@@ -18,12 +18,12 @@
 	let passwordConfirmShown = false;
 	let passwordConfirmValres: ValidationResult | null = null;
 
-	let turnstileResponse: string | null = null;
+	//let turnstileResponse: string | null = null;
 </script>
 
 <div class="container h-full mx-auto flex justify-center items-center">
 	<form class="flex flex-col space-y-4">
-		<h2 class="h2">Login</h2>
+		<h2 class="h2">Register</h2>
 
 		<TextInput
 			label="Username"
@@ -31,6 +31,13 @@
 			autocomplete="username"
 			bind:value={username}
 			validationResult={usernameValres}
+		/>
+		<TextInput
+			label="Email"
+			placeholder="Email"
+			autocomplete="email"
+			bind:value={email}
+			validationResult={emailValres}
 		/>
 		<PasswordInput
 			label="Password"
@@ -40,7 +47,18 @@
 			bind:valueShown={passwordShown}
 			validationResult={passwordValres}
 		/>
+		<PasswordInput
+			label="Confirm Password"
+			placeholder="Confirm Password"
+			autocomplete="new-password"
+			bind:value={passwordConfirm}
+			bind:valueShown={passwordConfirmShown}
+			validationResult={passwordConfirmValres}
+		/>
+		<!--
+		<Turnstile action="register" bind:response={turnstileResponse} />
+        -->
 
-		<button class="btn variant-filled-primary" type="submit"> Login </button>
+		<button class="btn variant-filled-primary" type="submit"> Register </button>
 	</form>
 </div>

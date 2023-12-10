@@ -1,0 +1,44 @@
+<script lang="ts">
+	import { afterNavigate } from '$app/navigation';
+	import { base } from '$app/paths';
+	import { page } from '$app/stores';
+	import { PUBLIC_FRONTEND_URL } from '$env/static/public';
+	import BasicTags from '$lib/components/metadata/BasicTags.svelte';
+	import OpenGraphTags from '$lib/components/metadata/OpenGraphTags.svelte';
+	import TwitterSummaryTags from '$lib/components/metadata/Twitter/TwitterSummaryTags.svelte';
+
+	let previousPage: string = base;
+
+	afterNavigate(({ from }) => {
+		previousPage = from?.url.pathname || previousPage;
+	});
+
+	$: meta = {
+		title: 'Service Unavailable',
+		description: 'OpenShock is currently unavailable',
+		image: {
+			src: '/logo.svg',
+			alt: 'OpenShock Logo'
+		}
+	};
+</script>
+
+<BasicTags {...meta} />
+<TwitterSummaryTags type="summary" {...meta} site="@OpenShockORG" creator="@OpenShockORG" />
+<OpenGraphTags
+	type="website"
+	{...meta}
+	url={PUBLIC_FRONTEND_URL}
+	siteName="OpenShock"
+	determiner="auto"
+	metaLocale="en_US"
+/>
+
+<div class="absolute left-1/2 top-1/2 -translate-x-[50%] -translate-y-[50%] text-center">
+	<div class="text-9xl">{$page.status}</div>
+	<div class="big">
+		{$page.error?.message ?? 'Something went wrong.'}
+		<br />
+		<a href={previousPage}>Go back</a>
+	</div>
+</div>
