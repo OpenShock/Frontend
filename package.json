@@ -2,6 +2,7 @@
 	"name": "frontend",
 	"version": "0.0.1",
 	"private": true,
+	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
@@ -15,9 +16,7 @@
 		"test:unit": "vitest"
 	},
 	"devDependencies": {
-		"@microsoft/signalr": "^8.0.0",
 		"@playwright/test": "^1.28.1",
-		"@sentry/svelte": "^7.86.0",
 		"@skeletonlabs/skeleton": "2.7.1",
 		"@skeletonlabs/tw-plugin": "0.3.1",
 		"@sveltejs/adapter-auto": "^3.0.0",
@@ -45,9 +44,10 @@
 		"vite-plugin-tailwind-purgecss": "0.2.0",
 		"vitest": "^1.2.0"
 	},
-	"type": "module",
 	"dependencies": {
 		"@floating-ui/dom": "1.5.4",
+		"@microsoft/signalr": "^8.0.0",
+		"@sentry/svelte": "^7.86.0",
 		"highlight.js": "11.9.0"
 	}
 }
