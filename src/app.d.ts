@@ -7,15 +7,15 @@
 import type { TurnstileInstance } from "$lib/types/TurnstileInstance";
 
 declare global {
-	declare namespace App {
-		// interface Locals {}
-		// interface PageData {}
-		// interface Error {}
-		// interface Platform {}
-	}
-	declare interface Window {
-		turnstile: TurnstileInstance | undefined;
-	}
+  declare namespace App {
+    // interface Locals {}
+    // interface PageData {}
+    // interface Error {}
+    // interface Platform {}
+  }
+  declare interface Window {
+    turnstile: TurnstileInstance | undefined;
+  }
 }
 
 export { };

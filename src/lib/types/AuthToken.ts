@@ -1,4 +1,4 @@
 export interface AuthToken {
-    token: string;
-    expires: number;
+  token: string;
+  expires: number;
 }
