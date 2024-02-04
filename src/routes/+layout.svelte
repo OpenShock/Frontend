@@ -14,6 +14,7 @@
   import { PUBLIC_FRONTEND_URL } from '$env/static/public';
   import OpenGraphTags from '$lib/components/metadata/OpenGraphTags.svelte';
   import TwitterSummaryTags from '$lib/components/metadata/Twitter/TwitterSummaryTags.svelte';
+  import { modalRegistry } from '$lib/modals';
 
   storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
   initializeStores();
@@ -21,7 +22,7 @@
   const toastStore = getToastStore();
 </script>
 
-<Modal />
+<Modal components={modalRegistry} />
 <Toast position="bl" max={5} />
 
 <TwitterSummaryTags

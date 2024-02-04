@@ -1,0 +1,30 @@
+diff --git a/node_modules/esptool-js/lib/esploader.js b/node_modules/esptool-js/lib/esploader.js
+index 6e80537..09df456 100644
+--- a/node_modules/esptool-js/lib/esploader.js
++++ b/node_modules/esptool-js/lib/esploader.js
+@@ -1,8 +1,8 @@
+-import { ESPError } from "./error";
++import { ESPError } from "./error.js";
+ import { deflate, Inflate } from "pako";
+-import { Transport } from "./webserial";
+-import { customReset, usbJTAGSerialReset } from "./reset";
+-import { Buffer } from "buffer/index";
++import { Transport } from "./webserial.js";
++import { customReset, usbJTAGSerialReset } from "./reset.js";
++import { Buffer } from "buffer/index.js";
+ /**
+  * Return the chip ROM based on the given magic number
+  * @param {number} magic - magic hex number to select ROM.
+diff --git a/node_modules/esptool-js/lib/index.js b/node_modules/esptool-js/lib/index.js
+index e999db9..14d574f 100644
+--- a/node_modules/esptool-js/lib/index.js
++++ b/node_modules/esptool-js/lib/index.js
+@@ -1,4 +1,4 @@
+-export { ESPLoader } from "./esploader";
+-export { classicReset, customReset, hardReset, usbJTAGSerialReset, validateCustomResetStringSequence } from "./reset";
+-export { ROM } from "./targets/rom";
+-export { Transport } from "./webserial";
++export { ESPLoader } from "./esploader.js";
++export { classicReset, customReset, hardReset, usbJTAGSerialReset, validateCustomResetStringSequence } from "./reset.js";
++export { ROM } from "./targets/rom.js";
++export { Transport } from "./webserial.js";
