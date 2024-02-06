@@ -37,5 +37,13 @@
         Register
       </a>
     {/if}
+    <div>
+      <a href="https://github.com/OpenShock" class="btn-icon">
+        <i class="fa-brands fa-github text-lg" />
+      </a>
+      <a href="https://discord.gg/openshock" class="btn-icon">
+        <i class="fa-brands fa-discord text-lg" />
+      </a>
+    </div>
   </svelte:fragment>
 </AppBar>
