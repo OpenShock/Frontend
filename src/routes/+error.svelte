@@ -2,7 +2,6 @@
   import { afterNavigate } from '$app/navigation';
   import { base } from '$app/paths';
   import { page } from '$app/stores';
-  import { PUBLIC_FRONTEND_URL } from '$env/static/public';
   import BasicTags from '$lib/components/metadata/BasicTags.svelte';
   import OpenGraphTags from '$lib/components/metadata/OpenGraphTags.svelte';
   import TwitterSummaryTags from '$lib/components/metadata/Twitter/TwitterSummaryTags.svelte';
@@ -28,7 +27,7 @@
 <OpenGraphTags
   type="website"
   {...meta}
-  url={PUBLIC_FRONTEND_URL}
+  url={$page.url.origin}
   siteName="OpenShock"
   determiner="auto"
   metaLocale="en_US"

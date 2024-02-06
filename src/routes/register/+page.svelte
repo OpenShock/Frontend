@@ -18,7 +18,7 @@
   let passwordConfirmShown = false;
   let passwordConfirmValres: ValidationResult | null = null;
 
-  //let turnstileResponse: string | null = null;
+  let turnstileResponse: string | null = null;
 </script>
 
 <div class="container h-full mx-auto flex justify-center items-center">
@@ -55,9 +55,8 @@
       bind:valueShown={passwordConfirmShown}
       validationResult={passwordConfirmValres}
     />
-    <!--
-		<Turnstile action="register" bind:response={turnstileResponse} />
-        -->
+
+    <Turnstile action="register" bind:response={turnstileResponse} />
 
     <button class="btn variant-filled-primary" type="submit"> Register </button>
   </form>

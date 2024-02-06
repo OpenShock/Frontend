@@ -21,7 +21,7 @@
 		"@playwright/test": "^1.41.1",
 		"@skeletonlabs/skeleton": "2.8.0",
 		"@skeletonlabs/tw-plugin": "0.3.1",
-		"@sveltejs/adapter-static": "^3.0.1",
+		"@sveltejs/adapter-node": "^4.0.1",
 		"@sveltejs/kit": "^2.5.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.2",
 		"@tailwindcss/forms": "0.5.7",

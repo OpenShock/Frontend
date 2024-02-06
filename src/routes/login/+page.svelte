@@ -1,24 +1,14 @@
 <script lang="ts">
   import PasswordInput from '$lib/components/PasswordInput.svelte';
   import TextInput from '$lib/components/TextInput.svelte';
-  import Turnstile from '$lib/components/Turnstile.svelte';
   import type { ValidationResult } from '$lib/types/ValidationResult';
 
   let username = '';
   let usernameValres: ValidationResult | null = null;
 
-  let email = '';
-  let emailValres: ValidationResult | null = null;
-
   let password = '';
   let passwordShown = false;
   let passwordValres: ValidationResult | null = null;
-
-  let passwordConfirm = '';
-  let passwordConfirmShown = false;
-  let passwordConfirmValres: ValidationResult | null = null;
-
-  let turnstileResponse: string | null = null;
 </script>
 
 <div class="container h-full mx-auto flex justify-center items-center">

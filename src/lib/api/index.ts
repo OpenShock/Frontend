@@ -1,13 +1,13 @@
-import { PUBLIC_BACKEND_API_BASE_URL } from '$env/static/public';
+import { env } from '$env/dynamic/public';
 import { AccountApi, AdminApi, Configuration as ConfigurationV1, DeviceApi, DevicesApi as DevicesV1Api, PublicApi, ShareLinksApi, SharesApi, ShockerApi as ShockerV1Api, TokensApi, UsersApi, VersionApi } from './internal/v1';
 import { Configuration as ConfigurationV2, DevicesApi as DevicesV2Api, ShockerApi as ShockerV2Api } from './internal/v2';
 
 export const DefaultApiV1Configuration = new ConfigurationV1({
-  basePath: PUBLIC_BACKEND_API_BASE_URL,
+  basePath: env.PUBLIC_BACKEND_API_BASE_URL,
   credentials: 'include'
 });
 export const DefaultApiV2Configuration = new ConfigurationV2({
-  basePath: PUBLIC_BACKEND_API_BASE_URL,
+  basePath: env.PUBLIC_BACKEND_API_BASE_URL,
   credentials: 'include'
 });
 
