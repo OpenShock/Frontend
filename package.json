@@ -55,7 +55,9 @@
 		"@sentry/svelte": "^7.99.0",
 		"bowser": "^2.11.0",
 		"crypto-js": "^4.2.0",
+		"email-validator": "^2.0.4",
 		"esptool-js": "^0.4.1",
-		"highlight.js": "11.9.0"
+		"highlight.js": "11.9.0",
+		"js-sha1": "^0.7.0"
 	}
 }
