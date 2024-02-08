@@ -7,7 +7,6 @@
   let usernameValres: ValidationResult | null = null;
 
   let password = '';
-  let passwordShown = false;
   let passwordValres: ValidationResult | null = null;
 </script>
 
@@ -27,7 +26,6 @@
       placeholder="Password"
       autocomplete="new-password"
       bind:value={password}
-      bind:valueShown={passwordShown}
       validationResult={passwordValres}
     />
 

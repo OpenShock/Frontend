@@ -15,7 +15,6 @@
   $: emailValres = validateEmail(email);
 
   let password = '';
-  let passwordShown = false;
   let passwordValres: ValidationResult | null = null;
   let passwordDebounce: ReturnType<typeof setTimeout> | null = null;
   $: {
@@ -45,7 +44,6 @@
   }
 
   let passwordConfirm = '';
-  let passwordConfirmShown = false;
   $: passwordConfirmValres = validatePasswordMatch(password, passwordConfirm);
 
   let turnstileResponse: string | null = null;
@@ -81,7 +79,6 @@
       placeholder="Password"
       autocomplete="new-password"
       bind:value={password}
-      bind:valueShown={passwordShown}
       validationResult={passwordValres}
       showPasswordStrength={true}
     />
@@ -90,7 +87,6 @@
       placeholder="Confirm Password"
       autocomplete="new-password"
       bind:value={passwordConfirm}
-      bind:valueShown={passwordConfirmShown}
       validationResult={passwordConfirmValres}
     />
 
