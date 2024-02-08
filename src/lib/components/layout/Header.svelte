@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { UserStore } from '$lib/stores/UserStore';
+  import { UserSelfStore } from '$lib/stores/UserStore';
   import { AppBar, LightSwitch } from '@skeletonlabs/skeleton';
 </script>
 
@@ -16,7 +16,7 @@
   </div>
   <svelte:fragment slot="trail">
     <LightSwitch />
-    {#if !!$UserStore}
+    {#if !!$UserSelfStore}
       <a
         href="/dashboard"
         class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
