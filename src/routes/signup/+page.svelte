@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
+  import { accountApi } from '$lib/api';
   import { checkPwnedCount } from '$lib/api/pwnedPasswords';
   import PasswordInput from '$lib/components/PasswordInput.svelte';
   import TextInput from '$lib/components/TextInput.svelte';
@@ -7,6 +9,9 @@
   import { validatePassword, validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
   import { validateUsername } from '$lib/inputvalidation/usernameValidator';
   import type { ValidationResult } from '$lib/types/ValidationResult';
+  import { getModalStore } from '@skeletonlabs/skeleton';
+
+  const modalStore = getModalStore();
 
   let username = '';
   $: usernameValres = validateUsername(username);
@@ -54,11 +59,30 @@
     passwordValres?.valid &&
     passwordConfirmValres?.valid &&
     turnstileResponse;
+
+  function handleSubmission() {
+    accountApi
+      .accountSignUp({
+        username,
+        password,
+        email,
+      })
+      .then(() => {
+        modalStore.trigger({
+          type: 'component',
+          component: 'SignUpSuccess',
+          response: () => goto('/login'),
+        });
+      })
+      .finally(() => {
+        turnstileResponse = null;
+      });
+  }
 </script>
 
 <div class="container h-full mx-auto flex justify-center items-center">
-  <form class="flex flex-col space-y-2">
-    <h2 class="h2">Register</h2>
+  <form class="flex flex-col space-y-2" on:submit|preventDefault={handleSubmission}>
+    <h2 class="h2">Sign Up</h2>
 
     <TextInput
       label="Username"
@@ -90,10 +114,10 @@
       validationResult={passwordConfirmValres}
     />
 
-    <Turnstile action="register" bind:response={turnstileResponse} />
+    <Turnstile action="signup" bind:response={turnstileResponse} />
 
     <button class="btn variant-filled-primary" type="submit" disabled={!canSubmit}>
-      Register
+      Sign Up
     </button>
   </form>
 </div>

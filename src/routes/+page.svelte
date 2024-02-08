@@ -5,10 +5,7 @@
     </h1>
     <p class="text-2xl font-light text-gray-600">[Put a slogan here]</p>
     <div class="flex flex-row justify-start items-center space-x-4 mt-8">
-      <a
-        href="register"
-        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-      >
+      <a href="signup" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
         Get Started
       </a>
       <a
