@@ -9,11 +9,7 @@
   export let autocomplete: 'new-password' | 'current-password';
   export let value: string;
   export let valueShown = false;
-  export let validationResult:
-    | ValidationResult
-    | null
-    | Promise<ValidationResult | null>
-    | undefined = undefined;
+  export let validationResult: ValidationResult | null | undefined = undefined;
   export let showPasswordStrength = false;
 
   function onInput(e: Event & { currentTarget: EventTarget & HTMLInputElement }) {
@@ -83,15 +79,11 @@
       />
     </div>
   </div>
-  {#await Promise.resolve(validationResult)}
-    <p class="text-sm text-orange-500">Validating...</p>
-  {:then validationResult}
-    {#if !validationResult || validationResult.valid}
-      <div class="h-3" />
-    {:else}
-      <p class="text-xs text-red-500 !mt-0">{validationResult.message}</p>
-    {/if}
-  {/await}
+  {#if !validationResult || validationResult.valid}
+    <div class="h-3" />
+  {:else}
+    <p class="text-xs text-red-500 !mt-0">{validationResult.message}</p>
+  {/if}
   {#if showPasswordStrength}
     <div class="card p-4 w-72 shadow-xl" data-popup={popupSettings.target}>
       <div class="flex flex-row items-center space-x-1">
