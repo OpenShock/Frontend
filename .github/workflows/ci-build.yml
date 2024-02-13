@@ -37,6 +37,9 @@ jobs:
         shell: bash
         run: npm run check
 
+      - name: Install playwright
+        run: npx playwright install
+
       - name: Test
         shell: bash
         run: npm test
