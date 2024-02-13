@@ -9,7 +9,7 @@
   import { RadioGroup, RadioItem } from '@skeletonlabs/skeleton';
 
   /** Optional chip to constrain the list of boards to */
-  export let chip: string | null = null;
+  //export let chip: string | null = null;
   export let version: string | null = null;
   export let board: string | null = null;
   export let disabled: boolean = false;

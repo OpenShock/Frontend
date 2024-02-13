@@ -66,7 +66,7 @@ export * from './ShockerResponse';
 export * from './ShockerResponseIEnumerableBaseResponse';
 export * from './ShockerWithDevice';
 export * from './ShockerWithDeviceBaseResponse';
-export * from './SignUp';
+export * from './Signup';
 export * from './StatsResponse';
 export * from './StatsResponseBaseResponse';
 export * from './StringBaseResponse';
