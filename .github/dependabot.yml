@@ -9,7 +9,9 @@ updates:
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
-      interval: 'daily'
+      interval: 'weekly'
+      day: 'monday'
+      time: '06:00'
     groups:
       npm-dependencies:
         patterns:
