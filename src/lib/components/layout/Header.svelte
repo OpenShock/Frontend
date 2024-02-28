@@ -18,10 +18,11 @@
     <LightSwitch />
     {#if !!$UserSelfStore}
       <a
-        href="/dashboard"
+        href="/account"
         class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
       >
-        Dashboard
+        <img class="inline-block h-8 rounded-full" src={$UserSelfStore.avatar} alt="User Avatar" />
+        <p class="hidden lg:inline-block">{$UserSelfStore.name}</p>
       </a>
     {:else}
       <a
@@ -36,14 +37,14 @@
       >
         Sign Up
       </a>
+      <div>
+        <a href="https://github.com/OpenShock" class="btn-icon">
+          <i class="fa-brands fa-github text-lg" />
+        </a>
+        <a href="https://discord.gg/openshock" class="btn-icon">
+          <i class="fa-brands fa-discord text-lg" />
+        </a>
+      </div>
     {/if}
-    <div>
-      <a href="https://github.com/OpenShock" class="btn-icon">
-        <i class="fa-brands fa-github text-lg" />
-      </a>
-      <a href="https://discord.gg/openshock" class="btn-icon">
-        <i class="fa-brands fa-discord text-lg" />
-      </a>
-    </div>
   </svelte:fragment>
 </AppBar>
