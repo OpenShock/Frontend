@@ -15,7 +15,7 @@
     accountApi
       .accountLogin({ email: usernameOrEmail, password })
       .then(() => {
-        goto('/dashboard');
+        goto('/home');
       })
       .catch((err) => {
         console.error(err);
