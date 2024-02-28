@@ -21,8 +21,6 @@ if (browser) {
 
     UserSelfStore.set(user);
     UsersStore.set([user]);
-
-    console.log(message);
   }).catch((error) => {
     console.error(error);
   });
