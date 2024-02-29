@@ -50,7 +50,7 @@ export default defineConfig(async ({ mode }) => {
   const plugins: PluginOption[] = [];
 
   // Ensure that local.{PUBLIC_SITE_DOMAIN} resolves to localhost, and then use mkcert to generate a certificate
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === 'development' && !process.env.CI) {
     // Load environment variables
     process.env = { ...process.env, ...loadEnv(mode, process.cwd(), ['PUBLIC_']) };
 
