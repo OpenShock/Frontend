@@ -64,9 +64,7 @@ export default defineConfig(async ({ mode }) => {
   }
 
   // Add the sveltekit plugin
-  plugins.push(sveltekit({
-
-  }));
+  plugins.push(sveltekit());
 
   // Configure the purgeCss plugin
   plugins.push(purgeCss({
