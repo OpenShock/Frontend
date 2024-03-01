@@ -9,7 +9,10 @@ export const UsersStore = writable<ApiUser[]>([]);
 
 if (browser) {
   usersApi.usersGetSelf().then(({ data, message }) => {
-    if (!data) return;
+    if (!data) {
+      console.error(`Failed to get user self: ${message}`);
+      return;
+    }
 
     const user = {
       id: data.id!,
