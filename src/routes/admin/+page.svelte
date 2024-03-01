@@ -1,9 +1,9 @@
 <script lang="ts">
   import { adminApi } from '$lib/api';
-  import type { AdminOnlineDeviceResponse as Device } from '$lib/api/internal/v1';
+  import { RankType, type AdminOnlineDeviceResponse as Device } from '$lib/api/internal/v1';
   import { UserSelfStore } from '$lib/stores/UserStore';
 
-  $: isAdmin = ($UserSelfStore?.rank as string | undefined | null) === 'Admin'; // WTF??? I thought it would be an integer, not a string
+  $: isAdmin = $UserSelfStore?.rank === RankType.admin;
 
   let devices: Device[] = [];
 
