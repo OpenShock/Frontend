@@ -24,12 +24,6 @@ export interface GenericIni {
      * @type {string}
      * @memberof GenericIni
      */
-    image?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof GenericIni
-     */
     id?: string;
     /**
      * 
@@ -37,6 +31,12 @@ export interface GenericIni {
      * @memberof GenericIni
      */
     name?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof GenericIni
+     */
+    image?: string | null;
 }
 
 /**
@@ -58,9 +58,9 @@ export function GenericIniFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'image': !exists(json, 'image') ? undefined : json['image'],
         'id': !exists(json, 'id') ? undefined : json['id'],
         'name': !exists(json, 'name') ? undefined : json['name'],
+        'image': !exists(json, 'image') ? undefined : json['image'],
     };
 }
 
@@ -73,9 +73,9 @@ export function GenericIniToJSON(value?: GenericIni | null): any {
     }
     return {
         
-        'image': value.image,
         'id': value.id,
         'name': value.name,
+        'image': value.image,
     };
 }
 

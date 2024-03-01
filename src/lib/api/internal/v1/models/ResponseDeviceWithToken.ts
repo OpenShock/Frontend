@@ -24,12 +24,6 @@ export interface ResponseDeviceWithToken {
      * @type {string}
      * @memberof ResponseDeviceWithToken
      */
-    token?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof ResponseDeviceWithToken
-     */
     id?: string;
     /**
      * 
@@ -43,6 +37,12 @@ export interface ResponseDeviceWithToken {
      * @memberof ResponseDeviceWithToken
      */
     createdOn?: Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResponseDeviceWithToken
+     */
+    token?: string | null;
 }
 
 /**
@@ -64,10 +64,10 @@ export function ResponseDeviceWithTokenFromJSONTyped(json: any, ignoreDiscrimina
     }
     return {
         
-        'token': !exists(json, 'token') ? undefined : json['token'],
         'id': !exists(json, 'id') ? undefined : json['id'],
         'name': !exists(json, 'name') ? undefined : json['name'],
         'createdOn': !exists(json, 'createdOn') ? undefined : (new Date(json['createdOn'])),
+        'token': !exists(json, 'token') ? undefined : json['token'],
     };
 }
 
@@ -80,10 +80,10 @@ export function ResponseDeviceWithTokenToJSON(value?: ResponseDeviceWithToken | 
     }
     return {
         
-        'token': value.token,
         'id': value.id,
         'name': value.name,
         'createdOn': value.createdOn === undefined ? undefined : (value.createdOn.toISOString()),
+        'token': value.token,
     };
 }
 

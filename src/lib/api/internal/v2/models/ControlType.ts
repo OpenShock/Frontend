@@ -18,11 +18,11 @@
  * @enum {string}
  */
 export enum ControlType {
-    NUMBER_0 = 0,
-    NUMBER_1 = 1,
-    NUMBER_2 = 2,
-    NUMBER_3 = 3,
-    NUMBER_unknown_default_open_api = 11184809
+    stop = 'Stop',
+    shock = 'Shock',
+    vibrate = 'Vibrate',
+    sound = 'Sound',
+    unknownDefaultOpenApi = '11184809'
 }
 
 

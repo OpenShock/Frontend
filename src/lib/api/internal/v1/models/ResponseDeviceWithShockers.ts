@@ -28,12 +28,6 @@ import {
 export interface ResponseDeviceWithShockers {
     /**
      * 
-     * @type {Array<ShockerResponse>}
-     * @memberof ResponseDeviceWithShockers
-     */
-    shockers?: Array<ShockerResponse> | null;
-    /**
-     * 
      * @type {string}
      * @memberof ResponseDeviceWithShockers
      */
@@ -50,6 +44,12 @@ export interface ResponseDeviceWithShockers {
      * @memberof ResponseDeviceWithShockers
      */
     createdOn?: Date;
+    /**
+     * 
+     * @type {Array<ShockerResponse>}
+     * @memberof ResponseDeviceWithShockers
+     */
+    shockers?: Array<ShockerResponse> | null;
 }
 
 /**
@@ -71,10 +71,10 @@ export function ResponseDeviceWithShockersFromJSONTyped(json: any, ignoreDiscrim
     }
     return {
         
-        'shockers': !exists(json, 'shockers') ? undefined : (json['shockers'] === null ? null : (json['shockers'] as Array<any>).map(ShockerResponseFromJSON)),
         'id': !exists(json, 'id') ? undefined : json['id'],
         'name': !exists(json, 'name') ? undefined : json['name'],
         'createdOn': !exists(json, 'createdOn') ? undefined : (new Date(json['createdOn'])),
+        'shockers': !exists(json, 'shockers') ? undefined : (json['shockers'] === null ? null : (json['shockers'] as Array<any>).map(ShockerResponseFromJSON)),
     };
 }
 
@@ -87,10 +87,10 @@ export function ResponseDeviceWithShockersToJSON(value?: ResponseDeviceWithShock
     }
     return {
         
-        'shockers': value.shockers === undefined ? undefined : (value.shockers === null ? null : (value.shockers as Array<any>).map(ShockerResponseToJSON)),
         'id': value.id,
         'name': value.name,
         'createdOn': value.createdOn === undefined ? undefined : (value.createdOn.toISOString()),
+        'shockers': value.shockers === undefined ? undefined : (value.shockers === null ? null : (value.shockers as Array<any>).map(ShockerResponseToJSON)),
     };
 }
 

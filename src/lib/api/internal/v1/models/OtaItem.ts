@@ -19,6 +19,12 @@ import {
     OtaUpdateStatusFromJSONTyped,
     OtaUpdateStatusToJSON,
 } from './OtaUpdateStatus';
+import type { SemVersion } from './SemVersion';
+import {
+    SemVersionFromJSON,
+    SemVersionFromJSONTyped,
+    SemVersionToJSON,
+} from './SemVersion';
 
 /**
  * 
@@ -46,10 +52,10 @@ export interface OtaItem {
     status?: OtaUpdateStatus;
     /**
      * 
-     * @type {any}
+     * @type {SemVersion}
      * @memberof OtaItem
      */
-    version?: any | null;
+    version?: SemVersion;
     /**
      * 
      * @type {string}
@@ -80,7 +86,7 @@ export function OtaItemFromJSONTyped(json: any, ignoreDiscriminator: boolean): O
         'id': !exists(json, 'id') ? undefined : json['id'],
         'startedAt': !exists(json, 'startedAt') ? undefined : (new Date(json['startedAt'])),
         'status': !exists(json, 'status') ? undefined : OtaUpdateStatusFromJSON(json['status']),
-        'version': !exists(json, 'version') ? undefined : json['version'],
+        'version': !exists(json, 'version') ? undefined : SemVersionFromJSON(json['version']),
         'message': !exists(json, 'message') ? undefined : json['message'],
     };
 }
@@ -97,7 +103,7 @@ export function OtaItemToJSON(value?: OtaItem | null): any {
         'id': value.id,
         'startedAt': value.startedAt === undefined ? undefined : (value.startedAt.toISOString()),
         'status': OtaUpdateStatusToJSON(value.status),
-        'version': value.version,
+        'version': SemVersionToJSON(value.version),
         'message': value.message,
     };
 }

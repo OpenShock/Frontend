@@ -31,24 +31,6 @@ export interface ShockerResponse {
      * @type {string}
      * @memberof ShockerResponse
      */
-    name?: string | null;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ShockerResponse
-     */
-    isPaused?: boolean;
-    /**
-     * 
-     * @type {Date}
-     * @memberof ShockerResponse
-     */
-    createdOn?: Date;
-    /**
-     * 
-     * @type {string}
-     * @memberof ShockerResponse
-     */
     id?: string;
     /**
      * 
@@ -62,6 +44,24 @@ export interface ShockerResponse {
      * @memberof ShockerResponse
      */
     model?: ShockerModelType;
+    /**
+     * 
+     * @type {string}
+     * @memberof ShockerResponse
+     */
+    name?: string | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ShockerResponse
+     */
+    isPaused?: boolean;
+    /**
+     * 
+     * @type {Date}
+     * @memberof ShockerResponse
+     */
+    createdOn?: Date;
 }
 
 /**
@@ -83,12 +83,12 @@ export function ShockerResponseFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'isPaused': !exists(json, 'isPaused') ? undefined : json['isPaused'],
-        'createdOn': !exists(json, 'createdOn') ? undefined : (new Date(json['createdOn'])),
         'id': !exists(json, 'id') ? undefined : json['id'],
         'rfId': !exists(json, 'rfId') ? undefined : json['rfId'],
         'model': !exists(json, 'model') ? undefined : ShockerModelTypeFromJSON(json['model']),
+        'name': !exists(json, 'name') ? undefined : json['name'],
+        'isPaused': !exists(json, 'isPaused') ? undefined : json['isPaused'],
+        'createdOn': !exists(json, 'createdOn') ? undefined : (new Date(json['createdOn'])),
     };
 }
 
@@ -101,12 +101,12 @@ export function ShockerResponseToJSON(value?: ShockerResponse | null): any {
     }
     return {
         
-        'name': value.name,
-        'isPaused': value.isPaused,
-        'createdOn': value.createdOn === undefined ? undefined : (value.createdOn.toISOString()),
         'id': value.id,
         'rfId': value.rfId,
         'model': ShockerModelTypeToJSON(value.model),
+        'name': value.name,
+        'isPaused': value.isPaused,
+        'createdOn': value.createdOn === undefined ? undefined : (value.createdOn.toISOString()),
     };
 }
 

@@ -46,53 +46,37 @@ import {
     StringBaseResponseToJSON,
 } from '../models/index';
 
-export interface DevicesCreateDeviceRequest {
-    version: string;
-}
-
 export interface DevicesEditDeviceRequest {
     deviceId: string;
-    version: string;
     deviceEdit?: DeviceEdit;
 }
 
 export interface DevicesGetDeviceByIdRequest {
     deviceId: string;
-    version: string;
 }
 
 export interface DevicesGetLiveControlGatewayInfoRequest {
     deviceId: string;
-    version: string;
 }
 
 export interface DevicesGetOtaUpdateHistoryRequest {
     deviceId: string;
-    version: string;
 }
 
 export interface DevicesGetPairCodeRequest {
     deviceId: string;
-    version: string;
 }
 
 export interface DevicesGetShockersRequest {
     deviceId: string;
-    version: string;
-}
-
-export interface DevicesListDevicesRequest {
-    version: string;
 }
 
 export interface DevicesRegenerateDeviceTokenRequest {
     deviceId: string;
-    version: string;
 }
 
 export interface DevicesRemoveDeviceRequest {
     deviceId: string;
-    version: string;
 }
 
 /**
@@ -105,23 +89,21 @@ export interface DevicesApiInterface {
     /**
      * 
      * @summary Create a new device for the current user
-     * @param {string} version 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DevicesApiInterface
      */
-    devicesCreateDeviceRaw(requestParameters: DevicesCreateDeviceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GuidBaseResponse>>;
+    devicesCreateDeviceRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GuidBaseResponse>>;
 
     /**
      * Create a new device for the current user
      */
-    devicesCreateDevice(version: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GuidBaseResponse>;
+    devicesCreateDevice(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GuidBaseResponse>;
 
     /**
      * 
      * @summary Edit a device
      * @param {string} deviceId 
-     * @param {string} version 
      * @param {DeviceEdit} [deviceEdit] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -132,13 +114,12 @@ export interface DevicesApiInterface {
     /**
      * Edit a device
      */
-    devicesEditDevice(deviceId: string, version: string, deviceEdit?: DeviceEdit, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse>;
+    devicesEditDevice(deviceId: string, deviceEdit?: DeviceEdit, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse>;
 
     /**
      * 
      * @summary Get a device by its id
      * @param {string} deviceId 
-     * @param {string} version 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DevicesApiInterface
@@ -148,13 +129,12 @@ export interface DevicesApiInterface {
     /**
      * Get a device by its id
      */
-    devicesGetDeviceById(deviceId: string, version: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseDeviceWithTokenBaseResponse>;
+    devicesGetDeviceById(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseDeviceWithTokenBaseResponse>;
 
     /**
      * 
      * @summary Get LCG info for a device if it is online and connected to a LCG node
      * @param {string} deviceId 
-     * @param {string} version 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DevicesApiInterface
@@ -164,13 +144,12 @@ export interface DevicesApiInterface {
     /**
      * Get LCG info for a device if it is online and connected to a LCG node
      */
-    devicesGetLiveControlGatewayInfo(deviceId: string, version: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LcgResponseBaseResponse>;
+    devicesGetLiveControlGatewayInfo(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LcgResponseBaseResponse>;
 
     /**
      * 
      * @summary Gets the OTA update history for a device
      * @param {string} deviceId Id of the device
-     * @param {string} version 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DevicesApiInterface
@@ -180,13 +159,12 @@ export interface DevicesApiInterface {
     /**
      * Gets the OTA update history for a device
      */
-    devicesGetOtaUpdateHistory(deviceId: string, version: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OtaItemIReadOnlyCollectionBaseResponse>;
+    devicesGetOtaUpdateHistory(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OtaItemIReadOnlyCollectionBaseResponse>;
 
     /**
      * 
      * @summary Get a pair code for a device
      * @param {string} deviceId 
-     * @param {string} version 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DevicesApiInterface
@@ -196,13 +174,12 @@ export interface DevicesApiInterface {
     /**
      * Get a pair code for a device
      */
-    devicesGetPairCode(deviceId: string, version: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StringBaseResponse>;
+    devicesGetPairCode(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StringBaseResponse>;
 
     /**
      * 
      * @summary Get all shockers for a device
      * @param {string} deviceId The device id
-     * @param {string} version 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DevicesApiInterface
@@ -212,28 +189,26 @@ export interface DevicesApiInterface {
     /**
      * Get all shockers for a device
      */
-    devicesGetShockers(deviceId: string, version: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShockerResponseIEnumerableBaseResponse>;
+    devicesGetShockers(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShockerResponseIEnumerableBaseResponse>;
 
     /**
      * 
      * @summary Get all devices for the current user
-     * @param {string} version 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DevicesApiInterface
      */
-    devicesListDevicesRaw(requestParameters: DevicesListDevicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponseDeviceIEnumerableBaseResponse>>;
+    devicesListDevicesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponseDeviceIEnumerableBaseResponse>>;
 
     /**
      * Get all devices for the current user
      */
-    devicesListDevices(version: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseDeviceIEnumerableBaseResponse>;
+    devicesListDevices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseDeviceIEnumerableBaseResponse>;
 
     /**
      * 
      * @summary Regenerate a device token
      * @param {string} deviceId The id of the device to regenerate the token for
-     * @param {string} version 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DevicesApiInterface
@@ -243,13 +218,12 @@ export interface DevicesApiInterface {
     /**
      * Regenerate a device token
      */
-    devicesRegenerateDeviceToken(deviceId: string, version: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse>;
+    devicesRegenerateDeviceToken(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse>;
 
     /**
      * 
      * @summary Remove a device from current user\'s account
      * @param {string} deviceId The id of the device to delete
-     * @param {string} version 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DevicesApiInterface
@@ -259,7 +233,7 @@ export interface DevicesApiInterface {
     /**
      * Remove a device from current user\'s account
      */
-    devicesRemoveDevice(deviceId: string, version: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse>;
+    devicesRemoveDevice(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse>;
 
 }
 
@@ -271,11 +245,7 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
     /**
      * Create a new device for the current user
      */
-    async devicesCreateDeviceRaw(requestParameters: DevicesCreateDeviceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GuidBaseResponse>> {
-        if (requestParameters.version === null || requestParameters.version === undefined) {
-            throw new runtime.RequiredError('version','Required parameter requestParameters.version was null or undefined when calling devicesCreateDevice.');
-        }
-
+    async devicesCreateDeviceRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GuidBaseResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -285,7 +255,7 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
         }
 
         const response = await this.request({
-            path: `/{version}/devices`.replace(`{${"version"}}`, encodeURIComponent(String(requestParameters.version))),
+            path: `/1/devices`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -297,8 +267,8 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
     /**
      * Create a new device for the current user
      */
-    async devicesCreateDevice(version: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GuidBaseResponse> {
-        const response = await this.devicesCreateDeviceRaw({ version: version }, initOverrides);
+    async devicesCreateDevice(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GuidBaseResponse> {
+        const response = await this.devicesCreateDeviceRaw(initOverrides);
         return await response.value();
     }
 
@@ -308,10 +278,6 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
     async devicesEditDeviceRaw(requestParameters: DevicesEditDeviceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
         if (requestParameters.deviceId === null || requestParameters.deviceId === undefined) {
             throw new runtime.RequiredError('deviceId','Required parameter requestParameters.deviceId was null or undefined when calling devicesEditDevice.');
-        }
-
-        if (requestParameters.version === null || requestParameters.version === undefined) {
-            throw new runtime.RequiredError('version','Required parameter requestParameters.version was null or undefined when calling devicesEditDevice.');
         }
 
         const queryParameters: any = {};
@@ -325,7 +291,7 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
         }
 
         const response = await this.request({
-            path: `/{version}/devices/{deviceId}`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters.deviceId))).replace(`{${"version"}}`, encodeURIComponent(String(requestParameters.version))),
+            path: `/1/devices/{deviceId}`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters.deviceId))),
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
@@ -338,8 +304,8 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
     /**
      * Edit a device
      */
-    async devicesEditDevice(deviceId: string, version: string, deviceEdit?: DeviceEdit, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse> {
-        const response = await this.devicesEditDeviceRaw({ deviceId: deviceId, version: version, deviceEdit: deviceEdit }, initOverrides);
+    async devicesEditDevice(deviceId: string, deviceEdit?: DeviceEdit, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse> {
+        const response = await this.devicesEditDeviceRaw({ deviceId: deviceId, deviceEdit: deviceEdit }, initOverrides);
         return await response.value();
     }
 
@@ -351,10 +317,6 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
             throw new runtime.RequiredError('deviceId','Required parameter requestParameters.deviceId was null or undefined when calling devicesGetDeviceById.');
         }
 
-        if (requestParameters.version === null || requestParameters.version === undefined) {
-            throw new runtime.RequiredError('version','Required parameter requestParameters.version was null or undefined when calling devicesGetDeviceById.');
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -364,7 +326,7 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
         }
 
         const response = await this.request({
-            path: `/{version}/devices/{deviceId}`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters.deviceId))).replace(`{${"version"}}`, encodeURIComponent(String(requestParameters.version))),
+            path: `/1/devices/{deviceId}`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters.deviceId))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -376,8 +338,8 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
     /**
      * Get a device by its id
      */
-    async devicesGetDeviceById(deviceId: string, version: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseDeviceWithTokenBaseResponse> {
-        const response = await this.devicesGetDeviceByIdRaw({ deviceId: deviceId, version: version }, initOverrides);
+    async devicesGetDeviceById(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseDeviceWithTokenBaseResponse> {
+        const response = await this.devicesGetDeviceByIdRaw({ deviceId: deviceId }, initOverrides);
         return await response.value();
     }
 
@@ -389,10 +351,6 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
             throw new runtime.RequiredError('deviceId','Required parameter requestParameters.deviceId was null or undefined when calling devicesGetLiveControlGatewayInfo.');
         }
 
-        if (requestParameters.version === null || requestParameters.version === undefined) {
-            throw new runtime.RequiredError('version','Required parameter requestParameters.version was null or undefined when calling devicesGetLiveControlGatewayInfo.');
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -402,7 +360,7 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
         }
 
         const response = await this.request({
-            path: `/{version}/devices/{deviceId}/lcg`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters.deviceId))).replace(`{${"version"}}`, encodeURIComponent(String(requestParameters.version))),
+            path: `/1/devices/{deviceId}/lcg`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters.deviceId))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -414,8 +372,8 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
     /**
      * Get LCG info for a device if it is online and connected to a LCG node
      */
-    async devicesGetLiveControlGatewayInfo(deviceId: string, version: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LcgResponseBaseResponse> {
-        const response = await this.devicesGetLiveControlGatewayInfoRaw({ deviceId: deviceId, version: version }, initOverrides);
+    async devicesGetLiveControlGatewayInfo(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LcgResponseBaseResponse> {
+        const response = await this.devicesGetLiveControlGatewayInfoRaw({ deviceId: deviceId }, initOverrides);
         return await response.value();
     }
 
@@ -427,10 +385,6 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
             throw new runtime.RequiredError('deviceId','Required parameter requestParameters.deviceId was null or undefined when calling devicesGetOtaUpdateHistory.');
         }
 
-        if (requestParameters.version === null || requestParameters.version === undefined) {
-            throw new runtime.RequiredError('version','Required parameter requestParameters.version was null or undefined when calling devicesGetOtaUpdateHistory.');
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -440,7 +394,7 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
         }
 
         const response = await this.request({
-            path: `/{version}/devices/{deviceId}/ota`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters.deviceId))).replace(`{${"version"}}`, encodeURIComponent(String(requestParameters.version))),
+            path: `/1/devices/{deviceId}/ota`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters.deviceId))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -452,8 +406,8 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
     /**
      * Gets the OTA update history for a device
      */
-    async devicesGetOtaUpdateHistory(deviceId: string, version: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OtaItemIReadOnlyCollectionBaseResponse> {
-        const response = await this.devicesGetOtaUpdateHistoryRaw({ deviceId: deviceId, version: version }, initOverrides);
+    async devicesGetOtaUpdateHistory(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OtaItemIReadOnlyCollectionBaseResponse> {
+        const response = await this.devicesGetOtaUpdateHistoryRaw({ deviceId: deviceId }, initOverrides);
         return await response.value();
     }
 
@@ -465,10 +419,6 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
             throw new runtime.RequiredError('deviceId','Required parameter requestParameters.deviceId was null or undefined when calling devicesGetPairCode.');
         }
 
-        if (requestParameters.version === null || requestParameters.version === undefined) {
-            throw new runtime.RequiredError('version','Required parameter requestParameters.version was null or undefined when calling devicesGetPairCode.');
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -478,7 +428,7 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
         }
 
         const response = await this.request({
-            path: `/{version}/devices/{deviceId}/pair`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters.deviceId))).replace(`{${"version"}}`, encodeURIComponent(String(requestParameters.version))),
+            path: `/1/devices/{deviceId}/pair`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters.deviceId))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -490,8 +440,8 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
     /**
      * Get a pair code for a device
      */
-    async devicesGetPairCode(deviceId: string, version: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StringBaseResponse> {
-        const response = await this.devicesGetPairCodeRaw({ deviceId: deviceId, version: version }, initOverrides);
+    async devicesGetPairCode(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StringBaseResponse> {
+        const response = await this.devicesGetPairCodeRaw({ deviceId: deviceId }, initOverrides);
         return await response.value();
     }
 
@@ -503,10 +453,6 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
             throw new runtime.RequiredError('deviceId','Required parameter requestParameters.deviceId was null or undefined when calling devicesGetShockers.');
         }
 
-        if (requestParameters.version === null || requestParameters.version === undefined) {
-            throw new runtime.RequiredError('version','Required parameter requestParameters.version was null or undefined when calling devicesGetShockers.');
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -516,7 +462,7 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
         }
 
         const response = await this.request({
-            path: `/{version}/devices/{deviceId}/shockers`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters.deviceId))).replace(`{${"version"}}`, encodeURIComponent(String(requestParameters.version))),
+            path: `/1/devices/{deviceId}/shockers`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters.deviceId))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -528,19 +474,15 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
     /**
      * Get all shockers for a device
      */
-    async devicesGetShockers(deviceId: string, version: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShockerResponseIEnumerableBaseResponse> {
-        const response = await this.devicesGetShockersRaw({ deviceId: deviceId, version: version }, initOverrides);
+    async devicesGetShockers(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShockerResponseIEnumerableBaseResponse> {
+        const response = await this.devicesGetShockersRaw({ deviceId: deviceId }, initOverrides);
         return await response.value();
     }
 
     /**
      * Get all devices for the current user
      */
-    async devicesListDevicesRaw(requestParameters: DevicesListDevicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponseDeviceIEnumerableBaseResponse>> {
-        if (requestParameters.version === null || requestParameters.version === undefined) {
-            throw new runtime.RequiredError('version','Required parameter requestParameters.version was null or undefined when calling devicesListDevices.');
-        }
-
+    async devicesListDevicesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponseDeviceIEnumerableBaseResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -550,7 +492,7 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
         }
 
         const response = await this.request({
-            path: `/{version}/devices`.replace(`{${"version"}}`, encodeURIComponent(String(requestParameters.version))),
+            path: `/1/devices`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -562,8 +504,8 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
     /**
      * Get all devices for the current user
      */
-    async devicesListDevices(version: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseDeviceIEnumerableBaseResponse> {
-        const response = await this.devicesListDevicesRaw({ version: version }, initOverrides);
+    async devicesListDevices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseDeviceIEnumerableBaseResponse> {
+        const response = await this.devicesListDevicesRaw(initOverrides);
         return await response.value();
     }
 
@@ -575,10 +517,6 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
             throw new runtime.RequiredError('deviceId','Required parameter requestParameters.deviceId was null or undefined when calling devicesRegenerateDeviceToken.');
         }
 
-        if (requestParameters.version === null || requestParameters.version === undefined) {
-            throw new runtime.RequiredError('version','Required parameter requestParameters.version was null or undefined when calling devicesRegenerateDeviceToken.');
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -588,7 +526,7 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
         }
 
         const response = await this.request({
-            path: `/{version}/devices/{deviceId}`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters.deviceId))).replace(`{${"version"}}`, encodeURIComponent(String(requestParameters.version))),
+            path: `/1/devices/{deviceId}`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters.deviceId))),
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
@@ -600,8 +538,8 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
     /**
      * Regenerate a device token
      */
-    async devicesRegenerateDeviceToken(deviceId: string, version: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse> {
-        const response = await this.devicesRegenerateDeviceTokenRaw({ deviceId: deviceId, version: version }, initOverrides);
+    async devicesRegenerateDeviceToken(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse> {
+        const response = await this.devicesRegenerateDeviceTokenRaw({ deviceId: deviceId }, initOverrides);
         return await response.value();
     }
 
@@ -613,10 +551,6 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
             throw new runtime.RequiredError('deviceId','Required parameter requestParameters.deviceId was null or undefined when calling devicesRemoveDevice.');
         }
 
-        if (requestParameters.version === null || requestParameters.version === undefined) {
-            throw new runtime.RequiredError('version','Required parameter requestParameters.version was null or undefined when calling devicesRemoveDevice.');
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -626,7 +560,7 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
         }
 
         const response = await this.request({
-            path: `/{version}/devices/{deviceId}`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters.deviceId))).replace(`{${"version"}}`, encodeURIComponent(String(requestParameters.version))),
+            path: `/1/devices/{deviceId}`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters.deviceId))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -638,8 +572,8 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
     /**
      * Remove a device from current user\'s account
      */
-    async devicesRemoveDevice(deviceId: string, version: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse> {
-        const response = await this.devicesRemoveDeviceRaw({ deviceId: deviceId, version: version }, initOverrides);
+    async devicesRemoveDevice(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse> {
+        const response = await this.devicesRemoveDeviceRaw({ deviceId: deviceId }, initOverrides);
         return await response.value();
     }
 

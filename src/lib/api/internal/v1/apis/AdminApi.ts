@@ -15,9 +15,12 @@
 
 import * as runtime from '../runtime';
 import type {
+  AdminOnlineDeviceResponseIEnumerableBaseResponse,
   ObjectBaseResponse,
 } from '../models/index';
 import {
+    AdminOnlineDeviceResponseIEnumerableBaseResponseFromJSON,
+    AdminOnlineDeviceResponseIEnumerableBaseResponseToJSON,
     ObjectBaseResponseFromJSON,
     ObjectBaseResponseToJSON,
 } from '../models/index';
@@ -36,12 +39,12 @@ export interface AdminApiInterface {
      * @throws {RequiredError}
      * @memberof AdminApiInterface
      */
-    adminGetOnlineDevicesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>>;
+    adminGetOnlineDevicesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AdminOnlineDeviceResponseIEnumerableBaseResponse>>;
 
     /**
      * Gets all online devices
      */
-    adminGetOnlineDevices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse>;
+    adminGetOnlineDevices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminOnlineDeviceResponseIEnumerableBaseResponse>;
 
 }
 
@@ -53,7 +56,7 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     /**
      * Gets all online devices
      */
-    async adminGetOnlineDevicesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
+    async adminGetOnlineDevicesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AdminOnlineDeviceResponseIEnumerableBaseResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -69,13 +72,13 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => AdminOnlineDeviceResponseIEnumerableBaseResponseFromJSON(jsonValue));
     }
 
     /**
      * Gets all online devices
      */
-    async adminGetOnlineDevices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse> {
+    async adminGetOnlineDevices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminOnlineDeviceResponseIEnumerableBaseResponse> {
         const response = await this.adminGetOnlineDevicesRaw(initOverrides);
         return await response.value();
     }

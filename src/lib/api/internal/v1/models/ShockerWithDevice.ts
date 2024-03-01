@@ -31,7 +31,19 @@ export interface ShockerWithDevice {
      * @type {string}
      * @memberof ShockerWithDevice
      */
-    device?: string;
+    id?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ShockerWithDevice
+     */
+    rfId?: number;
+    /**
+     * 
+     * @type {ShockerModelType}
+     * @memberof ShockerWithDevice
+     */
+    model?: ShockerModelType;
     /**
      * 
      * @type {string}
@@ -55,19 +67,7 @@ export interface ShockerWithDevice {
      * @type {string}
      * @memberof ShockerWithDevice
      */
-    id?: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof ShockerWithDevice
-     */
-    rfId?: number;
-    /**
-     * 
-     * @type {ShockerModelType}
-     * @memberof ShockerWithDevice
-     */
-    model?: ShockerModelType;
+    device?: string;
 }
 
 /**
@@ -89,13 +89,13 @@ export function ShockerWithDeviceFromJSONTyped(json: any, ignoreDiscriminator: b
     }
     return {
         
-        'device': !exists(json, 'device') ? undefined : json['device'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'isPaused': !exists(json, 'isPaused') ? undefined : json['isPaused'],
-        'createdOn': !exists(json, 'createdOn') ? undefined : (new Date(json['createdOn'])),
         'id': !exists(json, 'id') ? undefined : json['id'],
         'rfId': !exists(json, 'rfId') ? undefined : json['rfId'],
         'model': !exists(json, 'model') ? undefined : ShockerModelTypeFromJSON(json['model']),
+        'name': !exists(json, 'name') ? undefined : json['name'],
+        'isPaused': !exists(json, 'isPaused') ? undefined : json['isPaused'],
+        'createdOn': !exists(json, 'createdOn') ? undefined : (new Date(json['createdOn'])),
+        'device': !exists(json, 'device') ? undefined : json['device'],
     };
 }
 
@@ -108,13 +108,13 @@ export function ShockerWithDeviceToJSON(value?: ShockerWithDevice | null): any {
     }
     return {
         
-        'device': value.device,
-        'name': value.name,
-        'isPaused': value.isPaused,
-        'createdOn': value.createdOn === undefined ? undefined : (value.createdOn.toISOString()),
         'id': value.id,
         'rfId': value.rfId,
         'model': ShockerModelTypeToJSON(value.model),
+        'name': value.name,
+        'isPaused': value.isPaused,
+        'createdOn': value.createdOn === undefined ? undefined : (value.createdOn.toISOString()),
+        'device': value.device,
     };
 }
 

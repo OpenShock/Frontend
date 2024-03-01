@@ -24,7 +24,13 @@ export interface ControlLogSenderLight {
      * @type {string}
      * @memberof ControlLogSenderLight
      */
-    customName?: string | null;
+    id?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ControlLogSenderLight
+     */
+    name?: string | null;
     /**
      * 
      * @type {string}
@@ -36,13 +42,7 @@ export interface ControlLogSenderLight {
      * @type {string}
      * @memberof ControlLogSenderLight
      */
-    id?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ControlLogSenderLight
-     */
-    name?: string | null;
+    customName?: string | null;
 }
 
 /**
@@ -64,10 +64,10 @@ export function ControlLogSenderLightFromJSONTyped(json: any, ignoreDiscriminato
     }
     return {
         
-        'customName': !exists(json, 'customName') ? undefined : json['customName'],
-        'image': !exists(json, 'image') ? undefined : json['image'],
         'id': !exists(json, 'id') ? undefined : json['id'],
         'name': !exists(json, 'name') ? undefined : json['name'],
+        'image': !exists(json, 'image') ? undefined : json['image'],
+        'customName': !exists(json, 'customName') ? undefined : json['customName'],
     };
 }
 
@@ -80,10 +80,10 @@ export function ControlLogSenderLightToJSON(value?: ControlLogSenderLight | null
     }
     return {
         
-        'customName': value.customName,
-        'image': value.image,
         'id': value.id,
         'name': value.name,
+        'image': value.image,
+        'customName': value.customName,
     };
 }
 

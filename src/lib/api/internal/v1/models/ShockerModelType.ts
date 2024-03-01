@@ -18,9 +18,9 @@
  * @enum {string}
  */
 export enum ShockerModelType {
-    NUMBER_0 = 0,
-    NUMBER_1 = 1,
-    NUMBER_unknown_default_open_api = 11184809
+    caiXianlin = 'CaiXianlin',
+    petTrainer = 'PetTrainer',
+    unknownDefaultOpenApi = '11184809'
 }
 
 

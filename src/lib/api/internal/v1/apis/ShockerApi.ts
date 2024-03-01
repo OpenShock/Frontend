@@ -266,7 +266,7 @@ export interface ShockerApiInterface {
 
     /**
      * 
-     * @summary Send a control message to shockers (Deprecated)
+     * @summary Send a control message to shockers (Deprecated in favor of the /2/shockers/control endpoint)
      * @param {Array<Control>} [control] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -275,7 +275,7 @@ export interface ShockerApiInterface {
     shockerSendControlDEPRECATEDRaw(requestParameters: ShockerSendControlDEPRECATEDRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>>;
 
     /**
-     * Send a control message to shockers (Deprecated)
+     * Send a control message to shockers (Deprecated in favor of the /2/shockers/control endpoint)
      */
     shockerSendControlDEPRECATED(control?: Array<Control>, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse>;
 
@@ -679,7 +679,7 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
     }
 
     /**
-     * Send a control message to shockers (Deprecated)
+     * Send a control message to shockers (Deprecated in favor of the /2/shockers/control endpoint)
      */
     async shockerSendControlDEPRECATEDRaw(requestParameters: ShockerSendControlDEPRECATEDRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
         const queryParameters: any = {};
@@ -697,14 +697,14 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.control?.map(ControlToJSON),
+            body: requestParameters.control.map(ControlToJSON),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));
     }
 
     /**
-     * Send a control message to shockers (Deprecated)
+     * Send a control message to shockers (Deprecated in favor of the /2/shockers/control endpoint)
      */
     async shockerSendControlDEPRECATED(control?: Array<Control>, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse> {
         const response = await this.shockerSendControlDEPRECATEDRaw({ control: control }, initOverrides);

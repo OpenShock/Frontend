@@ -1,6 +1,6 @@
 import { env } from '$env/dynamic/public';
-import { AccountApi, AdminApi, Configuration as ConfigurationV1, DeviceApi, DevicesApi as DevicesV1Api, PublicApi, ShareLinksApi, SharesApi, ShockerApi as ShockerV1Api, TokensApi, UsersApi, VersionApi } from './internal/v1';
-import { Configuration as ConfigurationV2, DevicesApi as DevicesV2Api, ShockerApi as ShockerV2Api } from './internal/v2';
+import { AccountApi, AdminApi, Configuration as ConfigurationV1, DeviceApi, DevicesApi, PublicApi, ShareLinksApi, SharesApi, ShockerApi as ShockerV1Api, TokensApi, UsersApi, VersionApi } from './internal/v1';
+import { Configuration as ConfigurationV2, ShockerApi as ShockerV2Api } from './internal/v2';
 
 export const DefaultApiV1Configuration = new ConfigurationV1({
   basePath: env.PUBLIC_BACKEND_API_BASE_URL,
@@ -14,8 +14,7 @@ export const DefaultApiV2Configuration = new ConfigurationV2({
 export const accountApi = new AccountApi(DefaultApiV1Configuration);
 export const adminApi = new AdminApi(DefaultApiV1Configuration);
 export const deviceApi = new DeviceApi(DefaultApiV1Configuration);
-export const devicesV1Api = new DevicesV1Api(DefaultApiV1Configuration);
-export const devicesV2Api = new DevicesV2Api(DefaultApiV2Configuration);
+export const devicesApi = new DevicesApi(DefaultApiV1Configuration);
 export const publicApi = new PublicApi(DefaultApiV1Configuration);
 export const shareLinksApi = new ShareLinksApi(DefaultApiV1Configuration);
 export const sharesApi = new SharesApi(DefaultApiV1Configuration);

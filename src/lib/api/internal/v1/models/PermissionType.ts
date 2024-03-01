@@ -18,8 +18,8 @@
  * @enum {string}
  */
 export enum PermissionType {
-    NUMBER_0 = 0,
-    NUMBER_unknown_default_open_api = 11184809
+    shockersUse = 'Shockers_Use',
+    unknownDefaultOpenApi = '11184809'
 }
 
 
