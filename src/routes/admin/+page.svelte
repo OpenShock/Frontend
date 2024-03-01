@@ -1,23 +1,17 @@
 <script lang="ts">
   import { adminApi } from '$lib/api';
+  import type { AdminOnlineDeviceResponse as Device } from '$lib/api/internal/v1';
   import { UserSelfStore } from '$lib/stores/UserStore';
 
   $: isAdmin = ($UserSelfStore?.rank as string | undefined | null) === 'Admin'; // WTF??? I thought it would be an integer, not a string
 
-  type Device = {
-    id: string;
-    name: string;
-    owner: { id: string; name: string; image: string };
-    firmwareVersion: string;
-    gateway: string;
-  };
   let devices: Device[] = [];
 
   $: if (isAdmin) {
     adminApi
       .adminGetOnlineDevices()
       .then((res) => {
-        devices = res.data as Device[];
+        devices = res.data ?? [];
       })
       .catch((err) => {
         console.error(err);
@@ -102,8 +96,8 @@
                   {device.gateway}
                 </td>
                 <td class="flex items-center space-x-2">
-                  <img class="h-8 rounded-full" src={device.owner.image} alt="User Avatar" />
-                  <p>{device.owner.name}</p>
+                  <img class="h-8 rounded-full" src={device.owner?.image} alt="User Avatar" />
+                  <p>{device.owner?.name}</p>
                 </td>
               </tr>
             {/each}
