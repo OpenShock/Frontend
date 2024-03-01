@@ -33,7 +33,6 @@ models/LcgResponseBaseResponse.ts
 models/LogEntry.ts
 models/LogEntryIEnumerableBaseResponse.ts
 models/Login.ts
-models/MetadataIdentifier.ts
 models/MinimalShocker.ts
 models/NewShocker.ts
 models/ObjectBaseResponse.ts
@@ -47,7 +46,6 @@ models/PauseReason.ts
 models/PauseReasonBaseResponse.ts
 models/PauseRequest.ts
 models/PermissionType.ts
-models/PrereleaseIdentifier.ts
 models/PublicShareLinkResponse.ts
 models/PublicShareLinkResponseBaseResponse.ts
 models/RankType.ts
@@ -62,7 +60,6 @@ models/RootResponse.ts
 models/RootResponseBaseResponse.ts
 models/SelfResponse.ts
 models/SelfResponseBaseResponse.ts
-models/SemVersion.ts
 models/ShareCodeInfo.ts
 models/ShareCodeInfoIEnumerableBaseResponse.ts
 models/ShareInfo.ts

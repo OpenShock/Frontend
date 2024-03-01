@@ -19,12 +19,6 @@ import {
     GenericIniFromJSONTyped,
     GenericIniToJSON,
 } from './GenericIni';
-import type { SemVersion } from './SemVersion';
-import {
-    SemVersionFromJSON,
-    SemVersionFromJSONTyped,
-    SemVersionToJSON,
-} from './SemVersion';
 
 /**
  * 
@@ -52,10 +46,10 @@ export interface AdminOnlineDeviceResponse {
     owner?: GenericIni;
     /**
      * 
-     * @type {SemVersion}
+     * @type {string}
      * @memberof AdminOnlineDeviceResponse
      */
-    firmwareVersion?: SemVersion;
+    firmwareVersion?: string | null;
     /**
      * 
      * @type {string}
@@ -86,7 +80,7 @@ export function AdminOnlineDeviceResponseFromJSONTyped(json: any, ignoreDiscrimi
         'id': !exists(json, 'id') ? undefined : json['id'],
         'name': !exists(json, 'name') ? undefined : json['name'],
         'owner': !exists(json, 'owner') ? undefined : GenericIniFromJSON(json['owner']),
-        'firmwareVersion': !exists(json, 'firmwareVersion') ? undefined : SemVersionFromJSON(json['firmwareVersion']),
+        'firmwareVersion': !exists(json, 'firmwareVersion') ? undefined : json['firmwareVersion'],
         'gateway': !exists(json, 'gateway') ? undefined : json['gateway'],
     };
 }
@@ -103,7 +97,7 @@ export function AdminOnlineDeviceResponseToJSON(value?: AdminOnlineDeviceRespons
         'id': value.id,
         'name': value.name,
         'owner': GenericIniToJSON(value.owner),
-        'firmwareVersion': SemVersionToJSON(value.firmwareVersion),
+        'firmwareVersion': value.firmwareVersion,
         'gateway': value.gateway,
     };
 }
