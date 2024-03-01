@@ -13,12 +13,6 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { PauseReason } from './PauseReason';
-import {
-    PauseReasonFromJSON,
-    PauseReasonFromJSONTyped,
-    PauseReasonToJSON,
-} from './PauseReason';
 import type { ShockerLimits } from './ShockerLimits';
 import {
     ShockerLimitsFromJSON,
@@ -63,11 +57,18 @@ export interface ShareLinkShocker {
      */
     limits?: ShockerLimits;
     /**
+     * An integer representing the reason(s) for the shocker being paused, expressed as a bitfield where reasons are OR'd together.
      * 
-     * @type {PauseReason}
+     * Each bit corresponds to:
+     * - 1: Shocker
+     * - 2: Share
+     * - 4: ShareLink
+     * 
+     * For example, a value of 6 (2 | 4) indicates both 'Share' and 'ShareLink' reasons.
+     * @type {number}
      * @memberof ShareLinkShocker
      */
-    paused?: PauseReason;
+    paused?: number;
 }
 
 /**
@@ -93,7 +94,7 @@ export function ShareLinkShockerFromJSONTyped(json: any, ignoreDiscriminator: bo
         'name': !exists(json, 'name') ? undefined : json['name'],
         'permissions': !exists(json, 'permissions') ? undefined : ShockerPermissionsFromJSON(json['permissions']),
         'limits': !exists(json, 'limits') ? undefined : ShockerLimitsFromJSON(json['limits']),
-        'paused': !exists(json, 'paused') ? undefined : PauseReasonFromJSON(json['paused']),
+        'paused': !exists(json, 'paused') ? undefined : json['paused'],
     };
 }
 
@@ -110,7 +111,7 @@ export function ShareLinkShockerToJSON(value?: ShareLinkShocker | null): any {
         'name': value.name,
         'permissions': ShockerPermissionsToJSON(value.permissions),
         'limits': ShockerLimitsToJSON(value.limits),
-        'paused': PauseReasonToJSON(value.paused),
+        'paused': value.paused,
     };
 }
 

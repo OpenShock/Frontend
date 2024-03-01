@@ -42,7 +42,6 @@ models/OtaUpdateStatus.ts
 models/OwnerShockerResponse.ts
 models/OwnerShockerResponseIEnumerableBaseResponse.ts
 models/PasswordResetProcessData.ts
-models/PauseReason.ts
 models/PauseReasonBaseResponse.ts
 models/PauseRequest.ts
 models/PermissionType.ts

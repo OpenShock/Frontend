@@ -30,7 +30,6 @@ export * from './OtaUpdateStatus';
 export * from './OwnerShockerResponse';
 export * from './OwnerShockerResponseIEnumerableBaseResponse';
 export * from './PasswordResetProcessData';
-export * from './PauseReason';
 export * from './PauseReasonBaseResponse';
 export * from './PauseRequest';
 export * from './PermissionType';

@@ -13,13 +13,6 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { PauseReason } from './PauseReason';
-import {
-    PauseReasonFromJSON,
-    PauseReasonFromJSONTyped,
-    PauseReasonToJSON,
-} from './PauseReason';
-
 /**
  * 
  * @export
@@ -33,11 +26,18 @@ export interface PauseReasonBaseResponse {
      */
     message?: string | null;
     /**
+     * An integer representing the reason(s) for the shocker being paused, expressed as a bitfield where reasons are OR'd together.
      * 
-     * @type {PauseReason}
+     * Each bit corresponds to:
+     * - 1: Shocker
+     * - 2: Share
+     * - 4: ShareLink
+     * 
+     * For example, a value of 6 (2 | 4) indicates both 'Share' and 'ShareLink' reasons.
+     * @type {number}
      * @memberof PauseReasonBaseResponse
      */
-    data?: PauseReason;
+    data?: number;
 }
 
 /**
@@ -60,7 +60,7 @@ export function PauseReasonBaseResponseFromJSONTyped(json: any, ignoreDiscrimina
     return {
         
         'message': !exists(json, 'message') ? undefined : json['message'],
-        'data': !exists(json, 'data') ? undefined : PauseReasonFromJSON(json['data']),
+        'data': !exists(json, 'data') ? undefined : json['data'],
     };
 }
 
@@ -74,7 +74,7 @@ export function PauseReasonBaseResponseToJSON(value?: PauseReasonBaseResponse | 
     return {
         
         'message': value.message,
-        'data': PauseReasonToJSON(value.data),
+        'data': value.data,
     };
 }
 
