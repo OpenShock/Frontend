@@ -69,7 +69,7 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
         headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
+            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
         }
 
         const response = await this.request({

@@ -214,7 +214,7 @@ export class ShareLinksApi extends runtime.BaseAPI implements ShareLinksApiInter
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
+            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
         }
 
         const response = await this.request({
@@ -246,7 +246,7 @@ export class ShareLinksApi extends runtime.BaseAPI implements ShareLinksApiInter
         headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
+            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
         }
 
         const response = await this.request({
@@ -281,7 +281,7 @@ export class ShareLinksApi extends runtime.BaseAPI implements ShareLinksApiInter
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
+            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
         }
 
         const response = await this.request({
@@ -321,7 +321,7 @@ export class ShareLinksApi extends runtime.BaseAPI implements ShareLinksApiInter
         headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
+            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
         }
 
         const response = await this.request({
@@ -352,7 +352,7 @@ export class ShareLinksApi extends runtime.BaseAPI implements ShareLinksApiInter
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
+            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
         }
 
         const response = await this.request({
@@ -392,7 +392,7 @@ export class ShareLinksApi extends runtime.BaseAPI implements ShareLinksApiInter
         headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
+            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
         }
 
         const response = await this.request({
@@ -431,7 +431,7 @@ export class ShareLinksApi extends runtime.BaseAPI implements ShareLinksApiInter
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
+            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
         }
 
         const response = await this.request({

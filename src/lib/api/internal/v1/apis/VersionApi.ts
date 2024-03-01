@@ -59,7 +59,7 @@ export class VersionApi extends runtime.BaseAPI implements VersionApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
+            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
         }
 
         const response = await this.request({
