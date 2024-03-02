@@ -54,6 +54,7 @@ jobs:
           name: frontend
           path: |
             package.json
+            package-lock.json
             build/
           retention-days: 1
           if-no-files-found: error
