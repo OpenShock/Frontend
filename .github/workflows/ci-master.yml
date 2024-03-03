@@ -15,7 +15,6 @@ env:
   REGISTRY: ghcr.io
   ARTIFACT_NAME: openshock-frontend.zip
   IMAGE_NAME: ${{ github.repository_owner }}/frontend
-  NODE_ENV: production
 
 jobs:
   build:
