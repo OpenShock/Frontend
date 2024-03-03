@@ -1,0 +1,10 @@
+.openapi-generator-ignore
+apis/ShockerApi.ts
+apis/index.ts
+index.ts
+models/Control.ts
+models/ControlRequest.ts
+models/ControlType.ts
+models/ObjectBaseResponse.ts
+models/index.ts
+runtime.ts
