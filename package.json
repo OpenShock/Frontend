@@ -14,7 +14,7 @@
 		"format": "prettier --write .",
 		"test:integration": "playwright test",
 		"test:unit": "vitest",
-		"postinstall": "patch-package"
+		"postinstall": "npx patch-package"
 	},
 	"devDependencies": {
 		"@openapitools/openapi-generator-cli": "^2.9.0",
