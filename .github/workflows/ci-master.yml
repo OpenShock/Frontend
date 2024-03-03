@@ -97,6 +97,9 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}.{{minor}}.{{patch}} 
       
+      - name: ls
+        run: ls -al
+
       - name: Build image
         uses: docker/build-push-action@v5
         with:
