@@ -11,7 +11,7 @@ on:
 name: ci-master
 
 env:
-  NODE_VERSION: 20
+  NODE_VERSION: 21
   REGISTRY: ghcr.io
   ARTIFACT_NAME: openshock-frontend.zip
   IMAGE_NAME: ${{ github.repository_owner }}/frontend
