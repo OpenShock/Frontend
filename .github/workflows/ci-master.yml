@@ -11,7 +11,7 @@ on:
 name: ci-master
 
 env:
-  NODE_VERSION: 20
+  NODE_VERSION: 21
   REGISTRY: ghcr.io
   ARTIFACT_NAME: openshock-frontend.zip
   IMAGE_NAME: ${{ github.repository_owner }}/frontend
@@ -71,9 +71,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ env.ARTIFACT_NAME }}
-      
-      - name: Extract artifacts
-        run: unzip ${{ env.ARTIFACT_NAME }} -d app
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
