@@ -4,17 +4,17 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"dev": "npx vite dev",
-		"build": "npx vite build",
-		"preview": "npx vite preview",
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
 		"test": "npm run test:integration && npm run test:unit",
-		"check": "npx svelte-kit sync && npx svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "npx svelte-kit sync && npx svelte-check --tsconfig ./tsconfig.json --watch",
-		"lint": "npx prettier --check . && eslint .",
-		"format": "npx prettier --write .",
-		"test:integration": "npx playwright test",
-		"test:unit": "npx vitest",
-		"postinstall": "npx patch-package"
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"lint": "prettier --check . && eslint .",
+		"format": "prettier --write .",
+		"test:integration": "playwright test",
+		"test:unit": "vitest",
+		"postinstall": "patch-package"
 	},
 	"devDependencies": {
 		"@openapitools/openapi-generator-cli": "^2.9.0",
