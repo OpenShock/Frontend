@@ -4,6 +4,9 @@ inputs:
   registry:
     required: true
     description: Container registry to push the image to
+  registry-path:
+    required: true
+    description: Path to the image in the container registry
   registry-username:
     required: true
     description: Username to log in to the container registry
@@ -39,7 +42,7 @@ runs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        images: ${{ inputs.registry }}/${{ inputs.registry-username }}/frontend
+        images: ${{ inputs.registry }}/${{ inputs.registry-path }}
         flavor: |
           latest=false
         tags: |
