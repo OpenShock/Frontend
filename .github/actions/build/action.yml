@@ -32,6 +32,7 @@ runs:
       run: npm run check
 
     - name: Install playwright
+      shell: bash
       run: npx playwright install
 
     - name: Test
