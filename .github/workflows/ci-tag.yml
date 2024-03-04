@@ -15,6 +15,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: .github
+
       - uses: ./.github/actions/build
         with:
           node-version: ${{ env.NODE_VERSION }}
@@ -25,6 +29,10 @@ jobs:
     needs: build
 
     steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: .github
+
       - uses: ./.github/actions/containerize
         with:
           registry: ghcr.io
