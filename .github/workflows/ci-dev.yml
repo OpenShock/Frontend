@@ -1,0 +1,43 @@
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+    types: [opened, reopened, synchronize]
+  workflow_dispatch: # Manually invoked by user.
+
+name: ci-dev
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        version: [16, 18, 20]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.version }}
+          cache: npm
+
+      - name: Install dependencies
+        shell: bash
+        run: npm ci
+
+      - name: Check
+        shell: bash
+        run: npm run check
+
+      - name: Install playwright
+        run: npx playwright install
+
+      - name: Test
+        shell: bash
+        run: npm test
