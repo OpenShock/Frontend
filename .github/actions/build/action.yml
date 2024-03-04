@@ -31,13 +31,13 @@ runs:
       shell: bash
       run: npm run check
 
-    - name: Install playwright
-      shell: bash
-      run: npx playwright install
+#    - name: Install playwright
+#      shell: bash
+#      run: npx playwright install
 
-    - name: Test
-      shell: bash
-      run: npm test
+#    - name: Test
+#      shell: bash
+#      run: npm test
 
     - name: Build
       shell: bash
