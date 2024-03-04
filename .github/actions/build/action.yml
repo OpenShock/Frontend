@@ -1,0 +1,55 @@
+name: build
+description: Tests and builds the frontend
+inputs:
+  node-version:
+    required: true
+    description: Node.js version to use
+  artifact-name:
+    required: true
+    description: Name of the artifact to upload
+  skip-checkout:
+    description: If true, skips checkout
+    required: false
+    default: false
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v4
+      if: ${{ !inputs.skip-checkout }}
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: npm
+
+    - name: Install dependencies
+      shell: bash
+      run: npm ci
+
+    - name: Check
+      shell: bash
+      run: npm run check
+
+    - name: Install playwright
+      run: npx playwright install
+
+    - name: Test
+      shell: bash
+      run: npm test
+
+    - name: Build
+      shell: bash
+      run: npm run build
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: |
+          package.json
+          package-lock.json
+          build/
+          patches/
+        retention-days: 1
+        if-no-files-found: error
