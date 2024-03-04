@@ -28,6 +28,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: .github
 
       - uses: ./.github/actions/containerize
         with:
