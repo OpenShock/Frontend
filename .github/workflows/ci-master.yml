@@ -11,7 +11,7 @@ on:
 name: ci-master
 
 env:
-  NODE_VERSION: 21
+  NODE_VERSION: 20
   REGISTRY: ghcr.io
   ARTIFACT_NAME: openshock-frontend.zip
   IMAGE_NAME: ${{ github.repository_owner }}/frontend
@@ -26,6 +26,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: npm
 
       - name: Install dependencies
         shell: bash
@@ -97,7 +98,10 @@ jobs:
             type=ref,event=pr
             type=semver,pattern={{major}},enable=${{ !startsWith(github.ref, 'refs/tags/v0.') }}
             type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}.{{minor}}.{{patch}} 
+            type=semver,pattern={{major}}.{{minor}}.{{patch}}
+            type=semver,pattern={{major}}.{{minor}}.{{patch}}+{{build}}
+            type=semver,pattern={{major}}.{{minor}}.{{patch}}-{{prerelease}}
+            type=semver,pattern={{major}}.{{minor}}.{{patch}}-{{prerelease}}+{{build}}
 
       - name: Build image
         uses: docker/build-push-action@v5
