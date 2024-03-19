@@ -5,12 +5,14 @@
   import AdminDeviceList from './AdminDeviceList.svelte';
 
   $: isAdmin = $UserSelfStore?.rank === RankType.admin;
+  let refresh = true;
 
   type FlatDevice = AdminOnlineDeviceResponse & { ownerName: string | null | undefined };
 
-  let devices: FlatDevice[] | null = null;
+  let devices: FlatDevice[] = [];
 
-  $: if (isAdmin) {
+  $: if (isAdmin && refresh) {
+    refresh = false;
     adminApi
       .adminGetOnlineDevices()
       .then((res) => {
@@ -34,7 +36,13 @@
     <h1 class="text-4xl">You do not have permission to access this page</h1>
     <a href="/home" class="btn variant-filled-primary">Go Home</a>
   {:else}
-    <h2 class="h2">Admin Panel</h2>
+    <div class="flex justify-between w-full">
+      <h2 class="h2">Admin Panel</h2>
+      <button class="btn variant-filled-primary" on:click={() => (refresh = true)}>
+        <i class="fa fa-sync" />
+        Refresh
+      </button>
+    </div>
 
     <!-- Online Users List -->
     {#if devices}
