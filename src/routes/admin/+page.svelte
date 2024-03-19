@@ -5,14 +5,12 @@
   import AdminDeviceList from './AdminDeviceList.svelte';
 
   $: isAdmin = $UserSelfStore?.rank === RankType.admin;
-  let refresh = true;
 
   type FlatDevice = AdminOnlineDeviceResponse & { ownerName: string | null | undefined };
 
-  let devices: FlatDevice[] = [];
+  let devices: FlatDevice[] | null = null;
 
-  $: if (isAdmin && refresh) {
-    refresh = false;
+  $: if (isAdmin && !devices) {
     adminApi
       .adminGetOnlineDevices()
       .then((res) => {
@@ -38,7 +36,7 @@
   {:else}
     <div class="flex justify-between w-full">
       <h2 class="h2">Admin Panel</h2>
-      <button class="btn variant-filled-primary" on:click={() => (refresh = true)}>
+      <button class="btn variant-filled-primary" on:click={() => (devices = null)}>
         <i class="fa fa-sync" />
         Refresh
       </button>
