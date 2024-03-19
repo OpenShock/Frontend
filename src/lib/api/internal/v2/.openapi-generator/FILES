@@ -1,10 +1,13 @@
 .openapi-generator-ignore
+apis/AccountApi.ts
 apis/ShockerApi.ts
 apis/index.ts
 index.ts
 models/Control.ts
 models/ControlRequest.ts
 models/ControlType.ts
+models/LoginV2.ts
 models/ObjectBaseResponse.ts
+models/SignUpV2.ts
 models/index.ts
 runtime.ts

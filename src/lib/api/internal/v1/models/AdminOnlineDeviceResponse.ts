@@ -56,6 +56,12 @@ export interface AdminOnlineDeviceResponse {
      * @memberof AdminOnlineDeviceResponse
      */
     gateway?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof AdminOnlineDeviceResponse
+     */
+    connectedAt?: Date;
 }
 
 /**
@@ -82,6 +88,7 @@ export function AdminOnlineDeviceResponseFromJSONTyped(json: any, ignoreDiscrimi
         'owner': !exists(json, 'owner') ? undefined : GenericIniFromJSON(json['owner']),
         'firmwareVersion': !exists(json, 'firmwareVersion') ? undefined : json['firmwareVersion'],
         'gateway': !exists(json, 'gateway') ? undefined : json['gateway'],
+        'connectedAt': !exists(json, 'connectedAt') ? undefined : (new Date(json['connectedAt'])),
     };
 }
 
@@ -99,6 +106,7 @@ export function AdminOnlineDeviceResponseToJSON(value?: AdminOnlineDeviceRespons
         'owner': GenericIniToJSON(value.owner),
         'firmwareVersion': value.firmwareVersion,
         'gateway': value.gateway,
+        'connectedAt': value.connectedAt === undefined ? undefined : (value.connectedAt.toISOString()),
     };
 }
 
