@@ -4,6 +4,7 @@
   import { AppShell, Modal, Toast, initializeStores, storePopup } from '@skeletonlabs/skeleton';
   import Footer from '$lib/components/layout/Footer.svelte';
   import Header from '$lib/components/layout/Header.svelte';
+  import Sidebar from '$lib/components/layout/Sidebar.svelte';
   import OpenGraphTags from '$lib/components/metadata/OpenGraphTags.svelte';
   import TwitterSummaryTags from '$lib/components/metadata/Twitter/TwitterSummaryTags.svelte';
   import { modalRegistry } from '$lib/modals';
@@ -24,6 +25,7 @@
 
 <AppShell>
   <Header slot="header" />
+  <Sidebar slot="sidebarLeft" />
   <slot />
   <Footer slot="pageFooter" />
 </AppShell>

@@ -3,7 +3,7 @@
   import { AppBar, LightSwitch } from '@skeletonlabs/skeleton';
 </script>
 
-<AppBar slot="header">
+<AppBar>
   <div slot="lead" class="flex items-center space-x-4">
     <!-- Logo -->
     <a
