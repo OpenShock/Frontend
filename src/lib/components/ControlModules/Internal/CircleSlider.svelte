@@ -1,8 +1,7 @@
 <script lang="ts">
+  import { getCircleX, getCircleY } from '$lib/utils/math';
   import SvgArc from './SvgArc.svelte';
   import { dragcircle } from './dragcircle';
-
-  const RadToDeg = Math.PI / 180;
 
   const angleStart = 135;
   const angleEnd = 405;
@@ -26,8 +25,8 @@
 
   $: {
     if (sliderHandle) {
-      sliderHandle.style.left = `${60 + 60 * Math.cos(degrees * RadToDeg)}px`;
-      sliderHandle.style.top = `${60 + 60 * Math.sin(degrees * RadToDeg)}px`;
+      sliderHandle.style.left = `${60 + getCircleX(60, degrees)}px`;
+      sliderHandle.style.top = `${60 + getCircleY(60, degrees)}px`;
     }
   }
 

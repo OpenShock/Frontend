@@ -1,6 +1,6 @@
-export function dragcircle(node: HTMLElement, { centerX, centerY, radius, angleStart, angleEnd }: { centerX: number, centerY: number, radius: number, angleStart: number, angleEnd: number }) {
-  const RadToDeg = Math.PI / 180;
+import { RadToDeg, getCircleX, getCircleY } from "$lib/utils/math";
 
+export function dragcircle(node: HTMLElement, { centerX, centerY, radius, angleStart, angleEnd }: { centerX: number, centerY: number, radius: number, angleStart: number, angleEnd: number }) {
   const handler = (event: TouchEvent | MouseEvent) => {
     let clientX: number;
     let clientY: number;
@@ -17,14 +17,14 @@ export function dragcircle(node: HTMLElement, { centerX, centerY, radius, angleS
     const rect = node.getBoundingClientRect();
     const x = clientX - rect.left - rect.width / 2;
     const y = clientY - rect.top - rect.height / 2;
-    let angle = Math.atan2(y, x) * 180 / Math.PI;
+    let angle = Math.atan2(y, x) * RadToDeg;
     if (angle < 0) {
       angle += 360;
     }
     const newAngle = Math.min(angleEnd, Math.max(angleStart, angle));
 
-    node.style.left = `${centerX + radius * Math.cos(newAngle * RadToDeg)}px`;
-    node.style.top = `${centerY + radius * Math.sin(newAngle * RadToDeg)}px`;
+    node.style.left = `${centerX + getCircleX(radius, newAngle)}px`;
+    node.style.top = `${centerY + getCircleY(radius, newAngle)}px`;
 
     node.dispatchEvent(new CustomEvent("sliderdrag", { detail: { angle: newAngle } }));
   };

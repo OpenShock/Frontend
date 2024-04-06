@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { getCircleX, getCircleY } from '$lib/utils/math';
+
   export let centerX: number;
   export let centerY: number;
   export let angleStart: number;
@@ -8,12 +10,10 @@
   export let color: string;
   export let cursor: string;
 
-  const RadToDeg = Math.PI / 180;
-
-  $: rx = centerX + radius * Math.cos(angleStart * RadToDeg);
-  $: ry = centerY + radius * Math.sin(angleStart * RadToDeg);
-  $: x = centerX + radius * Math.cos(angleEnd * RadToDeg);
-  $: y = centerY + radius * Math.sin(angleEnd * RadToDeg);
+  $: rx = centerX + getCircleX(radius, angleStart);
+  $: ry = centerY + getCircleY(radius, angleStart);
+  $: x = centerX + getCircleX(radius, angleEnd);
+  $: y = centerY + getCircleY(radius, angleEnd);
 
   $: largeArcFlag = angleEnd - angleStart < 180 ? 0 : 1;
 </script>
