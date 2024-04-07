@@ -176,9 +176,9 @@
     @apply absolute w-[30px] h-[30px] rounded-full bg-white cursor-move;
   }
   span {
-    @apply absolute top-[50%] left-[50%] transform -translate-x-[50%] -translate-y-[50%] text-xl font-bold;
+    @apply absolute top-[50%] left-[50%] transform -translate-x-[50%] -translate-y-[50%] text-xl font-bold select-none;
   }
   label {
-    @apply absolute bottom-0 left-[50%] transform -translate-x-[50%] translate-y-[10%] text-center;
+    @apply absolute bottom-0 left-[50%] transform -translate-x-[50%] translate-y-[10%] text-center select-none;
   }
 </style>
