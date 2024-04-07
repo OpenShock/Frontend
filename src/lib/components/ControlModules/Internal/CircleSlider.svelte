@@ -67,26 +67,6 @@
 
     updateValueFromSlider(event);
   }
-  function handleInput(event: Event) {
-    const target = event.target as HTMLSpanElement;
-
-    // Try parse, only update if successful
-    const newValue = parseFloat(target.innerText);
-    if (isNaN(newValue)) {
-      event.preventDefault();
-      value = value;
-      return;
-    }
-
-    // Check if within bounds
-    if (newValue < 0 || newValue > 100) {
-      event.preventDefault();
-      value = value;
-      return;
-    }
-
-    value = Math.round(clamp(newValue, min, max));
-  }
   onDestroy(() => {
     trackingStopped();
   });
@@ -155,14 +135,11 @@
       aria-labelledby={labelId}
       aria-controls={guageId}
     />
-    <span contenteditable="true" aria-label="Value" aria-multiline="false" on:input={handleInput}>
-      {Math.round(value)}
-    </span>
+    <input id={inputId} type="number" {name} {min} bind:value {max} step="1" aria-label="Value" />
     <label for={inputId} aria-label="Name">
       {name}
     </label>
   </div>
-  <input id={inputId} type="hidden" {name} {min} {value} {max} step="1" />
 </div>
 
 <style lang="postcss">
@@ -175,8 +152,17 @@
   .handle {
     @apply absolute w-[30px] h-[30px] rounded-full bg-white cursor-move;
   }
-  span {
-    @apply absolute top-[50%] left-[50%] transform -translate-x-[50%] -translate-y-[50%] text-xl font-bold select-none;
+  input[type='number'] {
+    @apply absolute top-[50%] left-[50%] transform -translate-x-[50%] -translate-y-[50%] text-xl font-bold select-none appearance-none bg-transparent border-none text-center;
+
+    /* Firefox */
+    -moz-appearance: none;
+  }
+  /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
   label {
     @apply absolute bottom-0 left-[50%] transform -translate-x-[50%] translate-y-[10%] text-center select-none;
