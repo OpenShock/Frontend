@@ -1,5 +1,6 @@
 <script lang="ts">
   import { RadToDeg, clamp, getCircleX, getCircleY, lerp } from '$lib/utils/math';
+  import { randStr } from '$lib/utils/rand';
   import { onDestroy } from 'svelte';
 
   const viewSize = { x: 100, y: 100 };
@@ -8,6 +9,10 @@
   const angleStart = 135;
   const angleEnd = 405;
   const angleRange = angleEnd - angleStart;
+
+  const id = randStr(8);
+  const labelId = id + '-label';
+  const guageId = id + '-guage';
 
   function calculateProps(
     center: { x: number; y: number },
@@ -40,6 +45,7 @@
   export let value: number;
   export let min: number;
   export let max: number;
+  export let tabindex: number | null | undefined = undefined;
 
   let canvasHandle: HTMLDivElement;
   let sliderHandle: HTMLDivElement;
@@ -108,11 +114,14 @@
         {...calculateProps(center, angleStart, angleEnd, radius, 20, 'rgb(27, 29, 30)', 'pointer')}
         on:touchstart={startTracking}
         on:mousedown={startTracking}
+        aria-hidden="true"
       />
       <path
         {...calculateProps(center, angleStart, degrees, radius, 10, 'rgb(27, 180, 180)', 'pointer')}
         on:touchstart={startTracking}
         on:mousedown={startTracking}
+        id={guageId}
+        aria-hidden="true"
       />
     </svg>
     <div
@@ -120,12 +129,20 @@
       bind:this={sliderHandle}
       on:touchstart={startTracking}
       on:mousedown={startTracking}
+      role="slider"
+      {tabindex}
+      aria-valuemin={min}
+      aria-valuenow={value}
+      aria-valuemax={max}
+      aria-labelledby={labelId}
+      aria-controls={guageId}
     />
-    <span>{Math.round(value)}</span>
     <span>{Math.round(fraction * 100)}</span>
-    <p>{name}</p>
+    <p id={labelId} aria-label="Value">
+      {name}
+    </p>
   </div>
-  <input type="hidden" {name} {value} />
+  <input type="hidden" {name} {min} {value} {max} />
 </div>
 
 <style lang="postcss">
