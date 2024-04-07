@@ -106,7 +106,7 @@
         {...calcSvgArcProps(center, angleStart, angleEnd, radius, 20)}
         fill="none"
         stroke-linecap="round"
-        style="stroke: rgb(27, 29, 30); cursor: pointer;"
+        style="stroke: rgb(27, 29, 30)"
         on:touchstart={trackingStarted}
         on:mousedown={trackingStarted}
         aria-hidden="true"
@@ -115,7 +115,7 @@
         {...progressProps}
         fill="none"
         stroke-linecap="round"
-        style="stroke: rgb(27, 180, 180); cursor: pointer;"
+        style="stroke: rgb(27, 180, 180)"
         on:touchstart={trackingStarted}
         on:mousedown={trackingStarted}
         id={guageId}
@@ -148,6 +148,9 @@
   }
   svg {
     @apply absolute w-[150px] h-[150px];
+  }
+  path {
+    @apply cursor-pointer;
   }
   .handle {
     @apply absolute w-[30px] h-[30px] rounded-full bg-white cursor-move;
