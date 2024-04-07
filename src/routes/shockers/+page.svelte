@@ -5,7 +5,7 @@
 <!-- Rounded bordered container -->
 <div class="container mx-auto py-4 flex flex-wrap justify-center items-stretch gap-4">
   <!-- Grid container -->
-  {#each [...Array(20).keys()] as a}
+  {#each [...Array(4).keys()] as a}
     <!-- Grid item -->
     <RootComponent name={`Module ${a + 1}`} />
   {/each}
