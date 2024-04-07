@@ -7,6 +7,9 @@ export function clamp(value: number, min: number, max: number): number {
 export function lerp(a: number, b: number, t: number): number {
   return a + (b - a) * t;
 }
+export function invLerp(a: number, b: number, value: number): number {
+  return (value - a) / (b - a);
+}
 
 export function getCircleX(radius: number, degrees: number): number {
   return radius * Math.cos(degrees * DegToRad);

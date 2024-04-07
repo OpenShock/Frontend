@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { RadToDeg, clamp, getCircleX, getCircleY, lerp } from '$lib/utils/math';
+  import { RadToDeg, clamp, getCircleX, getCircleY, invLerp, lerp } from '$lib/utils/math';
   import { randStr } from '$lib/utils/rand';
   import { onDestroy } from 'svelte';
 
@@ -98,13 +98,12 @@
     stopTracking();
   });
 
+  $: degrees = angleStart + invLerp(min, max, value) * angleRange;
+
   $: if (sliderHandle) {
     sliderHandle.style.left = `${60 + getCircleX(60, degrees)}px`; // TODO: Avoid using pixel values
     sliderHandle.style.top = `${60 + getCircleY(60, degrees)}px`; // TODO: Avoid using pixel values
   }
-
-  $: fraction = (value - min) / (max - min);
-  $: degrees = angleStart + fraction * angleRange;
 </script>
 
 <div>
@@ -137,7 +136,7 @@
       aria-labelledby={labelId}
       aria-controls={guageId}
     />
-    <span>{Math.round(fraction * 100)}</span>
+    <span>{Math.round(value)}</span>
     <p id={labelId} aria-label="Value">
       {name}
     </p>
