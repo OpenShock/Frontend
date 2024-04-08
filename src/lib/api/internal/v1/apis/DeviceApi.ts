@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
   DeviceSelfResponseBaseResponse,
   LcgNodeResponseBaseResponse,
+  OpenShockProblem,
   StringBaseResponse,
 } from '../models/index';
 import {
@@ -24,6 +25,8 @@ import {
     DeviceSelfResponseBaseResponseToJSON,
     LcgNodeResponseBaseResponseFromJSON,
     LcgNodeResponseBaseResponseToJSON,
+    OpenShockProblemFromJSON,
+    OpenShockProblemToJSON,
     StringBaseResponseFromJSON,
     StringBaseResponseToJSON,
 } from '../models/index';

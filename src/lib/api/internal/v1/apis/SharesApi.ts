@@ -16,10 +16,13 @@
 import * as runtime from '../runtime';
 import type {
   ObjectBaseResponse,
+  OpenShockProblem,
 } from '../models/index';
 import {
     ObjectBaseResponseFromJSON,
     ObjectBaseResponseToJSON,
+    OpenShockProblemFromJSON,
+    OpenShockProblemToJSON,
 } from '../models/index';
 
 export interface SharesDeleteShareCodeRequest {

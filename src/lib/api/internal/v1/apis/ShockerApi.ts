@@ -22,7 +22,8 @@ import type {
   LogEntryIEnumerableBaseResponse,
   NewShocker,
   ObjectBaseResponse,
-  OwnerShockerResponseIEnumerableBaseResponse,
+  OpenShockProblem,
+  OwnerShockerResponseIEnumerableIEnumerableBaseResponse,
   PauseRequest,
   ResponseDeviceWithShockersIEnumerableBaseResponse,
   ShareCodeInfoIEnumerableBaseResponse,
@@ -44,8 +45,10 @@ import {
     NewShockerToJSON,
     ObjectBaseResponseFromJSON,
     ObjectBaseResponseToJSON,
-    OwnerShockerResponseIEnumerableBaseResponseFromJSON,
-    OwnerShockerResponseIEnumerableBaseResponseToJSON,
+    OpenShockProblemFromJSON,
+    OpenShockProblemToJSON,
+    OwnerShockerResponseIEnumerableIEnumerableBaseResponseFromJSON,
+    OwnerShockerResponseIEnumerableIEnumerableBaseResponseToJSON,
     PauseRequestFromJSON,
     PauseRequestToJSON,
     ResponseDeviceWithShockersIEnumerableBaseResponseFromJSON,
@@ -197,12 +200,12 @@ export interface ShockerApiInterface {
      * @throws {RequiredError}
      * @memberof ShockerApiInterface
      */
-    shockerListSharedShockersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OwnerShockerResponseIEnumerableBaseResponse>>;
+    shockerListSharedShockersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OwnerShockerResponseIEnumerableIEnumerableBaseResponse>>;
 
     /**
      * List all shockers shared with the authenticated user.
      */
-    shockerListSharedShockers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OwnerShockerResponseIEnumerableBaseResponse>;
+    shockerListSharedShockers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OwnerShockerResponseIEnumerableIEnumerableBaseResponse>;
 
     /**
      * 
@@ -517,7 +520,7 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
     /**
      * List all shockers shared with the authenticated user.
      */
-    async shockerListSharedShockersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OwnerShockerResponseIEnumerableBaseResponse>> {
+    async shockerListSharedShockersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OwnerShockerResponseIEnumerableIEnumerableBaseResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -533,13 +536,13 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OwnerShockerResponseIEnumerableBaseResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => OwnerShockerResponseIEnumerableIEnumerableBaseResponseFromJSON(jsonValue));
     }
 
     /**
      * List all shockers shared with the authenticated user.
      */
-    async shockerListSharedShockers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OwnerShockerResponseIEnumerableBaseResponse> {
+    async shockerListSharedShockers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OwnerShockerResponseIEnumerableIEnumerableBaseResponse> {
         const response = await this.shockerListSharedShockersRaw(initOverrides);
         return await response.value();
     }

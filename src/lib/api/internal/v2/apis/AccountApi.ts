@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
   LoginV2,
   ObjectBaseResponse,
+  OpenShockProblem,
   SignUpV2,
 } from '../models/index';
 import {
@@ -24,6 +25,8 @@ import {
     LoginV2ToJSON,
     ObjectBaseResponseFromJSON,
     ObjectBaseResponseToJSON,
+    OpenShockProblemFromJSON,
+    OpenShockProblemToJSON,
     SignUpV2FromJSON,
     SignUpV2ToJSON,
 } from '../models/index';

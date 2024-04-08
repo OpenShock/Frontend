@@ -15,11 +15,11 @@
 
 import * as runtime from '../runtime';
 import type {
-  SelfResponseBaseResponse,
+  SelfResponseIEnumerableBaseResponse,
 } from '../models/index';
 import {
-    SelfResponseBaseResponseFromJSON,
-    SelfResponseBaseResponseToJSON,
+    SelfResponseIEnumerableBaseResponseFromJSON,
+    SelfResponseIEnumerableBaseResponseToJSON,
 } from '../models/index';
 
 /**
@@ -36,12 +36,12 @@ export interface UsersApiInterface {
      * @throws {RequiredError}
      * @memberof UsersApiInterface
      */
-    usersGetSelfRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SelfResponseBaseResponse>>;
+    usersGetSelfRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SelfResponseIEnumerableBaseResponse>>;
 
     /**
      * Get the current user\'s information.
      */
-    usersGetSelf(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SelfResponseBaseResponse>;
+    usersGetSelf(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SelfResponseIEnumerableBaseResponse>;
 
 }
 
@@ -53,7 +53,7 @@ export class UsersApi extends runtime.BaseAPI implements UsersApiInterface {
     /**
      * Get the current user\'s information.
      */
-    async usersGetSelfRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SelfResponseBaseResponse>> {
+    async usersGetSelfRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SelfResponseIEnumerableBaseResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -69,13 +69,13 @@ export class UsersApi extends runtime.BaseAPI implements UsersApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => SelfResponseBaseResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => SelfResponseIEnumerableBaseResponseFromJSON(jsonValue));
     }
 
     /**
      * Get the current user\'s information.
      */
-    async usersGetSelf(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SelfResponseBaseResponse> {
+    async usersGetSelf(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SelfResponseIEnumerableBaseResponse> {
         const response = await this.usersGetSelfRaw(initOverrides);
         return await response.value();
     }

@@ -36,11 +36,12 @@ models/Login.ts
 models/MinimalShocker.ts
 models/NewShocker.ts
 models/ObjectBaseResponse.ts
+models/OpenShockProblem.ts
 models/OtaItem.ts
 models/OtaItemIReadOnlyCollectionBaseResponse.ts
 models/OtaUpdateStatus.ts
 models/OwnerShockerResponse.ts
-models/OwnerShockerResponseIEnumerableBaseResponse.ts
+models/OwnerShockerResponseIEnumerableIEnumerableBaseResponse.ts
 models/PasswordResetProcessData.ts
 models/PauseReasonBaseResponse.ts
 models/PauseRequest.ts
@@ -58,7 +59,7 @@ models/ResponseDeviceWithTokenBaseResponse.ts
 models/RootResponse.ts
 models/RootResponseBaseResponse.ts
 models/SelfResponse.ts
-models/SelfResponseBaseResponse.ts
+models/SelfResponseIEnumerableBaseResponse.ts
 models/ShareCodeInfo.ts
 models/ShareCodeInfoIEnumerableBaseResponse.ts
 models/ShareInfo.ts

@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
   Login,
   ObjectBaseResponse,
+  OpenShockProblem,
   PasswordResetProcessData,
   ResetRequest,
   SignUp,
@@ -26,6 +27,8 @@ import {
     LoginToJSON,
     ObjectBaseResponseFromJSON,
     ObjectBaseResponseToJSON,
+    OpenShockProblemFromJSON,
+    OpenShockProblemToJSON,
     PasswordResetProcessDataFromJSON,
     PasswordResetProcessDataToJSON,
     ResetRequestFromJSON,

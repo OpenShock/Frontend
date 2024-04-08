@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
   GuidBaseResponse,
   ObjectBaseResponse,
+  OpenShockProblem,
   PauseReasonBaseResponse,
   PauseRequest,
   ShareLinkCreate,
@@ -29,6 +30,8 @@ import {
     GuidBaseResponseToJSON,
     ObjectBaseResponseFromJSON,
     ObjectBaseResponseToJSON,
+    OpenShockProblemFromJSON,
+    OpenShockProblemToJSON,
     PauseReasonBaseResponseFromJSON,
     PauseReasonBaseResponseToJSON,
     PauseRequestFromJSON,
@@ -183,12 +186,12 @@ export interface ShareLinksApiInterface {
      * @throws {RequiredError}
      * @memberof ShareLinksApiInterface
      */
-    shareLinksRemoveShockerRaw(requestParameters: ShareLinksRemoveShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareLinkResponseBaseResponse>>;
+    shareLinksRemoveShockerRaw(requestParameters: ShareLinksRemoveShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>>;
 
     /**
      * Remove a shocker from a share link
      */
-    shareLinksRemoveShocker(shareLinkId: string, shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareLinkResponseBaseResponse>;
+    shareLinksRemoveShocker(shareLinkId: string, shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse>;
 
 }
 
@@ -417,7 +420,7 @@ export class ShareLinksApi extends runtime.BaseAPI implements ShareLinksApiInter
     /**
      * Remove a shocker from a share link
      */
-    async shareLinksRemoveShockerRaw(requestParameters: ShareLinksRemoveShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareLinkResponseBaseResponse>> {
+    async shareLinksRemoveShockerRaw(requestParameters: ShareLinksRemoveShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
         if (requestParameters.shareLinkId === null || requestParameters.shareLinkId === undefined) {
             throw new runtime.RequiredError('shareLinkId','Required parameter requestParameters.shareLinkId was null or undefined when calling shareLinksRemoveShocker.');
         }
@@ -441,13 +444,13 @@ export class ShareLinksApi extends runtime.BaseAPI implements ShareLinksApiInter
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ShareLinkResponseBaseResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));
     }
 
     /**
      * Remove a shocker from a share link
      */
-    async shareLinksRemoveShocker(shareLinkId: string, shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareLinkResponseBaseResponse> {
+    async shareLinksRemoveShocker(shareLinkId: string, shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse> {
         const response = await this.shareLinksRemoveShockerRaw({ shareLinkId: shareLinkId, shockerId: shockerId }, initOverrides);
         return await response.value();
     }

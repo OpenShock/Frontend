@@ -20,6 +20,7 @@
 export enum ShockerModelType {
     caiXianlin = 'CaiXianlin',
     petTrainer = 'PetTrainer',
+    petrainer998Dr = 'Petrainer998DR',
     unknownDefaultOpenApi = '11184809'
 }
 

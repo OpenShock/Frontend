@@ -16,13 +16,10 @@
 import * as runtime from '../runtime';
 import type {
   AdminOnlineDeviceResponseIEnumerableBaseResponse,
-  ObjectBaseResponse,
 } from '../models/index';
 import {
     AdminOnlineDeviceResponseIEnumerableBaseResponseFromJSON,
     AdminOnlineDeviceResponseIEnumerableBaseResponseToJSON,
-    ObjectBaseResponseFromJSON,
-    ObjectBaseResponseToJSON,
 } from '../models/index';
 
 /**

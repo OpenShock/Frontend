@@ -15,13 +15,13 @@
 
 import * as runtime from '../runtime';
 import type {
-  ObjectBaseResponse,
+  OpenShockProblem,
   PublicShareLinkResponseBaseResponse,
   StatsResponseBaseResponse,
 } from '../models/index';
 import {
-    ObjectBaseResponseFromJSON,
-    ObjectBaseResponseToJSON,
+    OpenShockProblemFromJSON,
+    OpenShockProblemToJSON,
     PublicShareLinkResponseBaseResponseFromJSON,
     PublicShareLinkResponseBaseResponseToJSON,
     StatsResponseBaseResponseFromJSON,
