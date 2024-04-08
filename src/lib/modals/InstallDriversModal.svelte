@@ -13,7 +13,6 @@
   <section class="flex flex-col p-4 gap-4">
     <div class="flex flex-col gap-1">
       <h4 class="h4">1. Download drivers</h4>
-      <p>Download and extract the drivers for your device from the following link:</p>
       <a
         href="https://download.openshock.org/drivers/CP210x_Universal_Windows_Driver.zip"
         target="_parent"
@@ -25,14 +24,27 @@
       </a>
     </div>
     <div class="flex flex-col gap-1">
-      <h4 class="h4">2. Open Device Manager</h4>
+      <h4 class="h4">2. Extract the zip file</h4>
+      <p>Extract the contents of the zip file to a folder on your computer.</p>
+    </div>
+    <div class="flex flex-col gap-1">
+      <h4 class="h4">3. Run the installer</h4>
       <p>
-        Open Device Manager by pressing <kbd class="kbd">Win + R</kbd> and typing
-        <code class="code">devmgmt.msc</code>.
+        Go to the folder where you extracted the zip file and run
+        <code class="code">CP210xVCPInstaller_x64.exe</code><br />
+        Follow the instructions to install the drivers.
+      </p>
+    </div>
+    <h3 class="h3 font-bold mt-6">If the device still doesn't appear in the list:</h3>
+    <div class="flex flex-col gap-1">
+      <h4 class="h4">1. Open Device Manager</h4>
+      <p>
+        Press <kbd class="kbd">Win</kbd> + <kbd class="kbd">X</kbd> and select
+        <code class="code">Device Manager</code>.
       </p>
     </div>
     <div class="flex flex-col gap-1">
-      <h4 class="h4">3. Find your device</h4>
+      <h4 class="h4">2. Find your device</h4>
       <p>
         Go to <code class="code">Ports (COM & LPT)</code> and look a device similar to one of the following:
       </p>
@@ -45,7 +57,7 @@
       </p>
     </div>
     <div class="flex flex-col gap-1">
-      <h4 class="h4">4. Update drivers</h4>
+      <h4 class="h4">3. Update drivers</h4>
       <p>
         Right click on the device and select <code class="code">Update Driver</code>.
       </p>
@@ -59,6 +71,24 @@
           >Silicon Labs CP210x USB to UART Bridge</code
         > in the list.
       </p>
+    </div>
+    <h3 class="h3 font-bold mt-6">Still having problems?</h3>
+    <div class="flex flex-col gap-1">
+      <p>
+        If you still have problems, join our discord server and ask for help in the <code
+          class="code">#support</code
+        >
+        channel.
+      </p>
+      <a
+        href="https://discord.gg/openshock"
+        target="_parent"
+        rel="noopener noreferrer"
+        class="btn variant-filled-primary gap-2"
+      >
+        <i class="fa-brands fa-discord" />
+        Join our Discord server
+      </a>
     </div>
   </section>
 </div>
