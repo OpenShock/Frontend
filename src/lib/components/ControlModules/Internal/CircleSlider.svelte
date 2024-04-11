@@ -22,11 +22,16 @@
   export let value: number;
   export let min: number;
   export let max: number;
+  export let step: number;
   export let tabindex: number | null | undefined = undefined;
 
   let canvasHandle: HTMLDivElement;
   let sliderHandle: HTMLDivElement;
 
+  function stupidUnfloatHack(value: number) {
+    // This is a stupid hack to avoid floating point errors, needed to make UI not look like shit
+    return Math.round((value + Number.EPSILON) * 100) / 100;
+  }
   function updateValueFromSlider(event: MouseEvent | TouchEvent) {
     if (!canvasHandle) return;
 
@@ -41,7 +46,7 @@
 
     const fraction = clamp(angle / angleRange + 0.5, 0, 1);
 
-    value = Math.round(lerp(min, max, fraction));
+    value = lerp(min, max, fraction);
   }
   function trackingUpdated(event: MouseEvent | TouchEvent) {
     updateValueFromSlider(event);
@@ -81,7 +86,7 @@
   $: {
     if (value < min) value = min;
     if (value > max) value = max;
-    if (!Number.isInteger(value)) value = Math.round(value);
+    value = stupidUnfloatHack(Math.round(value / step) * step);
     animatedValue.set(value);
   }
 
@@ -135,7 +140,7 @@
       aria-labelledby={labelId}
       aria-controls={guageId}
     />
-    <input id={inputId} type="number" {name} {min} bind:value {max} step="1" aria-label="Value" />
+    <input id={inputId} type="number" {name} {min} bind:value {max} {step} aria-label="Value" />
     <label for={inputId} aria-label="Name">
       {name}
     </label>

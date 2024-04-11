@@ -12,8 +12,8 @@
   <h2 class="text-lg font-bold">{name}</h2>
   <!-- Sliders -->
   <div class="flex items-center gap-2">
-    <CircleSlider name="Intensity" bind:value={intensity} min={0} max={100} />
-    <CircleSlider name="Duration" bind:value={duration} min={0} max={100} />
+    <CircleSlider name="Intensity" bind:value={intensity} min={0} max={100} step={1} />
+    <CircleSlider name="Duration" bind:value={duration} min={0.3} max={30} step={0.1} />
   </div>
   <!-- Buttons -->
   <div class="w-full flex gap-2">
