@@ -13,7 +13,7 @@
 
   export let name: string;
 
-  let moduleType: ModuleType = ModuleType.RichControlModule;
+  let moduleType: ModuleType = ModuleType.ClassicControlModule;
 
   const modeClick: PopupSettings = {
     event: 'click',
