@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { TokenResponse } from './TokenResponse';
 import {
     TokenResponseFromJSON,
@@ -31,22 +31,20 @@ export interface TokenResponseIEnumerableBaseResponse {
      * @type {string}
      * @memberof TokenResponseIEnumerableBaseResponse
      */
-    message?: string | null;
+    message?: string;
     /**
      * 
      * @type {Array<TokenResponse>}
      * @memberof TokenResponseIEnumerableBaseResponse
      */
-    data?: Array<TokenResponse> | null;
+    data?: Array<TokenResponse>;
 }
 
 /**
  * Check if a given object implements the TokenResponseIEnumerableBaseResponse interface.
  */
 export function instanceOfTokenResponseIEnumerableBaseResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function TokenResponseIEnumerableBaseResponseFromJSON(json: any): TokenResponseIEnumerableBaseResponse {
@@ -54,27 +52,24 @@ export function TokenResponseIEnumerableBaseResponseFromJSON(json: any): TokenRe
 }
 
 export function TokenResponseIEnumerableBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): TokenResponseIEnumerableBaseResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'message': !exists(json, 'message') ? undefined : json['message'],
-        'data': !exists(json, 'data') ? undefined : (json['data'] === null ? null : (json['data'] as Array<any>).map(TokenResponseFromJSON)),
+        'message': json['message'] == null ? undefined : json['message'],
+        'data': json['data'] == null ? undefined : ((json['data'] as Array<any>).map(TokenResponseFromJSON)),
     };
 }
 
 export function TokenResponseIEnumerableBaseResponseToJSON(value?: TokenResponseIEnumerableBaseResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'message': value.message,
-        'data': value.data === undefined ? undefined : (value.data === null ? null : (value.data as Array<any>).map(TokenResponseToJSON)),
+        'message': value['message'],
+        'data': value['data'] == null ? undefined : ((value['data'] as Array<any>).map(TokenResponseToJSON)),
     };
 }
 

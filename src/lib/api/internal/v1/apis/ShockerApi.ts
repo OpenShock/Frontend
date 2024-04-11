@@ -374,8 +374,11 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
      * Edit a shocker
      */
     async shockerEditShockerRaw(requestParameters: ShockerEditShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
-        if (requestParameters.shockerId === null || requestParameters.shockerId === undefined) {
-            throw new runtime.RequiredError('shockerId','Required parameter requestParameters.shockerId was null or undefined when calling shockerEditShocker.');
+        if (requestParameters['shockerId'] == null) {
+            throw new runtime.RequiredError(
+                'shockerId',
+                'Required parameter "shockerId" was null or undefined when calling shockerEditShocker().'
+            );
         }
 
         const queryParameters: any = {};
@@ -389,11 +392,11 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
         }
 
         const response = await this.request({
-            path: `/1/shockers/{shockerId}`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters.shockerId))),
+            path: `/1/shockers/{shockerId}`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))),
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: NewShockerToJSON(requestParameters.newShocker),
+            body: NewShockerToJSON(requestParameters['newShocker']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));
@@ -411,8 +414,11 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
      * Get information about a shocker.
      */
     async shockerGetShockerByIdRaw(requestParameters: ShockerGetShockerByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShockerWithDeviceBaseResponse>> {
-        if (requestParameters.shockerId === null || requestParameters.shockerId === undefined) {
-            throw new runtime.RequiredError('shockerId','Required parameter requestParameters.shockerId was null or undefined when calling shockerGetShockerById.');
+        if (requestParameters['shockerId'] == null) {
+            throw new runtime.RequiredError(
+                'shockerId',
+                'Required parameter "shockerId" was null or undefined when calling shockerGetShockerById().'
+            );
         }
 
         const queryParameters: any = {};
@@ -424,7 +430,7 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
         }
 
         const response = await this.request({
-            path: `/1/shockers/{shockerId}`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters.shockerId))),
+            path: `/1/shockers/{shockerId}`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -445,18 +451,21 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
      * Get the logs for a shocker
      */
     async shockerGetShockerLogsRaw(requestParameters: ShockerGetShockerLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LogEntryIEnumerableBaseResponse>> {
-        if (requestParameters.shockerId === null || requestParameters.shockerId === undefined) {
-            throw new runtime.RequiredError('shockerId','Required parameter requestParameters.shockerId was null or undefined when calling shockerGetShockerLogs.');
+        if (requestParameters['shockerId'] == null) {
+            throw new runtime.RequiredError(
+                'shockerId',
+                'Required parameter "shockerId" was null or undefined when calling shockerGetShockerLogs().'
+            );
         }
 
         const queryParameters: any = {};
 
-        if (requestParameters.offset !== undefined) {
-            queryParameters['offset'] = requestParameters.offset;
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
         }
 
-        if (requestParameters.limit !== undefined) {
-            queryParameters['limit'] = requestParameters.limit;
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -466,7 +475,7 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
         }
 
         const response = await this.request({
-            path: `/1/shockers/{shockerId}/logs`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters.shockerId))),
+            path: `/1/shockers/{shockerId}/logs`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -487,8 +496,11 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
      * Get all shares for a shocker
      */
     async shockerGetShockerSharesRaw(requestParameters: ShockerGetShockerSharesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareInfoIEnumerableBaseResponse>> {
-        if (requestParameters.shockerId === null || requestParameters.shockerId === undefined) {
-            throw new runtime.RequiredError('shockerId','Required parameter requestParameters.shockerId was null or undefined when calling shockerGetShockerShares.');
+        if (requestParameters['shockerId'] == null) {
+            throw new runtime.RequiredError(
+                'shockerId',
+                'Required parameter "shockerId" was null or undefined when calling shockerGetShockerShares().'
+            );
         }
 
         const queryParameters: any = {};
@@ -500,7 +512,7 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
         }
 
         const response = await this.request({
-            path: `/1/shockers/{shockerId}/shares`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters.shockerId))),
+            path: `/1/shockers/{shockerId}/shares`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -581,8 +593,11 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
      * Pause or unpause a shocker
      */
     async shockerPauseShockerRaw(requestParameters: ShockerPauseShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BooleanNullableBaseResponse>> {
-        if (requestParameters.shockerId === null || requestParameters.shockerId === undefined) {
-            throw new runtime.RequiredError('shockerId','Required parameter requestParameters.shockerId was null or undefined when calling shockerPauseShocker.');
+        if (requestParameters['shockerId'] == null) {
+            throw new runtime.RequiredError(
+                'shockerId',
+                'Required parameter "shockerId" was null or undefined when calling shockerPauseShocker().'
+            );
         }
 
         const queryParameters: any = {};
@@ -596,11 +611,11 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
         }
 
         const response = await this.request({
-            path: `/1/shockers/{shockerId}/pause`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters.shockerId))),
+            path: `/1/shockers/{shockerId}/pause`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: PauseRequestToJSON(requestParameters.pauseRequest),
+            body: PauseRequestToJSON(requestParameters['pauseRequest']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => BooleanNullableBaseResponseFromJSON(jsonValue));
@@ -633,7 +648,7 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: NewShockerToJSON(requestParameters.newShocker),
+            body: NewShockerToJSON(requestParameters['newShocker']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => GuidBaseResponseFromJSON(jsonValue));
@@ -651,8 +666,11 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
      * Remove a shocker
      */
     async shockerRemoveShockerRaw(requestParameters: ShockerRemoveShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
-        if (requestParameters.shockerId === null || requestParameters.shockerId === undefined) {
-            throw new runtime.RequiredError('shockerId','Required parameter requestParameters.shockerId was null or undefined when calling shockerRemoveShocker.');
+        if (requestParameters['shockerId'] == null) {
+            throw new runtime.RequiredError(
+                'shockerId',
+                'Required parameter "shockerId" was null or undefined when calling shockerRemoveShocker().'
+            );
         }
 
         const queryParameters: any = {};
@@ -664,7 +682,7 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
         }
 
         const response = await this.request({
-            path: `/1/shockers/{shockerId}`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters.shockerId))),
+            path: `/1/shockers/{shockerId}`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -700,7 +718,7 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.control?.map(ControlToJSON),
+            body: requestParameters['control']!.map(ControlToJSON),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));
@@ -718,8 +736,11 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
      * Create a share code for a shocker
      */
     async shockerShockerShareCodeCreateRaw(requestParameters: ShockerShockerShareCodeCreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GuidBaseResponse>> {
-        if (requestParameters.shockerId === null || requestParameters.shockerId === undefined) {
-            throw new runtime.RequiredError('shockerId','Required parameter requestParameters.shockerId was null or undefined when calling shockerShockerShareCodeCreate.');
+        if (requestParameters['shockerId'] == null) {
+            throw new runtime.RequiredError(
+                'shockerId',
+                'Required parameter "shockerId" was null or undefined when calling shockerShockerShareCodeCreate().'
+            );
         }
 
         const queryParameters: any = {};
@@ -733,11 +754,11 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
         }
 
         const response = await this.request({
-            path: `/1/shockers/{shockerId}/shares`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters.shockerId))),
+            path: `/1/shockers/{shockerId}/shares`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateShareCodeToJSON(requestParameters.createShareCode),
+            body: CreateShareCodeToJSON(requestParameters['createShareCode']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => GuidBaseResponseFromJSON(jsonValue));
@@ -755,8 +776,11 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
      * List all share codes for a shocker
      */
     async shockerShockerShareCodeListRaw(requestParameters: ShockerShockerShareCodeListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareCodeInfoIEnumerableBaseResponse>> {
-        if (requestParameters.shockerId === null || requestParameters.shockerId === undefined) {
-            throw new runtime.RequiredError('shockerId','Required parameter requestParameters.shockerId was null or undefined when calling shockerShockerShareCodeList.');
+        if (requestParameters['shockerId'] == null) {
+            throw new runtime.RequiredError(
+                'shockerId',
+                'Required parameter "shockerId" was null or undefined when calling shockerShockerShareCodeList().'
+            );
         }
 
         const queryParameters: any = {};
@@ -768,7 +792,7 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
         }
 
         const response = await this.request({
-            path: `/1/shockers/{shockerId}/shareCodes`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters.shockerId))),
+            path: `/1/shockers/{shockerId}/shareCodes`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -789,12 +813,18 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
      * Pause/Unpause a share code for a shocker
      */
     async shockerShockerShareCodePauseRaw(requestParameters: ShockerShockerShareCodePauseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
-        if (requestParameters.shockerId === null || requestParameters.shockerId === undefined) {
-            throw new runtime.RequiredError('shockerId','Required parameter requestParameters.shockerId was null or undefined when calling shockerShockerShareCodePause.');
+        if (requestParameters['shockerId'] == null) {
+            throw new runtime.RequiredError(
+                'shockerId',
+                'Required parameter "shockerId" was null or undefined when calling shockerShockerShareCodePause().'
+            );
         }
 
-        if (requestParameters.sharedWithUserId === null || requestParameters.sharedWithUserId === undefined) {
-            throw new runtime.RequiredError('sharedWithUserId','Required parameter requestParameters.sharedWithUserId was null or undefined when calling shockerShockerShareCodePause.');
+        if (requestParameters['sharedWithUserId'] == null) {
+            throw new runtime.RequiredError(
+                'sharedWithUserId',
+                'Required parameter "sharedWithUserId" was null or undefined when calling shockerShockerShareCodePause().'
+            );
         }
 
         const queryParameters: any = {};
@@ -808,11 +838,11 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
         }
 
         const response = await this.request({
-            path: `/1/shockers/{shockerId}/shares/{sharedWithUserId}/pause`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters.shockerId))).replace(`{${"sharedWithUserId"}}`, encodeURIComponent(String(requestParameters.sharedWithUserId))),
+            path: `/1/shockers/{shockerId}/shares/{sharedWithUserId}/pause`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))).replace(`{${"sharedWithUserId"}}`, encodeURIComponent(String(requestParameters['sharedWithUserId']))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: PauseRequestToJSON(requestParameters.pauseRequest),
+            body: PauseRequestToJSON(requestParameters['pauseRequest']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));
@@ -830,12 +860,18 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
      * Remove a share code for a shocker
      */
     async shockerShockerShareCodeRemoveRaw(requestParameters: ShockerShockerShareCodeRemoveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
-        if (requestParameters.shockerId === null || requestParameters.shockerId === undefined) {
-            throw new runtime.RequiredError('shockerId','Required parameter requestParameters.shockerId was null or undefined when calling shockerShockerShareCodeRemove.');
+        if (requestParameters['shockerId'] == null) {
+            throw new runtime.RequiredError(
+                'shockerId',
+                'Required parameter "shockerId" was null or undefined when calling shockerShockerShareCodeRemove().'
+            );
         }
 
-        if (requestParameters.sharedWithUserId === null || requestParameters.sharedWithUserId === undefined) {
-            throw new runtime.RequiredError('sharedWithUserId','Required parameter requestParameters.sharedWithUserId was null or undefined when calling shockerShockerShareCodeRemove.');
+        if (requestParameters['sharedWithUserId'] == null) {
+            throw new runtime.RequiredError(
+                'sharedWithUserId',
+                'Required parameter "sharedWithUserId" was null or undefined when calling shockerShockerShareCodeRemove().'
+            );
         }
 
         const queryParameters: any = {};
@@ -847,7 +883,7 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
         }
 
         const response = await this.request({
-            path: `/1/shockers/{shockerId}/shares/{sharedWithUserId}`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters.shockerId))).replace(`{${"sharedWithUserId"}}`, encodeURIComponent(String(requestParameters.sharedWithUserId))),
+            path: `/1/shockers/{shockerId}/shares/{sharedWithUserId}`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))).replace(`{${"sharedWithUserId"}}`, encodeURIComponent(String(requestParameters['sharedWithUserId']))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -868,12 +904,18 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
      * Update a share code for a shocker
      */
     async shockerShockerShareCodeUpdateRaw(requestParameters: ShockerShockerShareCodeUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
-        if (requestParameters.shockerId === null || requestParameters.shockerId === undefined) {
-            throw new runtime.RequiredError('shockerId','Required parameter requestParameters.shockerId was null or undefined when calling shockerShockerShareCodeUpdate.');
+        if (requestParameters['shockerId'] == null) {
+            throw new runtime.RequiredError(
+                'shockerId',
+                'Required parameter "shockerId" was null or undefined when calling shockerShockerShareCodeUpdate().'
+            );
         }
 
-        if (requestParameters.sharedWithUserId === null || requestParameters.sharedWithUserId === undefined) {
-            throw new runtime.RequiredError('sharedWithUserId','Required parameter requestParameters.sharedWithUserId was null or undefined when calling shockerShockerShareCodeUpdate.');
+        if (requestParameters['sharedWithUserId'] == null) {
+            throw new runtime.RequiredError(
+                'sharedWithUserId',
+                'Required parameter "sharedWithUserId" was null or undefined when calling shockerShockerShareCodeUpdate().'
+            );
         }
 
         const queryParameters: any = {};
@@ -887,11 +929,11 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
         }
 
         const response = await this.request({
-            path: `/1/shockers/{shockerId}/shares/{sharedWithUserId}`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters.shockerId))).replace(`{${"sharedWithUserId"}}`, encodeURIComponent(String(requestParameters.sharedWithUserId))),
+            path: `/1/shockers/{shockerId}/shares/{sharedWithUserId}`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))).replace(`{${"sharedWithUserId"}}`, encodeURIComponent(String(requestParameters['sharedWithUserId']))),
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateShareCodeToJSON(requestParameters.createShareCode),
+            body: CreateShareCodeToJSON(requestParameters['createShareCode']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));

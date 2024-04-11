@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -24,22 +24,20 @@ export interface LcgResponse {
      * @type {string}
      * @memberof LcgResponse
      */
-    gateway?: string | null;
+    gateway?: string;
     /**
      * 
      * @type {string}
      * @memberof LcgResponse
      */
-    country?: string | null;
+    country?: string;
 }
 
 /**
  * Check if a given object implements the LcgResponse interface.
  */
 export function instanceOfLcgResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function LcgResponseFromJSON(json: any): LcgResponse {
@@ -47,27 +45,24 @@ export function LcgResponseFromJSON(json: any): LcgResponse {
 }
 
 export function LcgResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): LcgResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'gateway': !exists(json, 'gateway') ? undefined : json['gateway'],
-        'country': !exists(json, 'country') ? undefined : json['country'],
+        'gateway': json['gateway'] == null ? undefined : json['gateway'],
+        'country': json['country'] == null ? undefined : json['country'],
     };
 }
 
 export function LcgResponseToJSON(value?: LcgResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'gateway': value.gateway,
-        'country': value.country,
+        'gateway': value['gateway'],
+        'country': value['country'],
     };
 }
 

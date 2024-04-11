@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -24,16 +24,14 @@ export interface DeviceEdit {
      * @type {string}
      * @memberof DeviceEdit
      */
-    name?: string | null;
+    name?: string;
 }
 
 /**
  * Check if a given object implements the DeviceEdit interface.
  */
 export function instanceOfDeviceEdit(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function DeviceEditFromJSON(json: any): DeviceEdit {
@@ -41,25 +39,22 @@ export function DeviceEditFromJSON(json: any): DeviceEdit {
 }
 
 export function DeviceEditFromJSONTyped(json: any, ignoreDiscriminator: boolean): DeviceEdit {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'name': !exists(json, 'name') ? undefined : json['name'],
+        'name': json['name'] == null ? undefined : json['name'],
     };
 }
 
 export function DeviceEditToJSON(value?: DeviceEdit | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'name': value.name,
+        'name': value['name'],
     };
 }
 

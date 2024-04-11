@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { Control } from './Control';
 import {
     ControlFromJSON,
@@ -31,22 +31,20 @@ export interface ControlRequest {
      * @type {Array<Control>}
      * @memberof ControlRequest
      */
-    shocks?: Array<Control> | null;
+    shocks?: Array<Control>;
     /**
      * 
      * @type {string}
      * @memberof ControlRequest
      */
-    customName?: string | null;
+    customName?: string;
 }
 
 /**
  * Check if a given object implements the ControlRequest interface.
  */
 export function instanceOfControlRequest(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function ControlRequestFromJSON(json: any): ControlRequest {
@@ -54,27 +52,24 @@ export function ControlRequestFromJSON(json: any): ControlRequest {
 }
 
 export function ControlRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): ControlRequest {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'shocks': !exists(json, 'shocks') ? undefined : (json['shocks'] === null ? null : (json['shocks'] as Array<any>).map(ControlFromJSON)),
-        'customName': !exists(json, 'customName') ? undefined : json['customName'],
+        'shocks': json['shocks'] == null ? undefined : ((json['shocks'] as Array<any>).map(ControlFromJSON)),
+        'customName': json['customName'] == null ? undefined : json['customName'],
     };
 }
 
 export function ControlRequestToJSON(value?: ControlRequest | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'shocks': value.shocks === undefined ? undefined : (value.shocks === null ? null : (value.shocks as Array<any>).map(ControlToJSON)),
-        'customName': value.customName,
+        'shocks': value['shocks'] == null ? undefined : ((value['shocks'] as Array<any>).map(ControlToJSON)),
+        'customName': value['customName'],
     };
 }
 

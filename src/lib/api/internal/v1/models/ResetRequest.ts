@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -24,16 +24,14 @@ export interface ResetRequest {
      * @type {string}
      * @memberof ResetRequest
      */
-    email?: string | null;
+    email?: string;
 }
 
 /**
  * Check if a given object implements the ResetRequest interface.
  */
 export function instanceOfResetRequest(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function ResetRequestFromJSON(json: any): ResetRequest {
@@ -41,25 +39,22 @@ export function ResetRequestFromJSON(json: any): ResetRequest {
 }
 
 export function ResetRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): ResetRequest {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'email': !exists(json, 'email') ? undefined : json['email'],
+        'email': json['email'] == null ? undefined : json['email'],
     };
 }
 
 export function ResetRequestToJSON(value?: ResetRequest | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'email': value.email,
+        'email': value['email'],
     };
 }
 

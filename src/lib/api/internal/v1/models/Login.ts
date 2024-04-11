@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -24,22 +24,20 @@ export interface Login {
      * @type {string}
      * @memberof Login
      */
-    password?: string | null;
+    password?: string;
     /**
      * 
      * @type {string}
      * @memberof Login
      */
-    email?: string | null;
+    email?: string;
 }
 
 /**
  * Check if a given object implements the Login interface.
  */
 export function instanceOfLogin(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function LoginFromJSON(json: any): Login {
@@ -47,27 +45,24 @@ export function LoginFromJSON(json: any): Login {
 }
 
 export function LoginFromJSONTyped(json: any, ignoreDiscriminator: boolean): Login {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'password': !exists(json, 'password') ? undefined : json['password'],
-        'email': !exists(json, 'email') ? undefined : json['email'],
+        'password': json['password'] == null ? undefined : json['password'],
+        'email': json['email'] == null ? undefined : json['email'],
     };
 }
 
 export function LoginToJSON(value?: Login | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'password': value.password,
-        'email': value.email,
+        'password': value['password'],
+        'email': value['email'],
     };
 }
 

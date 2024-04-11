@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { ControlType } from './ControlType';
 import {
     ControlTypeFromJSON,
@@ -56,9 +56,7 @@ export interface Control {
  * Check if a given object implements the Control interface.
  */
 export function instanceOfControl(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function ControlFromJSON(json: any): Control {
@@ -66,31 +64,28 @@ export function ControlFromJSON(json: any): Control {
 }
 
 export function ControlFromJSONTyped(json: any, ignoreDiscriminator: boolean): Control {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'type': !exists(json, 'type') ? undefined : ControlTypeFromJSON(json['type']),
-        'intensity': !exists(json, 'intensity') ? undefined : json['intensity'],
-        'duration': !exists(json, 'duration') ? undefined : json['duration'],
+        'id': json['id'] == null ? undefined : json['id'],
+        'type': json['type'] == null ? undefined : ControlTypeFromJSON(json['type']),
+        'intensity': json['intensity'] == null ? undefined : json['intensity'],
+        'duration': json['duration'] == null ? undefined : json['duration'],
     };
 }
 
 export function ControlToJSON(value?: Control | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'type': ControlTypeToJSON(value.type),
-        'intensity': value.intensity,
-        'duration': value.duration,
+        'id': value['id'],
+        'type': ControlTypeToJSON(value['type']),
+        'intensity': value['intensity'],
+        'duration': value['duration'],
     };
 }
 

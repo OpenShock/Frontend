@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -24,7 +24,7 @@ export interface PauseReasonBaseResponse {
      * @type {string}
      * @memberof PauseReasonBaseResponse
      */
-    message?: string | null;
+    message?: string;
     /**
      * An integer representing the reason(s) for the shocker being paused, expressed as a bitfield where reasons are OR'd together.
      * 
@@ -44,9 +44,7 @@ export interface PauseReasonBaseResponse {
  * Check if a given object implements the PauseReasonBaseResponse interface.
  */
 export function instanceOfPauseReasonBaseResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function PauseReasonBaseResponseFromJSON(json: any): PauseReasonBaseResponse {
@@ -54,27 +52,24 @@ export function PauseReasonBaseResponseFromJSON(json: any): PauseReasonBaseRespo
 }
 
 export function PauseReasonBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): PauseReasonBaseResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'message': !exists(json, 'message') ? undefined : json['message'],
-        'data': !exists(json, 'data') ? undefined : json['data'],
+        'message': json['message'] == null ? undefined : json['message'],
+        'data': json['data'] == null ? undefined : json['data'],
     };
 }
 
 export function PauseReasonBaseResponseToJSON(value?: PauseReasonBaseResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'message': value.message,
-        'data': value.data,
+        'message': value['message'],
+        'data': value['data'],
     };
 }
 

@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { GenericIni } from './GenericIni';
 import {
     GenericIniFromJSON,
@@ -74,9 +74,7 @@ export interface ShareInfo {
  * Check if a given object implements the ShareInfo interface.
  */
 export function instanceOfShareInfo(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function ShareInfoFromJSON(json: any): ShareInfo {
@@ -84,33 +82,30 @@ export function ShareInfoFromJSON(json: any): ShareInfo {
 }
 
 export function ShareInfoFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShareInfo {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'sharedWith': !exists(json, 'sharedWith') ? undefined : GenericIniFromJSON(json['sharedWith']),
-        'createdOn': !exists(json, 'createdOn') ? undefined : (new Date(json['createdOn'])),
-        'permissions': !exists(json, 'permissions') ? undefined : ShockerPermissionsFromJSON(json['permissions']),
-        'limits': !exists(json, 'limits') ? undefined : ShockerLimitsFromJSON(json['limits']),
-        'paused': !exists(json, 'paused') ? undefined : json['paused'],
+        'sharedWith': json['sharedWith'] == null ? undefined : GenericIniFromJSON(json['sharedWith']),
+        'createdOn': json['createdOn'] == null ? undefined : (new Date(json['createdOn'])),
+        'permissions': json['permissions'] == null ? undefined : ShockerPermissionsFromJSON(json['permissions']),
+        'limits': json['limits'] == null ? undefined : ShockerLimitsFromJSON(json['limits']),
+        'paused': json['paused'] == null ? undefined : json['paused'],
     };
 }
 
 export function ShareInfoToJSON(value?: ShareInfo | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'sharedWith': GenericIniToJSON(value.sharedWith),
-        'createdOn': value.createdOn === undefined ? undefined : (value.createdOn.toISOString()),
-        'permissions': ShockerPermissionsToJSON(value.permissions),
-        'limits': ShockerLimitsToJSON(value.limits),
-        'paused': value.paused,
+        'sharedWith': GenericIniToJSON(value['sharedWith']),
+        'createdOn': value['createdOn'] == null ? undefined : ((value['createdOn']).toISOString()),
+        'permissions': ShockerPermissionsToJSON(value['permissions']),
+        'limits': ShockerLimitsToJSON(value['limits']),
+        'paused': value['paused'],
     };
 }
 

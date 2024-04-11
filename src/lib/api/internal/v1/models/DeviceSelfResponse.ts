@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { MinimalShocker } from './MinimalShocker';
 import {
     MinimalShockerFromJSON,
@@ -37,22 +37,20 @@ export interface DeviceSelfResponse {
      * @type {string}
      * @memberof DeviceSelfResponse
      */
-    name?: string | null;
+    name?: string;
     /**
      * 
      * @type {Array<MinimalShocker>}
      * @memberof DeviceSelfResponse
      */
-    shockers?: Array<MinimalShocker> | null;
+    shockers?: Array<MinimalShocker>;
 }
 
 /**
  * Check if a given object implements the DeviceSelfResponse interface.
  */
 export function instanceOfDeviceSelfResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function DeviceSelfResponseFromJSON(json: any): DeviceSelfResponse {
@@ -60,29 +58,26 @@ export function DeviceSelfResponseFromJSON(json: any): DeviceSelfResponse {
 }
 
 export function DeviceSelfResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): DeviceSelfResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'shockers': !exists(json, 'shockers') ? undefined : (json['shockers'] === null ? null : (json['shockers'] as Array<any>).map(MinimalShockerFromJSON)),
+        'id': json['id'] == null ? undefined : json['id'],
+        'name': json['name'] == null ? undefined : json['name'],
+        'shockers': json['shockers'] == null ? undefined : ((json['shockers'] as Array<any>).map(MinimalShockerFromJSON)),
     };
 }
 
 export function DeviceSelfResponseToJSON(value?: DeviceSelfResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'name': value.name,
-        'shockers': value.shockers === undefined ? undefined : (value.shockers === null ? null : (value.shockers as Array<any>).map(MinimalShockerToJSON)),
+        'id': value['id'],
+        'name': value['name'],
+        'shockers': value['shockers'] == null ? undefined : ((value['shockers'] as Array<any>).map(MinimalShockerToJSON)),
     };
 }
 

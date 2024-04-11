@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { PermissionType } from './PermissionType';
 import {
     PermissionTypeFromJSON,
@@ -31,28 +31,26 @@ export interface CreateTokenRequest {
      * @type {string}
      * @memberof CreateTokenRequest
      */
-    name?: string | null;
+    name?: string;
     /**
      * 
      * @type {Array<PermissionType>}
      * @memberof CreateTokenRequest
      */
-    permissions?: Array<PermissionType> | null;
+    permissions?: Array<PermissionType>;
     /**
      * 
      * @type {Date}
      * @memberof CreateTokenRequest
      */
-    validUntil?: Date | null;
+    validUntil?: Date;
 }
 
 /**
  * Check if a given object implements the CreateTokenRequest interface.
  */
 export function instanceOfCreateTokenRequest(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function CreateTokenRequestFromJSON(json: any): CreateTokenRequest {
@@ -60,29 +58,26 @@ export function CreateTokenRequestFromJSON(json: any): CreateTokenRequest {
 }
 
 export function CreateTokenRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): CreateTokenRequest {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'permissions': !exists(json, 'permissions') ? undefined : (json['permissions'] === null ? null : (json['permissions'] as Array<any>).map(PermissionTypeFromJSON)),
-        'validUntil': !exists(json, 'validUntil') ? undefined : (json['validUntil'] === null ? null : new Date(json['validUntil'])),
+        'name': json['name'] == null ? undefined : json['name'],
+        'permissions': json['permissions'] == null ? undefined : ((json['permissions'] as Array<any>).map(PermissionTypeFromJSON)),
+        'validUntil': json['validUntil'] == null ? undefined : (new Date(json['validUntil'])),
     };
 }
 
 export function CreateTokenRequestToJSON(value?: CreateTokenRequest | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'name': value.name,
-        'permissions': value.permissions === undefined ? undefined : (value.permissions === null ? null : (value.permissions as Array<any>).map(PermissionTypeToJSON)),
-        'validUntil': value.validUntil === undefined ? undefined : (value.validUntil === null ? null : value.validUntil.toISOString().substring(0,10)),
+        'name': value['name'],
+        'permissions': value['permissions'] == null ? undefined : ((value['permissions'] as Array<any>).map(PermissionTypeToJSON)),
+        'validUntil': value['validUntil'] == null ? undefined : ((value['validUntil'] as any).toISOString().substring(0,10)),
     };
 }
 

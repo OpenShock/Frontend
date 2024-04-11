@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -25,53 +25,51 @@ export interface OpenShockProblem {
      * @type {string}
      * @memberof OpenShockProblem
      */
-    type?: string | null;
+    type?: string;
     /**
      * 
      * @type {string}
      * @memberof OpenShockProblem
      */
-    title?: string | null;
+    title?: string;
     /**
      * 
      * @type {number}
      * @memberof OpenShockProblem
      */
-    status?: number | null;
+    status?: number;
     /**
      * 
      * @type {string}
      * @memberof OpenShockProblem
      */
-    detail?: string | null;
+    detail?: string;
     /**
      * 
      * @type {string}
      * @memberof OpenShockProblem
      */
-    instance?: string | null;
+    instance?: string;
     /**
      * 
      * @type {string}
      * @memberof OpenShockProblem
      * @deprecated
      */
-    readonly message?: string | null;
+    readonly message?: string;
     /**
      * 
      * @type {string}
      * @memberof OpenShockProblem
      */
-    traceId?: string | null;
+    traceId?: string;
 }
 
 /**
  * Check if a given object implements the OpenShockProblem interface.
  */
 export function instanceOfOpenShockProblem(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function OpenShockProblemFromJSON(json: any): OpenShockProblem {
@@ -79,38 +77,35 @@ export function OpenShockProblemFromJSON(json: any): OpenShockProblem {
 }
 
 export function OpenShockProblemFromJSONTyped(json: any, ignoreDiscriminator: boolean): OpenShockProblem {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
             ...json,
-        'type': !exists(json, 'type') ? undefined : json['type'],
-        'title': !exists(json, 'title') ? undefined : json['title'],
-        'status': !exists(json, 'status') ? undefined : json['status'],
-        'detail': !exists(json, 'detail') ? undefined : json['detail'],
-        'instance': !exists(json, 'instance') ? undefined : json['instance'],
-        'message': !exists(json, 'message') ? undefined : json['message'],
-        'traceId': !exists(json, 'traceId') ? undefined : json['traceId'],
+        'type': json['type'] == null ? undefined : json['type'],
+        'title': json['title'] == null ? undefined : json['title'],
+        'status': json['status'] == null ? undefined : json['status'],
+        'detail': json['detail'] == null ? undefined : json['detail'],
+        'instance': json['instance'] == null ? undefined : json['instance'],
+        'message': json['message'] == null ? undefined : json['message'],
+        'traceId': json['traceId'] == null ? undefined : json['traceId'],
     };
 }
 
 export function OpenShockProblemToJSON(value?: OpenShockProblem | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
             ...value,
-        'type': value.type,
-        'title': value.title,
-        'status': value.status,
-        'detail': value.detail,
-        'instance': value.instance,
-        'traceId': value.traceId,
+        'type': value['type'],
+        'title': value['title'],
+        'status': value['status'],
+        'detail': value['detail'],
+        'instance': value['instance'],
+        'traceId': value['traceId'],
     };
 }
 

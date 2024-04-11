@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { ShockerWithDevice } from './ShockerWithDevice';
 import {
     ShockerWithDeviceFromJSON,
@@ -31,7 +31,7 @@ export interface ShockerWithDeviceBaseResponse {
      * @type {string}
      * @memberof ShockerWithDeviceBaseResponse
      */
-    message?: string | null;
+    message?: string;
     /**
      * 
      * @type {ShockerWithDevice}
@@ -44,9 +44,7 @@ export interface ShockerWithDeviceBaseResponse {
  * Check if a given object implements the ShockerWithDeviceBaseResponse interface.
  */
 export function instanceOfShockerWithDeviceBaseResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function ShockerWithDeviceBaseResponseFromJSON(json: any): ShockerWithDeviceBaseResponse {
@@ -54,27 +52,24 @@ export function ShockerWithDeviceBaseResponseFromJSON(json: any): ShockerWithDev
 }
 
 export function ShockerWithDeviceBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShockerWithDeviceBaseResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'message': !exists(json, 'message') ? undefined : json['message'],
-        'data': !exists(json, 'data') ? undefined : ShockerWithDeviceFromJSON(json['data']),
+        'message': json['message'] == null ? undefined : json['message'],
+        'data': json['data'] == null ? undefined : ShockerWithDeviceFromJSON(json['data']),
     };
 }
 
 export function ShockerWithDeviceBaseResponseToJSON(value?: ShockerWithDeviceBaseResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'message': value.message,
-        'data': ShockerWithDeviceToJSON(value.data),
+        'message': value['message'],
+        'data': ShockerWithDeviceToJSON(value['data']),
     };
 }
 

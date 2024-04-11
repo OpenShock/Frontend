@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -24,22 +24,20 @@ export interface ObjectBaseResponse {
      * @type {string}
      * @memberof ObjectBaseResponse
      */
-    message?: string | null;
+    message?: string;
     /**
      * 
      * @type {any}
      * @memberof ObjectBaseResponse
      */
-    data?: any | null;
+    data?: any;
 }
 
 /**
  * Check if a given object implements the ObjectBaseResponse interface.
  */
 export function instanceOfObjectBaseResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function ObjectBaseResponseFromJSON(json: any): ObjectBaseResponse {
@@ -47,27 +45,24 @@ export function ObjectBaseResponseFromJSON(json: any): ObjectBaseResponse {
 }
 
 export function ObjectBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ObjectBaseResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'message': !exists(json, 'message') ? undefined : json['message'],
-        'data': !exists(json, 'data') ? undefined : json['data'],
+        'message': json['message'] == null ? undefined : json['message'],
+        'data': json['data'] == null ? undefined : json['data'],
     };
 }
 
 export function ObjectBaseResponseToJSON(value?: ObjectBaseResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'message': value.message,
-        'data': value.data,
+        'message': value['message'],
+        'data': value['data'],
     };
 }
 

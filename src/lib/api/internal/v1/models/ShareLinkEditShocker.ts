@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { ShockerLimits } from './ShockerLimits';
 import {
     ShockerLimitsFromJSON,
@@ -49,16 +49,14 @@ export interface ShareLinkEditShocker {
      * @type {number}
      * @memberof ShareLinkEditShocker
      */
-    cooldown?: number | null;
+    cooldown?: number;
 }
 
 /**
  * Check if a given object implements the ShareLinkEditShocker interface.
  */
 export function instanceOfShareLinkEditShocker(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function ShareLinkEditShockerFromJSON(json: any): ShareLinkEditShocker {
@@ -66,29 +64,26 @@ export function ShareLinkEditShockerFromJSON(json: any): ShareLinkEditShocker {
 }
 
 export function ShareLinkEditShockerFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShareLinkEditShocker {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'permissions': !exists(json, 'permissions') ? undefined : ShockerPermissionsFromJSON(json['permissions']),
-        'limits': !exists(json, 'limits') ? undefined : ShockerLimitsFromJSON(json['limits']),
-        'cooldown': !exists(json, 'cooldown') ? undefined : json['cooldown'],
+        'permissions': json['permissions'] == null ? undefined : ShockerPermissionsFromJSON(json['permissions']),
+        'limits': json['limits'] == null ? undefined : ShockerLimitsFromJSON(json['limits']),
+        'cooldown': json['cooldown'] == null ? undefined : json['cooldown'],
     };
 }
 
 export function ShareLinkEditShockerToJSON(value?: ShareLinkEditShocker | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'permissions': ShockerPermissionsToJSON(value.permissions),
-        'limits': ShockerLimitsToJSON(value.limits),
-        'cooldown': value.cooldown,
+        'permissions': ShockerPermissionsToJSON(value['permissions']),
+        'limits': ShockerLimitsToJSON(value['limits']),
+        'cooldown': value['cooldown'],
     };
 }
 

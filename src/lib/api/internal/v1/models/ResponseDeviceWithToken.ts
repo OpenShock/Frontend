@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -30,7 +30,7 @@ export interface ResponseDeviceWithToken {
      * @type {string}
      * @memberof ResponseDeviceWithToken
      */
-    name?: string | null;
+    name?: string;
     /**
      * 
      * @type {Date}
@@ -42,16 +42,14 @@ export interface ResponseDeviceWithToken {
      * @type {string}
      * @memberof ResponseDeviceWithToken
      */
-    token?: string | null;
+    token?: string;
 }
 
 /**
  * Check if a given object implements the ResponseDeviceWithToken interface.
  */
 export function instanceOfResponseDeviceWithToken(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function ResponseDeviceWithTokenFromJSON(json: any): ResponseDeviceWithToken {
@@ -59,31 +57,28 @@ export function ResponseDeviceWithTokenFromJSON(json: any): ResponseDeviceWithTo
 }
 
 export function ResponseDeviceWithTokenFromJSONTyped(json: any, ignoreDiscriminator: boolean): ResponseDeviceWithToken {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'createdOn': !exists(json, 'createdOn') ? undefined : (new Date(json['createdOn'])),
-        'token': !exists(json, 'token') ? undefined : json['token'],
+        'id': json['id'] == null ? undefined : json['id'],
+        'name': json['name'] == null ? undefined : json['name'],
+        'createdOn': json['createdOn'] == null ? undefined : (new Date(json['createdOn'])),
+        'token': json['token'] == null ? undefined : json['token'],
     };
 }
 
 export function ResponseDeviceWithTokenToJSON(value?: ResponseDeviceWithToken | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'name': value.name,
-        'createdOn': value.createdOn === undefined ? undefined : (value.createdOn.toISOString()),
-        'token': value.token,
+        'id': value['id'],
+        'name': value['name'],
+        'createdOn': value['createdOn'] == null ? undefined : ((value['createdOn']).toISOString()),
+        'token': value['token'],
     };
 }
 

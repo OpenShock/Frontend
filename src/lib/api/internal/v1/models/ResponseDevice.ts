@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -30,7 +30,7 @@ export interface ResponseDevice {
      * @type {string}
      * @memberof ResponseDevice
      */
-    name?: string | null;
+    name?: string;
     /**
      * 
      * @type {Date}
@@ -43,9 +43,7 @@ export interface ResponseDevice {
  * Check if a given object implements the ResponseDevice interface.
  */
 export function instanceOfResponseDevice(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function ResponseDeviceFromJSON(json: any): ResponseDevice {
@@ -53,29 +51,26 @@ export function ResponseDeviceFromJSON(json: any): ResponseDevice {
 }
 
 export function ResponseDeviceFromJSONTyped(json: any, ignoreDiscriminator: boolean): ResponseDevice {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'createdOn': !exists(json, 'createdOn') ? undefined : (new Date(json['createdOn'])),
+        'id': json['id'] == null ? undefined : json['id'],
+        'name': json['name'] == null ? undefined : json['name'],
+        'createdOn': json['createdOn'] == null ? undefined : (new Date(json['createdOn'])),
     };
 }
 
 export function ResponseDeviceToJSON(value?: ResponseDevice | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'name': value.name,
-        'createdOn': value.createdOn === undefined ? undefined : (value.createdOn.toISOString()),
+        'id': value['id'],
+        'name': value['name'],
+        'createdOn': value['createdOn'] == null ? undefined : ((value['createdOn']).toISOString()),
     };
 }
 

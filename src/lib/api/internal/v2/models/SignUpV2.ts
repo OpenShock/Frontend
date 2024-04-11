@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -24,19 +24,19 @@ export interface SignUpV2 {
      * @type {string}
      * @memberof SignUpV2
      */
-    username?: string | null;
+    username?: string;
     /**
      * 
      * @type {string}
      * @memberof SignUpV2
      */
-    password?: string | null;
+    password?: string;
     /**
      * 
      * @type {string}
      * @memberof SignUpV2
      */
-    email?: string | null;
+    email?: string;
     /**
      * 
      * @type {string}
@@ -49,10 +49,8 @@ export interface SignUpV2 {
  * Check if a given object implements the SignUpV2 interface.
  */
 export function instanceOfSignUpV2(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "turnstileResponse" in value;
-
-    return isInstance;
+    if (!('turnstileResponse' in value)) return false;
+    return true;
 }
 
 export function SignUpV2FromJSON(json: any): SignUpV2 {
@@ -60,31 +58,28 @@ export function SignUpV2FromJSON(json: any): SignUpV2 {
 }
 
 export function SignUpV2FromJSONTyped(json: any, ignoreDiscriminator: boolean): SignUpV2 {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'username': !exists(json, 'username') ? undefined : json['username'],
-        'password': !exists(json, 'password') ? undefined : json['password'],
-        'email': !exists(json, 'email') ? undefined : json['email'],
+        'username': json['username'] == null ? undefined : json['username'],
+        'password': json['password'] == null ? undefined : json['password'],
+        'email': json['email'] == null ? undefined : json['email'],
         'turnstileResponse': json['turnstileResponse'],
     };
 }
 
 export function SignUpV2ToJSON(value?: SignUpV2 | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'username': value.username,
-        'password': value.password,
-        'email': value.email,
-        'turnstileResponse': value.turnstileResponse,
+        'username': value['username'],
+        'password': value['password'],
+        'email': value['email'],
+        'turnstileResponse': value['turnstileResponse'],
     };
 }
 

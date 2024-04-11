@@ -80,7 +80,7 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: ControlRequestToJSON(requestParameters.controlRequest),
+            body: ControlRequestToJSON(requestParameters['controlRequest']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));

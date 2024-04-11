@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -24,22 +24,20 @@ export interface ShareLinkCreate {
      * @type {string}
      * @memberof ShareLinkCreate
      */
-    name?: string | null;
+    name?: string;
     /**
      * 
      * @type {Date}
      * @memberof ShareLinkCreate
      */
-    expiresOn?: Date | null;
+    expiresOn?: Date;
 }
 
 /**
  * Check if a given object implements the ShareLinkCreate interface.
  */
 export function instanceOfShareLinkCreate(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function ShareLinkCreateFromJSON(json: any): ShareLinkCreate {
@@ -47,27 +45,24 @@ export function ShareLinkCreateFromJSON(json: any): ShareLinkCreate {
 }
 
 export function ShareLinkCreateFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShareLinkCreate {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'expiresOn': !exists(json, 'expiresOn') ? undefined : (json['expiresOn'] === null ? null : new Date(json['expiresOn'])),
+        'name': json['name'] == null ? undefined : json['name'],
+        'expiresOn': json['expiresOn'] == null ? undefined : (new Date(json['expiresOn'])),
     };
 }
 
 export function ShareLinkCreateToJSON(value?: ShareLinkCreate | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'name': value.name,
-        'expiresOn': value.expiresOn === undefined ? undefined : (value.expiresOn === null ? null : value.expiresOn.toISOString()),
+        'name': value['name'],
+        'expiresOn': value['expiresOn'] == null ? undefined : ((value['expiresOn'] as any).toISOString()),
     };
 }
 

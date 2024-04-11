@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -30,28 +30,26 @@ export interface ControlLogSenderLight {
      * @type {string}
      * @memberof ControlLogSenderLight
      */
-    name?: string | null;
+    name?: string;
     /**
      * 
      * @type {string}
      * @memberof ControlLogSenderLight
      */
-    image?: string | null;
+    image?: string;
     /**
      * 
      * @type {string}
      * @memberof ControlLogSenderLight
      */
-    customName?: string | null;
+    customName?: string;
 }
 
 /**
  * Check if a given object implements the ControlLogSenderLight interface.
  */
 export function instanceOfControlLogSenderLight(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function ControlLogSenderLightFromJSON(json: any): ControlLogSenderLight {
@@ -59,31 +57,28 @@ export function ControlLogSenderLightFromJSON(json: any): ControlLogSenderLight 
 }
 
 export function ControlLogSenderLightFromJSONTyped(json: any, ignoreDiscriminator: boolean): ControlLogSenderLight {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'image': !exists(json, 'image') ? undefined : json['image'],
-        'customName': !exists(json, 'customName') ? undefined : json['customName'],
+        'id': json['id'] == null ? undefined : json['id'],
+        'name': json['name'] == null ? undefined : json['name'],
+        'image': json['image'] == null ? undefined : json['image'],
+        'customName': json['customName'] == null ? undefined : json['customName'],
     };
 }
 
 export function ControlLogSenderLightToJSON(value?: ControlLogSenderLight | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'name': value.name,
-        'image': value.image,
-        'customName': value.customName,
+        'id': value['id'],
+        'name': value['name'],
+        'image': value['image'],
+        'customName': value['customName'],
     };
 }
 

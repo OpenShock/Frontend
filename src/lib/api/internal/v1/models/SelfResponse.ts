@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { RankType } from './RankType';
 import {
     RankTypeFromJSON,
@@ -37,19 +37,19 @@ export interface SelfResponse {
      * @type {string}
      * @memberof SelfResponse
      */
-    name?: string | null;
+    name?: string;
     /**
      * 
      * @type {string}
      * @memberof SelfResponse
      */
-    email?: string | null;
+    email?: string;
     /**
      * 
      * @type {string}
      * @memberof SelfResponse
      */
-    image?: string | null;
+    image?: string;
     /**
      * 
      * @type {RankType}
@@ -62,9 +62,7 @@ export interface SelfResponse {
  * Check if a given object implements the SelfResponse interface.
  */
 export function instanceOfSelfResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function SelfResponseFromJSON(json: any): SelfResponse {
@@ -72,33 +70,30 @@ export function SelfResponseFromJSON(json: any): SelfResponse {
 }
 
 export function SelfResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): SelfResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'email': !exists(json, 'email') ? undefined : json['email'],
-        'image': !exists(json, 'image') ? undefined : json['image'],
-        'rank': !exists(json, 'rank') ? undefined : RankTypeFromJSON(json['rank']),
+        'id': json['id'] == null ? undefined : json['id'],
+        'name': json['name'] == null ? undefined : json['name'],
+        'email': json['email'] == null ? undefined : json['email'],
+        'image': json['image'] == null ? undefined : json['image'],
+        'rank': json['rank'] == null ? undefined : RankTypeFromJSON(json['rank']),
     };
 }
 
 export function SelfResponseToJSON(value?: SelfResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'name': value.name,
-        'email': value.email,
-        'image': value.image,
-        'rank': RankTypeToJSON(value.rank),
+        'id': value['id'],
+        'name': value['name'],
+        'email': value['email'],
+        'image': value['image'],
+        'rank': RankTypeToJSON(value['rank']),
     };
 }
 

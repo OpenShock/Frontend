@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -31,9 +31,7 @@ export interface PauseRequest {
  * Check if a given object implements the PauseRequest interface.
  */
 export function instanceOfPauseRequest(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function PauseRequestFromJSON(json: any): PauseRequest {
@@ -41,25 +39,22 @@ export function PauseRequestFromJSON(json: any): PauseRequest {
 }
 
 export function PauseRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): PauseRequest {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'pause': !exists(json, 'pause') ? undefined : json['pause'],
+        'pause': json['pause'] == null ? undefined : json['pause'],
     };
 }
 
 export function PauseRequestToJSON(value?: PauseRequest | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'pause': value.pause,
+        'pause': value['pause'],
     };
 }
 

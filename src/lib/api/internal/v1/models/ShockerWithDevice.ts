@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { ShockerModelType } from './ShockerModelType';
 import {
     ShockerModelTypeFromJSON,
@@ -49,7 +49,7 @@ export interface ShockerWithDevice {
      * @type {string}
      * @memberof ShockerWithDevice
      */
-    name?: string | null;
+    name?: string;
     /**
      * 
      * @type {boolean}
@@ -74,9 +74,7 @@ export interface ShockerWithDevice {
  * Check if a given object implements the ShockerWithDevice interface.
  */
 export function instanceOfShockerWithDevice(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function ShockerWithDeviceFromJSON(json: any): ShockerWithDevice {
@@ -84,37 +82,34 @@ export function ShockerWithDeviceFromJSON(json: any): ShockerWithDevice {
 }
 
 export function ShockerWithDeviceFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShockerWithDevice {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'rfId': !exists(json, 'rfId') ? undefined : json['rfId'],
-        'model': !exists(json, 'model') ? undefined : ShockerModelTypeFromJSON(json['model']),
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'isPaused': !exists(json, 'isPaused') ? undefined : json['isPaused'],
-        'createdOn': !exists(json, 'createdOn') ? undefined : (new Date(json['createdOn'])),
-        'device': !exists(json, 'device') ? undefined : json['device'],
+        'id': json['id'] == null ? undefined : json['id'],
+        'rfId': json['rfId'] == null ? undefined : json['rfId'],
+        'model': json['model'] == null ? undefined : ShockerModelTypeFromJSON(json['model']),
+        'name': json['name'] == null ? undefined : json['name'],
+        'isPaused': json['isPaused'] == null ? undefined : json['isPaused'],
+        'createdOn': json['createdOn'] == null ? undefined : (new Date(json['createdOn'])),
+        'device': json['device'] == null ? undefined : json['device'],
     };
 }
 
 export function ShockerWithDeviceToJSON(value?: ShockerWithDevice | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'rfId': value.rfId,
-        'model': ShockerModelTypeToJSON(value.model),
-        'name': value.name,
-        'isPaused': value.isPaused,
-        'createdOn': value.createdOn === undefined ? undefined : (value.createdOn.toISOString()),
-        'device': value.device,
+        'id': value['id'],
+        'rfId': value['rfId'],
+        'model': ShockerModelTypeToJSON(value['model']),
+        'name': value['name'],
+        'isPaused': value['isPaused'],
+        'createdOn': value['createdOn'] == null ? undefined : ((value['createdOn']).toISOString()),
+        'device': value['device'],
     };
 }
 

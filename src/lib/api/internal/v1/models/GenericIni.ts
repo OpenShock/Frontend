@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -30,22 +30,20 @@ export interface GenericIni {
      * @type {string}
      * @memberof GenericIni
      */
-    name?: string | null;
+    name?: string;
     /**
      * 
      * @type {string}
      * @memberof GenericIni
      */
-    image?: string | null;
+    image?: string;
 }
 
 /**
  * Check if a given object implements the GenericIni interface.
  */
 export function instanceOfGenericIni(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function GenericIniFromJSON(json: any): GenericIni {
@@ -53,29 +51,26 @@ export function GenericIniFromJSON(json: any): GenericIni {
 }
 
 export function GenericIniFromJSONTyped(json: any, ignoreDiscriminator: boolean): GenericIni {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'image': !exists(json, 'image') ? undefined : json['image'],
+        'id': json['id'] == null ? undefined : json['id'],
+        'name': json['name'] == null ? undefined : json['name'],
+        'image': json['image'] == null ? undefined : json['image'],
     };
 }
 
 export function GenericIniToJSON(value?: GenericIni | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'name': value.name,
-        'image': value.image,
+        'id': value['id'],
+        'name': value['name'],
+        'image': value['image'],
     };
 }
 

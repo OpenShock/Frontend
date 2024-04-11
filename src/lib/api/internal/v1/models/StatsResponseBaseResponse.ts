@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { StatsResponse } from './StatsResponse';
 import {
     StatsResponseFromJSON,
@@ -31,7 +31,7 @@ export interface StatsResponseBaseResponse {
      * @type {string}
      * @memberof StatsResponseBaseResponse
      */
-    message?: string | null;
+    message?: string;
     /**
      * 
      * @type {StatsResponse}
@@ -44,9 +44,7 @@ export interface StatsResponseBaseResponse {
  * Check if a given object implements the StatsResponseBaseResponse interface.
  */
 export function instanceOfStatsResponseBaseResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function StatsResponseBaseResponseFromJSON(json: any): StatsResponseBaseResponse {
@@ -54,27 +52,24 @@ export function StatsResponseBaseResponseFromJSON(json: any): StatsResponseBaseR
 }
 
 export function StatsResponseBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): StatsResponseBaseResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'message': !exists(json, 'message') ? undefined : json['message'],
-        'data': !exists(json, 'data') ? undefined : StatsResponseFromJSON(json['data']),
+        'message': json['message'] == null ? undefined : json['message'],
+        'data': json['data'] == null ? undefined : StatsResponseFromJSON(json['data']),
     };
 }
 
 export function StatsResponseBaseResponseToJSON(value?: StatsResponseBaseResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'message': value.message,
-        'data': StatsResponseToJSON(value.data),
+        'message': value['message'],
+        'data': StatsResponseToJSON(value['data']),
     };
 }
 

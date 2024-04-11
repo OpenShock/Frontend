@@ -81,8 +81,11 @@ export class SharesApi extends runtime.BaseAPI implements SharesApiInterface {
      * Delete a share code
      */
     async sharesDeleteShareCodeRaw(requestParameters: SharesDeleteShareCodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
-        if (requestParameters.shareCodeId === null || requestParameters.shareCodeId === undefined) {
-            throw new runtime.RequiredError('shareCodeId','Required parameter requestParameters.shareCodeId was null or undefined when calling sharesDeleteShareCode.');
+        if (requestParameters['shareCodeId'] == null) {
+            throw new runtime.RequiredError(
+                'shareCodeId',
+                'Required parameter "shareCodeId" was null or undefined when calling sharesDeleteShareCode().'
+            );
         }
 
         const queryParameters: any = {};
@@ -94,7 +97,7 @@ export class SharesApi extends runtime.BaseAPI implements SharesApiInterface {
         }
 
         const response = await this.request({
-            path: `/1/shares/code/{shareCodeId}`.replace(`{${"shareCodeId"}}`, encodeURIComponent(String(requestParameters.shareCodeId))),
+            path: `/1/shares/code/{shareCodeId}`.replace(`{${"shareCodeId"}}`, encodeURIComponent(String(requestParameters['shareCodeId']))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -115,8 +118,11 @@ export class SharesApi extends runtime.BaseAPI implements SharesApiInterface {
      * Link a share code to your account
      */
     async sharesLinkShareCodeRaw(requestParameters: SharesLinkShareCodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
-        if (requestParameters.shareCodeId === null || requestParameters.shareCodeId === undefined) {
-            throw new runtime.RequiredError('shareCodeId','Required parameter requestParameters.shareCodeId was null or undefined when calling sharesLinkShareCode.');
+        if (requestParameters['shareCodeId'] == null) {
+            throw new runtime.RequiredError(
+                'shareCodeId',
+                'Required parameter "shareCodeId" was null or undefined when calling sharesLinkShareCode().'
+            );
         }
 
         const queryParameters: any = {};
@@ -128,7 +134,7 @@ export class SharesApi extends runtime.BaseAPI implements SharesApiInterface {
         }
 
         const response = await this.request({
-            path: `/1/shares/code/{shareCodeId}`.replace(`{${"shareCodeId"}}`, encodeURIComponent(String(requestParameters.shareCodeId))),
+            path: `/1/shares/code/{shareCodeId}`.replace(`{${"shareCodeId"}}`, encodeURIComponent(String(requestParameters['shareCodeId']))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,

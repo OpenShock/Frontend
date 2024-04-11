@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { ShareCodeInfo } from './ShareCodeInfo';
 import {
     ShareCodeInfoFromJSON,
@@ -31,22 +31,20 @@ export interface ShareCodeInfoIEnumerableBaseResponse {
      * @type {string}
      * @memberof ShareCodeInfoIEnumerableBaseResponse
      */
-    message?: string | null;
+    message?: string;
     /**
      * 
      * @type {Array<ShareCodeInfo>}
      * @memberof ShareCodeInfoIEnumerableBaseResponse
      */
-    data?: Array<ShareCodeInfo> | null;
+    data?: Array<ShareCodeInfo>;
 }
 
 /**
  * Check if a given object implements the ShareCodeInfoIEnumerableBaseResponse interface.
  */
 export function instanceOfShareCodeInfoIEnumerableBaseResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function ShareCodeInfoIEnumerableBaseResponseFromJSON(json: any): ShareCodeInfoIEnumerableBaseResponse {
@@ -54,27 +52,24 @@ export function ShareCodeInfoIEnumerableBaseResponseFromJSON(json: any): ShareCo
 }
 
 export function ShareCodeInfoIEnumerableBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShareCodeInfoIEnumerableBaseResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'message': !exists(json, 'message') ? undefined : json['message'],
-        'data': !exists(json, 'data') ? undefined : (json['data'] === null ? null : (json['data'] as Array<any>).map(ShareCodeInfoFromJSON)),
+        'message': json['message'] == null ? undefined : json['message'],
+        'data': json['data'] == null ? undefined : ((json['data'] as Array<any>).map(ShareCodeInfoFromJSON)),
     };
 }
 
 export function ShareCodeInfoIEnumerableBaseResponseToJSON(value?: ShareCodeInfoIEnumerableBaseResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'message': value.message,
-        'data': value.data === undefined ? undefined : (value.data === null ? null : (value.data as Array<any>).map(ShareCodeInfoToJSON)),
+        'message': value['message'],
+        'data': value['data'] == null ? undefined : ((value['data'] as Array<any>).map(ShareCodeInfoToJSON)),
     };
 }
 

@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { ShockerLimits } from './ShockerLimits';
 import {
     ShockerLimitsFromJSON,
@@ -43,7 +43,7 @@ export interface ShareLinkShocker {
      * @type {string}
      * @memberof ShareLinkShocker
      */
-    name?: string | null;
+    name?: string;
     /**
      * 
      * @type {ShockerPermissions}
@@ -75,9 +75,7 @@ export interface ShareLinkShocker {
  * Check if a given object implements the ShareLinkShocker interface.
  */
 export function instanceOfShareLinkShocker(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function ShareLinkShockerFromJSON(json: any): ShareLinkShocker {
@@ -85,33 +83,30 @@ export function ShareLinkShockerFromJSON(json: any): ShareLinkShocker {
 }
 
 export function ShareLinkShockerFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShareLinkShocker {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'permissions': !exists(json, 'permissions') ? undefined : ShockerPermissionsFromJSON(json['permissions']),
-        'limits': !exists(json, 'limits') ? undefined : ShockerLimitsFromJSON(json['limits']),
-        'paused': !exists(json, 'paused') ? undefined : json['paused'],
+        'id': json['id'] == null ? undefined : json['id'],
+        'name': json['name'] == null ? undefined : json['name'],
+        'permissions': json['permissions'] == null ? undefined : ShockerPermissionsFromJSON(json['permissions']),
+        'limits': json['limits'] == null ? undefined : ShockerLimitsFromJSON(json['limits']),
+        'paused': json['paused'] == null ? undefined : json['paused'],
     };
 }
 
 export function ShareLinkShockerToJSON(value?: ShareLinkShocker | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'name': value.name,
-        'permissions': ShockerPermissionsToJSON(value.permissions),
-        'limits': ShockerLimitsToJSON(value.limits),
-        'paused': value.paused,
+        'id': value['id'],
+        'name': value['name'],
+        'permissions': ShockerPermissionsToJSON(value['permissions']),
+        'limits': ShockerLimitsToJSON(value['limits']),
+        'paused': value['paused'],
     };
 }
 

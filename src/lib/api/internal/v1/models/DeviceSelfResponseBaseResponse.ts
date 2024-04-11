@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { DeviceSelfResponse } from './DeviceSelfResponse';
 import {
     DeviceSelfResponseFromJSON,
@@ -31,7 +31,7 @@ export interface DeviceSelfResponseBaseResponse {
      * @type {string}
      * @memberof DeviceSelfResponseBaseResponse
      */
-    message?: string | null;
+    message?: string;
     /**
      * 
      * @type {DeviceSelfResponse}
@@ -44,9 +44,7 @@ export interface DeviceSelfResponseBaseResponse {
  * Check if a given object implements the DeviceSelfResponseBaseResponse interface.
  */
 export function instanceOfDeviceSelfResponseBaseResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function DeviceSelfResponseBaseResponseFromJSON(json: any): DeviceSelfResponseBaseResponse {
@@ -54,27 +52,24 @@ export function DeviceSelfResponseBaseResponseFromJSON(json: any): DeviceSelfRes
 }
 
 export function DeviceSelfResponseBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): DeviceSelfResponseBaseResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'message': !exists(json, 'message') ? undefined : json['message'],
-        'data': !exists(json, 'data') ? undefined : DeviceSelfResponseFromJSON(json['data']),
+        'message': json['message'] == null ? undefined : json['message'],
+        'data': json['data'] == null ? undefined : DeviceSelfResponseFromJSON(json['data']),
     };
 }
 
 export function DeviceSelfResponseBaseResponseToJSON(value?: DeviceSelfResponseBaseResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'message': value.message,
-        'data': DeviceSelfResponseToJSON(value.data),
+        'message': value['message'],
+        'data': DeviceSelfResponseToJSON(value['data']),
     };
 }
 

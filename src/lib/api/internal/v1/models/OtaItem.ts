@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { OtaUpdateStatus } from './OtaUpdateStatus';
 import {
     OtaUpdateStatusFromJSON,
@@ -49,22 +49,20 @@ export interface OtaItem {
      * @type {string}
      * @memberof OtaItem
      */
-    version?: string | null;
+    version?: string;
     /**
      * 
      * @type {string}
      * @memberof OtaItem
      */
-    message?: string | null;
+    message?: string;
 }
 
 /**
  * Check if a given object implements the OtaItem interface.
  */
 export function instanceOfOtaItem(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function OtaItemFromJSON(json: any): OtaItem {
@@ -72,33 +70,30 @@ export function OtaItemFromJSON(json: any): OtaItem {
 }
 
 export function OtaItemFromJSONTyped(json: any, ignoreDiscriminator: boolean): OtaItem {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'startedAt': !exists(json, 'startedAt') ? undefined : (new Date(json['startedAt'])),
-        'status': !exists(json, 'status') ? undefined : OtaUpdateStatusFromJSON(json['status']),
-        'version': !exists(json, 'version') ? undefined : json['version'],
-        'message': !exists(json, 'message') ? undefined : json['message'],
+        'id': json['id'] == null ? undefined : json['id'],
+        'startedAt': json['startedAt'] == null ? undefined : (new Date(json['startedAt'])),
+        'status': json['status'] == null ? undefined : OtaUpdateStatusFromJSON(json['status']),
+        'version': json['version'] == null ? undefined : json['version'],
+        'message': json['message'] == null ? undefined : json['message'],
     };
 }
 
 export function OtaItemToJSON(value?: OtaItem | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'startedAt': value.startedAt === undefined ? undefined : (value.startedAt.toISOString()),
-        'status': OtaUpdateStatusToJSON(value.status),
-        'version': value.version,
-        'message': value.message,
+        'id': value['id'],
+        'startedAt': value['startedAt'] == null ? undefined : ((value['startedAt']).toISOString()),
+        'status': OtaUpdateStatusToJSON(value['status']),
+        'version': value['version'],
+        'message': value['message'],
     };
 }
 

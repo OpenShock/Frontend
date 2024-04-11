@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { GenericIni } from './GenericIni';
 import {
     GenericIniFromJSON,
@@ -37,7 +37,7 @@ export interface AdminOnlineDeviceResponse {
      * @type {string}
      * @memberof AdminOnlineDeviceResponse
      */
-    name?: string | null;
+    name?: string;
     /**
      * 
      * @type {GenericIni}
@@ -49,13 +49,13 @@ export interface AdminOnlineDeviceResponse {
      * @type {string}
      * @memberof AdminOnlineDeviceResponse
      */
-    firmwareVersion?: string | null;
+    firmwareVersion?: string;
     /**
      * 
      * @type {string}
      * @memberof AdminOnlineDeviceResponse
      */
-    gateway?: string | null;
+    gateway?: string;
     /**
      * 
      * @type {Date}
@@ -68,9 +68,7 @@ export interface AdminOnlineDeviceResponse {
  * Check if a given object implements the AdminOnlineDeviceResponse interface.
  */
 export function instanceOfAdminOnlineDeviceResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function AdminOnlineDeviceResponseFromJSON(json: any): AdminOnlineDeviceResponse {
@@ -78,35 +76,32 @@ export function AdminOnlineDeviceResponseFromJSON(json: any): AdminOnlineDeviceR
 }
 
 export function AdminOnlineDeviceResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): AdminOnlineDeviceResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'owner': !exists(json, 'owner') ? undefined : GenericIniFromJSON(json['owner']),
-        'firmwareVersion': !exists(json, 'firmwareVersion') ? undefined : json['firmwareVersion'],
-        'gateway': !exists(json, 'gateway') ? undefined : json['gateway'],
-        'connectedAt': !exists(json, 'connectedAt') ? undefined : (new Date(json['connectedAt'])),
+        'id': json['id'] == null ? undefined : json['id'],
+        'name': json['name'] == null ? undefined : json['name'],
+        'owner': json['owner'] == null ? undefined : GenericIniFromJSON(json['owner']),
+        'firmwareVersion': json['firmwareVersion'] == null ? undefined : json['firmwareVersion'],
+        'gateway': json['gateway'] == null ? undefined : json['gateway'],
+        'connectedAt': json['connectedAt'] == null ? undefined : (new Date(json['connectedAt'])),
     };
 }
 
 export function AdminOnlineDeviceResponseToJSON(value?: AdminOnlineDeviceResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'name': value.name,
-        'owner': GenericIniToJSON(value.owner),
-        'firmwareVersion': value.firmwareVersion,
-        'gateway': value.gateway,
-        'connectedAt': value.connectedAt === undefined ? undefined : (value.connectedAt.toISOString()),
+        'id': value['id'],
+        'name': value['name'],
+        'owner': GenericIniToJSON(value['owner']),
+        'firmwareVersion': value['firmwareVersion'],
+        'gateway': value['gateway'],
+        'connectedAt': value['connectedAt'] == null ? undefined : ((value['connectedAt']).toISOString()),
     };
 }
 

@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { ShockerLimits } from './ShockerLimits';
 import {
     ShockerLimitsFromJSON,
@@ -43,7 +43,7 @@ export interface SharedShocker {
      * @type {string}
      * @memberof SharedShocker
      */
-    name?: string | null;
+    name?: string;
     /**
      * 
      * @type {boolean}
@@ -68,9 +68,7 @@ export interface SharedShocker {
  * Check if a given object implements the SharedShocker interface.
  */
 export function instanceOfSharedShocker(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function SharedShockerFromJSON(json: any): SharedShocker {
@@ -78,33 +76,30 @@ export function SharedShockerFromJSON(json: any): SharedShocker {
 }
 
 export function SharedShockerFromJSONTyped(json: any, ignoreDiscriminator: boolean): SharedShocker {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'isPaused': !exists(json, 'isPaused') ? undefined : json['isPaused'],
-        'permissions': !exists(json, 'permissions') ? undefined : ShockerPermissionsFromJSON(json['permissions']),
-        'limits': !exists(json, 'limits') ? undefined : ShockerLimitsFromJSON(json['limits']),
+        'id': json['id'] == null ? undefined : json['id'],
+        'name': json['name'] == null ? undefined : json['name'],
+        'isPaused': json['isPaused'] == null ? undefined : json['isPaused'],
+        'permissions': json['permissions'] == null ? undefined : ShockerPermissionsFromJSON(json['permissions']),
+        'limits': json['limits'] == null ? undefined : ShockerLimitsFromJSON(json['limits']),
     };
 }
 
 export function SharedShockerToJSON(value?: SharedShocker | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'name': value.name,
-        'isPaused': value.isPaused,
-        'permissions': ShockerPermissionsToJSON(value.permissions),
-        'limits': ShockerLimitsToJSON(value.limits),
+        'id': value['id'],
+        'name': value['name'],
+        'isPaused': value['isPaused'],
+        'permissions': ShockerPermissionsToJSON(value['permissions']),
+        'limits': ShockerLimitsToJSON(value['limits']),
     };
 }
 

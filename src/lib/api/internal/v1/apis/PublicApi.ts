@@ -109,8 +109,11 @@ export class PublicApi extends runtime.BaseAPI implements PublicApiInterface {
      * Gets information about a public share link.
      */
     async publicGetShareLinkRaw(requestParameters: PublicGetShareLinkRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PublicShareLinkResponseBaseResponse>> {
-        if (requestParameters.shareLinkId === null || requestParameters.shareLinkId === undefined) {
-            throw new runtime.RequiredError('shareLinkId','Required parameter requestParameters.shareLinkId was null or undefined when calling publicGetShareLink.');
+        if (requestParameters['shareLinkId'] == null) {
+            throw new runtime.RequiredError(
+                'shareLinkId',
+                'Required parameter "shareLinkId" was null or undefined when calling publicGetShareLink().'
+            );
         }
 
         const queryParameters: any = {};
@@ -122,7 +125,7 @@ export class PublicApi extends runtime.BaseAPI implements PublicApiInterface {
         }
 
         const response = await this.request({
-            path: `/1/public/shares/links/{shareLinkId}`.replace(`{${"shareLinkId"}}`, encodeURIComponent(String(requestParameters.shareLinkId))),
+            path: `/1/public/shares/links/{shareLinkId}`.replace(`{${"shareLinkId"}}`, encodeURIComponent(String(requestParameters['shareLinkId']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

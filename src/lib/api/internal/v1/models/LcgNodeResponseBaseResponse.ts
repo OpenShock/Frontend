@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { LcgNodeResponse } from './LcgNodeResponse';
 import {
     LcgNodeResponseFromJSON,
@@ -31,7 +31,7 @@ export interface LcgNodeResponseBaseResponse {
      * @type {string}
      * @memberof LcgNodeResponseBaseResponse
      */
-    message?: string | null;
+    message?: string;
     /**
      * 
      * @type {LcgNodeResponse}
@@ -44,9 +44,7 @@ export interface LcgNodeResponseBaseResponse {
  * Check if a given object implements the LcgNodeResponseBaseResponse interface.
  */
 export function instanceOfLcgNodeResponseBaseResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function LcgNodeResponseBaseResponseFromJSON(json: any): LcgNodeResponseBaseResponse {
@@ -54,27 +52,24 @@ export function LcgNodeResponseBaseResponseFromJSON(json: any): LcgNodeResponseB
 }
 
 export function LcgNodeResponseBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): LcgNodeResponseBaseResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'message': !exists(json, 'message') ? undefined : json['message'],
-        'data': !exists(json, 'data') ? undefined : LcgNodeResponseFromJSON(json['data']),
+        'message': json['message'] == null ? undefined : json['message'],
+        'data': json['data'] == null ? undefined : LcgNodeResponseFromJSON(json['data']),
     };
 }
 
 export function LcgNodeResponseBaseResponseToJSON(value?: LcgNodeResponseBaseResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'message': value.message,
-        'data': LcgNodeResponseToJSON(value.data),
+        'message': value['message'],
+        'data': LcgNodeResponseToJSON(value['data']),
     };
 }
 

@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { OwnerShockerResponse } from './OwnerShockerResponse';
 import {
     OwnerShockerResponseFromJSON,
@@ -31,22 +31,20 @@ export interface OwnerShockerResponseIEnumerableIEnumerableBaseResponse {
      * @type {string}
      * @memberof OwnerShockerResponseIEnumerableIEnumerableBaseResponse
      */
-    message?: string | null;
+    message?: string;
     /**
      * 
      * @type {Array<Array<OwnerShockerResponse>>}
      * @memberof OwnerShockerResponseIEnumerableIEnumerableBaseResponse
      */
-    data?: Array<Array<OwnerShockerResponse>> | null;
+    data?: Array<Array<OwnerShockerResponse>>;
 }
 
 /**
  * Check if a given object implements the OwnerShockerResponseIEnumerableIEnumerableBaseResponse interface.
  */
 export function instanceOfOwnerShockerResponseIEnumerableIEnumerableBaseResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function OwnerShockerResponseIEnumerableIEnumerableBaseResponseFromJSON(json: any): OwnerShockerResponseIEnumerableIEnumerableBaseResponse {
@@ -54,27 +52,24 @@ export function OwnerShockerResponseIEnumerableIEnumerableBaseResponseFromJSON(j
 }
 
 export function OwnerShockerResponseIEnumerableIEnumerableBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): OwnerShockerResponseIEnumerableIEnumerableBaseResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'message': !exists(json, 'message') ? undefined : json['message'],
-        'data': !exists(json, 'data') ? undefined : json['data'],
+        'message': json['message'] == null ? undefined : json['message'],
+        'data': json['data'] == null ? undefined : json['data'],
     };
 }
 
 export function OwnerShockerResponseIEnumerableIEnumerableBaseResponseToJSON(value?: OwnerShockerResponseIEnumerableIEnumerableBaseResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'message': value.message,
-        'data': value.data,
+        'message': value['message'],
+        'data': value['data'],
     };
 }
 

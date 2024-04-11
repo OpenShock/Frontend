@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { SharedDevice } from './SharedDevice';
 import {
     SharedDeviceFromJSON,
@@ -37,22 +37,20 @@ export interface OwnerShockerResponse {
      * @type {string}
      * @memberof OwnerShockerResponse
      */
-    name?: string | null;
+    name?: string;
     /**
      * 
      * @type {Array<SharedDevice>}
      * @memberof OwnerShockerResponse
      */
-    devices?: Array<SharedDevice> | null;
+    devices?: Array<SharedDevice>;
 }
 
 /**
  * Check if a given object implements the OwnerShockerResponse interface.
  */
 export function instanceOfOwnerShockerResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function OwnerShockerResponseFromJSON(json: any): OwnerShockerResponse {
@@ -60,29 +58,26 @@ export function OwnerShockerResponseFromJSON(json: any): OwnerShockerResponse {
 }
 
 export function OwnerShockerResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): OwnerShockerResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'devices': !exists(json, 'devices') ? undefined : (json['devices'] === null ? null : (json['devices'] as Array<any>).map(SharedDeviceFromJSON)),
+        'id': json['id'] == null ? undefined : json['id'],
+        'name': json['name'] == null ? undefined : json['name'],
+        'devices': json['devices'] == null ? undefined : ((json['devices'] as Array<any>).map(SharedDeviceFromJSON)),
     };
 }
 
 export function OwnerShockerResponseToJSON(value?: OwnerShockerResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'name': value.name,
-        'devices': value.devices === undefined ? undefined : (value.devices === null ? null : (value.devices as Array<any>).map(SharedDeviceToJSON)),
+        'id': value['id'],
+        'name': value['name'],
+        'devices': value['devices'] == null ? undefined : ((value['devices'] as Array<any>).map(SharedDeviceToJSON)),
     };
 }
 

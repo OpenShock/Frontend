@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { PublicShareLinkResponse } from './PublicShareLinkResponse';
 import {
     PublicShareLinkResponseFromJSON,
@@ -31,7 +31,7 @@ export interface PublicShareLinkResponseBaseResponse {
      * @type {string}
      * @memberof PublicShareLinkResponseBaseResponse
      */
-    message?: string | null;
+    message?: string;
     /**
      * 
      * @type {PublicShareLinkResponse}
@@ -44,9 +44,7 @@ export interface PublicShareLinkResponseBaseResponse {
  * Check if a given object implements the PublicShareLinkResponseBaseResponse interface.
  */
 export function instanceOfPublicShareLinkResponseBaseResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function PublicShareLinkResponseBaseResponseFromJSON(json: any): PublicShareLinkResponseBaseResponse {
@@ -54,27 +52,24 @@ export function PublicShareLinkResponseBaseResponseFromJSON(json: any): PublicSh
 }
 
 export function PublicShareLinkResponseBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): PublicShareLinkResponseBaseResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'message': !exists(json, 'message') ? undefined : json['message'],
-        'data': !exists(json, 'data') ? undefined : PublicShareLinkResponseFromJSON(json['data']),
+        'message': json['message'] == null ? undefined : json['message'],
+        'data': json['data'] == null ? undefined : PublicShareLinkResponseFromJSON(json['data']),
     };
 }
 
 export function PublicShareLinkResponseBaseResponseToJSON(value?: PublicShareLinkResponseBaseResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'message': value.message,
-        'data': PublicShareLinkResponseToJSON(value.data),
+        'message': value['message'],
+        'data': PublicShareLinkResponseToJSON(value['data']),
     };
 }
 

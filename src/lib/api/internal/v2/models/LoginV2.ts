@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -43,12 +43,10 @@ export interface LoginV2 {
  * Check if a given object implements the LoginV2 interface.
  */
 export function instanceOfLoginV2(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "password" in value;
-    isInstance = isInstance && "email" in value;
-    isInstance = isInstance && "turnstileResponse" in value;
-
-    return isInstance;
+    if (!('password' in value)) return false;
+    if (!('email' in value)) return false;
+    if (!('turnstileResponse' in value)) return false;
+    return true;
 }
 
 export function LoginV2FromJSON(json: any): LoginV2 {
@@ -56,7 +54,7 @@ export function LoginV2FromJSON(json: any): LoginV2 {
 }
 
 export function LoginV2FromJSONTyped(json: any, ignoreDiscriminator: boolean): LoginV2 {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
@@ -68,17 +66,14 @@ export function LoginV2FromJSONTyped(json: any, ignoreDiscriminator: boolean): L
 }
 
 export function LoginV2ToJSON(value?: LoginV2 | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'password': value.password,
-        'email': value.email,
-        'turnstileResponse': value.turnstileResponse,
+        'password': value['password'],
+        'email': value['email'],
+        'turnstileResponse': value['turnstileResponse'],
     };
 }
 

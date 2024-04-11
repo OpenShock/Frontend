@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { LogEntry } from './LogEntry';
 import {
     LogEntryFromJSON,
@@ -31,22 +31,20 @@ export interface LogEntryIEnumerableBaseResponse {
      * @type {string}
      * @memberof LogEntryIEnumerableBaseResponse
      */
-    message?: string | null;
+    message?: string;
     /**
      * 
      * @type {Array<LogEntry>}
      * @memberof LogEntryIEnumerableBaseResponse
      */
-    data?: Array<LogEntry> | null;
+    data?: Array<LogEntry>;
 }
 
 /**
  * Check if a given object implements the LogEntryIEnumerableBaseResponse interface.
  */
 export function instanceOfLogEntryIEnumerableBaseResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function LogEntryIEnumerableBaseResponseFromJSON(json: any): LogEntryIEnumerableBaseResponse {
@@ -54,27 +52,24 @@ export function LogEntryIEnumerableBaseResponseFromJSON(json: any): LogEntryIEnu
 }
 
 export function LogEntryIEnumerableBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): LogEntryIEnumerableBaseResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'message': !exists(json, 'message') ? undefined : json['message'],
-        'data': !exists(json, 'data') ? undefined : (json['data'] === null ? null : (json['data'] as Array<any>).map(LogEntryFromJSON)),
+        'message': json['message'] == null ? undefined : json['message'],
+        'data': json['data'] == null ? undefined : ((json['data'] as Array<any>).map(LogEntryFromJSON)),
     };
 }
 
 export function LogEntryIEnumerableBaseResponseToJSON(value?: LogEntryIEnumerableBaseResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'message': value.message,
-        'data': value.data === undefined ? undefined : (value.data === null ? null : (value.data as Array<any>).map(LogEntryToJSON)),
+        'message': value['message'],
+        'data': value['data'] == null ? undefined : ((value['data'] as Array<any>).map(LogEntryToJSON)),
     };
 }
 

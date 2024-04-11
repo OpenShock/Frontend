@@ -279,8 +279,11 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
      * Edit a device
      */
     async devicesEditDeviceRaw(requestParameters: DevicesEditDeviceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
-        if (requestParameters.deviceId === null || requestParameters.deviceId === undefined) {
-            throw new runtime.RequiredError('deviceId','Required parameter requestParameters.deviceId was null or undefined when calling devicesEditDevice.');
+        if (requestParameters['deviceId'] == null) {
+            throw new runtime.RequiredError(
+                'deviceId',
+                'Required parameter "deviceId" was null or undefined when calling devicesEditDevice().'
+            );
         }
 
         const queryParameters: any = {};
@@ -294,11 +297,11 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
         }
 
         const response = await this.request({
-            path: `/1/devices/{deviceId}`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters.deviceId))),
+            path: `/1/devices/{deviceId}`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId']))),
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: DeviceEditToJSON(requestParameters.deviceEdit),
+            body: DeviceEditToJSON(requestParameters['deviceEdit']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));
@@ -316,8 +319,11 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
      * Get a device by its id
      */
     async devicesGetDeviceByIdRaw(requestParameters: DevicesGetDeviceByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponseDeviceWithTokenBaseResponse>> {
-        if (requestParameters.deviceId === null || requestParameters.deviceId === undefined) {
-            throw new runtime.RequiredError('deviceId','Required parameter requestParameters.deviceId was null or undefined when calling devicesGetDeviceById.');
+        if (requestParameters['deviceId'] == null) {
+            throw new runtime.RequiredError(
+                'deviceId',
+                'Required parameter "deviceId" was null or undefined when calling devicesGetDeviceById().'
+            );
         }
 
         const queryParameters: any = {};
@@ -329,7 +335,7 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
         }
 
         const response = await this.request({
-            path: `/1/devices/{deviceId}`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters.deviceId))),
+            path: `/1/devices/{deviceId}`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -350,8 +356,11 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
      * Get LCG info for a device if it is online and connected to a LCG node
      */
     async devicesGetLiveControlGatewayInfoRaw(requestParameters: DevicesGetLiveControlGatewayInfoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LcgResponseBaseResponse>> {
-        if (requestParameters.deviceId === null || requestParameters.deviceId === undefined) {
-            throw new runtime.RequiredError('deviceId','Required parameter requestParameters.deviceId was null or undefined when calling devicesGetLiveControlGatewayInfo.');
+        if (requestParameters['deviceId'] == null) {
+            throw new runtime.RequiredError(
+                'deviceId',
+                'Required parameter "deviceId" was null or undefined when calling devicesGetLiveControlGatewayInfo().'
+            );
         }
 
         const queryParameters: any = {};
@@ -363,7 +372,7 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
         }
 
         const response = await this.request({
-            path: `/1/devices/{deviceId}/lcg`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters.deviceId))),
+            path: `/1/devices/{deviceId}/lcg`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -384,8 +393,11 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
      * Gets the OTA update history for a device
      */
     async devicesGetOtaUpdateHistoryRaw(requestParameters: DevicesGetOtaUpdateHistoryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OtaItemIReadOnlyCollectionBaseResponse>> {
-        if (requestParameters.deviceId === null || requestParameters.deviceId === undefined) {
-            throw new runtime.RequiredError('deviceId','Required parameter requestParameters.deviceId was null or undefined when calling devicesGetOtaUpdateHistory.');
+        if (requestParameters['deviceId'] == null) {
+            throw new runtime.RequiredError(
+                'deviceId',
+                'Required parameter "deviceId" was null or undefined when calling devicesGetOtaUpdateHistory().'
+            );
         }
 
         const queryParameters: any = {};
@@ -397,7 +409,7 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
         }
 
         const response = await this.request({
-            path: `/1/devices/{deviceId}/ota`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters.deviceId))),
+            path: `/1/devices/{deviceId}/ota`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -418,8 +430,11 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
      * Get a pair code for a device
      */
     async devicesGetPairCodeRaw(requestParameters: DevicesGetPairCodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StringBaseResponse>> {
-        if (requestParameters.deviceId === null || requestParameters.deviceId === undefined) {
-            throw new runtime.RequiredError('deviceId','Required parameter requestParameters.deviceId was null or undefined when calling devicesGetPairCode.');
+        if (requestParameters['deviceId'] == null) {
+            throw new runtime.RequiredError(
+                'deviceId',
+                'Required parameter "deviceId" was null or undefined when calling devicesGetPairCode().'
+            );
         }
 
         const queryParameters: any = {};
@@ -431,7 +446,7 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
         }
 
         const response = await this.request({
-            path: `/1/devices/{deviceId}/pair`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters.deviceId))),
+            path: `/1/devices/{deviceId}/pair`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -452,8 +467,11 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
      * Get all shockers for a device
      */
     async devicesGetShockersRaw(requestParameters: DevicesGetShockersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShockerResponseIEnumerableBaseResponse>> {
-        if (requestParameters.deviceId === null || requestParameters.deviceId === undefined) {
-            throw new runtime.RequiredError('deviceId','Required parameter requestParameters.deviceId was null or undefined when calling devicesGetShockers.');
+        if (requestParameters['deviceId'] == null) {
+            throw new runtime.RequiredError(
+                'deviceId',
+                'Required parameter "deviceId" was null or undefined when calling devicesGetShockers().'
+            );
         }
 
         const queryParameters: any = {};
@@ -465,7 +483,7 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
         }
 
         const response = await this.request({
-            path: `/1/devices/{deviceId}/shockers`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters.deviceId))),
+            path: `/1/devices/{deviceId}/shockers`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -516,8 +534,11 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
      * Regenerate a device token
      */
     async devicesRegenerateDeviceTokenRaw(requestParameters: DevicesRegenerateDeviceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
-        if (requestParameters.deviceId === null || requestParameters.deviceId === undefined) {
-            throw new runtime.RequiredError('deviceId','Required parameter requestParameters.deviceId was null or undefined when calling devicesRegenerateDeviceToken.');
+        if (requestParameters['deviceId'] == null) {
+            throw new runtime.RequiredError(
+                'deviceId',
+                'Required parameter "deviceId" was null or undefined when calling devicesRegenerateDeviceToken().'
+            );
         }
 
         const queryParameters: any = {};
@@ -529,7 +550,7 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
         }
 
         const response = await this.request({
-            path: `/1/devices/{deviceId}`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters.deviceId))),
+            path: `/1/devices/{deviceId}`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId']))),
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
@@ -550,8 +571,11 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
      * Remove a device from current user\'s account
      */
     async devicesRemoveDeviceRaw(requestParameters: DevicesRemoveDeviceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
-        if (requestParameters.deviceId === null || requestParameters.deviceId === undefined) {
-            throw new runtime.RequiredError('deviceId','Required parameter requestParameters.deviceId was null or undefined when calling devicesRemoveDevice.');
+        if (requestParameters['deviceId'] == null) {
+            throw new runtime.RequiredError(
+                'deviceId',
+                'Required parameter "deviceId" was null or undefined when calling devicesRemoveDevice().'
+            );
         }
 
         const queryParameters: any = {};
@@ -563,7 +587,7 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
         }
 
         const response = await this.request({
-            path: `/1/devices/{deviceId}`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters.deviceId))),
+            path: `/1/devices/{deviceId}`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId']))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
