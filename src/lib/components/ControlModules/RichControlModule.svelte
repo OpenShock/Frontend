@@ -1,5 +1,8 @@
 <script lang="ts">
   export let name: string;
+
+  let intensity: number = 25;
+  let duration: number = 1;
 </script>
 
 <div
@@ -10,11 +13,11 @@
   <!-- Sliders -->
   <div class="grid grid-cols-[24px_128px_40px] gap-1 items-center text-center">
     <i class="fa-solid fa-signal" />
-    <input type="range" min="0" max="100" />
-    <p>100%</p>
+    <input type="range" bind:value={intensity} min="0" max="100" step="1" />
+    <p>{intensity}%</p>
     <i class="fa-solid fa-stopwatch" />
-    <input type="range" min="0" max="100" />
-    <p>10.5s</p>
+    <input type="range" bind:value={duration} min="0.3" max="30" step="0.3" />
+    <p>{duration}s</p>
   </div>
   <!-- Buttons -->
   <div class="w-full flex gap-2">
