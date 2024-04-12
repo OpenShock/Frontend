@@ -22,7 +22,7 @@
   };
 </script>
 
-<div class="card !bg-slate-500 flex flex-col items-stretch">
+<div class="card flex flex-col items-stretch">
   <div class="mx-2 my-1 flex items-center justify-between">
     {name}
     <div>

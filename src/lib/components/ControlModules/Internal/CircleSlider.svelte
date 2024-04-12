@@ -120,7 +120,7 @@
         {...progressProps}
         fill="none"
         stroke-linecap="round"
-        style="stroke: rgb(27, 180, 180)"
+        class="stroke-secondary-500"
         on:touchstart={trackingStarted}
         on:mousedown={trackingStarted}
         id={guageId}
