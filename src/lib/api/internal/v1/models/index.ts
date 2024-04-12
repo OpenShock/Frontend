@@ -47,7 +47,7 @@ export * from './ResponseDeviceWithTokenBaseResponse';
 export * from './RootResponse';
 export * from './RootResponseBaseResponse';
 export * from './SelfResponse';
-export * from './SelfResponseIEnumerableBaseResponse';
+export * from './SelfResponseBaseResponse';
 export * from './ShareCodeInfo';
 export * from './ShareCodeInfoIEnumerableBaseResponse';
 export * from './ShareInfo';
