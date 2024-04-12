@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -24,13 +24,13 @@ export interface RootResponse {
      * @type {string}
      * @memberof RootResponse
      */
-    version?: string | null;
+    version?: string;
     /**
      * 
      * @type {string}
      * @memberof RootResponse
      */
-    commit?: string | null;
+    commit?: string;
     /**
      * 
      * @type {Date}
@@ -43,9 +43,7 @@ export interface RootResponse {
  * Check if a given object implements the RootResponse interface.
  */
 export function instanceOfRootResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function RootResponseFromJSON(json: any): RootResponse {
@@ -53,29 +51,26 @@ export function RootResponseFromJSON(json: any): RootResponse {
 }
 
 export function RootResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): RootResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'version': !exists(json, 'version') ? undefined : json['version'],
-        'commit': !exists(json, 'commit') ? undefined : json['commit'],
-        'currentTime': !exists(json, 'currentTime') ? undefined : (new Date(json['currentTime'])),
+        'version': json['version'] == null ? undefined : json['version'],
+        'commit': json['commit'] == null ? undefined : json['commit'],
+        'currentTime': json['currentTime'] == null ? undefined : (new Date(json['currentTime'])),
     };
 }
 
 export function RootResponseToJSON(value?: RootResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'version': value.version,
-        'commit': value.commit,
-        'currentTime': value.currentTime === undefined ? undefined : (value.currentTime.toISOString()),
+        'version': value['version'],
+        'commit': value['commit'],
+        'currentTime': value['currentTime'] == null ? undefined : ((value['currentTime']).toISOString()),
     };
 }
 

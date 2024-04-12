@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { ShareLinkResponse } from './ShareLinkResponse';
 import {
     ShareLinkResponseFromJSON,
@@ -31,22 +31,20 @@ export interface ShareLinkResponseIEnumerableBaseResponse {
      * @type {string}
      * @memberof ShareLinkResponseIEnumerableBaseResponse
      */
-    message?: string | null;
+    message?: string;
     /**
      * 
      * @type {Array<ShareLinkResponse>}
      * @memberof ShareLinkResponseIEnumerableBaseResponse
      */
-    data?: Array<ShareLinkResponse> | null;
+    data?: Array<ShareLinkResponse>;
 }
 
 /**
  * Check if a given object implements the ShareLinkResponseIEnumerableBaseResponse interface.
  */
 export function instanceOfShareLinkResponseIEnumerableBaseResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function ShareLinkResponseIEnumerableBaseResponseFromJSON(json: any): ShareLinkResponseIEnumerableBaseResponse {
@@ -54,27 +52,24 @@ export function ShareLinkResponseIEnumerableBaseResponseFromJSON(json: any): Sha
 }
 
 export function ShareLinkResponseIEnumerableBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShareLinkResponseIEnumerableBaseResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'message': !exists(json, 'message') ? undefined : json['message'],
-        'data': !exists(json, 'data') ? undefined : (json['data'] === null ? null : (json['data'] as Array<any>).map(ShareLinkResponseFromJSON)),
+        'message': json['message'] == null ? undefined : json['message'],
+        'data': json['data'] == null ? undefined : ((json['data'] as Array<any>).map(ShareLinkResponseFromJSON)),
     };
 }
 
 export function ShareLinkResponseIEnumerableBaseResponseToJSON(value?: ShareLinkResponseIEnumerableBaseResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'message': value.message,
-        'data': value.data === undefined ? undefined : (value.data === null ? null : (value.data as Array<any>).map(ShareLinkResponseToJSON)),
+        'message': value['message'],
+        'data': value['data'] == null ? undefined : ((value['data'] as Array<any>).map(ShareLinkResponseToJSON)),
     };
 }
 

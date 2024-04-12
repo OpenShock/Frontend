@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { ShareLinkResponse } from './ShareLinkResponse';
 import {
     ShareLinkResponseFromJSON,
@@ -31,7 +31,7 @@ export interface ShareLinkResponseBaseResponse {
      * @type {string}
      * @memberof ShareLinkResponseBaseResponse
      */
-    message?: string | null;
+    message?: string;
     /**
      * 
      * @type {ShareLinkResponse}
@@ -44,9 +44,7 @@ export interface ShareLinkResponseBaseResponse {
  * Check if a given object implements the ShareLinkResponseBaseResponse interface.
  */
 export function instanceOfShareLinkResponseBaseResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function ShareLinkResponseBaseResponseFromJSON(json: any): ShareLinkResponseBaseResponse {
@@ -54,27 +52,24 @@ export function ShareLinkResponseBaseResponseFromJSON(json: any): ShareLinkRespo
 }
 
 export function ShareLinkResponseBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShareLinkResponseBaseResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'message': !exists(json, 'message') ? undefined : json['message'],
-        'data': !exists(json, 'data') ? undefined : ShareLinkResponseFromJSON(json['data']),
+        'message': json['message'] == null ? undefined : json['message'],
+        'data': json['data'] == null ? undefined : ShareLinkResponseFromJSON(json['data']),
     };
 }
 
 export function ShareLinkResponseBaseResponseToJSON(value?: ShareLinkResponseBaseResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'message': value.message,
-        'data': ShareLinkResponseToJSON(value.data),
+        'message': value['message'],
+        'data': ShareLinkResponseToJSON(value['data']),
     };
 }
 

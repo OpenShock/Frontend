@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -31,9 +31,7 @@ export interface StatsResponse {
  * Check if a given object implements the StatsResponse interface.
  */
 export function instanceOfStatsResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function StatsResponseFromJSON(json: any): StatsResponse {
@@ -41,25 +39,22 @@ export function StatsResponseFromJSON(json: any): StatsResponse {
 }
 
 export function StatsResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): StatsResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'devicesOnline': !exists(json, 'devicesOnline') ? undefined : json['devicesOnline'],
+        'devicesOnline': json['devicesOnline'] == null ? undefined : json['devicesOnline'],
     };
 }
 
 export function StatsResponseToJSON(value?: StatsResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'devicesOnline': value.devicesOnline,
+        'devicesOnline': value['devicesOnline'],
     };
 }
 

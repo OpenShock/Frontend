@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { PermissionType } from './PermissionType';
 import {
     PermissionTypeFromJSON,
@@ -37,7 +37,7 @@ export interface TokenResponse {
      * @type {string}
      * @memberof TokenResponse
      */
-    name?: string | null;
+    name?: string;
     /**
      * 
      * @type {Date}
@@ -49,28 +49,26 @@ export interface TokenResponse {
      * @type {string}
      * @memberof TokenResponse
      */
-    createdByIp?: string | null;
+    createdByIp?: string;
     /**
      * 
      * @type {Date}
      * @memberof TokenResponse
      */
-    validUntil?: Date | null;
+    validUntil?: Date;
     /**
      * 
      * @type {Array<PermissionType>}
      * @memberof TokenResponse
      */
-    permissions?: Array<PermissionType> | null;
+    permissions?: Array<PermissionType>;
 }
 
 /**
  * Check if a given object implements the TokenResponse interface.
  */
 export function instanceOfTokenResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function TokenResponseFromJSON(json: any): TokenResponse {
@@ -78,35 +76,32 @@ export function TokenResponseFromJSON(json: any): TokenResponse {
 }
 
 export function TokenResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): TokenResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'createdOn': !exists(json, 'createdOn') ? undefined : (new Date(json['createdOn'])),
-        'createdByIp': !exists(json, 'createdByIp') ? undefined : json['createdByIp'],
-        'validUntil': !exists(json, 'validUntil') ? undefined : (json['validUntil'] === null ? null : new Date(json['validUntil'])),
-        'permissions': !exists(json, 'permissions') ? undefined : (json['permissions'] === null ? null : (json['permissions'] as Array<any>).map(PermissionTypeFromJSON)),
+        'id': json['id'] == null ? undefined : json['id'],
+        'name': json['name'] == null ? undefined : json['name'],
+        'createdOn': json['createdOn'] == null ? undefined : (new Date(json['createdOn'])),
+        'createdByIp': json['createdByIp'] == null ? undefined : json['createdByIp'],
+        'validUntil': json['validUntil'] == null ? undefined : (new Date(json['validUntil'])),
+        'permissions': json['permissions'] == null ? undefined : ((json['permissions'] as Array<any>).map(PermissionTypeFromJSON)),
     };
 }
 
 export function TokenResponseToJSON(value?: TokenResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'name': value.name,
-        'createdOn': value.createdOn === undefined ? undefined : (value.createdOn.toISOString()),
-        'createdByIp': value.createdByIp,
-        'validUntil': value.validUntil === undefined ? undefined : (value.validUntil === null ? null : value.validUntil.toISOString().substring(0,10)),
-        'permissions': value.permissions === undefined ? undefined : (value.permissions === null ? null : (value.permissions as Array<any>).map(PermissionTypeToJSON)),
+        'id': value['id'],
+        'name': value['name'],
+        'createdOn': value['createdOn'] == null ? undefined : ((value['createdOn']).toISOString()),
+        'createdByIp': value['createdByIp'],
+        'validUntil': value['validUntil'] == null ? undefined : ((value['validUntil'] as any).toISOString().substring(0,10)),
+        'permissions': value['permissions'] == null ? undefined : ((value['permissions'] as Array<any>).map(PermissionTypeToJSON)),
     };
 }
 

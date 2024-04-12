@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { OtaItem } from './OtaItem';
 import {
     OtaItemFromJSON,
@@ -31,22 +31,20 @@ export interface OtaItemIReadOnlyCollectionBaseResponse {
      * @type {string}
      * @memberof OtaItemIReadOnlyCollectionBaseResponse
      */
-    message?: string | null;
+    message?: string;
     /**
      * 
      * @type {Array<OtaItem>}
      * @memberof OtaItemIReadOnlyCollectionBaseResponse
      */
-    data?: Array<OtaItem> | null;
+    data?: Array<OtaItem>;
 }
 
 /**
  * Check if a given object implements the OtaItemIReadOnlyCollectionBaseResponse interface.
  */
 export function instanceOfOtaItemIReadOnlyCollectionBaseResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function OtaItemIReadOnlyCollectionBaseResponseFromJSON(json: any): OtaItemIReadOnlyCollectionBaseResponse {
@@ -54,27 +52,24 @@ export function OtaItemIReadOnlyCollectionBaseResponseFromJSON(json: any): OtaIt
 }
 
 export function OtaItemIReadOnlyCollectionBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): OtaItemIReadOnlyCollectionBaseResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'message': !exists(json, 'message') ? undefined : json['message'],
-        'data': !exists(json, 'data') ? undefined : (json['data'] === null ? null : (json['data'] as Array<any>).map(OtaItemFromJSON)),
+        'message': json['message'] == null ? undefined : json['message'],
+        'data': json['data'] == null ? undefined : ((json['data'] as Array<any>).map(OtaItemFromJSON)),
     };
 }
 
 export function OtaItemIReadOnlyCollectionBaseResponseToJSON(value?: OtaItemIReadOnlyCollectionBaseResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'message': value.message,
-        'data': value.data === undefined ? undefined : (value.data === null ? null : (value.data as Array<any>).map(OtaItemToJSON)),
+        'message': value['message'],
+        'data': value['data'] == null ? undefined : ((value['data'] as Array<any>).map(OtaItemToJSON)),
     };
 }
 

@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -24,28 +24,26 @@ export interface SignUp {
      * @type {string}
      * @memberof SignUp
      */
-    username?: string | null;
+    username?: string;
     /**
      * 
      * @type {string}
      * @memberof SignUp
      */
-    password?: string | null;
+    password?: string;
     /**
      * 
      * @type {string}
      * @memberof SignUp
      */
-    email?: string | null;
+    email?: string;
 }
 
 /**
  * Check if a given object implements the SignUp interface.
  */
 export function instanceOfSignUp(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function SignUpFromJSON(json: any): SignUp {
@@ -53,29 +51,26 @@ export function SignUpFromJSON(json: any): SignUp {
 }
 
 export function SignUpFromJSONTyped(json: any, ignoreDiscriminator: boolean): SignUp {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'username': !exists(json, 'username') ? undefined : json['username'],
-        'password': !exists(json, 'password') ? undefined : json['password'],
-        'email': !exists(json, 'email') ? undefined : json['email'],
+        'username': json['username'] == null ? undefined : json['username'],
+        'password': json['password'] == null ? undefined : json['password'],
+        'email': json['email'] == null ? undefined : json['email'],
     };
 }
 
 export function SignUpToJSON(value?: SignUp | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'username': value.username,
-        'password': value.password,
-        'email': value.email,
+        'username': value['username'],
+        'password': value['password'],
+        'email': value['email'],
     };
 }
 

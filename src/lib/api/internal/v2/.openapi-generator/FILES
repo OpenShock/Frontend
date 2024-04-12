@@ -8,6 +8,7 @@ models/ControlRequest.ts
 models/ControlType.ts
 models/LoginV2.ts
 models/ObjectBaseResponse.ts
+models/OpenShockProblem.ts
 models/SignUpV2.ts
 models/index.ts
 runtime.ts

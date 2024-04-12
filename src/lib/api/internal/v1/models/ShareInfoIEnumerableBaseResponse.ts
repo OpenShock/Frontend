@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { ShareInfo } from './ShareInfo';
 import {
     ShareInfoFromJSON,
@@ -31,22 +31,20 @@ export interface ShareInfoIEnumerableBaseResponse {
      * @type {string}
      * @memberof ShareInfoIEnumerableBaseResponse
      */
-    message?: string | null;
+    message?: string;
     /**
      * 
      * @type {Array<ShareInfo>}
      * @memberof ShareInfoIEnumerableBaseResponse
      */
-    data?: Array<ShareInfo> | null;
+    data?: Array<ShareInfo>;
 }
 
 /**
  * Check if a given object implements the ShareInfoIEnumerableBaseResponse interface.
  */
 export function instanceOfShareInfoIEnumerableBaseResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function ShareInfoIEnumerableBaseResponseFromJSON(json: any): ShareInfoIEnumerableBaseResponse {
@@ -54,27 +52,24 @@ export function ShareInfoIEnumerableBaseResponseFromJSON(json: any): ShareInfoIE
 }
 
 export function ShareInfoIEnumerableBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShareInfoIEnumerableBaseResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'message': !exists(json, 'message') ? undefined : json['message'],
-        'data': !exists(json, 'data') ? undefined : (json['data'] === null ? null : (json['data'] as Array<any>).map(ShareInfoFromJSON)),
+        'message': json['message'] == null ? undefined : json['message'],
+        'data': json['data'] == null ? undefined : ((json['data'] as Array<any>).map(ShareInfoFromJSON)),
     };
 }
 
 export function ShareInfoIEnumerableBaseResponseToJSON(value?: ShareInfoIEnumerableBaseResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'message': value.message,
-        'data': value.data === undefined ? undefined : (value.data === null ? null : (value.data as Array<any>).map(ShareInfoToJSON)),
+        'message': value['message'],
+        'data': value['data'] == null ? undefined : ((value['data'] as Array<any>).map(ShareInfoToJSON)),
     };
 }
 

@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { AdminOnlineDeviceResponse } from './AdminOnlineDeviceResponse';
 import {
     AdminOnlineDeviceResponseFromJSON,
@@ -31,22 +31,20 @@ export interface AdminOnlineDeviceResponseIEnumerableBaseResponse {
      * @type {string}
      * @memberof AdminOnlineDeviceResponseIEnumerableBaseResponse
      */
-    message?: string | null;
+    message?: string;
     /**
      * 
      * @type {Array<AdminOnlineDeviceResponse>}
      * @memberof AdminOnlineDeviceResponseIEnumerableBaseResponse
      */
-    data?: Array<AdminOnlineDeviceResponse> | null;
+    data?: Array<AdminOnlineDeviceResponse>;
 }
 
 /**
  * Check if a given object implements the AdminOnlineDeviceResponseIEnumerableBaseResponse interface.
  */
 export function instanceOfAdminOnlineDeviceResponseIEnumerableBaseResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function AdminOnlineDeviceResponseIEnumerableBaseResponseFromJSON(json: any): AdminOnlineDeviceResponseIEnumerableBaseResponse {
@@ -54,27 +52,24 @@ export function AdminOnlineDeviceResponseIEnumerableBaseResponseFromJSON(json: a
 }
 
 export function AdminOnlineDeviceResponseIEnumerableBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): AdminOnlineDeviceResponseIEnumerableBaseResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'message': !exists(json, 'message') ? undefined : json['message'],
-        'data': !exists(json, 'data') ? undefined : (json['data'] === null ? null : (json['data'] as Array<any>).map(AdminOnlineDeviceResponseFromJSON)),
+        'message': json['message'] == null ? undefined : json['message'],
+        'data': json['data'] == null ? undefined : ((json['data'] as Array<any>).map(AdminOnlineDeviceResponseFromJSON)),
     };
 }
 
 export function AdminOnlineDeviceResponseIEnumerableBaseResponseToJSON(value?: AdminOnlineDeviceResponseIEnumerableBaseResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'message': value.message,
-        'data': value.data === undefined ? undefined : (value.data === null ? null : (value.data as Array<any>).map(AdminOnlineDeviceResponseToJSON)),
+        'message': value['message'],
+        'data': value['data'] == null ? undefined : ((value['data'] as Array<any>).map(AdminOnlineDeviceResponseToJSON)),
     };
 }
 

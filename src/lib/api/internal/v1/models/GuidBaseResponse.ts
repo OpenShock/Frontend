@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -24,7 +24,7 @@ export interface GuidBaseResponse {
      * @type {string}
      * @memberof GuidBaseResponse
      */
-    message?: string | null;
+    message?: string;
     /**
      * 
      * @type {string}
@@ -37,9 +37,7 @@ export interface GuidBaseResponse {
  * Check if a given object implements the GuidBaseResponse interface.
  */
 export function instanceOfGuidBaseResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function GuidBaseResponseFromJSON(json: any): GuidBaseResponse {
@@ -47,27 +45,24 @@ export function GuidBaseResponseFromJSON(json: any): GuidBaseResponse {
 }
 
 export function GuidBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): GuidBaseResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'message': !exists(json, 'message') ? undefined : json['message'],
-        'data': !exists(json, 'data') ? undefined : json['data'],
+        'message': json['message'] == null ? undefined : json['message'],
+        'data': json['data'] == null ? undefined : json['data'],
     };
 }
 
 export function GuidBaseResponseToJSON(value?: GuidBaseResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'message': value.message,
-        'data': value.data,
+        'message': value['message'],
+        'data': value['data'],
     };
 }
 

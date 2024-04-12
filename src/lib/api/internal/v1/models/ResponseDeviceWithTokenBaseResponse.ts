@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { ResponseDeviceWithToken } from './ResponseDeviceWithToken';
 import {
     ResponseDeviceWithTokenFromJSON,
@@ -31,7 +31,7 @@ export interface ResponseDeviceWithTokenBaseResponse {
      * @type {string}
      * @memberof ResponseDeviceWithTokenBaseResponse
      */
-    message?: string | null;
+    message?: string;
     /**
      * 
      * @type {ResponseDeviceWithToken}
@@ -44,9 +44,7 @@ export interface ResponseDeviceWithTokenBaseResponse {
  * Check if a given object implements the ResponseDeviceWithTokenBaseResponse interface.
  */
 export function instanceOfResponseDeviceWithTokenBaseResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function ResponseDeviceWithTokenBaseResponseFromJSON(json: any): ResponseDeviceWithTokenBaseResponse {
@@ -54,27 +52,24 @@ export function ResponseDeviceWithTokenBaseResponseFromJSON(json: any): Response
 }
 
 export function ResponseDeviceWithTokenBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ResponseDeviceWithTokenBaseResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'message': !exists(json, 'message') ? undefined : json['message'],
-        'data': !exists(json, 'data') ? undefined : ResponseDeviceWithTokenFromJSON(json['data']),
+        'message': json['message'] == null ? undefined : json['message'],
+        'data': json['data'] == null ? undefined : ResponseDeviceWithTokenFromJSON(json['data']),
     };
 }
 
 export function ResponseDeviceWithTokenBaseResponseToJSON(value?: ResponseDeviceWithTokenBaseResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'message': value.message,
-        'data': ResponseDeviceWithTokenToJSON(value.data),
+        'message': value['message'],
+        'data': ResponseDeviceWithTokenToJSON(value['data']),
     };
 }
 

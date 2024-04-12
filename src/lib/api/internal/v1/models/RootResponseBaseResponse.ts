@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { RootResponse } from './RootResponse';
 import {
     RootResponseFromJSON,
@@ -31,7 +31,7 @@ export interface RootResponseBaseResponse {
      * @type {string}
      * @memberof RootResponseBaseResponse
      */
-    message?: string | null;
+    message?: string;
     /**
      * 
      * @type {RootResponse}
@@ -44,9 +44,7 @@ export interface RootResponseBaseResponse {
  * Check if a given object implements the RootResponseBaseResponse interface.
  */
 export function instanceOfRootResponseBaseResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function RootResponseBaseResponseFromJSON(json: any): RootResponseBaseResponse {
@@ -54,27 +52,24 @@ export function RootResponseBaseResponseFromJSON(json: any): RootResponseBaseRes
 }
 
 export function RootResponseBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): RootResponseBaseResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'message': !exists(json, 'message') ? undefined : json['message'],
-        'data': !exists(json, 'data') ? undefined : RootResponseFromJSON(json['data']),
+        'message': json['message'] == null ? undefined : json['message'],
+        'data': json['data'] == null ? undefined : RootResponseFromJSON(json['data']),
     };
 }
 
 export function RootResponseBaseResponseToJSON(value?: RootResponseBaseResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'message': value.message,
-        'data': RootResponseToJSON(value.data),
+        'message': value['message'],
+        'data': RootResponseToJSON(value['data']),
     };
 }
 

@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { ShockerModelType } from './ShockerModelType';
 import {
     ShockerModelTypeFromJSON,
@@ -50,9 +50,7 @@ export interface MinimalShocker {
  * Check if a given object implements the MinimalShocker interface.
  */
 export function instanceOfMinimalShocker(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function MinimalShockerFromJSON(json: any): MinimalShocker {
@@ -60,29 +58,26 @@ export function MinimalShockerFromJSON(json: any): MinimalShocker {
 }
 
 export function MinimalShockerFromJSONTyped(json: any, ignoreDiscriminator: boolean): MinimalShocker {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'rfId': !exists(json, 'rfId') ? undefined : json['rfId'],
-        'model': !exists(json, 'model') ? undefined : ShockerModelTypeFromJSON(json['model']),
+        'id': json['id'] == null ? undefined : json['id'],
+        'rfId': json['rfId'] == null ? undefined : json['rfId'],
+        'model': json['model'] == null ? undefined : ShockerModelTypeFromJSON(json['model']),
     };
 }
 
 export function MinimalShockerToJSON(value?: MinimalShocker | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'rfId': value.rfId,
-        'model': ShockerModelTypeToJSON(value.model),
+        'id': value['id'],
+        'rfId': value['rfId'],
+        'model': ShockerModelTypeToJSON(value['model']),
     };
 }
 

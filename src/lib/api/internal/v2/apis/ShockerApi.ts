@@ -17,12 +17,15 @@ import * as runtime from '../runtime';
 import type {
   ControlRequest,
   ObjectBaseResponse,
+  OpenShockProblem,
 } from '../models/index';
 import {
     ControlRequestFromJSON,
     ControlRequestToJSON,
     ObjectBaseResponseFromJSON,
     ObjectBaseResponseToJSON,
+    OpenShockProblemFromJSON,
+    OpenShockProblemToJSON,
 } from '../models/index';
 
 export interface ShockerSendControlRequest {
@@ -77,7 +80,7 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: ControlRequestToJSON(requestParameters.controlRequest),
+            body: ControlRequestToJSON(requestParameters['controlRequest']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));

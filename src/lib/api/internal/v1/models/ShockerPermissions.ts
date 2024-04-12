@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -49,9 +49,7 @@ export interface ShockerPermissions {
  * Check if a given object implements the ShockerPermissions interface.
  */
 export function instanceOfShockerPermissions(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function ShockerPermissionsFromJSON(json: any): ShockerPermissions {
@@ -59,31 +57,28 @@ export function ShockerPermissionsFromJSON(json: any): ShockerPermissions {
 }
 
 export function ShockerPermissionsFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShockerPermissions {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'vibrate': !exists(json, 'vibrate') ? undefined : json['vibrate'],
-        'sound': !exists(json, 'sound') ? undefined : json['sound'],
-        'shock': !exists(json, 'shock') ? undefined : json['shock'],
-        'live': !exists(json, 'live') ? undefined : json['live'],
+        'vibrate': json['vibrate'] == null ? undefined : json['vibrate'],
+        'sound': json['sound'] == null ? undefined : json['sound'],
+        'shock': json['shock'] == null ? undefined : json['shock'],
+        'live': json['live'] == null ? undefined : json['live'],
     };
 }
 
 export function ShockerPermissionsToJSON(value?: ShockerPermissions | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'vibrate': value.vibrate,
-        'sound': value.sound,
-        'shock': value.shock,
-        'live': value.live,
+        'vibrate': value['vibrate'],
+        'sound': value['sound'],
+        'shock': value['shock'],
+        'live': value['live'],
     };
 }
 

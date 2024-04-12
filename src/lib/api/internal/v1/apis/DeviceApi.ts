@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
   DeviceSelfResponseBaseResponse,
   LcgNodeResponseBaseResponse,
+  OpenShockProblem,
   StringBaseResponse,
 } from '../models/index';
 import {
@@ -24,6 +25,8 @@ import {
     DeviceSelfResponseBaseResponseToJSON,
     LcgNodeResponseBaseResponseFromJSON,
     LcgNodeResponseBaseResponseToJSON,
+    OpenShockProblemFromJSON,
+    OpenShockProblemToJSON,
     StringBaseResponseFromJSON,
     StringBaseResponseToJSON,
 } from '../models/index';
@@ -172,8 +175,11 @@ export class DeviceApi extends runtime.BaseAPI implements DeviceApiInterface {
      * Pair a device with a pair code.
      */
     async devicePairRaw(requestParameters: DevicePairRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StringBaseResponse>> {
-        if (requestParameters.pairCode === null || requestParameters.pairCode === undefined) {
-            throw new runtime.RequiredError('pairCode','Required parameter requestParameters.pairCode was null or undefined when calling devicePair.');
+        if (requestParameters['pairCode'] == null) {
+            throw new runtime.RequiredError(
+                'pairCode',
+                'Required parameter "pairCode" was null or undefined when calling devicePair().'
+            );
         }
 
         const queryParameters: any = {};
@@ -185,7 +191,7 @@ export class DeviceApi extends runtime.BaseAPI implements DeviceApiInterface {
         }
 
         const response = await this.request({
-            path: `/1/device/pair/{pairCode}`.replace(`{${"pairCode"}}`, encodeURIComponent(String(requestParameters.pairCode))),
+            path: `/1/device/pair/{pairCode}`.replace(`{${"pairCode"}}`, encodeURIComponent(String(requestParameters['pairCode']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -206,8 +212,11 @@ export class DeviceApi extends runtime.BaseAPI implements DeviceApiInterface {
      * Pair a device with a pair code.
      */
     async devicePairDEPRECATEDRaw(requestParameters: DevicePairDEPRECATEDRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StringBaseResponse>> {
-        if (requestParameters.pairCode === null || requestParameters.pairCode === undefined) {
-            throw new runtime.RequiredError('pairCode','Required parameter requestParameters.pairCode was null or undefined when calling devicePairDEPRECATED.');
+        if (requestParameters['pairCode'] == null) {
+            throw new runtime.RequiredError(
+                'pairCode',
+                'Required parameter "pairCode" was null or undefined when calling devicePairDEPRECATED().'
+            );
         }
 
         const queryParameters: any = {};
@@ -219,7 +228,7 @@ export class DeviceApi extends runtime.BaseAPI implements DeviceApiInterface {
         }
 
         const response = await this.request({
-            path: `/1/pair/{pairCode}`.replace(`{${"pairCode"}}`, encodeURIComponent(String(requestParameters.pairCode))),
+            path: `/1/pair/{pairCode}`.replace(`{${"pairCode"}}`, encodeURIComponent(String(requestParameters['pairCode']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

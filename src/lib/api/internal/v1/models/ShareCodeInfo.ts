@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -37,9 +37,7 @@ export interface ShareCodeInfo {
  * Check if a given object implements the ShareCodeInfo interface.
  */
 export function instanceOfShareCodeInfo(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function ShareCodeInfoFromJSON(json: any): ShareCodeInfo {
@@ -47,27 +45,24 @@ export function ShareCodeInfoFromJSON(json: any): ShareCodeInfo {
 }
 
 export function ShareCodeInfoFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShareCodeInfo {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'createdOn': !exists(json, 'createdOn') ? undefined : (new Date(json['createdOn'])),
+        'id': json['id'] == null ? undefined : json['id'],
+        'createdOn': json['createdOn'] == null ? undefined : (new Date(json['createdOn'])),
     };
 }
 
 export function ShareCodeInfoToJSON(value?: ShareCodeInfo | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'createdOn': value.createdOn === undefined ? undefined : (value.createdOn.toISOString()),
+        'id': value['id'],
+        'createdOn': value['createdOn'] == null ? undefined : ((value['createdOn']).toISOString()),
     };
 }
 

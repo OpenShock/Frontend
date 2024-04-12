@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { LcgResponse } from './LcgResponse';
 import {
     LcgResponseFromJSON,
@@ -31,7 +31,7 @@ export interface LcgResponseBaseResponse {
      * @type {string}
      * @memberof LcgResponseBaseResponse
      */
-    message?: string | null;
+    message?: string;
     /**
      * 
      * @type {LcgResponse}
@@ -44,9 +44,7 @@ export interface LcgResponseBaseResponse {
  * Check if a given object implements the LcgResponseBaseResponse interface.
  */
 export function instanceOfLcgResponseBaseResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function LcgResponseBaseResponseFromJSON(json: any): LcgResponseBaseResponse {
@@ -54,27 +52,24 @@ export function LcgResponseBaseResponseFromJSON(json: any): LcgResponseBaseRespo
 }
 
 export function LcgResponseBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): LcgResponseBaseResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'message': !exists(json, 'message') ? undefined : json['message'],
-        'data': !exists(json, 'data') ? undefined : LcgResponseFromJSON(json['data']),
+        'message': json['message'] == null ? undefined : json['message'],
+        'data': json['data'] == null ? undefined : LcgResponseFromJSON(json['data']),
     };
 }
 
 export function LcgResponseBaseResponseToJSON(value?: LcgResponseBaseResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'message': value.message,
-        'data': LcgResponseToJSON(value.data),
+        'message': value['message'],
+        'data': LcgResponseToJSON(value['data']),
     };
 }
 

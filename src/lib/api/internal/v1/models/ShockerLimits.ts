@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -24,22 +24,20 @@ export interface ShockerLimits {
      * @type {number}
      * @memberof ShockerLimits
      */
-    intensity?: number | null;
+    intensity?: number;
     /**
      * 
      * @type {number}
      * @memberof ShockerLimits
      */
-    duration?: number | null;
+    duration?: number;
 }
 
 /**
  * Check if a given object implements the ShockerLimits interface.
  */
 export function instanceOfShockerLimits(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function ShockerLimitsFromJSON(json: any): ShockerLimits {
@@ -47,27 +45,24 @@ export function ShockerLimitsFromJSON(json: any): ShockerLimits {
 }
 
 export function ShockerLimitsFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShockerLimits {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'intensity': !exists(json, 'intensity') ? undefined : json['intensity'],
-        'duration': !exists(json, 'duration') ? undefined : json['duration'],
+        'intensity': json['intensity'] == null ? undefined : json['intensity'],
+        'duration': json['duration'] == null ? undefined : json['duration'],
     };
 }
 
 export function ShockerLimitsToJSON(value?: ShockerLimits | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'intensity': value.intensity,
-        'duration': value.duration,
+        'intensity': value['intensity'],
+        'duration': value['duration'],
     };
 }
 

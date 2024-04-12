@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
   LoginV2,
   ObjectBaseResponse,
+  OpenShockProblem,
   SignUpV2,
 } from '../models/index';
 import {
@@ -24,6 +25,8 @@ import {
     LoginV2ToJSON,
     ObjectBaseResponseFromJSON,
     ObjectBaseResponseToJSON,
+    OpenShockProblemFromJSON,
+    OpenShockProblemToJSON,
     SignUpV2FromJSON,
     SignUpV2ToJSON,
 } from '../models/index';
@@ -99,7 +102,7 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: LoginV2ToJSON(requestParameters.loginV2),
+            body: LoginV2ToJSON(requestParameters['loginV2']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));
@@ -132,7 +135,7 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: SignUpV2ToJSON(requestParameters.signUpV2),
+            body: SignUpV2ToJSON(requestParameters['signUpV2']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));

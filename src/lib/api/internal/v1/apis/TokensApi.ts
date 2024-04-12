@@ -18,6 +18,7 @@ import type {
   CreateTokenRequest,
   EditTokenRequest,
   ObjectBaseResponse,
+  OpenShockProblem,
   StringBaseResponse,
   TokenResponseBaseResponse,
   TokenResponseIEnumerableBaseResponse,
@@ -29,6 +30,8 @@ import {
     EditTokenRequestToJSON,
     ObjectBaseResponseFromJSON,
     ObjectBaseResponseToJSON,
+    OpenShockProblemFromJSON,
+    OpenShockProblemToJSON,
     StringBaseResponseFromJSON,
     StringBaseResponseToJSON,
     TokenResponseBaseResponseFromJSON,
@@ -84,12 +87,12 @@ export interface TokensApiInterface {
      * @throws {RequiredError}
      * @memberof TokensApiInterface
      */
-    tokensDeleteTokenRaw(requestParameters: TokensDeleteTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TokenResponseBaseResponse>>;
+    tokensDeleteTokenRaw(requestParameters: TokensDeleteTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>>;
 
     /**
      * Revoke a token from the current user
      */
-    tokensDeleteToken(tokenId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TokenResponseBaseResponse>;
+    tokensDeleteToken(tokenId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse>;
 
     /**
      * 
@@ -162,7 +165,7 @@ export class TokensApi extends runtime.BaseAPI implements TokensApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateTokenRequestToJSON(requestParameters.createTokenRequest),
+            body: CreateTokenRequestToJSON(requestParameters['createTokenRequest']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => StringBaseResponseFromJSON(jsonValue));
@@ -179,9 +182,12 @@ export class TokensApi extends runtime.BaseAPI implements TokensApiInterface {
     /**
      * Revoke a token from the current user
      */
-    async tokensDeleteTokenRaw(requestParameters: TokensDeleteTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TokenResponseBaseResponse>> {
-        if (requestParameters.tokenId === null || requestParameters.tokenId === undefined) {
-            throw new runtime.RequiredError('tokenId','Required parameter requestParameters.tokenId was null or undefined when calling tokensDeleteToken.');
+    async tokensDeleteTokenRaw(requestParameters: TokensDeleteTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
+        if (requestParameters['tokenId'] == null) {
+            throw new runtime.RequiredError(
+                'tokenId',
+                'Required parameter "tokenId" was null or undefined when calling tokensDeleteToken().'
+            );
         }
 
         const queryParameters: any = {};
@@ -193,19 +199,19 @@ export class TokensApi extends runtime.BaseAPI implements TokensApiInterface {
         }
 
         const response = await this.request({
-            path: `/1/tokens/{tokenId}`.replace(`{${"tokenId"}}`, encodeURIComponent(String(requestParameters.tokenId))),
+            path: `/1/tokens/{tokenId}`.replace(`{${"tokenId"}}`, encodeURIComponent(String(requestParameters['tokenId']))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => TokenResponseBaseResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));
     }
 
     /**
      * Revoke a token from the current user
      */
-    async tokensDeleteToken(tokenId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TokenResponseBaseResponse> {
+    async tokensDeleteToken(tokenId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse> {
         const response = await this.tokensDeleteTokenRaw({ tokenId: tokenId }, initOverrides);
         return await response.value();
     }
@@ -214,8 +220,11 @@ export class TokensApi extends runtime.BaseAPI implements TokensApiInterface {
      * Edit a token
      */
     async tokensEditTokenRaw(requestParameters: TokensEditTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
-        if (requestParameters.tokenId === null || requestParameters.tokenId === undefined) {
-            throw new runtime.RequiredError('tokenId','Required parameter requestParameters.tokenId was null or undefined when calling tokensEditToken.');
+        if (requestParameters['tokenId'] == null) {
+            throw new runtime.RequiredError(
+                'tokenId',
+                'Required parameter "tokenId" was null or undefined when calling tokensEditToken().'
+            );
         }
 
         const queryParameters: any = {};
@@ -229,11 +238,11 @@ export class TokensApi extends runtime.BaseAPI implements TokensApiInterface {
         }
 
         const response = await this.request({
-            path: `/1/tokens/{tokenId}`.replace(`{${"tokenId"}}`, encodeURIComponent(String(requestParameters.tokenId))),
+            path: `/1/tokens/{tokenId}`.replace(`{${"tokenId"}}`, encodeURIComponent(String(requestParameters['tokenId']))),
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: EditTokenRequestToJSON(requestParameters.editTokenRequest),
+            body: EditTokenRequestToJSON(requestParameters['editTokenRequest']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));
@@ -251,8 +260,11 @@ export class TokensApi extends runtime.BaseAPI implements TokensApiInterface {
      * Get a token by id
      */
     async tokensGetTokenByIdRaw(requestParameters: TokensGetTokenByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TokenResponseBaseResponse>> {
-        if (requestParameters.tokenId === null || requestParameters.tokenId === undefined) {
-            throw new runtime.RequiredError('tokenId','Required parameter requestParameters.tokenId was null or undefined when calling tokensGetTokenById.');
+        if (requestParameters['tokenId'] == null) {
+            throw new runtime.RequiredError(
+                'tokenId',
+                'Required parameter "tokenId" was null or undefined when calling tokensGetTokenById().'
+            );
         }
 
         const queryParameters: any = {};
@@ -264,7 +276,7 @@ export class TokensApi extends runtime.BaseAPI implements TokensApiInterface {
         }
 
         const response = await this.request({
-            path: `/1/tokens/{tokenId}`.replace(`{${"tokenId"}}`, encodeURIComponent(String(requestParameters.tokenId))),
+            path: `/1/tokens/{tokenId}`.replace(`{${"tokenId"}}`, encodeURIComponent(String(requestParameters['tokenId']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

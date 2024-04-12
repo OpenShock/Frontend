@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { ShockerModelType } from './ShockerModelType';
 import {
     ShockerModelTypeFromJSON,
@@ -31,7 +31,7 @@ export interface NewShocker {
      * @type {string}
      * @memberof NewShocker
      */
-    name?: string | null;
+    name?: string;
     /**
      * 
      * @type {number}
@@ -56,9 +56,7 @@ export interface NewShocker {
  * Check if a given object implements the NewShocker interface.
  */
 export function instanceOfNewShocker(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function NewShockerFromJSON(json: any): NewShocker {
@@ -66,31 +64,28 @@ export function NewShockerFromJSON(json: any): NewShocker {
 }
 
 export function NewShockerFromJSONTyped(json: any, ignoreDiscriminator: boolean): NewShocker {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'rfId': !exists(json, 'rfId') ? undefined : json['rfId'],
-        'device': !exists(json, 'device') ? undefined : json['device'],
-        'model': !exists(json, 'model') ? undefined : ShockerModelTypeFromJSON(json['model']),
+        'name': json['name'] == null ? undefined : json['name'],
+        'rfId': json['rfId'] == null ? undefined : json['rfId'],
+        'device': json['device'] == null ? undefined : json['device'],
+        'model': json['model'] == null ? undefined : ShockerModelTypeFromJSON(json['model']),
     };
 }
 
 export function NewShockerToJSON(value?: NewShocker | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'name': value.name,
-        'rfId': value.rfId,
-        'device': value.device,
-        'model': ShockerModelTypeToJSON(value.model),
+        'name': value['name'],
+        'rfId': value['rfId'],
+        'device': value['device'],
+        'model': ShockerModelTypeToJSON(value['model']),
     };
 }
 

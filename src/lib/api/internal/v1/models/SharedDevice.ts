@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { SharedShocker } from './SharedShocker';
 import {
     SharedShockerFromJSON,
@@ -37,22 +37,20 @@ export interface SharedDevice {
      * @type {string}
      * @memberof SharedDevice
      */
-    name?: string | null;
+    name?: string;
     /**
      * 
      * @type {Array<SharedShocker>}
      * @memberof SharedDevice
      */
-    shockers?: Array<SharedShocker> | null;
+    shockers?: Array<SharedShocker>;
 }
 
 /**
  * Check if a given object implements the SharedDevice interface.
  */
 export function instanceOfSharedDevice(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function SharedDeviceFromJSON(json: any): SharedDevice {
@@ -60,29 +58,26 @@ export function SharedDeviceFromJSON(json: any): SharedDevice {
 }
 
 export function SharedDeviceFromJSONTyped(json: any, ignoreDiscriminator: boolean): SharedDevice {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'shockers': !exists(json, 'shockers') ? undefined : (json['shockers'] === null ? null : (json['shockers'] as Array<any>).map(SharedShockerFromJSON)),
+        'id': json['id'] == null ? undefined : json['id'],
+        'name': json['name'] == null ? undefined : json['name'],
+        'shockers': json['shockers'] == null ? undefined : ((json['shockers'] as Array<any>).map(SharedShockerFromJSON)),
     };
 }
 
 export function SharedDeviceToJSON(value?: SharedDevice | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'name': value.name,
-        'shockers': value.shockers === undefined ? undefined : (value.shockers === null ? null : (value.shockers as Array<any>).map(SharedShockerToJSON)),
+        'id': value['id'],
+        'name': value['name'],
+        'shockers': value['shockers'] == null ? undefined : ((value['shockers'] as Array<any>).map(SharedShockerToJSON)),
     };
 }
 

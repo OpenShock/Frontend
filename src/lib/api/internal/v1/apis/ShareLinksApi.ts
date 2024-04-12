@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
   GuidBaseResponse,
   ObjectBaseResponse,
+  OpenShockProblem,
   PauseReasonBaseResponse,
   PauseRequest,
   ShareLinkCreate,
@@ -29,6 +30,8 @@ import {
     GuidBaseResponseToJSON,
     ObjectBaseResponseFromJSON,
     ObjectBaseResponseToJSON,
+    OpenShockProblemFromJSON,
+    OpenShockProblemToJSON,
     PauseReasonBaseResponseFromJSON,
     PauseReasonBaseResponseToJSON,
     PauseRequestFromJSON,
@@ -183,12 +186,12 @@ export interface ShareLinksApiInterface {
      * @throws {RequiredError}
      * @memberof ShareLinksApiInterface
      */
-    shareLinksRemoveShockerRaw(requestParameters: ShareLinksRemoveShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareLinkResponseBaseResponse>>;
+    shareLinksRemoveShockerRaw(requestParameters: ShareLinksRemoveShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>>;
 
     /**
      * Remove a shocker from a share link
      */
-    shareLinksRemoveShocker(shareLinkId: string, shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareLinkResponseBaseResponse>;
+    shareLinksRemoveShocker(shareLinkId: string, shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse>;
 
 }
 
@@ -201,12 +204,18 @@ export class ShareLinksApi extends runtime.BaseAPI implements ShareLinksApiInter
      * Add a shocker to a share link
      */
     async shareLinksAddShockerRaw(requestParameters: ShareLinksAddShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
-        if (requestParameters.shareLinkId === null || requestParameters.shareLinkId === undefined) {
-            throw new runtime.RequiredError('shareLinkId','Required parameter requestParameters.shareLinkId was null or undefined when calling shareLinksAddShocker.');
+        if (requestParameters['shareLinkId'] == null) {
+            throw new runtime.RequiredError(
+                'shareLinkId',
+                'Required parameter "shareLinkId" was null or undefined when calling shareLinksAddShocker().'
+            );
         }
 
-        if (requestParameters.shockerId === null || requestParameters.shockerId === undefined) {
-            throw new runtime.RequiredError('shockerId','Required parameter requestParameters.shockerId was null or undefined when calling shareLinksAddShocker.');
+        if (requestParameters['shockerId'] == null) {
+            throw new runtime.RequiredError(
+                'shockerId',
+                'Required parameter "shockerId" was null or undefined when calling shareLinksAddShocker().'
+            );
         }
 
         const queryParameters: any = {};
@@ -218,7 +227,7 @@ export class ShareLinksApi extends runtime.BaseAPI implements ShareLinksApiInter
         }
 
         const response = await this.request({
-            path: `/1/shares/links/{shareLinkId}/{shockerId}`.replace(`{${"shareLinkId"}}`, encodeURIComponent(String(requestParameters.shareLinkId))).replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters.shockerId))),
+            path: `/1/shares/links/{shareLinkId}/{shockerId}`.replace(`{${"shareLinkId"}}`, encodeURIComponent(String(requestParameters['shareLinkId']))).replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -254,7 +263,7 @@ export class ShareLinksApi extends runtime.BaseAPI implements ShareLinksApiInter
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: ShareLinkCreateToJSON(requestParameters.shareLinkCreate),
+            body: ShareLinkCreateToJSON(requestParameters['shareLinkCreate']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => GuidBaseResponseFromJSON(jsonValue));
@@ -272,8 +281,11 @@ export class ShareLinksApi extends runtime.BaseAPI implements ShareLinksApiInter
      * Deletes a share link
      */
     async shareLinksDeleteShareLinkRaw(requestParameters: ShareLinksDeleteShareLinkRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
-        if (requestParameters.shareLinkId === null || requestParameters.shareLinkId === undefined) {
-            throw new runtime.RequiredError('shareLinkId','Required parameter requestParameters.shareLinkId was null or undefined when calling shareLinksDeleteShareLink.');
+        if (requestParameters['shareLinkId'] == null) {
+            throw new runtime.RequiredError(
+                'shareLinkId',
+                'Required parameter "shareLinkId" was null or undefined when calling shareLinksDeleteShareLink().'
+            );
         }
 
         const queryParameters: any = {};
@@ -285,7 +297,7 @@ export class ShareLinksApi extends runtime.BaseAPI implements ShareLinksApiInter
         }
 
         const response = await this.request({
-            path: `/1/shares/links/{shareLinkId}`.replace(`{${"shareLinkId"}}`, encodeURIComponent(String(requestParameters.shareLinkId))),
+            path: `/1/shares/links/{shareLinkId}`.replace(`{${"shareLinkId"}}`, encodeURIComponent(String(requestParameters['shareLinkId']))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -306,12 +318,18 @@ export class ShareLinksApi extends runtime.BaseAPI implements ShareLinksApiInter
      * Edit a shocker in a share link
      */
     async shareLinksEditShockerRaw(requestParameters: ShareLinksEditShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareLinkResponseBaseResponse>> {
-        if (requestParameters.shareLinkId === null || requestParameters.shareLinkId === undefined) {
-            throw new runtime.RequiredError('shareLinkId','Required parameter requestParameters.shareLinkId was null or undefined when calling shareLinksEditShocker.');
+        if (requestParameters['shareLinkId'] == null) {
+            throw new runtime.RequiredError(
+                'shareLinkId',
+                'Required parameter "shareLinkId" was null or undefined when calling shareLinksEditShocker().'
+            );
         }
 
-        if (requestParameters.shockerId === null || requestParameters.shockerId === undefined) {
-            throw new runtime.RequiredError('shockerId','Required parameter requestParameters.shockerId was null or undefined when calling shareLinksEditShocker.');
+        if (requestParameters['shockerId'] == null) {
+            throw new runtime.RequiredError(
+                'shockerId',
+                'Required parameter "shockerId" was null or undefined when calling shareLinksEditShocker().'
+            );
         }
 
         const queryParameters: any = {};
@@ -325,11 +343,11 @@ export class ShareLinksApi extends runtime.BaseAPI implements ShareLinksApiInter
         }
 
         const response = await this.request({
-            path: `/1/shares/links/{shareLinkId}/{shockerId}`.replace(`{${"shareLinkId"}}`, encodeURIComponent(String(requestParameters.shareLinkId))).replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters.shockerId))),
+            path: `/1/shares/links/{shareLinkId}/{shockerId}`.replace(`{${"shareLinkId"}}`, encodeURIComponent(String(requestParameters['shareLinkId']))).replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))),
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: ShareLinkEditShockerToJSON(requestParameters.shareLinkEditShocker),
+            body: ShareLinkEditShockerToJSON(requestParameters['shareLinkEditShocker']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ShareLinkResponseBaseResponseFromJSON(jsonValue));
@@ -377,12 +395,18 @@ export class ShareLinksApi extends runtime.BaseAPI implements ShareLinksApiInter
      * Pause a shocker in a share link
      */
     async shareLinksPauseShockerRaw(requestParameters: ShareLinksPauseShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PauseReasonBaseResponse>> {
-        if (requestParameters.shareLinkId === null || requestParameters.shareLinkId === undefined) {
-            throw new runtime.RequiredError('shareLinkId','Required parameter requestParameters.shareLinkId was null or undefined when calling shareLinksPauseShocker.');
+        if (requestParameters['shareLinkId'] == null) {
+            throw new runtime.RequiredError(
+                'shareLinkId',
+                'Required parameter "shareLinkId" was null or undefined when calling shareLinksPauseShocker().'
+            );
         }
 
-        if (requestParameters.shockerId === null || requestParameters.shockerId === undefined) {
-            throw new runtime.RequiredError('shockerId','Required parameter requestParameters.shockerId was null or undefined when calling shareLinksPauseShocker.');
+        if (requestParameters['shockerId'] == null) {
+            throw new runtime.RequiredError(
+                'shockerId',
+                'Required parameter "shockerId" was null or undefined when calling shareLinksPauseShocker().'
+            );
         }
 
         const queryParameters: any = {};
@@ -396,11 +420,11 @@ export class ShareLinksApi extends runtime.BaseAPI implements ShareLinksApiInter
         }
 
         const response = await this.request({
-            path: `/1/shares/links/{shareLinkId}/{shockerId}/pause`.replace(`{${"shareLinkId"}}`, encodeURIComponent(String(requestParameters.shareLinkId))).replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters.shockerId))),
+            path: `/1/shares/links/{shareLinkId}/{shockerId}/pause`.replace(`{${"shareLinkId"}}`, encodeURIComponent(String(requestParameters['shareLinkId']))).replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: PauseRequestToJSON(requestParameters.pauseRequest),
+            body: PauseRequestToJSON(requestParameters['pauseRequest']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => PauseReasonBaseResponseFromJSON(jsonValue));
@@ -417,13 +441,19 @@ export class ShareLinksApi extends runtime.BaseAPI implements ShareLinksApiInter
     /**
      * Remove a shocker from a share link
      */
-    async shareLinksRemoveShockerRaw(requestParameters: ShareLinksRemoveShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareLinkResponseBaseResponse>> {
-        if (requestParameters.shareLinkId === null || requestParameters.shareLinkId === undefined) {
-            throw new runtime.RequiredError('shareLinkId','Required parameter requestParameters.shareLinkId was null or undefined when calling shareLinksRemoveShocker.');
+    async shareLinksRemoveShockerRaw(requestParameters: ShareLinksRemoveShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
+        if (requestParameters['shareLinkId'] == null) {
+            throw new runtime.RequiredError(
+                'shareLinkId',
+                'Required parameter "shareLinkId" was null or undefined when calling shareLinksRemoveShocker().'
+            );
         }
 
-        if (requestParameters.shockerId === null || requestParameters.shockerId === undefined) {
-            throw new runtime.RequiredError('shockerId','Required parameter requestParameters.shockerId was null or undefined when calling shareLinksRemoveShocker.');
+        if (requestParameters['shockerId'] == null) {
+            throw new runtime.RequiredError(
+                'shockerId',
+                'Required parameter "shockerId" was null or undefined when calling shareLinksRemoveShocker().'
+            );
         }
 
         const queryParameters: any = {};
@@ -435,19 +465,19 @@ export class ShareLinksApi extends runtime.BaseAPI implements ShareLinksApiInter
         }
 
         const response = await this.request({
-            path: `/1/shares/links/{shareLinkId}/{shockerId}`.replace(`{${"shareLinkId"}}`, encodeURIComponent(String(requestParameters.shareLinkId))).replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters.shockerId))),
+            path: `/1/shares/links/{shareLinkId}/{shockerId}`.replace(`{${"shareLinkId"}}`, encodeURIComponent(String(requestParameters['shareLinkId']))).replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ShareLinkResponseBaseResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));
     }
 
     /**
      * Remove a shocker from a share link
      */
-    async shareLinksRemoveShocker(shareLinkId: string, shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareLinkResponseBaseResponse> {
+    async shareLinksRemoveShocker(shareLinkId: string, shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse> {
         const response = await this.shareLinksRemoveShockerRaw({ shareLinkId: shareLinkId, shockerId: shockerId }, initOverrides);
         return await response.value();
     }

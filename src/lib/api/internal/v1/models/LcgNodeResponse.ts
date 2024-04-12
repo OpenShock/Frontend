@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -24,22 +24,20 @@ export interface LcgNodeResponse {
      * @type {string}
      * @memberof LcgNodeResponse
      */
-    fqdn?: string | null;
+    fqdn?: string;
     /**
      * 
      * @type {string}
      * @memberof LcgNodeResponse
      */
-    country?: string | null;
+    country?: string;
 }
 
 /**
  * Check if a given object implements the LcgNodeResponse interface.
  */
 export function instanceOfLcgNodeResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function LcgNodeResponseFromJSON(json: any): LcgNodeResponse {
@@ -47,27 +45,24 @@ export function LcgNodeResponseFromJSON(json: any): LcgNodeResponse {
 }
 
 export function LcgNodeResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): LcgNodeResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'fqdn': !exists(json, 'fqdn') ? undefined : json['fqdn'],
-        'country': !exists(json, 'country') ? undefined : json['country'],
+        'fqdn': json['fqdn'] == null ? undefined : json['fqdn'],
+        'country': json['country'] == null ? undefined : json['country'],
     };
 }
 
 export function LcgNodeResponseToJSON(value?: LcgNodeResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'fqdn': value.fqdn,
-        'country': value.country,
+        'fqdn': value['fqdn'],
+        'country': value['country'],
     };
 }
 

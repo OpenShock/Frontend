@@ -5,4 +5,5 @@ export * from './ControlRequest';
 export * from './ControlType';
 export * from './LoginV2';
 export * from './ObjectBaseResponse';
+export * from './OpenShockProblem';
 export * from './SignUpV2';

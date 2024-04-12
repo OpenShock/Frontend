@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
   Login,
   ObjectBaseResponse,
+  OpenShockProblem,
   PasswordResetProcessData,
   ResetRequest,
   SignUp,
@@ -26,6 +27,8 @@ import {
     LoginToJSON,
     ObjectBaseResponseFromJSON,
     ObjectBaseResponseToJSON,
+    OpenShockProblemFromJSON,
+    OpenShockProblemToJSON,
     PasswordResetProcessDataFromJSON,
     PasswordResetProcessDataToJSON,
     ResetRequestFromJSON,
@@ -168,7 +171,7 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: LoginToJSON(requestParameters.login),
+            body: LoginToJSON(requestParameters['login']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));
@@ -186,12 +189,18 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
      * Check if a password reset is in progress
      */
     async accountPasswordResetCheckValidRaw(requestParameters: AccountPasswordResetCheckValidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
-        if (requestParameters.passwordResetId === null || requestParameters.passwordResetId === undefined) {
-            throw new runtime.RequiredError('passwordResetId','Required parameter requestParameters.passwordResetId was null or undefined when calling accountPasswordResetCheckValid.');
+        if (requestParameters['passwordResetId'] == null) {
+            throw new runtime.RequiredError(
+                'passwordResetId',
+                'Required parameter "passwordResetId" was null or undefined when calling accountPasswordResetCheckValid().'
+            );
         }
 
-        if (requestParameters.secret === null || requestParameters.secret === undefined) {
-            throw new runtime.RequiredError('secret','Required parameter requestParameters.secret was null or undefined when calling accountPasswordResetCheckValid.');
+        if (requestParameters['secret'] == null) {
+            throw new runtime.RequiredError(
+                'secret',
+                'Required parameter "secret" was null or undefined when calling accountPasswordResetCheckValid().'
+            );
         }
 
         const queryParameters: any = {};
@@ -203,7 +212,7 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
         }
 
         const response = await this.request({
-            path: `/1/account/recover/{passwordResetId}/{secret}`.replace(`{${"passwordResetId"}}`, encodeURIComponent(String(requestParameters.passwordResetId))).replace(`{${"secret"}}`, encodeURIComponent(String(requestParameters.secret))),
+            path: `/1/account/recover/{passwordResetId}/{secret}`.replace(`{${"passwordResetId"}}`, encodeURIComponent(String(requestParameters['passwordResetId']))).replace(`{${"secret"}}`, encodeURIComponent(String(requestParameters['secret']))),
             method: 'HEAD',
             headers: headerParameters,
             query: queryParameters,
@@ -224,12 +233,18 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
      * Complete a password reset process
      */
     async accountPasswordResetCompleteRaw(requestParameters: AccountPasswordResetCompleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
-        if (requestParameters.passwordResetId === null || requestParameters.passwordResetId === undefined) {
-            throw new runtime.RequiredError('passwordResetId','Required parameter requestParameters.passwordResetId was null or undefined when calling accountPasswordResetComplete.');
+        if (requestParameters['passwordResetId'] == null) {
+            throw new runtime.RequiredError(
+                'passwordResetId',
+                'Required parameter "passwordResetId" was null or undefined when calling accountPasswordResetComplete().'
+            );
         }
 
-        if (requestParameters.secret === null || requestParameters.secret === undefined) {
-            throw new runtime.RequiredError('secret','Required parameter requestParameters.secret was null or undefined when calling accountPasswordResetComplete.');
+        if (requestParameters['secret'] == null) {
+            throw new runtime.RequiredError(
+                'secret',
+                'Required parameter "secret" was null or undefined when calling accountPasswordResetComplete().'
+            );
         }
 
         const queryParameters: any = {};
@@ -243,11 +258,11 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
         }
 
         const response = await this.request({
-            path: `/1/account/recover/{passwordResetId}/{secret}`.replace(`{${"passwordResetId"}}`, encodeURIComponent(String(requestParameters.passwordResetId))).replace(`{${"secret"}}`, encodeURIComponent(String(requestParameters.secret))),
+            path: `/1/account/recover/{passwordResetId}/{secret}`.replace(`{${"passwordResetId"}}`, encodeURIComponent(String(requestParameters['passwordResetId']))).replace(`{${"secret"}}`, encodeURIComponent(String(requestParameters['secret']))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: PasswordResetProcessDataToJSON(requestParameters.passwordResetProcessData),
+            body: PasswordResetProcessDataToJSON(requestParameters['passwordResetProcessData']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));
@@ -280,7 +295,7 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: ResetRequestToJSON(requestParameters.resetRequest),
+            body: ResetRequestToJSON(requestParameters['resetRequest']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));
@@ -313,7 +328,7 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: SignUpToJSON(requestParameters.signUp),
+            body: SignUpToJSON(requestParameters['signUp']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));

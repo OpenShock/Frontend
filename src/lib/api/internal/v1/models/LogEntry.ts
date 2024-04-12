@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { ControlLogSenderLight } from './ControlLogSenderLight';
 import {
     ControlLogSenderLightFromJSON,
@@ -74,9 +74,7 @@ export interface LogEntry {
  * Check if a given object implements the LogEntry interface.
  */
 export function instanceOfLogEntry(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function LogEntryFromJSON(json: any): LogEntry {
@@ -84,35 +82,32 @@ export function LogEntryFromJSON(json: any): LogEntry {
 }
 
 export function LogEntryFromJSONTyped(json: any, ignoreDiscriminator: boolean): LogEntry {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'createdOn': !exists(json, 'createdOn') ? undefined : (new Date(json['createdOn'])),
-        'type': !exists(json, 'type') ? undefined : ControlTypeFromJSON(json['type']),
-        'controlledBy': !exists(json, 'controlledBy') ? undefined : ControlLogSenderLightFromJSON(json['controlledBy']),
-        'intensity': !exists(json, 'intensity') ? undefined : json['intensity'],
-        'duration': !exists(json, 'duration') ? undefined : json['duration'],
+        'id': json['id'] == null ? undefined : json['id'],
+        'createdOn': json['createdOn'] == null ? undefined : (new Date(json['createdOn'])),
+        'type': json['type'] == null ? undefined : ControlTypeFromJSON(json['type']),
+        'controlledBy': json['controlledBy'] == null ? undefined : ControlLogSenderLightFromJSON(json['controlledBy']),
+        'intensity': json['intensity'] == null ? undefined : json['intensity'],
+        'duration': json['duration'] == null ? undefined : json['duration'],
     };
 }
 
 export function LogEntryToJSON(value?: LogEntry | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'createdOn': value.createdOn === undefined ? undefined : (value.createdOn.toISOString()),
-        'type': ControlTypeToJSON(value.type),
-        'controlledBy': ControlLogSenderLightToJSON(value.controlledBy),
-        'intensity': value.intensity,
-        'duration': value.duration,
+        'id': value['id'],
+        'createdOn': value['createdOn'] == null ? undefined : ((value['createdOn']).toISOString()),
+        'type': ControlTypeToJSON(value['type']),
+        'controlledBy': ControlLogSenderLightToJSON(value['controlledBy']),
+        'intensity': value['intensity'],
+        'duration': value['duration'],
     };
 }
 

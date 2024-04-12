@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { ResponseDeviceWithShockers } from './ResponseDeviceWithShockers';
 import {
     ResponseDeviceWithShockersFromJSON,
@@ -31,22 +31,20 @@ export interface ResponseDeviceWithShockersIEnumerableBaseResponse {
      * @type {string}
      * @memberof ResponseDeviceWithShockersIEnumerableBaseResponse
      */
-    message?: string | null;
+    message?: string;
     /**
      * 
      * @type {Array<ResponseDeviceWithShockers>}
      * @memberof ResponseDeviceWithShockersIEnumerableBaseResponse
      */
-    data?: Array<ResponseDeviceWithShockers> | null;
+    data?: Array<ResponseDeviceWithShockers>;
 }
 
 /**
  * Check if a given object implements the ResponseDeviceWithShockersIEnumerableBaseResponse interface.
  */
 export function instanceOfResponseDeviceWithShockersIEnumerableBaseResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function ResponseDeviceWithShockersIEnumerableBaseResponseFromJSON(json: any): ResponseDeviceWithShockersIEnumerableBaseResponse {
@@ -54,27 +52,24 @@ export function ResponseDeviceWithShockersIEnumerableBaseResponseFromJSON(json: 
 }
 
 export function ResponseDeviceWithShockersIEnumerableBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ResponseDeviceWithShockersIEnumerableBaseResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'message': !exists(json, 'message') ? undefined : json['message'],
-        'data': !exists(json, 'data') ? undefined : (json['data'] === null ? null : (json['data'] as Array<any>).map(ResponseDeviceWithShockersFromJSON)),
+        'message': json['message'] == null ? undefined : json['message'],
+        'data': json['data'] == null ? undefined : ((json['data'] as Array<any>).map(ResponseDeviceWithShockersFromJSON)),
     };
 }
 
 export function ResponseDeviceWithShockersIEnumerableBaseResponseToJSON(value?: ResponseDeviceWithShockersIEnumerableBaseResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'message': value.message,
-        'data': value.data === undefined ? undefined : (value.data === null ? null : (value.data as Array<any>).map(ResponseDeviceWithShockersToJSON)),
+        'message': value['message'],
+        'data': value['data'] == null ? undefined : ((value['data'] as Array<any>).map(ResponseDeviceWithShockersToJSON)),
     };
 }
 

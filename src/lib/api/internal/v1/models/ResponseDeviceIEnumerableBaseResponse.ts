@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { ResponseDevice } from './ResponseDevice';
 import {
     ResponseDeviceFromJSON,
@@ -31,22 +31,20 @@ export interface ResponseDeviceIEnumerableBaseResponse {
      * @type {string}
      * @memberof ResponseDeviceIEnumerableBaseResponse
      */
-    message?: string | null;
+    message?: string;
     /**
      * 
      * @type {Array<ResponseDevice>}
      * @memberof ResponseDeviceIEnumerableBaseResponse
      */
-    data?: Array<ResponseDevice> | null;
+    data?: Array<ResponseDevice>;
 }
 
 /**
  * Check if a given object implements the ResponseDeviceIEnumerableBaseResponse interface.
  */
 export function instanceOfResponseDeviceIEnumerableBaseResponse(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function ResponseDeviceIEnumerableBaseResponseFromJSON(json: any): ResponseDeviceIEnumerableBaseResponse {
@@ -54,27 +52,24 @@ export function ResponseDeviceIEnumerableBaseResponseFromJSON(json: any): Respon
 }
 
 export function ResponseDeviceIEnumerableBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ResponseDeviceIEnumerableBaseResponse {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'message': !exists(json, 'message') ? undefined : json['message'],
-        'data': !exists(json, 'data') ? undefined : (json['data'] === null ? null : (json['data'] as Array<any>).map(ResponseDeviceFromJSON)),
+        'message': json['message'] == null ? undefined : json['message'],
+        'data': json['data'] == null ? undefined : ((json['data'] as Array<any>).map(ResponseDeviceFromJSON)),
     };
 }
 
 export function ResponseDeviceIEnumerableBaseResponseToJSON(value?: ResponseDeviceIEnumerableBaseResponse | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'message': value.message,
-        'data': value.data === undefined ? undefined : (value.data === null ? null : (value.data as Array<any>).map(ResponseDeviceToJSON)),
+        'message': value['message'],
+        'data': value['data'] == null ? undefined : ((value['data'] as Array<any>).map(ResponseDeviceToJSON)),
     };
 }
 
