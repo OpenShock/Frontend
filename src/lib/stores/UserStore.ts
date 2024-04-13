@@ -3,11 +3,12 @@ import { usersApi } from "$lib/api";
 import type { ApiUser, ApiUserSelf } from "$lib/types/ApiUser";
 import { writable } from "svelte/store";
 
-
 export const UserSelfStore = writable<ApiUserSelf | null>(null);
 export const UsersStore = writable<ApiUser[]>([]);
 
-if (browser) {
+export function refreshUserSelf() {
+  if (!browser) return;
+
   usersApi.usersGetSelf().then(({ data, message }) => {
     if (!data) {
       console.error(`Failed to get user self: ${message}`);
@@ -28,3 +29,5 @@ if (browser) {
     console.error(error);
   });
 }
+
+refreshUserSelf();
