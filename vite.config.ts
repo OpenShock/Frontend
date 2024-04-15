@@ -67,12 +67,7 @@ export default defineConfig(async ({ mode }) => {
   plugins.push(sveltekit());
 
   // Configure the purgeCss plugin
-  plugins.push(purgeCss({
-    safelist: {
-      // any selectors that begin with "hljs-" will not be purged
-      greedy: [/^hljs-/],
-    },
-  }));
+  plugins.push(purgeCss());
 
   return defineConfig({ plugins, server: { host, port } });
 });
