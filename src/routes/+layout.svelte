@@ -10,7 +10,6 @@
   import { modalRegistry } from '$lib/modals';
   import { page } from '$app/stores';
   import { buildMetaData } from '$lib/metadata';
-  import { UserSelfStore } from '$lib/stores/UserStore';
 
   storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
   initializeStores();
@@ -26,9 +25,7 @@
 
 <AppShell>
   <Header slot="header" />
-  {#if $UserSelfStore}
-    <Sidebar slot="sidebarLeft" />
-  {/if}
+  <Sidebar slot="sidebarLeft" />
   <slot />
   <Footer slot="pageFooter" />
 </AppShell>
