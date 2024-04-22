@@ -23,6 +23,10 @@ export enum PermissionType {
 }
 
 
+export function instanceOfPermissionType(value: any): boolean {
+    return Object.values(PermissionType).includes(value);
+}
+
 export function PermissionTypeFromJSON(json: any): PermissionType {
     return PermissionTypeFromJSONTyped(json, false);
 }

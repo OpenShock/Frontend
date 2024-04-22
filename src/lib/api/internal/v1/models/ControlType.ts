@@ -26,6 +26,10 @@ export enum ControlType {
 }
 
 
+export function instanceOfControlType(value: any): boolean {
+    return Object.values(ControlType).includes(value);
+}
+
 export function ControlTypeFromJSON(json: any): ControlType {
     return ControlTypeFromJSONTyped(json, false);
 }

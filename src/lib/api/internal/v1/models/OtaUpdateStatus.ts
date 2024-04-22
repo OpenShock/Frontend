@@ -27,6 +27,10 @@ export enum OtaUpdateStatus {
 }
 
 
+export function instanceOfOtaUpdateStatus(value: any): boolean {
+    return Object.values(OtaUpdateStatus).includes(value);
+}
+
 export function OtaUpdateStatusFromJSON(json: any): OtaUpdateStatus {
     return OtaUpdateStatusFromJSONTyped(json, false);
 }

@@ -25,6 +25,10 @@ export enum ShockerModelType {
 }
 
 
+export function instanceOfShockerModelType(value: any): boolean {
+    return Object.values(ShockerModelType).includes(value);
+}
+
 export function ShockerModelTypeFromJSON(json: any): ShockerModelType {
     return ShockerModelTypeFromJSONTyped(json, false);
 }
