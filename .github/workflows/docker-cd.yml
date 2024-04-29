@@ -1,0 +1,55 @@
+name: Docker CD
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+    tags:
+      - '*.*'
+      - '*.*.*'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/metadata-action@v5
+        id: metadata
+        with:
+          images: ghcr.io/${{ github.repository }}
+          flavor: |
+            latest=false
+          tags: |
+            type=raw,value={{branch}},enable=${{ github.ref_type == 'branch' && github.event_name != 'pull_request' }}
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{major}},enable=${{ !startsWith(github.ref, 'refs/tags/v0') && !startsWith(github.ref, 'refs/tags/0') }}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}.{{minor}}.{{patch}}
+      - uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.metadata.outputs.tags }}
+          labels: ${{ steps.metadata.outputs.labels }}
+
+  trigger-deployment:
+    runs-on: ubuntu-latest
+    needs: deploy
+    environment: production
+    steps:
+      - name: Call deployment webhook
+        env:
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+        run: |
+          curl -X POST -d "" "$WEBHOOK_URL"
