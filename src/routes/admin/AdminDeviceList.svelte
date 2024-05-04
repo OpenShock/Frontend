@@ -76,7 +76,9 @@
           <td>{row.id}</td>
           <td>{row.name}</td>
           <td class={row.firmwareVersion ? '' : 'text-red-500'}>{row.firmwareVersion}</td>
-          <td>{row.connectedAt ? timeSince(since - row.connectedAt.getTime()) : 'N/A'}</td>
+          <td title={row.connectedAt?.toString() ?? 'N/A'}>
+            {row.connectedAt ? timeSince(since - row.connectedAt.getTime()) : 'N/A'}
+          </td>
           <td class={row.gateway ? '' : 'text-red-500'}>{row.gateway}</td>
           <td class="flex items-center space-x-2">
             <img class="h-8 rounded-full" src={row.owner?.image} alt="User Avatar" />
