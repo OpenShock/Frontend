@@ -27,10 +27,7 @@
 </script>
 
 <div class="container h-full p-12 flex flex-col justify-start items-start gap-4">
-  {#if !$UserSelfStore}
-    <h1 class="text-4xl">You need to be logged in to access this page</h1>
-    <a href="/login" class="btn variant-filled-primary">Login</a>
-  {:else if !isAdmin}
+  {#if !isAdmin}
     <h1 class="text-4xl">You do not have permission to access this page</h1>
     <a href="/home" class="btn variant-filled-primary">Go Home</a>
   {:else}
