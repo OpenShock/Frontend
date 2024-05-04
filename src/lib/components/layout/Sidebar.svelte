@@ -1,5 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
+  import { RankType } from '$lib/api/internal/v1';
   import { UserSelfStore } from '$lib/stores/UserStore';
   import { AppRail, AppRailAnchor } from '@skeletonlabs/skeleton';
 </script>
@@ -41,10 +42,12 @@
         <i slot="lead" class="fa fa-user fa-2xl py-4" />
         <span>Account</span>
       </AppRailAnchor>
-      <AppRailAnchor href="/admin" selected={$page.url.pathname === '/admin'} title="Admin">
-        <i slot="lead" class="fa fa-user-shield fa-2xl py-4" />
-        <span>Admin</span>
-      </AppRailAnchor>
+      {#if $UserSelfStore.rank === RankType.admin}
+        <AppRailAnchor href="/admin" selected={$page.url.pathname === '/admin'} title="Admin">
+          <i slot="lead" class="fa fa-user-shield fa-2xl py-4" />
+          <span>Admin</span>
+        </AppRailAnchor>
+      {/if}
     </svelte:fragment>
   </AppRail>
 {/if}
