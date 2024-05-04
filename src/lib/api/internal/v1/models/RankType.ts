@@ -27,6 +27,10 @@ export enum RankType {
 }
 
 
+export function instanceOfRankType(value: any): boolean {
+    return Object.values(RankType).includes(value);
+}
+
 export function RankTypeFromJSON(json: any): RankType {
     return RankTypeFromJSONTyped(json, false);
 }
