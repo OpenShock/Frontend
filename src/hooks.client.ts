@@ -1,5 +1,4 @@
-import { BrowserTracing, Replay } from '@sentry/browser';
-import { captureException as SentryCaptureException, init as SentryInit } from '@sentry/svelte';
+import { browserTracingIntegration, captureException, init as SentryInit, replayIntegration } from '@sentry/svelte';
 import type { HandleServerError } from '@sveltejs/kit';
 import { env } from '$env/dynamic/public';
 
@@ -21,10 +20,10 @@ if (sentryEnabled) {
     replaysOnErrorSampleRate: parseFloat(env.PUBLIC_SENTRY_REPLAYS_ONERROR_SAMPLERATE),
 
     // If you don't want to use Session Replay, just remove the line below:
-    integrations: [new BrowserTracing(), new Replay()],
+    integrations: [browserTracingIntegration(), replayIntegration()],
   });
   errorHandler = ({ error, event }) => {
-    const eventId = SentryCaptureException(error, { extra: { event } });
+    const eventId = captureException(error, { extra: { event } });
 
     return {
       message: 'An error occurred',
