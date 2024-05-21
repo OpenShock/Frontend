@@ -25,6 +25,7 @@
     error = null;
 
     function progressCallback(progress: number) {
+      if (!progressName) return;
       progressPercent = progress * 100;
     }
 

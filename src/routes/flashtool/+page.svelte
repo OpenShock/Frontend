@@ -5,13 +5,14 @@
   import SerialPortSelector from '$lib/components/EspTool/SerialPortSelector.svelte';
   import { modalRegistry } from '$lib/modals';
   import { FlashManagerStore } from '$lib/stores/FlashManagersStore';
-  import { Modal, initializeStores } from '@skeletonlabs/skeleton';
+  import { Modal, ProgressBar, initializeStores } from '@skeletonlabs/skeleton';
 
   initializeStores();
 
   let port: SerialPort | null = null;
   let manager: FlashManager | null = null;
-  let isFlashing: boolean = false;
+  let connectFailed = false;
+  let isFlashing = false;
 
   const terminal = {
     clean: () => {
@@ -26,8 +27,12 @@
   };
 
   $: if (port && !manager) {
+    connectFailed = false;
     FlashManagerStore.getManager(port, terminal).then((m) => {
       manager = m;
+      if (!manager) {
+        connectFailed = true;
+      }
     });
   } else if (!port && manager) {
     FlashManagerStore.removeManager(manager);
@@ -44,10 +49,23 @@
   <div class="card p-4 m-auto max-w-[55em] flex flex-col justify-center gap-8">
     <SerialPortSelector bind:port disabled={isFlashing} />
     {#if port}
-      <FirmwareSelector bind:version bind:board disabled={isFlashing} />
+      {#if manager}
+        <FirmwareSelector bind:version bind:board disabled={isFlashing} />
+        {#if version && board && manager}
+          <FirmwareFlasher {version} {board} {manager} bind:isFlashing />
+        {/if}
+      {:else if !connectFailed}
+        <div class="flex flex-col items-center gap-2">
+          <span class="text-2xl text-center"> Connecting... </span>
+          <ProgressBar />
+        </div>
+      {/if}
     {/if}
-    {#if version && board && manager}
-      <FirmwareFlasher {version} {board} {manager} bind:isFlashing />
+    {#if connectFailed}
+      <div class="flex flex-col items-center gap-2">
+        <span class="text-2xl text-center text-red-500"> Connection failed. </span>
+        <span class="text-center"> Please try again. </span>
+      </div>
     {/if}
   </div>
 </div>
