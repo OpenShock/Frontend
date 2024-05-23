@@ -1,11 +1,11 @@
-import { browserTracingIntegration, captureException, init as SentryInit, replayIntegration } from '@sentry/svelte';
+//import { browserTracingIntegration, captureException, init as SentryInit, replayIntegration } from '@sentry/svelte';
 import type { HandleServerError } from '@sveltejs/kit';
 import { env } from '$env/dynamic/public';
 
 const sentryEnabled = env.PUBLIC_SENTRY_ENABLED === 'true';
 
 let errorHandler: HandleServerError;
-if (sentryEnabled) {
+/*if (sentryEnabled) {
   // Initialize Sentry for error and performance monitoring
   SentryInit({
     dsn: env.PUBLIC_SENTRY_DSN,
@@ -31,11 +31,11 @@ if (sentryEnabled) {
     };
   };
 } else {
-  console.log('Sentry disabled in dev mode');
-  errorHandler = (e) => {
-    console.error(e);
-  };
-}
+  console.log('Sentry disabled in dev mode');*/
+errorHandler = (e) => {
+  console.error(e);
+};
+//}
 
 // If you have a custom error handler, pass it to `handleErrorWithSentry`
 export const handleError = errorHandler;

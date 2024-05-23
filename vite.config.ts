@@ -1,4 +1,3 @@
-import { purgeCss } from 'vite-plugin-tailwind-purgecss';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig, type PluginOption, loadEnv } from 'vite';
 import mkcert from 'vite-plugin-mkcert';
@@ -65,9 +64,6 @@ export default defineConfig(async ({ mode }) => {
 
   // Add the sveltekit plugin
   plugins.push(sveltekit());
-
-  // Configure the purgeCss plugin
-  plugins.push(purgeCss());
 
   return defineConfig({ plugins, server: { host, port } });
 });

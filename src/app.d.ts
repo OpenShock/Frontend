@@ -1,9 +1,6 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 
-/// <reference types="svelte" />
-/// <reference types="vite/client" />
-
 import type { TurnstileInstance } from "$lib/types/TurnstileInstance";
 
 declare global {
