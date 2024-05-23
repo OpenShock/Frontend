@@ -1,6 +1,13 @@
 <script lang="ts">
   import '../app.css';
-  import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
+  import {
+    computePosition,
+    autoUpdate,
+    flip,
+    shift,
+    offset,
+    arrow,
+  } from '@skeletonlabs/floating-ui-svelte';
   import { AppShell, Modal, Toast, initializeStores, storePopup } from '@skeletonlabs/skeleton';
   import Footer from '$lib/components/layout/Footer.svelte';
   import Header from '$lib/components/layout/Header.svelte';
