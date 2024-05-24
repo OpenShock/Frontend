@@ -61,10 +61,26 @@
         </div>
       {/if}
     {/if}
-    {#if connectFailed}
-      <div class="flex flex-col items-center gap-2">
-        <span class="text-2xl text-center text-red-500"> Connection failed. </span>
-        <span class="text-center"> Please try again. </span>
+    {#if connectFailed || true}
+      <div class="flex flex-col items-start gap-2">
+        <span class="text-2xl text-center bold text-red-500"> Device connection failed </span>
+        <span class="text-center">
+          There was an issue connecting to your device, please try the following:
+        </span>
+        <ol class="list-decimal text-left pl-6">
+          <li>
+            Install the drivers for your device if you haven't already, using the button above
+          </li>
+          <li>Unplug and replug your device</li>
+          <li>Use a different USB port</li>
+          <li>Use a different USB cable</li>
+          <li>
+            Contact support if the issue persists:
+            <a href="https://openshock.net/discord" target="_blank" class="underline text-blue-500">
+              OpenShock Discord
+            </a>
+          </li>
+        </ol>
       </div>
     {/if}
   </div>
