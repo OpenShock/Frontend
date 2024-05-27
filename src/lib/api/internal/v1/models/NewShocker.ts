@@ -31,31 +31,35 @@ export interface NewShocker {
      * @type {string}
      * @memberof NewShocker
      */
-    name?: string;
+    name: string | null;
     /**
      * 
      * @type {number}
      * @memberof NewShocker
      */
-    rfId?: number;
+    rfId: number;
     /**
      * 
      * @type {string}
      * @memberof NewShocker
      */
-    device?: string;
+    device: string;
     /**
      * 
      * @type {ShockerModelType}
      * @memberof NewShocker
      */
-    model?: ShockerModelType;
+    model: ShockerModelType;
 }
 
 /**
  * Check if a given object implements the NewShocker interface.
  */
-export function instanceOfNewShocker(value: object): boolean {
+export function instanceOfNewShocker(value: object): value is NewShocker {
+    if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('rfId' in value) || value['rfId'] === undefined) return false;
+    if (!('device' in value) || value['device'] === undefined) return false;
+    if (!('model' in value) || value['model'] === undefined) return false;
     return true;
 }
 
@@ -69,10 +73,10 @@ export function NewShockerFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'name': json['name'] == null ? undefined : json['name'],
-        'rfId': json['rfId'] == null ? undefined : json['rfId'],
-        'device': json['device'] == null ? undefined : json['device'],
-        'model': json['model'] == null ? undefined : ShockerModelTypeFromJSON(json['model']),
+        'name': json['name'],
+        'rfId': json['rfId'],
+        'device': json['device'],
+        'model': ShockerModelTypeFromJSON(json['model']),
     };
 }
 

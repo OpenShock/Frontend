@@ -14,6 +14,11 @@
   let loading = false;
   let errorMessage: Error | null = null;
 
+  // Remove port if disconnected
+  $: if (port && !$SerialPortsStore.includes(port)) {
+    port = null;
+  }
+
   async function OpenPort() {
     loading = true;
     SerialPortsStore.requestPort({ filters })

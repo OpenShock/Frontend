@@ -13,18 +13,18 @@
  */
 
 import { mapValues } from '../runtime';
-import type { GenericIni } from './GenericIni';
-import {
-    GenericIniFromJSON,
-    GenericIniFromJSONTyped,
-    GenericIniToJSON,
-} from './GenericIni';
 import type { ShareLinkDevice } from './ShareLinkDevice';
 import {
     ShareLinkDeviceFromJSON,
     ShareLinkDeviceFromJSONTyped,
     ShareLinkDeviceToJSON,
 } from './ShareLinkDevice';
+import type { GenericIni } from './GenericIni';
+import {
+    GenericIniFromJSON,
+    GenericIniFromJSONTyped,
+    GenericIniToJSON,
+} from './GenericIni';
 
 /**
  * 
@@ -37,19 +37,19 @@ export interface PublicShareLinkResponse {
      * @type {string}
      * @memberof PublicShareLinkResponse
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {string}
      * @memberof PublicShareLinkResponse
      */
-    name?: string;
+    name: string | null;
     /**
      * 
      * @type {Date}
      * @memberof PublicShareLinkResponse
      */
-    createdOn?: Date;
+    createdOn: Date;
     /**
      * 
      * @type {Date}
@@ -61,7 +61,7 @@ export interface PublicShareLinkResponse {
      * @type {GenericIni}
      * @memberof PublicShareLinkResponse
      */
-    author?: GenericIni;
+    author: GenericIni;
     /**
      * 
      * @type {Array<ShareLinkDevice>}
@@ -73,7 +73,11 @@ export interface PublicShareLinkResponse {
 /**
  * Check if a given object implements the PublicShareLinkResponse interface.
  */
-export function instanceOfPublicShareLinkResponse(value: object): boolean {
+export function instanceOfPublicShareLinkResponse(value: object): value is PublicShareLinkResponse {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('createdOn' in value) || value['createdOn'] === undefined) return false;
+    if (!('author' in value) || value['author'] === undefined) return false;
     return true;
 }
 
@@ -87,11 +91,11 @@ export function PublicShareLinkResponseFromJSONTyped(json: any, ignoreDiscrimina
     }
     return {
         
-        'id': json['id'] == null ? undefined : json['id'],
-        'name': json['name'] == null ? undefined : json['name'],
-        'createdOn': json['createdOn'] == null ? undefined : (new Date(json['createdOn'])),
+        'id': json['id'],
+        'name': json['name'],
+        'createdOn': (new Date(json['createdOn'])),
         'expiresOn': json['expiresOn'] == null ? undefined : (new Date(json['expiresOn'])),
-        'author': json['author'] == null ? undefined : GenericIniFromJSON(json['author']),
+        'author': GenericIniFromJSON(json['author']),
         'devices': json['devices'] == null ? undefined : ((json['devices'] as Array<any>).map(ShareLinkDeviceFromJSON)),
     };
 }
@@ -104,7 +108,7 @@ export function PublicShareLinkResponseToJSON(value?: PublicShareLinkResponse | 
         
         'id': value['id'],
         'name': value['name'],
-        'createdOn': value['createdOn'] == null ? undefined : ((value['createdOn']).toISOString()),
+        'createdOn': ((value['createdOn']).toISOString()),
         'expiresOn': value['expiresOn'] == null ? undefined : ((value['expiresOn'] as any).toISOString()),
         'author': GenericIniToJSON(value['author']),
         'devices': value['devices'] == null ? undefined : ((value['devices'] as Array<any>).map(ShareLinkDeviceToJSON)),

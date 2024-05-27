@@ -36,7 +36,7 @@ export interface BooleanNullableBaseResponse {
 /**
  * Check if a given object implements the BooleanNullableBaseResponse interface.
  */
-export function instanceOfBooleanNullableBaseResponse(value: object): boolean {
+export function instanceOfBooleanNullableBaseResponse(value: object): value is BooleanNullableBaseResponse {
     return true;
 }
 

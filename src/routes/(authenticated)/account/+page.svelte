@@ -34,10 +34,7 @@
 </script>
 
 <div class="container h-full mx-auto p-12 flex flex-col justify-start items-start gap-4">
-  {#if !$UserSelfStore}
-    <h1 class="text-4xl">You need to be logged in to access this page</h1>
-    <a href="/login" class="btn variant-filled-primary">Login</a>
-  {:else}
+  {#if $UserSelfStore}
     <form class="flex flex-col space-y-2" on:submit|preventDefault={handleSubmission}>
       <h2 class="h2">Account Settings</h2>
 
@@ -74,5 +71,7 @@
         Update
       </button>
     </form>
+  {:else}
+    <p>Loading...</p>
   {/if}
 </div>

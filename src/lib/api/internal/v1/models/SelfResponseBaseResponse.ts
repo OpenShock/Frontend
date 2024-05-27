@@ -43,7 +43,7 @@ export interface SelfResponseBaseResponse {
 /**
  * Check if a given object implements the SelfResponseBaseResponse interface.
  */
-export function instanceOfSelfResponseBaseResponse(value: object): boolean {
+export function instanceOfSelfResponseBaseResponse(value: object): value is SelfResponseBaseResponse {
     return true;
 }
 

@@ -43,7 +43,7 @@ export interface DeviceSelfResponseBaseResponse {
 /**
  * Check if a given object implements the DeviceSelfResponseBaseResponse interface.
  */
-export function instanceOfDeviceSelfResponseBaseResponse(value: object): boolean {
+export function instanceOfDeviceSelfResponseBaseResponse(value: object): value is DeviceSelfResponseBaseResponse {
     return true;
 }
 

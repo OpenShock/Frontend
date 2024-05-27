@@ -24,13 +24,14 @@ export interface StatsResponse {
      * @type {number}
      * @memberof StatsResponse
      */
-    devicesOnline?: number;
+    devicesOnline: number;
 }
 
 /**
  * Check if a given object implements the StatsResponse interface.
  */
-export function instanceOfStatsResponse(value: object): boolean {
+export function instanceOfStatsResponse(value: object): value is StatsResponse {
+    if (!('devicesOnline' in value) || value['devicesOnline'] === undefined) return false;
     return true;
 }
 
@@ -44,7 +45,7 @@ export function StatsResponseFromJSONTyped(json: any, ignoreDiscriminator: boole
     }
     return {
         
-        'devicesOnline': json['devicesOnline'] == null ? undefined : json['devicesOnline'],
+        'devicesOnline': json['devicesOnline'],
     };
 }
 

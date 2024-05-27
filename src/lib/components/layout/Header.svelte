@@ -1,6 +1,12 @@
 <script lang="ts">
   import { UserSelfStore } from '$lib/stores/UserStore';
-  import { AppBar, LightSwitch } from '@skeletonlabs/skeleton';
+  import { AppBar, LightSwitch, popup, type PopupSettings } from '@skeletonlabs/skeleton';
+
+  const accountPopup: PopupSettings = {
+    event: 'click',
+    target: 'accountPopup',
+    placement: 'bottom-end',
+  };
 </script>
 
 <AppBar>
@@ -17,13 +23,28 @@
   <svelte:fragment slot="trail">
     <LightSwitch />
     {#if !!$UserSelfStore}
-      <a
-        href="/account"
-        class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
+      <div
+        class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 cursor-pointer"
+        use:popup={accountPopup}
       >
         <img class="inline-block h-8 rounded-full" src={$UserSelfStore.avatar} alt="User Avatar" />
         <p class="hidden lg:inline-block">{$UserSelfStore.name}</p>
-      </a>
+      </div>
+      <div class="card p-4 w-48 bg-surface-200-700-token shadow-xl" data-popup="accountPopup">
+        <a
+          href="/account"
+          class="block text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
+        >
+          Account
+        </a>
+        <a
+          href="/logout"
+          class="block text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
+        >
+          Logout
+        </a>
+        <div class="arrow bg-surface-200-700-token" data-arrow="accountPopup" />
+      </div>
     {:else}
       <a
         href="/login"

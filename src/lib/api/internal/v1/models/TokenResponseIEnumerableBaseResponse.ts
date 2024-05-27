@@ -43,7 +43,7 @@ export interface TokenResponseIEnumerableBaseResponse {
 /**
  * Check if a given object implements the TokenResponseIEnumerableBaseResponse interface.
  */
-export function instanceOfTokenResponseIEnumerableBaseResponse(value: object): boolean {
+export function instanceOfTokenResponseIEnumerableBaseResponse(value: object): value is TokenResponseIEnumerableBaseResponse {
     return true;
 }
 

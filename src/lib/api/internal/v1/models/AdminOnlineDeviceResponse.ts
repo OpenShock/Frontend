@@ -31,43 +31,49 @@ export interface AdminOnlineDeviceResponse {
      * @type {string}
      * @memberof AdminOnlineDeviceResponse
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {string}
      * @memberof AdminOnlineDeviceResponse
      */
-    name?: string;
+    name: string | null;
     /**
      * 
      * @type {GenericIni}
      * @memberof AdminOnlineDeviceResponse
      */
-    owner?: GenericIni;
+    owner: GenericIni;
     /**
      * 
      * @type {string}
      * @memberof AdminOnlineDeviceResponse
      */
-    firmwareVersion?: string;
+    firmwareVersion: string | null;
     /**
      * 
      * @type {string}
      * @memberof AdminOnlineDeviceResponse
      */
-    gateway?: string;
+    gateway: string | null;
     /**
      * 
      * @type {Date}
      * @memberof AdminOnlineDeviceResponse
      */
-    connectedAt?: Date;
+    connectedAt: Date;
 }
 
 /**
  * Check if a given object implements the AdminOnlineDeviceResponse interface.
  */
-export function instanceOfAdminOnlineDeviceResponse(value: object): boolean {
+export function instanceOfAdminOnlineDeviceResponse(value: object): value is AdminOnlineDeviceResponse {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('owner' in value) || value['owner'] === undefined) return false;
+    if (!('firmwareVersion' in value) || value['firmwareVersion'] === undefined) return false;
+    if (!('gateway' in value) || value['gateway'] === undefined) return false;
+    if (!('connectedAt' in value) || value['connectedAt'] === undefined) return false;
     return true;
 }
 
@@ -81,12 +87,12 @@ export function AdminOnlineDeviceResponseFromJSONTyped(json: any, ignoreDiscrimi
     }
     return {
         
-        'id': json['id'] == null ? undefined : json['id'],
-        'name': json['name'] == null ? undefined : json['name'],
-        'owner': json['owner'] == null ? undefined : GenericIniFromJSON(json['owner']),
-        'firmwareVersion': json['firmwareVersion'] == null ? undefined : json['firmwareVersion'],
-        'gateway': json['gateway'] == null ? undefined : json['gateway'],
-        'connectedAt': json['connectedAt'] == null ? undefined : (new Date(json['connectedAt'])),
+        'id': json['id'],
+        'name': json['name'],
+        'owner': GenericIniFromJSON(json['owner']),
+        'firmwareVersion': json['firmwareVersion'],
+        'gateway': json['gateway'],
+        'connectedAt': (new Date(json['connectedAt'])),
     };
 }
 
@@ -101,7 +107,7 @@ export function AdminOnlineDeviceResponseToJSON(value?: AdminOnlineDeviceRespons
         'owner': GenericIniToJSON(value['owner']),
         'firmwareVersion': value['firmwareVersion'],
         'gateway': value['gateway'],
-        'connectedAt': value['connectedAt'] == null ? undefined : ((value['connectedAt']).toISOString()),
+        'connectedAt': ((value['connectedAt']).toISOString()),
     };
 }
 

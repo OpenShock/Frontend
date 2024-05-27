@@ -68,7 +68,7 @@ export interface OpenShockProblem {
 /**
  * Check if a given object implements the OpenShockProblem interface.
  */
-export function instanceOfOpenShockProblem(value: object): boolean {
+export function instanceOfOpenShockProblem(value: object): value is OpenShockProblem {
     return true;
 }
 

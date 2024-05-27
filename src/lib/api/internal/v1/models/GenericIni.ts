@@ -24,25 +24,28 @@ export interface GenericIni {
      * @type {string}
      * @memberof GenericIni
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {string}
      * @memberof GenericIni
      */
-    name?: string;
+    name: string | null;
     /**
      * 
      * @type {string}
      * @memberof GenericIni
      */
-    image?: string;
+    image: string | null;
 }
 
 /**
  * Check if a given object implements the GenericIni interface.
  */
-export function instanceOfGenericIni(value: object): boolean {
+export function instanceOfGenericIni(value: object): value is GenericIni {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('image' in value) || value['image'] === undefined) return false;
     return true;
 }
 
@@ -56,9 +59,9 @@ export function GenericIniFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'id': json['id'] == null ? undefined : json['id'],
-        'name': json['name'] == null ? undefined : json['name'],
-        'image': json['image'] == null ? undefined : json['image'],
+        'id': json['id'],
+        'name': json['name'],
+        'image': json['image'],
     };
 }
 

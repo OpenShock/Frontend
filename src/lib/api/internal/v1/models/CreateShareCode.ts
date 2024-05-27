@@ -13,18 +13,18 @@
  */
 
 import { mapValues } from '../runtime';
-import type { ShockerLimits } from './ShockerLimits';
-import {
-    ShockerLimitsFromJSON,
-    ShockerLimitsFromJSONTyped,
-    ShockerLimitsToJSON,
-} from './ShockerLimits';
 import type { ShockerPermissions } from './ShockerPermissions';
 import {
     ShockerPermissionsFromJSON,
     ShockerPermissionsFromJSONTyped,
     ShockerPermissionsToJSON,
 } from './ShockerPermissions';
+import type { ShockerLimits } from './ShockerLimits';
+import {
+    ShockerLimitsFromJSON,
+    ShockerLimitsFromJSONTyped,
+    ShockerLimitsToJSON,
+} from './ShockerLimits';
 
 /**
  * 
@@ -37,19 +37,21 @@ export interface CreateShareCode {
      * @type {ShockerPermissions}
      * @memberof CreateShareCode
      */
-    permissions?: ShockerPermissions;
+    permissions: ShockerPermissions;
     /**
      * 
      * @type {ShockerLimits}
      * @memberof CreateShareCode
      */
-    limits?: ShockerLimits;
+    limits: ShockerLimits;
 }
 
 /**
  * Check if a given object implements the CreateShareCode interface.
  */
-export function instanceOfCreateShareCode(value: object): boolean {
+export function instanceOfCreateShareCode(value: object): value is CreateShareCode {
+    if (!('permissions' in value) || value['permissions'] === undefined) return false;
+    if (!('limits' in value) || value['limits'] === undefined) return false;
     return true;
 }
 
@@ -63,8 +65,8 @@ export function CreateShareCodeFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'permissions': json['permissions'] == null ? undefined : ShockerPermissionsFromJSON(json['permissions']),
-        'limits': json['limits'] == null ? undefined : ShockerLimitsFromJSON(json['limits']),
+        'permissions': ShockerPermissionsFromJSON(json['permissions']),
+        'limits': ShockerLimitsFromJSON(json['limits']),
     };
 }
 

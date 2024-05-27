@@ -43,7 +43,7 @@ export interface ResponseDeviceWithShockersIEnumerableBaseResponse {
 /**
  * Check if a given object implements the ResponseDeviceWithShockersIEnumerableBaseResponse interface.
  */
-export function instanceOfResponseDeviceWithShockersIEnumerableBaseResponse(value: object): boolean {
+export function instanceOfResponseDeviceWithShockersIEnumerableBaseResponse(value: object): value is ResponseDeviceWithShockersIEnumerableBaseResponse {
     return true;
 }
 

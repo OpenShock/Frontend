@@ -31,7 +31,7 @@ export interface EditTokenRequest {
      * @type {string}
      * @memberof EditTokenRequest
      */
-    name?: string;
+    name: string | null;
     /**
      * 
      * @type {Array<PermissionType>}
@@ -43,7 +43,8 @@ export interface EditTokenRequest {
 /**
  * Check if a given object implements the EditTokenRequest interface.
  */
-export function instanceOfEditTokenRequest(value: object): boolean {
+export function instanceOfEditTokenRequest(value: object): value is EditTokenRequest {
+    if (!('name' in value) || value['name'] === undefined) return false;
     return true;
 }
 
@@ -57,7 +58,7 @@ export function EditTokenRequestFromJSONTyped(json: any, ignoreDiscriminator: bo
     }
     return {
         
-        'name': json['name'] == null ? undefined : json['name'],
+        'name': json['name'],
         'permissions': json['permissions'] == null ? undefined : ((json['permissions'] as Array<any>).map(PermissionTypeFromJSON)),
     };
 }

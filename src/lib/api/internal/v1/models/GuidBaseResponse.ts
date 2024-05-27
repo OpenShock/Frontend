@@ -36,7 +36,7 @@ export interface GuidBaseResponse {
 /**
  * Check if a given object implements the GuidBaseResponse interface.
  */
-export function instanceOfGuidBaseResponse(value: object): boolean {
+export function instanceOfGuidBaseResponse(value: object): value is GuidBaseResponse {
     return true;
 }
 

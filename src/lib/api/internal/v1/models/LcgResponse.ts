@@ -24,19 +24,21 @@ export interface LcgResponse {
      * @type {string}
      * @memberof LcgResponse
      */
-    gateway?: string;
+    gateway: string | null;
     /**
      * 
      * @type {string}
      * @memberof LcgResponse
      */
-    country?: string;
+    country: string | null;
 }
 
 /**
  * Check if a given object implements the LcgResponse interface.
  */
-export function instanceOfLcgResponse(value: object): boolean {
+export function instanceOfLcgResponse(value: object): value is LcgResponse {
+    if (!('gateway' in value) || value['gateway'] === undefined) return false;
+    if (!('country' in value) || value['country'] === undefined) return false;
     return true;
 }
 
@@ -50,8 +52,8 @@ export function LcgResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean
     }
     return {
         
-        'gateway': json['gateway'] == null ? undefined : json['gateway'],
-        'country': json['country'] == null ? undefined : json['country'],
+        'gateway': json['gateway'],
+        'country': json['country'],
     };
 }
 
