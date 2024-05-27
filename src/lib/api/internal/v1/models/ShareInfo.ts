@@ -43,37 +43,42 @@ export interface ShareInfo {
      * @type {GenericIni}
      * @memberof ShareInfo
      */
-    sharedWith?: GenericIni;
+    sharedWith: GenericIni;
     /**
      * 
      * @type {Date}
      * @memberof ShareInfo
      */
-    createdOn?: Date;
+    createdOn: Date;
     /**
      * 
      * @type {ShockerPermissions}
      * @memberof ShareInfo
      */
-    permissions?: ShockerPermissions;
+    permissions: ShockerPermissions;
     /**
      * 
      * @type {ShockerLimits}
      * @memberof ShareInfo
      */
-    limits?: ShockerLimits;
+    limits: ShockerLimits;
     /**
      * 
      * @type {boolean}
      * @memberof ShareInfo
      */
-    paused?: boolean;
+    paused: boolean;
 }
 
 /**
  * Check if a given object implements the ShareInfo interface.
  */
 export function instanceOfShareInfo(value: object): boolean {
+    if (!('sharedWith' in value)) return false;
+    if (!('createdOn' in value)) return false;
+    if (!('permissions' in value)) return false;
+    if (!('limits' in value)) return false;
+    if (!('paused' in value)) return false;
     return true;
 }
 
@@ -87,11 +92,11 @@ export function ShareInfoFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     }
     return {
         
-        'sharedWith': json['sharedWith'] == null ? undefined : GenericIniFromJSON(json['sharedWith']),
-        'createdOn': json['createdOn'] == null ? undefined : (new Date(json['createdOn'])),
-        'permissions': json['permissions'] == null ? undefined : ShockerPermissionsFromJSON(json['permissions']),
-        'limits': json['limits'] == null ? undefined : ShockerLimitsFromJSON(json['limits']),
-        'paused': json['paused'] == null ? undefined : json['paused'],
+        'sharedWith': GenericIniFromJSON(json['sharedWith']),
+        'createdOn': (new Date(json['createdOn'])),
+        'permissions': ShockerPermissionsFromJSON(json['permissions']),
+        'limits': ShockerLimitsFromJSON(json['limits']),
+        'paused': json['paused'],
     };
 }
 
@@ -102,7 +107,7 @@ export function ShareInfoToJSON(value?: ShareInfo | null): any {
     return {
         
         'sharedWith': GenericIniToJSON(value['sharedWith']),
-        'createdOn': value['createdOn'] == null ? undefined : ((value['createdOn']).toISOString()),
+        'createdOn': ((value['createdOn']).toISOString()),
         'permissions': ShockerPermissionsToJSON(value['permissions']),
         'limits': ShockerLimitsToJSON(value['limits']),
         'paused': value['paused'],

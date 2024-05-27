@@ -24,25 +24,28 @@ export interface SignUp {
      * @type {string}
      * @memberof SignUp
      */
-    username?: string;
+    username: string | null;
     /**
      * 
      * @type {string}
      * @memberof SignUp
      */
-    password?: string;
+    password: string | null;
     /**
      * 
      * @type {string}
      * @memberof SignUp
      */
-    email?: string;
+    email: string | null;
 }
 
 /**
  * Check if a given object implements the SignUp interface.
  */
 export function instanceOfSignUp(value: object): boolean {
+    if (!('username' in value)) return false;
+    if (!('password' in value)) return false;
+    if (!('email' in value)) return false;
     return true;
 }
 
@@ -56,9 +59,9 @@ export function SignUpFromJSONTyped(json: any, ignoreDiscriminator: boolean): Si
     }
     return {
         
-        'username': json['username'] == null ? undefined : json['username'],
-        'password': json['password'] == null ? undefined : json['password'],
-        'email': json['email'] == null ? undefined : json['email'],
+        'username': json['username'],
+        'password': json['password'],
+        'email': json['email'],
     };
 }
 

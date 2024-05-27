@@ -31,13 +31,13 @@ export interface OwnerShockerResponse {
      * @type {string}
      * @memberof OwnerShockerResponse
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {string}
      * @memberof OwnerShockerResponse
      */
-    name?: string;
+    name: string | null;
     /**
      * 
      * @type {Array<SharedDevice>}
@@ -50,6 +50,8 @@ export interface OwnerShockerResponse {
  * Check if a given object implements the OwnerShockerResponse interface.
  */
 export function instanceOfOwnerShockerResponse(value: object): boolean {
+    if (!('id' in value)) return false;
+    if (!('name' in value)) return false;
     return true;
 }
 
@@ -63,8 +65,8 @@ export function OwnerShockerResponseFromJSONTyped(json: any, ignoreDiscriminator
     }
     return {
         
-        'id': json['id'] == null ? undefined : json['id'],
-        'name': json['name'] == null ? undefined : json['name'],
+        'id': json['id'],
+        'name': json['name'],
         'devices': json['devices'] == null ? undefined : ((json['devices'] as Array<any>).map(SharedDeviceFromJSON)),
     };
 }

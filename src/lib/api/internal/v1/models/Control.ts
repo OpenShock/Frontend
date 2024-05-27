@@ -31,31 +31,41 @@ export interface Control {
      * @type {string}
      * @memberof Control
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {ControlType}
      * @memberof Control
      */
-    type?: ControlType;
+    type: ControlType;
     /**
      * 
      * @type {number}
      * @memberof Control
      */
-    intensity?: number;
+    intensity: number;
     /**
      * 
      * @type {number}
      * @memberof Control
      */
-    duration?: number;
+    duration: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Control
+     */
+    exclusive?: boolean;
 }
 
 /**
  * Check if a given object implements the Control interface.
  */
 export function instanceOfControl(value: object): boolean {
+    if (!('id' in value)) return false;
+    if (!('type' in value)) return false;
+    if (!('intensity' in value)) return false;
+    if (!('duration' in value)) return false;
     return true;
 }
 
@@ -69,10 +79,11 @@ export function ControlFromJSONTyped(json: any, ignoreDiscriminator: boolean): C
     }
     return {
         
-        'id': json['id'] == null ? undefined : json['id'],
-        'type': json['type'] == null ? undefined : ControlTypeFromJSON(json['type']),
-        'intensity': json['intensity'] == null ? undefined : json['intensity'],
-        'duration': json['duration'] == null ? undefined : json['duration'],
+        'id': json['id'],
+        'type': ControlTypeFromJSON(json['type']),
+        'intensity': json['intensity'],
+        'duration': json['duration'],
+        'exclusive': json['exclusive'] == null ? undefined : json['exclusive'],
     };
 }
 
@@ -86,6 +97,7 @@ export function ControlToJSON(value?: Control | null): any {
         'type': ControlTypeToJSON(value['type']),
         'intensity': value['intensity'],
         'duration': value['duration'],
+        'exclusive': value['exclusive'],
     };
 }
 

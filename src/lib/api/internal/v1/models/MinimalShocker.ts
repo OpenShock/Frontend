@@ -31,25 +31,28 @@ export interface MinimalShocker {
      * @type {string}
      * @memberof MinimalShocker
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {number}
      * @memberof MinimalShocker
      */
-    rfId?: number;
+    rfId: number;
     /**
      * 
      * @type {ShockerModelType}
      * @memberof MinimalShocker
      */
-    model?: ShockerModelType;
+    model: ShockerModelType;
 }
 
 /**
  * Check if a given object implements the MinimalShocker interface.
  */
 export function instanceOfMinimalShocker(value: object): boolean {
+    if (!('id' in value)) return false;
+    if (!('rfId' in value)) return false;
+    if (!('model' in value)) return false;
     return true;
 }
 
@@ -63,9 +66,9 @@ export function MinimalShockerFromJSONTyped(json: any, ignoreDiscriminator: bool
     }
     return {
         
-        'id': json['id'] == null ? undefined : json['id'],
-        'rfId': json['rfId'] == null ? undefined : json['rfId'],
-        'model': json['model'] == null ? undefined : ShockerModelTypeFromJSON(json['model']),
+        'id': json['id'],
+        'rfId': json['rfId'],
+        'model': ShockerModelTypeFromJSON(json['model']),
     };
 }
 

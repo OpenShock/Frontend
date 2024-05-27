@@ -31,13 +31,13 @@ export interface SharedDevice {
      * @type {string}
      * @memberof SharedDevice
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {string}
      * @memberof SharedDevice
      */
-    name?: string;
+    name: string | null;
     /**
      * 
      * @type {Array<SharedShocker>}
@@ -50,6 +50,8 @@ export interface SharedDevice {
  * Check if a given object implements the SharedDevice interface.
  */
 export function instanceOfSharedDevice(value: object): boolean {
+    if (!('id' in value)) return false;
+    if (!('name' in value)) return false;
     return true;
 }
 
@@ -63,8 +65,8 @@ export function SharedDeviceFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
-        'id': json['id'] == null ? undefined : json['id'],
-        'name': json['name'] == null ? undefined : json['name'],
+        'id': json['id'],
+        'name': json['name'],
         'shockers': json['shockers'] == null ? undefined : ((json['shockers'] as Array<any>).map(SharedShockerFromJSON)),
     };
 }

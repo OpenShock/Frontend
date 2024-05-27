@@ -24,13 +24,14 @@ export interface ResetRequest {
      * @type {string}
      * @memberof ResetRequest
      */
-    email?: string;
+    email: string | null;
 }
 
 /**
  * Check if a given object implements the ResetRequest interface.
  */
 export function instanceOfResetRequest(value: object): boolean {
+    if (!('email' in value)) return false;
     return true;
 }
 
@@ -44,7 +45,7 @@ export function ResetRequestFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
-        'email': json['email'] == null ? undefined : json['email'],
+        'email': json['email'],
     };
 }
 

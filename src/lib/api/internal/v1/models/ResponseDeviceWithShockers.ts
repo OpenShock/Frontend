@@ -31,31 +31,35 @@ export interface ResponseDeviceWithShockers {
      * @type {string}
      * @memberof ResponseDeviceWithShockers
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {string}
      * @memberof ResponseDeviceWithShockers
      */
-    name?: string;
+    name: string | null;
     /**
      * 
      * @type {Date}
      * @memberof ResponseDeviceWithShockers
      */
-    createdOn?: Date;
+    createdOn: Date;
     /**
      * 
      * @type {Array<ShockerResponse>}
      * @memberof ResponseDeviceWithShockers
      */
-    shockers?: Array<ShockerResponse>;
+    shockers: Array<ShockerResponse> | null;
 }
 
 /**
  * Check if a given object implements the ResponseDeviceWithShockers interface.
  */
 export function instanceOfResponseDeviceWithShockers(value: object): boolean {
+    if (!('id' in value)) return false;
+    if (!('name' in value)) return false;
+    if (!('createdOn' in value)) return false;
+    if (!('shockers' in value)) return false;
     return true;
 }
 
@@ -69,10 +73,10 @@ export function ResponseDeviceWithShockersFromJSONTyped(json: any, ignoreDiscrim
     }
     return {
         
-        'id': json['id'] == null ? undefined : json['id'],
-        'name': json['name'] == null ? undefined : json['name'],
-        'createdOn': json['createdOn'] == null ? undefined : (new Date(json['createdOn'])),
-        'shockers': json['shockers'] == null ? undefined : ((json['shockers'] as Array<any>).map(ShockerResponseFromJSON)),
+        'id': json['id'],
+        'name': json['name'],
+        'createdOn': (new Date(json['createdOn'])),
+        'shockers': (json['shockers'] == null ? null : (json['shockers'] as Array<any>).map(ShockerResponseFromJSON)),
     };
 }
 
@@ -84,8 +88,8 @@ export function ResponseDeviceWithShockersToJSON(value?: ResponseDeviceWithShock
         
         'id': value['id'],
         'name': value['name'],
-        'createdOn': value['createdOn'] == null ? undefined : ((value['createdOn']).toISOString()),
-        'shockers': value['shockers'] == null ? undefined : ((value['shockers'] as Array<any>).map(ShockerResponseToJSON)),
+        'createdOn': ((value['createdOn']).toISOString()),
+        'shockers': (value['shockers'] == null ? null : (value['shockers'] as Array<any>).map(ShockerResponseToJSON)),
     };
 }
 

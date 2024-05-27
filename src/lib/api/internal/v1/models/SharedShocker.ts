@@ -37,37 +37,42 @@ export interface SharedShocker {
      * @type {string}
      * @memberof SharedShocker
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {string}
      * @memberof SharedShocker
      */
-    name?: string;
+    name: string | null;
     /**
      * 
      * @type {boolean}
      * @memberof SharedShocker
      */
-    isPaused?: boolean;
+    isPaused: boolean;
     /**
      * 
      * @type {ShockerPermissions}
      * @memberof SharedShocker
      */
-    permissions?: ShockerPermissions;
+    permissions: ShockerPermissions;
     /**
      * 
      * @type {ShockerLimits}
      * @memberof SharedShocker
      */
-    limits?: ShockerLimits;
+    limits: ShockerLimits;
 }
 
 /**
  * Check if a given object implements the SharedShocker interface.
  */
 export function instanceOfSharedShocker(value: object): boolean {
+    if (!('id' in value)) return false;
+    if (!('name' in value)) return false;
+    if (!('isPaused' in value)) return false;
+    if (!('permissions' in value)) return false;
+    if (!('limits' in value)) return false;
     return true;
 }
 
@@ -81,11 +86,11 @@ export function SharedShockerFromJSONTyped(json: any, ignoreDiscriminator: boole
     }
     return {
         
-        'id': json['id'] == null ? undefined : json['id'],
-        'name': json['name'] == null ? undefined : json['name'],
-        'isPaused': json['isPaused'] == null ? undefined : json['isPaused'],
-        'permissions': json['permissions'] == null ? undefined : ShockerPermissionsFromJSON(json['permissions']),
-        'limits': json['limits'] == null ? undefined : ShockerLimitsFromJSON(json['limits']),
+        'id': json['id'],
+        'name': json['name'],
+        'isPaused': json['isPaused'],
+        'permissions': ShockerPermissionsFromJSON(json['permissions']),
+        'limits': ShockerLimitsFromJSON(json['limits']),
     };
 }
 

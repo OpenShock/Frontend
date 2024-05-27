@@ -24,19 +24,19 @@ export interface ShareLinkResponse {
      * @type {string}
      * @memberof ShareLinkResponse
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {string}
      * @memberof ShareLinkResponse
      */
-    name?: string;
+    name: string | null;
     /**
      * 
      * @type {Date}
      * @memberof ShareLinkResponse
      */
-    createdOn?: Date;
+    createdOn: Date;
     /**
      * 
      * @type {Date}
@@ -49,6 +49,9 @@ export interface ShareLinkResponse {
  * Check if a given object implements the ShareLinkResponse interface.
  */
 export function instanceOfShareLinkResponse(value: object): boolean {
+    if (!('id' in value)) return false;
+    if (!('name' in value)) return false;
+    if (!('createdOn' in value)) return false;
     return true;
 }
 
@@ -62,9 +65,9 @@ export function ShareLinkResponseFromJSONTyped(json: any, ignoreDiscriminator: b
     }
     return {
         
-        'id': json['id'] == null ? undefined : json['id'],
-        'name': json['name'] == null ? undefined : json['name'],
-        'createdOn': json['createdOn'] == null ? undefined : (new Date(json['createdOn'])),
+        'id': json['id'],
+        'name': json['name'],
+        'createdOn': (new Date(json['createdOn'])),
         'expiresOn': json['expiresOn'] == null ? undefined : (new Date(json['expiresOn'])),
     };
 }
@@ -77,7 +80,7 @@ export function ShareLinkResponseToJSON(value?: ShareLinkResponse | null): any {
         
         'id': value['id'],
         'name': value['name'],
-        'createdOn': value['createdOn'] == null ? undefined : ((value['createdOn']).toISOString()),
+        'createdOn': ((value['createdOn']).toISOString()),
         'expiresOn': value['expiresOn'] == null ? undefined : ((value['expiresOn'] as any).toISOString()),
     };
 }

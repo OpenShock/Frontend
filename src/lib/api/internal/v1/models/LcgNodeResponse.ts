@@ -24,19 +24,21 @@ export interface LcgNodeResponse {
      * @type {string}
      * @memberof LcgNodeResponse
      */
-    fqdn?: string;
+    fqdn: string | null;
     /**
      * 
      * @type {string}
      * @memberof LcgNodeResponse
      */
-    country?: string;
+    country: string | null;
 }
 
 /**
  * Check if a given object implements the LcgNodeResponse interface.
  */
 export function instanceOfLcgNodeResponse(value: object): boolean {
+    if (!('fqdn' in value)) return false;
+    if (!('country' in value)) return false;
     return true;
 }
 
@@ -50,8 +52,8 @@ export function LcgNodeResponseFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'fqdn': json['fqdn'] == null ? undefined : json['fqdn'],
-        'country': json['country'] == null ? undefined : json['country'],
+        'fqdn': json['fqdn'],
+        'country': json['country'],
     };
 }
 

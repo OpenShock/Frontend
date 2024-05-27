@@ -24,19 +24,21 @@ export interface ShareCodeInfo {
      * @type {string}
      * @memberof ShareCodeInfo
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {Date}
      * @memberof ShareCodeInfo
      */
-    createdOn?: Date;
+    createdOn: Date;
 }
 
 /**
  * Check if a given object implements the ShareCodeInfo interface.
  */
 export function instanceOfShareCodeInfo(value: object): boolean {
+    if (!('id' in value)) return false;
+    if (!('createdOn' in value)) return false;
     return true;
 }
 
@@ -50,8 +52,8 @@ export function ShareCodeInfoFromJSONTyped(json: any, ignoreDiscriminator: boole
     }
     return {
         
-        'id': json['id'] == null ? undefined : json['id'],
-        'createdOn': json['createdOn'] == null ? undefined : (new Date(json['createdOn'])),
+        'id': json['id'],
+        'createdOn': (new Date(json['createdOn'])),
     };
 }
 
@@ -62,7 +64,7 @@ export function ShareCodeInfoToJSON(value?: ShareCodeInfo | null): any {
     return {
         
         'id': value['id'],
-        'createdOn': value['createdOn'] == null ? undefined : ((value['createdOn']).toISOString()),
+        'createdOn': ((value['createdOn']).toISOString()),
     };
 }
 

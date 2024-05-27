@@ -18,7 +18,10 @@
  * @enum {string}
  */
 export enum PermissionType {
-    shockersUse = 'Shockers_Use',
+    shockersUse = 'shockers.use',
+    shockersEdit = 'shockers.edit',
+    shockersPause = 'shockers.pause',
+    devicesEdit = 'devices.edit',
     unknownDefaultOpenApi = '11184809'
 }
 

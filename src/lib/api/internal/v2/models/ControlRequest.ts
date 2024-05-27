@@ -31,19 +31,21 @@ export interface ControlRequest {
      * @type {Array<Control>}
      * @memberof ControlRequest
      */
-    shocks?: Array<Control>;
+    shocks: Array<Control> | null;
     /**
      * 
      * @type {string}
      * @memberof ControlRequest
      */
-    customName?: string;
+    customName: string | null;
 }
 
 /**
  * Check if a given object implements the ControlRequest interface.
  */
 export function instanceOfControlRequest(value: object): boolean {
+    if (!('shocks' in value)) return false;
+    if (!('customName' in value)) return false;
     return true;
 }
 
@@ -57,8 +59,8 @@ export function ControlRequestFromJSONTyped(json: any, ignoreDiscriminator: bool
     }
     return {
         
-        'shocks': json['shocks'] == null ? undefined : ((json['shocks'] as Array<any>).map(ControlFromJSON)),
-        'customName': json['customName'] == null ? undefined : json['customName'],
+        'shocks': (json['shocks'] == null ? null : (json['shocks'] as Array<any>).map(ControlFromJSON)),
+        'customName': json['customName'],
     };
 }
 
@@ -68,7 +70,7 @@ export function ControlRequestToJSON(value?: ControlRequest | null): any {
     }
     return {
         
-        'shocks': value['shocks'] == null ? undefined : ((value['shocks'] as Array<any>).map(ControlToJSON)),
+        'shocks': (value['shocks'] == null ? null : (value['shocks'] as Array<any>).map(ControlToJSON)),
         'customName': value['customName'],
     };
 }

@@ -31,37 +31,42 @@ export interface SelfResponse {
      * @type {string}
      * @memberof SelfResponse
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {string}
      * @memberof SelfResponse
      */
-    name?: string;
+    name: string | null;
     /**
      * 
      * @type {string}
      * @memberof SelfResponse
      */
-    email?: string;
+    email: string | null;
     /**
      * 
      * @type {string}
      * @memberof SelfResponse
      */
-    image?: string;
+    image: string | null;
     /**
      * 
      * @type {RankType}
      * @memberof SelfResponse
      */
-    rank?: RankType;
+    rank: RankType;
 }
 
 /**
  * Check if a given object implements the SelfResponse interface.
  */
 export function instanceOfSelfResponse(value: object): boolean {
+    if (!('id' in value)) return false;
+    if (!('name' in value)) return false;
+    if (!('email' in value)) return false;
+    if (!('image' in value)) return false;
+    if (!('rank' in value)) return false;
     return true;
 }
 
@@ -75,11 +80,11 @@ export function SelfResponseFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
-        'id': json['id'] == null ? undefined : json['id'],
-        'name': json['name'] == null ? undefined : json['name'],
-        'email': json['email'] == null ? undefined : json['email'],
-        'image': json['image'] == null ? undefined : json['image'],
-        'rank': json['rank'] == null ? undefined : RankTypeFromJSON(json['rank']),
+        'id': json['id'],
+        'name': json['name'],
+        'email': json['email'],
+        'image': json['image'],
+        'rank': RankTypeFromJSON(json['rank']),
     };
 }
 

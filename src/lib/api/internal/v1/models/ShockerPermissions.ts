@@ -24,19 +24,19 @@ export interface ShockerPermissions {
      * @type {boolean}
      * @memberof ShockerPermissions
      */
-    vibrate?: boolean;
+    vibrate: boolean;
     /**
      * 
      * @type {boolean}
      * @memberof ShockerPermissions
      */
-    sound?: boolean;
+    sound: boolean;
     /**
      * 
      * @type {boolean}
      * @memberof ShockerPermissions
      */
-    shock?: boolean;
+    shock: boolean;
     /**
      * 
      * @type {boolean}
@@ -49,6 +49,9 @@ export interface ShockerPermissions {
  * Check if a given object implements the ShockerPermissions interface.
  */
 export function instanceOfShockerPermissions(value: object): boolean {
+    if (!('vibrate' in value)) return false;
+    if (!('sound' in value)) return false;
+    if (!('shock' in value)) return false;
     return true;
 }
 
@@ -62,9 +65,9 @@ export function ShockerPermissionsFromJSONTyped(json: any, ignoreDiscriminator: 
     }
     return {
         
-        'vibrate': json['vibrate'] == null ? undefined : json['vibrate'],
-        'sound': json['sound'] == null ? undefined : json['sound'],
-        'shock': json['shock'] == null ? undefined : json['shock'],
+        'vibrate': json['vibrate'],
+        'sound': json['sound'],
+        'shock': json['shock'],
         'live': json['live'] == null ? undefined : json['live'],
     };
 }

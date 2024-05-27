@@ -24,19 +24,21 @@ export interface ShockerLimits {
      * @type {number}
      * @memberof ShockerLimits
      */
-    intensity?: number;
+    intensity: number | null;
     /**
      * 
      * @type {number}
      * @memberof ShockerLimits
      */
-    duration?: number;
+    duration: number | null;
 }
 
 /**
  * Check if a given object implements the ShockerLimits interface.
  */
 export function instanceOfShockerLimits(value: object): boolean {
+    if (!('intensity' in value)) return false;
+    if (!('duration' in value)) return false;
     return true;
 }
 
@@ -50,8 +52,8 @@ export function ShockerLimitsFromJSONTyped(json: any, ignoreDiscriminator: boole
     }
     return {
         
-        'intensity': json['intensity'] == null ? undefined : json['intensity'],
-        'duration': json['duration'] == null ? undefined : json['duration'],
+        'intensity': json['intensity'],
+        'duration': json['duration'],
     };
 }
 

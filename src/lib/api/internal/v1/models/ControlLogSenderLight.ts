@@ -24,31 +24,35 @@ export interface ControlLogSenderLight {
      * @type {string}
      * @memberof ControlLogSenderLight
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {string}
      * @memberof ControlLogSenderLight
      */
-    name?: string;
+    name: string | null;
     /**
      * 
      * @type {string}
      * @memberof ControlLogSenderLight
      */
-    image?: string;
+    image: string | null;
     /**
      * 
      * @type {string}
      * @memberof ControlLogSenderLight
      */
-    customName?: string;
+    customName: string | null;
 }
 
 /**
  * Check if a given object implements the ControlLogSenderLight interface.
  */
 export function instanceOfControlLogSenderLight(value: object): boolean {
+    if (!('id' in value)) return false;
+    if (!('name' in value)) return false;
+    if (!('image' in value)) return false;
+    if (!('customName' in value)) return false;
     return true;
 }
 
@@ -62,10 +66,10 @@ export function ControlLogSenderLightFromJSONTyped(json: any, ignoreDiscriminato
     }
     return {
         
-        'id': json['id'] == null ? undefined : json['id'],
-        'name': json['name'] == null ? undefined : json['name'],
-        'image': json['image'] == null ? undefined : json['image'],
-        'customName': json['customName'] == null ? undefined : json['customName'],
+        'id': json['id'],
+        'name': json['name'],
+        'image': json['image'],
+        'customName': json['customName'],
     };
 }
 

@@ -24,13 +24,14 @@ export interface PasswordResetProcessData {
      * @type {string}
      * @memberof PasswordResetProcessData
      */
-    password?: string;
+    password: string | null;
 }
 
 /**
  * Check if a given object implements the PasswordResetProcessData interface.
  */
 export function instanceOfPasswordResetProcessData(value: object): boolean {
+    if (!('password' in value)) return false;
     return true;
 }
 
@@ -44,7 +45,7 @@ export function PasswordResetProcessDataFromJSONTyped(json: any, ignoreDiscrimin
     }
     return {
         
-        'password': json['password'] == null ? undefined : json['password'],
+        'password': json['password'],
     };
 }
 

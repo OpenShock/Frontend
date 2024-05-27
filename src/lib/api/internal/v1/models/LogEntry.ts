@@ -37,43 +37,49 @@ export interface LogEntry {
      * @type {string}
      * @memberof LogEntry
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {Date}
      * @memberof LogEntry
      */
-    createdOn?: Date;
+    createdOn: Date;
     /**
      * 
      * @type {ControlType}
      * @memberof LogEntry
      */
-    type?: ControlType;
+    type: ControlType;
     /**
      * 
      * @type {ControlLogSenderLight}
      * @memberof LogEntry
      */
-    controlledBy?: ControlLogSenderLight;
+    controlledBy: ControlLogSenderLight;
     /**
      * 
      * @type {number}
      * @memberof LogEntry
      */
-    intensity?: number;
+    intensity: number;
     /**
      * 
      * @type {number}
      * @memberof LogEntry
      */
-    duration?: number;
+    duration: number;
 }
 
 /**
  * Check if a given object implements the LogEntry interface.
  */
 export function instanceOfLogEntry(value: object): boolean {
+    if (!('id' in value)) return false;
+    if (!('createdOn' in value)) return false;
+    if (!('type' in value)) return false;
+    if (!('controlledBy' in value)) return false;
+    if (!('intensity' in value)) return false;
+    if (!('duration' in value)) return false;
     return true;
 }
 
@@ -87,12 +93,12 @@ export function LogEntryFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     }
     return {
         
-        'id': json['id'] == null ? undefined : json['id'],
-        'createdOn': json['createdOn'] == null ? undefined : (new Date(json['createdOn'])),
-        'type': json['type'] == null ? undefined : ControlTypeFromJSON(json['type']),
-        'controlledBy': json['controlledBy'] == null ? undefined : ControlLogSenderLightFromJSON(json['controlledBy']),
-        'intensity': json['intensity'] == null ? undefined : json['intensity'],
-        'duration': json['duration'] == null ? undefined : json['duration'],
+        'id': json['id'],
+        'createdOn': (new Date(json['createdOn'])),
+        'type': ControlTypeFromJSON(json['type']),
+        'controlledBy': ControlLogSenderLightFromJSON(json['controlledBy']),
+        'intensity': json['intensity'],
+        'duration': json['duration'],
     };
 }
 
@@ -103,7 +109,7 @@ export function LogEntryToJSON(value?: LogEntry | null): any {
     return {
         
         'id': value['id'],
-        'createdOn': value['createdOn'] == null ? undefined : ((value['createdOn']).toISOString()),
+        'createdOn': ((value['createdOn']).toISOString()),
         'type': ControlTypeToJSON(value['type']),
         'controlledBy': ControlLogSenderLightToJSON(value['controlledBy']),
         'intensity': value['intensity'],

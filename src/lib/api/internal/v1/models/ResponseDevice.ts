@@ -24,25 +24,28 @@ export interface ResponseDevice {
      * @type {string}
      * @memberof ResponseDevice
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {string}
      * @memberof ResponseDevice
      */
-    name?: string;
+    name: string | null;
     /**
      * 
      * @type {Date}
      * @memberof ResponseDevice
      */
-    createdOn?: Date;
+    createdOn: Date;
 }
 
 /**
  * Check if a given object implements the ResponseDevice interface.
  */
 export function instanceOfResponseDevice(value: object): boolean {
+    if (!('id' in value)) return false;
+    if (!('name' in value)) return false;
+    if (!('createdOn' in value)) return false;
     return true;
 }
 
@@ -56,9 +59,9 @@ export function ResponseDeviceFromJSONTyped(json: any, ignoreDiscriminator: bool
     }
     return {
         
-        'id': json['id'] == null ? undefined : json['id'],
-        'name': json['name'] == null ? undefined : json['name'],
-        'createdOn': json['createdOn'] == null ? undefined : (new Date(json['createdOn'])),
+        'id': json['id'],
+        'name': json['name'],
+        'createdOn': (new Date(json['createdOn'])),
     };
 }
 
@@ -70,7 +73,7 @@ export function ResponseDeviceToJSON(value?: ResponseDevice | null): any {
         
         'id': value['id'],
         'name': value['name'],
-        'createdOn': value['createdOn'] == null ? undefined : ((value['createdOn']).toISOString()),
+        'createdOn': ((value['createdOn']).toISOString()),
     };
 }
 

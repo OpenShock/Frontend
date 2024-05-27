@@ -37,13 +37,13 @@ export interface ShareLinkEditShocker {
      * @type {ShockerPermissions}
      * @memberof ShareLinkEditShocker
      */
-    permissions?: ShockerPermissions;
+    permissions: ShockerPermissions;
     /**
      * 
      * @type {ShockerLimits}
      * @memberof ShareLinkEditShocker
      */
-    limits?: ShockerLimits;
+    limits: ShockerLimits;
     /**
      * 
      * @type {number}
@@ -56,6 +56,8 @@ export interface ShareLinkEditShocker {
  * Check if a given object implements the ShareLinkEditShocker interface.
  */
 export function instanceOfShareLinkEditShocker(value: object): boolean {
+    if (!('permissions' in value)) return false;
+    if (!('limits' in value)) return false;
     return true;
 }
 
@@ -69,8 +71,8 @@ export function ShareLinkEditShockerFromJSONTyped(json: any, ignoreDiscriminator
     }
     return {
         
-        'permissions': json['permissions'] == null ? undefined : ShockerPermissionsFromJSON(json['permissions']),
-        'limits': json['limits'] == null ? undefined : ShockerLimitsFromJSON(json['limits']),
+        'permissions': ShockerPermissionsFromJSON(json['permissions']),
+        'limits': ShockerLimitsFromJSON(json['limits']),
         'cooldown': json['cooldown'] == null ? undefined : json['cooldown'],
     };
 }

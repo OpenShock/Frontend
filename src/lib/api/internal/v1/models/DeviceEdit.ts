@@ -24,13 +24,14 @@ export interface DeviceEdit {
      * @type {string}
      * @memberof DeviceEdit
      */
-    name?: string;
+    name: string | null;
 }
 
 /**
  * Check if a given object implements the DeviceEdit interface.
  */
 export function instanceOfDeviceEdit(value: object): boolean {
+    if (!('name' in value)) return false;
     return true;
 }
 
@@ -44,7 +45,7 @@ export function DeviceEditFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'name': json['name'] == null ? undefined : json['name'],
+        'name': json['name'],
     };
 }
 

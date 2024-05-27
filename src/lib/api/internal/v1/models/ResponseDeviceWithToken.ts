@@ -24,31 +24,35 @@ export interface ResponseDeviceWithToken {
      * @type {string}
      * @memberof ResponseDeviceWithToken
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {string}
      * @memberof ResponseDeviceWithToken
      */
-    name?: string;
+    name: string | null;
     /**
      * 
      * @type {Date}
      * @memberof ResponseDeviceWithToken
      */
-    createdOn?: Date;
+    createdOn: Date;
     /**
      * 
      * @type {string}
      * @memberof ResponseDeviceWithToken
      */
-    token?: string;
+    token: string | null;
 }
 
 /**
  * Check if a given object implements the ResponseDeviceWithToken interface.
  */
 export function instanceOfResponseDeviceWithToken(value: object): boolean {
+    if (!('id' in value)) return false;
+    if (!('name' in value)) return false;
+    if (!('createdOn' in value)) return false;
+    if (!('token' in value)) return false;
     return true;
 }
 
@@ -62,10 +66,10 @@ export function ResponseDeviceWithTokenFromJSONTyped(json: any, ignoreDiscrimina
     }
     return {
         
-        'id': json['id'] == null ? undefined : json['id'],
-        'name': json['name'] == null ? undefined : json['name'],
-        'createdOn': json['createdOn'] == null ? undefined : (new Date(json['createdOn'])),
-        'token': json['token'] == null ? undefined : json['token'],
+        'id': json['id'],
+        'name': json['name'],
+        'createdOn': (new Date(json['createdOn'])),
+        'token': json['token'],
     };
 }
 
@@ -77,7 +81,7 @@ export function ResponseDeviceWithTokenToJSON(value?: ResponseDeviceWithToken | 
         
         'id': value['id'],
         'name': value['name'],
-        'createdOn': value['createdOn'] == null ? undefined : ((value['createdOn']).toISOString()),
+        'createdOn': ((value['createdOn']).toISOString()),
         'token': value['token'],
     };
 }

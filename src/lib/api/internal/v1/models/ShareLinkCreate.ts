@@ -24,7 +24,7 @@ export interface ShareLinkCreate {
      * @type {string}
      * @memberof ShareLinkCreate
      */
-    name?: string;
+    name: string | null;
     /**
      * 
      * @type {Date}
@@ -37,6 +37,7 @@ export interface ShareLinkCreate {
  * Check if a given object implements the ShareLinkCreate interface.
  */
 export function instanceOfShareLinkCreate(value: object): boolean {
+    if (!('name' in value)) return false;
     return true;
 }
 
@@ -50,7 +51,7 @@ export function ShareLinkCreateFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'name': json['name'] == null ? undefined : json['name'],
+        'name': json['name'],
         'expiresOn': json['expiresOn'] == null ? undefined : (new Date(json['expiresOn'])),
     };
 }

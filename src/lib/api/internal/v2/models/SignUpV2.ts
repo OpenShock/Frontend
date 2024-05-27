@@ -24,19 +24,19 @@ export interface SignUpV2 {
      * @type {string}
      * @memberof SignUpV2
      */
-    username?: string;
+    username: string | null;
     /**
      * 
      * @type {string}
      * @memberof SignUpV2
      */
-    password?: string;
+    password: string | null;
     /**
      * 
      * @type {string}
      * @memberof SignUpV2
      */
-    email?: string;
+    email: string | null;
     /**
      * 
      * @type {string}
@@ -49,6 +49,9 @@ export interface SignUpV2 {
  * Check if a given object implements the SignUpV2 interface.
  */
 export function instanceOfSignUpV2(value: object): boolean {
+    if (!('username' in value)) return false;
+    if (!('password' in value)) return false;
+    if (!('email' in value)) return false;
     if (!('turnstileResponse' in value)) return false;
     return true;
 }
@@ -63,9 +66,9 @@ export function SignUpV2FromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     }
     return {
         
-        'username': json['username'] == null ? undefined : json['username'],
-        'password': json['password'] == null ? undefined : json['password'],
-        'email': json['email'] == null ? undefined : json['email'],
+        'username': json['username'],
+        'password': json['password'],
+        'email': json['email'],
         'turnstileResponse': json['turnstileResponse'],
     };
 }

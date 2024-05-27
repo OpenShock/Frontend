@@ -24,25 +24,42 @@ export interface RootResponse {
      * @type {string}
      * @memberof RootResponse
      */
-    version?: string;
+    version: string | null;
     /**
      * 
      * @type {string}
      * @memberof RootResponse
      */
-    commit?: string;
+    commit: string | null;
     /**
      * 
      * @type {Date}
      * @memberof RootResponse
      */
-    currentTime?: Date;
+    currentTime: Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof RootResponse
+     */
+    frontendUrl: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof RootResponse
+     */
+    shortLinkUrl: string | null;
 }
 
 /**
  * Check if a given object implements the RootResponse interface.
  */
 export function instanceOfRootResponse(value: object): boolean {
+    if (!('version' in value)) return false;
+    if (!('commit' in value)) return false;
+    if (!('currentTime' in value)) return false;
+    if (!('frontendUrl' in value)) return false;
+    if (!('shortLinkUrl' in value)) return false;
     return true;
 }
 
@@ -56,9 +73,11 @@ export function RootResponseFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
-        'version': json['version'] == null ? undefined : json['version'],
-        'commit': json['commit'] == null ? undefined : json['commit'],
-        'currentTime': json['currentTime'] == null ? undefined : (new Date(json['currentTime'])),
+        'version': json['version'],
+        'commit': json['commit'],
+        'currentTime': (new Date(json['currentTime'])),
+        'frontendUrl': json['frontendUrl'],
+        'shortLinkUrl': json['shortLinkUrl'],
     };
 }
 
@@ -70,7 +89,9 @@ export function RootResponseToJSON(value?: RootResponse | null): any {
         
         'version': value['version'],
         'commit': value['commit'],
-        'currentTime': value['currentTime'] == null ? undefined : ((value['currentTime']).toISOString()),
+        'currentTime': ((value['currentTime']).toISOString()),
+        'frontendUrl': value['frontendUrl'],
+        'shortLinkUrl': value['shortLinkUrl'],
     };
 }
 

@@ -31,37 +31,42 @@ export interface OtaItem {
      * @type {number}
      * @memberof OtaItem
      */
-    id?: number;
+    id: number;
     /**
      * 
      * @type {Date}
      * @memberof OtaItem
      */
-    startedAt?: Date;
+    startedAt: Date;
     /**
      * 
      * @type {OtaUpdateStatus}
      * @memberof OtaItem
      */
-    status?: OtaUpdateStatus;
+    status: OtaUpdateStatus;
     /**
      * 
      * @type {string}
      * @memberof OtaItem
      */
-    version?: string;
+    version: string | null;
     /**
      * 
      * @type {string}
      * @memberof OtaItem
      */
-    message?: string;
+    message: string | null;
 }
 
 /**
  * Check if a given object implements the OtaItem interface.
  */
 export function instanceOfOtaItem(value: object): boolean {
+    if (!('id' in value)) return false;
+    if (!('startedAt' in value)) return false;
+    if (!('status' in value)) return false;
+    if (!('version' in value)) return false;
+    if (!('message' in value)) return false;
     return true;
 }
 
@@ -75,11 +80,11 @@ export function OtaItemFromJSONTyped(json: any, ignoreDiscriminator: boolean): O
     }
     return {
         
-        'id': json['id'] == null ? undefined : json['id'],
-        'startedAt': json['startedAt'] == null ? undefined : (new Date(json['startedAt'])),
-        'status': json['status'] == null ? undefined : OtaUpdateStatusFromJSON(json['status']),
-        'version': json['version'] == null ? undefined : json['version'],
-        'message': json['message'] == null ? undefined : json['message'],
+        'id': json['id'],
+        'startedAt': (new Date(json['startedAt'])),
+        'status': OtaUpdateStatusFromJSON(json['status']),
+        'version': json['version'],
+        'message': json['message'],
     };
 }
 
@@ -90,7 +95,7 @@ export function OtaItemToJSON(value?: OtaItem | null): any {
     return {
         
         'id': value['id'],
-        'startedAt': value['startedAt'] == null ? undefined : ((value['startedAt']).toISOString()),
+        'startedAt': ((value['startedAt']).toISOString()),
         'status': OtaUpdateStatusToJSON(value['status']),
         'version': value['version'],
         'message': value['message'],

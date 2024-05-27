@@ -31,43 +31,49 @@ export interface ShockerResponse {
      * @type {string}
      * @memberof ShockerResponse
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {number}
      * @memberof ShockerResponse
      */
-    rfId?: number;
+    rfId: number;
     /**
      * 
      * @type {ShockerModelType}
      * @memberof ShockerResponse
      */
-    model?: ShockerModelType;
+    model: ShockerModelType;
     /**
      * 
      * @type {string}
      * @memberof ShockerResponse
      */
-    name?: string;
+    name: string | null;
     /**
      * 
      * @type {boolean}
      * @memberof ShockerResponse
      */
-    isPaused?: boolean;
+    isPaused: boolean;
     /**
      * 
      * @type {Date}
      * @memberof ShockerResponse
      */
-    createdOn?: Date;
+    createdOn: Date;
 }
 
 /**
  * Check if a given object implements the ShockerResponse interface.
  */
 export function instanceOfShockerResponse(value: object): boolean {
+    if (!('id' in value)) return false;
+    if (!('rfId' in value)) return false;
+    if (!('model' in value)) return false;
+    if (!('name' in value)) return false;
+    if (!('isPaused' in value)) return false;
+    if (!('createdOn' in value)) return false;
     return true;
 }
 
@@ -81,12 +87,12 @@ export function ShockerResponseFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'id': json['id'] == null ? undefined : json['id'],
-        'rfId': json['rfId'] == null ? undefined : json['rfId'],
-        'model': json['model'] == null ? undefined : ShockerModelTypeFromJSON(json['model']),
-        'name': json['name'] == null ? undefined : json['name'],
-        'isPaused': json['isPaused'] == null ? undefined : json['isPaused'],
-        'createdOn': json['createdOn'] == null ? undefined : (new Date(json['createdOn'])),
+        'id': json['id'],
+        'rfId': json['rfId'],
+        'model': ShockerModelTypeFromJSON(json['model']),
+        'name': json['name'],
+        'isPaused': json['isPaused'],
+        'createdOn': (new Date(json['createdOn'])),
     };
 }
 
@@ -101,7 +107,7 @@ export function ShockerResponseToJSON(value?: ShockerResponse | null): any {
         'model': ShockerModelTypeToJSON(value['model']),
         'name': value['name'],
         'isPaused': value['isPaused'],
-        'createdOn': value['createdOn'] == null ? undefined : ((value['createdOn']).toISOString()),
+        'createdOn': ((value['createdOn']).toISOString()),
     };
 }
 
