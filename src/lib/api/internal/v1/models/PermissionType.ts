@@ -29,7 +29,7 @@ export enum PermissionType {
 export function instanceOfPermissionType(value: any): boolean {
     for (const key in PermissionType) {
         if (Object.prototype.hasOwnProperty.call(PermissionType, key)) {
-            if (PermissionType[key] === value) {
+            if ((PermissionType as Record<string, PermissionType>)[key] === value) {
                 return true;
             }
         }

@@ -29,7 +29,7 @@ export enum ControlType {
 export function instanceOfControlType(value: any): boolean {
     for (const key in ControlType) {
         if (Object.prototype.hasOwnProperty.call(ControlType, key)) {
-            if (ControlType[key] === value) {
+            if ((ControlType as Record<string, ControlType>)[key] === value) {
                 return true;
             }
         }

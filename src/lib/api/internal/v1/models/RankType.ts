@@ -30,7 +30,7 @@ export enum RankType {
 export function instanceOfRankType(value: any): boolean {
     for (const key in RankType) {
         if (Object.prototype.hasOwnProperty.call(RankType, key)) {
-            if (RankType[key] === value) {
+            if ((RankType as Record<string, RankType>)[key] === value) {
                 return true;
             }
         }

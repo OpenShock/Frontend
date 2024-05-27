@@ -30,7 +30,7 @@ export enum OtaUpdateStatus {
 export function instanceOfOtaUpdateStatus(value: any): boolean {
     for (const key in OtaUpdateStatus) {
         if (Object.prototype.hasOwnProperty.call(OtaUpdateStatus, key)) {
-            if (OtaUpdateStatus[key] === value) {
+            if ((OtaUpdateStatus as Record<string, OtaUpdateStatus>)[key] === value) {
                 return true;
             }
         }
