@@ -54,12 +54,12 @@ export interface RootResponse {
 /**
  * Check if a given object implements the RootResponse interface.
  */
-export function instanceOfRootResponse(value: object): boolean {
-    if (!('version' in value)) return false;
-    if (!('commit' in value)) return false;
-    if (!('currentTime' in value)) return false;
-    if (!('frontendUrl' in value)) return false;
-    if (!('shortLinkUrl' in value)) return false;
+export function instanceOfRootResponse(value: object): value is RootResponse {
+    if (!('version' in value) || value['version'] === undefined) return false;
+    if (!('commit' in value) || value['commit'] === undefined) return false;
+    if (!('currentTime' in value) || value['currentTime'] === undefined) return false;
+    if (!('frontendUrl' in value) || value['frontendUrl'] === undefined) return false;
+    if (!('shortLinkUrl' in value) || value['shortLinkUrl'] === undefined) return false;
     return true;
 }
 

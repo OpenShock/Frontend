@@ -42,10 +42,10 @@ export interface GenericIni {
 /**
  * Check if a given object implements the GenericIni interface.
  */
-export function instanceOfGenericIni(value: object): boolean {
-    if (!('id' in value)) return false;
-    if (!('name' in value)) return false;
-    if (!('image' in value)) return false;
+export function instanceOfGenericIni(value: object): value is GenericIni {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('image' in value) || value['image'] === undefined) return false;
     return true;
 }
 

@@ -55,11 +55,11 @@ export interface NewShocker {
 /**
  * Check if a given object implements the NewShocker interface.
  */
-export function instanceOfNewShocker(value: object): boolean {
-    if (!('name' in value)) return false;
-    if (!('rfId' in value)) return false;
-    if (!('device' in value)) return false;
-    if (!('model' in value)) return false;
+export function instanceOfNewShocker(value: object): value is NewShocker {
+    if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('rfId' in value) || value['rfId'] === undefined) return false;
+    if (!('device' in value) || value['device'] === undefined) return false;
+    if (!('model' in value) || value['model'] === undefined) return false;
     return true;
 }
 

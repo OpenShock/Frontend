@@ -13,6 +13,12 @@
  */
 
 import { mapValues } from '../runtime';
+import type { ShockerPermissions } from './ShockerPermissions';
+import {
+    ShockerPermissionsFromJSON,
+    ShockerPermissionsFromJSONTyped,
+    ShockerPermissionsToJSON,
+} from './ShockerPermissions';
 import type { GenericIni } from './GenericIni';
 import {
     GenericIniFromJSON,
@@ -25,12 +31,6 @@ import {
     ShockerLimitsFromJSONTyped,
     ShockerLimitsToJSON,
 } from './ShockerLimits';
-import type { ShockerPermissions } from './ShockerPermissions';
-import {
-    ShockerPermissionsFromJSON,
-    ShockerPermissionsFromJSONTyped,
-    ShockerPermissionsToJSON,
-} from './ShockerPermissions';
 
 /**
  * 
@@ -73,12 +73,12 @@ export interface ShareInfo {
 /**
  * Check if a given object implements the ShareInfo interface.
  */
-export function instanceOfShareInfo(value: object): boolean {
-    if (!('sharedWith' in value)) return false;
-    if (!('createdOn' in value)) return false;
-    if (!('permissions' in value)) return false;
-    if (!('limits' in value)) return false;
-    if (!('paused' in value)) return false;
+export function instanceOfShareInfo(value: object): value is ShareInfo {
+    if (!('sharedWith' in value) || value['sharedWith'] === undefined) return false;
+    if (!('createdOn' in value) || value['createdOn'] === undefined) return false;
+    if (!('permissions' in value) || value['permissions'] === undefined) return false;
+    if (!('limits' in value) || value['limits'] === undefined) return false;
+    if (!('paused' in value) || value['paused'] === undefined) return false;
     return true;
 }
 

@@ -30,8 +30,8 @@ export interface PauseRequest {
 /**
  * Check if a given object implements the PauseRequest interface.
  */
-export function instanceOfPauseRequest(value: object): boolean {
-    if (!('pause' in value)) return false;
+export function instanceOfPauseRequest(value: object): value is PauseRequest {
+    if (!('pause' in value) || value['pause'] === undefined) return false;
     return true;
 }
 

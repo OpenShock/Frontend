@@ -30,8 +30,8 @@ export interface ResetRequest {
 /**
  * Check if a given object implements the ResetRequest interface.
  */
-export function instanceOfResetRequest(value: object): boolean {
-    if (!('email' in value)) return false;
+export function instanceOfResetRequest(value: object): value is ResetRequest {
+    if (!('email' in value) || value['email'] === undefined) return false;
     return true;
 }
 

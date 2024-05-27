@@ -13,18 +13,18 @@
  */
 
 import { mapValues } from '../runtime';
-import type { ControlLogSenderLight } from './ControlLogSenderLight';
-import {
-    ControlLogSenderLightFromJSON,
-    ControlLogSenderLightFromJSONTyped,
-    ControlLogSenderLightToJSON,
-} from './ControlLogSenderLight';
 import type { ControlType } from './ControlType';
 import {
     ControlTypeFromJSON,
     ControlTypeFromJSONTyped,
     ControlTypeToJSON,
 } from './ControlType';
+import type { ControlLogSenderLight } from './ControlLogSenderLight';
+import {
+    ControlLogSenderLightFromJSON,
+    ControlLogSenderLightFromJSONTyped,
+    ControlLogSenderLightToJSON,
+} from './ControlLogSenderLight';
 
 /**
  * 
@@ -73,13 +73,13 @@ export interface LogEntry {
 /**
  * Check if a given object implements the LogEntry interface.
  */
-export function instanceOfLogEntry(value: object): boolean {
-    if (!('id' in value)) return false;
-    if (!('createdOn' in value)) return false;
-    if (!('type' in value)) return false;
-    if (!('controlledBy' in value)) return false;
-    if (!('intensity' in value)) return false;
-    if (!('duration' in value)) return false;
+export function instanceOfLogEntry(value: object): value is LogEntry {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('createdOn' in value) || value['createdOn'] === undefined) return false;
+    if (!('type' in value) || value['type'] === undefined) return false;
+    if (!('controlledBy' in value) || value['controlledBy'] === undefined) return false;
+    if (!('intensity' in value) || value['intensity'] === undefined) return false;
+    if (!('duration' in value) || value['duration'] === undefined) return false;
     return true;
 }
 

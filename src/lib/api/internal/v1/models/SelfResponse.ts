@@ -61,12 +61,12 @@ export interface SelfResponse {
 /**
  * Check if a given object implements the SelfResponse interface.
  */
-export function instanceOfSelfResponse(value: object): boolean {
-    if (!('id' in value)) return false;
-    if (!('name' in value)) return false;
-    if (!('email' in value)) return false;
-    if (!('image' in value)) return false;
-    if (!('rank' in value)) return false;
+export function instanceOfSelfResponse(value: object): value is SelfResponse {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('email' in value) || value['email'] === undefined) return false;
+    if (!('image' in value) || value['image'] === undefined) return false;
+    if (!('rank' in value) || value['rank'] === undefined) return false;
     return true;
 }
 

@@ -43,7 +43,7 @@ export interface LcgResponseBaseResponse {
 /**
  * Check if a given object implements the LcgResponseBaseResponse interface.
  */
-export function instanceOfLcgResponseBaseResponse(value: object): boolean {
+export function instanceOfLcgResponseBaseResponse(value: object): value is LcgResponseBaseResponse {
     return true;
 }
 

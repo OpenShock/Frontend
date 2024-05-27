@@ -30,8 +30,8 @@ export interface StatsResponse {
 /**
  * Check if a given object implements the StatsResponse interface.
  */
-export function instanceOfStatsResponse(value: object): boolean {
-    if (!('devicesOnline' in value)) return false;
+export function instanceOfStatsResponse(value: object): value is StatsResponse {
+    if (!('devicesOnline' in value) || value['devicesOnline'] === undefined) return false;
     return true;
 }
 

@@ -27,7 +27,14 @@ export enum PermissionType {
 
 
 export function instanceOfPermissionType(value: any): boolean {
-    return Object.values(PermissionType).includes(value);
+    for (const key in PermissionType) {
+        if (Object.prototype.hasOwnProperty.call(PermissionType, key)) {
+            if (PermissionType[key] === value) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 export function PermissionTypeFromJSON(json: any): PermissionType {

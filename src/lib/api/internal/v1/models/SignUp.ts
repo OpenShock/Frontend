@@ -42,10 +42,10 @@ export interface SignUp {
 /**
  * Check if a given object implements the SignUp interface.
  */
-export function instanceOfSignUp(value: object): boolean {
-    if (!('username' in value)) return false;
-    if (!('password' in value)) return false;
-    if (!('email' in value)) return false;
+export function instanceOfSignUp(value: object): value is SignUp {
+    if (!('username' in value) || value['username'] === undefined) return false;
+    if (!('password' in value) || value['password'] === undefined) return false;
+    if (!('email' in value) || value['email'] === undefined) return false;
     return true;
 }
 

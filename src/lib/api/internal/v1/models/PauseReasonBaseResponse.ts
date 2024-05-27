@@ -43,7 +43,7 @@ export interface PauseReasonBaseResponse {
 /**
  * Check if a given object implements the PauseReasonBaseResponse interface.
  */
-export function instanceOfPauseReasonBaseResponse(value: object): boolean {
+export function instanceOfPauseReasonBaseResponse(value: object): value is PauseReasonBaseResponse {
     return true;
 }
 

@@ -43,7 +43,7 @@ export interface RootResponseBaseResponse {
 /**
  * Check if a given object implements the RootResponseBaseResponse interface.
  */
-export function instanceOfRootResponseBaseResponse(value: object): boolean {
+export function instanceOfRootResponseBaseResponse(value: object): value is RootResponseBaseResponse {
     return true;
 }
 

@@ -43,7 +43,7 @@ export interface StatsResponseBaseResponse {
 /**
  * Check if a given object implements the StatsResponseBaseResponse interface.
  */
-export function instanceOfStatsResponseBaseResponse(value: object): boolean {
+export function instanceOfStatsResponseBaseResponse(value: object): value is StatsResponseBaseResponse {
     return true;
 }
 

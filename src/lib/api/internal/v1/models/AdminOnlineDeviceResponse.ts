@@ -67,13 +67,13 @@ export interface AdminOnlineDeviceResponse {
 /**
  * Check if a given object implements the AdminOnlineDeviceResponse interface.
  */
-export function instanceOfAdminOnlineDeviceResponse(value: object): boolean {
-    if (!('id' in value)) return false;
-    if (!('name' in value)) return false;
-    if (!('owner' in value)) return false;
-    if (!('firmwareVersion' in value)) return false;
-    if (!('gateway' in value)) return false;
-    if (!('connectedAt' in value)) return false;
+export function instanceOfAdminOnlineDeviceResponse(value: object): value is AdminOnlineDeviceResponse {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('owner' in value) || value['owner'] === undefined) return false;
+    if (!('firmwareVersion' in value) || value['firmwareVersion'] === undefined) return false;
+    if (!('gateway' in value) || value['gateway'] === undefined) return false;
+    if (!('connectedAt' in value) || value['connectedAt'] === undefined) return false;
     return true;
 }
 

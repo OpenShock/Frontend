@@ -55,11 +55,11 @@ export interface ResponseDeviceWithShockers {
 /**
  * Check if a given object implements the ResponseDeviceWithShockers interface.
  */
-export function instanceOfResponseDeviceWithShockers(value: object): boolean {
-    if (!('id' in value)) return false;
-    if (!('name' in value)) return false;
-    if (!('createdOn' in value)) return false;
-    if (!('shockers' in value)) return false;
+export function instanceOfResponseDeviceWithShockers(value: object): value is ResponseDeviceWithShockers {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('createdOn' in value) || value['createdOn'] === undefined) return false;
+    if (!('shockers' in value) || value['shockers'] === undefined) return false;
     return true;
 }
 

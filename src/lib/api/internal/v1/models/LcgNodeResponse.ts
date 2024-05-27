@@ -36,9 +36,9 @@ export interface LcgNodeResponse {
 /**
  * Check if a given object implements the LcgNodeResponse interface.
  */
-export function instanceOfLcgNodeResponse(value: object): boolean {
-    if (!('fqdn' in value)) return false;
-    if (!('country' in value)) return false;
+export function instanceOfLcgNodeResponse(value: object): value is LcgNodeResponse {
+    if (!('fqdn' in value) || value['fqdn'] === undefined) return false;
+    if (!('country' in value) || value['country'] === undefined) return false;
     return true;
 }
 

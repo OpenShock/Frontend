@@ -43,9 +43,9 @@ export interface ControlRequest {
 /**
  * Check if a given object implements the ControlRequest interface.
  */
-export function instanceOfControlRequest(value: object): boolean {
-    if (!('shocks' in value)) return false;
-    if (!('customName' in value)) return false;
+export function instanceOfControlRequest(value: object): value is ControlRequest {
+    if (!('shocks' in value) || value['shocks'] === undefined) return false;
+    if (!('customName' in value) || value['customName'] === undefined) return false;
     return true;
 }
 

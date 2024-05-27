@@ -48,10 +48,10 @@ export interface ShockerPermissions {
 /**
  * Check if a given object implements the ShockerPermissions interface.
  */
-export function instanceOfShockerPermissions(value: object): boolean {
-    if (!('vibrate' in value)) return false;
-    if (!('sound' in value)) return false;
-    if (!('shock' in value)) return false;
+export function instanceOfShockerPermissions(value: object): value is ShockerPermissions {
+    if (!('vibrate' in value) || value['vibrate'] === undefined) return false;
+    if (!('sound' in value) || value['sound'] === undefined) return false;
+    if (!('shock' in value) || value['shock'] === undefined) return false;
     return true;
 }
 

@@ -28,7 +28,14 @@ export enum RankType {
 
 
 export function instanceOfRankType(value: any): boolean {
-    return Object.values(RankType).includes(value);
+    for (const key in RankType) {
+        if (Object.prototype.hasOwnProperty.call(RankType, key)) {
+            if (RankType[key] === value) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 export function RankTypeFromJSON(json: any): RankType {

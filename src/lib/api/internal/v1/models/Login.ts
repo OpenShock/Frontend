@@ -36,9 +36,9 @@ export interface Login {
 /**
  * Check if a given object implements the Login interface.
  */
-export function instanceOfLogin(value: object): boolean {
-    if (!('password' in value)) return false;
-    if (!('email' in value)) return false;
+export function instanceOfLogin(value: object): value is Login {
+    if (!('password' in value) || value['password'] === undefined) return false;
+    if (!('email' in value) || value['email'] === undefined) return false;
     return true;
 }
 

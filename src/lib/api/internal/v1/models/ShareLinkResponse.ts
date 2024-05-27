@@ -48,10 +48,10 @@ export interface ShareLinkResponse {
 /**
  * Check if a given object implements the ShareLinkResponse interface.
  */
-export function instanceOfShareLinkResponse(value: object): boolean {
-    if (!('id' in value)) return false;
-    if (!('name' in value)) return false;
-    if (!('createdOn' in value)) return false;
+export function instanceOfShareLinkResponse(value: object): value is ShareLinkResponse {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('createdOn' in value) || value['createdOn'] === undefined) return false;
     return true;
 }
 

@@ -73,14 +73,14 @@ export interface ShockerWithDevice {
 /**
  * Check if a given object implements the ShockerWithDevice interface.
  */
-export function instanceOfShockerWithDevice(value: object): boolean {
-    if (!('id' in value)) return false;
-    if (!('rfId' in value)) return false;
-    if (!('model' in value)) return false;
-    if (!('name' in value)) return false;
-    if (!('isPaused' in value)) return false;
-    if (!('createdOn' in value)) return false;
-    if (!('device' in value)) return false;
+export function instanceOfShockerWithDevice(value: object): value is ShockerWithDevice {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('rfId' in value) || value['rfId'] === undefined) return false;
+    if (!('model' in value) || value['model'] === undefined) return false;
+    if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('isPaused' in value) || value['isPaused'] === undefined) return false;
+    if (!('createdOn' in value) || value['createdOn'] === undefined) return false;
+    if (!('device' in value) || value['device'] === undefined) return false;
     return true;
 }
 

@@ -49,9 +49,9 @@ export interface OwnerShockerResponse {
 /**
  * Check if a given object implements the OwnerShockerResponse interface.
  */
-export function instanceOfOwnerShockerResponse(value: object): boolean {
-    if (!('id' in value)) return false;
-    if (!('name' in value)) return false;
+export function instanceOfOwnerShockerResponse(value: object): value is OwnerShockerResponse {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('name' in value) || value['name'] === undefined) return false;
     return true;
 }
 

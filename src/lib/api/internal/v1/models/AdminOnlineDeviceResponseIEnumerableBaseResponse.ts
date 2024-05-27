@@ -43,7 +43,7 @@ export interface AdminOnlineDeviceResponseIEnumerableBaseResponse {
 /**
  * Check if a given object implements the AdminOnlineDeviceResponseIEnumerableBaseResponse interface.
  */
-export function instanceOfAdminOnlineDeviceResponseIEnumerableBaseResponse(value: object): boolean {
+export function instanceOfAdminOnlineDeviceResponseIEnumerableBaseResponse(value: object): value is AdminOnlineDeviceResponseIEnumerableBaseResponse {
     return true;
 }
 

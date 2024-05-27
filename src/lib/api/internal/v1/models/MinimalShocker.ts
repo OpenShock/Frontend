@@ -49,10 +49,10 @@ export interface MinimalShocker {
 /**
  * Check if a given object implements the MinimalShocker interface.
  */
-export function instanceOfMinimalShocker(value: object): boolean {
-    if (!('id' in value)) return false;
-    if (!('rfId' in value)) return false;
-    if (!('model' in value)) return false;
+export function instanceOfMinimalShocker(value: object): value is MinimalShocker {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('rfId' in value) || value['rfId'] === undefined) return false;
+    if (!('model' in value) || value['model'] === undefined) return false;
     return true;
 }
 

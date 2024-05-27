@@ -36,9 +36,9 @@ export interface ShockerLimits {
 /**
  * Check if a given object implements the ShockerLimits interface.
  */
-export function instanceOfShockerLimits(value: object): boolean {
-    if (!('intensity' in value)) return false;
-    if (!('duration' in value)) return false;
+export function instanceOfShockerLimits(value: object): value is ShockerLimits {
+    if (!('intensity' in value) || value['intensity'] === undefined) return false;
+    if (!('duration' in value) || value['duration'] === undefined) return false;
     return true;
 }
 

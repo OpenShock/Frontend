@@ -49,8 +49,8 @@ export interface CreateTokenRequest {
 /**
  * Check if a given object implements the CreateTokenRequest interface.
  */
-export function instanceOfCreateTokenRequest(value: object): boolean {
-    if (!('name' in value)) return false;
+export function instanceOfCreateTokenRequest(value: object): value is CreateTokenRequest {
+    if (!('name' in value) || value['name'] === undefined) return false;
     return true;
 }
 

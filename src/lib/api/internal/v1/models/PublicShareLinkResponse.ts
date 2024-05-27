@@ -13,18 +13,18 @@
  */
 
 import { mapValues } from '../runtime';
-import type { GenericIni } from './GenericIni';
-import {
-    GenericIniFromJSON,
-    GenericIniFromJSONTyped,
-    GenericIniToJSON,
-} from './GenericIni';
 import type { ShareLinkDevice } from './ShareLinkDevice';
 import {
     ShareLinkDeviceFromJSON,
     ShareLinkDeviceFromJSONTyped,
     ShareLinkDeviceToJSON,
 } from './ShareLinkDevice';
+import type { GenericIni } from './GenericIni';
+import {
+    GenericIniFromJSON,
+    GenericIniFromJSONTyped,
+    GenericIniToJSON,
+} from './GenericIni';
 
 /**
  * 
@@ -73,11 +73,11 @@ export interface PublicShareLinkResponse {
 /**
  * Check if a given object implements the PublicShareLinkResponse interface.
  */
-export function instanceOfPublicShareLinkResponse(value: object): boolean {
-    if (!('id' in value)) return false;
-    if (!('name' in value)) return false;
-    if (!('createdOn' in value)) return false;
-    if (!('author' in value)) return false;
+export function instanceOfPublicShareLinkResponse(value: object): value is PublicShareLinkResponse {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('createdOn' in value) || value['createdOn'] === undefined) return false;
+    if (!('author' in value) || value['author'] === undefined) return false;
     return true;
 }
 

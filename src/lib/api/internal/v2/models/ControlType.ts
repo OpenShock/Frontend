@@ -27,7 +27,14 @@ export enum ControlType {
 
 
 export function instanceOfControlType(value: any): boolean {
-    return Object.values(ControlType).includes(value);
+    for (const key in ControlType) {
+        if (Object.prototype.hasOwnProperty.call(ControlType, key)) {
+            if (ControlType[key] === value) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 export function ControlTypeFromJSON(json: any): ControlType {

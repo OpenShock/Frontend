@@ -48,11 +48,11 @@ export interface ResponseDeviceWithToken {
 /**
  * Check if a given object implements the ResponseDeviceWithToken interface.
  */
-export function instanceOfResponseDeviceWithToken(value: object): boolean {
-    if (!('id' in value)) return false;
-    if (!('name' in value)) return false;
-    if (!('createdOn' in value)) return false;
-    if (!('token' in value)) return false;
+export function instanceOfResponseDeviceWithToken(value: object): value is ResponseDeviceWithToken {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('createdOn' in value) || value['createdOn'] === undefined) return false;
+    if (!('token' in value) || value['token'] === undefined) return false;
     return true;
 }
 

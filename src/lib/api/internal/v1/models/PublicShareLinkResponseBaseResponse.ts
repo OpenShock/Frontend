@@ -43,7 +43,7 @@ export interface PublicShareLinkResponseBaseResponse {
 /**
  * Check if a given object implements the PublicShareLinkResponseBaseResponse interface.
  */
-export function instanceOfPublicShareLinkResponseBaseResponse(value: object): boolean {
+export function instanceOfPublicShareLinkResponseBaseResponse(value: object): value is PublicShareLinkResponseBaseResponse {
     return true;
 }
 

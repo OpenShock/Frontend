@@ -42,10 +42,10 @@ export interface LoginV2 {
 /**
  * Check if a given object implements the LoginV2 interface.
  */
-export function instanceOfLoginV2(value: object): boolean {
-    if (!('password' in value)) return false;
-    if (!('email' in value)) return false;
-    if (!('turnstileResponse' in value)) return false;
+export function instanceOfLoginV2(value: object): value is LoginV2 {
+    if (!('password' in value) || value['password'] === undefined) return false;
+    if (!('email' in value) || value['email'] === undefined) return false;
+    if (!('turnstileResponse' in value) || value['turnstileResponse'] === undefined) return false;
     return true;
 }
 

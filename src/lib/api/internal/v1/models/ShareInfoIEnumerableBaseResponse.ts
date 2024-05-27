@@ -43,7 +43,7 @@ export interface ShareInfoIEnumerableBaseResponse {
 /**
  * Check if a given object implements the ShareInfoIEnumerableBaseResponse interface.
  */
-export function instanceOfShareInfoIEnumerableBaseResponse(value: object): boolean {
+export function instanceOfShareInfoIEnumerableBaseResponse(value: object): value is ShareInfoIEnumerableBaseResponse {
     return true;
 }
 

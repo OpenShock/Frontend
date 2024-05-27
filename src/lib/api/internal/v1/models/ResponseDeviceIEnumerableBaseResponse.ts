@@ -43,7 +43,7 @@ export interface ResponseDeviceIEnumerableBaseResponse {
 /**
  * Check if a given object implements the ResponseDeviceIEnumerableBaseResponse interface.
  */
-export function instanceOfResponseDeviceIEnumerableBaseResponse(value: object): boolean {
+export function instanceOfResponseDeviceIEnumerableBaseResponse(value: object): value is ResponseDeviceIEnumerableBaseResponse {
     return true;
 }
 

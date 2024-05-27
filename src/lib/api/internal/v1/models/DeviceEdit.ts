@@ -30,8 +30,8 @@ export interface DeviceEdit {
 /**
  * Check if a given object implements the DeviceEdit interface.
  */
-export function instanceOfDeviceEdit(value: object): boolean {
-    if (!('name' in value)) return false;
+export function instanceOfDeviceEdit(value: object): value is DeviceEdit {
+    if (!('name' in value) || value['name'] === undefined) return false;
     return true;
 }
 

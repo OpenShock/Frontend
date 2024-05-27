@@ -48,11 +48,11 @@ export interface ControlLogSenderLight {
 /**
  * Check if a given object implements the ControlLogSenderLight interface.
  */
-export function instanceOfControlLogSenderLight(value: object): boolean {
-    if (!('id' in value)) return false;
-    if (!('name' in value)) return false;
-    if (!('image' in value)) return false;
-    if (!('customName' in value)) return false;
+export function instanceOfControlLogSenderLight(value: object): value is ControlLogSenderLight {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('image' in value) || value['image'] === undefined) return false;
+    if (!('customName' in value) || value['customName'] === undefined) return false;
     return true;
 }
 

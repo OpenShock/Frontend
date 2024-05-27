@@ -43,7 +43,7 @@ export interface OtaItemIReadOnlyCollectionBaseResponse {
 /**
  * Check if a given object implements the OtaItemIReadOnlyCollectionBaseResponse interface.
  */
-export function instanceOfOtaItemIReadOnlyCollectionBaseResponse(value: object): boolean {
+export function instanceOfOtaItemIReadOnlyCollectionBaseResponse(value: object): value is OtaItemIReadOnlyCollectionBaseResponse {
     return true;
 }
 

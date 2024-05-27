@@ -36,9 +36,9 @@ export interface ShareCodeInfo {
 /**
  * Check if a given object implements the ShareCodeInfo interface.
  */
-export function instanceOfShareCodeInfo(value: object): boolean {
-    if (!('id' in value)) return false;
-    if (!('createdOn' in value)) return false;
+export function instanceOfShareCodeInfo(value: object): value is ShareCodeInfo {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('createdOn' in value) || value['createdOn'] === undefined) return false;
     return true;
 }
 

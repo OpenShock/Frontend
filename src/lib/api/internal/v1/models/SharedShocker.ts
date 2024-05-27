@@ -13,18 +13,18 @@
  */
 
 import { mapValues } from '../runtime';
-import type { ShockerLimits } from './ShockerLimits';
-import {
-    ShockerLimitsFromJSON,
-    ShockerLimitsFromJSONTyped,
-    ShockerLimitsToJSON,
-} from './ShockerLimits';
 import type { ShockerPermissions } from './ShockerPermissions';
 import {
     ShockerPermissionsFromJSON,
     ShockerPermissionsFromJSONTyped,
     ShockerPermissionsToJSON,
 } from './ShockerPermissions';
+import type { ShockerLimits } from './ShockerLimits';
+import {
+    ShockerLimitsFromJSON,
+    ShockerLimitsFromJSONTyped,
+    ShockerLimitsToJSON,
+} from './ShockerLimits';
 
 /**
  * 
@@ -67,12 +67,12 @@ export interface SharedShocker {
 /**
  * Check if a given object implements the SharedShocker interface.
  */
-export function instanceOfSharedShocker(value: object): boolean {
-    if (!('id' in value)) return false;
-    if (!('name' in value)) return false;
-    if (!('isPaused' in value)) return false;
-    if (!('permissions' in value)) return false;
-    if (!('limits' in value)) return false;
+export function instanceOfSharedShocker(value: object): value is SharedShocker {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('isPaused' in value) || value['isPaused'] === undefined) return false;
+    if (!('permissions' in value) || value['permissions'] === undefined) return false;
+    if (!('limits' in value) || value['limits'] === undefined) return false;
     return true;
 }
 

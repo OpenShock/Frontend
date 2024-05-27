@@ -49,9 +49,9 @@ export interface SharedDevice {
 /**
  * Check if a given object implements the SharedDevice interface.
  */
-export function instanceOfSharedDevice(value: object): boolean {
-    if (!('id' in value)) return false;
-    if (!('name' in value)) return false;
+export function instanceOfSharedDevice(value: object): value is SharedDevice {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('name' in value) || value['name'] === undefined) return false;
     return true;
 }
 

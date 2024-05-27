@@ -30,8 +30,8 @@ export interface PasswordResetProcessData {
 /**
  * Check if a given object implements the PasswordResetProcessData interface.
  */
-export function instanceOfPasswordResetProcessData(value: object): boolean {
-    if (!('password' in value)) return false;
+export function instanceOfPasswordResetProcessData(value: object): value is PasswordResetProcessData {
+    if (!('password' in value) || value['password'] === undefined) return false;
     return true;
 }
 

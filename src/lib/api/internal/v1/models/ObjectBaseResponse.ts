@@ -36,7 +36,7 @@ export interface ObjectBaseResponse {
 /**
  * Check if a given object implements the ObjectBaseResponse interface.
  */
-export function instanceOfObjectBaseResponse(value: object): boolean {
+export function instanceOfObjectBaseResponse(value: object): value is ObjectBaseResponse {
     return true;
 }
 

@@ -28,7 +28,14 @@ export enum OtaUpdateStatus {
 
 
 export function instanceOfOtaUpdateStatus(value: any): boolean {
-    return Object.values(OtaUpdateStatus).includes(value);
+    for (const key in OtaUpdateStatus) {
+        if (Object.prototype.hasOwnProperty.call(OtaUpdateStatus, key)) {
+            if (OtaUpdateStatus[key] === value) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 export function OtaUpdateStatusFromJSON(json: any): OtaUpdateStatus {

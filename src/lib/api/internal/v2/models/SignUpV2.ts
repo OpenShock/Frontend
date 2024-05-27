@@ -48,11 +48,11 @@ export interface SignUpV2 {
 /**
  * Check if a given object implements the SignUpV2 interface.
  */
-export function instanceOfSignUpV2(value: object): boolean {
-    if (!('username' in value)) return false;
-    if (!('password' in value)) return false;
-    if (!('email' in value)) return false;
-    if (!('turnstileResponse' in value)) return false;
+export function instanceOfSignUpV2(value: object): value is SignUpV2 {
+    if (!('username' in value) || value['username'] === undefined) return false;
+    if (!('password' in value) || value['password'] === undefined) return false;
+    if (!('email' in value) || value['email'] === undefined) return false;
+    if (!('turnstileResponse' in value) || value['turnstileResponse'] === undefined) return false;
     return true;
 }
 

@@ -26,7 +26,14 @@ export enum ShockerModelType {
 
 
 export function instanceOfShockerModelType(value: any): boolean {
-    return Object.values(ShockerModelType).includes(value);
+    for (const key in ShockerModelType) {
+        if (Object.prototype.hasOwnProperty.call(ShockerModelType, key)) {
+            if (ShockerModelType[key] === value) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 export function ShockerModelTypeFromJSON(json: any): ShockerModelType {

@@ -42,10 +42,10 @@ export interface ResponseDevice {
 /**
  * Check if a given object implements the ResponseDevice interface.
  */
-export function instanceOfResponseDevice(value: object): boolean {
-    if (!('id' in value)) return false;
-    if (!('name' in value)) return false;
-    if (!('createdOn' in value)) return false;
+export function instanceOfResponseDevice(value: object): value is ResponseDevice {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('createdOn' in value) || value['createdOn'] === undefined) return false;
     return true;
 }
 

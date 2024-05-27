@@ -36,8 +36,8 @@ export interface ShareLinkCreate {
 /**
  * Check if a given object implements the ShareLinkCreate interface.
  */
-export function instanceOfShareLinkCreate(value: object): boolean {
-    if (!('name' in value)) return false;
+export function instanceOfShareLinkCreate(value: object): value is ShareLinkCreate {
+    if (!('name' in value) || value['name'] === undefined) return false;
     return true;
 }
 

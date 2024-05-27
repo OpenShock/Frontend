@@ -43,7 +43,7 @@ export interface ShockerResponseIEnumerableBaseResponse {
 /**
  * Check if a given object implements the ShockerResponseIEnumerableBaseResponse interface.
  */
-export function instanceOfShockerResponseIEnumerableBaseResponse(value: object): boolean {
+export function instanceOfShockerResponseIEnumerableBaseResponse(value: object): value is ShockerResponseIEnumerableBaseResponse {
     return true;
 }
 

@@ -67,13 +67,13 @@ export interface TokenResponse {
 /**
  * Check if a given object implements the TokenResponse interface.
  */
-export function instanceOfTokenResponse(value: object): boolean {
-    if (!('id' in value)) return false;
-    if (!('name' in value)) return false;
-    if (!('createdOn' in value)) return false;
-    if (!('createdByIp' in value)) return false;
-    if (!('validUntil' in value)) return false;
-    if (!('permissions' in value)) return false;
+export function instanceOfTokenResponse(value: object): value is TokenResponse {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('createdOn' in value) || value['createdOn'] === undefined) return false;
+    if (!('createdByIp' in value) || value['createdByIp'] === undefined) return false;
+    if (!('validUntil' in value) || value['validUntil'] === undefined) return false;
+    if (!('permissions' in value) || value['permissions'] === undefined) return false;
     return true;
 }
 

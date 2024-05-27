@@ -13,18 +13,18 @@
  */
 
 import { mapValues } from '../runtime';
-import type { ShockerLimits } from './ShockerLimits';
-import {
-    ShockerLimitsFromJSON,
-    ShockerLimitsFromJSONTyped,
-    ShockerLimitsToJSON,
-} from './ShockerLimits';
 import type { ShockerPermissions } from './ShockerPermissions';
 import {
     ShockerPermissionsFromJSON,
     ShockerPermissionsFromJSONTyped,
     ShockerPermissionsToJSON,
 } from './ShockerPermissions';
+import type { ShockerLimits } from './ShockerLimits';
+import {
+    ShockerLimitsFromJSON,
+    ShockerLimitsFromJSONTyped,
+    ShockerLimitsToJSON,
+} from './ShockerLimits';
 
 /**
  * 
@@ -49,9 +49,9 @@ export interface CreateShareCode {
 /**
  * Check if a given object implements the CreateShareCode interface.
  */
-export function instanceOfCreateShareCode(value: object): boolean {
-    if (!('permissions' in value)) return false;
-    if (!('limits' in value)) return false;
+export function instanceOfCreateShareCode(value: object): value is CreateShareCode {
+    if (!('permissions' in value) || value['permissions'] === undefined) return false;
+    if (!('limits' in value) || value['limits'] === undefined) return false;
     return true;
 }
 

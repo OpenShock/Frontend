@@ -43,8 +43,8 @@ export interface EditTokenRequest {
 /**
  * Check if a given object implements the EditTokenRequest interface.
  */
-export function instanceOfEditTokenRequest(value: object): boolean {
-    if (!('name' in value)) return false;
+export function instanceOfEditTokenRequest(value: object): value is EditTokenRequest {
+    if (!('name' in value) || value['name'] === undefined) return false;
     return true;
 }
 

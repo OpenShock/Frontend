@@ -61,12 +61,12 @@ export interface OtaItem {
 /**
  * Check if a given object implements the OtaItem interface.
  */
-export function instanceOfOtaItem(value: object): boolean {
-    if (!('id' in value)) return false;
-    if (!('startedAt' in value)) return false;
-    if (!('status' in value)) return false;
-    if (!('version' in value)) return false;
-    if (!('message' in value)) return false;
+export function instanceOfOtaItem(value: object): value is OtaItem {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('startedAt' in value) || value['startedAt'] === undefined) return false;
+    if (!('status' in value) || value['status'] === undefined) return false;
+    if (!('version' in value) || value['version'] === undefined) return false;
+    if (!('message' in value) || value['message'] === undefined) return false;
     return true;
 }
 

@@ -49,10 +49,10 @@ export interface DeviceSelfResponse {
 /**
  * Check if a given object implements the DeviceSelfResponse interface.
  */
-export function instanceOfDeviceSelfResponse(value: object): boolean {
-    if (!('id' in value)) return false;
-    if (!('name' in value)) return false;
-    if (!('shockers' in value)) return false;
+export function instanceOfDeviceSelfResponse(value: object): value is DeviceSelfResponse {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('shockers' in value) || value['shockers'] === undefined) return false;
     return true;
 }
 
