@@ -61,7 +61,7 @@
         </div>
       {/if}
     {/if}
-    {#if connectFailed || true}
+    {#if connectFailed}
       <div class="flex flex-col items-start gap-2">
         <span class="text-2xl text-center bold text-red-500"> Device connection failed </span>
         <span class="text-center">
