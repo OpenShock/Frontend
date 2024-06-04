@@ -34,20 +34,16 @@
       </AppRailAnchor>
     </svelte:fragment>
     <svelte:fragment slot="trail">
-      <AppRailAnchor href="/tokens" selected={$page.url.pathname === '/tokens'} title="Tokens">
-        <i slot="lead" class="fa fa-key text-2xl" />
-        <span>Tokens</span>
-      </AppRailAnchor>
-      <AppRailAnchor href="/account" selected={$page.url.pathname === '/account'} title="Account">
-        <i slot="lead" class="fa fa-user text-2xl" />
-        <span>Account</span>
-      </AppRailAnchor>
       {#if $UserSelfStore.rank === RankType.admin}
         <AppRailAnchor href="/admin" selected={$page.url.pathname === '/admin'} title="Admin">
           <i slot="lead" class="fa fa-user-shield text-2xl" />
           <span>Admin</span>
         </AppRailAnchor>
       {/if}
+      <AppRailAnchor href="/profile" selected={$page.url.pathname === '/profile'} title="Profile">
+        <i slot="lead" class="fa fa-user text-2xl" />
+        <span>Profile</span>
+      </AppRailAnchor>
     </svelte:fragment>
   </AppRail>
 {/if}

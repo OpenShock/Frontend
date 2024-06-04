@@ -34,44 +34,40 @@
 </script>
 
 <div class="container h-full mx-auto p-12 flex flex-col justify-start items-start gap-4">
-  {#if $UserSelfStore}
-    <form class="flex flex-col space-y-2" on:submit|preventDefault={handleSubmission}>
-      <h2 class="h2">Account Settings</h2>
+  <h1 class="h1">Account Settings</h1>
+  <form
+    class="w-full flex flex-col items-start gap-y-2 p-4 bg-surface-100-800-token rounded-lg border border-gray-500"
+    on:submit|preventDefault={handleSubmission}
+  >
+    <TextInput
+      label="Username"
+      placeholder={$UserSelfStore.name}
+      autocomplete="username"
+      bind:value={username}
+      validationResult={usernameValres}
+    />
+    <TextInput
+      label="Email"
+      placeholder={$UserSelfStore.email}
+      autocomplete="email"
+      bind:value={email}
+      validationResult={emailValres}
+    />
+    <PasswordInput
+      label="Password"
+      placeholder="Password"
+      autocomplete="current-password"
+      bind:value={password}
+      validationResult={passwordValres}
+    />
+    <PasswordInput
+      label="Confirm Password"
+      placeholder="Confirm Password"
+      autocomplete="current-password"
+      bind:value={passwordConfirm}
+      validationResult={passwordConfirmValres}
+    />
 
-      <TextInput
-        label="Username"
-        placeholder={$UserSelfStore.name}
-        autocomplete="username"
-        bind:value={username}
-        validationResult={usernameValres}
-      />
-      <TextInput
-        label="Email"
-        placeholder={$UserSelfStore.email}
-        autocomplete="email"
-        bind:value={email}
-        validationResult={emailValres}
-      />
-      <PasswordInput
-        label="Password"
-        placeholder="Password"
-        autocomplete="current-password"
-        bind:value={password}
-        validationResult={passwordValres}
-      />
-      <PasswordInput
-        label="Confirm Password"
-        placeholder="Confirm Password"
-        autocomplete="current-password"
-        bind:value={passwordConfirm}
-        validationResult={passwordConfirmValres}
-      />
-
-      <button class="btn variant-filled-primary" type="submit" disabled={!canSubmit}>
-        Update
-      </button>
-    </form>
-  {:else}
-    <p>Loading...</p>
-  {/if}
+    <button class="btn variant-filled-primary" type="submit" disabled={!canSubmit}> Update </button>
+  </form>
 </div>
