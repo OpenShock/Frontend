@@ -13,7 +13,7 @@
  */
 
 
-export const BASE_PATH = "https://api.shocklink.net".replace(/\/+$/, "");
+export const BASE_PATH = "https://api.openshock.app".replace(/\/+$/, "");
 
 export interface ConfigurationParameters {
     basePath?: string; // override base path
