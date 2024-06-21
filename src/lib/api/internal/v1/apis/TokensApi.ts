@@ -112,6 +112,20 @@ export interface TokensApiInterface {
 
     /**
      * 
+     * @summary Gets information about the current token used to access this endpoint
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TokensApiInterface
+     */
+    tokensGetSelfTokenRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TokenResponseBaseResponse>>;
+
+    /**
+     * Gets information about the current token used to access this endpoint
+     */
+    tokensGetSelfToken(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TokenResponseBaseResponse>;
+
+    /**
+     * 
      * @summary Get a token by id
      * @param {string} tokenId 
      * @param {*} [options] Override http request option.
@@ -253,6 +267,36 @@ export class TokensApi extends runtime.BaseAPI implements TokensApiInterface {
      */
     async tokensEditToken(tokenId: string, editTokenRequest?: EditTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse> {
         const response = await this.tokensEditTokenRaw({ tokenId: tokenId, editTokenRequest: editTokenRequest }, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Gets information about the current token used to access this endpoint
+     */
+    async tokensGetSelfTokenRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TokenResponseBaseResponse>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
+        }
+
+        const response = await this.request({
+            path: `/1/tokens/self`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TokenResponseBaseResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Gets information about the current token used to access this endpoint
+     */
+    async tokensGetSelfToken(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TokenResponseBaseResponse> {
+        const response = await this.tokensGetSelfTokenRaw(initOverrides);
         return await response.value();
     }
 

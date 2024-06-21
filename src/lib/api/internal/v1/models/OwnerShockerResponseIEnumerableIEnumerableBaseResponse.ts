@@ -43,7 +43,7 @@ export interface OwnerShockerResponseIEnumerableIEnumerableBaseResponse {
 /**
  * Check if a given object implements the OwnerShockerResponseIEnumerableIEnumerableBaseResponse interface.
  */
-export function instanceOfOwnerShockerResponseIEnumerableIEnumerableBaseResponse(value: object): boolean {
+export function instanceOfOwnerShockerResponseIEnumerableIEnumerableBaseResponse(value: object): value is OwnerShockerResponseIEnumerableIEnumerableBaseResponse {
     return true;
 }
 

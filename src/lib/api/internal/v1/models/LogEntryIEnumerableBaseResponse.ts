@@ -43,7 +43,7 @@ export interface LogEntryIEnumerableBaseResponse {
 /**
  * Check if a given object implements the LogEntryIEnumerableBaseResponse interface.
  */
-export function instanceOfLogEntryIEnumerableBaseResponse(value: object): boolean {
+export function instanceOfLogEntryIEnumerableBaseResponse(value: object): value is LogEntryIEnumerableBaseResponse {
     return true;
 }
 

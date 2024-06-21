@@ -1,15 +1,30 @@
+import { PUBLIC_BACKEND_API_DOMAIN } from '$env/static/public';
 import { env } from '$env/dynamic/public';
 import { AccountApi, AdminApi, Configuration as ConfigurationV1, DeviceApi, DevicesApi, PublicApi, ShareLinksApi, SharesApi, ShockerApi as ShockerV1Api, TokensApi, UsersApi, VersionApi } from './internal/v1';
 import { Configuration as ConfigurationV2, ShockerApi as ShockerV2Api } from './internal/v2';
 
-export const DefaultApiV1Configuration = new ConfigurationV1({
-  basePath: env.PUBLIC_BACKEND_API_BASE_URL,
-  credentials: 'include'
-});
-export const DefaultApiV2Configuration = new ConfigurationV2({
-  basePath: env.PUBLIC_BACKEND_API_BASE_URL,
-  credentials: 'include'
-});
+type Config = {
+  basePath?: string;
+  credentials?: RequestCredentials;
+};
+
+function GetConfig(): Config {
+  return {
+    basePath: (env.PUBLIC_BACKEND_API_DOMAIN || PUBLIC_BACKEND_API_DOMAIN || undefined) as string | undefined,
+    credentials: 'include'
+  };
+}
+
+export function GetV1Config() {
+  return new ConfigurationV1(GetConfig());
+}
+
+export function GetV2Config() {
+  return new ConfigurationV2(GetConfig());
+}
+
+const DefaultApiV1Configuration = GetV1Config();
+const DefaultApiV2Configuration = GetV2Config();
 
 export const accountApi = new AccountApi(DefaultApiV1Configuration);
 export const adminApi = new AdminApi(DefaultApiV1Configuration);

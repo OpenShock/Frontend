@@ -24,19 +24,21 @@ export interface Login {
      * @type {string}
      * @memberof Login
      */
-    password?: string;
+    password: string | null;
     /**
      * 
      * @type {string}
      * @memberof Login
      */
-    email?: string;
+    email: string | null;
 }
 
 /**
  * Check if a given object implements the Login interface.
  */
-export function instanceOfLogin(value: object): boolean {
+export function instanceOfLogin(value: object): value is Login {
+    if (!('password' in value) || value['password'] === undefined) return false;
+    if (!('email' in value) || value['email'] === undefined) return false;
     return true;
 }
 
@@ -50,8 +52,8 @@ export function LoginFromJSONTyped(json: any, ignoreDiscriminator: boolean): Log
     }
     return {
         
-        'password': json['password'] == null ? undefined : json['password'],
-        'email': json['email'] == null ? undefined : json['email'],
+        'password': json['password'],
+        'email': json['email'],
     };
 }
 

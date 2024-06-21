@@ -13,18 +13,18 @@
  */
 
 import { mapValues } from '../runtime';
-import type { ShockerLimits } from './ShockerLimits';
-import {
-    ShockerLimitsFromJSON,
-    ShockerLimitsFromJSONTyped,
-    ShockerLimitsToJSON,
-} from './ShockerLimits';
 import type { ShockerPermissions } from './ShockerPermissions';
 import {
     ShockerPermissionsFromJSON,
     ShockerPermissionsFromJSONTyped,
     ShockerPermissionsToJSON,
 } from './ShockerPermissions';
+import type { ShockerLimits } from './ShockerLimits';
+import {
+    ShockerLimitsFromJSON,
+    ShockerLimitsFromJSONTyped,
+    ShockerLimitsToJSON,
+} from './ShockerLimits';
 
 /**
  * 
@@ -37,25 +37,25 @@ export interface ShareLinkShocker {
      * @type {string}
      * @memberof ShareLinkShocker
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {string}
      * @memberof ShareLinkShocker
      */
-    name?: string;
+    name: string | null;
     /**
      * 
      * @type {ShockerPermissions}
      * @memberof ShareLinkShocker
      */
-    permissions?: ShockerPermissions;
+    permissions: ShockerPermissions;
     /**
      * 
      * @type {ShockerLimits}
      * @memberof ShareLinkShocker
      */
-    limits?: ShockerLimits;
+    limits: ShockerLimits;
     /**
      * An integer representing the reason(s) for the shocker being paused, expressed as a bitfield where reasons are OR'd together.
      * 
@@ -68,13 +68,18 @@ export interface ShareLinkShocker {
      * @type {number}
      * @memberof ShareLinkShocker
      */
-    paused?: number;
+    paused: number;
 }
 
 /**
  * Check if a given object implements the ShareLinkShocker interface.
  */
-export function instanceOfShareLinkShocker(value: object): boolean {
+export function instanceOfShareLinkShocker(value: object): value is ShareLinkShocker {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('permissions' in value) || value['permissions'] === undefined) return false;
+    if (!('limits' in value) || value['limits'] === undefined) return false;
+    if (!('paused' in value) || value['paused'] === undefined) return false;
     return true;
 }
 
@@ -88,11 +93,11 @@ export function ShareLinkShockerFromJSONTyped(json: any, ignoreDiscriminator: bo
     }
     return {
         
-        'id': json['id'] == null ? undefined : json['id'],
-        'name': json['name'] == null ? undefined : json['name'],
-        'permissions': json['permissions'] == null ? undefined : ShockerPermissionsFromJSON(json['permissions']),
-        'limits': json['limits'] == null ? undefined : ShockerLimitsFromJSON(json['limits']),
-        'paused': json['paused'] == null ? undefined : json['paused'],
+        'id': json['id'],
+        'name': json['name'],
+        'permissions': ShockerPermissionsFromJSON(json['permissions']),
+        'limits': ShockerLimitsFromJSON(json['limits']),
+        'paused': json['paused'],
     };
 }
 

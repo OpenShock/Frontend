@@ -18,13 +18,23 @@
  * @enum {string}
  */
 export enum PermissionType {
-    shockersUse = 'Shockers_Use',
+    shockersUse = 'shockers.use',
+    shockersEdit = 'shockers.edit',
+    shockersPause = 'shockers.pause',
+    devicesEdit = 'devices.edit',
     unknownDefaultOpenApi = '11184809'
 }
 
 
 export function instanceOfPermissionType(value: any): boolean {
-    return Object.values(PermissionType).includes(value);
+    for (const key in PermissionType) {
+        if (Object.prototype.hasOwnProperty.call(PermissionType, key)) {
+            if ((PermissionType as Record<string, PermissionType>)[key] === value) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 export function PermissionTypeFromJSON(json: any): PermissionType {

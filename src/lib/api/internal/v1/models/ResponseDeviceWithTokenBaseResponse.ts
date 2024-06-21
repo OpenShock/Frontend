@@ -43,7 +43,7 @@ export interface ResponseDeviceWithTokenBaseResponse {
 /**
  * Check if a given object implements the ResponseDeviceWithTokenBaseResponse interface.
  */
-export function instanceOfResponseDeviceWithTokenBaseResponse(value: object): boolean {
+export function instanceOfResponseDeviceWithTokenBaseResponse(value: object): value is ResponseDeviceWithTokenBaseResponse {
     return true;
 }
 

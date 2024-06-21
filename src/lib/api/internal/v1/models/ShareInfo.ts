@@ -13,6 +13,12 @@
  */
 
 import { mapValues } from '../runtime';
+import type { ShockerPermissions } from './ShockerPermissions';
+import {
+    ShockerPermissionsFromJSON,
+    ShockerPermissionsFromJSONTyped,
+    ShockerPermissionsToJSON,
+} from './ShockerPermissions';
 import type { GenericIni } from './GenericIni';
 import {
     GenericIniFromJSON,
@@ -25,12 +31,6 @@ import {
     ShockerLimitsFromJSONTyped,
     ShockerLimitsToJSON,
 } from './ShockerLimits';
-import type { ShockerPermissions } from './ShockerPermissions';
-import {
-    ShockerPermissionsFromJSON,
-    ShockerPermissionsFromJSONTyped,
-    ShockerPermissionsToJSON,
-} from './ShockerPermissions';
 
 /**
  * 
@@ -43,37 +43,42 @@ export interface ShareInfo {
      * @type {GenericIni}
      * @memberof ShareInfo
      */
-    sharedWith?: GenericIni;
+    sharedWith: GenericIni;
     /**
      * 
      * @type {Date}
      * @memberof ShareInfo
      */
-    createdOn?: Date;
+    createdOn: Date;
     /**
      * 
      * @type {ShockerPermissions}
      * @memberof ShareInfo
      */
-    permissions?: ShockerPermissions;
+    permissions: ShockerPermissions;
     /**
      * 
      * @type {ShockerLimits}
      * @memberof ShareInfo
      */
-    limits?: ShockerLimits;
+    limits: ShockerLimits;
     /**
      * 
      * @type {boolean}
      * @memberof ShareInfo
      */
-    paused?: boolean;
+    paused: boolean;
 }
 
 /**
  * Check if a given object implements the ShareInfo interface.
  */
-export function instanceOfShareInfo(value: object): boolean {
+export function instanceOfShareInfo(value: object): value is ShareInfo {
+    if (!('sharedWith' in value) || value['sharedWith'] === undefined) return false;
+    if (!('createdOn' in value) || value['createdOn'] === undefined) return false;
+    if (!('permissions' in value) || value['permissions'] === undefined) return false;
+    if (!('limits' in value) || value['limits'] === undefined) return false;
+    if (!('paused' in value) || value['paused'] === undefined) return false;
     return true;
 }
 
@@ -87,11 +92,11 @@ export function ShareInfoFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     }
     return {
         
-        'sharedWith': json['sharedWith'] == null ? undefined : GenericIniFromJSON(json['sharedWith']),
-        'createdOn': json['createdOn'] == null ? undefined : (new Date(json['createdOn'])),
-        'permissions': json['permissions'] == null ? undefined : ShockerPermissionsFromJSON(json['permissions']),
-        'limits': json['limits'] == null ? undefined : ShockerLimitsFromJSON(json['limits']),
-        'paused': json['paused'] == null ? undefined : json['paused'],
+        'sharedWith': GenericIniFromJSON(json['sharedWith']),
+        'createdOn': (new Date(json['createdOn'])),
+        'permissions': ShockerPermissionsFromJSON(json['permissions']),
+        'limits': ShockerLimitsFromJSON(json['limits']),
+        'paused': json['paused'],
     };
 }
 
@@ -102,7 +107,7 @@ export function ShareInfoToJSON(value?: ShareInfo | null): any {
     return {
         
         'sharedWith': GenericIniToJSON(value['sharedWith']),
-        'createdOn': value['createdOn'] == null ? undefined : ((value['createdOn']).toISOString()),
+        'createdOn': ((value['createdOn']).toISOString()),
         'permissions': ShockerPermissionsToJSON(value['permissions']),
         'limits': ShockerLimitsToJSON(value['limits']),
         'paused': value['paused'],

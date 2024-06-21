@@ -36,7 +36,7 @@ export interface StringBaseResponse {
 /**
  * Check if a given object implements the StringBaseResponse interface.
  */
-export function instanceOfStringBaseResponse(value: object): boolean {
+export function instanceOfStringBaseResponse(value: object): value is StringBaseResponse {
     return true;
 }
 

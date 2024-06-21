@@ -14,9 +14,6 @@ function getPageTitleAndDescription(page: Page): { title: string; description: s
     case "openshock":
       description = `Welcome to OpenShock, ${details}`;
       break;
-    case "shocklink":
-      description = `Welcome to ShockLink, the official instance of OpenShock - ${details}`;
-      break;
     default:
       description = `Welcome to ${title}, an independent instance of OpenShock - ${details}`;
       break;

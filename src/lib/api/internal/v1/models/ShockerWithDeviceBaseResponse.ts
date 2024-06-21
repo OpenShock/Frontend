@@ -43,7 +43,7 @@ export interface ShockerWithDeviceBaseResponse {
 /**
  * Check if a given object implements the ShockerWithDeviceBaseResponse interface.
  */
-export function instanceOfShockerWithDeviceBaseResponse(value: object): boolean {
+export function instanceOfShockerWithDeviceBaseResponse(value: object): value is ShockerWithDeviceBaseResponse {
     return true;
 }
 

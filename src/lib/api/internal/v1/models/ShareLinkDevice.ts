@@ -31,13 +31,13 @@ export interface ShareLinkDevice {
      * @type {string}
      * @memberof ShareLinkDevice
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {string}
      * @memberof ShareLinkDevice
      */
-    name?: string;
+    name: string | null;
     /**
      * 
      * @type {Array<ShareLinkShocker>}
@@ -49,7 +49,9 @@ export interface ShareLinkDevice {
 /**
  * Check if a given object implements the ShareLinkDevice interface.
  */
-export function instanceOfShareLinkDevice(value: object): boolean {
+export function instanceOfShareLinkDevice(value: object): value is ShareLinkDevice {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('name' in value) || value['name'] === undefined) return false;
     return true;
 }
 
@@ -63,8 +65,8 @@ export function ShareLinkDeviceFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'id': json['id'] == null ? undefined : json['id'],
-        'name': json['name'] == null ? undefined : json['name'],
+        'id': json['id'],
+        'name': json['name'],
         'shockers': json['shockers'] == null ? undefined : ((json['shockers'] as Array<any>).map(ShareLinkShockerFromJSON)),
     };
 }

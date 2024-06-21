@@ -24,13 +24,14 @@ export interface PauseRequest {
      * @type {boolean}
      * @memberof PauseRequest
      */
-    pause?: boolean;
+    pause: boolean;
 }
 
 /**
  * Check if a given object implements the PauseRequest interface.
  */
-export function instanceOfPauseRequest(value: object): boolean {
+export function instanceOfPauseRequest(value: object): value is PauseRequest {
+    if (!('pause' in value) || value['pause'] === undefined) return false;
     return true;
 }
 
@@ -44,7 +45,7 @@ export function PauseRequestFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
-        'pause': json['pause'] == null ? undefined : json['pause'],
+        'pause': json['pause'],
     };
 }
 
