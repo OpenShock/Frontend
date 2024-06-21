@@ -5,7 +5,7 @@
     "version": "7.6.0",
     "generators": {
       "v1": {
-        "inputSpec": "https://api.shocklink.net/swagger/1/swagger.json",
+        "inputSpec": "https://api.openshock.app/swagger/1/swagger.json",
         "generatorName": "typescript-fetch",
         "output": "src/lib/api/internal/v1",
         "additionalProperties": {
@@ -19,7 +19,7 @@
         }
       },
       "v2": {
-        "inputSpec": "https://api.shocklink.net/swagger/2/swagger.json",
+        "inputSpec": "https://api.openshock.app/swagger/2/swagger.json",
         "generatorName": "typescript-fetch",
         "output": "src/lib/api/internal/v2",
         "additionalProperties": {
