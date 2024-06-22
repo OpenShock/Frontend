@@ -5,7 +5,6 @@ WORKDIR /app
 COPY package.json .
 COPY package-lock.json .
 COPY build/ build/
-COPY patches/ patches/
 
 RUN npm i --only=production
 
