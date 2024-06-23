@@ -8,9 +8,23 @@ type Config = {
   credentials?: RequestCredentials;
 };
 
+function GetBasePath() {
+  let domain = (env.PUBLIC_BACKEND_API_DOMAIN || PUBLIC_BACKEND_API_DOMAIN || undefined) as string | undefined;
+
+  if (!domain) {
+    return undefined;
+  }
+
+  if (!/^[a-z0-9.-]+$/i.test(domain)) {
+    return undefined;
+  }
+
+  return 'https://' + domain; // TODO: Add configurable protocol
+}
+
 function GetConfig(): Config {
   return {
-    basePath: (env.PUBLIC_BACKEND_API_DOMAIN || PUBLIC_BACKEND_API_DOMAIN || undefined) as string | undefined,
+    basePath: GetBasePath(),
     credentials: 'include'
   };
 }
