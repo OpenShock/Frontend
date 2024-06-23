@@ -1,4 +1,4 @@
-import { validateEmail } from './emailValidator';
+import { validate as validateEmail } from 'email-validator';
 import type { ValidationResult } from '$lib/types/ValidationResult';
 
 /* eslint-disable no-misleading-character-class */
@@ -56,7 +56,7 @@ export function validateUsername(value: string): ValidationResult | null {
     };
   }
 
-  if (validateEmail(value)?.valid === true) {
+  if (validateEmail(value)) {
     return {
       valid: false,
       message: 'Username cannot be an email',
