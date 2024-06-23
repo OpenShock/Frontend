@@ -14,13 +14,13 @@ const OwnDevicesStore = writable<OwnDevice[] | null>(null);
 const OwnDeviceStatesStore = writable<OwnDeviceState[] | null>(null);
 
 if (browser) {
-  const response = await devicesApi.devicesListDevices();
+  devicesApi.devicesListDevices().then((response) => {
+    if (!response.data) {
+      throw new Error(`Failed to fetch devices: ${response.message}`);
+    }
 
-  if (!response.data) {
-    throw new Error(`Failed to fetch devices: ${response.message}`);
-  }
-
-  OwnDevicesStore.set(response.data);
+    OwnDevicesStore.set(response.data);
+  });
 }
 
 export { OwnDevicesStore, OwnDeviceStatesStore };
