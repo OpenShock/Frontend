@@ -1,11 +1,13 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import { RankType } from '$lib/api/internal/v1';
+  import { signalr_state } from '$lib/signalr/connection';
   import { UserSelfStore } from '$lib/stores/UserStore';
+  import { HubConnectionState } from '@microsoft/signalr';
   import { AppRail, AppRailAnchor } from '@skeletonlabs/skeleton';
 </script>
 
-{#if $UserSelfStore}
+{#if $UserSelfStore && $signalr_state === HubConnectionState.Connected}
   <AppRail>
     <svelte:fragment slot="lead">
       <AppRailAnchor href="/home" selected={$page.url.pathname === '/home'} title="Home">
