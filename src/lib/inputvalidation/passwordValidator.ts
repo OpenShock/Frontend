@@ -32,7 +32,7 @@ export function validatePassword(value: string): ValidationResult | null {
     message: ''
   };
 
-  if (value.length < 10) {
+  if (value.length < 12) {
     result.message = 'Password is too short';
     return result;
   }
