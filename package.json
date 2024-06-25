@@ -13,7 +13,8 @@
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
 		"test:integration": "playwright test",
-		"test:unit": "vitest"
+		"test:unit": "vitest",
+		"postinstall": "npx patch-package"
 	},
 	"devDependencies": {
 		"@openapitools/openapi-generator-cli": "^2.13.4",
@@ -34,6 +35,7 @@
 		"eslint": "^9.5.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.40.0",
+		"patch-package": "^8.0.0",
 		"postcss": "8.4.38",
 		"prettier": "^3.3.2",
 		"prettier-plugin-svelte": "^3.2.5",
