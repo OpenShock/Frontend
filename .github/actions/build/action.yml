@@ -44,5 +44,6 @@ runs:
           package.json
           package-lock.json
           build/
+          patches/
         retention-days: 1
         if-no-files-found: error
