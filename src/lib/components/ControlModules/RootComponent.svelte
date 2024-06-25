@@ -4,6 +4,8 @@
   import SimpleControlModule from '$lib/components/ControlModules/SimpleControlModule.svelte';
   import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
   import ClassicControlModule from './ClassicControlModule.svelte';
+  import type { ResponseDeviceWithShockers, ShockerResponse } from '$lib/api/internal/v1';
+  import { on } from 'events';
 
   enum ModuleType {
     ClassicControlModule,
@@ -11,20 +13,43 @@
     SimpleControlModule,
   }
 
-  export let name: string;
+  export let device: ResponseDeviceWithShockers;
 
   let moduleType: ModuleType = ModuleType.ClassicControlModule;
+
+  const Width = 3;
+
+  $: matrix =
+    device.shockers?.reduce(
+      (acc, shocker, i) => {
+        const row = Math.floor(i / Width);
+        if (acc[row] == null) {
+          acc[row] = [];
+        }
+
+        if (shocker.id !== null && shocker.name !== null) {
+          acc[row].push(shocker as { id: string; name: string });
+        }
+
+        return acc;
+      },
+      [] as { id: string; name: string }[][]
+    ) ?? [];
 
   const modeClick: PopupSettings = {
     event: 'click',
     target: 'modeClick',
     placement: 'bottom',
   };
+
+  function handleCommand(cmd: CustomEvent<any>) {
+    console.log(cmd);
+  }
 </script>
 
 <div class="card flex flex-col items-stretch">
   <div class="mx-2 my-1 flex items-center justify-between">
-    {name}
+    {device.name}
     <div>
       <!-- Mode button -->
       <button class="btn p-1" use:popup={modeClick}>
@@ -66,15 +91,15 @@
   <div class="p-2">
     <!-- Grid of controls -->
     <div class="flex flex-col gap-2">
-      {#each Array(4) as _, i}
+      {#each matrix as m1}
         <div class="flex flex-row gap-2">
-          {#each Array(3) as _, j}
+          {#each m1 as shocker}
             {#if moduleType === ModuleType.ClassicControlModule}
-              <ClassicControlModule name={`Control ${i * 3 + j + 1}`} />
+              <ClassicControlModule {shocker} on:command={handleCommand} />
             {:else if moduleType === ModuleType.RichControlModule}
-              <RichControlModule name={`Control ${i * 3 + j + 1}`} />
+              <RichControlModule {shocker} on:command={handleCommand} />
             {:else if moduleType === ModuleType.SimpleControlModule}
-              <SimpleControlModule name={`Control ${i * 3 + j + 1}`} />
+              <SimpleControlModule {shocker} on:command={handleCommand} />
             {/if}
           {/each}
         </div>
