@@ -60,7 +60,11 @@
     progressPercent = undefined;
     await manager.flash(firmware, eraseFlash, progressCallback);
 
-    progressName = 'Rebooting device...';
+    progressName = 'Rebooting device... (Reconnect to power manually if stuck)';
+    progressPercent = undefined;
+    await manager.hardReset();
+
+    progressName = 'Rebooted device!'
     progressPercent = undefined;
   }
   async function FlashDevice() {
