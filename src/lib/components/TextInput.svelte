@@ -17,7 +17,7 @@
     <slot name="button" />
   </div>
   {#if !validationResult || validationResult.valid}
-    <div class="h-3" />
+    <div class="h-3"></div>
   {:else}
     <p class="text-xs text-red-500 !mt-0">{validationResult.message}</p>
   {/if}
