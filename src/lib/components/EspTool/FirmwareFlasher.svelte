@@ -64,7 +64,7 @@
     progressPercent = undefined;
     await manager.hardReset();
 
-    progressName = 'Rebooted device!'
+    progressName = 'Rebooted device!';
     progressPercent = undefined;
   }
   async function FlashDevice() {
