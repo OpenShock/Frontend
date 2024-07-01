@@ -75,6 +75,19 @@ export default class FlashManager {
     }
   }
 
+  async hardReset() {
+    if (!this.loader) return false;
+
+    try {
+      await this.loader.hardReset();
+      return true;
+    } catch (e) {
+      console.error(e);
+      this.terminal.writeLine(`Failed to hard reset: ${e}`);
+      return false;
+    }
+  }
+
   async flash(data: ArrayBuffer, eraseAll: boolean, onProgress: (progress: number) => void) {
     if (!this.loader) return false;
 
