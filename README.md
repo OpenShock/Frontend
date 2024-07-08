@@ -38,6 +38,10 @@ npm i
 npm run dev
 ```
 
+## Support
+
+You can support the openshock dev team here: [Sponsor OpenShock](https://github.com/sponsors/OpenShock)
+
 ## Available Commands
 
 - `npm i` - Install dependencies
