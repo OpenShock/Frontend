@@ -63,8 +63,5 @@ export function validateUsername(value: string): ValidationResult | null {
     };
   }
 
-  return {
-    valid: true,
-    message: '',
-  };
+  return { valid: true };
 }

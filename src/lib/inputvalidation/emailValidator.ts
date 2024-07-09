@@ -20,8 +20,5 @@ export function validateEmail(value: string): ValidationResult | null {
     };
   }
 
-  return {
-    valid: true,
-    message: '',
-  };
+  return { valid: true };
 }
