@@ -59,6 +59,18 @@
     });
   }
 
+  function editToken(tokenId: string) {
+    modalStore.trigger({
+      type: 'component',
+      // Data
+      component: 'ApiTokenEdit',
+      meta: { id: tokenId },
+      response: async (r: boolean) => {
+        await refreshTokens();
+      },
+    });
+  }
+
   refreshTokens();
 </script>
 
@@ -86,14 +98,16 @@
           {#each tokens as row (row.id)}
             <tr>
               <td>{row.name}</td>
-              <td>{row.createdOn.toLocaleString()}</td>
+              <td title={row.createdOn.toLocaleString()}>{row.createdOn.toLocaleDateString()}</td>
               {#if row.validUntil}
-                <td>In {timeSince(row.validUntil.getTime() - since)}</td>
+                <td title={row.validUntil.toLocaleString()}>In {timeSince(row.validUntil.getTime() - since)}</td>
               {:else}
-                <td>Never</td>
+                <td class="text-amber-500">Never</td>
               {/if}
+              <td>LastUsed</td>
               <td class="!whitespace-nowrap">
-                <button class="btn-icon variant-filled-primary fa fa-edit"></button>
+                <button class="btn-icon variant-filled-primary fa fa-edit"
+                on:click={() => editToken(row.id)}></button>
                 <button
                   class="btn-icon variant-filled-primary fa fa-trash"
                   on:click={() => deleteToken(row)}
