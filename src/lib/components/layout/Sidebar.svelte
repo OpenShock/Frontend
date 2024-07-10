@@ -6,15 +6,52 @@
   import { HubConnectionState } from '@microsoft/signalr';
   import { AppRail, AppRailAnchor } from '@skeletonlabs/skeleton';
   import path from 'path';
+  import SecondLevelSidebar from './SecondLevelSidebar.svelte';
+  import type { RouteCategory } from './Route';
 
-  const settingsPaths = [
+  const settingsRoutes: RouteCategory[] = [
     {
-      name: 'Account',
-      path: '/settings/account',
+      name: 'General',
+      routes: [
+        {
+          name: 'Account',
+          path: '/settings/account',
+        },
+        {
+          name: 'API Tokens',
+          path: '/settings/api-tokens',
+        },
+      ],
     },
     {
-      name: 'API Tokens',
-      path: '/settings/api-tokens',
+      name: 'Danger Zone',
+      routes: [
+        {
+          name: 'Delete Account',
+          path: '/settings/delete-account',
+        },
+      ],
+    },
+  ];
+
+  const adminRoutes: RouteCategory[] = [
+    {
+      name: 'General',
+      routes: [
+        {
+          name: 'Online Hubs',
+          path: '/admin/online-hubs',
+        },
+        {
+          name: 'Users',
+          path: '/admin/users',
+        },
+        {
+          name: 'Hangfire',
+          path: '/hangfire',
+          external: true,
+        },
+      ],
     },
   ];
 </script>
@@ -58,39 +95,8 @@
       </svelte:fragment>
     </AppRail>
 
-{#if $page.url.pathname.startsWith('/settings')}
+    <SecondLevelSidebar baseRoute="/settings" routes={settingsRoutes} />
 
-    <section
-      class="p-4 space-y-4 overflow-x-y-auto text-nowrap bg-surface-100-800-token border-l border-surface-400-500-token min-w-[270px]"
-    >
-      <p class="font-bold text-2xl">General</p>
-      <nav class="list-nav">
-        <ul>
-          {#each settingsPaths as { name, path }}
-            <li>
-              <a href={path} class={$page.url.pathname === path ? 'bg-primary-active-token' : ''}>
-                {name}
-              </a>
-            </li>
-          {/each}
-        </ul>
-      </nav>
-      <p class="font-bold text-2xl text-red-500">Danger Zone</p>
-      <nav class="list-nav">
-        <ul>
-          <li>
-            <a
-              href="/settings/delete-account"
-              class={$page.url.pathname === '/settings/delete-account'
-                ? 'bg-primary-active-token'
-                : ''}
-            >
-              Delete Account
-            </a>
-          </li>
-        </ul>
-      </nav>
-    </section>
-    {/if}
+    <SecondLevelSidebar baseRoute="/admin" routes={adminRoutes} />
   </div>
 {/if}
