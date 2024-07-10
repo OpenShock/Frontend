@@ -1,13 +1,13 @@
-export type RouteCategory =
+export interface RouteCategory
     {
         name: string
-        routes: Route[],
+        routes: Route[]
         headerClass?: string
     }
 
-export type Route =
+export interface Route
     {
         name: string
-        path: string
-        external?: boolean
+        href: string
+        target?: string
     }

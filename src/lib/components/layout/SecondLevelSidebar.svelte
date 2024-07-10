@@ -17,9 +17,9 @@
           {#each category.routes as route }
             <li>
               <a
-                href={route.path}
-                target={route.external ? '_blank' : ''}
-                class={$page.url.pathname === route.path ? 'bg-primary-active-token' : ''}
+                href={route.href}
+                target={route.target}
+                class={$page.url.pathname === route.href ? 'bg-primary-active-token' : ''}
               >
                 {route.name}
               </a>

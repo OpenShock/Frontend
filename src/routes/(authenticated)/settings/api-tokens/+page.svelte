@@ -100,14 +100,22 @@
               <td>{row.name}</td>
               <td title={row.createdOn.toLocaleString()}>{row.createdOn.toLocaleDateString()}</td>
               {#if row.validUntil}
-                <td title={row.validUntil.toLocaleString()}>In {timeSince(row.validUntil.getTime() - since)}</td>
+                <td title={row.validUntil.toLocaleString()}
+                  >In {timeSince(row.validUntil.getTime() - since)}</td
+                >
               {:else}
-                <td class="text-amber-500">Never</td>
+                <td class="text-warning-500">Never</td>
               {/if}
-              <td>LastUsed</td>
+              {#if row.lastUsed.getTime() < 0}
+                <td>Never</td>
+              {:else}
+                <td title={row.lastUsed.toLocaleString()}>{timeSince(since - row.lastUsed.getTime())} ago</td>
+              {/if}
               <td class="!whitespace-nowrap">
-                <button class="btn-icon variant-filled-primary fa fa-edit"
-                on:click={() => editToken(row.id)}></button>
+                <button
+                  class="btn-icon variant-filled-primary fa fa-edit"
+                  on:click={() => editToken(row.id)}
+                ></button>
                 <button
                   class="btn-icon variant-filled-primary fa fa-trash"
                   on:click={() => deleteToken(row)}

@@ -15,20 +15,21 @@
       routes: [
         {
           name: 'Account',
-          path: '/settings/account',
+          href: '/settings/account',
         },
         {
           name: 'API Tokens',
-          path: '/settings/api-tokens',
+          href: '/settings/api-tokens',
         },
       ],
     },
     {
       name: 'Danger Zone',
+      headerClass: 'text-red-500',
       routes: [
         {
           name: 'Delete Account',
-          path: '/settings/delete-account',
+          href: '/settings/delete-account',
         },
       ],
     },
@@ -40,16 +41,16 @@
       routes: [
         {
           name: 'Online Hubs',
-          path: '/admin/online-hubs',
+          href: '/admin/online-hubs',
         },
         {
           name: 'Users',
-          path: '/admin/users',
+          href: '/admin/users',
         },
         {
           name: 'Hangfire',
-          path: '/hangfire',
-          external: true,
+          href: '/hangfire',
+          target: '_blank',
         },
       ],
     },
