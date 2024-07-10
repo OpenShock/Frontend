@@ -3,6 +3,6 @@
   import { goto } from '$app/navigation';
 
   if (browser) {
-    goto('/admin/online-hubs');
+    goto('/settings/account');
   }
 </script>

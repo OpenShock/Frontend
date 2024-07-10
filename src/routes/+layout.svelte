@@ -27,5 +27,6 @@
   <Header slot="header" />
   <Sidebar slot="sidebarLeft" />
   <slot />
-  <Footer slot="pageFooter" />
+
+  <Footer slot="pageFooter"/>
 </AppShell>

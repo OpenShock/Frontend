@@ -32,10 +32,16 @@
       </div>
       <div class="card p-4 w-48 bg-surface-200-700-token shadow-xl" data-popup="accountPopup">
         <a
-          href="/account"
+          href="/profile"
           class="block text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
         >
-          Account
+          Profile
+        </a>
+        <a
+          href="/settings"
+          class="block text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
+        >
+          Settings
         </a>
         <a
           href="/logout"

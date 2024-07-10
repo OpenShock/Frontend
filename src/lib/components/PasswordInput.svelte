@@ -7,7 +7,7 @@
 
   export let label = 'Password';
   export let placeholder = 'Password';
-  export let autocomplete: 'new-password' | 'current-password';
+  export let autocomplete: 'new-password' | 'current-password' | 'off';
   export let value: string;
   export let valueShown = false;
   export let validationResult: ValidationResult | null | undefined = undefined;
