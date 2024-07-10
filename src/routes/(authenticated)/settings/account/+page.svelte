@@ -33,6 +33,9 @@
   }
 </script>
 
+{#if $UserSelfStore}
+
+
 <div class="container h-full mx-auto p-12 flex flex-col justify-start items-start gap-4">
   <h1 class="h1">Account Settings</h1>
   <form autocomplete="off"
@@ -71,3 +74,7 @@
     <button class="btn variant-filled-primary" type="submit" disabled={!canSubmit}> Update </button>
   </form>
 </div>
+
+{/if}
+
+<!-- TODO: Display error -->
