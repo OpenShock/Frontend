@@ -14,6 +14,24 @@
   function onFormSubmit(): void {
     parent.close();
   }
+
+  type PermissionCategory = {
+    name: string;
+    perms: { name: string; key: string }[];
+  };
+
+  const permissions = Object.values(PermissionType)
+    .filter((v) => v !== PermissionType.unknownDefaultOpenApi)
+    .reduce((acc: PermissionCategory[], v) => {
+      const [category, perm] = v.split('.');
+      const cat = acc.find((c) => c.name === category);
+      if (cat) {
+        cat.perms.push({ name: perm, key: v });
+      } else {
+        acc.push({ name: category, perms: [{ name: perm, key: v }] });
+      }
+      return acc;
+    }, []);
 </script>
 
 <div class="card p-4 w-modal shadow-xl space-y-4">
@@ -28,15 +46,16 @@
       <span>Expire</span>
       <input class="input" type="tel" bind:value={formData.expire} placeholder="Enter expire..." />
     </label>
-    <label class="label">
-      <span>Permissions</span>
-      {#each Object.values(PermissionType).filter((v) => v !== PermissionType.unknownDefaultOpenApi) as name}
-        <label>
-          <input type="checkbox" value={name} bind:group={formData.permissions} />
-          {name}
+    <h3>Permissions</h3>
+    {#each permissions as permission}
+      <span>{permission.name}</span>
+      {#each permission.perms as perm}
+        <label class="!mt-0 ml-4">
+          <input type="checkbox" value={perm.key} bind:group={formData.permissions} />
+          {perm.name}
         </label>
       {/each}
-    </label>
+    {/each}
   </form>
   <!-- prettier-ignore -->
   <footer class="modal-footer {parent.regionFooter}">
