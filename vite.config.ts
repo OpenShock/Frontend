@@ -69,5 +69,5 @@ export default defineConfig(async ({ mode }) => {
   // Configure the purgeCss plugin
   plugins.push(purgeCss());
 
-  return defineConfig({ plugins, server: { host, port } });
+  return defineConfig({ plugins, server: { host, port, proxy: {} } });
 });

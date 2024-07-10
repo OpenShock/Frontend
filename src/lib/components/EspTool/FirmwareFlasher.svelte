@@ -104,7 +104,7 @@
   <div class="flex flex-col items-start justify-start gap-2 p-2">
     {#if error}
       <div class="flex flex-row items-center justify-start gap-2">
-        <i class="fas fa-exclamation-triangle text-red-500" />
+        <i class="fa fa-exclamation-triangle text-red-500" />
         <p class="text-red-500">Error: {error}</p>
       </div>
     {:else if progressName}
