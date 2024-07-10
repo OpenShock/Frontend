@@ -13,7 +13,7 @@
   let name = '';
   let expire = 'never';
   let expireCustom: Date | null = null;
-  let permissionsActually: PermissionType[] = [];
+  let permissionsActually: PermissionType[] = [PermissionType.shockersUse];
 
   function getExpireDate(expireType: string, customExpireDate: Date | null): Date | null {
     switch (expireType) {
