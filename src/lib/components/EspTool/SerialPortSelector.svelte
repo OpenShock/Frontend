@@ -71,7 +71,7 @@
       {/if}
       {#if errorMessage !== null && errorMessage.name !== 'NotFoundError'}
         <div class="flex flex-row items-center justify-start gap-2">
-          <i class="fas fa-exclamation-triangle text-yellow-500" />
+          <i class="fa fa-exclamation-triangle text-yellow-500" />
           <p class="text-yellow-500">Error: {errorMessage.message}</p>
         </div>
       {/if}

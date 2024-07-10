@@ -1,7 +1,4 @@
-export interface ValidationResult {
-  valid: boolean;
-  message: string;
-}
+export type ValidationResult = { valid: true } | { valid: false; message: string };
 
 export function ValidationResultIcon(result: ValidationResult): string {
   const IconOk = 'fa-circle-check text-success-500';

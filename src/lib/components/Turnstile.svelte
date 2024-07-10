@@ -64,7 +64,7 @@
     <!-- Turnstile placeholder -->
     <div id="placeholder">
       {#if isDev}
-        <i class="fa-solid fa-bug text-lg" />
+        <i class="fa fa-bug text-lg" />
         <span> Turnstile disabled </span>
       {:else}
         <ProgressRadial stroke={120} width="w-8" />

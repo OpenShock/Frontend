@@ -46,16 +46,16 @@ export interface TokenResponse {
     createdOn: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof TokenResponse
      */
-    createdByIp: string | null;
+    validUntil: Date | null;
     /**
      * 
      * @type {Date}
      * @memberof TokenResponse
      */
-    validUntil: Date | null;
+    lastUsed: Date;
     /**
      * 
      * @type {Array<PermissionType>}
@@ -71,8 +71,8 @@ export function instanceOfTokenResponse(value: object): value is TokenResponse {
     if (!('id' in value) || value['id'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('createdOn' in value) || value['createdOn'] === undefined) return false;
-    if (!('createdByIp' in value) || value['createdByIp'] === undefined) return false;
     if (!('validUntil' in value) || value['validUntil'] === undefined) return false;
+    if (!('lastUsed' in value) || value['lastUsed'] === undefined) return false;
     if (!('permissions' in value) || value['permissions'] === undefined) return false;
     return true;
 }
@@ -90,8 +90,8 @@ export function TokenResponseFromJSONTyped(json: any, ignoreDiscriminator: boole
         'id': json['id'],
         'name': json['name'],
         'createdOn': (new Date(json['createdOn'])),
-        'createdByIp': json['createdByIp'],
         'validUntil': (json['validUntil'] == null ? null : new Date(json['validUntil'])),
+        'lastUsed': (new Date(json['lastUsed'])),
         'permissions': (json['permissions'] == null ? null : (json['permissions'] as Array<any>).map(PermissionTypeFromJSON)),
     };
 }
@@ -105,8 +105,8 @@ export function TokenResponseToJSON(value?: TokenResponse | null): any {
         'id': value['id'],
         'name': value['name'],
         'createdOn': ((value['createdOn']).toISOString()),
-        'createdByIp': value['createdByIp'],
         'validUntil': (value['validUntil'] == null ? null : (value['validUntil'] as any).toISOString()),
+        'lastUsed': ((value['lastUsed']).toISOString()),
         'permissions': (value['permissions'] == null ? null : (value['permissions'] as Array<any>).map(PermissionTypeToJSON)),
     };
 }

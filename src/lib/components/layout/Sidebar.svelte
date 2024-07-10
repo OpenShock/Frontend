@@ -5,51 +5,99 @@
   import { UserSelfStore } from '$lib/stores/UserStore';
   import { HubConnectionState } from '@microsoft/signalr';
   import { AppRail, AppRailAnchor } from '@skeletonlabs/skeleton';
+  import path from 'path';
+  import SecondLevelSidebar from './SecondLevelSidebar.svelte';
+  import type { RouteCategory } from './Route';
+
+  const settingsRoutes: RouteCategory[] = [
+    {
+      name: 'General',
+      routes: [
+        {
+          name: 'Account',
+          href: '/settings/account',
+        },
+        {
+          name: 'API Tokens',
+          href: '/settings/api-tokens',
+        },
+      ],
+    },
+    {
+      name: 'Danger Zone',
+      headerClass: 'text-red-500',
+      routes: [
+        {
+          name: 'Delete Account',
+          href: '/settings/delete-account',
+        },
+      ],
+    },
+  ];
+
+  const adminRoutes: RouteCategory[] = [
+    {
+      name: 'General',
+      routes: [
+        {
+          name: 'Online Hubs',
+          href: '/admin/online-hubs',
+        },
+        {
+          name: 'Users',
+          href: '/admin/users',
+        },
+        {
+          name: 'Hangfire',
+          href: '/hangfire',
+          target: '_blank',
+        },
+      ],
+    },
+  ];
 </script>
 
 {#if $UserSelfStore && $signalr_state === HubConnectionState.Connected}
-  <AppRail>
-    <svelte:fragment slot="lead">
-      <AppRailAnchor href="/home" selected={$page.url.pathname === '/home'} title="Home">
-        <i slot="lead" class="fa fa-house text-2xl" />
-        <span>Home</span>
-      </AppRailAnchor>
-      <AppRailAnchor
-        href="/shockers"
-        selected={$page.url.pathname === '/shockers'}
-        title="Shockers"
-      >
-        <i slot="lead" class="fa fa-bolt text-2xl" />
-        <span>Shockers</span>
-      </AppRailAnchor>
-      <AppRailAnchor href="/devices" selected={$page.url.pathname === '/devices'} title="Devices">
-        <i slot="lead" class="fa fa-microchip text-2xl" />
-        <span>Devices</span>
-      </AppRailAnchor>
-      <AppRailAnchor
-        href="/sharelinks"
-        selected={$page.url.pathname === '/sharelinks'}
-        title="Sharelinks"
-      >
-        <i slot="lead" class="fa fa-link text-2xl" />
-        <span>Sharelinks</span>
-      </AppRailAnchor>
-    </svelte:fragment>
-    <svelte:fragment slot="trail">
-      <AppRailAnchor href="/tokens" selected={$page.url.pathname === '/tokens'} title="Tokens">
-        <i slot="lead" class="fa fa-key text-2xl" />
-        <span>Tokens</span>
-      </AppRailAnchor>
-      <AppRailAnchor href="/account" selected={$page.url.pathname === '/account'} title="Account">
-        <i slot="lead" class="fa fa-user text-2xl" />
-        <span>Account</span>
-      </AppRailAnchor>
-      {#if $UserSelfStore.rank === RankType.admin}
-        <AppRailAnchor href="/admin" selected={$page.url.pathname === '/admin'} title="Admin">
-          <i slot="lead" class="fa fa-user-shield text-2xl" />
-          <span>Admin</span>
+  <div class="flex flex-row h-full">
+    <AppRail>
+      <svelte:fragment slot="lead">
+        <AppRailAnchor href="/home" selected={$page.url.pathname === '/home'} title="Home">
+          <i slot="lead" class="fa fa-house text-2xl" />
+          <span>Home</span>
         </AppRailAnchor>
-      {/if}
-    </svelte:fragment>
-  </AppRail>
+        <AppRailAnchor
+          href="/shockers"
+          selected={$page.url.pathname === '/shockers'}
+          title="Shockers"
+        >
+          <i slot="lead" class="fa fa-bolt text-2xl" />
+          <span>Shockers</span>
+        </AppRailAnchor>
+        <AppRailAnchor href="/devices" selected={$page.url.pathname === '/devices'} title="Devices">
+          <i slot="lead" class="fa fa-microchip text-2xl" />
+          <span>Devices</span>
+        </AppRailAnchor>
+        <AppRailAnchor
+          href="/sharelinks"
+          selected={$page.url.pathname === '/sharelinks'}
+          title="Sharelinks"
+        >
+          <i slot="lead" class="fa fa-link text-2xl" />
+          <span>Sharelinks</span>
+        </AppRailAnchor>
+      </svelte:fragment>
+      <svelte:fragment slot="trail">
+        {#if $UserSelfStore.rank === RankType.admin}
+          <AppRailAnchor href="/admin" selected={$page.url.pathname === '/admin'} title="Admin">
+            <i slot="lead" class="fa fa-user-shield text-2xl" />
+            <span>Admin</span>
+          </AppRailAnchor>
+        {/if}
+      </svelte:fragment>
+    </AppRail>
+
+    <SecondLevelSidebar baseRoute="/settings" routes={settingsRoutes} />
+
+    <SecondLevelSidebar baseRoute="/admin" routes={adminRoutes} />
+  </div>
 {/if}

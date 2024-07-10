@@ -93,8 +93,5 @@ export function validatePasswordMatch(
     };
   }
 
-  return {
-    valid: true,
-    message: '',
-  };
+  return { valid: true };
 }
