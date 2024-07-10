@@ -3,20 +3,27 @@
   import type { TokenResponse } from '$lib/api/internal/v1';
   import { getModalStore } from '@skeletonlabs/skeleton';
   import { escapeHtml } from '$lib/utils/encoding';
+  import { timeSince } from '$lib/utils/time';
 
   const modalStore = getModalStore();
 
   let tokens: TokenResponse[] = [];
 
-  tokensApi.tokensListTokens().then((res) => {
-    if (res.data) {
-      tokens = res.data;
+  let since: number = Date.now();
+  setInterval(() => {
+    since = Date.now();
+  }, 1000);
+
+  async function refreshTokens() {
+    const response = await tokensApi.tokensListTokens();
+    if (!response.data) {
+      // FIXME: Handle error
+      console.error(response);
       return;
     }
 
-    // FIXME: Handle error
-    console.error(res);
-  });
+    tokens = response.data;
+  }
 
   function deleteToken(token: TokenResponse) {
     modalStore.trigger({
@@ -45,9 +52,14 @@
     modalStore.trigger({
       type: 'component',
       // Data
-      component: 'ApiTokenGenerate'
+      component: 'ApiTokenGenerate',
+      response: async (r: boolean) => {
+        await refreshTokens();
+      },
     });
   }
+
+  refreshTokens();
 </script>
 
 <div class="container h-full mx-auto p-12 flex flex-col justify-start items-start gap-4">
@@ -65,6 +77,8 @@
           <tr>
             <th>Name</th>
             <th>Created</th>
+            <th>Expires</th>
+            <th>Last Used</th>
             <th class="w-0"></th>
           </tr>
         </thead>
@@ -72,12 +86,16 @@
           {#each tokens as row (row.id)}
             <tr>
               <td>{row.name}</td>
-
               <td>{row.createdOn.toLocaleString()}</td>
+              {#if row.validUntil}
+                <td>In {timeSince(row.validUntil.getTime() - since)}</td>
+              {:else}
+                <td>Never</td>
+              {/if}
               <td class="!whitespace-nowrap">
-                <button class="btn variant-filled-primary fa fa-edit"></button>
+                <button class="btn-icon variant-filled-primary fa fa-edit"></button>
                 <button
-                  class="btn variant-filled-primary fa fa-trash"
+                  class="btn-icon variant-filled-primary fa fa-trash"
                   on:click={() => deleteToken(row)}
                 ></button>
               </td>
