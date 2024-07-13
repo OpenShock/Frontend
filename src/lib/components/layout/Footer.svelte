@@ -8,5 +8,4 @@
     <span style="color: #e25555;">&#9829;</span>
     by the OpenShock Team
   </div>
-  <div class="hidden sm:block">Copyright ©{year} | All Rights Reserved</div>
 </div>
