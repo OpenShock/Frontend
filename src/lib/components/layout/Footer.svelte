@@ -6,6 +6,6 @@
   <div>
     Made with
     <span style="color: #e25555;">&#9829;</span>
-    by the OpenShock Team
+    by the <a target="_blank" href="https://github.com/OpenShock"> OpenShock Team</a>
   </div>
 </div>
