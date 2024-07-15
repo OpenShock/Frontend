@@ -8,7 +8,7 @@
     offset,
     arrow,
   } from '@skeletonlabs/floating-ui-svelte';
-  import { AppShell, Modal, Toast, initializeStores, storePopup } from '@skeletonlabs/skeleton';
+  import { Modal, Toast, initializeStores, storePopup } from '@skeletonlabs/skeleton';
   import Footer from '$lib/components/layout/Footer.svelte';
   import Header from '$lib/components/layout/Header.svelte';
   import Sidebar from '$lib/components/layout/Sidebar.svelte';
@@ -30,9 +30,15 @@
 <TwitterSummaryTags type="summary" {...meta} site="@OpenShockORG" creator="@OpenShockORG" />
 <OpenGraphTags type="website" {...meta} url={$page.url.origin} />
 
-<AppShell>
-  <Header slot="header" />
-  <Sidebar slot="sidebarLeft" />
-  <slot />
-  <Footer slot="pageFooter" />
-</AppShell>
+<div class="w-full h-full flex flex-col overflow-hidden">
+  <Header />
+  <div class="flex flex-row flex-1 overflow-hidden">
+    <Sidebar />
+    <div class="flex flex-col flex-1 overflow-y-auto">
+      <main class="flex-auto">
+        <slot />
+      </main>
+      <Footer />
+    </div>
+  </div>
+</div>

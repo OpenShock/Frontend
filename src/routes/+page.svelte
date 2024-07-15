@@ -1,4 +1,4 @@
-<div class="container h-full mx-auto flex justify-start items-center space-x-8">
+<div class="container h-full mx-auto flex justify-center items-center space-x-8">
   <div class="flex flex-col">
     <h1 class="text-5xl font-bold text-gray-800 dark:text-white leading-none">
       Welcome to <span class="text-blue-600">OpenShock</span>
