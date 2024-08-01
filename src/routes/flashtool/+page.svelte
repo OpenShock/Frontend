@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { PUBLIC_DISCORD_INVITE_URL } from '$env/static/public';
   import FirmwareFlasher from '$lib/components/EspTool/FirmwareFlasher.svelte';
   import FirmwareSelector from '$lib/components/EspTool/FirmwareSelector.svelte';
   import FlashManager from '$lib/components/EspTool/FlashManager';
