@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
+
   const year = new Date().getFullYear();
 </script>
 
@@ -6,6 +8,6 @@
   <div>
     Made with
     <span style="color: #e25555;">&#9829;</span>
-    by the <a target="_blank" href="https://github.com/OpenShock"> OpenShock Team</a>
+    by the <a target="_blank" href={PUBLIC_GITHUB_PROJECT_URL}> OpenShock Team</a>
   </div>
 </div>

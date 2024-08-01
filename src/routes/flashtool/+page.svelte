@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { PUBLIC_DISCORD_INVITE_URL } from '$env/static/public';
   import FirmwareFlasher from '$lib/components/EspTool/FirmwareFlasher.svelte';
   import FirmwareSelector from '$lib/components/EspTool/FirmwareSelector.svelte';
   import FlashManager from '$lib/components/EspTool/FlashManager';
@@ -76,7 +77,7 @@
           <li>Use a different USB cable</li>
           <li>
             Contact support if the issue persists:
-            <a href="https://openshock.net/discord" target="_blank" class="underline text-blue-500">
+            <a href={PUBLIC_DISCORD_INVITE_URL} target="_blank" class="underline text-blue-500">
               OpenShock Discord
             </a>
           </li>
