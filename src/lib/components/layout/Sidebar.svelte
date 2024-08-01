@@ -73,9 +73,9 @@
           <i slot="lead" class="fa fa-bolt text-2xl" />
           <span>Shockers</span>
         </AppRailAnchor>
-        <AppRailAnchor href="/devices" selected={$page.url.pathname === '/devices'} title="Devices">
+        <AppRailAnchor href="/hubs" selected={$page.url.pathname === '/devices'} title="Hubs">
           <i slot="lead" class="fa fa-microchip text-2xl" />
-          <span>Devices</span>
+          <span>Hubs</span>
         </AppRailAnchor>
         <AppRailAnchor
           href="/sharelinks"
