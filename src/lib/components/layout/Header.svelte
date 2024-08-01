@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { PUBLIC_DISCORD_INVITE_URL, PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
   import { UserSelfStore } from '$lib/stores/UserStore';
   import { AppBar, LightSwitch, popup, type PopupSettings } from '@skeletonlabs/skeleton';
 
@@ -65,10 +66,10 @@
         Sign Up
       </a>
       <div>
-        <a href="https://github.com/OpenShock" class="btn-icon">
+        <a href={PUBLIC_GITHUB_PROJECT_URL} class="btn-icon">
           <i class="fa-brands fa-github text-lg" />
         </a>
-        <a href="https://discord.gg/openshock" class="btn-icon">
+        <a href={PUBLIC_DISCORD_INVITE_URL} class="btn-icon">
           <i class="fa-brands fa-discord text-lg" />
         </a>
       </div>

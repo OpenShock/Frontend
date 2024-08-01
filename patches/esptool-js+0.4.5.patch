@@ -5,7 +5,7 @@ index 1857de9..a2dae05 100644
 @@ -1,6 +1,7 @@
  {
    "name": "esptool-js",
-   "version": "0.4.3",
+   "version": "0.4.5",
 +  "type": "module",
    "module": "lib/index.js",
    "main": "lib/index.js",
