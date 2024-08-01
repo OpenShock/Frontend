@@ -14,15 +14,18 @@
   let connectFailed = false;
   let isFlashing = false;
 
+  let terminalOpen: boolean = false;
+  let terminalText: string = '';
+
   const terminal = {
     clean: () => {
-      //console.clear();
+      terminalText = '';
     },
     writeLine: (data: string) => {
-      console.log(data);
+      terminalText += data + '\n';
     },
     write: (data: string) => {
-      console.log(data);
+      terminalText += data;
     },
   };
 
@@ -44,43 +47,64 @@
 </script>
 
 <Modal components={modalRegistry} />
-
-<div class="w-full h-full flex-auto content-center justify-center items-center py-8">
-  <div class="card p-4 m-auto max-w-[55em] flex flex-col justify-center gap-8">
-    <SerialPortSelector bind:port disabled={isFlashing} />
-    {#if port}
-      {#if manager}
-        <FirmwareSelector bind:version bind:board disabled={isFlashing} />
-        {#if version && board && manager}
-          <FirmwareFlasher {version} {board} {manager} bind:isFlashing />
+<div class="flex w-full h-full items-center">
+  <div class="flex w-full h-max justify-center items-center lg:items-stretch gap-4 flex-col lg:flex-row">
+    <div class="flex-grow card p-4 min-w-[25em] lg:max-w-[50%] flex flex-col justify-center gap-8 w-[95%]">
+      <SerialPortSelector bind:terminalOpen bind:port disabled={isFlashing} />
+      {#if port}
+        {#if manager}
+          <FirmwareSelector bind:version bind:board disabled={isFlashing} />
+          {#if version && board && manager}
+            <FirmwareFlasher {version} {board} {manager} bind:isFlashing />
+          {/if}
+        {:else if !connectFailed}
+          <div class="flex flex-col items-center gap-2">
+            <span class="text-2xl text-center"> Connecting... </span>
+            <ProgressBar />
+          </div>
         {/if}
-      {:else if !connectFailed}
-        <div class="flex flex-col items-center gap-2">
-          <span class="text-2xl text-center"> Connecting... </span>
-          <ProgressBar />
+      {/if}
+      {#if connectFailed}
+        <div class="flex flex-col items-start gap-2">
+          <span class="text-2xl text-center bold text-red-500"> Device connection failed </span>
+          <span class="text-center">
+            There was an issue connecting to your device, please try the following:
+          </span>
+          <ol class="list-decimal text-left pl-6">
+            <li>
+              Install the drivers for your device if you haven't already, using the button above
+            </li>
+            <li>Unplug and replug your device</li>
+            <li>Use a different USB port</li>
+            <li>Use a different USB cable</li>
+            <li>
+              Contact support if the issue persists:
+              <a
+                href={PUBLIC_DISCORD_INVITE_URL}
+                target="_blank"
+                class="underline text-blue-500"
+              >
+                OpenShock Discord
+              </a>
+            </li>
+          </ol>
         </div>
       {/if}
-    {/if}
-    {#if connectFailed}
-      <div class="flex flex-col items-start gap-2">
-        <span class="text-2xl text-center bold text-red-500"> Device connection failed </span>
-        <span class="text-center">
-          There was an issue connecting to your device, please try the following:
-        </span>
-        <ol class="list-decimal text-left pl-6">
-          <li>
-            Install the drivers for your device if you haven't already, using the button above
-          </li>
-          <li>Unplug and replug your device</li>
-          <li>Use a different USB port</li>
-          <li>Use a different USB cable</li>
-          <li>
-            Contact support if the issue persists:
-            <a href="https://openshock.net/discord" target="_blank" class="underline text-blue-500">
-              OpenShock Discord
-            </a>
-          </li>
-        </ol>
+    </div>
+
+    {#if terminalOpen}
+      <div class="flex-grow card p-4 flex flex-col justify-center gap-2 w-[95%] h-56 min-w-[15em] lg:max-w-[25%] lg:h-auto">
+        <div class="flex flex-row items-center justify-between gap-2">
+          <h3 class="h3 font-bold">Console</h3>
+          <button class="btn variant-filled-primary" on:click={() => (terminalText = '')}
+            >Clear</button
+          >
+        </div>
+        <div
+          class="border border-surface-500 rounded-md p-4 overflow-y-auto flex-grow overflow-auto flex flex-col-reverse"
+        >
+          <pre id="terminal" class="text-xs text-left">{terminalText}</pre>
+        </div>
       </div>
     {/if}
   </div>
