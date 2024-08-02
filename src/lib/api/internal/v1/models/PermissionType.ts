@@ -22,6 +22,7 @@ export enum PermissionType {
     shockersEdit = 'shockers.edit',
     shockersPause = 'shockers.pause',
     devicesEdit = 'devices.edit',
+    devicesAuth = 'devices.auth',
     unknownDefaultOpenApi = '11184809'
 }
 
