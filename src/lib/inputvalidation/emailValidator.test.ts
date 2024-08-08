@@ -23,8 +23,7 @@ describe('email validator test', () => {
   it('validate valid email should return true and no error', () => {
     const result = validateEmail('valid.address@email.com');
     expect(result).toEqual({
-      valid: true,
-      message: '',
+      valid: true
     });
   });
 });

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { PUBLIC_DISCORD_INVITE_URL, PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
   import { UserSelfStore } from '$lib/stores/UserStore';
   import { AppBar, LightSwitch, popup, type PopupSettings } from '@skeletonlabs/skeleton';
 
@@ -32,10 +33,16 @@
       </div>
       <div class="card p-4 w-48 bg-surface-200-700-token shadow-xl" data-popup="accountPopup">
         <a
-          href="/account"
+          href="/profile"
           class="block text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
         >
-          Account
+          Profile
+        </a>
+        <a
+          href="/settings"
+          class="block text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
+        >
+          Settings
         </a>
         <a
           href="/logout"
@@ -43,7 +50,7 @@
         >
           Logout
         </a>
-        <div class="arrow bg-surface-200-700-token" data-arrow="accountPopup"></div>
+        <div class="arrow bg-surface-200-700-token" data-arrow="accountPopup" />
       </div>
     {:else}
       <a
@@ -59,11 +66,11 @@
         Sign Up
       </a>
       <div>
-        <a href="https://github.com/OpenShock" class="btn-icon">
-          <i class="fa-brands fa-github text-lg"></i>
+        <a href={PUBLIC_GITHUB_PROJECT_URL} class="btn-icon">
+          <i class="fa-brands fa-github text-lg" />
         </a>
-        <a href="https://discord.gg/openshock" class="btn-icon">
-          <i class="fa-brands fa-discord text-lg"></i>
+        <a href={PUBLIC_DISCORD_INVITE_URL} class="btn-icon">
+          <i class="fa-brands fa-discord text-lg" />
         </a>
       </div>
     {/if}

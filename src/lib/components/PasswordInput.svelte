@@ -7,7 +7,7 @@
 
   export let label = 'Password';
   export let placeholder = 'Password';
-  export let autocomplete: 'new-password' | 'current-password';
+  export let autocomplete: 'new-password' | 'current-password' | 'off';
   export let value: string;
   export let valueShown = false;
   export let validationResult: ValidationResult | null | undefined = undefined;
@@ -75,7 +75,7 @@
     />
     <div>
       <button
-        class={'fa-solid !m-0 h-[20px] w-[20px] cursor-pointer !p-0 ' +
+        class={'fa !m-0 h-[20px] w-[20px] cursor-pointer !p-0 ' +
           (valueShown ? 'fa-eye-slash' : 'fa-eye')}
         type="button"
         on:click={() => (valueShown = !valueShown)}

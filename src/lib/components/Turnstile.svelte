@@ -59,19 +59,19 @@
 </script>
 
 <!-- see: https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/#widget-size -->
-<div id="cfts-root" bind:this={element}>
+<div id="main" bind:this={element}>
   {#if isLoading}
     <!-- Turnstile placeholder -->
-    <div id="cfts-placeholder">
+    <div id="placeholder">
       {#if isDev}
-        <i class="fa-solid fa-bug text-lg"></i>
+        <i class="fa fa-bug text-lg" />
         <span> Turnstile disabled </span>
       {:else}
         <ProgressRadial stroke={120} width="w-8" />
         <span> Loading... </span>
       {/if}
       <a
-        id="cfts-logo"
+        id="logo"
         href="https://www.cloudflare.com/products/turnstile/?utm_source=turnstile&utm_campaign=widget"
         rel="noopen noreferrer"
       >
@@ -82,23 +82,16 @@
 </div>
 
 <style lang="postcss">
-  #cfts-root {
+  #main {
     @apply mx-auto h-[65px] w-[300px];
   }
-  #cfts-placeholder {
+  #placeholder {
     @apply flex h-full select-none items-center justify-center gap-3 p-3;
-    @apply bg-[#fafafa];
-    @apply border border-[#e0e0e0];
+    @apply bg-[#fafafa] dark:bg-[#222];
+    @apply border border-[#e0e0e0] dark:border-[#666];
   }
-  :global(.dark #cfts-placeholder) {
-    @apply bg-[#222];
-    @apply border-[#666];
-  }
-  #cfts-logo {
+  #logo {
     @apply mb-auto ml-auto h-7 w-auto;
-    @apply text-[#666];
-  }
-  :global(.dark #cfts-logo) {
-    @apply text-[#999];
+    @apply text-[#666] dark:text-[#999];
   }
 </style>

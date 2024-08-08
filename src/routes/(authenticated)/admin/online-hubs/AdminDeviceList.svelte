@@ -7,35 +7,11 @@
   import ThFilter from '$lib/components/table/ThFilter.svelte';
   import ThSort from '$lib/components/table/ThSort.svelte';
   import type { AdminOnlineDeviceResponse } from '$lib/api/internal/v1';
+  import { timeSince } from '$lib/utils/time';
 
   type FlatDevice = AdminOnlineDeviceResponse & { ownerName: string | null | undefined };
 
   export let devices: FlatDevice[];
-
-  function formatInterval(unit: string, interval: number) {
-    interval = Math.floor(interval);
-    return interval + ' ' + unit + (interval > 1 ? 's' : '');
-  }
-  function timeSince(unix: number) {
-    let seconds = Math.floor(unix / 1000);
-
-    let interval = seconds / 31536000;
-    if (interval > 1) return formatInterval('year', interval);
-
-    interval = seconds / 2592000;
-    if (interval > 1) return formatInterval('month', interval);
-
-    interval = seconds / 86400;
-    if (interval > 1) return formatInterval('day', interval);
-
-    interval = seconds / 3600;
-    if (interval > 1) return formatInterval('hour', interval);
-
-    interval = seconds / 60;
-    if (interval > 1) return formatInterval('minute', interval);
-
-    return formatInterval('second', seconds);
-  }
 
   let since: number = Date.now();
   setInterval(() => {

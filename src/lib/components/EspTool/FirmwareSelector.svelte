@@ -32,8 +32,6 @@
   $: boards = version ? boardsCache[version] ?? [] : [];
   $: if (boards.length === 0) {
     board = null;
-  } else if (board === null || !boards.includes(board)) {
-    board = boards[0];
   }
 </script>
 
@@ -49,13 +47,13 @@
 
   <div class="flex flex-row items-center justify-start gap-2 pl-2">
     {#if selectedChannel === 'stable'}
-      <i class="fas fa-check-circle text-green-500"></i>
+      <i class="fa fa-check-circle text-green-500" />
       <p class="text-green-500">This is the recommended channel.</p>
     {:else if selectedChannel === 'beta'}
-      <i class="fas fa-exclamation-triangle text-yellow-500"></i>
+      <i class="fa fa-exclamation-triangle text-yellow-500" />
       <p class="text-yellow-500">This channel might contain bugs.</p>
     {:else}
-      <i class="fas fa-exclamation-triangle text-red-500"></i>
+      <i class="fa fa-exclamation-triangle text-red-500" />
       <p class="text-red-500">Avoid this channel unless you know what you're doing.</p>
     {/if}
   </div>
