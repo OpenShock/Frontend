@@ -64,7 +64,7 @@
     progressPercent = undefined;
     await manager.hardReset();
 
-    progressName = 'Rebooted device! Flashing complete.'
+    progressName = 'Rebooted device! Flashing complete.';
     progressPercent = 100;
   }
   async function FlashDevice() {
@@ -85,7 +85,7 @@
     <div class="flex flex-row items-center justify-start gap-2">
       <label class="flex items-center space-x-2">
         <input type="checkbox" class="checkbox" bind:checked={eraseFlash} />
-        <p>Erase everything before flashing</p>
+        <p class="select-none">Erase everything before flashing</p>
       </label>
     </div>
   </div>
@@ -107,16 +107,16 @@
         <i class="fa fa-exclamation-triangle text-red-500" />
         <p class="text-red-500">Error: {error}</p>
       </div>
-    {:else if progressName}
+    {:else}
       <span>
-        Flash Progress: {progressName}
+        Flash Progress: {progressName ?? 'Idle'}
         {#if progressPercent !== undefined}
           ({progressPercent.toFixed(2)}%)
         {/if}
       </span>
-      <ProgressBar label="Progress Bar" value={progressPercent} max={100} />
-    {:else}
-      <span>Flash Progress: Idle</span>
+      {#if progressName !== null}
+        <ProgressBar label="Progress Bar" value={progressPercent} max={100} />
+      {/if}
     {/if}
   </div>
 </div>
