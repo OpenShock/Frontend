@@ -31,7 +31,7 @@ export interface TokenResponseBaseResponse {
      * @type {string}
      * @memberof TokenResponseBaseResponse
      */
-    message?: string;
+    message?: string | null;
     /**
      * 
      * @type {TokenResponse}

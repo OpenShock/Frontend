@@ -31,7 +31,7 @@ export interface RootResponseBaseResponse {
      * @type {string}
      * @memberof RootResponseBaseResponse
      */
-    message?: string;
+    message?: string | null;
     /**
      * 
      * @type {RootResponse}

@@ -31,7 +31,7 @@ export interface PublicShareLinkResponseBaseResponse {
      * @type {string}
      * @memberof PublicShareLinkResponseBaseResponse
      */
-    message?: string;
+    message?: string | null;
     /**
      * 
      * @type {PublicShareLinkResponse}

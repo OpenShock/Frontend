@@ -31,7 +31,7 @@ export interface SelfResponseBaseResponse {
      * @type {string}
      * @memberof SelfResponseBaseResponse
      */
-    message?: string;
+    message?: string | null;
     /**
      * 
      * @type {SelfResponse}

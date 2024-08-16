@@ -31,13 +31,13 @@ export interface AdminOnlineDeviceResponseIEnumerableBaseResponse {
      * @type {string}
      * @memberof AdminOnlineDeviceResponseIEnumerableBaseResponse
      */
-    message?: string;
+    message?: string | null;
     /**
      * 
      * @type {Array<AdminOnlineDeviceResponse>}
      * @memberof AdminOnlineDeviceResponseIEnumerableBaseResponse
      */
-    data?: Array<AdminOnlineDeviceResponse>;
+    data?: Array<AdminOnlineDeviceResponse> | null;
 }
 
 /**
