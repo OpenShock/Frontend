@@ -31,13 +31,13 @@ export interface ResponseDeviceWithShockersIEnumerableBaseResponse {
      * @type {string}
      * @memberof ResponseDeviceWithShockersIEnumerableBaseResponse
      */
-    message?: string;
+    message?: string | null;
     /**
      * 
      * @type {Array<ResponseDeviceWithShockers>}
      * @memberof ResponseDeviceWithShockersIEnumerableBaseResponse
      */
-    data?: Array<ResponseDeviceWithShockers>;
+    data?: Array<ResponseDeviceWithShockers> | null;
 }
 
 /**

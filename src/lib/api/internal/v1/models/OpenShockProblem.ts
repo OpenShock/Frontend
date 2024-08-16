@@ -25,44 +25,44 @@ export interface OpenShockProblem {
      * @type {string}
      * @memberof OpenShockProblem
      */
-    type?: string;
+    type?: string | null;
     /**
      * 
      * @type {string}
      * @memberof OpenShockProblem
      */
-    title?: string;
+    title?: string | null;
     /**
      * 
      * @type {number}
      * @memberof OpenShockProblem
      */
-    status?: number;
+    status?: number | null;
     /**
      * 
      * @type {string}
      * @memberof OpenShockProblem
      */
-    detail?: string;
+    detail?: string | null;
     /**
      * 
      * @type {string}
      * @memberof OpenShockProblem
      */
-    instance?: string;
+    instance?: string | null;
     /**
      * 
      * @type {string}
      * @memberof OpenShockProblem
      * @deprecated
      */
-    readonly message?: string;
+    readonly message?: string | null;
     /**
      * 
      * @type {string}
      * @memberof OpenShockProblem
      */
-    traceId?: string;
+    traceId?: string | null;
 }
 
 /**

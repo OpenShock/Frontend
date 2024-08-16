@@ -24,13 +24,13 @@ export interface BooleanNullableBaseResponse {
      * @type {string}
      * @memberof BooleanNullableBaseResponse
      */
-    message?: string;
+    message?: string | null;
     /**
      * 
      * @type {boolean}
      * @memberof BooleanNullableBaseResponse
      */
-    data?: boolean;
+    data?: boolean | null;
 }
 
 /**

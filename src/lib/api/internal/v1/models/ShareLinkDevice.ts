@@ -43,7 +43,7 @@ export interface ShareLinkDevice {
      * @type {Array<ShareLinkShocker>}
      * @memberof ShareLinkDevice
      */
-    shockers?: Array<ShareLinkShocker>;
+    shockers?: Array<ShareLinkShocker> | null;
 }
 
 /**

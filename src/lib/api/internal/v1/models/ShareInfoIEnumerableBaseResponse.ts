@@ -31,13 +31,13 @@ export interface ShareInfoIEnumerableBaseResponse {
      * @type {string}
      * @memberof ShareInfoIEnumerableBaseResponse
      */
-    message?: string;
+    message?: string | null;
     /**
      * 
      * @type {Array<ShareInfo>}
      * @memberof ShareInfoIEnumerableBaseResponse
      */
-    data?: Array<ShareInfo>;
+    data?: Array<ShareInfo> | null;
 }
 
 /**

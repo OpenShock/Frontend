@@ -55,7 +55,7 @@ export interface PublicShareLinkResponse {
      * @type {Date}
      * @memberof PublicShareLinkResponse
      */
-    expiresOn?: Date;
+    expiresOn?: Date | null;
     /**
      * 
      * @type {GenericIni}
@@ -67,7 +67,7 @@ export interface PublicShareLinkResponse {
      * @type {Array<ShareLinkDevice>}
      * @memberof PublicShareLinkResponse
      */
-    devices?: Array<ShareLinkDevice>;
+    devices?: Array<ShareLinkDevice> | null;
 }
 
 /**

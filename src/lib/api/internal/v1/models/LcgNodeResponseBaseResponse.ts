@@ -31,7 +31,7 @@ export interface LcgNodeResponseBaseResponse {
      * @type {string}
      * @memberof LcgNodeResponseBaseResponse
      */
-    message?: string;
+    message?: string | null;
     /**
      * 
      * @type {LcgNodeResponse}

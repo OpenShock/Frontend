@@ -24,7 +24,7 @@ export interface GuidBaseResponse {
      * @type {string}
      * @memberof GuidBaseResponse
      */
-    message?: string;
+    message?: string | null;
     /**
      * 
      * @type {string}

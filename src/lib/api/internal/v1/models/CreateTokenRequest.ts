@@ -37,13 +37,13 @@ export interface CreateTokenRequest {
      * @type {Array<PermissionType>}
      * @memberof CreateTokenRequest
      */
-    permissions?: Array<PermissionType>;
+    permissions?: Array<PermissionType> | null;
     /**
      * 
      * @type {Date}
      * @memberof CreateTokenRequest
      */
-    validUntil?: Date;
+    validUntil?: Date | null;
 }
 
 /**

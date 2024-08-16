@@ -49,7 +49,7 @@ export interface ShareLinkEditShocker {
      * @type {number}
      * @memberof ShareLinkEditShocker
      */
-    cooldown?: number;
+    cooldown?: number | null;
 }
 
 /**

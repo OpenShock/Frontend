@@ -24,13 +24,13 @@ export interface StringBaseResponse {
      * @type {string}
      * @memberof StringBaseResponse
      */
-    message?: string;
+    message?: string | null;
     /**
      * 
      * @type {string}
      * @memberof StringBaseResponse
      */
-    data?: string;
+    data?: string | null;
 }
 
 /**

@@ -31,13 +31,13 @@ export interface OwnerShockerResponseIEnumerableIEnumerableBaseResponse {
      * @type {string}
      * @memberof OwnerShockerResponseIEnumerableIEnumerableBaseResponse
      */
-    message?: string;
+    message?: string | null;
     /**
      * 
      * @type {Array<Array<OwnerShockerResponse>>}
      * @memberof OwnerShockerResponseIEnumerableIEnumerableBaseResponse
      */
-    data?: Array<Array<OwnerShockerResponse>>;
+    data?: Array<Array<OwnerShockerResponse>> | null;
 }
 
 /**

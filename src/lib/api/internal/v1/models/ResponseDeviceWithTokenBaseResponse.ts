@@ -31,7 +31,7 @@ export interface ResponseDeviceWithTokenBaseResponse {
      * @type {string}
      * @memberof ResponseDeviceWithTokenBaseResponse
      */
-    message?: string;
+    message?: string | null;
     /**
      * 
      * @type {ResponseDeviceWithToken}

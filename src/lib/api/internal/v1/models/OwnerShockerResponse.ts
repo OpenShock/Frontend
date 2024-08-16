@@ -43,7 +43,7 @@ export interface OwnerShockerResponse {
      * @type {Array<SharedDevice>}
      * @memberof OwnerShockerResponse
      */
-    devices?: Array<SharedDevice>;
+    devices?: Array<SharedDevice> | null;
 }
 
 /**

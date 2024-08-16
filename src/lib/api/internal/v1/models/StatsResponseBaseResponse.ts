@@ -31,7 +31,7 @@ export interface StatsResponseBaseResponse {
      * @type {string}
      * @memberof StatsResponseBaseResponse
      */
-    message?: string;
+    message?: string | null;
     /**
      * 
      * @type {StatsResponse}

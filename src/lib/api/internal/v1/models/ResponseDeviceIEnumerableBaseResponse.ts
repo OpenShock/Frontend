@@ -31,13 +31,13 @@ export interface ResponseDeviceIEnumerableBaseResponse {
      * @type {string}
      * @memberof ResponseDeviceIEnumerableBaseResponse
      */
-    message?: string;
+    message?: string | null;
     /**
      * 
      * @type {Array<ResponseDevice>}
      * @memberof ResponseDeviceIEnumerableBaseResponse
      */
-    data?: Array<ResponseDevice>;
+    data?: Array<ResponseDevice> | null;
 }
 
 /**

@@ -37,7 +37,7 @@ export interface EditTokenRequest {
      * @type {Array<PermissionType>}
      * @memberof EditTokenRequest
      */
-    permissions?: Array<PermissionType>;
+    permissions?: Array<PermissionType> | null;
 }
 
 /**

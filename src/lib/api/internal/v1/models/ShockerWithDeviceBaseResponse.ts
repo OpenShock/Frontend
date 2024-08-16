@@ -31,7 +31,7 @@ export interface ShockerWithDeviceBaseResponse {
      * @type {string}
      * @memberof ShockerWithDeviceBaseResponse
      */
-    message?: string;
+    message?: string | null;
     /**
      * 
      * @type {ShockerWithDevice}

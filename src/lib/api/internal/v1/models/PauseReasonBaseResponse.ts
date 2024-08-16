@@ -24,7 +24,7 @@ export interface PauseReasonBaseResponse {
      * @type {string}
      * @memberof PauseReasonBaseResponse
      */
-    message?: string;
+    message?: string | null;
     /**
      * An integer representing the reason(s) for the shocker being paused, expressed as a bitfield where reasons are OR'd together.
      * 

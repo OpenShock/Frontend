@@ -31,7 +31,7 @@ export interface DeviceSelfResponseBaseResponse {
      * @type {string}
      * @memberof DeviceSelfResponseBaseResponse
      */
-    message?: string;
+    message?: string | null;
     /**
      * 
      * @type {DeviceSelfResponse}
