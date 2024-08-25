@@ -2,11 +2,15 @@ name: build
 description: Tests and builds the frontend
 inputs:
   node-version:
-    required: true
     description: Node.js version to use
-  artifact-name:
     required: true
+  upload-artifact:
+    description: If true, uploads the artifact
+    required: true
+  artifact-name:
     description: Name of the artifact to upload
+    required: false
+    default: frontend
 
 runs:
   using: composite
