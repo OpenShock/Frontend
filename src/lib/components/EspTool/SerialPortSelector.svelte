@@ -6,6 +6,7 @@
 
   export let port: SerialPort | null = null;
   export let disabled: boolean = false;
+  export let terminalOpen: boolean = false;
 
   const filters = [{ usbVendorId: 0x1a86 }, { usbVendorId: 0x10c4 }, { usbVendorId: 0x303a }];
 
@@ -54,11 +55,22 @@
   }
 </script>
 
+<style>
+.flip-arrow {
+  transform: rotate(180deg);
+}
+</style>
+
 <div>
   {#if !browser}
     <h3 class="h3">Loading...</h3>
   {:else if 'serial' in navigator}
+  <div class="flex flex-row items-center justify-between">
     <h3 class="h3 font-bold">Select your device</h3>
+    <button
+    on:click={() => terminalOpen = !terminalOpen}
+    class={"btn btn-icon variant-outline-primary fa-solid fa-arrow-right transition-transform " + (terminalOpen ? "flip-arrow" : "")}></button>
+  </div>
     <div class="p-2">
       {#if port === null}
         <p>Please connect your device to your computer.</p>

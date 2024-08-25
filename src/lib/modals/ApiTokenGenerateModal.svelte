@@ -39,10 +39,16 @@
     const valid = expireDate == null ? undefined : expireDate;
 
     try {
-      await tokensApi.tokensCreateToken({
+      const res = await tokensApi.tokensCreateToken({
         name,
         validUntil: valid,
         permissions: permissionsActually,
+      });
+
+      modalStore.trigger({
+        type: 'component',
+        meta: { token: res.data },
+        component: 'ApiTokenDisplayGenerated'
       });
     } catch (e) {
       console.error(e);

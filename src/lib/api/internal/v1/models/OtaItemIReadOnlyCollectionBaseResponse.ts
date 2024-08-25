@@ -31,13 +31,13 @@ export interface OtaItemIReadOnlyCollectionBaseResponse {
      * @type {string}
      * @memberof OtaItemIReadOnlyCollectionBaseResponse
      */
-    message?: string;
+    message?: string | null;
     /**
      * 
      * @type {Array<OtaItem>}
      * @memberof OtaItemIReadOnlyCollectionBaseResponse
      */
-    data?: Array<OtaItem>;
+    data?: Array<OtaItem> | null;
 }
 
 /**

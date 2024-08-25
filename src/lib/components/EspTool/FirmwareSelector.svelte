@@ -32,8 +32,6 @@
   $: boards = version ? boardsCache[version] ?? [] : [];
   $: if (boards.length === 0) {
     board = null;
-  } else if (board === null || !boards.includes(board)) {
-    board = boards[0];
   }
 </script>
 

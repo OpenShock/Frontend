@@ -42,7 +42,7 @@ export interface ShareLinkResponse {
      * @type {Date}
      * @memberof ShareLinkResponse
      */
-    expiresOn?: Date;
+    expiresOn?: Date | null;
 }
 
 /**

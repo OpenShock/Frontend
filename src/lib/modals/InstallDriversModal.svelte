@@ -2,6 +2,7 @@
   import Bowser from 'bowser';
   import { browser } from '$app/environment';
   import { Step, Stepper, getModalStore } from '@skeletonlabs/skeleton';
+  import { PUBLIC_DISCORD_INVITE_URL } from '$env/static/public';
 
   const modalStore = getModalStore();
 </script>
@@ -81,7 +82,7 @@
         channel.
       </p>
       <a
-        href="https://discord.gg/openshock"
+        href={PUBLIC_DISCORD_INVITE_URL}
         target="_parent"
         rel="noopener noreferrer"
         class="btn variant-filled-primary gap-2"

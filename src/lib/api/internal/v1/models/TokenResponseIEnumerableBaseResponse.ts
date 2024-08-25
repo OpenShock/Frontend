@@ -31,13 +31,13 @@ export interface TokenResponseIEnumerableBaseResponse {
      * @type {string}
      * @memberof TokenResponseIEnumerableBaseResponse
      */
-    message?: string;
+    message?: string | null;
     /**
      * 
      * @type {Array<TokenResponse>}
      * @memberof TokenResponseIEnumerableBaseResponse
      */
-    data?: Array<TokenResponse>;
+    data?: Array<TokenResponse> | null;
 }
 
 /**

@@ -31,13 +31,13 @@ export interface LogEntryIEnumerableBaseResponse {
      * @type {string}
      * @memberof LogEntryIEnumerableBaseResponse
      */
-    message?: string;
+    message?: string | null;
     /**
      * 
      * @type {Array<LogEntry>}
      * @memberof LogEntryIEnumerableBaseResponse
      */
-    data?: Array<LogEntry>;
+    data?: Array<LogEntry> | null;
 }
 
 /**

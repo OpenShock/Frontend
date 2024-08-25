@@ -43,7 +43,7 @@ export interface SharedDevice {
      * @type {Array<SharedShocker>}
      * @memberof SharedDevice
      */
-    shockers?: Array<SharedShocker>;
+    shockers?: Array<SharedShocker> | null;
 }
 
 /**

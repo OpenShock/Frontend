@@ -30,7 +30,7 @@ export interface ShareLinkCreate {
      * @type {Date}
      * @memberof ShareLinkCreate
      */
-    expiresOn?: Date;
+    expiresOn?: Date | null;
 }
 
 /**
