@@ -23,25 +23,6 @@ This is the frontend for the OpenShock project that interfaces with the OpenShoc
 ![Skeleton UI](https://img.shields.io/badge/💀_Skeleton_UI-646CFF?style=for-the-badge&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-## Setup
-
-To get started with development, you will need to have Node.js LTS installed.
-
-We recommend using a version manager like [Volta](https://docs.volta.sh/guide/getting-started) to manage your Node.js versions. Alternatively, you can use [nvm-linux](https://github.com/nvm-sh/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows).
-
-If you are going to update the OpenAPI schema, you will need to have Java installed to run the OpenAPI generator.
-
-After you have Node.js installed, you can run the following commands to get started:
-
-```bash
-npm i
-npm run dev
-```
-
-## Support
-
-You can support the openshock dev team here: [Sponsor OpenShock](https://github.com/sponsors/OpenShock)
-
 ## Available Commands
 
 - `npm i` - Install dependencies
@@ -49,3 +30,65 @@ You can support the openshock dev team here: [Sponsor OpenShock](https://github.
 - `npm run build` - Build the project
 - `npm run preview` - Preview the built project
 - `npx openapi-generator-cli generate` - Generate the API client
+
+## Setup
+
+To get started with development, you will need to have **Node.js** and **npm** installed.
+
+We recommend using a version manager like [Volta](https://docs.volta.sh/guide/getting-started) to manage your Node.js versions.
+
+### Install Node.js and npm
+
+Install on Linux:
+```bash
+curl https://get.volta.sh | bash
+```
+
+Install on Windows:
+```pwsh
+winget install Volta.Volta
+```
+
+Then you can install the required **Node.js** and **npm** version by running a single command in the repository root directory:
+```bash
+volta install
+```
+
+### Install dependencies and build project
+
+With Node.js installed, you can run the following commands to get started:
+
+```bash
+npm i
+npm run build
+```
+
+## Running locally
+
+Running the frontend locally is as simple as this:
+```bash
+npm run dev
+```
+
+### Hosts redirect
+
+If you do not have a hosts file config for your domain and try to run the project you will get the following example message:
+```
+Please ensure that local.openshock.app resolves to 127.0.0.1 in your hosts file
+
+On macOS and Linux, you can do this by running the following command:
+echo "127.0.0.1 local.openshock.app" | sudo tee -a /etc/hosts
+
+On Windows, you can do this by running the following command in PowerShell as an administrator:
+Add-Content -Path "C:\Windows\System32\drivers\etc\hosts" -Value "127.0.0.1 local.openshock.app"
+
+Then restart your development server
+```
+
+This action is required because of cookie policy, once you have done this you should be set!
+
+Try closing and re-opening your development environment or console to refresh its cached system config.
+
+## Support
+
+You can support the openshock dev team here: [Sponsor OpenShock](https://github.com/sponsors/OpenShock)
