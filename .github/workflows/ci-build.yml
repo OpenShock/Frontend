@@ -4,16 +4,13 @@ on:
       - '*.*'
       - '*.*.*'
     branches:
-      - master
+      - '*'
   workflow_dispatch: # Manually invoked by user.
 
-name: ci-deploy
-
-env:
-  NODE_VERSION: 20
+name: ci-build
 
 jobs:
-  containerize:
+  build-container:
     runs-on: ubuntu-latest
     needs: build
 
@@ -33,7 +30,8 @@ jobs:
 
   trigger-deployment:
     runs-on: ubuntu-latest
-    needs: containerize
+    needs: build-container
+    if: ${{ github.ref_type == 'branch' && github.event_name != 'pull_request' && github.ref_name == 'master' }}
     environment: production
 
     steps:
@@ -43,3 +41,4 @@ jobs:
           WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
         run: |
           curl -X POST -d "" "$WEBHOOK_URL"
+
