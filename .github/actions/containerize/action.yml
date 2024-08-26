@@ -13,9 +13,6 @@ inputs:
   registry-password:
     required: true
     description: Password to log in to the container registry
-  artifact-name:
-    required: true
-    description: Name of the artifact to upload
   push-image:
     required: true
     description: If true, pushes the image to the registry
@@ -23,11 +20,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Download internal artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: ${{ inputs.artifact-name }}
-
+  
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
