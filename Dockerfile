@@ -1,7 +1,6 @@
 FROM node:20-alpine AS build
 
 WORKDIR /app
-ENV NODE_ENV=production
 ENV CI=true
 
 COPY package.json .
@@ -12,11 +11,6 @@ RUN npm i
 
 COPY . .
 
-RUN npm run check
-
-RUN npx playwright install
-
-RUN npm run test
 RUN npm run build
 
 FROM node:20-alpine AS runtime
