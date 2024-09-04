@@ -5,6 +5,7 @@
   import { env } from '$env/dynamic/public';
   import type { TurnstileInstance } from '$lib/types/TurnstileInstance';
   import { onMount } from 'svelte';
+  import { darkModeStore } from '$lib/stores/DarkModeStore';
 
   export let action: string;
   export let cData: string | undefined = undefined;
@@ -49,7 +50,7 @@
       sitekey: env.PUBLIC_TURNSTILE_SITE_KEY,
       action,
       cData,
-      theme: $modeCurrent ? 'light' : 'dark',
+      theme: $darkModeStore ? 'dark' : 'light',
       callback: (token) => (response = token),
       'expired-callback': handleExpired,
       'timeout-callback': handleTimeout,
