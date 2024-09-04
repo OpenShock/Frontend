@@ -62,7 +62,7 @@
     <AppRail>
       <svelte:fragment slot="lead">
         <AppRailAnchor href="/home" selected={$page.url.pathname === '/home'} title="Home">
-          <i slot="lead" class="fa fa-house text-2xl" />
+          <i slot="lead" class="fa fa-house text-2xl"></i>
           <span>Home</span>
         </AppRailAnchor>
         <AppRailAnchor
@@ -70,11 +70,11 @@
           selected={$page.url.pathname === '/shockers'}
           title="Shockers"
         >
-          <i slot="lead" class="fa fa-bolt text-2xl" />
+          <i slot="lead" class="fa fa-bolt text-2xl"></i>
           <span>Shockers</span>
         </AppRailAnchor>
         <AppRailAnchor href="/hubs" selected={$page.url.pathname === '/devices'} title="Hubs">
-          <i slot="lead" class="fa fa-microchip text-2xl" />
+          <i slot="lead" class="fa fa-microchip text-2xl"></i>
           <span>Hubs</span>
         </AppRailAnchor>
         <AppRailAnchor
@@ -82,14 +82,14 @@
           selected={$page.url.pathname === '/sharelinks'}
           title="Sharelinks"
         >
-          <i slot="lead" class="fa fa-link text-2xl" />
+          <i slot="lead" class="fa fa-link text-2xl"></i>
           <span>Sharelinks</span>
         </AppRailAnchor>
       </svelte:fragment>
       <svelte:fragment slot="trail">
         {#if $UserSelfStore.rank === RankType.admin}
           <AppRailAnchor href="/admin" selected={$page.url.pathname === '/admin'} title="Admin">
-            <i slot="lead" class="fa fa-user-shield text-2xl" />
+            <i slot="lead" class="fa fa-user-shield text-2xl"></i>
             <span>Admin</span>
           </AppRailAnchor>
         {/if}

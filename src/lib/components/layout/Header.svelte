@@ -50,7 +50,7 @@
         >
           Logout
         </a>
-        <div class="arrow bg-surface-200-700-token" data-arrow="accountPopup" />
+        <div class="arrow bg-surface-200-700-token" data-arrow="accountPopup"></div>
       </div>
     {:else}
       <a
@@ -67,10 +67,10 @@
       </a>
       <div>
         <a href={PUBLIC_GITHUB_PROJECT_URL} class="btn-icon">
-          <i class="fa-brands fa-github text-lg" />
+          <i class="fa-brands fa-github text-lg"></i>
         </a>
         <a href={PUBLIC_DISCORD_INVITE_URL} class="btn-icon">
-          <i class="fa-brands fa-discord text-lg" />
+          <i class="fa-brands fa-discord text-lg"></i>
         </a>
       </div>
     {/if}

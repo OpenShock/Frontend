@@ -96,7 +96,7 @@
     on:click={FlashDevice}
     disabled={!manager || isFlashing}
   >
-    <i class="fa fa-microchip" />
+    <i class="fa fa-microchip"></i>
     Flash
   </button>
 
@@ -104,7 +104,7 @@
   <div class="flex flex-col items-start justify-start gap-2 p-2">
     {#if error}
       <div class="flex flex-row items-center justify-start gap-2">
-        <i class="fa fa-exclamation-triangle text-red-500" />
+        <i class="fa fa-exclamation-triangle text-red-500"></i>
         <p class="text-red-500">Error: {error}</p>
       </div>
     {:else}

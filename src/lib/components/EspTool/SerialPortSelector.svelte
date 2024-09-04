@@ -83,7 +83,7 @@
       {/if}
       {#if errorMessage !== null && errorMessage.name !== 'NotFoundError'}
         <div class="flex flex-row items-center justify-start gap-2">
-          <i class="fa fa-exclamation-triangle text-yellow-500" />
+          <i class="fa fa-exclamation-triangle text-yellow-500"></i>
           <p class="text-yellow-500">Error: {errorMessage.message}</p>
         </div>
       {/if}
@@ -95,7 +95,7 @@
           on:click={OpenPort}
           disabled={disabled || loading}
         >
-          <i class="fa fa-microchip" />
+          <i class="fa fa-microchip"></i>
           Select Device
         </button>
         <button
@@ -103,7 +103,7 @@
           on:click={() => modalStore.trigger({ type: 'component', component: 'InstallDrivers' })}
           disabled={disabled || loading}
         >
-          <i class="fa fa-download" />
+          <i class="fa fa-download"></i>
           Install Drivers
         </button>
       {:else}
@@ -112,7 +112,7 @@
           on:click={() => (port = null)}
           disabled={disabled || loading}
         >
-          <i class="fa fa-times" />
+          <i class="fa fa-times"></i>
           Disconnect Device
         </button>
       {/if}
@@ -125,15 +125,15 @@
     <h3 class="h3">Please use one of the following browsers:</h3>
     <div class="logo-cloud grid-cols-1 lg:!grid-cols-3 gap-1">
       <a class="logo-item" href="https://www.google.com/chrome/">
-        <span class="fa-brands fa-chrome fa-xl" />
+        <span class="fa-brands fa-chrome fa-xl"></span>
         <span>Chrome</span>
       </a>
       <a class="logo-item" href="https://www.microsoft.com/en-us/edge">
-        <span class="fa-brands fa-edge fa-xl" />
+        <span class="fa-brands fa-edge fa-xl"></span>
         <span>Edge</span>
       </a>
       <a class="logo-item" href="https://www.opera.com/">
-        <span class="fa-brands fa-opera fa-xl" />
+        <span class="fa-brands fa-opera fa-xl"></span>
         <span>Opera</span>
       </a>
     </div>
