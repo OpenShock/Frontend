@@ -1,7 +1,6 @@
 <script lang="ts">
   import { PUBLIC_DISCORD_INVITE_URL, PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
   import { UserSelfStore } from '$lib/stores/UserStore';
-  import { AppBar, LightSwitch, popup, type PopupSettings } from '@skeletonlabs/skeleton';
 
   const accountPopup: PopupSettings = {
     event: 'click',

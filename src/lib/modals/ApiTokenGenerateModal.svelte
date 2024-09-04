@@ -3,7 +3,6 @@
   import { PermissionType } from '$lib/api/internal/v1';
   import TextInput from '$lib/components/TextInput.svelte';
   import type { ValidationResult } from '$lib/types/ValidationResult';
-  import { getModalStore } from '@skeletonlabs/skeleton';
   import type { SvelteComponent } from 'svelte';
 
 

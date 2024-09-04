@@ -1,7 +1,6 @@
 <script lang="ts">
   import Bowser from 'bowser';
   import { browser } from '$app/environment';
-  import { getModalStore } from '@skeletonlabs/skeleton';
   import { SerialPortsStore } from '$lib/stores/SerialPortsStore';
 
   export let port: SerialPort | null = null;

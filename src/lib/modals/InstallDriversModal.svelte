@@ -1,7 +1,6 @@
 <script lang="ts">
   import Bowser from 'bowser';
   import { browser } from '$app/environment';
-  import { Step, Stepper, getModalStore } from '@skeletonlabs/skeleton';
   import { PUBLIC_DISCORD_INVITE_URL } from '$env/static/public';
 
   const modalStore = getModalStore();
