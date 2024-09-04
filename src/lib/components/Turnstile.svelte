@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { modeCurrent, ProgressRadial } from '@skeletonlabs/skeleton';
+  import { ProgressRing } from '@skeletonlabs/skeleton-svelte';
   import { browser } from '$app/environment';
   import CloudflareLogo from '$lib/components/svg/CloudflareLogo.svelte';
   import { env } from '$env/dynamic/public';
@@ -68,7 +68,7 @@
         <i class="fa fa-bug text-lg"></i>
         <span> Turnstile disabled </span>
       {:else}
-        <ProgressRadial stroke={120} width="w-8" />
+        <ProgressRing stroke={120} width="w-8" />
         <span> Loading... </span>
       {/if}
       <a
