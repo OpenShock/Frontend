@@ -1,8 +1,9 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
   import CircleSlider from './Internal/CircleSlider.svelte';
+  import type { ShockerResponse } from '$lib/api/internal/v1';
 
-  export let shocker: { id: string; name: string };
+  export let shocker: ShockerResponse;
 
   let intensity: number = 25;
   let duration: number = 1;

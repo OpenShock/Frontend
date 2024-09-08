@@ -1,7 +1,8 @@
 <script lang="ts">
+  import type { ShockerResponse } from '$lib/api/internal/v1';
   import { createEventDispatcher } from 'svelte';
 
-  export let shocker: { id: string; name: string };
+  export let shocker: ShockerResponse;
 
   const dispatch = createEventDispatcher();
 
