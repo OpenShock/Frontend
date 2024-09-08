@@ -5,7 +5,6 @@
   import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
   import ClassicControlModule from './ClassicControlModule.svelte';
   import type { ResponseDeviceWithShockers, ShockerResponse } from '$lib/api/internal/v1';
-  import { on } from 'events';
 
   enum ModuleType {
     ClassicControlModule,
