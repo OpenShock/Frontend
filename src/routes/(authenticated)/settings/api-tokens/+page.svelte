@@ -3,7 +3,7 @@
   import type { TokenResponse } from '$lib/api/internal/v1';
   import { getModalStore } from '@skeletonlabs/skeleton';
   import { escapeHtml } from '$lib/utils/encoding';
-  import { timeSince } from '$lib/utils/time';
+  import { elapsedToString } from '$lib/utils/time';
 
   const modalStore = getModalStore();
 
@@ -101,7 +101,7 @@
               <td title={row.createdOn.toLocaleString()}>{row.createdOn.toLocaleDateString()}</td>
               {#if row.validUntil}
                 <td title={row.validUntil.toLocaleString()}
-                  >In {timeSince(row.validUntil.getTime() - since)}</td
+                  >In {elapsedToString(row.validUntil.getTime() - since)}</td
                 >
               {:else}
                 <td class="text-warning-500">Never</td>
@@ -109,7 +109,9 @@
               {#if row.lastUsed.getTime() < 0}
                 <td>Never</td>
               {:else}
-                <td title={row.lastUsed.toLocaleString()}>{timeSince(since - row.lastUsed.getTime())} ago</td>
+                <td title={row.lastUsed.toLocaleString()}>
+                  {elapsedToString(since - row.lastUsed.getTime())} ago
+                </td>
               {/if}
               <td class="!whitespace-nowrap">
                 <button

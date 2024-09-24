@@ -74,8 +74,7 @@ export function validatePassword(value: string): ValidationResult | null {
     return result;
   }
 
-  result.valid = true;
-  return result;
+  return { valid: true };
 }
 
 export function validatePasswordMatch(
