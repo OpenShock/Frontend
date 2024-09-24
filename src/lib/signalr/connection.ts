@@ -16,7 +16,10 @@ function isDeviceStatusArray(array: any): array is OwnDeviceState[] {
       return false;
     }
 
-    if (Object.hasOwnProperty.call(item, 'firmwareVersion') && typeof item.firmwareVersion !== 'string') {
+    if (
+      Object.hasOwnProperty.call(item, 'firmwareVersion') &&
+      typeof item.firmwareVersion !== 'string'
+    ) {
       return false;
     }
 
@@ -36,7 +39,10 @@ async function create_signalr_connection() {
 
   connection = new SignalR.HubConnectionBuilder()
     .configureLogging(SignalR.LogLevel.Debug)
-    .withUrl(`https://${PUBLIC_BACKEND_API_DOMAIN}/1/hubs/user`)
+    .withUrl(`https://${PUBLIC_BACKEND_API_DOMAIN}/1/hubs/user`, {
+      transport: SignalR.HttpTransportType.WebSockets,
+      skipNegotiation: true,
+    })
     .build();
 
   connection.onclose(() => {
