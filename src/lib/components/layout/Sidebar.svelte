@@ -5,7 +5,6 @@
   import { UserSelfStore } from '$lib/stores/UserStore';
   import { HubConnectionState } from '@microsoft/signalr';
   import { AppRail, AppRailAnchor } from '@skeletonlabs/skeleton';
-  import path from 'path';
   import SecondLevelSidebar from './SecondLevelSidebar.svelte';
   import type { RouteCategory } from './Route';
 
