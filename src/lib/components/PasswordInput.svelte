@@ -75,15 +75,16 @@
     />
     <div>
       <button
-        class={'fa !m-0 h-[20px] w-[20px] cursor-pointer !p-0 ' +
-          (valueShown ? 'fa-eye-slash' : 'fa-eye')}
         type="button"
+        class={'fa !m-0 h-[20px] w-[20px] cursor-pointer !p-0 ' + (valueShown ? 'fa-eye-slash' : 'fa-eye')}
+        aria-label="Toggle password visibility"
         on:click={() => (valueShown = !valueShown)}
-      />
+      >
+      </button>
     </div>
   </div>
   {#if !validationResult || validationResult.valid}
-    <div class="h-3" />
+    <div class="h-3"></div>
   {:else}
     <p class="text-xs text-red-500 !mt-0">{validationResult.message}</p>
   {/if}
@@ -93,7 +94,7 @@
         <p class="text-sm text-gray-500">Password strength:</p>
         <p class={`text-sm ${pwsmColor}`}>{pwsmText}</p>
       </div>
-      <div class="arrow bg-surface-100-800-token" />
+      <div class="arrow bg-surface-100-800-token"></div>
       <div class="pt-2 h-1 w-full flex flex-row items-center space-x-1">
         <div class="h-1 bg-red-500" style="flex: 3 3 0%"></div>
         <div class="h-1 bg-orange-500" style="flex: 2 2 0%"></div>
@@ -105,7 +106,7 @@
         <div
           bind:this={pwsmArrow}
           class="absolute w-2 h-2 bg-black dark:bg-white transform rotate-45 -translate-x-1 -translate-y-1"
-        />
+        ></div>
       </div>
     </div>
   {/if}

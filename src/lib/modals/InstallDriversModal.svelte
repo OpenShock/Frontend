@@ -20,7 +20,7 @@
         rel="noopener noreferrer"
         class="btn variant-filled-primary gap-2"
       >
-        <i class="fa fa-download" />
+        <i class="fa fa-download" ></i>
         CP210x Universal Windows Driver
       </a>
     </div>
@@ -87,7 +87,7 @@
         rel="noopener noreferrer"
         class="btn variant-filled-primary gap-2"
       >
-        <i class="fa-brands fa-discord" />
+        <i class="fa-brands fa-discord"></i>
         Join our Discord server
       </a>
     </div>

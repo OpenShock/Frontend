@@ -140,7 +140,7 @@
         {/if}
       </div>
       {#if expireValidationResult.valid}
-        <div class="h-3" />
+        <div class="h-3" ></div>
       {:else}
         <p class="text-xs text-red-500 !mt-0">{expireValidationResult.message}</p>
       {/if}
