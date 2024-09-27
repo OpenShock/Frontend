@@ -67,8 +67,11 @@
   <div class="flex flex-row items-center justify-between">
     <h3 class="h3 font-bold">Select your device</h3>
     <button
-    on:click={() => terminalOpen = !terminalOpen}
-    class={"btn btn-icon variant-outline-primary fa-solid fa-arrow-right transition-transform " + (terminalOpen ? "flip-arrow" : "")}></button>
+      type="button"
+      on:click={() => (terminalOpen = !terminalOpen)}
+      class={"btn btn-icon variant-outline-primary fa-solid fa-arrow-right transition-transform " + (terminalOpen ? "flip-arrow" : "")}
+      aria-label={terminalOpen ? 'Hide terminal' : 'Show terminal'}
+    ></button>
   </div>
     <div class="p-2">
       {#if port === null}

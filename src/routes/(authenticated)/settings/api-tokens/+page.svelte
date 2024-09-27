@@ -115,13 +115,21 @@
               {/if}
               <td class="!whitespace-nowrap">
                 <button
-                  class="btn-icon variant-filled-primary fa fa-edit"
+                  type="button"
                   on:click={() => editToken(row.id)}
-                ></button>
+                  class="btn-icon variant-filled-primary"
+                  aria-label="Edit"
+                >
+                  <i class="fa fa-edit"></i>
+                </button>
                 <button
-                  class="btn-icon variant-filled-primary fa fa-trash"
+                  type="button"
                   on:click={() => deleteToken(row)}
-                ></button>
+                  class="btn-icon variant-filled-primary"
+                  aria-label="Delete"
+                >
+                  <i class="fa fa-trash"></i>
+                </button>
               </td>
             </tr>
           {/each}

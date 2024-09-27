@@ -16,6 +16,7 @@
       href={!!$UserSelfStore ? '/home' : '/'}
       class="overflow-hidden lg:!ml-0 lg:w-auto select-none"
       data-sveltekit-preload-data="hover"
+      aria-label="OpenShock"
     >
       <img class="inline-block h-12 pointer-events-none" src="/logo.svg" alt="OpenShock Logo" />
     </a>
@@ -65,10 +66,10 @@
         Sign Up
       </a>
       <div>
-        <a href={PUBLIC_GITHUB_PROJECT_URL} class="btn-icon">
+        <a href={PUBLIC_GITHUB_PROJECT_URL} class="btn-icon" aria-label="GitHub Project">
           <i class="fa-brands fa-github text-lg"></i>
         </a>
-        <a href={PUBLIC_DISCORD_INVITE_URL} class="btn-icon">
+        <a href={PUBLIC_DISCORD_INVITE_URL} class="btn-icon" aria-label="Discord Server">
           <i class="fa-brands fa-discord text-lg"></i>
         </a>
       </div>

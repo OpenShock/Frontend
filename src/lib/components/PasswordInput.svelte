@@ -75,12 +75,12 @@
     />
     <div>
       <button
-        class={'fa !m-0 h-[20px] w-[20px] cursor-pointer !p-0 ' +
-          (valueShown ? 'fa-eye-slash' : 'fa-eye')}
         type="button"
         on:click={() => (valueShown = !valueShown)}
-      >
-      </button>
+        class={'fa !m-0 h-[20px] w-[20px] cursor-pointer !p-0 ' +
+          (valueShown ? 'fa-eye-slash' : 'fa-eye')}
+        aria-label={valueShown ? 'Hide password' : 'Show password'}
+      ></button>
     </div>
   </div>
   {#if !validationResult || validationResult.valid}
