@@ -2,9 +2,9 @@
   import { modeCurrent, ProgressRadial } from '@skeletonlabs/skeleton';
   import { browser, dev } from '$app/environment';
   import CloudflareLogo from '$lib/components/svg/CloudflareLogo.svelte';
-  import { env } from '$env/dynamic/public';
   import type { TurnstileInstance } from '$lib/types/TurnstileInstance';
   import { onMount } from 'svelte';
+  import { PUBLIC_TURNSTILE_SITE_KEY } from '$env/static/public';
 
   export let action: string;
   export let cData: string | undefined = undefined;
@@ -45,7 +45,7 @@
   }
   $: if (turnstile && !isLoading) {
     turnstile.render(element, {
-      sitekey: env.PUBLIC_TURNSTILE_SITE_KEY,
+      sitekey: PUBLIC_TURNSTILE_SITE_KEY,
       action,
       cData,
       theme: $modeCurrent ? 'light' : 'dark',

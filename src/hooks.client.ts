@@ -1,23 +1,23 @@
+import { PUBLIC_SENTRY_DSN, PUBLIC_SENTRY_ENABLED, PUBLIC_SENTRY_REPLAYS_ONERROR_SAMPLERATE, PUBLIC_SENTRY_REPLAYS_SESSION_SAMPLERATE, PUBLIC_SENTRY_TRACES_SAMPLERATE } from '$env/static/public';
 import { browserTracingIntegration, captureException, init as SentryInit, replayIntegration } from '@sentry/svelte';
 import type { HandleServerError } from '@sveltejs/kit';
-import { env } from '$env/dynamic/public';
 
-const sentryEnabled = env.PUBLIC_SENTRY_ENABLED === 'true';
+const sentryEnabled = PUBLIC_SENTRY_ENABLED === 'true';
 
 let errorHandler: HandleServerError;
 if (sentryEnabled) {
   // Initialize Sentry for error and performance monitoring
   SentryInit({
-    dsn: env.PUBLIC_SENTRY_DSN,
-    tracesSampleRate: parseFloat(env.PUBLIC_SENTRY_TRACES_SAMPLERATE),
+    dsn: PUBLIC_SENTRY_DSN,
+    tracesSampleRate: parseFloat(PUBLIC_SENTRY_TRACES_SAMPLERATE),
 
     // This sets the sample rate to be 10%. You may want this to be 100% while
     // in development and sample at a lower rate in production
-    replaysSessionSampleRate: parseFloat(env.PUBLIC_SENTRY_REPLAYS_SESSION_SAMPLERATE),
+    replaysSessionSampleRate: parseFloat(PUBLIC_SENTRY_REPLAYS_SESSION_SAMPLERATE),
 
     // If the entire session is not sampled, use the below sample rate to sample
     // sessions when an error occurs.
-    replaysOnErrorSampleRate: parseFloat(env.PUBLIC_SENTRY_REPLAYS_ONERROR_SAMPLERATE),
+    replaysOnErrorSampleRate: parseFloat(PUBLIC_SENTRY_REPLAYS_ONERROR_SAMPLERATE),
 
     // If you don't want to use Session Replay, just remove the line below:
     integrations: [browserTracingIntegration(), replayIntegration()],

@@ -1,13 +1,9 @@
-import { env } from "$env/dynamic/public";
+import { PUBLIC_SITE_NAME, PUBLIC_SITE_DESCRIPTION } from "$env/static/public";
 import type { Page } from "@sveltejs/kit";
 
-function getPageTitle(page: Page) {
-  return env.PUBLIC_SITE_NAME?.trim() || "OpenShock";
-}
-
 function getPageTitleAndDescription(page: Page): { title: string; description: string } {
-  const title = getPageTitle(page);
-  const details = env.PUBLIC_SITE_DESCRIPTION || "a free and open-source ecosystem to control various shock collars over the internet.";
+  const title = PUBLIC_SITE_NAME.trim();
+  const details = PUBLIC_SITE_DESCRIPTION.trim();
 
   let description: string;
   switch (title.toLowerCase()) {

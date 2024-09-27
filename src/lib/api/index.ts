@@ -1,5 +1,4 @@
 import { PUBLIC_BACKEND_API_DOMAIN } from '$env/static/public';
-import { env } from '$env/dynamic/public';
 import { AccountApi, AdminApi, Configuration as ConfigurationV1, DeviceApi, DevicesApi, PublicApi, ShareLinksApi, SharesApi, ShockerApi as ShockerV1Api, TokensApi, UsersApi, VersionApi } from './internal/v1';
 import { Configuration as ConfigurationV2, ShockerApi as ShockerV2Api } from './internal/v2';
 
@@ -9,7 +8,7 @@ type Config = {
 };
 
 function GetBasePath() {
-  let domain = (env.PUBLIC_BACKEND_API_DOMAIN || PUBLIC_BACKEND_API_DOMAIN || undefined) as string | undefined;
+  let domain = (PUBLIC_BACKEND_API_DOMAIN || undefined) as string | undefined;
 
   if (!domain) {
     return undefined;
