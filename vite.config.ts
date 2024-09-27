@@ -3,6 +3,7 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig, type PluginOption, loadEnv } from 'vite';
 import mkcert from 'vite-plugin-mkcert';
 import dns from 'dns';
+import { env } from 'process';
 
 function printRed(message: string) {
   console.log(`\u001b[1;31m${message}\u001b[0m`);
@@ -44,17 +45,29 @@ async function ensureFqdnRedirect(host: string, fqdn: string) {
   process.exit(1);
 }
 
-export default defineConfig(async ({ mode }) => {
+function isThruthy(value: string | undefined) {
+  return value === 'true' || value === '1';
+}
+
+export default defineConfig(async ({ command, mode, isPreview }) => {
   let host: string | undefined;
   let port: number | undefined;
   const plugins: PluginOption[] = [];
 
-  // Ensure that local.{PUBLIC_SITE_DOMAIN} resolves to localhost, and then use mkcert to generate a certificate
-  if (process.env.NODE_ENV === 'development' && !process.env.CI) {
-    // Load environment variables
-    process.env = { ...process.env, ...loadEnv(mode, process.cwd(), ['PUBLIC_']) };
+  const isLocalServe = command === 'serve' || isPreview === true;
+  const isProduction = mode === 'production' && (isThruthy(env.CI) || isThruthy(env.DOCKER) || isThruthy(env.CF_PAGES));
 
-    host = `local.${process.env.PUBLIC_SITE_DOMAIN}`;
+  const vars = { ...env, ...loadEnv(mode, process.cwd(), ['PUBLIC_']) };
+
+  // If non-prod, ensure that local.{PUBLIC_SITE_DOMAIN} resolves to localhost, and then use mkcert to generate a certificate
+  if (isLocalServe && !isProduction) {
+    // Load environment variables
+    if (!vars.PUBLIC_SITE_DOMAIN) {
+      printRed('PUBLIC_SITE_DOMAIN must be set in your environment');
+      process.exit(1);
+    }
+
+    host = `local.${vars.PUBLIC_SITE_DOMAIN}`;
     port = 443;
 
     // Ensure we have the host entry redirecting to localhost

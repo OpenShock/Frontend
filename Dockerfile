@@ -1,7 +1,8 @@
 FROM node:20-alpine AS build
 
 WORKDIR /app
-ENV CI=true
+ENV DOCKER=true
+ENV NODE_ENV=production
 
 COPY package.json .
 COPY package-lock.json .
@@ -16,7 +17,9 @@ RUN npm run build
 FROM node:20-alpine AS runtime
 
 WORKDIR /app
+ENV DOCKER=true
 ENV NODE_ENV=production
+
 EXPOSE 3000
 
 COPY --from=build /app/package.json .
