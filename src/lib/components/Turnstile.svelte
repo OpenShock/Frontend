@@ -4,7 +4,7 @@
   import CloudflareLogo from '$lib/components/svg/CloudflareLogo.svelte';
   import type { TurnstileInstance } from '$lib/types/TurnstileInstance';
   import { onMount } from 'svelte';
-  import { PUBLIC_TURNSTILE_SITE_KEY } from '$env/static/public';
+  import { PUBLIC_TURNSTILE_DEV_BYPASS_VALUE, PUBLIC_TURNSTILE_SITE_KEY } from '$env/static/public';
 
   export let action: string;
   export let cData: string | undefined = undefined;
@@ -32,7 +32,7 @@
   if (browser) {
     if (dev) {
       console.log('Turnstile is disabled in dev mode');
-      response = 'dev-bypass';
+      response = PUBLIC_TURNSTILE_DEV_BYPASS_VALUE;
     } else {
       // If turstile doesnt load, then the index.html is proabably missing the script tag (https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/#explicitly-render-the-turnstile-widget)
       onMount(() => (turnstile = window.turnstile));
