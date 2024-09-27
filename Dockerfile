@@ -26,6 +26,6 @@ COPY --from=build /app/package-lock.json .
 COPY --from=build /app/patches/ patches/
 COPY --from=build /app/build build/
 
-RUN npm ci --only=production
+RUN npm ci
 
 CMD ["node","build/index.js"]
