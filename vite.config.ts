@@ -55,12 +55,12 @@ export default defineConfig(async ({ command, mode, isPreview }) => {
   const plugins: PluginOption[] = [];
 
   const isLocalServe = command === 'serve' || isPreview === true;
-  const isProduction = mode === 'production' && (isThruthy(env.CI) || isThruthy(env.DOCKER) || isThruthy(env.CF_PAGES));
+  const isProduction = mode === 'production' && (isThruthy(env.DOCKER) || isThruthy(env.CF_PAGES));
 
   const vars = { ...env, ...loadEnv(mode, process.cwd(), ['PUBLIC_']) };
 
-  // If non-prod, ensure that local.{PUBLIC_SITE_DOMAIN} resolves to localhost, and then use mkcert to generate a certificate
-  if (isLocalServe && !isProduction) {
+  // If we are running locally, ensure that local.{PUBLIC_SITE_DOMAIN} resolves to localhost, and then use mkcert to generate a certificate
+  if (isLocalServe && !isProduction && !isThruthy(env.CI)) {
     // Load environment variables
     if (!vars.PUBLIC_SITE_DOMAIN) {
       printRed('PUBLIC_SITE_DOMAIN must be set in your environment');
