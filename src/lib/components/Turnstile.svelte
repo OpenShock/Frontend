@@ -1,6 +1,6 @@
 <script lang="ts">
   import { modeCurrent, ProgressRadial } from '@skeletonlabs/skeleton';
-  import { browser } from '$app/environment';
+  import { browser, dev } from '$app/environment';
   import CloudflareLogo from '$lib/components/svg/CloudflareLogo.svelte';
   import { env } from '$env/dynamic/public';
   import type { TurnstileInstance } from '$lib/types/TurnstileInstance';
@@ -10,7 +10,6 @@
   export let cData: string | undefined = undefined;
   export let response: string | null = null;
 
-  const isDev = import.meta.env.DEV;
   let turnstile: TurnstileInstance | undefined;
   let element: HTMLDivElement;
 
@@ -31,7 +30,7 @@
   }
 
   if (browser) {
-    if (isDev) {
+    if (dev) {
       console.log('Turnstile is disabled in dev mode');
       response = 'dev-bypass';
     } else {
@@ -63,7 +62,7 @@
   {#if isLoading}
     <!-- Turnstile placeholder -->
     <div id="placeholder">
-      {#if isDev}
+      {#if dev}
         <i class="fa fa-bug text-lg" />
         <span> Turnstile disabled </span>
       {:else}
