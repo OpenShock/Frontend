@@ -74,7 +74,7 @@
           <i slot="lead" class="fa fa-bolt text-2xl"></i>
           <span>Shockers</span>
         </AppRailAnchor>
-        <AppRailAnchor href="/hubs" selected={path === '/devices'} title="Hubs">
+        <AppRailAnchor href="/hubs" selected={path === '/hubs'} title="Hubs">
           <i slot="lead" class="fa fa-microchip text-2xl"></i>
           <span>Hubs</span>
         </AppRailAnchor>
