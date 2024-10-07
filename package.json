@@ -19,14 +19,14 @@
 	"devDependencies": {
 		"@floating-ui/dom": "^1.6.11",
 		"@microsoft/signalr": "^8.0.7",
-		"@openapitools/openapi-generator-cli": "^2.13.12",
+		"@openapitools/openapi-generator-cli": "^2.13.13",
 		"@playwright/test": "^1.47.2",
-		"@sentry/svelte": "^8.32.0",
+		"@sentry/svelte": "^8.33.1",
 		"@skeletonlabs/skeleton": "2.10.2",
 		"@skeletonlabs/tw-plugin": "0.4.0",
 		"@sveltejs/adapter-cloudflare": "^4.7.2",
 		"@sveltejs/adapter-node": "^5.2.4",
-		"@sveltejs/kit": "^2.6.1",
+		"@sveltejs/kit": "^2.6.2",
 		"@sveltejs/vite-plugin-svelte": "^3.1.2",
 		"@tailwindcss/forms": "0.5.9",
 		"@tailwindcss/typography": "0.5.15",
@@ -39,7 +39,7 @@
 		"bowser": "^2.11.0",
 		"crypto-js": "^4.2.0",
 		"email-validator": "^2.0.4",
-		"eslint": "^9.11.1",
+		"eslint": "^9.12.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.44.0",
 		"highlight.js": "^11.10.0",
@@ -54,7 +54,7 @@
 		"typescript": "^5.6.2",
 		"vite-plugin-mkcert": "^1.17.6",
 		"vite-plugin-tailwind-purgecss": "0.3.3",
-		"vitest": "^2.1.1"
+		"vitest": "^2.1.2"
 	},
 	"dependencies": {
 		"esptool-js": "^0.4.5",
