@@ -1,5 +1,6 @@
 apis/AccountApi.ts
 apis/AdminApi.ts
+apis/AuthenticatedAccountApi.ts
 apis/DeviceApi.ts
 apis/DevicesApi.ts
 apis/PublicApi.ts
@@ -14,6 +15,9 @@ index.ts
 models/AdminOnlineDeviceResponse.ts
 models/AdminOnlineDeviceResponseIEnumerableBaseResponse.ts
 models/BooleanNullableBaseResponse.ts
+models/ChangeEmailRequest.ts
+models/ChangePasswordRequest.ts
+models/ChangeUsernameRequest.ts
 models/Control.ts
 models/ControlLogSenderLight.ts
 models/ControlType.ts
@@ -86,5 +90,10 @@ models/StringBaseResponse.ts
 models/TokenResponse.ts
 models/TokenResponseBaseResponse.ts
 models/TokenResponseIEnumerableBaseResponse.ts
+models/UsernameAvailability.ts
+models/UsernameCheckResponse.ts
+models/UsernameCheckResponseBaseResponse.ts
+models/UsernameError.ts
+models/UsernameErrorType.ts
 models/index.ts
 runtime.ts
