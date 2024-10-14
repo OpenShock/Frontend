@@ -7,7 +7,6 @@
   import { UserSelfStore } from '$lib/stores/UserStore';
   import { Accordion, AccordionItem } from '@skeletonlabs/skeleton';
 
-
   let username: string = '';
   $: usernameValres = validateUsername(username);
 
@@ -52,8 +51,7 @@
         bind:value={username}
         validationResult={usernameValres}
         icon="fa-user"
-        buttonText="Change"
-        on:buttonClick={submitUsername}
+        button={{ text: 'Change', onClick: submitUsername }}
       />
 
       <TextInput
@@ -63,8 +61,7 @@
         bind:value={email}
         validationResult={emailValres}
         icon="fa-envelope"
-        buttonText="Change"
-        on:buttonClick={submitEmail}
+        button={{ text: 'Change', onClick: submitEmail }}
       />
 
       <Accordion>
