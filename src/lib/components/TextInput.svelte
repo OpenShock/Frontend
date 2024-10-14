@@ -18,6 +18,10 @@
     dispatch('buttonClick');
   }
 
+  function handleInput(event: Event) {
+    dispatch('input', event);
+  }
+
 </script>
 
 <label class="label w-full">
@@ -27,9 +31,9 @@
       {#if icon}
         <div class="input-group-shim fa {icon}"></div>
       {/if}
-      <input type="text" title={label} {placeholder} {autocomplete} bind:value />
+      <input type="text" title={label} {placeholder} {autocomplete} bind:value on:input={handleInput} />
       {#if buttonText}
-          <button class={buttonVariant} on:click={handleButtonClick} disabled={validationResult !== undefined && !validationResult}>{buttonText}</button>
+          <button class={buttonVariant} on:click={handleButtonClick} disabled={validationResult !== undefined && !validationResult?.valid}>{buttonText}</button>
       {/if}
     </div>
   </div>

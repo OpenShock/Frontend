@@ -3,13 +3,16 @@
   import TextInput from '$lib/components/TextInput.svelte';
   import { validateEmail } from '$lib/inputvalidation/emailValidator';
   import { validatePassword, validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
-  import { validateUsername } from '$lib/inputvalidation/usernameValidator';
   import { UserSelfStore } from '$lib/stores/UserStore';
   import { Accordion, AccordionItem } from '@skeletonlabs/skeleton';
+  import { accountApi, authenticatedAccountApi } from '$lib/api';
+  import { getToastStore } from '@skeletonlabs/skeleton';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import UsernameInput from '$lib/components/UsernameInput.svelte';
 
+  const toastStore = getToastStore();
 
   let username: string = '';
-  $: usernameValres = validateUsername(username);
 
   let email: string = '';
   $: emailValres = validateEmail(email);
@@ -23,8 +26,29 @@
   let passwordConfirm: string = '';
   $: passwordConfirmValres = validatePasswordMatch(password, passwordConfirm);
 
-  function submitUsername() {
-    console.log('Submitting username');
+
+  async function submitUsername() {
+    try {
+      const response = await authenticatedAccountApi.authenticatedAccountChangeUsername({
+        username: username,
+      });
+
+      toastStore.trigger({
+        background: 'variant-filled-success',
+        message: 'Username changed successfully',
+      });
+    } catch (e) {
+      await handleApiError(e, toastStore, (problem) => {
+        if (problem.type === 'Account.Username.Invalid') {
+          toastStore.trigger({
+            background: 'variant-filled-error',
+            message: "",
+          });
+          return true;
+        }
+        return false;
+      });
+    }
   }
 
   function submitEmail() {
@@ -45,13 +69,9 @@
     <div
       class="w-full flex flex-col items-start gap-y-2 p-4 bg-surface-100-800-token rounded-lg border border-gray-500"
     >
-      <TextInput
-        label="Username"
+      <UsernameInput
         placeholder={$UserSelfStore.name}
-        autocomplete="off"
-        bind:value={username}
-        validationResult={usernameValres}
-        icon="fa-user"
+        bind:username
         buttonText="Change"
         on:buttonClick={submitUsername}
       />
