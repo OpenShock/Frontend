@@ -16,5 +16,5 @@
       </a>
     </div>
   </div>
-  <div class="placeholder w-1/2 h-3/4 rounded-none" />
+  <div class="placeholder w-1/2 h-3/4 rounded-none" ></div>
 </div>

@@ -34,7 +34,7 @@
     <div class="flex justify-between w-full">
       <h2 class="h2">Admin Panel</h2>
       <button class="btn variant-filled-primary" on:click={() => (devices = null)}>
-        <i class="fa fa-sync" />
+        <i class="fa fa-sync" ></i>
         Refresh
       </button>
     </div>

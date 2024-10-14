@@ -1,9 +1,10 @@
 import { default as adapterCloudflare } from '@sveltejs/adapter-cloudflare';
 import { default as adapterNode } from '@sveltejs/adapter-node';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import { env } from 'process';
 
 // Determine if we are running on Cloudflare Pages
-const isCloudflare = process.env.CF_PAGES === '1';
+const isCloudflare = env.CF_PAGES === '1';
 
 // Use the appropriate adapter
 const adapter = isCloudflare ? adapterCloudflare : adapterNode;
