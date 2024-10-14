@@ -4,9 +4,11 @@
   import { signalr_state } from '$lib/signalr/connection';
   import { UserSelfStore } from '$lib/stores/UserStore';
   import { HubConnectionState } from '@microsoft/signalr';
-  import path from 'path';
+  import { AppRail, AppRailAnchor } from '@skeletonlabs/skeleton';
   import SecondLevelSidebar from './SecondLevelSidebar.svelte';
   import type { RouteCategory } from './Route';
+
+  $: path = $page.url.pathname;
 
   const settingsRoutes: RouteCategory[] = [
     {
@@ -60,34 +62,30 @@
   <div class="flex flex-row h-full">
     <AppRail>
       <svelte:fragment slot="lead">
-        <AppRailAnchor href="/home" selected={$page.url.pathname === '/home'} title="Home">
+        <AppRailAnchor href="/home" selected={path === '/home'} title="Home">
           <i slot="lead" class="fa fa-house text-2xl"></i>
           <span>Home</span>
         </AppRailAnchor>
-        <AppRailAnchor
-          href="/shockers"
-          selected={$page.url.pathname === '/shockers'}
-          title="Shockers"
-        >
+        <AppRailAnchor href="/shockers" selected={path === '/shockers'} title="Shockers">
           <i slot="lead" class="fa fa-bolt text-2xl"></i>
           <span>Shockers</span>
         </AppRailAnchor>
-        <AppRailAnchor href="/hubs" selected={$page.url.pathname === '/devices'} title="Hubs">
+        <AppRailAnchor href="/hubs" selected={path === '/hubs'} title="Hubs">
           <i slot="lead" class="fa fa-microchip text-2xl"></i>
           <span>Hubs</span>
         </AppRailAnchor>
-        <AppRailAnchor
-          href="/sharelinks"
-          selected={$page.url.pathname === '/sharelinks'}
-          title="Sharelinks"
-        >
+        <AppRailAnchor href="/sharelinks" selected={path === '/sharelinks'} title="Sharelinks">
           <i slot="lead" class="fa fa-link text-2xl"></i>
           <span>Sharelinks</span>
         </AppRailAnchor>
       </svelte:fragment>
       <svelte:fragment slot="trail">
         {#if $UserSelfStore.rank === RankType.admin}
-          <AppRailAnchor href="/admin" selected={$page.url.pathname === '/admin'} title="Admin">
+          <AppRailAnchor
+            href="/admin"
+            selected={path === '/admin' || path.startsWith('/admin/')}
+            title="Admin"
+          >
             <i slot="lead" class="fa fa-user-shield text-2xl"></i>
             <span>Admin</span>
           </AppRailAnchor>

@@ -2,6 +2,7 @@
 /* eslint-disable */
 export * from './AccountApi';
 export * from './AdminApi';
+export * from './AuthenticatedAccountApi';
 export * from './DeviceApi';
 export * from './DevicesApi';
 export * from './PublicApi';

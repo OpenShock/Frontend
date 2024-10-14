@@ -1,17 +1,16 @@
 <script lang="ts">
   import { ProgressRing } from '@skeletonlabs/skeleton-svelte';
-  import { browser } from '$app/environment';
+  import { browser, dev } from '$app/environment';
   import CloudflareLogo from '$lib/components/svg/CloudflareLogo.svelte';
-  import { env } from '$env/dynamic/public';
   import type { TurnstileInstance } from '$lib/types/TurnstileInstance';
   import { onMount } from 'svelte';
+  import { PUBLIC_TURNSTILE_DEV_BYPASS_VALUE, PUBLIC_TURNSTILE_SITE_KEY } from '$env/static/public';
   import { darkModeStore } from '$lib/stores/DarkModeStore';
 
   export let action: string;
   export let cData: string | undefined = undefined;
   export let response: string | null = null;
 
-  const isDev = import.meta.env.DEV;
   let turnstile: TurnstileInstance | undefined;
   let element: HTMLDivElement;
 
@@ -32,9 +31,9 @@
   }
 
   if (browser) {
-    if (isDev) {
+    if (dev) {
       console.log('Turnstile is disabled in dev mode');
-      response = 'dev-bypass';
+      response = PUBLIC_TURNSTILE_DEV_BYPASS_VALUE;
     } else {
       // If turstile doesnt load, then the index.html is proabably missing the script tag (https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/#explicitly-render-the-turnstile-widget)
       onMount(() => (turnstile = window.turnstile));
@@ -47,7 +46,7 @@
   }
   $: if (turnstile && !isLoading) {
     turnstile.render(element, {
-      sitekey: env.PUBLIC_TURNSTILE_SITE_KEY,
+      sitekey: PUBLIC_TURNSTILE_SITE_KEY,
       action,
       cData,
       theme: $darkModeStore ? 'dark' : 'light',
@@ -64,7 +63,7 @@
   {#if isLoading}
     <!-- Turnstile placeholder -->
     <div id="placeholder">
-      {#if isDev}
+      {#if dev}
         <i class="fa fa-bug text-lg"></i>
         <span> Turnstile disabled </span>
       {:else}

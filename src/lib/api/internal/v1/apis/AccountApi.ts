@@ -15,14 +15,18 @@
 
 import * as runtime from '../runtime';
 import type {
+  ChangeUsernameRequest,
   Login,
   ObjectBaseResponse,
   OpenShockProblem,
   PasswordResetProcessData,
   ResetRequest,
   SignUp,
+  UsernameCheckResponseBaseResponse,
 } from '../models/index';
 import {
+    ChangeUsernameRequestFromJSON,
+    ChangeUsernameRequestToJSON,
     LoginFromJSON,
     LoginToJSON,
     ObjectBaseResponseFromJSON,
@@ -35,7 +39,13 @@ import {
     ResetRequestToJSON,
     SignUpFromJSON,
     SignUpToJSON,
+    UsernameCheckResponseBaseResponseFromJSON,
+    UsernameCheckResponseBaseResponseToJSON,
 } from '../models/index';
+
+export interface AccountCheckUsernameRequest {
+    changeUsernameRequest?: ChangeUsernameRequest;
+}
 
 export interface AccountLoginRequest {
     login?: Login;
@@ -67,6 +77,21 @@ export interface AccountSignUpRequest {
  * @interface AccountApiInterface
  */
 export interface AccountApiInterface {
+    /**
+     * 
+     * @summary Check if a username is available
+     * @param {ChangeUsernameRequest} [changeUsernameRequest] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApiInterface
+     */
+    accountCheckUsernameRaw(requestParameters: AccountCheckUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UsernameCheckResponseBaseResponse>>;
+
+    /**
+     * Check if a username is available
+     */
+    accountCheckUsername(changeUsernameRequest?: ChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UsernameCheckResponseBaseResponse>;
+
     /**
      * 
      * @summary Authenticate a user
@@ -151,6 +176,39 @@ export interface AccountApiInterface {
  * 
  */
 export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
+
+    /**
+     * Check if a username is available
+     */
+    async accountCheckUsernameRaw(requestParameters: AccountCheckUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UsernameCheckResponseBaseResponse>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
+        }
+
+        const response = await this.request({
+            path: `/1/account/username/check`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ChangeUsernameRequestToJSON(requestParameters['changeUsernameRequest']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => UsernameCheckResponseBaseResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Check if a username is available
+     */
+    async accountCheckUsername(changeUsernameRequest?: ChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UsernameCheckResponseBaseResponse> {
+        const response = await this.accountCheckUsernameRaw({ changeUsernameRequest: changeUsernameRequest }, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Authenticate a user

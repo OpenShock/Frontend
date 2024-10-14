@@ -5,7 +5,6 @@
   import type { ValidationResult } from '$lib/types/ValidationResult';
   import type { SvelteComponent } from 'svelte';
 
-
   export let parent: SvelteComponent;
   const modalStore = getModalStore();
 
@@ -47,17 +46,17 @@
       modalStore.trigger({
         type: 'component',
         meta: { token: res.data },
-        component: 'ApiTokenDisplayGenerated'
+        component: 'ApiTokenDisplayGenerated',
       });
     } catch (e) {
       console.error(e);
     }
-    
+
     parent.onClose();
 
     const firstModal = $modalStore[0];
     if (firstModal && firstModal.component === 'ApiTokenGenerate' && firstModal.response) {
-        firstModal.response(true);
+      firstModal.response(true);
     }
   }
 

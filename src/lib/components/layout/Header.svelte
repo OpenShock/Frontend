@@ -66,10 +66,10 @@
         Sign Up
       </a>
       <div>
-        <a href={PUBLIC_GITHUB_PROJECT_URL} class="btn-icon" aria-label="GitHub Project">
+        <a href={PUBLIC_GITHUB_PROJECT_URL} class="btn-icon" aria-label="GitHub">
           <i class="fa-brands fa-github text-lg"></i>
         </a>
-        <a href={PUBLIC_DISCORD_INVITE_URL} class="btn-icon" aria-label="Discord Server">
+        <a href={PUBLIC_DISCORD_INVITE_URL} class="btn-icon" aria-label="Discord">
           <i class="fa-brands fa-discord text-lg"></i>
         </a>
       </div>
