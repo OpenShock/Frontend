@@ -1,13 +1,11 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { accountApi } from '$lib/api';
-  import { checkPwnedCount } from '$lib/api/pwnedPasswords';
-  import EmailInput from '$lib/components/EmailInput.svelte';
-  import PasswordInput from '$lib/components/PasswordInput.svelte';
+  import EmailInput from '$lib/components/input/EmailInput.svelte';
+  import PasswordInput from '$lib/components/input/PasswordInput.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
-  import UsernameInput from '$lib/components/UsernameInput.svelte';
-  import { validatePassword, validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
-  import type { ValidationResult } from '$lib/types/ValidationResult';
+  import UsernameInput from '$lib/components/input/UsernameInput.svelte';
+  import { validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
   import { getModalStore } from '@skeletonlabs/skeleton';
 
   const modalStore = getModalStore();
@@ -22,12 +20,15 @@
   let passwordValid = false;
 
   let passwordConfirm = '';
-  let passwordConfirmValid = false;
 
   let turnstileResponse: string | null = null;
 
   $: canSubmit =
-    usernameValid && emailValid && passwordValid && passwordConfirmValid && turnstileResponse;
+    usernameValid &&
+    emailValid &&
+    passwordValid &&
+    password == passwordConfirm &&
+    turnstileResponse;
 
   function handleSubmission() {
     accountApi
@@ -67,7 +68,6 @@
       placeholder="Confirm Password"
       autocomplete="new-password"
       bind:value={passwordConfirm}
-      bind:valid={passwordConfirmValid}
       validate={validatePasswordMatch(passwordConfirm, password)}
     />
 

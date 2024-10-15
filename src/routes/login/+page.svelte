@@ -1,10 +1,9 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { accountApi } from '$lib/api';
-  import PasswordInput from '$lib/components/PasswordInput.svelte';
-  import TextInput from '$lib/components/TextInput.svelte';
+  import PasswordInput from '$lib/components/input/PasswordInput.svelte';
+  import TextInput from '$lib/components/input/TextInput.svelte';
   import { refreshUserSelf } from '$lib/stores/UserStore';
-  import type { ValidationResult } from '$lib/types/ValidationResult';
 
   let usernameOrEmail = '';
   let password = '';

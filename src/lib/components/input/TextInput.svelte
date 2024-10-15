@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { TwTextColor } from '$lib/types/Tailwind';
-  import { GetValResColor, type ValidationResult } from '$lib/types/ValidationResult';
+  import type { ValidationResult } from '$lib/types/ValidationResult';
+  import ValidationResultText from './impl/ValidationResultText.svelte';
 
   export let type: 'text' | 'password' = 'text';
   export let label: string;
@@ -41,9 +41,5 @@
       {/if}
     </div>
   </div>
-  {#if !validationResult || !('message' in validationResult)}
-    <div class="h-3"></div>
-  {:else}
-    <p class="text-xs text-{GetValResColor(validationResult)} !mt-0">{validationResult.message}</p>
-  {/if}
+  <ValidationResultText {validationResult} />
 </label>

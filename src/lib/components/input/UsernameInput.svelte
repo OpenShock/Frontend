@@ -9,7 +9,7 @@
   import { accountApi } from '$lib/api';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { getToastStore } from '@skeletonlabs/skeleton';
-  import TextInput from '$lib/components/TextInput.svelte';
+  import TextInput from '$lib/components/input/TextInput.svelte';
 
   const toastStore = getToastStore();
 

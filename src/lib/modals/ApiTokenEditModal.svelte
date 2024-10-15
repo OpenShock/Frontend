@@ -1,11 +1,10 @@
 <script lang="ts">
   import { tokensApi } from '$lib/api';
   import { PermissionType } from '$lib/api/internal/v1';
-  import TextInput from '$lib/components/TextInput.svelte';
+  import TextInput from '$lib/components/input/TextInput.svelte';
   import type { ValidationResult } from '$lib/types/ValidationResult';
   import { getModalStore } from '@skeletonlabs/skeleton';
   import type { SvelteComponent } from 'svelte';
-
 
   export let parent: SvelteComponent;
   const modalStore = getModalStore();
@@ -17,17 +16,17 @@
     try {
       await tokensApi.tokensEditToken($modalStore[0].meta.id, {
         name,
-        permissions: permissionsActually
+        permissions: permissionsActually,
       });
     } catch (e) {
       console.error(e);
     }
-    
+
     parent.onClose();
 
     const firstModal = $modalStore[0];
     if (firstModal && firstModal.component === 'ApiTokenEdit' && firstModal.response) {
-        firstModal.response(true);
+      firstModal.response(true);
     }
   }
 
@@ -68,7 +67,7 @@
   async function getTokenData(tokenId: string) {
     try {
       const response = await tokensApi.tokensGetTokenById(tokenId);
-      if(!response) {
+      if (!response) {
         // TODO: Handle error
         console.error(response);
         return;
@@ -76,18 +75,15 @@
 
       name = response.name!;
       permissionsActually = response.permissions!;
-
     } catch (e) {
       // TODO: Handle error
       console.error(e);
     }
-
   }
 
   getTokenData($modalStore[0].meta.id);
 
   $: nameValidationResult = nameValidation(name);
-
 </script>
 
 <div class="card p-4 w-modal shadow-xl space-y-4">

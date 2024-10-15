@@ -1,7 +1,7 @@
 <script lang="ts">
   import { tokensApi } from '$lib/api';
   import { PermissionType } from '$lib/api/internal/v1';
-  import TextInput from '$lib/components/TextInput.svelte';
+  import TextInput from '$lib/components/input/TextInput.svelte';
   import { GetValResColor, type ValidationResult } from '$lib/types/ValidationResult';
   import { getModalStore } from '@skeletonlabs/skeleton';
   import type { SvelteComponent } from 'svelte';

@@ -1,13 +1,13 @@
 <script lang="ts">
-  import PasswordInput from '$lib/components/PasswordInput.svelte';
-  import { validatePassword, validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
+  import PasswordInput from '$lib/components/input/PasswordInput.svelte';
+  import { validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
   import { UserSelfStore } from '$lib/stores/UserStore';
   import { Accordion, AccordionItem } from '@skeletonlabs/skeleton';
   import { authenticatedAccountApi } from '$lib/api';
   import { getToastStore } from '@skeletonlabs/skeleton';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import UsernameInput from '$lib/components/UsernameInput.svelte';
-  import EmailInput from '$lib/components/EmailInput.svelte';
+  import UsernameInput from '$lib/components/input/UsernameInput.svelte';
+  import EmailInput from '$lib/components/input/EmailInput.svelte';
 
   const toastStore = getToastStore();
 
@@ -21,7 +21,6 @@
   let passwordValid: boolean = false;
 
   let passwordConfirm: string = '';
-  let passwordConfirmValid: boolean = false;
 
   async function submitUsername() {
     try {
@@ -55,7 +54,7 @@
     console.log('Submitting password');
   }
 
-  $: canSubmitPassword = currentPasswordValid && passwordValid && passwordConfirmValid;
+  $: canSubmitPassword = currentPasswordValid && passwordValid && password == passwordConfirm;
 </script>
 
 {#if $UserSelfStore}
@@ -108,7 +107,6 @@
                 placeholder="Confirm New Password"
                 autocomplete="new-password"
                 bind:value={passwordConfirm}
-                bind:valid={passwordConfirmValid}
                 validate={validatePasswordMatch(passwordConfirm, password)}
               />
 

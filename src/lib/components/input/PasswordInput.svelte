@@ -2,10 +2,10 @@
   import { checkPwnedCount } from '$lib/api/pwnedPasswords';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { getPasswordStrength, validatePassword } from '$lib/inputvalidation/passwordValidator';
-  import type { TwTextColor } from '$lib/types/Tailwind';
-  import { GetValResColor, type ValidationResult } from '$lib/types/ValidationResult';
+  import type { ValidationResult } from '$lib/types/ValidationResult';
   import { randStr } from '$lib/utils/rand';
   import { popup, type PopupSettings, getToastStore } from '@skeletonlabs/skeleton';
+  import ValidationResultText from './impl/ValidationResultText.svelte';
 
   const toastStore = getToastStore();
 
@@ -128,11 +128,7 @@
       </button>
     </div>
   </div>
-  {#if validationResult && 'message' in validationResult}
-    <p class="text-xs text-{GetValResColor(validationResult)} !mt-0">{validationResult.message}</p>
-  {:else}
-    <div class="h-3"></div>
-  {/if}
+  <ValidationResultText {validationResult} />
   {#if strength}
     <div class="card p-4 w-72 shadow-xl" data-popup={popupSettings.target}>
       <div class="flex flex-row items-center space-x-1">

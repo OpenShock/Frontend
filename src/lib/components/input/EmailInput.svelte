@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { ValidationResult } from '$lib/types/ValidationResult';
-  import TextInput from '$lib/components/TextInput.svelte';
+  import TextInput from '$lib/components/input/TextInput.svelte';
   import { validateEmail } from '$lib/inputvalidation/emailValidator';
 
   export let label: string = 'Email';
