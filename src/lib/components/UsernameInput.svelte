@@ -14,11 +14,12 @@
   const toastStore = getToastStore();
 
   export let label: string = 'Username';
-  export let placeholder: string | undefined = undefined;
-  export let autocomplete: string | undefined = undefined;
+  export let placeholder: string | undefined = 'Username';
+  export let autocomplete: string | undefined = 'username';
   export let value: string;
+  export let valid: boolean = false;
 
-  export let icon: string | undefined;
+  export let icon: string | undefined = undefined;
   export let button: { text: string; variant?: string; onClick: () => void } | undefined =
     undefined;
 
@@ -63,6 +64,8 @@
       validationResult = valRes;
     }
   }
+
+  $: valid = validationResult?.valid ?? false;
 </script>
 
 <TextInput {label} {placeholder} {autocomplete} bind:value {validationResult} {icon} {button} />

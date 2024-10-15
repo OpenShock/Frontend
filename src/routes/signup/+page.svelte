@@ -5,16 +5,16 @@
   import PasswordInput from '$lib/components/PasswordInput.svelte';
   import TextInput from '$lib/components/TextInput.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
+  import UsernameInput from '$lib/components/UsernameInput.svelte';
   import { validateEmail } from '$lib/inputvalidation/emailValidator';
   import { validatePassword, validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
-  import { validateUsername } from '$lib/inputvalidation/usernameValidator';
   import type { ValidationResult } from '$lib/types/ValidationResult';
   import { getModalStore } from '@skeletonlabs/skeleton';
 
   const modalStore = getModalStore();
 
   let username = '';
-  $: usernameValres = validateUsername(username);
+  let usernameValid = false;
 
   let email = '';
   $: emailValres = validateEmail(email);
@@ -54,7 +54,7 @@
   let turnstileResponse: string | null = null;
 
   $: canSubmit =
-    usernameValres?.valid &&
+    usernameValid &&
     emailValres?.valid &&
     passwordValres?.valid &&
     passwordConfirmValres?.valid &&
@@ -84,13 +84,7 @@
   <form class="flex flex-col space-y-2" on:submit|preventDefault={handleSubmission}>
     <h2 class="h2">Sign Up</h2>
 
-    <TextInput
-      label="Username"
-      placeholder="Username"
-      autocomplete="username"
-      bind:value={username}
-      validationResult={usernameValres}
-    />
+    <UsernameInput bind:value={username} bind:valid={usernameValid} />
     <TextInput
       label="Email"
       placeholder="Email"
