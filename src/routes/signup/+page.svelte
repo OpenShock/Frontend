@@ -2,11 +2,10 @@
   import { goto } from '$app/navigation';
   import { accountApi } from '$lib/api';
   import { checkPwnedCount } from '$lib/api/pwnedPasswords';
+  import EmailInput from '$lib/components/EmailInput.svelte';
   import PasswordInput from '$lib/components/PasswordInput.svelte';
-  import TextInput from '$lib/components/TextInput.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
   import UsernameInput from '$lib/components/UsernameInput.svelte';
-  import { validateEmail } from '$lib/inputvalidation/emailValidator';
   import { validatePassword, validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
   import type { ValidationResult } from '$lib/types/ValidationResult';
   import { getModalStore } from '@skeletonlabs/skeleton';
@@ -17,7 +16,7 @@
   let usernameValid = false;
 
   let email = '';
-  $: emailValres = validateEmail(email);
+  let emailValid = false;
 
   let password = '';
   let passwordValres: ValidationResult | null = null;
@@ -55,7 +54,7 @@
 
   $: canSubmit =
     usernameValid &&
-    emailValres?.valid &&
+    emailValid &&
     passwordValres?.valid &&
     passwordConfirmValres?.valid &&
     turnstileResponse;
@@ -85,13 +84,7 @@
     <h2 class="h2">Sign Up</h2>
 
     <UsernameInput bind:value={username} bind:valid={usernameValid} />
-    <TextInput
-      label="Email"
-      placeholder="Email"
-      autocomplete="email"
-      bind:value={email}
-      validationResult={emailValres}
-    />
+    <EmailInput bind:value={email} bind:valid={emailValid} />
     <PasswordInput
       label="Password"
       placeholder="Password"

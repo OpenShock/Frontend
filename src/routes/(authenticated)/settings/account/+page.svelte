@@ -1,21 +1,18 @@
 <script lang="ts">
   import PasswordInput from '$lib/components/PasswordInput.svelte';
-  import TextInput from '$lib/components/TextInput.svelte';
-  import { validateEmail } from '$lib/inputvalidation/emailValidator';
   import { validatePassword, validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
   import { UserSelfStore } from '$lib/stores/UserStore';
   import { Accordion, AccordionItem } from '@skeletonlabs/skeleton';
-  import { accountApi, authenticatedAccountApi } from '$lib/api';
+  import { authenticatedAccountApi } from '$lib/api';
   import { getToastStore } from '@skeletonlabs/skeleton';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import UsernameInput from '$lib/components/UsernameInput.svelte';
+  import EmailInput from '$lib/components/EmailInput.svelte';
 
   const toastStore = getToastStore();
 
   let username: string = '';
-
   let email: string = '';
-  $: emailValres = validateEmail(email);
 
   let currentPassword: string = '';
   $: currentPasswordValid = currentPassword.length > 0;
@@ -76,12 +73,10 @@
         button={{ text: 'Change', onClick: submitUsername }}
       />
 
-      <TextInput
-        label="Email"
+      <EmailInput
         placeholder={$UserSelfStore.email}
         autocomplete="off"
         bind:value={email}
-        validationResult={emailValres}
         icon="fa-envelope"
         button={{ text: 'Change', onClick: submitEmail }}
       />
