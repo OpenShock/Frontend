@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { TwTextColor } from '$lib/types/Tailwind';
-  import type { ValidationResult } from '$lib/types/ValidationResult';
+  import { GetValResColor, type ValidationResult } from '$lib/types/ValidationResult';
 
   export let type: 'text' | 'password' = 'text';
   export let label: string;
@@ -12,17 +12,16 @@
   export let icon: string | undefined = undefined;
   export let button: { text: string; variant?: string; onClick: () => void } | undefined =
     undefined;
-
-  function getValResColor(valRes: ValidationResult): TwTextColor {
-    if ('color' in valRes) return `text-${valRes.color}`;
-    return valRes.valid ? 'text-green-500' : 'text-red-500';
-  }
 </script>
 
 <label class="label w-full">
   <span>{label}</span>
   <div class="flex flex-row items-center gap-2">
-    <div class={"input-group input-group-divider flex-grow grid-cols-[auto_1fr" + (button ? "_auto" : "") + "]"}>
+    <div
+      class={'input-group input-group-divider flex-grow grid-cols-[auto_1fr' +
+        (button ? '_auto' : '') +
+        ']'}
+    >
       {#if icon}
         <div class="input-group-shim fa {icon}"></div>
       {/if}
@@ -45,6 +44,6 @@
   {#if !validationResult || !('message' in validationResult)}
     <div class="h-3"></div>
   {:else}
-    <p class="text-xs {getValResColor(validationResult)} !mt-0">{validationResult.message}</p>
+    <p class="text-xs text-{GetValResColor(validationResult)} !mt-0">{validationResult.message}</p>
   {/if}
 </label>

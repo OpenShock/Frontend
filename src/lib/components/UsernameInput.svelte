@@ -18,6 +18,7 @@
   export let autocomplete: string | undefined = 'username';
   export let value: string;
   export let valid: boolean = false;
+  export let validate: boolean = true;
 
   export let icon: string | undefined = undefined;
   export let button: { text: string; variant?: string; onClick: () => void } | undefined =
@@ -54,7 +55,7 @@
     }, 250);
   }
 
-  $: {
+  $: if (validate) {
     const valRes = validateUsername(value);
     if (valRes?.valid) {
       // Basic validation passed, check availability
@@ -63,6 +64,8 @@
       // Basic validation failed, return the failed validation result
       validationResult = valRes;
     }
+  } else {
+    validationResult = { valid: true };
   }
 
   $: valid = validationResult?.valid ?? false;

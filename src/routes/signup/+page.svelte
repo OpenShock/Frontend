@@ -19,45 +19,15 @@
   let emailValid = false;
 
   let password = '';
-  let passwordValres: ValidationResult | null = null;
-  let passwordDebounce: ReturnType<typeof setTimeout> | null = null;
-  $: {
-    // Do basic password validation
-    const valres = validatePassword(password);
-    if (valres?.valid) {
-      // Basic validation passed, wait 500ms after the user stops typing
-      if (passwordDebounce) clearTimeout(passwordDebounce);
-      passwordDebounce = setTimeout(async () => {
-        // 500ms has passed, check if the password has been pwned
-        const pwnedCount = await checkPwnedCount(password);
-        if (pwnedCount > 0) {
-          // Password has been pwned, change the validation result
-          passwordValres = {
-            valid: false,
-            message: `Password detected in ${pwnedCount} data breaches`,
-          };
-        } else {
-          // Password is ok, return the successful validation result from the basic validation step
-          passwordValres = valres;
-        }
-      }, 500);
-    } else {
-      // Basic validation failed, return the failed validation result
-      passwordValres = valres;
-    }
-  }
+  let passwordValid = false;
 
   let passwordConfirm = '';
-  $: passwordConfirmValres = validatePasswordMatch(password, passwordConfirm);
+  let passwordConfirmValid = false;
 
   let turnstileResponse: string | null = null;
 
   $: canSubmit =
-    usernameValid &&
-    emailValid &&
-    passwordValres?.valid &&
-    passwordConfirmValres?.valid &&
-    turnstileResponse;
+    usernameValid && emailValid && passwordValid && passwordConfirmValid && turnstileResponse;
 
   function handleSubmission() {
     accountApi
@@ -86,19 +56,19 @@
     <UsernameInput bind:value={username} bind:valid={usernameValid} />
     <EmailInput bind:value={email} bind:valid={emailValid} />
     <PasswordInput
-      label="Password"
-      placeholder="Password"
       autocomplete="new-password"
       bind:value={password}
-      validationResult={passwordValres}
-      showPasswordStrength={true}
+      bind:valid={passwordValid}
+      validate={true}
+      showStrengthMeter={true}
     />
     <PasswordInput
       label="Confirm Password"
       placeholder="Confirm Password"
       autocomplete="new-password"
       bind:value={passwordConfirm}
-      validationResult={passwordConfirmValres}
+      bind:valid={passwordConfirmValid}
+      validate={validatePasswordMatch(passwordConfirm, password)}
     />
 
     <Turnstile action="signup" bind:response={turnstileResponse} />

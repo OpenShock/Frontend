@@ -7,10 +7,7 @@
   import type { ValidationResult } from '$lib/types/ValidationResult';
 
   let usernameOrEmail = '';
-  let usernameOrEmailValres: ValidationResult | null = null;
-
   let password = '';
-  let passwordValres: ValidationResult | null = null;
 
   function handleSubmission() {
     accountApi
@@ -34,14 +31,12 @@
       placeholder="Username or Email"
       autocomplete="on"
       bind:value={usernameOrEmail}
-      validationResult={usernameOrEmailValres}
     />
     <PasswordInput
       label="Password"
       placeholder="Password"
       autocomplete="new-password"
       bind:value={password}
-      validationResult={passwordValres}
     />
 
     <button

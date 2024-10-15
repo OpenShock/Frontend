@@ -18,10 +18,10 @@
   $: currentPasswordValid = currentPassword.length > 0;
 
   let password: string = '';
-  $: passwordValres = validatePassword(password);
+  let passwordValid: boolean = false;
 
   let passwordConfirm: string = '';
-  $: passwordConfirmValres = validatePasswordMatch(password, passwordConfirm);
+  let passwordConfirmValid: boolean = false;
 
   async function submitUsername() {
     try {
@@ -55,8 +55,7 @@
     console.log('Submitting password');
   }
 
-  $: canSubmitPassword =
-    currentPasswordValid && passwordValres?.valid && passwordConfirmValres?.valid;
+  $: canSubmitPassword = currentPasswordValid && passwordValid && passwordConfirmValid;
 </script>
 
 {#if $UserSelfStore}
@@ -97,17 +96,20 @@
               <PasswordInput
                 label="New Password"
                 placeholder="New Password"
-                autocomplete="off"
+                autocomplete="new-password"
                 bind:value={password}
-                validationResult={passwordValres}
+                bind:valid={passwordValid}
+                validate={true}
+                showStrengthMeter={true}
               />
 
               <PasswordInput
                 label="Confirm New Password"
                 placeholder="Confirm New Password"
-                autocomplete="off"
+                autocomplete="new-password"
                 bind:value={passwordConfirm}
-                validationResult={passwordConfirmValres}
+                bind:valid={passwordConfirmValid}
+                validate={validatePasswordMatch(passwordConfirm, password)}
               />
 
               <button class="btn variant-filled-primary" type="submit" disabled={!canSubmitPassword}

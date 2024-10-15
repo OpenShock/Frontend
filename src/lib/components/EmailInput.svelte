@@ -8,6 +8,7 @@
   export let autocomplete: string | undefined = 'email';
   export let value: string;
   export let valid: boolean = false;
+  export let validate: boolean = true;
 
   export let icon: string | undefined = undefined;
   export let button: { text: string; variant?: string; onClick: () => void } | undefined =
@@ -15,7 +16,11 @@
 
   let validationResult: ValidationResult | null = null;
 
-  $: validationResult = validateEmail(value);
+  $: if (validate) {
+    validationResult = validateEmail(value);
+  } else {
+    validationResult = { valid: true };
+  }
 
   $: valid = validationResult?.valid ?? false;
 </script>

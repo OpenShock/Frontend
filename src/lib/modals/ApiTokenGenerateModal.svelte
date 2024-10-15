@@ -2,10 +2,9 @@
   import { tokensApi } from '$lib/api';
   import { PermissionType } from '$lib/api/internal/v1';
   import TextInput from '$lib/components/TextInput.svelte';
-  import type { ValidationResult } from '$lib/types/ValidationResult';
+  import { GetValResColor, type ValidationResult } from '$lib/types/ValidationResult';
   import { getModalStore } from '@skeletonlabs/skeleton';
   import type { SvelteComponent } from 'svelte';
-
 
   export let parent: SvelteComponent;
   const modalStore = getModalStore();
@@ -48,17 +47,17 @@
       modalStore.trigger({
         type: 'component',
         meta: { token: res.token },
-        component: 'ApiTokenDisplayGenerated'
+        component: 'ApiTokenDisplayGenerated',
       });
     } catch (e) {
       console.error(e);
     }
-    
+
     parent.onClose();
 
     const firstModal = $modalStore[0];
     if (firstModal && firstModal.component === 'ApiTokenGenerate' && firstModal.response) {
-        firstModal.response(true);
+      firstModal.response(true);
     }
   }
 
@@ -139,10 +138,12 @@
           <p>The token will never expire</p>
         {/if}
       </div>
-      {#if expireValidationResult.valid}
-        <div class="h-3" ></div>
+      {#if 'message' in expireValidationResult}
+        <p class="text-xs text-{GetValResColor(expireValidationResult)} !mt-0">
+          {expireValidationResult.message}
+        </p>
       {:else}
-        <p class="text-xs text-red-500 !mt-0">{expireValidationResult.message}</p>
+        <div class="h-3"></div>
       {/if}
     </label>
 
