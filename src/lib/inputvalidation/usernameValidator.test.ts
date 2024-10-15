@@ -115,7 +115,7 @@ describe('username validator test', () => {
     const result = validateUsername('user@domain.tld');
     expect(result).toEqual({
       valid: false,
-      message: 'Username cannot be an email',
+      message: 'Username cannot resemble an email address',
     });
   });
   it('valid username should return true and no error', () => {

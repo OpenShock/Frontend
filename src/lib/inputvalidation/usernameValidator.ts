@@ -78,7 +78,7 @@ export function validateUsername(value: string): ValidationResult | null {
   }
 
   if (value.length < 3) {
-    return UsernameTooLongValRes;
+    return UsernameTooShortValRes;
   }
 
   if (value.length > 32) {
