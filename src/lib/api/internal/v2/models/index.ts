@@ -10,6 +10,5 @@ export * from './OpenShockProblem';
 export * from './SignUpV2';
 export * from './UsernameAvailability';
 export * from './UsernameCheckResponse';
-export * from './UsernameCheckResponseBaseResponse';
 export * from './UsernameError';
 export * from './UsernameErrorType';

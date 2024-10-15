@@ -20,7 +20,7 @@ import type {
   ObjectBaseResponse,
   OpenShockProblem,
   SignUpV2,
-  UsernameCheckResponseBaseResponse,
+  UsernameCheckResponse,
 } from '../models/index';
 import {
     ChangeUsernameRequestFromJSON,
@@ -33,8 +33,8 @@ import {
     OpenShockProblemToJSON,
     SignUpV2FromJSON,
     SignUpV2ToJSON,
-    UsernameCheckResponseBaseResponseFromJSON,
-    UsernameCheckResponseBaseResponseToJSON,
+    UsernameCheckResponseFromJSON,
+    UsernameCheckResponseToJSON,
 } from '../models/index';
 
 export interface AccountCheckUsernameRequest {
@@ -64,12 +64,12 @@ export interface AccountApiInterface {
      * @throws {RequiredError}
      * @memberof AccountApiInterface
      */
-    accountCheckUsernameRaw(requestParameters: AccountCheckUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UsernameCheckResponseBaseResponse>>;
+    accountCheckUsernameRaw(requestParameters: AccountCheckUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UsernameCheckResponse>>;
 
     /**
      * Check if a username is available
      */
-    accountCheckUsername(changeUsernameRequest?: ChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UsernameCheckResponseBaseResponse>;
+    accountCheckUsername(changeUsernameRequest?: ChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UsernameCheckResponse>;
 
     /**
      * 
@@ -111,7 +111,7 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
     /**
      * Check if a username is available
      */
-    async accountCheckUsernameRaw(requestParameters: AccountCheckUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UsernameCheckResponseBaseResponse>> {
+    async accountCheckUsernameRaw(requestParameters: AccountCheckUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UsernameCheckResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -130,13 +130,13 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
             body: ChangeUsernameRequestToJSON(requestParameters['changeUsernameRequest']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => UsernameCheckResponseBaseResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => UsernameCheckResponseFromJSON(jsonValue));
     }
 
     /**
      * Check if a username is available
      */
-    async accountCheckUsername(changeUsernameRequest?: ChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UsernameCheckResponseBaseResponse> {
+    async accountCheckUsername(changeUsernameRequest?: ChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UsernameCheckResponse> {
         const response = await this.accountCheckUsernameRaw({ changeUsernameRequest: changeUsernameRequest }, initOverrides);
         return await response.value();
     }

@@ -10,14 +10,11 @@
   const dispatch = createEventDispatcher();
   const toastStore = getToastStore();
 
-
   export let placeholder: string | undefined = undefined;
   export let username: string;
+  export let buttonText: string | undefined = undefined;
 
   let usernameValres: ValidationResult | null;
-
-  export let buttonText: string | undefined = undefined;
-  export let buttonVariant: string | undefined = "variant-filled-primary";
 
   let pendingUsernameCheck: boolean = false;
   let usernameCheck: UsernameCheckResponse | null = null;
@@ -53,7 +50,7 @@
     try {
       const response = await accountApi.accountCheckUsername({ username: username });
       pendingUsernameCheck = false;
-      return response.data!;
+      return response;
     } catch (e) {
       await handleApiError(e, toastStore);
       pendingUsernameCheck = false;
@@ -70,7 +67,7 @@
         <div class="input-group-shim fa fa-user"></div>
       <input type="text" title="Username" {placeholder} autocomplete="off" bind:value={username} on:input={handleInput} />
       {#if buttonText}
-          <button class={buttonVariant} on:click={handleButtonClick} disabled={!allGood}>{buttonText}</button>
+          <button class="variant-filled-primary" on:click={handleButtonClick} disabled={!allGood}>{buttonText}</button>
       {/if}
     </div>
   </div>

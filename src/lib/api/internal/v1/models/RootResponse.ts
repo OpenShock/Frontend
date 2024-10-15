@@ -49,6 +49,12 @@ export interface RootResponse {
      * @memberof RootResponse
      */
     shortLinkUrl: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof RootResponse
+     */
+    turnstileSiteKey: string | null;
 }
 
 /**
@@ -60,6 +66,7 @@ export function instanceOfRootResponse(value: object): value is RootResponse {
     if (!('currentTime' in value) || value['currentTime'] === undefined) return false;
     if (!('frontendUrl' in value) || value['frontendUrl'] === undefined) return false;
     if (!('shortLinkUrl' in value) || value['shortLinkUrl'] === undefined) return false;
+    if (!('turnstileSiteKey' in value) || value['turnstileSiteKey'] === undefined) return false;
     return true;
 }
 
@@ -78,6 +85,7 @@ export function RootResponseFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'currentTime': (new Date(json['currentTime'])),
         'frontendUrl': json['frontendUrl'],
         'shortLinkUrl': json['shortLinkUrl'],
+        'turnstileSiteKey': json['turnstileSiteKey'],
     };
 }
 
@@ -92,6 +100,7 @@ export function RootResponseToJSON(value?: RootResponse | null): any {
         'currentTime': ((value['currentTime']).toISOString()),
         'frontendUrl': value['frontendUrl'],
         'shortLinkUrl': value['shortLinkUrl'],
+        'turnstileSiteKey': value['turnstileSiteKey'],
     };
 }
 

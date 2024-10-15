@@ -80,6 +80,5 @@ export * from './TokenResponseBaseResponse';
 export * from './TokenResponseIEnumerableBaseResponse';
 export * from './UsernameAvailability';
 export * from './UsernameCheckResponse';
-export * from './UsernameCheckResponseBaseResponse';
 export * from './UsernameError';
 export * from './UsernameErrorType';

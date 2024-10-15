@@ -4,6 +4,7 @@ apis/AuthenticatedAccountApi.ts
 apis/DeviceApi.ts
 apis/DevicesApi.ts
 apis/PublicApi.ts
+apis/SessionsApi.ts
 apis/ShareLinksApi.ts
 apis/SharesApi.ts
 apis/ShockerApi.ts
@@ -92,7 +93,6 @@ models/TokenResponseBaseResponse.ts
 models/TokenResponseIEnumerableBaseResponse.ts
 models/UsernameAvailability.ts
 models/UsernameCheckResponse.ts
-models/UsernameCheckResponseBaseResponse.ts
 models/UsernameError.ts
 models/UsernameErrorType.ts
 models/index.ts

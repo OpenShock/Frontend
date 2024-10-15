@@ -1,5 +1,5 @@
 import { PUBLIC_BACKEND_API_DOMAIN } from '$env/static/public';
-import { AccountApi, AdminApi, AuthenticatedAccountApi, Configuration as ConfigurationV1, DeviceApi, DevicesApi, PublicApi, ShareLinksApi, SharesApi, ShockerApi as ShockerV1Api, TokensApi, UsersApi, VersionApi } from './internal/v1';
+import { AccountApi, AdminApi, AuthenticatedAccountApi, Configuration as ConfigurationV1, DeviceApi, DevicesApi, PublicApi, SessionsApi, ShareLinksApi, SharesApi, ShockerApi as ShockerV1Api, TokensApi, UsersApi, VersionApi } from './internal/v1';
 import { Configuration as ConfigurationV2, ShockerApi as ShockerV2Api } from './internal/v2';
 
 type Config = {
@@ -45,6 +45,7 @@ export const adminApi = new AdminApi(DefaultApiV1Configuration);
 export const deviceApi = new DeviceApi(DefaultApiV1Configuration);
 export const devicesApi = new DevicesApi(DefaultApiV1Configuration);
 export const publicApi = new PublicApi(DefaultApiV1Configuration);
+export const sessionApi = new SessionsApi(DefaultApiV1Configuration);
 export const shareLinksApi = new ShareLinksApi(DefaultApiV1Configuration);
 export const sharesApi = new SharesApi(DefaultApiV1Configuration);
 export const shockerV1Api = new ShockerV1Api(DefaultApiV1Configuration);

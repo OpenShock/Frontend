@@ -12,7 +12,6 @@ models/OpenShockProblem.ts
 models/SignUpV2.ts
 models/UsernameAvailability.ts
 models/UsernameCheckResponse.ts
-models/UsernameCheckResponseBaseResponse.ts
 models/UsernameError.ts
 models/UsernameErrorType.ts
 models/index.ts
