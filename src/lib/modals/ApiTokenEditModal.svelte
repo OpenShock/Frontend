@@ -68,14 +68,14 @@
   async function getTokenData(tokenId: string) {
     try {
       const response = await tokensApi.tokensGetTokenById(tokenId);
-      if(!response.data) {
+      if(!response) {
         // TODO: Handle error
         console.error(response);
         return;
       }
 
-      name = response.data.name!;
-      permissionsActually = response.data.permissions!;
+      name = response.name!;
+      permissionsActually = response.permissions!;
 
     } catch (e) {
       // TODO: Handle error

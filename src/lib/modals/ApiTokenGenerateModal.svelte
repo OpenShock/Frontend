@@ -47,7 +47,7 @@
 
       modalStore.trigger({
         type: 'component',
-        meta: { token: res.data },
+        meta: { token: res.token },
         component: 'ApiTokenDisplayGenerated'
       });
     } catch (e) {

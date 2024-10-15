@@ -17,27 +17,21 @@ import * as runtime from '../runtime';
 import type {
   CreateTokenRequest,
   EditTokenRequest,
-  ObjectBaseResponse,
   OpenShockProblem,
-  StringBaseResponse,
-  TokenResponseBaseResponse,
-  TokenResponseIEnumerableBaseResponse,
+  TokenCreatedResponse,
+  TokenResponse,
 } from '../models/index';
 import {
     CreateTokenRequestFromJSON,
     CreateTokenRequestToJSON,
     EditTokenRequestFromJSON,
     EditTokenRequestToJSON,
-    ObjectBaseResponseFromJSON,
-    ObjectBaseResponseToJSON,
     OpenShockProblemFromJSON,
     OpenShockProblemToJSON,
-    StringBaseResponseFromJSON,
-    StringBaseResponseToJSON,
-    TokenResponseBaseResponseFromJSON,
-    TokenResponseBaseResponseToJSON,
-    TokenResponseIEnumerableBaseResponseFromJSON,
-    TokenResponseIEnumerableBaseResponseToJSON,
+    TokenCreatedResponseFromJSON,
+    TokenCreatedResponseToJSON,
+    TokenResponseFromJSON,
+    TokenResponseToJSON,
 } from '../models/index';
 
 export interface TokensCreateTokenRequest {
@@ -72,12 +66,12 @@ export interface TokensApiInterface {
      * @throws {RequiredError}
      * @memberof TokensApiInterface
      */
-    tokensCreateTokenRaw(requestParameters: TokensCreateTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StringBaseResponse>>;
+    tokensCreateTokenRaw(requestParameters: TokensCreateTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TokenCreatedResponse>>;
 
     /**
      * Create a new token
      */
-    tokensCreateToken(createTokenRequest?: CreateTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StringBaseResponse>;
+    tokensCreateToken(createTokenRequest?: CreateTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TokenCreatedResponse>;
 
     /**
      * 
@@ -87,12 +81,12 @@ export interface TokensApiInterface {
      * @throws {RequiredError}
      * @memberof TokensApiInterface
      */
-    tokensDeleteTokenRaw(requestParameters: TokensDeleteTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>>;
+    tokensDeleteTokenRaw(requestParameters: TokensDeleteTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>>;
 
     /**
      * Revoke a token from the current user
      */
-    tokensDeleteToken(tokenId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse>;
+    tokensDeleteToken(tokenId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any>;
 
     /**
      * 
@@ -103,12 +97,12 @@ export interface TokensApiInterface {
      * @throws {RequiredError}
      * @memberof TokensApiInterface
      */
-    tokensEditTokenRaw(requestParameters: TokensEditTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>>;
+    tokensEditTokenRaw(requestParameters: TokensEditTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>>;
 
     /**
      * Edit a token
      */
-    tokensEditToken(tokenId: string, editTokenRequest?: EditTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse>;
+    tokensEditToken(tokenId: string, editTokenRequest?: EditTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any>;
 
     /**
      * 
@@ -117,12 +111,12 @@ export interface TokensApiInterface {
      * @throws {RequiredError}
      * @memberof TokensApiInterface
      */
-    tokensGetSelfTokenRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TokenResponseBaseResponse>>;
+    tokensGetSelfTokenRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TokenResponse>>;
 
     /**
      * Gets information about the current token used to access this endpoint
      */
-    tokensGetSelfToken(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TokenResponseBaseResponse>;
+    tokensGetSelfToken(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TokenResponse>;
 
     /**
      * 
@@ -132,12 +126,12 @@ export interface TokensApiInterface {
      * @throws {RequiredError}
      * @memberof TokensApiInterface
      */
-    tokensGetTokenByIdRaw(requestParameters: TokensGetTokenByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TokenResponseBaseResponse>>;
+    tokensGetTokenByIdRaw(requestParameters: TokensGetTokenByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TokenResponse>>;
 
     /**
      * Get a token by id
      */
-    tokensGetTokenById(tokenId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TokenResponseBaseResponse>;
+    tokensGetTokenById(tokenId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TokenResponse>;
 
     /**
      * 
@@ -146,12 +140,12 @@ export interface TokensApiInterface {
      * @throws {RequiredError}
      * @memberof TokensApiInterface
      */
-    tokensListTokensRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TokenResponseIEnumerableBaseResponse>>;
+    tokensListTokensRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<TokenResponse>>>;
 
     /**
      * List all tokens for the current user
      */
-    tokensListTokens(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TokenResponseIEnumerableBaseResponse>;
+    tokensListTokens(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<TokenResponse>>;
 
 }
 
@@ -163,7 +157,7 @@ export class TokensApi extends runtime.BaseAPI implements TokensApiInterface {
     /**
      * Create a new token
      */
-    async tokensCreateTokenRaw(requestParameters: TokensCreateTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StringBaseResponse>> {
+    async tokensCreateTokenRaw(requestParameters: TokensCreateTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TokenCreatedResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -182,13 +176,13 @@ export class TokensApi extends runtime.BaseAPI implements TokensApiInterface {
             body: CreateTokenRequestToJSON(requestParameters['createTokenRequest']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => StringBaseResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => TokenCreatedResponseFromJSON(jsonValue));
     }
 
     /**
      * Create a new token
      */
-    async tokensCreateToken(createTokenRequest?: CreateTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StringBaseResponse> {
+    async tokensCreateToken(createTokenRequest?: CreateTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TokenCreatedResponse> {
         const response = await this.tokensCreateTokenRaw({ createTokenRequest: createTokenRequest }, initOverrides);
         return await response.value();
     }
@@ -196,7 +190,7 @@ export class TokensApi extends runtime.BaseAPI implements TokensApiInterface {
     /**
      * Revoke a token from the current user
      */
-    async tokensDeleteTokenRaw(requestParameters: TokensDeleteTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
+    async tokensDeleteTokenRaw(requestParameters: TokensDeleteTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
         if (requestParameters['tokenId'] == null) {
             throw new runtime.RequiredError(
                 'tokenId',
@@ -219,13 +213,17 @@ export class TokensApi extends runtime.BaseAPI implements TokensApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<any>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
     }
 
     /**
      * Revoke a token from the current user
      */
-    async tokensDeleteToken(tokenId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse> {
+    async tokensDeleteToken(tokenId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
         const response = await this.tokensDeleteTokenRaw({ tokenId: tokenId }, initOverrides);
         return await response.value();
     }
@@ -233,7 +231,7 @@ export class TokensApi extends runtime.BaseAPI implements TokensApiInterface {
     /**
      * Edit a token
      */
-    async tokensEditTokenRaw(requestParameters: TokensEditTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
+    async tokensEditTokenRaw(requestParameters: TokensEditTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
         if (requestParameters['tokenId'] == null) {
             throw new runtime.RequiredError(
                 'tokenId',
@@ -259,13 +257,17 @@ export class TokensApi extends runtime.BaseAPI implements TokensApiInterface {
             body: EditTokenRequestToJSON(requestParameters['editTokenRequest']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<any>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
     }
 
     /**
      * Edit a token
      */
-    async tokensEditToken(tokenId: string, editTokenRequest?: EditTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse> {
+    async tokensEditToken(tokenId: string, editTokenRequest?: EditTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
         const response = await this.tokensEditTokenRaw({ tokenId: tokenId, editTokenRequest: editTokenRequest }, initOverrides);
         return await response.value();
     }
@@ -273,7 +275,7 @@ export class TokensApi extends runtime.BaseAPI implements TokensApiInterface {
     /**
      * Gets information about the current token used to access this endpoint
      */
-    async tokensGetSelfTokenRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TokenResponseBaseResponse>> {
+    async tokensGetSelfTokenRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TokenResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -289,13 +291,13 @@ export class TokensApi extends runtime.BaseAPI implements TokensApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => TokenResponseBaseResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => TokenResponseFromJSON(jsonValue));
     }
 
     /**
      * Gets information about the current token used to access this endpoint
      */
-    async tokensGetSelfToken(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TokenResponseBaseResponse> {
+    async tokensGetSelfToken(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TokenResponse> {
         const response = await this.tokensGetSelfTokenRaw(initOverrides);
         return await response.value();
     }
@@ -303,7 +305,7 @@ export class TokensApi extends runtime.BaseAPI implements TokensApiInterface {
     /**
      * Get a token by id
      */
-    async tokensGetTokenByIdRaw(requestParameters: TokensGetTokenByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TokenResponseBaseResponse>> {
+    async tokensGetTokenByIdRaw(requestParameters: TokensGetTokenByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TokenResponse>> {
         if (requestParameters['tokenId'] == null) {
             throw new runtime.RequiredError(
                 'tokenId',
@@ -326,13 +328,13 @@ export class TokensApi extends runtime.BaseAPI implements TokensApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => TokenResponseBaseResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => TokenResponseFromJSON(jsonValue));
     }
 
     /**
      * Get a token by id
      */
-    async tokensGetTokenById(tokenId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TokenResponseBaseResponse> {
+    async tokensGetTokenById(tokenId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TokenResponse> {
         const response = await this.tokensGetTokenByIdRaw({ tokenId: tokenId }, initOverrides);
         return await response.value();
     }
@@ -340,7 +342,7 @@ export class TokensApi extends runtime.BaseAPI implements TokensApiInterface {
     /**
      * List all tokens for the current user
      */
-    async tokensListTokensRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TokenResponseIEnumerableBaseResponse>> {
+    async tokensListTokensRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<TokenResponse>>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -356,13 +358,13 @@ export class TokensApi extends runtime.BaseAPI implements TokensApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => TokenResponseIEnumerableBaseResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(TokenResponseFromJSON));
     }
 
     /**
      * List all tokens for the current user
      */
-    async tokensListTokens(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TokenResponseIEnumerableBaseResponse> {
+    async tokensListTokens(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<TokenResponse>> {
         const response = await this.tokensListTokensRaw(initOverrides);
         return await response.value();
     }
