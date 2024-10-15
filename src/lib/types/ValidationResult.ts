@@ -1,9 +1,8 @@
-export type ValidationResult = { valid: true } | { valid: false; message: string };
+import type { TwColor } from "./Tailwind";
 
-export function ValidationResultIcon(result: ValidationResult): string {
-  const IconOk = 'fa-circle-check text-success-500';
-  const IconError = 'fa-circle-exclamation text-error-500';
-  const IconMissing = 'fa-circle-minus text-gray-500';
+export type ValidationResult = { valid: boolean } | { valid: boolean; message: string; } | { valid: boolean; message: string; color: TwColor };
 
-  return result.valid ? IconOk : result.message.length > 0 ? IconError : IconMissing;
+export function GetValResColor(valRes: ValidationResult): TwColor {
+  if ('color' in valRes) return valRes.color;
+  return valRes.valid ? 'green-500' : 'red-500';
 }

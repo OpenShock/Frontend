@@ -16,13 +16,13 @@
 
   async function refreshTokens() {
     const response = await tokensApi.tokensListTokens();
-    if (!response.data) {
+    if (!response) {
       // FIXME: Handle error
       console.error(response);
       return;
     }
 
-    tokens = response.data;
+    tokens = response;
   }
 
   function deleteToken(token: TokenResponse) {
