@@ -37,6 +37,7 @@ models/LcgResponseBaseResponse.ts
 models/LogEntry.ts
 models/LogEntryIEnumerableBaseResponse.ts
 models/Login.ts
+models/LoginSessionResponse.ts
 models/MinimalShocker.ts
 models/NewShocker.ts
 models/ObjectBaseResponse.ts
@@ -88,9 +89,8 @@ models/SignUp.ts
 models/StatsResponse.ts
 models/StatsResponseBaseResponse.ts
 models/StringBaseResponse.ts
+models/TokenCreatedResponse.ts
 models/TokenResponse.ts
-models/TokenResponseBaseResponse.ts
-models/TokenResponseIEnumerableBaseResponse.ts
 models/UsernameAvailability.ts
 models/UsernameCheckResponse.ts
 models/UsernameError.ts

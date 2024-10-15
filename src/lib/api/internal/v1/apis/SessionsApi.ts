@@ -15,9 +15,12 @@
 
 import * as runtime from '../runtime';
 import type {
+  LoginSessionResponse,
   OpenShockProblem,
 } from '../models/index';
 import {
+    LoginSessionResponseFromJSON,
+    LoginSessionResponseToJSON,
     OpenShockProblemFromJSON,
     OpenShockProblemToJSON,
 } from '../models/index';
@@ -45,6 +48,20 @@ export interface SessionsApiInterface {
     /**
      */
     sessionsDeleteSession(sessionId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any>;
+
+    /**
+     * 
+     * @summary Gets information about the current token used to access this endpoint
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SessionsApiInterface
+     */
+    sessionsGetSelfSessionRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LoginSessionResponse>>;
+
+    /**
+     * Gets information about the current token used to access this endpoint
+     */
+    sessionsGetSelfSession(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LoginSessionResponse>;
 
     /**
      * 
@@ -101,6 +118,36 @@ export class SessionsApi extends runtime.BaseAPI implements SessionsApiInterface
      */
     async sessionsDeleteSession(sessionId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
         const response = await this.sessionsDeleteSessionRaw({ sessionId: sessionId }, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Gets information about the current token used to access this endpoint
+     */
+    async sessionsGetSelfSessionRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LoginSessionResponse>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
+        }
+
+        const response = await this.request({
+            path: `/1/sessions/self`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => LoginSessionResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Gets information about the current token used to access this endpoint
+     */
+    async sessionsGetSelfSession(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LoginSessionResponse> {
+        const response = await this.sessionsGetSelfSessionRaw(initOverrides);
         return await response.value();
     }
 
