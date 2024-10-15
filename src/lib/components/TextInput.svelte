@@ -22,7 +22,7 @@
 <label class="label w-full">
   <span>{label}</span>
   <div class="flex flex-row items-center gap-2">
-    <div class="input-group input-group-divider flex-grow grid-cols-[auto_1fr_auto]">
+    <div class={"input-group input-group-divider flex-grow grid-cols-[auto_1fr" + (button ? "_auto" : "") + "]"}>
       {#if icon}
         <div class="input-group-shim fa {icon}"></div>
       {/if}

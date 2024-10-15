@@ -32,9 +32,9 @@
     // Set the validation result to the checking availability state
     validationResult = UsernameCheckingAvailabilityValRes;
 
-    // Start a new username request in 500ms
+    // Start a new username request in 250ms
     usernameDebounce = setTimeout(async () => {
-      // 500ms has passed, check if the username is available
+      // 250ms has passed, check if the username is available
       try {
         // Make the API request
         const response = await accountApi.accountCheckUsername({ username: value });
@@ -51,7 +51,7 @@
 
       // Clear the debounce timer
       usernameDebounce = null;
-    }, 500);
+    }, 250);
   }
 
   $: {
