@@ -19,6 +19,10 @@
           href: '/settings/account',
         },
         {
+          name: 'Sessions',
+          href: '/settings/sessions',
+        },
+        {
           name: 'API Tokens',
           href: '/settings/api-tokens',
         },

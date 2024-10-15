@@ -69,11 +69,11 @@ export interface SessionsApiInterface {
      * @throws {RequiredError}
      * @memberof SessionsApiInterface
      */
-    sessionsListSessionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>>;
+    sessionsListSessionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<LoginSessionResponse>>>;
 
     /**
      */
-    sessionsListSessions(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any>;
+    sessionsListSessions(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<LoginSessionResponse>>;
 
 }
 
@@ -153,7 +153,7 @@ export class SessionsApi extends runtime.BaseAPI implements SessionsApiInterface
 
     /**
      */
-    async sessionsListSessionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
+    async sessionsListSessionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<LoginSessionResponse>>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -169,16 +169,12 @@ export class SessionsApi extends runtime.BaseAPI implements SessionsApiInterface
             query: queryParameters,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<any>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(LoginSessionResponseFromJSON));
     }
 
     /**
      */
-    async sessionsListSessions(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
+    async sessionsListSessions(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<LoginSessionResponse>> {
         const response = await this.sessionsListSessionsRaw(initOverrides);
         return await response.value();
     }
