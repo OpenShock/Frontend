@@ -26,7 +26,6 @@
   let passwordConfirm: string = '';
   $: passwordConfirmValres = validatePasswordMatch(password, passwordConfirm);
 
-
   async function submitUsername() {
     try {
       const response = await authenticatedAccountApi.authenticatedAccountChangeUsername({
@@ -42,7 +41,7 @@
         if (problem.type === 'Account.Username.Invalid') {
           toastStore.trigger({
             background: 'variant-filled-error',
-            message: "",
+            message: '',
           });
           return true;
         }
@@ -71,9 +70,10 @@
     >
       <UsernameInput
         placeholder={$UserSelfStore.name}
-        bind:username
-        buttonText="Change"
-        on:buttonClick={submitUsername}
+        autocomplete="off"
+        bind:value={username}
+        icon="fa-user"
+        button={{ text: 'Change', onClick: submitUsername }}
       />
 
       <TextInput

@@ -1,91 +1,68 @@
 <script lang="ts">
   import type { ValidationResult } from '$lib/types/ValidationResult';
-  import { createEventDispatcher } from "svelte";
-  import { validateUsername } from '$lib/inputvalidation/usernameValidator';
-  import { ResponseError, UsernameAvailability, type UsernameCheckResponse } from '$lib/api/internal/v1';
-  import { accountApi, authenticatedAccountApi } from '$lib/api';
+  import {
+    mapUsernameAvailability,
+    UsernameCheckingAvailabilityValRes,
+    UsernameInternalServerErrorValRes,
+    validateUsername,
+  } from '$lib/inputvalidation/usernameValidator';
+  import { accountApi } from '$lib/api';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { getToastStore } from '@skeletonlabs/skeleton';
+  import TextInput from '$lib/components/TextInput.svelte';
 
-  const dispatch = createEventDispatcher();
   const toastStore = getToastStore();
 
+  export let label: string = 'Username';
   export let placeholder: string | undefined = undefined;
-  export let username: string;
-  export let buttonText: string | undefined = undefined;
+  export let autocomplete: string | undefined = undefined;
+  export let value: string;
 
-  let usernameValres: ValidationResult | null;
+  export let icon: string | undefined;
+  export let button: { text: string; variant?: string; onClick: () => void } | undefined =
+    undefined;
 
-  let pendingUsernameCheck: boolean = false;
-  let usernameCheck: UsernameCheckResponse | null = null;
+  let validationResult: ValidationResult | null = null;
+  let usernameDebounce: ReturnType<typeof setTimeout> | null = null;
+  function checkUsernameAvailability() {
+    // Stop the previous debounce timer if it exists
+    if (usernameDebounce) clearTimeout(usernameDebounce);
 
-  $: allGood = usernameValres?.valid && !pendingUsernameCheck && usernameCheck && usernameCheck.availability === UsernameAvailability.available;
+    // Set the validation result to the checking availability state
+    validationResult = UsernameCheckingAvailabilityValRes;
 
-	let timer: NodeJS.Timeout;
-  
-  function handleButtonClick() {
-    dispatch('buttonClick');
+    // Start a new username request in 500ms
+    usernameDebounce = setTimeout(async () => {
+      // 500ms has passed, check if the username is available
+      try {
+        // Make the API request
+        const response = await accountApi.accountCheckUsername({ username: value });
+
+        // Map the response to a validation result
+        validationResult = mapUsernameAvailability(response.availability);
+      } catch (e) {
+        // Show an error toast
+        await handleApiError(e, toastStore);
+
+        // Set the validation result to the internal server error state
+        validationResult = UsernameInternalServerErrorValRes;
+      }
+
+      // Clear the debounce timer
+      usernameDebounce = null;
+    }, 500);
   }
 
-  function handleInput() {
-    usernameValres = validateUsername(username);
-
-    usernameCheck = null;
-		clearTimeout(timer);
-
-    if(!usernameValres || !usernameValres.valid) {
-      pendingUsernameCheck = false;
-      return;
+  $: {
+    const valRes = validateUsername(value);
+    if (valRes?.valid) {
+      // Basic validation passed, check availability
+      checkUsernameAvailability();
+    } else {
+      // Basic validation failed, return the failed validation result
+      validationResult = valRes;
     }
-
-    pendingUsernameCheck = true;
-
-		timer = setTimeout(async () => {
-			usernameCheck = await checkUsernameAvailability();
-      console.log(usernameCheck);
-		}, 500);
   }
-
-  async function checkUsernameAvailability(): Promise<UsernameCheckResponse> {
-    try {
-      const response = await accountApi.accountCheckUsername({ username: username });
-      pendingUsernameCheck = false;
-      return response;
-    } catch (e) {
-      await handleApiError(e, toastStore);
-      pendingUsernameCheck = false;
-      throw e;
-    }
-  }
-
 </script>
 
-<label class="label w-full">
-  <span>Username</span>
-  <div class="flex flex-row items-center gap-2">
-    <div class="input-group input-group-divider flex-grow grid-cols-[auto_1fr_auto]">
-        <div class="input-group-shim fa fa-user"></div>
-      <input type="text" title="Username" {placeholder} autocomplete="off" bind:value={username} on:input={handleInput} />
-      {#if buttonText}
-          <button class="variant-filled-primary" on:click={handleButtonClick} disabled={!allGood}>{buttonText}</button>
-      {/if}
-    </div>
-  </div>
-  {#if !usernameValres || usernameValres.valid}
-    {#if pendingUsernameCheck}
-      <p class="text-xs text-gray-500 !mt-0">Checking username availability...</p>
-    {:else if usernameCheck}
-      {#if usernameCheck.availability === UsernameAvailability.available}
-      <p class="text-xs text-green-500 !mt-0">Username is available ✅</p>
-      {:else if usernameCheck.availability === UsernameAvailability.taken}
-      <p class="text-xs text-red-500 !mt-0">Username is already taken</p>
-      {:else}
-      <p class="text-xs text-red-500 !mt-0">Unknown username is invalid: {usernameCheck.error?.message}</p>
-      {/if}
-    {:else}
-    <div class="h-3"></div>
-    {/if}
-  {:else}
-    <p class="text-xs text-red-500 !mt-0">{usernameValres.message}</p>
-  {/if}
-</label>
+<TextInput {label} {placeholder} {autocomplete} bind:value {validationResult} {icon} {button} />

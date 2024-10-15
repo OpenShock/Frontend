@@ -1,6 +1,8 @@
 <script lang="ts">
+  import type { TwTextColor } from '$lib/types/Tailwind';
   import type { ValidationResult } from '$lib/types/ValidationResult';
 
+  export let type: 'text' | 'password' = 'text';
   export let label: string;
   export let placeholder: string | undefined = undefined;
   export let autocomplete: string | undefined = undefined;
@@ -10,6 +12,11 @@
   export let icon: string | undefined = undefined;
   export let button: { text: string; variant?: string; onClick: () => void } | undefined =
     undefined;
+
+  function getValResColor(valRes: ValidationResult): TwTextColor {
+    if ('color' in valRes) return `text-${valRes.color}`;
+    return valRes.valid ? 'text-green-500' : 'text-red-500';
+  }
 </script>
 
 <label class="label w-full">
@@ -19,7 +26,11 @@
       {#if icon}
         <div class="input-group-shim fa {icon}"></div>
       {/if}
-      <input type="text" title={label} {placeholder} {autocomplete} bind:value />
+      {#if type === 'password'}
+        <input type="password" title={label} {placeholder} {autocomplete} bind:value on:input />
+      {:else}
+        <input type="text" title={label} {placeholder} {autocomplete} bind:value on:input />
+      {/if}
       {#if button}
         <button
           class={button.variant ?? 'variant-filled-primary'}
@@ -31,9 +42,9 @@
       {/if}
     </div>
   </div>
-  {#if !validationResult || validationResult.valid}
+  {#if !validationResult || !('message' in validationResult)}
     <div class="h-3"></div>
   {:else}
-    <p class="text-xs text-red-500 !mt-0">{validationResult.message}</p>
+    <p class="text-xs {getValResColor(validationResult)} !mt-0">{validationResult.message}</p>
   {/if}
 </label>
