@@ -1,8 +1,5 @@
 <script lang="ts">
   import type { ValidationResult } from '$lib/types/ValidationResult';
-  import { createEventDispatcher } from "svelte";
-  const dispatch = createEventDispatcher();
-
 
   export let label: string;
   export let placeholder: string | undefined = undefined;
@@ -11,17 +8,8 @@
   export let validationResult: ValidationResult | null | undefined = undefined;
 
   export let icon: string | undefined = undefined;
-  export let buttonText: string | undefined = undefined;
-  export let buttonVariant: string | undefined = "variant-filled-primary";
-  
-  function handleButtonClick() {
-    dispatch('buttonClick');
-  }
-
-  function handleInput(event: Event) {
-    dispatch('input', event);
-  }
-
+  export let button: { text: string; variant?: string; onClick: () => void } | undefined =
+    undefined;
 </script>
 
 <label class="label w-full">
@@ -31,9 +19,15 @@
       {#if icon}
         <div class="input-group-shim fa {icon}"></div>
       {/if}
-      <input type="text" title={label} {placeholder} {autocomplete} bind:value on:input={handleInput} />
-      {#if buttonText}
-          <button class={buttonVariant} on:click={handleButtonClick} disabled={validationResult !== undefined && !validationResult?.valid}>{buttonText}</button>
+      <input type="text" title={label} {placeholder} {autocomplete} bind:value />
+      {#if button}
+        <button
+          class={button.variant ?? 'variant-filled-primary'}
+          on:click={button.onClick}
+          disabled={validationResult && !validationResult.valid}
+        >
+          {button.text}
+        </button>
       {/if}
     </div>
   </div>

@@ -10,8 +10,6 @@
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import UsernameInput from '$lib/components/UsernameInput.svelte';
 
-  const toastStore = getToastStore();
-
   let username: string = '';
 
   let email: string = '';
@@ -83,8 +81,7 @@
         bind:value={email}
         validationResult={emailValres}
         icon="fa-envelope"
-        buttonText="Change"
-        on:buttonClick={submitEmail}
+        button={{ text: 'Change', onClick: submitEmail }}
       />
 
       <Accordion>
