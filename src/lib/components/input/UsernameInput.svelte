@@ -10,19 +10,19 @@
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { getToastStore } from '@skeletonlabs/skeleton';
   import TextInput from '$lib/components/input/TextInput.svelte';
+  import type { ButtonSettings } from '$lib/components/input/impl/ButtonSettings';
 
   const toastStore = getToastStore();
 
-  export let label: string = 'Username';
-  export let placeholder: string | undefined = 'Username';
+  export let label: string;
+  export let placeholder: string | undefined = undefined;
   export let autocomplete: string | undefined = 'username';
   export let value: string;
   export let valid: boolean = false;
   export let validate: boolean = true;
 
-  export let icon: string | undefined = undefined;
-  export let button: { text: string; variant?: string; onClick: () => void } | undefined =
-    undefined;
+  export let icon: `fa-${string}` | undefined = undefined;
+  export let button: ButtonSettings | undefined = undefined;
 
   let validationResult: ValidationResult | null = null;
   let usernameDebounce: ReturnType<typeof setTimeout> | null = null;
@@ -71,4 +71,13 @@
   $: valid = validationResult?.valid ?? false;
 </script>
 
-<TextInput {label} {placeholder} {autocomplete} bind:value {validationResult} {icon} {button} />
+<TextInput
+  {label}
+  {placeholder}
+  {autocomplete}
+  bind:value
+  {validationResult}
+  {icon}
+  {button}
+  on:input
+/>

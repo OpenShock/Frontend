@@ -64,19 +64,21 @@
       class="w-full flex flex-col items-start gap-y-2 p-4 bg-surface-100-800-token rounded-lg border border-gray-500"
     >
       <UsernameInput
+        label="Username"
         placeholder={$UserSelfStore.name}
         autocomplete="off"
         bind:value={username}
         icon="fa-user"
-        button={{ text: 'Change', onClick: submitUsername }}
+        button={{ text: 'Change', submits: true, onClick: submitUsername }}
       />
 
       <EmailInput
+        label="Email"
         placeholder={$UserSelfStore.email}
         autocomplete="off"
         bind:value={email}
         icon="fa-envelope"
-        button={{ text: 'Change', onClick: submitEmail }}
+        button={{ text: 'Change', submits: true, onClick: submitEmail }}
       />
 
       <Accordion>

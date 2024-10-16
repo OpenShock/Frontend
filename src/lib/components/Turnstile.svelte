@@ -72,7 +72,8 @@
       <a
         id="logo"
         href="https://www.cloudflare.com/products/turnstile/?utm_source=turnstile&utm_campaign=widget"
-        rel="noopen noreferrer"
+        target="_blank"
+        rel="noreferrer"
       >
         <CloudflareLogo class="mb-[1px] h-[26px]" />
       </a>
