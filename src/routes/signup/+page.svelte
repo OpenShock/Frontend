@@ -54,9 +54,16 @@
   <form class="flex flex-col space-y-2" on:submit|preventDefault={handleSubmission}>
     <h2 class="h2">Sign Up</h2>
 
-    <UsernameInput bind:value={username} bind:valid={usernameValid} />
-    <EmailInput bind:value={email} bind:valid={emailValid} />
+    <UsernameInput
+      label="Username"
+      placeholder="Username"
+      bind:value={username}
+      bind:valid={usernameValid}
+    />
+    <EmailInput label="Email" placeholder="Email" bind:value={email} bind:valid={emailValid} />
     <PasswordInput
+      label="Password"
+      placeholder="Password"
       autocomplete="new-password"
       bind:value={password}
       bind:valid={passwordValid}
