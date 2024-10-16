@@ -43,6 +43,7 @@ async function create_signalr_connection() {
       transport: SignalR.HttpTransportType.WebSockets,
       skipNegotiation: true,
     })
+    .withAutomaticReconnect([0, 1000, 2000, 5000, 10000, 10000, 15000, 30000, 60000])
     .build();
 
   connection.onclose(() => {
