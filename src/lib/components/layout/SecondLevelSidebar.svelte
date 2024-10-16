@@ -19,7 +19,7 @@
               <a
                 href={route.href}
                 target={route.target}
-                class={$page.url.pathname === route.href ? 'bg-primary-active-token' : ''}
+                class={'transition ease-in-out ' + ($page.url.pathname === route.href ? 'bg-primary-active-token' : '')}
               >
                 {route.name}
               </a>

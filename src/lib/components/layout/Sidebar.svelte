@@ -66,7 +66,7 @@
   <div class="flex flex-row h-full">
     <AppRail>
       <svelte:fragment slot="lead">
-        <AppRailAnchor href="/home" selected={path === '/home'} title="Home">
+        <AppRailAnchor href="/home" selected={path === '/home'} title="Home" hover="transition ease-in-out bg-primary-hover-token">
           <i slot="lead" class="fa fa-house text-2xl"></i>
           <span>Home</span>
         </AppRailAnchor>
@@ -78,7 +78,7 @@
           <i slot="lead" class="fa fa-bolt text-2xl"></i>
           <span>Shockers</span>
         </AppRailAnchor>
-        <AppRailAnchor href="/hubs" selected={path === '/hubs'} title="Hubs">
+        <AppRailAnchor href="/hubs" selected={path === '/hubs'} title="Hubs" hover="transition ease-in-out bg-primary-hover-token">
           <i slot="lead" class="fa fa-microchip text-2xl"></i>
           <span>Hubs</span>
         </AppRailAnchor>
@@ -86,6 +86,7 @@
           href="/sharelinks"
           selected={path === '/sharelinks'}
           title="Sharelinks"
+          hover="transition ease-in-out bg-primary-hover-token"
         >
           <i slot="lead" class="fa fa-link text-2xl"></i>
           <span>Sharelinks</span>
@@ -93,7 +94,7 @@
       </svelte:fragment>
       <svelte:fragment slot="trail">
         {#if $UserSelfStore.rank === RankType.admin}
-          <AppRailAnchor href="/admin" selected={path === '/admin' || path.startsWith('/admin/')} title="Admin">
+          <AppRailAnchor href="/admin" selected={path === '/admin' || path.startsWith('/admin/')} title="Admin" hover="transition ease-in-out bg-primary-hover-token">
             <i slot="lead" class="fa fa-user-shield text-2xl"></i>
             <span>Admin</span>
           </AppRailAnchor>
