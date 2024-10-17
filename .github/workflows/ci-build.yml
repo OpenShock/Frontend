@@ -12,13 +12,7 @@ name: ci-build
 jobs:
 
   test:
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        node: [20.18]
-        pnpm: [9]
-
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
@@ -27,13 +21,13 @@ jobs:
       - uses: pnpm/action-setup@v4
         name: Install pnpm
         with:
-          version: ${{ matrix.pnpm }}
+          version: 9
           run_install: false
 
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node }}
+          node-version: 20.18
           cache: 'pnpm'
 
       - name: Install dependencies
