@@ -4,7 +4,7 @@ WORKDIR /app
 ENV DOCKER=true
 
 COPY package.json .
-COPY package-lock.json .
+COPY pnpm-lock.yaml .
 COPY patches/ patches/
 
 RUN pnpm install --frozen-lockfile
@@ -22,7 +22,7 @@ ENV NODE_ENV=production
 EXPOSE 3000
 
 COPY --from=build /app/package.json .
-COPY --from=build /app/package-lock.json .
+COPY --from=build /app/pnpm-lock.yaml .
 COPY --from=build /app/patches/ patches/
 COPY --from=build /app/build build/
 
