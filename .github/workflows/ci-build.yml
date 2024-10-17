@@ -23,11 +23,11 @@ jobs:
 
       - name: Install dependencies
         shell: bash
-        run: npm ci
+        run: pnpm ci
 
       - name: Check
         shell: bash
-        run: npm run check
+        run: pnpm run check
 
       - name: Install playwright
         shell: bash
@@ -35,7 +35,7 @@ jobs:
 
       - name: Test
         shell: bash
-        run: npm test
+        run: pnpm test
 
   build-container:
     runs-on: ubuntu-latest

@@ -7,11 +7,11 @@ COPY package.json .
 COPY package-lock.json .
 COPY patches/ patches/
 
-RUN npm ci
+RUN pnpm ci
 
 COPY . .
 
-RUN npm run build
+RUN pnpm run build
 
 FROM node:20-alpine AS runtime
 
@@ -26,6 +26,6 @@ COPY --from=build /app/package-lock.json .
 COPY --from=build /app/patches/ patches/
 COPY --from=build /app/build build/
 
-RUN npm ci
+RUN pnpm ci
 
 CMD ["node","build/index.js"]
