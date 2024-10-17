@@ -7,7 +7,7 @@ COPY package.json .
 COPY package-lock.json .
 COPY patches/ patches/
 
-RUN pnpm ci
+RUN pnpm install --frozen-lockfile
 
 COPY . .
 
@@ -26,6 +26,6 @@ COPY --from=build /app/package-lock.json .
 COPY --from=build /app/patches/ patches/
 COPY --from=build /app/build build/
 
-RUN pnpm ci
+RUN pnpm install --frozen-lockfile
 
 CMD ["node","build/index.js"]
