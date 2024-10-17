@@ -9,13 +9,14 @@ on:
 
 name: ci-build
 
-env:
-  NODE_VERSION: 20
-
 jobs:
 
   test:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18, 20] # Cloudflare uses Node.js 18.17.1
 
     steps:
       - name: Checkout
@@ -30,7 +31,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
 
       - name: Install dependencies
