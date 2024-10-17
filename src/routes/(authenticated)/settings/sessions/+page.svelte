@@ -9,7 +9,6 @@
 
   const modalStore = getModalStore();
 
-
   const toastStore = getToastStore();
   let sessions: LoginSessionResponse[] = [];
 
@@ -21,8 +20,8 @@
   async function listSessions() {
     try {
       sessions = await sessionApi.sessionsListSessions();
-      console.log(sessions)
-      console.log(typeof(sessions[0].expires))
+      console.log(sessions);
+      console.log(typeof sessions[0].expires);
     } catch (e) {
       await handleApiError(e, toastStore);
     }
@@ -32,7 +31,7 @@
     modalStore.trigger({
       type: 'confirm',
       title: 'Please Confirm',
-      body: `Are you sure you want to delete the session from ${session.userAgent}?`,
+      body: `Are you sure you want to log out from ${escapeHtml(session.userAgent)}?`,
       response: async (r: boolean) => {
         if (r) await deleteSessionActually(session.id);
       },
@@ -52,11 +51,11 @@
 </script>
 
 <div class="container h-full mx-auto p-12 flex flex-col justify-start items-start gap-4">
-  <h1 class="h1">API Tokens</h1>
+  <h1 class="h1">Sessions</h1>
   <div
     class="w-full flex flex-col items-start gap-y-4 p-4 bg-surface-100-800-token rounded-lg border border-gray-500"
   >
-    <p>API Tokens are used to authenticate with the OpenShock API</p>
+    <p>Currently valid sessions</p>
 
     <!-- Responsive Container (recommended) -->
     <div class="table-container">
@@ -82,11 +81,15 @@
               <td title={row.lastUsed.toLocaleString()}>
                 {elapsedToString(since - row.lastUsed.getTime())} ago
               </td>-->
-              <td>Last Used Placeholder</td>
+              <td>Not Implemented</td>
 
-              <td title={row.expires.toLocaleString()}
-                >In {elapsedToString(row.expires.getTime() - since)}</td
-              >
+              {#if since < row.expires.getTime()}
+                <td title={row.expires.toLocaleString()}>
+                  {elapsedToString(row.expires.getTime() - since)}
+                </td>
+              {:else}
+                <td title={row.expires.toLocaleString()} class="text-red-500"> Already expired </td>
+              {/if}
 
               <td>{row.ip}</td>
 

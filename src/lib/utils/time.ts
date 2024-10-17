@@ -3,8 +3,8 @@ function formatInterval(unit: string, interval: number) {
   return interval + ' ' + unit + (interval != 1 ? 's' : '');
 }
 
-export function elapsedToString(elapsedMs: number) {
-  let seconds = Math.floor(elapsedMs / 1000);
+export function durationToString(durationMs: number) {
+  const seconds = Math.floor(Math.abs(durationMs) / 1000);
 
   let interval = seconds / 31536000;
   if (interval >= 1) return formatInterval('year', interval);
@@ -24,3 +24,9 @@ export function elapsedToString(elapsedMs: number) {
   return formatInterval('second', seconds);
 }
 
+export function elapsedToString(elapsedMs: number) {
+  const isNegative = elapsedMs < 0;
+  const duration = durationToString(elapsedMs);
+
+  return isNegative ? duration + ' ago' : 'in ' + duration;
+}

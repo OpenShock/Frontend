@@ -100,9 +100,9 @@
               <td>{row.name}</td>
               <td title={row.createdOn.toLocaleString()}>{row.createdOn.toLocaleDateString()}</td>
               {#if row.validUntil}
-                <td title={row.validUntil.toLocaleString()}
-                  >In {elapsedToString(row.validUntil.getTime() - since)}</td
-                >
+                <td title={row.validUntil.toLocaleString()}>
+                  {elapsedToString(row.validUntil.getTime() - since)}
+                </td>
               {:else}
                 <td class="text-warning-500">Never</td>
               {/if}
@@ -110,18 +110,20 @@
                 <td>Never</td>
               {:else}
                 <td title={row.lastUsed.toLocaleString()}>
-                  {elapsedToString(since - row.lastUsed.getTime())} ago
+                  {elapsedToString(row.lastUsed.getTime() - since)}
                 </td>
               {/if}
               <td class="!whitespace-nowrap">
                 <button
                   class="btn-icon variant-filled-primary fa fa-edit"
                   on:click={() => editToken(row.id)}
-                ></button>
+                >
+                </button>
                 <button
                   class="btn-icon variant-filled-primary fa fa-trash"
                   on:click={() => deleteToken(row)}
-                ></button>
+                >
+                </button>
               </td>
             </tr>
           {/each}

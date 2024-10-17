@@ -7,7 +7,7 @@
   import ThFilter from '$lib/components/table/ThFilter.svelte';
   import ThSort from '$lib/components/table/ThSort.svelte';
   import type { AdminOnlineDeviceResponse } from '$lib/api/internal/v1';
-  import { elapsedToString } from '$lib/utils/time';
+  import { durationToString } from '$lib/utils/time';
 
   type FlatDevice = AdminOnlineDeviceResponse & { ownerName: string | null | undefined };
 
@@ -53,7 +53,7 @@
           <td>{row.name}</td>
           <td class={row.firmwareVersion ? '' : 'text-red-500'}>{row.firmwareVersion}</td>
           <td title={row.connectedAt?.toString() ?? 'N/A'}>
-            {row.connectedAt ? elapsedToString(since - row.connectedAt.getTime()) : 'N/A'}
+            {row.connectedAt ? durationToString(since - row.connectedAt.getTime()) : 'N/A'}
           </td>
           <td class={row.gateway ? '' : 'text-red-500'}>{row.gateway}</td>
           <td class="flex items-center space-x-2">
