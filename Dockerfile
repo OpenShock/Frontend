@@ -1,7 +1,10 @@
-FROM node:20-alpine AS build
+FROM alpine:3.20 AS build
 
 WORKDIR /app
 ENV DOCKER=true
+ENV PNPM_VERSION=9.12.2
+
+RUN wget -qO /bin/pnpm "https://github.com/pnpm/pnpm/releases/latest/download/pnpm-linuxstatic-x64" && chmod +x /bin/pnpm
 
 COPY package.json .
 COPY pnpm-lock.yaml .
@@ -13,11 +16,14 @@ COPY . .
 
 RUN pnpm run build
 
-FROM node:20-alpine AS runtime
+FROM alpine:3.20 AS runtime
 
 WORKDIR /app
 ENV DOCKER=true
 ENV NODE_ENV=production
+ENV PNPM_VERSION=9.12.2
+
+RUN wget -qO /bin/pnpm "https://github.com/pnpm/pnpm/releases/latest/download/pnpm-linuxstatic-x64" && chmod +x /bin/pnpm
 
 EXPOSE 3000
 
