@@ -9,25 +9,40 @@ on:
 
 name: ci-build
 
-env:
-  NODE_VERSION: 20
-
 jobs:
 
   test:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node: [20.18]
+        pnpm: [9]
+
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: ${{ matrix.pnpm }}
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: 'pnpm'
+
       - name: Install dependencies
         shell: bash
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Check
         shell: bash
-        run: npm run check
+        run: pnpm run check
 
       - name: Install playwright
         shell: bash
@@ -35,7 +50,7 @@ jobs:
 
       - name: Test
         shell: bash
-        run: npm test
+        run: pnpm test
 
   build-container:
     runs-on: ubuntu-latest
