@@ -16,7 +16,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         node: [20.18]
-        pnpm: [8.7, 9]
+        pnpm: [9]
 
     runs-on: ${{ matrix.os }}
 
