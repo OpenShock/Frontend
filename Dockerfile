@@ -1,11 +1,12 @@
 ARG NODE_VERSION=20
 ARG PNPM_VERSION=9.12.2
+ARG ALPINE_VERSION=3.20
 
-FROM node:{NODE_VERSION}-alpine AS build
+FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION} AS build
 
 WORKDIR /app
 ENV DOCKER=true
-ENV PNPM_VERSION={PNPM_VERSION}
+ENV PNPM_VERSION=${PNPM_VERSION}
 
 RUN wget -qO /bin/pnpm "https://github.com/pnpm/pnpm/releases/latest/download/pnpm-linuxstatic-x64" && chmod +x /bin/pnpm
 
@@ -19,12 +20,12 @@ COPY . .
 
 RUN pnpm run build
 
-FROM node:{NODE_VERSION}-alpine AS runtime
+FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION} AS runtime
 
 WORKDIR /app
 ENV DOCKER=true
 ENV NODE_ENV=production
-ENV PNPM_VERSION={PNPM_VERSION}
+ENV PNPM_VERSION=${PNPM_VERSION}
 
 RUN wget -qO /bin/pnpm "https://github.com/pnpm/pnpm/releases/latest/download/pnpm-linuxstatic-x64" && chmod +x /bin/pnpm
 
