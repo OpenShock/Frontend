@@ -32,6 +32,10 @@
         background: 'variant-filled-success',
         message: 'Username changed successfully',
       });
+
+      UserStore.setSelfName(username);
+
+      username = '';
     } catch (e) {
       await handleApiError(e, toastStore, (problem) => {
         if (problem.type === 'Account.Username.Invalid') {
