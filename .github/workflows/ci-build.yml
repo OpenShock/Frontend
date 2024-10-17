@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18, 20] # Cloudflare uses Node.js 18.17.1
+        node-version: [18.17, 20] # Cloudflare uses Node.js 18.17.1
 
     steps:
       - name: Checkout
