@@ -3,13 +3,33 @@ import { usersApi } from "$lib/api";
 import type { ApiUser, ApiUserSelf } from "$lib/types/ApiUser";
 import { writable } from "svelte/store";
 
-export const UserSelfStore = writable<ApiUserSelf | null>(null);
-export const UsersStore = writable<ApiUser[]>([]);
+const { set, update, subscribe } = writable<{ self: ApiUserSelf | null, all: ApiUser[] }>({ self: null, all: [] });
 
-export function refreshUserSelf() {
+function updateAllFromSelf(all: ApiUser[], self: ApiUserSelf | null): ApiUser[] {
+  if (!self) return all;
+  return all.map((user) => {
+    if (user.id === self.id) {
+      return self;
+    }
+    return user;
+  });
+}
+
+function setSelfName(name: string) {
+  update((state) => {
+    if (!state.self) return state;
+    state.self.name = name;
+    state.all = updateAllFromSelf(state.all, state.self);
+    return state;
+  });
+}
+
+async function refreshSelf() {
   if (!browser) return;
 
-  usersApi.usersGetSelf().then(({ data, message }) => {
+  try {
+    const { data, message } = await usersApi.usersGetSelf();
+
     if (!data) {
       console.error(`Failed to get user self: ${message}`);
       return;
@@ -23,11 +43,27 @@ export function refreshUserSelf() {
       email: data.email!,
     };
 
-    UserSelfStore.set(user);
-    UsersStore.set([user]);
-  }).catch((error) => {
+    update((state) => {
+      state.self = user;
+      state.all = updateAllFromSelf(state.all, user);
+      return state;
+    });
+  } catch (error) {
     console.error(error);
-  });
+  }
 }
 
-refreshUserSelf();
+function reset() {
+  set({ self: null, all: [] });
+}
+
+refreshSelf();
+
+export const UserStore = {
+  subscribe,
+  set,
+  update,
+  setSelfName,
+  refreshSelf,
+  reset,
+};

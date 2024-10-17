@@ -1,10 +1,10 @@
 <script lang="ts">
   import { adminApi } from '$lib/api';
   import { RankType, type AdminOnlineDeviceResponse } from '$lib/api/internal/v1';
-  import { UserSelfStore } from '$lib/stores/UserStore';
+  import { UserStore } from '$lib/stores/UserStore';
   import AdminDeviceList from './AdminDeviceList.svelte';
 
-  $: isAdmin = $UserSelfStore?.rank === RankType.admin;
+  $: isAdmin = $UserStore.self?.rank === RankType.admin;
 
   type FlatDevice = AdminOnlineDeviceResponse & { ownerName: string | null | undefined };
 
@@ -34,7 +34,7 @@
     <div class="flex justify-between w-full">
       <h2 class="h2">Admin Panel</h2>
       <button class="btn variant-filled-primary" on:click={() => (devices = null)}>
-        <i class="fa fa-sync" ></i>
+        <i class="fa fa-sync"></i>
         Refresh
       </button>
     </div>

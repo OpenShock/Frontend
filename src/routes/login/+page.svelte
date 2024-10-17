@@ -3,7 +3,7 @@
   import { accountApi } from '$lib/api';
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
-  import { refreshUserSelf } from '$lib/stores/UserStore';
+  import { UserStore } from '$lib/stores/UserStore';
 
   let usernameOrEmail = '';
   let password = '';
@@ -12,7 +12,7 @@
     accountApi
       .accountLogin({ email: usernameOrEmail, password })
       .then(() => {
-        refreshUserSelf();
+        UserStore.refreshSelf();
         goto('/home');
       })
       .catch((err) => {

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { PUBLIC_DISCORD_INVITE_URL, PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
-  import { UserSelfStore } from '$lib/stores/UserStore';
+  import { UserStore } from '$lib/stores/UserStore';
   import { AppBar, LightSwitch, popup, type PopupSettings } from '@skeletonlabs/skeleton';
 
   const accountPopup: PopupSettings = {
@@ -14,7 +14,7 @@
   <div slot="lead" class="flex items-center space-x-4">
     <!-- Logo -->
     <a
-      href={!!$UserSelfStore ? '/home' : '/'}
+      href={!!$UserStore.self ? '/home' : '/'}
       class="overflow-hidden lg:!ml-0 lg:w-auto select-none"
       data-sveltekit-preload-data="hover"
       aria-label="OpenShock"
@@ -24,13 +24,13 @@
   </div>
   <svelte:fragment slot="trail">
     <LightSwitch />
-    {#if !!$UserSelfStore}
+    {#if $UserStore.self !== null}
       <div
         class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 cursor-pointer"
         use:popup={accountPopup}
       >
-        <img class="inline-block h-8 rounded-full" src={$UserSelfStore.avatar} alt="User Avatar" />
-        <p class="hidden lg:inline-block">{$UserSelfStore.name}</p>
+        <img class="inline-block h-8 rounded-full" src={$UserStore.self.avatar} alt="User Avatar" />
+        <p class="hidden lg:inline-block">{$UserStore.self.name}</p>
       </div>
       <div class="card p-4 w-48 bg-surface-200-700-token shadow-xl" data-popup="accountPopup">
         <a

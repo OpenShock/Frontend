@@ -1,7 +1,7 @@
 import { browser } from '$app/environment';
 import { PUBLIC_BACKEND_API_DOMAIN } from '$env/static/public';
 import { OwnDeviceStatesStore, type OwnDeviceState } from '$lib/stores/DevicesStore';
-import { UserSelfStore } from '$lib/stores/UserStore';
+import { UserStore } from '$lib/stores/UserStore';
 import * as SignalR from '@microsoft/signalr';
 import { get, writable } from 'svelte/store';
 
@@ -91,8 +91,8 @@ function destroy_signalr_connection() {
 }
 
 if (browser) {
-  UserSelfStore.subscribe((user) => {
-    if (!user) {
+  UserStore.subscribe(({ self }) => {
+    if (self === null) {
       destroy_signalr_connection();
     } else {
       create_signalr_connection()

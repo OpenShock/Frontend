@@ -2,7 +2,7 @@
   import { page } from '$app/stores';
   import { RankType } from '$lib/api/internal/v1';
   import { signalr_state } from '$lib/signalr/connection';
-  import { UserSelfStore } from '$lib/stores/UserStore';
+  import { UserStore } from '$lib/stores/UserStore';
   import { HubConnectionState } from '@microsoft/signalr';
   import { AppRail, AppRailAnchor } from '@skeletonlabs/skeleton';
   import SecondLevelSidebar from './SecondLevelSidebar.svelte';
@@ -107,12 +107,12 @@
   }
 </script>
 
-{#if $UserSelfStore && $signalr_state === HubConnectionState.Connected}
+{#if $UserStore.self !== null && $signalr_state === HubConnectionState.Connected}
   <div class="flex flex-row h-full">
     <AppRail>
       <svelte:fragment slot="lead">
         {#each leadRoutes as route (route.href)}
-          {#if meetsReq($UserSelfStore, route)}
+          {#if meetsReq($UserStore.self, route)}
             <AppRailAnchor
               href={route.href}
               selected={isPathMatch(path, route.href)}
@@ -127,7 +127,7 @@
       </svelte:fragment>
       <svelte:fragment slot="trail">
         {#each trailRoutes as route (route.href)}
-          {#if meetsReq($UserSelfStore, route)}
+          {#if meetsReq($UserStore.self, route)}
             <AppRailAnchor
               href={route.href}
               selected={isPathMatch(path, route.href)}
