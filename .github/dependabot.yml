@@ -5,7 +5,7 @@
 
 version: 2
 updates:
-  # Daily checks for npm package updates in frontend
+  # Daily checks for pnpm package updates in frontend
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:

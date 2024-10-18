@@ -1,10 +1,10 @@
 <script lang="ts">
   import { signalr_state } from '$lib/signalr/connection';
-  import { UserSelfStore } from '$lib/stores/UserStore';
+  import { UserStore } from '$lib/stores/UserStore';
   import { HubConnectionState } from '@microsoft/signalr';
 </script>
 
-{#if !$UserSelfStore}
+{#if $UserStore.self === null}
   <div class="container h-full mx-auto flex justify-center items-center">
     <h1 class="text-4xl">You need to be logged in to access this page</h1>
     <a href="/login" class="btn variant-filled-primary">Login</a>

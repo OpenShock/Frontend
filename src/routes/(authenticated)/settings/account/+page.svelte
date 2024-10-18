@@ -1,7 +1,7 @@
 <script lang="ts">
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
   import { validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
-  import { UserSelfStore } from '$lib/stores/UserStore';
+  import { UserStore } from '$lib/stores/UserStore';
   import { Accordion, AccordionItem } from '@skeletonlabs/skeleton';
   import { authenticatedAccountApi } from '$lib/api';
   import { getToastStore } from '@skeletonlabs/skeleton';
@@ -32,6 +32,10 @@
         background: 'variant-filled-success',
         message: 'Username changed successfully',
       });
+
+      UserStore.setSelfName(username);
+
+      username = '';
     } catch (e) {
       await handleApiError(e, toastStore, (problem) => {
         if (problem.type === 'Account.Username.Invalid') {
@@ -57,7 +61,7 @@
   $: canSubmitPassword = currentPasswordValid && passwordValid && password == passwordConfirm;
 </script>
 
-{#if $UserSelfStore}
+{#if $UserStore.self}
   <div class="container h-full mx-auto p-12 flex flex-col justify-start items-start gap-4">
     <h1 class="h1">Account Settings</h1>
     <div
@@ -65,7 +69,7 @@
     >
       <UsernameInput
         label="Username"
-        placeholder={$UserSelfStore.name}
+        placeholder={$UserStore.self.name}
         autocomplete="off"
         bind:value={username}
         icon="fa-user"
@@ -74,7 +78,7 @@
 
       <EmailInput
         label="Email"
-        placeholder={$UserSelfStore.email}
+        placeholder={$UserStore.self.email}
         autocomplete="off"
         bind:value={email}
         icon="fa-envelope"

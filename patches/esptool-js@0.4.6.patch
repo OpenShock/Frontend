@@ -1,0 +1,12 @@
+diff --git a/package.json b/package.json
+index 08b403d99a52684e533748c7cf88f1dd62230153..54e6233d4c338edb6c37f38c1312b55c54b575c0 100644
+--- a/package.json
++++ b/package.json
+@@ -1,6 +1,7 @@
+ {
+   "name": "esptool-js",
+   "version": "0.4.6",
++  "type": "module",
+   "module": "lib/index.js",
+   "main": "lib/index.js",
+   "types": "lib/index.d.ts",

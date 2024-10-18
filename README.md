@@ -25,19 +25,19 @@ This is the frontend for the OpenShock project that interfaces with the OpenShoc
 
 ## Available Commands
 
-- `npm i` - Install dependencies
-- `npm run dev` - Start the development server
-- `npm run build` - Build the project
-- `npm run preview` - Preview the built project
-- `npx openapi-generator-cli generate` - Generate the API client
+- `pnpm i` - Install dependencies
+- `pnpm run dev` - Start the development server
+- `pnpm run build` - Build the project
+- `pnpm run preview` - Preview the built project
+- `pnpx openapi-generator-cli generate` - Generate the API client
 
 ## Setup
 
-To get started with development, you will need to have **Node.js** and **npm** installed.
+To get started with development, you will need to have **Node.js** and **pnpm** installed.
 
 We recommend using a version manager like [Volta](https://docs.volta.sh/guide/getting-started) to manage your Node.js versions.
 
-### Install Node.js and npm
+### Install Node.js and pnpm
 
 Install on Linux:
 ```bash
@@ -49,9 +49,10 @@ Install on Windows:
 winget install Volta.Volta
 ```
 
-Then you can install the required **Node.js** and **npm** version by running a single command in the repository root directory:
+Then you can install the required **Node.js** and **pnpm** version by running a single command in the repository root directory:
 ```bash
-volta install
+volta install node
+volta install pnpm
 ```
 
 ### Install dependencies and build project
@@ -59,15 +60,15 @@ volta install
 With Node.js installed, you can run the following commands to get started:
 
 ```bash
-npm i
-npm run build
+pnpm i
+pnpm run build
 ```
 
 ## Running locally
 
 Running the frontend locally is as simple as this:
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 ### Hosts redirect
