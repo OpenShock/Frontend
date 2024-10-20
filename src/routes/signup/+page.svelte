@@ -10,27 +10,29 @@
 
   const modalStore = getModalStore();
 
-  let username = '';
-  let usernameValid = false;
+  let username = $state('');
+  let usernameValid = $state(false);
 
-  let email = '';
-  let emailValid = false;
+  let email = $state('');
+  let emailValid = $state(false);
 
-  let password = '';
-  let passwordValid = false;
+  let password = $state('');
+  let passwordValid = $state(false);
 
-  let passwordConfirm = '';
+  let passwordConfirm = $state('');
 
-  let turnstileResponse: string | null = null;
+  let turnstileResponse: string | null = $state(null);
 
-  $: canSubmit =
-    usernameValid &&
+  let canSubmit =
+    $derived(usernameValid &&
     emailValid &&
     passwordValid &&
     password == passwordConfirm &&
-    turnstileResponse;
+    turnstileResponse);
 
-  function handleSubmission() {
+  function handleSubmission(ev: SubmitEvent) {
+    ev.preventDefault();
+
     accountApi
       .accountSignUp({
         username,
@@ -51,7 +53,7 @@
 </script>
 
 <div class="container h-full mx-auto flex justify-center items-center">
-  <form class="flex flex-col space-y-2" on:submit|preventDefault={handleSubmission}>
+  <form class="flex flex-col space-y-2" onsubmit={handleSubmission}>
     <h2 class="h2">Sign Up</h2>
 
     <UsernameInput

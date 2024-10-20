@@ -2,8 +2,12 @@
   import type { RouteCategory } from './Route';
   import { page } from '$app/stores';
 
-  export let baseRoute: string;
-  export let routes: RouteCategory[];
+  interface Props {
+    baseRoute: string;
+    routes: RouteCategory[];
+  }
+
+  let { baseRoute, routes }: Props = $props();
 </script>
 
 {#if $page.url.pathname.startsWith(baseRoute)}

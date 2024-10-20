@@ -10,9 +10,9 @@
   const modalStore = getModalStore();
 
   const toastStore = getToastStore();
-  let sessions: LoginSessionResponse[] = [];
+  let sessions: LoginSessionResponse[] = $state([]);
 
-  let since: number = Date.now();
+  let since: number = $state(Date.now());
   setInterval(() => {
     since = Date.now();
   }, 1000);
@@ -96,7 +96,8 @@
               <td class="!whitespace-nowrap">
                 <button
                   class="btn-icon variant-filled-primary fa fa-trash"
-                  on:click={() => deleteSession(row)}
+                  onclick={() => deleteSession(row)}
+                  aria-label="Delete Session"
                 ></button>
               </td>
             </tr>

@@ -2,10 +2,14 @@
   import type { SvelteComponent } from 'svelte';
   import { getModalStore } from '@skeletonlabs/skeleton';
 
-  export let parent: SvelteComponent;
+  interface Props {
+    parent: SvelteComponent;
+  }
+
+  let { parent }: Props = $props();
   const modalStore = getModalStore();
 
-  let token: string = 'error';
+  let token: string = $state('error');
 
   function copyToken() {
     navigator.clipboard.writeText(token);
@@ -23,12 +27,12 @@ token = $modalStore[0].meta.token;
     <div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
         <div class="input-group-shim fa fa-key"></div>
         <input readonly type="text" value={token} />
-        <button on:click={copyToken} class="variant-filled-secondary fa fa-copy" style="outline-style: none;" aria-label="Copy Token"></button>
+        <button onclick={copyToken} class="variant-filled-secondary fa fa-copy" style="outline-style: none;" aria-label="Copy Token"></button>
     </div>
 
     <button
       class="btn variant-filled-primary"
-      on:click={() => {
+      onclick={() => {
         parent.onClose();
       }}
     >

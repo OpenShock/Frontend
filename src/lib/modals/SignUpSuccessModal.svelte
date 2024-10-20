@@ -1,7 +1,11 @@
 <script lang="ts">
   import type { SvelteComponent } from 'svelte';
 
-  export let parent: SvelteComponent;
+  interface Props {
+    parent: SvelteComponent;
+  }
+
+  let { parent }: Props = $props();
 </script>
 
 <div class="bg-surface-100-800-token w-screen h-screen p-4 flex justify-center items-center">
@@ -10,7 +14,7 @@
     <p>Your account has been created. Please check your email to verify your account.</p>
     <button
       class="btn variant-filled-primary"
-      on:click={() => {
+      onclick={() => {
         parent.onClose();
       }}
     >

@@ -1,7 +1,11 @@
 <script lang="ts">
-  import type { DataHandler } from '@vincjo/datatables';
-  export let handler: DataHandler;
-  let value: string;
+  import type { TableHandler } from '@vincjo/datatables';
+  interface Props {
+    handler: TableHandler;
+  }
+
+  let { handler }: Props = $props();
+  let value: string = $state('');
 </script>
 
 <input
@@ -9,5 +13,5 @@
   type="search"
   placeholder="Search..."
   bind:value
-  on:input={() => handler.search(value)}
+  oninput={() => handler.search(value)}
 />

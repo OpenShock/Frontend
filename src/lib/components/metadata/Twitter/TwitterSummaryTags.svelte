@@ -1,12 +1,23 @@
 <script lang="ts">
   import { isTwitterHandle } from '$lib/typeguards/twitterHandleGuard';
 
-  export let type: 'summary' | 'summary_large_image';
-  export let title: string | undefined = undefined;
-  export let description: string | undefined = undefined;
-  export let image: { src: string; alt: string } | undefined = undefined;
-  export let site: string | number | undefined = undefined;
-  export let creator: string | number | undefined = undefined;
+  interface Props {
+    type: 'summary' | 'summary_large_image';
+    title?: string;
+    description?: string;
+    image?: { src: string; alt: string };
+    site?: string | number;
+    creator?: string | number;
+  }
+
+  let {
+    type,
+    title,
+    description,
+    image,
+    site,
+    creator
+  }: Props = $props();
 </script>
 
 <svelte:head>

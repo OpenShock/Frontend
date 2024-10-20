@@ -4,13 +4,15 @@
   import { UserStore } from '$lib/stores/UserStore';
   import AdminDeviceList from './AdminDeviceList.svelte';
 
-  $: isAdmin = $UserStore.self?.rank === RankType.admin;
+  let isAdmin = $derived($UserStore.self?.rank === RankType.admin);
 
   type FlatDevice = AdminOnlineDeviceResponse & { ownerName: string | null | undefined };
 
-  let devices: FlatDevice[] | null = null;
+  let devices: FlatDevice[] | null = $state(null);
 
-  $: if (isAdmin && !devices) {
+  $effect(() => {
+    if (!isAdmin || devices) return;
+    
     adminApi
       .adminGetOnlineDevices()
       .then((res) => {
@@ -23,7 +25,7 @@
       .catch((err) => {
         console.error(err);
       });
-  }
+  });
 </script>
 
 <div class="container h-full p-12 flex flex-col justify-start items-start gap-4">
@@ -33,7 +35,7 @@
   {:else}
     <div class="flex justify-between w-full">
       <h2 class="h2">Admin Panel</h2>
-      <button class="btn variant-filled-primary" on:click={() => (devices = null)}>
+      <button class="btn variant-filled-primary" onclick={() => (devices = null)}>
         <i class="fa fa-sync"></i>
         Refresh
       </button>

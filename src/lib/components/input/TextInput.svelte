@@ -1,22 +1,37 @@
 <script lang="ts">
   import { GetValResColor, type ValidationResult } from '$lib/types/ValidationResult';
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, type Snippet } from 'svelte';
+  import type { FullAutoFill } from 'svelte/elements';
   import type { ButtonSettings } from './impl/ButtonSettings';
-  import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
+  import { popup as popupAction, type PopupSettings } from '@skeletonlabs/skeleton';
 
   const dispatch = createEventDispatcher();
+  
+  interface Props {
+    type?: 'text' | 'password';
+    label: string;
+    placeholder?: string;
+    autocomplete?: FullAutoFill;
+    value: string;
+    validationResult?: ValidationResult | null;
+    icon?: `fa-${string}`;
+    button?: ButtonSettings;
+    popup?: Snippet;
+    popupSettings?: PopupSettings;
+  }
 
-  export let type: 'text' | 'password' = 'text';
-  export let label: string;
-  export let placeholder: string | undefined = undefined;
-  export let autocomplete: string | undefined = undefined;
-  export let value: string;
-  export let validationResult: ValidationResult | null | undefined = undefined;
-
-  export let icon: `fa-${string}` | undefined = undefined;
-  export let button: ButtonSettings | undefined = undefined;
-
-  export let popupSettings: PopupSettings | undefined = undefined;
+  let {
+    type = 'text',
+    label,
+    placeholder,
+    autocomplete,
+    value = $bindable(''),
+    validationResult,
+    icon,
+    button,
+    popup,
+    popupSettings
+  }: Props = $props();
 
   function handleInput(event: Event & { currentTarget: HTMLInputElement }) {
     const target = event.currentTarget;
@@ -28,14 +43,14 @@
     update(args: PopupSettings): void;
     destroy(): void;
   } {
-    if (popupSettings === undefined) {
+    if (popup === undefined || popupSettings === undefined) {
       return {
         update: () => {},
         destroy: () => {},
       };
     }
 
-    return popup(triggerNode, popupSettings);
+    return popupAction(triggerNode, popupSettings);
   }
 </script>
 
@@ -53,14 +68,14 @@
         {placeholder}
         {autocomplete}
         {value}
-        on:input={handleInput}
+        oninput={handleInput}
         use:popupProxy
       />
       {#if button}
         <button
           type="button"
           class={button.class ?? 'variant-filled-primary disabled:opacity-50'}
-          on:click={button.onClick}
+          onclick={button.onClick}
           disabled={button.submits &&
             (validationResult === null || (validationResult && !validationResult.valid))}
         >
@@ -90,5 +105,7 @@
   {:else}
     <div class="h-3"></div>
   {/if}
-  <slot name="popup" />
+  {#if popup}
+    {@html popup}
+  {/if}
 </label>

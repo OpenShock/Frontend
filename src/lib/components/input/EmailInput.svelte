@@ -2,27 +2,44 @@
   import type { ValidationResult } from '$lib/types/ValidationResult';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import { validateEmail } from '$lib/inputvalidation/emailValidator';
+  import type { FullAutoFill } from 'svelte/elements';
   import type { ButtonSettings } from '$lib/components/input/impl/ButtonSettings';
 
-  export let label: string;
-  export let placeholder: string | undefined = undefined;
-  export let autocomplete: string | undefined = 'email';
-  export let value: string;
-  export let valid: boolean = false;
-  export let validate: boolean = true;
 
-  export let icon: `fa-${string}` | undefined = undefined;
-  export let button: ButtonSettings | undefined = undefined;
-
-  let validationResult: ValidationResult | null = null;
-
-  $: if (validate) {
-    validationResult = validateEmail(value);
-  } else {
-    validationResult = { valid: true };
+  interface Props {
+    label: string;
+    placeholder?: string;
+    autocomplete?: FullAutoFill;
+    value: string;
+    valid?: boolean;
+    validate?: boolean;
+    icon?: `fa-${string}`;
+    button?: ButtonSettings;
   }
 
-  $: valid = validationResult?.valid ?? false;
+  let {
+    label,
+    placeholder,
+    autocomplete = 'email',
+    value = $bindable(),
+    valid = $bindable(false),
+    validate = true,
+    icon,
+    button
+  }: Props = $props();
+
+  let validationResult: ValidationResult | null = $state(null);
+  $effect(() => {
+    if (validate) {
+      validationResult = validateEmail(value);
+      
+      valid = validationResult?.valid ?? false;
+    } else {
+      validationResult = { valid: true };
+
+      valid = true;
+    }
+  });
 </script>
 
 <TextInput

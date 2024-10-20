@@ -1,13 +1,21 @@
 <script lang="ts">
   import { isTwitterHandle } from '$lib/typeguards';
 
-  export let site: string | number | undefined = undefined;
-  export let description: string | undefined = undefined;
-  export let title: string | undefined = undefined;
-  export let image: { src: string; alt: string } | undefined = undefined;
-  export let player:
-    | { type: 'iframe' | 'stream'; src: string; width: number; height: number }
-    | undefined = undefined;
+  interface Props {
+    site?: string | number;
+    description?: string;
+    title?: string;
+    image?: { src: string; alt: string };
+    player?: { type: 'iframe' | 'stream'; src: string; width: number; height: number };
+  }
+
+  let {
+    site,
+    description,
+    title,
+    image,
+    player
+  }: Props = $props();
 </script>
 
 <svelte:head>

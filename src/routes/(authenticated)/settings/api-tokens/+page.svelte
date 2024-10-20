@@ -7,9 +7,9 @@
 
   const modalStore = getModalStore();
 
-  let tokens: TokenResponse[] = [];
+  let tokens: TokenResponse[] = $state([]);
 
-  let since: number = Date.now();
+  let since: number = $state(Date.now());
   setInterval(() => {
     since = Date.now();
   }, 1000);
@@ -116,12 +116,14 @@
               <td class="!whitespace-nowrap">
                 <button
                   class="btn-icon variant-filled-primary fa fa-edit"
-                  on:click={() => editToken(row.id)}
+                  onclick={() => editToken(row.id)}
+                  aria-label="Edit Token"
                 >
                 </button>
                 <button
                   class="btn-icon variant-filled-primary fa fa-trash"
-                  on:click={() => deleteToken(row)}
+                  onclick={() => deleteToken(row)}
+                  aria-label="Delete Token"
                 >
                 </button>
               </td>
@@ -130,6 +132,6 @@
         </tbody>
       </table>
     </div>
-    <button class="btn variant-filled-primary" on:click={generateToken}>Generate Token</button>
+    <button class="btn variant-filled-primary" onclick={generateToken}>Generate Token</button>
   </div>
 </div>

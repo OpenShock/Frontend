@@ -11,16 +11,16 @@
 
   const toastStore = getToastStore();
 
-  let username: string = '';
-  let email: string = '';
+  let username: string = $state('');
+  let email: string = $state('');
 
-  let currentPassword: string = '';
-  $: currentPasswordValid = currentPassword.length > 0;
+  let currentPassword: string = $state('');
+  let currentPasswordValid = $derived(currentPassword.length > 0);
 
-  let password: string = '';
-  let passwordValid: boolean = false;
+  let password: string = $state('');
+  let passwordValid: boolean = $state(false);
 
-  let passwordConfirm: string = '';
+  let passwordConfirm: string = $state('');
 
   async function submitUsername() {
     try {
@@ -58,7 +58,7 @@
     console.log('Submitting password');
   }
 
-  $: canSubmitPassword = currentPasswordValid && passwordValid && password == passwordConfirm;
+  let canSubmitPassword = $derived(currentPasswordValid && passwordValid && password == passwordConfirm);
 </script>
 
 {#if $UserStore.self}
@@ -87,40 +87,46 @@
 
       <Accordion>
         <AccordionItem>
-          <svelte:fragment slot="lead"><i class="fa fa-key"></i></svelte:fragment>
-          <svelte:fragment slot="summary">Change your password</svelte:fragment>
-          <svelte:fragment slot="content">
-            <div class="rounded-lg border border-gray-700 p-5 mx-[-1rem]">
-              <PasswordInput
-                label="Current Password"
-                placeholder="Current Password"
-                autocomplete="off"
-                bind:value={currentPassword}
-              />
+          {#snippet lead()}
+                    <i class="fa fa-key"></i>
+                  {/snippet}
+          {#snippet summary()}
+                    Change your password
+                  {/snippet}
+          {#snippet content()}
+                  
+              <div class="rounded-lg border border-gray-700 p-5 mx-[-1rem]">
+                <PasswordInput
+                  label="Current Password"
+                  placeholder="Current Password"
+                  autocomplete="off"
+                  bind:value={currentPassword}
+                />
 
-              <PasswordInput
-                label="New Password"
-                placeholder="New Password"
-                autocomplete="new-password"
-                bind:value={password}
-                bind:valid={passwordValid}
-                validate={true}
-                showStrengthMeter={true}
-              />
+                <PasswordInput
+                  label="New Password"
+                  placeholder="New Password"
+                  autocomplete="new-password"
+                  bind:value={password}
+                  bind:valid={passwordValid}
+                  validate={true}
+                  showStrengthMeter={true}
+                />
 
-              <PasswordInput
-                label="Confirm New Password"
-                placeholder="Confirm New Password"
-                autocomplete="new-password"
-                bind:value={passwordConfirm}
-                validate={validatePasswordMatch(passwordConfirm, password)}
-              />
+                <PasswordInput
+                  label="Confirm New Password"
+                  placeholder="Confirm New Password"
+                  autocomplete="new-password"
+                  bind:value={passwordConfirm}
+                  validate={validatePasswordMatch(passwordConfirm, password)}
+                />
 
-              <button class="btn variant-filled-primary" type="submit" disabled={!canSubmitPassword}
-                >Change Password</button
-              >
-            </div>
-          </svelte:fragment>
+                <button class="btn variant-filled-primary" type="submit" disabled={!canSubmitPassword}
+                  >Change Password</button
+                >
+              </div>
+            
+                  {/snippet}
         </AccordionItem>
       </Accordion>
     </div>

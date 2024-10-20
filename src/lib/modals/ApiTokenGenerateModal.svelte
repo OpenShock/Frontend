@@ -6,13 +6,17 @@
   import { getModalStore } from '@skeletonlabs/skeleton';
   import type { SvelteComponent } from 'svelte';
 
-  export let parent: SvelteComponent;
+  interface Props {
+    parent: SvelteComponent;
+  }
+
+  let { parent }: Props = $props();
   const modalStore = getModalStore();
 
-  let name = '';
-  let expire = 'never';
-  let expireCustom: Date | null = null;
-  let permissionsActually: PermissionType[] = [PermissionType.shockersUse];
+  let name = $state('');
+  let expire = $state('never');
+  let expireCustom: Date | null = $state(null);
+  let permissionsActually: PermissionType[] = $state([PermissionType.shockersUse]);
 
   function getExpireDate(expireType: string, customExpireDate: Date | null): Date | null {
     switch (expireType) {
@@ -103,8 +107,8 @@
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
-  $: nameValidationResult = nameValidation(name);
-  $: expireValidationResult = expireValidation(expire, expireCustom);
+  let nameValidationResult = $derived(nameValidation(name));
+  let expireValidationResult = $derived(expireValidation(expire, expireCustom));
 </script>
 
 <div class="card p-4 w-modal shadow-xl space-y-4">
@@ -169,8 +173,8 @@
   </form>
   <!-- prettier-ignore -->
   <footer class="modal-footer {parent.regionFooter}">
-			<button class="btn {parent.buttonNeutral}" on:click={parent.onClose}>{parent.buttonTextCancel}</button>
+			<button class="btn {parent.buttonNeutral}" onclick={parent.onClose}>{parent.buttonTextCancel}</button>
 			<button class="btn variant-filled-primary {parent.buttonPositive}"
-       disabled={!nameValidationResult.valid || !expireValidationResult.valid} on:click={onFormSubmit}>Generate</button>
+       disabled={!nameValidationResult.valid || !expireValidationResult.valid} onclick={onFormSubmit}>Generate</button>
 		</footer>
 </div>

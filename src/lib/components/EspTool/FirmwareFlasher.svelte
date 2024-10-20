@@ -5,15 +5,24 @@
   import { DownloadFirmwareBinary, GetFirmwareBinaryHash } from './CDN';
   import { ProgressBar } from '@skeletonlabs/skeleton';
 
-  export let version: string;
-  export let board: string;
-  export let manager: FlashManager;
-  export let isFlashing: boolean = false;
+  interface Props {
+    version: string;
+    board: string;
+    manager: FlashManager;
+    isFlashing?: boolean;
+  }
 
-  let eraseFlash: boolean = false;
-  let progressName: string | null = null;
-  let progressPercent: number | undefined = undefined;
-  let error: string | null = null;
+  let {
+    version,
+    board,
+    manager,
+    isFlashing = $bindable(false)
+  }: Props = $props();
+
+  let eraseFlash: boolean = $state(false);
+  let progressName: string | null = $state(null);
+  let progressPercent: number | undefined = $state(undefined);
+  let error: string | null = $state(null);
 
   async function FlashDeviceImpl() {
     if (!version || !board || !manager) {
@@ -93,7 +102,7 @@
   <!-- Flash button -->
   <button
     class="btn variant-filled-primary gap-2"
-    on:click={FlashDevice}
+    onclick={FlashDevice}
     disabled={!manager || isFlashing}
   >
     <i class="fa fa-microchip"></i>

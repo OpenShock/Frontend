@@ -9,7 +9,7 @@
   import type { RouteCategory } from './Route';
   import type { ApiUserSelf } from '$lib/types/ApiUser';
 
-  $: path = $page.url.pathname;
+  let path = $derived($page.url.pathname);
 
   type Route = {
     name: string;
@@ -99,7 +99,9 @@
     },
   ];
 
-  function meetsReq(user: ApiUserSelf, route: Route) {
+  function meetsReq(user: ApiUserSelf | null, route: Route) {
+    if (!user) return false;
+
     return !route.requirement || route.requirement(user);
   }
   function isPathMatch(path: string, href: string) {
@@ -107,39 +109,35 @@
   }
 </script>
 
+{#snippet item(route: Route)}
+  {#if meetsReq($UserStore.self, route)}
+    <AppRailAnchor
+      href={route.href}
+      selected={isPathMatch(path, route.href)}
+      title={route.name}
+      hover="transition ease-in-out bg-primary-hover-token"
+    >
+      {#snippet lead()}
+                  <i  class="fa {route.icon} text-2xl"></i>
+                {/snippet}
+      <span>{route.name}</span>
+    </AppRailAnchor>
+  {/if}
+{/snippet}
+
 {#if $UserStore.self !== null && $signalr_state === HubConnectionState.Connected}
   <div class="flex flex-row h-full">
     <AppRail>
-      <svelte:fragment slot="lead">
-        {#each leadRoutes as route (route.href)}
-          {#if meetsReq($UserStore.self, route)}
-            <AppRailAnchor
-              href={route.href}
-              selected={isPathMatch(path, route.href)}
-              title={route.name}
-              hover="transition ease-in-out bg-primary-hover-token"
-            >
-              <i slot="lead" class="fa {route.icon} text-2xl"></i>
-              <span>{route.name}</span>
-            </AppRailAnchor>
-          {/if}
-        {/each}
-      </svelte:fragment>
-      <svelte:fragment slot="trail">
+      {#snippet lead()}
+          {#each leadRoutes as route (route.href)}
+            {@render item(route)}
+          {/each}
+      {/snippet}
+      {#snippet trail()}
         {#each trailRoutes as route (route.href)}
-          {#if meetsReq($UserStore.self, route)}
-            <AppRailAnchor
-              href={route.href}
-              selected={isPathMatch(path, route.href)}
-              title={route.name}
-              hover="transition ease-in-out bg-primary-hover-token"
-            >
-              <i slot="lead" class="fa {route.icon} text-2xl"></i>
-              <span>{route.name}</span>
-            </AppRailAnchor>
-          {/if}
+          {@render item(route)}
         {/each}
-      </svelte:fragment>
+      {/snippet}
     </AppRail>
 
     <SecondLevelSidebar baseRoute="/settings" routes={settingsRoutes} />

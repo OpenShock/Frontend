@@ -6,11 +6,15 @@
   import { getModalStore } from '@skeletonlabs/skeleton';
   import type { SvelteComponent } from 'svelte';
 
-  export let parent: SvelteComponent;
+  interface Props {
+    parent: SvelteComponent;
+  }
+
+  let { parent }: Props = $props();
   const modalStore = getModalStore();
 
-  let name = '';
-  let permissionsActually: PermissionType[] = [];
+  let name = $state('');
+  let permissionsActually: PermissionType[] = $state([]);
 
   async function onFormSubmit() {
     try {
@@ -83,7 +87,7 @@
 
   getTokenData($modalStore[0].meta.id);
 
-  $: nameValidationResult = nameValidation(name);
+  let nameValidationResult = $derived(nameValidation(name));
 </script>
 
 <div class="card p-4 w-modal shadow-xl space-y-4">
@@ -119,8 +123,8 @@
   </form>
   <!-- prettier-ignore -->
   <footer class="modal-footer {parent.regionFooter}">
-			<button class="btn {parent.buttonNeutral}" on:click={parent.onClose}>{parent.buttonTextCancel}</button>
+			<button class="btn {parent.buttonNeutral}" onclick={parent.onClose}>{parent.buttonTextCancel}</button>
 			<button class="btn variant-filled-primary {parent.buttonPositive}"
-       disabled={!nameValidationResult.valid} on:click={onFormSubmit}>Save Changes</button>
+       disabled={!nameValidationResult.valid} onclick={onFormSubmit}>Save Changes</button>
 		</footer>
 </div>
