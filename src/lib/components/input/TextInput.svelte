@@ -1,11 +1,9 @@
 <script lang="ts">
   import { GetValResColor, type ValidationResult } from '$lib/types/ValidationResult';
-  import { createEventDispatcher, type Snippet } from 'svelte';
+  import type { Snippet } from 'svelte';
   import type { FullAutoFill } from 'svelte/elements';
   import type { ButtonSettings } from './impl/ButtonSettings';
   import { popup as popupAction, type PopupSettings } from '@skeletonlabs/skeleton';
-
-  const dispatch = createEventDispatcher();
   
   interface Props {
     type?: 'text' | 'password';
@@ -18,6 +16,7 @@
     button?: ButtonSettings;
     popup?: Snippet;
     popupSettings?: PopupSettings;
+    oninput?: (input: string) => void | undefined;
   }
 
   let {
@@ -30,13 +29,16 @@
     icon,
     button,
     popup,
-    popupSettings
+    popupSettings,
+    oninput
   }: Props = $props();
 
   function handleInput(event: Event & { currentTarget: HTMLInputElement }) {
+    if (!oninput) return;
+
     const target = event.currentTarget;
-    value = target.value;
-    dispatch('input', event);
+
+    oninput(target.value);
   }
 
   function popupProxy(triggerNode: HTMLElement): {

@@ -15,6 +15,7 @@
     validate?: boolean;
     icon?: `fa-${string}`;
     button?: ButtonSettings;
+    oninput?: (value: string) => void | undefined;
   }
 
   let {
@@ -25,7 +26,8 @@
     valid = $bindable(false),
     validate = true,
     icon,
-    button
+    button,
+    oninput
   }: Props = $props();
 
   let validationResult: ValidationResult | null = $state(null);
@@ -50,5 +52,5 @@
   {validationResult}
   {icon}
   {button}
-  on:input
+  {oninput}
 />

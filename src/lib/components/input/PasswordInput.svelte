@@ -9,9 +9,7 @@
   import type { FullAutoFill } from 'svelte/elements';
   import PasswordStrengthMeter from './impl/PasswordStrengthMeter.svelte';
   import type { ButtonSettings } from './impl/ButtonSettings';
-  import { createEventDispatcher } from 'svelte';
 
-  const dispatch = createEventDispatcher();
   const toastStore = getToastStore();
 
   interface Props {
@@ -24,6 +22,7 @@
     validate?: boolean | 'string' | 'pwned' | ValidationResult | null;
     showStrengthMeter?: boolean;
     icon?: `fa-${string}`;
+    oninput?: (value: string) => void | undefined;
   }
 
   let {
@@ -35,7 +34,8 @@
     valid = $bindable(false),
     validate = false,
     showStrengthMeter = false,
-    icon
+    icon,
+    oninput
   }: Props = $props();
 
   const popupSettings: PopupSettings = {
@@ -114,13 +114,6 @@
     class: 'cursor-pointer',
     onClick: () => (valueShown = !valueShown),
   });
-  
-
-  function handleInput(event: CustomEvent<any>) {
-    const target = event.currentTarget as HTMLInputElement;
-    value = target.value;
-    dispatch('input', event);
-  }
 </script>
 
 <TextInput
@@ -133,7 +126,7 @@
   {icon}
   {button}
   {popupSettings}
-  on:input={handleInput}
+  {oninput}
 >
   {#snippet popup()}
     {#if showStrengthMeter}
