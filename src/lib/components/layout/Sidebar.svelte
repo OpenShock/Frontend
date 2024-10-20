@@ -5,7 +5,6 @@
   import { UserStore } from '$lib/stores/UserStore';
   import { HubConnectionState } from '@microsoft/signalr';
   import { AppRail, AppRailAnchor } from '@skeletonlabs/skeleton';
-  import SecondLevelSidebar from './SecondLevelSidebar.svelte';
   import type { RouteCategory } from './Route';
   import type { ApiUserSelf } from '$lib/types/ApiUser';
 
@@ -109,39 +108,56 @@
   }
 </script>
 
-{#snippet item(route: Route)}
-  {#if meetsReq($UserStore.self, route)}
-    <AppRailAnchor
-      href={route.href}
-      selected={isPathMatch(path, route.href)}
-      title={route.name}
-      hover="transition ease-in-out bg-primary-hover-token"
+{#snippet items(routes: Route[])}
+  {#each routes as route (route.href)}
+    {#if meetsReq($UserStore.self, route)}
+      <AppRailAnchor
+        href={route.href}
+        selected={isPathMatch(path, route.href)}
+        title={route.name}
+        hover="transition ease-in-out bg-primary-hover-token"
+      >
+        {#snippet lead()}<i class="fa {route.icon} text-2xl"></i>{/snippet}
+        <span>{route.name}</span>
+      </AppRailAnchor>
+    {/if}
+  {/each}
+{/snippet}
+
+{#snippet nestedSidebar(baseRoute: string, routes: RouteCategory[])}
+  {#if $page.url.pathname.startsWith(baseRoute)}
+    <section
+      class="p-4 space-y-4 overflow-x-y-auto text-nowrap bg-surface-100-800-token border-l border-surface-400-500-token min-w-[270px]"
     >
-      {#snippet lead()}
-                  <i  class="fa {route.icon} text-2xl"></i>
-                {/snippet}
-      <span>{route.name}</span>
-    </AppRailAnchor>
+      {#each routes as category}
+        <p class="font-bold text-2xl {category.headerClass}">{category.name}</p>
+        <nav class="list-nav">
+          <ul>
+            {#each category.routes as route }
+              <li>
+                <a
+                  href={route.href}
+                  target={route.target}
+                  class={'transition ease-in-out ' + ($page.url.pathname === route.href ? 'bg-primary-active-token' : '')}
+                >
+                  {route.name}
+                </a>
+              </li>
+            {/each}
+          </ul>
+        </nav>
+      {/each}
+    </section>
   {/if}
 {/snippet}
 
 {#if $UserStore.self !== null && $signalr_state === HubConnectionState.Connected}
   <div class="flex flex-row h-full">
     <AppRail>
-      {#snippet lead()}
-          {#each leadRoutes as route (route.href)}
-            {@render item(route)}
-          {/each}
-      {/snippet}
-      {#snippet trail()}
-        {#each trailRoutes as route (route.href)}
-          {@render item(route)}
-        {/each}
-      {/snippet}
+      {#snippet lead()}{@render items(leadRoutes)}{/snippet}
+      {#snippet trail()}{@render items(trailRoutes)}{/snippet}
     </AppRail>
-
-    <SecondLevelSidebar baseRoute="/settings" routes={settingsRoutes} />
-
-    <SecondLevelSidebar baseRoute="/admin" routes={adminRoutes} />
+    {@render nestedSidebar('/settings', settingsRoutes)}
+    {@render nestedSidebar('/admin', adminRoutes)}
   </div>
 {/if}
