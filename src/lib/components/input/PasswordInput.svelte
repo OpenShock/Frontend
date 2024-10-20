@@ -135,9 +135,9 @@
   {popupSettings}
   on:input={handleInput}
 >
-  <svelte:fragment slot="popup">
+  {#snippet popup()}
     {#if showStrengthMeter}
       <PasswordStrengthMeter popupTarget={popupSettings.target} password={value} />
     {/if}
-  </svelte:fragment>
+  {/snippet}
 </TextInput>

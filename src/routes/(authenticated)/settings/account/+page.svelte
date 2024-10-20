@@ -88,45 +88,43 @@
       <Accordion>
         <AccordionItem>
           {#snippet lead()}
-                    <i class="fa fa-key"></i>
-                  {/snippet}
+            <i class="fa fa-key"></i>
+          {/snippet}
           {#snippet summary()}
-                    Change your password
-                  {/snippet}
+            Change your password
+          {/snippet}
           {#snippet content()}
-                  
-              <div class="rounded-lg border border-gray-700 p-5 mx-[-1rem]">
-                <PasswordInput
-                  label="Current Password"
-                  placeholder="Current Password"
-                  autocomplete="off"
-                  bind:value={currentPassword}
-                />
+            <div class="rounded-lg border border-gray-700 p-5 mx-[-1rem]">
+              <PasswordInput
+                label="Current Password"
+                placeholder="Current Password"
+                autocomplete="off"
+                bind:value={currentPassword}
+              />
 
-                <PasswordInput
-                  label="New Password"
-                  placeholder="New Password"
-                  autocomplete="new-password"
-                  bind:value={password}
-                  bind:valid={passwordValid}
-                  validate={true}
-                  showStrengthMeter={true}
-                />
+              <PasswordInput
+                label="New Password"
+                placeholder="New Password"
+                autocomplete="new-password"
+                bind:value={password}
+                bind:valid={passwordValid}
+                validate={true}
+                showStrengthMeter={true}
+              />
 
-                <PasswordInput
-                  label="Confirm New Password"
-                  placeholder="Confirm New Password"
-                  autocomplete="new-password"
-                  bind:value={passwordConfirm}
-                  validate={validatePasswordMatch(passwordConfirm, password)}
-                />
+              <PasswordInput
+                label="Confirm New Password"
+                placeholder="Confirm New Password"
+                autocomplete="new-password"
+                bind:value={passwordConfirm}
+                validate={validatePasswordMatch(passwordConfirm, password)}
+              />
 
-                <button class="btn variant-filled-primary" type="submit" disabled={!canSubmitPassword}
-                  >Change Password</button
-                >
-              </div>
-            
-                  {/snippet}
+              <button class="btn variant-filled-primary" type="submit" disabled={!canSubmitPassword}
+                >Change Password</button
+              >
+            </div>
+          {/snippet}
         </AccordionItem>
       </Accordion>
     </div>
