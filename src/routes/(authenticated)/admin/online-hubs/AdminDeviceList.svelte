@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { TableHandler } from '@vincjo/datatables';
+  import { DataHandler } from '@vincjo/datatables';
   import Pagination from '$lib/components/table/Pagination.svelte';
   import RowCount from '$lib/components/table/RowCount.svelte';
   import RowsPerPage from '$lib/components/table/RowsPerPage.svelte';
@@ -22,7 +22,8 @@
     since = Date.now();
   }, 1000);
 
-  const handler = new TableHandler(devices, { rowsPerPage: 10 });
+  const handler = new DataHandler(devices, { rowsPerPage: 10 });
+  const rows = handler.getRows();
 </script>
 
 <div class="overflow-x-auto space-y-2">
@@ -50,7 +51,7 @@
       </tr>
     </thead>
     <tbody>
-      {#each handler.rows as row (row.id)}
+      {#each $rows as row (row.id)}
         <tr>
           <td>{row.id}</td>
           <td>{row.name}</td>
