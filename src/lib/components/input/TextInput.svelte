@@ -34,11 +34,10 @@
   }: Props = $props();
 
   function handleInput(event: Event & { currentTarget: HTMLInputElement }) {
-    if (!oninput) return;
-
-    const target = event.currentTarget;
-
-    oninput(target.value);
+    value = event.currentTarget.value;
+    if (oninput) {
+      oninput(value);
+    }
   }
 
   function popupProxy(triggerNode: HTMLElement): {
