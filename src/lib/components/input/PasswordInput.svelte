@@ -105,7 +105,9 @@
       // If validate is a ValidationResult object, use it as the validation result
       validationResult = validate;
     }
+  });
 
+  $effect(() => {
     valid = validationResult?.valid ?? false;
   });
 
