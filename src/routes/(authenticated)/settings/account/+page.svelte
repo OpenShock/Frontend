@@ -24,9 +24,7 @@
 
   async function submitUsername() {
     try {
-      const response = await authenticatedAccountApi.authenticatedAccountChangeUsername({
-        username: username,
-      });
+      await authenticatedAccountApi.authenticatedAccountChangeUsername({ username });
 
       toastStore.trigger({
         background: 'variant-filled-success',
