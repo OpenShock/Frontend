@@ -108,6 +108,6 @@
     <div class="h-3"></div>
   {/if}
   {#if popup}
-    {@html popup}
+    {@render popup()}
   {/if}
 </label>
