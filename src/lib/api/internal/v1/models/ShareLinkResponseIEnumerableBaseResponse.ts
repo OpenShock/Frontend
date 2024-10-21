@@ -18,6 +18,7 @@ import {
     ShareLinkResponseFromJSON,
     ShareLinkResponseFromJSONTyped,
     ShareLinkResponseToJSON,
+    ShareLinkResponseToJSONTyped,
 } from './ShareLinkResponse';
 
 /**
@@ -62,10 +63,15 @@ export function ShareLinkResponseIEnumerableBaseResponseFromJSONTyped(json: any,
     };
 }
 
-export function ShareLinkResponseIEnumerableBaseResponseToJSON(value?: ShareLinkResponseIEnumerableBaseResponse | null): any {
+  export function ShareLinkResponseIEnumerableBaseResponseToJSON(json: any): ShareLinkResponseIEnumerableBaseResponse {
+      return ShareLinkResponseIEnumerableBaseResponseToJSONTyped(json, false);
+  }
+
+  export function ShareLinkResponseIEnumerableBaseResponseToJSONTyped(value?: ShareLinkResponseIEnumerableBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'message': value['message'],

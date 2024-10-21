@@ -18,6 +18,7 @@ import {
     RankTypeFromJSON,
     RankTypeFromJSONTyped,
     RankTypeToJSON,
+    RankTypeToJSONTyped,
 } from './RankType';
 
 /**
@@ -58,6 +59,8 @@ export interface SelfResponse {
     rank: RankType;
 }
 
+
+
 /**
  * Check if a given object implements the SelfResponse interface.
  */
@@ -88,10 +91,15 @@ export function SelfResponseFromJSONTyped(json: any, ignoreDiscriminator: boolea
     };
 }
 
-export function SelfResponseToJSON(value?: SelfResponse | null): any {
+  export function SelfResponseToJSON(json: any): SelfResponse {
+      return SelfResponseToJSONTyped(json, false);
+  }
+
+  export function SelfResponseToJSONTyped(value?: SelfResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'id': value['id'],

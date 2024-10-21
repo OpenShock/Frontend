@@ -18,12 +18,14 @@ import {
     ShareLinkDeviceFromJSON,
     ShareLinkDeviceFromJSONTyped,
     ShareLinkDeviceToJSON,
+    ShareLinkDeviceToJSONTyped,
 } from './ShareLinkDevice';
 import type { GenericIni } from './GenericIni';
 import {
     GenericIniFromJSON,
     GenericIniFromJSONTyped,
     GenericIniToJSON,
+    GenericIniToJSONTyped,
 } from './GenericIni';
 
 /**
@@ -100,10 +102,15 @@ export function PublicShareLinkResponseFromJSONTyped(json: any, ignoreDiscrimina
     };
 }
 
-export function PublicShareLinkResponseToJSON(value?: PublicShareLinkResponse | null): any {
+  export function PublicShareLinkResponseToJSON(json: any): PublicShareLinkResponse {
+      return PublicShareLinkResponseToJSONTyped(json, false);
+  }
+
+  export function PublicShareLinkResponseToJSONTyped(value?: PublicShareLinkResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'id': value['id'],

@@ -18,6 +18,7 @@ import {
     SharedShockerFromJSON,
     SharedShockerFromJSONTyped,
     SharedShockerToJSON,
+    SharedShockerToJSONTyped,
 } from './SharedShocker';
 
 /**
@@ -71,10 +72,15 @@ export function SharedDeviceFromJSONTyped(json: any, ignoreDiscriminator: boolea
     };
 }
 
-export function SharedDeviceToJSON(value?: SharedDevice | null): any {
+  export function SharedDeviceToJSON(json: any): SharedDevice {
+      return SharedDeviceToJSONTyped(json, false);
+  }
+
+  export function SharedDeviceToJSONTyped(value?: SharedDevice | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'id': value['id'],

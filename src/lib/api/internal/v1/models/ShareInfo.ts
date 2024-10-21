@@ -18,18 +18,21 @@ import {
     ShockerPermissionsFromJSON,
     ShockerPermissionsFromJSONTyped,
     ShockerPermissionsToJSON,
+    ShockerPermissionsToJSONTyped,
 } from './ShockerPermissions';
 import type { GenericIni } from './GenericIni';
 import {
     GenericIniFromJSON,
     GenericIniFromJSONTyped,
     GenericIniToJSON,
+    GenericIniToJSONTyped,
 } from './GenericIni';
 import type { ShockerLimits } from './ShockerLimits';
 import {
     ShockerLimitsFromJSON,
     ShockerLimitsFromJSONTyped,
     ShockerLimitsToJSON,
+    ShockerLimitsToJSONTyped,
 } from './ShockerLimits';
 
 /**
@@ -100,10 +103,15 @@ export function ShareInfoFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     };
 }
 
-export function ShareInfoToJSON(value?: ShareInfo | null): any {
+  export function ShareInfoToJSON(json: any): ShareInfo {
+      return ShareInfoToJSONTyped(json, false);
+  }
+
+  export function ShareInfoToJSONTyped(value?: ShareInfo | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'sharedWith': GenericIniToJSON(value['sharedWith']),

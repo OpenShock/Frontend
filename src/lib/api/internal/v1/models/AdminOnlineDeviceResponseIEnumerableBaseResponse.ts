@@ -18,6 +18,7 @@ import {
     AdminOnlineDeviceResponseFromJSON,
     AdminOnlineDeviceResponseFromJSONTyped,
     AdminOnlineDeviceResponseToJSON,
+    AdminOnlineDeviceResponseToJSONTyped,
 } from './AdminOnlineDeviceResponse';
 
 /**
@@ -62,10 +63,15 @@ export function AdminOnlineDeviceResponseIEnumerableBaseResponseFromJSONTyped(js
     };
 }
 
-export function AdminOnlineDeviceResponseIEnumerableBaseResponseToJSON(value?: AdminOnlineDeviceResponseIEnumerableBaseResponse | null): any {
+  export function AdminOnlineDeviceResponseIEnumerableBaseResponseToJSON(json: any): AdminOnlineDeviceResponseIEnumerableBaseResponse {
+      return AdminOnlineDeviceResponseIEnumerableBaseResponseToJSONTyped(json, false);
+  }
+
+  export function AdminOnlineDeviceResponseIEnumerableBaseResponseToJSONTyped(value?: AdminOnlineDeviceResponseIEnumerableBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'message': value['message'],

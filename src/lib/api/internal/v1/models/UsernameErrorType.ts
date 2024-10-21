@@ -30,7 +30,7 @@ export enum UsernameErrorType {
 export function instanceOfUsernameErrorType(value: any): boolean {
     for (const key in UsernameErrorType) {
         if (Object.prototype.hasOwnProperty.call(UsernameErrorType, key)) {
-            if ((UsernameErrorType as Record<string, UsernameErrorType>)[key] === value) {
+            if (UsernameErrorType[key as keyof typeof UsernameErrorType] === value) {
                 return true;
             }
         }
@@ -48,5 +48,9 @@ export function UsernameErrorTypeFromJSONTyped(json: any, ignoreDiscriminator: b
 
 export function UsernameErrorTypeToJSON(value?: UsernameErrorType | null): any {
     return value as any;
+}
+
+export function UsernameErrorTypeToJSONTyped(value: any, ignoreDiscriminator: boolean): UsernameErrorType {
+    return value as UsernameErrorType;
 }
 

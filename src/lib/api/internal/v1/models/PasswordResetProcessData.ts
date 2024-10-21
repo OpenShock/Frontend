@@ -49,10 +49,15 @@ export function PasswordResetProcessDataFromJSONTyped(json: any, ignoreDiscrimin
     };
 }
 
-export function PasswordResetProcessDataToJSON(value?: PasswordResetProcessData | null): any {
+  export function PasswordResetProcessDataToJSON(json: any): PasswordResetProcessData {
+      return PasswordResetProcessDataToJSONTyped(json, false);
+  }
+
+  export function PasswordResetProcessDataToJSONTyped(value?: PasswordResetProcessData | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'password': value['password'],

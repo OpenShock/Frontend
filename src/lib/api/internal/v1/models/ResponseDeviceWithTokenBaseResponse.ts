@@ -18,6 +18,7 @@ import {
     ResponseDeviceWithTokenFromJSON,
     ResponseDeviceWithTokenFromJSONTyped,
     ResponseDeviceWithTokenToJSON,
+    ResponseDeviceWithTokenToJSONTyped,
 } from './ResponseDeviceWithToken';
 
 /**
@@ -62,10 +63,15 @@ export function ResponseDeviceWithTokenBaseResponseFromJSONTyped(json: any, igno
     };
 }
 
-export function ResponseDeviceWithTokenBaseResponseToJSON(value?: ResponseDeviceWithTokenBaseResponse | null): any {
+  export function ResponseDeviceWithTokenBaseResponseToJSON(json: any): ResponseDeviceWithTokenBaseResponse {
+      return ResponseDeviceWithTokenBaseResponseToJSONTyped(json, false);
+  }
+
+  export function ResponseDeviceWithTokenBaseResponseToJSONTyped(value?: ResponseDeviceWithTokenBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'message': value['message'],

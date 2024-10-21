@@ -18,6 +18,7 @@ import {
     ShockerWithDeviceFromJSON,
     ShockerWithDeviceFromJSONTyped,
     ShockerWithDeviceToJSON,
+    ShockerWithDeviceToJSONTyped,
 } from './ShockerWithDevice';
 
 /**
@@ -62,10 +63,15 @@ export function ShockerWithDeviceBaseResponseFromJSONTyped(json: any, ignoreDisc
     };
 }
 
-export function ShockerWithDeviceBaseResponseToJSON(value?: ShockerWithDeviceBaseResponse | null): any {
+  export function ShockerWithDeviceBaseResponseToJSON(json: any): ShockerWithDeviceBaseResponse {
+      return ShockerWithDeviceBaseResponseToJSONTyped(json, false);
+  }
+
+  export function ShockerWithDeviceBaseResponseToJSONTyped(value?: ShockerWithDeviceBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'message': value['message'],

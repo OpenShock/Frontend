@@ -55,10 +55,15 @@ export function GuidBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: bo
     };
 }
 
-export function GuidBaseResponseToJSON(value?: GuidBaseResponse | null): any {
+  export function GuidBaseResponseToJSON(json: any): GuidBaseResponse {
+      return GuidBaseResponseToJSONTyped(json, false);
+  }
+
+  export function GuidBaseResponseToJSONTyped(value?: GuidBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'message': value['message'],

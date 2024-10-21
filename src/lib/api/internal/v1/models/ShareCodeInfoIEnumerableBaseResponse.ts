@@ -18,6 +18,7 @@ import {
     ShareCodeInfoFromJSON,
     ShareCodeInfoFromJSONTyped,
     ShareCodeInfoToJSON,
+    ShareCodeInfoToJSONTyped,
 } from './ShareCodeInfo';
 
 /**
@@ -62,10 +63,15 @@ export function ShareCodeInfoIEnumerableBaseResponseFromJSONTyped(json: any, ign
     };
 }
 
-export function ShareCodeInfoIEnumerableBaseResponseToJSON(value?: ShareCodeInfoIEnumerableBaseResponse | null): any {
+  export function ShareCodeInfoIEnumerableBaseResponseToJSON(json: any): ShareCodeInfoIEnumerableBaseResponse {
+      return ShareCodeInfoIEnumerableBaseResponseToJSONTyped(json, false);
+  }
+
+  export function ShareCodeInfoIEnumerableBaseResponseToJSONTyped(value?: ShareCodeInfoIEnumerableBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'message': value['message'],

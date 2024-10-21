@@ -18,6 +18,7 @@ import {
     ShareLinkResponseFromJSON,
     ShareLinkResponseFromJSONTyped,
     ShareLinkResponseToJSON,
+    ShareLinkResponseToJSONTyped,
 } from './ShareLinkResponse';
 
 /**
@@ -62,10 +63,15 @@ export function ShareLinkResponseBaseResponseFromJSONTyped(json: any, ignoreDisc
     };
 }
 
-export function ShareLinkResponseBaseResponseToJSON(value?: ShareLinkResponseBaseResponse | null): any {
+  export function ShareLinkResponseBaseResponseToJSON(json: any): ShareLinkResponseBaseResponse {
+      return ShareLinkResponseBaseResponseToJSONTyped(json, false);
+  }
+
+  export function ShareLinkResponseBaseResponseToJSONTyped(value?: ShareLinkResponseBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'message': value['message'],

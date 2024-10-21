@@ -49,10 +49,15 @@ export function ChangeUsernameRequestFromJSONTyped(json: any, ignoreDiscriminato
     };
 }
 
-export function ChangeUsernameRequestToJSON(value?: ChangeUsernameRequest | null): any {
+  export function ChangeUsernameRequestToJSON(json: any): ChangeUsernameRequest {
+      return ChangeUsernameRequestToJSONTyped(json, false);
+  }
+
+  export function ChangeUsernameRequestToJSONTyped(value?: ChangeUsernameRequest | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'username': value['username'],

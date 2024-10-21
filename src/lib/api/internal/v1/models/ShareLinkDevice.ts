@@ -18,6 +18,7 @@ import {
     ShareLinkShockerFromJSON,
     ShareLinkShockerFromJSONTyped,
     ShareLinkShockerToJSON,
+    ShareLinkShockerToJSONTyped,
 } from './ShareLinkShocker';
 
 /**
@@ -71,10 +72,15 @@ export function ShareLinkDeviceFromJSONTyped(json: any, ignoreDiscriminator: boo
     };
 }
 
-export function ShareLinkDeviceToJSON(value?: ShareLinkDevice | null): any {
+  export function ShareLinkDeviceToJSON(json: any): ShareLinkDevice {
+      return ShareLinkDeviceToJSONTyped(json, false);
+  }
+
+  export function ShareLinkDeviceToJSONTyped(value?: ShareLinkDevice | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'id': value['id'],

@@ -18,6 +18,7 @@ import {
     ShareInfoFromJSON,
     ShareInfoFromJSONTyped,
     ShareInfoToJSON,
+    ShareInfoToJSONTyped,
 } from './ShareInfo';
 
 /**
@@ -62,10 +63,15 @@ export function ShareInfoIEnumerableBaseResponseFromJSONTyped(json: any, ignoreD
     };
 }
 
-export function ShareInfoIEnumerableBaseResponseToJSON(value?: ShareInfoIEnumerableBaseResponse | null): any {
+  export function ShareInfoIEnumerableBaseResponseToJSON(json: any): ShareInfoIEnumerableBaseResponse {
+      return ShareInfoIEnumerableBaseResponseToJSONTyped(json, false);
+  }
+
+  export function ShareInfoIEnumerableBaseResponseToJSONTyped(value?: ShareInfoIEnumerableBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'message': value['message'],

@@ -49,10 +49,15 @@ export function StatsResponseFromJSONTyped(json: any, ignoreDiscriminator: boole
     };
 }
 
-export function StatsResponseToJSON(value?: StatsResponse | null): any {
+  export function StatsResponseToJSON(json: any): StatsResponse {
+      return StatsResponseToJSONTyped(json, false);
+  }
+
+  export function StatsResponseToJSONTyped(value?: StatsResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'devicesOnline': value['devicesOnline'],

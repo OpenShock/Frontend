@@ -18,12 +18,14 @@ import {
     ShockerPermissionsFromJSON,
     ShockerPermissionsFromJSONTyped,
     ShockerPermissionsToJSON,
+    ShockerPermissionsToJSONTyped,
 } from './ShockerPermissions';
 import type { ShockerLimits } from './ShockerLimits';
 import {
     ShockerLimitsFromJSON,
     ShockerLimitsFromJSONTyped,
     ShockerLimitsToJSON,
+    ShockerLimitsToJSONTyped,
 } from './ShockerLimits';
 
 /**
@@ -101,10 +103,15 @@ export function ShareLinkShockerFromJSONTyped(json: any, ignoreDiscriminator: bo
     };
 }
 
-export function ShareLinkShockerToJSON(value?: ShareLinkShocker | null): any {
+  export function ShareLinkShockerToJSON(json: any): ShareLinkShocker {
+      return ShareLinkShockerToJSONTyped(json, false);
+  }
+
+  export function ShareLinkShockerToJSONTyped(value?: ShareLinkShocker | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'id': value['id'],

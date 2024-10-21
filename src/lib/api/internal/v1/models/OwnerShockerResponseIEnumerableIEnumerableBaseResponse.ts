@@ -18,6 +18,7 @@ import {
     OwnerShockerResponseFromJSON,
     OwnerShockerResponseFromJSONTyped,
     OwnerShockerResponseToJSON,
+    OwnerShockerResponseToJSONTyped,
 } from './OwnerShockerResponse';
 
 /**
@@ -62,10 +63,15 @@ export function OwnerShockerResponseIEnumerableIEnumerableBaseResponseFromJSONTy
     };
 }
 
-export function OwnerShockerResponseIEnumerableIEnumerableBaseResponseToJSON(value?: OwnerShockerResponseIEnumerableIEnumerableBaseResponse | null): any {
+  export function OwnerShockerResponseIEnumerableIEnumerableBaseResponseToJSON(json: any): OwnerShockerResponseIEnumerableIEnumerableBaseResponse {
+      return OwnerShockerResponseIEnumerableIEnumerableBaseResponseToJSONTyped(json, false);
+  }
+
+  export function OwnerShockerResponseIEnumerableIEnumerableBaseResponseToJSONTyped(value?: OwnerShockerResponseIEnumerableIEnumerableBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'message': value['message'],

@@ -18,12 +18,14 @@ import {
     ShockerPermissionsFromJSON,
     ShockerPermissionsFromJSONTyped,
     ShockerPermissionsToJSON,
+    ShockerPermissionsToJSONTyped,
 } from './ShockerPermissions';
 import type { ShockerLimits } from './ShockerLimits';
 import {
     ShockerLimitsFromJSON,
     ShockerLimitsFromJSONTyped,
     ShockerLimitsToJSON,
+    ShockerLimitsToJSONTyped,
 } from './ShockerLimits';
 
 /**
@@ -70,10 +72,15 @@ export function CreateShareCodeFromJSONTyped(json: any, ignoreDiscriminator: boo
     };
 }
 
-export function CreateShareCodeToJSON(value?: CreateShareCode | null): any {
+  export function CreateShareCodeToJSON(json: any): CreateShareCode {
+      return CreateShareCodeToJSONTyped(json, false);
+  }
+
+  export function CreateShareCodeToJSONTyped(value?: CreateShareCode | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'permissions': ShockerPermissionsToJSON(value['permissions']),

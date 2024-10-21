@@ -18,6 +18,7 @@ import {
     LcgNodeResponseFromJSON,
     LcgNodeResponseFromJSONTyped,
     LcgNodeResponseToJSON,
+    LcgNodeResponseToJSONTyped,
 } from './LcgNodeResponse';
 
 /**
@@ -62,10 +63,15 @@ export function LcgNodeResponseBaseResponseFromJSONTyped(json: any, ignoreDiscri
     };
 }
 
-export function LcgNodeResponseBaseResponseToJSON(value?: LcgNodeResponseBaseResponse | null): any {
+  export function LcgNodeResponseBaseResponseToJSON(json: any): LcgNodeResponseBaseResponse {
+      return LcgNodeResponseBaseResponseToJSONTyped(json, false);
+  }
+
+  export function LcgNodeResponseBaseResponseToJSONTyped(value?: LcgNodeResponseBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'message': value['message'],

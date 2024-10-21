@@ -57,10 +57,15 @@ export function LcgNodeResponseFromJSONTyped(json: any, ignoreDiscriminator: boo
     };
 }
 
-export function LcgNodeResponseToJSON(value?: LcgNodeResponse | null): any {
+  export function LcgNodeResponseToJSON(json: any): LcgNodeResponse {
+      return LcgNodeResponseToJSONTyped(json, false);
+  }
+
+  export function LcgNodeResponseToJSONTyped(value?: LcgNodeResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'fqdn': value['fqdn'],

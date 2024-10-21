@@ -18,6 +18,7 @@ import {
     OtaUpdateStatusFromJSON,
     OtaUpdateStatusFromJSONTyped,
     OtaUpdateStatusToJSON,
+    OtaUpdateStatusToJSONTyped,
 } from './OtaUpdateStatus';
 
 /**
@@ -58,6 +59,8 @@ export interface OtaItem {
     message: string | null;
 }
 
+
+
 /**
  * Check if a given object implements the OtaItem interface.
  */
@@ -88,10 +91,15 @@ export function OtaItemFromJSONTyped(json: any, ignoreDiscriminator: boolean): O
     };
 }
 
-export function OtaItemToJSON(value?: OtaItem | null): any {
+  export function OtaItemToJSON(json: any): OtaItem {
+      return OtaItemToJSONTyped(json, false);
+  }
+
+  export function OtaItemToJSONTyped(value?: OtaItem | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'id': value['id'],

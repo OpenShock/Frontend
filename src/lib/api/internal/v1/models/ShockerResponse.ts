@@ -18,6 +18,7 @@ import {
     ShockerModelTypeFromJSON,
     ShockerModelTypeFromJSONTyped,
     ShockerModelTypeToJSON,
+    ShockerModelTypeToJSONTyped,
 } from './ShockerModelType';
 
 /**
@@ -64,6 +65,8 @@ export interface ShockerResponse {
     createdOn: Date;
 }
 
+
+
 /**
  * Check if a given object implements the ShockerResponse interface.
  */
@@ -96,10 +99,15 @@ export function ShockerResponseFromJSONTyped(json: any, ignoreDiscriminator: boo
     };
 }
 
-export function ShockerResponseToJSON(value?: ShockerResponse | null): any {
+  export function ShockerResponseToJSON(json: any): ShockerResponse {
+      return ShockerResponseToJSONTyped(json, false);
+  }
+
+  export function ShockerResponseToJSONTyped(value?: ShockerResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'id': value['id'],

@@ -18,6 +18,7 @@ import {
     LogEntryFromJSON,
     LogEntryFromJSONTyped,
     LogEntryToJSON,
+    LogEntryToJSONTyped,
 } from './LogEntry';
 
 /**
@@ -62,10 +63,15 @@ export function LogEntryIEnumerableBaseResponseFromJSONTyped(json: any, ignoreDi
     };
 }
 
-export function LogEntryIEnumerableBaseResponseToJSON(value?: LogEntryIEnumerableBaseResponse | null): any {
+  export function LogEntryIEnumerableBaseResponseToJSON(json: any): LogEntryIEnumerableBaseResponse {
+      return LogEntryIEnumerableBaseResponseToJSONTyped(json, false);
+  }
+
+  export function LogEntryIEnumerableBaseResponseToJSONTyped(value?: LogEntryIEnumerableBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'message': value['message'],

@@ -49,10 +49,15 @@ export function DeviceEditFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     };
 }
 
-export function DeviceEditToJSON(value?: DeviceEdit | null): any {
+  export function DeviceEditToJSON(json: any): DeviceEdit {
+      return DeviceEditToJSONTyped(json, false);
+  }
+
+  export function DeviceEditToJSONTyped(value?: DeviceEdit | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'name': value['name'],

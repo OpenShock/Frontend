@@ -62,10 +62,15 @@ export function PauseReasonBaseResponseFromJSONTyped(json: any, ignoreDiscrimina
     };
 }
 
-export function PauseReasonBaseResponseToJSON(value?: PauseReasonBaseResponse | null): any {
+  export function PauseReasonBaseResponseToJSON(json: any): PauseReasonBaseResponse {
+      return PauseReasonBaseResponseToJSONTyped(json, false);
+  }
+
+  export function PauseReasonBaseResponseToJSONTyped(value?: PauseReasonBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'message': value['message'],

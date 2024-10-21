@@ -18,6 +18,7 @@ import {
     ShockerResponseFromJSON,
     ShockerResponseFromJSONTyped,
     ShockerResponseToJSON,
+    ShockerResponseToJSONTyped,
 } from './ShockerResponse';
 
 /**
@@ -80,10 +81,15 @@ export function ResponseDeviceWithShockersFromJSONTyped(json: any, ignoreDiscrim
     };
 }
 
-export function ResponseDeviceWithShockersToJSON(value?: ResponseDeviceWithShockers | null): any {
+  export function ResponseDeviceWithShockersToJSON(json: any): ResponseDeviceWithShockers {
+      return ResponseDeviceWithShockersToJSONTyped(json, false);
+  }
+
+  export function ResponseDeviceWithShockersToJSONTyped(value?: ResponseDeviceWithShockers | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'id': value['id'],

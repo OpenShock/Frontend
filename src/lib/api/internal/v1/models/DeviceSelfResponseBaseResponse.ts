@@ -18,6 +18,7 @@ import {
     DeviceSelfResponseFromJSON,
     DeviceSelfResponseFromJSONTyped,
     DeviceSelfResponseToJSON,
+    DeviceSelfResponseToJSONTyped,
 } from './DeviceSelfResponse';
 
 /**
@@ -62,10 +63,15 @@ export function DeviceSelfResponseBaseResponseFromJSONTyped(json: any, ignoreDis
     };
 }
 
-export function DeviceSelfResponseBaseResponseToJSON(value?: DeviceSelfResponseBaseResponse | null): any {
+  export function DeviceSelfResponseBaseResponseToJSON(json: any): DeviceSelfResponseBaseResponse {
+      return DeviceSelfResponseBaseResponseToJSONTyped(json, false);
+  }
+
+  export function DeviceSelfResponseBaseResponseToJSONTyped(value?: DeviceSelfResponseBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'message': value['message'],
