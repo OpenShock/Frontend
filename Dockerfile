@@ -14,7 +14,7 @@ COPY package.json .
 COPY pnpm-lock.yaml .
 COPY patches/ patches/
 
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --strict-peer-dependencies
 
 COPY . .
 
@@ -36,6 +36,6 @@ COPY --from=build /app/pnpm-lock.yaml .
 COPY --from=build /app/patches/ patches/
 COPY --from=build /app/build build/
 
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --strict-peer-dependencies
 
 CMD ["node","build/index.js"]
