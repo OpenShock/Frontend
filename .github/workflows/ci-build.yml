@@ -10,7 +10,6 @@ on:
 name: ci-build
 
 jobs:
-
   test:
     runs-on: ubuntu-latest
 
@@ -40,7 +39,7 @@ jobs:
 
       - name: Install playwright
         shell: bash
-        run: npx playwright install --with-deps
+        run: pnpx playwright install --with-deps
 
       - name: Test
         shell: bash
