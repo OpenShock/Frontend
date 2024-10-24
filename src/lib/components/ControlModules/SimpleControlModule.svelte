@@ -2,7 +2,11 @@
   import type { ShockerResponse } from '$lib/api/internal/v1';
   import { createEventDispatcher } from 'svelte';
 
-  export let shocker: ShockerResponse;
+  interface Props {
+    shocker: ShockerResponse;
+  }
+
+  let { shocker }: Props = $props();
 
   const dispatch = createEventDispatcher();
 
@@ -19,16 +23,16 @@
   <!-- Buttons -->
   <div class="w-full flex gap-2">
     <!-- Beep button -->
-    <button class="btn p-2 bg-primary-500 rounded-md flex-1" on:click={() => emit('beep')}>
-      <i class="fa-solid fa-volume-high" />
+    <button class="btn p-2 bg-primary-500 rounded-md flex-1" onclick={() => emit('beep')}>
+      <i class="fa-solid fa-volume-high"></i>
     </button>
     <!-- Vibrate button -->
-    <button class="btn p-2 bg-primary-500 rounded-md flex-1" on:click={() => emit('vibrate')}>
-      <i class="fa-solid fa-water" />
+    <button class="btn p-2 bg-primary-500 rounded-md flex-1" onclick={() => emit('vibrate')}>
+      <i class="fa-solid fa-water"></i>
     </button>
     <!-- Shock button -->
-    <button class="btn p-2 bg-primary-500 rounded-md flex-1" on:click={() => emit('shock')}>
-      <i class="fa-solid fa-bolt" />
+    <button class="btn p-2 bg-primary-500 rounded-md flex-1" onclick={() => emit('shock')}>
+      <i class="fa-solid fa-bolt"></i>
     </button>
   </div>
 </div>

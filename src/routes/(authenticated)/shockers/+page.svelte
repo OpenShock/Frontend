@@ -1,23 +1,21 @@
 <script lang="ts">
-  import { shockerV1Api } from '$lib/api';
+  import { shockerV2Api } from '$lib/api';
+  import type { ControlType } from '$lib/api/internal/v1';
+  import type { Control } from '$lib/api/internal/v2';
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import MapControlModule from '$lib/components/ControlModules/MapControlModule.svelte';
+  import { ModuleType } from '$lib/components/ControlModules/ModuleType';
   import RichControlModule from '$lib/components/ControlModules/RichControlModule.svelte';
   import SimpleControlHeader from '$lib/components/ControlModules/SimpleControlHeader.svelte';
   import SimpleControlModule from '$lib/components/ControlModules/SimpleControlModule.svelte';
   import { OwnDevicesStore } from '$lib/stores/DevicesStore';
   import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
 
-  $: shockers = $OwnDevicesStore?.flatMap((device) => device.shockers)?.filter((shocker) => !!shocker) ?? [];
+  let shockers = $derived(
+    $OwnDevicesStore?.flatMap((device) => device.shockers)?.filter((shocker) => !!shocker) ?? []
+  );
 
-  enum ModuleType {
-    ClassicControlModule,
-    RichControlModule,
-    SimpleControlModule,
-    MapControlModule,
-  }
-
-  let moduleType: ModuleType = ModuleType.ClassicControlModule;
+  let moduleType: ModuleType = $state(ModuleType.ClassicControlModule);
 
   const modeClick: PopupSettings = {
     event: 'click',
@@ -25,8 +23,21 @@
     placement: 'bottom',
   };
 
-  function handleCommand(event: CustomEvent<{ id: string; type: string; intensity: number; duration: number }>) {
-    shockerV1Api.sendCommand(event.detail.id, event.detail.type, event.detail.intensity, event.detail.duration);
+  function handleCommand(
+    event: CustomEvent<{ id: string; type: ControlType; intensity: number; duration: number }>
+  ) {
+    let shocks: Control[] = [
+      {
+        id: event.detail.id,
+        type: event.detail.type,
+        intensity: event.detail.intensity,
+        duration: event.detail.duration,
+      },
+    ];
+    shockerV2Api.shockerSendControl({
+      shocks,
+      customName: 'Custom name',
+    });
   }
 </script>
 
@@ -40,40 +51,40 @@
       <div>
         <!-- Mode button -->
         <button class="btn p-1" use:popup={modeClick}>
-          <i class="fa-solid fa-layer-group" />
+          <i class="fa-solid fa-layer-group"></i>
         </button>
         <div class="card p-4 max-w-md" data-popup="modeClick">
           <div class="flex gap-2">
             <button
               class="btn p-2 variant-filled-secondary"
-              on:click={() => (moduleType = ModuleType.ClassicControlModule)}
+              onclick={() => (moduleType = ModuleType.ClassicControlModule)}
             >
               Classic
             </button>
             <button
               class="btn p-2 variant-filled-secondary"
-              on:click={() => (moduleType = ModuleType.RichControlModule)}
+              onclick={() => (moduleType = ModuleType.RichControlModule)}
             >
               Rich
             </button>
             <button
               class="btn p-1 variant-filled-secondary"
-              on:click={() => (moduleType = ModuleType.SimpleControlModule)}
+              onclick={() => (moduleType = ModuleType.SimpleControlModule)}
             >
               Simple
             </button>
             <button
               class="btn p-1 variant-filled-secondary"
-              on:click={() => (moduleType = ModuleType.MapControlModule)}
+              onclick={() => (moduleType = ModuleType.MapControlModule)}
             >
               Map
             </button>
           </div>
-          <div class="arrow bg-surface-100-800-token" />
+          <div class="arrow bg-surface-100-800-token"></div>
         </div>
         <!-- Options button -->
         <button class="btn p-1">
-          <i class="fa-solid fa-cog" />
+          <i class="fa-solid fa-cog"></i>
         </button>
       </div>
     </div>
