@@ -6,48 +6,50 @@
   import { elapsedToString } from '$lib/utils/time';
   import { escapeHtml } from '$lib/utils/encoding';
   import { getModalStore } from '@skeletonlabs/skeleton';
+  import { onMount } from 'svelte';
 
   const modalStore = getModalStore();
 
   const toastStore = getToastStore();
   let sessions: LoginSessionResponse[] = $state([]);
 
-  let since: number = $state(Date.now());
-  setInterval(() => {
-    since = Date.now();
-  }, 1000);
+  function handleDeleteSessionModalResponse(sessionId: string, result: boolean) {
+    if (!result) return;
 
-  async function listSessions() {
-    try {
-      sessions = await sessionApi.sessionsListSessions();
-      console.log(sessions);
-      console.log(typeof sessions[0].expires);
-    } catch (e) {
-      await handleApiError(e, toastStore);
-    }
+    sessionApi
+      .sessionsDeleteSession(sessionId)
+      .then(() => {
+        sessions = sessions.filter((s) => s.id !== sessionId);
+      })
+      .catch((e) => {
+        handleApiError(e, toastStore);
+      });
   }
 
-  async function deleteSession(session: LoginSessionResponse) {
+  function deleteSession(session: LoginSessionResponse) {
     modalStore.trigger({
       type: 'confirm',
       title: 'Please Confirm',
       body: `Are you sure you want to log out from ${escapeHtml(session.userAgent)}?`,
-      response: async (r: boolean) => {
-        if (r) await deleteSessionActually(session.id);
-      },
+      response: (r: boolean) => handleDeleteSessionModalResponse(session.id, r),
     });
   }
 
-  async function deleteSessionActually(sessionId: string) {
-    try {
-      await sessionApi.sessionsDeleteSession(sessionId);
-      sessions = sessions.filter((session) => session.id !== sessionId);
-    } catch (e) {
-      await handleApiError(e, toastStore);
-    }
-  }
+  onMount(() => {
+    sessionApi
+      .sessionsListSessions()
+      .then((s) => {
+        sessions = s;
+      })
+      .catch((e) => {
+        handleApiError(e, toastStore);
+      });
+  });
 
-  listSessions();
+  let since: number = $state(Date.now());
+  setInterval(() => {
+    since = Date.now();
+  }, 1000);
 </script>
 
 <div class="container h-full mx-auto p-12 flex flex-col justify-start items-start gap-4">
