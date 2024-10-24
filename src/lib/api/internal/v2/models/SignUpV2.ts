@@ -73,10 +73,15 @@ export function SignUpV2FromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     };
 }
 
-export function SignUpV2ToJSON(value?: SignUpV2 | null): any {
+  export function SignUpV2ToJSON(json: any): SignUpV2 {
+      return SignUpV2ToJSONTyped(json, false);
+  }
+
+  export function SignUpV2ToJSONTyped(value?: SignUpV2 | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'username': value['username'],

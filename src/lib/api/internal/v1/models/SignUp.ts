@@ -65,10 +65,15 @@ export function SignUpFromJSONTyped(json: any, ignoreDiscriminator: boolean): Si
     };
 }
 
-export function SignUpToJSON(value?: SignUp | null): any {
+  export function SignUpToJSON(json: any): SignUp {
+      return SignUpToJSONTyped(json, false);
+  }
+
+  export function SignUpToJSONTyped(value?: SignUp | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'username': value['username'],

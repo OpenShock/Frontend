@@ -49,10 +49,15 @@ export function TokenCreatedResponseFromJSONTyped(json: any, ignoreDiscriminator
     };
 }
 
-export function TokenCreatedResponseToJSON(value?: TokenCreatedResponse | null): any {
+  export function TokenCreatedResponseToJSON(json: any): TokenCreatedResponse {
+      return TokenCreatedResponseToJSONTyped(json, false);
+  }
+
+  export function TokenCreatedResponseToJSONTyped(value?: TokenCreatedResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'token': value['token'],

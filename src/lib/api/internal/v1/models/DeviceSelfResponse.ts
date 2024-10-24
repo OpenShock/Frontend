@@ -18,6 +18,7 @@ import {
     MinimalShockerFromJSON,
     MinimalShockerFromJSONTyped,
     MinimalShockerToJSON,
+    MinimalShockerToJSONTyped,
 } from './MinimalShocker';
 
 /**
@@ -72,10 +73,15 @@ export function DeviceSelfResponseFromJSONTyped(json: any, ignoreDiscriminator: 
     };
 }
 
-export function DeviceSelfResponseToJSON(value?: DeviceSelfResponse | null): any {
+  export function DeviceSelfResponseToJSON(json: any): DeviceSelfResponse {
+      return DeviceSelfResponseToJSONTyped(json, false);
+  }
+
+  export function DeviceSelfResponseToJSONTyped(value?: DeviceSelfResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'id': value['id'],

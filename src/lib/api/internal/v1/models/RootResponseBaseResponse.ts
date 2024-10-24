@@ -18,6 +18,7 @@ import {
     RootResponseFromJSON,
     RootResponseFromJSONTyped,
     RootResponseToJSON,
+    RootResponseToJSONTyped,
 } from './RootResponse';
 
 /**
@@ -62,10 +63,15 @@ export function RootResponseBaseResponseFromJSONTyped(json: any, ignoreDiscrimin
     };
 }
 
-export function RootResponseBaseResponseToJSON(value?: RootResponseBaseResponse | null): any {
+  export function RootResponseBaseResponseToJSON(json: any): RootResponseBaseResponse {
+      return RootResponseBaseResponseToJSONTyped(json, false);
+  }
+
+  export function RootResponseBaseResponseToJSONTyped(value?: RootResponseBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'message': value['message'],

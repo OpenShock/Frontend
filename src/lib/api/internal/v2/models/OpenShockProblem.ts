@@ -93,10 +93,15 @@ export function OpenShockProblemFromJSONTyped(json: any, ignoreDiscriminator: bo
     };
 }
 
-export function OpenShockProblemToJSON(value?: Omit<OpenShockProblem, 'message'> | null): any {
+  export function OpenShockProblemToJSON(json: any): OpenShockProblem {
+      return OpenShockProblemToJSONTyped(json, false);
+  }
+
+  export function OpenShockProblemToJSONTyped(value?: Omit<OpenShockProblem, 'message'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
             ...value,

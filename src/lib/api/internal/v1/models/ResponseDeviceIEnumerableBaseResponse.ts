@@ -18,6 +18,7 @@ import {
     ResponseDeviceFromJSON,
     ResponseDeviceFromJSONTyped,
     ResponseDeviceToJSON,
+    ResponseDeviceToJSONTyped,
 } from './ResponseDevice';
 
 /**
@@ -62,10 +63,15 @@ export function ResponseDeviceIEnumerableBaseResponseFromJSONTyped(json: any, ig
     };
 }
 
-export function ResponseDeviceIEnumerableBaseResponseToJSON(value?: ResponseDeviceIEnumerableBaseResponse | null): any {
+  export function ResponseDeviceIEnumerableBaseResponseToJSON(json: any): ResponseDeviceIEnumerableBaseResponse {
+      return ResponseDeviceIEnumerableBaseResponseToJSONTyped(json, false);
+  }
+
+  export function ResponseDeviceIEnumerableBaseResponseToJSONTyped(value?: ResponseDeviceIEnumerableBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'message': value['message'],

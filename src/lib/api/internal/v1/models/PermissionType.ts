@@ -30,7 +30,7 @@ export enum PermissionType {
 export function instanceOfPermissionType(value: any): boolean {
     for (const key in PermissionType) {
         if (Object.prototype.hasOwnProperty.call(PermissionType, key)) {
-            if ((PermissionType as Record<string, PermissionType>)[key] === value) {
+            if (PermissionType[key as keyof typeof PermissionType] === value) {
                 return true;
             }
         }
@@ -48,5 +48,9 @@ export function PermissionTypeFromJSONTyped(json: any, ignoreDiscriminator: bool
 
 export function PermissionTypeToJSON(value?: PermissionType | null): any {
     return value as any;
+}
+
+export function PermissionTypeToJSONTyped(value: any, ignoreDiscriminator: boolean): PermissionType {
+    return value as PermissionType;
 }
 

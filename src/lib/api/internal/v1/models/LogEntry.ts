@@ -18,12 +18,14 @@ import {
     ControlTypeFromJSON,
     ControlTypeFromJSONTyped,
     ControlTypeToJSON,
+    ControlTypeToJSONTyped,
 } from './ControlType';
 import type { ControlLogSenderLight } from './ControlLogSenderLight';
 import {
     ControlLogSenderLightFromJSON,
     ControlLogSenderLightFromJSONTyped,
     ControlLogSenderLightToJSON,
+    ControlLogSenderLightToJSONTyped,
 } from './ControlLogSenderLight';
 
 /**
@@ -70,6 +72,8 @@ export interface LogEntry {
     duration: number;
 }
 
+
+
 /**
  * Check if a given object implements the LogEntry interface.
  */
@@ -102,10 +106,15 @@ export function LogEntryFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     };
 }
 
-export function LogEntryToJSON(value?: LogEntry | null): any {
+  export function LogEntryToJSON(json: any): LogEntry {
+      return LogEntryToJSONTyped(json, false);
+  }
+
+  export function LogEntryToJSONTyped(value?: LogEntry | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'id': value['id'],

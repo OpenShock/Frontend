@@ -18,6 +18,7 @@ import {
     PublicShareLinkResponseFromJSON,
     PublicShareLinkResponseFromJSONTyped,
     PublicShareLinkResponseToJSON,
+    PublicShareLinkResponseToJSONTyped,
 } from './PublicShareLinkResponse';
 
 /**
@@ -62,10 +63,15 @@ export function PublicShareLinkResponseBaseResponseFromJSONTyped(json: any, igno
     };
 }
 
-export function PublicShareLinkResponseBaseResponseToJSON(value?: PublicShareLinkResponseBaseResponse | null): any {
+  export function PublicShareLinkResponseBaseResponseToJSON(json: any): PublicShareLinkResponseBaseResponse {
+      return PublicShareLinkResponseBaseResponseToJSONTyped(json, false);
+  }
+
+  export function PublicShareLinkResponseBaseResponseToJSONTyped(value?: PublicShareLinkResponseBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'message': value['message'],

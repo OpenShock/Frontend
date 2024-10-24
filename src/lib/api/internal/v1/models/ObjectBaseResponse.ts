@@ -55,10 +55,15 @@ export function ObjectBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: 
     };
 }
 
-export function ObjectBaseResponseToJSON(value?: ObjectBaseResponse | null): any {
+  export function ObjectBaseResponseToJSON(json: any): ObjectBaseResponse {
+      return ObjectBaseResponseToJSONTyped(json, false);
+  }
+
+  export function ObjectBaseResponseToJSONTyped(value?: ObjectBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'message': value['message'],

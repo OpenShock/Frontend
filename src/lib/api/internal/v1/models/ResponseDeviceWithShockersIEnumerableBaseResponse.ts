@@ -18,6 +18,7 @@ import {
     ResponseDeviceWithShockersFromJSON,
     ResponseDeviceWithShockersFromJSONTyped,
     ResponseDeviceWithShockersToJSON,
+    ResponseDeviceWithShockersToJSONTyped,
 } from './ResponseDeviceWithShockers';
 
 /**
@@ -62,10 +63,15 @@ export function ResponseDeviceWithShockersIEnumerableBaseResponseFromJSONTyped(j
     };
 }
 
-export function ResponseDeviceWithShockersIEnumerableBaseResponseToJSON(value?: ResponseDeviceWithShockersIEnumerableBaseResponse | null): any {
+  export function ResponseDeviceWithShockersIEnumerableBaseResponseToJSON(json: any): ResponseDeviceWithShockersIEnumerableBaseResponse {
+      return ResponseDeviceWithShockersIEnumerableBaseResponseToJSONTyped(json, false);
+  }
+
+  export function ResponseDeviceWithShockersIEnumerableBaseResponseToJSONTyped(value?: ResponseDeviceWithShockersIEnumerableBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'message': value['message'],

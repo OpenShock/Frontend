@@ -18,6 +18,7 @@ import {
     PermissionTypeFromJSON,
     PermissionTypeFromJSONTyped,
     PermissionTypeToJSON,
+    PermissionTypeToJSONTyped,
 } from './PermissionType';
 
 /**
@@ -96,10 +97,15 @@ export function TokenResponseFromJSONTyped(json: any, ignoreDiscriminator: boole
     };
 }
 
-export function TokenResponseToJSON(value?: TokenResponse | null): any {
+  export function TokenResponseToJSON(json: any): TokenResponse {
+      return TokenResponseToJSONTyped(json, false);
+  }
+
+  export function TokenResponseToJSONTyped(value?: TokenResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'id': value['id'],

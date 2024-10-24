@@ -348,7 +348,7 @@ export interface ShockerApiInterface {
 
     /**
      * 
-     * @summary Update a share code for a shocker
+     * @summary Update a share for a shocker
      * @param {string} shockerId 
      * @param {string} sharedWithUserId 
      * @param {CreateShareCode} [createShareCode] 
@@ -359,7 +359,7 @@ export interface ShockerApiInterface {
     shockerShockerShareCodeUpdateRaw(requestParameters: ShockerShockerShareCodeUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>>;
 
     /**
-     * Update a share code for a shocker
+     * Update a share for a shocker
      */
     shockerShockerShareCodeUpdate(shockerId: string, sharedWithUserId: string, createShareCode?: CreateShareCode, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse>;
 
@@ -901,7 +901,7 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
     }
 
     /**
-     * Update a share code for a shocker
+     * Update a share for a shocker
      */
     async shockerShockerShareCodeUpdateRaw(requestParameters: ShockerShockerShareCodeUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
         if (requestParameters['shockerId'] == null) {
@@ -940,7 +940,7 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
     }
 
     /**
-     * Update a share code for a shocker
+     * Update a share for a shocker
      */
     async shockerShockerShareCodeUpdate(shockerId: string, sharedWithUserId: string, createShareCode?: CreateShareCode, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse> {
         const response = await this.shockerShockerShareCodeUpdateRaw({ shockerId: shockerId, sharedWithUserId: sharedWithUserId, createShareCode: createShareCode }, initOverrides);

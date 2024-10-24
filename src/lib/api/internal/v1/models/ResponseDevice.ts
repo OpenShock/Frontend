@@ -65,10 +65,15 @@ export function ResponseDeviceFromJSONTyped(json: any, ignoreDiscriminator: bool
     };
 }
 
-export function ResponseDeviceToJSON(value?: ResponseDevice | null): any {
+  export function ResponseDeviceToJSON(json: any): ResponseDevice {
+      return ResponseDeviceToJSONTyped(json, false);
+  }
+
+  export function ResponseDeviceToJSONTyped(value?: ResponseDevice | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'id': value['id'],

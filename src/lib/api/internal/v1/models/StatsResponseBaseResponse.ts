@@ -18,6 +18,7 @@ import {
     StatsResponseFromJSON,
     StatsResponseFromJSONTyped,
     StatsResponseToJSON,
+    StatsResponseToJSONTyped,
 } from './StatsResponse';
 
 /**
@@ -62,10 +63,15 @@ export function StatsResponseBaseResponseFromJSONTyped(json: any, ignoreDiscrimi
     };
 }
 
-export function StatsResponseBaseResponseToJSON(value?: StatsResponseBaseResponse | null): any {
+  export function StatsResponseBaseResponseToJSON(json: any): StatsResponseBaseResponse {
+      return StatsResponseBaseResponseToJSONTyped(json, false);
+  }
+
+  export function StatsResponseBaseResponseToJSONTyped(value?: StatsResponseBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'message': value['message'],

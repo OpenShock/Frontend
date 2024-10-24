@@ -18,6 +18,7 @@ import {
     LcgResponseFromJSON,
     LcgResponseFromJSONTyped,
     LcgResponseToJSON,
+    LcgResponseToJSONTyped,
 } from './LcgResponse';
 
 /**
@@ -62,10 +63,15 @@ export function LcgResponseBaseResponseFromJSONTyped(json: any, ignoreDiscrimina
     };
 }
 
-export function LcgResponseBaseResponseToJSON(value?: LcgResponseBaseResponse | null): any {
+  export function LcgResponseBaseResponseToJSON(json: any): LcgResponseBaseResponse {
+      return LcgResponseBaseResponseToJSONTyped(json, false);
+  }
+
+  export function LcgResponseBaseResponseToJSONTyped(value?: LcgResponseBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'message': value['message'],

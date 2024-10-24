@@ -18,6 +18,7 @@ import {
     UsernameErrorTypeFromJSON,
     UsernameErrorTypeFromJSONTyped,
     UsernameErrorTypeToJSON,
+    UsernameErrorTypeToJSONTyped,
 } from './UsernameErrorType';
 
 /**
@@ -39,6 +40,8 @@ export interface UsernameError {
      */
     type: UsernameErrorType;
 }
+
+
 
 /**
  * Check if a given object implements the UsernameError interface.
@@ -64,10 +67,15 @@ export function UsernameErrorFromJSONTyped(json: any, ignoreDiscriminator: boole
     };
 }
 
-export function UsernameErrorToJSON(value?: UsernameError | null): any {
+  export function UsernameErrorToJSON(json: any): UsernameError {
+      return UsernameErrorToJSONTyped(json, false);
+  }
+
+  export function UsernameErrorToJSONTyped(value?: UsernameError | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'message': value['message'],

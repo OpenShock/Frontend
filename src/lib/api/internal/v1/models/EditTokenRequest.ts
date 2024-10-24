@@ -18,6 +18,7 @@ import {
     PermissionTypeFromJSON,
     PermissionTypeFromJSONTyped,
     PermissionTypeToJSON,
+    PermissionTypeToJSONTyped,
 } from './PermissionType';
 
 /**
@@ -63,10 +64,15 @@ export function EditTokenRequestFromJSONTyped(json: any, ignoreDiscriminator: bo
     };
 }
 
-export function EditTokenRequestToJSON(value?: EditTokenRequest | null): any {
+  export function EditTokenRequestToJSON(json: any): EditTokenRequest {
+      return EditTokenRequestToJSONTyped(json, false);
+  }
+
+  export function EditTokenRequestToJSONTyped(value?: EditTokenRequest | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'name': value['name'],

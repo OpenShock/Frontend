@@ -18,6 +18,7 @@ import {
     ShockerModelTypeFromJSON,
     ShockerModelTypeFromJSONTyped,
     ShockerModelTypeToJSON,
+    ShockerModelTypeToJSONTyped,
 } from './ShockerModelType';
 
 /**
@@ -52,6 +53,8 @@ export interface NewShocker {
     model: ShockerModelType;
 }
 
+
+
 /**
  * Check if a given object implements the NewShocker interface.
  */
@@ -80,10 +83,15 @@ export function NewShockerFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     };
 }
 
-export function NewShockerToJSON(value?: NewShocker | null): any {
+  export function NewShockerToJSON(json: any): NewShocker {
+      return NewShockerToJSONTyped(json, false);
+  }
+
+  export function NewShockerToJSONTyped(value?: NewShocker | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'name': value['name'],

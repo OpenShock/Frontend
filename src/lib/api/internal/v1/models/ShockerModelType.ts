@@ -28,7 +28,7 @@ export enum ShockerModelType {
 export function instanceOfShockerModelType(value: any): boolean {
     for (const key in ShockerModelType) {
         if (Object.prototype.hasOwnProperty.call(ShockerModelType, key)) {
-            if ((ShockerModelType as Record<string, ShockerModelType>)[key] === value) {
+            if (ShockerModelType[key as keyof typeof ShockerModelType] === value) {
                 return true;
             }
         }
@@ -46,5 +46,9 @@ export function ShockerModelTypeFromJSONTyped(json: any, ignoreDiscriminator: bo
 
 export function ShockerModelTypeToJSON(value?: ShockerModelType | null): any {
     return value as any;
+}
+
+export function ShockerModelTypeToJSONTyped(value: any, ignoreDiscriminator: boolean): ShockerModelType {
+    return value as ShockerModelType;
 }
 

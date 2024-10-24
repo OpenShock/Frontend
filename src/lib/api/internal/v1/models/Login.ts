@@ -57,10 +57,15 @@ export function LoginFromJSONTyped(json: any, ignoreDiscriminator: boolean): Log
     };
 }
 
-export function LoginToJSON(value?: Login | null): any {
+  export function LoginToJSON(json: any): Login {
+      return LoginToJSONTyped(json, false);
+  }
+
+  export function LoginToJSONTyped(value?: Login | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'password': value['password'],

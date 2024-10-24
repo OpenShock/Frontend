@@ -18,6 +18,7 @@ import {
     SelfResponseFromJSON,
     SelfResponseFromJSONTyped,
     SelfResponseToJSON,
+    SelfResponseToJSONTyped,
 } from './SelfResponse';
 
 /**
@@ -62,10 +63,15 @@ export function SelfResponseBaseResponseFromJSONTyped(json: any, ignoreDiscrimin
     };
 }
 
-export function SelfResponseBaseResponseToJSON(value?: SelfResponseBaseResponse | null): any {
+  export function SelfResponseBaseResponseToJSON(json: any): SelfResponseBaseResponse {
+      return SelfResponseBaseResponseToJSONTyped(json, false);
+  }
+
+  export function SelfResponseBaseResponseToJSONTyped(value?: SelfResponseBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'message': value['message'],

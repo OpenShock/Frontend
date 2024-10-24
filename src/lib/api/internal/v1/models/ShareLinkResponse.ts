@@ -72,10 +72,15 @@ export function ShareLinkResponseFromJSONTyped(json: any, ignoreDiscriminator: b
     };
 }
 
-export function ShareLinkResponseToJSON(value?: ShareLinkResponse | null): any {
+  export function ShareLinkResponseToJSON(json: any): ShareLinkResponse {
+      return ShareLinkResponseToJSONTyped(json, false);
+  }
+
+  export function ShareLinkResponseToJSONTyped(value?: ShareLinkResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'id': value['id'],

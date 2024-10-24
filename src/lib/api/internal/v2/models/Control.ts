@@ -18,6 +18,7 @@ import {
     ControlTypeFromJSON,
     ControlTypeFromJSONTyped,
     ControlTypeToJSON,
+    ControlTypeToJSONTyped,
 } from './ControlType';
 
 /**
@@ -58,6 +59,8 @@ export interface Control {
     exclusive?: boolean;
 }
 
+
+
 /**
  * Check if a given object implements the Control interface.
  */
@@ -87,10 +90,15 @@ export function ControlFromJSONTyped(json: any, ignoreDiscriminator: boolean): C
     };
 }
 
-export function ControlToJSON(value?: Control | null): any {
+  export function ControlToJSON(json: any): Control {
+      return ControlToJSONTyped(json, false);
+  }
+
+  export function ControlToJSONTyped(value?: Control | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'id': value['id'],

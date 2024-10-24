@@ -56,10 +56,15 @@ export function ShareLinkCreateFromJSONTyped(json: any, ignoreDiscriminator: boo
     };
 }
 
-export function ShareLinkCreateToJSON(value?: ShareLinkCreate | null): any {
+  export function ShareLinkCreateToJSON(json: any): ShareLinkCreate {
+      return ShareLinkCreateToJSONTyped(json, false);
+  }
+
+  export function ShareLinkCreateToJSONTyped(value?: ShareLinkCreate | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'name': value['name'],

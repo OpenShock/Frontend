@@ -29,7 +29,7 @@ export enum ControlType {
 export function instanceOfControlType(value: any): boolean {
     for (const key in ControlType) {
         if (Object.prototype.hasOwnProperty.call(ControlType, key)) {
-            if ((ControlType as Record<string, ControlType>)[key] === value) {
+            if (ControlType[key as keyof typeof ControlType] === value) {
                 return true;
             }
         }
@@ -47,5 +47,9 @@ export function ControlTypeFromJSONTyped(json: any, ignoreDiscriminator: boolean
 
 export function ControlTypeToJSON(value?: ControlType | null): any {
     return value as any;
+}
+
+export function ControlTypeToJSONTyped(value: any, ignoreDiscriminator: boolean): ControlType {
+    return value as ControlType;
 }
 

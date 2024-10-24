@@ -18,6 +18,7 @@ import {
     GenericIniFromJSON,
     GenericIniFromJSONTyped,
     GenericIniToJSON,
+    GenericIniToJSONTyped,
 } from './GenericIni';
 
 /**
@@ -96,10 +97,15 @@ export function AdminOnlineDeviceResponseFromJSONTyped(json: any, ignoreDiscrimi
     };
 }
 
-export function AdminOnlineDeviceResponseToJSON(value?: AdminOnlineDeviceResponse | null): any {
+  export function AdminOnlineDeviceResponseToJSON(json: any): AdminOnlineDeviceResponse {
+      return AdminOnlineDeviceResponseToJSONTyped(json, false);
+  }
+
+  export function AdminOnlineDeviceResponseToJSONTyped(value?: AdminOnlineDeviceResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'id': value['id'],

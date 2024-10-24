@@ -18,6 +18,7 @@ import {
     ShockerModelTypeFromJSON,
     ShockerModelTypeFromJSONTyped,
     ShockerModelTypeToJSON,
+    ShockerModelTypeToJSONTyped,
 } from './ShockerModelType';
 
 /**
@@ -70,6 +71,8 @@ export interface ShockerWithDevice {
     device: string;
 }
 
+
+
 /**
  * Check if a given object implements the ShockerWithDevice interface.
  */
@@ -104,10 +107,15 @@ export function ShockerWithDeviceFromJSONTyped(json: any, ignoreDiscriminator: b
     };
 }
 
-export function ShockerWithDeviceToJSON(value?: ShockerWithDevice | null): any {
+  export function ShockerWithDeviceToJSON(json: any): ShockerWithDevice {
+      return ShockerWithDeviceToJSONTyped(json, false);
+  }
+
+  export function ShockerWithDeviceToJSONTyped(value?: ShockerWithDevice | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'id': value['id'],

@@ -18,6 +18,7 @@ import {
     SharedDeviceFromJSON,
     SharedDeviceFromJSONTyped,
     SharedDeviceToJSON,
+    SharedDeviceToJSONTyped,
 } from './SharedDevice';
 
 /**
@@ -79,10 +80,15 @@ export function OwnerShockerResponseFromJSONTyped(json: any, ignoreDiscriminator
     };
 }
 
-export function OwnerShockerResponseToJSON(value?: OwnerShockerResponse | null): any {
+  export function OwnerShockerResponseToJSON(json: any): OwnerShockerResponse {
+      return OwnerShockerResponseToJSONTyped(json, false);
+  }
+
+  export function OwnerShockerResponseToJSONTyped(value?: OwnerShockerResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'id': value['id'],

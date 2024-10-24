@@ -49,10 +49,15 @@ export function ChangeEmailRequestFromJSONTyped(json: any, ignoreDiscriminator: 
     };
 }
 
-export function ChangeEmailRequestToJSON(value?: ChangeEmailRequest | null): any {
+  export function ChangeEmailRequestToJSON(json: any): ChangeEmailRequest {
+      return ChangeEmailRequestToJSONTyped(json, false);
+  }
+
+  export function ChangeEmailRequestToJSONTyped(value?: ChangeEmailRequest | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'email': value['email'],

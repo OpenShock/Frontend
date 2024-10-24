@@ -28,7 +28,7 @@ export enum UsernameAvailability {
 export function instanceOfUsernameAvailability(value: any): boolean {
     for (const key in UsernameAvailability) {
         if (Object.prototype.hasOwnProperty.call(UsernameAvailability, key)) {
-            if ((UsernameAvailability as Record<string, UsernameAvailability>)[key] === value) {
+            if (UsernameAvailability[key as keyof typeof UsernameAvailability] === value) {
                 return true;
             }
         }
@@ -46,5 +46,9 @@ export function UsernameAvailabilityFromJSONTyped(json: any, ignoreDiscriminator
 
 export function UsernameAvailabilityToJSON(value?: UsernameAvailability | null): any {
     return value as any;
+}
+
+export function UsernameAvailabilityToJSONTyped(value: any, ignoreDiscriminator: boolean): UsernameAvailability {
+    return value as UsernameAvailability;
 }
 

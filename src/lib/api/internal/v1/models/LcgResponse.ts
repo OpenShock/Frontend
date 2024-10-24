@@ -57,10 +57,15 @@ export function LcgResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean
     };
 }
 
-export function LcgResponseToJSON(value?: LcgResponse | null): any {
+  export function LcgResponseToJSON(json: any): LcgResponse {
+      return LcgResponseToJSONTyped(json, false);
+  }
+
+  export function LcgResponseToJSONTyped(value?: LcgResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'gateway': value['gateway'],

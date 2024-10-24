@@ -30,7 +30,7 @@ export enum OtaUpdateStatus {
 export function instanceOfOtaUpdateStatus(value: any): boolean {
     for (const key in OtaUpdateStatus) {
         if (Object.prototype.hasOwnProperty.call(OtaUpdateStatus, key)) {
-            if ((OtaUpdateStatus as Record<string, OtaUpdateStatus>)[key] === value) {
+            if (OtaUpdateStatus[key as keyof typeof OtaUpdateStatus] === value) {
                 return true;
             }
         }
@@ -48,5 +48,9 @@ export function OtaUpdateStatusFromJSONTyped(json: any, ignoreDiscriminator: boo
 
 export function OtaUpdateStatusToJSON(value?: OtaUpdateStatus | null): any {
     return value as any;
+}
+
+export function OtaUpdateStatusToJSONTyped(value: any, ignoreDiscriminator: boolean): OtaUpdateStatus {
+    return value as OtaUpdateStatus;
 }
 

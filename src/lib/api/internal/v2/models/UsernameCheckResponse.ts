@@ -18,12 +18,14 @@ import {
     UsernameAvailabilityFromJSON,
     UsernameAvailabilityFromJSONTyped,
     UsernameAvailabilityToJSON,
+    UsernameAvailabilityToJSONTyped,
 } from './UsernameAvailability';
 import type { UsernameError } from './UsernameError';
 import {
     UsernameErrorFromJSON,
     UsernameErrorFromJSONTyped,
     UsernameErrorToJSON,
+    UsernameErrorToJSONTyped,
 } from './UsernameError';
 
 /**
@@ -45,6 +47,8 @@ export interface UsernameCheckResponse {
      */
     error?: UsernameError;
 }
+
+
 
 /**
  * Check if a given object implements the UsernameCheckResponse interface.
@@ -69,10 +73,15 @@ export function UsernameCheckResponseFromJSONTyped(json: any, ignoreDiscriminato
     };
 }
 
-export function UsernameCheckResponseToJSON(value?: UsernameCheckResponse | null): any {
+  export function UsernameCheckResponseToJSON(json: any): UsernameCheckResponse {
+      return UsernameCheckResponseToJSONTyped(json, false);
+  }
+
+  export function UsernameCheckResponseToJSONTyped(value?: UsernameCheckResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'availability': UsernameAvailabilityToJSON(value['availability']),

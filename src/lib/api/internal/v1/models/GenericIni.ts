@@ -65,10 +65,15 @@ export function GenericIniFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     };
 }
 
-export function GenericIniToJSON(value?: GenericIni | null): any {
+  export function GenericIniToJSON(json: any): GenericIni {
+      return GenericIniToJSONTyped(json, false);
+  }
+
+  export function GenericIniToJSONTyped(value?: GenericIni | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'id': value['id'],

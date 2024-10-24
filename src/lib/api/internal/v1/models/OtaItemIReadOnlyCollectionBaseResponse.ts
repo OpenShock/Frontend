@@ -18,6 +18,7 @@ import {
     OtaItemFromJSON,
     OtaItemFromJSONTyped,
     OtaItemToJSON,
+    OtaItemToJSONTyped,
 } from './OtaItem';
 
 /**
@@ -62,10 +63,15 @@ export function OtaItemIReadOnlyCollectionBaseResponseFromJSONTyped(json: any, i
     };
 }
 
-export function OtaItemIReadOnlyCollectionBaseResponseToJSON(value?: OtaItemIReadOnlyCollectionBaseResponse | null): any {
+  export function OtaItemIReadOnlyCollectionBaseResponseToJSON(json: any): OtaItemIReadOnlyCollectionBaseResponse {
+      return OtaItemIReadOnlyCollectionBaseResponseToJSONTyped(json, false);
+  }
+
+  export function OtaItemIReadOnlyCollectionBaseResponseToJSONTyped(value?: OtaItemIReadOnlyCollectionBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
+
     return {
         
         'message': value['message'],
