@@ -2,10 +2,9 @@
   import { sessionApi } from '$lib/api';
   import type { LoginSessionResponse } from '$lib/api/internal/v1';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { getToastStore } from '@skeletonlabs/skeleton';
   import { elapsedToString } from '$lib/utils/time';
   import { escapeHtml } from '$lib/utils/encoding';
-  import { getModalStore } from '@skeletonlabs/skeleton';
+  import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
   import { onMount } from 'svelte';
 
   const modalStore = getModalStore();
@@ -13,9 +12,18 @@
   const toastStore = getToastStore();
   let sessions: LoginSessionResponse[] = $state([]);
 
-  function handleDeleteSessionModalResponse(sessionId: string, result: boolean) {
-    if (!result) return;
+  function refreshSessions() {
+    sessionApi
+      .sessionsListSessions()
+      .then((s) => {
+        sessions = s;
+      })
+      .catch((e) => {
+        handleApiError(e, toastStore);
+      });
+  }
 
+  function deleteSession(sessionId: string) {
     sessionApi
       .sessionsDeleteSession(sessionId)
       .then(() => {
@@ -26,25 +34,18 @@
       });
   }
 
-  function deleteSession(session: LoginSessionResponse) {
+  function showDeleteSessionModal(session: LoginSessionResponse) {
     modalStore.trigger({
       type: 'confirm',
       title: 'Please Confirm',
-      body: `Are you sure you want to log out from ${escapeHtml(session.userAgent)}?`,
-      response: (r: boolean) => handleDeleteSessionModalResponse(session.id, r),
+      body: `Are you sure you want to log out from <b>${escapeHtml(session.userAgent)}</b>?`,
+      response: (r: boolean) => {
+        if (r) deleteSession(session.id);
+      },
     });
   }
 
-  onMount(() => {
-    sessionApi
-      .sessionsListSessions()
-      .then((s) => {
-        sessions = s;
-      })
-      .catch((e) => {
-        handleApiError(e, toastStore);
-      });
-  });
+  onMount(refreshSessions);
 
   let since: number = $state(Date.now());
   setInterval(() => {
@@ -74,10 +75,12 @@
           </tr>
         </thead>
         <tbody>
-          {#each sessions as row (row.id)}
+          {#each sessions as session (session.id)}
             <tr>
-              <td>{row.userAgent}</td>
-              <td title={row.created.toLocaleString()}>{row.created.toLocaleDateString()}</td>
+              <td>{session.userAgent}</td>
+              <td title={session.created.toLocaleString()}
+                >{session.created.toLocaleDateString()}</td
+              >
 
               <!--
               <td title={row.lastUsed.toLocaleString()}>
@@ -85,20 +88,22 @@
               </td>-->
               <td>Not Implemented</td>
 
-              {#if since < row.expires.getTime()}
-                <td title={row.expires.toLocaleString()}>
-                  {elapsedToString(row.expires.getTime() - since)}
+              {#if since < session.expires.getTime()}
+                <td title={session.expires.toLocaleString()}>
+                  {elapsedToString(session.expires.getTime() - since)}
                 </td>
               {:else}
-                <td title={row.expires.toLocaleString()} class="text-red-500"> Already expired </td>
+                <td title={session.expires.toLocaleString()} class="text-red-500">
+                  Already expired
+                </td>
               {/if}
 
-              <td>{row.ip}</td>
+              <td>{session.ip}</td>
 
               <td class="!whitespace-nowrap">
                 <button
                   class="btn-icon variant-filled-primary fa fa-trash"
-                  onclick={() => deleteSession(row)}
+                  onclick={() => showDeleteSessionModal(session)}
                   aria-label="Delete Session"
                 ></button>
               </td>
