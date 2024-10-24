@@ -1,21 +1,17 @@
 <script lang="ts">
-  import { shockerV1Api } from '$lib/api';
+  import { shockerV2Api } from '$lib/api';
+  import type { Control, ControlType } from '$lib/api/internal/v2';
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import MapControlModule from '$lib/components/ControlModules/MapControlModule.svelte';
+  import { ModuleType } from '$lib/components/ControlModules/ModuleType';
   import RichControlModule from '$lib/components/ControlModules/RichControlModule.svelte';
   import SimpleControlHeader from '$lib/components/ControlModules/SimpleControlHeader.svelte';
   import SimpleControlModule from '$lib/components/ControlModules/SimpleControlModule.svelte';
   import { OwnDevicesStore } from '$lib/stores/DevicesStore';
   import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
 
-  $: shockers = $OwnDevicesStore?.flatMap((device) => device.shockers)?.filter((shocker) => !!shocker) ?? [];
-
-  enum ModuleType {
-    ClassicControlModule,
-    RichControlModule,
-    SimpleControlModule,
-    MapControlModule,
-  }
+  $: shockers =
+    $OwnDevicesStore?.flatMap((device) => device.shockers)?.filter((shocker) => !!shocker) ?? [];
 
   let moduleType: ModuleType = ModuleType.ClassicControlModule;
 
@@ -25,8 +21,21 @@
     placement: 'bottom',
   };
 
-  function handleCommand(event: CustomEvent<{ id: string; type: string; intensity: number; duration: number }>) {
-    shockerV1Api.sendCommand(event.detail.id, event.detail.type, event.detail.intensity, event.detail.duration);
+  function handleCommand(
+    event: CustomEvent<{ id: string; type: ControlType; intensity: number; duration: number }>
+  ) {
+    let shocks: Control[] = [
+      {
+        id: event.detail.id,
+        type: event.detail.type,
+        intensity: event.detail.intensity,
+        duration: event.detail.duration,
+      },
+    ];
+    shockerV2Api.shockerSendControl({
+      shocks,
+      customName: 'Custom name',
+    });
   }
 </script>
 
@@ -39,8 +48,8 @@
       <h1 class="text-2xl font-bold">Shockers</h1>
       <div>
         <!-- Mode button -->
-        <button class="btn p-1" use:popup={modeClick}>
-          <i class="fa-solid fa-layer-group" />
+        <button class="btn p-1" use:popup={modeClick} aria-label="Change mode">
+          <i class="fa-solid fa-layer-group"></i>
         </button>
         <div class="card p-4 max-w-md" data-popup="modeClick">
           <div class="flex gap-2">
@@ -69,11 +78,11 @@
               Map
             </button>
           </div>
-          <div class="arrow bg-surface-100-800-token" />
+          <div class="arrow bg-surface-100-800-token"></div>
         </div>
         <!-- Options button -->
-        <button class="btn p-1">
-          <i class="fa-solid fa-cog" />
+        <button class="btn p-1" aria-label="Options">
+          <i class="fa-solid fa-cog"></i>
         </button>
       </div>
     </div>
