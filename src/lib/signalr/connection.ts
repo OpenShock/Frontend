@@ -1,6 +1,6 @@
 import { browser } from '$app/environment';
 import { PUBLIC_BACKEND_API_DOMAIN } from '$env/static/public';
-import { OwnDeviceStatesStore, type OwnDeviceState } from '$lib/stores/DevicesStore';
+import { OwnDeviceStatesStore, refreshOwnDevices, type OwnDeviceState } from '$lib/stores/DevicesStore';
 import { UserStore } from '$lib/stores/UserStore';
 import * as SignalR from '@microsoft/signalr';
 import { get, writable } from 'svelte/store';
@@ -73,6 +73,7 @@ async function create_signalr_connection() {
 
   connection.on('deviceupdate', (message) => {
     console.log('Received device update message', message);
+    refreshOwnDevices();
   });
 
   signalr_connection.set(connection);
