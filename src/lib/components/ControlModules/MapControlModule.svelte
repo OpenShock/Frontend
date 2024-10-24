@@ -37,14 +37,14 @@
     ctx.fillStyle = 'white';
     ctx.fillRect(900, 1000, 50, 200);
     ctx.fillRect(1050, 1000, 50, 200);
-    
   });
 
   const dispatch = createEventDispatcher();
-
+  /*
   function emit(type: string) {
-    dispatch('command', { id: shocker.id, type, intensity, duration });
+    dispatch('command', { id: shocker.id, type, intensity, duration }); // TODO
   }
+*/
 </script>
 
 <canvas bind:this={canvas} width="2000" height="1300" class="w-full h-full" />
