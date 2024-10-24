@@ -3,4 +3,4 @@ export enum ModuleType {
   RichControlModule,
   SimpleControlModule,
   MapControlModule,
-}
+};

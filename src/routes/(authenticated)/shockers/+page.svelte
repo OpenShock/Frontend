@@ -1,7 +1,6 @@
 <script lang="ts">
   import { shockerV2Api } from '$lib/api';
-  import type { ControlType } from '$lib/api/internal/v1';
-  import type { Control } from '$lib/api/internal/v2';
+  import type { Control, ControlType } from '$lib/api/internal/v2';
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import MapControlModule from '$lib/components/ControlModules/MapControlModule.svelte';
   import { ModuleType } from '$lib/components/ControlModules/ModuleType';
@@ -50,7 +49,7 @@
       <h1 class="text-2xl font-bold">Shockers</h1>
       <div>
         <!-- Mode button -->
-        <button class="btn p-1" use:popup={modeClick}>
+        <button class="btn p-1" use:popup={modeClick} aria-label="Change mode">
           <i class="fa-solid fa-layer-group"></i>
         </button>
         <div class="card p-4 max-w-md" data-popup="modeClick">
@@ -83,7 +82,7 @@
           <div class="arrow bg-surface-100-800-token"></div>
         </div>
         <!-- Options button -->
-        <button class="btn p-1">
+        <button class="btn p-1" aria-label="Options">
           <i class="fa-solid fa-cog"></i>
         </button>
       </div>
