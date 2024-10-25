@@ -6,6 +6,7 @@
   import { elapsedToString } from '$lib/utils/time';
   import { escapeHtml } from '$lib/utils/encoding';
   import { getModalStore } from '@skeletonlabs/skeleton';
+  import { UAParser } from 'ua-parser-js';
 
   const modalStore = getModalStore();
 
@@ -47,6 +48,17 @@
     }
   }
 
+  function getReadableName(userAgent: string | null): string {
+    if (!userAgent) return 'Unknown';
+
+    const ua = new UAParser(userAgent);
+
+    const browser = ua.getBrowser();
+    const os = ua.getOS();
+
+    return `${browser.name} on ${os.name} ${os.version}`;
+  }
+
   listSessions();
 </script>
 
@@ -63,7 +75,7 @@
       <table class="table table-hover">
         <thead>
           <tr>
-            <th>User-Agent</th>
+            <th>UserAgent</th>
             <th>Created</th>
             <th>Last Seen</th>
             <th>Expires</th>
@@ -74,7 +86,7 @@
         <tbody>
           {#each sessions as row (row.id)}
             <tr>
-              <td>{row.userAgent}</td>
+              <td title={row.userAgent}>{getReadableName(row.userAgent)}</td>
               <td title={row.created.toLocaleString()}>{row.created.toLocaleDateString()}</td>
 
               <!--

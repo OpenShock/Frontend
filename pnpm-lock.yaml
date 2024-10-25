@@ -125,6 +125,9 @@ importers:
       typescript:
         specifier: ^5.6.3
         version: 5.6.3
+      ua-parser-js:
+        specifier: ^2.0.0-beta.3
+        version: 2.0.0-beta.3
       vite-plugin-mkcert:
         specifier: ^1.17.6
         version: 1.17.6(vite@5.4.9(@types/node@22.7.7))
@@ -2380,6 +2383,10 @@ packages:
   typescript@5.6.3:
     resolution: {integrity: sha512-hjcS1mhfuyi4WW8IWtjP7brDrG2cuDZukyrYrSauoXGNgx0S7zceP07adYkJycEr56BOUTNPzbInooiN3fn1qw==}
     engines: {node: '>=14.17'}
+    hasBin: true
+
+  ua-parser-js@2.0.0-beta.3:
+    resolution: {integrity: sha512-vZkEG/GplLRxj4XVrjLUQpSNg9Qj9RdnIqrOy8dqrLP1e5x7i2N8RfVYlWRbKEZdDSWfeWNcWS38gmieX03/5A==}
     hasBin: true
 
   ufo@1.5.4:
@@ -4761,6 +4768,8 @@ snapshots:
   type-fest@0.21.3: {}
 
   typescript@5.6.3: {}
+
+  ua-parser-js@2.0.0-beta.3: {}
 
   ufo@1.5.4: {}
 
