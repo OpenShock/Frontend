@@ -6,6 +6,7 @@
   import { escapeHtml } from '$lib/utils/encoding';
   import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
   import { onMount } from 'svelte';
+  import { UAParser } from 'ua-parser-js';
 
   const modalStore = getModalStore();
 
@@ -45,6 +46,17 @@
     });
   }
 
+  function getReadableName(userAgent: string | null): string {
+    if (!userAgent) return 'Unknown';
+
+    const ua = new UAParser(userAgent);
+
+    const browser = ua.getBrowser();
+    const os = ua.getOS();
+
+    return `${browser.name} on ${os.name} ${os.version}`;
+  }
+
   onMount(refreshSessions);
 
   let since: number = $state(Date.now());
@@ -66,7 +78,7 @@
       <table class="table table-hover">
         <thead>
           <tr>
-            <th>User-Agent</th>
+            <th>UserAgent</th>
             <th>Created</th>
             <th>Last Seen</th>
             <th>Expires</th>
@@ -77,10 +89,12 @@
         <tbody>
           {#each sessions as session (session.id)}
             <tr>
-              <td>{session.userAgent}</td>
-              <td title={session.created.toLocaleString()}
-                >{session.created.toLocaleDateString()}</td
-              >
+              <td title={session.userAgent}>
+                {getReadableName(session.userAgent)}
+              </td>
+              <td title={session.created.toLocaleString()}>
+                {session.created.toLocaleDateString()}
+              </td>
 
               <!--
               <td title={row.lastUsed.toLocaleString()}>

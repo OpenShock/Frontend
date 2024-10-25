@@ -11,7 +11,7 @@
   const dispatch = createEventDispatcher();
 
   function emit(type: string) {
-    dispatch('command', { id: shocker.id, type, intensity, duration });
+    dispatch('command', { id: shocker.id, type }); // TODO: What to do with intensity and duration?
   }
 </script>
 
