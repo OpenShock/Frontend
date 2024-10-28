@@ -32,15 +32,27 @@
   <!-- Buttons -->
   <div class="w-full flex gap-2">
     <!-- Beep button -->
-    <button class="btn p-2 bg-primary-500 rounded-md flex-1" onclick={() => emit('beep')}>
+    <button
+      class="btn p-2 bg-primary-500 rounded-md flex-1"
+      onclick={() => emit('beep')}
+      aria-label="Beep"
+    >
       <i class="fa-solid fa-volume-high"></i>
     </button>
     <!-- Vibrate button -->
-    <button class="btn p-2 bg-primary-500 rounded-md flex-1" onclick={() => emit('vibrate')}>
+    <button
+      class="btn p-2 bg-primary-500 rounded-md flex-1"
+      onclick={() => emit('vibrate')}
+      aria-label="Vibrate"
+    >
       <i class="fa-solid fa-water"></i>
     </button>
     <!-- Shock button -->
-    <button class="btn p-2 bg-primary-500 rounded-md flex-1" onclick={() => emit('shock')}>
+    <button
+      class="btn p-2 bg-primary-500 rounded-md flex-1"
+      onclick={() => emit('shock')}
+      aria-label="Shock"
+    >
       <i class="fa-solid fa-bolt"></i>
     </button>
   </div>
