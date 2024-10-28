@@ -56,7 +56,13 @@
     const browser = ua.getBrowser();
     const os = ua.getOS();
 
-    return `${browser.name} on ${os.name} ${os.version}`;
+    if (!browser.name || !os.name) return userAgent;
+
+    let name = `${browser.name} on ${os.name}`;
+
+    if (os.version) name += ` ${os.version}`;
+
+    return name;
   }
 
   listSessions();
