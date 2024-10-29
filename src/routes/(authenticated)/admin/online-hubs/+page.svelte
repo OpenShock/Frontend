@@ -2,29 +2,32 @@
   import { adminApi } from '$lib/api';
   import { RankType, type AdminOnlineDeviceResponse } from '$lib/api/internal/v1';
   import { UserStore } from '$lib/stores/UserStore';
+  import { onMount } from 'svelte';
   import AdminDeviceList from './AdminDeviceList.svelte';
 
   let isAdmin = $derived($UserStore.self?.rank === RankType.admin);
 
-  type FlatDevice = AdminOnlineDeviceResponse & { ownerName: string | null | undefined };
+  type FlatDevice = AdminOnlineDeviceResponse & { ownerName: string | null };
 
   let devices: FlatDevice[] | null = $state(null);
 
-  $effect(() => {
-    if (!isAdmin || devices) return;
-    
+  function fetchOnlineDevices() {
     adminApi
       .adminGetOnlineDevices()
       .then((res) => {
         devices =
           res.data?.map((device) => ({
             ...device,
-            ownerName: device.owner?.name,
+            ownerName: device.owner ? device.owner.name : null,
           })) ?? [];
       })
       .catch((err) => {
         console.error(err);
       });
+  }
+
+  onMount(() => {
+    if (isAdmin) fetchOnlineDevices();
   });
 </script>
 
@@ -34,8 +37,8 @@
     <a href="/home" class="btn variant-filled-primary">Go Home</a>
   {:else}
     <div class="flex justify-between w-full">
-      <h2 class="h2">Admin Panel</h2>
-      <button class="btn variant-filled-primary" onclick={() => (devices = null)}>
+      <h2 class="h2">Online Users</h2>
+      <button class="btn variant-filled-primary" onclick={fetchOnlineDevices}>
         <i class="fa fa-sync"></i>
         Refresh
       </button>
@@ -43,10 +46,7 @@
 
     <!-- Online Users List -->
     {#if devices}
-      <div class="flex flex-col space-y-2 w-full">
-        <h2 class="h2">Online Users</h2>
-        <AdminDeviceList {devices} />
-      </div>
+      <AdminDeviceList {devices} />
     {/if}
   {/if}
 </div>
