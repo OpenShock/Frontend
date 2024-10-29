@@ -12,6 +12,8 @@
   let devices: FlatDevice[] | null = $state(null);
 
   function fetchOnlineDevices() {
+    if (!isAdmin) return; // TODO: Display toast
+
     adminApi
       .adminGetOnlineDevices()
       .then((res) => {
@@ -26,9 +28,7 @@
       });
   }
 
-  onMount(() => {
-    if (isAdmin) fetchOnlineDevices();
-  });
+  onMount(fetchOnlineDevices);
 </script>
 
 <div class="container h-full p-12 flex flex-col justify-start items-start gap-4">

@@ -73,9 +73,7 @@
 
     trackingUpdated(event);
   }
-  onDestroy(() => {
-    trackingStopped();
-  });
+  onDestroy(trackingStopped);
 
   // Smooth animation
   const animatedValue = tweened(value, {
