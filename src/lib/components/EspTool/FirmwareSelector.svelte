@@ -10,29 +10,37 @@
 
   /** Optional chip to constrain the list of boards to */
   //export let chip: string | null = null;
-  export let version: string | null = null;
-  export let board: string | null = null;
-  export let disabled: boolean = false;
+  interface Props {
+    version?: string | null;
+    board?: string | null;
+    disabled?: boolean;
+  }
 
-  let selectedChannel: Channel = 'stable';
+  let { version = $bindable(null), board = $bindable(null), disabled = false }: Props = $props();
 
-  let channels: ChannelDict = {};
+  let selectedChannel: Channel = $state('stable');
+
+  let channels: ChannelDict = $state({});
   GetFirmwareChannel().then((c) => (channels = c));
 
-  $: version = channels[selectedChannel] ?? null;
+  let boardsCache: { [key: string]: string[] } = $state({});
+  $effect(() => {
+    version = channels[selectedChannel] ?? null;
 
-  let boardsCache: { [key: string]: string[] } = {};
-  $: if (version && !(version in boardsCache)) {
-    let requestedVersion = version;
-    GetChannelBoards(version).then((b) => {
-      boardsCache = { ...boardsCache, [requestedVersion]: b ?? [] };
-    });
-  }
+    if (version && !(version in boardsCache)) {
+      let requestedVersion = version;
+      GetChannelBoards(version).then((b) => {
+        boardsCache = { ...boardsCache, [requestedVersion]: b ?? [] };
+      });
+    }
+  });
 
-  $: boards = version ? boardsCache[version] ?? [] : [];
-  $: if (boards.length === 0) {
-    board = null;
-  }
+  let boards = $derived(version ? boardsCache[version] ?? [] : []);
+  $effect(() => {
+    if (boards.length === 0) {
+      board = null;
+    }
+  });
 </script>
 
 <div class="flex flex-col items-stretch justify-start gap-1">

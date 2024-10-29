@@ -3,12 +3,16 @@
   import CircleSlider from './Internal/CircleSlider.svelte';
   import type { ShockerResponse } from '$lib/api/internal/v1';
 
-  export let shockers: ShockerResponse[];
+  interface Props {
+    shockers: ShockerResponse[];
+  }
+
+  let { shockers }: Props = $props();
 
   let intensity: number = 25;
   let duration: number = 1;
 
-  let canvas: HTMLCanvasElement;
+  let canvas: HTMLCanvasElement = $state();
 
   onMount(() => {
     const ctx = canvas.getContext('2d');
@@ -47,4 +51,4 @@
 */
 </script>
 
-<canvas bind:this={canvas} width="2000" height="1300" class="w-full h-full" />
+<canvas bind:this={canvas} width="2000" height="1300" class="w-full h-full"></canvas>

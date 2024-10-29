@@ -18,21 +18,25 @@
   const labelId = id + '-label';
   const guageId = id + '-guage';
 
-  export let name: string;
-  export let value: number;
-  export let min: number;
-  export let max: number;
-  export let step: number;
-  export let tabindex: number | null | undefined = undefined;
+  interface Props {
+    name: string;
+    value: number;
+    min: number;
+    max: number;
+    step: number;
+    tabindex?: number | null | undefined;
+  }
 
-  let canvasHandle: HTMLDivElement;
-  let sliderHandle: HTMLDivElement;
+  let { name, value = $bindable(), min, max, step, tabindex = undefined }: Props = $props();
+
+  let canvasHandle: HTMLDivElement | undefined = $state();
+  let sliderHandle: HTMLDivElement | undefined = $state();
 
   function stupidUnfloatHack(value: number) {
     // This is a stupid hack to avoid floating point errors, needed to make UI not look like shit
     return Math.round((value + Number.EPSILON) * 100) / 100;
   }
-  function updateValueFromSlider(event: MouseEvent | TouchEvent) {
+  function trackingUpdated(event: MouseEvent | TouchEvent) {
     if (!canvasHandle) return;
 
     const rect = canvasHandle.getBoundingClientRect();
@@ -47,9 +51,6 @@
     const fraction = clamp(angle / angleRange + 0.5, 0, 1);
 
     value = lerp(min, max, fraction);
-  }
-  function trackingUpdated(event: MouseEvent | TouchEvent) {
-    updateValueFromSlider(event);
   }
   function trackingStopped() {
     window.removeEventListener('touchmove', trackingUpdated);
@@ -70,7 +71,7 @@
       window.addEventListener('mouseup', trackingStopped);
     }
 
-    updateValueFromSlider(event);
+    trackingUpdated(event);
   }
   onDestroy(() => {
     trackingStopped();
@@ -83,25 +84,23 @@
   });
 
   // Sanitize and update value
-  $: {
+  $effect(() => {
     if (value < min) value = min;
     if (value > max) value = max;
     value = stupidUnfloatHack(Math.round(value / step) * step);
     animatedValue.set(value);
-  }
+  });
 
   // Update visual progress
-  let progressProps = {};
-  $: {
-    let degrees = angleStart + invLerp(min, max, $animatedValue) * angleRange;
+  let degrees = $derived(angleStart + invLerp(min, max, $animatedValue) * angleRange);
+  let progressProps = $derived(calcSvgArcProps(center, angleStart, degrees, radius, 10));
 
-    progressProps = calcSvgArcProps(center, angleStart, degrees, radius, 10);
+  $effect(() => {
+    if (!sliderHandle) return;
 
-    if (sliderHandle) {
-      sliderHandle.style.left = `${60 + getCircleX(60, degrees)}px`; // TODO: Avoid using pixel values
-      sliderHandle.style.top = `${60 + getCircleY(60, degrees)}px`; // TODO: Avoid using pixel values
-    }
-  }
+    sliderHandle.style.left = `${60 + getCircleX(60, degrees)}px`; // TODO: Avoid using pixel values
+    sliderHandle.style.top = `${60 + getCircleY(60, degrees)}px`; // TODO: Avoid using pixel values
+  });
 </script>
 
 <div>
@@ -112,8 +111,8 @@
         fill="none"
         stroke-linecap="round"
         style="stroke: rgb(27, 29, 30)"
-        on:touchstart={trackingStarted}
-        on:mousedown={trackingStarted}
+        ontouchstart={trackingStarted}
+        onmousedown={trackingStarted}
         aria-hidden="true"
       />
       <path
@@ -121,8 +120,8 @@
         fill="none"
         stroke-linecap="round"
         class="stroke-secondary-500"
-        on:touchstart={trackingStarted}
-        on:mousedown={trackingStarted}
+        ontouchstart={trackingStarted}
+        onmousedown={trackingStarted}
         id={guageId}
         aria-hidden="true"
       />
@@ -130,8 +129,8 @@
     <div
       class="handle"
       bind:this={sliderHandle}
-      on:touchstart={trackingStarted}
-      on:mousedown={trackingStarted}
+      ontouchstart={trackingStarted}
+      onmousedown={trackingStarted}
       role="slider"
       {tabindex}
       aria-valuemin={min}
@@ -139,7 +138,7 @@
       aria-valuemax={max}
       aria-labelledby={labelId}
       aria-controls={guageId}
-    />
+    ></div>
     <input id={inputId} type="number" {name} {min} bind:value {max} {step} aria-label="Value" />
     <label for={inputId} aria-label="Name">
       {name}

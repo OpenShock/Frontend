@@ -10,13 +10,13 @@
 
   initializeStores();
 
-  let port: SerialPort | null = null;
-  let manager: FlashManager | null = null;
-  let connectFailed = false;
-  let isFlashing = false;
+  let port: SerialPort | null = $state(null);
+  let manager: FlashManager | null = $state(null);
+  let connectFailed = $state(false);
+  let isFlashing = $state(false);
 
-  let terminalOpen: boolean = false;
-  let terminalText: string = '';
+  let terminalOpen: boolean = $state(false);
+  let terminalText: string = $state('');
 
   const terminal = {
     clean: () => {
@@ -30,21 +30,23 @@
     },
   };
 
-  $: if (port && !manager) {
-    connectFailed = false;
-    FlashManagerStore.getManager(port, terminal).then((m) => {
-      manager = m;
-      if (!manager) {
-        connectFailed = true;
-      }
-    });
-  } else if (!port && manager) {
-    FlashManagerStore.removeManager(manager);
-    manager = null;
-  }
+  $effect(() => {
+    if (port && !manager) {
+      connectFailed = false;
+      FlashManagerStore.getManager(port, terminal).then((m) => {
+        manager = m;
+        if (!manager) {
+          connectFailed = true;
+        }
+      });
+    } else if (!port && manager) {
+      FlashManagerStore.removeManager(manager);
+      manager = null;
+    }
+  });
 
-  let version: string | null = null;
-  let board: string | null = null;
+  let version: string | null = $state(null);
+  let board: string | null = $state(null);
 </script>
 
 <Modal components={modalRegistry} />
@@ -97,7 +99,7 @@
       <div class="flex-grow card p-4 flex flex-col justify-center gap-2 w-[95%] h-56 min-w-[15em] lg:max-w-[25%] lg:h-auto">
         <div class="flex flex-row items-center justify-between gap-2">
           <h3 class="h3 font-bold">Console</h3>
-          <button class="btn variant-filled-primary" on:click={() => (terminalText = '')}
+          <button class="btn variant-filled-primary" onclick={() => (terminalText = '')}
             >Clear</button
           >
         </div>

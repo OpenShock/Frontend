@@ -9,17 +9,21 @@
     createdAt: Date;
   }
 
-  let devices: Device[] = [];
+  let devices: Device[] = $state([]);
 
-  $: if ($OwnDevicesStore != null) {
+  $effect(() => {
+    if (!$OwnDevicesStore) return;
+
     const deviceStates = $OwnDeviceStatesStore?.map((state) => ({
       id: state.device,
       online: state.online,
       firmwareVersion: state.firmwareVersion,
     }));
 
+    if (!deviceStates) return;
+
     devices = $OwnDevicesStore.map((device) => {
-      const state = deviceStates?.find((state) => state.id === device.id);
+      const state = deviceStates.find((state) => state.id === device.id);
       return {
         id: device.id,
         name: device.name,
@@ -28,7 +32,7 @@
         createdAt: device.createdOn,
       };
     });
-  }
+  });
 </script>
 
 <div class="container h-full mx-auto flex flex-col justify-center items-center">

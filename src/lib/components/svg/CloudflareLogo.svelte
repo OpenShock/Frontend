@@ -1,12 +1,11 @@
 <script lang="ts">
-  let classText: string | undefined = undefined;
-  export { classText as class };
+  let props: { class: string } = $props();
 </script>
 
 <svg
   role="img"
   aria-label="Cloudflare"
-  class={classText}
+  class={props.class}
   viewBox="0 0 74 25"
   fill="none"
   xmlns="http://www.w3.org/2000/svg"

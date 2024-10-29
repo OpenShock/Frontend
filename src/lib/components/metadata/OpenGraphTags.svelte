@@ -1,5 +1,6 @@
 <script lang="ts">
-  export let type:
+  interface Props {
+    type: 
     | 'website'
     | 'profile'
     | 'article'
@@ -12,23 +13,37 @@
     | 'music.album'
     | 'music.playlist'
     | 'music.radio_station';
-  export let title: string;
-  export let image: {
+    title: string;
+    image: {
     src: string;
     type?: string;
     width?: number;
     height?: number;
     alt?: string;
   };
-  export let url: string;
-  export let siteName: string | undefined = undefined;
-  export let description: string | undefined = undefined;
-  export let determiner: string | undefined = undefined;
-  export let metaLocale: string | undefined = undefined;
-  export let locales: string[] | undefined = undefined;
-  export let video: { src: string; type?: string; width?: number; height?: number } | undefined =
-    undefined;
-  export let audio: { src: string; type?: string } | undefined = undefined;
+    url: string;
+    siteName?: string;
+    description?: string;
+    determiner?: string;
+    metaLocale?: string;
+    locales?: string[];
+    video?: { src: string; type?: string; width?: number; height?: number };
+    audio?: { src: string; type?: string };
+  }
+
+  let {
+    type,
+    title,
+    image,
+    url,
+    siteName,
+    description,
+    determiner,
+    metaLocale,
+    locales,
+    video,
+    audio
+  }: Props = $props();
 </script>
 
 <svelte:head>

@@ -49,30 +49,11 @@ function isThruthy(value: string | undefined) {
   return value === 'true' || value === '1';
 }
 
-export default defineConfig(async ({ command, mode, isPreview }) => {
-  let host: string | undefined;
-  let port: number | undefined;
+async function getPlugins(useLocalRedirect: boolean) {
   const plugins: PluginOption[] = [];
 
-  const isLocalServe = command === 'serve' || isPreview === true;
-  const isProduction = mode === 'production' && (isThruthy(env.DOCKER) || isThruthy(env.CF_PAGES));
-
-  const vars = { ...env, ...loadEnv(mode, process.cwd(), ['PUBLIC_']) };
-
-  // If we are running locally, ensure that local.{PUBLIC_SITE_DOMAIN} resolves to localhost, and then use mkcert to generate a certificate
-  if (isLocalServe && !isProduction && !isThruthy(env.CI)) {
-    // Load environment variables
-    if (!vars.PUBLIC_SITE_DOMAIN) {
-      printRed('PUBLIC_SITE_DOMAIN must be set in your environment');
-      process.exit(1);
-    }
-
-    host = `local.${vars.PUBLIC_SITE_DOMAIN}`;
-    port = 443;
-
-    // Ensure we have the host entry redirecting to localhost
-    await ensureFqdnRedirect('127.0.0.1', host);
-
+  if (useLocalRedirect) {
+    // Use the mkcert plugin to generate a certificate
     plugins.push(mkcert());
   }
 
@@ -82,5 +63,44 @@ export default defineConfig(async ({ command, mode, isPreview }) => {
   // Configure the purgeCss plugin
   plugins.push(purgeCss());
 
-  return defineConfig({ plugins, server: { host, port, proxy: {} } });
+  return plugins;
+}
+
+async function getServer(mode: string, useLocalRedirect: boolean) {
+  if (!useLocalRedirect) return undefined;
+
+  const vars = { ...env, ...loadEnv(mode, process.cwd(), ['PUBLIC_']) };
+
+  // Load environment variables
+  if (!vars.PUBLIC_SITE_DOMAIN) {
+    printRed('PUBLIC_SITE_DOMAIN must be set in your environment');
+    process.exit(1);
+  }
+
+  const host = `local.${vars.PUBLIC_SITE_DOMAIN}`;
+
+  // Ensure we have the host entry redirecting to localhost
+  await ensureFqdnRedirect('127.0.0.1', host);
+
+  return { host, port: 443, proxy: {} };
+}
+
+function getTest() {
+  return {
+    include: ['src/**/*.{test,spec}.{js,ts}']
+  };
+}
+
+export default defineConfig(async ({ command, mode, isPreview }) => {
+  const isLocalServe = command === 'serve' || isPreview === true;
+  const isProduction = mode === 'production' && (isThruthy(env.DOCKER) || isThruthy(env.CF_PAGES));
+  
+  // If we are running locally, ensure that local.{PUBLIC_SITE_DOMAIN} resolves to localhost, and then use mkcert to generate a certificate
+  const useLocalRedirect = isLocalServe && !isProduction && !isThruthy(env.CI);
+
+  return defineConfig({
+    plugins: await getPlugins(useLocalRedirect),
+    server: await getServer(mode, useLocalRedirect),
+    test: getTest()
+  });
 });

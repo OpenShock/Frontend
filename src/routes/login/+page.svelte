@@ -5,10 +5,10 @@
   import TextInput from '$lib/components/input/TextInput.svelte';
   import { UserStore } from '$lib/stores/UserStore';
 
-  let usernameOrEmail = '';
-  let password = '';
+  let usernameOrEmail = $state('');
+  let password = $state('');
 
-  function handleSubmission() {
+  function handleSubmission(ev: SubmitEvent) {
     accountApi
       .accountLogin({ email: usernameOrEmail, password })
       .then(() => {
@@ -22,7 +22,7 @@
 </script>
 
 <div class="container h-full mx-auto flex justify-center items-center">
-  <form class="flex flex-col space-y-4" on:submit|preventDefault={handleSubmission}>
+  <form class="flex flex-col space-y-4" onsubmit={handleSubmission}>
     <h2 class="h2">Login</h2>
 
     <TextInput

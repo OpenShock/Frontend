@@ -1,77 +1,75 @@
 <script lang="ts">
   import { tokensApi } from '$lib/api';
   import type { TokenResponse } from '$lib/api/internal/v1';
-  import { getModalStore } from '@skeletonlabs/skeleton';
-  import { escapeHtml } from '$lib/utils/encoding';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { elapsedToString } from '$lib/utils/time';
+  import { escapeHtml } from '$lib/utils/encoding';
+  import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
+  import { onMount } from 'svelte';
 
   const modalStore = getModalStore();
 
-  let tokens: TokenResponse[] = [];
+  const toastStore = getToastStore();
+  let tokens: TokenResponse[] = $state([]);
 
-  let since: number = Date.now();
-  setInterval(() => {
-    since = Date.now();
-  }, 1000);
-
-  async function refreshTokens() {
-    const response = await tokensApi.tokensListTokens();
-    if (!response) {
-      // FIXME: Handle error
-      console.error(response);
-      return;
-    }
-
-    tokens = response;
+  function refreshTokens() {
+    tokensApi
+      .tokensListTokens()
+      .then((response) => {
+        tokens = response;
+      })
+      .catch((e) => {
+        handleApiError(e, toastStore);
+      });
   }
 
-  function deleteToken(token: TokenResponse) {
+  function deleteToken(tokenId: string) {
+    tokensApi
+      .tokensDeleteToken(tokenId)
+      .then(() => {
+        tokens = tokens.filter((t) => t.id !== tokenId);
+      })
+      .catch((e) => {
+        handleApiError(e, toastStore);
+      });
+  }
+
+  function showDeleteTokenModal(token: TokenResponse) {
     modalStore.trigger({
       type: 'confirm',
-      // Data
       title: 'Please Confirm',
       body: `Are you sure you want to delete <b>${escapeHtml(token.name)}</b>?`,
       response: async (r: boolean) => {
-        if (r) await deleteTokenActually(token.id);
+        if (r) deleteToken(token.id);
       },
     });
   }
 
-  async function deleteTokenActually(id: string) {
-    try {
-      const response = await tokensApi.tokensDeleteToken(id);
-
-      tokens = tokens.filter((token) => token.id !== id);
-    } catch (e) {
-      // FIXME: Handle error
-      console.error(e);
-    }
-  }
-
-  function generateToken() {
+  function showGenerateTokenModal() {
     modalStore.trigger({
       type: 'component',
       // Data
       component: 'ApiTokenGenerate',
-      response: async (r: boolean) => {
-        await refreshTokens();
-      },
+      response: refreshTokens,
     });
   }
 
-  function editToken(tokenId: string) {
+  function showEditTokenModal(tokenId: string) {
     modalStore.trigger({
       type: 'component',
       // Data
       component: 'ApiTokenEdit',
       meta: { id: tokenId },
-      response: async (r: boolean) => {
-        await refreshTokens();
-      },
+      response: refreshTokens,
     });
   }
 
-  refreshTokens();
+  onMount(refreshTokens);
+
+  let since: number = $state(Date.now());
+  setInterval(() => {
+    since = Date.now();
+  }, 1000);
 </script>
 
 <div class="container h-full mx-auto p-12 flex flex-col justify-start items-start gap-4">
@@ -95,33 +93,37 @@
           </tr>
         </thead>
         <tbody>
-          {#each tokens as row (row.id)}
+          {#each tokens as token (token.id)}
             <tr>
-              <td>{row.name}</td>
-              <td title={row.createdOn.toLocaleString()}>{row.createdOn.toLocaleDateString()}</td>
-              {#if row.validUntil}
-                <td title={row.validUntil.toLocaleString()}>
-                  {elapsedToString(row.validUntil.getTime() - since)}
+              <td>{token.name}</td>
+              <td title={token.createdOn.toLocaleString()}
+                >{token.createdOn.toLocaleDateString()}</td
+              >
+              {#if token.validUntil}
+                <td title={token.validUntil.toLocaleString()}>
+                  {elapsedToString(token.validUntil.getTime() - since)}
                 </td>
               {:else}
                 <td class="text-warning-500">Never</td>
               {/if}
-              {#if row.lastUsed.getTime() < 0}
+              {#if token.lastUsed.getTime() < 0}
                 <td>Never</td>
               {:else}
-                <td title={row.lastUsed.toLocaleString()}>
-                  {elapsedToString(row.lastUsed.getTime() - since)}
+                <td title={token.lastUsed.toLocaleString()}>
+                  {elapsedToString(token.lastUsed.getTime() - since)}
                 </td>
               {/if}
               <td class="!whitespace-nowrap">
                 <button
                   class="btn-icon variant-filled-primary fa fa-edit"
-                  on:click={() => editToken(row.id)}
+                  onclick={() => showEditTokenModal(token.id)}
+                  aria-label="Edit Token"
                 >
                 </button>
                 <button
                   class="btn-icon variant-filled-primary fa fa-trash"
-                  on:click={() => deleteToken(row)}
+                  onclick={() => showDeleteTokenModal(token)}
+                  aria-label="Delete Token"
                 >
                 </button>
               </td>
@@ -130,6 +132,8 @@
         </tbody>
       </table>
     </div>
-    <button class="btn variant-filled-primary" on:click={generateToken}>Generate Token</button>
+    <button class="btn variant-filled-primary" onclick={showGenerateTokenModal}
+      >Generate Token</button
+    >
   </div>
 </div>
