@@ -15,6 +15,9 @@ apis/index.ts
 index.ts
 models/AdminOnlineDeviceResponse.ts
 models/AdminOnlineDeviceResponseIEnumerableBaseResponse.ts
+models/AdminUserCountsResponse.ts
+models/AdminUserResponse.ts
+models/AdminUserResponsePaginated.ts
 models/BooleanNullableBaseResponse.ts
 models/ChangeEmailRequest.ts
 models/ChangePasswordRequest.ts
@@ -24,12 +27,12 @@ models/ControlLogSenderLight.ts
 models/ControlType.ts
 models/CreateShareCode.ts
 models/CreateTokenRequest.ts
-models/DeviceEdit.ts
 models/DeviceSelfResponse.ts
 models/DeviceSelfResponseBaseResponse.ts
 models/EditTokenRequest.ts
 models/GenericIni.ts
 models/GuidBaseResponse.ts
+models/HubEditRequest.ts
 models/LcgNodeResponse.ts
 models/LcgNodeResponseBaseResponse.ts
 models/LcgResponse.ts
@@ -47,6 +50,7 @@ models/OtaItemIReadOnlyCollectionBaseResponse.ts
 models/OtaUpdateStatus.ts
 models/OwnerShockerResponse.ts
 models/OwnerShockerResponseIEnumerableIEnumerableBaseResponse.ts
+models/PasswordHashingAlgorithm.ts
 models/PasswordResetProcessData.ts
 models/PauseReasonBaseResponse.ts
 models/PauseRequest.ts

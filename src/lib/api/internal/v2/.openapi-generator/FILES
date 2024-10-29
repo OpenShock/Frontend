@@ -1,4 +1,5 @@
 apis/AccountApi.ts
+apis/DevicesApi.ts
 apis/ShockerApi.ts
 apis/index.ts
 index.ts
@@ -6,6 +7,7 @@ models/ChangeUsernameRequest.ts
 models/Control.ts
 models/ControlRequest.ts
 models/ControlType.ts
+models/HubCreateRequest.ts
 models/LoginV2.ts
 models/ObjectBaseResponse.ts
 models/OpenShockProblem.ts
