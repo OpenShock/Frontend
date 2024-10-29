@@ -29,17 +29,10 @@
     tabindex?: number | null | undefined;
   }
 
-  let {
-    name,
-    value = $bindable(),
-    min,
-    max,
-    step,
-    tabindex = undefined
-  }: Props = $props();
+  let { name, value = $bindable(), min, max, step, tabindex = undefined }: Props = $props();
 
-  let canvasHandle: HTMLDivElement = $state();
-  let sliderHandle: HTMLDivElement = $state();
+  let canvasHandle: HTMLDivElement | undefined = $state();
+  let sliderHandle: HTMLDivElement | undefined = $state();
 
   function stupidUnfloatHack(value: number) {
     // This is a stupid hack to avoid floating point errors, needed to make UI not look like shit
@@ -152,7 +145,7 @@
       aria-valuemax={max}
       aria-labelledby={labelId}
       aria-controls={guageId}
-></div>
+    ></div>
     <input id={inputId} type="number" {name} {min} bind:value {max} {step} aria-label="Value" />
     <label for={inputId} aria-label="Name">
       {name}
