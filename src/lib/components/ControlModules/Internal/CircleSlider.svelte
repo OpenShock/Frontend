@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import { RadToDeg, clamp, getCircleX, getCircleY, invLerp, lerp } from '$lib/utils/math';
   import { randStr } from '$lib/utils/rand';
   import { calcSvgArcProps } from '$lib/utils/svg';
@@ -38,7 +36,7 @@
     // This is a stupid hack to avoid floating point errors, needed to make UI not look like shit
     return Math.round((value + Number.EPSILON) * 100) / 100;
   }
-  function updateValueFromSlider(event: MouseEvent | TouchEvent) {
+  function trackingUpdated(event: MouseEvent | TouchEvent) {
     if (!canvasHandle) return;
 
     const rect = canvasHandle.getBoundingClientRect();
@@ -53,9 +51,6 @@
     const fraction = clamp(angle / angleRange + 0.5, 0, 1);
 
     value = lerp(min, max, fraction);
-  }
-  function trackingUpdated(event: MouseEvent | TouchEvent) {
-    updateValueFromSlider(event);
   }
   function trackingStopped() {
     window.removeEventListener('touchmove', trackingUpdated);
@@ -76,7 +71,7 @@
       window.addEventListener('mouseup', trackingStopped);
     }
 
-    updateValueFromSlider(event);
+    trackingUpdated(event);
   }
   onDestroy(() => {
     trackingStopped();
@@ -89,7 +84,7 @@
   });
 
   // Sanitize and update value
-  run(() => {
+  $effect(() => {
     if (value < min) value = min;
     if (value > max) value = max;
     value = stupidUnfloatHack(Math.round(value / step) * step);
@@ -97,16 +92,14 @@
   });
 
   // Update visual progress
-  let progressProps = $state({});
-  run(() => {
-    let degrees = angleStart + invLerp(min, max, $animatedValue) * angleRange;
+  let degrees = $derived(angleStart + invLerp(min, max, $animatedValue) * angleRange);
+  let progressProps = $derived(calcSvgArcProps(center, angleStart, degrees, radius, 10));
 
-    progressProps = calcSvgArcProps(center, angleStart, degrees, radius, 10);
+  $effect(() => {
+    if (!sliderHandle) return;
 
-    if (sliderHandle) {
-      sliderHandle.style.left = `${60 + getCircleX(60, degrees)}px`; // TODO: Avoid using pixel values
-      sliderHandle.style.top = `${60 + getCircleY(60, degrees)}px`; // TODO: Avoid using pixel values
-    }
+    sliderHandle.style.left = `${60 + getCircleX(60, degrees)}px`; // TODO: Avoid using pixel values
+    sliderHandle.style.top = `${60 + getCircleY(60, degrees)}px`; // TODO: Avoid using pixel values
   });
 </script>
 
