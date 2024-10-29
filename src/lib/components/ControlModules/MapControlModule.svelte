@@ -12,10 +12,10 @@
   let intensity: number = 25;
   let duration: number = 1;
 
-  let canvas: HTMLCanvasElement = $state();
+  let canvas: HTMLCanvasElement | undefined = $state();
 
   onMount(() => {
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas?.getContext('2d');
     if (!ctx) return;
 
     // Draw human body
