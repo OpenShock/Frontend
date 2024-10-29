@@ -2,50 +2,48 @@
   import { sessionApi } from '$lib/api';
   import type { LoginSessionResponse } from '$lib/api/internal/v1';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { getToastStore } from '@skeletonlabs/skeleton';
   import { elapsedToString } from '$lib/utils/time';
   import { escapeHtml } from '$lib/utils/encoding';
-  import { getModalStore } from '@skeletonlabs/skeleton';
+  import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
+  import { onMount } from 'svelte';
   import { UAParser } from 'ua-parser-js';
 
   const modalStore = getModalStore();
 
   const toastStore = getToastStore();
-  let sessions: LoginSessionResponse[] = [];
+  let sessions: LoginSessionResponse[] = $state([]);
 
-  let since: number = Date.now();
-  setInterval(() => {
-    since = Date.now();
-  }, 1000);
-
-  async function listSessions() {
-    try {
-      sessions = await sessionApi.sessionsListSessions();
-      console.log(sessions);
-      console.log(typeof sessions[0].expires);
-    } catch (e) {
-      await handleApiError(e, toastStore);
-    }
+  function refreshSessions() {
+    sessionApi
+      .sessionsListSessions()
+      .then((s) => {
+        sessions = s;
+      })
+      .catch((e) => {
+        handleApiError(e, toastStore);
+      });
   }
 
-  async function deleteSession(session: LoginSessionResponse) {
+  function deleteSession(sessionId: string) {
+    sessionApi
+      .sessionsDeleteSession(sessionId)
+      .then(() => {
+        sessions = sessions.filter((s) => s.id !== sessionId);
+      })
+      .catch((e) => {
+        handleApiError(e, toastStore);
+      });
+  }
+
+  function showDeleteSessionModal(session: LoginSessionResponse) {
     modalStore.trigger({
       type: 'confirm',
       title: 'Please Confirm',
-      body: `Are you sure you want to log out from ${escapeHtml(session.userAgent)}?`,
-      response: async (r: boolean) => {
-        if (r) await deleteSessionActually(session.id);
+      body: `Are you sure you want to log out from <b>${escapeHtml(session.userAgent)}</b>?`,
+      response: (r: boolean) => {
+        if (r) deleteSession(session.id);
       },
     });
-  }
-
-  async function deleteSessionActually(sessionId: string) {
-    try {
-      await sessionApi.sessionsDeleteSession(sessionId);
-      sessions = sessions.filter((session) => session.id !== sessionId);
-    } catch (e) {
-      await handleApiError(e, toastStore);
-    }
   }
 
   function getReadableName(userAgent: string | null): string {
@@ -65,7 +63,12 @@
     return name;
   }
 
-  listSessions();
+  onMount(refreshSessions);
+
+  let since: number = $state(Date.now());
+  setInterval(() => {
+    since = Date.now();
+  }, 1000);
 </script>
 
 <div class="container h-full mx-auto p-12 flex flex-col justify-start items-start gap-4">
@@ -90,10 +93,14 @@
           </tr>
         </thead>
         <tbody>
-          {#each sessions as row (row.id)}
+          {#each sessions as session (session.id)}
             <tr>
-              <td title={row.userAgent}>{getReadableName(row.userAgent)}</td>
-              <td title={row.created.toLocaleString()}>{row.created.toLocaleDateString()}</td>
+              <td title={session.userAgent}>
+                {getReadableName(session.userAgent)}
+              </td>
+              <td title={session.created.toLocaleString()}>
+                {session.created.toLocaleDateString()}
+              </td>
 
               <!--
               <td title={row.lastUsed.toLocaleString()}>
@@ -101,20 +108,23 @@
               </td>-->
               <td>Not Implemented</td>
 
-              {#if since < row.expires.getTime()}
-                <td title={row.expires.toLocaleString()}>
-                  {elapsedToString(row.expires.getTime() - since)}
+              {#if since < session.expires.getTime()}
+                <td title={session.expires.toLocaleString()}>
+                  {elapsedToString(session.expires.getTime() - since)}
                 </td>
               {:else}
-                <td title={row.expires.toLocaleString()} class="text-red-500"> Already expired </td>
+                <td title={session.expires.toLocaleString()} class="text-red-500">
+                  Already expired
+                </td>
               {/if}
 
-              <td>{row.ip}</td>
+              <td>{session.ip}</td>
 
               <td class="!whitespace-nowrap">
                 <button
                   class="btn-icon variant-filled-primary fa fa-trash"
-                  on:click={() => deleteSession(row)}
+                  onclick={() => showDeleteSessionModal(session)}
+                  aria-label="Delete Session"
                 ></button>
               </td>
             </tr>

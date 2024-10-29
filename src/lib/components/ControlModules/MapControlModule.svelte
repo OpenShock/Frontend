@@ -3,15 +3,19 @@
   import CircleSlider from './Internal/CircleSlider.svelte';
   import type { ShockerResponse } from '$lib/api/internal/v1';
 
-  export let shockers: ShockerResponse[];
+  interface Props {
+    shockers: ShockerResponse[];
+  }
+
+  let { shockers }: Props = $props();
 
   let intensity: number = 25;
   let duration: number = 1;
 
-  let canvas: HTMLCanvasElement;
+  let canvas: HTMLCanvasElement | undefined = $state();
 
   onMount(() => {
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas?.getContext('2d');
     if (!ctx) return;
 
     // Draw human body
@@ -40,11 +44,10 @@
   });
 
   const dispatch = createEventDispatcher();
-  /*
+
   function emit(type: string) {
-    dispatch('command', { id: shocker.id, type, intensity, duration }); // TODO
+    dispatch('command', { id: 0, type, intensity, duration }); // TODO
   }
-*/
 </script>
 
-<canvas bind:this={canvas} width="2000" height="1300" class="w-full h-full" />
+<canvas bind:this={canvas} width="2000" height="1300" class="w-full h-full"></canvas>

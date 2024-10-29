@@ -11,8 +11,12 @@
     goto('/');
   }
 
-  $: if (browser && !$UserStore.self) {
-    logout();
+  if (browser) {
+    $effect(() => {
+      if (!$UserStore.self) {
+        logout();
+      }
+    });
   }
 </script>
 
@@ -23,7 +27,7 @@
 
       <p>Are you sure you want to logout?</p>
 
-      <button class="btn variant-filled-primary" on:click={logout}> Logout </button>
+      <button class="btn variant-filled-primary" onclick={logout}> Logout </button>
     </div>
   </div>
 {/if}

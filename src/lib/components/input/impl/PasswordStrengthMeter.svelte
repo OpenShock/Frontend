@@ -1,13 +1,19 @@
 <script lang="ts">
   import { getPasswordStrength } from '$lib/inputvalidation/passwordValidator';
 
-  export let popupTarget: string;
-  export let password: string;
+  interface Props {
+    popupTarget: string;
+    password: string;
+  }
 
-  let arrow: HTMLDivElement;
+  let { popupTarget, password }: Props = $props();
 
-  $: strength = getPasswordStrength(password);
-  $: if (arrow) arrow.style.left = `${strength.percent}%`;
+  let arrow: HTMLDivElement | undefined = $state();
+
+  let strength = $derived(getPasswordStrength(password));
+  $effect(() => {
+    if (arrow) arrow.style.left = `${strength.percent}%`;
+  });
 </script>
 
 <div class="card p-4 w-72 shadow-xl" data-popup={popupTarget}>

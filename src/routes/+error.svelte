@@ -6,20 +6,20 @@
   import OpenGraphTags from '$lib/components/metadata/OpenGraphTags.svelte';
   import TwitterSummaryTags from '$lib/components/metadata/Twitter/TwitterSummaryTags.svelte';
 
-  let previousPage: string = base;
+  let previousPage: string = $state(base);
 
   afterNavigate(({ from }) => {
     previousPage = from?.url.pathname || previousPage;
   });
 
-  $: meta = {
+  let meta = $derived({
     title: 'Service Unavailable',
     description: 'OpenShock is currently unavailable',
     image: {
       src: '/logo.svg',
       alt: 'OpenShock Logo',
     },
-  };
+  });
 </script>
 
 <BasicTags {...meta} />

@@ -10,10 +10,11 @@
   import { OwnDevicesStore } from '$lib/stores/DevicesStore';
   import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
 
-  $: shockers =
-    $OwnDevicesStore?.flatMap((device) => device.shockers)?.filter((shocker) => !!shocker) ?? [];
+  let shockers = $derived(
+    $OwnDevicesStore?.flatMap((device) => device.shockers)?.filter((shocker) => !!shocker) ?? []
+  );
 
-  let moduleType: ModuleType = ModuleType.ClassicControlModule;
+  let moduleType: ModuleType = $state(ModuleType.ClassicControlModule);
 
   const modeClick: PopupSettings = {
     event: 'click',
@@ -55,25 +56,25 @@
           <div class="flex gap-2">
             <button
               class="btn p-2 variant-filled-secondary"
-              on:click={() => (moduleType = ModuleType.ClassicControlModule)}
+              onclick={() => (moduleType = ModuleType.ClassicControlModule)}
             >
               Classic
             </button>
             <button
               class="btn p-2 variant-filled-secondary"
-              on:click={() => (moduleType = ModuleType.RichControlModule)}
+              onclick={() => (moduleType = ModuleType.RichControlModule)}
             >
               Rich
             </button>
             <button
               class="btn p-1 variant-filled-secondary"
-              on:click={() => (moduleType = ModuleType.SimpleControlModule)}
+              onclick={() => (moduleType = ModuleType.SimpleControlModule)}
             >
               Simple
             </button>
             <button
               class="btn p-1 variant-filled-secondary"
-              on:click={() => (moduleType = ModuleType.MapControlModule)}
+              onclick={() => (moduleType = ModuleType.MapControlModule)}
             >
               Map
             </button>
@@ -91,7 +92,7 @@
       <SimpleControlHeader />
     {/if}
     {#if moduleType === ModuleType.MapControlModule}
-      <MapControlModule {shockers} on:command={handleCommand} />
+      <MapControlModule {shockers} />
     {:else}
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
         {#each shockers ?? [] as shocker (shocker.id)}

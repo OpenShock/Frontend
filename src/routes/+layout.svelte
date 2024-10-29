@@ -10,6 +10,12 @@
   import { modalRegistry } from '$lib/modals';
   import { page } from '$app/stores';
   import { buildMetaData } from '$lib/metadata';
+  
+  interface Props {
+    children?: import('svelte').Snippet;
+  }
+
+  let { children }: Props = $props();
 
   storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
   initializeStores();
@@ -24,9 +30,15 @@
 <OpenGraphTags type="website" {...meta} url={$page.url.origin} />
 
 <AppShell>
-  <Header slot="header" />
-  <Sidebar slot="sidebarLeft" />
-  <slot />
+  {#snippet header()}
+    <Header  />
+  {/snippet}
+  {#snippet sidebarLeft()}
+    <Sidebar  />
+  {/snippet}
+  {@render children?.()}
 
-  <Footer slot="pageFooter"/>
+  {#snippet pageFooter()}
+    <Footer />
+  {/snippet}
 </AppShell>

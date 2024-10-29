@@ -6,27 +6,35 @@
   import { onMount } from 'svelte';
   import { PUBLIC_TURNSTILE_DEV_BYPASS_VALUE, PUBLIC_TURNSTILE_SITE_KEY } from '$env/static/public';
 
-  export let action: string;
-  export let cData: string | undefined = undefined;
-  export let response: string | null = null;
+  interface Props {
+    action: string;
+    cData?: string;
+    response?: string | null;
+  }
 
-  let turnstile: TurnstileInstance | undefined;
-  let element: HTMLDivElement;
+  let { action, cData, response = $bindable(null) }: Props = $props();
 
+  let turnstile: TurnstileInstance | undefined = $state();
+  let element: HTMLDivElement | undefined = $state();
+
+  function resetTurnstile() {
+    if (!turnstile || !element) return;
+    turnstile?.reset(element);
+  }
   function handleExpired() {
     response = null;
     // Reset the widget after 5 seconds to prevent the user from spamming the button
-    setTimeout(() => turnstile?.reset(element), 5000);
+    setTimeout(resetTurnstile, 5000);
   }
   function handleTimeout() {
     response = null;
     // Reset the widget after 5 seconds to prevent the user from spamming the button
-    setTimeout(() => turnstile?.reset(element), 5000);
+    setTimeout(resetTurnstile, 5000);
   }
   function handleError() {
     response = null;
     // Reset the widget after 5 seconds to prevent the user from spamming the button
-    setTimeout(() => turnstile?.reset(element), 5000);
+    setTimeout(resetTurnstile, 5000);
   }
 
   if (browser) {
@@ -39,22 +47,25 @@
     }
   }
 
-  let isLoading = true;
-  $: if (turnstile && isLoading) {
-    turnstile.ready(() => (isLoading = false));
-  }
-  $: if (turnstile && !isLoading) {
-    turnstile.render(element, {
-      sitekey: PUBLIC_TURNSTILE_SITE_KEY,
-      action,
-      cData,
-      theme: $modeCurrent ? 'light' : 'dark',
-      callback: (token) => (response = token),
-      'expired-callback': handleExpired,
-      'timeout-callback': handleTimeout,
-      'error-callback': handleError,
-    });
-  }
+  let isLoading = $state(true);
+  $effect(() => {
+    if (!turnstile) return;
+
+    if (isLoading) {
+      turnstile.ready(() => (isLoading = false));
+    } else if (element) {
+      turnstile.render(element, {
+        sitekey: PUBLIC_TURNSTILE_SITE_KEY,
+        action,
+        cData,
+        theme: $modeCurrent ? 'light' : 'dark',
+        callback: (token) => (response = token),
+        'expired-callback': handleExpired,
+        'timeout-callback': handleTimeout,
+        'error-callback': handleError,
+      });
+    }
+  });
 </script>
 
 <!-- see: https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/#widget-size -->
@@ -63,7 +74,7 @@
     <!-- Turnstile placeholder -->
     <div id="placeholder">
       {#if dev}
-        <i class="fa fa-bug text-lg" />
+        <i class="fa fa-bug text-lg"></i>
         <span> Turnstile disabled </span>
       {:else}
         <ProgressRadial stroke={120} width="w-8" />
@@ -87,8 +98,12 @@
   }
   #placeholder {
     @apply flex h-full select-none items-center justify-center gap-3 p-3;
-    @apply bg-[#fafafa] dark:bg-[#222];
-    @apply border border-[#e0e0e0] dark:border-[#666];
+    @apply bg-[#fafafa];
+    @apply border border-[#e0e0e0];
+  }
+  :global(.dark) #placeholder {
+    @apply bg-[#222];
+    @apply border-[#666];
   }
   #logo {
     @apply mb-auto ml-auto h-7 w-auto;

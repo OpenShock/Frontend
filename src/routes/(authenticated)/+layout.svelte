@@ -2,6 +2,11 @@
   import { signalr_state } from '$lib/signalr/connection';
   import { UserStore } from '$lib/stores/UserStore';
   import { HubConnectionState } from '@microsoft/signalr';
+  interface Props {
+    children?: import('svelte').Snippet;
+  }
+
+  let { children }: Props = $props();
 </script>
 
 {#if $UserStore.self === null}
@@ -14,5 +19,5 @@
     <h1 class="text-4xl">Connecting to server...</h1>
   </div>
 {:else}
-  <slot />
+  {@render children?.()}
 {/if}

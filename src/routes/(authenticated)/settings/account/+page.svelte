@@ -11,22 +11,20 @@
 
   const toastStore = getToastStore();
 
-  let username: string = '';
-  let email: string = '';
+  let username: string = $state('');
+  let email: string = $state('');
 
-  let currentPassword: string = '';
-  $: currentPasswordValid = currentPassword.length > 0;
+  let currentPassword: string = $state('');
+  let currentPasswordValid = $derived(currentPassword.length > 0);
 
-  let password: string = '';
-  let passwordValid: boolean = false;
+  let password: string = $state('');
+  let passwordValid: boolean = $state(false);
 
-  let passwordConfirm: string = '';
+  let passwordConfirm: string = $state('');
 
   async function submitUsername() {
     try {
-      const response = await authenticatedAccountApi.authenticatedAccountChangeUsername({
-        username: username,
-      });
+      await authenticatedAccountApi.authenticatedAccountChangeUsername({ username });
 
       toastStore.trigger({
         background: 'variant-filled-success',
@@ -58,7 +56,7 @@
     console.log('Submitting password');
   }
 
-  $: canSubmitPassword = currentPasswordValid && passwordValid && password == passwordConfirm;
+  let canSubmitPassword = $derived(currentPasswordValid && passwordValid && password == passwordConfirm);
 </script>
 
 {#if $UserStore.self}
@@ -87,9 +85,13 @@
 
       <Accordion>
         <AccordionItem>
-          <svelte:fragment slot="lead"><i class="fa fa-key"></i></svelte:fragment>
-          <svelte:fragment slot="summary">Change your password</svelte:fragment>
-          <svelte:fragment slot="content">
+          {#snippet lead()}
+            <i class="fa fa-key"></i>
+          {/snippet}
+          {#snippet summary()}
+            Change your password
+          {/snippet}
+          {#snippet content()}
             <div class="rounded-lg border border-gray-700 p-5 mx-[-1rem]">
               <PasswordInput
                 label="Current Password"
@@ -120,7 +122,7 @@
                 >Change Password</button
               >
             </div>
-          </svelte:fragment>
+          {/snippet}
         </AccordionItem>
       </Accordion>
     </div>

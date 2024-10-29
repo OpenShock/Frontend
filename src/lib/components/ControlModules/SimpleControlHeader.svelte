@@ -1,9 +1,9 @@
 <script lang="ts">
   import CircleSlider from "./Internal/CircleSlider.svelte";
 
-  let shockIntensity: number = 25;
-  let vibrationIntensity: number = 25;
-  let duration: number = 1;
+  let shockIntensity: number = $state(25);
+  let vibrationIntensity: number = $state(25);
+  let duration: number = $state(1);
 </script>
 
 <div
@@ -11,13 +11,13 @@
 >
   <!-- Sliders -->
   <div class="grid grid-cols-[24px_auto_40px] gap-1 items-center text-center">
-    <i class="fa-solid fa-bolt" />
+    <i class="fa-solid fa-bolt"></i>
     <input type="range" bind:value={shockIntensity} min="0" max="100" step="1" />
     <p>{shockIntensity}%</p>
-    <i class="fa-solid fa-volume-high" />
+    <i class="fa-solid fa-volume-high"></i>
     <input type="range" bind:value={vibrationIntensity} min="0" max="100" step="1" />
     <p>{vibrationIntensity}%</p>
-    <i class="fa-solid fa-stopwatch" />
+    <i class="fa-solid fa-stopwatch"></i>
     <input type="range" bind:value={duration} min="0.3" max="30" step="0.3" />
     <p>{duration}s</p>
   </div>

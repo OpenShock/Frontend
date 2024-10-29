@@ -4,21 +4,20 @@
   import { getModalStore } from '@skeletonlabs/skeleton';
   import { SerialPortsStore } from '$lib/stores/SerialPortsStore';
 
-  export let port: SerialPort | null = null;
-  export let disabled: boolean = false;
-  export let terminalOpen: boolean = false;
+  interface Props {
+    port?: SerialPort | null;
+    disabled?: boolean;
+    terminalOpen?: boolean;
+  }
+
+  let { port = $bindable(null), disabled = false, terminalOpen = $bindable(false) }: Props = $props();
 
   const filters = [{ usbVendorId: 0x1a86 }, { usbVendorId: 0x10c4 }, { usbVendorId: 0x303a }];
 
   const modalStore = getModalStore();
 
-  let loading = false;
-  let errorMessage: Error | null = null;
-
-  // Remove port if disconnected
-  $: if (port && !$SerialPortsStore.includes(port)) {
-    port = null;
-  }
+  let loading = $state(false);
+  let errorMessage: Error | null = $state(null);
 
   async function OpenPort() {
     loading = true;
@@ -53,6 +52,13 @@
 
     return parts.join('&');
   }
+
+  // Remove port if disconnected
+  $effect(() => {
+    if (port && !$SerialPortsStore.includes(port)) {
+      port = null;
+    }
+  });
 </script>
 
 <style>
@@ -68,8 +74,11 @@
   <div class="flex flex-row items-center justify-between">
     <h3 class="h3 font-bold">Select your device</h3>
     <button
-    on:click={() => terminalOpen = !terminalOpen}
-    class={"btn btn-icon variant-outline-primary fa-solid fa-arrow-right transition-transform " + (terminalOpen ? "flip-arrow" : "")}></button>
+      onclick={() => terminalOpen = !terminalOpen}
+      class={"btn btn-icon variant-outline-primary fa-solid fa-arrow-right transition-transform " + (terminalOpen ? "flip-arrow" : "")}
+      aria-label="Toggle terminal"
+    >
+    </button>
   </div>
     <div class="p-2">
       {#if port === null}
@@ -83,7 +92,7 @@
       {/if}
       {#if errorMessage !== null && errorMessage.name !== 'NotFoundError'}
         <div class="flex flex-row items-center justify-start gap-2">
-          <i class="fa fa-exclamation-triangle text-yellow-500" />
+          <i class="fa fa-exclamation-triangle text-yellow-500"></i>
           <p class="text-yellow-500">Error: {errorMessage.message}</p>
         </div>
       {/if}
@@ -92,27 +101,27 @@
       {#if port === null}
         <button
           class="btn variant-filled-primary gap-2 flex-1"
-          on:click={OpenPort}
+          onclick={OpenPort}
           disabled={disabled || loading}
         >
-          <i class="fa fa-microchip" />
+          <i class="fa fa-microchip"></i>
           Select Device
         </button>
         <button
           class="btn variant-filled-primary gap-2 flex-1"
-          on:click={() => modalStore.trigger({ type: 'component', component: 'InstallDrivers' })}
+          onclick={() => modalStore.trigger({ type: 'component', component: 'InstallDrivers' })}
           disabled={disabled || loading}
         >
-          <i class="fa fa-download" />
+          <i class="fa fa-download"></i>
           Install Drivers
         </button>
       {:else}
         <button
           class="btn variant-filled-primary gap-2 w-full"
-          on:click={() => (port = null)}
+          onclick={() => (port = null)}
           disabled={disabled || loading}
         >
-          <i class="fa fa-times" />
+          <i class="fa fa-times"></i>
           Disconnect Device
         </button>
       {/if}
@@ -125,15 +134,15 @@
     <h3 class="h3">Please use one of the following browsers:</h3>
     <div class="logo-cloud grid-cols-1 lg:!grid-cols-3 gap-1">
       <a class="logo-item" href="https://www.google.com/chrome/">
-        <span class="fa-brands fa-chrome fa-xl" />
+        <span class="fa-brands fa-chrome fa-xl"></span>
         <span>Chrome</span>
       </a>
       <a class="logo-item" href="https://www.microsoft.com/en-us/edge">
-        <span class="fa-brands fa-edge fa-xl" />
+        <span class="fa-brands fa-edge fa-xl"></span>
         <span>Edge</span>
       </a>
       <a class="logo-item" href="https://www.opera.com/">
-        <span class="fa-brands fa-opera fa-xl" />
+        <span class="fa-brands fa-opera fa-xl"></span>
         <span>Opera</span>
       </a>
     </div>

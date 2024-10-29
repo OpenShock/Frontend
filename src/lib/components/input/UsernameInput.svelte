@@ -9,22 +9,37 @@
   import { accountApi } from '$lib/api';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { getToastStore } from '@skeletonlabs/skeleton';
+  import type { FullAutoFill } from 'svelte/elements';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import type { ButtonSettings } from '$lib/components/input/impl/ButtonSettings';
 
   const toastStore = getToastStore();
 
-  export let label: string;
-  export let placeholder: string | undefined = undefined;
-  export let autocomplete: string | undefined = 'username';
-  export let value: string;
-  export let valid: boolean = false;
-  export let validate: boolean = true;
+  interface Props {
+    label: string;
+    placeholder?: string;
+    autocomplete?: FullAutoFill;
+    value: string;
+    valid?: boolean;
+    validate?: boolean;
+    icon?: `fa-${string}`;
+    button?: ButtonSettings;
+    oninput?: (value: string) => void | undefined;
+  }
 
-  export let icon: `fa-${string}` | undefined = undefined;
-  export let button: ButtonSettings | undefined = undefined;
+  let {
+    label,
+    placeholder,
+    autocomplete = 'username',
+    value = $bindable(),
+    valid = $bindable(false),
+    validate = true,
+    icon,
+    button,
+    oninput,
+  }: Props = $props();
 
-  let validationResult: ValidationResult | null = null;
+  let validationResult: ValidationResult | null = $state(null);
   let usernameDebounce: ReturnType<typeof setTimeout> | null = null;
   function checkUsernameAvailability() {
     // Stop the previous debounce timer if it exists
@@ -55,20 +70,22 @@
     }, 250);
   }
 
-  $: if (validate) {
-    const valRes = validateUsername(value);
-    if (valRes?.valid) {
-      // Basic validation passed, check availability
-      checkUsernameAvailability();
+  $effect(() => {
+    if (validate) {
+      const valRes = validateUsername(value);
+      if (valRes?.valid) {
+        // Basic validation passed, check availability
+        checkUsernameAvailability();
+      } else {
+        // Basic validation failed, return the failed validation result
+        validationResult = valRes;
+      }
+      valid = validationResult?.valid ?? false;
     } else {
-      // Basic validation failed, return the failed validation result
-      validationResult = valRes;
+      validationResult = { valid: true };
+      valid = true;
     }
-  } else {
-    validationResult = { valid: true };
-  }
-
-  $: valid = validationResult?.valid ?? false;
+  });
 </script>
 
 <TextInput
@@ -79,5 +96,5 @@
   {validationResult}
   {icon}
   {button}
-  on:input
+  {oninput}
 />

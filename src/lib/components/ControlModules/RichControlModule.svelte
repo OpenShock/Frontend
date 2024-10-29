@@ -2,10 +2,14 @@
   import type { ShockerResponse } from '$lib/api/internal/v1';
   import { createEventDispatcher } from 'svelte';
 
-  export let shocker: ShockerResponse;
+  interface Props {
+    shocker: ShockerResponse;
+  }
 
-  let intensity: number = 25;
-  let duration: number = 1;
+  let { shocker }: Props = $props();
+
+  let intensity: number = $state(25);
+  let duration: number = $state(1);
 
   const dispatch = createEventDispatcher();
 
@@ -21,26 +25,38 @@
   <h2 class="text-lg font-bold">{shocker.name}</h2>
   <!-- Sliders -->
   <div class="grid grid-cols-[24px_128px_40px] gap-1 items-center text-center">
-    <i class="fa-solid fa-signal" />
+    <i class="fa-solid fa-signal"></i>
     <input type="range" bind:value={intensity} min="0" max="100" step="1" />
     <p>{intensity}%</p>
-    <i class="fa-solid fa-stopwatch" />
+    <i class="fa-solid fa-stopwatch"></i>
     <input type="range" bind:value={duration} min="0.3" max="30" step="0.3" />
     <p>{duration}s</p>
   </div>
   <!-- Buttons -->
   <div class="w-full flex gap-2">
     <!-- Beep button -->
-    <button class="btn p-2 bg-primary-500 rounded-md flex-1" on:click={() => emit('beep')}>
-      <i class="fa-solid fa-volume-high" />
+    <button
+      class="btn p-2 bg-primary-500 rounded-md flex-1"
+      onclick={() => emit('beep')}
+      aria-label="Beep"
+    >
+      <i class="fa-solid fa-volume-high"></i>
     </button>
     <!-- Vibrate button -->
-    <button class="btn p-2 bg-primary-500 rounded-md flex-1" on:click={() => emit('vibrate')}>
-      <i class="fa-solid fa-water" />
+    <button
+      class="btn p-2 bg-primary-500 rounded-md flex-1"
+      onclick={() => emit('vibrate')}
+      aria-label="Vibrate"
+    >
+      <i class="fa-solid fa-water"></i>
     </button>
     <!-- Shock button -->
-    <button class="btn p-2 bg-primary-500 rounded-md flex-1" on:click={() => emit('shock')}>
-      <i class="fa-solid fa-bolt" />
+    <button
+      class="btn p-2 bg-primary-500 rounded-md flex-1"
+      onclick={() => emit('shock')}
+      aria-label="Shock"
+    >
+      <i class="fa-solid fa-bolt"></i>
     </button>
   </div>
 </div>

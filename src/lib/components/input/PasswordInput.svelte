@@ -6,24 +6,37 @@
   import { randStr } from '$lib/utils/rand';
   import { type PopupSettings, getToastStore } from '@skeletonlabs/skeleton';
   import TextInput from './TextInput.svelte';
+  import type { FullAutoFill } from 'svelte/elements';
   import PasswordStrengthMeter from './impl/PasswordStrengthMeter.svelte';
   import type { ButtonSettings } from './impl/ButtonSettings';
-  import { createEventDispatcher } from 'svelte';
 
-  const dispatch = createEventDispatcher();
   const toastStore = getToastStore();
 
-  export let label: string;
-  export let placeholder: string | undefined = undefined;
-  export let autocomplete: string | undefined = 'current-password';
-  export let value: string;
-  export let valueShown = false;
-  export let valid: boolean = false;
-  export let validate: boolean | 'string' | 'pwned' | ValidationResult | null = false;
+  interface Props {
+    label: string;
+    placeholder?: string;
+    autocomplete?: FullAutoFill;
+    value: string;
+    valueShown?: boolean;
+    valid?: boolean;
+    validate?: boolean | 'string' | 'pwned' | ValidationResult | null;
+    showStrengthMeter?: boolean;
+    icon?: `fa-${string}`;
+    oninput?: (value: string) => void | undefined;
+  }
 
-  export let showStrengthMeter = false;
-
-  export let icon: `fa-${string}` | undefined = undefined;
+  let {
+    label,
+    placeholder,
+    autocomplete = 'current-password',
+    value = $bindable(),
+    valueShown = $bindable(false),
+    valid = $bindable(false),
+    validate = false,
+    showStrengthMeter = false,
+    icon,
+    oninput
+  }: Props = $props();
 
   const popupSettings: PopupSettings = {
     event: 'focus-blur',
@@ -31,7 +44,7 @@
     placement: 'left-start',
   };
 
-  let validationResult: ValidationResult | null = null;
+  let validationResult: ValidationResult | null = $state(null);
   let passwordDebounce: ReturnType<typeof setTimeout> | null = null;
   function checkHIBP(str: string) {
     // Stop the previous debounce timer if it exists
@@ -72,40 +85,37 @@
     }, 500);
   }
 
-  $: if (validate === true || validate === 'string') {
-    // Do basic password validation
-    const valres = validatePassword(value);
-    if (valres?.valid) {
-      // Basic validation passed, check if the password has been pwned
+  $effect(() => {
+    if (validate === true || validate === 'string') {
+      // Do basic password validation
+      const valres = validatePassword(value);
+      if (valres?.valid) {
+        // Basic validation passed, check if the password has been pwned
+        checkHIBP(value);
+      } else {
+        // Basic validation failed, return the failed validation result
+        validationResult = valres;
+      }
+    } else if (validate === 'pwned') {
       checkHIBP(value);
+    } else if (validate === false) {
+      // Only if validate is set to false will the password be considered valid
+      validationResult = { valid: validate === false };
     } else {
-      // Basic validation failed, return the failed validation result
-      validationResult = valres;
+      // If validate is a ValidationResult object, use it as the validation result
+      validationResult = validate;
     }
-  } else if (validate === 'pwned') {
-    checkHIBP(value);
-  } else if (validate === false) {
-    // Only if validate is set to false will the password be considered valid
-    validationResult = { valid: validate === false };
-  } else {
-    // If validate is a ValidationResult object, use it as the validation result
-    validationResult = validate;
-  }
+  });
 
-  $: valid = validationResult?.valid ?? false;
+  $effect(() => {
+    valid = validationResult?.valid ?? false;
+  });
 
-  let button: ButtonSettings;
-  $: button = {
+  let button: ButtonSettings = $derived({
     icon: valueShown ? 'fa-eye-slash' : 'fa-eye',
     class: 'cursor-pointer',
     onClick: () => (valueShown = !valueShown),
-  };
-
-  function handleInput(event: CustomEvent<any>) {
-    const target = event.currentTarget as HTMLInputElement;
-    value = target.value;
-    dispatch('input', event);
-  }
+  });
 </script>
 
 <TextInput
@@ -118,11 +128,11 @@
   {icon}
   {button}
   {popupSettings}
-  on:input={handleInput}
+  {oninput}
 >
-  <svelte:fragment slot="popup">
+  {#snippet popup()}
     {#if showStrengthMeter}
       <PasswordStrengthMeter popupTarget={popupSettings.target} password={value} />
     {/if}
-  </svelte:fragment>
+  {/snippet}
 </TextInput>

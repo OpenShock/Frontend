@@ -38,7 +38,7 @@ export interface ControlRequest {
      * @type {string}
      * @memberof ControlRequest
      */
-    customName: string | null;
+    customName?: string | null;
 }
 
 /**
@@ -46,7 +46,6 @@ export interface ControlRequest {
  */
 export function instanceOfControlRequest(value: object): value is ControlRequest {
     if (!('shocks' in value) || value['shocks'] === undefined) return false;
-    if (!('customName' in value) || value['customName'] === undefined) return false;
     return true;
 }
 
@@ -61,7 +60,7 @@ export function ControlRequestFromJSONTyped(json: any, ignoreDiscriminator: bool
     return {
         
         'shocks': (json['shocks'] == null ? null : (json['shocks'] as Array<any>).map(ControlFromJSON)),
-        'customName': json['customName'],
+        'customName': json['customName'] == null ? undefined : json['customName'],
     };
 }
 

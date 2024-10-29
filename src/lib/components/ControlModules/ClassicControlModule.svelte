@@ -3,10 +3,14 @@
   import CircleSlider from './Internal/CircleSlider.svelte';
   import type { ShockerResponse } from '$lib/api/internal/v1';
 
-  export let shocker: ShockerResponse;
+  interface Props {
+    shocker: ShockerResponse;
+  }
 
-  let intensity: number = 25;
-  let duration: number = 1;
+  let { shocker }: Props = $props();
+
+  let intensity: number = $state(25);
+  let duration: number = $state(1);
 
   const dispatch = createEventDispatcher();
 
@@ -28,16 +32,28 @@
   <!-- Buttons -->
   <div class="w-full flex gap-2">
     <!-- Beep button -->
-    <button class="btn p-2 bg-primary-500 rounded-md flex-1" on:click={() => emit('beep')}>
-      <i class="fa-solid fa-volume-high" />
+    <button
+      class="btn p-2 bg-primary-500 rounded-md flex-1"
+      onclick={() => emit('beep')}
+      aria-label="Beep"
+    >
+      <i class="fa-solid fa-volume-high"></i>
     </button>
     <!-- Vibrate button -->
-    <button class="btn p-2 bg-primary-500 rounded-md flex-1" on:click={() => emit('vibrate')}>
-      <i class="fa-solid fa-water" />
+    <button
+      class="btn p-2 bg-primary-500 rounded-md flex-1"
+      onclick={() => emit('vibrate')}
+      aria-label="Vibrate"
+    >
+      <i class="fa-solid fa-water"></i>
     </button>
     <!-- Shock button -->
-    <button class="btn p-2 bg-primary-500 rounded-md flex-1" on:click={() => emit('shock')}>
-      <i class="fa-solid fa-bolt" />
+    <button
+      class="btn p-2 bg-primary-500 rounded-md flex-1"
+      onclick={() => emit('shock')}
+      aria-label="Shock"
+    >
+      <i class="fa-solid fa-bolt"></i>
     </button>
   </div>
 </div>

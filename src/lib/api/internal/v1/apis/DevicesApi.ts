@@ -15,10 +15,8 @@
 
 import * as runtime from '../runtime';
 import type {
-  DeviceEdit,
-  GuidBaseResponse,
+  HubEditRequest,
   LcgResponseBaseResponse,
-  ObjectBaseResponse,
   OpenShockProblem,
   OtaItemIReadOnlyCollectionBaseResponse,
   ResponseDeviceIEnumerableBaseResponse,
@@ -27,14 +25,10 @@ import type {
   StringBaseResponse,
 } from '../models/index';
 import {
-    DeviceEditFromJSON,
-    DeviceEditToJSON,
-    GuidBaseResponseFromJSON,
-    GuidBaseResponseToJSON,
+    HubEditRequestFromJSON,
+    HubEditRequestToJSON,
     LcgResponseBaseResponseFromJSON,
     LcgResponseBaseResponseToJSON,
-    ObjectBaseResponseFromJSON,
-    ObjectBaseResponseToJSON,
     OpenShockProblemFromJSON,
     OpenShockProblemToJSON,
     OtaItemIReadOnlyCollectionBaseResponseFromJSON,
@@ -51,7 +45,7 @@ import {
 
 export interface DevicesEditDeviceRequest {
     deviceId: string;
-    deviceEdit?: DeviceEdit;
+    hubEditRequest?: HubEditRequest;
 }
 
 export interface DevicesGetDeviceByIdRequest {
@@ -96,28 +90,28 @@ export interface DevicesApiInterface {
      * @throws {RequiredError}
      * @memberof DevicesApiInterface
      */
-    devicesCreateDeviceRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GuidBaseResponse>>;
+    devicesCreateDeviceRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>>;
 
     /**
      * Create a new device for the current user
      */
-    devicesCreateDevice(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GuidBaseResponse>;
+    devicesCreateDevice(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
 
     /**
      * 
      * @summary Edit a device
      * @param {string} deviceId 
-     * @param {DeviceEdit} [deviceEdit] 
+     * @param {HubEditRequest} [hubEditRequest] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DevicesApiInterface
      */
-    devicesEditDeviceRaw(requestParameters: DevicesEditDeviceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>>;
+    devicesEditDeviceRaw(requestParameters: DevicesEditDeviceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>>;
 
     /**
      * Edit a device
      */
-    devicesEditDevice(deviceId: string, deviceEdit?: DeviceEdit, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse>;
+    devicesEditDevice(deviceId: string, hubEditRequest?: HubEditRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any>;
 
     /**
      * 
@@ -216,12 +210,12 @@ export interface DevicesApiInterface {
      * @throws {RequiredError}
      * @memberof DevicesApiInterface
      */
-    devicesRegenerateDeviceTokenRaw(requestParameters: DevicesRegenerateDeviceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>>;
+    devicesRegenerateDeviceTokenRaw(requestParameters: DevicesRegenerateDeviceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>>;
 
     /**
      * Regenerate a device token
      */
-    devicesRegenerateDeviceToken(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse>;
+    devicesRegenerateDeviceToken(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any>;
 
     /**
      * 
@@ -231,12 +225,12 @@ export interface DevicesApiInterface {
      * @throws {RequiredError}
      * @memberof DevicesApiInterface
      */
-    devicesRemoveDeviceRaw(requestParameters: DevicesRemoveDeviceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>>;
+    devicesRemoveDeviceRaw(requestParameters: DevicesRemoveDeviceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>>;
 
     /**
      * Remove a device from current user\'s account
      */
-    devicesRemoveDevice(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse>;
+    devicesRemoveDevice(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any>;
 
 }
 
@@ -248,7 +242,7 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
     /**
      * Create a new device for the current user
      */
-    async devicesCreateDeviceRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GuidBaseResponse>> {
+    async devicesCreateDeviceRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -264,13 +258,17 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GuidBaseResponseFromJSON(jsonValue));
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<string>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
     }
 
     /**
      * Create a new device for the current user
      */
-    async devicesCreateDevice(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GuidBaseResponse> {
+    async devicesCreateDevice(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         const response = await this.devicesCreateDeviceRaw(initOverrides);
         return await response.value();
     }
@@ -278,7 +276,7 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
     /**
      * Edit a device
      */
-    async devicesEditDeviceRaw(requestParameters: DevicesEditDeviceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
+    async devicesEditDeviceRaw(requestParameters: DevicesEditDeviceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
         if (requestParameters['deviceId'] == null) {
             throw new runtime.RequiredError(
                 'deviceId',
@@ -301,17 +299,21 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: DeviceEditToJSON(requestParameters['deviceEdit']),
+            body: HubEditRequestToJSON(requestParameters['hubEditRequest']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<any>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
     }
 
     /**
      * Edit a device
      */
-    async devicesEditDevice(deviceId: string, deviceEdit?: DeviceEdit, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse> {
-        const response = await this.devicesEditDeviceRaw({ deviceId: deviceId, deviceEdit: deviceEdit }, initOverrides);
+    async devicesEditDevice(deviceId: string, hubEditRequest?: HubEditRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
+        const response = await this.devicesEditDeviceRaw({ deviceId: deviceId, hubEditRequest: hubEditRequest }, initOverrides);
         return await response.value();
     }
 
@@ -533,7 +535,7 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
     /**
      * Regenerate a device token
      */
-    async devicesRegenerateDeviceTokenRaw(requestParameters: DevicesRegenerateDeviceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
+    async devicesRegenerateDeviceTokenRaw(requestParameters: DevicesRegenerateDeviceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
         if (requestParameters['deviceId'] == null) {
             throw new runtime.RequiredError(
                 'deviceId',
@@ -556,13 +558,17 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<any>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
     }
 
     /**
      * Regenerate a device token
      */
-    async devicesRegenerateDeviceToken(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse> {
+    async devicesRegenerateDeviceToken(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
         const response = await this.devicesRegenerateDeviceTokenRaw({ deviceId: deviceId }, initOverrides);
         return await response.value();
     }
@@ -570,7 +576,7 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
     /**
      * Remove a device from current user\'s account
      */
-    async devicesRemoveDeviceRaw(requestParameters: DevicesRemoveDeviceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
+    async devicesRemoveDeviceRaw(requestParameters: DevicesRemoveDeviceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
         if (requestParameters['deviceId'] == null) {
             throw new runtime.RequiredError(
                 'deviceId',
@@ -593,13 +599,17 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<any>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
     }
 
     /**
      * Remove a device from current user\'s account
      */
-    async devicesRemoveDevice(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse> {
+    async devicesRemoveDevice(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
         const response = await this.devicesRemoveDeviceRaw({ deviceId: deviceId }, initOverrides);
         return await response.value();
     }
