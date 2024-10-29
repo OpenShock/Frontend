@@ -58,7 +58,7 @@
   #char {
     fill: #000;
   }
-  :is(.dark #char) {
+  :global(.dark) #char {
     fill: #fff;
   }
 </style>

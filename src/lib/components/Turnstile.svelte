@@ -98,8 +98,12 @@
   }
   #placeholder {
     @apply flex h-full select-none items-center justify-center gap-3 p-3;
-    @apply bg-[#fafafa] dark:bg-[#222];
-    @apply border border-[#e0e0e0] dark:border-[#666];
+    @apply bg-[#fafafa];
+    @apply border border-[#e0e0e0];
+  }
+  :global(.dark) #placeholder {
+    @apply bg-[#222];
+    @apply border-[#666];
   }
   #logo {
     @apply mb-auto ml-auto h-7 w-auto;
