@@ -44,11 +44,10 @@
   });
 
   const dispatch = createEventDispatcher();
-  /*
+
   function emit(type: string) {
-    dispatch('command', { id: shocker.id, type, intensity, duration }); // TODO
+    dispatch('command', { id: 0, type, intensity, duration }); // TODO
   }
-*/
 </script>
 
 <canvas bind:this={canvas} width="2000" height="1300" class="w-full h-full"></canvas>
