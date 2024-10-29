@@ -37,7 +37,7 @@
     <a href="/home" class="btn variant-filled-primary">Go Home</a>
   {:else}
     <div class="flex justify-between w-full">
-      <h2 class="h2">Online Users</h2>
+      <h2 class="h2">Online Hubs</h2>
       <button class="btn variant-filled-primary" onclick={fetchOnlineDevices}>
         <i class="fa fa-sync"></i>
         Refresh
