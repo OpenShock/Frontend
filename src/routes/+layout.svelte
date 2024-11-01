@@ -11,12 +11,9 @@
   import { buildMetaData } from '$lib/metadata';
   import { initializeStores } from '$lib/stores';
   import { initializeSignalR } from '$lib/signalr';
+  import type { Snippet } from 'svelte';
 
-  interface Props {
-    children?: import('svelte').Snippet;
-  }
-
-  let { children }: Props = $props();
+  let { children }: { children: Snippet } = $props();
 
   initializeStores();
   initializeSignalR();
@@ -30,16 +27,17 @@
 <TwitterSummaryTags type="summary" {...meta} site="@OpenShockORG" creator="@OpenShockORG" />
 <OpenGraphTags type="website" {...meta} url={$page.url.origin} />
 
-<AppShell>
-  {#snippet header()}
-    <Header  />
-  {/snippet}
-  {#snippet sidebarLeft()}
-    <Sidebar  />
-  {/snippet}
-  {@render children?.()}
-
-  {#snippet pageFooter()}
-    <Footer />
-  {/snippet}
-</AppShell>
+<header>
+  <Header />
+</header>
+<div>
+  <aside>
+    <Sidebar />
+  </aside>
+  <main>
+    {@render children()}
+  </main>
+</div>
+<footer>
+  <Footer />
+</footer>
