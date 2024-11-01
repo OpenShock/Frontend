@@ -1,4 +1,3 @@
-import { browser } from "$app/environment";
 import FlashManager from "$lib/components/EspTool/FlashManager";
 import type { IEspLoaderTerminal } from "esptool-js";
 import { get, writable } from "svelte/store";
@@ -48,13 +47,15 @@ function removePort(port: SerialPort) {
   });
 }
 
-if (browser && 'serial' in navigator) {
-  navigator.serial.addEventListener("disconnect", (e) => removePort(e.target as SerialPort));
-}
-
 export const FlashManagerStore = {
   getManager,
   removeManager,
   removePort,
   subscribe,
 };
+
+export function initializeFlashManagersStore() {
+  if ('serial' in navigator) {
+    navigator.serial.addEventListener("disconnect", (e) => removePort(e.target as SerialPort));
+  }
+}

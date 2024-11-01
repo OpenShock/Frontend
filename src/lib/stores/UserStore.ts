@@ -1,4 +1,3 @@
-import { browser } from "$app/environment";
 import { usersApi } from "$lib/api";
 import type { ApiUser, ApiUserSelf } from "$lib/types/ApiUser";
 import { writable } from "svelte/store";
@@ -24,40 +23,37 @@ function setSelfName(name: string) {
   });
 }
 
-async function refreshSelf() {
-  if (!browser) return;
+function refreshSelf() {
+  usersApi.usersGetSelf()
+    .then(({ data, message }) => {
+      if (!data) {
+        console.error(`Failed to get user self: ${message}`);
+        return;
+      }
 
-  try {
-    const { data, message } = await usersApi.usersGetSelf();
+      const user = {
+        id: data.id!,
+        name: data.name!,
+        avatar: data.image!,
+        rank: data.rank!,
+        email: data.email!,
+      };
 
-    if (!data) {
-      console.error(`Failed to get user self: ${message}`);
-      return;
-    }
-
-    const user = {
-      id: data.id!,
-      name: data.name!,
-      avatar: data.image!,
-      rank: data.rank!,
-      email: data.email!,
-    };
-
-    update((state) => {
-      state.self = user;
-      state.all = updateAllFromSelf(state.all, user);
-      return state;
+      update((state) => {
+        state.self = user;
+        state.all = updateAllFromSelf(state.all, user);
+        return state;
+      });
+    })
+    .catch((error) => {
+      console.error(error); // TODO: Show toast
     });
-  } catch (error) {
-    console.error(error);
-  }
 }
 
 function reset() {
   set({ self: null, all: [] });
 }
 
-refreshSelf();
 
 export const UserStore = {
   subscribe,
@@ -67,3 +63,7 @@ export const UserStore = {
   refreshSelf,
   reset,
 };
+
+export async function initializeUserStore() {
+  await refreshSelf();
+}

@@ -1,7 +1,6 @@
 <script lang="ts">
   import '../app.postcss';
   import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
-  import { AppShell, Modal, Toast, initializeStores, storePopup } from '@skeletonlabs/skeleton';
   import Footer from '$lib/components/layout/Footer.svelte';
   import Header from '$lib/components/layout/Header.svelte';
   import Sidebar from '$lib/components/layout/Sidebar.svelte';
@@ -10,14 +9,14 @@
   import { modalRegistry } from '$lib/modals';
   import { page } from '$app/stores';
   import { buildMetaData } from '$lib/metadata';
-  
+  import { initializeStores } from '$lib/stores';
+
   interface Props {
     children?: import('svelte').Snippet;
   }
 
   let { children }: Props = $props();
 
-  storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
   initializeStores();
 
   const meta = buildMetaData($page);

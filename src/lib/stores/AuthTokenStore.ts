@@ -41,14 +41,16 @@ function updateFromJson(json: string | null) {
   setAll(authToken);
 }
 
-window.addEventListener("storage", (event) => {
-  if (event.storageArea === localStorage && event.key === LOCALSTORAGE_KEY) {
-    updateFromJson(event.newValue);
-  }
-});
-
 export const authTokenStore: Writable<AuthToken | null> = {
   subscribe,
   set: setAll,
   update,
 };
+
+export function initializeAuthTokenStore() {
+  window.addEventListener("storage", (event) => {
+    if (event.storageArea === localStorage && event.key === LOCALSTORAGE_KEY) {
+      updateFromJson(event.newValue);
+    }
+  });
+}
