@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import { RankType } from '$lib/api/internal/v1';
-  import { signalr_state } from '$lib/signalr/connection';
+  import { SignalR_State } from '$lib/signalr';
   import { UserStore } from '$lib/stores/UserStore';
   import { HubConnectionState } from '@microsoft/signalr';
   import { AppRail, AppRailAnchor } from '@skeletonlabs/skeleton';
@@ -151,7 +151,7 @@
   {/if}
 {/snippet}
 
-{#if $UserStore.self !== null && $signalr_state === HubConnectionState.Connected}
+{#if $UserStore.self !== null && $SignalR_State === HubConnectionState.Connected}
   <div class="flex flex-row h-full">
     <AppRail>
       {#snippet lead()}{@render items(leadRoutes)}{/snippet}

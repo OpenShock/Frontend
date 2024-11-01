@@ -2,13 +2,13 @@ import { browser } from '$app/environment';
 import { PUBLIC_BACKEND_API_DOMAIN } from '$env/static/public';
 import { OwnDeviceStatesStore, refreshOwnDevices, type OwnDeviceState } from '$lib/stores/DevicesStore';
 import { UserStore } from '$lib/stores/UserStore';
-import * as SignalR from '@microsoft/signalr';
-import { get, writable } from 'svelte/store';
+import * as SR from '@microsoft/signalr';
+import { get, writable, type Readable } from 'svelte/store';
 
-const signalr_connection = writable<SignalR.HubConnection | null>(null);
-const signalr_state = writable<SignalR.HubConnectionState>(SignalR.HubConnectionState.Disconnected);
+const signalr_connection = writable<SR.HubConnection | null>(null);
+const signalr_state = writable<SR.HubConnectionState>(SR.HubConnectionState.Disconnected);
 
-function isDeviceStatusArray(array: any): array is OwnDeviceState[] {
+function isDeviceStatusArray(array: unknown): array is OwnDeviceState[] {
   if (!array || !Array.isArray(array)) return false;
 
   for (const item of array) {
@@ -37,25 +37,25 @@ async function create_signalr_connection() {
     return;
   }
 
-  connection = new SignalR.HubConnectionBuilder()
-    .configureLogging(SignalR.LogLevel.Debug)
+  connection = new SR.HubConnectionBuilder()
+    .configureLogging(SR.LogLevel.Debug)
     .withUrl(`https://${PUBLIC_BACKEND_API_DOMAIN}/1/hubs/user`, {
-      transport: SignalR.HttpTransportType.WebSockets,
+      transport: SR.HttpTransportType.WebSockets,
       skipNegotiation: true,
     })
     .withAutomaticReconnect([0, 1000, 2000, 5000, 10000, 10000, 15000, 30000, 60000])
     .build();
 
   connection.onclose(() => {
-    signalr_state.set(SignalR.HubConnectionState.Disconnected);
+    signalr_state.set(SR.HubConnectionState.Disconnected);
   });
 
   connection.onreconnecting(() => {
-    signalr_state.set(SignalR.HubConnectionState.Reconnecting);
+    signalr_state.set(SR.HubConnectionState.Reconnecting);
   });
 
   connection.onreconnected(() => {
-    signalr_state.set(SignalR.HubConnectionState.Connected);
+    signalr_state.set(SR.HubConnectionState.Connected);
   });
 
   connection.on('welcome', (message) => {
@@ -91,21 +91,30 @@ function destroy_signalr_connection() {
   }
 }
 
-if (browser) {
+export const SignalR_State = {
+  subscribe: signalr_state.subscribe
+} as Readable<SR.HubConnectionState>;
+
+export const SignalR_Connection = {
+  subscribe: signalr_connection.subscribe
+} as Readable<SR.HubConnection | null>;
+
+export function initializeSignalR() {
+  if (!browser) return;
+
   UserStore.subscribe(({ self }) => {
     if (self === null) {
       destroy_signalr_connection();
     } else {
       create_signalr_connection()
         .then(() => {
-          signalr_state.set(SignalR.HubConnectionState.Connected);
+          signalr_state.set(SR.HubConnectionState.Connected);
         })
         .catch((e) => {
           console.error(e);
-          signalr_state.set(SignalR.HubConnectionState.Disconnected);
+          signalr_state.set(SR.HubConnectionState.Disconnected);
         });
     }
   });
 }
 
-export { signalr_connection, signalr_state };
