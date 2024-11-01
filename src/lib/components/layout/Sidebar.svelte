@@ -133,12 +133,13 @@
         <p class="font-bold text-2xl {category.headerClass}">{category.name}</p>
         <nav class="list-nav">
           <ul>
-            {#each category.routes as route }
+            {#each category.routes as route}
               <li>
                 <a
                   href={route.href}
                   target={route.target}
-                  class={'transition ease-in-out ' + ($page.url.pathname === route.href ? 'bg-primary-active-token' : '')}
+                  class={'transition ease-in-out ' +
+                    ($page.url.pathname === route.href ? 'bg-primary-active-token' : '')}
                 >
                   {route.name}
                 </a>
@@ -152,12 +153,12 @@
 {/snippet}
 
 {#if $UserStore.self !== null && $SignalR_State === HubConnectionState.Connected}
-  <div class="flex flex-row h-full">
+  <sidebar class="flex flex-row h-full">
     <AppRail>
       {#snippet lead()}{@render items(leadRoutes)}{/snippet}
       {#snippet trail()}{@render items(trailRoutes)}{/snippet}
     </AppRail>
     {@render nestedSidebar('/settings', settingsRoutes)}
     {@render nestedSidebar('/admin', adminRoutes)}
-  </div>
+  </sidebar>
 {/if}

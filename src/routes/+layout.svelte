@@ -1,6 +1,5 @@
 <script lang="ts">
   import '../app.postcss';
-  import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
   import Footer from '$lib/components/layout/Footer.svelte';
   import Header from '$lib/components/layout/Header.svelte';
   import Sidebar from '$lib/components/layout/Sidebar.svelte';
@@ -27,17 +26,11 @@
 <TwitterSummaryTags type="summary" {...meta} site="@OpenShockORG" creator="@OpenShockORG" />
 <OpenGraphTags type="website" {...meta} url={$page.url.origin} />
 
-<header>
-  <Header />
-</header>
+<Header />
 <div>
-  <aside>
-    <Sidebar />
-  </aside>
+  <Sidebar />
   <main>
     {@render children()}
   </main>
 </div>
-<footer>
-  <Footer />
-</footer>
+<Footer />
