@@ -3,13 +3,13 @@ import { writable, type Updater } from "svelte/store";
 
 function getLocalStoreState() {
   const scheme = localStorage.getItem('theme');
-  if (scheme === 'dark' || scheme === 'light' || scheme === 'default') {
+  if (scheme === 'dark' || scheme === 'light' || scheme === 'auto') {
     return scheme;
   }
 
-  localStorage.setItem('theme', 'default');
+  localStorage.setItem('theme', 'auto');
 
-  return 'default';
+  return 'auto';
 }
 
 function getDarkReaderState() {
@@ -25,12 +25,12 @@ function getDarkReaderState() {
 function getColorSchemePreference() {
   // If we are not in a browser environment, return default
   if (!browser) {
-    return 'default';
+    return 'auto';
   }
 
   // Check if local storage has a theme stored
   const localStoreState = getLocalStoreState();
-  if (localStoreState !== 'default') {
+  if (localStoreState !== 'auto') {
     return localStoreState;
   }
 
@@ -45,10 +45,10 @@ function getColorSchemePreference() {
     return 'light';
   }
 
-  return 'default';
+  return 'auto';
 }
 
-const { set, update, subscribe } = writable<'dark' | 'light' | 'default'>(getColorSchemePreference());
+const { set, update, subscribe } = writable<'dark' | 'light' | 'auto'>(getColorSchemePreference());
 
 function setHtmlDarkModeSelector(value: boolean) {
   document.documentElement.classList.toggle('dark', value);
@@ -60,12 +60,12 @@ function handleSchemePreferenceChange() {
   set(scheme);
 }
 
-export const DarkModeStore = {
-  set: (value: 'dark' | 'light' | 'default') => {
+export const ColorSchemeStore = {
+  set: (value: 'dark' | 'light' | 'auto') => {
     localStorage.setItem('theme', value);
     set(value);
   },
-  update: (updater: Updater<'dark' | 'light' | 'default'>) => {
+  update: (updater: Updater<'dark' | 'light' | 'auto'>) => {
     update((value) => {
       const oldValue = value;
       const newValue = updater(value);

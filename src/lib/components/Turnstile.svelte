@@ -1,10 +1,11 @@
 <script lang="ts">
-  import { modeCurrent, ProgressRadial } from '@skeletonlabs/skeleton';
+  import { ProgressRadial } from '@skeletonlabs/skeleton';
   import { browser, dev } from '$app/environment';
   import CloudflareLogo from '$lib/components/svg/CloudflareLogo.svelte';
   import type { TurnstileInstance } from '$lib/types/TurnstileInstance';
   import { onMount } from 'svelte';
   import { PUBLIC_TURNSTILE_DEV_BYPASS_VALUE, PUBLIC_TURNSTILE_SITE_KEY } from '$env/static/public';
+  import { ColorSchemeStore } from '$lib/stores/DarkModeStore';
 
   interface Props {
     action: string;
@@ -58,7 +59,7 @@
         sitekey: PUBLIC_TURNSTILE_SITE_KEY,
         action,
         cData,
-        theme: $modeCurrent ? 'light' : 'dark',
+        theme: $ColorSchemeStore,
         callback: (token) => (response = token),
         'expired-callback': handleExpired,
         'timeout-callback': handleTimeout,
