@@ -10,6 +10,7 @@
   import { page } from '$app/stores';
   import { buildMetaData } from '$lib/metadata';
   import { initializeStores } from '$lib/stores';
+  import { initializeSignalR } from '$lib/signalr';
 
   interface Props {
     children?: import('svelte').Snippet;
@@ -18,6 +19,7 @@
   let { children }: Props = $props();
 
   initializeStores();
+  initializeSignalR();
 
   const meta = buildMetaData($page);
 </script>
