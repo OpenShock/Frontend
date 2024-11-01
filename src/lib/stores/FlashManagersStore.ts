@@ -24,6 +24,7 @@ async function getManager(port: SerialPort, terminal: IEspLoaderTerminal) {
 async function removeManager(manager: FlashManager) {
   try {
     await manager.disconnect();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
     // Ignore
   }
