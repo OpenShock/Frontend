@@ -5,7 +5,7 @@
   import type { TurnstileInstance } from '$lib/types/TurnstileInstance';
   import { onMount } from 'svelte';
   import { PUBLIC_TURNSTILE_DEV_BYPASS_VALUE, PUBLIC_TURNSTILE_SITE_KEY } from '$env/static/public';
-  import { ColorSchemeStore } from '$lib/stores/DarkModeStore';
+  import { ColorSchemeStore } from '$lib/stores/ColorSchemeStore';
 
   interface Props {
     action: string;

@@ -1,6 +1,6 @@
 import { initializeStores as initializeSkeletonStores, storePopup } from '@skeletonlabs/skeleton';
 import { initializeAuthTokenStore } from "./AuthTokenStore";
-import { initializeDarkModeStore } from "./DarkModeStore";
+import { initializeDarkModeStore } from "./ColorSchemeStore";
 import { initializeDevicesStore } from "./DevicesStore";
 import { initializeFlashManagersStore } from "./FlashManagersStore";
 import { initializeSerialPortsStore } from "./SerialPortsStore";
