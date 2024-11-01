@@ -1,7 +1,8 @@
 <script lang="ts">
   import { PUBLIC_DISCORD_INVITE_URL, PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
   import { UserStore } from '$lib/stores/UserStore';
-  import { LightSwitch, popup, type PopupSettings } from '@skeletonlabs/skeleton';
+  import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
+  import LightSwitch from '$lib/components/LightSwitch.svelte';
 
   const accountPopup: PopupSettings = {
     event: 'click',
