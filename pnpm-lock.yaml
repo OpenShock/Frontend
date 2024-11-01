@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 patchedDependencies:
+  '@microsoft/signalr@8.0.7':
+    hash: vl6mvrodvyt4cwoevl3v2ipkay
+    path: patches/@microsoft__signalr@8.0.7.patch
   esptool-js@0.4.6:
     hash: 3a3x37scxxjnnesy2e5ida6v34
     path: patches/esptool-js@0.4.6.patch
@@ -25,7 +28,7 @@ importers:
         version: 1.6.11
       '@microsoft/signalr':
         specifier: ^8.0.7
-        version: 8.0.7
+        version: 8.0.7(patch_hash=vl6mvrodvyt4cwoevl3v2ipkay)
       '@openapitools/openapi-generator-cli':
         specifier: ^2.15.0
         version: 2.15.0
@@ -3095,7 +3098,7 @@ snapshots:
 
   '@lukeed/csprng@1.1.0': {}
 
-  '@microsoft/signalr@8.0.7':
+  '@microsoft/signalr@8.0.7(patch_hash=vl6mvrodvyt4cwoevl3v2ipkay)':
     dependencies:
       abort-controller: 3.0.0
       eventsource: 2.0.2

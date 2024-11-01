@@ -71,7 +71,8 @@
 	},
 	"pnpm": {
 		"patchedDependencies": {
-			"esptool-js@0.4.6": "patches/esptool-js@0.4.6.patch"
+			"esptool-js@0.4.6": "patches/esptool-js@0.4.6.patch",
+			"@microsoft/signalr@8.0.7": "patches/@microsoft__signalr@8.0.7.patch"
 		}
 	}
 }
