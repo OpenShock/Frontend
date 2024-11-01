@@ -1,12 +1,14 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import { RankType } from '$lib/api/internal/v1';
-  import { SignalR_State } from '$lib/signalr';
-  import { UserStore } from '$lib/stores/UserStore';
-  import { HubConnectionState } from '@microsoft/signalr';
   import { AppRail, AppRailAnchor } from '@skeletonlabs/skeleton';
   import type { RouteCategory } from './Route';
-  import type { ApiUserSelf } from '$lib/types/ApiUser';
+
+  interface Props {
+    currentUserRank: RankType;
+  }
+
+  let { currentUserRank }: Props = $props();
 
   let path = $derived($page.url.pathname);
 
@@ -14,7 +16,7 @@
     name: string;
     icon: `fa-${string}`;
     href: string;
-    requirement?: (user: ApiUserSelf) => boolean;
+    ranks?: RankType[];
   };
   const leadRoutes: Route[] = [
     {
@@ -43,7 +45,7 @@
       name: 'Admin',
       icon: 'fa-user-shield',
       href: '/admin',
-      requirement: (usr) => usr.rank == RankType.admin || usr.rank == RankType.system,
+      ranks: [RankType.admin, RankType.system],
     },
   ];
 
@@ -98,10 +100,8 @@
     },
   ];
 
-  function meetsReq(user: ApiUserSelf | null, route: Route) {
-    if (!user) return false;
-
-    return !route.requirement || route.requirement(user);
+  function meetsReq(rank: RankType, route: Route) {
+    return route.ranks === undefined || rank in route.ranks;
   }
   function isPathMatch(path: string, href: string) {
     return path === href || path.startsWith(href + '/');
@@ -110,7 +110,7 @@
 
 {#snippet items(routes: Route[])}
   {#each routes as route (route.href)}
-    {#if meetsReq($UserStore.self, route)}
+    {#if meetsReq(currentUserRank, route)}
       <AppRailAnchor
         href={route.href}
         selected={isPathMatch(path, route.href)}
@@ -152,13 +152,11 @@
   {/if}
 {/snippet}
 
-{#if $UserStore.self !== null && $SignalR_State === HubConnectionState.Connected}
-  <sidebar class="flex flex-row h-full">
-    <AppRail>
-      {#snippet lead()}{@render items(leadRoutes)}{/snippet}
-      {#snippet trail()}{@render items(trailRoutes)}{/snippet}
-    </AppRail>
-    {@render nestedSidebar('/settings', settingsRoutes)}
-    {@render nestedSidebar('/admin', adminRoutes)}
-  </sidebar>
-{/if}
+<sidebar class="flex flex-row h-full">
+  <AppRail>
+    {#snippet lead()}{@render items(leadRoutes)}{/snippet}
+    {#snippet trail()}{@render items(trailRoutes)}{/snippet}
+  </AppRail>
+  {@render nestedSidebar('/settings', settingsRoutes)}
+  {@render nestedSidebar('/admin', adminRoutes)}
+</sidebar>

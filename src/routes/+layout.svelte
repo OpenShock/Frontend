@@ -11,6 +11,7 @@
   import { initializeStores } from '$lib/stores';
   import { initializeSignalR } from '$lib/signalr';
   import type { Snippet } from 'svelte';
+  import { UserStore } from '$lib/stores/UserStore';
 
   let { children }: { children: Snippet } = $props();
 
@@ -18,6 +19,8 @@
   initializeSignalR();
 
   const meta = buildMetaData($page);
+
+  let currentUserRank = $derived($UserStore?.self?.rank ?? null);
 </script>
 
 <Modal components={modalRegistry} />
@@ -28,7 +31,9 @@
 
 <Header />
 <div>
-  <Sidebar />
+  {#if currentUserRank !== null}
+    <Sidebar {currentUserRank} />
+  {/if}
   <main>
     {@render children()}
   </main>
