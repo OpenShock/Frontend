@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="ec619d49-55f9-4ced-bdc3-b178f23d56ef" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/app.pcss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/utils/cn.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/utils/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openshock-theme.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app.postcss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/EspTool/FirmwareFlasher.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/EspTool/FirmwareFlasher.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/EspTool/FirmwareSelector.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/EspTool/FirmwareSelector.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/EspTool/SerialPortSelector.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/EspTool/SerialPortSelector.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/LightSwitch.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/LightSwitch.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/Turnstile.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/Turnstile.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/input/PasswordInput.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/input/PasswordInput.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/input/TextInput.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/input/TextInput.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/input/UsernameInput.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/input/UsernameInput.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/layout/Header.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/layout/Header.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/layout/Sidebar.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/layout/AppSidebar.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/toasts/ToastStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/ModalView.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/toasts/Toaster.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/stores/ModalStore.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/errorhandling/apiErrorHandling.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/errorhandling/apiErrorHandling.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/modals/InstallDriversModal.svelte" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/modals/SignUpSuccessModal.svelte" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/modals/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/stores/ColorSchemeStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/stores/ColorSchemeStore.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/stores/UserStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/stores/UserStore.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/stores/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/stores/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/(authenticated)/settings/account/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(authenticated)/settings/account/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/(authenticated)/settings/api-tokens/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(authenticated)/settings/api-tokens/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/(authenticated)/settings/sessions/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(authenticated)/settings/sessions/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/(authenticated)/shockers/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(authenticated)/shockers/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/+layout.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/+layout.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/flashtool/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/flashtool/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/login/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/login/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/signup/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/signup/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tailwind.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/tailwind.config.ts" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="develop" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="2nuBoapo6Fh7MXvIV6YRbz5zjeY" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "JavaScript Debug.dev JavaScript.executor": "Debug",
+    "Playwright.test.ts.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "feature/shadcn",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "pnpm",
+    "npm.build.executor": "Run",
+    "npm.check.executor": "Run",
+    "npm.dev.executor": "Run",
+    "prettierjs.PrettierConfiguration.Package": "E:\\Development\\Source\\OpenShock\\Frontend\\node_modules\\prettier",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "ts.external.directory.path": "E:\\Development\\Source\\OpenShock\\Frontend\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager" selected="npm.dev">
+    <configuration name="test.ts" type="JavaScriptTestRunnerPlaywright" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <playwright-package value="$PROJECT_DIR$/node_modules/@playwright/test" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="TEST_FILE" />
+      <test-file value="$PROJECT_DIR$/tests/test.ts" />
+      <method v="2" />
+    </configuration>
+    <configuration name="dev JavaScript" type="JavascriptDebugType" uri="https://local.openshock.app/">
+      <method v="2" />
+    </configuration>
+    <configuration name="build" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="build" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="check" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="check" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="dev" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <EXTENSION ID="com.intellij.lang.javascript.buildTools.npm.rc.StartBrowserRunConfigurationExtension">
+        <browser start="true" with-js-debugger="true" url="https://local.openshock.app/" />
+      </EXTENSION>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="JavaScript Debug.dev JavaScript" />
+      <item itemvalue="npm.build" />
+      <item itemvalue="npm.check" />
+      <item itemvalue="npm.dev" />
+      <item itemvalue="Playwright.test.ts" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.dev" />
+        <item itemvalue="npm.build" />
+        <item itemvalue="npm.check" />
+        <item itemvalue="Playwright.test.ts" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-WS-242.23726.96" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ec619d49-55f9-4ced-bdc3-b178f23d56ef" name="Changes" comment="" />
+      <created>1729813256576</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1729813256576</updated>
+      <workItem from="1729813258096" duration="312000" />
+      <workItem from="1729945117476" duration="7192000" />
+      <workItem from="1730099588904" duration="607000" />
+      <workItem from="1730159486772" duration="1143000" />
+      <workItem from="1730223715650" duration="2549000" />
+      <workItem from="1730226743046" duration="2533000" />
+      <workItem from="1730478546923" duration="24091000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/dependabot/npm_and_yarn/npm-dependencies-beb8decf97" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/routes/+error.svelte</url>
+          <line>1</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/routes/(authenticated)/settings/api-tokens/+page.svelte</url>
+          <line>1</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/lib/components/EspTool/SerialPortSelector.svelte</url>
+          <line>105</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/lib/components/layout/Header.svelte</url>
+          <line>22</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

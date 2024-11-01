@@ -5,10 +5,11 @@
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
+  import * as Dialog from '$lib/components/ui/dialog';
   import { validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
-  import { getModalStore } from '@skeletonlabs/skeleton';
-
-  const modalStore = getModalStore();
+  import { Button } from '$lib/components/ui/button';
+  import * as Card from '$lib/components/ui/card';
+  import TextInput from '$lib/components/input/TextInput.svelte';
 
   let username = $state('');
   let usernameValid = $state(false);
@@ -30,6 +31,8 @@
     password == passwordConfirm &&
     turnstileResponse);
 
+  let accountCreated = $state(false);
+
   function handleSubmission(ev: SubmitEvent) {
     ev.preventDefault();
 
@@ -39,51 +42,67 @@
         password,
         email,
       })
-      .then(() => {
-        modalStore.trigger({
-          type: 'component',
-          component: 'SignUpSuccess',
-          response: () => goto('/login'),
-        });
-      })
+      .then(() => accountCreated = true)
       .finally(() => {
         turnstileResponse = null;
       });
   }
 </script>
 
-<div class="container h-full mx-auto flex justify-center items-center">
-  <form class="flex flex-col space-y-2" onsubmit={handleSubmission}>
-    <h2 class="h2">Sign Up</h2>
+{#if accountCreated != null}
+  <Dialog.Root>
+    <Dialog.Trigger>Open</Dialog.Trigger>
+    <Dialog.Content>
+      <Dialog.Header>
+        <Dialog.Title>Account created</Dialog.Title>
+        <Dialog.Description>
+          Your account has been created. Please check your email to verify your account.
 
-    <UsernameInput
-      label="Username"
-      placeholder="Username"
-      bind:value={username}
-      bind:valid={usernameValid}
-    />
-    <EmailInput label="Email" placeholder="Email" bind:value={email} bind:valid={emailValid} />
-    <PasswordInput
-      label="Password"
-      placeholder="Password"
-      autocomplete="new-password"
-      bind:value={password}
-      bind:valid={passwordValid}
-      validate={true}
-      showStrengthMeter={true}
-    />
-    <PasswordInput
-      label="Confirm Password"
-      placeholder="Confirm Password"
-      autocomplete="new-password"
-      bind:value={passwordConfirm}
-      validate={validatePasswordMatch(passwordConfirm, password)}
-    />
+          <!-- TODO: button to go to login screen -->
+        </Dialog.Description>
+      </Dialog.Header>
+    </Dialog.Content>
+  </Dialog.Root>
+{/if}
 
-    <Turnstile action="signup" bind:response={turnstileResponse} />
+<Card.Root>
+  <Card.Header>
+    <Card.Title class="text-3xl">Sign Up</Card.Title>
+  </Card.Header>
+  <Card.Content>
+    <form class="flex flex-col space-y-2" onsubmit={handleSubmission}>
+      <UsernameInput
+        label="Username"
+        placeholder="Username"
+        bind:value={username}
+        bind:valid={usernameValid}
+      />
+      <EmailInput label="Email" placeholder="Email" bind:value={email} bind:valid={emailValid} />
+      <PasswordInput
+        label="Password"
+        placeholder="Password"
+        autocomplete="new-password"
+        bind:value={password}
+        bind:valid={passwordValid}
+        validate={true}
+        showStrengthMeter={true}
+      />
+      <PasswordInput
+        label="Confirm Password"
+        placeholder="Confirm Password"
+        autocomplete="new-password"
+        bind:value={passwordConfirm}
+        validate={validatePasswordMatch(passwordConfirm, password)}
+      />
 
-    <button class="btn variant-filled-primary" type="submit" disabled={!canSubmit}>
-      Sign Up
-    </button>
-  </form>
-</div>
+      <Turnstile action="signup" bind:response={turnstileResponse} />
+
+      <Button
+        type="submit"
+        disabled={!canSubmit}
+      >
+        Sign Up
+      </Button>
+    </form>
+  </Card.Content>
+</Card.Root>

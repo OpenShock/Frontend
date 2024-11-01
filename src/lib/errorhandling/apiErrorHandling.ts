@@ -1,12 +1,11 @@
 import { ResponseError } from "$lib/api/internal/v1";
-import type { ToastStore } from "@skeletonlabs/skeleton";
 import type { ProblemDetails } from "./ProblemDetails";
+import { toast } from 'svelte-sonner';
 
 
 export type HandleProblemCallback = (problem: ProblemDetails) => boolean;
 
-export async function handleApiError(error: any, toastStore: ToastStore,
-     handleProblemCallback: HandleProblemCallback | null = null): Promise<void> {
+export async function handleApiError(error: any, handleProblemCallback: HandleProblemCallback | null = null): Promise<void> {
     if (!(error instanceof ResponseError)) {
         return;
     }
@@ -23,10 +22,7 @@ export async function handleApiError(error: any, toastStore: ToastStore,
         return;
     }
 
-    toastStore.trigger({
-        background: 'variant-filled-error',
-        message: problem.title,
-      });
+    toast.error(problem.title);
 }
 
 async function getProblemDetails(response: Response): Promise<ProblemDetails | null> {
@@ -37,7 +33,7 @@ async function getProblemDetails(response: Response): Promise<ProblemDetails | n
     }
 
     if(!contentTypeHeader.startsWith('application/problem+json')) {
-        console.error("Content type header is not application/problem+json [" 
+        console.error("Content type header is not application/problem+json ["
             + contentTypeHeader + "]");
         return null;
     }

@@ -6,7 +6,6 @@
     type Channel,
     Channels,
   } from './CDN';
-  import { RadioGroup, RadioItem } from '@skeletonlabs/skeleton';
 
   /** Optional chip to constrain the list of boards to */
   //export let chip: string | null = null;
@@ -45,6 +44,7 @@
 
 <div class="flex flex-col items-stretch justify-start gap-1">
   <span class="h3 font-bold">Select Channel</span>
+  <!--
   <RadioGroup active="variant-filled-primary" hover="hover:variant-soft-primary">
     {#each Channels as key}
       <RadioItem bind:group={selectedChannel} name="justify" value={key} {disabled}>
@@ -52,6 +52,7 @@
       </RadioItem>
     {/each}
   </RadioGroup>
+  -->
 
   <div class="flex flex-row items-center justify-start gap-2 pl-2">
     {#if selectedChannel === 'stable'}

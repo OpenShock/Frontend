@@ -8,12 +8,9 @@
   } from '$lib/inputvalidation/usernameValidator';
   import { accountApi } from '$lib/api';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { getToastStore } from '@skeletonlabs/skeleton';
   import type { FullAutoFill } from 'svelte/elements';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import type { ButtonSettings } from '$lib/components/input/impl/ButtonSettings';
-
-  const toastStore = getToastStore();
 
   interface Props {
     label: string;
@@ -59,7 +56,7 @@
         validationResult = mapUsernameAvailability(response.availability);
       } catch (e) {
         // Show an error toast
-        await handleApiError(e, toastStore);
+        await handleApiError(e);
 
         // Set the validation result to the internal server error state
         validationResult = UsernameInternalServerErrorValRes;

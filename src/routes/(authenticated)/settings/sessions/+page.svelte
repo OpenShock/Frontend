@@ -1,17 +1,14 @@
 <script lang="ts">
   import { sessionApi } from '$lib/api';
   import type { LoginSessionResponse } from '$lib/api/internal/v1';
+  import * as Dialog from '$lib/components/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { elapsedToString } from '$lib/utils/time';
-  import { escapeHtml } from '$lib/utils/encoding';
-  import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
   import { onMount } from 'svelte';
   import { UAParser } from 'ua-parser-js';
 
-  const modalStore = getModalStore();
-
-  const toastStore = getToastStore();
   let sessions: LoginSessionResponse[] = $state([]);
+  let sessionToDelete = $state<LoginSessionResponse | null>(null);
 
   function refreshSessions() {
     sessionApi
@@ -19,9 +16,7 @@
       .then((s) => {
         sessions = s;
       })
-      .catch((e) => {
-        handleApiError(e, toastStore);
-      });
+      .catch(handleApiError);
   }
 
   function deleteSession(sessionId: string) {
@@ -30,20 +25,7 @@
       .then(() => {
         sessions = sessions.filter((s) => s.id !== sessionId);
       })
-      .catch((e) => {
-        handleApiError(e, toastStore);
-      });
-  }
-
-  function showDeleteSessionModal(session: LoginSessionResponse) {
-    modalStore.trigger({
-      type: 'confirm',
-      title: 'Please Confirm',
-      body: `Are you sure you want to log out from <b>${escapeHtml(session.userAgent)}</b>?`,
-      response: (r: boolean) => {
-        if (r) deleteSession(session.id);
-      },
-    });
+      .catch(handleApiError);
   }
 
   function getReadableName(userAgent: string | null): string {
@@ -70,6 +52,22 @@
     since = Date.now();
   }, 1000);
 </script>
+
+{#if sessionToDelete != null}
+  <Dialog.Root>
+    <Dialog.Trigger>Open</Dialog.Trigger>
+    <Dialog.Content>
+      <Dialog.Header>
+        <Dialog.Title>Are you sure you want to log out from <b>{sessionToDelete.userAgent}</b>?</Dialog.Title>
+        <Dialog.Description>
+          !!! Testing text !!!
+          This action cannot be undone. This will permanently delete your account
+          and remove your data from our servers.
+        </Dialog.Description>
+      </Dialog.Header>
+    </Dialog.Content>
+  </Dialog.Root>
+{/if}
 
 <div class="container h-full mx-auto p-12 flex flex-col justify-start items-start gap-4">
   <h1 class="h1">Sessions</h1>
@@ -123,7 +121,7 @@
               <td class="!whitespace-nowrap">
                 <button
                   class="btn-icon variant-filled-primary fa fa-trash"
-                  onclick={() => showDeleteSessionModal(session)}
+                  onclick={() => sessionToDelete = session}
                   aria-label="Delete Session"
                 ></button>
               </td>

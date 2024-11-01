@@ -1,4 +1,3 @@
-import { initializeStores as initializeSkeletonStores, storePopup } from '@skeletonlabs/skeleton';
 import { initializeAuthTokenStore } from "./AuthTokenStore";
 import { initializeDarkModeStore } from "./ColorSchemeStore";
 import { initializeDevicesStore } from "./DevicesStore";
@@ -9,9 +8,6 @@ import { browser } from '$app/environment';
 
 export function initializeStores() {
   if (!browser) return;
-
-  storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
-  initializeSkeletonStores();
 
   initializeAuthTokenStore();
   initializeDarkModeStore();

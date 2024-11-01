@@ -70,6 +70,7 @@ export const ColorSchemeStore = {
       const oldValue = value;
       const newValue = updater(value);
       if (oldValue !== newValue) {
+        setHtmlDarkModeSelector(newValue === 'dark');
         localStorage.setItem('theme', newValue);
       }
       return newValue;

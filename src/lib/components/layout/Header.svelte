@@ -1,34 +1,24 @@
 <script lang="ts">
   import { PUBLIC_DISCORD_INVITE_URL, PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
   import { UserStore } from '$lib/stores/UserStore';
-  import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
   import LightSwitch from '$lib/components/LightSwitch.svelte';
+  import { Button, buttonVariants } from '$lib/components/ui/button';
+  import * as Menubar from '$lib/components/ui/menubar';
 
-  const accountPopup: PopupSettings = {
-    event: 'click',
-    target: 'accountPopup',
-    placement: 'bottom-end',
-  };
 </script>
 
 {#snippet item(text: string, href: string)}
-  <a
-    {href}
-    class="block text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
-  >
-    {text}
-  </a>
+  <Button {href}>{text}</Button>
 {/snippet}
 
 {#snippet brand(name: string, icon: `fa-${string}`, href: string)}
-  <a {href} class="btn-icon" aria-label={name}>
+  <a {href} class="p-2" aria-label={name}>
     <i class="fa-brands {icon} text-lg"></i>
   </a>
 {/snippet}
 
-<header>
+<header class="px-4 py-2 flex items-center justify-between space-x-2">
   <div class="flex items-center space-x-4">
-    <!-- Logo -->
     <a
       href={!!$UserStore.self ? '/home' : '/'}
       class="overflow-hidden lg:!ml-0 lg:w-auto select-none"
@@ -39,12 +29,13 @@
     </a>
   </div>
 
+  <div class="flex-1"></div>
+
   <LightSwitch />
 
   {#if $UserStore.self !== null}
     <div
       class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 cursor-pointer"
-      use:popup={accountPopup}
     >
       <img class="inline-block h-8 rounded-full" src={$UserStore.self.avatar} alt="User Avatar" />
       <p class="hidden lg:inline-block">{$UserStore.self.name}</p>

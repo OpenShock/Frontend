@@ -2,14 +2,12 @@
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
   import { validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
   import { UserStore } from '$lib/stores/UserStore';
-  import { Accordion, AccordionItem } from '@skeletonlabs/skeleton';
+  import * as Accordion from '$lib/components/ui/accordion';
   import { authenticatedAccountApi } from '$lib/api';
-  import { getToastStore } from '@skeletonlabs/skeleton';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
   import EmailInput from '$lib/components/input/EmailInput.svelte';
-
-  const toastStore = getToastStore();
+  import { toast } from 'svelte-sonner';
 
   let username: string = $state('');
   let email: string = $state('');
@@ -26,21 +24,15 @@
     try {
       await authenticatedAccountApi.authenticatedAccountChangeUsername({ username });
 
-      toastStore.trigger({
-        background: 'variant-filled-success',
-        message: 'Username changed successfully',
-      });
+      toast.success('Username changed successfully');
 
       UserStore.setSelfName(username);
 
       username = '';
     } catch (e) {
-      await handleApiError(e, toastStore, (problem) => {
+      await handleApiError(e, (problem) => {
         if (problem.type === 'Account.Username.Invalid') {
-          toastStore.trigger({
-            background: 'variant-filled-error',
-            message: '',
-          });
+          toast.error('Invalid Username');
           return true;
         }
         return false;
@@ -83,15 +75,13 @@
         button={{ text: 'Change', submits: true, onClick: submitEmail }}
       />
 
-      <Accordion>
-        <AccordionItem>
-          {#snippet lead()}
+      <Accordion.Root>
+        <Accordion.Item>
+          <Accordion.Trigger>
             <i class="fa fa-key"></i>
-          {/snippet}
-          {#snippet summary()}
             Change your password
-          {/snippet}
-          {#snippet content()}
+          </Accordion.Trigger>
+          <Accordion.Content>
             <div class="rounded-lg border border-gray-700 p-5 mx-[-1rem]">
               <PasswordInput
                 label="Current Password"
@@ -119,12 +109,12 @@
               />
 
               <button class="btn variant-filled-primary" type="submit" disabled={!canSubmitPassword}
-                >Change Password</button
+              >Change Password</button
               >
             </div>
-          {/snippet}
-        </AccordionItem>
-      </Accordion>
+          </Accordion.Content>
+        </Accordion.Item>
+      </Accordion.Root>
     </div>
   </div>
 {/if}

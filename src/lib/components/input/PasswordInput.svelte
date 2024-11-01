@@ -4,13 +4,10 @@
   import { validatePassword } from '$lib/inputvalidation/passwordValidator';
   import type { ValidationResult } from '$lib/types/ValidationResult';
   import { randStr } from '$lib/utils/rand';
-  import { type PopupSettings, getToastStore } from '@skeletonlabs/skeleton';
   import TextInput from './TextInput.svelte';
   import type { FullAutoFill } from 'svelte/elements';
   import PasswordStrengthMeter from './impl/PasswordStrengthMeter.svelte';
   import type { ButtonSettings } from './impl/ButtonSettings';
-
-  const toastStore = getToastStore();
 
   interface Props {
     label: string;
@@ -37,12 +34,6 @@
     icon,
     oninput
   }: Props = $props();
-
-  const popupSettings: PopupSettings = {
-    event: 'focus-blur',
-    target: 'popupStrengthMeter-' + randStr(8),
-    placement: 'left-start',
-  };
 
   let validationResult: ValidationResult | null = $state(null);
   let passwordDebounce: ReturnType<typeof setTimeout> | null = null;
@@ -77,7 +68,7 @@
         }
       } catch (e) {
         // Show an error toast
-        await handleApiError(e, toastStore);
+        await handleApiError(e);
 
         // We shouldnt block the user from submitting the form if the pwned password check fails
         validationResult = { valid: true };
@@ -127,12 +118,11 @@
   {validationResult}
   {icon}
   {button}
-  {popupSettings}
   {oninput}
 >
   {#snippet popup()}
     {#if showStrengthMeter}
-      <PasswordStrengthMeter popupTarget={popupSettings.target} password={value} />
+      <PasswordStrengthMeter password={value} />
     {/if}
   {/snippet}
 </TextInput>

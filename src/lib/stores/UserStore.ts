@@ -64,6 +64,6 @@ export const UserStore = {
   reset,
 };
 
-export async function initializeUserStore() {
-  await refreshSelf();
+export function initializeUserStore() {
+  refreshSelf();
 }

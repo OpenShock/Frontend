@@ -3,7 +3,7 @@
   import WordArray from 'crypto-js/lib-typedarrays';
   import FlashManager from './FlashManager';
   import { DownloadFirmwareBinary, GetFirmwareBinaryHash } from './CDN';
-  import { ProgressBar } from '@skeletonlabs/skeleton';
+  import { Progress } from '$lib/components/ui/progress';
 
   interface Props {
     version: string;
@@ -124,7 +124,7 @@
         {/if}
       </span>
       {#if progressName !== null}
-        <ProgressBar label="Progress Bar" value={progressPercent} max={100} />
+        <Progress value={progressPercent} max={100} />
       {/if}
     {/if}
   </div>

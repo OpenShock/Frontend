@@ -1,16 +1,13 @@
 <script lang="ts">
   import { tokensApi } from '$lib/api';
   import type { TokenResponse } from '$lib/api/internal/v1';
+  import * as Dialog from '$lib/components/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { elapsedToString } from '$lib/utils/time';
-  import { escapeHtml } from '$lib/utils/encoding';
-  import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
   import { onMount } from 'svelte';
 
-  const modalStore = getModalStore();
-
-  const toastStore = getToastStore();
   let tokens: TokenResponse[] = $state([]);
+  let tokenToDelete = $state<TokenResponse | null>(null);
 
   function refreshTokens() {
     tokensApi
@@ -18,9 +15,7 @@
       .then((response) => {
         tokens = response;
       })
-      .catch((e) => {
-        handleApiError(e, toastStore);
-      });
+      .catch(handleApiError);
   }
 
   function deleteToken(tokenId: string) {
@@ -29,20 +24,7 @@
       .then(() => {
         tokens = tokens.filter((t) => t.id !== tokenId);
       })
-      .catch((e) => {
-        handleApiError(e, toastStore);
-      });
-  }
-
-  function showDeleteTokenModal(token: TokenResponse) {
-    modalStore.trigger({
-      type: 'confirm',
-      title: 'Please Confirm',
-      body: `Are you sure you want to delete <b>${escapeHtml(token.name)}</b>?`,
-      response: async (r: boolean) => {
-        if (r) deleteToken(token.id);
-      },
-    });
+      .catch(handleApiError);
   }
 
   function showGenerateTokenModal() {
@@ -71,6 +53,22 @@
     since = Date.now();
   }, 1000);
 </script>
+
+{#if tokenToDelete != null}
+  <Dialog.Root>
+    <Dialog.Trigger>Open</Dialog.Trigger>
+    <Dialog.Content>
+      <Dialog.Header>
+        <Dialog.Title>Are you sure you want to delete <b>{tokenToDelete.name}</b>?</Dialog.Title>
+        <Dialog.Description>
+          !!! Testing text !!!
+          This action cannot be undone. This will permanently delete your account
+          and remove your data from our servers.
+        </Dialog.Description>
+      </Dialog.Header>
+    </Dialog.Content>
+  </Dialog.Root>
+{/if}
 
 <div class="container h-full mx-auto p-12 flex flex-col justify-start items-start gap-4">
   <h1 class="h1">API Tokens</h1>
@@ -122,7 +120,7 @@
                 </button>
                 <button
                   class="btn-icon variant-filled-primary fa fa-trash"
-                  onclick={() => showDeleteTokenModal(token)}
+                  onclick={() => tokenToDelete = token}
                   aria-label="Delete Token"
                 >
                 </button>

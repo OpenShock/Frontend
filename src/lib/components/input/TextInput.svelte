@@ -3,8 +3,9 @@
   import type { Snippet } from 'svelte';
   import type { FullAutoFill } from 'svelte/elements';
   import type { ButtonSettings } from './impl/ButtonSettings';
-  import { popup as popupAction, type PopupSettings } from '@skeletonlabs/skeleton';
-  
+  import { Input } from '$lib/components/ui/input';
+  import * as Popover from '$lib/components/ui/popover';
+
   interface Props {
     type?: 'text' | 'password';
     label: string;
@@ -15,7 +16,6 @@
     icon?: `fa-${string}`;
     button?: ButtonSettings;
     popup?: Snippet;
-    popupSettings?: PopupSettings;
     oninput?: (input: string) => void | undefined;
   }
 
@@ -29,7 +29,6 @@
     icon,
     button,
     popup,
-    popupSettings,
     oninput
   }: Props = $props();
 
@@ -39,21 +38,8 @@
       oninput(value);
     }
   }
-
-  function popupProxy(triggerNode: HTMLElement): {
-    update(args: PopupSettings): void;
-    destroy(): void;
-  } {
-    if (popup === undefined || popupSettings === undefined) {
-      return {
-        update: () => {},
-        destroy: () => {},
-      };
-    }
-
-    return popupAction(triggerNode, popupSettings);
-  }
 </script>
+
 
 <label class="label w-full">
   <span>{label}</span>
@@ -62,7 +48,7 @@
       {#if icon}
         <div class="input-group-shim fa {icon}"></div>
       {/if}
-      <input
+      <Input
         {type}
         class="input flex-grow"
         title={label}
@@ -70,7 +56,6 @@
         {autocomplete}
         {value}
         oninput={handleInput}
-        use:popupProxy
       />
       {#if button}
         <button
@@ -107,6 +92,10 @@
     <div class="h-3"></div>
   {/if}
   {#if popup}
-    {@render popup()}
+    <Popover.Root>
+      <Popover.Content>
+        {@render popup()}
+      </Popover.Content>
+    </Popover.Root>
   {/if}
 </label>

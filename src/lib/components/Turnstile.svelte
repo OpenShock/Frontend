@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { ProgressRadial } from '@skeletonlabs/skeleton';
   import { browser, dev } from '$app/environment';
   import CloudflareLogo from '$lib/components/svg/CloudflareLogo.svelte';
   import type { TurnstileInstance } from '$lib/types/TurnstileInstance';
@@ -78,7 +77,7 @@
         <i class="fa fa-bug text-lg"></i>
         <span> Turnstile disabled </span>
       {:else}
-        <ProgressRadial stroke={120} width="w-8" />
+        <!-- <ProgressRadial stroke={120} width="w-8" /> --> <!-- TODO: IMPLEMENT ME! -->
         <span> Loading... </span>
       {/if}
       <a

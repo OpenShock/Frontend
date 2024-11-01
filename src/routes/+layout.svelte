@@ -1,11 +1,12 @@
 <script lang="ts">
-  import '../app.postcss';
+  import '../app.pcss';
+  import AppSidebar from '$lib/components/layout/AppSidebar.svelte';
   import Footer from '$lib/components/layout/Footer.svelte';
   import Header from '$lib/components/layout/Header.svelte';
-  import Sidebar from '$lib/components/layout/Sidebar.svelte';
   import OpenGraphTags from '$lib/components/metadata/OpenGraphTags.svelte';
   import TwitterSummaryTags from '$lib/components/metadata/Twitter/TwitterSummaryTags.svelte';
-  import { modalRegistry } from '$lib/modals';
+  import * as Sidebar from '$lib/components/ui/sidebar';
+  import { Toaster } from '$lib/components/ui/sonner'
   import { page } from '$app/stores';
   import { buildMetaData } from '$lib/metadata';
   import { initializeStores } from '$lib/stores';
@@ -23,19 +24,18 @@
   let currentUserRank = $derived($UserStore?.self?.rank ?? null);
 </script>
 
-<Modal components={modalRegistry} />
-<Toast position="bl" max={5} />
+<Toaster />
 
 <TwitterSummaryTags type="summary" {...meta} site="@OpenShockORG" creator="@OpenShockORG" />
 <OpenGraphTags type="website" {...meta} url={$page.url.origin} />
 
 <Header />
-<div>
-  {#if currentUserRank !== null}
-    <Sidebar {currentUserRank} />
-  {/if}
-  <main>
-    {@render children()}
-  </main>
-</div>
+  <Sidebar.Provider>
+    {#if currentUserRank !== null}
+      <AppSidebar {currentUserRank} />
+    {/if}
+    <main>
+      {@render children()}
+    </main>
+  </Sidebar.Provider>
 <Footer />

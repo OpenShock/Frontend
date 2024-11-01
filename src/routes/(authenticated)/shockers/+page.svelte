@@ -8,19 +8,13 @@
   import SimpleControlHeader from '$lib/components/ControlModules/SimpleControlHeader.svelte';
   import SimpleControlModule from '$lib/components/ControlModules/SimpleControlModule.svelte';
   import { OwnDevicesStore } from '$lib/stores/DevicesStore';
-  import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
+  import * as Popover from '$lib/components/ui/popover';
 
   let shockers = $derived(
     $OwnDevicesStore?.flatMap((device) => device.shockers)?.filter((shocker) => !!shocker) ?? []
   );
 
   let moduleType: ModuleType = $state(ModuleType.ClassicControlModule);
-
-  const modeClick: PopupSettings = {
-    event: 'click',
-    target: 'modeClick',
-    placement: 'bottom',
-  };
 
   function handleCommand(
     event: CustomEvent<{ id: string; type: ControlType; intensity: number; duration: number }>
@@ -49,38 +43,37 @@
       <h1 class="text-2xl font-bold">Shockers</h1>
       <div>
         <!-- Mode button -->
-        <button class="btn p-1" use:popup={modeClick} aria-label="Change mode">
-          <i class="fa-solid fa-layer-group"></i>
-        </button>
-        <div class="card p-4 max-w-md" data-popup="modeClick">
-          <div class="flex gap-2">
-            <button
-              class="btn p-2 variant-filled-secondary"
-              onclick={() => (moduleType = ModuleType.ClassicControlModule)}
-            >
-              Classic
-            </button>
-            <button
-              class="btn p-2 variant-filled-secondary"
-              onclick={() => (moduleType = ModuleType.RichControlModule)}
-            >
-              Rich
-            </button>
-            <button
-              class="btn p-1 variant-filled-secondary"
-              onclick={() => (moduleType = ModuleType.SimpleControlModule)}
-            >
-              Simple
-            </button>
-            <button
-              class="btn p-1 variant-filled-secondary"
-              onclick={() => (moduleType = ModuleType.MapControlModule)}
-            >
-              Map
-            </button>
-          </div>
-          <div class="arrow bg-surface-100-800-token"></div>
-        </div>
+        <Popover.Root>
+          <Popover.Trigger><i class="fa-solid fa-layer-group"></i></Popover.Trigger>
+          <Popover.Content>
+            <div class="flex gap-2">
+              <button
+                class="btn p-2 variant-filled-secondary"
+                onclick={() => (moduleType = ModuleType.ClassicControlModule)}
+              >
+                Classic
+              </button>
+              <button
+                class="btn p-2 variant-filled-secondary"
+                onclick={() => (moduleType = ModuleType.RichControlModule)}
+              >
+                Rich
+              </button>
+              <button
+                class="btn p-1 variant-filled-secondary"
+                onclick={() => (moduleType = ModuleType.SimpleControlModule)}
+              >
+                Simple
+              </button>
+              <button
+                class="btn p-1 variant-filled-secondary"
+                onclick={() => (moduleType = ModuleType.MapControlModule)}
+              >
+                Map
+              </button>
+            </div>
+          </Popover.Content>
+        </Popover.Root>
         <!-- Options button -->
         <button class="btn p-1" aria-label="Options">
           <i class="fa-solid fa-cog"></i>
