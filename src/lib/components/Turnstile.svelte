@@ -107,6 +107,9 @@
   }
   #logo {
     @apply mb-auto ml-auto h-7 w-auto;
-    @apply text-[#666] dark:text-[#999];
+    @apply text-[#666];
+  }
+  :global(.dark) #logo {
+    @apply text-[#999];
   }
 </style>
