@@ -3,6 +3,7 @@
   import { RankType } from '$lib/api/internal/v1';
   import * as Sidebar from "$lib/components/ui/sidebar/index.js";
   import {Collapsible} from "bits-ui";
+  import ChevronDown from "lucide-svelte/icons/chevron-down";
 
   interface Props {
     currentUserRank: RankType;
@@ -24,14 +25,13 @@
     color?: string;
     href?: string;
     target?: string;
-    collapsible?: true;
     subItems?: subItem[]
   };
 
   type Group = {
     title: string;
     ranks?: RankType[];
-    collapsible?: true;
+    collapsible?: { open: boolean };
     menus: Menu[];
   };
 
@@ -67,6 +67,7 @@
     {
       title: 'Admin',
       ranks: [RankType.admin, RankType.system],
+      collapsible: { open: false },
       menus: [
         {
           name: 'Monitoring',
@@ -98,7 +99,7 @@
     },
     {
       title: 'Settings',
-      collapsible: true,
+      collapsible: { open: false },
       menus: [
         {
           name: 'Account',
@@ -147,48 +148,66 @@
 {/snippet}
 
 {#snippet menuSection(menu: Menu)}
-  <Collapsible.Root>
-    <Sidebar.MenuItem>
-      <Collapsible.Trigger>
-        <Sidebar.MenuButton>
-          {#snippet child({ props })}
-            <a href={menu.href} {...props}>
-              <i class={"fa " + menu.icon}></i>
-              <span>{menu.name}</span>
-            </a>
-          {/snippet}
-        </Sidebar.MenuButton>
-      </Collapsible.Trigger>
-      <!--
-      <Sidebar.MenuAction>
-      </Sidebar.MenuAction>
-      -->
-    </Sidebar.MenuItem>
-    {#if menu.subItems}
-      <Collapsible.Content>
-        <Sidebar.MenuSub>
-          {#each menu.subItems as subItem (subItem.name)}
-            {@render menuSubItemSection(subItem)}
-          {/each}
-        </Sidebar.MenuSub>
-      </Collapsible.Content>
-    {/if}
-  </Collapsible.Root>
+  <Sidebar.MenuItem>
+    <Sidebar.MenuButton>
+      {#snippet child({ props })}
+        <a href={menu.href} {...props}>
+          <i class={"fa " + menu.icon}></i>
+          <span>{menu.name}</span>
+        </a>
+      {/snippet}
+    </Sidebar.MenuButton>
+    <!--
+    <Sidebar.MenuAction>
+    </Sidebar.MenuAction>
+    -->
+  </Sidebar.MenuItem>
+  {#if menu.subItems}
+      <Sidebar.MenuSub>
+        {#each menu.subItems as subItem (subItem.name)}
+          {@render menuSubItemSection(subItem)}
+        {/each}
+      </Sidebar.MenuSub>
+  {/if}
+{/snippet}
+
+{#snippet groupContentSection(group: Group)}
+  <Sidebar.GroupContent>
+    <Sidebar.Menu>
+      {#each group.menus as menu (menu.name)}
+        {@render menuSection(menu)}
+      {/each}
+    </Sidebar.Menu>
+  </Sidebar.GroupContent>
 {/snippet}
 
 {#snippet groupsSection(userRank: RankType, groups: Group[])}
   {#each groups as group (group.title)}
     {#if meetsReq(userRank, group)}
-      <Sidebar.Group>
-        <Sidebar.GroupLabel>{group.title}</Sidebar.GroupLabel>
-        <Sidebar.GroupContent>
-          <Sidebar.Menu>
-            {#each group.menus as menu (menu.name)}
-              {@render menuSection(menu)}
-            {/each}
-          </Sidebar.Menu>
-        </Sidebar.GroupContent>
-      </Sidebar.Group>
+      {#if group.collapsible === undefined}
+        <Sidebar.Group>
+          <Sidebar.GroupLabel>{group.title}</Sidebar.GroupLabel>
+          {@render groupContentSection(group)}
+        </Sidebar.Group>
+      {:else}
+        <Collapsible.Root open={group.collapsible.open} class="group/collapsible">
+          <Sidebar.Group>
+            <Sidebar.GroupLabel>
+              {#snippet child({ props })}
+                <Collapsible.Trigger {...props}>
+                  {group.title}
+                  <ChevronDown
+                    class="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180"
+                  />
+                </Collapsible.Trigger>
+              {/snippet}
+            </Sidebar.GroupLabel>
+            <Collapsible.Content>
+              {@render groupContentSection(group)}
+            </Collapsible.Content>
+          </Sidebar.Group>
+        </Collapsible.Root>
+      {/if}
     {/if}
   {/each}
 {/snippet}
