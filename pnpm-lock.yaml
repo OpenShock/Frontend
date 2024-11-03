@@ -56,6 +56,9 @@ importers:
       '@tailwindcss/typography':
         specifier: 0.5.15
         version: 0.5.15(tailwindcss@3.4.14)
+      '@tanstack/table-core':
+        specifier: ^8.20.5
+        version: 8.20.5
       '@types/crypto-js':
         specifier: ^4.2.2
         version: 4.2.2
@@ -65,18 +68,18 @@ importers:
       '@types/node':
         specifier: 22.8.2
         version: 22.8.2
+      '@types/semver':
+        specifier: ^7.5.8
+        version: 7.5.8
       '@types/w3c-web-serial':
         specifier: ^1.0.7
         version: 1.0.7
-      '@vincjo/datatables':
-        specifier: ^2.0.5
-        version: 2.0.5(svelte@5.1.4)
       autoprefixer:
         specifier: 10.4.20
         version: 10.4.20(postcss@8.4.47)
       bits-ui:
-        specifier: 1.0.0-next.35
-        version: 1.0.0-next.35(svelte@5.1.4)
+        specifier: 1.0.0-next.39
+        version: 1.0.0-next.39(svelte@5.1.4)
       bowser:
         specifier: ^2.11.0
         version: 2.11.0
@@ -122,6 +125,9 @@ importers:
       prettier-plugin-svelte:
         specifier: ^3.2.7
         version: 3.2.7(prettier@3.3.3)(svelte@5.1.4)
+      semver:
+        specifier: ^7.6.3
+        version: 7.6.3
       svelte:
         specifier: ^5.1.4
         version: 5.1.4
@@ -937,6 +943,10 @@ packages:
     peerDependencies:
       tailwindcss: '>=3.0.0 || insiders || >=4.0.0-alpha.20'
 
+  '@tanstack/table-core@8.20.5':
+    resolution: {integrity: sha512-P9dF7XbibHph2PFRz8gfBKEXEY/HJPOhym8CHmjF8y3q5mWpKx9xtZapXQUWCgkqvsK0R46Azuz+VaxD4Xl+Tg==}
+    engines: {node: '>=12'}
+
   '@tootallnate/quickjs-emscripten@0.23.0':
     resolution: {integrity: sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA==}
 
@@ -963,6 +973,9 @@ packages:
 
   '@types/resolve@1.20.2':
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
+
+  '@types/semver@7.5.8':
+    resolution: {integrity: sha512-I8EUhyrgfLrcTkzV3TSsGyl1tSuPrEDzr0yd5m90UgNxQkyDXULk3b6MlQqTCpZpNtWe1K0hzclnZkTcLBe2UQ==}
 
   '@types/w3c-web-serial@1.0.7':
     resolution: {integrity: sha512-jzcwm//EZ0Z306L1/O1GXC3GthRd//9eaNB4/Yagm98UjEQViTzDS8bYvL+y+rTk1r9OFt9Yhp5pprUQFzSiiQ==}
@@ -1023,11 +1036,6 @@ packages:
   '@typescript-eslint/visitor-keys@8.12.1':
     resolution: {integrity: sha512-2RwdwnNGuOQKdGjuhujQHUqBZhEuodg2sLVPvOfWktvA9sOXOVqARjOyHSyhN2LiJGKxV6c8oOcmOtRcAnEeFw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
-
-  '@vincjo/datatables@2.0.5':
-    resolution: {integrity: sha512-ZD5Y5Tp1jlVSJhKEZqwhaUTUpTi+voz2Hx+Yr2HQ1JoCisYKk4T+MbJNmB6fN/Mra/hjrlEm5j/Ap5Ud0qydLw==}
-    peerDependencies:
-      svelte: ^5.0.0
 
   '@vitest/expect@2.1.4':
     resolution: {integrity: sha512-DOETT0Oh1avie/D/o2sgMHGrzYUFFo3zqESB2Hn70z6QB1HrS2IQ9z5DfyTqU8sg4Bpu13zZe9V4+UTNQlUeQA==}
@@ -1173,8 +1181,8 @@ packages:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
     engines: {node: '>=8'}
 
-  bits-ui@1.0.0-next.35:
-    resolution: {integrity: sha512-Bm9hPlswA1hbYwn3xmSUsimEp7UlpNcoT7YddshtG7zd/lcZe5I5vr27flRTjYlBOKkjX6V32b+xwHNBOKSvvA==}
+  bits-ui@1.0.0-next.39:
+    resolution: {integrity: sha512-pG05LtgSuUAFETQX6NjIwgk79PQd77QxrxbFrf1N/p8TRZFZ3LdT9bVLVRbdwouU+v/urkCsGwM1bd9Oyyretg==}
     engines: {node: '>=18', pnpm: '>=8.7.0'}
     peerDependencies:
       svelte: ^5.0.0-next.1
@@ -3556,6 +3564,8 @@ snapshots:
       postcss-selector-parser: 6.0.10
       tailwindcss: 3.4.14
 
+  '@tanstack/table-core@8.20.5': {}
+
   '@tootallnate/quickjs-emscripten@0.23.0': {}
 
   '@types/cookie@0.6.0': {}
@@ -3580,6 +3590,8 @@ snapshots:
       undici-types: 6.19.8
 
   '@types/resolve@1.20.2': {}
+
+  '@types/semver@7.5.8': {}
 
   '@types/w3c-web-serial@1.0.7': {}
 
@@ -3663,10 +3675,6 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 8.12.1
       eslint-visitor-keys: 3.4.3
-
-  '@vincjo/datatables@2.0.5(svelte@5.1.4)':
-    dependencies:
-      svelte: 5.1.4
 
   '@vitest/expect@2.1.4':
     dependencies:
@@ -3810,7 +3818,7 @@ snapshots:
 
   binary-extensions@2.3.0: {}
 
-  bits-ui@1.0.0-next.35(svelte@5.1.4):
+  bits-ui@1.0.0-next.39(svelte@5.1.4):
     dependencies:
       '@floating-ui/core': 1.6.8
       '@floating-ui/dom': 1.6.11

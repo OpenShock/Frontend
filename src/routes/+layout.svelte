@@ -34,7 +34,7 @@
     {#if currentUserRank !== null}
       <AppSidebar {currentUserRank} />
     {/if}
-    <main>
+    <main class="w-full p-16">
       {@render children()}
     </main>
   </Sidebar.Provider>
