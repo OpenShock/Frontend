@@ -4,12 +4,11 @@
   import { SemVer } from 'semver';
   import { adminApi } from '$lib/api';
   import { handleApiError } from "$lib/errorhandling/apiErrorHandling";
-  import { columns, type OnlineDevice } from './columns';
+  import {columns, type OnlineDevice, type OnlineDeviceOwner} from './columns';
   import DataTable from './data-table.svelte';
-  import semver from "semver/preload";
 
   function apiDeviceToTableDevice(device: AdminOnlineDeviceResponse): OnlineDevice {
-    let owner: { id: string; name: string, image: string };
+    let owner: OnlineDeviceOwner;
     if (device.owner) {
       owner = {
         id: device.owner.id,

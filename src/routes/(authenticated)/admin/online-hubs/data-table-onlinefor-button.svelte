@@ -7,6 +7,6 @@
 </script>
 
 <Button {variant} {...restProps}>
-  Online For
+  Online for
   <ArrowUpDown class="ml-2 size-4" />
 </Button>

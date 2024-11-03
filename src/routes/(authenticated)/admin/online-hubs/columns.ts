@@ -9,7 +9,7 @@ import DataTableFirmwareVersionButton from './data-table-firmwareversion-button.
 import DataTableOnlineForButton from './data-table-onlinefor-button.svelte'
 import type {TwColor} from "$lib/types/Tailwind";
 
-type OnlineDeviceOwner = {
+export type OnlineDeviceOwner = {
   id: string;
   name: string;
   image: string;
@@ -44,7 +44,7 @@ export const columns: ColumnDef<OnlineDevice>[] = [
       })
     ),
     cell: ({ row }) => {
-      const ownerCellSnippet = createRawSnippet<[{ id: string, name: string, image: string }]>((getOwner) => {
+      const ownerCellSnippet = createRawSnippet<[OnlineDeviceOwner]>((getOwner) => {
         const owner = getOwner();
         return {
           render: () => `<div class="text-left font-medium" title="${owner.id}">${owner.name}</div>`,
