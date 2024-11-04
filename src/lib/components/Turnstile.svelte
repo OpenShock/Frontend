@@ -1,10 +1,12 @@
 <script lang="ts">
+  import Bug from 'lucide-svelte/icons/bug';
   import { browser, dev } from '$app/environment';
   import CloudflareLogo from '$lib/components/svg/CloudflareLogo.svelte';
   import type { TurnstileInstance } from '$lib/types/TurnstileInstance';
   import { onMount } from 'svelte';
   import { PUBLIC_TURNSTILE_DEV_BYPASS_VALUE, PUBLIC_TURNSTILE_SITE_KEY } from '$env/static/public';
   import { ColorSchemeStore } from '$lib/stores/ColorSchemeStore';
+  import LoadingCircle from './svg/LoadingCircle.svelte';
 
   interface Props {
     action: string;
@@ -48,7 +50,10 @@
   }
 
   let isLoading = $state(true);
-  let cfColorScheme = $derived($ColorSchemeStore === 'system' ? 'auto' : $ColorSchemeStore) as 'dark' | 'light' | 'auto';
+  let cfColorScheme = $derived($ColorSchemeStore === 'system' ? 'auto' : $ColorSchemeStore) as
+    | 'dark'
+    | 'light'
+    | 'auto';
   $effect(() => {
     if (!turnstile) return;
 
@@ -75,10 +80,10 @@
     <!-- Turnstile placeholder -->
     <div id="placeholder">
       {#if dev}
-        <i class="fa fa-bug text-lg"></i>
+        <Bug />
         <span> Turnstile disabled </span>
       {:else}
-        <!-- <ProgressRadial stroke={120} width="w-8" /> --> <!-- TODO: IMPLEMENT ME! -->
+        <LoadingCircle />
         <span> Loading... </span>
       {/if}
       <a
