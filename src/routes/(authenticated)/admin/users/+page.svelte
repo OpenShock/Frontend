@@ -33,74 +33,14 @@
     | '>='
     | 'gte';
   type Filter<TEntity> = `${Extract<keyof TEntity, string>} ${FilterOpType} ${string}`;
-
-  type ApiMethod<TEntity> = (
-    filter: string,
-    orderby: string,
-    offset: number,
-    limit: number
-  ) => Promise<TEntity[]>;
-
   type FilterMap<TEntity> = { [K in keyof TEntity]: string };
   type OrderbyQuery<TEntity> = `${Extract<keyof TEntity, string>} ${'asc' | 'desc'}`;
-  class QueryApiHandler<TEntity> {
-    private apiInstance: ApiMethod<TEntity>;
-    private filters = $state<FilterMap<TEntity>>({});
-    private orderby = $state<OrderbyQuery<TEntity> | undefined>();
-    private offset = $state<number | undefined>();
-    private limit = $state<number | undefined>();
-
-    constructor(api: ApiMethod<TEntity>) {
-      this.apiInstance = api;
-    }
-
-    setFilter(field: keyof TEntity, value: string) {
-      this.filters = { ...this.filters, [field]: value };
-    }
-    clearFilter(field: keyof TEntity) {
-      if (field in this.filters) {
-        delete this.filters[field];
-      }
-    }
-
-    setOrderby(field: Extract<keyof TEntity, string>, direction: 'asc' | 'desc') {
-      this.orderby = `${field} ${direction}`;
-    }
-    clearOrderby() {
-      this.orderby = undefined;
-    }
-
-    setOffset(offset: number) {
-      this.offset = offset;
-    }
-    clearOffset() {
-      this.offset = undefined;
-    }
-
-    setLimit(limit: number) {
-      this.limit = limit;
-    }
-    clearLimit() {
-      this.limit = undefined;
-    }
-
-    async fetch() {
-      let filter = Object.entries(this.filters)
-        .map(([key, value]) => `${key} eq ${value}`)
-        .join(' and ');
-      let orderby = this.orderby;
-      let offset = this.offset;
-      let limit = this.limit;
-
-      return this.apiInstance(filter, orderby, offset, limit);
-    }
-  }
 
   let data = $state<User[]>([]);
 
   function fetchUsers() {
     adminApi
-      .adminGetUsers(filter, orderby, offset, limit)
+      .adminGetUsers() /* filter, orderby, offset, limit */
       .then((res) => {
         if (res.data) {
           data = res.data.map(apiUserToTableDevice);
