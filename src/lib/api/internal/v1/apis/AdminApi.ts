@@ -30,8 +30,10 @@ export interface AdminDeleteUserRequest {
 }
 
 export interface AdminGetUsersRequest {
-    limit?: number;
-    offset?: number;
+    $filter?: string;
+    $orderby?: string;
+    $offset?: number;
+    $limit?: number;
 }
 
 /**
@@ -73,8 +75,10 @@ export interface AdminApiInterface {
     /**
      * 
      * @summary Gets all users, paginated
-     * @param {number} [limit] 
-     * @param {number} [offset] 
+     * @param {string} [$filter] 
+     * @param {string} [$orderby] 
+     * @param {number} [$offset] 
+     * @param {number} [$limit] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AdminApiInterface
@@ -84,7 +88,7 @@ export interface AdminApiInterface {
     /**
      * Gets all users, paginated
      */
-    adminGetUsers(limit?: number, offset?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminUserResponsePaginated>;
+    adminGetUsers($filter?: string, $orderby?: string, $offset?: number, $limit?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminUserResponsePaginated>;
 
 }
 
@@ -170,12 +174,20 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     async adminGetUsersRaw(requestParameters: AdminGetUsersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AdminUserResponsePaginated>> {
         const queryParameters: any = {};
 
-        if (requestParameters['limit'] != null) {
-            queryParameters['limit'] = requestParameters['limit'];
+        if (requestParameters['$filter'] != null) {
+            queryParameters['$filter'] = requestParameters['$filter'];
         }
 
-        if (requestParameters['offset'] != null) {
-            queryParameters['offset'] = requestParameters['offset'];
+        if (requestParameters['$orderby'] != null) {
+            queryParameters['$orderby'] = requestParameters['$orderby'];
+        }
+
+        if (requestParameters['$offset'] != null) {
+            queryParameters['$offset'] = requestParameters['$offset'];
+        }
+
+        if (requestParameters['$limit'] != null) {
+            queryParameters['$limit'] = requestParameters['$limit'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -197,8 +209,8 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     /**
      * Gets all users, paginated
      */
-    async adminGetUsers(limit?: number, offset?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminUserResponsePaginated> {
-        const response = await this.adminGetUsersRaw({ limit: limit, offset: offset }, initOverrides);
+    async adminGetUsers($filter?: string, $orderby?: string, $offset?: number, $limit?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminUserResponsePaginated> {
+        const response = await this.adminGetUsersRaw({ $filter: $filter, $orderby: $orderby, $offset: $offset, $limit: $limit }, initOverrides);
         return await response.value();
     }
 
