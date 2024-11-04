@@ -77,11 +77,12 @@
         // Basic validation failed, return the failed validation result
         validationResult = valRes;
       }
-      valid = validationResult?.valid ?? false;
     } else {
       validationResult = { valid: true };
-      valid = true;
     }
+  });
+  $effect(() => {
+    valid = validationResult?.valid ?? false;
   });
 </script>
 
