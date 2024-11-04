@@ -8,6 +8,7 @@
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
   import EmailInput from '$lib/components/input/EmailInput.svelte';
   import { toast } from 'svelte-sonner';
+  import {Button} from "$lib/components/ui/button";
 
   let username: string = $state('');
   let email: string = $state('');
@@ -75,7 +76,7 @@
         button={{ text: 'Change', submits: true, onClick: submitEmail }}
       />
 
-      <Accordion.Root>
+      <Accordion.Root class="w-full">
         <Accordion.Item>
           <Accordion.Trigger>
             <i class="fa fa-key"></i>
@@ -108,9 +109,10 @@
                 validate={validatePasswordMatch(passwordConfirm, password)}
               />
 
-              <button class="btn variant-filled-primary" type="submit" disabled={!canSubmitPassword}
-              >Change Password</button
+              <Button class="btn variant-filled-primary" type="submit" disabled={!canSubmitPassword}
               >
+                Change Password
+              </Button>
             </div>
           </Accordion.Content>
         </Accordion.Item>

@@ -5,6 +5,7 @@
   import type { ButtonSettings } from './impl/ButtonSettings';
   import { Input } from '$lib/components/ui/input';
   import * as Popover from '$lib/components/ui/popover';
+  import {Button} from "$lib/components/ui/button";
 
   interface Props {
     type?: 'text' | 'password';
@@ -58,7 +59,7 @@
         oninput={handleInput}
       />
       {#if button}
-        <button
+        <Button
           type="button"
           class={button.class ?? 'variant-filled-primary disabled:opacity-50'}
           onclick={button.onClick}
@@ -70,7 +71,7 @@
           {:else if 'text' in button}
             {button.text}
           {/if}
-        </button>
+        </Button>
       {/if}
     </div>
   </div>
