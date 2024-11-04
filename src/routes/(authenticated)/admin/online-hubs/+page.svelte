@@ -70,7 +70,6 @@
   </button>
 </div>
 
-<!-- Online Users List -->
 {#if data}
   <DataTable {data} {columns} />
 {/if}
