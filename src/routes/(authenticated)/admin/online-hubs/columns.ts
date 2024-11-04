@@ -7,7 +7,7 @@ import DataTableNameButton from './data-table-name-button.svelte'
 import DataTableOwnerButton from './data-table-owner-button.svelte'
 import DataTableFirmwareVersionButton from './data-table-firmwareversion-button.svelte'
 import DataTableOnlineForButton from './data-table-onlinefor-button.svelte'
-import type {TwColor} from "$lib/types/Tailwind";
+import type { TwColor } from "$lib/types/Tailwind";
 
 export type OnlineDeviceOwner = {
   id: string;
@@ -83,7 +83,7 @@ export const columns: ColumnDef<OnlineDevice>[] = [
         }
 
         return {
-          render: () => `<div class="text-right font-medium ${color}" title="${firmwareVersion}">${firmwareVersion}</div>`,
+          render: () => `<div class="text-left font-medium ${color}" title="${firmwareVersion}">${firmwareVersion}</div>`,
         }
       });
 
@@ -117,7 +117,7 @@ export const columns: ColumnDef<OnlineDevice>[] = [
         const connectedAt = getConnectedAt();
         const formattedDuration = durationToString(now - connectedAt.getTime());
         return {
-          render: () => `<div class="text-right font-medium" title="${connectedAt}">${formattedDuration}</div>`,
+          render: () => `<div class="text-left font-medium" title="${connectedAt}">${formattedDuration}</div>`,
         }
       });
 
