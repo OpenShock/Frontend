@@ -27,6 +27,7 @@
 
   type subItem = {
     name: string;
+    class?: string;
     href?: string;
     target?: string;
   };
@@ -34,9 +35,10 @@
   type Menu = {
     name: string;
     icon: typeof Cpu;
-    color?: string;
+    class?: string;
     href?: string;
     target?: string;
+    collapsible?: { open: boolean };
     subItems?: subItem[];
   };
 
@@ -131,10 +133,12 @@
         {
           name: 'Danger Zone',
           icon: TriangleAlert,
-          color: 'red-500',
+          class: '!text-red-500',
+          collapsible: { open: false },
           subItems: [
             {
               name: 'Delete Account',
+              class: '!text-red-500',
               href: '/settings/delete-account',
             },
           ],
@@ -152,7 +156,7 @@
 </script>
 
 {#snippet menuSubItemSection(subItem: subItem)}
-  <Sidebar.MenuSubButton>
+  <Sidebar.MenuSubButton class={subItem.class}>
     <a href={subItem.href}>
       <span> {subItem.name}</span>
     </a>
@@ -161,7 +165,7 @@
 
 {#snippet menuSection(menu: Menu)}
   <Sidebar.MenuItem>
-    <Sidebar.MenuButton>
+    <Sidebar.MenuButton class={menu.class}>
       {#snippet child({ props })}
         <a href={menu.href} {...props}>
           <menu.icon />
