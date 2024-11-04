@@ -16,7 +16,6 @@
 		"test:unit": "vitest"
 	},
 	"devDependencies": {
-		"@floating-ui/dom": "^1.6.11",
 		"@microsoft/signalr": "^8.0.7",
 		"@openapitools/openapi-generator-cli": "^2.15.0",
 		"@playwright/test": "^1.48.2",
@@ -46,7 +45,6 @@
 		"highlight.js": "^11.10.0",
 		"js-sha1": "^0.7.0",
 		"lucide-svelte": "^0.454.0",
-		"mode-watcher": "^0.4.1",
 		"postcss": "8.4.47",
 		"prettier": "^3.3.3",
 		"prettier-plugin-svelte": "^3.2.7",
