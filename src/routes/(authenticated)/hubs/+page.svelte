@@ -1,5 +1,10 @@
 <script lang="ts">
+  import Button, { buttonVariants } from '$lib/components/ui/button/button.svelte';
   import { OwnDeviceStatesStore, OwnDevicesStore } from '$lib/stores/DevicesStore';
+
+  import CircleFadingArrowUp from 'lucide-svelte/icons/circle-fading-arrow-up';
+  import Pencil from 'lucide-svelte/icons/pencil';
+  import Trash from 'lucide-svelte/icons/trash';
 
   interface Device {
     id: string;
@@ -35,47 +40,49 @@
   });
 </script>
 
-<div class="container h-full mx-auto flex flex-col justify-center items-center">
-  <table class="table-container border-collapse max-w-4xl">
-    <thead>
+<table class="table-container border-collapse">
+  <thead>
+    <tr>
+      <th class="text-left">Device Name</th>
+      <th class="text-left">Status</th>
+      <th class="text-left">Version</th>
+      <th class="text-left">Created On</th>
+      <th class="text-center">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {#each devices as device (device.id)}
       <tr>
-        <th class="text-left">Device Name</th>
-        <th class="text-left">Status</th>
-        <th class="text-left">Version</th>
-        <th class="text-left">Created On</th>
+        <td class="text-lg border-y">
+          {device.name ?? 'Unnamed device'}
+        </td>
+        <td class="border-y">
+          {#if device.isOnline}
+            <span class="text-green-500">Online</span>
+          {:else}
+            <span class="text-red-500">Offline</span>
+          {/if}
+        </td>
+        <td class="border-y">
+          {#if device.firmwareVersion}
+            <span>{device.firmwareVersion}</span>
+          {/if}
+        </td>
+        <td class="border-y">
+          {device.createdAt.toLocaleDateString()}
+        </td>
+        <td>
+          <Button
+            class={buttonVariants({ variant: 'secondary' })}
+            disabled={!device.firmwareVersion}><CircleFadingArrowUp /></Button
+          >
+          <Button class={buttonVariants({ variant: 'secondary' })}><Pencil /></Button>
+          <Button class={buttonVariants({ variant: 'destructive' })}><Trash /></Button>
+        </td>
       </tr>
-    </thead>
-    <tbody>
-      {#each devices as device (device.id)}
-        <tr>
-          <td class="text-lg border-y">
-            {device.name ?? 'Unnamed device'}
-          </td>
-          <td class="border-y">
-            {#if device.isOnline}
-              <span class="text-green-500">Online</span>
-            {:else}
-              <span class="text-red-500">Offline</span>
-            {/if}
-            {#if device.firmwareVersion}
-              <button class="btn variant-filled">
-                  Update Firmware
-              </button>
-            {/if}
-          </td>
-          <td class="border-y">
-            {#if device.firmwareVersion}
-              <span class="text-gray-500">Version {device.firmwareVersion}</span>
-            {/if}
-          </td>
-          <td class="border-y">
-            {device.createdAt.toLocaleDateString()}
-          </td>
-        </tr>
-      {/each}
-    </tbody>
-  </table>
-</div>
+    {/each}
+  </tbody>
+</table>
 
 <style>
   table td {
