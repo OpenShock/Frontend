@@ -3,34 +3,42 @@ import { writable, type Updater } from "svelte/store";
 
 function getLocalStoreState() {
   const scheme = localStorage.getItem('theme');
-  if (scheme === 'dark' || scheme === 'light' || scheme === 'auto') {
+  if (scheme === 'dark' || scheme === 'light' || scheme === 'system') {
     return scheme;
   }
 
-  localStorage.setItem('theme', 'auto');
+  localStorage.setItem('theme', 'system');
 
-  return 'auto';
+  return 'system';
 }
 
 function getDarkReaderState() {
   const rootHtml = document.documentElement;
 
+  const proxyInjected = rootHtml.getAttribute('data-darkreader-proxy-injected');
+  const metaElement = rootHtml.querySelector('head meta[name="darkreader"]');
+
+  let scheme = rootHtml.getAttribute('data-darkreader-scheme');
+  if (scheme === 'auto') {
+    scheme = 'system';
+  }
+
   return {
-    isInjected: rootHtml.getAttribute('data-darkreader-proxy-injected') === 'true',
-    isActive: rootHtml.querySelector('head meta[name="darkreader"]') !== null,
-    scheme: rootHtml.getAttribute('data-darkreader-scheme'),
+    isInjected: proxyInjected === 'true',
+    isActive: metaElement !== null,
+    scheme,
   };
 }
 
 function getColorSchemePreference() {
   // If we are not in a browser environment, return default
   if (!browser) {
-    return 'auto';
+    return 'system';
   }
 
   // Check if local storage has a theme stored
   const localStoreState = getLocalStoreState();
-  if (localStoreState !== 'auto') {
+  if (localStoreState !== 'system') {
     return localStoreState;
   }
 
@@ -45,10 +53,11 @@ function getColorSchemePreference() {
     return 'light';
   }
 
-  return 'auto';
+  // Default to dark mode
+  return 'dark';
 }
 
-const { set, update, subscribe } = writable<'dark' | 'light' | 'auto'>(getColorSchemePreference());
+const { set, update, subscribe } = writable<'dark' | 'light' | 'system'>(getColorSchemePreference());
 
 function setHtmlDarkModeSelector(value: boolean) {
   document.documentElement.classList.toggle('dark', value);
@@ -56,16 +65,16 @@ function setHtmlDarkModeSelector(value: boolean) {
 
 function handleSchemePreferenceChange() {
   const scheme = getColorSchemePreference();
+  console.log('scheme', scheme);
   setHtmlDarkModeSelector(scheme === 'dark');
-  set(scheme);
 }
 
 export const ColorSchemeStore = {
-  set: (value: 'dark' | 'light' | 'auto') => {
+  set: (value: 'dark' | 'light' | 'system') => {
     localStorage.setItem('theme', value);
     set(value);
   },
-  update: (updater: Updater<'dark' | 'light' | 'auto'>) => {
+  update: (updater: Updater<'dark' | 'light' | 'system'>) => {
     update((value) => {
       const oldValue = value;
       const newValue = updater(value);

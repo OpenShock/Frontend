@@ -48,6 +48,7 @@
   }
 
   let isLoading = $state(true);
+  let cfColorScheme = $derived($ColorSchemeStore === 'system' ? 'auto' : $ColorSchemeStore) as 'dark' | 'light' | 'auto';
   $effect(() => {
     if (!turnstile) return;
 
@@ -58,7 +59,7 @@
         sitekey: PUBLIC_TURNSTILE_SITE_KEY,
         action,
         cData,
-        theme: $ColorSchemeStore,
+        theme: cfColorScheme,
         callback: (token) => (response = token),
         'expired-callback': handleExpired,
         'timeout-callback': handleTimeout,
