@@ -18,13 +18,12 @@
     };
   }
 
-  let raw = $state<AdminUserResponse[] | null>(null);
-  let data = $derived(raw?.map(apiUserToTableDevice));
+  let data = $state<User[]>([]);
 
   function fetchUsers() {
     adminApi
       .adminGetUsers()
-      .then((res) => raw = res?.data ?? null)
+      .then((res) => { if (res.data) { data = res.data.map(apiUserToTableDevice); }})
       .catch(handleApiError);
   }
 
@@ -33,7 +32,7 @@
   onMount(() => {
     fetchUsers();
     // Trigger refresh every 5 seconds
-    interval = setInterval(() => { if (raw) { raw = Object.assign([], raw); } }, 5000);
+    interval = setInterval(() => { data = Object.assign([], data); }, 5000);
   });
   onDestroy(() => {
     clearInterval(interval);

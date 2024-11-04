@@ -40,13 +40,12 @@
     };
   }
 
-  let raw = $state<AdminOnlineDeviceResponse[] | null>(null);
-  let data = $derived(raw?.map(apiDeviceToTableDevice));
+  let data = $state<OnlineDevice[]>([]);
 
   function fetchOnlineDevices() {
     adminApi
       .adminGetOnlineDevices()
-      .then((res) => raw = res?.data ?? null)
+      .then((res) => { if (res.data) { data = res.data.map(apiDeviceToTableDevice) }})
       .catch(handleApiError);
   }
 
@@ -55,7 +54,7 @@
   onMount(() => {
     fetchOnlineDevices();
     // Trigger refresh every 5 seconds
-    interval = setInterval(() => { if (raw) { raw = Object.assign([], raw); } }, 5000);
+    interval = setInterval(() => { data = Object.assign([], data); }, 5000);
   });
   onDestroy(() => {
     clearInterval(interval);
