@@ -1,13 +1,8 @@
-import type {ColumnDef} from '@tanstack/table-core';
-import {createRawSnippet} from 'svelte';
-import {renderComponent, renderSnippet} from '$lib/components/ui/data-table';
-import DataTableNameButton from './data-table-name-button.svelte';
-import DataTableEmailButton from './data-table-email-button.svelte';
-import DataTablePasswordHashTypeButton from './data-table-passwordhashtype-button.svelte';
-import DataTableCreatedAtButton from './data-table-createdat-button.svelte';
-import DataTableEmailActivatedButton from './data-table-emailactivated-button.svelte';
-import DataTableRankButton from './data-table-rank-button.svelte';
-import {PasswordHashingAlgorithm, RankType} from '$lib/api/internal/v1';
+import type { ColumnDef, StringOrTemplateHeader } from '@tanstack/table-core';
+import { createRawSnippet } from 'svelte';
+import { renderComponent, renderSnippet } from '$lib/components/ui/data-table';
+import { PasswordHashingAlgorithm, RankType } from '$lib/api/internal/v1';
+import DataTableSortButton from './data-table-sort-button.svelte';
 
 export type User = {
   id: string;
@@ -19,6 +14,14 @@ export type User = {
   rank: RankType;
 };
 
+function CreateSortHeader<TData>(name: string): StringOrTemplateHeader<TData, unknown> {
+  return ({ column }) =>
+    renderComponent(DataTableSortButton, {
+      name,
+      onclick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
+    });
+}
+
 export const columns: ColumnDef<User>[] = [
   {
     accessorKey: 'id',
@@ -26,24 +29,15 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: 'name',
-    header: ({ column }) =>
-      renderComponent(DataTableNameButton, {
-        onclick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
-      }),
+    header: CreateSortHeader<User>('Name'),
   },
   {
     accessorKey: 'email',
-    header: ({ column }) =>
-      renderComponent(DataTableEmailButton, {
-        onclick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
-      }),
+    header: CreateSortHeader<User>('Email'),
   },
   {
     accessorKey: 'password_hash_type',
-    header: ({ column }) =>
-      renderComponent(DataTablePasswordHashTypeButton, {
-        onclick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
-      }),
+    header: CreateSortHeader<User>('Password hash type'),
     cell: ({ row }) => {
       const passwordHashTypeCellSnippet = createRawSnippet<[PasswordHashingAlgorithm]>((getPasswordHashType) => {
         const passwordHashType = getPasswordHashType();
@@ -58,10 +52,7 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: 'created_at',
-    header: ({ column }) =>
-      renderComponent(DataTableCreatedAtButton, {
-        onclick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
-      }),
+    header: CreateSortHeader<User>('Created at'),
     cell: ({ row }) => {
       const createdAtCellSnippet = createRawSnippet<[Date]>((getCreatedAt) => {
         const createdAt = getCreatedAt();
@@ -76,10 +67,7 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: 'email_activated',
-    header: ({ column }) =>
-      renderComponent(DataTableEmailActivatedButton, {
-        onclick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
-      }),
+    header: CreateSortHeader<User>('Email activated'),
     cell: ({ row }) => {
       const emailActivatedCellSnippet = createRawSnippet<[boolean]>((getEmailActivated) => {
         const emailActivated = getEmailActivated();
@@ -94,10 +82,7 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: 'rank',
-    header: ({ column }) =>
-      renderComponent(DataTableRankButton, {
-        onclick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
-      }),
+    header: CreateSortHeader<User>('Rank'),
     cell: ({ row }) => {
       const rankCellSnippet = createRawSnippet<[RankType]>((getRank) => {
         const rank = getRank();
