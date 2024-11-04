@@ -1,9 +1,21 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import { RankType } from '$lib/api/internal/v1';
-  import * as Sidebar from "$lib/components/ui/sidebar/index.js";
-  import {Collapsible} from "bits-ui";
-  import ChevronDown from "lucide-svelte/icons/chevron-down";
+  import * as Sidebar from '$lib/components/ui/sidebar/index.js';
+  import { Collapsible } from 'bits-ui';
+  import ChevronDown from 'lucide-svelte/icons/chevron-down';
+
+  import Cpu from 'lucide-svelte/icons/cpu';
+  import House from 'lucide-svelte/icons/house';
+  import Zap from 'lucide-svelte/icons/zap';
+  import Link from 'lucide-svelte/icons/link';
+  import SquareActivity from 'lucide-svelte/icons/square-activity';
+  import Wrench from 'lucide-svelte/icons/wrench';
+  import Timer from 'lucide-svelte/icons/timer';
+  import UserPen from 'lucide-svelte/icons/user-pen';
+  import MonitorSmartphone from 'lucide-svelte/icons/monitor-smartphone';
+  import KeyRound from 'lucide-svelte/icons/key-round';
+  import TriangleAlert from 'lucide-svelte/icons/triangle-alert';
 
   interface Props {
     currentUserRank: RankType;
@@ -21,11 +33,11 @@
 
   type Menu = {
     name: string;
-    icon: `fa-${string}`;
+    icon: typeof Cpu;
     color?: string;
     href?: string;
     target?: string;
-    subItems?: subItem[]
+    subItems?: subItem[];
   };
 
   type Group = {
@@ -41,26 +53,26 @@
       menus: [
         {
           name: 'Home',
-          icon: 'fa-house',
+          icon: House,
           href: '/home',
         },
         {
           name: 'Shockers',
-          icon: 'fa-bolt',
+          icon: Zap,
           href: '/shockers',
         },
         {
           name: 'Hubs',
-          icon: 'fa-microchip',
+          icon: Cpu,
           href: '/hubs',
         },
         {
           name: 'Sharelinks',
-          icon: 'fa-link',
+          icon: Link,
           href: '/sharelinks',
-        }
-      ]
-    }
+        },
+      ],
+    },
   ];
 
   const footerGroups: Group[] = [
@@ -71,31 +83,31 @@
       menus: [
         {
           name: 'Monitoring',
-          icon: 'fa-eye',
+          icon: SquareActivity,
           subItems: [
             {
               name: 'Online Hubs',
               href: '/admin/online-hubs',
-            }
-          ]
+            },
+          ],
         },
         {
           name: 'Management',
-          icon: 'fa-wrench',
+          icon: Wrench,
           subItems: [
             {
               name: 'Users',
               href: '/admin/users',
-            }
-          ]
+            },
+          ],
         },
         {
           name: 'Hangfire',
-          icon: 'fa-circle-h',
+          icon: Timer,
           href: '/hangfire',
-          target: '_blank'
-        }
-      ]
+          target: '_blank',
+        },
+      ],
     },
     {
       title: 'Settings',
@@ -103,32 +115,32 @@
       menus: [
         {
           name: 'Account',
-          icon: 'fa-eye',
+          icon: UserPen,
           href: '/settings/account',
         },
         {
           name: 'Sessions',
-          icon: 'fa-eye',
+          icon: MonitorSmartphone,
           href: '/settings/sessions',
         },
         {
           name: 'API Tokens',
-          icon: 'fa-eye',
+          icon: KeyRound,
           href: '/settings/api-tokens',
         },
         {
           name: 'Danger Zone',
-          icon: 'fa-triangle-exclamation',
+          icon: TriangleAlert,
           color: 'red-500',
           subItems: [
             {
               name: 'Delete Account',
               href: '/settings/delete-account',
-            }
-          ]
-        }
-      ]
-    }
+            },
+          ],
+        },
+      ],
+    },
   ];
 
   function meetsReq(rank: RankType, group: Group) {
@@ -152,7 +164,7 @@
     <Sidebar.MenuButton>
       {#snippet child({ props })}
         <a href={menu.href} {...props}>
-          <i class={"fa " + menu.icon}></i>
+          <menu.icon />
           <span>{menu.name}</span>
         </a>
       {/snippet}
@@ -163,11 +175,11 @@
     -->
   </Sidebar.MenuItem>
   {#if menu.subItems}
-      <Sidebar.MenuSub>
-        {#each menu.subItems as subItem (subItem.name)}
-          {@render menuSubItemSection(subItem)}
-        {/each}
-      </Sidebar.MenuSub>
+    <Sidebar.MenuSub>
+      {#each menu.subItems as subItem (subItem.name)}
+        {@render menuSubItemSection(subItem)}
+      {/each}
+    </Sidebar.MenuSub>
   {/if}
 {/snippet}
 
