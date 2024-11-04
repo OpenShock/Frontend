@@ -12,7 +12,7 @@
     <p class={`text-sm text-${color}`}>{text}</p>
   </div>
   <div class="arrow bg-surface-100-800-token"></div>
-  <div id="line">
+  <div class="pt-2 h-1 w-full flex flex-row items-center space-x-1">
     <div class="h-1 bg-red-500" style="flex: 3 3 0%"></div>
     <div class="h-1 bg-orange-500" style="flex: 2 2 0%"></div>
     <div class="h-1 bg-yellow-500" style="flex: 1 1 0%"></div>
@@ -26,11 +26,3 @@
     ></div>
   </div>
 </div>
-
-<style lang="postcss">
-  #line {
-    @apply pt-2 h-1 w-full flex flex-row items-center space-x-1;
-  }
-
-  #line div
-</style>
