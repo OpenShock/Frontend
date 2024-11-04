@@ -27,16 +27,17 @@
       .catch(handleApiError);
   }
 
-
   let interval: ReturnType<typeof setInterval>;
   onMount(() => {
     fetchUsers();
-    // Trigger refresh every 5 seconds
-    interval = setInterval(() => { data = Object.assign([], data); }, 5000);
+    // Update timestamps every minute
+    interval = setInterval(() => {
+      data = Object.assign([], data);
+    }, 60000);
   });
   onDestroy(() => {
     clearInterval(interval);
-  })
+  });
 </script>
 
 <div class="flex justify-between w-full mb-2">

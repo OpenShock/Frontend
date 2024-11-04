@@ -44,7 +44,7 @@
   let interval: ReturnType<typeof setInterval>;
   onMount(() => {
     fetchSessions();
-    // Trigger refresh every 5 seconds
+    // Update timestamps every 5 seconds
     interval = setInterval(() => {
       if (sessions) {
         sessions = Object.assign([], sessions);

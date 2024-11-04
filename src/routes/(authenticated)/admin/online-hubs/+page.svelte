@@ -3,8 +3,8 @@
   import { onDestroy, onMount } from 'svelte';
   import { SemVer } from 'semver';
   import { adminApi } from '$lib/api';
-  import { handleApiError } from "$lib/errorhandling/apiErrorHandling";
-  import {columns, type OnlineDevice, type OnlineDeviceOwner} from './columns';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { columns, type OnlineDevice, type OnlineDeviceOwner } from './columns';
   import DataTable from './data-table.svelte';
 
   function apiDeviceToTableDevice(device: AdminOnlineDeviceResponse): OnlineDevice {
@@ -13,13 +13,13 @@
       owner = {
         id: device.owner.id,
         name: device.owner.name ?? 'Unknown',
-        image: device.owner.image ?? 'https://openshock.app/someimageurl'
+        image: device.owner.image ?? 'https://openshock.app/someimageurl',
       };
     } else {
       owner = {
         id: 'Unknown',
         name: 'Unknown',
-        image: 'https://openshock.app/someimageurl'
+        image: 'https://openshock.app/someimageurl',
       };
     }
 
@@ -45,20 +45,25 @@
   function fetchOnlineDevices() {
     adminApi
       .adminGetOnlineDevices()
-      .then((res) => { if (res.data) { data = res.data.map(apiDeviceToTableDevice) }})
+      .then((res) => {
+        if (res.data) {
+          data = res.data.map(apiDeviceToTableDevice);
+        }
+      })
       .catch(handleApiError);
   }
-
 
   let interval: ReturnType<typeof setInterval>;
   onMount(() => {
     fetchOnlineDevices();
-    // Trigger refresh every 5 seconds
-    interval = setInterval(() => { data = Object.assign([], data); }, 5000);
+    // Update timestamps every 5 seconds
+    interval = setInterval(() => {
+      data = Object.assign([], data);
+    }, 5000);
   });
   onDestroy(() => {
     clearInterval(interval);
-  })
+  });
 </script>
 
 <div class="flex justify-between w-full mb-2">
