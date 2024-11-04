@@ -65,7 +65,6 @@ function setHtmlDarkModeSelector(value: boolean) {
 
 function handleSchemePreferenceChange() {
   const scheme = getColorSchemePreference();
-  console.log('scheme', scheme);
   setHtmlDarkModeSelector(scheme === 'dark');
 }
 
@@ -73,6 +72,7 @@ export const ColorSchemeStore = {
   set: (value: 'dark' | 'light' | 'system') => {
     localStorage.setItem('theme', value);
     set(value);
+    handleSchemePreferenceChange();
   },
   update: (updater: Updater<'dark' | 'light' | 'system'>) => {
     update((value) => {
