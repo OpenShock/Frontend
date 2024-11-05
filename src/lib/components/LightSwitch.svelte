@@ -2,10 +2,50 @@
   import Sun from 'lucide-svelte/icons/sun';
   import Moon from 'lucide-svelte/icons/moon';
 
-  import { buttonVariants } from '$lib/components/ui/button';
+  import { ColorSchemeStore, willActivateLightMode } from '$lib/stores/ColorSchemeStore';
+
+  import { Button, buttonVariants } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-  import { ColorSchemeStore } from '$lib/stores/ColorSchemeStore';
+  import * as Dialog from '$lib/components/ui/dialog';
+  import AbsolutelySureButton from './AbsolutelySureButton.svelte';
+
+  let pendingScheme = $state<'light' | 'dark' | 'system' | undefined>();
+  function handleOpenChanged(open: boolean) {
+    if (open) return;
+    pendingScheme = undefined;
+  }
+  function confirm() {
+    if (!pendingScheme) return;
+    ColorSchemeStore.set(pendingScheme);
+    pendingScheme = undefined;
+  }
+  function evaluateLightSwitch(scheme: 'light' | 'dark' | 'system') {
+    if (willActivateLightMode(scheme) && scheme !== $ColorSchemeStore) {
+      pendingScheme = scheme;
+      return;
+    }
+    ColorSchemeStore.set(scheme);
+  }
 </script>
+
+<Dialog.Root
+  open={pendingScheme !== undefined}
+  onOpenChange={handleOpenChanged}
+  controlledOpen={true}
+>
+  <Dialog.Content>
+    <Dialog.Header>
+      <Dialog.Title>Switch to light mode</Dialog.Title>
+      <Dialog.Description>
+        <!-- Funny lightmode warning -->
+        <span class="text-red-500 font-bold">Warning:</span> You are about to switch to light mode.
+        <br />
+        Are you sure you want to do this?
+      </Dialog.Description>
+    </Dialog.Header>
+    <AbsolutelySureButton text="I am willing to take the risk" onconfirm={confirm} />
+  </Dialog.Content>
+</Dialog.Root>
 
 <DropdownMenu.Root>
   <DropdownMenu.Trigger class={buttonVariants({ variant: 'outline', size: 'icon' })}>
@@ -18,8 +58,8 @@
     <span class="sr-only">Toggle theme</span>
   </DropdownMenu.Trigger>
   <DropdownMenu.Content align="end">
-    <DropdownMenu.Item onclick={() => ColorSchemeStore.set('light')}>Light</DropdownMenu.Item>
-    <DropdownMenu.Item onclick={() => ColorSchemeStore.set('dark')}>Dark</DropdownMenu.Item>
-    <DropdownMenu.Item onclick={() => ColorSchemeStore.set('system')}>System</DropdownMenu.Item>
+    <DropdownMenu.Item onclick={() => evaluateLightSwitch('light')}>Light</DropdownMenu.Item>
+    <DropdownMenu.Item onclick={() => evaluateLightSwitch('dark')}>Dark</DropdownMenu.Item>
+    <DropdownMenu.Item onclick={() => evaluateLightSwitch('system')}>System</DropdownMenu.Item>
   </DropdownMenu.Content>
 </DropdownMenu.Root>

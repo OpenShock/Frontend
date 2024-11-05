@@ -88,6 +88,10 @@ export const ColorSchemeStore = {
   subscribe,
 };
 
+export function willActivateLightMode(value: 'dark' | 'light' | 'system') {
+  return value === 'light' || (value === 'system' && window.matchMedia('(prefers-color-scheme: light)').matches);
+}
+
 export function initializeDarkModeStore() {
   const schemePreference = getColorSchemePreference();
   setHtmlDarkModeSelector(schemePreference === 'dark');
