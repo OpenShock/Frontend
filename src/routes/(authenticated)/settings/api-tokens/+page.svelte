@@ -1,14 +1,32 @@
 <script lang="ts">
   import { tokensApi } from '$lib/api';
   import type { TokenResponse } from '$lib/api/internal/v1';
-  import * as Dialog from '$lib/components/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { elapsedToString } from '$lib/utils/time';
   import { onMount } from 'svelte';
+  import TokenEditDialog from './token-edit-dialog.svelte';
+  import TokenDeleteDialog from './token-delete-dialog.svelte';
+  import Button from '$lib/components/ui/button/button.svelte';
+  import TokenGenerateDialog from './token-generate-dialog.svelte';
 
   let tokens: TokenResponse[] = $state([]);
+  let showGenerateTokenModal = $state<boolean>(false);
+  let tokenToEdit = $state<TokenResponse | null>(null);
   let tokenToDelete = $state<TokenResponse | null>(null);
 
+  function refreshToken(id: string) {
+    tokensApi
+      .tokensGetTokenById(id)
+      .then((response) => {
+        const index = tokens.findIndex((t) => t.id === id);
+        if (index >= 0) {
+          tokens[index] = response;
+        } else {
+          tokens.push(response);
+        }
+      })
+      .catch(handleApiError);
+  }
   function refreshTokens() {
     tokensApi
       .tokensListTokens()
@@ -16,34 +34,6 @@
         tokens = response;
       })
       .catch(handleApiError);
-  }
-
-  function deleteToken(tokenId: string) {
-    tokensApi
-      .tokensDeleteToken(tokenId)
-      .then(() => {
-        tokens = tokens.filter((t) => t.id !== tokenId);
-      })
-      .catch(handleApiError);
-  }
-
-  function showGenerateTokenModal() {
-    modalStore.trigger({
-      type: 'component',
-      // Data
-      component: 'ApiTokenGenerate',
-      response: refreshTokens,
-    });
-  }
-
-  function showEditTokenModal(tokenId: string) {
-    modalStore.trigger({
-      type: 'component',
-      // Data
-      component: 'ApiTokenEdit',
-      meta: { id: tokenId },
-      response: refreshTokens,
-    });
   }
 
   onMount(refreshTokens);
@@ -54,21 +44,21 @@
   }, 1000);
 </script>
 
-{#if tokenToDelete != null}
-  <Dialog.Root>
-    <Dialog.Trigger>Open</Dialog.Trigger>
-    <Dialog.Content>
-      <Dialog.Header>
-        <Dialog.Title>Are you sure you want to delete <b>{tokenToDelete.name}</b>?</Dialog.Title>
-        <Dialog.Description>
-          !!! Testing text !!!
-          This action cannot be undone. This will permanently delete your account
-          and remove your data from our servers.
-        </Dialog.Description>
-      </Dialog.Header>
-    </Dialog.Content>
-  </Dialog.Root>
-{/if}
+<TokenGenerateDialog
+  open={showGenerateTokenModal}
+  onGenerated={(id) => refreshToken(id)}
+  onClose={() => (showGenerateTokenModal = false)}
+/>
+<TokenEditDialog
+  token={tokenToEdit}
+  onEdited={(id) => refreshToken(id)}
+  onClose={() => (tokenToEdit = null)}
+/>
+<TokenDeleteDialog
+  token={tokenToDelete}
+  onDeleted={(id) => (tokens = tokens.filter((t) => t.id !== id))}
+  onClose={() => (tokenToDelete = null)}
+/>
 
 <div class="container h-full mx-auto p-12 flex flex-col justify-start items-start gap-4">
   <h1 class="h1">API Tokens</h1>
@@ -114,13 +104,13 @@
               <td class="!whitespace-nowrap">
                 <button
                   class="btn-icon variant-filled-primary fa fa-edit"
-                  onclick={() => showEditTokenModal(token.id)}
+                  onclick={() => (tokenToEdit = token)}
                   aria-label="Edit Token"
                 >
                 </button>
                 <button
                   class="btn-icon variant-filled-primary fa fa-trash"
-                  onclick={() => tokenToDelete = token}
+                  onclick={() => (tokenToDelete = token)}
                   aria-label="Delete Token"
                 >
                 </button>
@@ -130,8 +120,6 @@
         </tbody>
       </table>
     </div>
-    <button class="btn variant-filled-primary" onclick={showGenerateTokenModal}
-      >Generate Token</button
-    >
+    <Button onclick={() => (showGenerateTokenModal = true)}>Generate Token</Button>
   </div>
 </div>
