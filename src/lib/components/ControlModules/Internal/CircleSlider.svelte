@@ -30,7 +30,6 @@
   let { name, value = $bindable(), min, max, step, tabindex = undefined }: Props = $props();
 
   let canvasHandle: HTMLDivElement | undefined = $state();
-  let sliderHandle: HTMLDivElement | undefined = $state();
 
   function stupidUnfloatHack(value: number) {
     // This is a stupid hack to avoid floating point errors, needed to make UI not look like shit
@@ -92,13 +91,6 @@
   // Update visual progress
   let degrees = $derived(angleStart + invLerp(min, max, $animatedValue) * angleRange);
   let progressProps = $derived(calcSvgArcProps(center, angleStart, degrees, radius, 10));
-
-  $effect(() => {
-    if (!sliderHandle) return;
-
-    sliderHandle.style.left = `${60 + getCircleX(60, degrees)}px`; // TODO: Avoid using pixel values
-    sliderHandle.style.top = `${60 + getCircleY(60, degrees)}px`; // TODO: Avoid using pixel values
-  });
 </script>
 
 <div>
@@ -108,7 +100,7 @@
         {...calcSvgArcProps(center, angleStart, angleEnd, radius, 20)}
         fill="none"
         stroke-linecap="round"
-        style="stroke: rgb(27, 29, 30)"
+        style:troke="rgb(27, 29, 30)"
         ontouchstart={trackingStarted}
         onmousedown={trackingStarted}
         aria-hidden="true"
@@ -117,7 +109,7 @@
         {...progressProps}
         fill="none"
         stroke-linecap="round"
-        class="stroke-secondary-500"
+        style:stroke="rgb(0, 122, 255)"
         ontouchstart={trackingStarted}
         onmousedown={trackingStarted}
         id={guageId}
@@ -126,7 +118,8 @@
     </svg>
     <div
       class="handle"
-      bind:this={sliderHandle}
+      style:left={`${60 + getCircleX(60, degrees)}px`}
+      style:top={`${60 + getCircleY(60, degrees)}px`}
       ontouchstart={trackingStarted}
       onmousedown={trackingStarted}
       role="slider"
