@@ -18,9 +18,9 @@ This is the frontend for the OpenShock project that interfaces with the OpenShoc
 ## Technologies
 
 ![Typescript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
-![Vite](https://img.shields.io/badge/shadcn/ui-000?style=for-the-badge&logo=shadcnui&logoColor=orange)
-![SveltKit](https://img.shields.io/badge/SvelteKit-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00)
-![Skeleton UI](https://img.shields.io/badge/💀_Skeleton_UI-646CFF?style=for-the-badge&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![SvelteKit](https://img.shields.io/badge/SvelteKit-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00)
+![shadcn-ui](https://img.shields.io/badge/shadcn/ui-000?style=for-the-badge&logo=shadcnui&logoColor=orange)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
 ## Available Commands
@@ -40,16 +40,19 @@ We recommend using a version manager like [Volta](https://docs.volta.sh/guide/ge
 ### Install Node.js and pnpm
 
 Install on Linux:
+
 ```bash
 curl https://get.volta.sh | bash
 ```
 
 Install on Windows:
+
 ```pwsh
 winget install Volta.Volta
 ```
 
 Then you can install the required **Node.js** and **pnpm** version by running a single command in the repository root directory:
+
 ```bash
 volta install node
 volta install pnpm
@@ -67,6 +70,7 @@ pnpm run build
 ## Running locally
 
 Running the frontend locally is as simple as this:
+
 ```bash
 pnpm run dev
 ```
@@ -74,6 +78,7 @@ pnpm run dev
 ### Hosts redirect
 
 If you do not have a hosts file config for your domain and try to run the project you will get the following example message:
+
 ```
 Please ensure that local.openshock.app resolves to 127.0.0.1 in your hosts file
 
