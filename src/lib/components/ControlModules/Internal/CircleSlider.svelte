@@ -131,7 +131,7 @@
       aria-controls={guageId}
     ></div>
     <input id={inputId} type="number" {name} {min} bind:value {max} {step} aria-label="Value" />
-    <label for={inputId} aria-label="Name">
+    <label id={labelId} for={inputId} aria-label="Name">
       {name}
     </label>
   </div>
