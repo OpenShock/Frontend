@@ -50,7 +50,9 @@
 
 <button
   onmousedown={startConfirm}
+  ontouchstart={startConfirm}
   onmouseup={stopTimers}
+  ontouchend={stopTimers}
   onmouseleave={stopTimers}
   class={timer ? 'violent-shake' : undefined}
 >
