@@ -1,6 +1,6 @@
 import { PUBLIC_BACKEND_API_DOMAIN } from '$env/static/public';
 import { AccountApi as AccountV1Api, DevicesApi as DevicesV1Api, SharesApi as SharesV1Api, ShockerApi as ShockerV1Api, AdminApi, AuthenticatedAccountApi, DeviceApi, PublicApi, SessionsApi, ShareLinksApi, TokensApi, UsersApi, VersionApi, Configuration as ConfigurationV1 } from './internal/v1';
-import { AccountApi as AccountV2Api, DevicesApi as DevicesV2Api, SharesVApi as SharesV2Api, ShockerApi as ShockerV2Api, Configuration as ConfigurationV2 } from './internal/v2';
+import { AccountApi as AccountV2Api, DevicesApi as DevicesV2Api, SharesApi as SharesV2Api, ShockerApi as ShockerV2Api, Configuration as ConfigurationV2 } from './internal/v2';
 
 type Config = {
   basePath?: string;

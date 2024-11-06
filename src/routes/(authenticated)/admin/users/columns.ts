@@ -1,7 +1,7 @@
 import type { ColumnDef, StringOrTemplateHeader } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table';
-import { RankType } from '$lib/api/internal/v1';
+import { PasswordHashingAlgorithm, RankType } from '$lib/api/internal/v1';
 import DataTableSortButton from './data-table-sort-button.svelte';
 import DataTableActions from './data-table-actions.svelte';
 
@@ -9,7 +9,7 @@ export type User = {
   id: string;
   name: string;
   email: string;
-  password_hash_type: PasswordHasing;
+  password_hash_type: PasswordHashingAlgorithm;
   created_at: Date;
   email_activated: boolean;
   rank: RankType;
