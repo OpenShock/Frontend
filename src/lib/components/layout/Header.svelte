@@ -4,7 +4,7 @@
   import LightSwitch from '$lib/components/LightSwitch.svelte';
   import { Button, buttonVariants } from '$lib/components/ui/button';
   import * as Menubar from '$lib/components/ui/menubar';
-
+  import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 </script>
 
 {#snippet item(text: string, href: string)}
@@ -34,18 +34,19 @@
   <LightSwitch />
 
   {#if $UserStore.self !== null}
-    <div
-      class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 cursor-pointer"
-    >
-      <img class="inline-block h-8 rounded-full" src={$UserStore.self.avatar} alt="User Avatar" />
-      <p class="hidden lg:inline-block">{$UserStore.self.name}</p>
-    </div>
-    <div class="card p-4 w-48 bg-surface-200-700-token shadow-xl" data-popup="accountPopup">
-      {@render item('Profile', '/profile')}
-      {@render item('Settings', '/settings')}
-      {@render item('Logout', '/logout')}
-      <div class="arrow bg-surface-200-700-token" data-arrow="accountPopup"></div>
-    </div>
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 cursor-pointer select-none">
+        <img class="inline-block h-8 rounded-full" src={$UserStore.self.avatar} alt="User Avatar" />
+        <p class="hidden lg:inline-block">{$UserStore.self.name}</p>
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.Group>
+          <DropdownMenu.Item>Profile</DropdownMenu.Item>
+          <DropdownMenu.Item>Settings</DropdownMenu.Item>
+          <DropdownMenu.Item>Logout</DropdownMenu.Item>
+        </DropdownMenu.Group>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
   {:else}
     {@render item('Login', '/login')}
     {@render item('Sign Up', '/signup')}
