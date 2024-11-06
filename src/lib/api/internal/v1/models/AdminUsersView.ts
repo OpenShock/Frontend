@@ -32,103 +32,103 @@ export interface AdminUsersView {
      * @type {string}
      * @memberof AdminUsersView
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {string}
      * @memberof AdminUsersView
      */
-    name?: string;
+    name: string;
     /**
      * 
      * @type {string}
      * @memberof AdminUsersView
      */
-    email?: string;
+    email: string;
     /**
      * 
      * @type {string}
      * @memberof AdminUsersView
      */
-    passwordHashType?: string;
+    passwordHashType: string;
     /**
      * 
      * @type {Date}
      * @memberof AdminUsersView
      */
-    createdAt?: Date;
+    createdAt: Date;
     /**
      * 
      * @type {boolean}
      * @memberof AdminUsersView
      */
-    emailActivated?: boolean;
+    emailActivated: boolean;
     /**
      * 
      * @type {RankType}
      * @memberof AdminUsersView
      */
-    rank?: RankType;
+    rank: RankType;
     /**
      * 
      * @type {number}
      * @memberof AdminUsersView
      */
-    apiTokenCount?: number;
+    apiTokenCount: number;
     /**
      * 
      * @type {number}
      * @memberof AdminUsersView
      */
-    passwordResetCount?: number;
+    passwordResetCount: number;
     /**
      * 
      * @type {number}
      * @memberof AdminUsersView
      */
-    shockerShareCount?: number;
+    shockerShareCount: number;
     /**
      * 
      * @type {number}
      * @memberof AdminUsersView
      */
-    shockerShareLinkCount?: number;
+    shockerShareLinkCount: number;
     /**
      * 
      * @type {number}
      * @memberof AdminUsersView
      */
-    emailChangeRequestCount?: number;
+    emailChangeRequestCount: number;
     /**
      * 
      * @type {number}
      * @memberof AdminUsersView
      */
-    nameChangeRequestCount?: number;
+    nameChangeRequestCount: number;
     /**
      * 
      * @type {number}
      * @memberof AdminUsersView
      */
-    userActivationCount?: number;
+    userActivationCount: number;
     /**
      * 
      * @type {number}
      * @memberof AdminUsersView
      */
-    deviceCount?: number;
+    deviceCount: number;
     /**
      * 
      * @type {number}
      * @memberof AdminUsersView
      */
-    shockerCount?: number;
+    shockerCount: number;
     /**
      * 
      * @type {number}
      * @memberof AdminUsersView
      */
-    shockerControlLogCount?: number;
+    shockerControlLogCount: number;
 }
 
 
@@ -137,6 +137,23 @@ export interface AdminUsersView {
  * Check if a given object implements the AdminUsersView interface.
  */
 export function instanceOfAdminUsersView(value: object): value is AdminUsersView {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('email' in value) || value['email'] === undefined) return false;
+    if (!('passwordHashType' in value) || value['passwordHashType'] === undefined) return false;
+    if (!('createdAt' in value) || value['createdAt'] === undefined) return false;
+    if (!('emailActivated' in value) || value['emailActivated'] === undefined) return false;
+    if (!('rank' in value) || value['rank'] === undefined) return false;
+    if (!('apiTokenCount' in value) || value['apiTokenCount'] === undefined) return false;
+    if (!('passwordResetCount' in value) || value['passwordResetCount'] === undefined) return false;
+    if (!('shockerShareCount' in value) || value['shockerShareCount'] === undefined) return false;
+    if (!('shockerShareLinkCount' in value) || value['shockerShareLinkCount'] === undefined) return false;
+    if (!('emailChangeRequestCount' in value) || value['emailChangeRequestCount'] === undefined) return false;
+    if (!('nameChangeRequestCount' in value) || value['nameChangeRequestCount'] === undefined) return false;
+    if (!('userActivationCount' in value) || value['userActivationCount'] === undefined) return false;
+    if (!('deviceCount' in value) || value['deviceCount'] === undefined) return false;
+    if (!('shockerCount' in value) || value['shockerCount'] === undefined) return false;
+    if (!('shockerControlLogCount' in value) || value['shockerControlLogCount'] === undefined) return false;
     return true;
 }
 
@@ -150,23 +167,23 @@ export function AdminUsersViewFromJSONTyped(json: any, ignoreDiscriminator: bool
     }
     return {
         
-        'id': json['id'] == null ? undefined : json['id'],
-        'name': json['name'] == null ? undefined : json['name'],
-        'email': json['email'] == null ? undefined : json['email'],
-        'passwordHashType': json['passwordHashType'] == null ? undefined : json['passwordHashType'],
-        'createdAt': json['createdAt'] == null ? undefined : (new Date(json['createdAt'])),
-        'emailActivated': json['emailActivated'] == null ? undefined : json['emailActivated'],
-        'rank': json['rank'] == null ? undefined : RankTypeFromJSON(json['rank']),
-        'apiTokenCount': json['apiTokenCount'] == null ? undefined : json['apiTokenCount'],
-        'passwordResetCount': json['passwordResetCount'] == null ? undefined : json['passwordResetCount'],
-        'shockerShareCount': json['shockerShareCount'] == null ? undefined : json['shockerShareCount'],
-        'shockerShareLinkCount': json['shockerShareLinkCount'] == null ? undefined : json['shockerShareLinkCount'],
-        'emailChangeRequestCount': json['emailChangeRequestCount'] == null ? undefined : json['emailChangeRequestCount'],
-        'nameChangeRequestCount': json['nameChangeRequestCount'] == null ? undefined : json['nameChangeRequestCount'],
-        'userActivationCount': json['userActivationCount'] == null ? undefined : json['userActivationCount'],
-        'deviceCount': json['deviceCount'] == null ? undefined : json['deviceCount'],
-        'shockerCount': json['shockerCount'] == null ? undefined : json['shockerCount'],
-        'shockerControlLogCount': json['shockerControlLogCount'] == null ? undefined : json['shockerControlLogCount'],
+        'id': json['id'],
+        'name': json['name'],
+        'email': json['email'],
+        'passwordHashType': json['passwordHashType'],
+        'createdAt': (new Date(json['createdAt'])),
+        'emailActivated': json['emailActivated'],
+        'rank': RankTypeFromJSON(json['rank']),
+        'apiTokenCount': json['apiTokenCount'],
+        'passwordResetCount': json['passwordResetCount'],
+        'shockerShareCount': json['shockerShareCount'],
+        'shockerShareLinkCount': json['shockerShareLinkCount'],
+        'emailChangeRequestCount': json['emailChangeRequestCount'],
+        'nameChangeRequestCount': json['nameChangeRequestCount'],
+        'userActivationCount': json['userActivationCount'],
+        'deviceCount': json['deviceCount'],
+        'shockerCount': json['shockerCount'],
+        'shockerControlLogCount': json['shockerControlLogCount'],
     };
 }
 
@@ -185,7 +202,7 @@ export function AdminUsersViewFromJSONTyped(json: any, ignoreDiscriminator: bool
         'name': value['name'],
         'email': value['email'],
         'passwordHashType': value['passwordHashType'],
-        'createdAt': value['createdAt'] == null ? undefined : ((value['createdAt']).toISOString()),
+        'createdAt': ((value['createdAt']).toISOString()),
         'emailActivated': value['emailActivated'],
         'rank': RankTypeToJSON(value['rank']),
         'apiTokenCount': value['apiTokenCount'],
