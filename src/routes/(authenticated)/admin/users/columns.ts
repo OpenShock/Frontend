@@ -9,7 +9,7 @@ export type User = {
   id: string;
   name: string;
   email: string;
-  password_hash_type: PasswordHashingAlgorithm;
+  password_hash_type: PasswordHasing;
   created_at: Date;
   email_activated: boolean;
   rank: RankType;

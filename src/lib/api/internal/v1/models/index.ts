@@ -36,6 +36,7 @@ export * from './OtaItemIReadOnlyCollectionBaseResponse';
 export * from './OtaUpdateStatus';
 export * from './OwnerShockerResponse';
 export * from './OwnerShockerResponseIEnumerableIEnumerableBaseResponse';
+export * from './PasswordHashingAlgorithm';
 export * from './PasswordResetProcessData';
 export * from './PauseReasonBaseResponse';
 export * from './PauseRequest';

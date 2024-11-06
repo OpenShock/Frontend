@@ -13,6 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
+import type { PasswordHashingAlgorithm } from './PasswordHashingAlgorithm';
+import {
+    PasswordHashingAlgorithmFromJSON,
+    PasswordHashingAlgorithmFromJSONTyped,
+    PasswordHashingAlgorithmToJSON,
+    PasswordHashingAlgorithmToJSONTyped,
+} from './PasswordHashingAlgorithm';
 import type { RankType } from './RankType';
 import {
     RankTypeFromJSON,
@@ -47,10 +54,10 @@ export interface AdminUsersView {
     email: string;
     /**
      * 
-     * @type {string}
+     * @type {PasswordHashingAlgorithm}
      * @memberof AdminUsersView
      */
-    passwordHashType: string;
+    passwordHashType: PasswordHashingAlgorithm;
     /**
      * 
      * @type {Date}
@@ -170,7 +177,7 @@ export function AdminUsersViewFromJSONTyped(json: any, ignoreDiscriminator: bool
         'id': json['id'],
         'name': json['name'],
         'email': json['email'],
-        'passwordHashType': json['passwordHashType'],
+        'passwordHashType': PasswordHashingAlgorithmFromJSON(json['passwordHashType']),
         'createdAt': (new Date(json['createdAt'])),
         'emailActivated': json['emailActivated'],
         'rank': RankTypeFromJSON(json['rank']),
@@ -201,7 +208,7 @@ export function AdminUsersViewFromJSONTyped(json: any, ignoreDiscriminator: bool
         'id': value['id'],
         'name': value['name'],
         'email': value['email'],
-        'passwordHashType': value['passwordHashType'],
+        'passwordHashType': PasswordHashingAlgorithmToJSON(value['passwordHashType']),
         'createdAt': ((value['createdAt']).toISOString()),
         'emailActivated': value['emailActivated'],
         'rank': RankTypeToJSON(value['rank']),

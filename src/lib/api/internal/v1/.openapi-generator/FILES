@@ -49,6 +49,7 @@ models/OtaItemIReadOnlyCollectionBaseResponse.ts
 models/OtaUpdateStatus.ts
 models/OwnerShockerResponse.ts
 models/OwnerShockerResponseIEnumerableIEnumerableBaseResponse.ts
+models/PasswordHashingAlgorithm.ts
 models/PasswordResetProcessData.ts
 models/PauseReasonBaseResponse.ts
 models/PauseRequest.ts
