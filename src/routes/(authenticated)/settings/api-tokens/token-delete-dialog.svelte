@@ -3,10 +3,10 @@
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import * as Dialog from '$lib/components/ui/dialog';
   import Button from '$lib/components/ui/button/button.svelte';
-  import type { TokenResponse } from '$lib/api/internal/v1';
+  import type { ApiToken } from './columns';
 
   type Props = {
-    token: TokenResponse | null;
+    token: ApiToken | null;
     onDeleted: (id: string) => void;
     onClose: () => void;
   };

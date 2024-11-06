@@ -1,23 +1,12 @@
 <script lang="ts">
-  import CalendarIcon from 'lucide-svelte/icons/calendar';
   import { tokensApi } from '$lib/api';
   import { PermissionType } from '$lib/api/internal/v1';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import { GetValResColor, type ValidationResult } from '$lib/types/ValidationResult';
   import { toast } from 'svelte-sonner';
-  import {
-    CalendarDate,
-    DateFormatter,
-    type DateValue,
-    getLocalTimeZone,
-  } from '@internationalized/date';
-  import { cn } from '$lib/utils.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import Button from '$lib/components/ui/button/button.svelte';
   import TokenCreatedDialog from './token-created-dialog.svelte';
-  import { buttonVariants } from '$lib/components/ui/button';
-  import { Calendar } from '$lib/components/ui/calendar';
-  import * as Popover from '$lib/components/ui/popover';
   import * as Dialog from '$lib/components/ui/dialog';
 
   type Props = {
@@ -60,6 +49,10 @@
     tokensApi
       .tokensCreateToken({ name, validUntil, permissions })
       .then((res) => {
+        if (!res.token) {
+          toast.error('Received invalid response from server');
+          return;
+        }
         token = res.token;
         onGenerated(res.token);
         toast.success('Token created successfully');

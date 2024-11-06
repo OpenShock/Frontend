@@ -2,27 +2,41 @@
   import { tokensApi } from '$lib/api';
   import type { TokenResponse } from '$lib/api/internal/v1';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { elapsedToString } from '$lib/utils/time';
   import { onMount } from 'svelte';
   import TokenEditDialog from './token-edit-dialog.svelte';
   import TokenDeleteDialog from './token-delete-dialog.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import TokenGenerateDialog from './token-generate-dialog.svelte';
+  import * as Card from '$lib/components/ui/card';
+  import DataTable from './data-table.svelte';
+  import { columns, type ApiToken } from './columns';
 
-  let tokens: TokenResponse[] = $state([]);
+  function apiTokenToTableToken(user: TokenResponse): ApiToken {
+    return {
+      id: user.id,
+      name: user.name ?? 'Unknown',
+      created_at: user.createdOn,
+      expires_at: user.validUntil,
+      last_used: user.lastUsed,
+      permissions: user.permissions ?? [],
+    };
+  }
+
+  let data = $state<ApiToken[]>([]);
   let showGenerateTokenModal = $state<boolean>(false);
-  let tokenToEdit = $state<TokenResponse | null>(null);
-  let tokenToDelete = $state<TokenResponse | null>(null);
+  let tokenToEdit = $state<ApiToken | null>(null);
+  let tokenToDelete = $state<ApiToken | null>(null);
 
   function refreshToken(id: string) {
     tokensApi
       .tokensGetTokenById(id)
       .then((response) => {
-        const index = tokens.findIndex((t) => t.id === id);
+        const index = data.findIndex((t) => t.id === id);
         if (index >= 0) {
-          tokens[index] = response;
+          data[index] = apiTokenToTableToken(response);
+          data = Object.assign([], data); // Force update
         } else {
-          tokens.push(response);
+          data = [...data, apiTokenToTableToken(response)];
         }
       })
       .catch(handleApiError);
@@ -31,16 +45,15 @@
     tokensApi
       .tokensListTokens()
       .then((response) => {
-        tokens = response;
+        data = response.map(apiTokenToTableToken);
       })
       .catch(handleApiError);
   }
 
   onMount(refreshTokens);
 
-  let since: number = $state(Date.now());
   setInterval(() => {
-    since = Date.now();
+    data = Object.assign([], data); // Force update
   }, 1000);
 </script>
 
@@ -56,70 +69,17 @@
 />
 <TokenDeleteDialog
   token={tokenToDelete}
-  onDeleted={(id) => (tokens = tokens.filter((t) => t.id !== id))}
+  onDeleted={(id) => (data = data.filter((t) => t.id !== id))}
   onClose={() => (tokenToDelete = null)}
 />
 
-<div class="container h-full mx-auto p-12 flex flex-col justify-start items-start gap-4">
-  <h1 class="h1">API Tokens</h1>
-  <div
-    class="w-full flex flex-col items-start gap-y-4 p-4 bg-surface-100-800-token rounded-lg border border-gray-500"
-  >
-    <p>API Tokens are used to authenticate with the OpenShock API</p>
-
-    <!-- Responsive Container (recommended) -->
-    <div class="table-container">
-      <!-- Native Table Element -->
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Created</th>
-            <th>Expires</th>
-            <th>Last Used</th>
-            <th class="w-0"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {#each tokens as token (token.id)}
-            <tr>
-              <td>{token.name}</td>
-              <td title={token.createdOn.toLocaleString()}
-                >{token.createdOn.toLocaleDateString()}</td
-              >
-              {#if token.validUntil}
-                <td title={token.validUntil.toLocaleString()}>
-                  {elapsedToString(token.validUntil.getTime() - since)}
-                </td>
-              {:else}
-                <td class="text-warning-500">Never</td>
-              {/if}
-              {#if token.lastUsed.getTime() < 0}
-                <td>Never</td>
-              {:else}
-                <td title={token.lastUsed.toLocaleString()}>
-                  {elapsedToString(token.lastUsed.getTime() - since)}
-                </td>
-              {/if}
-              <td class="!whitespace-nowrap">
-                <button
-                  class="btn-icon variant-filled-primary fa fa-edit"
-                  onclick={() => (tokenToEdit = token)}
-                  aria-label="Edit Token"
-                >
-                </button>
-                <button
-                  class="btn-icon variant-filled-primary fa fa-trash"
-                  onclick={() => (tokenToDelete = token)}
-                  aria-label="Delete Token"
-                >
-                </button>
-              </td>
-            </tr>
-          {/each}
-        </tbody>
-      </table>
-    </div>
+<Card.Root>
+  <Card.Header>
+    <Card.Title>API Tokens</Card.Title>
+    <Card.Description>API Tokens are used to authenticate with the OpenShock API</Card.Description>
+  </Card.Header>
+  <Card.Content>
+    <DataTable {data} {columns} />
     <Button onclick={() => (showGenerateTokenModal = true)}>Generate Token</Button>
-  </div>
-</div>
+  </Card.Content>
+</Card.Root>
