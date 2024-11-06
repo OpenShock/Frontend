@@ -1,26 +1,35 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { accountApi } from '$lib/api';
+  import { accountV2Api } from '$lib/api';
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import { UserStore } from '$lib/stores/UserStore';
   import { Button } from '$lib/components/ui/button';
   import * as Card from '$lib/components/ui/card';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import Turnstile from '$lib/components/Turnstile.svelte';
 
-  let usernameOrEmail = $state('');
-  let password = $state('');
+  let usernameOrEmail = $state<string>('');
+  let password = $state<string>('');
+  let turnstileResponse = $state<string | null>(null);
 
   function handleSubmission(ev: SubmitEvent) {
-    accountApi
-      .accountLogin({ email: usernameOrEmail, password })
+    if (!usernameOrEmail || !password || !turnstileResponse) {
+      return;
+    }
+
+    accountV2Api
+      .accountLoginV2({ email: usernameOrEmail, password, turnstileResponse })
       .then(() => {
         UserStore.refreshSelf();
         goto('/home');
       })
-      .catch((err) => {
-        console.error(err);
-      });
+      .catch(handleApiError);
   }
+
+  let canSubmit = $derived(
+    usernameOrEmail.length > 0 && password.length > 0 && turnstileResponse != null
+  );
 </script>
 
 <Card.Root>
@@ -42,12 +51,9 @@
         bind:value={password}
       />
 
-      <Button
-        type="submit"
-        disabled={usernameOrEmail.length === 0 || password.length === 0}
-      >
-        Log In
-      </Button>
+      <Turnstile action="signin" bind:response={turnstileResponse} />
+
+      <Button type="submit" disabled={!canSubmit}>Log In</Button>
     </form>
   </Card.Content>
 </Card.Root>

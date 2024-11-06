@@ -15,9 +15,9 @@
 
 import * as runtime from '../runtime';
 import type {
+  BooleanBaseResponse,
   BooleanNullableBaseResponse,
   Control,
-  CreateShareCode,
   GuidBaseResponse,
   LogEntryIEnumerableBaseResponse,
   NewShocker,
@@ -28,15 +28,16 @@ import type {
   ResponseDeviceWithShockersIEnumerableBaseResponse,
   ShareCodeInfoIEnumerableBaseResponse,
   ShareInfoIEnumerableBaseResponse,
+  ShockerPermLimitPair,
   ShockerWithDeviceBaseResponse,
 } from '../models/index';
 import {
+    BooleanBaseResponseFromJSON,
+    BooleanBaseResponseToJSON,
     BooleanNullableBaseResponseFromJSON,
     BooleanNullableBaseResponseToJSON,
     ControlFromJSON,
     ControlToJSON,
-    CreateShareCodeFromJSON,
-    CreateShareCodeToJSON,
     GuidBaseResponseFromJSON,
     GuidBaseResponseToJSON,
     LogEntryIEnumerableBaseResponseFromJSON,
@@ -57,6 +58,8 @@ import {
     ShareCodeInfoIEnumerableBaseResponseToJSON,
     ShareInfoIEnumerableBaseResponseFromJSON,
     ShareInfoIEnumerableBaseResponseToJSON,
+    ShockerPermLimitPairFromJSON,
+    ShockerPermLimitPairToJSON,
     ShockerWithDeviceBaseResponseFromJSON,
     ShockerWithDeviceBaseResponseToJSON,
 } from '../models/index';
@@ -99,7 +102,7 @@ export interface ShockerSendControlDEPRECATEDRequest {
 
 export interface ShockerShockerShareCodeCreateRequest {
     shockerId: string;
-    createShareCode?: CreateShareCode;
+    shockerPermLimitPair?: ShockerPermLimitPair;
 }
 
 export interface ShockerShockerShareCodeListRequest {
@@ -120,7 +123,7 @@ export interface ShockerShockerShareCodeRemoveRequest {
 export interface ShockerShockerShareCodeUpdateRequest {
     shockerId: string;
     sharedWithUserId: string;
-    createShareCode?: CreateShareCode;
+    shockerPermLimitPair?: ShockerPermLimitPair;
 }
 
 /**
@@ -286,7 +289,7 @@ export interface ShockerApiInterface {
      * 
      * @summary Create a share code for a shocker
      * @param {string} shockerId 
-     * @param {CreateShareCode} [createShareCode] 
+     * @param {ShockerPermLimitPair} [shockerPermLimitPair] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ShockerApiInterface
@@ -296,7 +299,7 @@ export interface ShockerApiInterface {
     /**
      * Create a share code for a shocker
      */
-    shockerShockerShareCodeCreate(shockerId: string, createShareCode?: CreateShareCode, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GuidBaseResponse>;
+    shockerShockerShareCodeCreate(shockerId: string, shockerPermLimitPair?: ShockerPermLimitPair, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GuidBaseResponse>;
 
     /**
      * 
@@ -323,12 +326,12 @@ export interface ShockerApiInterface {
      * @throws {RequiredError}
      * @memberof ShockerApiInterface
      */
-    shockerShockerShareCodePauseRaw(requestParameters: ShockerShockerShareCodePauseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>>;
+    shockerShockerShareCodePauseRaw(requestParameters: ShockerShockerShareCodePauseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BooleanBaseResponse>>;
 
     /**
      * Pause/Unpause a share code for a shocker
      */
-    shockerShockerShareCodePause(shockerId: string, sharedWithUserId: string, pauseRequest?: PauseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse>;
+    shockerShockerShareCodePause(shockerId: string, sharedWithUserId: string, pauseRequest?: PauseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BooleanBaseResponse>;
 
     /**
      * 
@@ -339,29 +342,29 @@ export interface ShockerApiInterface {
      * @throws {RequiredError}
      * @memberof ShockerApiInterface
      */
-    shockerShockerShareCodeRemoveRaw(requestParameters: ShockerShockerShareCodeRemoveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>>;
+    shockerShockerShareCodeRemoveRaw(requestParameters: ShockerShockerShareCodeRemoveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>>;
 
     /**
      * Remove a share code for a shocker
      */
-    shockerShockerShareCodeRemove(shockerId: string, sharedWithUserId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse>;
+    shockerShockerShareCodeRemove(shockerId: string, sharedWithUserId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any>;
 
     /**
      * 
      * @summary Update a share for a shocker
      * @param {string} shockerId 
      * @param {string} sharedWithUserId 
-     * @param {CreateShareCode} [createShareCode] 
+     * @param {ShockerPermLimitPair} [shockerPermLimitPair] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ShockerApiInterface
      */
-    shockerShockerShareCodeUpdateRaw(requestParameters: ShockerShockerShareCodeUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>>;
+    shockerShockerShareCodeUpdateRaw(requestParameters: ShockerShockerShareCodeUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>>;
 
     /**
      * Update a share for a shocker
      */
-    shockerShockerShareCodeUpdate(shockerId: string, sharedWithUserId: string, createShareCode?: CreateShareCode, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse>;
+    shockerShockerShareCodeUpdate(shockerId: string, sharedWithUserId: string, shockerPermLimitPair?: ShockerPermLimitPair, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any>;
 
 }
 
@@ -758,7 +761,7 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateShareCodeToJSON(requestParameters['createShareCode']),
+            body: ShockerPermLimitPairToJSON(requestParameters['shockerPermLimitPair']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => GuidBaseResponseFromJSON(jsonValue));
@@ -767,8 +770,8 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
     /**
      * Create a share code for a shocker
      */
-    async shockerShockerShareCodeCreate(shockerId: string, createShareCode?: CreateShareCode, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GuidBaseResponse> {
-        const response = await this.shockerShockerShareCodeCreateRaw({ shockerId: shockerId, createShareCode: createShareCode }, initOverrides);
+    async shockerShockerShareCodeCreate(shockerId: string, shockerPermLimitPair?: ShockerPermLimitPair, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GuidBaseResponse> {
+        const response = await this.shockerShockerShareCodeCreateRaw({ shockerId: shockerId, shockerPermLimitPair: shockerPermLimitPair }, initOverrides);
         return await response.value();
     }
 
@@ -812,7 +815,7 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
     /**
      * Pause/Unpause a share code for a shocker
      */
-    async shockerShockerShareCodePauseRaw(requestParameters: ShockerShockerShareCodePauseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
+    async shockerShockerShareCodePauseRaw(requestParameters: ShockerShockerShareCodePauseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BooleanBaseResponse>> {
         if (requestParameters['shockerId'] == null) {
             throw new runtime.RequiredError(
                 'shockerId',
@@ -845,13 +848,13 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
             body: PauseRequestToJSON(requestParameters['pauseRequest']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => BooleanBaseResponseFromJSON(jsonValue));
     }
 
     /**
      * Pause/Unpause a share code for a shocker
      */
-    async shockerShockerShareCodePause(shockerId: string, sharedWithUserId: string, pauseRequest?: PauseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse> {
+    async shockerShockerShareCodePause(shockerId: string, sharedWithUserId: string, pauseRequest?: PauseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BooleanBaseResponse> {
         const response = await this.shockerShockerShareCodePauseRaw({ shockerId: shockerId, sharedWithUserId: sharedWithUserId, pauseRequest: pauseRequest }, initOverrides);
         return await response.value();
     }
@@ -859,7 +862,7 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
     /**
      * Remove a share code for a shocker
      */
-    async shockerShockerShareCodeRemoveRaw(requestParameters: ShockerShockerShareCodeRemoveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
+    async shockerShockerShareCodeRemoveRaw(requestParameters: ShockerShockerShareCodeRemoveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
         if (requestParameters['shockerId'] == null) {
             throw new runtime.RequiredError(
                 'shockerId',
@@ -889,13 +892,17 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<any>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
     }
 
     /**
      * Remove a share code for a shocker
      */
-    async shockerShockerShareCodeRemove(shockerId: string, sharedWithUserId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse> {
+    async shockerShockerShareCodeRemove(shockerId: string, sharedWithUserId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
         const response = await this.shockerShockerShareCodeRemoveRaw({ shockerId: shockerId, sharedWithUserId: sharedWithUserId }, initOverrides);
         return await response.value();
     }
@@ -903,7 +910,7 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
     /**
      * Update a share for a shocker
      */
-    async shockerShockerShareCodeUpdateRaw(requestParameters: ShockerShockerShareCodeUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
+    async shockerShockerShareCodeUpdateRaw(requestParameters: ShockerShockerShareCodeUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
         if (requestParameters['shockerId'] == null) {
             throw new runtime.RequiredError(
                 'shockerId',
@@ -933,17 +940,21 @@ export class ShockerApi extends runtime.BaseAPI implements ShockerApiInterface {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateShareCodeToJSON(requestParameters['createShareCode']),
+            body: ShockerPermLimitPairToJSON(requestParameters['shockerPermLimitPair']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<any>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
     }
 
     /**
      * Update a share for a shocker
      */
-    async shockerShockerShareCodeUpdate(shockerId: string, sharedWithUserId: string, createShareCode?: CreateShareCode, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse> {
-        const response = await this.shockerShockerShareCodeUpdateRaw({ shockerId: shockerId, sharedWithUserId: sharedWithUserId, createShareCode: createShareCode }, initOverrides);
+    async shockerShockerShareCodeUpdate(shockerId: string, sharedWithUserId: string, shockerPermLimitPair?: ShockerPermLimitPair, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
+        const response = await this.shockerShockerShareCodeUpdateRaw({ shockerId: shockerId, sharedWithUserId: sharedWithUserId, shockerPermLimitPair: shockerPermLimitPair }, initOverrides);
         return await response.value();
     }
 

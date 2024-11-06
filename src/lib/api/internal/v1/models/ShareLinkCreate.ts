@@ -24,7 +24,7 @@ export interface ShareLinkCreate {
      * @type {string}
      * @memberof ShareLinkCreate
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {Date}

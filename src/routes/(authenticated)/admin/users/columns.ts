@@ -1,7 +1,7 @@
 import type { ColumnDef, StringOrTemplateHeader } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table';
-import { PasswordHashingAlgorithm, RankType } from '$lib/api/internal/v1';
+import { RankType } from '$lib/api/internal/v1';
 import DataTableSortButton from './data-table-sort-button.svelte';
 import DataTableActions from './data-table-actions.svelte';
 
@@ -36,7 +36,7 @@ export const columns: ColumnDef<User>[] = [
     accessorKey: 'password_hash_type',
     header: CreateSortHeader<User>('Password hash type'),
     cell: ({ row }) => {
-      const passwordHashTypeCellSnippet = createRawSnippet<[PasswordHashingAlgorithm]>((getPasswordHashType) => {
+      const passwordHashTypeCellSnippet = createRawSnippet<[string]>((getPasswordHashType) => {
         const passwordHashType = getPasswordHashType();
         const isLegacy = passwordHashType !== PasswordHashingAlgorithm.bCrypt;
         return {

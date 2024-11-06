@@ -1,5 +1,7 @@
+.openapi-generator-ignore
 apis/AccountApi.ts
 apis/DevicesApi.ts
+apis/SharesVApi.ts
 apis/ShockerApi.ts
 apis/index.ts
 index.ts
@@ -7,10 +9,19 @@ models/ChangeUsernameRequest.ts
 models/Control.ts
 models/ControlRequest.ts
 models/ControlType.ts
+models/CreateShareRequest.ts
+models/GenericIni.ts
 models/HubCreateRequest.ts
 models/LoginV2.ts
 models/ObjectBaseResponse.ts
 models/OpenShockProblem.ts
+models/ShareInfo.ts
+models/ShareRequestBaseDetails.ts
+models/ShareRequestBaseItem.ts
+models/ShareRequestCounts.ts
+models/ShockerLimits.ts
+models/ShockerPermLimitPairWithId.ts
+models/ShockerPermissions.ts
 models/SignUpV2.ts
 models/UsernameAvailability.ts
 models/UsernameCheckResponse.ts

@@ -6,7 +6,7 @@
     UsernameInternalServerErrorValRes,
     validateUsername,
   } from '$lib/inputvalidation/usernameValidator';
-  import { accountApi } from '$lib/api';
+  import { accountV2Api } from '$lib/api';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import type { FullAutoFill } from 'svelte/elements';
   import TextInput from '$lib/components/input/TextInput.svelte';
@@ -50,7 +50,7 @@
       // 250ms has passed, check if the username is available
       try {
         // Make the API request
-        const response = await accountApi.accountCheckUsername({ username: value });
+        const response = await accountV2Api.accountCheckUsername({ username: value });
 
         // Map the response to a validation result
         validationResult = mapUsernameAvailability(response.availability);

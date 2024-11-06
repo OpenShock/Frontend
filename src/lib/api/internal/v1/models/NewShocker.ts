@@ -32,7 +32,7 @@ export interface NewShocker {
      * @type {string}
      * @memberof NewShocker
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {number}

@@ -1,8 +1,6 @@
 import { validate as validateEmail } from 'email-validator';
 import type { ValidationResult } from '$lib/types/ValidationResult';
-import { accountApi } from '$lib/api';
 import { UsernameAvailability } from '$lib/api/internal/v2';
-import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 
 /* eslint-disable no-misleading-character-class */
 

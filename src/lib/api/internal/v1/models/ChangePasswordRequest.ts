@@ -24,7 +24,7 @@ export interface ChangePasswordRequest {
      * @type {string}
      * @memberof ChangePasswordRequest
      */
-    oldPassword: string | null;
+    oldPassword: string;
     /**
      * 
      * @type {string}

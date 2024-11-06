@@ -16,13 +16,13 @@
 import * as runtime from '../runtime';
 import type {
   AdminOnlineDeviceResponseIEnumerableBaseResponse,
-  AdminUserResponsePaginated,
+  AdminUsersViewPaginated,
 } from '../models/index';
 import {
     AdminOnlineDeviceResponseIEnumerableBaseResponseFromJSON,
     AdminOnlineDeviceResponseIEnumerableBaseResponseToJSON,
-    AdminUserResponsePaginatedFromJSON,
-    AdminUserResponsePaginatedToJSON,
+    AdminUsersViewPaginatedFromJSON,
+    AdminUsersViewPaginatedToJSON,
 } from '../models/index';
 
 export interface AdminDeleteUserRequest {
@@ -83,12 +83,12 @@ export interface AdminApiInterface {
      * @throws {RequiredError}
      * @memberof AdminApiInterface
      */
-    adminGetUsersRaw(requestParameters: AdminGetUsersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AdminUserResponsePaginated>>;
+    adminGetUsersRaw(requestParameters: AdminGetUsersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AdminUsersViewPaginated>>;
 
     /**
      * Gets all users, paginated
      */
-    adminGetUsers($filter?: string, $orderby?: string, $offset?: number, $limit?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminUserResponsePaginated>;
+    adminGetUsers($filter?: string, $orderby?: string, $offset?: number, $limit?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminUsersViewPaginated>;
 
 }
 
@@ -171,7 +171,7 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     /**
      * Gets all users, paginated
      */
-    async adminGetUsersRaw(requestParameters: AdminGetUsersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AdminUserResponsePaginated>> {
+    async adminGetUsersRaw(requestParameters: AdminGetUsersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AdminUsersViewPaginated>> {
         const queryParameters: any = {};
 
         if (requestParameters['$filter'] != null) {
@@ -203,13 +203,13 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AdminUserResponsePaginatedFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => AdminUsersViewPaginatedFromJSON(jsonValue));
     }
 
     /**
      * Gets all users, paginated
      */
-    async adminGetUsers($filter?: string, $orderby?: string, $offset?: number, $limit?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminUserResponsePaginated> {
+    async adminGetUsers($filter?: string, $orderby?: string, $offset?: number, $limit?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminUsersViewPaginated> {
         const response = await this.adminGetUsersRaw({ $filter: $filter, $orderby: $orderby, $offset: $offset, $limit: $limit }, initOverrides);
         return await response.value();
     }

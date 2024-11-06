@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { accountApi } from '$lib/api';
+  import { accountV2Api } from '$lib/api';
   import EmailInput from '$lib/components/input/EmailInput.svelte';
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
@@ -24,25 +24,27 @@
 
   let turnstileResponse: string | null = $state(null);
 
-  let canSubmit =
-    $derived(usernameValid &&
-    emailValid &&
-    passwordValid &&
-    password == passwordConfirm &&
-    turnstileResponse);
+  let canSubmit = $derived(
+    usernameValid && emailValid && passwordValid && password == passwordConfirm && turnstileResponse
+  );
 
   let accountCreated = $state(false);
 
   function handleSubmission(ev: SubmitEvent) {
     ev.preventDefault();
 
-    accountApi
-      .accountSignUp({
+    if (!username || !email || !password || !passwordConfirm || !turnstileResponse) {
+      return;
+    }
+
+    accountV2Api
+      .accountSignUpV2({
         username,
         password,
         email,
+        turnstileResponse,
       })
-      .then(() => accountCreated = true)
+      .then(() => (accountCreated = true))
       .finally(() => {
         turnstileResponse = null;
       });
@@ -97,12 +99,7 @@
 
       <Turnstile action="signup" bind:response={turnstileResponse} />
 
-      <Button
-        type="submit"
-        disabled={!canSubmit}
-      >
-        Sign Up
-      </Button>
+      <Button type="submit" disabled={!canSubmit}>Sign Up</Button>
     </form>
   </Card.Content>
 </Card.Root>
