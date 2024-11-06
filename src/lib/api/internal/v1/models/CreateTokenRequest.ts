@@ -32,13 +32,13 @@ export interface CreateTokenRequest {
      * @type {string}
      * @memberof CreateTokenRequest
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {Array<PermissionType>}
      * @memberof CreateTokenRequest
      */
-    permissions?: Array<PermissionType> | null;
+    permissions?: Array<PermissionType>;
     /**
      * 
      * @type {Date}

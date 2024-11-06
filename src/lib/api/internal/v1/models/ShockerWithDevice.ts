@@ -50,7 +50,7 @@ export interface ShockerWithDevice {
      * @type {string}
      * @memberof ShockerWithDevice
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {boolean}

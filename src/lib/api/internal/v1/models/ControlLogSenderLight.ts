@@ -30,13 +30,13 @@ export interface ControlLogSenderLight {
      * @type {string}
      * @memberof ControlLogSenderLight
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {string}
      * @memberof ControlLogSenderLight
      */
-    image: string | null;
+    image: string;
     /**
      * 
      * @type {string}

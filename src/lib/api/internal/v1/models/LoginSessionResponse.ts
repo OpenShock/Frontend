@@ -30,13 +30,13 @@ export interface LoginSessionResponse {
      * @type {string}
      * @memberof LoginSessionResponse
      */
-    ip: string | null;
+    ip: string;
     /**
      * 
      * @type {string}
      * @memberof LoginSessionResponse
      */
-    userAgent: string | null;
+    userAgent: string;
     /**
      * 
      * @type {Date}

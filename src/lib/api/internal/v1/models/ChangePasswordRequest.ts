@@ -30,7 +30,7 @@ export interface ChangePasswordRequest {
      * @type {string}
      * @memberof ChangePasswordRequest
      */
-    newPassword: string | null;
+    newPassword: string;
 }
 
 /**

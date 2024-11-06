@@ -45,7 +45,7 @@ export interface PublicShareLinkResponse {
      * @type {string}
      * @memberof PublicShareLinkResponse
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {Date}
@@ -69,7 +69,7 @@ export interface PublicShareLinkResponse {
      * @type {Array<ShareLinkDevice>}
      * @memberof PublicShareLinkResponse
      */
-    devices?: Array<ShareLinkDevice> | null;
+    devices?: Array<ShareLinkDevice>;
 }
 
 /**

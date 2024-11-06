@@ -38,19 +38,19 @@ export interface OwnerShockerResponse {
      * @type {string}
      * @memberof OwnerShockerResponse
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {string}
      * @memberof OwnerShockerResponse
      */
-    image: string | null;
+    image: string;
     /**
      * 
      * @type {Array<SharedDevice>}
      * @memberof OwnerShockerResponse
      */
-    devices?: Array<SharedDevice> | null;
+    devices?: Array<SharedDevice>;
 }
 
 /**

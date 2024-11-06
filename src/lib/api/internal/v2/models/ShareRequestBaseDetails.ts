@@ -63,7 +63,7 @@ export interface ShareRequestBaseDetails {
      * @type {Array<ShockerPermLimitPairWithId>}
      * @memberof ShareRequestBaseDetails
      */
-    shockers: Array<ShockerPermLimitPairWithId> | null;
+    shockers: Array<ShockerPermLimitPairWithId>;
 }
 
 /**
@@ -92,7 +92,7 @@ export function ShareRequestBaseDetailsFromJSONTyped(json: any, ignoreDiscrimina
         'createdOn': (new Date(json['createdOn'])),
         'owner': GenericIniFromJSON(json['owner']),
         'sharedWith': GenericIniFromJSON(json['sharedWith']),
-        'shockers': (json['shockers'] == null ? null : (json['shockers'] as Array<any>).map(ShockerPermLimitPairWithIdFromJSON)),
+        'shockers': ((json['shockers'] as Array<any>).map(ShockerPermLimitPairWithIdFromJSON)),
     };
 }
 
@@ -111,7 +111,7 @@ export function ShareRequestBaseDetailsFromJSONTyped(json: any, ignoreDiscrimina
         'createdOn': ((value['createdOn']).toISOString()),
         'owner': GenericIniToJSON(value['owner']),
         'sharedWith': GenericIniToJSON(value['sharedWith']),
-        'shockers': (value['shockers'] == null ? null : (value['shockers'] as Array<any>).map(ShockerPermLimitPairWithIdToJSON)),
+        'shockers': ((value['shockers'] as Array<any>).map(ShockerPermLimitPairWithIdToJSON)),
     };
 }
 

@@ -56,7 +56,7 @@ export interface OpenShockProblem {
      * @memberof OpenShockProblem
      * @deprecated
      */
-    readonly message?: string | null;
+    readonly message?: string;
     /**
      * 
      * @type {string}

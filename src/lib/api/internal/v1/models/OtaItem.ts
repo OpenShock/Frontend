@@ -50,7 +50,7 @@ export interface OtaItem {
      * @type {string}
      * @memberof OtaItem
      */
-    version: string | null;
+    version: string;
     /**
      * 
      * @type {string}

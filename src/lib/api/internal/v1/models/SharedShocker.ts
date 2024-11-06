@@ -45,7 +45,7 @@ export interface SharedShocker {
      * @type {string}
      * @memberof SharedShocker
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {boolean}

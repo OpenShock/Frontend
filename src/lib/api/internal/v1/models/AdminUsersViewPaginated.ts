@@ -50,7 +50,7 @@ export interface AdminUsersViewPaginated {
      * @type {Array<AdminUsersView>}
      * @memberof AdminUsersViewPaginated
      */
-    data?: Array<AdminUsersView> | null;
+    data?: Array<AdminUsersView>;
 }
 
 /**

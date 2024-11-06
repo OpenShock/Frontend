@@ -50,7 +50,7 @@ export interface ShockerResponse {
      * @type {string}
      * @memberof ShockerResponse
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {boolean}

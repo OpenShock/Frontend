@@ -30,7 +30,7 @@ export interface ShareLinkResponse {
      * @type {string}
      * @memberof ShareLinkResponse
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {Date}

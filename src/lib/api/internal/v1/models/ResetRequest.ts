@@ -24,7 +24,7 @@ export interface ResetRequest {
      * @type {string}
      * @memberof ResetRequest
      */
-    email: string | null;
+    email: string;
 }
 
 /**

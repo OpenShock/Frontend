@@ -38,19 +38,19 @@ export interface AdminUsersView {
      * @type {string}
      * @memberof AdminUsersView
      */
-    name?: string | null;
+    name?: string;
     /**
      * 
      * @type {string}
      * @memberof AdminUsersView
      */
-    email?: string | null;
+    email?: string;
     /**
      * 
      * @type {string}
      * @memberof AdminUsersView
      */
-    passwordHashType?: string | null;
+    passwordHashType?: string;
     /**
      * 
      * @type {Date}
@@ -62,7 +62,7 @@ export interface AdminUsersView {
      * @type {boolean}
      * @memberof AdminUsersView
      */
-    emailActived?: boolean;
+    emailActivated?: boolean;
     /**
      * 
      * @type {RankType}
@@ -155,7 +155,7 @@ export function AdminUsersViewFromJSONTyped(json: any, ignoreDiscriminator: bool
         'email': json['email'] == null ? undefined : json['email'],
         'passwordHashType': json['passwordHashType'] == null ? undefined : json['passwordHashType'],
         'createdAt': json['createdAt'] == null ? undefined : (new Date(json['createdAt'])),
-        'emailActived': json['emailActived'] == null ? undefined : json['emailActived'],
+        'emailActivated': json['emailActivated'] == null ? undefined : json['emailActivated'],
         'rank': json['rank'] == null ? undefined : RankTypeFromJSON(json['rank']),
         'apiTokenCount': json['apiTokenCount'] == null ? undefined : json['apiTokenCount'],
         'passwordResetCount': json['passwordResetCount'] == null ? undefined : json['passwordResetCount'],
@@ -186,7 +186,7 @@ export function AdminUsersViewFromJSONTyped(json: any, ignoreDiscriminator: bool
         'email': value['email'],
         'passwordHashType': value['passwordHashType'],
         'createdAt': value['createdAt'] == null ? undefined : ((value['createdAt']).toISOString()),
-        'emailActived': value['emailActived'],
+        'emailActivated': value['emailActivated'],
         'rank': RankTypeToJSON(value['rank']),
         'apiTokenCount': value['apiTokenCount'],
         'passwordResetCount': value['passwordResetCount'],

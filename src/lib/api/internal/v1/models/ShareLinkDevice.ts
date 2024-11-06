@@ -38,13 +38,13 @@ export interface ShareLinkDevice {
      * @type {string}
      * @memberof ShareLinkDevice
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {Array<ShareLinkShocker>}
      * @memberof ShareLinkDevice
      */
-    shockers?: Array<ShareLinkShocker> | null;
+    shockers?: Array<ShareLinkShocker>;
 }
 
 /**

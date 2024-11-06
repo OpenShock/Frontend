@@ -24,7 +24,7 @@ export interface ChangeEmailRequest {
      * @type {string}
      * @memberof ChangeEmailRequest
      */
-    email: string | null;
+    email: string;
 }
 
 /**

@@ -24,7 +24,7 @@ export interface TokenCreatedResponse {
      * @type {string}
      * @memberof TokenCreatedResponse
      */
-    token: string | null;
+    token: string;
 }
 
 /**

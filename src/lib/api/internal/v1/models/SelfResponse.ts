@@ -38,19 +38,19 @@ export interface SelfResponse {
      * @type {string}
      * @memberof SelfResponse
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {string}
      * @memberof SelfResponse
      */
-    email: string | null;
+    email: string;
     /**
      * 
      * @type {string}
      * @memberof SelfResponse
      */
-    image: string | null;
+    image: string;
     /**
      * 
      * @type {RankType}

@@ -24,7 +24,7 @@ export interface ChangeUsernameRequest {
      * @type {string}
      * @memberof ChangeUsernameRequest
      */
-    username: string | null;
+    username: string;
 }
 
 /**

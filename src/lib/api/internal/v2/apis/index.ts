@@ -2,5 +2,5 @@
 /* eslint-disable */
 export * from './AccountApi';
 export * from './DevicesApi';
-export * from './SharesVApi';
+export * from './SharesApi';
 export * from './ShockerApi';

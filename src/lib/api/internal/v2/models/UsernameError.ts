@@ -32,7 +32,7 @@ export interface UsernameError {
      * @type {string}
      * @memberof UsernameError
      */
-    message: string | null;
+    message: string;
     /**
      * 
      * @type {UsernameErrorType}

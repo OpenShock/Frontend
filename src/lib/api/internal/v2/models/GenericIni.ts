@@ -30,13 +30,13 @@ export interface GenericIni {
      * @type {string}
      * @memberof GenericIni
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {string}
      * @memberof GenericIni
      */
-    image: string | null;
+    image: string;
 }
 
 /**

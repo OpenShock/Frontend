@@ -45,7 +45,7 @@ export interface ShareLinkShocker {
      * @type {string}
      * @memberof ShareLinkShocker
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {ShockerPermissions}

@@ -1,7 +1,6 @@
-.openapi-generator-ignore
 apis/AccountApi.ts
 apis/DevicesApi.ts
-apis/SharesVApi.ts
+apis/SharesApi.ts
 apis/ShockerApi.ts
 apis/index.ts
 index.ts

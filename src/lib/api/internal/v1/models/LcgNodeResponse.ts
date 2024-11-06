@@ -24,13 +24,13 @@ export interface LcgNodeResponse {
      * @type {string}
      * @memberof LcgNodeResponse
      */
-    fqdn: string | null;
+    fqdn: string;
     /**
      * 
      * @type {string}
      * @memberof LcgNodeResponse
      */
-    country: string | null;
+    country: string;
 }
 
 /**

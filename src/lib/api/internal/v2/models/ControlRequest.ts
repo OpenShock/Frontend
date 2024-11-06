@@ -32,7 +32,7 @@ export interface ControlRequest {
      * @type {Array<Control>}
      * @memberof ControlRequest
      */
-    shocks: Array<Control> | null;
+    shocks: Array<Control>;
     /**
      * 
      * @type {string}
@@ -59,7 +59,7 @@ export function ControlRequestFromJSONTyped(json: any, ignoreDiscriminator: bool
     }
     return {
         
-        'shocks': (json['shocks'] == null ? null : (json['shocks'] as Array<any>).map(ControlFromJSON)),
+        'shocks': ((json['shocks'] as Array<any>).map(ControlFromJSON)),
         'customName': json['customName'] == null ? undefined : json['customName'],
     };
 }
@@ -75,7 +75,7 @@ export function ControlRequestFromJSONTyped(json: any, ignoreDiscriminator: bool
 
     return {
         
-        'shocks': (value['shocks'] == null ? null : (value['shocks'] as Array<any>).map(ControlToJSON)),
+        'shocks': ((value['shocks'] as Array<any>).map(ControlToJSON)),
         'customName': value['customName'],
     };
 }

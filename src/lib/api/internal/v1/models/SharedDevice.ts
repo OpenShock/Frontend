@@ -38,13 +38,13 @@ export interface SharedDevice {
      * @type {string}
      * @memberof SharedDevice
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {Array<SharedShocker>}
      * @memberof SharedDevice
      */
-    shockers?: Array<SharedShocker> | null;
+    shockers?: Array<SharedShocker>;
 }
 
 /**

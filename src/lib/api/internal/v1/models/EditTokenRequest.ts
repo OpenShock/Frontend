@@ -32,13 +32,13 @@ export interface EditTokenRequest {
      * @type {string}
      * @memberof EditTokenRequest
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {Array<PermissionType>}
      * @memberof EditTokenRequest
      */
-    permissions?: Array<PermissionType> | null;
+    permissions?: Array<PermissionType>;
 }
 
 /**

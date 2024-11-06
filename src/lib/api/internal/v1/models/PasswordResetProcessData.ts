@@ -24,7 +24,7 @@ export interface PasswordResetProcessData {
      * @type {string}
      * @memberof PasswordResetProcessData
      */
-    password: string | null;
+    password: string;
 }
 
 /**

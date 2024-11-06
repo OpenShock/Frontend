@@ -24,13 +24,13 @@ export interface RootResponse {
      * @type {string}
      * @memberof RootResponse
      */
-    version: string | null;
+    version: string;
     /**
      * 
      * @type {string}
      * @memberof RootResponse
      */
-    commit: string | null;
+    commit: string;
     /**
      * 
      * @type {Date}
@@ -42,13 +42,13 @@ export interface RootResponse {
      * @type {string}
      * @memberof RootResponse
      */
-    frontendUrl: string | null;
+    frontendUrl: string;
     /**
      * 
      * @type {string}
      * @memberof RootResponse
      */
-    shortLinkUrl: string | null;
+    shortLinkUrl: string;
     /**
      * 
      * @type {string}

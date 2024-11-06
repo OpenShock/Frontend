@@ -32,7 +32,7 @@ export interface CreateShareRequest {
      * @type {Array<ShockerPermLimitPairWithId>}
      * @memberof CreateShareRequest
      */
-    shockers: Array<ShockerPermLimitPairWithId> | null;
+    shockers: Array<ShockerPermLimitPairWithId>;
     /**
      * 
      * @type {string}
@@ -59,7 +59,7 @@ export function CreateShareRequestFromJSONTyped(json: any, ignoreDiscriminator: 
     }
     return {
         
-        'shockers': (json['shockers'] == null ? null : (json['shockers'] as Array<any>).map(ShockerPermLimitPairWithIdFromJSON)),
+        'shockers': ((json['shockers'] as Array<any>).map(ShockerPermLimitPairWithIdFromJSON)),
         'user': json['user'] == null ? undefined : json['user'],
     };
 }
@@ -75,7 +75,7 @@ export function CreateShareRequestFromJSONTyped(json: any, ignoreDiscriminator: 
 
     return {
         
-        'shockers': (value['shockers'] == null ? null : (value['shockers'] as Array<any>).map(ShockerPermLimitPairWithIdToJSON)),
+        'shockers': ((value['shockers'] as Array<any>).map(ShockerPermLimitPairWithIdToJSON)),
         'user': value['user'],
     };
 }

@@ -38,7 +38,7 @@ export interface AdminOnlineDeviceResponse {
      * @type {string}
      * @memberof AdminOnlineDeviceResponse
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {GenericIni}
@@ -50,13 +50,13 @@ export interface AdminOnlineDeviceResponse {
      * @type {string}
      * @memberof AdminOnlineDeviceResponse
      */
-    firmwareVersion: string | null;
+    firmwareVersion: string;
     /**
      * 
      * @type {string}
      * @memberof AdminOnlineDeviceResponse
      */
-    gateway: string | null;
+    gateway: string;
     /**
      * 
      * @type {Date}

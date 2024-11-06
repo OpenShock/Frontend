@@ -24,19 +24,19 @@ export interface SignUp {
      * @type {string}
      * @memberof SignUp
      */
-    username: string | null;
+    username: string;
     /**
      * 
      * @type {string}
      * @memberof SignUp
      */
-    password: string | null;
+    password: string;
     /**
      * 
      * @type {string}
      * @memberof SignUp
      */
-    email: string | null;
+    email: string;
 }
 
 /**

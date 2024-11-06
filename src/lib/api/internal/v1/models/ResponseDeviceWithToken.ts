@@ -30,7 +30,7 @@ export interface ResponseDeviceWithToken {
      * @type {string}
      * @memberof ResponseDeviceWithToken
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {Date}
