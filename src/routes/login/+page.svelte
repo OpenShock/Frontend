@@ -19,7 +19,7 @@
     }
 
     accountV2Api
-      .accountLoginV2({ email: usernameOrEmail, password, turnstileResponse })
+      .accountLoginV2({ usernameOrEmail, password, turnstileResponse })
       .then(() => {
         UserStore.refreshSelf();
         goto('/home');

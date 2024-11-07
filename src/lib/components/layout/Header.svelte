@@ -20,7 +20,7 @@
 <header class="px-4 py-2 flex items-center justify-between space-x-2">
   <div class="flex items-center space-x-4">
     <a
-      href={!!$UserStore.self ? '/home' : '/'}
+      href={$UserStore.self ? '/home' : '/'}
       class="overflow-hidden lg:!ml-0 lg:w-auto select-none"
       data-sveltekit-preload-data="hover"
       aria-label="OpenShock"
