@@ -29,6 +29,8 @@
 
   const meta = buildMetaData($page);
 
+  let isOpen = $state(false);
+  let isLoggedIn = $derived($UserStore?.self !== null);
   let currentUserRank = $derived($UserStore?.self?.rank ?? null);
 </script>
 
@@ -37,7 +39,7 @@
 <TwitterSummaryTags type="summary" {...meta} site="@OpenShockORG" creator="@OpenShockORG" />
 <OpenGraphTags type="website" {...meta} url={$page.url.origin} />
 
-<Sidebar.Provider>
+<Sidebar.Provider open={isOpen && isLoggedIn} onOpenChange={(open) => (isOpen = open)} controlledOpen={true}>
   <AppSidebar currentUserRank={currentUserRank ?? RankType.User} />
   <div class="flex-1 flex flex-col min-h-screen">
     <Header />

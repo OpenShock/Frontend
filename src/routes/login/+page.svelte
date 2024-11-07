@@ -32,7 +32,7 @@
   );
 </script>
 
-<Card.Root>
+<div class="container my-8">
   <Card.Header>
     <Card.Title class="text-3xl">Login</Card.Title>
   </Card.Header>
@@ -56,4 +56,4 @@
       <Button type="submit" disabled={!canSubmit}>Log In</Button>
     </form>
   </Card.Content>
-</Card.Root>
+</div>

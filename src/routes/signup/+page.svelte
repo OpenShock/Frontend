@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
   import { accountV2Api } from '$lib/api';
   import EmailInput from '$lib/components/input/EmailInput.svelte';
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
@@ -8,6 +9,7 @@
   import * as Card from '$lib/components/ui/card';
   import * as Dialog from '$lib/components/ui/dialog';
   import { validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
+  import { toast } from 'svelte-sonner';
 
   let username = $state<string>('');
   let usernameValid = $state<boolean>(false);
@@ -27,6 +29,14 @@
   );
 
   let accountCreated = $state(false);
+
+  function onOpenChange(open: boolean) {
+    if (!open) {
+      accountCreated = false;
+      toast.success('Account created successfully. Please check your email to verify your account.');
+      goto('/login');
+    }
+  }
 
   function handleSubmission(ev: SubmitEvent) {
     ev.preventDefault();
@@ -49,23 +59,20 @@
   }
 </script>
 
-{#if accountCreated != null}
-  <Dialog.Root>
-    <Dialog.Trigger>Open</Dialog.Trigger>
-    <Dialog.Content>
-      <Dialog.Header>
-        <Dialog.Title>Account created</Dialog.Title>
-        <Dialog.Description>
-          Your account has been created. Please check your email to verify your account.
+<Dialog.Root open={accountCreated} {onOpenChange} controlledOpen={true}>
+  <Dialog.Content>
+    <Dialog.Header>
+      <Dialog.Title>Account created</Dialog.Title>
+      <Dialog.Description>
+        Your account has been created. Please check your email to verify your account.
 
-          <!-- TODO: button to go to login screen -->
-        </Dialog.Description>
-      </Dialog.Header>
-    </Dialog.Content>
-  </Dialog.Root>
-{/if}
+        <!-- TODO: button to go to login screen -->
+      </Dialog.Description>
+    </Dialog.Header>
+  </Dialog.Content>
+</Dialog.Root>
 
-<Card.Root>
+<div class="container my-8">
   <Card.Header>
     <Card.Title class="text-3xl">Sign Up</Card.Title>
   </Card.Header>
@@ -100,4 +107,4 @@
       <Button type="submit" disabled={!canSubmit}>Sign Up</Button>
     </form>
   </Card.Content>
-</Card.Root>
+</div>
