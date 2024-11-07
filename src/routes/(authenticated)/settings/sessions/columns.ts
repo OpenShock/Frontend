@@ -1,12 +1,10 @@
-import type { ColumnDef } from '@tanstack/table-core';
+import type { ColumnDef, StringOrTemplateHeader } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table';
 import { elapsedToString } from '$lib/utils/time';
-import DataTableCreatedAtButton from './data-table-createdat-button.svelte'
-import DataTableUserAgentButton from './data-table-useragent-button.svelte'
-import DataTableExpiresAtButton from './data-table-expiresat-button.svelte'
 import DataTableActions from './data-table-actions.svelte';
 import { getReadableUserAgentName } from '$lib/utils/userAgent';
+import DataTableSortButton from './data-table-sort-button.svelte';
 
 export type Session = {
   id: string;
@@ -16,6 +14,14 @@ export type Session = {
   expires_at: Date;
 };
 
+function CreateSortHeader<TData>(name: string): StringOrTemplateHeader<TData, unknown> {
+  return ({ column }) =>
+    renderComponent(DataTableSortButton, {
+      name,
+      onclick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
+    });
+}
+
 export const columns: ColumnDef<Session>[] = [
   {
     accessorKey: 'ip',
@@ -23,11 +29,7 @@ export const columns: ColumnDef<Session>[] = [
   },
   {
     accessorKey: 'user_agent',
-    header: ({ column }) => (
-      renderComponent(DataTableUserAgentButton, {
-        onclick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
-      })
-    ),
+    header: CreateSortHeader('User Agent'),
     cell: ({ row }) => {
       const userAgentCellSnippet = createRawSnippet<[string]>((getUserAgent) => {
         const userAgent = getUserAgent();
@@ -42,11 +44,7 @@ export const columns: ColumnDef<Session>[] = [
   },
   {
     accessorKey: 'created_at',
-    header: ({ column }) => (
-      renderComponent(DataTableCreatedAtButton, {
-        onclick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
-      })
-    ),
+    header: CreateSortHeader('Created at'),
     cell: ({ row }) => {
       const createdAtCellSnippet = createRawSnippet<[Date]>((getCreatedAt) => {
         const now = Date.now();
@@ -62,11 +60,7 @@ export const columns: ColumnDef<Session>[] = [
   },
   {
     accessorKey: 'expires_at',
-    header: ({ column }) => (
-      renderComponent(DataTableExpiresAtButton, {
-        onclick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
-      })
-    ),
+    header: CreateSortHeader('Expires at'),
     cell: ({ row }) => {
       const expiresAtCellSnippet = createRawSnippet<[Date]>((getExpiresAt) => {
         const now = Date.now();

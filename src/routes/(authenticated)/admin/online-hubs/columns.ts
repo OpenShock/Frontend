@@ -1,15 +1,12 @@
-import type { ColumnDef } from '@tanstack/table-core';
+import type { ColumnDef, StringOrTemplateHeader } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
 import { SemVer } from 'semver';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table';
 import { durationToString } from '$lib/utils/time';
-import DataTableNameButton from './data-table-name-button.svelte'
-import DataTableOwnerButton from './data-table-owner-button.svelte'
-import DataTableFirmwareVersionButton from './data-table-firmwareversion-button.svelte'
-import DataTableOnlineForButton from './data-table-onlinefor-button.svelte'
 import type { TwColor } from "$lib/types/Tailwind";
 import DataTableActions from './data-table-actions.svelte';
 import { getReadableUserAgentName } from '$lib/utils/userAgent';
+import DataTableSortButton from './data-table-sort-button.svelte';
 
 export type OnlineDeviceOwner = {
   id: string;
@@ -28,22 +25,22 @@ export type OnlineDevice = {
   latency: number | null;
 };
 
+function CreateSortHeader<TData>(name: string): StringOrTemplateHeader<TData, unknown> {
+  return ({ column }) =>
+    renderComponent(DataTableSortButton, {
+      name,
+      onclick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
+    });
+}
+
 export const columns: ColumnDef<OnlineDevice>[] = [
   {
     accessorKey: 'name',
-    header: ({ column }) => (
-      renderComponent(DataTableNameButton, {
-        onclick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
-      })
-    ),
+    header: CreateSortHeader('Name'),
   },
   {
     accessorKey: 'owner',
-    header: ({ column }) => (
-      renderComponent(DataTableOwnerButton, {
-        onclick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
-      })
-    ),
+    header: CreateSortHeader('Owner'),
     cell: ({ row }) => {
       const ownerCellSnippet = createRawSnippet<[OnlineDeviceOwner]>((getOwner) => {
         const owner = getOwner();
@@ -63,11 +60,7 @@ export const columns: ColumnDef<OnlineDevice>[] = [
   },
   {
     accessorKey: 'firmware_version',
-    header: ({ column }) => (
-      renderComponent(DataTableFirmwareVersionButton, {
-        onclick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
-      })
-    ),
+    header: CreateSortHeader('Firmware Version'),
     cell: ({ row }) => {
       const firmwareVersionCellSnippet = createRawSnippet<[string]>((getFirmwareVersion) => {
         let firmwareVersion = getFirmwareVersion().toString();
@@ -102,11 +95,7 @@ export const columns: ColumnDef<OnlineDevice>[] = [
   },
   {
     accessorKey: 'connected_at',
-    header: ({ column }) => (
-      renderComponent(DataTableOnlineForButton, {
-        onclick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
-      })
-    ),
+    header: CreateSortHeader('Online for'),
     cell: ({ row }) => {
       const connectedAtCellSnippet = createRawSnippet<[Date]>((getConnectedAt) => {
         const now = Date.now();
@@ -146,7 +135,7 @@ export const columns: ColumnDef<OnlineDevice>[] = [
   },
   {
     accessorKey: 'booted_at',
-    header: 'Uptime',
+    header: CreateSortHeader('Uptime'),
     cell: ({ row }) => {
       const bootedAtCellSnippet = createRawSnippet<[Date | null]>((getBootedAt) => {
         const bootedAt = getBootedAt();
@@ -168,7 +157,7 @@ export const columns: ColumnDef<OnlineDevice>[] = [
   },
   {
     accessorKey: 'latency',
-    header: 'Latency',
+    header: CreateSortHeader('Latency'),
     cell: ({ row }) => {
       const latencyCellSnippet = createRawSnippet<[number | null]>((getLatency) => {
         const latency = getLatency();
