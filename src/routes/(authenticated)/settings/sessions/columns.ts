@@ -5,8 +5,8 @@ import { elapsedToString } from '$lib/utils/time';
 import DataTableCreatedAtButton from './data-table-createdat-button.svelte'
 import DataTableUserAgentButton from './data-table-useragent-button.svelte'
 import DataTableExpiresAtButton from './data-table-expiresat-button.svelte'
-import { UAParser } from "ua-parser-js";
 import DataTableActions from './data-table-actions.svelte';
+import { getReadableUserAgentName } from '$lib/utils/userAgent';
 
 export type Session = {
   id: string;
@@ -15,21 +15,6 @@ export type Session = {
   created_at: Date;
   expires_at: Date;
 };
-
-function getReadableUserAgentName(userAgent: string): string {
-  const ua = new UAParser(userAgent);
-
-  const browser = ua.getBrowser();
-  const os = ua.getOS();
-
-  if (!browser.name || !os.name) return userAgent;
-
-  let name = `${browser.name} on ${os.name}`;
-
-  if (os.version) name += ` ${os.version}`;
-
-  return name;
-}
 
 export const columns: ColumnDef<Session>[] = [
   {

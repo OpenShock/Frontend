@@ -9,6 +9,7 @@ import DataTableFirmwareVersionButton from './data-table-firmwareversion-button.
 import DataTableOnlineForButton from './data-table-onlinefor-button.svelte'
 import type { TwColor } from "$lib/types/Tailwind";
 import DataTableActions from './data-table-actions.svelte';
+import { getReadableUserAgentName } from '$lib/utils/userAgent';
 
 export type OnlineDeviceOwner = {
   id: string;
@@ -131,8 +132,9 @@ export const columns: ColumnDef<OnlineDevice>[] = [
           }
         }
 
+        const readableName = getReadableUserAgentName(userAgent);
         return {
-          render: () => `<div class="text-left font-medium" title="${userAgent}">${userAgent}</div>`,
+          render: () => `<div class="text-left font-medium" title="${userAgent}">${readableName}</div>`,
         }
       });
 
