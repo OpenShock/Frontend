@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { onDestroy, onMount } from 'svelte';
   import { adminApi } from '$lib/api';
+  import type { AdminUsersView } from '$lib/api/internal/v1/models/AdminUsersView';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { onDestroy, onMount } from 'svelte';
   import { columns, type User } from './columns';
   import DataTable from './data-table.svelte';
-  import type { AdminUsersView } from '$lib/api/internal/v1/models/AdminUsersView';
 
   function apiUserToTableDevice(user: AdminUsersView): User {
     return {

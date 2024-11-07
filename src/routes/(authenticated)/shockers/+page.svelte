@@ -7,8 +7,8 @@
   import RichControlModule from '$lib/components/ControlModules/RichControlModule.svelte';
   import SimpleControlHeader from '$lib/components/ControlModules/SimpleControlHeader.svelte';
   import SimpleControlModule from '$lib/components/ControlModules/SimpleControlModule.svelte';
-  import { OwnDevicesStore } from '$lib/stores/DevicesStore';
   import * as Popover from '$lib/components/ui/popover';
+  import { OwnDevicesStore } from '$lib/stores/DevicesStore';
 
   let shockers = $derived(
     $OwnDevicesStore?.flatMap((device) => device.shockers)?.filter((shocker) => !!shocker) ?? []

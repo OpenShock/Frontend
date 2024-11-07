@@ -1,13 +1,11 @@
 <script lang="ts">
-  import Sun from 'lucide-svelte/icons/sun';
-  import Moon from 'lucide-svelte/icons/moon';
-
-  import { ColorSchemeStore, willActivateLightMode } from '$lib/stores/ColorSchemeStore';
-
-  import { Button, buttonVariants } from '$lib/components/ui/button';
-  import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+  import { buttonVariants } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
+  import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+  import { ColorSchemeStore, willActivateLightMode } from '$lib/stores/ColorSchemeStore';
   import AbsolutelySureButton from './AbsolutelySureButton.svelte';
+
+  import { Moon, Sun } from 'lucide-svelte/icons';
 
   let pendingScheme = $state<'light' | 'dark' | 'system' | undefined>();
   function handleOpenChanged(open: boolean) {

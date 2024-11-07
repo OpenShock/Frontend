@@ -1,8 +1,7 @@
 <script lang="ts">
-  import type { User } from './columns';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import TextInput from '$lib/components/input/TextInput.svelte';
   import AbsolutelySureButton from '$lib/components/AbsolutelySureButton.svelte';
+  import * as Dialog from '$lib/components/ui/dialog';
+  import type { User } from './columns';
 
   type Props = {
     open: boolean;

@@ -1,7 +1,7 @@
 <script lang="ts">
+  import type { ShockerResponse } from '$lib/api/internal/v1';
   import { createEventDispatcher } from 'svelte';
   import CircleSlider from './Internal/CircleSlider.svelte';
-  import type { ShockerResponse } from '$lib/api/internal/v1';
 
   interface Props {
     shocker: ShockerResponse;

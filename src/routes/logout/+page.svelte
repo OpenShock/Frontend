@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { UserStore } from '$lib/stores/UserStore';
-  import { goto } from '$app/navigation';
   import { browser } from '$app/environment';
+  import { goto } from '$app/navigation';
+  import { UserStore } from '$lib/stores/UserStore';
 
   function logout() {
     // TODO: Make a API call to invalidate the cookie

@@ -1,5 +1,5 @@
 import { PUBLIC_SENTRY_DSN, PUBLIC_SENTRY_ENABLED, PUBLIC_SENTRY_REPLAYS_ONERROR_SAMPLERATE, PUBLIC_SENTRY_REPLAYS_SESSION_SAMPLERATE, PUBLIC_SENTRY_TRACES_SAMPLERATE } from '$env/static/public';
-import { browserTracingIntegration, captureException, init as SentryInit, replayIntegration } from '@sentry/svelte';
+import { browserTracingIntegration, captureException, replayIntegration, init as SentryInit } from '@sentry/svelte';
 import type { HandleServerError } from '@sveltejs/kit';
 
 const sentryEnabled = PUBLIC_SENTRY_ENABLED === 'true';

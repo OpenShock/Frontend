@@ -1,6 +1,7 @@
-import { PUBLIC_SITE_NAME, PUBLIC_SITE_DESCRIPTION } from "$env/static/public";
+import { PUBLIC_SITE_DESCRIPTION, PUBLIC_SITE_NAME } from "$env/static/public";
 import type { Page } from "@sveltejs/kit";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function getPageTitleAndDescription(page: Page): { title: string; description: string } {
   const title = PUBLIC_SITE_NAME.trim();
   const details = PUBLIC_SITE_DESCRIPTION.trim();

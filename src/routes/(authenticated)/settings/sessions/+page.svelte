@@ -1,15 +1,14 @@
 <script lang="ts">
   import { sessionApi } from '$lib/api';
   import type { LoginSessionResponse } from '$lib/api/internal/v1';
+  import Button from '$lib/components/ui/button/button.svelte';
+  import * as Card from '$lib/components/ui/card';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onDestroy, onMount } from 'svelte';
   import { columns, type Session } from './columns';
   import DataTable from './data-table.svelte';
 
-  import * as Card from '$lib/components/ui/card';
-
   import RotateCcw from 'lucide-svelte/icons/rotate-ccw';
-  import Button from '$lib/components/ui/button/button.svelte';
 
   function apiSessionToTableSession(session: LoginSessionResponse): Session {
     return {

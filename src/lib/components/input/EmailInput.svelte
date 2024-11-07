@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { ValidationResult } from '$lib/types/ValidationResult';
+  import type { ButtonSettings } from '$lib/components/input/impl/ButtonSettings';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import { validateEmail } from '$lib/inputvalidation/emailValidator';
+  import type { ValidationResult } from '$lib/types/ValidationResult';
   import type { FullAutoFill } from 'svelte/elements';
-  import type { ButtonSettings } from '$lib/components/input/impl/ButtonSettings';
 
   interface Props {
     label: string;

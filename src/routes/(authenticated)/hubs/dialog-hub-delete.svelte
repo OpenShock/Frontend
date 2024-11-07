@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { Hub } from './columns';
-  import * as Dialog from '$lib/components/ui/dialog';
   import Button from '$lib/components/ui/button/button.svelte';
+  import * as Dialog from '$lib/components/ui/dialog';
+  import type { Hub } from './columns';
 
   type Props = {
     open: boolean;

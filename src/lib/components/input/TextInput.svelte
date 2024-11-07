@@ -1,11 +1,11 @@
 <script lang="ts">
+  import { Button } from '$lib/components/ui/button';
+  import { Input } from '$lib/components/ui/input';
+  import * as Popover from '$lib/components/ui/popover';
   import { GetValResColor, type ValidationResult } from '$lib/types/ValidationResult';
   import type { Snippet } from 'svelte';
   import type { FullAutoFill } from 'svelte/elements';
   import type { ButtonSettings } from './impl/ButtonSettings';
-  import { Input } from '$lib/components/ui/input';
-  import * as Popover from '$lib/components/ui/popover';
-  import { Button } from '$lib/components/ui/button';
 
   interface Props {
     type?: 'text' | 'password';

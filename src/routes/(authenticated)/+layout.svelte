@@ -2,6 +2,7 @@
   import { SignalR_State } from '$lib/signalr';
   import { UserStore } from '$lib/stores/UserStore';
   import { HubConnectionState } from '@microsoft/signalr';
+
   interface Props {
     children?: import('svelte').Snippet;
   }

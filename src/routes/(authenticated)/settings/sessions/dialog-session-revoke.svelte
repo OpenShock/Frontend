@@ -1,11 +1,11 @@
 <script lang="ts">
   import { sessionApi } from '$lib/api';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import * as Dialog from '$lib/components/ui/dialog';
   import Button from '$lib/components/ui/button/button.svelte';
-  import type { Session } from './columns';
-  import { toast } from 'svelte-sonner';
+  import * as Dialog from '$lib/components/ui/dialog';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { getReadableUserAgentName } from '$lib/utils/userAgent';
+  import { toast } from 'svelte-sonner';
+  import type { Session } from './columns';
 
   type Props = {
     open: boolean;

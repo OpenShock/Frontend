@@ -1,15 +1,13 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
   import { accountV2Api } from '$lib/api';
   import EmailInput from '$lib/components/input/EmailInput.svelte';
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
-  import Turnstile from '$lib/components/Turnstile.svelte';
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import { validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
+  import Turnstile from '$lib/components/Turnstile.svelte';
   import { Button } from '$lib/components/ui/button';
   import * as Card from '$lib/components/ui/card';
-  import TextInput from '$lib/components/input/TextInput.svelte';
+  import * as Dialog from '$lib/components/ui/dialog';
+  import { validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
 
   let username = $state('');
   let usernameValid = $state(false);

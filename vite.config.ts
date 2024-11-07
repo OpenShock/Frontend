@@ -1,9 +1,9 @@
-import { purgeCss } from 'vite-plugin-tailwind-purgecss';
 import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig, type PluginOption, loadEnv } from 'vite';
-import mkcert from 'vite-plugin-mkcert';
 import dns from 'dns';
 import { env } from 'process';
+import { defineConfig, loadEnv, type PluginOption } from 'vite';
+import mkcert from 'vite-plugin-mkcert';
+import { purgeCss } from 'vite-plugin-tailwind-purgecss';
 
 function printRed(message: string) {
   console.log(`\u001b[1;31m${message}\u001b[0m`);
@@ -94,7 +94,7 @@ function getTest() {
 export default defineConfig(async ({ command, mode, isPreview }) => {
   const isLocalServe = command === 'serve' || isPreview === true;
   const isProduction = mode === 'production' && (isThruthy(env.DOCKER) || isThruthy(env.CF_PAGES));
-  
+
   // If we are running locally, ensure that local.{PUBLIC_SITE_DOMAIN} resolves to localhost, and then use mkcert to generate a certificate
   const useLocalRedirect = isLocalServe && !isProduction && !isThruthy(env.CI);
 

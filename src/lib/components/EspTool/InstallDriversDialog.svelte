@@ -1,6 +1,5 @@
 <script lang="ts">
   import { PUBLIC_DISCORD_INVITE_URL } from '$env/static/public';
-  import { buttonVariants } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
 
   interface Props {

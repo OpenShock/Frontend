@@ -18,9 +18,8 @@ export default class FlashManager {
   static async Connect(serialPort: SerialPort, terminal: IEspLoaderTerminal) {
     try {
       await serialPort.close(); // TODO: Find some way to detect if the port is already open
-    } catch (e) {
-      // Ignore
-    }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (e) { /* empty */ }
 
     try {
       console.log("Connecting to", serialPort);

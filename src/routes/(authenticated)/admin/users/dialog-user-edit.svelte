@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { User } from './columns';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import { Button } from '$lib/components/ui/button';
+  import EmailInput from '$lib/components/input/EmailInput.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
-  import EmailInput from '$lib/components/input/EmailInput.svelte';
+  import { Button } from '$lib/components/ui/button';
+  import * as Dialog from '$lib/components/ui/dialog';
+  import type { User } from './columns';
 
   type Props = {
     open: boolean;

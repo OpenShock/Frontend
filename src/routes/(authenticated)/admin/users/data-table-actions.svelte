@@ -1,12 +1,13 @@
 <script lang="ts">
-  import Ellipsis from 'lucide-svelte/icons/ellipsis';
+  import { RankType } from '$lib/api/internal/v1';
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { toast } from 'svelte-sonner';
   import type { User } from './columns';
-  import { RankType } from '$lib/api/internal/v1';
-  import UserEditDialog from './dialog-user-edit.svelte';
   import UserDeleteDialog from './dialog-user-delete.svelte';
+  import UserEditDialog from './dialog-user-edit.svelte';
+
+  import Ellipsis from 'lucide-svelte/icons/ellipsis';
 
   type Props = {
     user: User;

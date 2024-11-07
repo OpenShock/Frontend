@@ -1,12 +1,11 @@
 <script lang="ts">
-  import Cpu from 'lucide-svelte/icons/cpu';
-  import ArrowDownToLine from 'lucide-svelte/icons/arrow-down-to-line';
-
-  import Bowser from 'bowser';
   import { browser } from '$app/environment';
-  import { SerialPortsStore } from '$lib/stores/SerialPortsStore';
   import { Button } from '$lib/components/ui/button';
+  import { SerialPortsStore } from '$lib/stores/SerialPortsStore';
+  import Bowser from 'bowser';
   import InstallDriversDialog from './InstallDriversDialog.svelte';
+
+  import { ArrowDownToLine, Cpu } from 'lucide-svelte/icons';
 
   interface Props {
     port?: SerialPort | null;

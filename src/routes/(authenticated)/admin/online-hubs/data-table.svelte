@@ -1,12 +1,12 @@
 <script lang="ts" generics="TData, TValue">
+  import { createSvelteTable, FlexRender } from '$lib/components/ui/data-table';
+  import * as Table from '$lib/components/ui/table';
   import {
     getCoreRowModel,
     getSortedRowModel,
     type ColumnDef,
     type SortingState,
   } from '@tanstack/table-core';
-  import { createSvelteTable, FlexRender } from '$lib/components/ui/data-table';
-  import * as Table from '$lib/components/ui/table';
 
   type DateTableProps<TData, TValue> = {
     columns: ColumnDef<TData, TValue>[];

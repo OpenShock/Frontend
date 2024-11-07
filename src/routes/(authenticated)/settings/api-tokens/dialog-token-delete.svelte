@@ -1,10 +1,10 @@
 <script lang="ts">
   import { tokensApi } from '$lib/api';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import * as Dialog from '$lib/components/ui/dialog';
   import Button from '$lib/components/ui/button/button.svelte';
-  import type { ApiToken } from './columns';
+  import * as Dialog from '$lib/components/ui/dialog';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { toast } from 'svelte-sonner';
+  import type { ApiToken } from './columns';
 
   type Props = {
     open: boolean;

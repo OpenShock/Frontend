@@ -1,12 +1,13 @@
 <script lang="ts">
-  import Bug from 'lucide-svelte/icons/bug';
   import { browser, dev } from '$app/environment';
+  import { PUBLIC_TURNSTILE_DEV_BYPASS_VALUE, PUBLIC_TURNSTILE_SITE_KEY } from '$env/static/public';
   import CloudflareLogo from '$lib/components/svg/CloudflareLogo.svelte';
+  import { ColorSchemeStore } from '$lib/stores/ColorSchemeStore';
   import type { TurnstileInstance } from '$lib/types/TurnstileInstance';
   import { onMount } from 'svelte';
-  import { PUBLIC_TURNSTILE_DEV_BYPASS_VALUE, PUBLIC_TURNSTILE_SITE_KEY } from '$env/static/public';
-  import { ColorSchemeStore } from '$lib/stores/ColorSchemeStore';
   import LoadingCircle from './svg/LoadingCircle.svelte';
+
+  import { Bug } from 'lucide-svelte/icons';
 
   interface Props {
     action: string;

@@ -1,12 +1,12 @@
 <script lang="ts">
   import Button from '$lib/components/ui/button/button.svelte';
-  import { OwnDeviceStatesStore, OwnDevicesStore } from '$lib/stores/DevicesStore';
   import * as Card from '$lib/components/ui/card';
-  import RotateCcw from 'lucide-svelte/icons/rotate-ccw';
-
-  import { columns, type Hub } from './columns';
+  import { OwnDeviceStatesStore, OwnDevicesStore } from '$lib/stores/DevicesStore';
   import { SemVer } from 'semver';
+  import { columns, type Hub } from './columns';
   import DataTable from './data-table.svelte';
+
+  import RotateCcw from 'lucide-svelte/icons/rotate-ccw';
 
   let data = $derived.by<Hub[]>(() => {
     if (!$OwnDeviceStatesStore || !$OwnDevicesStore) return [];

@@ -1,16 +1,16 @@
 <script lang="ts">
-  import type { ValidationResult } from '$lib/types/ValidationResult';
+  import { accountV2Api } from '$lib/api';
+  import type { ButtonSettings } from '$lib/components/input/impl/ButtonSettings';
+  import TextInput from '$lib/components/input/TextInput.svelte';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import {
     mapUsernameAvailability,
     UsernameCheckingAvailabilityValRes,
     UsernameInternalServerErrorValRes,
     validateUsername,
   } from '$lib/inputvalidation/usernameValidator';
-  import { accountV2Api } from '$lib/api';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import type { ValidationResult } from '$lib/types/ValidationResult';
   import type { FullAutoFill } from 'svelte/elements';
-  import TextInput from '$lib/components/input/TextInput.svelte';
-  import type { ButtonSettings } from '$lib/components/input/impl/ButtonSettings';
 
   interface Props {
     label: string;

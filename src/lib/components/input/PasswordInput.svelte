@@ -3,11 +3,10 @@
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { validatePassword } from '$lib/inputvalidation/passwordValidator';
   import type { ValidationResult } from '$lib/types/ValidationResult';
-  import { randStr } from '$lib/utils/rand';
-  import TextInput from './TextInput.svelte';
   import type { FullAutoFill } from 'svelte/elements';
-  import PasswordStrengthMeter from './impl/PasswordStrengthMeter.svelte';
   import type { ButtonSettings } from './impl/ButtonSettings';
+  import PasswordStrengthMeter from './impl/PasswordStrengthMeter.svelte';
+  import TextInput from './TextInput.svelte';
 
   interface Props {
     label: string;

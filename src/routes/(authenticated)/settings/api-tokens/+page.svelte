@@ -1,13 +1,13 @@
 <script lang="ts">
   import { tokensApi } from '$lib/api';
   import type { TokenResponse } from '$lib/api/internal/v1';
+  import Button from '$lib/components/ui/button/button.svelte';
+  import * as Card from '$lib/components/ui/card';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import TokenGenerateDialog from './dialog-token-generate.svelte';
-  import * as Card from '$lib/components/ui/card';
-  import DataTable from './data-table.svelte';
   import { columns, type ApiToken } from './columns';
+  import DataTable from './data-table.svelte';
+  import TokenGenerateDialog from './dialog-token-generate.svelte';
 
   function apiTokenToTableToken(user: TokenResponse): ApiToken {
     return {

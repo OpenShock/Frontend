@@ -1,13 +1,13 @@
 <script lang="ts">
   import { tokensApi } from '$lib/api';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import Button from '$lib/components/ui/button/button.svelte';
   import { PermissionType } from '$lib/api/internal/v1';
   import TextInput from '$lib/components/input/TextInput.svelte';
+  import Button from '$lib/components/ui/button/button.svelte';
+  import * as Dialog from '$lib/components/ui/dialog';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import type { ValidationResult } from '$lib/types/ValidationResult';
-  import type { ApiToken } from './columns';
   import { toast } from 'svelte-sonner';
+  import type { ApiToken } from './columns';
 
   type Props = {
     open: boolean;

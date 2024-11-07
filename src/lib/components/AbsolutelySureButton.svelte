@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { onDestroy, type Snippet } from 'svelte';
-  import { Button } from '$lib/components/ui/button';
+  import { onDestroy } from 'svelte';
 
   type Props = {
     text: string;

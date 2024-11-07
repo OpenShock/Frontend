@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from 'svelte';
-  import CircleSlider from './Internal/CircleSlider.svelte';
   import type { ShockerResponse } from '$lib/api/internal/v1';
+  import { createEventDispatcher, onMount } from 'svelte';
 
   interface Props {
     shockers: ShockerResponse[];

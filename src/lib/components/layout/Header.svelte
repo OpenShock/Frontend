@@ -1,10 +1,9 @@
 <script lang="ts">
   import { PUBLIC_DISCORD_INVITE_URL, PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
-  import { UserStore } from '$lib/stores/UserStore';
   import LightSwitch from '$lib/components/LightSwitch.svelte';
-  import { Button, buttonVariants } from '$lib/components/ui/button';
-  import * as Menubar from '$lib/components/ui/menubar';
+  import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+  import { UserStore } from '$lib/stores/UserStore';
 </script>
 
 {#snippet item(text: string, href: string)}

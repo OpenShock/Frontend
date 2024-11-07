@@ -3,11 +3,11 @@
   import { accountV2Api } from '$lib/api';
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
-  import { UserStore } from '$lib/stores/UserStore';
+  import Turnstile from '$lib/components/Turnstile.svelte';
   import { Button } from '$lib/components/ui/button';
   import * as Card from '$lib/components/ui/card';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import Turnstile from '$lib/components/Turnstile.svelte';
+  import { UserStore } from '$lib/stores/UserStore';
 
   let usernameOrEmail = $state<string>('');
   let password = $state<string>('');

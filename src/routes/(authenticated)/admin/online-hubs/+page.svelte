@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { AdminOnlineDeviceResponse } from '$lib/api/internal/v1';
-  import { onDestroy, onMount } from 'svelte';
-  import { SemVer } from 'semver';
   import { adminApi } from '$lib/api';
+  import type { AdminOnlineDeviceResponse } from '$lib/api/internal/v1';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { columns, type OnlineDevice, type OnlineDeviceOwner } from './columns';
+  import { SemVer } from 'semver';
+  import { onDestroy, onMount } from 'svelte';
+  import { columns, type OnlineDevice } from './columns';
   import DataTable from './data-table.svelte';
 
   function apiDeviceToTableDevice(device: AdminOnlineDeviceResponse): OnlineDevice {

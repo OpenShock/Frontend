@@ -1,17 +1,17 @@
 <script lang="ts" generics="TData, TValue">
-  import {
-    getCoreRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    getFilteredRowModel,
-    type ColumnDef,
-    type SortingState,
-    type PaginationState,
-    type ColumnFiltersState,
-  } from '@tanstack/table-core';
   import { createSvelteTable, FlexRender } from '$lib/components/ui/data-table';
   import { Input } from '$lib/components/ui/input';
   import * as Table from '$lib/components/ui/table';
+  import {
+    getCoreRowModel,
+    getFilteredRowModel,
+    getPaginationRowModel,
+    getSortedRowModel,
+    type ColumnDef,
+    type ColumnFiltersState,
+    type PaginationState,
+    type SortingState,
+  } from '@tanstack/table-core';
 
   type DataTableProps<TData, TValue> = {
     columns: ColumnDef<TData, TValue>[];

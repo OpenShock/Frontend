@@ -1,5 +1,5 @@
 <script lang="ts">
-  import '../app.pcss';
+  import { page } from '$app/stores';
   import AppSidebar from '$lib/components/layout/AppSidebar.svelte';
   import Footer from '$lib/components/layout/Footer.svelte';
   import Header from '$lib/components/layout/Header.svelte';
@@ -7,12 +7,12 @@
   import TwitterSummaryTags from '$lib/components/metadata/Twitter/TwitterSummaryTags.svelte';
   import * as Sidebar from '$lib/components/ui/sidebar';
   import { Toaster } from '$lib/components/ui/sonner';
-  import { page } from '$app/stores';
   import { buildMetaData } from '$lib/metadata';
-  import { initializeStores } from '$lib/stores';
   import { initializeSignalR } from '$lib/signalr';
-  import type { Snippet } from 'svelte';
+  import { initializeStores } from '$lib/stores';
   import { UserStore } from '$lib/stores/UserStore';
+  import type { Snippet } from 'svelte';
+  import '../app.pcss';
 
   let { children }: { children: Snippet } = $props();
 

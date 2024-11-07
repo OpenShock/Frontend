@@ -1,21 +1,23 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import { RankType } from '$lib/api/internal/v1';
-  import * as Sidebar from '$lib/components/ui/sidebar/index.js';
+  import * as Sidebar from '$lib/components/ui/sidebar';
   import { Collapsible } from 'bits-ui';
-  import ChevronDown from 'lucide-svelte/icons/chevron-down';
 
-  import Cpu from 'lucide-svelte/icons/cpu';
-  import House from 'lucide-svelte/icons/house';
-  import Zap from 'lucide-svelte/icons/zap';
-  import Link from 'lucide-svelte/icons/link';
-  import SquareActivity from 'lucide-svelte/icons/square-activity';
-  import Wrench from 'lucide-svelte/icons/wrench';
-  import Timer from 'lucide-svelte/icons/timer';
-  import UserPen from 'lucide-svelte/icons/user-pen';
-  import MonitorSmartphone from 'lucide-svelte/icons/monitor-smartphone';
-  import KeyRound from 'lucide-svelte/icons/key-round';
-  import TriangleAlert from 'lucide-svelte/icons/triangle-alert';
+  import {
+    ChevronDown,
+    Cpu,
+    House,
+    KeyRound,
+    Link,
+    MonitorSmartphone,
+    SquareActivity,
+    Timer,
+    TriangleAlert,
+    UserPen,
+    Wrench,
+    Zap,
+  } from 'lucide-svelte/icons';
 
   interface Props {
     currentUserRank: RankType;

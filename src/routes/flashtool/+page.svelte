@@ -4,10 +4,10 @@
   import FirmwareSelector from '$lib/components/EspTool/FirmwareSelector.svelte';
   import FlashManager from '$lib/components/EspTool/FlashManager';
   import SerialPortSelector from '$lib/components/EspTool/SerialPortSelector.svelte';
+  import { Button } from '$lib/components/ui/button';
+  import * as Card from '$lib/components/ui/card';
   import { Progress } from '$lib/components/ui/progress';
   import { FlashManagerStore } from '$lib/stores/FlashManagersStore';
-  import * as Card from '$lib/components/ui/card';
-  import { Button } from '$lib/components/ui/button';
 
   let port: SerialPort | null = $state(null);
   let manager: FlashManager | null = $state(null);

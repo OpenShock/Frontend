@@ -1,14 +1,14 @@
 <script lang="ts">
+  import { authenticatedAccountApi } from '$lib/api';
+  import EmailInput from '$lib/components/input/EmailInput.svelte';
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
+  import UsernameInput from '$lib/components/input/UsernameInput.svelte';
+  import * as Accordion from '$lib/components/ui/accordion';
+  import { Button } from '$lib/components/ui/button';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
   import { UserStore } from '$lib/stores/UserStore';
-  import * as Accordion from '$lib/components/ui/accordion';
-  import { authenticatedAccountApi } from '$lib/api';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import UsernameInput from '$lib/components/input/UsernameInput.svelte';
-  import EmailInput from '$lib/components/input/EmailInput.svelte';
   import { toast } from 'svelte-sonner';
-  import { Button } from '$lib/components/ui/button';
 
   let username: string = $state('');
   let email: string = $state('');

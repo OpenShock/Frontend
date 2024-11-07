@@ -1,8 +1,9 @@
 <script lang="ts">
-  import Ellipsis from 'lucide-svelte/icons/ellipsis';
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { toast } from 'svelte-sonner';
+
+  import Ellipsis from 'lucide-svelte/icons/ellipsis';
 
   let { id }: { id: string } = $props();
 
