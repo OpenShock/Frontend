@@ -8,15 +8,15 @@ import DataTableActions from './data-table-actions.svelte';
 import { getReadableUserAgentName } from '$lib/utils/userAgent';
 import DataTableSortButton from './data-table-sort-button.svelte';
 
-export type OnlineDeviceOwner = {
+export type OnlineHubOwner = {
   id: string;
   name: string;
   image: string;
 };
-export type OnlineDevice = {
+export type OnlineHub = {
   id: string;
   name: string;
-  owner: OnlineDeviceOwner;
+  owner: OnlineHubOwner;
   firmware_version: SemVer;
   gateway: string;
   connected_at: Date;
@@ -33,7 +33,7 @@ function CreateSortHeader<TData>(name: string): StringOrTemplateHeader<TData, un
     });
 }
 
-export const columns: ColumnDef<OnlineDevice>[] = [
+export const columns: ColumnDef<OnlineHub>[] = [
   {
     accessorKey: 'name',
     header: CreateSortHeader('Name'),
@@ -42,18 +42,18 @@ export const columns: ColumnDef<OnlineDevice>[] = [
     accessorKey: 'owner',
     header: CreateSortHeader('Owner'),
     cell: ({ row }) => {
-      const ownerCellSnippet = createRawSnippet<[OnlineDeviceOwner]>((getOwner) => {
+      const ownerCellSnippet = createRawSnippet<[OnlineHubOwner]>((getOwner) => {
         const owner = getOwner();
         return {
           render: () => `<div class="text-left font-medium" title="${owner.id}">${owner.name}</div>`,
         }
       });
 
-      return renderSnippet(ownerCellSnippet, row.getValue<OnlineDeviceOwner>('owner'));
+      return renderSnippet(ownerCellSnippet, row.getValue<OnlineHubOwner>('owner'));
     },
     sortingFn: (row_a, row_b) => {
-      const a = row_a.getValue<OnlineDeviceOwner>('owner');
-      const b = row_b.getValue<OnlineDeviceOwner>('owner');
+      const a = row_a.getValue<OnlineHubOwner>('owner');
+      const b = row_b.getValue<OnlineHubOwner>('owner');
 
       return a.name.localeCompare(b.name);
     }
@@ -179,7 +179,7 @@ export const columns: ColumnDef<OnlineDevice>[] = [
     id: 'actions',
     cell: ({ row }) => {
       // You can pass whatever you need from `row.original` to the component
-      return renderComponent(DataTableActions, { id: row.original.id });
+      return renderComponent(DataTableActions, { hub: row.original });
     }
   }
 ];

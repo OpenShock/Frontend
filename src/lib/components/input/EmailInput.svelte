@@ -32,6 +32,7 @@
   let validationResult = $derived<ValidationResult | null>(
     validate ? validateEmail(value) : { valid: true }
   );
+
   $effect(() => {
     valid = validationResult?.valid ?? false;
   });

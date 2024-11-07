@@ -4,36 +4,35 @@
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { SemVer } from 'semver';
   import { onDestroy, onMount } from 'svelte';
-  import { columns, type OnlineDevice } from './columns';
+  import { columns, type OnlineHub } from './columns';
   import DataTable from './data-table.svelte';
-  import { dev } from '$app/environment';
 
-  function apiDeviceToTableDevice(device: AdminOnlineDeviceResponse): OnlineDevice {
+  function apiHubToTableHub(hub: AdminOnlineDeviceResponse): OnlineHub {
     return {
-      id: device.id,
-      name: device.name,
+      id: hub.id,
+      name: hub.name,
       owner: {
-        id: device.owner.id,
-        name: device.owner.name,
-        image: device.owner.image,
+        id: hub.owner.id,
+        name: hub.owner.name,
+        image: hub.owner.image,
       },
-      firmware_version: new SemVer(device.firmwareVersion),
-      gateway: device.gateway,
-      connected_at: device.connectedAt,
-      user_agent: device.userAgent,
-      booted_at: device.uptime ? new Date(Date.now() - Number(device.uptime)) : null,
-      latency: device.latency ? Number(device.latency) : null,
+      firmware_version: new SemVer(hub.firmwareVersion),
+      gateway: hub.gateway,
+      connected_at: hub.connectedAt,
+      user_agent: hub.userAgent,
+      booted_at: hub.uptime ? new Date(Date.now() - Number(hub.uptime)) : null,
+      latency: hub.latency ? Number(hub.latency) : null,
     };
   }
 
-  let data = $state<OnlineDevice[]>([]);
+  let data = $state<OnlineHub[]>([]);
 
-  function fetchOnlineDevices() {
+  function fetchOnlineHubs() {
     adminApi
       .adminGetOnlineDevices()
       .then((res) => {
         if (res.data) {
-          data = res.data.map(apiDeviceToTableDevice);
+          data = res.data.map(apiHubToTableHub);
         }
       })
       .catch(handleApiError);
@@ -41,7 +40,7 @@
 
   let interval: ReturnType<typeof setInterval>;
   onMount(() => {
-    fetchOnlineDevices();
+    fetchOnlineHubs();
     // Update timestamps every 5 seconds
     interval = setInterval(() => {
       data = Object.assign([], data);
@@ -53,8 +52,8 @@
 </script>
 
 <div class="flex justify-between w-full mb-2">
-  <h2 class="text-3xl">Online Hubs: { data.length }</h2>
-  <button class="btn variant-filled-primary text-xl" onclick={fetchOnlineDevices}>
+  <h2 class="text-3xl">Online Hubs: {data.length}</h2>
+  <button class="btn variant-filled-primary text-xl" onclick={fetchOnlineHubs}>
     <i class="fa fa-sync"></i>
     Refresh
   </button>

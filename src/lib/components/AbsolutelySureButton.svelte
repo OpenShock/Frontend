@@ -9,7 +9,7 @@
   let { text, onconfirm }: Props = $props();
 
   let clickedAt = $state<number | undefined>();
-  let buttonText = $state(text);
+  let buttonText = $state<string>(text);
   function updateText() {
     if (clickedAt === undefined) {
       buttonText = text;

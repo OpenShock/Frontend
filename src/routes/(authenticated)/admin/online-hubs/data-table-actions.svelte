@@ -2,13 +2,18 @@
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { toast } from 'svelte-sonner';
+  import type { OnlineHub } from './columns';
 
   import Ellipsis from 'lucide-svelte/icons/ellipsis';
 
-  let { id }: { id: string } = $props();
+  type Props = {
+    hub: OnlineHub;
+  };
+
+  let { hub }: Props = $props();
 
   function copyId() {
-    navigator.clipboard.writeText(id);
+    navigator.clipboard.writeText(hub.id);
     toast.success('ID copied to clipboard');
   }
 </script>

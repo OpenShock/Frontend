@@ -1,7 +1,11 @@
 <script lang="ts">
   import { getPasswordStrength } from '$lib/inputvalidation/passwordValidator';
 
-  let { password }: { password: string } = $props();
+  type Props = {
+    password: string;
+  };
+
+  let { password }: Props = $props();
 
   let { percent, text, color } = $derived(getPasswordStrength(password));
 </script>

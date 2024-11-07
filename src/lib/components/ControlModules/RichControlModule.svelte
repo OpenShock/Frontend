@@ -8,8 +8,8 @@
 
   let { shocker }: Props = $props();
 
-  let intensity: number = $state(25);
-  let duration: number = $state(1);
+  let intensity = $state(25);
+  let duration = $state(1);
 
   const dispatch = createEventDispatcher();
 
