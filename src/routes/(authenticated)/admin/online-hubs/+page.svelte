@@ -2,10 +2,14 @@
   import { adminApi } from '$lib/api';
   import type { AdminOnlineDeviceResponse } from '$lib/api/internal/v1';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { Button } from '$lib/components/ui/button';
+  import * as Card from '$lib/components/ui/card';
   import { SemVer } from 'semver';
   import { onDestroy, onMount } from 'svelte';
   import { columns, type OnlineHub } from './columns';
   import DataTable from './data-table.svelte';
+
+  import RotateCcw from 'lucide-svelte/icons/rotate-ccw';
 
   function apiHubToTableHub(hub: AdminOnlineDeviceResponse): OnlineHub {
     return {
@@ -51,14 +55,17 @@
   });
 </script>
 
-<div class="flex justify-between w-full mb-2">
-  <h2 class="text-3xl">Online Hubs: {data.length}</h2>
-  <button class="btn variant-filled-primary text-xl" onclick={fetchOnlineHubs}>
-    <i class="fa fa-sync"></i>
-    Refresh
-  </button>
+<div class="container my-8">
+  <Card.Header>
+    <Card.Title class="text-3xl flex items-center space-x-2 justify-between">
+      Online Hubs: {data.length}
+      <Button class="btn variant-filled-primary text-xl" onclick={fetchOnlineHubs}>
+        <RotateCcw />
+        <span> Refresh </span>
+      </Button>
+    </Card.Title>
+  </Card.Header>
+  <Card.Content>
+    <DataTable {data} {columns} />
+  </Card.Content>
 </div>
-
-{#if data}
-  <DataTable {data} {columns} />
-{/if}

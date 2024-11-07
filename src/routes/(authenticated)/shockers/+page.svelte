@@ -35,7 +35,7 @@
 </script>
 
 <!-- Rounded bordered container -->
-<div class="container mx-auto py-4 flex flex-col flex-wrap justify-center items-stretch gap-4">
+<div class="container py-4 flex flex-col gap-4">
   {#if $OwnDevicesStore == null}
     <p>Loading...</p>
   {:else}

@@ -9,6 +9,8 @@
   import DataTable from './data-table.svelte';
   import TokenGenerateDialog from './dialog-token-generate.svelte';
 
+  import RotateCcw from 'lucide-svelte/icons/rotate-ccw';
+
   function apiTokenToTableToken(user: TokenResponse): ApiToken {
     return {
       id: user.id,
@@ -59,13 +61,21 @@
   onClose={() => (showGenerateTokenModal = false)}
 />
 
-<Card.Root>
+<div class="container my-8">
   <Card.Header>
-    <Card.Title>API Tokens</Card.Title>
+    <Card.Title class="text-3xl flex items-center space-x-2 justify-between">
+      API Tokens
+      <Button class="btn variant-filled-primary" onclick={refreshTokens}>
+        <RotateCcw />
+        <span> Refresh </span>
+      </Button>
+    </Card.Title>
     <Card.Description>API Tokens are used to authenticate with the OpenShock API</Card.Description>
   </Card.Header>
-  <Card.Content>
+  <Card.Content class="flex flex-col space-y-4">
     <DataTable {data} {columns} />
-    <Button onclick={() => (showGenerateTokenModal = true)}>Generate Token</Button>
+    <div class="flex justify-end">
+      <Button onclick={() => (showGenerateTokenModal = true)}>Generate Token</Button>
+    </div>
   </Card.Content>
-</Card.Root>
+</div>

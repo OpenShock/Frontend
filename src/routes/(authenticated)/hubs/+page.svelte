@@ -40,7 +40,7 @@
   });
 </script>
 
-<Card.Root>
+<div class="container my-8">
   <Card.Header>
     <Card.Title class="text-3xl flex items-center space-x-2 justify-between">
       Hubs
@@ -54,4 +54,4 @@
   <Card.Content>
     <DataTable {data} {columns} />
   </Card.Content>
-</Card.Root>
+</div>
