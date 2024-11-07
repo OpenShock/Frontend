@@ -14,7 +14,11 @@
   import type { Snippet } from 'svelte';
   import '../app.pcss';
 
-  let { children }: { children: Snippet } = $props();
+  type Props = {
+    children?: Snippet;
+  };
+
+  let { children }: Props = $props();
 
   initializeStores();
   initializeSignalR();
@@ -35,7 +39,7 @@
     <AppSidebar {currentUserRank} />
   {/if}
   <main class="w-full p-16">
-    {@render children()}
+    {@render children?.()}
   </main>
 </Sidebar.Provider>
 <Footer />

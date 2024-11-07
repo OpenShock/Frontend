@@ -1,5 +1,9 @@
 <script lang="ts">
-  let props: { class: string } = $props();
+  type Props = {
+    class: string;
+  };
+
+  let props: Props = $props();
 </script>
 
 <svg

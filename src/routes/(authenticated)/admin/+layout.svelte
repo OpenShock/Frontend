@@ -3,10 +3,14 @@
   import { UserStore } from '$lib/stores/UserStore';
   import type { Snippet } from 'svelte';
 
+  type Props = {
+    children?: Snippet;
+  };
+
+  let { children }: Props = $props();
+
   const allowedRanks = [RankType.Admin, RankType.System];
   let isAdmin = $derived($UserStore.self ? allowedRanks.includes($UserStore.self.rank) : false);
-
-  let { children }: { children?: Snippet } = $props();
 </script>
 
 {#if isAdmin}

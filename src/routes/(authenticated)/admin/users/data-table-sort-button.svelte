@@ -4,11 +4,9 @@
 
   import ArrowUpDown from 'lucide-svelte/icons/arrow-up-down';
 
-  let {
-    variant = 'ghost',
-    name,
-    ...restProps
-  }: ComponentProps<typeof Button> & { name: string } = $props();
+  type Props = ComponentProps<typeof Button> & { name: string };
+
+  let { variant = 'ghost', name, ...restProps }: Props = $props();
 </script>
 
 <Button {variant} {...restProps}>
