@@ -135,13 +135,7 @@
           icon: TriangleAlert,
           class: '!text-red-500',
           collapsible: { open: false },
-          subItems: [
-            {
-              name: 'Delete Account',
-              class: '!text-red-500',
-              href: '/settings/delete-account',
-            },
-          ],
+          href: '/settings/danger-zone'
         },
       ],
     },
