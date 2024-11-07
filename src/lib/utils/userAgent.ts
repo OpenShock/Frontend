@@ -16,13 +16,13 @@ const OpenShockExtension: UAParserExt = {
   ]
 };
 
-export function getReadableUserAgentName(userAgent: string): string {
+export function getReadableUserAgentName(userAgent: string): string | null {
   const ua = new UAParser(userAgent, OpenShockExtension);
 
   const browser = ua.getBrowser();
   const os = ua.getOS();
 
-  if (!browser.name || !os.name) return userAgent;
+  if (!browser.name || !os.name) return null;
 
   if (browser.name === 'OpenShock') {
     const device = ua.getDevice();

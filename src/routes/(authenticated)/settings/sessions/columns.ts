@@ -33,7 +33,7 @@ export const columns: ColumnDef<Session>[] = [
         const userAgent = getUserAgent();
         const readableUserAgent = getReadableUserAgentName(userAgent);
         return {
-          render: () => `<div class="text-left font-medium" title="${userAgent}">${readableUserAgent}</div>`,
+          render: () => `<div class="text-left font-medium" title="${userAgent}">${readableUserAgent ?? userAgent}</div>`,
         }
       });
 

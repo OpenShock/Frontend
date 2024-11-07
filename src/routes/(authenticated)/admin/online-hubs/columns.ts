@@ -126,15 +126,18 @@ export const columns: ColumnDef<OnlineDevice>[] = [
     cell: ({ row }) => {
       const userAgentCellSnippet = createRawSnippet<[string | null]>((getUserAgent) => {
         const userAgent = getUserAgent();
+        const readableName = userAgent ? getReadableUserAgentName(userAgent) : 'Unknown';
+
+        let color: `` | `text-${TwColor}` = '';
         if (!userAgent) {
-          return {
-            render: () => `<div class="text-left font-medium text-orange-500">Unknown</div>`,
-          }
+          color = 'text-red-500';
+        } else if (!readableName) {
+          color = 'text-orange-500';
         }
 
-        const readableName = getReadableUserAgentName(userAgent);
+
         return {
-          render: () => `<div class="text-left font-medium" title="${userAgent}">${readableName}</div>`,
+          render: () => `<div class="text-left font-medium ${color}" title="${userAgent}">${readableName ?? userAgent}</div>`,
         }
       });
 
