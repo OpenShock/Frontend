@@ -6,7 +6,7 @@
   import OpenGraphTags from '$lib/components/metadata/OpenGraphTags.svelte';
   import TwitterSummaryTags from '$lib/components/metadata/Twitter/TwitterSummaryTags.svelte';
   import * as Sidebar from '$lib/components/ui/sidebar';
-  import { Toaster } from '$lib/components/ui/sonner'
+  import { Toaster } from '$lib/components/ui/sonner';
   import { page } from '$app/stores';
   import { buildMetaData } from '$lib/metadata';
   import { initializeStores } from '$lib/stores';
@@ -30,12 +30,12 @@
 <OpenGraphTags type="website" {...meta} url={$page.url.origin} />
 
 <Header />
-  <Sidebar.Provider>
-    {#if currentUserRank !== null}
-      <AppSidebar {currentUserRank} />
-    {/if}
-    <main class="w-full p-16">
-      {@render children()}
-    </main>
-  </Sidebar.Provider>
+<Sidebar.Provider>
+  {#if currentUserRank !== null}
+    <AppSidebar {currentUserRank} />
+  {/if}
+  <main class="w-full p-16">
+    {@render children()}
+  </main>
+</Sidebar.Provider>
 <Footer />

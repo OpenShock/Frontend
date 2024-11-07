@@ -5,7 +5,7 @@
   import type { ButtonSettings } from './impl/ButtonSettings';
   import { Input } from '$lib/components/ui/input';
   import * as Popover from '$lib/components/ui/popover';
-  import {Button} from "$lib/components/ui/button";
+  import { Button } from '$lib/components/ui/button';
 
   interface Props {
     type?: 'text' | 'password';
@@ -30,7 +30,7 @@
     icon,
     button,
     popup,
-    oninput
+    oninput,
   }: Props = $props();
 
   function handleInput(event: Event & { currentTarget: HTMLInputElement }) {
@@ -40,7 +40,6 @@
     }
   }
 </script>
-
 
 <label class="label w-full">
   <span>{label}</span>

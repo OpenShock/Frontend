@@ -1,5 +1,10 @@
 <script lang="ts" generics="TData, TValue">
-  import { getCoreRowModel, getSortedRowModel, type ColumnDef, type SortingState } from '@tanstack/table-core';
+  import {
+    getCoreRowModel,
+    getSortedRowModel,
+    type ColumnDef,
+    type SortingState,
+  } from '@tanstack/table-core';
   import { createSvelteTable, FlexRender } from '$lib/components/ui/data-table';
   import { Input } from '$lib/components/ui/input';
   import * as Table from '$lib/components/ui/table';

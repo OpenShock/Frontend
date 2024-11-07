@@ -1,5 +1,5 @@
 <script lang="ts">
-  import CircleSlider from "./Internal/CircleSlider.svelte";
+  import CircleSlider from './Internal/CircleSlider.svelte';
 
   let shockIntensity: number = $state(25);
   let vibrationIntensity: number = $state(25);

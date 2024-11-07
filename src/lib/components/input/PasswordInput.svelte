@@ -32,7 +32,7 @@
     validate = false,
     showStrengthMeter = false,
     icon,
-    oninput
+    oninput,
   }: Props = $props();
 
   let validationResult: ValidationResult | null = $state(null);

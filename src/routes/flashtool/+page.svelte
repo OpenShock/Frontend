@@ -63,7 +63,8 @@
       {:else if !connectFailed}
         <div class="flex flex-col items-center gap-2">
           <span class="text-2xl text-center"> Connecting... </span>
-          <Progress /> <!-- TODO: Make this a loading animation -->
+          <Progress />
+          <!-- TODO: Make this a loading animation -->
         </div>
       {/if}
     {/if}
@@ -71,8 +72,8 @@
       <div class="flex flex-col items-start gap-2">
         <span class="text-2xl text-center bold text-red-500"> Device connection failed </span>
         <span class="text-center">
-        There was an issue connecting to your device, please try the following:
-      </span>
+          There was an issue connecting to your device, please try the following:
+        </span>
         <ol class="list-decimal text-left pl-6">
           <li>
             Install the drivers for your device if you haven't already, using the button above
@@ -82,11 +83,7 @@
           <li>Use a different USB cable</li>
           <li>
             Contact support if the issue persists:
-            <a
-              href={PUBLIC_DISCORD_INVITE_URL}
-              target="_blank"
-              class="underline text-blue-500"
-            >
+            <a href={PUBLIC_DISCORD_INVITE_URL} target="_blank" class="underline text-blue-500">
               OpenShock Discord
             </a>
           </li>

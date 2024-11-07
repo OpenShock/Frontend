@@ -1,26 +1,26 @@
 <script lang="ts">
   interface Props {
-    type: 
-    | 'website'
-    | 'profile'
-    | 'article'
-    | 'book'
-    | 'video.movie'
-    | 'video.episode'
-    | 'video.tv_show'
-    | 'video.other'
-    | 'music.song'
-    | 'music.album'
-    | 'music.playlist'
-    | 'music.radio_station';
+    type:
+      | 'website'
+      | 'profile'
+      | 'article'
+      | 'book'
+      | 'video.movie'
+      | 'video.episode'
+      | 'video.tv_show'
+      | 'video.other'
+      | 'music.song'
+      | 'music.album'
+      | 'music.playlist'
+      | 'music.radio_station';
     title: string;
     image: {
-    src: string;
-    type?: string;
-    width?: number;
-    height?: number;
-    alt?: string;
-  };
+      src: string;
+      type?: string;
+      width?: number;
+      height?: number;
+      alt?: string;
+    };
     url: string;
     siteName?: string;
     description?: string;
@@ -42,7 +42,7 @@
     metaLocale,
     locales,
     video,
-    audio
+    audio,
   }: Props = $props();
 </script>
 

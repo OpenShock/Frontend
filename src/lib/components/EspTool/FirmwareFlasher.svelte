@@ -12,12 +12,7 @@
     isFlashing?: boolean;
   }
 
-  let {
-    version,
-    board,
-    manager,
-    isFlashing = $bindable(false)
-  }: Props = $props();
+  let { version, board, manager, isFlashing = $bindable(false) }: Props = $props();
 
   let eraseFlash: boolean = $state(false);
   let progressName: string | null = $state(null);

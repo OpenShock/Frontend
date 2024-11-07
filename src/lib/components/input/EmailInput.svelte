@@ -5,7 +5,6 @@
   import type { FullAutoFill } from 'svelte/elements';
   import type { ButtonSettings } from '$lib/components/input/impl/ButtonSettings';
 
-
   interface Props {
     label: string;
     placeholder?: string;
@@ -27,14 +26,14 @@
     validate = true,
     icon,
     button,
-    oninput
+    oninput,
   }: Props = $props();
 
   let validationResult: ValidationResult | null = $state(null);
   $effect(() => {
     if (validate) {
       validationResult = validateEmail(value);
-      
+
       valid = validationResult?.valid ?? false;
     } else {
       validationResult = { valid: true };

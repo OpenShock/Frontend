@@ -10,14 +10,7 @@
     creator?: string | number;
   }
 
-  let {
-    type,
-    title,
-    description,
-    image,
-    site,
-    creator
-  }: Props = $props();
+  let { type, title, description, image, site, creator }: Props = $props();
 </script>
 
 <svelte:head>

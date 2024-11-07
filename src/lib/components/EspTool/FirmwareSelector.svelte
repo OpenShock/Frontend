@@ -1,11 +1,5 @@
 <script lang="ts">
-  import {
-    GetFirmwareChannel,
-    GetChannelBoards,
-    type ChannelDict,
-    type Channel,
-    Channels,
-  } from './CDN';
+  import { GetFirmwareChannel, GetChannelBoards, type ChannelDict, type Channel } from './CDN';
 
   /** Optional chip to constrain the list of boards to */
   //export let chip: string | null = null;
@@ -34,7 +28,7 @@
     }
   });
 
-  let boards = $derived(version ? boardsCache[version] ?? [] : []);
+  let boards = $derived(version ? (boardsCache[version] ?? []) : []);
   $effect(() => {
     if (boards.length === 0) {
       board = null;

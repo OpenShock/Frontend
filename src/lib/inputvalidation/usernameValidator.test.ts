@@ -1,5 +1,5 @@
 import { validateUsername } from "./usernameValidator";
-import { describe, expect, it, test } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 describe('username validator test', () => {
   it('empty username should return null', () => {

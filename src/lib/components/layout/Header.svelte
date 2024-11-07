@@ -35,7 +35,9 @@
 
   {#if $UserStore.self !== null}
     <DropdownMenu.Root>
-      <DropdownMenu.Trigger class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 cursor-pointer select-none">
+      <DropdownMenu.Trigger
+        class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 cursor-pointer select-none"
+      >
         <img class="inline-block h-8 rounded-full" src={$UserStore.self.avatar} alt="User Avatar" />
         <p class="hidden lg:inline-block">{$UserStore.self.name}</p>
       </DropdownMenu.Trigger>

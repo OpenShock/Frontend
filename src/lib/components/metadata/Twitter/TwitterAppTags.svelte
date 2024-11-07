@@ -6,12 +6,7 @@
     googleplay?: { id: string; name: string; url: string };
   }
 
-  let {
-    site,
-    iphone,
-    ipad,
-    googleplay
-  }: Props = $props();
+  let { site, iphone, ipad, googleplay }: Props = $props();
 </script>
 
 <svelte:head>
