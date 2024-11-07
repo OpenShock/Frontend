@@ -1,3 +1,5 @@
+import { toast } from "svelte-sonner";
+
 async function DownloadText(url: string) {
   try {
     const response = await fetch(url);
@@ -5,6 +7,8 @@ async function DownloadText(url: string) {
     const text = await response.text();
     return text.trim();
   } catch (e) {
+    console.error(e);
+    toast.error(`Failed to fetch ${url}`);
     return null;
   }
 }
