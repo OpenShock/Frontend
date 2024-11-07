@@ -75,7 +75,7 @@ export const columns: ColumnDef<ApiToken>[] = [
     id: 'actions',
     cell: ({ row }) => {
       // You can pass whatever you need from `row.original` to the component
-      return renderComponent(DataTableActions, { id: row.original.id });
+      return renderComponent(DataTableActions, { token: row.original });
     }
   },
 ];

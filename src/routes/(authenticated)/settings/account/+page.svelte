@@ -8,7 +8,7 @@
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
   import EmailInput from '$lib/components/input/EmailInput.svelte';
   import { toast } from 'svelte-sonner';
-  import {Button} from "$lib/components/ui/button";
+  import { Button } from '$lib/components/ui/button';
 
   let username: string = $state('');
   let email: string = $state('');
@@ -49,7 +49,9 @@
     console.log('Submitting password');
   }
 
-  let canSubmitPassword = $derived(currentPasswordValid && passwordValid && password == passwordConfirm);
+  let canSubmitPassword = $derived(
+    currentPasswordValid && passwordValid && password == passwordConfirm
+  );
 </script>
 
 {#if $UserStore.self}
@@ -76,7 +78,7 @@
         button={{ text: 'Change', submits: true, onClick: submitEmail }}
       />
 
-      <Accordion.Root class="w-full">
+      <Accordion.Root type="single" class="w-full">
         <Accordion.Item>
           <Accordion.Trigger>
             <i class="fa fa-key"></i>
@@ -109,7 +111,10 @@
                 validate={validatePasswordMatch(passwordConfirm, password)}
               />
 
-              <Button class="btn variant-filled-primary" type="submit" disabled={!canSubmitPassword}
+              <Button
+                class="btn variant-filled-primary"
+                type="submit"
+                disabled={!canSubmitPassword}
               >
                 Change Password
               </Button>
