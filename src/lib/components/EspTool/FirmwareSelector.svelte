@@ -11,12 +11,12 @@
 
   let { version = $bindable(null), board = $bindable(null), disabled = false }: Props = $props();
 
-  let selectedChannel: Channel = $state('stable');
+  let selectedChannel = $state<Channel>('stable');
 
-  let channels: ChannelDict = $state({});
+  let channels = $state<ChannelDict>({});
   GetFirmwareChannel().then((c) => (channels = c));
 
-  let boardsCache: { [key: string]: string[] } = $state({});
+  let boardsCache = $state<{ [key: string]: string[] }>({});
   $effect(() => {
     version = channels[selectedChannel] ?? null;
 

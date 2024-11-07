@@ -36,7 +36,7 @@
     oninput,
   }: Props = $props();
 
-  let validationResult: ValidationResult | null = $state(null);
+  let validationResult = $state<ValidationResult | null>(null);
   let usernameDebounce: ReturnType<typeof setTimeout> | null = null;
   function checkUsernameAvailability() {
     // Stop the previous debounce timer if it exists

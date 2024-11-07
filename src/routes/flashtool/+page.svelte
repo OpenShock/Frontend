@@ -9,13 +9,13 @@
   import { Progress } from '$lib/components/ui/progress';
   import { FlashManagerStore } from '$lib/stores/FlashManagersStore';
 
-  let port: SerialPort | null = $state(null);
-  let manager: FlashManager | null = $state(null);
-  let connectFailed = $state(false);
-  let isFlashing = $state(false);
+  let port = $state<SerialPort | null>(null);
+  let manager = $state<FlashManager | null>(null);
+  let connectFailed = $state<boolean>(false);
+  let isFlashing = $state<boolean>(false);
 
-  let terminalOpen: boolean = $state(false);
-  let terminalText: string = $state('');
+  let terminalOpen = $state<boolean>(false);
+  let terminalText = $state<string>('');
 
   const terminal = {
     clean: () => {
@@ -44,8 +44,8 @@
     }
   });
 
-  let version: string | null = $state(null);
-  let board: string | null = $state(null);
+  let version = $state<string | null>(null);
+  let board = $state<string | null>(null);
 </script>
 
 <Card.Root>

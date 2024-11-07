@@ -29,7 +29,7 @@
 
   let { name, value = $bindable(), min, max, step, tabindex = undefined }: Props = $props();
 
-  let canvasHandle: HTMLDivElement | undefined = $state();
+  let canvasHandle = $state<HTMLDivElement | undefined>();
 
   function stupidUnfloatHack(value: number) {
     // This is a stupid hack to avoid floating point errors, needed to make UI not look like shit

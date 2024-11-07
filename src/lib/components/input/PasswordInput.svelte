@@ -34,7 +34,7 @@
     oninput,
   }: Props = $props();
 
-  let validationResult: ValidationResult | null = $state(null);
+  let validationResult = $state<ValidationResult | null>(null);
   let passwordDebounce: ReturnType<typeof setTimeout> | null = null;
   function checkHIBP(str: string) {
     // Stop the previous debounce timer if it exists

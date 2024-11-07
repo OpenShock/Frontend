@@ -14,7 +14,7 @@
     $OwnDevicesStore?.flatMap((device) => device.shockers)?.filter((shocker) => !!shocker) ?? []
   );
 
-  let moduleType: ModuleType = $state(ModuleType.ClassicControlModule);
+  let moduleType = $state<ModuleType>(ModuleType.ClassicControlModule);
 
   function handleCommand(
     event: CustomEvent<{ id: string; type: ControlType; intensity: number; duration: number }>

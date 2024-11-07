@@ -6,7 +6,7 @@
   import OpenGraphTags from '$lib/components/metadata/OpenGraphTags.svelte';
   import TwitterSummaryTags from '$lib/components/metadata/Twitter/TwitterSummaryTags.svelte';
 
-  let previousPage: string = $state(base);
+  let previousPage = $state<string>(base);
 
   afterNavigate(({ from }) => {
     previousPage = from?.url.pathname || previousPage;

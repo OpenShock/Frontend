@@ -11,7 +11,7 @@
   let intensity: number = 25;
   let duration: number = 1;
 
-  let canvas: HTMLCanvasElement | undefined = $state();
+  let canvas = $state<HTMLCanvasElement | undefined>();
 
   onMount(() => {
     const ctx = canvas?.getContext('2d');

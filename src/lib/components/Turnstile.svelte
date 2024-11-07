@@ -7,7 +7,7 @@
   import { onMount } from 'svelte';
   import LoadingCircle from './svg/LoadingCircle.svelte';
 
-  import { Bug } from 'lucide-svelte/icons';
+  import Bug from 'lucide-svelte/icons/bug';
 
   interface Props {
     action: string;
@@ -17,8 +17,8 @@
 
   let { action, cData, response = $bindable(null) }: Props = $props();
 
-  let turnstile: TurnstileInstance | undefined = $state();
-  let element: HTMLDivElement | undefined = $state();
+  let turnstile = $state<TurnstileInstance | undefined>();
+  let element = $state<HTMLDivElement | undefined>();
 
   function resetTurnstile() {
     if (!turnstile || !element) return;

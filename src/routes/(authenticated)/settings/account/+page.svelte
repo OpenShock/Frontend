@@ -10,16 +10,16 @@
   import { UserStore } from '$lib/stores/UserStore';
   import { toast } from 'svelte-sonner';
 
-  let username: string = $state('');
-  let email: string = $state('');
+  let username = $state<string>('');
+  let email = $state<string>('');
 
-  let currentPassword: string = $state('');
+  let currentPassword = $state<string>('');
   let currentPasswordValid = $derived(currentPassword.length > 0);
 
-  let password: string = $state('');
-  let passwordValid: boolean = $state(false);
+  let password = $state<string>('');
+  let passwordValid = $state<boolean>(false);
 
-  let passwordConfirm: string = $state('');
+  let passwordConfirm = $state<string>('');
 
   async function submitUsername() {
     try {

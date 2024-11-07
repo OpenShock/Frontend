@@ -22,7 +22,7 @@
   const filters = [{ usbVendorId: 0x1a86 }, { usbVendorId: 0x10c4 }, { usbVendorId: 0x303a }];
 
   let loading = $state(false);
-  let errorMessage: Error | null = $state(null);
+  let errorMessage = $state<Error | null>(null);
 
   async function OpenPort() {
     loading = true;

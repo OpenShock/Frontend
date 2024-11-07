@@ -29,7 +29,7 @@
     oninput,
   }: Props = $props();
 
-  let validationResult: ValidationResult | null = $state(null);
+  let validationResult = $state<ValidationResult | null>(null);
   $effect(() => {
     if (validate) {
       validationResult = validateEmail(value);

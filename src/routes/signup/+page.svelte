@@ -9,8 +9,8 @@
   import * as Dialog from '$lib/components/ui/dialog';
   import { validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
 
-  let username = $state('');
-  let usernameValid = $state(false);
+  let username = $state<string>('');
+  let usernameValid = $state<boolean>(false);
 
   let email = $state('');
   let emailValid = $state(false);
@@ -20,7 +20,7 @@
 
   let passwordConfirm = $state('');
 
-  let turnstileResponse: string | null = $state(null);
+  let turnstileResponse = $state<string | null>(null);
 
   let canSubmit = $derived(
     usernameValid && emailValid && passwordValid && password == passwordConfirm && turnstileResponse
