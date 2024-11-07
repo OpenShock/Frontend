@@ -24,13 +24,15 @@
 <header
   class="sticky top-0 z-50 w-full flex flex-row border-border/40 bg-background/95 supports-[backdrop-filter]:bg-background/60 border-b backdrop-blur"
 >
-  <button
-    onclick={() => {
-      sidebar.toggle();
-    }}
-  >
-    <Menu size={32} class="mr-2 sm:m-3 p-0 text-gray-500" />
-  </button>
+  {#if $UserStore.self}
+    <button
+      onclick={() => {
+        sidebar.toggle();
+      }}
+    >
+      <Menu size={32} class="mr-2 sm:m-3 p-0 text-gray-500" />
+    </button>
+  {/if}
   <div class="pr-4 py-2 flex-1 flex flex-row items-center justify-between space-x-2">
     <div class="flex items-center space-x-4">
       <a
@@ -51,7 +53,7 @@
 
     <LightSwitch />
 
-    {#if $UserStore.self !== null}
+    {#if $UserStore.self}
       <DropdownMenu.Root>
         <DropdownMenu.Trigger
           class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 cursor-pointer select-none"

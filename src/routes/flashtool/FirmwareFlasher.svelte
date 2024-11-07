@@ -2,8 +2,8 @@
   import { Progress } from '$lib/components/ui/progress';
   import WordArray from 'crypto-js/lib-typedarrays';
   import HashMD5 from 'crypto-js/md5';
-  import { DownloadFirmwareBinary, GetFirmwareBinaryHash } from './CDN';
-  import FlashManager from './FlashManager';
+  import { DownloadFirmwareBinary, GetFirmwareBinaryHash } from '$lib/EspTool/CDN';
+  import FlashManager from '$lib/EspTool/FlashManager';
 
   interface Props {
     version: string;

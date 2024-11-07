@@ -1,4 +1,4 @@
-import FlashManager from "$lib/components/EspTool/FlashManager";
+import FlashManager from "$lib/EspTool/FlashManager";
 import type { IEspLoaderTerminal } from "esptool-js";
 import { get, writable } from "svelte/store";
 

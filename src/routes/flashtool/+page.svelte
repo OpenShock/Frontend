@@ -1,9 +1,9 @@
 <script lang="ts">
   import { PUBLIC_DISCORD_INVITE_URL } from '$env/static/public';
-  import FirmwareFlasher from '$lib/components/EspTool/FirmwareFlasher.svelte';
-  import FirmwareSelector from '$lib/components/EspTool/FirmwareSelector.svelte';
-  import FlashManager from '$lib/components/EspTool/FlashManager';
-  import SerialPortSelector from '$lib/components/EspTool/SerialPortSelector.svelte';
+  import FirmwareFlasher from './FirmwareFlasher.svelte';
+  import FirmwareSelector from './FirmwareSelector.svelte';
+  import FlashManager from '$lib/EspTool/FlashManager';
+  import SerialPortSelector from './SerialPortSelector.svelte';
   import { Button } from '$lib/components/ui/button';
   import * as Card from '$lib/components/ui/card';
   import { Progress } from '$lib/components/ui/progress';
@@ -48,7 +48,7 @@
   let board = $state<string | null>(null);
 </script>
 
-<Card.Root>
+<div class="container my-8">
   <Card.Header>
     <Card.Title class="text-3xl">Flash Tool</Card.Title>
   </Card.Header>
@@ -91,7 +91,8 @@
       </div>
     {/if}
   </Card.Content>
-</Card.Root>
+</div>
+
 {#if terminalOpen}
   <Card.Root>
     <Card.Header>

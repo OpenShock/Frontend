@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { GetFirmwareChannel, GetChannelBoards, type ChannelDict, type Channel } from './CDN';
+  import * as ToggleGroup from '$lib/components/ui/toggle-group';
+  import { GetFirmwareChannel, GetChannelBoards, type ChannelDict, type Channel } from '$lib/EspTool/CDN';
 
   /** Optional chip to constrain the list of boards to */
   //export let chip: string | null = null;
@@ -38,15 +39,14 @@
 
 <div class="flex flex-col items-stretch justify-start gap-1">
   <span class="h3 font-bold">Select Channel</span>
-  <!--
-  <RadioGroup active="variant-filled-primary" hover="hover:variant-soft-primary">
-    {#each Channels as key}
-      <RadioItem bind:group={selectedChannel} name="justify" value={key} {disabled}>
+
+  <ToggleGroup.Root type="single" bind:value={selectedChannel} {disabled}>
+    {#each Object.keys(channels) as key}
+      <ToggleGroup.Item value={key} {disabled}>
         {key.charAt(0).toUpperCase() + key.slice(1)}
-      </RadioItem>
+      </ToggleGroup.Item>
     {/each}
-  </RadioGroup>
-  -->
+  </ToggleGroup.Root>
 
   <div class="flex flex-row items-center justify-start gap-2 pl-2">
     {#if selectedChannel === 'stable'}

@@ -68,12 +68,9 @@
   });
 </script>
 
-<div>
-  <InstallDriversDialog
-    open={showInstallDriversDialog}
-    onClose={() => (showInstallDriversDialog = false)}
-  />
+<InstallDriversDialog open={showInstallDriversDialog} onClose={() => (showInstallDriversDialog = false)} />
 
+<div>
   {#if !browser}
     <h3 class="h3">Loading...</h3>
   {:else if 'serial' in navigator}
