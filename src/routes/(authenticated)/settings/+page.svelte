@@ -1,8 +1,6 @@
 <script lang="ts">
-  import { browser } from '$app/environment';
   import { goto } from '$app/navigation';
+  import { onMount } from 'svelte';
 
-  if (browser) {
-    goto('/settings/account');
-  }
+  onMount(() => goto('/settings/account'));
 </script>

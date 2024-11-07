@@ -29,17 +29,11 @@
     oninput,
   }: Props = $props();
 
-  let validationResult = $state<ValidationResult | null>(null);
+  let validationResult = $derived<ValidationResult | null>(
+    validate ? validateEmail(value) : { valid: true }
+  );
   $effect(() => {
-    if (validate) {
-      validationResult = validateEmail(value);
-
-      valid = validationResult?.valid ?? false;
-    } else {
-      validationResult = { valid: true };
-
-      valid = true;
-    }
+    valid = validationResult?.valid ?? false;
   });
 </script>
 

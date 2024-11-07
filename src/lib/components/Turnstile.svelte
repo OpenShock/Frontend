@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { browser, dev } from '$app/environment';
+  import { dev } from '$app/environment';
   import { PUBLIC_TURNSTILE_DEV_BYPASS_VALUE, PUBLIC_TURNSTILE_SITE_KEY } from '$env/static/public';
   import CloudflareLogo from '$lib/components/svg/CloudflareLogo.svelte';
   import { ColorSchemeStore } from '$lib/stores/ColorSchemeStore';
@@ -40,7 +40,7 @@
     setTimeout(resetTurnstile, 5000);
   }
 
-  if (browser) {
+  onMount(() => {
     if (dev) {
       console.log('Turnstile is disabled in dev mode');
       response = PUBLIC_TURNSTILE_DEV_BYPASS_VALUE;
@@ -48,9 +48,9 @@
       // If turstile doesnt load, then the index.html is proabably missing the script tag (https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/#explicitly-render-the-turnstile-widget)
       onMount(() => (turnstile = window.turnstile));
     }
-  }
+  });
 
-  let isLoading = $state(true);
+  let isLoading = $state<boolean>(true);
   let cfColorScheme = $derived($ColorSchemeStore === 'system' ? 'auto' : $ColorSchemeStore) as
     | 'dark'
     | 'light'

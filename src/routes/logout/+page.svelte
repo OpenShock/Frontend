@@ -1,7 +1,9 @@
 <script lang="ts">
   import { browser } from '$app/environment';
   import { goto } from '$app/navigation';
+  import { usersApi } from '$lib/api';
   import { UserStore } from '$lib/stores/UserStore';
+  import { onMount } from 'svelte';
 
   function logout() {
     // TODO: Make a API call to invalidate the cookie
@@ -11,13 +13,10 @@
     goto('/');
   }
 
-  if (browser) {
-    $effect(() => {
-      if (!$UserStore.self) {
-        logout();
-      }
-    });
-  }
+  onMount(() => {
+    // If we can't get the user, we are already logged out, make sure to clear the cookies and store
+    usersApi.usersGetSelf().catch(logout);
+  });
 </script>
 
 {#if browser && $UserStore.self}
