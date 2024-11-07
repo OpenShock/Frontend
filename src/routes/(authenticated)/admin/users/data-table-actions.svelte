@@ -3,14 +3,29 @@
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { toast } from 'svelte-sonner';
+  import type { User } from './columns';
+  import { RankType } from '$lib/api/internal/v1';
+  import DialogUserEdit from './dialog-user-edit.svelte';
+  import DialogUserDelete from './dialog-user-delete.svelte';
 
-  let { id }: { id: string } = $props();
+  type Props = {
+    user: User;
+  };
+
+  let { user }: Props = $props();
+
+  let editUser = $state<boolean>(false);
+  let deleteUser = $state<boolean>(false);
+  let isPrivileged = $derived([RankType.Admin, RankType.System].includes(user.rank));
 
   function copyId() {
-    navigator.clipboard.writeText(id);
+    navigator.clipboard.writeText(user.id);
     toast.success('ID copied to clipboard');
   }
 </script>
+
+<DialogUserEdit bind:open={editUser} {user} />
+<DialogUserDelete bind:open={deleteUser} {user} />
 
 <DropdownMenu.Root>
   <DropdownMenu.Trigger>
@@ -23,7 +38,15 @@
   </DropdownMenu.Trigger>
   <DropdownMenu.Content>
     <DropdownMenu.Item onclick={copyId}>Copy ID</DropdownMenu.Item>
-    <DropdownMenu.Item>Edit</DropdownMenu.Item>
-    <DropdownMenu.Item>Delete</DropdownMenu.Item>
+    <DropdownMenu.Item onclick={() => (editUser = true)}>Edit</DropdownMenu.Item>
+    <DropdownMenu.Item>Promote</DropdownMenu.Item>
+    <DropdownMenu.Item>Reset password</DropdownMenu.Item>
+    <DropdownMenu.Item
+      onclick={() => (deleteUser = true)}
+      disabled={isPrivileged}
+      class={isPrivileged ? undefined : 'text-red-500'}
+    >
+      Delete
+    </DropdownMenu.Item>
   </DropdownMenu.Content>
 </DropdownMenu.Root>
