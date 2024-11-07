@@ -19,6 +19,9 @@
       firmware_version: new SemVer(device.firmwareVersion),
       gateway: device.gateway,
       connected_at: device.connectedAt,
+      user_agent: device.userAgent,
+      booted_at: device.uptime ? new Date(Date.now() - Number(device.uptime)) : null,
+      latency: device.latency ? Number(device.latency) : null,
     };
   }
 

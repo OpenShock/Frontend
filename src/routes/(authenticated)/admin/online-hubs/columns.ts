@@ -22,6 +22,9 @@ export type OnlineDevice = {
   firmware_version: SemVer;
   gateway: string;
   connected_at: Date;
+  user_agent: string | null;
+  booted_at: Date | null;
+  latency: number | null;
 };
 
 export const columns: ColumnDef<OnlineDevice>[] = [
@@ -65,7 +68,7 @@ export const columns: ColumnDef<OnlineDevice>[] = [
       })
     ),
     cell: ({ row }) => {
-      const firmwareVersionCellSnippet = createRawSnippet<[SemVer]>((getFirmwareVersion) => {
+      const firmwareVersionCellSnippet = createRawSnippet<[string]>((getFirmwareVersion) => {
         let firmwareVersion = getFirmwareVersion().toString();
 
         let color: `text-${TwColor}`;
@@ -81,11 +84,11 @@ export const columns: ColumnDef<OnlineDevice>[] = [
         }
       });
 
-      return renderSnippet(firmwareVersionCellSnippet, row.getValue('firmware_version'));
+      return renderSnippet(firmwareVersionCellSnippet, row.getValue<string>('firmware_version'));
     },
     sortingFn: (row_a, row_b) => {
-      const a = row_a.getValue<SemVer>('firmware_version');
-      const b = row_b.getValue<SemVer>('firmware_version');
+      const a = new SemVer(row_a.getValue<string>('firmware_version'));
+      const b = new SemVer(row_b.getValue<string>('firmware_version'));
 
       if (a === b) return 0;
 
@@ -114,6 +117,68 @@ export const columns: ColumnDef<OnlineDevice>[] = [
       });
 
       return renderSnippet(connectedAtCellSnippet, row.getValue<Date>('connected_at'));
+    }
+  },
+  {
+    accessorKey: 'user_agent',
+    header: 'User Agent',
+    cell: ({ row }) => {
+      const userAgentCellSnippet = createRawSnippet<[string | null]>((getUserAgent) => {
+        const userAgent = getUserAgent();
+        if (!userAgent) {
+          return {
+            render: () => `<div class="text-left font-medium text-orange-500">Unknown</div>`,
+          }
+        }
+
+        return {
+          render: () => `<div class="text-left font-medium" title="${userAgent}">${userAgent}</div>`,
+        }
+      });
+
+      return renderSnippet(userAgentCellSnippet, row.getValue<string | null>('user_agent'));
+    }
+  },
+  {
+    accessorKey: 'booted_at',
+    header: 'Uptime',
+    cell: ({ row }) => {
+      const bootedAtCellSnippet = createRawSnippet<[Date | null]>((getBootedAt) => {
+        const bootedAt = getBootedAt();
+        if (!bootedAt) {
+          return {
+            render: () => `<div class="text-left font-medium" title="N/A">N/A</div>`,
+          }
+        }
+
+        const now = Date.now();
+        const formattedDuration = durationToString(now - bootedAt.getTime());
+        return {
+          render: () => `<div class="text-left font-medium" title="${bootedAt}">${formattedDuration}</div>`,
+        }
+      });
+
+      return renderSnippet(bootedAtCellSnippet, row.getValue<Date | null>('booted_at'));
+    }
+  },
+  {
+    accessorKey: 'latency',
+    header: 'Latency',
+    cell: ({ row }) => {
+      const latencyCellSnippet = createRawSnippet<[number | null]>((getLatency) => {
+        const latency = getLatency();
+        if (!latency) {
+          return {
+            render: () => `<div class="text-left font-medium" title="N/A">N/A</div>`,
+          }
+        }
+
+        return {
+          render: () => `<div class="text-left font-medium" title="${latency}">${latency}</div>`,
+        }
+      });
+
+      return renderSnippet(latencyCellSnippet, row.getValue<number | null>('latency'));
     }
   },
   {
