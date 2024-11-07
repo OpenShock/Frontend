@@ -41,5 +41,5 @@
   <main class="w-full p-16">
     {@render children?.()}
   </main>
+  <Footer />
 </Sidebar.Provider>
-<Footer />

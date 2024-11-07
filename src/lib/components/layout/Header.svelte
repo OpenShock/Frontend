@@ -16,7 +16,9 @@
   </a>
 {/snippet}
 
-<header class="px-4 py-2 flex items-center justify-between space-x-2">
+<header
+  class="sticky top-0 z-50 w-full px-4 py-2 flex items-center justify-between space-x-2 border-border/40 bg-background/95 supports-[backdrop-filter]:bg-background/60 border-b backdrop-blur"
+>
   <div class="flex items-center space-x-4">
     <a
       href={$UserStore.self ? '/home' : '/'}
