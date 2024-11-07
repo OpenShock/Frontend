@@ -7,31 +7,29 @@
   import TextInput from '$lib/components/input/TextInput.svelte';
   import type { ValidationResult } from '$lib/types/ValidationResult';
   import type { ApiToken } from './columns';
+  import { toast } from 'svelte-sonner';
 
   type Props = {
-    token: ApiToken | null;
-    onEdited: (id: string) => void;
-    onClose: () => void;
+    open: boolean;
+    token: ApiToken;
   };
 
-  let { token, onEdited, onClose }: Props = $props();
+  let { open = $bindable(), token }: Props = $props();
 
   let name = $state<string>('');
   let permissions = $state<PermissionType[]>([]);
 
-  async function saveChanges() {
-    if (!token) return;
-
-    tokensApi
-      .tokensEditToken(token.id, { name, permissions })
-      .then(() => onEdited(token.id))
-      .catch(handleApiError);
+  function handleEdited() {
+    // TODO: do something
+    toast.success('Token edited successfully');
+    open = false;
   }
 
-  function handleOpenChanged(open: boolean) {
-    if (!open) {
-      onClose();
-    }
+  function saveChanges() {
+    tokensApi
+      .tokensEditToken(token.id, { name, permissions })
+      .then(handleEdited)
+      .catch(handleApiError);
   }
 
   function capitalizeFirstLetter(string: string) {
@@ -69,7 +67,7 @@
   let nameValidationResult = $derived(nameValidation(name));
 </script>
 
-<Dialog.Root open={token !== null} onOpenChange={handleOpenChanged} controlledOpen={true}>
+<Dialog.Root {open} onOpenChange={(o) => (open = o)} controlledOpen={true}>
   <Dialog.Content>
     <Dialog.Header>
       <Dialog.Title>Edit API Token</Dialog.Title>

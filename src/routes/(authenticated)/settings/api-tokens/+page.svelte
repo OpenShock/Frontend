@@ -3,10 +3,8 @@
   import type { TokenResponse } from '$lib/api/internal/v1';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
-  import TokenEditDialog from './token-edit-dialog.svelte';
-  import TokenDeleteDialog from './token-delete-dialog.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
-  import TokenGenerateDialog from './token-generate-dialog.svelte';
+  import TokenGenerateDialog from './dialog-token-generate.svelte';
   import * as Card from '$lib/components/ui/card';
   import DataTable from './data-table.svelte';
   import { columns, type ApiToken } from './columns';
@@ -24,8 +22,6 @@
 
   let data = $state<ApiToken[]>([]);
   let showGenerateTokenModal = $state<boolean>(false);
-  let tokenToEdit = $state<ApiToken | null>(null);
-  let tokenToDelete = $state<ApiToken | null>(null);
 
   function refreshToken(id: string) {
     tokensApi
@@ -61,16 +57,6 @@
   open={showGenerateTokenModal}
   onGenerated={(id) => refreshToken(id)}
   onClose={() => (showGenerateTokenModal = false)}
-/>
-<TokenEditDialog
-  token={tokenToEdit}
-  onEdited={(id) => refreshToken(id)}
-  onClose={() => (tokenToEdit = null)}
-/>
-<TokenDeleteDialog
-  token={tokenToDelete}
-  onDeleted={(id) => (data = data.filter((t) => t.id !== id))}
-  onClose={() => (tokenToDelete = null)}
 />
 
 <Card.Root>

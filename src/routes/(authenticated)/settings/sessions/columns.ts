@@ -78,7 +78,7 @@ export const columns: ColumnDef<Session>[] = [
     id: 'actions',
     cell: ({ row }) => {
       // You can pass whatever you need from `row.original` to the component
-      return renderComponent(DataTableActions, { id: row.original.id });
+      return renderComponent(DataTableActions, { session: row.original });
     }
   }
 ];

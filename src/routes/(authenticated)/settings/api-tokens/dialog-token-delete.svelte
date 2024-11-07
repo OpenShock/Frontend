@@ -4,32 +4,27 @@
   import * as Dialog from '$lib/components/ui/dialog';
   import Button from '$lib/components/ui/button/button.svelte';
   import type { ApiToken } from './columns';
+  import { toast } from 'svelte-sonner';
 
   type Props = {
-    token: ApiToken | null;
-    onDeleted: (id: string) => void;
-    onClose: () => void;
+    open: boolean;
+    token: ApiToken;
   };
 
-  let { token, onDeleted, onClose }: Props = $props();
+  let { open = $bindable(), token }: Props = $props();
 
-  function deleteToken() {
-    if (!token) return;
-
-    tokensApi
-      .tokensDeleteToken(token.id)
-      .then(() => onDeleted(token.id))
-      .catch(handleApiError);
+  function handleDeleted() {
+    // TODO: do something
+    toast.success('Token deleted successfully');
+    open = false;
   }
 
-  function handleOpenChanged(open: boolean) {
-    if (!open) {
-      onClose();
-    }
+  function deleteToken() {
+    tokensApi.tokensDeleteToken(token.id).then(handleDeleted).catch(handleApiError);
   }
 </script>
 
-<Dialog.Root open={token !== null} onOpenChange={handleOpenChanged} controlledOpen={true}>
+<Dialog.Root {open} onOpenChange={(o) => (open = o)} controlledOpen={true}>
   <Dialog.Content>
     <Dialog.Header>
       <Dialog.Title>Are you sure you want to delete <b>{token?.name}</b>?</Dialog.Title>

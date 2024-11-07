@@ -6,7 +6,7 @@
   import { toast } from 'svelte-sonner';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import Button from '$lib/components/ui/button/button.svelte';
-  import TokenCreatedDialog from './token-created-dialog.svelte';
+  import TokenCreatedDialog from './dialog-token-created.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
 
   type Props = {

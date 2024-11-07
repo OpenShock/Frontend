@@ -3,14 +3,27 @@
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { toast } from 'svelte-sonner';
+  import TokenEditDialog from './dialog-token-edit.svelte';
+  import TokenDeleteDialog from './dialog-token-delete.svelte';
+  import type { ApiToken } from './columns';
 
-  let { id }: { id: string } = $props();
+  type Props = {
+    token: ApiToken;
+  };
+
+  let { token }: Props = $props();
+
+  let editDialogOpen = $state<boolean>(false);
+  let deleteDialogOpen = $state<boolean>(false);
 
   function copyId() {
-    navigator.clipboard.writeText(id);
+    navigator.clipboard.writeText(token.id);
     toast.success('ID copied to clipboard');
   }
 </script>
+
+<TokenEditDialog open={editDialogOpen} {token} />
+<TokenDeleteDialog open={deleteDialogOpen} {token} />
 
 <DropdownMenu.Root>
   <DropdownMenu.Trigger>
@@ -23,7 +36,7 @@
   </DropdownMenu.Trigger>
   <DropdownMenu.Content>
     <DropdownMenu.Item onclick={copyId}>Copy ID</DropdownMenu.Item>
-    <DropdownMenu.Item>Edit</DropdownMenu.Item>
-    <DropdownMenu.Item>Delete</DropdownMenu.Item>
+    <DropdownMenu.Item onclick={() => (editDialogOpen = true)}>Edit</DropdownMenu.Item>
+    <DropdownMenu.Item onclick={() => (deleteDialogOpen = true)}>Delete</DropdownMenu.Item>
   </DropdownMenu.Content>
 </DropdownMenu.Root>

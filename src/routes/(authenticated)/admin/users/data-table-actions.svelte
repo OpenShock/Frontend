@@ -5,8 +5,8 @@
   import { toast } from 'svelte-sonner';
   import type { User } from './columns';
   import { RankType } from '$lib/api/internal/v1';
-  import DialogUserEdit from './dialog-user-edit.svelte';
-  import DialogUserDelete from './dialog-user-delete.svelte';
+  import UserEditDialog from './dialog-user-edit.svelte';
+  import UserDeleteDialog from './dialog-user-delete.svelte';
 
   type Props = {
     user: User;
@@ -14,8 +14,8 @@
 
   let { user }: Props = $props();
 
-  let editUser = $state<boolean>(false);
-  let deleteUser = $state<boolean>(false);
+  let editDialogOpen = $state<boolean>(false);
+  let deleteDialogOpen = $state<boolean>(false);
   let isPrivileged = $derived([RankType.Admin, RankType.System].includes(user.rank));
 
   function copyId() {
@@ -24,8 +24,8 @@
   }
 </script>
 
-<DialogUserEdit bind:open={editUser} {user} />
-<DialogUserDelete bind:open={deleteUser} {user} />
+<UserEditDialog bind:open={editDialogOpen} {user} />
+<UserDeleteDialog bind:open={deleteDialogOpen} {user} />
 
 <DropdownMenu.Root>
   <DropdownMenu.Trigger>
@@ -38,11 +38,11 @@
   </DropdownMenu.Trigger>
   <DropdownMenu.Content>
     <DropdownMenu.Item onclick={copyId}>Copy ID</DropdownMenu.Item>
-    <DropdownMenu.Item onclick={() => (editUser = true)}>Edit</DropdownMenu.Item>
+    <DropdownMenu.Item onclick={() => (editDialogOpen = true)}>Edit</DropdownMenu.Item>
     <DropdownMenu.Item>Promote</DropdownMenu.Item>
     <DropdownMenu.Item>Reset password</DropdownMenu.Item>
     <DropdownMenu.Item
-      onclick={() => (deleteUser = true)}
+      onclick={() => (deleteDialogOpen = true)}
       disabled={isPrivileged}
       class={isPrivileged ? undefined : 'text-red-500'}
     >

@@ -3,14 +3,24 @@
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { toast } from 'svelte-sonner';
+  import type { Session } from './columns';
+  import SessionRevokeDialog from './dialog-session-revoke.svelte';
 
-  let { id }: { id: string } = $props();
+  type Props = {
+    session: Session;
+  };
+
+  let { session }: Props = $props();
+
+  let revokeDialogOpen = $state<boolean>(false);
 
   function copyId() {
-    navigator.clipboard.writeText(id);
+    navigator.clipboard.writeText(session.id);
     toast.success('ID copied to clipboard');
   }
 </script>
+
+<SessionRevokeDialog bind:open={revokeDialogOpen} {session} />
 
 <DropdownMenu.Root>
   <DropdownMenu.Trigger>
@@ -23,7 +33,8 @@
   </DropdownMenu.Trigger>
   <DropdownMenu.Content>
     <DropdownMenu.Item onclick={copyId}>Copy ID</DropdownMenu.Item>
-    <DropdownMenu.Item>Edit</DropdownMenu.Item>
-    <DropdownMenu.Item>Delete</DropdownMenu.Item>
+    <DropdownMenu.Item onclick={() => (revokeDialogOpen = true)} class="text-red-500">
+      Revoke
+    </DropdownMenu.Item>
   </DropdownMenu.Content>
 </DropdownMenu.Root>
