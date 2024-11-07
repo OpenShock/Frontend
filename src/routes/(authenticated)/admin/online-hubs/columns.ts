@@ -48,11 +48,11 @@ export const columns: ColumnDef<OnlineDevice>[] = [
         }
       });
 
-      return renderSnippet(ownerCellSnippet, row.getValue('owner'));
+      return renderSnippet(ownerCellSnippet, row.getValue<OnlineDeviceOwner>('owner'));
     },
     sortingFn: (row_a, row_b) => {
-      const a = row_a.getValue('owner') as OnlineDeviceOwner;
-      const b = row_b.getValue('owner') as OnlineDeviceOwner;
+      const a = row_a.getValue<OnlineDeviceOwner>('owner');
+      const b = row_b.getValue<OnlineDeviceOwner>('owner');
 
       return a.name.localeCompare(b.name);
     }
@@ -84,8 +84,8 @@ export const columns: ColumnDef<OnlineDevice>[] = [
       return renderSnippet(firmwareVersionCellSnippet, row.getValue('firmware_version'));
     },
     sortingFn: (row_a, row_b) => {
-      const a = row_a.getValue('firmware_version') as SemVer;
-      const b = row_b.getValue('firmware_version') as SemVer;
+      const a = row_a.getValue<SemVer>('firmware_version');
+      const b = row_b.getValue<SemVer>('firmware_version');
 
       if (a === b) return 0;
 
@@ -113,7 +113,7 @@ export const columns: ColumnDef<OnlineDevice>[] = [
         }
       });
 
-      return renderSnippet(connectedAtCellSnippet, row.getValue('connected_at'));
+      return renderSnippet(connectedAtCellSnippet, row.getValue<Date>('connected_at'));
     }
   },
   {

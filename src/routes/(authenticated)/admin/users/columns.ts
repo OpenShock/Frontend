@@ -44,7 +44,7 @@ export const columns: ColumnDef<User>[] = [
         };
       });
 
-      return renderSnippet(passwordHashTypeCellSnippet, row.getValue('password_hash_type'));
+      return renderSnippet(passwordHashTypeCellSnippet, row.getValue<string>('password_hash_type'));
     },
   },
   {
@@ -59,7 +59,7 @@ export const columns: ColumnDef<User>[] = [
         };
       });
 
-      return renderSnippet(createdAtCellSnippet, row.getValue('created_at'));
+      return renderSnippet(createdAtCellSnippet, row.getValue<Date>('created_at'));
     },
   },
   {
@@ -74,7 +74,7 @@ export const columns: ColumnDef<User>[] = [
         };
       });
 
-      return renderSnippet(emailActivatedCellSnippet, row.getValue('email_activated'));
+      return renderSnippet(emailActivatedCellSnippet, row.getValue<boolean>('email_activated'));
     },
   },
   {
@@ -90,7 +90,7 @@ export const columns: ColumnDef<User>[] = [
         };
       });
 
-      return renderSnippet(rankCellSnippet, row.getValue('rank'));
+      return renderSnippet(rankCellSnippet, row.getValue<RankType>('rank'));
     },
   },
   {

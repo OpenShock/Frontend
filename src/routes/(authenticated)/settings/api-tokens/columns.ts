@@ -39,7 +39,7 @@ export const columns: ColumnDef<ApiToken>[] = [
         };
       });
 
-      return renderSnippet(createdAtCellSnippet, row.getValue('created_at'));
+      return renderSnippet(createdAtCellSnippet, row.getValue<Date>('created_at'));
     },
   },
   {
@@ -54,7 +54,7 @@ export const columns: ColumnDef<ApiToken>[] = [
         };
       });
 
-      return renderSnippet(expiresAtCellSnippet, row.getValue('expires_at'));
+      return renderSnippet(expiresAtCellSnippet, row.getValue<Date | null>('expires_at'));
     },
   },
   {
@@ -68,7 +68,7 @@ export const columns: ColumnDef<ApiToken>[] = [
         };
       });
 
-      return renderSnippet(lastUsedCellSnippet, row.getValue('last_used'));
+      return renderSnippet(lastUsedCellSnippet, row.getValue<Date>('last_used'));
     },
   },
   {

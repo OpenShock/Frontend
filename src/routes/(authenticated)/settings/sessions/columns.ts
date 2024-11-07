@@ -1,11 +1,11 @@
 import type { ColumnDef } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table';
-import {elapsedToString} from '$lib/utils/time';
+import { elapsedToString } from '$lib/utils/time';
 import DataTableCreatedAtButton from './data-table-createdat-button.svelte'
 import DataTableUserAgentButton from './data-table-useragent-button.svelte'
 import DataTableExpiresAtButton from './data-table-expiresat-button.svelte'
-import {UAParser} from "ua-parser-js";
+import { UAParser } from "ua-parser-js";
 import DataTableActions from './data-table-actions.svelte';
 
 export type Session = {
@@ -52,7 +52,7 @@ export const columns: ColumnDef<Session>[] = [
         }
       });
 
-      return renderSnippet(userAgentCellSnippet, row.getValue('user_agent'));
+      return renderSnippet(userAgentCellSnippet, row.getValue<string>('user_agent'));
     }
   },
   {
@@ -72,7 +72,7 @@ export const columns: ColumnDef<Session>[] = [
         }
       });
 
-      return renderSnippet(createdAtCellSnippet, row.getValue('created_at'));
+      return renderSnippet(createdAtCellSnippet, row.getValue<Date>('created_at'));
     }
   },
   {
@@ -92,7 +92,7 @@ export const columns: ColumnDef<Session>[] = [
         }
       });
 
-      return renderSnippet(expiresAtCellSnippet, row.getValue('expires_at'));
+      return renderSnippet(expiresAtCellSnippet, row.getValue<Date>('expires_at'));
     }
   },
   {
