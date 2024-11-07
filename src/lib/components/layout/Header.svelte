@@ -3,7 +3,12 @@
   import LightSwitch from '$lib/components/LightSwitch.svelte';
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+  import { useSidebar } from '$lib/components/ui/sidebar';
   import { UserStore } from '$lib/stores/UserStore';
+
+  import Menu from 'lucide-svelte/icons/menu';
+
+  let sidebar = useSidebar();
 </script>
 
 {#snippet item(text: string, href: string)}
@@ -19,6 +24,13 @@
 <header
   class="sticky top-0 z-50 w-full px-4 py-2 flex items-center justify-between space-x-2 border-border/40 bg-background/95 supports-[backdrop-filter]:bg-background/60 border-b backdrop-blur"
 >
+  <button
+    onclick={() => {
+      sidebar.toggle();
+    }}
+  >
+    <Menu class="w-6 h-6 mr-2 sm:w-10 sm:h-10 sm:m-3 text-gray-500" />
+  </button>
   <div class="flex items-center space-x-4">
     <a
       href={$UserStore.self ? '/home' : '/'}
@@ -26,7 +38,11 @@
       data-sveltekit-preload-data="hover"
       aria-label="OpenShock"
     >
-      <img class="inline-block h-12 pointer-events-none" src="/logo.svg" alt="OpenShock Logo" />
+      <img
+        class="inline-block h-6 sm:h-12 pointer-events-none"
+        src="/logo.svg"
+        alt="OpenShock Logo"
+      />
     </a>
   </div>
 

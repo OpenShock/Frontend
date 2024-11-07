@@ -13,6 +13,8 @@
   import { UserStore } from '$lib/stores/UserStore';
   import type { Snippet } from 'svelte';
   import '../app.pcss';
+  import { RankType } from '$lib/api/internal/v1';
+  import { browser } from '$app/environment';
 
   type Props = {
     children?: Snippet;
@@ -20,8 +22,10 @@
 
   let { children }: Props = $props();
 
-  initializeStores();
-  initializeSignalR();
+  if (browser) {
+    initializeStores();
+    initializeSignalR();
+  }
 
   const meta = buildMetaData($page);
 
@@ -33,13 +37,13 @@
 <TwitterSummaryTags type="summary" {...meta} site="@OpenShockORG" creator="@OpenShockORG" />
 <OpenGraphTags type="website" {...meta} url={$page.url.origin} />
 
-<Header />
 <Sidebar.Provider>
-  {#if currentUserRank !== null}
-    <AppSidebar {currentUserRank} />
-  {/if}
-  <main class="w-full p-16">
-    {@render children?.()}
-  </main>
-  <Footer />
+  <AppSidebar currentUserRank={currentUserRank ?? RankType.User} />
+  <div class="flex-1 flex flex-col min-h-screen">
+    <Header />
+    <main class="flex-1">
+      {@render children?.()}
+    </main>
+    <Footer />
+  </div>
 </Sidebar.Provider>
