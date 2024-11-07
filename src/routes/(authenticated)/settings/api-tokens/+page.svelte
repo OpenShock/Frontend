@@ -14,11 +14,11 @@
   function apiTokenToTableToken(user: TokenResponse): ApiToken {
     return {
       id: user.id,
-      name: user.name ?? 'Unknown',
+      name: user.name,
       created_at: user.createdOn,
       expires_at: user.validUntil,
       last_used: user.lastUsed,
-      permissions: user.permissions ?? [],
+      permissions: user.permissions,
     };
   }
 

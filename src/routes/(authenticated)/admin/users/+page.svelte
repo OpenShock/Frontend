@@ -9,8 +9,8 @@
   function apiUserToTableDevice(user: AdminUsersView): User {
     return {
       id: user.id,
-      name: user.name ?? 'Unknown',
-      email: user.email ?? 'Unknown',
+      name: user.name,
+      email: user.email,
       password_hash_type: user.passwordHashType,
       created_at: user.createdAt,
       email_activated: user.emailActivated,

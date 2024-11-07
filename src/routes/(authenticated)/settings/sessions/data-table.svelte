@@ -8,14 +8,14 @@
   import { createSvelteTable, FlexRender } from '$lib/components/ui/data-table';
   import * as Table from '$lib/components/ui/table';
 
-  type DateTableProps<TData, TValue> = {
+  type DataTableProps<TData, TValue> = {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
   };
 
   let sorting = $state<SortingState>([]);
 
-  let { data, columns }: DateTableProps<TData, TValue> = $props();
+  let { data, columns }: DataTableProps<TData, TValue> = $props();
 
   const table = createSvelteTable({
     get data() {

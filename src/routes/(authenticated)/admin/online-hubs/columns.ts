@@ -19,7 +19,7 @@ export type OnlineDevice = {
   id: string;
   name: string;
   owner: OnlineDeviceOwner;
-  firmware_version: SemVer | null;
+  firmware_version: SemVer;
   gateway: string;
   connected_at: Date;
 };
@@ -54,9 +54,6 @@ export const columns: ColumnDef<OnlineDevice>[] = [
       const a = row_a.getValue('owner') as OnlineDeviceOwner;
       const b = row_b.getValue('owner') as OnlineDeviceOwner;
 
-      if (a === b) return 0;
-      if (!a) return 1;
-      if (!b) return -1;
       return a.name.localeCompare(b.name);
     }
   },
@@ -68,11 +65,11 @@ export const columns: ColumnDef<OnlineDevice>[] = [
       })
     ),
     cell: ({ row }) => {
-      const firmwareVersionCellSnippet = createRawSnippet<[SemVer | null]>((getFirmwareVersion) => {
-        let firmwareVersion = getFirmwareVersion()?.toString() ?? null;
+      const firmwareVersionCellSnippet = createRawSnippet<[SemVer]>((getFirmwareVersion) => {
+        let firmwareVersion = getFirmwareVersion().toString();
 
         let color: `text-${TwColor}`;
-        if (firmwareVersion === null) {
+        if (firmwareVersion.length <= 0) {
           firmwareVersion = 'Invalid';
           color = 'text-red-500';
         } else if (firmwareVersion === '0.0.0-local') {
@@ -87,12 +84,10 @@ export const columns: ColumnDef<OnlineDevice>[] = [
       return renderSnippet(firmwareVersionCellSnippet, row.getValue('firmware_version'));
     },
     sortingFn: (row_a, row_b) => {
-      const a = row_a.getValue('firmware_version') as SemVer | null;
-      const b = row_b.getValue('firmware_version') as SemVer | null;
+      const a = row_a.getValue('firmware_version') as SemVer;
+      const b = row_b.getValue('firmware_version') as SemVer;
 
       if (a === b) return 0;
-      if (!a) return -1;
-      if (!b) return 1;
 
       return a.compare(b);
     }

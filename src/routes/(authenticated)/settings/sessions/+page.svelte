@@ -1,6 +1,6 @@
 <script lang="ts">
   import { sessionApi } from '$lib/api';
-  import type { LoginSessionResponse } from '$lib/api/internal/v1';
+  import type { LoginSessionResponse, TokenResponse } from '$lib/api/internal/v1';
   import * as Dialog from '$lib/components/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onDestroy, onMount } from 'svelte';
@@ -9,25 +9,26 @@
 
   import RotateCcw from 'lucide-svelte/icons/rotate-ccw';
   import Button from '$lib/components/ui/button/button.svelte';
+  import type { ApiToken } from '../api-tokens/columns';
 
-  function apiSessionToTableDevice(session: LoginSessionResponse): Session {
+  function apiSessionToTableSession(session: LoginSessionResponse): Session {
     return {
       id: session.id,
       ip: session.ip,
       user_agent: session.userAgent,
       created_at: session.created,
-      expires_at: session.expires,
+      expires_at: session.expires
     };
   }
 
-  let sessions = $state<Session[]>([]);
+  let data = $state<Session[]>([]);
   let sessionToDelete = $state<LoginSessionResponse | null>(null);
 
   function fetchSessions() {
     sessionApi
       .sessionsListSessions()
       .then((res) => {
-        sessions = res.map(apiSessionToTableDevice);
+        data = res.map(apiSessionToTableSession);
       })
       .catch(handleApiError);
   }
@@ -36,7 +37,7 @@
     sessionApi
       .sessionsDeleteSession(sessionId)
       .then(() => {
-        sessions = sessions.filter((s) => s.id !== sessionId);
+        data = data.filter((s) => s.id !== sessionId);
       })
       .catch(handleApiError);
   }
@@ -46,8 +47,8 @@
     fetchSessions();
     // Update timestamps every 5 seconds
     interval = setInterval(() => {
-      if (sessions) {
-        sessions = Object.assign([], sessions);
+      if (data) {
+        data = Object.assign([], data);
       }
     }, 5000);
   });
@@ -82,6 +83,6 @@
 </div>
 <p>Currently valid sessions</p>
 
-{#if sessions}
-  <DataTable {sessions} {columns} />
+{#if data}
+  <DataTable {data} {columns} />
 {/if}

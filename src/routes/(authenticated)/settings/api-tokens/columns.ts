@@ -61,11 +61,10 @@ export const columns: ColumnDef<ApiToken>[] = [
     accessorKey: 'last_used',
     header: CreateSortHeader<ApiToken>('Last used'),
     cell: ({ row }) => {
-      const lastUsedCellSnippet = createRawSnippet<[Date | null]>((getLastUsed) => {
+      const lastUsedCellSnippet = createRawSnippet<[Date]>((getLastUsed) => {
         const lastUsed = getLastUsed();
         return {
-          render: () => lastUsed === null ? '<div class="text-right font-medium text-orange-500">Never</div>' :
-            `<div class="text-right font-medium" title="${lastUsed}">${lastUsed.toLocaleString()}</div>`,
+          render: () => `<div class="text-right font-medium" title="${lastUsed}">${lastUsed.toLocaleString()}</div>`,
         };
       });
 

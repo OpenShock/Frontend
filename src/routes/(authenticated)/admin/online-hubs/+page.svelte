@@ -8,34 +8,16 @@
   import DataTable from './data-table.svelte';
 
   function apiDeviceToTableDevice(device: AdminOnlineDeviceResponse): OnlineDevice {
-    let owner: OnlineDeviceOwner;
-    if (device.owner) {
-      owner = {
-        id: device.owner.id,
-        name: device.owner.name ?? 'Unknown',
-        image: device.owner.image ?? 'https://openshock.app/someimageurl',
-      };
-    } else {
-      owner = {
-        id: 'Unknown',
-        name: 'Unknown',
-        image: 'https://openshock.app/someimageurl',
-      };
-    }
-
-    let firmware_version: SemVer | null;
-    if (device.firmwareVersion) {
-      firmware_version = new SemVer(device.firmwareVersion);
-    } else {
-      firmware_version = null;
-    }
-
     return {
       id: device.id,
-      name: device.name ?? 'Unknown',
-      owner,
-      firmware_version,
-      gateway: device.gateway ?? 'Unknown',
+      name: device.name,
+      owner: {
+        id: device.owner.id,
+        name: device.owner.name,
+        image: device.owner.image,
+      },
+      firmware_version: new SemVer(device.firmwareVersion),
+      gateway: device.gateway,
       connected_at: device.connectedAt,
     };
   }

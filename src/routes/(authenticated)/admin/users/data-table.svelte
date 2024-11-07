@@ -4,6 +4,7 @@
     getPaginationRowModel,
     getSortedRowModel,
     getFilteredRowModel,
+    type ColumnDef,
     type SortingState,
     type PaginationState,
     type ColumnFiltersState,
@@ -11,6 +12,11 @@
   import { createSvelteTable, FlexRender } from '$lib/components/ui/data-table';
   import { Input } from '$lib/components/ui/input';
   import * as Table from '$lib/components/ui/table';
+
+  type DataTableProps<TData, TValue> = {
+    columns: ColumnDef<TData, TValue>[];
+    data: TData[];
+  };
 
   let { columns, data }: DataTableProps<TData, TValue> = $props();
 
