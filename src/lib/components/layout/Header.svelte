@@ -22,56 +22,58 @@
 {/snippet}
 
 <header
-  class="sticky top-0 z-50 w-full px-4 py-2 flex items-center justify-between space-x-2 border-border/40 bg-background/95 supports-[backdrop-filter]:bg-background/60 border-b backdrop-blur"
+  class="sticky top-0 z-50 w-full flex flex-row border-border/40 bg-background/95 supports-[backdrop-filter]:bg-background/60 border-b backdrop-blur"
 >
   <button
     onclick={() => {
       sidebar.toggle();
     }}
   >
-    <Menu class="w-6 h-6 mr-2 sm:w-10 sm:h-10 sm:m-3 text-gray-500" />
+    <Menu size={32} class="mr-2 sm:m-3 p-0 text-gray-500" />
   </button>
-  <div class="flex items-center space-x-4">
-    <a
-      href={$UserStore.self ? '/home' : '/'}
-      class="overflow-hidden lg:!ml-0 lg:w-auto select-none"
-      data-sveltekit-preload-data="hover"
-      aria-label="OpenShock"
-    >
-      <img
-        class="inline-block h-6 sm:h-12 pointer-events-none"
-        src="/logo.svg"
-        alt="OpenShock Logo"
-      />
-    </a>
-  </div>
-
-  <div class="flex-1"></div>
-
-  <LightSwitch />
-
-  {#if $UserStore.self !== null}
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger
-        class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 cursor-pointer select-none"
+  <div class="pr-4 py-2 flex-1 flex flex-row items-center justify-between space-x-2">
+    <div class="flex items-center space-x-4">
+      <a
+        href={$UserStore.self ? '/home' : '/'}
+        class="overflow-hidden lg:!ml-0 lg:w-auto select-none"
+        data-sveltekit-preload-data="hover"
+        aria-label="OpenShock"
       >
-        <img class="inline-block h-8 rounded-full" src={$UserStore.self.avatar} alt="User Avatar" />
-        <p class="hidden lg:inline-block">{$UserStore.self.name}</p>
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Content>
-        <DropdownMenu.Group>
-          <DropdownMenu.Item>Profile</DropdownMenu.Item>
-          <DropdownMenu.Item>Settings</DropdownMenu.Item>
-          <DropdownMenu.Item>Logout</DropdownMenu.Item>
-        </DropdownMenu.Group>
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
-  {:else}
-    {@render item('Login', '/login')}
-    {@render item('Sign Up', '/signup')}
-    <div>
-      {@render brand('GitHub', 'fa-github', PUBLIC_GITHUB_PROJECT_URL)}
-      {@render brand('Discord', 'fa-discord', PUBLIC_DISCORD_INVITE_URL)}
+        <img
+          class="inline-block h-6 sm:h-10 pointer-events-none"
+          src="/logo.svg"
+          alt="OpenShock Logo"
+        />
+      </a>
     </div>
-  {/if}
+
+    <div class="flex-1"></div>
+
+    <LightSwitch />
+
+    {#if $UserStore.self !== null}
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger
+          class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 cursor-pointer select-none"
+        >
+          <img class="inline-block h-8 rounded-full" src={$UserStore.self.avatar} alt="User Avatar" />
+          <p class="hidden lg:inline-block">{$UserStore.self.name}</p>
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content>
+          <DropdownMenu.Group>
+            <DropdownMenu.Item>Profile</DropdownMenu.Item>
+            <DropdownMenu.Item>Settings</DropdownMenu.Item>
+            <DropdownMenu.Item>Logout</DropdownMenu.Item>
+          </DropdownMenu.Group>
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
+    {:else}
+      {@render item('Login', '/login')}
+      {@render item('Sign Up', '/signup')}
+      <div>
+        {@render brand('GitHub', 'fa-github', PUBLIC_GITHUB_PROJECT_URL)}
+        {@render brand('Discord', 'fa-discord', PUBLIC_DISCORD_INVITE_URL)}
+      </div>
+    {/if}
+  </div>
 </header>
