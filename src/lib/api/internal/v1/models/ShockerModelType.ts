@@ -18,10 +18,9 @@
  * @enum {string}
  */
 export enum ShockerModelType {
-    caiXianlin = 'CaiXianlin',
-    petTrainer = 'PetTrainer',
-    petrainer998Dr = 'Petrainer998DR',
-    unknownDefaultOpenApi = '11184809'
+    CaiXianlin = 'CaiXianlin',
+    PetTrainer = 'PetTrainer',
+    Petrainer998Dr = 'Petrainer998DR'
 }
 
 

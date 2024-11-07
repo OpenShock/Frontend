@@ -20,7 +20,7 @@
   let name = $state<string>('');
   let expire = $state<'never' | `${number}days` | 'custom'>('never');
   let expireCustom = $state<Date | null>(null);
-  let permissions = $state<PermissionType[]>([PermissionType.shockersUse]);
+  let permissions = $state<PermissionType[]>([PermissionType.ShockersUse]);
   let token = $state<string | null>(null);
 
   function getExpireDate(expireType: string, customExpireDate: Date | null): Date | null {
@@ -65,9 +65,8 @@
     perms: { name: string; key: string }[];
   };
 
-  const permissionCategories = Object.values(PermissionType)
-    .filter((v) => v !== PermissionType.unknownDefaultOpenApi)
-    .reduce((acc: PermissionCategory[], v) => {
+  const permissionCategories = Object.values(PermissionType).reduce(
+    (acc: PermissionCategory[], v) => {
       const [category, perm] = v.split('.');
       const cat = acc.find((c) => c.name === category);
       if (cat) {
@@ -76,7 +75,9 @@
         acc.push({ name: category, perms: [{ name: perm, key: v }] });
       }
       return acc;
-    }, []);
+    },
+    []
+  );
 
   function nameValidation(name: string): ValidationResult {
     if (name.length === 0) {

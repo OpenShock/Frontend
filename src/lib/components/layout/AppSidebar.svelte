@@ -80,7 +80,7 @@
   const footerGroups: Group[] = [
     {
       title: 'Admin',
-      ranks: [RankType.admin, RankType.system],
+      ranks: [RankType.Admin, RankType.System],
       collapsible: { open: false },
       menus: [
         {

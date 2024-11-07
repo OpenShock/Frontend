@@ -109,9 +109,9 @@ export function validateUsername(value: string): ValidationResult | null {
 
 export function mapUsernameAvailability(availability: UsernameAvailability): ValidationResult {
   switch (availability) {
-    case UsernameAvailability.available:
+    case UsernameAvailability.Available:
       return UsernameAvailableValRes;
-    case UsernameAvailability.taken:
+    case UsernameAvailability.Taken:
       return UsernameTakenValRes;
     default:
       return UsernameAvailabilityUnknownValRes;

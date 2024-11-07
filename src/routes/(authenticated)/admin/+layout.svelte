@@ -1,9 +1,9 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
-  import { RankType} from '$lib/api/internal/v1';
+  import { RankType } from '$lib/api/internal/v1';
   import { UserStore } from '$lib/stores/UserStore';
 
-  const allowedRanks = [ RankType.admin, RankType.system ];
+  const allowedRanks = [RankType.Admin, RankType.System];
   let isAdmin = $derived($UserStore.self ? allowedRanks.includes($UserStore.self.rank) : false);
 
   let { children }: { children?: Snippet } = $props();

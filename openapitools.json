@@ -12,9 +12,10 @@
           "supportsES6": true,
           "stringEnums": true,
           "withInterfaces": true,
-          "enumPropertyNaming": "camelCase",
+          "paramNaming": "camelCase",
+          "enumPropertyNaming": "PascalCase",
           "modelPropertyNaming": "camelCase",
-          "enumUnknownDefaultCase": true,
+          "enumUnknownDefaultCase": false,
           "useSingleRequestParameter": false
         }
       },
@@ -26,9 +27,10 @@
           "supportsES6": true,
           "stringEnums": true,
           "withInterfaces": true,
-          "enumPropertyNaming": "camelCase",
+          "paramNaming": "camelCase",
+          "enumPropertyNaming": "PascalCase",
           "modelPropertyNaming": "camelCase",
-          "enumUnknownDefaultCase": true,
+          "enumUnknownDefaultCase": false,
           "useSingleRequestParameter": false
         }
       }

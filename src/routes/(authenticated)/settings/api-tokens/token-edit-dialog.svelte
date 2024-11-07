@@ -43,18 +43,16 @@
     perms: { name: string; key: string }[];
   };
 
-  const permissionTypes = Object.values(PermissionType)
-    .filter((v) => v !== PermissionType.unknownDefaultOpenApi)
-    .reduce((acc: PermissionCategory[], v) => {
-      const [category, perm] = v.split('.');
-      const cat = acc.find((c) => c.name === category);
-      if (cat) {
-        cat.perms.push({ name: capitalizeFirstLetter(perm), key: v });
-      } else {
-        acc.push({ name: capitalizeFirstLetter(category), perms: [{ name: perm, key: v }] });
-      }
-      return acc;
-    }, []);
+  const permissionTypes = Object.values(PermissionType).reduce((acc: PermissionCategory[], v) => {
+    const [category, perm] = v.split('.');
+    const cat = acc.find((c) => c.name === category);
+    if (cat) {
+      cat.perms.push({ name: capitalizeFirstLetter(perm), key: v });
+    } else {
+      acc.push({ name: capitalizeFirstLetter(category), perms: [{ name: perm, key: v }] });
+    }
+    return acc;
+  }, []);
 
   function nameValidation(name: string): ValidationResult {
     if (name.length === 0) {

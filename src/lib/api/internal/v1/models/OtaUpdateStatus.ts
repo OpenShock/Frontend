@@ -18,12 +18,11 @@
  * @enum {string}
  */
 export enum OtaUpdateStatus {
-    started = 'Started',
-    running = 'Running',
-    finished = 'Finished',
-    error = 'Error',
-    timeout = 'Timeout',
-    unknownDefaultOpenApi = '11184809'
+    Started = 'Started',
+    Running = 'Running',
+    Finished = 'Finished',
+    Error = 'Error',
+    Timeout = 'Timeout'
 }
 
 

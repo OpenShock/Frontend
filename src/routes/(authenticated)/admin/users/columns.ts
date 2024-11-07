@@ -38,7 +38,7 @@ export const columns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       const passwordHashTypeCellSnippet = createRawSnippet<[string]>((getPasswordHashType) => {
         const passwordHashType = getPasswordHashType();
-        const isLegacy = passwordHashType !== PasswordHashingAlgorithm.bCrypt;
+        const isLegacy = passwordHashType !== PasswordHashingAlgorithm.BCrypt;
         return {
           render: () => `<div class="text-center font-medium ${isLegacy ? 'text-orange-500' : ''}">${passwordHashType}</div>`,
         };
@@ -83,7 +83,7 @@ export const columns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       const rankCellSnippet = createRawSnippet<[RankType]>((getRank) => {
         const rank = getRank();
-        const isPrivileged = [RankType.admin, RankType.system].includes(rank);
+        const isPrivileged = [RankType.Admin, RankType.System].includes(rank);
         return {
           render: () =>
             `<div class="text-center font-medium ${isPrivileged ? 'text-blue-500' : ''}">${rank}</div>`,
