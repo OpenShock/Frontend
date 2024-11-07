@@ -6,6 +6,7 @@
   import { onDestroy, onMount } from 'svelte';
   import { columns, type OnlineDevice } from './columns';
   import DataTable from './data-table.svelte';
+  import { dev } from '$app/environment';
 
   function apiDeviceToTableDevice(device: AdminOnlineDeviceResponse): OnlineDevice {
     return {
@@ -52,7 +53,7 @@
 </script>
 
 <div class="flex justify-between w-full mb-2">
-  <h2 class="text-3xl">Online Hubs</h2>
+  <h2 class="text-3xl">Online Hubs: { data.length }</h2>
   <button class="btn variant-filled-primary text-xl" onclick={fetchOnlineDevices}>
     <i class="fa fa-sync"></i>
     Refresh
