@@ -1,91 +1,57 @@
 <script lang="ts">
-  import Button, { buttonVariants } from '$lib/components/ui/button/button.svelte';
+  import Button from '$lib/components/ui/button/button.svelte';
   import { OwnDeviceStatesStore, OwnDevicesStore } from '$lib/stores/DevicesStore';
+  import * as Card from '$lib/components/ui/card';
+  import RotateCcw from 'lucide-svelte/icons/rotate-ccw';
 
-  import CircleFadingArrowUp from 'lucide-svelte/icons/circle-fading-arrow-up';
-  import Pencil from 'lucide-svelte/icons/pencil';
-  import Trash from 'lucide-svelte/icons/trash';
+  import { columns, type Hub } from './columns';
+  import { SemVer } from 'semver';
+  import DataTable from './data-table.svelte';
 
-  interface Device {
-    id: string;
-    name: string | null;
-    isOnline: boolean;
-    firmwareVersion: string | null;
-    createdAt: Date;
-  }
+  let data = $derived.by<Hub[]>(() => {
+    if (!$OwnDeviceStatesStore || !$OwnDevicesStore) return [];
 
-  let devices: Device[] = $state([]);
-
-  $effect(() => {
-    if (!$OwnDevicesStore) return;
-
-    const deviceStates = $OwnDeviceStatesStore?.map((state) => ({
+    const deviceStates = $OwnDeviceStatesStore.map((state) => ({
       id: state.device,
       online: state.online,
       firmwareVersion: state.firmwareVersion,
     }));
 
-    if (!deviceStates) return;
-
-    devices = $OwnDevicesStore.map((device) => {
+    return $OwnDevicesStore.map((device) => {
       const state = deviceStates.find((state) => state.id === device.id);
       return {
         id: device.id,
         name: device.name,
-        isOnline: state?.online ?? false,
-        firmwareVersion: state?.firmwareVersion ?? null,
-        createdAt: device.createdOn,
+        is_online: state?.online ?? false,
+        firmware_version: state?.firmwareVersion ? new SemVer(state.firmwareVersion) : null,
+        shockers: device.shockers.map((shocker) => {
+          return {
+            id: shocker.id,
+            rf_id: shocker.rfId,
+            model: shocker.model,
+            name: shocker.name,
+            is_paused: shocker.isPaused,
+            created_at: shocker.createdOn,
+          };
+        }),
+        created_at: device.createdOn,
       };
     });
   });
 </script>
 
-<table class="table-container border-collapse">
-  <thead>
-    <tr>
-      <th class="text-left">Device Name</th>
-      <th class="text-left">Status</th>
-      <th class="text-left">Version</th>
-      <th class="text-left">Created On</th>
-      <th class="text-center">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {#each devices as device (device.id)}
-      <tr>
-        <td class="text-lg border-y">
-          {device.name ?? 'Unnamed device'}
-        </td>
-        <td class="border-y">
-          {#if device.isOnline}
-            <span class="text-green-500">Online</span>
-          {:else}
-            <span class="text-red-500">Offline</span>
-          {/if}
-        </td>
-        <td class="border-y">
-          {#if device.firmwareVersion}
-            <span>{device.firmwareVersion}</span>
-          {/if}
-        </td>
-        <td class="border-y">
-          {device.createdAt.toLocaleDateString()}
-        </td>
-        <td>
-          <Button
-            class={buttonVariants({ variant: 'secondary' })}
-            disabled={!device.firmwareVersion}><CircleFadingArrowUp /></Button
-          >
-          <Button class={buttonVariants({ variant: 'secondary' })}><Pencil /></Button>
-          <Button class={buttonVariants({ variant: 'destructive' })}><Trash /></Button>
-        </td>
-      </tr>
-    {/each}
-  </tbody>
-</table>
-
-<style>
-  table td {
-    padding: 0.5rem 0.25rem;
-  }
-</style>
+<Card.Root>
+  <Card.Header>
+    <Card.Title class="text-3xl flex items-center space-x-2 justify-between">
+      Hubs
+      <Button class="btn variant-filled-primary text-xl" onclick={() => {}}>
+        <RotateCcw />
+        <span> Refresh </span>
+      </Button>
+    </Card.Title>
+    <Card.Description>This is a list of all hubs you own.</Card.Description>
+  </Card.Header>
+  <Card.Content>
+    <DataTable {data} {columns} />
+  </Card.Content>
+</Card.Root>

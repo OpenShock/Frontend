@@ -20,7 +20,7 @@
     open = false;
   }
 
-  function deleteSession() {
+  function revokeSession() {
     sessionApi.sessionsDeleteSession(session.id).then(handleDeleted).catch(handleApiError);
   }
 
@@ -41,6 +41,6 @@
       <strong>{readableUserAgent}</strong>
     </span>
 
-    <Button variant="destructive" onclick={deleteSession}>Delete</Button>
+    <Button variant="destructive" onclick={revokeSession}>Delete</Button>
   </Dialog.Content>
 </Dialog.Root>
