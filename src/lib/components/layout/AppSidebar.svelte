@@ -17,7 +17,7 @@
     UserPen,
     Wrench,
     Zap,
-  } from 'lucide-svelte/icons';
+  } from 'lucide-svelte';
 
   interface Props {
     currentUserRank: RankType;

@@ -5,7 +5,7 @@
   import { ColorSchemeStore, willActivateLightMode } from '$lib/stores/ColorSchemeStore';
   import AbsolutelySureButton from './AbsolutelySureButton.svelte';
 
-  import { Moon, Sun } from 'lucide-svelte/icons';
+  import { Moon, Sun } from 'lucide-svelte';
 
   let pendingScheme = $state<'light' | 'dark' | 'system' | undefined>();
   function handleOpenChanged(open: boolean) {

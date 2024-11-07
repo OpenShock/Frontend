@@ -5,7 +5,7 @@
   import Bowser from 'bowser';
   import InstallDriversDialog from './InstallDriversDialog.svelte';
 
-  import { ArrowDownToLine, Cpu } from 'lucide-svelte/icons';
+  import { ArrowDownToLine, Cpu } from 'lucide-svelte';
 
   interface Props {
     port?: SerialPort | null;
