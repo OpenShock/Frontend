@@ -109,6 +109,18 @@ export interface AccountApiInterface {
 
     /**
      * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApiInterface
+     */
+    accountLogoutRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     */
+    accountLogout(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * 
      * @summary Check if a password reset is in progress
      * @param {string} passwordResetId The id of the password reset
      * @param {string} secret The secret of the password reset
@@ -241,6 +253,33 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
     async accountLogin(login?: Login, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse> {
         const response = await this.accountLoginRaw({ login: login }, initOverrides);
         return await response.value();
+    }
+
+    /**
+     */
+    async accountLogoutRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
+        }
+
+        const response = await this.request({
+            path: `/1/account/logout`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async accountLogout(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.accountLogoutRaw(initOverrides);
     }
 
     /**

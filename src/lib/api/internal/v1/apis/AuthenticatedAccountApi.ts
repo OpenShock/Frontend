@@ -76,12 +76,12 @@ export interface AuthenticatedAccountApiInterface {
      * @throws {RequiredError}
      * @memberof AuthenticatedAccountApiInterface
      */
-    authenticatedAccountChangePasswordRaw(requestParameters: AuthenticatedAccountChangePasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>>;
+    authenticatedAccountChangePasswordRaw(requestParameters: AuthenticatedAccountChangePasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
      * Change the password of the current user
      */
-    authenticatedAccountChangePassword(changePasswordRequest?: ChangePasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any>;
+    authenticatedAccountChangePassword(changePasswordRequest?: ChangePasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -91,12 +91,12 @@ export interface AuthenticatedAccountApiInterface {
      * @throws {RequiredError}
      * @memberof AuthenticatedAccountApiInterface
      */
-    authenticatedAccountChangeUsernameRaw(requestParameters: AuthenticatedAccountChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>>;
+    authenticatedAccountChangeUsernameRaw(requestParameters: AuthenticatedAccountChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
      * Change the username of the current user
      */
-    authenticatedAccountChangeUsername(changeUsernameRequest?: ChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any>;
+    authenticatedAccountChangeUsername(changeUsernameRequest?: ChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
 }
 
@@ -141,7 +141,7 @@ export class AuthenticatedAccountApi extends runtime.BaseAPI implements Authenti
     /**
      * Change the password of the current user
      */
-    async authenticatedAccountChangePasswordRaw(requestParameters: AuthenticatedAccountChangePasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
+    async authenticatedAccountChangePasswordRaw(requestParameters: AuthenticatedAccountChangePasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -160,25 +160,20 @@ export class AuthenticatedAccountApi extends runtime.BaseAPI implements Authenti
             body: ChangePasswordRequestToJSON(requestParameters['changePasswordRequest']),
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<any>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Change the password of the current user
      */
-    async authenticatedAccountChangePassword(changePasswordRequest?: ChangePasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
-        const response = await this.authenticatedAccountChangePasswordRaw({ changePasswordRequest: changePasswordRequest }, initOverrides);
-        return await response.value();
+    async authenticatedAccountChangePassword(changePasswordRequest?: ChangePasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.authenticatedAccountChangePasswordRaw({ changePasswordRequest: changePasswordRequest }, initOverrides);
     }
 
     /**
      * Change the username of the current user
      */
-    async authenticatedAccountChangeUsernameRaw(requestParameters: AuthenticatedAccountChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
+    async authenticatedAccountChangeUsernameRaw(requestParameters: AuthenticatedAccountChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -197,19 +192,14 @@ export class AuthenticatedAccountApi extends runtime.BaseAPI implements Authenti
             body: ChangeUsernameRequestToJSON(requestParameters['changeUsernameRequest']),
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<any>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Change the username of the current user
      */
-    async authenticatedAccountChangeUsername(changeUsernameRequest?: ChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
-        const response = await this.authenticatedAccountChangeUsernameRaw({ changeUsernameRequest: changeUsernameRequest }, initOverrides);
-        return await response.value();
+    async authenticatedAccountChangeUsername(changeUsernameRequest?: ChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.authenticatedAccountChangeUsernameRaw({ changeUsernameRequest: changeUsernameRequest }, initOverrides);
     }
 
 }

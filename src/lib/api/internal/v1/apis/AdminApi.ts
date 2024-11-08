@@ -51,12 +51,12 @@ export interface AdminApiInterface {
      * @throws {RequiredError}
      * @memberof AdminApiInterface
      */
-    adminDeleteUserRaw(requestParameters: AdminDeleteUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>>;
+    adminDeleteUserRaw(requestParameters: AdminDeleteUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
      * Deletes a user
      */
-    adminDeleteUser(userId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any>;
+    adminDeleteUser(userId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -100,7 +100,7 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     /**
      * Deletes a user
      */
-    async adminDeleteUserRaw(requestParameters: AdminDeleteUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
+    async adminDeleteUserRaw(requestParameters: AdminDeleteUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['userId'] == null) {
             throw new runtime.RequiredError(
                 'userId',
@@ -123,19 +123,14 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<any>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Deletes a user
      */
-    async adminDeleteUser(userId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
-        const response = await this.adminDeleteUserRaw({ userId: userId }, initOverrides);
-        return await response.value();
+    async adminDeleteUser(userId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.adminDeleteUserRaw({ userId: userId }, initOverrides);
     }
 
     /**

@@ -84,11 +84,11 @@ export interface SharesApiInterface {
      * @throws {RequiredError}
      * @memberof SharesApiInterface
      */
-    sharesDeleteRequestRaw(requestParameters: SharesDeleteRequestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>>;
+    sharesDeleteRequestRaw(requestParameters: SharesDeleteRequestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
      */
-    sharesDeleteRequest(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any>;
+    sharesDeleteRequest(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -97,11 +97,11 @@ export interface SharesApiInterface {
      * @throws {RequiredError}
      * @memberof SharesApiInterface
      */
-    sharesDenyRequestRaw(requestParameters: SharesDenyRequestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>>;
+    sharesDenyRequestRaw(requestParameters: SharesDenyRequestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
      */
-    sharesDenyRequest(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any>;
+    sharesDenyRequest(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -209,7 +209,7 @@ export class SharesApi extends runtime.BaseAPI implements SharesApiInterface {
 
     /**
      */
-    async sharesDeleteRequestRaw(requestParameters: SharesDeleteRequestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
+    async sharesDeleteRequestRaw(requestParameters: SharesDeleteRequestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -232,23 +232,18 @@ export class SharesApi extends runtime.BaseAPI implements SharesApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<any>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      */
-    async sharesDeleteRequest(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
-        const response = await this.sharesDeleteRequestRaw({ id: id }, initOverrides);
-        return await response.value();
+    async sharesDeleteRequest(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.sharesDeleteRequestRaw({ id: id }, initOverrides);
     }
 
     /**
      */
-    async sharesDenyRequestRaw(requestParameters: SharesDenyRequestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
+    async sharesDenyRequestRaw(requestParameters: SharesDenyRequestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -271,18 +266,13 @@ export class SharesApi extends runtime.BaseAPI implements SharesApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<any>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      */
-    async sharesDenyRequest(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
-        const response = await this.sharesDenyRequestRaw({ id: id }, initOverrides);
-        return await response.value();
+    async sharesDenyRequest(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.sharesDenyRequestRaw({ id: id }, initOverrides);
     }
 
     /**

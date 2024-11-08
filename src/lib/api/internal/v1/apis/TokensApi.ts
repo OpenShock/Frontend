@@ -81,12 +81,12 @@ export interface TokensApiInterface {
      * @throws {RequiredError}
      * @memberof TokensApiInterface
      */
-    tokensDeleteTokenRaw(requestParameters: TokensDeleteTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>>;
+    tokensDeleteTokenRaw(requestParameters: TokensDeleteTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
      * Revoke a token from the current user
      */
-    tokensDeleteToken(tokenId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any>;
+    tokensDeleteToken(tokenId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -97,12 +97,12 @@ export interface TokensApiInterface {
      * @throws {RequiredError}
      * @memberof TokensApiInterface
      */
-    tokensEditTokenRaw(requestParameters: TokensEditTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>>;
+    tokensEditTokenRaw(requestParameters: TokensEditTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
      * Edit a token
      */
-    tokensEditToken(tokenId: string, editTokenRequest?: EditTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any>;
+    tokensEditToken(tokenId: string, editTokenRequest?: EditTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -190,7 +190,7 @@ export class TokensApi extends runtime.BaseAPI implements TokensApiInterface {
     /**
      * Revoke a token from the current user
      */
-    async tokensDeleteTokenRaw(requestParameters: TokensDeleteTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
+    async tokensDeleteTokenRaw(requestParameters: TokensDeleteTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['tokenId'] == null) {
             throw new runtime.RequiredError(
                 'tokenId',
@@ -213,25 +213,20 @@ export class TokensApi extends runtime.BaseAPI implements TokensApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<any>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Revoke a token from the current user
      */
-    async tokensDeleteToken(tokenId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
-        const response = await this.tokensDeleteTokenRaw({ tokenId: tokenId }, initOverrides);
-        return await response.value();
+    async tokensDeleteToken(tokenId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.tokensDeleteTokenRaw({ tokenId: tokenId }, initOverrides);
     }
 
     /**
      * Edit a token
      */
-    async tokensEditTokenRaw(requestParameters: TokensEditTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
+    async tokensEditTokenRaw(requestParameters: TokensEditTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['tokenId'] == null) {
             throw new runtime.RequiredError(
                 'tokenId',
@@ -257,19 +252,14 @@ export class TokensApi extends runtime.BaseAPI implements TokensApiInterface {
             body: EditTokenRequestToJSON(requestParameters['editTokenRequest']),
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<any>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Edit a token
      */
-    async tokensEditToken(tokenId: string, editTokenRequest?: EditTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
-        const response = await this.tokensEditTokenRaw({ tokenId: tokenId, editTokenRequest: editTokenRequest }, initOverrides);
-        return await response.value();
+    async tokensEditToken(tokenId: string, editTokenRequest?: EditTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.tokensEditTokenRaw({ tokenId: tokenId, editTokenRequest: editTokenRequest }, initOverrides);
     }
 
     /**

@@ -32,31 +32,35 @@ export interface AdminUsersViewPaginated {
      * @type {number}
      * @memberof AdminUsersViewPaginated
      */
-    offset?: number;
+    offset: number;
     /**
      * 
      * @type {number}
      * @memberof AdminUsersViewPaginated
      */
-    limit?: number;
+    limit: number;
     /**
      * 
      * @type {number}
      * @memberof AdminUsersViewPaginated
      */
-    total?: number;
+    total: number;
     /**
      * 
      * @type {Array<AdminUsersView>}
      * @memberof AdminUsersViewPaginated
      */
-    data?: Array<AdminUsersView>;
+    data: Array<AdminUsersView>;
 }
 
 /**
  * Check if a given object implements the AdminUsersViewPaginated interface.
  */
 export function instanceOfAdminUsersViewPaginated(value: object): value is AdminUsersViewPaginated {
+    if (!('offset' in value) || value['offset'] === undefined) return false;
+    if (!('limit' in value) || value['limit'] === undefined) return false;
+    if (!('total' in value) || value['total'] === undefined) return false;
+    if (!('data' in value) || value['data'] === undefined) return false;
     return true;
 }
 
@@ -70,10 +74,10 @@ export function AdminUsersViewPaginatedFromJSONTyped(json: any, ignoreDiscrimina
     }
     return {
         
-        'offset': json['offset'] == null ? undefined : json['offset'],
-        'limit': json['limit'] == null ? undefined : json['limit'],
-        'total': json['total'] == null ? undefined : json['total'],
-        'data': json['data'] == null ? undefined : ((json['data'] as Array<any>).map(AdminUsersViewFromJSON)),
+        'offset': json['offset'],
+        'limit': json['limit'],
+        'total': json['total'],
+        'data': ((json['data'] as Array<any>).map(AdminUsersViewFromJSON)),
     };
 }
 
@@ -91,7 +95,7 @@ export function AdminUsersViewPaginatedFromJSONTyped(json: any, ignoreDiscrimina
         'offset': value['offset'],
         'limit': value['limit'],
         'total': value['total'],
-        'data': value['data'] == null ? undefined : ((value['data'] as Array<any>).map(AdminUsersViewToJSON)),
+        'data': ((value['data'] as Array<any>).map(AdminUsersViewToJSON)),
     };
 }
 
