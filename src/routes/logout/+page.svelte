@@ -1,12 +1,17 @@
 <script lang="ts">
   import { browser } from '$app/environment';
   import { goto } from '$app/navigation';
-  import { usersApi } from '$lib/api';
+  import { accountV1Api, usersApi } from '$lib/api';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { UserStore } from '$lib/stores/UserStore';
   import { onMount } from 'svelte';
 
-  function logout() {
-    // TODO: Make a API call to invalidate the cookie
+  async function logout() {
+    try {
+      await accountV1Api.accountLogout();
+    } catch (e) {
+      handleApiError(e);
+    }
 
     UserStore.reset();
 
