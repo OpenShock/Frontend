@@ -1,15 +1,14 @@
 <script lang="ts">
-  import { tokensApi } from '$lib/api';
   import type { TokenResponse } from '$lib/api/internal/v1';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
   import { columns, type ApiToken } from './columns';
   import DataTable from './data-table.svelte';
   import TokenGenerateDialog from './dialog-token-generate.svelte';
 
   import RotateCcw from 'lucide-svelte/icons/rotate-ccw';
+  import { refreshApiToken, refreshApiTokens } from '$lib/stores/ApiTokensStore';
 
   function apiTokenToTableToken(user: TokenResponse): ApiToken {
     return {
@@ -25,30 +24,7 @@
   let data = $state<ApiToken[]>([]);
   let showGenerateTokenModal = $state<boolean>(false);
 
-  function refreshToken(id: string) {
-    tokensApi
-      .tokensGetTokenById(id)
-      .then((response) => {
-        const index = data.findIndex((t) => t.id === id);
-        if (index >= 0) {
-          data[index] = apiTokenToTableToken(response);
-          data = Object.assign([], data); // Force update
-        } else {
-          data = [...data, apiTokenToTableToken(response)];
-        }
-      })
-      .catch(handleApiError);
-  }
-  function refreshTokens() {
-    tokensApi
-      .tokensListTokens()
-      .then((response) => {
-        data = response.map(apiTokenToTableToken);
-      })
-      .catch(handleApiError);
-  }
-
-  onMount(refreshTokens);
+  onMount(refreshApiTokens);
 
   setInterval(() => {
     data = Object.assign([], data); // Force update
@@ -57,7 +33,7 @@
 
 <TokenGenerateDialog
   open={showGenerateTokenModal}
-  onGenerated={(id) => refreshToken(id)}
+  onGenerated={(id) => refreshApiToken(id)}
   onClose={() => (showGenerateTokenModal = false)}
 />
 
@@ -65,7 +41,7 @@
   <Card.Header>
     <Card.Title class="text-3xl flex items-center space-x-2 justify-between">
       API Tokens
-      <Button class="btn variant-filled-primary" onclick={refreshTokens}>
+      <Button class="btn variant-filled-primary" onclick={refreshApiTokens}>
         <RotateCcw />
         <span> Refresh </span>
       </Button>

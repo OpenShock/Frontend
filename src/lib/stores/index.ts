@@ -1,4 +1,4 @@
-import { initializeAuthTokenStore } from "./AuthTokenStore";
+import { initializeApiTokenStore } from "./ApiTokensStore";
 import { initializeDarkModeStore } from "./ColorSchemeStore";
 import { initializeDevicesStore } from "./DevicesStore";
 import { initializeFlashManagersStore } from "./FlashManagersStore";
@@ -9,7 +9,7 @@ import { browser } from '$app/environment';
 export function initializeStores() {
   if (!browser) return;
 
-  initializeAuthTokenStore();
+  initializeApiTokenStore
   initializeDarkModeStore();
   initializeDevicesStore();
   initializeFlashManagersStore();
