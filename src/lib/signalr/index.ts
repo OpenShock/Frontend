@@ -1,6 +1,6 @@
 import { browser } from '$app/environment';
 import { PUBLIC_BACKEND_API_DOMAIN } from '$env/static/public';
-import { OwnDeviceStatesStore, refreshOwnDevices, type OwnDeviceState } from '$lib/stores/DevicesStore';
+import { OnlineDevicesStore, refreshOwnDevices, type DeviceOnlineState } from '$lib/stores/DevicesStore';
 import { UserStore } from '$lib/stores/UserStore';
 import * as SR from '@microsoft/signalr';
 import { get, writable, type Readable } from 'svelte/store';
@@ -8,27 +8,23 @@ import { get, writable, type Readable } from 'svelte/store';
 const signalr_connection = writable<SR.HubConnection | null>(null);
 const signalr_state = writable<SR.HubConnectionState>(SR.HubConnectionState.Disconnected);
 
-function isDeviceStatusArray(array: unknown): array is OwnDeviceState[] {
-  if (!array || !Array.isArray(array)) return false;
-
-  for (const item of array) {
-    if (Object.hasOwnProperty.call(item, 'device') && typeof item.device !== 'string') {
-      return false;
-    }
-
-    if (
-      Object.hasOwnProperty.call(item, 'firmwareVersion') &&
-      typeof item.firmwareVersion !== 'string'
-    ) {
-      return false;
-    }
-
-    if (Object.hasOwnProperty.call(item, 'online') && typeof item.online !== 'boolean') {
-      return false;
-    }
+function isDeviceStatusArray(array: unknown): array is DeviceOnlineState[] {
+  if (!Array.isArray(array)) {
+    return false;
   }
 
-  return true;
+  console.log(array);
+
+  return array.every(item =>
+    typeof item === 'object' &&
+    item !== null &&
+    'device' in item &&
+    'online' in item &&
+    'firmwareVersion' in item &&
+    typeof item.device === 'string' &&
+    typeof item.online === 'boolean' &&
+    (typeof item.firmwareVersion === 'string' || item.firmwareVersion === null)
+  );
 }
 
 async function create_signalr_connection() {
@@ -62,13 +58,20 @@ async function create_signalr_connection() {
     console.log(message);
   });
 
-  connection.on('devicestatus', (message) => {
-    if (!isDeviceStatusArray(message)) {
-      console.error('Received invalid device status message');
+  connection.on('devicestatus', (devices) => {
+    console.log('Device status received!');
+    if (!isDeviceStatusArray(devices)) {
+      console.error('Received invalid device status message', devices);
       return;
     }
 
-    OwnDeviceStatesStore.set(message);
+    OnlineDevicesStore.update((state) => {
+      devices.forEach((entry) => {
+        state.set(entry.device, entry);
+      });
+
+      return state;
+    });
   });
 
   connection.on('deviceupdate', (message) => {

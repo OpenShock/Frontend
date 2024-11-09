@@ -10,9 +10,7 @@
   import * as Popover from '$lib/components/ui/popover';
   import { OwnDevicesStore } from '$lib/stores/DevicesStore';
 
-  let shockers = $derived(
-    $OwnDevicesStore?.flatMap((device) => device.shockers)?.filter((shocker) => !!shocker) ?? []
-  );
+  let shockers = $derived(Array.from($OwnDevicesStore).flatMap(([,device]) => device.shockers));
 
   let moduleType = $state<ModuleType>(ModuleType.ClassicControlModule);
 

@@ -3,14 +3,14 @@ import type { ResponseDeviceWithShockers } from "$lib/api/internal/v1";
 import { writable } from "svelte/store";
 
 export type OwnDevice = ResponseDeviceWithShockers;
-export interface OwnDeviceState {
+export interface DeviceOnlineState {
   device: string;
   online: boolean;
-  firmwareVersion: string;
+  firmwareVersion: string | null;
 };
 
-export const OwnDevicesStore = writable<OwnDevice[] | null>(null);
-export const OwnDeviceStatesStore = writable<OwnDeviceState[] | null>(null);
+export const OwnDevicesStore = writable<Map<string, OwnDevice>>(new Map());
+export const OnlineDevicesStore = writable<Map<string, DeviceOnlineState>>(new Map());
 
 export function refreshOwnDevices() {
   shockerV1Api.shockerListShockers()
@@ -19,7 +19,7 @@ export function refreshOwnDevices() {
         throw new Error(`Failed to fetch devices: ${response.message}`);
       }
 
-      OwnDevicesStore.set(response.data);
+      OwnDevicesStore.set(new Map(response.data.map((d) => [d.id, d])));
     })
     .catch((error) => {
       console.error(error); // TODO: Show toast

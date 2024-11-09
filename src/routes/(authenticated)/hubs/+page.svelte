@@ -1,7 +1,7 @@
 <script lang="ts">
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card';
-  import { OwnDeviceStatesStore, OwnDevicesStore } from '$lib/stores/DevicesStore';
+  import { OwnDevicesStore, OnlineDevicesStore } from '$lib/stores/DevicesStore';
   import { SemVer } from 'semver';
   import { columns, type Hub } from './columns';
   import DataTable from './data-table.svelte';
@@ -9,21 +9,15 @@
   import RotateCcw from 'lucide-svelte/icons/rotate-ccw';
 
   let data = $derived.by<Hub[]>(() => {
-    if (!$OwnDeviceStatesStore || !$OwnDevicesStore) return [];
+    if (!$OwnDevicesStore || !$OnlineDevicesStore) return [];
 
-    const deviceStates = $OwnDeviceStatesStore.map((state) => ({
-      id: state.device,
-      online: state.online,
-      firmwareVersion: state.firmwareVersion,
-    }));
-
-    return $OwnDevicesStore.map((device) => {
-      const state = deviceStates.find((state) => state.id === device.id);
+    return Array.from($OwnDevicesStore).map(([,device]) => {
+      const onlineState = $OnlineDevicesStore.get(device.id);
       return {
         id: device.id,
         name: device.name,
-        is_online: state?.online ?? false,
-        firmware_version: state?.firmwareVersion ? new SemVer(state.firmwareVersion) : null,
+        is_online: onlineState?.online ?? false,
+        firmware_version: onlineState?.firmwareVersion ? new SemVer(onlineState.firmwareVersion) : null,
         shockers: device.shockers.map((shocker) => {
           return {
             id: shocker.id,
