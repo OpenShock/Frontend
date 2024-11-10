@@ -1,4 +1,4 @@
-import { OnlineHubsStore, type HubOnlineState } from "$lib/stores/HubsStore";
+import { OnlineHubsStore } from "$lib/stores/HubsStore";
 import { toast } from "svelte-sonner";
 
 type SignalrHub = {

@@ -1,13 +1,6 @@
 import { refreshOwnHubs } from "$lib/stores/HubsStore";
+import { isNumber, isString } from "$lib/typeguards";
 import { toast } from "svelte-sonner";
-
-function isString(value: unknown): value is string {
-  return typeof value === 'string';
-}
-
-function isNumber(value: unknown): value is number {
-  return typeof value === 'number';
-}
 
 export function handleSignalrDeviceUpdate(deviceId: unknown, count: unknown) {
   if (isString(deviceId) && isNumber(count)) {
