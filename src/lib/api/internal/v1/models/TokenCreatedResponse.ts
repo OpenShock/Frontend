@@ -25,6 +25,12 @@ export interface TokenCreatedResponse {
      * @memberof TokenCreatedResponse
      */
     token: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TokenCreatedResponse
+     */
+    id: string;
 }
 
 /**
@@ -32,6 +38,7 @@ export interface TokenCreatedResponse {
  */
 export function instanceOfTokenCreatedResponse(value: object): value is TokenCreatedResponse {
     if (!('token' in value) || value['token'] === undefined) return false;
+    if (!('id' in value) || value['id'] === undefined) return false;
     return true;
 }
 
@@ -46,6 +53,7 @@ export function TokenCreatedResponseFromJSONTyped(json: any, ignoreDiscriminator
     return {
         
         'token': json['token'],
+        'id': json['id'],
     };
 }
 
@@ -61,6 +69,7 @@ export function TokenCreatedResponseFromJSONTyped(json: any, ignoreDiscriminator
     return {
         
         'token': value['token'],
+        'id': value['id'],
     };
 }
 

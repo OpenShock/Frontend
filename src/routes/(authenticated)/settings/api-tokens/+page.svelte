@@ -8,7 +8,7 @@
   import TokenGenerateDialog from './dialog-token-generate.svelte';
 
   import RotateCcw from 'lucide-svelte/icons/rotate-ccw';
-  import { refreshApiToken, refreshApiTokens } from '$lib/stores/ApiTokensStore';
+  import { ApiTokensStore, refreshApiToken, refreshApiTokens } from '$lib/stores/ApiTokensStore';
 
   function apiTokenToTableToken(user: TokenResponse): ApiToken {
     return {
@@ -21,21 +21,19 @@
     };
   }
 
-  let data = $state<ApiToken[]>([]);
+  let data = $derived<ApiToken[]>(Array.from($ApiTokensStore).map(([_, token]) => apiTokenToTableToken(token)));
+
   let showGenerateTokenModal = $state<boolean>(false);
 
   onMount(refreshApiTokens);
 
-  setInterval(() => {
-    data = Object.assign([], data); // Force update
-  }, 1000);
 </script>
 
 <TokenGenerateDialog
-  open={showGenerateTokenModal}
+  bind:open={showGenerateTokenModal}
   onGenerated={(id) => refreshApiToken(id)}
-  onClose={() => (showGenerateTokenModal = false)}
 />
+
 
 <div class="container my-8">
   <Card.Header>

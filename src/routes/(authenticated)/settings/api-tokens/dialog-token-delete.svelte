@@ -5,6 +5,7 @@
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { toast } from 'svelte-sonner';
   import type { ApiToken } from './columns';
+  import { deleteApiToken } from '$lib/stores/ApiTokensStore';
 
   type Props = {
     open: boolean;
@@ -14,7 +15,7 @@
   let { open = $bindable(), token }: Props = $props();
 
   function handleDeleted() {
-    // TODO: do something
+    deleteApiToken(token.id);
     toast.success('Token deleted successfully');
     open = false;
   }

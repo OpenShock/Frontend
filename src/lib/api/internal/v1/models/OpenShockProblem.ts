@@ -62,7 +62,7 @@ export interface OpenShockProblem {
      * @type {string}
      * @memberof OpenShockProblem
      */
-    traceId?: string | null;
+    requestId?: string | null;
 }
 
 /**
@@ -89,7 +89,7 @@ export function OpenShockProblemFromJSONTyped(json: any, ignoreDiscriminator: bo
         'detail': json['detail'] == null ? undefined : json['detail'],
         'instance': json['instance'] == null ? undefined : json['instance'],
         'message': json['message'] == null ? undefined : json['message'],
-        'traceId': json['traceId'] == null ? undefined : json['traceId'],
+        'requestId': json['requestId'] == null ? undefined : json['requestId'],
     };
 }
 
@@ -110,7 +110,7 @@ export function OpenShockProblemFromJSONTyped(json: any, ignoreDiscriminator: bo
         'status': value['status'],
         'detail': value['detail'],
         'instance': value['instance'],
-        'traceId': value['traceId'],
+        'requestId': value['requestId'],
     };
 }
 

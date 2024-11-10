@@ -12,10 +12,9 @@
   type Props = {
     open: boolean;
     onGenerated: (id: string) => void;
-    onClose: () => void;
   };
 
-  let { open, onGenerated, onClose }: Props = $props();
+  let { open = $bindable(), onGenerated }: Props = $props();
 
   let name = $state<string>('');
   let expire = $state<'never' | `${number}days` | 'custom'>('never');
@@ -54,8 +53,10 @@
           return;
         }
         token = res.token;
-        onGenerated(res.token);
+        onGenerated(res.id);
         toast.success('Token created successfully');
+        open = false;
+        createdDialog = true;
       })
       .catch(handleApiError);
   }
@@ -103,25 +104,16 @@
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
-  function copyToken() {
-    if (token == null) return;
-    navigator.clipboard.writeText(token);
-    toast.success('Token copied to clipboard');
-  }
-
-  function handleOpenChanged(open: boolean) {
-    if (!open) {
-      onClose();
-    }
-  }
 
   let nameValidationResult = $derived(nameValidation(name));
   let expireValidationResult = $derived(expireValidation(expire, expireCustom));
+
+  let createdDialog = $state(false);
 </script>
 
-<TokenCreatedDialog {token} {onClose} />
+<TokenCreatedDialog bind:open={createdDialog} {token} />
 
-<Dialog.Root {open} onOpenChange={handleOpenChanged} controlledOpen={true}>
+<Dialog.Root {open} onOpenChange={(o) => open = o} controlledOpen={true}>
   <Dialog.Content>
     <Dialog.Header>
       <Dialog.Title>Generate a new API Token</Dialog.Title>

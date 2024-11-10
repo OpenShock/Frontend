@@ -29,6 +29,13 @@ export function refreshApiTokens() {
     });
 }
 
+export function deleteApiToken(id: string) {
+    ApiTokensStore.update((state) => {
+      state.delete(id);
+      return state;
+    });
+}
+
 export function initializeApiTokenStore() {
   refreshApiTokens();
 }

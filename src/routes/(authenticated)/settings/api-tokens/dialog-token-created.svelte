@@ -3,11 +3,11 @@
   import { toast } from 'svelte-sonner';
 
   type Props = {
+    open: boolean;
     token: string | null;
-    onClose: () => void;
   };
 
-  let { token, onClose }: Props = $props();
+  let { open = $bindable(), token }: Props = $props();
 
   function copyToken() {
     if (token == null) return;
@@ -15,14 +15,10 @@
     toast.success('Token copied to clipboard');
   }
 
-  function handleOpenChanged(open: boolean) {
-    if (!open) {
-      onClose();
-    }
-  }
+
 </script>
 
-<Dialog.Root open={token !== null} onOpenChange={handleOpenChanged} controlledOpen={true}>
+<Dialog.Root {open} onOpenChange={(o) => open = o} controlledOpen={true}>
   <Dialog.Content>
     <Dialog.Header>
       <Dialog.Title>API Token Generated</Dialog.Title>
