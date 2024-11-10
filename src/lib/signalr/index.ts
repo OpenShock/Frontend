@@ -1,4 +1,4 @@
-import { browser } from '$app/environment';
+import { browser, dev } from '$app/environment';
 import { PUBLIC_BACKEND_API_DOMAIN } from '$env/static/public';
 import { UserStore } from '$lib/stores/UserStore';
 import * as SR from '@microsoft/signalr';
@@ -17,7 +17,7 @@ async function create_signalr_connection() {
   }
 
   connection = new SR.HubConnectionBuilder()
-    .configureLogging(SR.LogLevel.Debug)
+    .configureLogging(dev ? SR.LogLevel.Debug : SR.LogLevel.Information)
     .withUrl(`https://${PUBLIC_BACKEND_API_DOMAIN}/1/hubs/user`, {
       transport: SR.HttpTransportType.WebSockets,
       skipNegotiation: true,
