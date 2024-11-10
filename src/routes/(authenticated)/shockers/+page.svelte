@@ -8,9 +8,9 @@
   import SimpleControlHeader from '$lib/components/ControlModules/SimpleControlHeader.svelte';
   import SimpleControlModule from '$lib/components/ControlModules/SimpleControlModule.svelte';
   import * as Popover from '$lib/components/ui/popover';
-  import { OwnDevicesStore } from '$lib/stores/DevicesStore';
+  import { OwnHubsStore } from '$lib/stores/HubsStore';
 
-  let shockers = $derived(Array.from($OwnDevicesStore).flatMap(([,device]) => device.shockers));
+  let shockers = $derived(Array.from($OwnHubsStore).flatMap(([,hub]) => hub.shockers));
 
   let moduleType = $state<ModuleType>(ModuleType.ClassicControlModule);
 
@@ -34,7 +34,7 @@
 
 <!-- Rounded bordered container -->
 <div class="container py-4 flex flex-col gap-4">
-  {#if $OwnDevicesStore == null}
+  {#if $OwnHubsStore == null}
     <p>Loading...</p>
   {:else}
     <div class="flex items-center justify-between">

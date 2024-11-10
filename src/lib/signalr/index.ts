@@ -1,31 +1,14 @@
 import { browser } from '$app/environment';
 import { PUBLIC_BACKEND_API_DOMAIN } from '$env/static/public';
-import { OnlineDevicesStore, refreshOwnDevices, type DeviceOnlineState } from '$lib/stores/DevicesStore';
 import { UserStore } from '$lib/stores/UserStore';
 import * as SR from '@microsoft/signalr';
 import { get, writable, type Readable } from 'svelte/store';
+import { handleSignalrDeviceState } from './handlers/DeviceStatus';
+import { handleSignalrDeviceUpdate } from './handlers/DeviceUpdate';
+import { toast } from 'svelte-sonner';
 
 const signalr_connection = writable<SR.HubConnection | null>(null);
 const signalr_state = writable<SR.HubConnectionState>(SR.HubConnectionState.Disconnected);
-
-function isDeviceStatusArray(array: unknown): array is DeviceOnlineState[] {
-  if (!Array.isArray(array)) {
-    return false;
-  }
-
-  console.log(array);
-
-  return array.every(item =>
-    typeof item === 'object' &&
-    item !== null &&
-    'device' in item &&
-    'online' in item &&
-    'firmwareVersion' in item &&
-    typeof item.device === 'string' &&
-    typeof item.online === 'boolean' &&
-    (typeof item.firmwareVersion === 'string' || item.firmwareVersion === null)
-  );
-}
 
 async function create_signalr_connection() {
   let connection = get(signalr_connection);
@@ -54,30 +37,16 @@ async function create_signalr_connection() {
     signalr_state.set(SR.HubConnectionState.Connected);
   });
 
-  connection.on('welcome', (message) => {
+  connection.on('Welcome', (message) => {
     console.log(message);
   });
 
-  connection.on('devicestatus', (devices) => {
-    console.log('Device status received!');
-    if (!isDeviceStatusArray(devices)) {
-      console.error('Received invalid device status message', devices);
-      return;
-    }
+  connection.on('Log', (log) => {
 
-    OnlineDevicesStore.update((state) => {
-      devices.forEach((entry) => {
-        state.set(entry.device, entry);
-      });
-
-      return state;
-    });
   });
 
-  connection.on('deviceupdate', (message) => {
-    console.log('Received device update message', message);
-    refreshOwnDevices();
-  });
+  connection.on('DeviceStatus', handleSignalrDeviceState);
+  connection.on('DeviceUpdate', handleSignalrDeviceUpdate);
 
   signalr_connection.set(connection);
 
@@ -115,6 +84,7 @@ export function initializeSignalR() {
         })
         .catch((e) => {
           console.error(e);
+          toast.error('Failed to connect to server!');
           signalr_state.set(SR.HubConnectionState.Disconnected);
         });
     }

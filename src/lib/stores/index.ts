@@ -1,6 +1,6 @@
 import { initializeApiTokenStore } from "./ApiTokensStore";
 import { initializeDarkModeStore } from "./ColorSchemeStore";
-import { initializeDevicesStore } from "./DevicesStore";
+import { initializeDevicesStore } from "./HubsStore";
 import { initializeFlashManagersStore } from "./FlashManagersStore";
 import { initializeSerialPortsStore } from "./SerialPortsStore";
 import { initializeUserStore } from "./UserStore";

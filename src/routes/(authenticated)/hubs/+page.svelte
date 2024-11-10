@@ -1,7 +1,7 @@
 <script lang="ts">
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card';
-  import { OwnDevicesStore, OnlineDevicesStore } from '$lib/stores/DevicesStore';
+  import { OwnHubsStore, OnlineHubsStore } from '$lib/stores/HubsStore';
   import { SemVer } from 'semver';
   import { columns, type Hub } from './columns';
   import DataTable from './data-table.svelte';
@@ -9,16 +9,16 @@
   import RotateCcw from 'lucide-svelte/icons/rotate-ccw';
 
   let data = $derived.by<Hub[]>(() => {
-    if (!$OwnDevicesStore || !$OnlineDevicesStore) return [];
+    if (!$OwnHubsStore || !$OnlineHubsStore) return [];
 
-    return Array.from($OwnDevicesStore).map(([,device]) => {
-      const onlineState = $OnlineDevicesStore.get(device.id);
+    return Array.from($OwnHubsStore).map(([,hub]) => {
+      const onlineState = $OnlineHubsStore.get(hub.id);
       return {
-        id: device.id,
-        name: device.name,
-        is_online: onlineState?.online ?? false,
+        id: hub.id,
+        name: hub.name,
+        is_online: onlineState?.isOnline ?? false,
         firmware_version: onlineState?.firmwareVersion ? new SemVer(onlineState.firmwareVersion) : null,
-        shockers: device.shockers.map((shocker) => {
+        shockers: hub.shockers.map((shocker) => {
           return {
             id: shocker.id,
             rf_id: shocker.rfId,
@@ -28,7 +28,7 @@
             created_at: shocker.createdOn,
           };
         }),
-        created_at: device.createdOn,
+        created_at: hub.createdOn,
       };
     });
   });
