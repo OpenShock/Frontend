@@ -100,7 +100,7 @@
         {...calcSvgArcProps(center, angleStart, angleEnd, radius, 20)}
         fill="none"
         stroke-linecap="round"
-        style:troke="rgb(27, 29, 30)"
+        style:stroke="rgb(27, 29, 30)"
         ontouchstart={trackingStarted}
         onmousedown={trackingStarted}
         aria-hidden="true"
