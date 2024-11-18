@@ -24,8 +24,9 @@
       gateway: hub.gateway,
       connected_at: hub.connectedAt,
       user_agent: hub.userAgent,
-      booted_at: hub.uptime ? new Date(Date.now() - Number(hub.uptime)) : null,
-      latency: hub.latency ? Number(hub.latency) : null,
+      booted_at: hub.bootedAt,
+      latency: hub.latencyMs,
+      rssi: hub.rssi,
     };
   }
 

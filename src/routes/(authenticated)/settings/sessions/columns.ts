@@ -12,6 +12,7 @@ export type Session = {
   user_agent: string;
   created_at: Date;
   expires_at: Date;
+  last_seen: Date | null;
 };
 
 function CreateSortHeader<TData>(name: string): StringOrTemplateHeader<TData, unknown> {
@@ -72,6 +73,28 @@ export const columns: ColumnDef<Session>[] = [
       });
 
       return renderSnippet(expiresAtCellSnippet, row.getValue<Date>('expires_at'));
+    }
+  },
+  {
+    accessorKey: 'last_seen',
+    header: CreateSortHeader('Last seen'),
+    cell: ({ row }) => {
+      const lastSeenCellSnippet = createRawSnippet<[Date | null]>((getLastSeen) => {
+        const lastSeen = getLastSeen();
+        if (!lastSeen) {
+          return {
+            render: () => `<div class="text-left font-medium" title="N/A">N/A</div>`,
+          }
+        }
+
+        const now = Date.now();
+        const formattedTimeSpan = elapsedToString(lastSeen.getTime() - now);
+        return {
+          render: () => `<div class="text-right font-medium" title="${lastSeen}">${formattedTimeSpan}</div>`,
+        }
+      });
+
+      return renderSnippet(lastSeenCellSnippet, row.getValue<Date | null>('last_seen'));
     }
   },
   {

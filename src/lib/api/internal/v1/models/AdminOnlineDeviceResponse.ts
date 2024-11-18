@@ -71,16 +71,22 @@ export interface AdminOnlineDeviceResponse {
     userAgent: string | null;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof AdminOnlineDeviceResponse
      */
-    uptime: string | null;
+    bootedAt: Date;
     /**
      * 
-     * @type {string}
+     * @type {number}
      * @memberof AdminOnlineDeviceResponse
      */
-    latency: string | null;
+    latencyMs: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof AdminOnlineDeviceResponse
+     */
+    rssi: number | null;
 }
 
 /**
@@ -94,8 +100,9 @@ export function instanceOfAdminOnlineDeviceResponse(value: object): value is Adm
     if (!('gateway' in value) || value['gateway'] === undefined) return false;
     if (!('connectedAt' in value) || value['connectedAt'] === undefined) return false;
     if (!('userAgent' in value) || value['userAgent'] === undefined) return false;
-    if (!('uptime' in value) || value['uptime'] === undefined) return false;
-    if (!('latency' in value) || value['latency'] === undefined) return false;
+    if (!('bootedAt' in value) || value['bootedAt'] === undefined) return false;
+    if (!('latencyMs' in value) || value['latencyMs'] === undefined) return false;
+    if (!('rssi' in value) || value['rssi'] === undefined) return false;
     return true;
 }
 
@@ -116,8 +123,9 @@ export function AdminOnlineDeviceResponseFromJSONTyped(json: any, ignoreDiscrimi
         'gateway': json['gateway'],
         'connectedAt': (new Date(json['connectedAt'])),
         'userAgent': json['userAgent'],
-        'uptime': json['uptime'],
-        'latency': json['latency'],
+        'bootedAt': (new Date(json['bootedAt'])),
+        'latencyMs': json['latencyMs'],
+        'rssi': json['rssi'],
     };
 }
 
@@ -139,8 +147,9 @@ export function AdminOnlineDeviceResponseFromJSONTyped(json: any, ignoreDiscrimi
         'gateway': value['gateway'],
         'connectedAt': ((value['connectedAt']).toISOString()),
         'userAgent': value['userAgent'],
-        'uptime': value['uptime'],
-        'latency': value['latency'],
+        'bootedAt': ((value['bootedAt']).toISOString()),
+        'latencyMs': value['latencyMs'],
+        'rssi': value['rssi'],
     };
 }
 

@@ -17,6 +17,7 @@
       user_agent: session.userAgent,
       created_at: session.created,
       expires_at: session.expires,
+      last_seen: session.lastUsed,
     };
   }
 

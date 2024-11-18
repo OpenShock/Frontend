@@ -21,8 +21,9 @@ export type OnlineHub = {
   gateway: string;
   connected_at: Date;
   user_agent: string | null;
-  booted_at: Date | null;
+  booted_at: Date;
   latency: number | null;
+  rssi: number | null;
 };
 
 function CreateSortHeader<TData>(name: string): StringOrTemplateHeader<TData, unknown> {
@@ -137,14 +138,8 @@ export const columns: ColumnDef<OnlineHub>[] = [
     accessorKey: 'booted_at',
     header: CreateSortHeader('Uptime'),
     cell: ({ row }) => {
-      const bootedAtCellSnippet = createRawSnippet<[Date | null]>((getBootedAt) => {
+      const bootedAtCellSnippet = createRawSnippet<[Date]>((getBootedAt) => {
         const bootedAt = getBootedAt();
-        if (!bootedAt) {
-          return {
-            render: () => `<div class="text-left font-medium" title="N/A">N/A</div>`,
-          }
-        }
-
         const now = Date.now();
         const formattedDuration = durationToString(now - bootedAt.getTime());
         return {
@@ -152,7 +147,7 @@ export const columns: ColumnDef<OnlineHub>[] = [
         }
       });
 
-      return renderSnippet(bootedAtCellSnippet, row.getValue<Date | null>('booted_at'));
+      return renderSnippet(bootedAtCellSnippet, row.getValue<Date>('booted_at'));
     }
   },
   {
@@ -173,6 +168,26 @@ export const columns: ColumnDef<OnlineHub>[] = [
       });
 
       return renderSnippet(latencyCellSnippet, row.getValue<number | null>('latency'));
+    }
+  },
+  {
+    accessorKey: 'rssi',
+    header: CreateSortHeader('RSSI'),
+    cell: ({ row }) => {
+      const rssiCellSnippet = createRawSnippet<[number | null]>((getRssi) => {
+        const rssi = getRssi();
+        if (!rssi) {
+          return {
+            render: () => `<div class="text-left font-medium" title="N/A">N/A</div>`,
+          }
+        }
+
+        return {
+          render: () => `<div class="text-left font-medium" title="${rssi}">${rssi}</div>`,
+        }
+      });
+
+      return renderSnippet(rssiCellSnippet, row.getValue<number | null>('rssi'));
     }
   },
   {
