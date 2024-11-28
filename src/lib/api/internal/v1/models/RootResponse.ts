@@ -89,11 +89,11 @@ export function RootResponseFromJSONTyped(json: any, ignoreDiscriminator: boolea
     };
 }
 
-  export function RootResponseToJSON(json: any): RootResponse {
-      return RootResponseToJSONTyped(json, false);
-  }
+export function RootResponseToJSON(json: any): RootResponse {
+    return RootResponseToJSONTyped(json, false);
+}
 
-  export function RootResponseToJSONTyped(value?: RootResponse | null, ignoreDiscriminator: boolean = false): any {
+export function RootResponseToJSONTyped(value?: RootResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

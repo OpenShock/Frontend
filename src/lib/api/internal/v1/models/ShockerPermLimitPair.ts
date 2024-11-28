@@ -72,11 +72,11 @@ export function ShockerPermLimitPairFromJSONTyped(json: any, ignoreDiscriminator
     };
 }
 
-  export function ShockerPermLimitPairToJSON(json: any): ShockerPermLimitPair {
-      return ShockerPermLimitPairToJSONTyped(json, false);
-  }
+export function ShockerPermLimitPairToJSON(json: any): ShockerPermLimitPair {
+    return ShockerPermLimitPairToJSONTyped(json, false);
+}
 
-  export function ShockerPermLimitPairToJSONTyped(value?: ShockerPermLimitPair | null, ignoreDiscriminator: boolean = false): any {
+export function ShockerPermLimitPairToJSONTyped(value?: ShockerPermLimitPair | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

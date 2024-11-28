@@ -63,11 +63,11 @@ export function ResponseDeviceWithShockersIEnumerableBaseResponseFromJSONTyped(j
     };
 }
 
-  export function ResponseDeviceWithShockersIEnumerableBaseResponseToJSON(json: any): ResponseDeviceWithShockersIEnumerableBaseResponse {
-      return ResponseDeviceWithShockersIEnumerableBaseResponseToJSONTyped(json, false);
-  }
+export function ResponseDeviceWithShockersIEnumerableBaseResponseToJSON(json: any): ResponseDeviceWithShockersIEnumerableBaseResponse {
+    return ResponseDeviceWithShockersIEnumerableBaseResponseToJSONTyped(json, false);
+}
 
-  export function ResponseDeviceWithShockersIEnumerableBaseResponseToJSONTyped(value?: ResponseDeviceWithShockersIEnumerableBaseResponse | null, ignoreDiscriminator: boolean = false): any {
+export function ResponseDeviceWithShockersIEnumerableBaseResponseToJSONTyped(value?: ResponseDeviceWithShockersIEnumerableBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

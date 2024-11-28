@@ -97,11 +97,11 @@ export function TokenResponseFromJSONTyped(json: any, ignoreDiscriminator: boole
     };
 }
 
-  export function TokenResponseToJSON(json: any): TokenResponse {
-      return TokenResponseToJSONTyped(json, false);
-  }
+export function TokenResponseToJSON(json: any): TokenResponse {
+    return TokenResponseToJSONTyped(json, false);
+}
 
-  export function TokenResponseToJSONTyped(value?: TokenResponse | null, ignoreDiscriminator: boolean = false): any {
+export function TokenResponseToJSONTyped(value?: TokenResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

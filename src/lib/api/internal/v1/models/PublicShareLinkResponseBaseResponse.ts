@@ -63,11 +63,11 @@ export function PublicShareLinkResponseBaseResponseFromJSONTyped(json: any, igno
     };
 }
 
-  export function PublicShareLinkResponseBaseResponseToJSON(json: any): PublicShareLinkResponseBaseResponse {
-      return PublicShareLinkResponseBaseResponseToJSONTyped(json, false);
-  }
+export function PublicShareLinkResponseBaseResponseToJSON(json: any): PublicShareLinkResponseBaseResponse {
+    return PublicShareLinkResponseBaseResponseToJSONTyped(json, false);
+}
 
-  export function PublicShareLinkResponseBaseResponseToJSONTyped(value?: PublicShareLinkResponseBaseResponse | null, ignoreDiscriminator: boolean = false): any {
+export function PublicShareLinkResponseBaseResponseToJSONTyped(value?: PublicShareLinkResponseBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

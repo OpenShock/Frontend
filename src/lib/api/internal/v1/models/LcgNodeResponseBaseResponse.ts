@@ -63,11 +63,11 @@ export function LcgNodeResponseBaseResponseFromJSONTyped(json: any, ignoreDiscri
     };
 }
 
-  export function LcgNodeResponseBaseResponseToJSON(json: any): LcgNodeResponseBaseResponse {
-      return LcgNodeResponseBaseResponseToJSONTyped(json, false);
-  }
+export function LcgNodeResponseBaseResponseToJSON(json: any): LcgNodeResponseBaseResponse {
+    return LcgNodeResponseBaseResponseToJSONTyped(json, false);
+}
 
-  export function LcgNodeResponseBaseResponseToJSONTyped(value?: LcgNodeResponseBaseResponse | null, ignoreDiscriminator: boolean = false): any {
+export function LcgNodeResponseBaseResponseToJSONTyped(value?: LcgNodeResponseBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

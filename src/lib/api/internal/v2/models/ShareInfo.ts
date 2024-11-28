@@ -103,11 +103,11 @@ export function ShareInfoFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     };
 }
 
-  export function ShareInfoToJSON(json: any): ShareInfo {
-      return ShareInfoToJSONTyped(json, false);
-  }
+export function ShareInfoToJSON(json: any): ShareInfo {
+    return ShareInfoToJSONTyped(json, false);
+}
 
-  export function ShareInfoToJSONTyped(value?: ShareInfo | null, ignoreDiscriminator: boolean = false): any {
+export function ShareInfoToJSONTyped(value?: ShareInfo | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

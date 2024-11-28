@@ -49,11 +49,11 @@ export function ShareRequestCountsFromJSONTyped(json: any, ignoreDiscriminator: 
     };
 }
 
-  export function ShareRequestCountsToJSON(json: any): ShareRequestCounts {
-      return ShareRequestCountsToJSONTyped(json, false);
-  }
+export function ShareRequestCountsToJSON(json: any): ShareRequestCounts {
+    return ShareRequestCountsToJSONTyped(json, false);
+}
 
-  export function ShareRequestCountsToJSONTyped(value?: ShareRequestCounts | null, ignoreDiscriminator: boolean = false): any {
+export function ShareRequestCountsToJSONTyped(value?: ShareRequestCounts | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

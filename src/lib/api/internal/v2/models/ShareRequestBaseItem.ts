@@ -96,11 +96,11 @@ export function ShareRequestBaseItemFromJSONTyped(json: any, ignoreDiscriminator
     };
 }
 
-  export function ShareRequestBaseItemToJSON(json: any): ShareRequestBaseItem {
-      return ShareRequestBaseItemToJSONTyped(json, false);
-  }
+export function ShareRequestBaseItemToJSON(json: any): ShareRequestBaseItem {
+    return ShareRequestBaseItemToJSONTyped(json, false);
+}
 
-  export function ShareRequestBaseItemToJSONTyped(value?: ShareRequestBaseItem | null, ignoreDiscriminator: boolean = false): any {
+export function ShareRequestBaseItemToJSONTyped(value?: ShareRequestBaseItem | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

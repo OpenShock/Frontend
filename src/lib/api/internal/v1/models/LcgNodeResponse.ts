@@ -57,11 +57,11 @@ export function LcgNodeResponseFromJSONTyped(json: any, ignoreDiscriminator: boo
     };
 }
 
-  export function LcgNodeResponseToJSON(json: any): LcgNodeResponse {
-      return LcgNodeResponseToJSONTyped(json, false);
-  }
+export function LcgNodeResponseToJSON(json: any): LcgNodeResponse {
+    return LcgNodeResponseToJSONTyped(json, false);
+}
 
-  export function LcgNodeResponseToJSONTyped(value?: LcgNodeResponse | null, ignoreDiscriminator: boolean = false): any {
+export function LcgNodeResponseToJSONTyped(value?: LcgNodeResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

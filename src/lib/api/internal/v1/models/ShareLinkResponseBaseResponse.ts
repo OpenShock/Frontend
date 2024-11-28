@@ -63,11 +63,11 @@ export function ShareLinkResponseBaseResponseFromJSONTyped(json: any, ignoreDisc
     };
 }
 
-  export function ShareLinkResponseBaseResponseToJSON(json: any): ShareLinkResponseBaseResponse {
-      return ShareLinkResponseBaseResponseToJSONTyped(json, false);
-  }
+export function ShareLinkResponseBaseResponseToJSON(json: any): ShareLinkResponseBaseResponse {
+    return ShareLinkResponseBaseResponseToJSONTyped(json, false);
+}
 
-  export function ShareLinkResponseBaseResponseToJSONTyped(value?: ShareLinkResponseBaseResponse | null, ignoreDiscriminator: boolean = false): any {
+export function ShareLinkResponseBaseResponseToJSONTyped(value?: ShareLinkResponseBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

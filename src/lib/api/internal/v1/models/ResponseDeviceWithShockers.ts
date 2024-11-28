@@ -81,11 +81,11 @@ export function ResponseDeviceWithShockersFromJSONTyped(json: any, ignoreDiscrim
     };
 }
 
-  export function ResponseDeviceWithShockersToJSON(json: any): ResponseDeviceWithShockers {
-      return ResponseDeviceWithShockersToJSONTyped(json, false);
-  }
+export function ResponseDeviceWithShockersToJSON(json: any): ResponseDeviceWithShockers {
+    return ResponseDeviceWithShockersToJSONTyped(json, false);
+}
 
-  export function ResponseDeviceWithShockersToJSONTyped(value?: ResponseDeviceWithShockers | null, ignoreDiscriminator: boolean = false): any {
+export function ResponseDeviceWithShockersToJSONTyped(value?: ResponseDeviceWithShockers | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

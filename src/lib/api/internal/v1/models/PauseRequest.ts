@@ -49,11 +49,11 @@ export function PauseRequestFromJSONTyped(json: any, ignoreDiscriminator: boolea
     };
 }
 
-  export function PauseRequestToJSON(json: any): PauseRequest {
-      return PauseRequestToJSONTyped(json, false);
-  }
+export function PauseRequestToJSON(json: any): PauseRequest {
+    return PauseRequestToJSONTyped(json, false);
+}
 
-  export function PauseRequestToJSONTyped(value?: PauseRequest | null, ignoreDiscriminator: boolean = false): any {
+export function PauseRequestToJSONTyped(value?: PauseRequest | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

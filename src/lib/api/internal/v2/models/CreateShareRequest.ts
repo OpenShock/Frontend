@@ -64,11 +64,11 @@ export function CreateShareRequestFromJSONTyped(json: any, ignoreDiscriminator: 
     };
 }
 
-  export function CreateShareRequestToJSON(json: any): CreateShareRequest {
-      return CreateShareRequestToJSONTyped(json, false);
-  }
+export function CreateShareRequestToJSON(json: any): CreateShareRequest {
+    return CreateShareRequestToJSONTyped(json, false);
+}
 
-  export function CreateShareRequestToJSONTyped(value?: CreateShareRequest | null, ignoreDiscriminator: boolean = false): any {
+export function CreateShareRequestToJSONTyped(value?: CreateShareRequest | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

@@ -65,11 +65,11 @@ export function LoginV2FromJSONTyped(json: any, ignoreDiscriminator: boolean): L
     };
 }
 
-  export function LoginV2ToJSON(json: any): LoginV2 {
-      return LoginV2ToJSONTyped(json, false);
-  }
+export function LoginV2ToJSON(json: any): LoginV2 {
+    return LoginV2ToJSONTyped(json, false);
+}
 
-  export function LoginV2ToJSONTyped(value?: LoginV2 | null, ignoreDiscriminator: boolean = false): any {
+export function LoginV2ToJSONTyped(value?: LoginV2 | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

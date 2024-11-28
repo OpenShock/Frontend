@@ -63,11 +63,11 @@ export function AdminOnlineDeviceResponseIEnumerableBaseResponseFromJSONTyped(js
     };
 }
 
-  export function AdminOnlineDeviceResponseIEnumerableBaseResponseToJSON(json: any): AdminOnlineDeviceResponseIEnumerableBaseResponse {
-      return AdminOnlineDeviceResponseIEnumerableBaseResponseToJSONTyped(json, false);
-  }
+export function AdminOnlineDeviceResponseIEnumerableBaseResponseToJSON(json: any): AdminOnlineDeviceResponseIEnumerableBaseResponse {
+    return AdminOnlineDeviceResponseIEnumerableBaseResponseToJSONTyped(json, false);
+}
 
-  export function AdminOnlineDeviceResponseIEnumerableBaseResponseToJSONTyped(value?: AdminOnlineDeviceResponseIEnumerableBaseResponse | null, ignoreDiscriminator: boolean = false): any {
+export function AdminOnlineDeviceResponseIEnumerableBaseResponseToJSONTyped(value?: AdminOnlineDeviceResponseIEnumerableBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

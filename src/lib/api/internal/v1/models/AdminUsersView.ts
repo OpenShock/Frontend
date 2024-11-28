@@ -194,11 +194,11 @@ export function AdminUsersViewFromJSONTyped(json: any, ignoreDiscriminator: bool
     };
 }
 
-  export function AdminUsersViewToJSON(json: any): AdminUsersView {
-      return AdminUsersViewToJSONTyped(json, false);
-  }
+export function AdminUsersViewToJSON(json: any): AdminUsersView {
+    return AdminUsersViewToJSONTyped(json, false);
+}
 
-  export function AdminUsersViewToJSONTyped(value?: AdminUsersView | null, ignoreDiscriminator: boolean = false): any {
+export function AdminUsersViewToJSONTyped(value?: AdminUsersView | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

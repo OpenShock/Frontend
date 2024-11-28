@@ -73,11 +73,11 @@ export function DeviceSelfResponseFromJSONTyped(json: any, ignoreDiscriminator: 
     };
 }
 
-  export function DeviceSelfResponseToJSON(json: any): DeviceSelfResponse {
-      return DeviceSelfResponseToJSONTyped(json, false);
-  }
+export function DeviceSelfResponseToJSON(json: any): DeviceSelfResponse {
+    return DeviceSelfResponseToJSONTyped(json, false);
+}
 
-  export function DeviceSelfResponseToJSONTyped(value?: DeviceSelfResponse | null, ignoreDiscriminator: boolean = false): any {
+export function DeviceSelfResponseToJSONTyped(value?: DeviceSelfResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

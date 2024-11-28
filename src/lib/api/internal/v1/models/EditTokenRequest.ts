@@ -64,11 +64,11 @@ export function EditTokenRequestFromJSONTyped(json: any, ignoreDiscriminator: bo
     };
 }
 
-  export function EditTokenRequestToJSON(json: any): EditTokenRequest {
-      return EditTokenRequestToJSONTyped(json, false);
-  }
+export function EditTokenRequestToJSON(json: any): EditTokenRequest {
+    return EditTokenRequestToJSONTyped(json, false);
+}
 
-  export function EditTokenRequestToJSONTyped(value?: EditTokenRequest | null, ignoreDiscriminator: boolean = false): any {
+export function EditTokenRequestToJSONTyped(value?: EditTokenRequest | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

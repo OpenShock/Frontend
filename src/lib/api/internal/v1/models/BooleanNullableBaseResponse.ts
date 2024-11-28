@@ -55,11 +55,11 @@ export function BooleanNullableBaseResponseFromJSONTyped(json: any, ignoreDiscri
     };
 }
 
-  export function BooleanNullableBaseResponseToJSON(json: any): BooleanNullableBaseResponse {
-      return BooleanNullableBaseResponseToJSONTyped(json, false);
-  }
+export function BooleanNullableBaseResponseToJSON(json: any): BooleanNullableBaseResponse {
+    return BooleanNullableBaseResponseToJSONTyped(json, false);
+}
 
-  export function BooleanNullableBaseResponseToJSONTyped(value?: BooleanNullableBaseResponse | null, ignoreDiscriminator: boolean = false): any {
+export function BooleanNullableBaseResponseToJSONTyped(value?: BooleanNullableBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

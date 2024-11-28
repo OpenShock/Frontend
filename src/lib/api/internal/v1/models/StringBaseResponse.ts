@@ -55,11 +55,11 @@ export function StringBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: 
     };
 }
 
-  export function StringBaseResponseToJSON(json: any): StringBaseResponse {
-      return StringBaseResponseToJSONTyped(json, false);
-  }
+export function StringBaseResponseToJSON(json: any): StringBaseResponse {
+    return StringBaseResponseToJSONTyped(json, false);
+}
 
-  export function StringBaseResponseToJSONTyped(value?: StringBaseResponse | null, ignoreDiscriminator: boolean = false): any {
+export function StringBaseResponseToJSONTyped(value?: StringBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

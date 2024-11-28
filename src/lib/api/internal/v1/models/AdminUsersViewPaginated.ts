@@ -81,11 +81,11 @@ export function AdminUsersViewPaginatedFromJSONTyped(json: any, ignoreDiscrimina
     };
 }
 
-  export function AdminUsersViewPaginatedToJSON(json: any): AdminUsersViewPaginated {
-      return AdminUsersViewPaginatedToJSONTyped(json, false);
-  }
+export function AdminUsersViewPaginatedToJSON(json: any): AdminUsersViewPaginated {
+    return AdminUsersViewPaginatedToJSONTyped(json, false);
+}
 
-  export function AdminUsersViewPaginatedToJSONTyped(value?: AdminUsersViewPaginated | null, ignoreDiscriminator: boolean = false): any {
+export function AdminUsersViewPaginatedToJSONTyped(value?: AdminUsersViewPaginated | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

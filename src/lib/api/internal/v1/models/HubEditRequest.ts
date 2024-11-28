@@ -49,11 +49,11 @@ export function HubEditRequestFromJSONTyped(json: any, ignoreDiscriminator: bool
     };
 }
 
-  export function HubEditRequestToJSON(json: any): HubEditRequest {
-      return HubEditRequestToJSONTyped(json, false);
-  }
+export function HubEditRequestToJSON(json: any): HubEditRequest {
+    return HubEditRequestToJSONTyped(json, false);
+}
 
-  export function HubEditRequestToJSONTyped(value?: HubEditRequest | null, ignoreDiscriminator: boolean = false): any {
+export function HubEditRequestToJSONTyped(value?: HubEditRequest | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

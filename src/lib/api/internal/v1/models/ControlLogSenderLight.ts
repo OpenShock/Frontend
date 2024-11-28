@@ -73,11 +73,11 @@ export function ControlLogSenderLightFromJSONTyped(json: any, ignoreDiscriminato
     };
 }
 
-  export function ControlLogSenderLightToJSON(json: any): ControlLogSenderLight {
-      return ControlLogSenderLightToJSONTyped(json, false);
-  }
+export function ControlLogSenderLightToJSON(json: any): ControlLogSenderLight {
+    return ControlLogSenderLightToJSONTyped(json, false);
+}
 
-  export function ControlLogSenderLightToJSONTyped(value?: ControlLogSenderLight | null, ignoreDiscriminator: boolean = false): any {
+export function ControlLogSenderLightToJSONTyped(value?: ControlLogSenderLight | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

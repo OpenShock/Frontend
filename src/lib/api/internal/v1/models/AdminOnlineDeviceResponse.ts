@@ -129,11 +129,11 @@ export function AdminOnlineDeviceResponseFromJSONTyped(json: any, ignoreDiscrimi
     };
 }
 
-  export function AdminOnlineDeviceResponseToJSON(json: any): AdminOnlineDeviceResponse {
-      return AdminOnlineDeviceResponseToJSONTyped(json, false);
-  }
+export function AdminOnlineDeviceResponseToJSON(json: any): AdminOnlineDeviceResponse {
+    return AdminOnlineDeviceResponseToJSONTyped(json, false);
+}
 
-  export function AdminOnlineDeviceResponseToJSONTyped(value?: AdminOnlineDeviceResponse | null, ignoreDiscriminator: boolean = false): any {
+export function AdminOnlineDeviceResponseToJSONTyped(value?: AdminOnlineDeviceResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

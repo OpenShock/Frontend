@@ -57,11 +57,11 @@ export function ShareCodeInfoFromJSONTyped(json: any, ignoreDiscriminator: boole
     };
 }
 
-  export function ShareCodeInfoToJSON(json: any): ShareCodeInfo {
-      return ShareCodeInfoToJSONTyped(json, false);
-  }
+export function ShareCodeInfoToJSON(json: any): ShareCodeInfo {
+    return ShareCodeInfoToJSONTyped(json, false);
+}
 
-  export function ShareCodeInfoToJSONTyped(value?: ShareCodeInfo | null, ignoreDiscriminator: boolean = false): any {
+export function ShareCodeInfoToJSONTyped(value?: ShareCodeInfo | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

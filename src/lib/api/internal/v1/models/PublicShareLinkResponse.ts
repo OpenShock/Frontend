@@ -102,11 +102,11 @@ export function PublicShareLinkResponseFromJSONTyped(json: any, ignoreDiscrimina
     };
 }
 
-  export function PublicShareLinkResponseToJSON(json: any): PublicShareLinkResponse {
-      return PublicShareLinkResponseToJSONTyped(json, false);
-  }
+export function PublicShareLinkResponseToJSON(json: any): PublicShareLinkResponse {
+    return PublicShareLinkResponseToJSONTyped(json, false);
+}
 
-  export function PublicShareLinkResponseToJSONTyped(value?: PublicShareLinkResponse | null, ignoreDiscriminator: boolean = false): any {
+export function PublicShareLinkResponseToJSONTyped(value?: PublicShareLinkResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

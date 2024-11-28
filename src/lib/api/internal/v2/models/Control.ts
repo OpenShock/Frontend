@@ -90,11 +90,11 @@ export function ControlFromJSONTyped(json: any, ignoreDiscriminator: boolean): C
     };
 }
 
-  export function ControlToJSON(json: any): Control {
-      return ControlToJSONTyped(json, false);
-  }
+export function ControlToJSON(json: any): Control {
+    return ControlToJSONTyped(json, false);
+}
 
-  export function ControlToJSONTyped(value?: Control | null, ignoreDiscriminator: boolean = false): any {
+export function ControlToJSONTyped(value?: Control | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

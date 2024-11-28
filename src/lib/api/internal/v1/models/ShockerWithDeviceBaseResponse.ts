@@ -63,11 +63,11 @@ export function ShockerWithDeviceBaseResponseFromJSONTyped(json: any, ignoreDisc
     };
 }
 
-  export function ShockerWithDeviceBaseResponseToJSON(json: any): ShockerWithDeviceBaseResponse {
-      return ShockerWithDeviceBaseResponseToJSONTyped(json, false);
-  }
+export function ShockerWithDeviceBaseResponseToJSON(json: any): ShockerWithDeviceBaseResponse {
+    return ShockerWithDeviceBaseResponseToJSONTyped(json, false);
+}
 
-  export function ShockerWithDeviceBaseResponseToJSONTyped(value?: ShockerWithDeviceBaseResponse | null, ignoreDiscriminator: boolean = false): any {
+export function ShockerWithDeviceBaseResponseToJSONTyped(value?: ShockerWithDeviceBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

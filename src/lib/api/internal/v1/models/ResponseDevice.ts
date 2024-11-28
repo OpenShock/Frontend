@@ -65,11 +65,11 @@ export function ResponseDeviceFromJSONTyped(json: any, ignoreDiscriminator: bool
     };
 }
 
-  export function ResponseDeviceToJSON(json: any): ResponseDevice {
-      return ResponseDeviceToJSONTyped(json, false);
-  }
+export function ResponseDeviceToJSON(json: any): ResponseDevice {
+    return ResponseDeviceToJSONTyped(json, false);
+}
 
-  export function ResponseDeviceToJSONTyped(value?: ResponseDevice | null, ignoreDiscriminator: boolean = false): any {
+export function ResponseDeviceToJSONTyped(value?: ResponseDevice | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

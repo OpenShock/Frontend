@@ -64,11 +64,11 @@ export function ControlRequestFromJSONTyped(json: any, ignoreDiscriminator: bool
     };
 }
 
-  export function ControlRequestToJSON(json: any): ControlRequest {
-      return ControlRequestToJSONTyped(json, false);
-  }
+export function ControlRequestToJSON(json: any): ControlRequest {
+    return ControlRequestToJSONTyped(json, false);
+}
 
-  export function ControlRequestToJSONTyped(value?: ControlRequest | null, ignoreDiscriminator: boolean = false): any {
+export function ControlRequestToJSONTyped(value?: ControlRequest | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

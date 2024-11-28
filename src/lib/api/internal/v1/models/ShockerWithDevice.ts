@@ -107,11 +107,11 @@ export function ShockerWithDeviceFromJSONTyped(json: any, ignoreDiscriminator: b
     };
 }
 
-  export function ShockerWithDeviceToJSON(json: any): ShockerWithDevice {
-      return ShockerWithDeviceToJSONTyped(json, false);
-  }
+export function ShockerWithDeviceToJSON(json: any): ShockerWithDevice {
+    return ShockerWithDeviceToJSONTyped(json, false);
+}
 
-  export function ShockerWithDeviceToJSONTyped(value?: ShockerWithDevice | null, ignoreDiscriminator: boolean = false): any {
+export function ShockerWithDeviceToJSONTyped(value?: ShockerWithDevice | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

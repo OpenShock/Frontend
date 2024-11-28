@@ -62,11 +62,11 @@ export function PauseReasonBaseResponseFromJSONTyped(json: any, ignoreDiscrimina
     };
 }
 
-  export function PauseReasonBaseResponseToJSON(json: any): PauseReasonBaseResponse {
-      return PauseReasonBaseResponseToJSONTyped(json, false);
-  }
+export function PauseReasonBaseResponseToJSON(json: any): PauseReasonBaseResponse {
+    return PauseReasonBaseResponseToJSONTyped(json, false);
+}
 
-  export function PauseReasonBaseResponseToJSONTyped(value?: PauseReasonBaseResponse | null, ignoreDiscriminator: boolean = false): any {
+export function PauseReasonBaseResponseToJSONTyped(value?: PauseReasonBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

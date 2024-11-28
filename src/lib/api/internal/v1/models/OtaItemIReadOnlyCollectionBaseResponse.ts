@@ -63,11 +63,11 @@ export function OtaItemIReadOnlyCollectionBaseResponseFromJSONTyped(json: any, i
     };
 }
 
-  export function OtaItemIReadOnlyCollectionBaseResponseToJSON(json: any): OtaItemIReadOnlyCollectionBaseResponse {
-      return OtaItemIReadOnlyCollectionBaseResponseToJSONTyped(json, false);
-  }
+export function OtaItemIReadOnlyCollectionBaseResponseToJSON(json: any): OtaItemIReadOnlyCollectionBaseResponse {
+    return OtaItemIReadOnlyCollectionBaseResponseToJSONTyped(json, false);
+}
 
-  export function OtaItemIReadOnlyCollectionBaseResponseToJSONTyped(value?: OtaItemIReadOnlyCollectionBaseResponse | null, ignoreDiscriminator: boolean = false): any {
+export function OtaItemIReadOnlyCollectionBaseResponseToJSONTyped(value?: OtaItemIReadOnlyCollectionBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

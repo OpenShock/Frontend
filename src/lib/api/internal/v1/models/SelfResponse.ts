@@ -91,11 +91,11 @@ export function SelfResponseFromJSONTyped(json: any, ignoreDiscriminator: boolea
     };
 }
 
-  export function SelfResponseToJSON(json: any): SelfResponse {
-      return SelfResponseToJSONTyped(json, false);
-  }
+export function SelfResponseToJSON(json: any): SelfResponse {
+    return SelfResponseToJSONTyped(json, false);
+}
 
-  export function SelfResponseToJSONTyped(value?: SelfResponse | null, ignoreDiscriminator: boolean = false): any {
+export function SelfResponseToJSONTyped(value?: SelfResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

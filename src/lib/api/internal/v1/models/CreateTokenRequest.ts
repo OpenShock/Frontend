@@ -71,11 +71,11 @@ export function CreateTokenRequestFromJSONTyped(json: any, ignoreDiscriminator: 
     };
 }
 
-  export function CreateTokenRequestToJSON(json: any): CreateTokenRequest {
-      return CreateTokenRequestToJSONTyped(json, false);
-  }
+export function CreateTokenRequestToJSON(json: any): CreateTokenRequest {
+    return CreateTokenRequestToJSONTyped(json, false);
+}
 
-  export function CreateTokenRequestToJSONTyped(value?: CreateTokenRequest | null, ignoreDiscriminator: boolean = false): any {
+export function CreateTokenRequestToJSONTyped(value?: CreateTokenRequest | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

@@ -83,11 +83,11 @@ export function NewShockerFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     };
 }
 
-  export function NewShockerToJSON(json: any): NewShocker {
-      return NewShockerToJSONTyped(json, false);
-  }
+export function NewShockerToJSON(json: any): NewShocker {
+    return NewShockerToJSONTyped(json, false);
+}
 
-  export function NewShockerToJSONTyped(value?: NewShocker | null, ignoreDiscriminator: boolean = false): any {
+export function NewShockerToJSONTyped(value?: NewShocker | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

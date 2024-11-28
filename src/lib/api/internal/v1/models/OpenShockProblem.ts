@@ -101,11 +101,11 @@ export function OpenShockProblemFromJSONTyped(json: any, ignoreDiscriminator: bo
     };
 }
 
-  export function OpenShockProblemToJSON(json: any): OpenShockProblem {
-      return OpenShockProblemToJSONTyped(json, false);
-  }
+export function OpenShockProblemToJSON(json: any): OpenShockProblem {
+    return OpenShockProblemToJSONTyped(json, false);
+}
 
-  export function OpenShockProblemToJSONTyped(value?: Omit<OpenShockProblem, 'message'|'traceId'> | null, ignoreDiscriminator: boolean = false): any {
+export function OpenShockProblemToJSONTyped(value?: Omit<OpenShockProblem, 'message'|'traceId'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

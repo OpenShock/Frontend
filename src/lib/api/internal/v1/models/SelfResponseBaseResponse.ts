@@ -63,11 +63,11 @@ export function SelfResponseBaseResponseFromJSONTyped(json: any, ignoreDiscrimin
     };
 }
 
-  export function SelfResponseBaseResponseToJSON(json: any): SelfResponseBaseResponse {
-      return SelfResponseBaseResponseToJSONTyped(json, false);
-  }
+export function SelfResponseBaseResponseToJSON(json: any): SelfResponseBaseResponse {
+    return SelfResponseBaseResponseToJSONTyped(json, false);
+}
 
-  export function SelfResponseBaseResponseToJSONTyped(value?: SelfResponseBaseResponse | null, ignoreDiscriminator: boolean = false): any {
+export function SelfResponseBaseResponseToJSONTyped(value?: SelfResponseBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

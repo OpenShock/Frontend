@@ -57,11 +57,11 @@ export function ShockerLimitsFromJSONTyped(json: any, ignoreDiscriminator: boole
     };
 }
 
-  export function ShockerLimitsToJSON(json: any): ShockerLimits {
-      return ShockerLimitsToJSONTyped(json, false);
-  }
+export function ShockerLimitsToJSON(json: any): ShockerLimits {
+    return ShockerLimitsToJSONTyped(json, false);
+}
 
-  export function ShockerLimitsToJSONTyped(value?: ShockerLimits | null, ignoreDiscriminator: boolean = false): any {
+export function ShockerLimitsToJSONTyped(value?: ShockerLimits | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

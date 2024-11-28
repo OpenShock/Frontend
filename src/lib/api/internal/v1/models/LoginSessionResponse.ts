@@ -89,11 +89,11 @@ export function LoginSessionResponseFromJSONTyped(json: any, ignoreDiscriminator
     };
 }
 
-  export function LoginSessionResponseToJSON(json: any): LoginSessionResponse {
-      return LoginSessionResponseToJSONTyped(json, false);
-  }
+export function LoginSessionResponseToJSON(json: any): LoginSessionResponse {
+    return LoginSessionResponseToJSONTyped(json, false);
+}
 
-  export function LoginSessionResponseToJSONTyped(value?: LoginSessionResponse | null, ignoreDiscriminator: boolean = false): any {
+export function LoginSessionResponseToJSONTyped(value?: LoginSessionResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
