@@ -20,17 +20,17 @@
 		"@microsoft/signalr": "^8.0.7",
 		"@openapitools/openapi-generator-cli": "^2.15.3",
 		"@playwright/test": "^1.49.0",
-		"@sentry/svelte": "^8.40.0",
+		"@sentry/svelte": "^8.41.0",
 		"@sveltejs/adapter-cloudflare": "^4.7.4",
 		"@sveltejs/adapter-node": "^5.2.9",
-		"@sveltejs/kit": "^2.8.3",
-		"@sveltejs/vite-plugin-svelte": "^4.0.1",
+		"@sveltejs/kit": "^2.8.5",
+		"@sveltejs/vite-plugin-svelte": "^5.0.1",
 		"@tailwindcss/forms": "^0.5.9",
 		"@tailwindcss/typography": "^0.5.15",
 		"@tanstack/table-core": "^8.20.5",
 		"@types/crypto-js": "^4.2.2",
 		"@types/eslint": "^9.6.1",
-		"@types/node": "^22.9.3",
+		"@types/node": "^22.10.1",
 		"@types/semver": "^7.5.8",
 		"@types/w3c-web-serial": "^1.0.7",
 		"autoprefixer": "^10.4.20",
@@ -45,12 +45,12 @@
 		"globals": "^15.12.0",
 		"highlight.js": "^11.10.0",
 		"js-sha1": "^0.7.0",
-		"lucide-svelte": "^0.460.1",
+		"lucide-svelte": "^0.462.0",
 		"postcss": "^8.4.49",
-		"prettier": "^3.3.3",
+		"prettier": "^3.4.1",
 		"prettier-plugin-svelte": "^3.3.2",
 		"semver": "^7.6.3",
-		"svelte": "^5.2.7",
+		"svelte": "^5.2.10",
 		"svelte-check": "^4.1.0",
 		"svelte-sonner": "^0.3.28",
 		"tailwind-merge": "^2.5.5",
@@ -59,15 +59,15 @@
 		"tailwindcss-animate": "^1.0.7",
 		"tslib": "^2.8.1",
 		"typescript": "^5.7.2",
-		"typescript-eslint": "^8.15.0",
+		"typescript-eslint": "^8.16.0",
 		"ua-parser-js": "2.0.0",
 		"vite-plugin-mkcert": "^1.17.6",
 		"vite-plugin-tailwind-purgecss": "^0.3.3",
-		"vitest": "^2.1.5"
+		"vitest": "^2.1.6"
 	},
 	"dependencies": {
-		"esptool-js": "^0.4.6",
-		"vite": "^5.4.11"
+		"esptool-js": "^0.4.7",
+		"vite": "^6.0.1"
 	},
 	"engines": {
 		"node": "^20.18",
@@ -78,8 +78,8 @@
 	},
 	"pnpm": {
 		"patchedDependencies": {
-			"esptool-js@0.4.6": "patches/esptool-js@0.4.6.patch",
-			"@microsoft/signalr@8.0.7": "patches/@microsoft__signalr@8.0.7.patch"
+			"@microsoft/signalr@8.0.7": "patches/@microsoft__signalr@8.0.7.patch",
+			"esptool-js@0.4.7": "patches/esptool-js@0.4.7.patch"
 		},
 		"overrides": {
 			"cookie@<0.7.0": ">=0.7.0"
