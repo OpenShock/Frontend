@@ -14,7 +14,7 @@
   import type { Snippet } from 'svelte';
   import '../app.pcss';
   import { RankType } from '$lib/api/internal/v1';
-  import { browser } from '$app/environment';
+  import { browser, dev } from '$app/environment';
 
   type Props = {
     children?: Snippet;
@@ -33,6 +33,12 @@
   let isLoggedIn = $derived($UserStore?.self !== null);
   let currentUserRank = $derived($UserStore?.self?.rank ?? null);
 </script>
+
+<svelte:head>
+  {#if dev}
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>
+  {/if}
+</svelte:head>
 
 <Toaster />
 

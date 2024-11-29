@@ -8,7 +8,14 @@ export interface TurnstileInstance {
   getResponse: (container: string | HTMLElement) => string;
   implicitRender: () => void;
   ready: (callback: (token: string) => void) => void;
-  remove: (container: string | HTMLElement) => void;
-  render: (container: string | HTMLElement, parameters: TurnstileRenderParameters) => void;
-  reset: (container: string | HTMLElement) => void;
+
+  /**
+   * Programatically loads turnstile
+   * @param container reference to a HTML widget
+   * @param parameters render parameters
+   * @returns Returns a widgetId if successful, else returns undefined.
+   */
+  render: (container: string | HTMLElement, parameters: TurnstileRenderParameters) => string | undefined;
+  reset: (widgetId: string) => void;
+  remove: (widgetId: string) => void;
 }
