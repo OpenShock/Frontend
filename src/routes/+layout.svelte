@@ -12,9 +12,10 @@
   import { initializeStores } from '$lib/stores';
   import { UserStore } from '$lib/stores/UserStore';
   import type { Snippet } from 'svelte';
-  import '../app.pcss';
   import { RankType } from '$lib/api/internal/v1';
-  import { browser, dev } from '$app/environment';
+  import { browser, building, dev } from '$app/environment';
+  import { PUBLIC_SITE_DOMAIN } from '$env/static/public';
+  import '../app.pcss';
 
   type Props = {
     children?: Snippet;
@@ -27,7 +28,9 @@
     initializeSignalR();
   }
 
-  const meta = buildMetaData($page);
+  let domain = $derived<string>(building ? `https://${PUBLIC_SITE_DOMAIN}` : $page.url.host); // TODO: Find a better way to get the host while prerendering?
+
+  let meta = $derived(buildMetaData({ domain, path: $page.url.pathname }));
 
   let isOpen = $state(false);
   let isLoggedIn = $derived($UserStore?.self !== null);
@@ -43,9 +46,13 @@
 <Toaster />
 
 <TwitterSummaryTags type="summary" {...meta} site="@OpenShockORG" creator="@OpenShockORG" />
-<OpenGraphTags type="website" {...meta} url={$page.url.origin} />
+<OpenGraphTags type="website" {...meta} url={domain} />
 
-<Sidebar.Provider open={isOpen && isLoggedIn} onOpenChange={(open) => (isOpen = open)} controlledOpen={true}>
+<Sidebar.Provider
+  open={isOpen && isLoggedIn}
+  onOpenChange={(open) => (isOpen = open)}
+  controlledOpen={true}
+>
   <AppSidebar currentUserRank={currentUserRank ?? RankType.User} />
   <div class="flex-1 flex flex-col min-h-screen">
     <Header />
