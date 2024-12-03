@@ -53,3 +53,5 @@ runs:
         push: ${{ inputs.push-image }}
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
+        build-args: |
+          GIT_HASH=${{ $GITHUB_SHA }}

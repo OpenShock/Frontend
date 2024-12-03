@@ -2,13 +2,25 @@ import * as child_process from 'node:child_process';
 import adapterCloudflare from '@sveltejs/adapter-cloudflare';
 import adapterNode from '@sveltejs/adapter-node';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
-import { env } from 'process';
+import dotenv from 'dotenv';
+import process from 'process';
 
 // Determine if we are running on Cloudflare Pages
-const isCloudflare = env.CF_PAGES === '1';
+const isCloudflare = process.env.CF_PAGES === '1';
 
 // Use the appropriate adapter
 const adapter = isCloudflare ? adapterCloudflare : adapterNode;
+
+function readEnv(path) {
+  return dotenv.config({ path })?.parsed ?? {};
+}
+
+const env = {
+  ...process.env,
+  ...readEnv('.env'),
+  ...readEnv(`.env.${process.env.NODE_ENV}`),
+  ...readEnv('.env.local'),
+};
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -28,13 +40,22 @@ const config = {
       },
     }),
     csp: {
-      mode: 'auto',
+      mode: 'hash',
       directives: {
-        'script-src': ['self', 'https://challenges.cloudflare.com'],
+        'connect-src': [
+          'self',
+          'https://*.' + env.PUBLIC_SITE_DOMAIN,
+          'wss://*.' + env.PUBLIC_SITE_DOMAIN,
+        ],
+        'script-src': [
+          'self',
+          'https://challenges.cloudflare.com',
+          'https://static.cloudflareinsights.com',
+        ],
       },
     },
     version: {
-      name: child_process.execSync('git rev-parse HEAD').toString().trim(),
+      name: process.env.GIT_HASH ?? child_process.execSync('git rev-parse HEAD').toString().trim(),
     },
   },
 };
