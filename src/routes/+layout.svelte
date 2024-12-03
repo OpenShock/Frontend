@@ -3,8 +3,7 @@
   import AppSidebar from '$lib/components/layout/AppSidebar.svelte';
   import Footer from '$lib/components/layout/Footer.svelte';
   import Header from '$lib/components/layout/Header.svelte';
-  import OpenGraphTags from '$lib/components/metadata/OpenGraphTags.svelte';
-  import TwitterSummaryTags from '$lib/components/metadata/Twitter/TwitterSummaryTags.svelte';
+  import { BasicTags, OpenGraphTags, TwitterSummaryTags } from '$lib/components/metadata';
   import * as Sidebar from '$lib/components/ui/sidebar';
   import { Toaster } from '$lib/components/ui/sonner';
   import { buildMetaData } from '$lib/metadata';
@@ -13,8 +12,7 @@
   import { UserStore } from '$lib/stores/UserStore';
   import type { Snippet } from 'svelte';
   import { RankType } from '$lib/api/internal/v1';
-  import { browser, building, dev } from '$app/environment';
-  import { PUBLIC_SITE_DOMAIN } from '$env/static/public';
+  import { browser, dev } from '$app/environment';
   import '../app.pcss';
 
   type Props = {
@@ -28,25 +26,18 @@
     initializeSignalR();
   }
 
-  let domain = $derived<string>(building ? `https://${PUBLIC_SITE_DOMAIN}` : $page.url.host); // TODO: Find a better way to get the host while prerendering?
-
-  let meta = $derived(buildMetaData({ domain, path: $page.url.pathname }));
+  let meta = $derived(buildMetaData($page.url));
 
   let isOpen = $state(false);
   let isLoggedIn = $derived($UserStore?.self !== null);
   let currentUserRank = $derived($UserStore?.self?.rank ?? null);
 </script>
 
-<svelte:head>
-  {#if !dev}
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>
-  {/if}
-</svelte:head>
+<BasicTags {...meta} />
+<OpenGraphTags type="website" {...meta} url={$page.url.origin} />
+<TwitterSummaryTags type="summary" {...meta} site="@OpenShockORG" creator="@OpenShockORG" />
 
 <Toaster />
-
-<TwitterSummaryTags type="summary" {...meta} site="@OpenShockORG" creator="@OpenShockORG" />
-<OpenGraphTags type="website" {...meta} url={domain} />
 
 <Sidebar.Provider
   open={isOpen && isLoggedIn}

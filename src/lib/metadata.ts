@@ -1,7 +1,7 @@
 import { PUBLIC_SITE_DESCRIPTION, PUBLIC_SITE_NAME } from "$env/static/public";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function getPageTitleAndDescription(page: { domain: string, path: string }): { title: string; description: string } {
+function getPageTitleAndDescription(url: URL): { title: string; description: string } {
   const title = PUBLIC_SITE_NAME.trim();
   const details = PUBLIC_SITE_DESCRIPTION.trim();
 
@@ -18,11 +18,11 @@ function getPageTitleAndDescription(page: { domain: string, path: string }): { t
   return { title, description };
 }
 
-export function buildMetaData(page: { domain: string, path: string }) {
-  const { title, description } = getPageTitleAndDescription(page);
+export function buildMetaData(url: URL) {
+  const { title, description } = getPageTitleAndDescription(url);
 
   const image = {
-    src: new URL('/logo.svg', page.domain).href,
+    src: new URL('/logo.svg', url.origin).href,
     alt: 'OpenShock Logo',
   };
 

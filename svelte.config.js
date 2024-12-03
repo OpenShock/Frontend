@@ -1,5 +1,6 @@
-import { default as adapterCloudflare } from '@sveltejs/adapter-cloudflare';
-import { default as adapterNode } from '@sveltejs/adapter-node';
+import * as child_process from 'node:child_process';
+import adapterCloudflare from '@sveltejs/adapter-cloudflare';
+import adapterNode from '@sveltejs/adapter-node';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import { env } from 'process';
 
@@ -26,6 +27,15 @@ const config = {
         exclude: ['<all>'],
       },
     }),
+    csp: {
+      mode: 'auto',
+      directives: {
+        'script-src': ['self', 'https://challenges.cloudflare.com'],
+      },
+    },
+    version: {
+      name: child_process.execSync('git rev-parse HEAD').toString().trim(),
+    },
   },
 };
 export default config;
