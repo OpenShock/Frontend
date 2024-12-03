@@ -46,12 +46,15 @@ const config = {
           'self',
           'https://*.' + env.PUBLIC_SITE_DOMAIN,
           'wss://*.' + env.PUBLIC_SITE_DOMAIN,
+          'https://firmware.openshock.org',
+          'https://api.pwnedpasswords.com',
         ],
         'script-src': [
           'self',
           'https://challenges.cloudflare.com',
           'https://static.cloudflareinsights.com',
         ],
+        'frame-src': ['https://challenges.cloudflare.com'],
       },
     },
     version: {
