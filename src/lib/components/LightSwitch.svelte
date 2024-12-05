@@ -2,7 +2,8 @@
   import { buttonVariants } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-  import { ColorSchemeStore, willActivateLightMode } from '$lib/stores/ColorSchemeStore';
+  import { ColorSchemeStore, willActivateLightMode, getDarkReaderState } from '$lib/stores/ColorSchemeStore';
+  import { toast } from 'svelte-sonner';
   import AbsolutelySureButton from './AbsolutelySureButton.svelte';
 
   import { Moon, Sun } from 'lucide-svelte';
@@ -19,6 +20,11 @@
   }
   function evaluateLightSwitch(scheme: 'light' | 'dark' | 'system') {
     if (willActivateLightMode(scheme) && scheme !== $ColorSchemeStore) {
+      const darkreader = getDarkReaderState();
+      if (darkreader.isActive) {
+        toast.warning('DarkReader is enabled, activating light mode will have no effect!');
+        return;
+      }
       pendingScheme = scheme;
       return;
     }
