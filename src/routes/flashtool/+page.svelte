@@ -56,7 +56,7 @@
     <SerialPortSelector bind:terminalOpen bind:port disabled={isFlashing} />
     {#if port}
       {#if manager}
-        <FirmwareSelector bind:version bind:board disabled={isFlashing} />
+        <FirmwareSelector bind:version bind:selectedBoard={board} disabled={isFlashing} />
         {#if version && board && manager}
           <FirmwareFlasher {version} {board} {manager} bind:isFlashing />
         {/if}
