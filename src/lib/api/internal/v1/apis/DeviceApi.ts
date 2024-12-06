@@ -120,7 +120,7 @@ export class DeviceApi extends runtime.BaseAPI implements DeviceApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
+            headerParameters["DeviceToken"] = await this.configuration.apiKey("DeviceToken"); // HubToken authentication
         }
 
         const response = await this.request({
@@ -150,7 +150,7 @@ export class DeviceApi extends runtime.BaseAPI implements DeviceApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
+            headerParameters["DeviceToken"] = await this.configuration.apiKey("DeviceToken"); // HubToken authentication
         }
 
         const response = await this.request({
@@ -187,7 +187,7 @@ export class DeviceApi extends runtime.BaseAPI implements DeviceApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
+            headerParameters["DeviceToken"] = await this.configuration.apiKey("DeviceToken"); // HubToken authentication
         }
 
         const response = await this.request({
@@ -224,7 +224,7 @@ export class DeviceApi extends runtime.BaseAPI implements DeviceApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
+            headerParameters["DeviceToken"] = await this.configuration.apiKey("DeviceToken"); // HubToken authentication
         }
 
         const response = await this.request({
