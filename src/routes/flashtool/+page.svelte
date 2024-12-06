@@ -8,6 +8,9 @@
   import * as Card from '$lib/components/ui/card';
   import { Progress } from '$lib/components/ui/progress';
   import { FlashManagerStore } from '$lib/stores/FlashManagersStore';
+  import HelpDialog from './HelpDialog.svelte';
+
+  import { MessageCircleQuestion, SquareTerminal } from 'lucide-svelte';
 
   let port = $state<SerialPort | null>(null);
   let manager = $state<FlashManager | null>(null);
@@ -44,16 +47,30 @@
     }
   });
 
+  let showHelpDialog = $state(false);
+
   let version = $state<string | null>(null);
   let board = $state<string | null>(null);
 </script>
 
+<HelpDialog open={showHelpDialog} onClose={() => (showHelpDialog = false)} />
+
 <div class="container my-8">
-  <Card.Header>
+  <Card.Header class="flex flex-row justify-between">
     <Card.Title class="text-3xl">Flash Tool</Card.Title>
+    <div>
+      <Button variant="outline" onclick={() => (terminalOpen = !terminalOpen)}>
+        <SquareTerminal />
+        Toggle Terminal
+      </Button>
+      <Button variant="outline" onclick={() => (showHelpDialog = true)}>
+        <MessageCircleQuestion />
+        I'm having trouble, help?
+      </Button>
+    </div>
   </Card.Header>
   <Card.Content>
-    <SerialPortSelector bind:terminalOpen bind:port disabled={isFlashing} />
+    <SerialPortSelector bind:port disabled={isFlashing} />
     {#if port}
       {#if manager}
         <FirmwareSelector bind:version bind:selectedBoard={board} disabled={isFlashing} />

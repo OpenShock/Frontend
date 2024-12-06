@@ -3,21 +3,15 @@
   import { Button } from '$lib/components/ui/button';
   import { SerialPortsStore } from '$lib/stores/SerialPortsStore';
   import Bowser from 'bowser';
-  import InstallDriversDialog from './InstallDriversDialog.svelte';
 
-  import { ArrowDownToLine, Cpu } from 'lucide-svelte';
+  import { Cpu } from 'lucide-svelte';
 
   interface Props {
     port?: SerialPort | null;
     disabled?: boolean;
-    terminalOpen?: boolean;
   }
 
-  let {
-    port = $bindable(null),
-    disabled = false,
-    terminalOpen = $bindable(false),
-  }: Props = $props();
+  let { port = $bindable(null), disabled = false }: Props = $props();
 
   const filters = [{ usbVendorId: 0x1a86 }, { usbVendorId: 0x10c4 }, { usbVendorId: 0x303a }];
 
@@ -58,8 +52,6 @@
     return parts.join('&');
   }
 
-  let showInstallDriversDialog = $state(false);
-
   // Remove port if disconnected
   $effect(() => {
     if (port && !$SerialPortsStore.includes(port)) {
@@ -68,27 +60,12 @@
   });
 </script>
 
-<InstallDriversDialog open={showInstallDriversDialog} onClose={() => (showInstallDriversDialog = false)} />
-
 <div>
   {#if !browser}
     <h3 class="h3">Loading...</h3>
   {:else if 'serial' in navigator}
-    <div class="flex flex-row items-center justify-between">
-      <h3 class="h3 font-bold">Select your device</h3>
-      <button
-        onclick={() => (terminalOpen = !terminalOpen)}
-        class="btn btn-icon variant-outline-primary"
-        aria-label="Toggle terminal"
-      >
-        <i class={'fa fa-arrow-right transition ' + (terminalOpen ? 'rotate-180' : '')}></i>
-      </button>
-    </div>
     <div class="p-2">
-      {#if port === null}
-        <p>Please connect your device to your computer.</p>
-        <p>If you don't see your device in the popup, then you may need to install drivers.</p>
-      {:else}
+      {#if port !== null}
         <p class="text-green-500">Device connected</p>
         <p class="text-green-500">
           HardwareID: <span class="font-bold">{GetHardwareID(port)}</span>
@@ -106,10 +83,6 @@
         <Button class="flex-1" onclick={OpenPort} disabled={disabled || loading}>
           <Cpu />
           Select Device
-        </Button>
-        <Button class="flex-1" onclick={() => (showInstallDriversDialog = true)}>
-          <ArrowDownToLine />
-          Install Drivers
         </Button>
       {:else}
         <Button onclick={() => (port = null)} disabled={disabled || loading}>
