@@ -1,8 +1,6 @@
 <script lang="ts">
-  import { browser } from '$app/environment';
   import { Button } from '$lib/components/ui/button';
   import { SerialPortsStore } from '$lib/stores/SerialPortsStore';
-  import Bowser from 'bowser';
 
   import { Cpu } from 'lucide-svelte';
 
@@ -18,7 +16,12 @@
   let loading = $state(false);
   let errorMessage = $state<Error | null>(null);
 
-  async function OpenPort() {
+  async function ToggleDeviceConnection() {
+    if (port !== null) {
+      port = null;
+      return;
+    }
+
     loading = true;
     SerialPortsStore.requestPort({ filters })
       .then((p) => {
@@ -61,15 +64,21 @@
 </script>
 
 <div>
-  {#if !browser}
-    <h3 class="h3">Loading...</h3>
-  {:else if 'serial' in navigator}
+  <div class="flex flex-row gap-3 justify-stretch">
+    <Button class="flex-1" onclick={ToggleDeviceConnection} disabled={disabled || loading}>
+      {#if port === null}
+        <Cpu />
+        Select Device
+      {:else}
+        <i class="fa fa-times"></i>
+        Disconnect Device
+      {/if}
+    </Button>
+  </div>
+  {#if port !== null || (errorMessage !== null && errorMessage.name !== 'NotFoundError')}
     <div class="p-2">
       {#if port !== null}
-        <p class="text-green-500">Device connected</p>
-        <p class="text-green-500">
-          HardwareID: <span class="font-bold">{GetHardwareID(port)}</span>
-        </p>
+        <p class="text-green-500">Device connected: <span class="font-bold">{GetHardwareID(port)}</span></p>
       {/if}
       {#if errorMessage !== null && errorMessage.name !== 'NotFoundError'}
         <div class="flex flex-row items-center justify-start gap-2">
@@ -77,39 +86,6 @@
           <p class="text-yellow-500">Error: {errorMessage.message}</p>
         </div>
       {/if}
-    </div>
-    <div class="flex flex-row gap-3 justify-stretch">
-      {#if port === null}
-        <Button class="flex-1" onclick={OpenPort} disabled={disabled || loading}>
-          <Cpu />
-          Select Device
-        </Button>
-      {:else}
-        <Button onclick={() => (port = null)} disabled={disabled || loading}>
-          <i class="fa fa-times"></i>
-          Disconnect Device
-        </Button>
-      {/if}
-    </div>
-  {:else if ['Chrome', 'Edge', 'Opera'].includes(Bowser.getParser(window.navigator.userAgent).getBrowserName())}
-    <h2 class="h2 mb-16">Your browser version does not support this feature.</h2>
-    <h3 class="h3">Please update your browser to the latest version.</h3>
-  {:else}
-    <h2 class="h2 mb-16">Your browser does not support this feature.</h2>
-    <h3 class="h3">Please use one of the following browsers:</h3>
-    <div class="logo-cloud grid-cols-1 lg:!grid-cols-3 gap-1">
-      <a class="logo-item" href="https://www.google.com/chrome/">
-        <span class="fa-brands fa-chrome fa-xl"></span>
-        <span>Chrome</span>
-      </a>
-      <a class="logo-item" href="https://www.microsoft.com/en-us/edge">
-        <span class="fa-brands fa-edge fa-xl"></span>
-        <span>Edge</span>
-      </a>
-      <a class="logo-item" href="https://www.opera.com/">
-        <span class="fa-brands fa-opera fa-xl"></span>
-        <span>Opera</span>
-      </a>
     </div>
   {/if}
 </div>

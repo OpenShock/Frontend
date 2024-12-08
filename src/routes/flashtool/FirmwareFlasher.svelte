@@ -4,17 +4,18 @@
   import HashMD5 from 'crypto-js/md5';
   import { DownloadFirmwareBinary, GetFirmwareBinaryHash } from '$lib/api/firmwareCDN';
   import FlashManager from '$lib/EspTool/FlashManager';
+  import { Button } from '$lib/components/ui/button';
 
   interface Props {
     version: string;
     board: string;
     manager: FlashManager;
+    eraseBeforeFlash: boolean;
     isFlashing?: boolean;
   }
 
-  let { version, board, manager, isFlashing = $bindable(false) }: Props = $props();
+  let { version, board, manager, eraseBeforeFlash, isFlashing = $bindable(false) }: Props = $props();
 
-  let eraseFlash = $state<boolean>(false);
   let progressName = $state<string | null>(null);
   let progressPercent = $state<number | undefined>(undefined);
   let error = $state<string | null>(null);
@@ -62,7 +63,7 @@
 
     progressName = 'Flashing firmware...';
     progressPercent = undefined;
-    await manager.flash(firmware, eraseFlash, progressCallback);
+    await manager.flash(firmware, eraseBeforeFlash, progressCallback);
 
     progressName = 'Rebooting device... (Reconnect to power manually if stuck)';
     progressPercent = undefined;
@@ -83,26 +84,15 @@
   }
 </script>
 
-<div class="flex flex-col items-stretch justify-start">
-  <h3 class="h3 font-bold">Flashing</h3>
-  <div class="flex flex-col items-start justify-start p-2 gap-1">
-    <div class="flex flex-row items-center justify-start gap-2">
-      <label class="flex items-center space-x-2">
-        <input type="checkbox" class="checkbox" bind:checked={eraseFlash} />
-        <p class="select-none">Erase everything before flashing</p>
-      </label>
-    </div>
-  </div>
-
+<div class="flex flex-col items-stretch justify-start gap-4">
   <!-- Flash button -->
-  <button
-    class="btn variant-filled-primary gap-2"
+  <Button
     onclick={FlashDevice}
     disabled={!manager || isFlashing}
   >
     <i class="fa fa-microchip"></i>
     Flash
-  </button>
+  </Button>
 
   <!-- Flash progress -->
   <div class="flex flex-col items-start justify-start gap-2 p-2">
