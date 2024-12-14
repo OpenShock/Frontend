@@ -55,9 +55,7 @@
           {#each boards as board}
             <CommandItem
               value={board}
-              onSelect={() => {
-                selectedBoard = board;
-              }}
+              onSelect={() => (selectedBoard = board)}
             >
               <Check
                 class={cn(

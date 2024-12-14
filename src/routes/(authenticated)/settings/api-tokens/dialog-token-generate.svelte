@@ -8,6 +8,7 @@
   import { GetValResColor, type ValidationResult } from '$lib/types/ValidationResult';
   import { toast } from 'svelte-sonner';
   import TokenCreatedDialog from './dialog-token-created.svelte';
+  import { Select, SelectContent, SelectGroup, SelectGroupHeading, SelectItem, SelectTrigger } from '$lib/components/ui/select';
 
   type Props = {
     open: boolean;
@@ -127,60 +128,25 @@
         validationResult={nameValidationResult}
       />
 
-      <!--
-      <Form.Field {form} name="dob" class="flex flex-col">
-        <Form.Control>
-          {#snippet children({ props })}
-            <Form.Label>Date of birth</Form.Label>
-            <Popover.Root>
-              <Popover.Trigger
-                {...props}
-                class={cn(
-                  buttonVariants({ variant: 'outline' }),
-                  'w-[280px] justify-start pl-4 text-left font-normal',
-                  !value && 'text-muted-foreground'
-                )}
-              >
-                {value ? df.format(value.toDate(getLocalTimeZone())) : 'Pick a date'}
-                <CalendarIcon class="ml-auto size-4 opacity-50" />
-              </Popover.Trigger>
-              <Popover.Content class="w-auto p-0" side="top">
-                <Calendar
-                  type="single"
-                  value={value as DateValue}
-                  bind:placeholder
-                  minValue={new CalendarDate(1900, 1, 1)}
-                  maxValue={today(getLocalTimeZone())}
-                  calendarLabel="Date of birth"
-                  onValueChange={(v) => {
-                    if (v) {
-                      $formData.dob = v.toString();
-                    } else {
-                      $formData.dob = '';
-                    }
-                  }}
-                />
-              </Popover.Content>
-            </Popover.Root>
-            <Form.Description>Your date of birth is used to calculator your age</Form.Description>
-            <Form.FieldErrors />
-            <input hidden value={$formData.dob} name={props.name} />
-          {/snippet}
-        </Form.Control>
-      </Form.Field>
-      -->
-
-      <label class="label">
+      <label>
         <span>Expiration</span>
+        <Select type="single" name="expiration" bind:value={expire}>
+          <SelectTrigger class="w-[180px]">
+            {expire}
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem value="never" label="Never">Never</SelectItem>
+              <SelectItem value="7days" label="7 days">7 days</SelectItem>
+              <SelectItem value="30days" label="30 days">30 days</SelectItem>
+              <SelectItem value="60days" label="60 days">60 days</SelectItem>
+              <SelectItem value="90days" label="90 days">90 days</SelectItem>
+              <SelectItem value="custom" label="Custom...">Custom...</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+
         <div class="flex items-center gap-3">
-          <select class="select w-1/2" bind:value={expire}>
-            <option value="never">Never</option>
-            <option value="7days">7 days</option>
-            <option value="30days">30 days</option>
-            <option value="60days">60 days</option>
-            <option value="90days">90 days</option>
-            <option value="custom">Custom...</option>
-          </select>
 
           {#if expire === 'custom'}
             <!--
