@@ -13,7 +13,7 @@
   import type { Snippet } from 'svelte';
   import { RankType } from '$lib/api/internal/v1';
   import { browser, dev } from '$app/environment';
-  import '../app.pcss';
+  import '../app.css';
 
   type Props = {
     children?: Snippet;

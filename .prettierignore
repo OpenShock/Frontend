@@ -2,7 +2,11 @@
 node_modules
 /build
 /.svelte-kit
+/.vscode
 /package
+/src/lib/api/internal
+/src/lib/components/ui
+/static
 .env
 .env.*
 !.env.example

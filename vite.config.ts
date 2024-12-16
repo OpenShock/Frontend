@@ -3,7 +3,6 @@ import dns from 'dns';
 import { env } from 'process';
 import { defineConfig, loadEnv, type PluginOption } from 'vite';
 import mkcert from 'vite-plugin-mkcert';
-import { purgeCss } from 'vite-plugin-tailwind-purgecss';
 
 function printRed(message: string) {
   console.log(`\u001b[1;31m${message}\u001b[0m`);
@@ -59,9 +58,6 @@ async function getPlugins(useLocalRedirect: boolean) {
 
   // Add the sveltekit plugin
   plugins.push(sveltekit());
-
-  // Configure the purgeCss plugin
-  plugins.push(purgeCss());
 
   return plugins;
 }
