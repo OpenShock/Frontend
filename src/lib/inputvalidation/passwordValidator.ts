@@ -2,7 +2,12 @@ import type { TwColor } from '$lib/types/Tailwind';
 import type { ValidationResult } from '$lib/types/ValidationResult';
 import { calculateStringEntropy } from '$lib/utils/entropy';
 
-function countCharacters(value: string): { lower: number; upper: number; digit: number; special: number } {
+function countCharacters(value: string): {
+  lower: number;
+  upper: number;
+  digit: number;
+  special: number;
+} {
   const uniqueChars = new Set(value);
   let lower = 0;
   let upper = 0;
@@ -31,7 +36,7 @@ export function validatePassword(value: string): ValidationResult | null {
 
   const result = {
     valid: false,
-    message: ''
+    message: '',
   };
 
   if (value.length < 12) {
@@ -97,7 +102,11 @@ export function validatePasswordMatch(
   return { valid: true };
 }
 
-export function getPasswordStrength(value: string): { percent: number; text: string; color: TwColor } {
+export function getPasswordStrength(value: string): {
+  percent: number;
+  text: string;
+  color: TwColor;
+} {
   let percent: number;
   let text: string;
   let color: TwColor;

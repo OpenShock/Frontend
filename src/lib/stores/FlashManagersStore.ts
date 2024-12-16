@@ -1,6 +1,6 @@
-import FlashManager from "$lib/EspTool/FlashManager";
-import type { IEspLoaderTerminal } from "esptool-js";
-import { get, writable } from "svelte/store";
+import FlashManager from '$lib/EspTool/FlashManager';
+import type { IEspLoaderTerminal } from 'esptool-js';
+import { get, writable } from 'svelte/store';
 
 const { update, subscribe } = writable<FlashManager[]>([]);
 
@@ -10,7 +10,7 @@ async function getManager(port: SerialPort, terminal: IEspLoaderTerminal) {
     return manager;
   }
 
-  console.log("Connecting to", port);
+  console.log('Connecting to', port);
 
   manager = await FlashManager.Connect(port, terminal);
 
@@ -35,12 +35,12 @@ async function removeManager(manager: FlashManager) {
 }
 
 function removePort(port: SerialPort) {
-  console.log("Removing port", port);
+  console.log('Removing port', port);
   update((m) => {
     const manager = m.find((m) => m.SerialPort === port);
 
     if (manager) {
-      console.log("Disconnecting manager", manager);
+      console.log('Disconnecting manager', manager);
       manager.disconnect(); // Ignored promise
     }
 
@@ -57,6 +57,6 @@ export const FlashManagerStore = {
 
 export function initializeFlashManagersStore() {
   if ('serial' in navigator) {
-    navigator.serial.addEventListener("disconnect", (e) => removePort(e.target as SerialPort));
+    navigator.serial.addEventListener('disconnect', (e) => removePort(e.target as SerialPort));
   }
 }

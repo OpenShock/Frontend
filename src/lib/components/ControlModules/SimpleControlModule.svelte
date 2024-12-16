@@ -16,15 +16,15 @@
 </script>
 
 <div
-  class="flex flex-col items-center justify-center gap-2 p-2 border border-surface-400-500-token rounded-md"
+  class="border-surface-400-500-token flex flex-col items-center justify-center gap-2 rounded-md border p-2"
 >
   <!-- Title -->
   <h2 class="text-lg font-bold">{shocker.name}</h2>
   <!-- Buttons -->
-  <div class="w-full flex gap-2">
+  <div class="flex w-full gap-2">
     <!-- Beep button -->
     <button
-      class="btn p-2 bg-primary-500 rounded-md flex-1"
+      class="btn bg-primary-500 flex-1 rounded-md p-2"
       onclick={() => emit('beep')}
       aria-label="Beep"
     >
@@ -32,7 +32,7 @@
     </button>
     <!-- Vibrate button -->
     <button
-      class="btn p-2 bg-primary-500 rounded-md flex-1"
+      class="btn bg-primary-500 flex-1 rounded-md p-2"
       onclick={() => emit('vibrate')}
       aria-label="Vibrate"
     >
@@ -40,7 +40,7 @@
     </button>
     <!-- Shock button -->
     <button
-      class="btn p-2 bg-primary-500 rounded-md flex-1"
+      class="btn bg-primary-500 flex-1 rounded-md p-2"
       onclick={() => emit('shock')}
       aria-label="Shock"
     >

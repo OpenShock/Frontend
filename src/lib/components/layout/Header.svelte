@@ -22,7 +22,7 @@
 {/snippet}
 
 <header
-  class="sticky top-0 z-50 w-full flex flex-row border-border/40 bg-background/95 supports-[backdrop-filter]:bg-background/60 border-b backdrop-blur"
+  class="sticky top-0 z-50 flex w-full flex-row border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
 >
   {#if $UserStore.self}
     <button
@@ -30,19 +30,19 @@
         sidebar.toggle();
       }}
     >
-      <Menu size={32} class="mr-2 sm:m-3 p-0 text-gray-500" />
+      <Menu size={32} class="mr-2 p-0 text-gray-500 sm:m-3" />
     </button>
   {/if}
-  <div class="pr-4 py-2 flex-1 flex flex-row items-center justify-between space-x-2">
+  <div class="flex flex-1 flex-row items-center justify-between space-x-2 py-2 pr-4">
     <div class="flex items-center space-x-4">
       <a
         href={$UserStore.self ? '/home' : '/'}
-        class="overflow-hidden lg:!ml-0 lg:w-auto select-none"
+        class="select-none overflow-hidden lg:!ml-0 lg:w-auto"
         data-sveltekit-preload-data="hover"
         aria-label="OpenShock"
       >
         <img
-          class="inline-block h-6 sm:h-10 pointer-events-none"
+          class="pointer-events-none inline-block h-6 sm:h-10"
           src="/logo.svg"
           alt="OpenShock Logo"
         />
@@ -56,9 +56,13 @@
     {#if $UserStore.self}
       <DropdownMenu.Root>
         <DropdownMenu.Trigger
-          class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 cursor-pointer select-none"
+          class="cursor-pointer select-none text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
         >
-          <img class="inline-block h-8 rounded-full" src={$UserStore.self.avatar} alt="User Avatar" />
+          <img
+            class="inline-block h-8 rounded-full"
+            src={$UserStore.self.avatar}
+            alt="User Avatar"
+          />
           <p class="hidden lg:inline-block">{$UserStore.self.name}</p>
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>

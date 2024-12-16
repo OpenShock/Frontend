@@ -2,9 +2,15 @@
   import { GetChannelBoards } from '$lib/api/firmwareCDN';
   import { Popover, PopoverTrigger, PopoverContent } from '$lib/components/ui/popover';
   import { Button } from '$lib/components/ui/button';
-  import { Command, CommandInput, CommandEmpty, CommandGroup, CommandItem } from '$lib/components/ui/command';
+  import {
+    Command,
+    CommandInput,
+    CommandEmpty,
+    CommandGroup,
+    CommandItem,
+  } from '$lib/components/ui/command';
   import { cn } from '$lib/utils';
-  
+
   import { Check, ChevronsUpDown } from 'lucide-svelte';
 
   /** Optional chip to constrain the list of boards to */
@@ -38,11 +44,7 @@
 <div class="flex flex-row items-center justify-start gap-2">
   <Popover>
     <PopoverTrigger>
-      <Button
-        variant="outline"
-        role="combobox"
-        class="w-[240px] justify-between"
-      >
+      <Button variant="outline" role="combobox" class="w-[240px] justify-between">
         {selectedBoard ?? 'Select a board...'}
         <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
       </Button>
@@ -53,16 +55,8 @@
         <CommandEmpty>No board found.</CommandEmpty>
         <CommandGroup>
           {#each boards as board}
-            <CommandItem
-              value={board}
-              onSelect={() => (selectedBoard = board)}
-            >
-              <Check
-                class={cn(
-                  "mr-2 h-4 w-4",
-                  selectedBoard !== board && "text-transparent"
-                )}
-              />
+            <CommandItem value={board} onSelect={() => (selectedBoard = board)}>
+              <Check class={cn('mr-2 h-4 w-4', selectedBoard !== board && 'text-transparent')} />
               {board}
             </CommandItem>
           {/each}

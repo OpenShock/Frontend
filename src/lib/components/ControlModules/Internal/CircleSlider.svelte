@@ -139,19 +139,19 @@
 
 <style lang="postcss">
   .canvas {
-    @apply relative w-[150px] h-[150px];
+    @apply relative h-[150px] w-[150px];
   }
   svg {
-    @apply absolute w-[150px] h-[150px];
+    @apply absolute h-[150px] w-[150px];
   }
   path {
     @apply cursor-pointer;
   }
   .handle {
-    @apply absolute w-[30px] h-[30px] rounded-full bg-white cursor-move;
+    @apply absolute h-[30px] w-[30px] cursor-move rounded-full bg-white;
   }
   input[type='number'] {
-    @apply absolute top-[50%] left-[50%] transform -translate-x-[50%] -translate-y-[50%] text-xl font-bold select-none appearance-none bg-transparent border-none text-center;
+    @apply absolute left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] transform select-none appearance-none border-none bg-transparent text-center text-xl font-bold;
 
     /* Firefox */
     -moz-appearance: none;
@@ -163,6 +163,6 @@
     margin: 0;
   }
   label {
-    @apply absolute bottom-0 left-[50%] transform -translate-x-[50%] translate-y-[10%] text-center select-none;
+    @apply absolute bottom-0 left-[50%] -translate-x-[50%] translate-y-[10%] transform select-none text-center;
   }
 </style>

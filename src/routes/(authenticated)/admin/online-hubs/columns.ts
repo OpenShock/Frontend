@@ -3,7 +3,7 @@ import { createRawSnippet } from 'svelte';
 import { SemVer } from 'semver';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table';
 import { durationToString } from '$lib/utils/time';
-import type { TwColor } from "$lib/types/Tailwind";
+import type { TwColor } from '$lib/types/Tailwind';
 import DataTableActions from './data-table-actions.svelte';
 import { getReadableUserAgentName } from '$lib/utils/userAgent';
 import DataTableSortButton from './data-table-sort-button.svelte';
@@ -46,8 +46,9 @@ export const columns: ColumnDef<OnlineHub>[] = [
       const ownerCellSnippet = createRawSnippet<[OnlineHubOwner]>((getOwner) => {
         const owner = getOwner();
         return {
-          render: () => `<div class="text-left font-medium" title="${owner.id}">${owner.name}</div>`,
-        }
+          render: () =>
+            `<div class="text-left font-medium" title="${owner.id}">${owner.name}</div>`,
+        };
       });
 
       return renderSnippet(ownerCellSnippet, row.getValue<OnlineHubOwner>('owner'));
@@ -57,7 +58,7 @@ export const columns: ColumnDef<OnlineHub>[] = [
       const b = row_b.getValue<OnlineHubOwner>('owner');
 
       return a.name.localeCompare(b.name);
-    }
+    },
   },
   {
     accessorKey: 'firmware_version',
@@ -75,8 +76,9 @@ export const columns: ColumnDef<OnlineHub>[] = [
         }
 
         return {
-          render: () => `<div class="text-left font-medium ${color}" title="${firmwareVersion}">${firmwareVersion}</div>`,
-        }
+          render: () =>
+            `<div class="text-left font-medium ${color}" title="${firmwareVersion}">${firmwareVersion}</div>`,
+        };
       });
 
       return renderSnippet(firmwareVersionCellSnippet, row.getValue<string>('firmware_version'));
@@ -88,7 +90,7 @@ export const columns: ColumnDef<OnlineHub>[] = [
       if (a === b) return 0;
 
       return a.compare(b);
-    }
+    },
   },
   {
     accessorKey: 'gateway',
@@ -103,12 +105,13 @@ export const columns: ColumnDef<OnlineHub>[] = [
         const connectedAt = getConnectedAt();
         const formattedDuration = durationToString(now - connectedAt.getTime());
         return {
-          render: () => `<div class="text-left font-medium" title="${connectedAt}">${formattedDuration}</div>`,
-        }
+          render: () =>
+            `<div class="text-left font-medium" title="${connectedAt}">${formattedDuration}</div>`,
+        };
       });
 
       return renderSnippet(connectedAtCellSnippet, row.getValue<Date>('connected_at'));
-    }
+    },
   },
   {
     accessorKey: 'user_agent',
@@ -125,14 +128,14 @@ export const columns: ColumnDef<OnlineHub>[] = [
           color = 'text-orange-500';
         }
 
-
         return {
-          render: () => `<div class="text-left font-medium ${color}" title="${userAgent}">${readableName ?? userAgent}</div>`,
-        }
+          render: () =>
+            `<div class="text-left font-medium ${color}" title="${userAgent}">${readableName ?? userAgent}</div>`,
+        };
       });
 
       return renderSnippet(userAgentCellSnippet, row.getValue<string | null>('user_agent'));
-    }
+    },
   },
   {
     accessorKey: 'booted_at',
@@ -143,12 +146,13 @@ export const columns: ColumnDef<OnlineHub>[] = [
         const now = Date.now();
         const formattedDuration = durationToString(now - bootedAt.getTime());
         return {
-          render: () => `<div class="text-left font-medium" title="${bootedAt}">${formattedDuration}</div>`,
-        }
+          render: () =>
+            `<div class="text-left font-medium" title="${bootedAt}">${formattedDuration}</div>`,
+        };
       });
 
       return renderSnippet(bootedAtCellSnippet, row.getValue<Date>('booted_at'));
-    }
+    },
   },
   {
     accessorKey: 'latency',
@@ -159,16 +163,16 @@ export const columns: ColumnDef<OnlineHub>[] = [
         if (!latency) {
           return {
             render: () => `<div class="text-left font-medium" title="N/A">N/A</div>`,
-          }
+          };
         }
 
         return {
           render: () => `<div class="text-left font-medium" title="${latency}">${latency}</div>`,
-        }
+        };
       });
 
       return renderSnippet(latencyCellSnippet, row.getValue<number | null>('latency'));
-    }
+    },
   },
   {
     accessorKey: 'rssi',
@@ -179,22 +183,22 @@ export const columns: ColumnDef<OnlineHub>[] = [
         if (!rssi) {
           return {
             render: () => `<div class="text-left font-medium" title="N/A">N/A</div>`,
-          }
+          };
         }
 
         return {
           render: () => `<div class="text-left font-medium" title="${rssi}">${rssi}</div>`,
-        }
+        };
       });
 
       return renderSnippet(rssiCellSnippet, row.getValue<number | null>('rssi'));
-    }
+    },
   },
   {
     id: 'actions',
     cell: ({ row }) => {
       // You can pass whatever you need from `row.original` to the component
       return renderComponent(DataTableActions, { hub: row.original });
-    }
-  }
+    },
+  },
 ];

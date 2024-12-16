@@ -64,7 +64,7 @@
 </script>
 
 <div>
-  <div class="flex flex-row gap-3 justify-stretch">
+  <div class="flex flex-row justify-stretch gap-3">
     <Button class="flex-1" onclick={ToggleDeviceConnection} disabled={disabled || loading}>
       {#if port === null}
         <Cpu />
@@ -78,7 +78,9 @@
   {#if port !== null || (errorMessage !== null && errorMessage.name !== 'NotFoundError')}
     <div class="p-2">
       {#if port !== null}
-        <p class="text-green-500">Device connected: <span class="font-bold">{GetHardwareID(port)}</span></p>
+        <p class="text-green-500">
+          Device connected: <span class="font-bold">{GetHardwareID(port)}</span>
+        </p>
       {/if}
       {#if errorMessage !== null && errorMessage.name !== 'NotFoundError'}
         <div class="flex flex-row items-center justify-start gap-2">

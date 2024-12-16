@@ -14,7 +14,13 @@
     isFlashing?: boolean;
   }
 
-  let { version, board, manager, eraseBeforeFlash, isFlashing = $bindable(false) }: Props = $props();
+  let {
+    version,
+    board,
+    manager,
+    eraseBeforeFlash,
+    isFlashing = $bindable(false),
+  }: Props = $props();
 
   let progressName = $state<string | null>(null);
   let progressPercent = $state<number | undefined>(undefined);
@@ -86,10 +92,7 @@
 
 <div class="flex flex-col items-stretch justify-start gap-4">
   <!-- Flash button -->
-  <Button
-    onclick={FlashDevice}
-    disabled={!manager || isFlashing}
-  >
+  <Button onclick={FlashDevice} disabled={!manager || isFlashing}>
     <i class="fa fa-microchip"></i>
     Flash
   </Button>

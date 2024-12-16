@@ -10,7 +10,7 @@
   import * as Popover from '$lib/components/ui/popover';
   import { OwnHubsStore } from '$lib/stores/HubsStore';
 
-  let shockers = $derived(Array.from($OwnHubsStore).flatMap(([,hub]) => hub.shockers));
+  let shockers = $derived(Array.from($OwnHubsStore).flatMap(([, hub]) => hub.shockers));
 
   let moduleType = $state<ModuleType>(ModuleType.ClassicControlModule);
 
@@ -33,7 +33,7 @@
 </script>
 
 <!-- Rounded bordered container -->
-<div class="container py-4 flex flex-col gap-4">
+<div class="container flex flex-col gap-4 py-4">
   {#if $OwnHubsStore == null}
     <p>Loading...</p>
   {:else}
@@ -46,25 +46,25 @@
           <Popover.Content>
             <div class="flex gap-2">
               <button
-                class="btn p-2 variant-filled-secondary"
+                class="btn variant-filled-secondary p-2"
                 onclick={() => (moduleType = ModuleType.ClassicControlModule)}
               >
                 Classic
               </button>
               <button
-                class="btn p-2 variant-filled-secondary"
+                class="btn variant-filled-secondary p-2"
                 onclick={() => (moduleType = ModuleType.RichControlModule)}
               >
                 Rich
               </button>
               <button
-                class="btn p-1 variant-filled-secondary"
+                class="btn variant-filled-secondary p-1"
                 onclick={() => (moduleType = ModuleType.SimpleControlModule)}
               >
                 Simple
               </button>
               <button
-                class="btn p-1 variant-filled-secondary"
+                class="btn variant-filled-secondary p-1"
                 onclick={() => (moduleType = ModuleType.MapControlModule)}
               >
                 Map
@@ -85,7 +85,7 @@
     {#if moduleType === ModuleType.MapControlModule}
       <MapControlModule {shockers} />
     {:else}
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+      <div class="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {#each shockers ?? [] as shocker (shocker.id)}
           {#if moduleType === ModuleType.ClassicControlModule}
             <ClassicControlModule {shocker} on:command={handleCommand} />

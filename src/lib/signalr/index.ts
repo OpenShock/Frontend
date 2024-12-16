@@ -41,9 +41,7 @@ async function create_signalr_connection() {
     console.log(message);
   });
 
-  connection.on('Log', (log) => {
-
-  });
+  connection.on('Log', (log) => {});
 
   connection.on('DeviceStatus', handleSignalrDeviceState);
   connection.on('DeviceUpdate', handleSignalrDeviceUpdate);
@@ -64,11 +62,11 @@ function destroy_signalr_connection() {
 }
 
 export const SignalR_State = {
-  subscribe: signalr_state.subscribe
+  subscribe: signalr_state.subscribe,
 } as Readable<SR.HubConnectionState>;
 
 export const SignalR_Connection = {
-  subscribe: signalr_connection.subscribe
+  subscribe: signalr_connection.subscribe,
 } as Readable<SR.HubConnection | null>;
 
 export function initializeSignalR() {
@@ -90,4 +88,3 @@ export function initializeSignalR() {
     }
   });
 }
-

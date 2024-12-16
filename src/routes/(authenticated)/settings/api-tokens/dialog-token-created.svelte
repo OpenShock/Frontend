@@ -14,11 +14,9 @@
     navigator.clipboard.writeText(token);
     toast.success('Token copied to clipboard');
   }
-
-
 </script>
 
-<Dialog.Root {open} onOpenChange={(o) => open = o} controlledOpen={true}>
+<Dialog.Root {open} onOpenChange={(o) => (open = o)} controlledOpen={true}>
   <Dialog.Content>
     <Dialog.Header>
       <Dialog.Title>API Token Generated</Dialog.Title>

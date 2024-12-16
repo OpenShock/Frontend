@@ -45,7 +45,7 @@
   controlledOpen={true}
 >
   <AppSidebar currentUserRank={currentUserRank ?? RankType.User} />
-  <div class="flex-1 flex flex-col min-h-screen">
+  <div class="flex min-h-screen flex-1 flex-col">
     <Header />
     <main class="flex-1">
       {@render children?.()}

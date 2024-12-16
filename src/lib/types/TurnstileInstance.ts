@@ -15,7 +15,10 @@ export interface TurnstileInstance {
    * @param parameters render parameters
    * @returns Returns a widgetId if successful, else returns undefined.
    */
-  render: (container: string | HTMLElement, parameters: TurnstileRenderParameters) => string | undefined;
+  render: (
+    container: string | HTMLElement,
+    parameters: TurnstileRenderParameters
+  ) => string | undefined;
   reset: (widgetId: string) => void;
   remove: (widgetId: string) => void;
 }

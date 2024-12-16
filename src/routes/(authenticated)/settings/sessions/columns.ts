@@ -36,12 +36,13 @@ export const columns: ColumnDef<Session>[] = [
         const userAgent = getUserAgent();
         const readableUserAgent = getReadableUserAgentName(userAgent);
         return {
-          render: () => `<div class="text-left font-medium" title="${userAgent}">${readableUserAgent ?? userAgent}</div>`,
-        }
+          render: () =>
+            `<div class="text-left font-medium" title="${userAgent}">${readableUserAgent ?? userAgent}</div>`,
+        };
       });
 
       return renderSnippet(userAgentCellSnippet, row.getValue<string>('user_agent'));
-    }
+    },
   },
   {
     accessorKey: 'created_at',
@@ -52,12 +53,13 @@ export const columns: ColumnDef<Session>[] = [
         const createdAt = getCreatedAt();
         const formattedTimeSpan = elapsedToString(now - createdAt.getTime());
         return {
-          render: () => `<div class="text-right font-medium" title="${createdAt}">${formattedTimeSpan}</div>`,
-        }
+          render: () =>
+            `<div class="text-right font-medium" title="${createdAt}">${formattedTimeSpan}</div>`,
+        };
       });
 
       return renderSnippet(createdAtCellSnippet, row.getValue<Date>('created_at'));
-    }
+    },
   },
   {
     accessorKey: 'expires_at',
@@ -68,12 +70,13 @@ export const columns: ColumnDef<Session>[] = [
         const expiresAt = getExpiresAt();
         const formattedTimeSpan = elapsedToString(expiresAt.getTime() - now);
         return {
-          render: () => `<div class="text-right font-medium" title="${expiresAt}">${formattedTimeSpan}</div>`,
-        }
+          render: () =>
+            `<div class="text-right font-medium" title="${expiresAt}">${formattedTimeSpan}</div>`,
+        };
       });
 
       return renderSnippet(expiresAtCellSnippet, row.getValue<Date>('expires_at'));
-    }
+    },
   },
   {
     accessorKey: 'last_seen',
@@ -84,24 +87,25 @@ export const columns: ColumnDef<Session>[] = [
         if (!lastSeen) {
           return {
             render: () => `<div class="text-left font-medium" title="N/A">N/A</div>`,
-          }
+          };
         }
 
         const now = Date.now();
         const formattedTimeSpan = elapsedToString(lastSeen.getTime() - now);
         return {
-          render: () => `<div class="text-right font-medium" title="${lastSeen}">${formattedTimeSpan}</div>`,
-        }
+          render: () =>
+            `<div class="text-right font-medium" title="${lastSeen}">${formattedTimeSpan}</div>`,
+        };
       });
 
       return renderSnippet(lastSeenCellSnippet, row.getValue<Date | null>('last_seen'));
-    }
+    },
   },
   {
     id: 'actions',
     cell: ({ row }) => {
       // You can pass whatever you need from `row.original` to the component
       return renderComponent(DataTableActions, { session: row.original });
-    }
-  }
+    },
+  },
 ];

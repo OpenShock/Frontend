@@ -49,7 +49,7 @@ export const columns: ColumnDef<Hub>[] = [
       });
 
       return renderSnippet(isOnlineCellSnippet, row.getValue<boolean>('is_online'));
-    }
+    },
   },
   {
     accessorKey: 'firmware_version',
@@ -58,12 +58,13 @@ export const columns: ColumnDef<Hub>[] = [
       const versionCellSnippet = createRawSnippet<[SemVer | null]>((getFirmwareVersion) => {
         const firmwareVersion = getFirmwareVersion();
         return {
-          render: () => `<div class="text-center font-medium">${firmwareVersion?.format() ?? ''}</div>`,
+          render: () =>
+            `<div class="text-center font-medium">${firmwareVersion?.format() ?? ''}</div>`,
         };
       });
 
       return renderSnippet(versionCellSnippet, row.getValue<SemVer | null>('firmware_version'));
-    }
+    },
   },
   {
     accessorKey: 'created_at',
@@ -85,6 +86,6 @@ export const columns: ColumnDef<Hub>[] = [
     cell: ({ row }) => {
       // You can pass whatever you need from `row.original` to the component
       return renderComponent(DataTableActions, { hub: row.original });
-    }
-  }
+    },
+  },
 ];

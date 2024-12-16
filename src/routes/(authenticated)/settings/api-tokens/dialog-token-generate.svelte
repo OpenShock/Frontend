@@ -8,7 +8,14 @@
   import { GetValResColor, type ValidationResult } from '$lib/types/ValidationResult';
   import { toast } from 'svelte-sonner';
   import TokenCreatedDialog from './dialog-token-created.svelte';
-  import { Select, SelectContent, SelectGroup, SelectGroupHeading, SelectItem, SelectTrigger } from '$lib/components/ui/select';
+  import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectGroupHeading,
+    SelectItem,
+    SelectTrigger,
+  } from '$lib/components/ui/select';
 
   type Props = {
     open: boolean;
@@ -105,7 +112,6 @@
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
-
   let nameValidationResult = $derived(nameValidation(name));
   let expireValidationResult = $derived(expireValidation(expire, expireCustom));
 
@@ -114,13 +120,13 @@
 
 <TokenCreatedDialog bind:open={createdDialog} {token} />
 
-<Dialog.Root {open} onOpenChange={(o) => open = o} controlledOpen={true}>
+<Dialog.Root {open} onOpenChange={(o) => (open = o)} controlledOpen={true}>
   <Dialog.Content>
     <Dialog.Header>
       <Dialog.Title>Generate a new API Token</Dialog.Title>
       <Dialog.Description>Example text</Dialog.Description>
     </Dialog.Header>
-    <form class="modal-form border border-surface-500 p-4 space-y-4 rounded-container-token">
+    <form class="modal-form border-surface-500 rounded-container-token space-y-4 border p-4">
       <TextInput
         label="Token Name"
         placeholder="Token name..."
@@ -147,7 +153,6 @@
         </Select>
 
         <div class="flex items-center gap-3">
-
           {#if expire === 'custom'}
             <!--
             <Calendar
@@ -184,7 +189,7 @@
 
       <div>
         <h2>Permissions</h2>
-        <div class="border rounded-md border-surface-500 p-4 space-y-4 flex flex-col">
+        <div class="border-surface-500 flex flex-col space-y-4 rounded-md border p-4">
           {#each permissionCategories as permission}
             <span>{capitalizeFirstLetter(permission.name)}</span>
             {#each permission.perms as perm}

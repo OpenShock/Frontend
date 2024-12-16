@@ -1,4 +1,4 @@
-import { randStr } from "./rand";
+import { randStr } from './rand';
 import { describe, expect, it } from 'vitest';
 
 describe('rand utils validator test', () => {

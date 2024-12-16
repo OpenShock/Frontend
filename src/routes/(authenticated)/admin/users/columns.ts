@@ -40,7 +40,8 @@ export const columns: ColumnDef<User>[] = [
         const passwordHashType = getPasswordHashType();
         const isLegacy = passwordHashType !== PasswordHashingAlgorithm.BCrypt;
         return {
-          render: () => `<div class="text-center font-medium ${isLegacy ? 'text-orange-500' : ''}">${passwordHashType}</div>`,
+          render: () =>
+            `<div class="text-center font-medium ${isLegacy ? 'text-orange-500' : ''}">${passwordHashType}</div>`,
         };
       });
 
@@ -98,6 +99,6 @@ export const columns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       // You can pass whatever you need from `row.original` to the component
       return renderComponent(DataTableActions, { user: row.original });
-    }
-  }
+    },
+  },
 ];

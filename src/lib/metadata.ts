@@ -1,4 +1,4 @@
-import { PUBLIC_SITE_DESCRIPTION, PUBLIC_SITE_NAME } from "$env/static/public";
+import { PUBLIC_SITE_DESCRIPTION, PUBLIC_SITE_NAME } from '$env/static/public';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function getPageTitleAndDescription(url: URL): { title: string; description: string } {
@@ -7,7 +7,7 @@ function getPageTitleAndDescription(url: URL): { title: string; description: str
 
   let description: string;
   switch (title.toLowerCase()) {
-    case "openshock":
+    case 'openshock':
       description = `Welcome to OpenShock, ${details}`;
       break;
     default:
@@ -29,6 +29,6 @@ export function buildMetaData(url: URL) {
   return {
     title,
     description,
-    image
+    image,
   };
 }

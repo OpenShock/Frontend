@@ -71,11 +71,10 @@
   {#if manager}
     <h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">Select Channel</h3>
     <FirmwareChannelSelector bind:version disabled={isFlashing} />
-    
+
     <h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">Select Board</h3>
     <FirmwareBoardSelector {version} bind:selectedBoard={board} disabled={isFlashing} />
 
-    
     <div class="items-top flex space-x-2">
       <Checkbox id="erase-before-flash" bind:checked={eraseBeforeFlash} />
       <div class="grid gap-1.5 leading-none">
@@ -85,41 +84,38 @@
         >
           Erase before flashing
         </Label>
-        <p class="text-muted-foreground text-sm">
-          Flash tool will erase all data on the device before flashing, in the process clearing any existing configs
+        <p class="text-sm text-muted-foreground">
+          Flash tool will erase all data on the device before flashing, in the process clearing any
+          existing configs
         </p>
       </div>
     </div>
-    
+
     {#if version && board}
       <FirmwareFlasher {version} {board} {manager} {eraseBeforeFlash} bind:isFlashing />
     {/if}
   {:else if port && !connectFailed}
     <div class="flex flex-col items-center gap-2">
-      <span class="text-2xl text-center"> Connecting... </span>
+      <span class="text-center text-2xl"> Connecting... </span>
       <Progress />
       <!-- TODO: Make this a loading animation -->
     </div>
   {/if}
-  
+
   {#if port && connectFailed}
     <div class="flex flex-col items-start gap-2">
-      <span class="text-2xl text-center bold text-red-500"> Device connection failed </span>
+      <span class="bold text-center text-2xl text-red-500"> Device connection failed </span>
       <span class="text-center">
         There was an issue connecting to your device, please try the following:
       </span>
-      <ol class="list-decimal text-left pl-6">
-        <li>
-          Install the drivers for your device if you haven't already, using the button above
-        </li>
+      <ol class="list-decimal pl-6 text-left">
+        <li>Install the drivers for your device if you haven't already, using the button above</li>
         <li>Unplug and replug your device</li>
         <li>Use a different USB port</li>
         <li>Use a different USB cable</li>
         <li>
           Contact support if the issue persists:
-          <Button href={PUBLIC_DISCORD_INVITE_URL} target="_blank">
-            OpenShock Discord
-          </Button>
+          <Button href={PUBLIC_DISCORD_INVITE_URL} target="_blank">OpenShock Discord</Button>
         </li>
       </ol>
     </div>
@@ -127,35 +123,25 @@
 {/snippet}
 
 {#snippet unsupportedBrowser()}
-  <h3>
-    Your browser does not support this feature.
-  </h3>
+  <h3>Your browser does not support this feature.</h3>
   {#if ['Chrome', 'Edge', 'Opera'].includes(Bowser.getParser(navigator.userAgent).getBrowserName())}
     <h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">
       Please update your browser to the latest version.
     </h3>
   {:else}
-    <h3>
-      Please use one of the following browsers:
-    </h3>
+    <h3>Please use one of the following browsers:</h3>
     <div class="flex flex-col gap-2">
       <a class="flex items-center gap-2" href="https://www.google.com/chrome/">
         <ChromeLogo class="h-16" />
-        <h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">
-          Chrome
-        </h3>
+        <h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">Chrome</h3>
       </a>
       <a class="flex items-center gap-2" href="https://www.microsoft.com/en-us/edge">
         <EdgeLogo class="h-16" />
-        <h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">
-          Edge
-        </h3>
+        <h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">Edge</h3>
       </a>
       <a class="flex items-center gap-2" href="https://www.opera.com/">
         <OperaLogo class="h-16" />
-        <h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">
-          Opera
-        </h3>
+        <h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">Opera</h3>
       </a>
     </div>
   {/if}
@@ -196,15 +182,13 @@
       <SheetTitle class="flex items-center">
         Console
         <div class="flex-1"></div>
-        <Button class="m-2" onclick={() => (terminalText = '')}>
-          Clear
-        </Button>
+        <Button class="m-2" onclick={() => (terminalText = '')}>Clear</Button>
       </SheetTitle>
     </SheetHeader>
     <div
-      class="border border-surface-500 rounded-md p-4 overflow-y-auto flex-grow overflow-auto flex flex-col-reverse h-max"
+      class="border-surface-500 flex h-max flex-grow flex-col-reverse overflow-auto overflow-y-auto rounded-md border p-4"
     >
-      <pre id="terminal" class="text-xs text-left">{terminalText}</pre>
+      <pre id="terminal" class="text-left text-xs">{terminalText}</pre>
     </div>
   </SheetContent>
 </Sheet>

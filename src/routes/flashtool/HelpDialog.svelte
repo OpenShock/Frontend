@@ -31,7 +31,7 @@
       </Dialog.Title>
     </Dialog.Header>
     <ScrollArea orientation="vertical" class="max-h-[80vh]">
-      <div class="flex flex-col p-4 gap-4">
+      <div class="flex flex-col gap-4 p-4">
         <h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">Install drivers</h3>
         <div class="flex flex-col gap-1">
           <h4 class="h4 font-bold">1. Download drivers</h4>

@@ -1,4 +1,4 @@
-import { toast } from "svelte-sonner";
+import { toast } from 'svelte-sonner';
 
 async function DownloadText(url: string) {
   try {
@@ -16,13 +16,13 @@ async function DownloadLines(url: string) {
   const text = await DownloadText(url);
   if (!text) return null;
 
-  return text.split("\n").map((x) => x.trim());
+  return text.split('\n').map((x) => x.trim());
 }
 async function DownloadBinary(url: string, onProgress: (progress: number) => void) {
   const response = await fetch(url);
   if (!response.ok) return null;
 
-  const contentLength = parseInt(response.headers.get("content-length")?.trim() ?? "0");
+  const contentLength = parseInt(response.headers.get('content-length')?.trim() ?? '0');
   const reader = response.body?.getReader();
   if (!reader) return null;
 
@@ -30,7 +30,7 @@ async function DownloadBinary(url: string, onProgress: (progress: number) => voi
 
   let receivedLength = 0;
   const chunks: Uint8Array[] = [];
-  for (; ;) {
+  for (;;) {
     const { done, value } = await reader.read();
     if (done) break;
     if (!value) continue;
@@ -46,9 +46,9 @@ async function DownloadBinary(url: string, onProgress: (progress: number) => voi
   return await blob.arrayBuffer();
 }
 
-export const Channels = ["stable", "beta", "develop"] as const;
-export type Channel = typeof Channels[number];
-export type ChannelDict = { [key in typeof Channels[number]]?: string };
+export const Channels = ['stable', 'beta', 'develop'] as const;
+export type Channel = (typeof Channels)[number];
+export type ChannelDict = { [key in (typeof Channels)[number]]?: string };
 
 function DownloadChannelVersion(channel: Channel) {
   return DownloadText(`https://firmware.openshock.org/version-${channel}.txt`);
@@ -71,18 +71,27 @@ export function GetChannelBoards(version: string) {
   return DownloadLines(`https://firmware.openshock.org/${version}/boards.txt`);
 }
 
-export function DownloadFirmwareBinary(version: string, board: string, onProgress: (percent: number) => void) {
-  return DownloadBinary(`https://firmware.openshock.org/${version}/${board}/firmware.bin`, onProgress);
+export function DownloadFirmwareBinary(
+  version: string,
+  board: string,
+  onProgress: (percent: number) => void
+) {
+  return DownloadBinary(
+    `https://firmware.openshock.org/${version}/${board}/firmware.bin`,
+    onProgress
+  );
 }
 
 export async function GetFirmwareBinaryHash(version: string, board: string) {
-  const lines = await DownloadLines(`https://firmware.openshock.org/${version}/${board}/hashes.md5.txt`);
+  const lines = await DownloadLines(
+    `https://firmware.openshock.org/${version}/${board}/hashes.md5.txt`
+  );
   if (!lines) return null;
 
-  const hashLine = lines.find((x) => x.endsWith("firmware.bin"));
+  const hashLine = lines.find((x) => x.endsWith('firmware.bin'));
   if (!hashLine) return null;
 
-  const hash = hashLine.split(" ")[0].trim();
+  const hash = hashLine.split(' ')[0].trim();
 
   // Validate hash length
   if (hash.length != 32) return null;

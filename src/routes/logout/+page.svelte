@@ -25,7 +25,7 @@
 </script>
 
 {#if browser && $UserStore.self}
-  <div class="container h-full mx-auto flex justify-center items-center">
+  <div class="container mx-auto flex h-full items-center justify-center">
     <div class="flex flex-col space-y-4">
       <h2 class="h2">Logout</h2>
 

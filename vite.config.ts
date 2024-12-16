@@ -37,8 +37,12 @@ async function ensureFqdnRedirect(host: string, fqdn: string) {
   console.log('On macOS and Linux, you can do this by running the following command:');
   printBlue(`echo "${host} ${fqdn}" | sudo tee -a /etc/hosts\n`);
 
-  console.log('On Windows, you can do this by running the following command in PowerShell as an administrator:');
-  printBlue(`Add-Content -Path "C:\\Windows\\System32\\drivers\\etc\\hosts" -Value "${host} ${fqdn}"\n`);
+  console.log(
+    'On Windows, you can do this by running the following command in PowerShell as an administrator:'
+  );
+  printBlue(
+    `Add-Content -Path "C:\\Windows\\System32\\drivers\\etc\\hosts" -Value "${host} ${fqdn}"\n`
+  );
 
   printRed('Then restart your development server');
   process.exit(1);
@@ -83,7 +87,7 @@ async function getServer(mode: string, useLocalRedirect: boolean) {
 
 function getTest() {
   return {
-    include: ['src/**/*.{test,spec}.{js,ts}']
+    include: ['src/**/*.{test,spec}.{js,ts}'],
   };
 }
 
@@ -97,6 +101,6 @@ export default defineConfig(async ({ command, mode, isPreview }) => {
   return defineConfig({
     plugins: await getPlugins(useLocalRedirect),
     server: await getServer(mode, useLocalRedirect),
-    test: getTest()
+    test: getTest(),
   });
 });

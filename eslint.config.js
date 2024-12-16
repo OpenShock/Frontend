@@ -1,4 +1,4 @@
-import prettier from "eslint-config-prettier";
+import prettier from 'eslint-config-prettier';
 import js from '@eslint/js';
 import { includeIgnoreFile } from '@eslint/compat';
 import svelte from 'eslint-plugin-svelte';
@@ -11,25 +11,25 @@ export default ts.config(
   includeIgnoreFile(gitignorePath),
   js.configs.recommended,
   ...ts.configs.recommended,
-  ...svelte.configs["flat/recommended"],
+  ...svelte.configs['flat/recommended'],
   prettier,
   ...svelte.configs['flat/prettier'],
   {
     languageOptions: {
-	  globals: {
-	    ...globals.browser,
-	    ...globals.node
-	  }
-	}
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+    },
   },
   {
-    files: ["**/*.svelte"],
+    files: ['**/*.svelte'],
 
     languageOptions: {
-	  parserOptions: {
-	    parser: ts.parser,
-      ecmaVersion: 2020
-	  }
-	}
+      parserOptions: {
+        parser: ts.parser,
+        ecmaVersion: 2020,
+      },
+    },
   }
 );

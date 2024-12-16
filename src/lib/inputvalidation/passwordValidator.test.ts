@@ -1,4 +1,4 @@
-import { validatePassword, validatePasswordMatch } from "./passwordValidator";
+import { validatePassword, validatePasswordMatch } from './passwordValidator';
 import { describe, expect, it } from 'vitest';
 
 describe('email validator test', () => {
@@ -72,7 +72,7 @@ describe('email validator test', () => {
   it('valid password should return true and no error', () => {
     const result = validatePassword('validPassword123!');
     expect(result).toEqual({
-      valid: true
+      valid: true,
     });
   });
   it('password match with different password should return false and error', () => {
@@ -85,7 +85,7 @@ describe('email validator test', () => {
   it('password match with invalid password should return false and error', () => {
     const result = validatePasswordMatch('password', 'password');
     expect(result).toEqual({
-      valid: true
+      valid: true,
     });
   });
 });

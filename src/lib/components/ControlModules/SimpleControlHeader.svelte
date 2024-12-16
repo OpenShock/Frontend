@@ -7,10 +7,10 @@
 </script>
 
 <div
-  class="flex flex-row items-center justify-center gap-2 p-2 border border-surface-400-500-token rounded-md"
+  class="border-surface-400-500-token flex flex-row items-center justify-center gap-2 rounded-md border p-2"
 >
   <!-- Sliders -->
-  <div class="grid grid-cols-[24px_auto_40px] gap-1 items-center text-center">
+  <div class="grid grid-cols-[24px_auto_40px] items-center gap-1 text-center">
     <i class="fa-solid fa-bolt"></i>
     <input type="range" bind:value={shockIntensity} min="0" max="100" step="1" />
     <p>{shockIntensity}%</p>

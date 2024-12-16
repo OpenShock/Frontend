@@ -33,7 +33,9 @@
   function onOpenChange(open: boolean) {
     if (!open) {
       accountCreated = false;
-      toast.success('Account created successfully. Please check your email to verify your account.');
+      toast.success(
+        'Account created successfully. Please check your email to verify your account.'
+      );
       goto('/login');
     }
   }

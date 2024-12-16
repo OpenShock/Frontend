@@ -1,6 +1,7 @@
 import type { ValidationResult } from '$lib/types/ValidationResult';
 
-const emailRegex = /^[\w-!#$%&'*+/=?^`{|}~](\.?[\w-!#$%&'*+/=?^`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
+const emailRegex =
+  /^[\w-!#$%&'*+/=?^`{|}~](\.?[\w-!#$%&'*+/=?^`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
 
 export function isEmailAddress(value: string): boolean {
   if (!value) return false;
@@ -17,7 +18,7 @@ export function isEmailAddress(value: string): boolean {
 
   const domainParts = address.split('.');
 
-  if (domainParts.some(part => part.length > 63)) return false;
+  if (domainParts.some((part) => part.length > 63)) return false;
 
   return emailRegex.test(value);
 }

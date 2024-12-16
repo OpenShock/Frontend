@@ -1,19 +1,18 @@
-import { UAParser, type UAParserExt } from "ua-parser-js";
+import { UAParser, type UAParserExt } from 'ua-parser-js';
 
 const OpenShockExtension: UAParserExt = {
-  browser: [
-    [/^(OpenShock)\/([-\w.+]+)/i], ['name', 'version'],
-  ],
+  browser: [[/^(OpenShock)\/([-\w.+]+)/i], ['name', 'version']],
   cpu: [
-    [/;\s*(ESP32(?:S[0-9]+)?);/i], [['architecture', 'XTensa']],
-    [/;\s*(ESP32C[0-9]+);/i], [['architecture', 'RISC-V']]
+    [/;\s*(ESP32(?:S[0-9]+)?);/i],
+    [['architecture', 'XTensa']],
+    [/;\s*(ESP32C[0-9]+);/i],
+    [['architecture', 'RISC-V']],
   ],
   device: [
-    [/;\s*(ESP32(?:[SC][0-9]+)?);\s*Espressif\)/i], ['model', ['vendor', 'Espressif'], ['type', 'embedded']]
+    [/;\s*(ESP32(?:[SC][0-9]+)?);\s*Espressif\)/i],
+    ['model', ['vendor', 'Espressif'], ['type', 'embedded']],
   ],
-  os: [
-    [/\(arduino-esp32;/i], [['name', 'Arduino']]
-  ]
+  os: [[/\(arduino-esp32;/i], [['name', 'Arduino']]],
 };
 
 export function getReadableUserAgentName(userAgent: string): string | null {

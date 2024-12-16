@@ -1,6 +1,11 @@
 <script lang="ts">
   import * as ToggleGroup from '$lib/components/ui/toggle-group';
-  import { GetFirmwareChannel, GetChannelBoards, type ChannelDict, type Channel } from '$lib/api/firmwareCDN';
+  import {
+    GetFirmwareChannel,
+    GetChannelBoards,
+    type ChannelDict,
+    type Channel,
+  } from '$lib/api/firmwareCDN';
 
   /** Optional chip to constrain the list of boards to */
   //export let chip: string | null = null;

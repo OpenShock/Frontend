@@ -3,7 +3,7 @@ export interface TurnstileRenderParameters {
    * Every widget has a sitekey.
    *
    * This sitekey is associated with the corresponding widget configuration and is created upon the widget creation.
-  */
+   */
   sitekey: string;
 
   /**
@@ -74,24 +74,24 @@ export interface TurnstileRenderParameters {
    * Refer to the {@link https://developers.cloudflare.com/turnstile/reference/supported-languages/|list of supported languages} for more information.
    */
   language?:
-  | 'auto'
-  | 'ar-eg'
-  | 'de'
-  | 'en'
-  | 'es'
-  | 'fa'
-  | 'fr'
-  | 'id'
-  | 'it'
-  | 'ja'
-  | 'ko'
-  | 'nl'
-  | 'pl'
-  | 'pt-br'
-  | 'ru'
-  | 'tr'
-  | 'zh-cn'
-  | 'zh-tw';
+    | 'auto'
+    | 'ar-eg'
+    | 'de'
+    | 'en'
+    | 'es'
+    | 'fa'
+    | 'fr'
+    | 'id'
+    | 'it'
+    | 'ja'
+    | 'ko'
+    | 'nl'
+    | 'pl'
+    | 'pt-br'
+    | 'ru'
+    | 'tr'
+    | 'zh-cn'
+    | 'zh-tw';
 
   /**
    * The tabindex of Turnstile's iframe for accessibility purposes.

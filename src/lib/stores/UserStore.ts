@@ -1,8 +1,11 @@
-import { usersApi } from "$lib/api";
-import type { ApiUser, ApiUserSelf } from "$lib/types/ApiUser";
-import { writable } from "svelte/store";
+import { usersApi } from '$lib/api';
+import type { ApiUser, ApiUserSelf } from '$lib/types/ApiUser';
+import { writable } from 'svelte/store';
 
-const { set, update, subscribe } = writable<{ self: ApiUserSelf | null, all: ApiUser[] }>({ self: null, all: [] });
+const { set, update, subscribe } = writable<{ self: ApiUserSelf | null; all: ApiUser[] }>({
+  self: null,
+  all: [],
+});
 
 function updateAllFromSelf(all: ApiUser[], self: ApiUserSelf | null): ApiUser[] {
   if (!self) return all;
@@ -24,7 +27,8 @@ function setSelfName(name: string) {
 }
 
 function refreshSelf() {
-  usersApi.usersGetSelf()
+  usersApi
+    .usersGetSelf()
     .then(({ data, message }) => {
       if (!data) {
         console.error(`Failed to get user self: ${message}`);
@@ -53,7 +57,6 @@ function refreshSelf() {
 function reset() {
   set({ self: null, all: [] });
 }
-
 
 export const UserStore = {
   subscribe,

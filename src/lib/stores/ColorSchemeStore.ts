@@ -1,5 +1,5 @@
-import { browser } from "$app/environment";
-import { writable, type Updater } from "svelte/store";
+import { browser } from '$app/environment';
+import { writable, type Updater } from 'svelte/store';
 
 function getLocalStoreState() {
   const scheme = localStorage.getItem('theme');
@@ -57,7 +57,9 @@ function getColorSchemePreference() {
   return 'dark';
 }
 
-const { set, update, subscribe } = writable<'dark' | 'light' | 'system'>(getColorSchemePreference());
+const { set, update, subscribe } = writable<'dark' | 'light' | 'system'>(
+  getColorSchemePreference()
+);
 
 function setHtmlDarkModeSelector(value: boolean) {
   document.documentElement.classList.toggle('dark', value);
@@ -89,7 +91,10 @@ export const ColorSchemeStore = {
 };
 
 export function willActivateLightMode(value: 'dark' | 'light' | 'system') {
-  return value === 'light' || (value === 'system' && window.matchMedia('(prefers-color-scheme: light)').matches);
+  return (
+    value === 'light' ||
+    (value === 'system' && window.matchMedia('(prefers-color-scheme: light)').matches)
+  );
 }
 
 export function initializeDarkModeStore() {
@@ -97,8 +102,12 @@ export function initializeDarkModeStore() {
   setHtmlDarkModeSelector(schemePreference === 'dark');
   set(schemePreference);
 
-  window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', handleSchemePreferenceChange);
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', handleSchemePreferenceChange);
+  window
+    .matchMedia('(prefers-color-scheme: light)')
+    .addEventListener('change', handleSchemePreferenceChange);
+  window
+    .matchMedia('(prefers-color-scheme: dark)')
+    .addEventListener('change', handleSchemePreferenceChange);
 
   window.addEventListener('storage', (event) => {
     if (event.key !== 'theme') return;
