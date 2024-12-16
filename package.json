@@ -44,7 +44,6 @@
 		"eslint-plugin-svelte": "^2.46.1",
 		"globals": "^15.13.0",
 		"highlight.js": "^11.11.0",
-		"js-sha1": "^0.7.0",
 		"lucide-svelte": "^0.468.0",
 		"postcss": "^8.4.49",
 		"prettier": "^3.4.2",
