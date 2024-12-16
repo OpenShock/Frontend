@@ -49,4 +49,4 @@
   }
 </script>
 
-<canvas bind:this={canvas} width="2000" height="1300" class="h-full w-full"></canvas>
+<canvas bind:this={canvas} width="2000" height="1300" class="size-full"></canvas>

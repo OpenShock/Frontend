@@ -139,16 +139,16 @@
 
 <style lang="postcss">
   .canvas {
-    @apply relative h-[150px] w-[150px];
+    @apply relative size-[150px];
   }
   svg {
-    @apply absolute h-[150px] w-[150px];
+    @apply absolute size-[150px];
   }
   path {
     @apply cursor-pointer;
   }
   .handle {
-    @apply absolute h-[30px] w-[30px] cursor-move rounded-full bg-white;
+    @apply absolute size-[30px] cursor-move rounded-full bg-white;
   }
   input[type='number'] {
     @apply absolute left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] transform select-none appearance-none border-none bg-transparent text-center text-xl font-bold;

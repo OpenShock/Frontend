@@ -25,7 +25,7 @@
   <!-- Arrow -->
   <div class="relative h-0 w-full">
     <div
-      class="absolute h-2 w-2 -translate-x-1 -translate-y-1 rotate-45 transform bg-black dark:bg-white"
+      class="absolute size-2 -translate-x-1 -translate-y-1 rotate-45 transform bg-black dark:bg-white"
       style={`left: ${percent}%`}
     ></div>
   </div>

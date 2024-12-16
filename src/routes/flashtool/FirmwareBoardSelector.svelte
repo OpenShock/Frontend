@@ -46,7 +46,7 @@
     <PopoverTrigger>
       <Button variant="outline" role="combobox" class="w-[240px] justify-between">
         {selectedBoard ?? 'Select a board...'}
-        <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        <ChevronsUpDown class="ml-2 size-4 shrink-0 opacity-50" />
       </Button>
     </PopoverTrigger>
     <PopoverContent class="w-[240px] p-0">
@@ -56,7 +56,7 @@
         <CommandGroup>
           {#each boards as board}
             <CommandItem value={board} onSelect={() => (selectedBoard = board)}>
-              <Check class={cn('mr-2 h-4 w-4', selectedBoard !== board && 'text-transparent')} />
+              <Check class={cn('mr-2 size-4', selectedBoard !== board && 'text-transparent')} />
               {board}
             </CommandItem>
           {/each}
