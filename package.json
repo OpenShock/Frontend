@@ -38,7 +38,6 @@
 		"clsx": "^2.1.1",
 		"crypto-js": "^4.2.0",
 		"dotenv": "^16.4.7",
-		"email-validator": "^2.0.4",
 		"eslint": "^9.16.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.46.1",

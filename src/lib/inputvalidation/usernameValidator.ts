@@ -1,6 +1,6 @@
-import { validate as validateEmail } from 'email-validator';
 import type { ValidationResult } from '$lib/types/ValidationResult';
 import { UsernameAvailability } from '$lib/api/internal/v2';
+import { isEmailAddress } from './emailValidator';
 
 /* eslint-disable no-misleading-character-class */
 
@@ -100,7 +100,7 @@ export function validateUsername(value: string): ValidationResult | null {
     return UsernameBannedCharactersValRes;
   }
 
-  if (validateEmail(value)) {
+  if (isEmailAddress(value)) {
     return UsernameResemblesEmailValRes;
   }
 

@@ -92,9 +92,6 @@ importers:
       dotenv:
         specifier: ^16.4.7
         version: 16.4.7
-      email-validator:
-        specifier: ^2.0.4
-        version: 2.0.4
       eslint:
         specifier: ^9.16.0
         version: 9.17.0(jiti@1.21.6)
@@ -1544,10 +1541,6 @@ packages:
 
   electron-to-chromium@1.5.40:
     resolution: {integrity: sha512-LYm78o6if4zTasnYclgQzxEcgMoIcybWOhkATWepN95uwVVWV0/IW10v+2sIeHE+bIYWipLneTftVyQm45UY7g==}
-
-  email-validator@2.0.4:
-    resolution: {integrity: sha512-gYCwo7kh5S3IDyZPLZf6hSS0MnZT8QmJFqYvbqlDZSbwdZlY6QZWxJ4i/6UhITOJ4XzyI647Bm2MXKCLqnJ4nQ==}
-    engines: {node: '>4.0'}
 
   emoji-regex@8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
@@ -4244,8 +4237,6 @@ snapshots:
       wcwidth: 1.0.1
 
   electron-to-chromium@1.5.40: {}
-
-  email-validator@2.0.4: {}
 
   emoji-regex@8.0.0: {}
 
