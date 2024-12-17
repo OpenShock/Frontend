@@ -50,7 +50,7 @@ export const columns: ColumnDef<ApiToken>[] = [
       const expiresAtCellSnippet = createRawSnippet<[Date | null]>((getExpiresAt) => {
         const expiresAt = getExpiresAt();
 
-        if(expiresAt === null) {
+        if (expiresAt === null) {
           return {
             render: () => '<div class="text-right font-medium text-orange-500">Never</div>',
           };
@@ -58,7 +58,8 @@ export const columns: ColumnDef<ApiToken>[] = [
         const now = Date.now();
         const formattedTimeSpan = elapsedToString(expiresAt.getTime() - now);
         return {
-          render: () => `<div class="text-right font-medium" title="${expiresAt}">${formattedTimeSpan}</div>`,
+          render: () =>
+            `<div class="text-right font-medium" title="${expiresAt}">${formattedTimeSpan}</div>`,
         };
       });
 
@@ -73,7 +74,7 @@ export const columns: ColumnDef<ApiToken>[] = [
         const lastUsed = getLastUsed();
         const isNever = lastUsed.getTime() < 0;
 
-        if(isNever) {
+        if (isNever) {
           return {
             render: () => '<div class="text-right font-medium text-orange-500">Never</div>',
           };
@@ -82,7 +83,8 @@ export const columns: ColumnDef<ApiToken>[] = [
         const now = Date.now();
         const formattedTimeSpan = elapsedToString(lastUsed.getTime() - now);
         return {
-          render: () => `<div class="text-right font-medium" title="${lastUsed}">${formattedTimeSpan}</div>`,
+          render: () =>
+            `<div class="text-right font-medium" title="${lastUsed}">${formattedTimeSpan}</div>`,
         };
       });
 
@@ -94,6 +96,6 @@ export const columns: ColumnDef<ApiToken>[] = [
     cell: ({ row }) => {
       // You can pass whatever you need from `row.original` to the component
       return renderComponent(DataTableActions, { token: row.original });
-    }
+    },
   },
 ];

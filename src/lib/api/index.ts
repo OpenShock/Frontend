@@ -1,6 +1,27 @@
 import { PUBLIC_BACKEND_API_DOMAIN } from '$env/static/public';
-import { AccountApi as AccountV1Api, AdminApi, AuthenticatedAccountApi, Configuration as ConfigurationV1, DeviceApi, DevicesApi as DevicesV1Api, PublicApi, SessionsApi, ShareLinksApi, SharesApi as SharesV1Api, ShockerApi as ShockerV1Api, TokensApi, UsersApi, VersionApi } from './internal/v1';
-import { AccountApi as AccountV2Api, Configuration as ConfigurationV2, DevicesApi as DevicesV2Api, SharesApi as SharesV2Api, ShockerApi as ShockerV2Api } from './internal/v2';
+import {
+  AccountApi as AccountV1Api,
+  AdminApi,
+  AuthenticatedAccountApi,
+  Configuration as ConfigurationV1,
+  DeviceApi,
+  DevicesApi as DevicesV1Api,
+  PublicApi,
+  SessionsApi,
+  ShareLinksApi,
+  SharesApi as SharesV1Api,
+  ShockerApi as ShockerV1Api,
+  TokensApi,
+  UsersApi,
+  VersionApi,
+} from './internal/v1';
+import {
+  AccountApi as AccountV2Api,
+  Configuration as ConfigurationV2,
+  DevicesApi as DevicesV2Api,
+  SharesApi as SharesV2Api,
+  ShockerApi as ShockerV2Api,
+} from './internal/v2';
 
 type Config = {
   basePath?: string;
@@ -24,7 +45,7 @@ function GetBasePath() {
 function GetConfig(): Config {
   return {
     basePath: GetBasePath(),
-    credentials: 'include'
+    credentials: 'include',
   };
 }
 

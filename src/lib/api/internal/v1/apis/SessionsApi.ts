@@ -96,10 +96,6 @@ export class SessionsApi extends runtime.BaseAPI implements SessionsApiInterface
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
-        }
-
         const response = await this.request({
             path: `/1/sessions/{sessionId}`.replace(`{${"sessionId"}}`, encodeURIComponent(String(requestParameters['sessionId']))),
             method: 'DELETE',
@@ -123,10 +119,6 @@ export class SessionsApi extends runtime.BaseAPI implements SessionsApiInterface
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
-        }
 
         const response = await this.request({
             path: `/1/sessions/self`,
@@ -152,10 +144,6 @@ export class SessionsApi extends runtime.BaseAPI implements SessionsApiInterface
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
-        }
 
         const response = await this.request({
             path: `/1/sessions`,

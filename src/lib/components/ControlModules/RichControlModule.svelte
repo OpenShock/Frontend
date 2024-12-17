@@ -19,12 +19,12 @@
 </script>
 
 <div
-  class="flex flex-col items-center justify-center gap-2 p-2 border border-surface-400-500-token rounded-md"
+  class="border-surface-400-500-token flex flex-col items-center justify-center gap-2 rounded-md border p-2"
 >
   <!-- Title -->
   <h2 class="text-lg font-bold">{shocker.name}</h2>
   <!-- Sliders -->
-  <div class="grid grid-cols-[24px_128px_40px] gap-1 items-center text-center">
+  <div class="grid grid-cols-[24px_128px_40px] items-center gap-1 text-center">
     <i class="fa-solid fa-signal"></i>
     <input type="range" bind:value={intensity} min="0" max="100" step="1" />
     <p>{intensity}%</p>
@@ -33,10 +33,10 @@
     <p>{duration}s</p>
   </div>
   <!-- Buttons -->
-  <div class="w-full flex gap-2">
+  <div class="flex w-full gap-2">
     <!-- Beep button -->
     <button
-      class="btn p-2 bg-primary-500 rounded-md flex-1"
+      class="btn bg-primary-500 flex-1 rounded-md p-2"
       onclick={() => emit('beep')}
       aria-label="Beep"
     >
@@ -44,7 +44,7 @@
     </button>
     <!-- Vibrate button -->
     <button
-      class="btn p-2 bg-primary-500 rounded-md flex-1"
+      class="btn bg-primary-500 flex-1 rounded-md p-2"
       onclick={() => emit('vibrate')}
       aria-label="Vibrate"
     >
@@ -52,7 +52,7 @@
     </button>
     <!-- Shock button -->
     <button
-      class="btn p-2 bg-primary-500 rounded-md flex-1"
+      class="btn bg-primary-500 flex-1 rounded-md p-2"
       onclick={() => emit('shock')}
       aria-label="Shock"
     >

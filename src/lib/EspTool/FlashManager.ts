@@ -1,4 +1,10 @@
-import { ESPLoader, Transport, type LoaderOptions, type IEspLoaderTerminal, type FlashOptions } from 'esptool-js';
+import {
+  ESPLoader,
+  Transport,
+  type LoaderOptions,
+  type IEspLoaderTerminal,
+  type FlashOptions,
+} from 'esptool-js';
 import HashMD5 from 'crypto-js/md5';
 import Latin1 from 'crypto-js/enc-latin1';
 
@@ -8,7 +14,12 @@ export default class FlashManager {
   private terminal: IEspLoaderTerminal;
   private chip: string;
 
-  private constructor(transport: Transport, loader: ESPLoader, terminal: IEspLoaderTerminal, chip: string) {
+  private constructor(
+    transport: Transport,
+    loader: ESPLoader,
+    terminal: IEspLoaderTerminal,
+    chip: string
+  ) {
     this.transport = transport;
     this.loader = loader;
     this.terminal = terminal;
@@ -19,16 +30,18 @@ export default class FlashManager {
     try {
       await serialPort.close(); // TODO: Find some way to detect if the port is already open
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (e) { /* empty */ }
+    } catch (e) {
+      /* empty */
+    }
 
     try {
-      console.log("Connecting to", serialPort);
+      console.log('Connecting to', serialPort);
       const transport = new Transport(serialPort);
 
       const flashOptions = {
         transport,
         baudrate: 115200,
-        terminal
+        terminal,
       } as LoaderOptions;
 
       const loader = new ESPLoader(flashOptions);
@@ -51,14 +64,14 @@ export default class FlashManager {
   }
 
   async disconnect() {
-    console.log("Disconnecting");
+    console.log('Disconnecting');
     if (this.transport) {
       await this.transport.disconnect();
       this.transport = null;
     }
     this.loader = null;
     this.terminal.clean();
-    console.log("Disconnected");
+    console.log('Disconnected');
   }
 
   async erase() {
@@ -103,15 +116,17 @@ export default class FlashManager {
     }
 
     const flashOptions = {
-      fileArray: [{
-        data: arrayBufferToString(data),
-        address: 0
-      }],
+      fileArray: [
+        {
+          data: arrayBufferToString(data),
+          address: 0,
+        },
+      ],
       flashSize: 'keep',
       eraseAll,
       compress: true,
       reportProgress,
-      calculateMD5Hash: (image) => HashMD5(Latin1.parse(image)).toString()
+      calculateMD5Hash: (image) => HashMD5(Latin1.parse(image)).toString(),
     } as FlashOptions;
 
     try {
@@ -123,7 +138,6 @@ export default class FlashManager {
       this.terminal.writeLine(`Failed to flash: ${e}`);
       return false;
     }
-
   }
 
   private consoleRunning = false;
@@ -148,8 +162,8 @@ export default class FlashManager {
   private async _internalConsoleLoop(timeout: number) {
     const reader = this?.transport?.device?.readable?.getReader();
     if (!reader) {
-      console.error("No reader");
-      this.terminal.writeLine("No reader");
+      console.error('No reader');
+      this.terminal.writeLine('No reader');
       return;
     }
 
@@ -191,7 +205,7 @@ export default class FlashManager {
       const { value, done } = await reader.read();
 
       if (done) {
-        throw new Error("Timeout");
+        throw new Error('Timeout');
       }
 
       return value;

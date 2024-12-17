@@ -4,7 +4,7 @@
 /// <reference types="svelte" />
 /// <reference types="vite/client" />
 
-import type { TurnstileInstance } from "$lib/types/TurnstileInstance";
+import type { TurnstileInstance } from '$lib/types/TurnstileInstance';
 
 declare global {
   declare namespace App {
@@ -18,4 +18,4 @@ declare global {
   }
 }
 
-export { };
+export {};

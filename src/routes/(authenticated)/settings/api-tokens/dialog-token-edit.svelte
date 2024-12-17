@@ -83,7 +83,7 @@
 
       <div>
         <h2>Permissions</h2>
-        <div class="border rounded-md border-surface-500 p-4 space-y-4">
+        <div class="border-surface-500 space-y-4 rounded-md border p-4">
           {#each permissionTypes as category}
             <span>{category.name}</span>
             {#each category.perms as permission}

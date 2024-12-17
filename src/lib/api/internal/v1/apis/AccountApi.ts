@@ -199,10 +199,6 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
 
         headerParameters['Content-Type'] = 'application/json';
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
-        }
-
         const response = await this.request({
             path: `/1/account/username/check`,
             method: 'POST',
@@ -232,10 +228,6 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
 
         headerParameters['Content-Type'] = 'application/json';
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
-        }
-
         const response = await this.request({
             path: `/1/account/login`,
             method: 'POST',
@@ -261,10 +253,6 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
-        }
 
         const response = await this.request({
             path: `/1/account/logout`,
@@ -303,10 +291,6 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
-        }
 
         const response = await this.request({
             path: `/1/account/recover/{passwordResetId}/{secret}`.replace(`{${"passwordResetId"}}`, encodeURIComponent(String(requestParameters['passwordResetId']))).replace(`{${"secret"}}`, encodeURIComponent(String(requestParameters['secret']))),
@@ -350,10 +334,6 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
 
         headerParameters['Content-Type'] = 'application/json';
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
-        }
-
         const response = await this.request({
             path: `/1/account/recover/{passwordResetId}/{secret}`.replace(`{${"passwordResetId"}}`, encodeURIComponent(String(requestParameters['passwordResetId']))).replace(`{${"secret"}}`, encodeURIComponent(String(requestParameters['secret']))),
             method: 'POST',
@@ -383,10 +363,6 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
 
         headerParameters['Content-Type'] = 'application/json';
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
-        }
-
         const response = await this.request({
             path: `/1/account/reset`,
             method: 'POST',
@@ -415,10 +391,6 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
-        }
 
         const response = await this.request({
             path: `/1/account/signup`,

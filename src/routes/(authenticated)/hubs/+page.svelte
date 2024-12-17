@@ -11,13 +11,15 @@
   let data = $derived.by<Hub[]>(() => {
     if (!$OwnHubsStore || !$OnlineHubsStore) return [];
 
-    return Array.from($OwnHubsStore).map(([,hub]) => {
+    return Array.from($OwnHubsStore).map(([, hub]) => {
       const onlineState = $OnlineHubsStore.get(hub.id);
       return {
         id: hub.id,
         name: hub.name,
         is_online: onlineState?.isOnline ?? false,
-        firmware_version: onlineState?.firmwareVersion ? new SemVer(onlineState.firmwareVersion) : null,
+        firmware_version: onlineState?.firmwareVersion
+          ? new SemVer(onlineState.firmwareVersion)
+          : null,
         shockers: hub.shockers.map((shocker) => {
           return {
             id: shocker.id,
@@ -36,7 +38,7 @@
 
 <div class="container my-8">
   <Card.Header>
-    <Card.Title class="text-3xl flex items-center space-x-2 justify-between">
+    <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
       Hubs
       <Button class="btn variant-filled-primary text-xl" onclick={() => {}}>
         <RotateCcw />

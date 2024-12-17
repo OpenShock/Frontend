@@ -2,7 +2,11 @@
   import { buttonVariants } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-  import { ColorSchemeStore, willActivateLightMode, getDarkReaderState } from '$lib/stores/ColorSchemeStore';
+  import {
+    ColorSchemeStore,
+    willActivateLightMode,
+    getDarkReaderState,
+  } from '$lib/stores/ColorSchemeStore';
   import { toast } from 'svelte-sonner';
   import AbsolutelySureButton from './AbsolutelySureButton.svelte';
 
@@ -41,7 +45,7 @@
     <Dialog.Header>
       <Dialog.Title>Switch to light mode</Dialog.Title>
       <Dialog.Description>
-        <span class="text-red-500 font-bold">Warning:</span> You are about to switch to light mode.
+        <span class="font-bold text-red-500">Warning:</span> You are about to switch to light mode.
         <br />
         Are you sure you want to do this?
       </Dialog.Description>
@@ -52,11 +56,9 @@
 
 <DropdownMenu.Root>
   <DropdownMenu.Trigger class={buttonVariants({ variant: 'outline', size: 'icon' })}>
-    <Sun
-      class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
-    />
+    <Sun class="size-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
     <Moon
-      class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
+      class="absolute size-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
     />
     <span class="sr-only">Toggle theme</span>
   </DropdownMenu.Trigger>

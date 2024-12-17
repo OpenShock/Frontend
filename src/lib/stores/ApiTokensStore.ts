@@ -1,13 +1,14 @@
-import { tokensApi } from "$lib/api";
-import type { TokenResponse } from "$lib/api/internal/v1";
-import { writable } from "svelte/store";
+import { tokensApi } from '$lib/api';
+import type { TokenResponse } from '$lib/api/internal/v1';
+import { writable } from 'svelte/store';
 
 export type ApiToken = TokenResponse;
 
 export const ApiTokensStore = writable<Map<string, ApiToken>>(new Map());
 
 export function refreshApiToken(id: string) {
-  tokensApi.tokensGetTokenById(id)
+  tokensApi
+    .tokensGetTokenById(id)
     .then((token) => {
       ApiTokensStore.update((state) => {
         state.set(token.id, token);
@@ -20,9 +21,10 @@ export function refreshApiToken(id: string) {
 }
 
 export function refreshApiTokens() {
-  tokensApi.tokensListTokens()
+  tokensApi
+    .tokensListTokens()
     .then((tokens) => {
-        ApiTokensStore.set(new Map(tokens.map((t) => [t.id, t])));
+      ApiTokensStore.set(new Map(tokens.map((t) => [t.id, t])));
     })
     .catch((error) => {
       console.error(error); // TODO: Show toast
@@ -30,10 +32,10 @@ export function refreshApiTokens() {
 }
 
 export function deleteApiToken(id: string) {
-    ApiTokensStore.update((state) => {
-      state.delete(id);
-      return state;
-    });
+  ApiTokensStore.update((state) => {
+    state.delete(id);
+    return state;
+  });
 }
 
 export function initializeApiTokenStore() {

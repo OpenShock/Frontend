@@ -21,23 +21,20 @@
     };
   }
 
-  let data = $derived<ApiToken[]>(Array.from($ApiTokensStore).map(([_, token]) => apiTokenToTableToken(token)));
+  let data = $derived<ApiToken[]>(
+    Array.from($ApiTokensStore).map(([_, token]) => apiTokenToTableToken(token))
+  );
 
   let showGenerateTokenModal = $state<boolean>(false);
 
   onMount(refreshApiTokens);
-
 </script>
 
-<TokenGenerateDialog
-  bind:open={showGenerateTokenModal}
-  onGenerated={(id) => refreshApiToken(id)}
-/>
-
+<TokenGenerateDialog bind:open={showGenerateTokenModal} onGenerated={(id) => refreshApiToken(id)} />
 
 <div class="container my-8">
   <Card.Header>
-    <Card.Title class="text-3xl flex items-center space-x-2 justify-between">
+    <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
       API Tokens
       <Button class="btn variant-filled-primary" onclick={refreshApiTokens}>
         <RotateCcw />

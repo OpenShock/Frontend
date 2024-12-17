@@ -55,10 +55,10 @@
 </script>
 
 {#if $UserStore.self}
-  <div class="container h-full mx-auto p-12 flex flex-col justify-start items-start gap-4">
+  <div class="container mx-auto flex h-full flex-col items-start justify-start gap-4 p-12">
     <h1 class="h1">Account Settings</h1>
     <div
-      class="w-full flex flex-col items-start gap-y-2 p-4 bg-surface-100-800-token rounded-lg border border-gray-500"
+      class="bg-surface-100-800-token flex w-full flex-col items-start gap-y-2 rounded-lg border border-gray-500 p-4"
     >
       <UsernameInput
         label="Username"
@@ -85,7 +85,7 @@
             Change your password
           </Accordion.Trigger>
           <Accordion.Content>
-            <div class="rounded-lg border border-gray-700 p-5 mx-[-1rem]">
+            <div class="mx-[-1rem] rounded-lg border border-gray-700 p-5">
               <PasswordInput
                 label="Current Password"
                 placeholder="Current Password"

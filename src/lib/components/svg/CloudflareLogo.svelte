@@ -1,10 +1,14 @@
 <script lang="ts">
   type Props = {
-    class: string;
+    class?: string;
   };
 
   let props: Props = $props();
 </script>
+
+<!--
+  The following SVG graphic is the property of Cloudflare, Inc. And is just used here for illustrative purposes, we do not claim ownership of it.
+-->
 
 <svg
   role="img"

@@ -115,10 +115,6 @@ export class AuthenticatedAccountApi extends runtime.BaseAPI implements Authenti
 
         headerParameters['Content-Type'] = 'application/json';
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
-        }
-
         const response = await this.request({
             path: `/1/account/email`,
             method: 'POST',
@@ -148,10 +144,6 @@ export class AuthenticatedAccountApi extends runtime.BaseAPI implements Authenti
 
         headerParameters['Content-Type'] = 'application/json';
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
-        }
-
         const response = await this.request({
             path: `/1/account/password`,
             method: 'POST',
@@ -179,10 +171,6 @@ export class AuthenticatedAccountApi extends runtime.BaseAPI implements Authenti
         const headerParameters: runtime.HTTPHeaders = {};
 
         headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
-        }
 
         const response = await this.request({
             path: `/1/account/username`,

@@ -13,7 +13,7 @@
   import type { Snippet } from 'svelte';
   import { RankType } from '$lib/api/internal/v1';
   import { browser, dev } from '$app/environment';
-  import '../app.pcss';
+  import '../app.css';
 
   type Props = {
     children?: Snippet;
@@ -45,7 +45,7 @@
   controlledOpen={true}
 >
   <AppSidebar currentUserRank={currentUserRank ?? RankType.User} />
-  <div class="flex-1 flex flex-col min-h-screen">
+  <div class="flex min-h-screen flex-1 flex-col">
     <Header />
     <main class="flex-1">
       {@render children?.()}

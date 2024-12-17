@@ -58,7 +58,7 @@
 
 <div class="container my-8">
   <Card.Header>
-    <Card.Title class="text-3xl flex items-center space-x-2 justify-between">
+    <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
       Online Hubs: {data.length}
       <Button class="btn variant-filled-primary text-xl" onclick={fetchOnlineHubs}>
         <RotateCcw />

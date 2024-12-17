@@ -1,4 +1,4 @@
-import { writable } from "svelte/store";
+import { writable } from 'svelte/store';
 
 const { update, subscribe } = writable<SerialPort[]>([]);
 
@@ -21,17 +21,17 @@ export const SerialPortsStore = {
 export function initializeSerialPortsStore() {
   if (!('serial' in navigator)) return;
 
-  navigator.serial.addEventListener("connect", (e) => addPort(e.target as SerialPort));
-  navigator.serial.addEventListener("disconnect", (e) => removePort(e.target as SerialPort));
+  navigator.serial.addEventListener('connect', (e) => addPort(e.target as SerialPort));
+  navigator.serial.addEventListener('disconnect', (e) => removePort(e.target as SerialPort));
 
-  navigator.serial.getPorts()
+  navigator.serial
+    .getPorts()
     .then((ports) => {
       if (ports.length > 0) {
         update((p) => [...p, ...ports]);
       }
     })
     .catch((error) => {
-      console.error("Failed to get ports", error); // TODO: Show toast
+      console.error('Failed to get ports', error); // TODO: Show toast
     });
 }
-

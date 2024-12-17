@@ -1,4 +1,4 @@
 <script lang="ts">
 </script>
 
-<div class="container h-full mx-auto flex justify-center items-center"></div>
+<div class="container mx-auto flex h-full items-center justify-center"></div>
