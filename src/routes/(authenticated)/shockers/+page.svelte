@@ -14,21 +14,36 @@
 
   let moduleType = $state<ModuleType>(ModuleType.ClassicControlModule);
 
-  function handleCommand(
-    event: CustomEvent<{ id: string; type: ControlType; intensity: number; duration: number }>
-  ) {
-    let shocks: Control[] = [
-      {
-        id: event.detail.id,
-        type: event.detail.type,
-        intensity: event.detail.intensity,
-        duration: event.detail.duration,
-      },
-    ];
+  let shockIntensity = $state(25);
+  let vibrationIntensity = $state(25);
+  let duration = $state(1);
+
+  function handleControlMessages(controls: Control[]) {
     shockerV2Api.shockerSendControl({
-      shocks,
+      shocks: controls,
       customName: 'Custom name',
     });
+  }
+  function handleSimpleControl(shockerId: string, controlType: ControlType) {
+    let intensity: number;
+    switch (controlType) {
+      case 'Stop':
+        intensity = 0;
+        break;
+      case 'Shock':
+        intensity = shockIntensity;
+        break;
+      case 'Vibrate':
+        intensity = vibrationIntensity;
+        break;
+      case 'Sound':
+        intensity = 0;
+        break;
+      default:
+        return;
+    }
+
+    handleControlMessages([{ id: shockerId, type: controlType, intensity, duration }]);
   }
 </script>
 
@@ -80,19 +95,19 @@
     </div>
     <hr class="border-2" />
     {#if moduleType === ModuleType.SimpleControlModule}
-      <SimpleControlHeader />
+      <SimpleControlHeader bind:shockIntensity bind:vibrationIntensity bind:duration />
     {/if}
     {#if moduleType === ModuleType.MapControlModule}
-      <MapControlModule {shockers} />
+      <MapControlModule {shockers} controlHandler={handleControlMessages} />
     {:else}
       <div class="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {#each shockers ?? [] as shocker (shocker.id)}
           {#if moduleType === ModuleType.ClassicControlModule}
-            <ClassicControlModule {shocker} on:command={handleCommand} />
+            <ClassicControlModule {shocker} controlHandler={handleControlMessages} />
           {:else if moduleType === ModuleType.RichControlModule}
-            <RichControlModule {shocker} on:command={handleCommand} />
+            <RichControlModule {shocker} controlHandler={handleControlMessages} />
           {:else if moduleType === ModuleType.SimpleControlModule}
-            <SimpleControlModule {shocker} on:command={handleCommand} />
+            <SimpleControlModule {shocker} controlHandler={handleSimpleControl} />
           {:else}
             <p>Unknown module type</p>
           {/if}

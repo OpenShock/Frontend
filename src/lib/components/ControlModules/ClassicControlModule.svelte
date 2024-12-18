@@ -1,21 +1,21 @@
 <script lang="ts">
   import type { ShockerResponse } from '$lib/api/internal/v1';
-  import { createEventDispatcher } from 'svelte';
+  import { ControlType, type Control } from '$lib/api/internal/v2';
+  import { Button } from '$lib/components/ui/button';
   import CircleSlider from './Internal/CircleSlider.svelte';
 
   interface Props {
     shocker: ShockerResponse;
+    controlHandler: (controls: Control[]) => void;
   }
 
-  let { shocker }: Props = $props();
+  let { shocker, controlHandler }: Props = $props();
 
   let intensity = $state(25);
   let duration = $state(1);
 
-  const dispatch = createEventDispatcher();
-
-  function emit(type: string) {
-    dispatch('command', { id: shocker.id, type, intensity, duration });
+  function ctrl(type: ControlType) {
+    controlHandler([{ id: shocker.id, type, intensity, duration }]);
   }
 </script>
 
@@ -32,28 +32,31 @@
   <!-- Buttons -->
   <div class="flex w-full gap-2">
     <!-- Beep button -->
-    <button
-      class="btn bg-primary-500 flex-1 rounded-md p-2"
-      onclick={() => emit('beep')}
+    <Button
+      variant="secondary"
+      class="flex-1"
       aria-label="Beep"
+      onclick={() => ctrl(ControlType.Sound)}
     >
       <i class="fa-solid fa-volume-high"></i>
-    </button>
+    </Button>
     <!-- Vibrate button -->
-    <button
-      class="btn bg-primary-500 flex-1 rounded-md p-2"
-      onclick={() => emit('vibrate')}
+    <Button
+      variant="secondary"
+      class="flex-1"
       aria-label="Vibrate"
+      onclick={() => ctrl(ControlType.Vibrate)}
     >
       <i class="fa-solid fa-water"></i>
-    </button>
+    </Button>
     <!-- Shock button -->
-    <button
-      class="btn bg-primary-500 flex-1 rounded-md p-2"
-      onclick={() => emit('shock')}
+    <Button
+      variant="secondary"
+      class="flex-1"
       aria-label="Shock"
+      onclick={() => ctrl(ControlType.Shock)}
     >
       <i class="fa-solid fa-bolt"></i>
-    </button>
+    </Button>
   </div>
 </div>

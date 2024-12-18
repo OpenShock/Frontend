@@ -1,50 +1,53 @@
 <script lang="ts">
   import type { ShockerResponse } from '$lib/api/internal/v1';
-  import { createEventDispatcher } from 'svelte';
+  import { ControlType } from '$lib/api/internal/v2';
+  import { Button } from '$lib/components/ui/button';
 
   interface Props {
     shocker: ShockerResponse;
+    controlHandler: (shockerId: string, controlType: ControlType) => void;
   }
 
-  let { shocker }: Props = $props();
+  let { shocker, controlHandler }: Props = $props();
 
-  const dispatch = createEventDispatcher();
-
-  function emit(type: string) {
-    dispatch('command', { id: shocker.id, type }); // TODO: What to do with intensity and duration?
+  function ctrl(type: ControlType) {
+    controlHandler(shocker.id, type);
   }
 </script>
 
 <div
-  class="border-surface-400-500-token flex flex-col items-center justify-center gap-2 rounded-md border p-2"
+  class="border-surface-400-500-token flex flex-col items-center justify-center gap-2 overflow-hidden rounded-md border p-2"
 >
   <!-- Title -->
-  <h2 class="text-lg font-bold">{shocker.name}</h2>
+  <h2 class="truncate text-lg font-bold">{shocker.name}</h2>
   <!-- Buttons -->
   <div class="flex w-full gap-2">
     <!-- Beep button -->
-    <button
-      class="btn bg-primary-500 flex-1 rounded-md p-2"
-      onclick={() => emit('beep')}
+    <Button
+      variant="secondary"
+      class="flex-1"
       aria-label="Beep"
+      onclick={() => ctrl(ControlType.Sound)}
     >
       <i class="fa-solid fa-volume-high"></i>
-    </button>
+    </Button>
     <!-- Vibrate button -->
-    <button
-      class="btn bg-primary-500 flex-1 rounded-md p-2"
-      onclick={() => emit('vibrate')}
+    <Button
+      variant="secondary"
+      class="flex-1"
       aria-label="Vibrate"
+      onclick={() => ctrl(ControlType.Vibrate)}
     >
       <i class="fa-solid fa-water"></i>
-    </button>
+    </Button>
     <!-- Shock button -->
-    <button
-      class="btn bg-primary-500 flex-1 rounded-md p-2"
-      onclick={() => emit('shock')}
+    <Button
+      variant="secondary"
+      class="flex-1"
       aria-label="Shock"
+      onclick={() => ctrl(ControlType.Shock)}
     >
       <i class="fa-solid fa-bolt"></i>
-    </button>
+    </Button>
   </div>
 </div>
