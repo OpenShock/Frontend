@@ -143,78 +143,34 @@ export default class FlashManager {
   private consoleRunning = false;
 
   async readConsoleLoop() {
+    let ok = true;
+    this.consoleRunning = true;
+
     try {
-      this.consoleRunning = true;
-
-      await this._internalConsoleLoop(0);
-
-      return true;
+      await this._internalConsoleLoop();
     } catch (e) {
       console.error(e);
       this.terminal.writeLine(`Failed to read console: ${e}`);
-
-      this.consoleRunning = false;
-
-      return false;
-    }
-  }
-
-  private async _internalConsoleLoop(timeout: number) {
-    const reader = this?.transport?.device?.readable?.getReader();
-    if (!reader) {
-      console.error('No reader');
-      this.terminal.writeLine('No reader');
-      return;
-    }
-
-    while (this.transport) {
-      const value = await this._rawRead(timeout);
-
-      if (value === null) {
-        break;
-      }
-
-      this.terminal.write(value.toString());
+      ok = false;
     }
 
     this.consoleRunning = false;
+
+    return ok;
   }
 
-  private async _rawRead(timeout = 0) {
-    if (!this.transport) return null;
+  private async _internalConsoleLoop() {
+    while (this.transport) {
+      const readLoop = this.transport.read(250);
+      while (true) {
+        const { value, done } = await readLoop.next();
 
-    if (this.transport.leftOver.length != 0) {
-      const p = this.transport.leftOver;
-      this.transport.leftOver = new Uint8Array(0);
-      return p;
-    }
-    if (!this.transport.device.readable) {
-      return this.transport.leftOver;
-    }
+        if (!value || done) {
+          break;
+        }
 
-    const reader = this.transport.device.readable.getReader();
-
-    let t: ReturnType<typeof setTimeout> | null = null;
-    try {
-      if (timeout > 0) {
-        t = setTimeout(async () => {
-          await reader.cancel();
-        }, timeout);
+        this.terminal.write(value.toString());
       }
-
-      const { value, done } = await reader.read();
-
-      if (done) {
-        throw new Error('Timeout');
-      }
-
-      return value;
-    } finally {
-      if (timeout > 0 && t) {
-        clearTimeout(t);
-      }
-
-      reader.releaseLock();
     }
   }
 }
