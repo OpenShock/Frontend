@@ -1,7 +1,7 @@
 <script lang="ts">
   import { afterNavigate } from '$app/navigation';
   import { base } from '$app/paths';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { PUBLIC_SITE_NAME } from '$env/static/public';
   import { BasicTags, OpenGraphTags, TwitterSummaryTags } from '$lib/components/metadata';
 
@@ -25,7 +25,7 @@
 <OpenGraphTags
   type="website"
   {...meta}
-  url={$page.url.origin}
+  url={page.url.origin}
   siteName={PUBLIC_SITE_NAME}
   determiner="auto"
   metaLocale="en_US"
@@ -33,9 +33,9 @@
 <TwitterSummaryTags type="summary" {...meta} site="@OpenShockORG" creator="@OpenShockORG" />
 
 <div class="absolute left-1/2 top-1/2 -translate-x-[50%] -translate-y-[50%] text-center">
-  <div class="text-9xl">{$page.status}</div>
+  <div class="text-9xl">{page.status}</div>
   <div class="big">
-    {$page.error?.message ?? 'Something went wrong.'}
+    {page.error?.message ?? 'Something went wrong.'}
     <br />
     <a href={previousPage}>Go back</a>
   </div>

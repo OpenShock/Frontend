@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import AppSidebar from '$lib/components/layout/AppSidebar.svelte';
   import Footer from '$lib/components/layout/Footer.svelte';
   import Header from '$lib/components/layout/Header.svelte';
@@ -26,7 +26,7 @@
     initializeSignalR();
   }
 
-  let meta = $derived(buildMetaData($page.url));
+  let meta = $derived(buildMetaData(page.url));
 
   let isOpen = $state(false);
   let isLoggedIn = $derived($UserStore?.self !== null);
@@ -34,7 +34,7 @@
 </script>
 
 <BasicTags {...meta} />
-<OpenGraphTags type="website" {...meta} url={$page.url.origin} />
+<OpenGraphTags type="website" {...meta} url={page.url.origin} />
 <TwitterSummaryTags type="summary" {...meta} site="@OpenShockORG" creator="@OpenShockORG" />
 
 <Toaster />

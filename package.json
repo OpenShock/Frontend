@@ -22,7 +22,7 @@
 		"@playwright/test": "^1.49.1",
 		"@sveltejs/adapter-cloudflare": "^4.8.0",
 		"@sveltejs/adapter-node": "^5.2.10",
-		"@sveltejs/kit": "^2.11.1",
+		"@sveltejs/kit": "^2.12.2",
 		"@sveltejs/vite-plugin-svelte": "^5.0.2",
 		"@tanstack/table-core": "^8.20.5",
 		"@types/crypto-js": "^4.2.2",

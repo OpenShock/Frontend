@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { RankType } from '$lib/api/internal/v1';
   import * as Sidebar from '$lib/components/ui/sidebar';
   import { Collapsible } from 'bits-ui';
@@ -25,7 +25,7 @@
 
   let { currentUserRank }: Props = $props();
 
-  let path = $derived($page.url.pathname);
+  let path = $derived(page.url.pathname);
 
   type subItem = {
     name: string;
