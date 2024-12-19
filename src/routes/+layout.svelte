@@ -4,7 +4,7 @@
   import Footer from '$lib/components/layout/Footer.svelte';
   import Header from '$lib/components/layout/Header.svelte';
   import { BasicTags, OpenGraphTags, TwitterSummaryTags } from '$lib/components/metadata';
-  import * as Sidebar from '$lib/components/ui/sidebar';
+  import { SidebarProvider } from '$lib/components/ui/sidebar';
   import { Toaster } from '$lib/components/ui/sonner';
   import { buildMetaData } from '$lib/metadata';
   import { initializeSignalR } from '$lib/signalr';
@@ -12,7 +12,7 @@
   import { UserStore } from '$lib/stores/UserStore';
   import type { Snippet } from 'svelte';
   import { RankType } from '$lib/api/internal/v1';
-  import { browser, dev } from '$app/environment';
+  import { browser } from '$app/environment';
   import '../app.css';
 
   type Props = {
@@ -39,7 +39,7 @@
 
 <Toaster />
 
-<Sidebar.Provider
+<SidebarProvider
   open={isOpen && isLoggedIn}
   onOpenChange={(open) => (isOpen = open)}
   controlledOpen={true}
@@ -52,4 +52,4 @@
     </main>
     <Footer />
   </div>
-</Sidebar.Provider>
+</SidebarProvider>
