@@ -52,6 +52,7 @@ const config = {
           'wss://*.' + env.PUBLIC_SITE_DOMAIN,
           'https://firmware.openshock.org',
           'https://api.pwnedpasswords.com',
+          'https://cloudflareinsights.com',
         ],
         'script-src': [
           'self',
