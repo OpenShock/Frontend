@@ -42,6 +42,10 @@ const config = {
     csp: {
       mode: 'hash',
       directives: {
+        'default-src': ['self'],
+        'child-src': ['https://challenges.cloudflare.com'],
+        'frame-src': ['https://challenges.cloudflare.com'], // Deprecated
+        'img-src': ['self', 'https://www.gravatar.com'],
         'connect-src': [
           'self',
           'https://*.' + env.PUBLIC_SITE_DOMAIN,
@@ -54,7 +58,6 @@ const config = {
           'https://challenges.cloudflare.com',
           'https://static.cloudflareinsights.com',
         ],
-        'frame-src': ['https://challenges.cloudflare.com'],
       },
     },
     version: {
