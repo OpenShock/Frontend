@@ -27,11 +27,11 @@
 		"@tanstack/table-core": "^8.20.5",
 		"@types/crypto-js": "^4.2.2",
 		"@types/eslint": "^9.6.1",
-		"@types/node": "^22.10.2",
+		"@types/node": "^22.10.5",
 		"@types/semver": "^7.5.8",
 		"@types/w3c-web-serial": "^1.0.7",
 		"autoprefixer": "^10.4.20",
-		"bits-ui": "1.0.0-next.74",
+		"bits-ui": "1.0.0-next.77",
 		"bowser": "^2.11.0",
 		"clsx": "^2.1.1",
 		"crypto-js": "^4.2.0",
@@ -45,7 +45,7 @@
 		"prettier-plugin-svelte": "^3.3.2",
 		"prettier-plugin-tailwindcss": "^0.6.9",
 		"semver": "^7.6.3",
-		"svelte": "^5.16.0",
+		"svelte": "^5.16.2",
 		"svelte-check": "^4.1.1",
 		"svelte-sonner": "^0.3.28",
 		"tailwind-merge": "^2.6.0",
@@ -54,7 +54,7 @@
 		"tailwindcss-animate": "^1.0.7",
 		"tslib": "^2.8.1",
 		"typescript": "^5.7.2",
-		"typescript-eslint": "^8.18.2",
+		"typescript-eslint": "^8.19.0",
 		"ua-parser-js": "2.0.0",
 		"vite-plugin-mkcert": "^1.17.6",
 		"vitest": "^2.1.8"
@@ -63,7 +63,7 @@
 		"@tailwindcss/forms": "^0.5.9",
 		"@tailwindcss/typography": "^0.5.15",
 		"esptool-js": "^0.5.2",
-		"vite": "^6.0.6"
+		"vite": "^6.0.7"
 	},
 	"engines": {
 		"node": "^20.18",
