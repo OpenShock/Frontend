@@ -55,7 +55,7 @@
           // Password has been pwned, change the validation result
           validationResult = {
             valid: false,
-            message: `Password detected in ${pwnedCount} data breaches`,
+            message: `Password detected in ${pwnedCount} data ${pwnedCount == 1 ? 'breach' : 'breaches'}`,
             link: {
               text: "What's this?",
               href: 'https://haveibeenpwned.com/Passwords',
