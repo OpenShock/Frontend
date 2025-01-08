@@ -176,7 +176,7 @@
   </Card.Content>
 </div>
 
-<Sheet controlledOpen={true} open={terminalOpen} onOpenChange={(open) => (terminalOpen = open)}>
+<Sheet bind:open={() => terminalOpen, (o) => (terminalOpen = o)}>
   <SheetContent>
     <SheetHeader>
       <SheetTitle class="flex items-center">

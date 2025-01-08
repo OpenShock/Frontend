@@ -67,7 +67,7 @@
   let nameValidationResult = $derived(nameValidation(name));
 </script>
 
-<Dialog.Root {open} onOpenChange={(o) => (open = o)} controlledOpen={true}>
+<Dialog.Root bind:open={() => open, (o) => (open = o)}>
   <Dialog.Content>
     <Dialog.Header>
       <Dialog.Title>Edit API Token</Dialog.Title>

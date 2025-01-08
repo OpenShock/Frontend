@@ -120,7 +120,7 @@
 
 <TokenCreatedDialog bind:open={createdDialog} {token} />
 
-<Dialog.Root {open} onOpenChange={(o) => (open = o)} controlledOpen={true}>
+<Dialog.Root bind:open={() => open, (o) => (open = o)}>
   <Dialog.Content>
     <Dialog.Header>
       <Dialog.Title>Generate a new API Token</Dialog.Title>

@@ -61,7 +61,7 @@
   }
 </script>
 
-<Dialog.Root open={accountCreated} {onOpenChange} controlledOpen={true}>
+<Dialog.Root bind:open={() => accountCreated, onOpenChange}>
   <Dialog.Content>
     <Dialog.Header>
       <Dialog.Title>Account created</Dialog.Title>

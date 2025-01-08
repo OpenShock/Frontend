@@ -10,7 +10,7 @@
   let { open = $bindable<boolean>(), hub }: Props = $props();
 </script>
 
-<Dialog.Root {open} onOpenChange={(o) => (open = o)} controlledOpen={true}>
+<Dialog.Root bind:open={() => open, (o) => (open = o)}>
   <Dialog.Content>
     <Dialog.Header>
       <Dialog.Title>Update hub</Dialog.Title>

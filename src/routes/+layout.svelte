@@ -39,11 +39,7 @@
 
 <Toaster />
 
-<SidebarProvider
-  open={isOpen && isLoggedIn}
-  onOpenChange={(open) => (isOpen = open)}
-  controlledOpen={true}
->
+<SidebarProvider bind:open={() => isOpen && isLoggedIn, (o) => (isOpen = o)}>
   <AppSidebar currentUserRank={currentUserRank ?? RankType.User} />
   <div class="flex min-h-screen flex-1 flex-col">
     <Header />

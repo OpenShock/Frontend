@@ -11,7 +11,7 @@
   let { open = $bindable<boolean>(), user }: Props = $props();
 </script>
 
-<Dialog.Root {open} onOpenChange={(o) => (open = o)} controlledOpen={true}>
+<Dialog.Root bind:open={() => open, (o) => (open = o)}>
   <Dialog.Content>
     <Dialog.Header>
       <Dialog.Title>Delete user</Dialog.Title>

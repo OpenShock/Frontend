@@ -19,7 +19,7 @@
   }
 </script>
 
-<Dialog.Root {open} {onOpenChange} controlledOpen={true}>
+<Dialog.Root bind:open={() => open, onOpenChange}>
   <Dialog.Content class="max-w-fit">
     <Dialog.Header>
       <Dialog.Title>

@@ -1,7 +1,7 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import dns from 'dns';
 import { env } from 'process';
-import { defineConfig, loadEnv, type PluginOption } from 'vite';
+import { defineConfig, loadEnv, type PluginOption, type UserConfig } from 'vite';
 import mkcert from 'vite-plugin-mkcert';
 
 function printRed(message: string) {
@@ -102,5 +102,5 @@ export default defineConfig(async ({ command, mode, isPreview }) => {
     plugins: await getPlugins(useLocalRedirect),
     server: await getServer(mode, useLocalRedirect),
     test: getTest(),
-  });
+  } as UserConfig); // TODO: "test" is not a valid property of the defineconfig argument? This needs to get fixed
 });

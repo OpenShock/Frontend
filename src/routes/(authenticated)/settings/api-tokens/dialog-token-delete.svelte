@@ -25,7 +25,7 @@
   }
 </script>
 
-<Dialog.Root {open} onOpenChange={(o) => (open = o)} controlledOpen={true}>
+<Dialog.Root bind:open={() => open, (o) => (open = o)}>
   <Dialog.Content>
     <Dialog.Header>
       <Dialog.Title>Are you sure you want to delete <b>{token?.name}</b>?</Dialog.Title>
