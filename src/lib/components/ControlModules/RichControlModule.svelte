@@ -3,6 +3,8 @@
   import { ControlType, type Control } from '$lib/api/internal/v2';
   import { Button } from '$lib/components/ui/button';
 
+  import { Signal, Timer, Volume2, Waves, Zap } from 'lucide-svelte';
+
   interface Props {
     shocker: ShockerResponse;
     controlHandler: (controls: Control[]) => void;
@@ -25,10 +27,10 @@
   <h2 class="text-lg font-bold">{shocker.name}</h2>
   <!-- Sliders -->
   <div class="grid grid-cols-[24px_128px_40px] items-center gap-1 text-center">
-    <i class="fa-solid fa-signal"></i>
+    <Signal />
     <input type="range" bind:value={intensity} min="0" max="100" step="1" />
     <p>{intensity}%</p>
-    <i class="fa-solid fa-stopwatch"></i>
+    <Timer />
     <input type="range" bind:value={duration} min="0.3" max="30" step="0.3" />
     <p>{duration}s</p>
   </div>
@@ -41,7 +43,7 @@
       aria-label="Beep"
       onclick={() => ctrl(ControlType.Sound)}
     >
-      <i class="fa-solid fa-volume-high"></i>
+      <Volume2 />
     </Button>
     <!-- Vibrate button -->
     <Button
@@ -50,7 +52,7 @@
       aria-label="Vibrate"
       onclick={() => ctrl(ControlType.Vibrate)}
     >
-      <i class="fa-solid fa-water"></i>
+      <Waves />
     </Button>
     <!-- Shock button -->
     <Button
@@ -59,7 +61,7 @@
       aria-label="Shock"
       onclick={() => ctrl(ControlType.Shock)}
     >
-      <i class="fa-solid fa-bolt"></i>
+      <Zap />
     </Button>
   </div>
 </div>

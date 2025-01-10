@@ -2,7 +2,7 @@
   import { Button } from '$lib/components/ui/button';
   import { SerialPortsStore } from '$lib/stores/SerialPortsStore';
 
-  import { Cpu } from 'lucide-svelte';
+  import { Cpu, TriangleAlert, Unplug } from 'lucide-svelte';
 
   interface Props {
     port?: SerialPort | null;
@@ -70,7 +70,7 @@
         <Cpu />
         Select Device
       {:else}
-        <i class="fa fa-times"></i>
+        <Unplug />
         Disconnect Device
       {/if}
     </Button>
@@ -84,7 +84,7 @@
       {/if}
       {#if errorMessage !== null && errorMessage.name !== 'NotFoundError'}
         <div class="flex flex-row items-center justify-start gap-2">
-          <i class="fa fa-exclamation-triangle text-yellow-500"></i>
+          <TriangleAlert color="#eab308" />
           <p class="text-yellow-500">Error: {errorMessage.message}</p>
         </div>
       {/if}

@@ -5,6 +5,8 @@
   import * as Dialog from '$lib/components/ui/dialog';
   import { ScrollArea } from '$lib/components/ui/scroll-area';
 
+  import { ArrowDownToLine } from 'lucide-svelte';
+
   interface Props {
     open: boolean;
     onClose: () => void;
@@ -40,7 +42,7 @@
               href="https://download.openshock.org/drivers/CP210x_Universal_Windows_Driver.zip"
               target="_blank"
             >
-              <i class="fa fa-download"></i>
+              <ArrowDownToLine />
               CP210x Universal Windows Driver
             </Button>
           </div>

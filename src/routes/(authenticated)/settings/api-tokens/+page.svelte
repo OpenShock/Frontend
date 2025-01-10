@@ -6,9 +6,9 @@
   import { columns, type ApiToken } from './columns';
   import DataTable from './data-table.svelte';
   import TokenGenerateDialog from './dialog-token-generate.svelte';
+  import { ApiTokensStore, refreshApiToken, refreshApiTokens } from '$lib/stores/ApiTokensStore';
 
   import RotateCcw from 'lucide-svelte/icons/rotate-ccw';
-  import { ApiTokensStore, refreshApiToken, refreshApiTokens } from '$lib/stores/ApiTokensStore';
 
   function apiTokenToTableToken(user: TokenResponse): ApiToken {
     return {

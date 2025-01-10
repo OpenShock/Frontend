@@ -4,6 +4,8 @@
   import { Button } from '$lib/components/ui/button';
   import CircleSlider from './Internal/CircleSlider.svelte';
 
+  import { Volume2, Waves, Zap } from 'lucide-svelte';
+
   interface Props {
     shocker: ShockerResponse;
     controlHandler: (controls: Control[]) => void;
@@ -38,7 +40,7 @@
       aria-label="Beep"
       onclick={() => ctrl(ControlType.Sound)}
     >
-      <i class="fa-solid fa-volume-high"></i>
+      <Volume2 />
     </Button>
     <!-- Vibrate button -->
     <Button
@@ -47,7 +49,7 @@
       aria-label="Vibrate"
       onclick={() => ctrl(ControlType.Vibrate)}
     >
-      <i class="fa-solid fa-water"></i>
+      <Waves />
     </Button>
     <!-- Shock button -->
     <Button
@@ -56,7 +58,7 @@
       aria-label="Shock"
       onclick={() => ctrl(ControlType.Shock)}
     >
-      <i class="fa-solid fa-bolt"></i>
+      <Zap />
     </Button>
   </div>
 </div>

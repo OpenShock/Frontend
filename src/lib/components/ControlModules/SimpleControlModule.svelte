@@ -3,6 +3,8 @@
   import { ControlType } from '$lib/api/internal/v2';
   import { Button } from '$lib/components/ui/button';
 
+  import { Volume2, Waves, Zap } from 'lucide-svelte';
+
   interface Props {
     shocker: ShockerResponse;
     controlHandler: (shockerId: string, controlType: ControlType) => void;
@@ -29,7 +31,7 @@
       aria-label="Beep"
       onclick={() => ctrl(ControlType.Sound)}
     >
-      <i class="fa-solid fa-volume-high"></i>
+      <Volume2 />
     </Button>
     <!-- Vibrate button -->
     <Button
@@ -38,7 +40,7 @@
       aria-label="Vibrate"
       onclick={() => ctrl(ControlType.Vibrate)}
     >
-      <i class="fa-solid fa-water"></i>
+      <Waves />
     </Button>
     <!-- Shock button -->
     <Button
@@ -47,7 +49,7 @@
       aria-label="Shock"
       onclick={() => ctrl(ControlType.Shock)}
     >
-      <i class="fa-solid fa-bolt"></i>
+      <Zap />
     </Button>
   </div>
 </div>

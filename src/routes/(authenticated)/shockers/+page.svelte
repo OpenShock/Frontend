@@ -10,6 +10,8 @@
   import * as Popover from '$lib/components/ui/popover';
   import { OwnHubsStore } from '$lib/stores/HubsStore';
 
+  import { Layers, Settings } from 'lucide-svelte';
+
   let shockers = $derived(Array.from($OwnHubsStore).flatMap(([, hub]) => hub.shockers));
 
   let moduleType = $state<ModuleType>(ModuleType.ClassicControlModule);
@@ -57,7 +59,7 @@
       <div>
         <!-- Mode button -->
         <Popover.Root>
-          <Popover.Trigger><i class="fa-solid fa-layer-group"></i></Popover.Trigger>
+          <Popover.Trigger><Layers /></Popover.Trigger>
           <Popover.Content>
             <div class="flex gap-2">
               <button
@@ -89,7 +91,7 @@
         </Popover.Root>
         <!-- Options button -->
         <button class="btn p-1" aria-label="Options">
-          <i class="fa-solid fa-cog"></i>
+          <Settings />
         </button>
       </div>
     </div>

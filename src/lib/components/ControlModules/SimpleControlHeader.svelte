@@ -1,6 +1,8 @@
 <script lang="ts">
   import CircleSlider from './Internal/CircleSlider.svelte';
 
+  import { Timer, Volume2, Zap } from 'lucide-svelte';
+
   interface Props {
     shockIntensity: number;
     vibrationIntensity: number;
@@ -19,13 +21,13 @@
 >
   <!-- Sliders -->
   <div class="grid flex-1 grid-cols-[24px_auto_40px] items-center gap-1 text-center">
-    <i class="fa-solid fa-bolt"></i>
+    <Zap />
     <input type="range" bind:value={shockIntensity} min="0" max="100" step="1" />
     <p>{shockIntensity}%</p>
-    <i class="fa-solid fa-volume-high"></i>
+    <Volume2 />
     <input type="range" bind:value={vibrationIntensity} min="0" max="100" step="1" />
     <p>{vibrationIntensity}%</p>
-    <i class="fa-solid fa-stopwatch"></i>
+    <Timer />
     <input type="range" bind:value={duration} min="0.3" max="30" step="0.3" />
     <p>{duration}s</p>
   </div>

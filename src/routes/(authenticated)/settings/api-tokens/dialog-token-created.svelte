@@ -2,6 +2,8 @@
   import * as Dialog from '$lib/components/ui/dialog';
   import { toast } from 'svelte-sonner';
 
+  import { Copy, KeyRound } from 'lucide-svelte';
+
   type Props = {
     open: boolean;
     token: string | null;
@@ -26,14 +28,16 @@
     </Dialog.Header>
     <div class="flex flex-col items-center space-y-4">
       <div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
-        <div class="input-group-shim fa fa-key"></div>
+        <KeyRound />
         <input readonly type="text" value={token} />
         <button
           onclick={copyToken}
-          class="variant-filled-secondary fa fa-copy"
+          class="variant-filled-secondary"
           style="outline-style: none;"
           aria-label="Copy Token"
-        ></button>
+        >
+          <Copy />
+        </button>
       </div>
     </div>
   </Dialog.Content>

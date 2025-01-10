@@ -6,6 +6,8 @@
   import FlashManager from '$lib/EspTool/FlashManager';
   import { Button } from '$lib/components/ui/button';
 
+  import { Microchip, TriangleAlert } from 'lucide-svelte';
+
   interface Props {
     version: string;
     board: string;
@@ -93,7 +95,7 @@
 <div class="flex flex-col items-stretch justify-start gap-4">
   <!-- Flash button -->
   <Button onclick={FlashDevice} disabled={!manager || isFlashing}>
-    <i class="fa fa-microchip"></i>
+    <Microchip />
     Flash
   </Button>
 
@@ -101,7 +103,7 @@
   <div class="flex flex-col items-start justify-start gap-2 p-2">
     {#if error}
       <div class="flex flex-row items-center justify-start gap-2">
-        <i class="fa fa-exclamation-triangle text-red-500"></i>
+        <TriangleAlert color="#ef4444" />
         <p class="text-red-500">Error: {error}</p>
       </div>
     {:else}

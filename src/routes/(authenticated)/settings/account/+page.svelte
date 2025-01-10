@@ -10,6 +10,8 @@
   import { UserStore } from '$lib/stores/UserStore';
   import { toast } from 'svelte-sonner';
 
+  import { KeyRound } from 'lucide-svelte';
+
   let username = $state<string>('');
   let email = $state<string>('');
 
@@ -81,7 +83,7 @@
       <Accordion.Root type="single" class="w-full">
         <Accordion.Item>
           <Accordion.Trigger>
-            <i class="fa fa-key"></i>
+            <KeyRound />
             Change your password
           </Accordion.Trigger>
           <Accordion.Content>
