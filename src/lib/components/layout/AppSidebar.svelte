@@ -6,7 +6,7 @@
 
   import {
     ChevronDown,
-    Cpu,
+    Router,
     House,
     KeyRound,
     Link,
@@ -18,6 +18,7 @@
     Wrench,
     Zap,
   } from 'lucide-svelte';
+  import type { Component, SvelteComponent } from 'svelte';
 
   interface Props {
     currentUserRank: RankType;
@@ -67,7 +68,7 @@
         },
         {
           name: 'Hubs',
-          icon: Cpu,
+          icon: Router,
           href: '/hubs',
         },
         {
