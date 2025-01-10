@@ -16,10 +16,10 @@ function readEnv(path) {
 }
 
 const env = {
-  ...process.env,
   ...readEnv('.env'),
   ...readEnv(`.env.${process.env.NODE_ENV}`),
   ...readEnv('.env.local'),
+  ...process.env,
 };
 
 /** @type {import('@sveltejs/kit').Config} */
