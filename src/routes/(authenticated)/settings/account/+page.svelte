@@ -10,7 +10,7 @@
   import { UserStore } from '$lib/stores/UserStore';
   import { toast } from 'svelte-sonner';
 
-  import { KeyRound } from 'lucide-svelte';
+  import { KeyRound, Mail, User } from 'lucide-svelte';
 
   let username = $state<string>('');
   let email = $state<string>('');
@@ -67,7 +67,7 @@
         placeholder={$UserStore.self.name}
         autocomplete="off"
         bind:value={username}
-        icon="fa-user"
+        icon={User}
         button={{ text: 'Change', submits: true, onClick: submitUsername }}
       />
 
@@ -76,7 +76,7 @@
         placeholder={$UserStore.self.email}
         autocomplete="off"
         bind:value={email}
-        icon="fa-envelope"
+        icon={Mail}
         button={{ text: 'Change', submits: true, onClick: submitEmail }}
       />
 

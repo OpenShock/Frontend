@@ -2,6 +2,7 @@
   import type { ButtonSettings } from '$lib/components/input/impl/ButtonSettings';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import { validateEmail } from '$lib/inputvalidation/emailValidator';
+  import type { AnyComponent } from '$lib/types/AnyComponent';
   import type { ValidationResult } from '$lib/types/ValidationResult';
   import type { FullAutoFill } from 'svelte/elements';
 
@@ -12,7 +13,7 @@
     value: string;
     valid?: boolean;
     validate?: boolean;
-    icon?: `fa-${string}`;
+    icon?: AnyComponent;
     button?: ButtonSettings;
     oninput?: (value: string) => void | undefined;
   }

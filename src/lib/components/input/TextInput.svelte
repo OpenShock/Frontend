@@ -6,6 +6,7 @@
   import type { Snippet } from 'svelte';
   import type { FullAutoFill } from 'svelte/elements';
   import type { ButtonSettings } from './impl/ButtonSettings';
+  import type { AnyComponent } from '$lib/types/AnyComponent';
 
   interface Props {
     type?: 'text' | 'password';
@@ -14,7 +15,7 @@
     autocomplete?: FullAutoFill;
     value: string;
     validationResult?: ValidationResult | null;
-    icon?: `fa-${string}`;
+    icon?: AnyComponent;
     button?: ButtonSettings;
     popup?: Snippet;
     oninput?: (input: string) => void | undefined;
@@ -39,14 +40,16 @@
       oninput(value);
     }
   }
+
+  let iconWrapper = $derived({ icon });
 </script>
 
 <label class="label w-full">
   <span>{label}</span>
   <div class="flex flex-row items-center gap-2">
     <div class="input-group input-group-divider flex flex-grow flex-row gap-2">
-      {#if icon}
-        <div class="input-group-shim fa {icon}"></div>
+      {#if iconWrapper.icon}
+        <iconWrapper.icon />
       {/if}
       <Input
         {type}
@@ -66,7 +69,7 @@
             (validationResult === null || (validationResult && !validationResult.valid))}
         >
           {#if 'icon' in button}
-            <i class="fa {button.icon}"></i>
+            <button.icon />
           {:else if 'text' in button}
             {button.text}
           {/if}

@@ -2,6 +2,7 @@
   import { page } from '$app/state';
   import { RankType } from '$lib/api/internal/v1';
   import * as Sidebar from '$lib/components/ui/sidebar';
+  import type { AnyComponent } from '$lib/types/AnyComponent';
   import { Collapsible } from 'bits-ui';
 
   import {
@@ -18,7 +19,6 @@
     Wrench,
     Zap,
   } from 'lucide-svelte';
-  import type { Component, SvelteComponent } from 'svelte';
 
   interface Props {
     currentUserRank: RankType;
@@ -37,7 +37,7 @@
 
   type Menu = {
     name: string;
-    icon: Component<any, any, any> | (new (...args: any[]) => SvelteComponent<any, any, any>);
+    icon: AnyComponent;
     class?: string;
     href?: string;
     target?: string;

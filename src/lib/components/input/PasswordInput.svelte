@@ -7,6 +7,9 @@
   import type { ButtonSettings } from './impl/ButtonSettings';
   import PasswordStrengthMeter from './impl/PasswordStrengthMeter.svelte';
   import TextInput from './TextInput.svelte';
+  import type { AnyComponent } from '$lib/types/AnyComponent';
+
+  import { Eye, EyeOff } from 'lucide-svelte';
 
   interface Props {
     label: string;
@@ -17,7 +20,7 @@
     valid?: boolean;
     validate?: boolean | 'string' | 'pwned' | ValidationResult | null;
     showStrengthMeter?: boolean;
-    icon?: `fa-${string}`;
+    icon?: AnyComponent;
     oninput?: (value: string) => void | undefined;
   }
 
@@ -102,7 +105,7 @@
   });
 
   let button: ButtonSettings = $derived({
-    icon: valueShown ? 'fa-eye-slash' : 'fa-eye',
+    icon: valueShown ? EyeOff : Eye,
     class: 'cursor-pointer',
     onClick: () => (valueShown = !valueShown),
   });
