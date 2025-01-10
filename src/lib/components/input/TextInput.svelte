@@ -15,7 +15,7 @@
     autocomplete?: FullAutoFill;
     value: string;
     validationResult?: ValidationResult | null;
-    icon?: AnyComponent;
+    Icon?: AnyComponent;
     button?: ButtonSettings;
     popup?: Snippet;
     oninput?: (input: string) => void | undefined;
@@ -28,7 +28,7 @@
     autocomplete,
     value = $bindable(''),
     validationResult,
-    icon,
+    Icon,
     button,
     popup,
     oninput,
@@ -40,16 +40,14 @@
       oninput(value);
     }
   }
-
-  let iconWrapper = $derived({ icon });
 </script>
 
 <label class="label w-full">
   <span>{label}</span>
   <div class="flex flex-row items-center gap-2">
     <div class="input-group input-group-divider flex flex-grow flex-row gap-2">
-      {#if iconWrapper.icon}
-        <iconWrapper.icon />
+      {#if Icon}
+        <Icon />
       {/if}
       <Input
         {type}
@@ -68,8 +66,8 @@
           disabled={button.submits &&
             (validationResult === null || (validationResult && !validationResult.valid))}
         >
-          {#if 'icon' in button}
-            <button.icon />
+          {#if 'Icon' in button}
+            <button.Icon />
           {:else if 'text' in button}
             {button.text}
           {/if}

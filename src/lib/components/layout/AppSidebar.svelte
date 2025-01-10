@@ -37,7 +37,7 @@
 
   type Menu = {
     name: string;
-    icon: AnyComponent;
+    Icon: AnyComponent;
     class?: string;
     href?: string;
     target?: string;
@@ -58,22 +58,22 @@
       menus: [
         {
           name: 'Home',
-          icon: House,
+          Icon: House,
           href: '/home',
         },
         {
           name: 'Shockers',
-          icon: Zap,
+          Icon: Zap,
           href: '/shockers',
         },
         {
           name: 'Hubs',
-          icon: Router,
+          Icon: Router,
           href: '/hubs',
         },
         {
           name: 'Sharelinks',
-          icon: Link,
+          Icon: Link,
           href: '/sharelinks',
         },
       ],
@@ -88,7 +88,7 @@
       menus: [
         {
           name: 'Monitoring',
-          icon: SquareActivity,
+          Icon: SquareActivity,
           subItems: [
             {
               name: 'Online Hubs',
@@ -98,7 +98,7 @@
         },
         {
           name: 'Management',
-          icon: Wrench,
+          Icon: Wrench,
           subItems: [
             {
               name: 'Users',
@@ -108,7 +108,7 @@
         },
         {
           name: 'Hangfire',
-          icon: Timer,
+          Icon: Timer,
           href: '/hangfire',
           target: '_blank',
         },
@@ -120,22 +120,22 @@
       menus: [
         {
           name: 'Account',
-          icon: UserPen,
+          Icon: UserPen,
           href: '/settings/account',
         },
         {
           name: 'Sessions',
-          icon: MonitorSmartphone,
+          Icon: MonitorSmartphone,
           href: '/settings/sessions',
         },
         {
           name: 'API Tokens',
-          icon: KeyRound,
+          Icon: KeyRound,
           href: '/settings/api-tokens',
         },
         {
           name: 'Danger Zone',
-          icon: TriangleAlert,
+          Icon: TriangleAlert,
           class: '!text-red-500',
           collapsible: { open: false },
           href: '/settings/danger-zone',
@@ -165,7 +165,7 @@
     <Sidebar.MenuButton class={menu.class}>
       {#snippet child({ props })}
         <a href={menu.href} {...props}>
-          <menu.icon />
+          <menu.Icon />
           <span>{menu.name}</span>
         </a>
       {/snippet}

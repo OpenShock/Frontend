@@ -20,7 +20,7 @@
     valid?: boolean;
     validate?: boolean | 'string' | 'pwned' | ValidationResult | null;
     showStrengthMeter?: boolean;
-    icon?: AnyComponent;
+    Icon?: AnyComponent;
     oninput?: (value: string) => void | undefined;
   }
 
@@ -33,7 +33,7 @@
     valid = $bindable(false),
     validate = false,
     showStrengthMeter = false,
-    icon,
+    Icon,
     oninput,
   }: Props = $props();
 
@@ -105,7 +105,7 @@
   });
 
   let button: ButtonSettings = $derived({
-    icon: valueShown ? EyeOff : Eye,
+    Icon: valueShown ? EyeOff : Eye,
     class: 'cursor-pointer',
     onClick: () => (valueShown = !valueShown),
   });
@@ -118,7 +118,7 @@
   {autocomplete}
   bind:value
   {validationResult}
-  {icon}
+  {Icon}
   {button}
   {oninput}
 >

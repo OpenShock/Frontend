@@ -5,7 +5,6 @@
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { useSidebar } from '$lib/components/ui/sidebar';
   import { UserStore } from '$lib/stores/UserStore';
-  import type { AnyComponent } from '$lib/types/AnyComponent';
 
   import Menu from 'lucide-svelte/icons/menu';
 

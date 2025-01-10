@@ -67,7 +67,7 @@
         placeholder={$UserStore.self.name}
         autocomplete="off"
         bind:value={username}
-        icon={User}
+        Icon={User}
         button={{ text: 'Change', submits: true, onClick: submitUsername }}
       />
 
@@ -76,7 +76,7 @@
         placeholder={$UserStore.self.email}
         autocomplete="off"
         bind:value={email}
-        icon={Mail}
+        Icon={Mail}
         button={{ text: 'Change', submits: true, onClick: submitEmail }}
       />
 

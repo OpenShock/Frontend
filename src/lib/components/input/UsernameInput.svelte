@@ -20,7 +20,7 @@
     value: string;
     valid?: boolean;
     validate?: boolean;
-    icon?: AnyComponent;
+    Icon?: AnyComponent;
     button?: ButtonSettings;
     oninput?: (value: string) => void | undefined;
   }
@@ -32,7 +32,7 @@
     value = $bindable(),
     valid = $bindable(false),
     validate = true,
-    icon,
+    Icon,
     button,
     oninput,
   }: Props = $props();
@@ -93,7 +93,7 @@
   {autocomplete}
   bind:value
   {validationResult}
-  {icon}
+  {Icon}
   {button}
   {oninput}
 />
