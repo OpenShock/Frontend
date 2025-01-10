@@ -36,7 +36,7 @@
 
   type Menu = {
     name: string;
-    icon: typeof Cpu;
+    icon: Component<any, any, any> | (new (...args: any[]) => SvelteComponent<any, any, any>);
     class?: string;
     href?: string;
     target?: string;
