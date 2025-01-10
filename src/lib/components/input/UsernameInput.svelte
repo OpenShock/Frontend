@@ -9,6 +9,7 @@
     UsernameInternalServerErrorValRes,
     validateUsername,
   } from '$lib/inputvalidation/usernameValidator';
+  import type { AnyComponent } from '$lib/types/AnyComponent';
   import type { ValidationResult } from '$lib/types/ValidationResult';
   import type { FullAutoFill } from 'svelte/elements';
 
@@ -19,7 +20,7 @@
     value: string;
     valid?: boolean;
     validate?: boolean;
-    icon?: `fa-${string}`;
+    icon?: AnyComponent;
     button?: ButtonSettings;
     oninput?: (value: string) => void | undefined;
   }
