@@ -24,19 +24,19 @@ export interface SignUpV2 {
      * @type {string}
      * @memberof SignUpV2
      */
-    username: string | null;
+    username: string;
     /**
      * 
      * @type {string}
      * @memberof SignUpV2
      */
-    password: string | null;
+    password: string;
     /**
      * 
      * @type {string}
      * @memberof SignUpV2
      */
-    email: string | null;
+    email: string;
     /**
      * 
      * @type {string}
@@ -73,11 +73,11 @@ export function SignUpV2FromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     };
 }
 
-  export function SignUpV2ToJSON(json: any): SignUpV2 {
-      return SignUpV2ToJSONTyped(json, false);
-  }
+export function SignUpV2ToJSON(json: any): SignUpV2 {
+    return SignUpV2ToJSONTyped(json, false);
+}
 
-  export function SignUpV2ToJSONTyped(value?: SignUpV2 | null, ignoreDiscriminator: boolean = false): any {
+export function SignUpV2ToJSONTyped(value?: SignUpV2 | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

@@ -1,49 +1,59 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { accountApi } from '$lib/api';
+  import { accountV2Api } from '$lib/api';
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
+  import Turnstile from '$lib/components/Turnstile.svelte';
+  import { Button } from '$lib/components/ui/button';
+  import * as Card from '$lib/components/ui/card';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { UserStore } from '$lib/stores/UserStore';
 
-  let usernameOrEmail = $state('');
-  let password = $state('');
+  let usernameOrEmail = $state<string>('');
+  let password = $state<string>('');
+  let turnstileResponse = $state<string | null>(null);
 
   function handleSubmission(ev: SubmitEvent) {
-    accountApi
-      .accountLogin({ email: usernameOrEmail, password })
+    if (!usernameOrEmail || !password || !turnstileResponse) {
+      return;
+    }
+
+    accountV2Api
+      .accountLoginV2({ usernameOrEmail, password, turnstileResponse })
       .then(() => {
         UserStore.refreshSelf();
         goto('/home');
       })
-      .catch((err) => {
-        console.error(err);
-      });
+      .catch(handleApiError);
   }
+
+  let canSubmit = $derived(
+    usernameOrEmail.length > 0 && password.length > 0 && turnstileResponse != null
+  );
 </script>
 
-<div class="container h-full mx-auto flex justify-center items-center">
-  <form class="flex flex-col space-y-4" onsubmit={handleSubmission}>
-    <h2 class="h2">Login</h2>
+<div class="container my-8">
+  <Card.Header>
+    <Card.Title class="text-3xl">Login</Card.Title>
+  </Card.Header>
+  <Card.Content>
+    <form class="flex flex-col space-y-4" onsubmit={handleSubmission}>
+      <TextInput
+        label="Username or Email"
+        placeholder="Username or Email"
+        autocomplete="on"
+        bind:value={usernameOrEmail}
+      />
+      <PasswordInput
+        label="Password"
+        placeholder="Password"
+        autocomplete="new-password"
+        bind:value={password}
+      />
 
-    <TextInput
-      label="Username or Email"
-      placeholder="Username or Email"
-      autocomplete="on"
-      bind:value={usernameOrEmail}
-    />
-    <PasswordInput
-      label="Password"
-      placeholder="Password"
-      autocomplete="new-password"
-      bind:value={password}
-    />
+      <Turnstile action="signin" bind:response={turnstileResponse} />
 
-    <button
-      class="btn variant-filled-primary"
-      type="submit"
-      disabled={usernameOrEmail.length === 0 || password.length === 0}
-    >
-      Log In
-    </button>
-  </form>
+      <Button type="submit" disabled={!canSubmit}>Log In</Button>
+    </form>
+  </Card.Content>
 </div>

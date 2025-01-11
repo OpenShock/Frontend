@@ -1,13 +1,13 @@
-import { PUBLIC_SITE_NAME, PUBLIC_SITE_DESCRIPTION } from "$env/static/public";
-import type { Page } from "@sveltejs/kit";
+import { PUBLIC_SITE_DESCRIPTION, PUBLIC_SITE_NAME } from '$env/static/public';
 
-function getPageTitleAndDescription(page: Page): { title: string; description: string } {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function getPageTitleAndDescription(url: URL): { title: string; description: string } {
   const title = PUBLIC_SITE_NAME.trim();
   const details = PUBLIC_SITE_DESCRIPTION.trim();
 
   let description: string;
   switch (title.toLowerCase()) {
-    case "openshock":
+    case 'openshock':
       description = `Welcome to OpenShock, ${details}`;
       break;
     default:
@@ -18,17 +18,17 @@ function getPageTitleAndDescription(page: Page): { title: string; description: s
   return { title, description };
 }
 
-export function buildMetaData(page: Page) {
-  const { title, description } = getPageTitleAndDescription(page);
+export function buildMetaData(url: URL) {
+  const { title, description } = getPageTitleAndDescription(url);
 
   const image = {
-    src: new URL('/logo.svg', page.url.origin).href,
+    src: new URL('/logo.svg', url.origin).href,
     alt: 'OpenShock Logo',
   };
 
   return {
     title,
     description,
-    image
+    image,
   };
 }

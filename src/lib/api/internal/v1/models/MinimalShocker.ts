@@ -75,11 +75,11 @@ export function MinimalShockerFromJSONTyped(json: any, ignoreDiscriminator: bool
     };
 }
 
-  export function MinimalShockerToJSON(json: any): MinimalShocker {
-      return MinimalShockerToJSONTyped(json, false);
-  }
+export function MinimalShockerToJSON(json: any): MinimalShocker {
+    return MinimalShockerToJSONTyped(json, false);
+}
 
-  export function MinimalShockerToJSONTyped(value?: MinimalShocker | null, ignoreDiscriminator: boolean = false): any {
+export function MinimalShockerToJSONTyped(value?: MinimalShocker | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

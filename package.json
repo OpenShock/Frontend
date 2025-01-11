@@ -16,62 +16,70 @@
 		"test:unit": "vitest"
 	},
 	"devDependencies": {
-		"@floating-ui/dom": "^1.6.11",
+		"@eslint/compat": "^1.2.4",
+		"@internationalized/date": "^3.6.0",
 		"@microsoft/signalr": "^8.0.7",
-		"@openapitools/openapi-generator-cli": "^2.15.0",
-		"@playwright/test": "^1.48.2",
-		"@sentry/svelte": "^8.35.0",
-		"@skeletonlabs/skeleton": "^2.10.3",
-		"@skeletonlabs/tw-plugin": "0.4.0",
-		"@sveltejs/adapter-cloudflare": "^4.7.4",
-		"@sveltejs/adapter-node": "^5.2.9",
-		"@sveltejs/kit": "^2.7.3",
-		"@sveltejs/vite-plugin-svelte": "^4.0.0",
-		"@tailwindcss/forms": "0.5.9",
-		"@tailwindcss/typography": "0.5.15",
+		"@playwright/test": "^1.49.1",
+		"@sveltejs/adapter-cloudflare": "^5.0.0",
+		"@sveltejs/adapter-node": "^5.2.11",
+		"@sveltejs/kit": "^2.15.1",
+		"@sveltejs/vite-plugin-svelte": "^5.0.3",
+		"@tanstack/table-core": "^8.20.5",
 		"@types/crypto-js": "^4.2.2",
 		"@types/eslint": "^9.6.1",
-		"@types/node": "22.8.2",
+		"@types/node": "^22.10.5",
+		"@types/semver": "^7.5.8",
 		"@types/w3c-web-serial": "^1.0.7",
-		"@vincjo/datatables": "^2.0.5",
-		"autoprefixer": "10.4.20",
+		"autoprefixer": "^10.4.20",
+		"bits-ui": "1.0.0-next.77",
 		"bowser": "^2.11.0",
+		"clsx": "^2.1.1",
 		"crypto-js": "^4.2.0",
-		"email-validator": "^2.0.4",
-		"eslint": "^9.13.0",
+		"dotenv": "^16.4.7",
+		"eslint": "^9.17.0",
 		"eslint-config-prettier": "^9.1.0",
-		"eslint-plugin-svelte": "^2.46.0",
-		"globals": "^15.11.0",
-		"highlight.js": "^11.10.0",
-		"js-sha1": "^0.7.0",
-		"postcss": "8.4.47",
-		"prettier": "^3.3.3",
-		"prettier-plugin-svelte": "^3.2.7",
-		"svelte": "^5.1.4",
-		"svelte-check": "^4.0.5",
-		"tailwindcss": "3.4.14",
-		"tslib": "^2.8.0",
-		"typescript": "^5.6.3",
-		"typescript-eslint": "^8.12.1",
-		"ua-parser-js": "^2.0.0-beta.3",
+		"eslint-plugin-svelte": "^2.46.1",
+		"globals": "^15.14.0",
+		"lucide-svelte": "^0.469.0",
+		"prettier": "^3.4.2",
+		"prettier-plugin-svelte": "^3.3.2",
+		"prettier-plugin-tailwindcss": "^0.6.9",
+		"semver": "^7.6.3",
+		"svelte": "^5.16.2",
+		"svelte-check": "^4.1.1",
+		"svelte-sonner": "^0.3.28",
+		"tailwind-merge": "^2.6.0",
+		"tailwind-variants": "^0.3.0",
+		"tailwindcss": "^3.4.17",
+		"tailwindcss-animate": "^1.0.7",
+		"tslib": "^2.8.1",
+		"typescript": "^5.7.2",
+		"typescript-eslint": "^8.19.0",
+		"ua-parser-js": "2.0.0",
 		"vite-plugin-mkcert": "^1.17.6",
-		"vite-plugin-tailwind-purgecss": "0.3.3",
-		"vitest": "^2.1.4"
+		"vitest": "^2.1.8"
 	},
 	"dependencies": {
-		"esptool-js": "^0.4.6",
-		"vite": "^5.4.10"
+		"@tailwindcss/forms": "^0.5.9",
+		"@tailwindcss/typography": "^0.5.15",
+		"esptool-js": "^0.5.2",
+		"vite": "^6.0.7"
 	},
 	"engines": {
-		"node": ">=20.18",
-		"pnpm": ">=9"
+		"node": "^20.18",
+		"pnpm": "^9.12.3"
 	},
 	"volta": {
 		"node": "20.18.0"
 	},
+	"packageManager": "pnpm@9.12.3",
 	"pnpm": {
 		"patchedDependencies": {
-			"esptool-js@0.4.6": "patches/esptool-js@0.4.6.patch"
+			"@microsoft/signalr@8.0.7": "patches/@microsoft__signalr@8.0.7.patch",
+			"esptool-js@0.5.2": "patches/esptool-js@0.5.2.patch"
+		},
+		"overrides": {
+			"cookie@<0.7.0": ">=0.7.0"
 		}
 	}
 }

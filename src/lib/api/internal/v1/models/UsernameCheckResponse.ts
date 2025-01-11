@@ -73,11 +73,11 @@ export function UsernameCheckResponseFromJSONTyped(json: any, ignoreDiscriminato
     };
 }
 
-  export function UsernameCheckResponseToJSON(json: any): UsernameCheckResponse {
-      return UsernameCheckResponseToJSONTyped(json, false);
-  }
+export function UsernameCheckResponseToJSON(json: any): UsernameCheckResponse {
+    return UsernameCheckResponseToJSONTyped(json, false);
+}
 
-  export function UsernameCheckResponseToJSONTyped(value?: UsernameCheckResponse | null, ignoreDiscriminator: boolean = false): any {
+export function UsernameCheckResponseToJSONTyped(value?: UsernameCheckResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

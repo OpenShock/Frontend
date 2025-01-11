@@ -30,13 +30,13 @@ export interface LoginSessionResponse {
      * @type {string}
      * @memberof LoginSessionResponse
      */
-    ip: string | null;
+    ip: string;
     /**
      * 
      * @type {string}
      * @memberof LoginSessionResponse
      */
-    userAgent: string | null;
+    userAgent: string;
     /**
      * 
      * @type {Date}
@@ -49,6 +49,12 @@ export interface LoginSessionResponse {
      * @memberof LoginSessionResponse
      */
     expires: Date;
+    /**
+     * 
+     * @type {Date}
+     * @memberof LoginSessionResponse
+     */
+    lastUsed: Date | null;
 }
 
 /**
@@ -60,6 +66,7 @@ export function instanceOfLoginSessionResponse(value: object): value is LoginSes
     if (!('userAgent' in value) || value['userAgent'] === undefined) return false;
     if (!('created' in value) || value['created'] === undefined) return false;
     if (!('expires' in value) || value['expires'] === undefined) return false;
+    if (!('lastUsed' in value) || value['lastUsed'] === undefined) return false;
     return true;
 }
 
@@ -78,14 +85,15 @@ export function LoginSessionResponseFromJSONTyped(json: any, ignoreDiscriminator
         'userAgent': json['userAgent'],
         'created': (new Date(json['created'])),
         'expires': (new Date(json['expires'])),
+        'lastUsed': (json['lastUsed'] == null ? null : new Date(json['lastUsed'])),
     };
 }
 
-  export function LoginSessionResponseToJSON(json: any): LoginSessionResponse {
-      return LoginSessionResponseToJSONTyped(json, false);
-  }
+export function LoginSessionResponseToJSON(json: any): LoginSessionResponse {
+    return LoginSessionResponseToJSONTyped(json, false);
+}
 
-  export function LoginSessionResponseToJSONTyped(value?: LoginSessionResponse | null, ignoreDiscriminator: boolean = false): any {
+export function LoginSessionResponseToJSONTyped(value?: LoginSessionResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
@@ -97,6 +105,7 @@ export function LoginSessionResponseFromJSONTyped(json: any, ignoreDiscriminator
         'userAgent': value['userAgent'],
         'created': ((value['created']).toISOString()),
         'expires': ((value['expires']).toISOString()),
+        'lastUsed': (value['lastUsed'] == null ? null : (value['lastUsed'] as any).toISOString()),
     };
 }
 

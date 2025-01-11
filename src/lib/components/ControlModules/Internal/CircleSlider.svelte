@@ -29,8 +29,7 @@
 
   let { name, value = $bindable(), min, max, step, tabindex = undefined }: Props = $props();
 
-  let canvasHandle: HTMLDivElement | undefined = $state();
-  let sliderHandle: HTMLDivElement | undefined = $state();
+  let canvasHandle = $state<HTMLDivElement | undefined>();
 
   function stupidUnfloatHack(value: number) {
     // This is a stupid hack to avoid floating point errors, needed to make UI not look like shit
@@ -92,13 +91,6 @@
   // Update visual progress
   let degrees = $derived(angleStart + invLerp(min, max, $animatedValue) * angleRange);
   let progressProps = $derived(calcSvgArcProps(center, angleStart, degrees, radius, 10));
-
-  $effect(() => {
-    if (!sliderHandle) return;
-
-    sliderHandle.style.left = `${60 + getCircleX(60, degrees)}px`; // TODO: Avoid using pixel values
-    sliderHandle.style.top = `${60 + getCircleY(60, degrees)}px`; // TODO: Avoid using pixel values
-  });
 </script>
 
 <div>
@@ -108,7 +100,7 @@
         {...calcSvgArcProps(center, angleStart, angleEnd, radius, 20)}
         fill="none"
         stroke-linecap="round"
-        style="stroke: rgb(27, 29, 30)"
+        style:stroke="rgb(27, 29, 30)"
         ontouchstart={trackingStarted}
         onmousedown={trackingStarted}
         aria-hidden="true"
@@ -117,7 +109,7 @@
         {...progressProps}
         fill="none"
         stroke-linecap="round"
-        class="stroke-secondary-500"
+        style:stroke="rgb(0, 122, 255)"
         ontouchstart={trackingStarted}
         onmousedown={trackingStarted}
         id={guageId}
@@ -126,7 +118,8 @@
     </svg>
     <div
       class="handle"
-      bind:this={sliderHandle}
+      style:left={`${60 + getCircleX(60, degrees)}px`}
+      style:top={`${60 + getCircleY(60, degrees)}px`}
       ontouchstart={trackingStarted}
       onmousedown={trackingStarted}
       role="slider"
@@ -138,7 +131,7 @@
       aria-controls={guageId}
     ></div>
     <input id={inputId} type="number" {name} {min} bind:value {max} {step} aria-label="Value" />
-    <label for={inputId} aria-label="Name">
+    <label id={labelId} for={inputId} aria-label="Name">
       {name}
     </label>
   </div>
@@ -146,19 +139,19 @@
 
 <style lang="postcss">
   .canvas {
-    @apply relative w-[150px] h-[150px];
+    @apply relative size-[150px];
   }
   svg {
-    @apply absolute w-[150px] h-[150px];
+    @apply absolute size-[150px];
   }
   path {
     @apply cursor-pointer;
   }
   .handle {
-    @apply absolute w-[30px] h-[30px] rounded-full bg-white cursor-move;
+    @apply absolute size-[30px] cursor-move rounded-full bg-white;
   }
   input[type='number'] {
-    @apply absolute top-[50%] left-[50%] transform -translate-x-[50%] -translate-y-[50%] text-xl font-bold select-none appearance-none bg-transparent border-none text-center;
+    @apply absolute left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] transform select-none appearance-none border-none bg-transparent text-center text-xl font-bold;
 
     /* Firefox */
     -moz-appearance: none;
@@ -170,6 +163,6 @@
     margin: 0;
   }
   label {
-    @apply absolute bottom-0 left-[50%] transform -translate-x-[50%] translate-y-[10%] text-center select-none;
+    @apply absolute bottom-0 left-[50%] -translate-x-[50%] translate-y-[10%] transform select-none text-center;
   }
 </style>

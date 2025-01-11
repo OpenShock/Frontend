@@ -30,7 +30,7 @@ export interface ResponseDeviceWithToken {
      * @type {string}
      * @memberof ResponseDeviceWithToken
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {Date}
@@ -73,11 +73,11 @@ export function ResponseDeviceWithTokenFromJSONTyped(json: any, ignoreDiscrimina
     };
 }
 
-  export function ResponseDeviceWithTokenToJSON(json: any): ResponseDeviceWithToken {
-      return ResponseDeviceWithTokenToJSONTyped(json, false);
-  }
+export function ResponseDeviceWithTokenToJSON(json: any): ResponseDeviceWithToken {
+    return ResponseDeviceWithTokenToJSONTyped(json, false);
+}
 
-  export function ResponseDeviceWithTokenToJSONTyped(value?: ResponseDeviceWithToken | null, ignoreDiscriminator: boolean = false): any {
+export function ResponseDeviceWithTokenToJSONTyped(value?: ResponseDeviceWithToken | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

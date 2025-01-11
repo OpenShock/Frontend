@@ -1,19 +1,17 @@
 <script lang="ts">
-  import type { ValidationResult } from '$lib/types/ValidationResult';
+  import { accountV2Api } from '$lib/api';
+  import type { ButtonSettings } from '$lib/components/input/impl/ButtonSettings';
+  import TextInput from '$lib/components/input/TextInput.svelte';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import {
     mapUsernameAvailability,
     UsernameCheckingAvailabilityValRes,
     UsernameInternalServerErrorValRes,
     validateUsername,
   } from '$lib/inputvalidation/usernameValidator';
-  import { accountApi } from '$lib/api';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { getToastStore } from '@skeletonlabs/skeleton';
+  import type { AnyComponent } from '$lib/types/AnyComponent';
+  import type { ValidationResult } from '$lib/types/ValidationResult';
   import type { FullAutoFill } from 'svelte/elements';
-  import TextInput from '$lib/components/input/TextInput.svelte';
-  import type { ButtonSettings } from '$lib/components/input/impl/ButtonSettings';
-
-  const toastStore = getToastStore();
 
   interface Props {
     label: string;
@@ -22,7 +20,7 @@
     value: string;
     valid?: boolean;
     validate?: boolean;
-    icon?: `fa-${string}`;
+    Icon?: AnyComponent;
     button?: ButtonSettings;
     oninput?: (value: string) => void | undefined;
   }
@@ -34,12 +32,12 @@
     value = $bindable(),
     valid = $bindable(false),
     validate = true,
-    icon,
+    Icon,
     button,
     oninput,
   }: Props = $props();
 
-  let validationResult: ValidationResult | null = $state(null);
+  let validationResult = $state<ValidationResult | null>(null);
   let usernameDebounce: ReturnType<typeof setTimeout> | null = null;
   function checkUsernameAvailability() {
     // Stop the previous debounce timer if it exists
@@ -53,13 +51,13 @@
       // 250ms has passed, check if the username is available
       try {
         // Make the API request
-        const response = await accountApi.accountCheckUsername({ username: value });
+        const response = await accountV2Api.accountCheckUsername({ username: value });
 
         // Map the response to a validation result
         validationResult = mapUsernameAvailability(response.availability);
       } catch (e) {
         // Show an error toast
-        await handleApiError(e, toastStore);
+        await handleApiError(e);
 
         // Set the validation result to the internal server error state
         validationResult = UsernameInternalServerErrorValRes;
@@ -80,11 +78,12 @@
         // Basic validation failed, return the failed validation result
         validationResult = valRes;
       }
-      valid = validationResult?.valid ?? false;
     } else {
       validationResult = { valid: true };
-      valid = true;
     }
+  });
+  $effect(() => {
+    valid = validationResult?.valid ?? false;
   });
 </script>
 
@@ -94,7 +93,7 @@
   {autocomplete}
   bind:value
   {validationResult}
-  {icon}
+  {Icon}
   {button}
   {oninput}
 />

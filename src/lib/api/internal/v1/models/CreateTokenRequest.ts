@@ -32,13 +32,13 @@ export interface CreateTokenRequest {
      * @type {string}
      * @memberof CreateTokenRequest
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {Array<PermissionType>}
      * @memberof CreateTokenRequest
      */
-    permissions?: Array<PermissionType> | null;
+    permissions?: Array<PermissionType>;
     /**
      * 
      * @type {Date}
@@ -71,11 +71,11 @@ export function CreateTokenRequestFromJSONTyped(json: any, ignoreDiscriminator: 
     };
 }
 
-  export function CreateTokenRequestToJSON(json: any): CreateTokenRequest {
-      return CreateTokenRequestToJSONTyped(json, false);
-  }
+export function CreateTokenRequestToJSON(json: any): CreateTokenRequest {
+    return CreateTokenRequestToJSONTyped(json, false);
+}
 
-  export function CreateTokenRequestToJSONTyped(value?: CreateTokenRequest | null, ignoreDiscriminator: boolean = false): any {
+export function CreateTokenRequestToJSONTyped(value?: CreateTokenRequest | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

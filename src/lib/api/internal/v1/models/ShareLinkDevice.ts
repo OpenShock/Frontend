@@ -38,13 +38,13 @@ export interface ShareLinkDevice {
      * @type {string}
      * @memberof ShareLinkDevice
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {Array<ShareLinkShocker>}
      * @memberof ShareLinkDevice
      */
-    shockers?: Array<ShareLinkShocker> | null;
+    shockers?: Array<ShareLinkShocker>;
 }
 
 /**
@@ -72,11 +72,11 @@ export function ShareLinkDeviceFromJSONTyped(json: any, ignoreDiscriminator: boo
     };
 }
 
-  export function ShareLinkDeviceToJSON(json: any): ShareLinkDevice {
-      return ShareLinkDeviceToJSONTyped(json, false);
-  }
+export function ShareLinkDeviceToJSON(json: any): ShareLinkDevice {
+    return ShareLinkDeviceToJSONTyped(json, false);
+}
 
-  export function ShareLinkDeviceToJSONTyped(value?: ShareLinkDevice | null, ignoreDiscriminator: boolean = false): any {
+export function ShareLinkDeviceToJSONTyped(value?: ShareLinkDevice | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

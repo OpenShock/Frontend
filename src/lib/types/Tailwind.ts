@@ -1,6 +1,5 @@
-
-type color
-  = 'slate'
+type color =
+  | 'slate'
   | 'gray'
   | 'zinc'
   | 'neutral'
@@ -23,19 +22,15 @@ type color
   | 'pink'
   | 'rose';
 
-type shade
-  = 50
-  | 100
-  | 200
-  | 300
-  | 400
-  | 500
-  | 600
-  | 700
-  | 800
-  | 900;
+type shade = 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
 
-export type TwColor = 'transparent' | 'current' | 'black' | 'white' | 'inherit' | `${color}-${shade}`;
+export type TwColor =
+  | 'transparent'
+  | 'current'
+  | 'black'
+  | 'white'
+  | 'inherit'
+  | `${color}-${shade}`;
 export type TwBgColor = `bg-${TwColor}`;
 export type TwTextColor = `text-${TwColor}`;
 export type TwBorderColor = `border-${TwColor}`;

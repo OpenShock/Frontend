@@ -1,52 +1,72 @@
 <script lang="ts">
   import { adminApi } from '$lib/api';
-  import { RankType, type AdminOnlineDeviceResponse } from '$lib/api/internal/v1';
-  import { UserStore } from '$lib/stores/UserStore';
-  import { onMount } from 'svelte';
-  import AdminDeviceList from './AdminDeviceList.svelte';
+  import type { AdminOnlineDeviceResponse } from '$lib/api/internal/v1';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { Button } from '$lib/components/ui/button';
+  import * as Card from '$lib/components/ui/card';
+  import { SemVer } from 'semver';
+  import { onDestroy, onMount } from 'svelte';
+  import { columns, type OnlineHub } from './columns';
+  import DataTable from './data-table.svelte';
 
-  let isAdmin = $derived($UserStore.self?.rank === RankType.admin);
+  import RotateCcw from 'lucide-svelte/icons/rotate-ccw';
 
-  type FlatDevice = AdminOnlineDeviceResponse & { ownerName: string | null };
+  function apiHubToTableHub(hub: AdminOnlineDeviceResponse): OnlineHub {
+    return {
+      id: hub.id,
+      name: hub.name,
+      owner: {
+        id: hub.owner.id,
+        name: hub.owner.name,
+        image: hub.owner.image,
+      },
+      firmware_version: new SemVer(hub.firmwareVersion),
+      gateway: hub.gateway,
+      connected_at: hub.connectedAt,
+      user_agent: hub.userAgent,
+      booted_at: hub.bootedAt,
+      latency: hub.latencyMs,
+      rssi: hub.rssi,
+    };
+  }
 
-  let devices: FlatDevice[] | null = $state(null);
+  let data = $state<OnlineHub[]>([]);
 
-  function fetchOnlineDevices() {
-    if (!isAdmin) return; // TODO: Display toast
-
+  function fetchOnlineHubs() {
     adminApi
       .adminGetOnlineDevices()
       .then((res) => {
-        devices =
-          res.data?.map((device) => ({
-            ...device,
-            ownerName: device.owner ? device.owner.name : null,
-          })) ?? [];
+        if (res.data) {
+          data = res.data.map(apiHubToTableHub);
+        }
       })
-      .catch((err) => {
-        console.error(err);
-      });
+      .catch(handleApiError);
   }
 
-  onMount(fetchOnlineDevices);
+  let interval: ReturnType<typeof setInterval>;
+  onMount(() => {
+    fetchOnlineHubs();
+    // Update timestamps every 5 seconds
+    interval = setInterval(() => {
+      data = Object.assign([], data);
+    }, 5000);
+  });
+  onDestroy(() => {
+    clearInterval(interval);
+  });
 </script>
 
-<div class="container h-full p-12 flex flex-col justify-start items-start gap-4">
-  {#if !isAdmin}
-    <h1 class="text-4xl">You do not have permission to access this page</h1>
-    <a href="/home" class="btn variant-filled-primary">Go Home</a>
-  {:else}
-    <div class="flex justify-between w-full">
-      <h2 class="h2">Online Hubs</h2>
-      <button class="btn variant-filled-primary" onclick={fetchOnlineDevices}>
-        <i class="fa fa-sync"></i>
-        Refresh
-      </button>
-    </div>
-
-    <!-- Online Users List -->
-    {#if devices}
-      <AdminDeviceList {devices} />
-    {/if}
-  {/if}
+<div class="container my-8">
+  <Card.Header>
+    <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
+      Online Hubs: {data.length}
+      <Button class="btn variant-filled-primary text-xl" onclick={fetchOnlineHubs}>
+        <RotateCcw />
+        <span> Refresh </span>
+      </Button>
+    </Card.Title>
+  </Card.Header>
+  <Card.Content>
+    <DataTable {data} {columns} />
+  </Card.Content>
 </div>

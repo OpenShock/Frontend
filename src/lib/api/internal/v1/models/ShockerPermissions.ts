@@ -72,11 +72,11 @@ export function ShockerPermissionsFromJSONTyped(json: any, ignoreDiscriminator: 
     };
 }
 
-  export function ShockerPermissionsToJSON(json: any): ShockerPermissions {
-      return ShockerPermissionsToJSONTyped(json, false);
-  }
+export function ShockerPermissionsToJSON(json: any): ShockerPermissions {
+    return ShockerPermissionsToJSONTyped(json, false);
+}
 
-  export function ShockerPermissionsToJSONTyped(value?: ShockerPermissions | null, ignoreDiscriminator: boolean = false): any {
+export function ShockerPermissionsToJSONTyped(value?: ShockerPermissions | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

@@ -63,11 +63,11 @@ export function ShareCodeInfoIEnumerableBaseResponseFromJSONTyped(json: any, ign
     };
 }
 
-  export function ShareCodeInfoIEnumerableBaseResponseToJSON(json: any): ShareCodeInfoIEnumerableBaseResponse {
-      return ShareCodeInfoIEnumerableBaseResponseToJSONTyped(json, false);
-  }
+export function ShareCodeInfoIEnumerableBaseResponseToJSON(json: any): ShareCodeInfoIEnumerableBaseResponse {
+    return ShareCodeInfoIEnumerableBaseResponseToJSONTyped(json, false);
+}
 
-  export function ShareCodeInfoIEnumerableBaseResponseToJSONTyped(value?: ShareCodeInfoIEnumerableBaseResponse | null, ignoreDiscriminator: boolean = false): any {
+export function ShareCodeInfoIEnumerableBaseResponseToJSONTyped(value?: ShareCodeInfoIEnumerableBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

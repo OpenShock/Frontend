@@ -38,7 +38,7 @@ export interface ResponseDeviceWithShockers {
      * @type {string}
      * @memberof ResponseDeviceWithShockers
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {Date}
@@ -50,7 +50,7 @@ export interface ResponseDeviceWithShockers {
      * @type {Array<ShockerResponse>}
      * @memberof ResponseDeviceWithShockers
      */
-    shockers: Array<ShockerResponse> | null;
+    shockers: Array<ShockerResponse>;
 }
 
 /**
@@ -77,15 +77,15 @@ export function ResponseDeviceWithShockersFromJSONTyped(json: any, ignoreDiscrim
         'id': json['id'],
         'name': json['name'],
         'createdOn': (new Date(json['createdOn'])),
-        'shockers': (json['shockers'] == null ? null : (json['shockers'] as Array<any>).map(ShockerResponseFromJSON)),
+        'shockers': ((json['shockers'] as Array<any>).map(ShockerResponseFromJSON)),
     };
 }
 
-  export function ResponseDeviceWithShockersToJSON(json: any): ResponseDeviceWithShockers {
-      return ResponseDeviceWithShockersToJSONTyped(json, false);
-  }
+export function ResponseDeviceWithShockersToJSON(json: any): ResponseDeviceWithShockers {
+    return ResponseDeviceWithShockersToJSONTyped(json, false);
+}
 
-  export function ResponseDeviceWithShockersToJSONTyped(value?: ResponseDeviceWithShockers | null, ignoreDiscriminator: boolean = false): any {
+export function ResponseDeviceWithShockersToJSONTyped(value?: ResponseDeviceWithShockers | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
@@ -95,7 +95,7 @@ export function ResponseDeviceWithShockersFromJSONTyped(json: any, ignoreDiscrim
         'id': value['id'],
         'name': value['name'],
         'createdOn': ((value['createdOn']).toISOString()),
-        'shockers': (value['shockers'] == null ? null : (value['shockers'] as Array<any>).map(ShockerResponseToJSON)),
+        'shockers': ((value['shockers'] as Array<any>).map(ShockerResponseToJSON)),
     };
 }
 

@@ -20,7 +20,6 @@ inputs:
 runs:
   using: composite
   steps:
-  
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
@@ -53,3 +52,5 @@ runs:
         push: ${{ inputs.push-image }}
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
+        build-args: |
+          GIT_HASH=${{ github.sha }}

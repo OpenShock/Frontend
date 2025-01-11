@@ -63,11 +63,11 @@ export function LogEntryIEnumerableBaseResponseFromJSONTyped(json: any, ignoreDi
     };
 }
 
-  export function LogEntryIEnumerableBaseResponseToJSON(json: any): LogEntryIEnumerableBaseResponse {
-      return LogEntryIEnumerableBaseResponseToJSONTyped(json, false);
-  }
+export function LogEntryIEnumerableBaseResponseToJSON(json: any): LogEntryIEnumerableBaseResponse {
+    return LogEntryIEnumerableBaseResponseToJSONTyped(json, false);
+}
 
-  export function LogEntryIEnumerableBaseResponseToJSONTyped(value?: LogEntryIEnumerableBaseResponse | null, ignoreDiscriminator: boolean = false): any {
+export function LogEntryIEnumerableBaseResponseToJSONTyped(value?: LogEntryIEnumerableBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

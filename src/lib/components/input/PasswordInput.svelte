@@ -3,14 +3,13 @@
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { validatePassword } from '$lib/inputvalidation/passwordValidator';
   import type { ValidationResult } from '$lib/types/ValidationResult';
-  import { randStr } from '$lib/utils/rand';
-  import { type PopupSettings, getToastStore } from '@skeletonlabs/skeleton';
-  import TextInput from './TextInput.svelte';
   import type { FullAutoFill } from 'svelte/elements';
-  import PasswordStrengthMeter from './impl/PasswordStrengthMeter.svelte';
   import type { ButtonSettings } from './impl/ButtonSettings';
+  import PasswordStrengthMeter from './impl/PasswordStrengthMeter.svelte';
+  import TextInput from './TextInput.svelte';
+  import type { AnyComponent } from '$lib/types/AnyComponent';
 
-  const toastStore = getToastStore();
+  import { Eye, EyeOff } from 'lucide-svelte';
 
   interface Props {
     label: string;
@@ -21,7 +20,7 @@
     valid?: boolean;
     validate?: boolean | 'string' | 'pwned' | ValidationResult | null;
     showStrengthMeter?: boolean;
-    icon?: `fa-${string}`;
+    Icon?: AnyComponent;
     oninput?: (value: string) => void | undefined;
   }
 
@@ -34,17 +33,11 @@
     valid = $bindable(false),
     validate = false,
     showStrengthMeter = false,
-    icon,
-    oninput
+    Icon,
+    oninput,
   }: Props = $props();
 
-  const popupSettings: PopupSettings = {
-    event: 'focus-blur',
-    target: 'popupStrengthMeter-' + randStr(8),
-    placement: 'left-start',
-  };
-
-  let validationResult: ValidationResult | null = $state(null);
+  let validationResult = $state<ValidationResult | null>(null);
   let passwordDebounce: ReturnType<typeof setTimeout> | null = null;
   function checkHIBP(str: string) {
     // Stop the previous debounce timer if it exists
@@ -65,7 +58,7 @@
           // Password has been pwned, change the validation result
           validationResult = {
             valid: false,
-            message: `Password detected in ${pwnedCount} data breaches`,
+            message: `Password detected in ${pwnedCount} data ${pwnedCount == 1 ? 'breach' : 'breaches'}`,
             link: {
               text: "What's this?",
               href: 'https://haveibeenpwned.com/Passwords',
@@ -77,7 +70,7 @@
         }
       } catch (e) {
         // Show an error toast
-        await handleApiError(e, toastStore);
+        await handleApiError(e);
 
         // We shouldnt block the user from submitting the form if the pwned password check fails
         validationResult = { valid: true };
@@ -112,7 +105,7 @@
   });
 
   let button: ButtonSettings = $derived({
-    icon: valueShown ? 'fa-eye-slash' : 'fa-eye',
+    Icon: valueShown ? EyeOff : Eye,
     class: 'cursor-pointer',
     onClick: () => (valueShown = !valueShown),
   });
@@ -125,14 +118,13 @@
   {autocomplete}
   bind:value
   {validationResult}
-  {icon}
+  {Icon}
   {button}
-  {popupSettings}
   {oninput}
 >
   {#snippet popup()}
     {#if showStrengthMeter}
-      <PasswordStrengthMeter popupTarget={popupSettings.target} password={value} />
+      <PasswordStrengthMeter password={value} />
     {/if}
   {/snippet}
 </TextInput>

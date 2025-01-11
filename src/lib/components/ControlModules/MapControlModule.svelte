@@ -1,18 +1,19 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from 'svelte';
-  import CircleSlider from './Internal/CircleSlider.svelte';
   import type { ShockerResponse } from '$lib/api/internal/v1';
+  import type { Control, ControlType } from '$lib/api/internal/v2';
+  import { onMount } from 'svelte';
 
   interface Props {
     shockers: ShockerResponse[];
+    controlHandler: (controls: Control[]) => void;
   }
 
-  let { shockers }: Props = $props();
+  let { shockers, controlHandler }: Props = $props();
 
   let intensity: number = 25;
   let duration: number = 1;
 
-  let canvas: HTMLCanvasElement | undefined = $state();
+  let canvas = $state<HTMLCanvasElement | undefined>();
 
   onMount(() => {
     const ctx = canvas?.getContext('2d');
@@ -42,12 +43,6 @@
     ctx.fillRect(900, 1000, 50, 200);
     ctx.fillRect(1050, 1000, 50, 200);
   });
-
-  const dispatch = createEventDispatcher();
-
-  function emit(type: string) {
-    dispatch('command', { id: 0, type, intensity, duration }); // TODO
-  }
 </script>
 
-<canvas bind:this={canvas} width="2000" height="1300" class="w-full h-full"></canvas>
+<canvas bind:this={canvas} width="2000" height="1300" class="size-full"></canvas>

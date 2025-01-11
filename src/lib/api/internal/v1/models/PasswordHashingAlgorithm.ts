@@ -18,10 +18,9 @@
  * @enum {string}
  */
 export enum PasswordHashingAlgorithm {
-    bCrypt = 'BCrypt',
-    pbkdf2 = 'PBKDF2',
-    unknown = 'Unknown',
-    unknownDefaultOpenApi = '11184809'
+    BCrypt = 'BCrypt',
+    Pbkdf2 = 'PBKDF2',
+    Unknown = 'Unknown'
 }
 
 

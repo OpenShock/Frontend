@@ -1,9 +1,8 @@
-import { purgeCss } from 'vite-plugin-tailwind-purgecss';
 import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig, type PluginOption, loadEnv } from 'vite';
-import mkcert from 'vite-plugin-mkcert';
 import dns from 'dns';
 import { env } from 'process';
+import { defineConfig, loadEnv, type PluginOption, type UserConfig } from 'vite';
+import mkcert from 'vite-plugin-mkcert';
 
 function printRed(message: string) {
   console.log(`\u001b[1;31m${message}\u001b[0m`);
@@ -38,8 +37,12 @@ async function ensureFqdnRedirect(host: string, fqdn: string) {
   console.log('On macOS and Linux, you can do this by running the following command:');
   printBlue(`echo "${host} ${fqdn}" | sudo tee -a /etc/hosts\n`);
 
-  console.log('On Windows, you can do this by running the following command in PowerShell as an administrator:');
-  printBlue(`Add-Content -Path "C:\\Windows\\System32\\drivers\\etc\\hosts" -Value "${host} ${fqdn}"\n`);
+  console.log(
+    'On Windows, you can do this by running the following command in PowerShell as an administrator:'
+  );
+  printBlue(
+    `Add-Content -Path "C:\\Windows\\System32\\drivers\\etc\\hosts" -Value "${host} ${fqdn}"\n`
+  );
 
   printRed('Then restart your development server');
   process.exit(1);
@@ -59,9 +62,6 @@ async function getPlugins(useLocalRedirect: boolean) {
 
   // Add the sveltekit plugin
   plugins.push(sveltekit());
-
-  // Configure the purgeCss plugin
-  plugins.push(purgeCss());
 
   return plugins;
 }
@@ -87,20 +87,20 @@ async function getServer(mode: string, useLocalRedirect: boolean) {
 
 function getTest() {
   return {
-    include: ['src/**/*.{test,spec}.{js,ts}']
+    include: ['src/**/*.{test,spec}.{js,ts}'],
   };
 }
 
 export default defineConfig(async ({ command, mode, isPreview }) => {
   const isLocalServe = command === 'serve' || isPreview === true;
   const isProduction = mode === 'production' && (isThruthy(env.DOCKER) || isThruthy(env.CF_PAGES));
-  
+
   // If we are running locally, ensure that local.{PUBLIC_SITE_DOMAIN} resolves to localhost, and then use mkcert to generate a certificate
   const useLocalRedirect = isLocalServe && !isProduction && !isThruthy(env.CI);
 
   return defineConfig({
     plugins: await getPlugins(useLocalRedirect),
     server: await getServer(mode, useLocalRedirect),
-    test: getTest()
-  });
+    test: getTest(),
+  } as UserConfig); // TODO: "test" is not a valid property of the defineconfig argument? This needs to get fixed
 });

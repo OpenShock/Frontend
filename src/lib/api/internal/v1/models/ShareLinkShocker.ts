@@ -45,7 +45,7 @@ export interface ShareLinkShocker {
      * @type {string}
      * @memberof ShareLinkShocker
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {ShockerPermissions}
@@ -103,11 +103,11 @@ export function ShareLinkShockerFromJSONTyped(json: any, ignoreDiscriminator: bo
     };
 }
 
-  export function ShareLinkShockerToJSON(json: any): ShareLinkShocker {
-      return ShareLinkShockerToJSONTyped(json, false);
-  }
+export function ShareLinkShockerToJSON(json: any): ShareLinkShocker {
+    return ShareLinkShockerToJSONTyped(json, false);
+}
 
-  export function ShareLinkShockerToJSONTyped(value?: ShareLinkShocker | null, ignoreDiscriminator: boolean = false): any {
+export function ShareLinkShockerToJSONTyped(value?: ShareLinkShocker | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

@@ -38,13 +38,13 @@ export interface DeviceSelfResponse {
      * @type {string}
      * @memberof DeviceSelfResponse
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {Array<MinimalShocker>}
      * @memberof DeviceSelfResponse
      */
-    shockers: Array<MinimalShocker> | null;
+    shockers: Array<MinimalShocker>;
 }
 
 /**
@@ -69,15 +69,15 @@ export function DeviceSelfResponseFromJSONTyped(json: any, ignoreDiscriminator: 
         
         'id': json['id'],
         'name': json['name'],
-        'shockers': (json['shockers'] == null ? null : (json['shockers'] as Array<any>).map(MinimalShockerFromJSON)),
+        'shockers': ((json['shockers'] as Array<any>).map(MinimalShockerFromJSON)),
     };
 }
 
-  export function DeviceSelfResponseToJSON(json: any): DeviceSelfResponse {
-      return DeviceSelfResponseToJSONTyped(json, false);
-  }
+export function DeviceSelfResponseToJSON(json: any): DeviceSelfResponse {
+    return DeviceSelfResponseToJSONTyped(json, false);
+}
 
-  export function DeviceSelfResponseToJSONTyped(value?: DeviceSelfResponse | null, ignoreDiscriminator: boolean = false): any {
+export function DeviceSelfResponseToJSONTyped(value?: DeviceSelfResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
@@ -86,7 +86,7 @@ export function DeviceSelfResponseFromJSONTyped(json: any, ignoreDiscriminator: 
         
         'id': value['id'],
         'name': value['name'],
-        'shockers': (value['shockers'] == null ? null : (value['shockers'] as Array<any>).map(MinimalShockerToJSON)),
+        'shockers': ((value['shockers'] as Array<any>).map(MinimalShockerToJSON)),
     };
 }
 

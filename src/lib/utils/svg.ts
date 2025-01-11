@@ -1,4 +1,4 @@
-import { getCircleX, getCircleY } from "./math";
+import { getCircleX, getCircleY } from './math';
 
 export function calcSvgArcProps(
   center: { x: number; y: number },

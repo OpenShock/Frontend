@@ -30,7 +30,7 @@ export interface ShareLinkResponse {
      * @type {string}
      * @memberof ShareLinkResponse
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {Date}
@@ -72,11 +72,11 @@ export function ShareLinkResponseFromJSONTyped(json: any, ignoreDiscriminator: b
     };
 }
 
-  export function ShareLinkResponseToJSON(json: any): ShareLinkResponse {
-      return ShareLinkResponseToJSONTyped(json, false);
-  }
+export function ShareLinkResponseToJSON(json: any): ShareLinkResponse {
+    return ShareLinkResponseToJSONTyped(json, false);
+}
 
-  export function ShareLinkResponseToJSONTyped(value?: ShareLinkResponse | null, ignoreDiscriminator: boolean = false): any {
+export function ShareLinkResponseToJSONTyped(value?: ShareLinkResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

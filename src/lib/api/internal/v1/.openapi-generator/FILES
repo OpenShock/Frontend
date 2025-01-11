@@ -15,9 +15,9 @@ apis/index.ts
 index.ts
 models/AdminOnlineDeviceResponse.ts
 models/AdminOnlineDeviceResponseIEnumerableBaseResponse.ts
-models/AdminUserCountsResponse.ts
-models/AdminUserResponse.ts
-models/AdminUserResponsePaginated.ts
+models/AdminUsersView.ts
+models/AdminUsersViewPaginated.ts
+models/BooleanBaseResponse.ts
 models/BooleanNullableBaseResponse.ts
 models/ChangeEmailRequest.ts
 models/ChangePasswordRequest.ts
@@ -25,7 +25,6 @@ models/ChangeUsernameRequest.ts
 models/Control.ts
 models/ControlLogSenderLight.ts
 models/ControlType.ts
-models/CreateShareCode.ts
 models/CreateTokenRequest.ts
 models/DeviceSelfResponse.ts
 models/DeviceSelfResponseBaseResponse.ts
@@ -84,6 +83,7 @@ models/SharedDevice.ts
 models/SharedShocker.ts
 models/ShockerLimits.ts
 models/ShockerModelType.ts
+models/ShockerPermLimitPair.ts
 models/ShockerPermissions.ts
 models/ShockerResponse.ts
 models/ShockerResponseIEnumerableBaseResponse.ts

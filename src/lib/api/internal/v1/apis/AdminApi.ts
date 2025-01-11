@@ -16,13 +16,13 @@
 import * as runtime from '../runtime';
 import type {
   AdminOnlineDeviceResponseIEnumerableBaseResponse,
-  AdminUserResponsePaginated,
+  AdminUsersViewPaginated,
 } from '../models/index';
 import {
     AdminOnlineDeviceResponseIEnumerableBaseResponseFromJSON,
     AdminOnlineDeviceResponseIEnumerableBaseResponseToJSON,
-    AdminUserResponsePaginatedFromJSON,
-    AdminUserResponsePaginatedToJSON,
+    AdminUsersViewPaginatedFromJSON,
+    AdminUsersViewPaginatedToJSON,
 } from '../models/index';
 
 export interface AdminDeleteUserRequest {
@@ -30,8 +30,10 @@ export interface AdminDeleteUserRequest {
 }
 
 export interface AdminGetUsersRequest {
-    limit?: number;
-    offset?: number;
+    $filter?: string;
+    $orderby?: string;
+    $offset?: number;
+    $limit?: number;
 }
 
 /**
@@ -49,12 +51,12 @@ export interface AdminApiInterface {
      * @throws {RequiredError}
      * @memberof AdminApiInterface
      */
-    adminDeleteUserRaw(requestParameters: AdminDeleteUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>>;
+    adminDeleteUserRaw(requestParameters: AdminDeleteUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
      * Deletes a user
      */
-    adminDeleteUser(userId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any>;
+    adminDeleteUser(userId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -73,18 +75,20 @@ export interface AdminApiInterface {
     /**
      * 
      * @summary Gets all users, paginated
-     * @param {number} [limit] 
-     * @param {number} [offset] 
+     * @param {string} [$filter] 
+     * @param {string} [$orderby] 
+     * @param {number} [$offset] 
+     * @param {number} [$limit] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AdminApiInterface
      */
-    adminGetUsersRaw(requestParameters: AdminGetUsersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AdminUserResponsePaginated>>;
+    adminGetUsersRaw(requestParameters: AdminGetUsersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AdminUsersViewPaginated>>;
 
     /**
      * Gets all users, paginated
      */
-    adminGetUsers(limit?: number, offset?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminUserResponsePaginated>;
+    adminGetUsers($filter?: string, $orderby?: string, $offset?: number, $limit?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminUsersViewPaginated>;
 
 }
 
@@ -96,7 +100,7 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     /**
      * Deletes a user
      */
-    async adminDeleteUserRaw(requestParameters: AdminDeleteUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
+    async adminDeleteUserRaw(requestParameters: AdminDeleteUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['userId'] == null) {
             throw new runtime.RequiredError(
                 'userId',
@@ -108,10 +112,6 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
-        }
-
         const response = await this.request({
             path: `/1/admin/users/{userId}`.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))),
             method: 'DELETE',
@@ -119,19 +119,14 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<any>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Deletes a user
      */
-    async adminDeleteUser(userId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
-        const response = await this.adminDeleteUserRaw({ userId: userId }, initOverrides);
-        return await response.value();
+    async adminDeleteUser(userId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.adminDeleteUserRaw({ userId: userId }, initOverrides);
     }
 
     /**
@@ -141,10 +136,6 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
-        }
 
         const response = await this.request({
             path: `/1/admin/monitoring/onlineDevices`,
@@ -167,22 +158,26 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     /**
      * Gets all users, paginated
      */
-    async adminGetUsersRaw(requestParameters: AdminGetUsersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AdminUserResponsePaginated>> {
+    async adminGetUsersRaw(requestParameters: AdminGetUsersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AdminUsersViewPaginated>> {
         const queryParameters: any = {};
 
-        if (requestParameters['limit'] != null) {
-            queryParameters['limit'] = requestParameters['limit'];
+        if (requestParameters['$filter'] != null) {
+            queryParameters['$filter'] = requestParameters['$filter'];
         }
 
-        if (requestParameters['offset'] != null) {
-            queryParameters['offset'] = requestParameters['offset'];
+        if (requestParameters['$orderby'] != null) {
+            queryParameters['$orderby'] = requestParameters['$orderby'];
+        }
+
+        if (requestParameters['$offset'] != null) {
+            queryParameters['$offset'] = requestParameters['$offset'];
+        }
+
+        if (requestParameters['$limit'] != null) {
+            queryParameters['$limit'] = requestParameters['$limit'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
-        }
 
         const response = await this.request({
             path: `/1/admin/users`,
@@ -191,14 +186,14 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AdminUserResponsePaginatedFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => AdminUsersViewPaginatedFromJSON(jsonValue));
     }
 
     /**
      * Gets all users, paginated
      */
-    async adminGetUsers(limit?: number, offset?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminUserResponsePaginated> {
-        const response = await this.adminGetUsersRaw({ limit: limit, offset: offset }, initOverrides);
+    async adminGetUsers($filter?: string, $orderby?: string, $offset?: number, $limit?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminUsersViewPaginated> {
+        const response = await this.adminGetUsersRaw({ $filter: $filter, $orderby: $orderby, $offset: $offset, $limit: $limit }, initOverrides);
         return await response.value();
     }
 

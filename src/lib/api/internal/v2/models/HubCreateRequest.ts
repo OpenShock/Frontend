@@ -49,11 +49,11 @@ export function HubCreateRequestFromJSONTyped(json: any, ignoreDiscriminator: bo
     };
 }
 
-  export function HubCreateRequestToJSON(json: any): HubCreateRequest {
-      return HubCreateRequestToJSONTyped(json, false);
-  }
+export function HubCreateRequestToJSON(json: any): HubCreateRequest {
+    return HubCreateRequestToJSONTyped(json, false);
+}
 
-  export function HubCreateRequestToJSONTyped(value?: HubCreateRequest | null, ignoreDiscriminator: boolean = false): any {
+export function HubCreateRequestToJSONTyped(value?: HubCreateRequest | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

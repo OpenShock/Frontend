@@ -38,7 +38,7 @@ export interface TokenResponse {
      * @type {string}
      * @memberof TokenResponse
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {Date}
@@ -62,7 +62,7 @@ export interface TokenResponse {
      * @type {Array<PermissionType>}
      * @memberof TokenResponse
      */
-    permissions: Array<PermissionType> | null;
+    permissions: Array<PermissionType>;
 }
 
 /**
@@ -93,15 +93,15 @@ export function TokenResponseFromJSONTyped(json: any, ignoreDiscriminator: boole
         'createdOn': (new Date(json['createdOn'])),
         'validUntil': (json['validUntil'] == null ? null : new Date(json['validUntil'])),
         'lastUsed': (new Date(json['lastUsed'])),
-        'permissions': (json['permissions'] == null ? null : (json['permissions'] as Array<any>).map(PermissionTypeFromJSON)),
+        'permissions': ((json['permissions'] as Array<any>).map(PermissionTypeFromJSON)),
     };
 }
 
-  export function TokenResponseToJSON(json: any): TokenResponse {
-      return TokenResponseToJSONTyped(json, false);
-  }
+export function TokenResponseToJSON(json: any): TokenResponse {
+    return TokenResponseToJSONTyped(json, false);
+}
 
-  export function TokenResponseToJSONTyped(value?: TokenResponse | null, ignoreDiscriminator: boolean = false): any {
+export function TokenResponseToJSONTyped(value?: TokenResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
@@ -113,7 +113,7 @@ export function TokenResponseFromJSONTyped(json: any, ignoreDiscriminator: boole
         'createdOn': ((value['createdOn']).toISOString()),
         'validUntil': (value['validUntil'] == null ? null : (value['validUntil'] as any).toISOString()),
         'lastUsed': ((value['lastUsed']).toISOString()),
-        'permissions': (value['permissions'] == null ? null : (value['permissions'] as Array<any>).map(PermissionTypeToJSON)),
+        'permissions': ((value['permissions'] as Array<any>).map(PermissionTypeToJSON)),
     };
 }
 

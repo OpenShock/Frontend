@@ -45,7 +45,7 @@ export interface SharedShocker {
      * @type {string}
      * @memberof SharedShocker
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {boolean}
@@ -96,11 +96,11 @@ export function SharedShockerFromJSONTyped(json: any, ignoreDiscriminator: boole
     };
 }
 
-  export function SharedShockerToJSON(json: any): SharedShocker {
-      return SharedShockerToJSONTyped(json, false);
-  }
+export function SharedShockerToJSON(json: any): SharedShocker {
+    return SharedShockerToJSONTyped(json, false);
+}
 
-  export function SharedShockerToJSONTyped(value?: SharedShocker | null, ignoreDiscriminator: boolean = false): any {
+export function SharedShockerToJSONTyped(value?: SharedShocker | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

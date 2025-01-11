@@ -55,11 +55,11 @@ export function GuidBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: bo
     };
 }
 
-  export function GuidBaseResponseToJSON(json: any): GuidBaseResponse {
-      return GuidBaseResponseToJSONTyped(json, false);
-  }
+export function GuidBaseResponseToJSON(json: any): GuidBaseResponse {
+    return GuidBaseResponseToJSONTyped(json, false);
+}
 
-  export function GuidBaseResponseToJSONTyped(value?: GuidBaseResponse | null, ignoreDiscriminator: boolean = false): any {
+export function GuidBaseResponseToJSONTyped(value?: GuidBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

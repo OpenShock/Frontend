@@ -30,13 +30,13 @@ export interface GenericIni {
      * @type {string}
      * @memberof GenericIni
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {string}
      * @memberof GenericIni
      */
-    image: string | null;
+    image: string;
 }
 
 /**
@@ -65,11 +65,11 @@ export function GenericIniFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     };
 }
 
-  export function GenericIniToJSON(json: any): GenericIni {
-      return GenericIniToJSONTyped(json, false);
-  }
+export function GenericIniToJSON(json: any): GenericIni {
+    return GenericIniToJSONTyped(json, false);
+}
 
-  export function GenericIniToJSONTyped(value?: GenericIni | null, ignoreDiscriminator: boolean = false): any {
+export function GenericIniToJSONTyped(value?: GenericIni | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

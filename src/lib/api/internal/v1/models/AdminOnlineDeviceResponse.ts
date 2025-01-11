@@ -38,7 +38,7 @@ export interface AdminOnlineDeviceResponse {
      * @type {string}
      * @memberof AdminOnlineDeviceResponse
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {GenericIni}
@@ -50,19 +50,43 @@ export interface AdminOnlineDeviceResponse {
      * @type {string}
      * @memberof AdminOnlineDeviceResponse
      */
-    firmwareVersion: string | null;
+    firmwareVersion: string;
     /**
      * 
      * @type {string}
      * @memberof AdminOnlineDeviceResponse
      */
-    gateway: string | null;
+    gateway: string;
     /**
      * 
      * @type {Date}
      * @memberof AdminOnlineDeviceResponse
      */
     connectedAt: Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof AdminOnlineDeviceResponse
+     */
+    userAgent: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof AdminOnlineDeviceResponse
+     */
+    bootedAt: Date;
+    /**
+     * 
+     * @type {number}
+     * @memberof AdminOnlineDeviceResponse
+     */
+    latencyMs: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof AdminOnlineDeviceResponse
+     */
+    rssi: number | null;
 }
 
 /**
@@ -75,6 +99,10 @@ export function instanceOfAdminOnlineDeviceResponse(value: object): value is Adm
     if (!('firmwareVersion' in value) || value['firmwareVersion'] === undefined) return false;
     if (!('gateway' in value) || value['gateway'] === undefined) return false;
     if (!('connectedAt' in value) || value['connectedAt'] === undefined) return false;
+    if (!('userAgent' in value) || value['userAgent'] === undefined) return false;
+    if (!('bootedAt' in value) || value['bootedAt'] === undefined) return false;
+    if (!('latencyMs' in value) || value['latencyMs'] === undefined) return false;
+    if (!('rssi' in value) || value['rssi'] === undefined) return false;
     return true;
 }
 
@@ -94,14 +122,18 @@ export function AdminOnlineDeviceResponseFromJSONTyped(json: any, ignoreDiscrimi
         'firmwareVersion': json['firmwareVersion'],
         'gateway': json['gateway'],
         'connectedAt': (new Date(json['connectedAt'])),
+        'userAgent': json['userAgent'],
+        'bootedAt': (new Date(json['bootedAt'])),
+        'latencyMs': json['latencyMs'],
+        'rssi': json['rssi'],
     };
 }
 
-  export function AdminOnlineDeviceResponseToJSON(json: any): AdminOnlineDeviceResponse {
-      return AdminOnlineDeviceResponseToJSONTyped(json, false);
-  }
+export function AdminOnlineDeviceResponseToJSON(json: any): AdminOnlineDeviceResponse {
+    return AdminOnlineDeviceResponseToJSONTyped(json, false);
+}
 
-  export function AdminOnlineDeviceResponseToJSONTyped(value?: AdminOnlineDeviceResponse | null, ignoreDiscriminator: boolean = false): any {
+export function AdminOnlineDeviceResponseToJSONTyped(value?: AdminOnlineDeviceResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
@@ -114,6 +146,10 @@ export function AdminOnlineDeviceResponseFromJSONTyped(json: any, ignoreDiscrimi
         'firmwareVersion': value['firmwareVersion'],
         'gateway': value['gateway'],
         'connectedAt': ((value['connectedAt']).toISOString()),
+        'userAgent': value['userAgent'],
+        'bootedAt': ((value['bootedAt']).toISOString()),
+        'latencyMs': value['latencyMs'],
+        'rssi': value['rssi'],
     };
 }
 

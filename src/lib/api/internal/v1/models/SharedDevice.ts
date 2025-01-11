@@ -38,13 +38,13 @@ export interface SharedDevice {
      * @type {string}
      * @memberof SharedDevice
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {Array<SharedShocker>}
      * @memberof SharedDevice
      */
-    shockers?: Array<SharedShocker> | null;
+    shockers?: Array<SharedShocker>;
 }
 
 /**
@@ -72,11 +72,11 @@ export function SharedDeviceFromJSONTyped(json: any, ignoreDiscriminator: boolea
     };
 }
 
-  export function SharedDeviceToJSON(json: any): SharedDevice {
-      return SharedDeviceToJSONTyped(json, false);
-  }
+export function SharedDeviceToJSON(json: any): SharedDevice {
+    return SharedDeviceToJSONTyped(json, false);
+}
 
-  export function SharedDeviceToJSONTyped(value?: SharedDevice | null, ignoreDiscriminator: boolean = false): any {
+export function SharedDeviceToJSONTyped(value?: SharedDevice | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

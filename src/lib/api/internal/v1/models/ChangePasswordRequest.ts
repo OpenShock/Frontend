@@ -24,13 +24,13 @@ export interface ChangePasswordRequest {
      * @type {string}
      * @memberof ChangePasswordRequest
      */
-    oldPassword: string | null;
+    oldPassword: string;
     /**
      * 
      * @type {string}
      * @memberof ChangePasswordRequest
      */
-    newPassword: string | null;
+    newPassword: string;
 }
 
 /**
@@ -57,11 +57,11 @@ export function ChangePasswordRequestFromJSONTyped(json: any, ignoreDiscriminato
     };
 }
 
-  export function ChangePasswordRequestToJSON(json: any): ChangePasswordRequest {
-      return ChangePasswordRequestToJSONTyped(json, false);
-  }
+export function ChangePasswordRequestToJSON(json: any): ChangePasswordRequest {
+    return ChangePasswordRequestToJSONTyped(json, false);
+}
 
-  export function ChangePasswordRequestToJSONTyped(value?: ChangePasswordRequest | null, ignoreDiscriminator: boolean = false): any {
+export function ChangePasswordRequestToJSONTyped(value?: ChangePasswordRequest | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

@@ -1,46 +1,41 @@
 <script lang="ts">
+  import { authenticatedAccountApi } from '$lib/api';
+  import EmailInput from '$lib/components/input/EmailInput.svelte';
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
+  import UsernameInput from '$lib/components/input/UsernameInput.svelte';
+  import * as Accordion from '$lib/components/ui/accordion';
+  import { Button } from '$lib/components/ui/button';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
   import { UserStore } from '$lib/stores/UserStore';
-  import { Accordion, AccordionItem } from '@skeletonlabs/skeleton';
-  import { authenticatedAccountApi } from '$lib/api';
-  import { getToastStore } from '@skeletonlabs/skeleton';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import UsernameInput from '$lib/components/input/UsernameInput.svelte';
-  import EmailInput from '$lib/components/input/EmailInput.svelte';
+  import { toast } from 'svelte-sonner';
 
-  const toastStore = getToastStore();
+  import { KeyRound, Mail, User } from 'lucide-svelte';
 
-  let username: string = $state('');
-  let email: string = $state('');
+  let username = $state<string>('');
+  let email = $state<string>('');
 
-  let currentPassword: string = $state('');
+  let currentPassword = $state<string>('');
   let currentPasswordValid = $derived(currentPassword.length > 0);
 
-  let password: string = $state('');
-  let passwordValid: boolean = $state(false);
+  let password = $state<string>('');
+  let passwordValid = $state<boolean>(false);
 
-  let passwordConfirm: string = $state('');
+  let passwordConfirm = $state<string>('');
 
   async function submitUsername() {
     try {
       await authenticatedAccountApi.authenticatedAccountChangeUsername({ username });
 
-      toastStore.trigger({
-        background: 'variant-filled-success',
-        message: 'Username changed successfully',
-      });
+      toast.success('Username changed successfully');
 
       UserStore.setSelfName(username);
 
       username = '';
     } catch (e) {
-      await handleApiError(e, toastStore, (problem) => {
+      await handleApiError(e, (problem) => {
         if (problem.type === 'Account.Username.Invalid') {
-          toastStore.trigger({
-            background: 'variant-filled-error',
-            message: '',
-          });
+          toast.error('Invalid Username');
           return true;
         }
         return false;
@@ -56,21 +51,23 @@
     console.log('Submitting password');
   }
 
-  let canSubmitPassword = $derived(currentPasswordValid && passwordValid && password == passwordConfirm);
+  let canSubmitPassword = $derived(
+    currentPasswordValid && passwordValid && password == passwordConfirm
+  );
 </script>
 
 {#if $UserStore.self}
-  <div class="container h-full mx-auto p-12 flex flex-col justify-start items-start gap-4">
+  <div class="container mx-auto flex h-full flex-col items-start justify-start gap-4 p-12">
     <h1 class="h1">Account Settings</h1>
     <div
-      class="w-full flex flex-col items-start gap-y-2 p-4 bg-surface-100-800-token rounded-lg border border-gray-500"
+      class="bg-surface-100-800-token flex w-full flex-col items-start gap-y-2 rounded-lg border border-gray-500 p-4"
     >
       <UsernameInput
         label="Username"
         placeholder={$UserStore.self.name}
         autocomplete="off"
         bind:value={username}
-        icon="fa-user"
+        Icon={User}
         button={{ text: 'Change', submits: true, onClick: submitUsername }}
       />
 
@@ -79,20 +76,18 @@
         placeholder={$UserStore.self.email}
         autocomplete="off"
         bind:value={email}
-        icon="fa-envelope"
+        Icon={Mail}
         button={{ text: 'Change', submits: true, onClick: submitEmail }}
       />
 
-      <Accordion>
-        <AccordionItem>
-          {#snippet lead()}
-            <i class="fa fa-key"></i>
-          {/snippet}
-          {#snippet summary()}
+      <Accordion.Root type="single" class="w-full">
+        <Accordion.Item>
+          <Accordion.Trigger>
+            <KeyRound />
             Change your password
-          {/snippet}
-          {#snippet content()}
-            <div class="rounded-lg border border-gray-700 p-5 mx-[-1rem]">
+          </Accordion.Trigger>
+          <Accordion.Content>
+            <div class="mx-[-1rem] rounded-lg border border-gray-700 p-5">
               <PasswordInput
                 label="Current Password"
                 placeholder="Current Password"
@@ -118,13 +113,17 @@
                 validate={validatePasswordMatch(passwordConfirm, password)}
               />
 
-              <button class="btn variant-filled-primary" type="submit" disabled={!canSubmitPassword}
-                >Change Password</button
+              <Button
+                class="btn variant-filled-primary"
+                type="submit"
+                disabled={!canSubmitPassword}
               >
+                Change Password
+              </Button>
             </div>
-          {/snippet}
-        </AccordionItem>
-      </Accordion>
+          </Accordion.Content>
+        </Accordion.Item>
+      </Accordion.Root>
     </div>
   </div>
 {/if}

@@ -83,10 +83,6 @@ export class PublicApi extends runtime.BaseAPI implements PublicApiInterface {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
-        }
-
         const response = await this.request({
             path: `/1/public/stats`,
             method: 'GET',
@@ -119,10 +115,6 @@ export class PublicApi extends runtime.BaseAPI implements PublicApiInterface {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
-        }
 
         const response = await this.request({
             path: `/1/public/shares/links/{shareLinkId}`.replace(`{${"shareLinkId"}}`, encodeURIComponent(String(requestParameters['shareLinkId']))),

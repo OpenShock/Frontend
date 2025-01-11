@@ -24,13 +24,13 @@ export interface Login {
      * @type {string}
      * @memberof Login
      */
-    password: string | null;
+    password: string;
     /**
      * 
      * @type {string}
      * @memberof Login
      */
-    email: string | null;
+    email: string;
 }
 
 /**
@@ -57,11 +57,11 @@ export function LoginFromJSONTyped(json: any, ignoreDiscriminator: boolean): Log
     };
 }
 
-  export function LoginToJSON(json: any): Login {
-      return LoginToJSONTyped(json, false);
-  }
+export function LoginToJSON(json: any): Login {
+    return LoginToJSONTyped(json, false);
+}
 
-  export function LoginToJSONTyped(value?: Login | null, ignoreDiscriminator: boolean = false): any {
+export function LoginToJSONTyped(value?: Login | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

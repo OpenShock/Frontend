@@ -1,84 +1,53 @@
 <script lang="ts">
-  import { OwnDeviceStatesStore, OwnDevicesStore } from '$lib/stores/DevicesStore';
+  import Button from '$lib/components/ui/button/button.svelte';
+  import * as Card from '$lib/components/ui/card';
+  import { OwnHubsStore, OnlineHubsStore } from '$lib/stores/HubsStore';
+  import { SemVer } from 'semver';
+  import { columns, type Hub } from './columns';
+  import DataTable from './data-table.svelte';
 
-  interface Device {
-    id: string;
-    name: string | null;
-    isOnline: boolean;
-    firmwareVersion: string | null;
-    createdAt: Date;
-  }
+  import RotateCcw from 'lucide-svelte/icons/rotate-ccw';
 
-  let devices: Device[] = $state([]);
+  let data = $derived.by<Hub[]>(() => {
+    if (!$OwnHubsStore || !$OnlineHubsStore) return [];
 
-  $effect(() => {
-    if (!$OwnDevicesStore) return;
-
-    const deviceStates = $OwnDeviceStatesStore?.map((state) => ({
-      id: state.device,
-      online: state.online,
-      firmwareVersion: state.firmwareVersion,
-    }));
-
-    if (!deviceStates) return;
-
-    devices = $OwnDevicesStore.map((device) => {
-      const state = deviceStates.find((state) => state.id === device.id);
+    return Array.from($OwnHubsStore).map(([, hub]) => {
+      const onlineState = $OnlineHubsStore.get(hub.id);
       return {
-        id: device.id,
-        name: device.name,
-        isOnline: state?.online ?? false,
-        firmwareVersion: state?.firmwareVersion ?? null,
-        createdAt: device.createdOn,
+        id: hub.id,
+        name: hub.name,
+        is_online: onlineState?.isOnline ?? false,
+        firmware_version: onlineState?.firmwareVersion
+          ? new SemVer(onlineState.firmwareVersion)
+          : null,
+        shockers: hub.shockers.map((shocker) => {
+          return {
+            id: shocker.id,
+            rf_id: shocker.rfId,
+            model: shocker.model,
+            name: shocker.name,
+            is_paused: shocker.isPaused,
+            created_at: shocker.createdOn,
+          };
+        }),
+        created_at: hub.createdOn,
       };
     });
   });
 </script>
 
-<div class="container h-full mx-auto flex flex-col justify-center items-center">
-  <table class="table-container border-collapse max-w-4xl">
-    <thead>
-      <tr>
-        <th class="text-left">Device Name</th>
-        <th class="text-left">Status</th>
-        <th class="text-left">Version</th>
-        <th class="text-left">Created On</th>
-      </tr>
-    </thead>
-    <tbody>
-      {#each devices as device (device.id)}
-        <tr>
-          <td class="text-lg border-y">
-            {device.name ?? 'Unnamed device'}
-          </td>
-          <td class="border-y">
-            {#if device.isOnline}
-              <span class="text-green-500">Online</span>
-            {:else}
-              <span class="text-red-500">Offline</span>
-            {/if}
-            {#if device.firmwareVersion}
-              <button class="btn variant-filled">
-                  Update Firmware
-              </button>
-            {/if}
-          </td>
-          <td class="border-y">
-            {#if device.firmwareVersion}
-              <span class="text-gray-500">Version {device.firmwareVersion}</span>
-            {/if}
-          </td>
-          <td class="border-y">
-            {device.createdAt.toLocaleDateString()}
-          </td>
-        </tr>
-      {/each}
-    </tbody>
-  </table>
+<div class="container my-8">
+  <Card.Header>
+    <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
+      Hubs
+      <Button class="btn variant-filled-primary text-xl" onclick={() => {}}>
+        <RotateCcw />
+        <span> Refresh </span>
+      </Button>
+    </Card.Title>
+    <Card.Description>This is a list of all hubs you own.</Card.Description>
+  </Card.Header>
+  <Card.Content>
+    <DataTable {data} {columns} />
+  </Card.Content>
 </div>
-
-<style>
-  table td {
-    padding: 0.5rem 0.25rem;
-  }
-</style>

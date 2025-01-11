@@ -56,13 +56,20 @@ export interface OpenShockProblem {
      * @memberof OpenShockProblem
      * @deprecated
      */
-    readonly message?: string | null;
+    readonly message?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OpenShockProblem
+     * @deprecated
+     */
+    readonly traceId?: string | null;
     /**
      * 
      * @type {string}
      * @memberof OpenShockProblem
      */
-    traceId?: string | null;
+    requestId?: string | null;
 }
 
 /**
@@ -90,14 +97,15 @@ export function OpenShockProblemFromJSONTyped(json: any, ignoreDiscriminator: bo
         'instance': json['instance'] == null ? undefined : json['instance'],
         'message': json['message'] == null ? undefined : json['message'],
         'traceId': json['traceId'] == null ? undefined : json['traceId'],
+        'requestId': json['requestId'] == null ? undefined : json['requestId'],
     };
 }
 
-  export function OpenShockProblemToJSON(json: any): OpenShockProblem {
-      return OpenShockProblemToJSONTyped(json, false);
-  }
+export function OpenShockProblemToJSON(json: any): OpenShockProblem {
+    return OpenShockProblemToJSONTyped(json, false);
+}
 
-  export function OpenShockProblemToJSONTyped(value?: Omit<OpenShockProblem, 'message'> | null, ignoreDiscriminator: boolean = false): any {
+export function OpenShockProblemToJSONTyped(value?: Omit<OpenShockProblem, 'message'|'traceId'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
@@ -110,7 +118,7 @@ export function OpenShockProblemFromJSONTyped(json: any, ignoreDiscriminator: bo
         'status': value['status'],
         'detail': value['detail'],
         'instance': value['instance'],
-        'traceId': value['traceId'],
+        'requestId': value['requestId'],
     };
 }
 

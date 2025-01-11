@@ -1,5 +1,5 @@
-import { validateUsername } from "./usernameValidator";
-import { describe, expect, it, test } from 'vitest';
+import { validateUsername } from './usernameValidator';
+import { describe, expect, it } from 'vitest';
 
 describe('username validator test', () => {
   it('empty username should return null', () => {
@@ -121,7 +121,7 @@ describe('username validator test', () => {
   it('valid username should return true and no error', () => {
     const result = validateUsername('validUsername');
     expect(result).toEqual({
-      valid: true
+      valid: true,
     });
   });
 });

@@ -18,12 +18,11 @@
  * @enum {string}
  */
 export enum UsernameErrorType {
-    tooShort = 'TooShort',
-    tooLong = 'TooLong',
-    startOrEndWithWhitespace = 'StartOrEndWithWhitespace',
-    resembleEmail = 'ResembleEmail',
-    obnoxiousCharacters = 'ObnoxiousCharacters',
-    unknownDefaultOpenApi = '11184809'
+    TooShort = 'TooShort',
+    TooLong = 'TooLong',
+    StartOrEndWithWhitespace = 'StartOrEndWithWhitespace',
+    ResembleEmail = 'ResembleEmail',
+    ObnoxiousCharacters = 'ObnoxiousCharacters'
 }
 
 

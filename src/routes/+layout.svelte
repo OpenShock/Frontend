@@ -1,44 +1,51 @@
 <script lang="ts">
-  import '../app.postcss';
-  import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
-  import { AppShell, Modal, Toast, initializeStores, storePopup } from '@skeletonlabs/skeleton';
+  import { page } from '$app/state';
+  import AppSidebar from '$lib/components/layout/AppSidebar.svelte';
   import Footer from '$lib/components/layout/Footer.svelte';
   import Header from '$lib/components/layout/Header.svelte';
-  import Sidebar from '$lib/components/layout/Sidebar.svelte';
-  import OpenGraphTags from '$lib/components/metadata/OpenGraphTags.svelte';
-  import TwitterSummaryTags from '$lib/components/metadata/Twitter/TwitterSummaryTags.svelte';
-  import { modalRegistry } from '$lib/modals';
-  import { page } from '$app/stores';
+  import { BasicTags, OpenGraphTags, TwitterSummaryTags } from '$lib/components/metadata';
+  import { SidebarProvider } from '$lib/components/ui/sidebar';
+  import { Toaster } from '$lib/components/ui/sonner';
   import { buildMetaData } from '$lib/metadata';
-  
-  interface Props {
-    children?: import('svelte').Snippet;
-  }
+  import { initializeSignalR } from '$lib/signalr';
+  import { initializeStores } from '$lib/stores';
+  import { UserStore } from '$lib/stores/UserStore';
+  import type { Snippet } from 'svelte';
+  import { RankType } from '$lib/api/internal/v1';
+  import { browser } from '$app/environment';
+  import '../app.css';
+
+  type Props = {
+    children?: Snippet;
+  };
 
   let { children }: Props = $props();
 
-  storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
-  initializeStores();
+  if (browser) {
+    initializeStores();
+    initializeSignalR();
+  }
 
-  const meta = buildMetaData($page);
+  let meta = $derived(buildMetaData(page.url));
+
+  let isOpen = $state(false);
+  let isLoggedIn = $derived($UserStore?.self !== null);
+  let currentUserRank = $derived($UserStore?.self?.rank ?? null);
 </script>
 
-<Modal components={modalRegistry} />
-<Toast position="bl" max={5} />
-
+<BasicTags {...meta} />
+<OpenGraphTags type="website" {...meta} url={page.url.origin} />
 <TwitterSummaryTags type="summary" {...meta} site="@OpenShockORG" creator="@OpenShockORG" />
-<OpenGraphTags type="website" {...meta} url={$page.url.origin} />
 
-<AppShell>
-  {#snippet header()}
-    <Header  />
-  {/snippet}
-  {#snippet sidebarLeft()}
-    <Sidebar  />
-  {/snippet}
-  {@render children?.()}
+<Toaster />
 
-  {#snippet pageFooter()}
+<SidebarProvider bind:open={() => isOpen && isLoggedIn, (o) => (isOpen = o)}>
+  <AppSidebar currentUserRank={currentUserRank ?? RankType.User} />
+  <div class="flex min-h-screen flex-1 flex-col">
+    <Header />
+    <main class="flex-1">
+      {@render children?.()}
+    </main>
     <Footer />
-  {/snippet}
-</AppShell>
+  </div>
+</SidebarProvider>

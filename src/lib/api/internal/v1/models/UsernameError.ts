@@ -32,7 +32,7 @@ export interface UsernameError {
      * @type {string}
      * @memberof UsernameError
      */
-    message: string | null;
+    message: string;
     /**
      * 
      * @type {UsernameErrorType}
@@ -67,11 +67,11 @@ export function UsernameErrorFromJSONTyped(json: any, ignoreDiscriminator: boole
     };
 }
 
-  export function UsernameErrorToJSON(json: any): UsernameError {
-      return UsernameErrorToJSONTyped(json, false);
-  }
+export function UsernameErrorToJSON(json: any): UsernameError {
+    return UsernameErrorToJSONTyped(json, false);
+}
 
-  export function UsernameErrorToJSONTyped(value?: UsernameError | null, ignoreDiscriminator: boolean = false): any {
+export function UsernameErrorToJSONTyped(value?: UsernameError | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

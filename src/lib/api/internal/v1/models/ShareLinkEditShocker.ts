@@ -79,11 +79,11 @@ export function ShareLinkEditShockerFromJSONTyped(json: any, ignoreDiscriminator
     };
 }
 
-  export function ShareLinkEditShockerToJSON(json: any): ShareLinkEditShocker {
-      return ShareLinkEditShockerToJSONTyped(json, false);
-  }
+export function ShareLinkEditShockerToJSON(json: any): ShareLinkEditShocker {
+    return ShareLinkEditShockerToJSONTyped(json, false);
+}
 
-  export function ShareLinkEditShockerToJSONTyped(value?: ShareLinkEditShocker | null, ignoreDiscriminator: boolean = false): any {
+export function ShareLinkEditShockerToJSONTyped(value?: ShareLinkEditShocker | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

@@ -24,7 +24,7 @@ export interface ShareLinkCreate {
      * @type {string}
      * @memberof ShareLinkCreate
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {Date}
@@ -56,11 +56,11 @@ export function ShareLinkCreateFromJSONTyped(json: any, ignoreDiscriminator: boo
     };
 }
 
-  export function ShareLinkCreateToJSON(json: any): ShareLinkCreate {
-      return ShareLinkCreateToJSONTyped(json, false);
-  }
+export function ShareLinkCreateToJSON(json: any): ShareLinkCreate {
+    return ShareLinkCreateToJSONTyped(json, false);
+}
 
-  export function ShareLinkCreateToJSONTyped(value?: ShareLinkCreate | null, ignoreDiscriminator: boolean = false): any {
+export function ShareLinkCreateToJSONTyped(value?: ShareLinkCreate | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

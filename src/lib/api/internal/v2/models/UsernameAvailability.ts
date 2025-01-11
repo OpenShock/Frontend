@@ -18,10 +18,9 @@
  * @enum {string}
  */
 export enum UsernameAvailability {
-    available = 'Available',
-    taken = 'Taken',
-    invalid = 'Invalid',
-    unknownDefaultOpenApi = '11184809'
+    Available = 'Available',
+    Taken = 'Taken',
+    Invalid = 'Invalid'
 }
 
 

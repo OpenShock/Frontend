@@ -63,11 +63,11 @@ export function ShareLinkResponseIEnumerableBaseResponseFromJSONTyped(json: any,
     };
 }
 
-  export function ShareLinkResponseIEnumerableBaseResponseToJSON(json: any): ShareLinkResponseIEnumerableBaseResponse {
-      return ShareLinkResponseIEnumerableBaseResponseToJSONTyped(json, false);
-  }
+export function ShareLinkResponseIEnumerableBaseResponseToJSON(json: any): ShareLinkResponseIEnumerableBaseResponse {
+    return ShareLinkResponseIEnumerableBaseResponseToJSONTyped(json, false);
+}
 
-  export function ShareLinkResponseIEnumerableBaseResponseToJSONTyped(value?: ShareLinkResponseIEnumerableBaseResponse | null, ignoreDiscriminator: boolean = false): any {
+export function ShareLinkResponseIEnumerableBaseResponseToJSONTyped(value?: ShareLinkResponseIEnumerableBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

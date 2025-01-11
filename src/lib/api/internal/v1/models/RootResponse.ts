@@ -24,13 +24,13 @@ export interface RootResponse {
      * @type {string}
      * @memberof RootResponse
      */
-    version: string | null;
+    version: string;
     /**
      * 
      * @type {string}
      * @memberof RootResponse
      */
-    commit: string | null;
+    commit: string;
     /**
      * 
      * @type {Date}
@@ -42,13 +42,13 @@ export interface RootResponse {
      * @type {string}
      * @memberof RootResponse
      */
-    frontendUrl: string | null;
+    frontendUrl: string;
     /**
      * 
      * @type {string}
      * @memberof RootResponse
      */
-    shortLinkUrl: string | null;
+    shortLinkUrl: string;
     /**
      * 
      * @type {string}
@@ -89,11 +89,11 @@ export function RootResponseFromJSONTyped(json: any, ignoreDiscriminator: boolea
     };
 }
 
-  export function RootResponseToJSON(json: any): RootResponse {
-      return RootResponseToJSONTyped(json, false);
-  }
+export function RootResponseToJSON(json: any): RootResponse {
+    return RootResponseToJSONTyped(json, false);
+}
 
-  export function RootResponseToJSONTyped(value?: RootResponse | null, ignoreDiscriminator: boolean = false): any {
+export function RootResponseToJSONTyped(value?: RootResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

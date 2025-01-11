@@ -9,13 +9,7 @@
     player?: { type: 'iframe' | 'stream'; src: string; width: number; height: number };
   }
 
-  let {
-    site,
-    description,
-    title,
-    image,
-    player
-  }: Props = $props();
+  let { site, description, title, image, player }: Props = $props();
 </script>
 
 <svelte:head>

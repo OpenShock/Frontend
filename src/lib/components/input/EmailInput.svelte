@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { ValidationResult } from '$lib/types/ValidationResult';
+  import type { ButtonSettings } from '$lib/components/input/impl/ButtonSettings';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import { validateEmail } from '$lib/inputvalidation/emailValidator';
+  import type { AnyComponent } from '$lib/types/AnyComponent';
+  import type { ValidationResult } from '$lib/types/ValidationResult';
   import type { FullAutoFill } from 'svelte/elements';
-  import type { ButtonSettings } from '$lib/components/input/impl/ButtonSettings';
-
 
   interface Props {
     label: string;
@@ -13,7 +13,7 @@
     value: string;
     valid?: boolean;
     validate?: boolean;
-    icon?: `fa-${string}`;
+    Icon?: AnyComponent;
     button?: ButtonSettings;
     oninput?: (value: string) => void | undefined;
   }
@@ -25,22 +25,17 @@
     value = $bindable(),
     valid = $bindable(false),
     validate = true,
-    icon,
+    Icon,
     button,
-    oninput
+    oninput,
   }: Props = $props();
 
-  let validationResult: ValidationResult | null = $state(null);
-  $effect(() => {
-    if (validate) {
-      validationResult = validateEmail(value);
-      
-      valid = validationResult?.valid ?? false;
-    } else {
-      validationResult = { valid: true };
+  let validationResult = $derived<ValidationResult | null>(
+    validate ? validateEmail(value) : { valid: true }
+  );
 
-      valid = true;
-    }
+  $effect(() => {
+    valid = validationResult?.valid ?? false;
   });
 </script>
 
@@ -50,7 +45,7 @@
   {autocomplete}
   bind:value
   {validationResult}
-  {icon}
+  {Icon}
   {button}
   {oninput}
 />

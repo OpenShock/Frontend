@@ -1,139 +1,52 @@
 <script lang="ts">
-  import { tokensApi } from '$lib/api';
   import type { TokenResponse } from '$lib/api/internal/v1';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { elapsedToString } from '$lib/utils/time';
-  import { escapeHtml } from '$lib/utils/encoding';
-  import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
+  import Button from '$lib/components/ui/button/button.svelte';
+  import * as Card from '$lib/components/ui/card';
   import { onMount } from 'svelte';
+  import { columns, type ApiToken } from './columns';
+  import DataTable from './data-table.svelte';
+  import TokenGenerateDialog from './dialog-token-generate.svelte';
+  import { ApiTokensStore, refreshApiToken, refreshApiTokens } from '$lib/stores/ApiTokensStore';
 
-  const modalStore = getModalStore();
+  import RotateCcw from 'lucide-svelte/icons/rotate-ccw';
 
-  const toastStore = getToastStore();
-  let tokens: TokenResponse[] = $state([]);
-
-  function refreshTokens() {
-    tokensApi
-      .tokensListTokens()
-      .then((response) => {
-        tokens = response;
-      })
-      .catch((e) => {
-        handleApiError(e, toastStore);
-      });
+  function apiTokenToTableToken(user: TokenResponse): ApiToken {
+    return {
+      id: user.id,
+      name: user.name,
+      created_at: user.createdOn,
+      expires_at: user.validUntil,
+      last_used: user.lastUsed,
+      permissions: user.permissions,
+    };
   }
 
-  function deleteToken(tokenId: string) {
-    tokensApi
-      .tokensDeleteToken(tokenId)
-      .then(() => {
-        tokens = tokens.filter((t) => t.id !== tokenId);
-      })
-      .catch((e) => {
-        handleApiError(e, toastStore);
-      });
-  }
+  let data = $derived<ApiToken[]>(
+    Array.from($ApiTokensStore).map(([_, token]) => apiTokenToTableToken(token))
+  );
 
-  function showDeleteTokenModal(token: TokenResponse) {
-    modalStore.trigger({
-      type: 'confirm',
-      title: 'Please Confirm',
-      body: `Are you sure you want to delete <b>${escapeHtml(token.name)}</b>?`,
-      response: async (r: boolean) => {
-        if (r) deleteToken(token.id);
-      },
-    });
-  }
+  let showGenerateTokenModal = $state<boolean>(false);
 
-  function showGenerateTokenModal() {
-    modalStore.trigger({
-      type: 'component',
-      // Data
-      component: 'ApiTokenGenerate',
-      response: refreshTokens,
-    });
-  }
-
-  function showEditTokenModal(tokenId: string) {
-    modalStore.trigger({
-      type: 'component',
-      // Data
-      component: 'ApiTokenEdit',
-      meta: { id: tokenId },
-      response: refreshTokens,
-    });
-  }
-
-  onMount(refreshTokens);
-
-  let since: number = $state(Date.now());
-  setInterval(() => {
-    since = Date.now();
-  }, 1000);
+  onMount(refreshApiTokens);
 </script>
 
-<div class="container h-full mx-auto p-12 flex flex-col justify-start items-start gap-4">
-  <h1 class="h1">API Tokens</h1>
-  <div
-    class="w-full flex flex-col items-start gap-y-4 p-4 bg-surface-100-800-token rounded-lg border border-gray-500"
-  >
-    <p>API Tokens are used to authenticate with the OpenShock API</p>
+<TokenGenerateDialog bind:open={showGenerateTokenModal} onGenerated={(id) => refreshApiToken(id)} />
 
-    <!-- Responsive Container (recommended) -->
-    <div class="table-container">
-      <!-- Native Table Element -->
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Created</th>
-            <th>Expires</th>
-            <th>Last Used</th>
-            <th class="w-0"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {#each tokens as token (token.id)}
-            <tr>
-              <td>{token.name}</td>
-              <td title={token.createdOn.toLocaleString()}
-                >{token.createdOn.toLocaleDateString()}</td
-              >
-              {#if token.validUntil}
-                <td title={token.validUntil.toLocaleString()}>
-                  {elapsedToString(token.validUntil.getTime() - since)}
-                </td>
-              {:else}
-                <td class="text-warning-500">Never</td>
-              {/if}
-              {#if token.lastUsed.getTime() < 0}
-                <td>Never</td>
-              {:else}
-                <td title={token.lastUsed.toLocaleString()}>
-                  {elapsedToString(token.lastUsed.getTime() - since)}
-                </td>
-              {/if}
-              <td class="!whitespace-nowrap">
-                <button
-                  class="btn-icon variant-filled-primary fa fa-edit"
-                  onclick={() => showEditTokenModal(token.id)}
-                  aria-label="Edit Token"
-                >
-                </button>
-                <button
-                  class="btn-icon variant-filled-primary fa fa-trash"
-                  onclick={() => showDeleteTokenModal(token)}
-                  aria-label="Delete Token"
-                >
-                </button>
-              </td>
-            </tr>
-          {/each}
-        </tbody>
-      </table>
+<div class="container my-8">
+  <Card.Header>
+    <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
+      API Tokens
+      <Button class="btn variant-filled-primary" onclick={refreshApiTokens}>
+        <RotateCcw />
+        <span> Refresh </span>
+      </Button>
+    </Card.Title>
+    <Card.Description>API Tokens are used to authenticate with the OpenShock API</Card.Description>
+  </Card.Header>
+  <Card.Content class="flex flex-col space-y-4">
+    <DataTable {data} {columns} />
+    <div class="flex justify-end">
+      <Button onclick={() => (showGenerateTokenModal = true)}>Generate Token</Button>
     </div>
-    <button class="btn variant-filled-primary" onclick={showGenerateTokenModal}
-      >Generate Token</button
-    >
-  </div>
+  </Card.Content>
 </div>

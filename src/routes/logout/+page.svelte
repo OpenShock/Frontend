@@ -1,27 +1,31 @@
 <script lang="ts">
-  import { UserStore } from '$lib/stores/UserStore';
-  import { goto } from '$app/navigation';
   import { browser } from '$app/environment';
+  import { goto } from '$app/navigation';
+  import { accountV1Api, usersApi } from '$lib/api';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { UserStore } from '$lib/stores/UserStore';
+  import { onMount } from 'svelte';
 
-  function logout() {
-    // TODO: Make a API call to invalidate the cookie
+  async function logout() {
+    try {
+      await accountV1Api.accountLogout();
+    } catch (e) {
+      handleApiError(e);
+    }
 
     UserStore.reset();
 
     goto('/');
   }
 
-  if (browser) {
-    $effect(() => {
-      if (!$UserStore.self) {
-        logout();
-      }
-    });
-  }
+  onMount(() => {
+    // If we can't get the user, we are already logged out, make sure to clear the cookies and store
+    usersApi.usersGetSelf().catch(logout);
+  });
 </script>
 
 {#if browser && $UserStore.self}
-  <div class="container h-full mx-auto flex justify-center items-center">
+  <div class="container mx-auto flex h-full items-center justify-center">
     <div class="flex flex-col space-y-4">
       <h2 class="h2">Logout</h2>
 

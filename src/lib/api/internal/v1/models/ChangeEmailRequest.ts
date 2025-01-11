@@ -24,7 +24,7 @@ export interface ChangeEmailRequest {
      * @type {string}
      * @memberof ChangeEmailRequest
      */
-    email: string | null;
+    email: string;
 }
 
 /**
@@ -49,11 +49,11 @@ export function ChangeEmailRequestFromJSONTyped(json: any, ignoreDiscriminator: 
     };
 }
 
-  export function ChangeEmailRequestToJSON(json: any): ChangeEmailRequest {
-      return ChangeEmailRequestToJSONTyped(json, false);
-  }
+export function ChangeEmailRequestToJSON(json: any): ChangeEmailRequest {
+    return ChangeEmailRequestToJSONTyped(json, false);
+}
 
-  export function ChangeEmailRequestToJSONTyped(value?: ChangeEmailRequest | null, ignoreDiscriminator: boolean = false): any {
+export function ChangeEmailRequestToJSONTyped(value?: ChangeEmailRequest | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

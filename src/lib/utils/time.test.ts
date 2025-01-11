@@ -1,4 +1,4 @@
-import { durationToString } from "./time";
+import { durationToString } from './time';
 import { describe, expect, it } from 'vitest';
 
 describe('time utils validator test', () => {

@@ -30,7 +30,7 @@ export interface LoginV2 {
      * @type {string}
      * @memberof LoginV2
      */
-    email: string;
+    usernameOrEmail: string;
     /**
      * 
      * @type {string}
@@ -44,7 +44,7 @@ export interface LoginV2 {
  */
 export function instanceOfLoginV2(value: object): value is LoginV2 {
     if (!('password' in value) || value['password'] === undefined) return false;
-    if (!('email' in value) || value['email'] === undefined) return false;
+    if (!('usernameOrEmail' in value) || value['usernameOrEmail'] === undefined) return false;
     if (!('turnstileResponse' in value) || value['turnstileResponse'] === undefined) return false;
     return true;
 }
@@ -60,16 +60,16 @@ export function LoginV2FromJSONTyped(json: any, ignoreDiscriminator: boolean): L
     return {
         
         'password': json['password'],
-        'email': json['email'],
+        'usernameOrEmail': json['usernameOrEmail'],
         'turnstileResponse': json['turnstileResponse'],
     };
 }
 
-  export function LoginV2ToJSON(json: any): LoginV2 {
-      return LoginV2ToJSONTyped(json, false);
-  }
+export function LoginV2ToJSON(json: any): LoginV2 {
+    return LoginV2ToJSONTyped(json, false);
+}
 
-  export function LoginV2ToJSONTyped(value?: LoginV2 | null, ignoreDiscriminator: boolean = false): any {
+export function LoginV2ToJSONTyped(value?: LoginV2 | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
@@ -77,7 +77,7 @@ export function LoginV2FromJSONTyped(json: any, ignoreDiscriminator: boolean): L
     return {
         
         'password': value['password'],
-        'email': value['email'],
+        'usernameOrEmail': value['usernameOrEmail'],
         'turnstileResponse': value['turnstileResponse'],
     };
 }

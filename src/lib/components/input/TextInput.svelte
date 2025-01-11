@@ -1,10 +1,13 @@
 <script lang="ts">
+  import { Button } from '$lib/components/ui/button';
+  import { Input } from '$lib/components/ui/input';
+  import * as Popover from '$lib/components/ui/popover';
   import { GetValResColor, type ValidationResult } from '$lib/types/ValidationResult';
   import type { Snippet } from 'svelte';
   import type { FullAutoFill } from 'svelte/elements';
   import type { ButtonSettings } from './impl/ButtonSettings';
-  import { popup as popupAction, type PopupSettings } from '@skeletonlabs/skeleton';
-  
+  import type { AnyComponent } from '$lib/types/AnyComponent';
+
   interface Props {
     type?: 'text' | 'password';
     label: string;
@@ -12,10 +15,9 @@
     autocomplete?: FullAutoFill;
     value: string;
     validationResult?: ValidationResult | null;
-    icon?: `fa-${string}`;
+    Icon?: AnyComponent;
     button?: ButtonSettings;
     popup?: Snippet;
-    popupSettings?: PopupSettings;
     oninput?: (input: string) => void | undefined;
   }
 
@@ -26,11 +28,10 @@
     autocomplete,
     value = $bindable(''),
     validationResult,
-    icon,
+    Icon,
     button,
     popup,
-    popupSettings,
-    oninput
+    oninput,
   }: Props = $props();
 
   function handleInput(event: Event & { currentTarget: HTMLInputElement }) {
@@ -39,30 +40,16 @@
       oninput(value);
     }
   }
-
-  function popupProxy(triggerNode: HTMLElement): {
-    update(args: PopupSettings): void;
-    destroy(): void;
-  } {
-    if (popup === undefined || popupSettings === undefined) {
-      return {
-        update: () => {},
-        destroy: () => {},
-      };
-    }
-
-    return popupAction(triggerNode, popupSettings);
-  }
 </script>
 
 <label class="label w-full">
   <span>{label}</span>
   <div class="flex flex-row items-center gap-2">
-    <div class="input-group input-group-divider flex-grow flex flex-row gap-2">
-      {#if icon}
-        <div class="input-group-shim fa {icon}"></div>
+    <div class="input-group input-group-divider flex flex-grow flex-row gap-2">
+      {#if Icon}
+        <Icon />
       {/if}
-      <input
+      <Input
         {type}
         class="input flex-grow"
         title={label}
@@ -70,22 +57,21 @@
         {autocomplete}
         {value}
         oninput={handleInput}
-        use:popupProxy
       />
       {#if button}
-        <button
+        <Button
           type="button"
           class={button.class ?? 'variant-filled-primary disabled:opacity-50'}
           onclick={button.onClick}
           disabled={button.submits &&
             (validationResult === null || (validationResult && !validationResult.valid))}
         >
-          {#if 'icon' in button}
-            <i class="fa {button.icon}"></i>
+          {#if 'Icon' in button}
+            <button.Icon />
           {:else if 'text' in button}
             {button.text}
           {/if}
-        </button>
+        </Button>
       {/if}
     </div>
   </div>
@@ -107,6 +93,10 @@
     <div class="h-3"></div>
   {/if}
   {#if popup}
-    {@render popup()}
+    <Popover.Root>
+      <Popover.Content>
+        {@render popup()}
+      </Popover.Content>
+    </Popover.Root>
   {/if}
 </label>

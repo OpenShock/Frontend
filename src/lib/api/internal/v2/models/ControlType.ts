@@ -18,11 +18,10 @@
  * @enum {string}
  */
 export enum ControlType {
-    stop = 'Stop',
-    shock = 'Shock',
-    vibrate = 'Vibrate',
-    sound = 'Sound',
-    unknownDefaultOpenApi = '11184809'
+    Stop = 'Stop',
+    Shock = 'Shock',
+    Vibrate = 'Vibrate',
+    Sound = 'Sound'
 }
 
 

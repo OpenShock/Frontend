@@ -50,7 +50,7 @@ export interface ShockerResponse {
      * @type {string}
      * @memberof ShockerResponse
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {boolean}
@@ -99,11 +99,11 @@ export function ShockerResponseFromJSONTyped(json: any, ignoreDiscriminator: boo
     };
 }
 
-  export function ShockerResponseToJSON(json: any): ShockerResponse {
-      return ShockerResponseToJSONTyped(json, false);
-  }
+export function ShockerResponseToJSON(json: any): ShockerResponse {
+    return ShockerResponseToJSONTyped(json, false);
+}
 
-  export function ShockerResponseToJSONTyped(value?: ShockerResponse | null, ignoreDiscriminator: boolean = false): any {
+export function ShockerResponseToJSONTyped(value?: ShockerResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

@@ -63,11 +63,11 @@ export function ShareInfoIEnumerableBaseResponseFromJSONTyped(json: any, ignoreD
     };
 }
 
-  export function ShareInfoIEnumerableBaseResponseToJSON(json: any): ShareInfoIEnumerableBaseResponse {
-      return ShareInfoIEnumerableBaseResponseToJSONTyped(json, false);
-  }
+export function ShareInfoIEnumerableBaseResponseToJSON(json: any): ShareInfoIEnumerableBaseResponse {
+    return ShareInfoIEnumerableBaseResponseToJSONTyped(json, false);
+}
 
-  export function ShareInfoIEnumerableBaseResponseToJSONTyped(value?: ShareInfoIEnumerableBaseResponse | null, ignoreDiscriminator: boolean = false): any {
+export function ShareInfoIEnumerableBaseResponseToJSONTyped(value?: ShareInfoIEnumerableBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

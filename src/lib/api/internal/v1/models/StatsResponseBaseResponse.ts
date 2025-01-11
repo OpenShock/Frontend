@@ -63,11 +63,11 @@ export function StatsResponseBaseResponseFromJSONTyped(json: any, ignoreDiscrimi
     };
 }
 
-  export function StatsResponseBaseResponseToJSON(json: any): StatsResponseBaseResponse {
-      return StatsResponseBaseResponseToJSONTyped(json, false);
-  }
+export function StatsResponseBaseResponseToJSON(json: any): StatsResponseBaseResponse {
+    return StatsResponseBaseResponseToJSONTyped(json, false);
+}
 
-  export function StatsResponseBaseResponseToJSONTyped(value?: StatsResponseBaseResponse | null, ignoreDiscriminator: boolean = false): any {
+export function StatsResponseBaseResponseToJSONTyped(value?: StatsResponseBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

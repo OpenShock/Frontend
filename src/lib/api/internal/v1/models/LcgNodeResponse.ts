@@ -24,13 +24,13 @@ export interface LcgNodeResponse {
      * @type {string}
      * @memberof LcgNodeResponse
      */
-    fqdn: string | null;
+    fqdn: string;
     /**
      * 
      * @type {string}
      * @memberof LcgNodeResponse
      */
-    country: string | null;
+    country: string;
 }
 
 /**
@@ -57,11 +57,11 @@ export function LcgNodeResponseFromJSONTyped(json: any, ignoreDiscriminator: boo
     };
 }
 
-  export function LcgNodeResponseToJSON(json: any): LcgNodeResponse {
-      return LcgNodeResponseToJSONTyped(json, false);
-  }
+export function LcgNodeResponseToJSON(json: any): LcgNodeResponse {
+    return LcgNodeResponseToJSONTyped(json, false);
+}
 
-  export function LcgNodeResponseToJSONTyped(value?: LcgNodeResponse | null, ignoreDiscriminator: boolean = false): any {
+export function LcgNodeResponseToJSONTyped(value?: LcgNodeResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

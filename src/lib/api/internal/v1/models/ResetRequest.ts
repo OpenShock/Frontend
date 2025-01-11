@@ -24,7 +24,7 @@ export interface ResetRequest {
      * @type {string}
      * @memberof ResetRequest
      */
-    email: string | null;
+    email: string;
 }
 
 /**
@@ -49,11 +49,11 @@ export function ResetRequestFromJSONTyped(json: any, ignoreDiscriminator: boolea
     };
 }
 
-  export function ResetRequestToJSON(json: any): ResetRequest {
-      return ResetRequestToJSONTyped(json, false);
-  }
+export function ResetRequestToJSON(json: any): ResetRequest {
+    return ResetRequestToJSONTyped(json, false);
+}
 
-  export function ResetRequestToJSONTyped(value?: ResetRequest | null, ignoreDiscriminator: boolean = false): any {
+export function ResetRequestToJSONTyped(value?: ResetRequest | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

@@ -18,12 +18,11 @@
  * @enum {string}
  */
 export enum RankType {
-    user = 'User',
-    support = 'Support',
-    staff = 'Staff',
-    admin = 'Admin',
-    system = 'System',
-    unknownDefaultOpenApi = '11184809'
+    User = 'User',
+    Support = 'Support',
+    Staff = 'Staff',
+    Admin = 'Admin',
+    System = 'System'
 }
 
 

@@ -38,19 +38,19 @@ export interface OwnerShockerResponse {
      * @type {string}
      * @memberof OwnerShockerResponse
      */
-    name: string | null;
+    name: string;
     /**
      * 
      * @type {string}
      * @memberof OwnerShockerResponse
      */
-    image: string | null;
+    image: string;
     /**
      * 
      * @type {Array<SharedDevice>}
      * @memberof OwnerShockerResponse
      */
-    devices?: Array<SharedDevice> | null;
+    devices?: Array<SharedDevice>;
 }
 
 /**
@@ -80,11 +80,11 @@ export function OwnerShockerResponseFromJSONTyped(json: any, ignoreDiscriminator
     };
 }
 
-  export function OwnerShockerResponseToJSON(json: any): OwnerShockerResponse {
-      return OwnerShockerResponseToJSONTyped(json, false);
-  }
+export function OwnerShockerResponseToJSON(json: any): OwnerShockerResponse {
+    return OwnerShockerResponseToJSONTyped(json, false);
+}
 
-  export function OwnerShockerResponseToJSONTyped(value?: OwnerShockerResponse | null, ignoreDiscriminator: boolean = false): any {
+export function OwnerShockerResponseToJSONTyped(value?: OwnerShockerResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

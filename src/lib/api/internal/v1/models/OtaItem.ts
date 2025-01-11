@@ -50,7 +50,7 @@ export interface OtaItem {
      * @type {string}
      * @memberof OtaItem
      */
-    version: string | null;
+    version: string;
     /**
      * 
      * @type {string}
@@ -91,11 +91,11 @@ export function OtaItemFromJSONTyped(json: any, ignoreDiscriminator: boolean): O
     };
 }
 
-  export function OtaItemToJSON(json: any): OtaItem {
-      return OtaItemToJSONTyped(json, false);
-  }
+export function OtaItemToJSON(json: any): OtaItem {
+    return OtaItemToJSONTyped(json, false);
+}
 
-  export function OtaItemToJSONTyped(value?: OtaItem | null, ignoreDiscriminator: boolean = false): any {
+export function OtaItemToJSONTyped(value?: OtaItem | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

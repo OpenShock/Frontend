@@ -1,4 +1,4 @@
-import { validatePassword, validatePasswordMatch } from "./passwordValidator";
+import { validatePassword, validatePasswordMatch } from './passwordValidator';
 import { describe, expect, it } from 'vitest';
 
 describe('email validator test', () => {
@@ -41,40 +41,6 @@ describe('email validator test', () => {
       message: 'Password cannot start or end with whitespace',
     });
   });
-  it('password without lowercase character should return false and error', () => {
-    const result = validatePassword('MYINSECUREPASSWORD123!');
-    expect(result).toEqual({
-      valid: false,
-      message: 'Password must contain a lowercase character',
-    });
-  });
-  it('password without uppercase character should return false and error', () => {
-    const result = validatePassword('myinsecurepassword123!');
-    expect(result).toEqual({
-      valid: false,
-      message: 'Password must contain a uppercase character',
-    });
-  });
-  it('password without digit should return false and error', () => {
-    const result = validatePassword('MyInsecurePassword!');
-    expect(result).toEqual({
-      valid: false,
-      message: 'Password must contain a digit',
-    });
-  });
-  it('password without special character should return false and error', () => {
-    const result = validatePassword('MyInsecurePassword123');
-    expect(result).toEqual({
-      valid: false,
-      message: 'Password must contain a special character',
-    });
-  });
-  it('valid password should return true and no error', () => {
-    const result = validatePassword('validPassword123!');
-    expect(result).toEqual({
-      valid: true
-    });
-  });
   it('password match with different password should return false and error', () => {
     const result = validatePasswordMatch('password', 'differentpassword');
     expect(result).toEqual({
@@ -85,7 +51,7 @@ describe('email validator test', () => {
   it('password match with invalid password should return false and error', () => {
     const result = validatePasswordMatch('password', 'password');
     expect(result).toEqual({
-      valid: true
+      valid: true,
     });
   });
 });

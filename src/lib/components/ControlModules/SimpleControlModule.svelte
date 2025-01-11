@@ -1,50 +1,55 @@
 <script lang="ts">
   import type { ShockerResponse } from '$lib/api/internal/v1';
-  import { createEventDispatcher } from 'svelte';
+  import { ControlType } from '$lib/api/internal/v2';
+  import { Button } from '$lib/components/ui/button';
+
+  import { Volume2, Waves, Zap } from 'lucide-svelte';
 
   interface Props {
     shocker: ShockerResponse;
+    controlHandler: (shockerId: string, controlType: ControlType) => void;
   }
 
-  let { shocker }: Props = $props();
+  let { shocker, controlHandler }: Props = $props();
 
-  const dispatch = createEventDispatcher();
-
-  function emit(type: string) {
-    dispatch('command', { id: shocker.id, type }); // TODO: What to do with intensity and duration?
+  function ctrl(type: ControlType) {
+    controlHandler(shocker.id, type);
   }
 </script>
 
 <div
-  class="flex flex-col items-center justify-center gap-2 p-2 border border-surface-400-500-token rounded-md"
+  class="border-surface-400-500-token flex flex-col items-center justify-center gap-2 overflow-hidden rounded-md border p-2"
 >
   <!-- Title -->
-  <h2 class="text-lg font-bold">{shocker.name}</h2>
+  <h2 class="truncate text-lg font-bold">{shocker.name}</h2>
   <!-- Buttons -->
-  <div class="w-full flex gap-2">
+  <div class="flex w-full gap-2">
     <!-- Beep button -->
-    <button
-      class="btn p-2 bg-primary-500 rounded-md flex-1"
-      onclick={() => emit('beep')}
+    <Button
+      variant="secondary"
+      class="flex-1"
       aria-label="Beep"
+      onclick={() => ctrl(ControlType.Sound)}
     >
-      <i class="fa-solid fa-volume-high"></i>
-    </button>
+      <Volume2 />
+    </Button>
     <!-- Vibrate button -->
-    <button
-      class="btn p-2 bg-primary-500 rounded-md flex-1"
-      onclick={() => emit('vibrate')}
+    <Button
+      variant="secondary"
+      class="flex-1"
       aria-label="Vibrate"
+      onclick={() => ctrl(ControlType.Vibrate)}
     >
-      <i class="fa-solid fa-water"></i>
-    </button>
+      <Waves />
+    </Button>
     <!-- Shock button -->
-    <button
-      class="btn p-2 bg-primary-500 rounded-md flex-1"
-      onclick={() => emit('shock')}
+    <Button
+      variant="secondary"
+      class="flex-1"
       aria-label="Shock"
+      onclick={() => ctrl(ControlType.Shock)}
     >
-      <i class="fa-solid fa-bolt"></i>
-    </button>
+      <Zap />
+    </Button>
   </div>
 </div>

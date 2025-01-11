@@ -106,11 +106,11 @@ export function LogEntryFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     };
 }
 
-  export function LogEntryToJSON(json: any): LogEntry {
-      return LogEntryToJSONTyped(json, false);
-  }
+export function LogEntryToJSON(json: any): LogEntry {
+    return LogEntryToJSONTyped(json, false);
+}
 
-  export function LogEntryToJSONTyped(value?: LogEntry | null, ignoreDiscriminator: boolean = false): any {
+export function LogEntryToJSONTyped(value?: LogEntry | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

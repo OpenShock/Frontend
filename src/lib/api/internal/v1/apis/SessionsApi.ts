@@ -43,11 +43,11 @@ export interface SessionsApiInterface {
      * @throws {RequiredError}
      * @memberof SessionsApiInterface
      */
-    sessionsDeleteSessionRaw(requestParameters: SessionsDeleteSessionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>>;
+    sessionsDeleteSessionRaw(requestParameters: SessionsDeleteSessionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
      */
-    sessionsDeleteSession(sessionId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any>;
+    sessionsDeleteSession(sessionId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -84,7 +84,7 @@ export class SessionsApi extends runtime.BaseAPI implements SessionsApiInterface
 
     /**
      */
-    async sessionsDeleteSessionRaw(requestParameters: SessionsDeleteSessionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
+    async sessionsDeleteSessionRaw(requestParameters: SessionsDeleteSessionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['sessionId'] == null) {
             throw new runtime.RequiredError(
                 'sessionId',
@@ -96,10 +96,6 @@ export class SessionsApi extends runtime.BaseAPI implements SessionsApiInterface
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
-        }
-
         const response = await this.request({
             path: `/1/sessions/{sessionId}`.replace(`{${"sessionId"}}`, encodeURIComponent(String(requestParameters['sessionId']))),
             method: 'DELETE',
@@ -107,18 +103,13 @@ export class SessionsApi extends runtime.BaseAPI implements SessionsApiInterface
             query: queryParameters,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<any>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      */
-    async sessionsDeleteSession(sessionId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
-        const response = await this.sessionsDeleteSessionRaw({ sessionId: sessionId }, initOverrides);
-        return await response.value();
+    async sessionsDeleteSession(sessionId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.sessionsDeleteSessionRaw({ sessionId: sessionId }, initOverrides);
     }
 
     /**
@@ -128,10 +119,6 @@ export class SessionsApi extends runtime.BaseAPI implements SessionsApiInterface
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
-        }
 
         const response = await this.request({
             path: `/1/sessions/self`,
@@ -157,10 +144,6 @@ export class SessionsApi extends runtime.BaseAPI implements SessionsApiInterface
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // OpenShockToken authentication
-        }
 
         const response = await this.request({
             path: `/1/sessions`,
