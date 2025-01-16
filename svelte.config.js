@@ -45,7 +45,13 @@ const config = {
         'default-src': ['self'],
         'child-src': ['https://challenges.cloudflare.com'],
         'frame-src': ['https://challenges.cloudflare.com'], // Deprecated
-        'img-src': ['self', 'https://www.gravatar.com'],
+        'img-src': [
+          'self',
+          'https://www.gravatar.com',
+          'https://i0.wp.com/openshock.app/static/images/',
+          'https://i1.wp.com/openshock.app/static/images/',
+          'https://i2.wp.com/openshock.app/static/images/',
+        ],
         'connect-src': [
           'self',
           'https://' + env.PUBLIC_BACKEND_API_DOMAIN,
