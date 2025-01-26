@@ -98,3 +98,5 @@ Try closing and re-opening your development environment or console to refresh it
 ## Support
 
 You can support the openshock dev team here: [Sponsor OpenShock](https://github.com/sponsors/OpenShock)
+
+For self hosting support consider supporting us via the link above.
