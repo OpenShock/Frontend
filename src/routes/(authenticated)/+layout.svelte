@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Button } from '$lib/components/ui/button';
   import { SignalR_State } from '$lib/signalr';
   import { UserStore } from '$lib/stores/UserStore';
   import { HubConnectionState } from '@microsoft/signalr';
@@ -12,9 +13,9 @@
 </script>
 
 {#if $UserStore.self === null}
-  <div class="container mx-auto flex h-full items-center justify-center">
+  <div class="container mx-auto flex flex-col h-full items-center justify-center gap-4">
     <h1 class="text-4xl">You need to be logged in to access this page</h1>
-    <a href="/login" class="btn variant-filled-primary">Login</a>
+    <Button href="/login">Login</Button>
   </div>
 {:else if $SignalR_State !== HubConnectionState.Connected}
   <div class="container mx-auto flex h-full items-center justify-center">
