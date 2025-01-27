@@ -130,8 +130,8 @@
       aria-labelledby={labelId}
       aria-controls={guageId}
     ></div>
-    <input class="appearance-none" id={inputId} type="number" {name} {min} bind:value {max} {step} aria-label="Value" />
-    <label class="appearance-none" id={labelId} for={inputId} aria-label="Name">
+    <input id={inputId} type="number" {name} {min} bind:value {max} {step} aria-label="Value" />
+    <label id={labelId} for={inputId} aria-label="Name">
       {name}
     </label>
   </div>
@@ -154,7 +154,7 @@
     @apply absolute left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] transform select-none appearance-none border-none bg-transparent text-center text-xl font-bold;
 
     /* Firefox */
-    -moz-appearance: none;
+    -moz-appearance: textfield;
   }
   /* Chrome, Safari, Edge, Opera */
   input::-webkit-outer-spin-button,
