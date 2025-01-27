@@ -130,8 +130,8 @@
       aria-labelledby={labelId}
       aria-controls={guageId}
     ></div>
-    <input id={inputId} type="number" {name} {min} bind:value {max} {step} aria-label="Value" />
-    <label id={labelId} for={inputId} aria-label="Name">
+    <input class="appearance-none" id={inputId} type="number" {name} {min} bind:value {max} {step} aria-label="Value" />
+    <label class="appearance-none" id={labelId} for={inputId} aria-label="Name">
       {name}
     </label>
   </div>

@@ -83,4 +83,14 @@
   .code {
     @apply bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold;
   }
+  
+  input[type="number"].appearance-none::-webkit-inner-spin-button,
+  input[type="number"].appearance-none::-webkit-outer-spin-button {
+      -webkit-appearance: none !important;
+      margin: 0 !important;
+  }
+
+  input[type="number"].appearance-none {
+      -moz-appearance: textfield !important;
+  }
 }
