@@ -13,7 +13,7 @@
 </script>
 
 {#if $UserStore.self === null}
-  <div class="container mx-auto flex flex-col h-full items-center justify-center gap-4">
+  <div class="container mx-auto flex h-full flex-col items-center justify-center gap-4">
     <h1 class="text-4xl">You need to be logged in to access this page</h1>
     <Button href="/login">Login</Button>
   </div>
