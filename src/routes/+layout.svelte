@@ -41,7 +41,7 @@
 
 <SidebarProvider bind:open={() => isOpen && isLoggedIn, (o) => (isOpen = o)}>
   <AppSidebar currentUserRank={currentUserRank ?? RankType.User} />
-  <div class="flex min-h-screen flex-1 flex-col">
+  <div class="flex flex-1 flex-col h-screen w-screen overflow-hidden">
     <Header />
     <main class="flex-1">
       {@render children?.()}

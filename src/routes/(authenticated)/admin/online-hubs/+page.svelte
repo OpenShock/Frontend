@@ -56,7 +56,7 @@
   });
 </script>
 
-<div class="container my-8">
+<div class="my-8">
   <Card.Header>
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
       Online Hubs: {data.length}

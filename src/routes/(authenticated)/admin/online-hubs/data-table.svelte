@@ -1,5 +1,6 @@
 <script lang="ts" generics="TData, TValue">
   import { createSvelteTable, FlexRender } from '$lib/components/ui/data-table';
+  import { ScrollArea } from '$lib/components/ui/scroll-area';
   import * as Table from '$lib/components/ui/table';
   import {
     getCoreRowModel,
@@ -39,7 +40,7 @@
   });
 </script>
 
-<div class="rounded-md border">
+<div class="rounded-md border max-h-[60vh] overflow-y-auto">
   <Table.Root>
     <Table.Header>
       {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
