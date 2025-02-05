@@ -99,10 +99,12 @@
 </script>
 
 <!-- see: https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/#widget-size -->
-<div id="main" bind:this={element}>
+<div class="mx-auto h-[65px] w-[300px]" bind:this={element}>
   {#if widgetState != 'mounted'}
     <!-- Turnstile placeholder -->
-    <div id="placeholder">
+    <div
+      class="flex h-full select-none items-center justify-center gap-3 border border-[#e0e0e0] bg-[#fafafa] p-3 dark:border-[#666] dark:bg-[#222]"
+    >
       {#if dev}
         <Bug />
         <span> Turnstile disabled </span>
@@ -111,7 +113,7 @@
         <span> Loading... </span>
       {/if}
       <a
-        id="logo"
+        class="mb-auto ml-auto h-7 w-auto text-[#666] dark:text-[#999]"
         href="https://www.cloudflare.com/products/turnstile/?utm_source=turnstile&utm_campaign=widget"
         target="_blank"
         rel="noreferrer"
@@ -121,25 +123,3 @@
     </div>
   {/if}
 </div>
-
-<style lang="postcss">
-  #main {
-    @apply mx-auto h-[65px] w-[300px];
-  }
-  #placeholder {
-    @apply flex h-full select-none items-center justify-center gap-3 p-3;
-    @apply bg-[#fafafa];
-    @apply border border-[#e0e0e0];
-  }
-  :global(.dark) #placeholder {
-    @apply bg-[#222];
-    @apply border-[#666];
-  }
-  #logo {
-    @apply mb-auto ml-auto h-7 w-auto;
-    @apply text-[#666];
-  }
-  :global(.dark) #logo {
-    @apply text-[#999];
-  }
-</style>

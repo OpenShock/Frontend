@@ -83,4 +83,18 @@
   .code {
     @apply relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold;
   }
+
+  .hide-spinners {
+    /* Hide spin buttons in Chrome, Safari, Edge */
+    -webkit-appearance: none;
+    -moz-appearance: textfield; /* Hide spinners in Firefox */
+    appearance: textfield;
+  }
+
+  /* Target WebKit browsers (Chrome, Safari, Edge) */
+  .hide-spinners::-webkit-outer-spin-button,
+  .hide-spinners::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }

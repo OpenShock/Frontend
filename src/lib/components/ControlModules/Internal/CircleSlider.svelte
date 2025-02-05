@@ -94,12 +94,13 @@
 </script>
 
 <div>
-  <div class="canvas" bind:this={canvasHandle}>
-    <svg class="tracks" viewBox="0 0 {viewSize.x} {viewSize.y}">
+  <div class="relative size-[150px]" bind:this={canvasHandle}>
+    <svg class="absolute size-[150px]" viewBox="0 0 {viewSize.x} {viewSize.y}">
       <path
         {...calcSvgArcProps(center, angleStart, angleEnd, radius, 20)}
         fill="none"
         stroke-linecap="round"
+        style:cursor="pointer"
         style:stroke="rgb(27, 29, 30)"
         ontouchstart={trackingStarted}
         onmousedown={trackingStarted}
@@ -109,6 +110,7 @@
         {...progressProps}
         fill="none"
         stroke-linecap="round"
+        style:cursor="pointer"
         style:stroke="rgb(0, 122, 255)"
         ontouchstart={trackingStarted}
         onmousedown={trackingStarted}
@@ -117,7 +119,7 @@
       />
     </svg>
     <div
-      class="handle"
+      class="absolute size-[30px] cursor-move rounded-full bg-white"
       style:left={`${60 + getCircleX(60, degrees)}px`}
       style:top={`${60 + getCircleY(60, degrees)}px`}
       ontouchstart={trackingStarted}
@@ -130,39 +132,24 @@
       aria-labelledby={labelId}
       aria-controls={guageId}
     ></div>
-    <input id={inputId} type="number" {name} {min} bind:value {max} {step} aria-label="Value" />
-    <label id={labelId} for={inputId} aria-label="Name">
+    <input
+      id={inputId}
+      type="number"
+      {name}
+      {min}
+      bind:value
+      {max}
+      {step}
+      aria-label="Value"
+      class="hide-spinners absolute left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] transform select-none border-none bg-transparent text-center text-xl font-bold"
+    />
+    <label
+      id={labelId}
+      for={inputId}
+      aria-label="Name"
+      class="absolute bottom-0 left-[50%] -translate-x-[50%] translate-y-[10%] transform select-none text-center"
+    >
       {name}
     </label>
   </div>
 </div>
-
-<style lang="postcss">
-  .canvas {
-    @apply relative size-[150px];
-  }
-  svg {
-    @apply absolute size-[150px];
-  }
-  path {
-    @apply cursor-pointer;
-  }
-  .handle {
-    @apply absolute size-[30px] cursor-move rounded-full bg-white;
-  }
-  input[type='number'] {
-    @apply absolute left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] transform select-none appearance-none border-none bg-transparent text-center text-xl font-bold;
-
-    /* Firefox */
-    -moz-appearance: textfield;
-  }
-  /* Chrome, Safari, Edge, Opera */
-  input::-webkit-outer-spin-button,
-  input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-  label {
-    @apply absolute bottom-0 left-[50%] -translate-x-[50%] translate-y-[10%] transform select-none text-center;
-  }
-</style>
