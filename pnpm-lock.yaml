@@ -9,10 +9,10 @@ overrides:
 
 patchedDependencies:
   '@microsoft/signalr@8.0.7':
-    hash: ae77219bc9dd03b77011df9a4d1a1b670685d7fabb7990775c94dde1b4b2a328
+    hash: vl6mvrodvyt4cwoevl3v2ipkay
     path: patches/@microsoft__signalr@8.0.7.patch
   esptool-js@0.5.2:
-    hash: ca8593ccfc344943ed73180d80c80c7df5913fcf9ce30efcd75bf5f27c733205
+    hash: yai43fsvnizsaie2tx4fahz3ay
     path: patches/esptool-js@0.5.2.patch
 
 importers:
@@ -21,7 +21,7 @@ importers:
     dependencies:
       esptool-js:
         specifier: ^0.5.2
-        version: 0.5.2(patch_hash=ca8593ccfc344943ed73180d80c80c7df5913fcf9ce30efcd75bf5f27c733205)
+        version: 0.5.2(patch_hash=yai43fsvnizsaie2tx4fahz3ay)
       vite:
         specifier: ^6.0.11
         version: 6.0.11(@types/node@22.13.0)(jiti@2.4.2)(lightningcss@1.29.1)(yaml@2.6.1)
@@ -34,7 +34,7 @@ importers:
         version: 3.7.0
       '@microsoft/signalr':
         specifier: ^8.0.7
-        version: 8.0.7(patch_hash=ae77219bc9dd03b77011df9a4d1a1b670685d7fabb7990775c94dde1b4b2a328)
+        version: 8.0.7(patch_hash=vl6mvrodvyt4cwoevl3v2ipkay)
       '@playwright/test':
         specifier: ^1.50.1
         version: 1.50.1
@@ -2955,7 +2955,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@microsoft/signalr@8.0.7(patch_hash=ae77219bc9dd03b77011df9a4d1a1b670685d7fabb7990775c94dde1b4b2a328)':
+  '@microsoft/signalr@8.0.7(patch_hash=vl6mvrodvyt4cwoevl3v2ipkay)':
     dependencies:
       abort-controller: 3.0.0
       eventsource: 2.0.2
@@ -3818,7 +3818,7 @@ snapshots:
       acorn-jsx: 5.3.2(acorn@8.14.0)
       eslint-visitor-keys: 3.4.3
 
-  esptool-js@0.5.2(patch_hash=ca8593ccfc344943ed73180d80c80c7df5913fcf9ce30efcd75bf5f27c733205):
+  esptool-js@0.5.2(patch_hash=yai43fsvnizsaie2tx4fahz3ay):
     dependencies:
       atob-lite: 2.0.0
       pako: 2.1.0
