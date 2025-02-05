@@ -66,13 +66,13 @@
 		"vite": "^6.0.11"
 	},
 	"engines": {
-		"node": "^20.18",
-		"pnpm": "^9.12.3"
+		"node": "^22.13.1",
+		"pnpm": "^10.2.0"
 	},
 	"volta": {
-		"node": "20.18.0"
+		"node": "22.13.1"
 	},
-	"packageManager": "pnpm@9.12.3",
+	"packageManager": "pnpm@10.2.0",
 	"pnpm": {
 		"patchedDependencies": {
 			"@microsoft/signalr@8.0.7": "patches/@microsoft__signalr@8.0.7.patch",
