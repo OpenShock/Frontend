@@ -62,7 +62,7 @@ export interface SelfResponse {
      * @type {string}
      * @memberof SelfResponse
      */
-    readonly rank?: string;
+    rank: string;
 }
 
 /**
@@ -74,6 +74,7 @@ export function instanceOfSelfResponse(value: object): value is SelfResponse {
     if (!('email' in value) || value['email'] === undefined) return false;
     if (!('image' in value) || value['image'] === undefined) return false;
     if (!('roles' in value) || value['roles'] === undefined) return false;
+    if (!('rank' in value) || value['rank'] === undefined) return false;
     return true;
 }
 
@@ -92,7 +93,7 @@ export function SelfResponseFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'email': json['email'],
         'image': json['image'],
         'roles': ((json['roles'] as Array<any>).map(RoleTypeFromJSON)),
-        'rank': json['rank'] == null ? undefined : json['rank'],
+        'rank': json['rank'],
     };
 }
 
@@ -100,7 +101,7 @@ export function SelfResponseToJSON(json: any): SelfResponse {
     return SelfResponseToJSONTyped(json, false);
 }
 
-export function SelfResponseToJSONTyped(value?: Omit<SelfResponse, 'rank'> | null, ignoreDiscriminator: boolean = false): any {
+export function SelfResponseToJSONTyped(value?: SelfResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
@@ -112,6 +113,7 @@ export function SelfResponseToJSONTyped(value?: Omit<SelfResponse, 'rank'> | nul
         'email': value['email'],
         'image': value['image'],
         'roles': ((value['roles'] as Array<any>).map(RoleTypeToJSON)),
+        'rank': value['rank'],
     };
 }
 
