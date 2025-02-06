@@ -11,7 +11,7 @@
   import { initializeStores } from '$lib/stores';
   import { UserStore } from '$lib/stores/UserStore';
   import type { Snippet } from 'svelte';
-  import { RankType } from '$lib/api/internal/v1';
+  import { RoleType } from '$lib/api/internal/v1';
   import { browser } from '$app/environment';
   import '../app.css';
 
@@ -30,7 +30,7 @@
 
   let isOpen = $state(false);
   let isLoggedIn = $derived($UserStore?.self !== null);
-  let currentUserRank = $derived($UserStore?.self?.rank ?? null);
+  let currentUserRoles = $derived($UserStore?.self?.roles ?? []);
 </script>
 
 <BasicTags {...meta} />
@@ -40,7 +40,7 @@
 <Toaster />
 
 <SidebarProvider bind:open={() => isOpen && isLoggedIn, (o) => (isOpen = o)}>
-  <AppSidebar currentUserRank={currentUserRank ?? RankType.User} />
+  <AppSidebar {currentUserRoles} />
   <div class="flex flex-1 flex-col h-screen w-screen overflow-hidden">
     <Header />
     <main class="flex-1">

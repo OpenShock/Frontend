@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import { RankType } from '$lib/api/internal/v1';
+  import { RoleType } from '$lib/api/internal/v1';
   import * as Sidebar from '$lib/components/ui/sidebar';
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import { Collapsible } from 'bits-ui';
@@ -21,10 +21,10 @@
   } from 'lucide-svelte';
 
   interface Props {
-    currentUserRank: RankType;
+    currentUserRoles: RoleType[];
   }
 
-  let { currentUserRank }: Props = $props();
+  let { currentUserRoles }: Props = $props();
 
   let path = $derived(page.url.pathname);
 
@@ -47,7 +47,7 @@
 
   type Group = {
     title: string;
-    ranks?: RankType[];
+    roles?: RoleType[];
     collapsible?: { open: boolean };
     menus: Menu[];
   };
@@ -83,7 +83,7 @@
   const footerGroups: Group[] = [
     {
       title: 'Admin',
-      ranks: [RankType.Admin, RankType.System],
+      roles: [RoleType.Admin, RoleType.System],
       collapsible: { open: false },
       menus: [
         {
@@ -144,8 +144,8 @@
     },
   ];
 
-  function meetsReq(rank: RankType, group: Group) {
-    return group.ranks?.includes(rank) ?? true;
+  function meetsReq(roles: RoleType[], group: Group) {
+    return group.roles?.some(role => roles.includes(role)) ?? true;
   }
   function isPathMatch(path: string, href: string) {
     return path === href || path.startsWith(href + '/');
@@ -194,9 +194,9 @@
   </Sidebar.GroupContent>
 {/snippet}
 
-{#snippet groupsSection(userRank: RankType, groups: Group[])}
+{#snippet groupsSection(userRoles: RoleType[], groups: Group[])}
   {#each groups as group (group.title)}
-    {#if meetsReq(userRank, group)}
+    {#if meetsReq(userRoles, group)}
       {#if group.collapsible === undefined}
         <Sidebar.Group>
           <Sidebar.GroupLabel>{group.title}</Sidebar.GroupLabel>
@@ -231,9 +231,9 @@
   </Sidebar.Header>
   -->
   <Sidebar.Content>
-    {@render groupsSection(currentUserRank, groups)}
+    {@render groupsSection(currentUserRoles, groups)}
   </Sidebar.Content>
   <Sidebar.Footer>
-    {@render groupsSection(currentUserRank, footerGroups)}
+    {@render groupsSection(currentUserRoles, footerGroups)}
   </Sidebar.Footer>
 </Sidebar.Root>

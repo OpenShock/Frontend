@@ -39,7 +39,7 @@ function refreshSelf() {
         id: data.id!,
         name: data.name!,
         avatar: data.image!,
-        rank: data.rank!,
+        roles: data.roles!,
         email: data.email!,
       };
 

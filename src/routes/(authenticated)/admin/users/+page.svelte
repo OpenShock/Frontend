@@ -18,7 +18,7 @@
       password_hash_type: user.passwordHashType,
       created_at: user.createdAt,
       email_activated: user.emailActivated,
-      rank: user.rank,
+      roles: user.roles,
     };
   }
 

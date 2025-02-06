@@ -18,10 +18,9 @@ import type {
   HubEditRequest,
   LcgResponseBaseResponse,
   OpenShockProblem,
-  OtaItemIReadOnlyCollectionBaseResponse,
-  ResponseDeviceIEnumerableBaseResponse,
+  ResponseDeviceArrayBaseResponse,
   ResponseDeviceWithTokenBaseResponse,
-  ShockerResponseIEnumerableBaseResponse,
+  ShockerResponseArrayBaseResponse,
   StringBaseResponse,
 } from '../models/index';
 import {
@@ -31,14 +30,12 @@ import {
     LcgResponseBaseResponseToJSON,
     OpenShockProblemFromJSON,
     OpenShockProblemToJSON,
-    OtaItemIReadOnlyCollectionBaseResponseFromJSON,
-    OtaItemIReadOnlyCollectionBaseResponseToJSON,
-    ResponseDeviceIEnumerableBaseResponseFromJSON,
-    ResponseDeviceIEnumerableBaseResponseToJSON,
+    ResponseDeviceArrayBaseResponseFromJSON,
+    ResponseDeviceArrayBaseResponseToJSON,
     ResponseDeviceWithTokenBaseResponseFromJSON,
     ResponseDeviceWithTokenBaseResponseToJSON,
-    ShockerResponseIEnumerableBaseResponseFromJSON,
-    ShockerResponseIEnumerableBaseResponseToJSON,
+    ShockerResponseArrayBaseResponseFromJSON,
+    ShockerResponseArrayBaseResponseToJSON,
     StringBaseResponseFromJSON,
     StringBaseResponseToJSON,
 } from '../models/index';
@@ -53,10 +50,6 @@ export interface DevicesGetDeviceByIdRequest {
 }
 
 export interface DevicesGetLiveControlGatewayInfoRequest {
-    deviceId: string;
-}
-
-export interface DevicesGetOtaUpdateHistoryRequest {
     deviceId: string;
 }
 
@@ -145,21 +138,6 @@ export interface DevicesApiInterface {
 
     /**
      * 
-     * @summary Gets the OTA update history for a device
-     * @param {string} deviceId Id of the device
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DevicesApiInterface
-     */
-    devicesGetOtaUpdateHistoryRaw(requestParameters: DevicesGetOtaUpdateHistoryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OtaItemIReadOnlyCollectionBaseResponse>>;
-
-    /**
-     * Gets the OTA update history for a device
-     */
-    devicesGetOtaUpdateHistory(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OtaItemIReadOnlyCollectionBaseResponse>;
-
-    /**
-     * 
      * @summary Get a pair code for a device
      * @param {string} deviceId 
      * @param {*} [options] Override http request option.
@@ -181,12 +159,12 @@ export interface DevicesApiInterface {
      * @throws {RequiredError}
      * @memberof DevicesApiInterface
      */
-    devicesGetShockersRaw(requestParameters: DevicesGetShockersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShockerResponseIEnumerableBaseResponse>>;
+    devicesGetShockersRaw(requestParameters: DevicesGetShockersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShockerResponseArrayBaseResponse>>;
 
     /**
      * Get all shockers for a device
      */
-    devicesGetShockers(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShockerResponseIEnumerableBaseResponse>;
+    devicesGetShockers(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShockerResponseArrayBaseResponse>;
 
     /**
      * 
@@ -195,12 +173,12 @@ export interface DevicesApiInterface {
      * @throws {RequiredError}
      * @memberof DevicesApiInterface
      */
-    devicesListDevicesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponseDeviceIEnumerableBaseResponse>>;
+    devicesListDevicesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponseDeviceArrayBaseResponse>>;
 
     /**
      * Get all devices for the current user
      */
-    devicesListDevices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseDeviceIEnumerableBaseResponse>;
+    devicesListDevices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseDeviceArrayBaseResponse>;
 
     /**
      * 
@@ -387,43 +365,6 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
     }
 
     /**
-     * Gets the OTA update history for a device
-     */
-    async devicesGetOtaUpdateHistoryRaw(requestParameters: DevicesGetOtaUpdateHistoryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OtaItemIReadOnlyCollectionBaseResponse>> {
-        if (requestParameters['deviceId'] == null) {
-            throw new runtime.RequiredError(
-                'deviceId',
-                'Required parameter "deviceId" was null or undefined when calling devicesGetOtaUpdateHistory().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
-
-        const response = await this.request({
-            path: `/1/devices/{deviceId}/ota`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => OtaItemIReadOnlyCollectionBaseResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Gets the OTA update history for a device
-     */
-    async devicesGetOtaUpdateHistory(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OtaItemIReadOnlyCollectionBaseResponse> {
-        const response = await this.devicesGetOtaUpdateHistoryRaw({ deviceId: deviceId }, initOverrides);
-        return await response.value();
-    }
-
-    /**
      * Get a pair code for a device
      */
     async devicesGetPairCodeRaw(requestParameters: DevicesGetPairCodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StringBaseResponse>> {
@@ -463,7 +404,7 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
     /**
      * Get all shockers for a device
      */
-    async devicesGetShockersRaw(requestParameters: DevicesGetShockersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShockerResponseIEnumerableBaseResponse>> {
+    async devicesGetShockersRaw(requestParameters: DevicesGetShockersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShockerResponseArrayBaseResponse>> {
         if (requestParameters['deviceId'] == null) {
             throw new runtime.RequiredError(
                 'deviceId',
@@ -486,13 +427,13 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ShockerResponseIEnumerableBaseResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ShockerResponseArrayBaseResponseFromJSON(jsonValue));
     }
 
     /**
      * Get all shockers for a device
      */
-    async devicesGetShockers(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShockerResponseIEnumerableBaseResponse> {
+    async devicesGetShockers(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShockerResponseArrayBaseResponse> {
         const response = await this.devicesGetShockersRaw({ deviceId: deviceId }, initOverrides);
         return await response.value();
     }
@@ -500,7 +441,7 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
     /**
      * Get all devices for the current user
      */
-    async devicesListDevicesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponseDeviceIEnumerableBaseResponse>> {
+    async devicesListDevicesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponseDeviceArrayBaseResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -516,13 +457,13 @@ export class DevicesApi extends runtime.BaseAPI implements DevicesApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ResponseDeviceIEnumerableBaseResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ResponseDeviceArrayBaseResponseFromJSON(jsonValue));
     }
 
     /**
      * Get all devices for the current user
      */
-    async devicesListDevices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseDeviceIEnumerableBaseResponse> {
+    async devicesListDevices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseDeviceArrayBaseResponse> {
         const response = await this.devicesListDevicesRaw(initOverrides);
         return await response.value();
     }

@@ -24,35 +24,35 @@ import {
 /**
  * 
  * @export
- * @interface ResponseDeviceIEnumerableBaseResponse
+ * @interface ResponseDeviceArrayBaseResponse
  */
-export interface ResponseDeviceIEnumerableBaseResponse {
+export interface ResponseDeviceArrayBaseResponse {
     /**
      * 
      * @type {string}
-     * @memberof ResponseDeviceIEnumerableBaseResponse
+     * @memberof ResponseDeviceArrayBaseResponse
      */
     message?: string | null;
     /**
      * 
      * @type {Array<ResponseDevice>}
-     * @memberof ResponseDeviceIEnumerableBaseResponse
+     * @memberof ResponseDeviceArrayBaseResponse
      */
     data?: Array<ResponseDevice> | null;
 }
 
 /**
- * Check if a given object implements the ResponseDeviceIEnumerableBaseResponse interface.
+ * Check if a given object implements the ResponseDeviceArrayBaseResponse interface.
  */
-export function instanceOfResponseDeviceIEnumerableBaseResponse(value: object): value is ResponseDeviceIEnumerableBaseResponse {
+export function instanceOfResponseDeviceArrayBaseResponse(value: object): value is ResponseDeviceArrayBaseResponse {
     return true;
 }
 
-export function ResponseDeviceIEnumerableBaseResponseFromJSON(json: any): ResponseDeviceIEnumerableBaseResponse {
-    return ResponseDeviceIEnumerableBaseResponseFromJSONTyped(json, false);
+export function ResponseDeviceArrayBaseResponseFromJSON(json: any): ResponseDeviceArrayBaseResponse {
+    return ResponseDeviceArrayBaseResponseFromJSONTyped(json, false);
 }
 
-export function ResponseDeviceIEnumerableBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ResponseDeviceIEnumerableBaseResponse {
+export function ResponseDeviceArrayBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ResponseDeviceArrayBaseResponse {
     if (json == null) {
         return json;
     }
@@ -63,11 +63,11 @@ export function ResponseDeviceIEnumerableBaseResponseFromJSONTyped(json: any, ig
     };
 }
 
-export function ResponseDeviceIEnumerableBaseResponseToJSON(json: any): ResponseDeviceIEnumerableBaseResponse {
-    return ResponseDeviceIEnumerableBaseResponseToJSONTyped(json, false);
+export function ResponseDeviceArrayBaseResponseToJSON(json: any): ResponseDeviceArrayBaseResponse {
+    return ResponseDeviceArrayBaseResponseToJSONTyped(json, false);
 }
 
-export function ResponseDeviceIEnumerableBaseResponseToJSONTyped(value?: ResponseDeviceIEnumerableBaseResponse | null, ignoreDiscriminator: boolean = false): any {
+export function ResponseDeviceArrayBaseResponseToJSONTyped(value?: ResponseDeviceArrayBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

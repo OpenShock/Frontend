@@ -1,7 +1,7 @@
 import type { ColumnDef, StringOrTemplateHeader } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table';
-import { PasswordHashingAlgorithm, RankType } from '$lib/api/internal/v1';
+import { PasswordHashingAlgorithm, RoleType } from '$lib/api/internal/v1';
 import DataTableSortButton from './data-table-sort-button.svelte';
 import DataTableActions from './data-table-actions.svelte';
 
@@ -12,7 +12,7 @@ export type User = {
   password_hash_type: PasswordHashingAlgorithm;
   created_at: Date;
   email_activated: boolean;
-  rank: RankType;
+  roles: RoleType[];
 };
 
 function CreateSortHeader<TData>(name: string): StringOrTemplateHeader<TData, unknown> {
@@ -79,19 +79,19 @@ export const columns: ColumnDef<User>[] = [
     },
   },
   {
-    accessorKey: 'rank',
-    header: CreateSortHeader<User>('Rank'),
+    accessorKey: 'roles',
+    header: CreateSortHeader<User>('Roles'),
     cell: ({ row }) => {
-      const rankCellSnippet = createRawSnippet<[RankType]>((getRank) => {
-        const rank = getRank();
-        const isPrivileged = [RankType.Admin, RankType.System].includes(rank);
+      const rolesCellSnippet = createRawSnippet<[RoleType[]]>((getRoles) => {
+        const roles = getRoles();
+        const isPrivileged = [RoleType.Admin, RoleType.System].some(role => roles.includes(role));
         return {
           render: () =>
-            `<div class="text-center font-medium ${isPrivileged ? 'text-blue-500' : ''}">${rank}</div>`,
+            `<div class="text-center font-medium ${isPrivileged ? 'text-blue-500' : ''}">${roles}</div>`,
         };
       });
 
-      return renderSnippet(rankCellSnippet, row.getValue<RankType>('rank'));
+      return renderSnippet(rolesCellSnippet, row.getValue<RoleType[]>('roles'));
     },
   },
   {

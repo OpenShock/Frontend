@@ -22,8 +22,8 @@ import type {
   PauseRequest,
   ShareLinkCreate,
   ShareLinkEditShocker,
+  ShareLinkResponseArrayBaseResponse,
   ShareLinkResponseBaseResponse,
-  ShareLinkResponseIEnumerableBaseResponse,
 } from '../models/index';
 import {
     GuidBaseResponseFromJSON,
@@ -40,10 +40,10 @@ import {
     ShareLinkCreateToJSON,
     ShareLinkEditShockerFromJSON,
     ShareLinkEditShockerToJSON,
+    ShareLinkResponseArrayBaseResponseFromJSON,
+    ShareLinkResponseArrayBaseResponseToJSON,
     ShareLinkResponseBaseResponseFromJSON,
     ShareLinkResponseBaseResponseToJSON,
-    ShareLinkResponseIEnumerableBaseResponseFromJSON,
-    ShareLinkResponseIEnumerableBaseResponseToJSON,
 } from '../models/index';
 
 export interface ShareLinksAddShockerRequest {
@@ -153,12 +153,12 @@ export interface ShareLinksApiInterface {
      * @throws {RequiredError}
      * @memberof ShareLinksApiInterface
      */
-    shareLinksListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareLinkResponseIEnumerableBaseResponse>>;
+    shareLinksListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareLinkResponseArrayBaseResponse>>;
 
     /**
      * Get all share links for the current user
      */
-    shareLinksList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareLinkResponseIEnumerableBaseResponse>;
+    shareLinksList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareLinkResponseArrayBaseResponse>;
 
     /**
      * 
@@ -364,7 +364,7 @@ export class ShareLinksApi extends runtime.BaseAPI implements ShareLinksApiInter
     /**
      * Get all share links for the current user
      */
-    async shareLinksListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareLinkResponseIEnumerableBaseResponse>> {
+    async shareLinksListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareLinkResponseArrayBaseResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -380,13 +380,13 @@ export class ShareLinksApi extends runtime.BaseAPI implements ShareLinksApiInter
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ShareLinkResponseIEnumerableBaseResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ShareLinkResponseArrayBaseResponseFromJSON(jsonValue));
     }
 
     /**
      * Get all share links for the current user
      */
-    async shareLinksList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareLinkResponseIEnumerableBaseResponse> {
+    async shareLinksList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareLinkResponseArrayBaseResponse> {
         const response = await this.shareLinksListRaw(initOverrides);
         return await response.value();
     }

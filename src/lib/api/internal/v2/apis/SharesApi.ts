@@ -18,9 +18,9 @@ import type {
   CreateShareRequest,
   GenericIni,
   OpenShockProblem,
-  ShareInfo,
   ShareRequestBaseDetails,
   ShareRequestBaseItem,
+  UserShareInfo,
 } from '../models/index';
 import {
     CreateShareRequestFromJSON,
@@ -29,12 +29,12 @@ import {
     GenericIniToJSON,
     OpenShockProblemFromJSON,
     OpenShockProblemToJSON,
-    ShareInfoFromJSON,
-    ShareInfoToJSON,
     ShareRequestBaseDetailsFromJSON,
     ShareRequestBaseDetailsToJSON,
     ShareRequestBaseItemFromJSON,
     ShareRequestBaseItemToJSON,
+    UserShareInfoFromJSON,
+    UserShareInfoToJSON,
 } from '../models/index';
 
 export interface SharesCreateShareRequest {
@@ -159,11 +159,11 @@ export interface SharesApiInterface {
      * @throws {RequiredError}
      * @memberof SharesApiInterface
      */
-    sharesGetSharesToUserRaw(requestParameters: SharesGetSharesToUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareInfo>>;
+    sharesGetSharesToUserRaw(requestParameters: SharesGetSharesToUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UserShareInfo>>>;
 
     /**
      */
-    sharesGetSharesToUser(userId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareInfo>;
+    sharesGetSharesToUser(userId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<UserShareInfo>>;
 
 }
 
@@ -396,7 +396,7 @@ export class SharesApi extends runtime.BaseAPI implements SharesApiInterface {
 
     /**
      */
-    async sharesGetSharesToUserRaw(requestParameters: SharesGetSharesToUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareInfo>> {
+    async sharesGetSharesToUserRaw(requestParameters: SharesGetSharesToUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UserShareInfo>>> {
         if (requestParameters['userId'] == null) {
             throw new runtime.RequiredError(
                 'userId',
@@ -419,12 +419,12 @@ export class SharesApi extends runtime.BaseAPI implements SharesApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ShareInfoFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(UserShareInfoFromJSON));
     }
 
     /**
      */
-    async sharesGetSharesToUser(userId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareInfo> {
+    async sharesGetSharesToUser(userId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<UserShareInfo>> {
         const response = await this.sharesGetSharesToUserRaw({ userId: userId }, initOverrides);
         return await response.value();
     }

@@ -20,13 +20,6 @@ import {
     ShockerPermissionsToJSON,
     ShockerPermissionsToJSONTyped,
 } from './ShockerPermissions';
-import type { GenericIni } from './GenericIni';
-import {
-    GenericIniFromJSON,
-    GenericIniFromJSONTyped,
-    GenericIniToJSON,
-    GenericIniToJSONTyped,
-} from './GenericIni';
 import type { ShockerLimits } from './ShockerLimits';
 import {
     ShockerLimitsFromJSON,
@@ -38,46 +31,53 @@ import {
 /**
  * 
  * @export
- * @interface ShareInfo
+ * @interface UserShareInfo
  */
-export interface ShareInfo {
+export interface UserShareInfo {
     /**
      * 
-     * @type {GenericIni}
-     * @memberof ShareInfo
+     * @type {string}
+     * @memberof UserShareInfo
      */
-    sharedWith: GenericIni;
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserShareInfo
+     */
+    name: string;
     /**
      * 
      * @type {Date}
-     * @memberof ShareInfo
+     * @memberof UserShareInfo
      */
     createdOn: Date;
     /**
      * 
      * @type {ShockerPermissions}
-     * @memberof ShareInfo
+     * @memberof UserShareInfo
      */
     permissions: ShockerPermissions;
     /**
      * 
      * @type {ShockerLimits}
-     * @memberof ShareInfo
+     * @memberof UserShareInfo
      */
     limits: ShockerLimits;
     /**
      * 
      * @type {boolean}
-     * @memberof ShareInfo
+     * @memberof UserShareInfo
      */
     paused: boolean;
 }
 
 /**
- * Check if a given object implements the ShareInfo interface.
+ * Check if a given object implements the UserShareInfo interface.
  */
-export function instanceOfShareInfo(value: object): value is ShareInfo {
-    if (!('sharedWith' in value) || value['sharedWith'] === undefined) return false;
+export function instanceOfUserShareInfo(value: object): value is UserShareInfo {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('name' in value) || value['name'] === undefined) return false;
     if (!('createdOn' in value) || value['createdOn'] === undefined) return false;
     if (!('permissions' in value) || value['permissions'] === undefined) return false;
     if (!('limits' in value) || value['limits'] === undefined) return false;
@@ -85,17 +85,18 @@ export function instanceOfShareInfo(value: object): value is ShareInfo {
     return true;
 }
 
-export function ShareInfoFromJSON(json: any): ShareInfo {
-    return ShareInfoFromJSONTyped(json, false);
+export function UserShareInfoFromJSON(json: any): UserShareInfo {
+    return UserShareInfoFromJSONTyped(json, false);
 }
 
-export function ShareInfoFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShareInfo {
+export function UserShareInfoFromJSONTyped(json: any, ignoreDiscriminator: boolean): UserShareInfo {
     if (json == null) {
         return json;
     }
     return {
         
-        'sharedWith': GenericIniFromJSON(json['sharedWith']),
+        'id': json['id'],
+        'name': json['name'],
         'createdOn': (new Date(json['createdOn'])),
         'permissions': ShockerPermissionsFromJSON(json['permissions']),
         'limits': ShockerLimitsFromJSON(json['limits']),
@@ -103,18 +104,19 @@ export function ShareInfoFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     };
 }
 
-export function ShareInfoToJSON(json: any): ShareInfo {
-    return ShareInfoToJSONTyped(json, false);
+export function UserShareInfoToJSON(json: any): UserShareInfo {
+    return UserShareInfoToJSONTyped(json, false);
 }
 
-export function ShareInfoToJSONTyped(value?: ShareInfo | null, ignoreDiscriminator: boolean = false): any {
+export function UserShareInfoToJSONTyped(value?: UserShareInfo | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
 
     return {
         
-        'sharedWith': GenericIniToJSON(value['sharedWith']),
+        'id': value['id'],
+        'name': value['name'],
         'createdOn': ((value['createdOn']).toISOString()),
         'permissions': ShockerPermissionsToJSON(value['permissions']),
         'limits': ShockerLimitsToJSON(value['limits']),

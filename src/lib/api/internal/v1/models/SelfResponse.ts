@@ -13,13 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
-import type { RankType } from './RankType';
+import type { RoleType } from './RoleType';
 import {
-    RankTypeFromJSON,
-    RankTypeFromJSONTyped,
-    RankTypeToJSON,
-    RankTypeToJSONTyped,
-} from './RankType';
+    RoleTypeFromJSON,
+    RoleTypeFromJSONTyped,
+    RoleTypeToJSON,
+    RoleTypeToJSONTyped,
+} from './RoleType';
 
 /**
  * 
@@ -53,13 +53,17 @@ export interface SelfResponse {
     image: string;
     /**
      * 
-     * @type {RankType}
+     * @type {Array<RoleType>}
      * @memberof SelfResponse
      */
-    rank: RankType;
+    roles: Array<RoleType>;
+    /**
+     * 
+     * @type {string}
+     * @memberof SelfResponse
+     */
+    readonly rank?: string;
 }
-
-
 
 /**
  * Check if a given object implements the SelfResponse interface.
@@ -69,7 +73,7 @@ export function instanceOfSelfResponse(value: object): value is SelfResponse {
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('email' in value) || value['email'] === undefined) return false;
     if (!('image' in value) || value['image'] === undefined) return false;
-    if (!('rank' in value) || value['rank'] === undefined) return false;
+    if (!('roles' in value) || value['roles'] === undefined) return false;
     return true;
 }
 
@@ -87,7 +91,8 @@ export function SelfResponseFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'name': json['name'],
         'email': json['email'],
         'image': json['image'],
-        'rank': RankTypeFromJSON(json['rank']),
+        'roles': ((json['roles'] as Array<any>).map(RoleTypeFromJSON)),
+        'rank': json['rank'] == null ? undefined : json['rank'],
     };
 }
 
@@ -95,7 +100,7 @@ export function SelfResponseToJSON(json: any): SelfResponse {
     return SelfResponseToJSONTyped(json, false);
 }
 
-export function SelfResponseToJSONTyped(value?: SelfResponse | null, ignoreDiscriminator: boolean = false): any {
+export function SelfResponseToJSONTyped(value?: Omit<SelfResponse, 'rank'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
@@ -106,7 +111,7 @@ export function SelfResponseToJSONTyped(value?: SelfResponse | null, ignoreDiscr
         'name': value['name'],
         'email': value['email'],
         'image': value['image'],
-        'rank': RankTypeToJSON(value['rank']),
+        'roles': ((value['roles'] as Array<any>).map(RoleTypeToJSON)),
     };
 }
 

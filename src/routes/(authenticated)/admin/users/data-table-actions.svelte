@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { RankType } from '$lib/api/internal/v1';
+  import { RoleType } from '$lib/api/internal/v1';
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { toast } from 'svelte-sonner';
@@ -17,7 +17,7 @@
 
   let editDialogOpen = $state<boolean>(false);
   let deleteDialogOpen = $state<boolean>(false);
-  let isPrivileged = $derived([RankType.Admin, RankType.System].includes(user.rank));
+  let isPrivileged = $derived([RoleType.Admin, RoleType.System].some(role => user.roles.includes(role)));
 
   function copyId() {
     navigator.clipboard.writeText(user.id);

@@ -20,13 +20,13 @@ import {
     PasswordHashingAlgorithmToJSON,
     PasswordHashingAlgorithmToJSONTyped,
 } from './PasswordHashingAlgorithm';
-import type { RankType } from './RankType';
+import type { RoleType } from './RoleType';
 import {
-    RankTypeFromJSON,
-    RankTypeFromJSONTyped,
-    RankTypeToJSON,
-    RankTypeToJSONTyped,
-} from './RankType';
+    RoleTypeFromJSON,
+    RoleTypeFromJSONTyped,
+    RoleTypeToJSON,
+    RoleTypeToJSONTyped,
+} from './RoleType';
 
 /**
  * 
@@ -72,10 +72,10 @@ export interface AdminUsersView {
     emailActivated: boolean;
     /**
      * 
-     * @type {RankType}
+     * @type {Array<RoleType>}
      * @memberof AdminUsersView
      */
-    rank: RankType;
+    roles: Array<RoleType>;
     /**
      * 
      * @type {number}
@@ -150,7 +150,7 @@ export function instanceOfAdminUsersView(value: object): value is AdminUsersView
     if (!('passwordHashType' in value) || value['passwordHashType'] === undefined) return false;
     if (!('createdAt' in value) || value['createdAt'] === undefined) return false;
     if (!('emailActivated' in value) || value['emailActivated'] === undefined) return false;
-    if (!('rank' in value) || value['rank'] === undefined) return false;
+    if (!('roles' in value) || value['roles'] === undefined) return false;
     if (!('apiTokenCount' in value) || value['apiTokenCount'] === undefined) return false;
     if (!('passwordResetCount' in value) || value['passwordResetCount'] === undefined) return false;
     if (!('shockerShareCount' in value) || value['shockerShareCount'] === undefined) return false;
@@ -180,7 +180,7 @@ export function AdminUsersViewFromJSONTyped(json: any, ignoreDiscriminator: bool
         'passwordHashType': PasswordHashingAlgorithmFromJSON(json['passwordHashType']),
         'createdAt': (new Date(json['createdAt'])),
         'emailActivated': json['emailActivated'],
-        'rank': RankTypeFromJSON(json['rank']),
+        'roles': ((json['roles'] as Array<any>).map(RoleTypeFromJSON)),
         'apiTokenCount': json['apiTokenCount'],
         'passwordResetCount': json['passwordResetCount'],
         'shockerShareCount': json['shockerShareCount'],
@@ -211,7 +211,7 @@ export function AdminUsersViewToJSONTyped(value?: AdminUsersView | null, ignoreD
         'passwordHashType': PasswordHashingAlgorithmToJSON(value['passwordHashType']),
         'createdAt': ((value['createdAt']).toISOString()),
         'emailActivated': value['emailActivated'],
-        'rank': RankTypeToJSON(value['rank']),
+        'roles': ((value['roles'] as Array<any>).map(RoleTypeToJSON)),
         'apiTokenCount': value['apiTokenCount'],
         'passwordResetCount': value['passwordResetCount'],
         'shockerShareCount': value['shockerShareCount'],

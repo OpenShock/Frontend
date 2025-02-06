@@ -24,35 +24,35 @@ import {
 /**
  * 
  * @export
- * @interface ShockerResponseIEnumerableBaseResponse
+ * @interface ShockerResponseArrayBaseResponse
  */
-export interface ShockerResponseIEnumerableBaseResponse {
+export interface ShockerResponseArrayBaseResponse {
     /**
      * 
      * @type {string}
-     * @memberof ShockerResponseIEnumerableBaseResponse
+     * @memberof ShockerResponseArrayBaseResponse
      */
     message?: string | null;
     /**
      * 
      * @type {Array<ShockerResponse>}
-     * @memberof ShockerResponseIEnumerableBaseResponse
+     * @memberof ShockerResponseArrayBaseResponse
      */
     data?: Array<ShockerResponse> | null;
 }
 
 /**
- * Check if a given object implements the ShockerResponseIEnumerableBaseResponse interface.
+ * Check if a given object implements the ShockerResponseArrayBaseResponse interface.
  */
-export function instanceOfShockerResponseIEnumerableBaseResponse(value: object): value is ShockerResponseIEnumerableBaseResponse {
+export function instanceOfShockerResponseArrayBaseResponse(value: object): value is ShockerResponseArrayBaseResponse {
     return true;
 }
 
-export function ShockerResponseIEnumerableBaseResponseFromJSON(json: any): ShockerResponseIEnumerableBaseResponse {
-    return ShockerResponseIEnumerableBaseResponseFromJSONTyped(json, false);
+export function ShockerResponseArrayBaseResponseFromJSON(json: any): ShockerResponseArrayBaseResponse {
+    return ShockerResponseArrayBaseResponseFromJSONTyped(json, false);
 }
 
-export function ShockerResponseIEnumerableBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShockerResponseIEnumerableBaseResponse {
+export function ShockerResponseArrayBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShockerResponseArrayBaseResponse {
     if (json == null) {
         return json;
     }
@@ -63,11 +63,11 @@ export function ShockerResponseIEnumerableBaseResponseFromJSONTyped(json: any, i
     };
 }
 
-export function ShockerResponseIEnumerableBaseResponseToJSON(json: any): ShockerResponseIEnumerableBaseResponse {
-    return ShockerResponseIEnumerableBaseResponseToJSONTyped(json, false);
+export function ShockerResponseArrayBaseResponseToJSON(json: any): ShockerResponseArrayBaseResponse {
+    return ShockerResponseArrayBaseResponseToJSONTyped(json, false);
 }
 
-export function ShockerResponseIEnumerableBaseResponseToJSONTyped(value?: ShockerResponseIEnumerableBaseResponse | null, ignoreDiscriminator: boolean = false): any {
+export function ShockerResponseArrayBaseResponseToJSONTyped(value?: ShockerResponseArrayBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

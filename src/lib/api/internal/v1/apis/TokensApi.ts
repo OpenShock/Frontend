@@ -106,20 +106,6 @@ export interface TokensApiInterface {
 
     /**
      * 
-     * @summary Gets information about the current token used to access this endpoint
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof TokensApiInterface
-     */
-    tokensGetSelfTokenRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TokenResponse>>;
-
-    /**
-     * Gets information about the current token used to access this endpoint
-     */
-    tokensGetSelfToken(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TokenResponse>;
-
-    /**
-     * 
      * @summary Get a token by id
      * @param {string} tokenId 
      * @param {*} [options] Override http request option.
@@ -164,10 +150,6 @@ export class TokensApi extends runtime.BaseAPI implements TokensApiInterface {
 
         headerParameters['Content-Type'] = 'application/json';
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
-
         const response = await this.request({
             path: `/1/tokens`,
             method: 'POST',
@@ -201,10 +183,6 @@ export class TokensApi extends runtime.BaseAPI implements TokensApiInterface {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
 
         const response = await this.request({
             path: `/1/tokens/{tokenId}`.replace(`{${"tokenId"}}`, encodeURIComponent(String(requestParameters['tokenId']))),
@@ -240,10 +218,6 @@ export class TokensApi extends runtime.BaseAPI implements TokensApiInterface {
 
         headerParameters['Content-Type'] = 'application/json';
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
-
         const response = await this.request({
             path: `/1/tokens/{tokenId}`.replace(`{${"tokenId"}}`, encodeURIComponent(String(requestParameters['tokenId']))),
             method: 'PATCH',
@@ -263,36 +237,6 @@ export class TokensApi extends runtime.BaseAPI implements TokensApiInterface {
     }
 
     /**
-     * Gets information about the current token used to access this endpoint
-     */
-    async tokensGetSelfTokenRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TokenResponse>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
-
-        const response = await this.request({
-            path: `/1/tokens/self`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => TokenResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Gets information about the current token used to access this endpoint
-     */
-    async tokensGetSelfToken(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TokenResponse> {
-        const response = await this.tokensGetSelfTokenRaw(initOverrides);
-        return await response.value();
-    }
-
-    /**
      * Get a token by id
      */
     async tokensGetTokenByIdRaw(requestParameters: TokensGetTokenByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TokenResponse>> {
@@ -306,10 +250,6 @@ export class TokensApi extends runtime.BaseAPI implements TokensApiInterface {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
 
         const response = await this.request({
             path: `/1/tokens/{tokenId}`.replace(`{${"tokenId"}}`, encodeURIComponent(String(requestParameters['tokenId']))),
@@ -336,10 +276,6 @@ export class TokensApi extends runtime.BaseAPI implements TokensApiInterface {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
 
         const response = await this.request({
             path: `/1/tokens`,

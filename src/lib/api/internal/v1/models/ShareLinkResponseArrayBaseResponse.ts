@@ -24,35 +24,35 @@ import {
 /**
  * 
  * @export
- * @interface ShareLinkResponseIEnumerableBaseResponse
+ * @interface ShareLinkResponseArrayBaseResponse
  */
-export interface ShareLinkResponseIEnumerableBaseResponse {
+export interface ShareLinkResponseArrayBaseResponse {
     /**
      * 
      * @type {string}
-     * @memberof ShareLinkResponseIEnumerableBaseResponse
+     * @memberof ShareLinkResponseArrayBaseResponse
      */
     message?: string | null;
     /**
      * 
      * @type {Array<ShareLinkResponse>}
-     * @memberof ShareLinkResponseIEnumerableBaseResponse
+     * @memberof ShareLinkResponseArrayBaseResponse
      */
     data?: Array<ShareLinkResponse> | null;
 }
 
 /**
- * Check if a given object implements the ShareLinkResponseIEnumerableBaseResponse interface.
+ * Check if a given object implements the ShareLinkResponseArrayBaseResponse interface.
  */
-export function instanceOfShareLinkResponseIEnumerableBaseResponse(value: object): value is ShareLinkResponseIEnumerableBaseResponse {
+export function instanceOfShareLinkResponseArrayBaseResponse(value: object): value is ShareLinkResponseArrayBaseResponse {
     return true;
 }
 
-export function ShareLinkResponseIEnumerableBaseResponseFromJSON(json: any): ShareLinkResponseIEnumerableBaseResponse {
-    return ShareLinkResponseIEnumerableBaseResponseFromJSONTyped(json, false);
+export function ShareLinkResponseArrayBaseResponseFromJSON(json: any): ShareLinkResponseArrayBaseResponse {
+    return ShareLinkResponseArrayBaseResponseFromJSONTyped(json, false);
 }
 
-export function ShareLinkResponseIEnumerableBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShareLinkResponseIEnumerableBaseResponse {
+export function ShareLinkResponseArrayBaseResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShareLinkResponseArrayBaseResponse {
     if (json == null) {
         return json;
     }
@@ -63,11 +63,11 @@ export function ShareLinkResponseIEnumerableBaseResponseFromJSONTyped(json: any,
     };
 }
 
-export function ShareLinkResponseIEnumerableBaseResponseToJSON(json: any): ShareLinkResponseIEnumerableBaseResponse {
-    return ShareLinkResponseIEnumerableBaseResponseToJSONTyped(json, false);
+export function ShareLinkResponseArrayBaseResponseToJSON(json: any): ShareLinkResponseArrayBaseResponse {
+    return ShareLinkResponseArrayBaseResponseToJSONTyped(json, false);
 }
 
-export function ShareLinkResponseIEnumerableBaseResponseToJSONTyped(value?: ShareLinkResponseIEnumerableBaseResponse | null, ignoreDiscriminator: boolean = false): any {
+export function ShareLinkResponseArrayBaseResponseToJSONTyped(value?: ShareLinkResponseArrayBaseResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

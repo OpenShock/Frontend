@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { RankType } from '$lib/api/internal/v1';
+  import { RoleType } from '$lib/api/internal/v1';
   import { UserStore } from '$lib/stores/UserStore';
   import type { Snippet } from 'svelte';
 
@@ -9,8 +9,8 @@
 
   let { children }: Props = $props();
 
-  const allowedRanks = [RankType.Admin, RankType.System];
-  let isAdmin = $derived($UserStore.self ? allowedRanks.includes($UserStore.self.rank) : false);
+  const allowedRoles = [RoleType.Admin, RoleType.System];
+  let isAdmin = $derived($UserStore.self ? $UserStore.self.roles.some(role => allowedRoles.includes(role)) : false);
 </script>
 
 {#if isAdmin}
