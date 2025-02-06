@@ -48,6 +48,7 @@ const config = {
         'style-src': ['self','unsafe-inline'],
         'img-src': [
           'self',
+          'https://challenges.cloudflare.com',
           'https://www.gravatar.com',
           'https://i0.wp.com/openshock.app/static/images/',
           'https://i1.wp.com/openshock.app/static/images/',
