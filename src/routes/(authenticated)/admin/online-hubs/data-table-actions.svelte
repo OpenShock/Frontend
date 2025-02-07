@@ -5,6 +5,7 @@
   import type { OnlineHub } from './columns';
 
   import Ellipsis from 'lucide-svelte/icons/ellipsis';
+  import { goto } from '$app/navigation';
 
   type Props = {
     hub: OnlineHub;
@@ -15,6 +16,10 @@
   function copyId() {
     navigator.clipboard.writeText(hub.id);
     toast.success('ID copied to clipboard');
+  }
+  function copyUserId() {
+    navigator.clipboard.writeText(hub.owner.id);
+    toast.success('User ID copied to clipboard');
   }
 </script>
 
@@ -29,6 +34,10 @@
   </DropdownMenu.Trigger>
   <DropdownMenu.Content>
     <DropdownMenu.Item onclick={copyId}>Copy ID</DropdownMenu.Item>
+    <DropdownMenu.Item onclick={copyUserId}>Copy User ID</DropdownMenu.Item>
+    <DropdownMenu.Item onclick={() => goto(`/admin/users/${hub.owner.id}`)}>
+      View User
+    </DropdownMenu.Item>
     <DropdownMenu.Item>Edit</DropdownMenu.Item>
     <DropdownMenu.Item>Delete</DropdownMenu.Item>
   </DropdownMenu.Content>
