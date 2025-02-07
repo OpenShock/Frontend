@@ -5,9 +5,9 @@
   import type { Hub } from './columns';
   import HubDeleteDialog from './dialog-hub-delete.svelte';
   import HubEditDialog from './dialog-hub-edit.svelte';
-  import HubUpdateDialog from './dialog-hub-update.svelte';
 
   import Ellipsis from 'lucide-svelte/icons/ellipsis';
+  import { goto } from '$app/navigation';
 
   type Props = {
     hub: Hub;
@@ -15,7 +15,6 @@
 
   let { hub }: Props = $props();
 
-  let updateDialogOpen = $state<boolean>(false);
   let editDialogOpen = $state<boolean>(false);
   let deleteDialogOpen = $state<boolean>(false);
 
@@ -25,7 +24,6 @@
   }
 </script>
 
-<HubUpdateDialog bind:open={updateDialogOpen} {hub} />
 <HubEditDialog bind:open={editDialogOpen} {hub} />
 <HubDeleteDialog bind:open={deleteDialogOpen} {hub} />
 
@@ -40,7 +38,7 @@
   </DropdownMenu.Trigger>
   <DropdownMenu.Content>
     <DropdownMenu.Item onclick={copyId}>Copy ID</DropdownMenu.Item>
-    <DropdownMenu.Item onclick={() => (updateDialogOpen = true)}>Update</DropdownMenu.Item>
+    <DropdownMenu.Item onclick={() => goto(`/hubs/${hub.id}/update`)}>Update</DropdownMenu.Item>
     <DropdownMenu.Item onclick={() => (editDialogOpen = true)}>Edit</DropdownMenu.Item>
     <DropdownMenu.Item onclick={() => (deleteDialogOpen = true)}>Delete</DropdownMenu.Item>
   </DropdownMenu.Content>
