@@ -145,7 +145,7 @@
   ];
 
   function meetsReq(roles: RoleType[], group: Group) {
-    return group.roles?.some(role => roles.includes(role)) ?? true;
+    return group.roles?.some((role) => roles.includes(role)) ?? true;
   }
   function isPathMatch(path: string, href: string) {
     return path === href || path.startsWith(href + '/');

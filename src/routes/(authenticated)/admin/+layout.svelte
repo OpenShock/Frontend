@@ -10,7 +10,9 @@
   let { children }: Props = $props();
 
   const allowedRoles = [RoleType.Admin, RoleType.System];
-  let isAdmin = $derived($UserStore.self ? $UserStore.self.roles.some(role => allowedRoles.includes(role)) : false);
+  let isAdmin = $derived(
+    $UserStore.self ? $UserStore.self.roles.some((role) => allowedRoles.includes(role)) : false
+  );
 </script>
 
 {#if isAdmin}

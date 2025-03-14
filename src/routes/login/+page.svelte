@@ -5,7 +5,7 @@
   import TextInput from '$lib/components/input/TextInput.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
   import { Button } from '$lib/components/ui/button';
-  import * as Card from '$lib/components/ui/card';
+  import { CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { UserStore } from '$lib/stores/UserStore';
 
@@ -13,7 +13,9 @@
   let password = $state<string>('');
   let turnstileResponse = $state<string | null>(null);
 
-  function handleSubmission(ev: SubmitEvent) {
+  function handleSubmission(e: SubmitEvent) {
+    e.preventDefault();
+
     if (!usernameOrEmail || !password || !turnstileResponse) {
       return;
     }
@@ -33,10 +35,10 @@
 </script>
 
 <div class="container my-8">
-  <Card.Header>
-    <Card.Title class="text-3xl">Login</Card.Title>
-  </Card.Header>
-  <Card.Content>
+  <CardHeader>
+    <CardTitle class="text-3xl">Login</CardTitle>
+  </CardHeader>
+  <CardContent>
     <form class="flex flex-col space-y-4" onsubmit={handleSubmission}>
       <TextInput
         label="Username or Email"
@@ -55,5 +57,5 @@
 
       <Button type="submit" disabled={!canSubmit}>Log In</Button>
     </form>
-  </Card.Content>
+  </CardContent>
 </div>
