@@ -91,7 +91,7 @@ export default class FlashManager {
     if (!this.loader) return false;
 
     try {
-      await this.loader.hardReset();
+      await this.loader.after();
       return true;
     } catch (e) {
       console.error(e);

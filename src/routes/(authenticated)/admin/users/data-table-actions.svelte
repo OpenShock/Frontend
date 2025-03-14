@@ -17,7 +17,9 @@
 
   let editDialogOpen = $state<boolean>(false);
   let deleteDialogOpen = $state<boolean>(false);
-  let isPrivileged = $derived([RoleType.Admin, RoleType.System].some(role => user.roles.includes(role)));
+  let isPrivileged = $derived(
+    [RoleType.Admin, RoleType.System].some((role) => user.roles.includes(role))
+  );
 
   function copyId() {
     navigator.clipboard.writeText(user.id);

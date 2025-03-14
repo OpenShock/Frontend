@@ -74,7 +74,7 @@ export class DevicesOtaApi extends runtime.BaseAPI implements DevicesOtaApiInter
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/{deviceId}/ota`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId']))),
+            path: `/1/devices/{deviceId}/ota`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

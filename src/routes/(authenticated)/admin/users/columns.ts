@@ -84,7 +84,7 @@ export const columns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       const rolesCellSnippet = createRawSnippet<[RoleType[]]>((getRoles) => {
         const roles = getRoles();
-        const isPrivileged = [RoleType.Admin, RoleType.System].some(role => roles.includes(role));
+        const isPrivileged = [RoleType.Admin, RoleType.System].some((role) => roles.includes(role));
         return {
           render: () =>
             `<div class="text-center font-medium ${isPrivileged ? 'text-blue-500' : ''}">${roles}</div>`,

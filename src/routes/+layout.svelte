@@ -41,7 +41,7 @@
 
 <SidebarProvider bind:open={() => isOpen && isLoggedIn, (o) => (isOpen = o)}>
   <AppSidebar {currentUserRoles} />
-  <div class="flex flex-1 flex-col h-screen w-screen overflow-hidden">
+  <div class="flex h-screen w-screen flex-1 flex-col overflow-hidden">
     <Header />
     <main class="flex-1">
       {@render children?.()}
