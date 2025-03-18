@@ -2,10 +2,14 @@
   import { page } from '$app/state';
   import { devicesOtaApi } from '$lib/api';
   import type { OtaItem } from '$lib/api/internal/v1';
+  import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { OnlineHubsStore } from '$lib/stores/HubsStore';
+  import { RotateCcw } from '@lucide/svelte';
   import { onMount } from 'svelte';
+  import DataTable from './data-table.svelte';
+  import { columns } from './columns';
 
   let hubId = $derived(page.params.hubId);
 
@@ -45,6 +49,22 @@
     <!-- Begin OTA Logs Section -->
     <h3 class="mt-6 text-lg font-semibold">OTA Update Logs</h3>
     {#if otaLogs.length > 0}
+      <div class="container my-8">
+        <Card.Header>
+          <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
+            Hubs
+            <Button class="btn variant-filled-primary text-xl" onclick={() => {}}>
+              <RotateCcw />
+              <span> Refresh OTA Logs </span>
+            </Button>
+          </Card.Title>
+          <Card.Description>This is a list of all hubs you own.</Card.Description>
+        </Card.Header>
+        <Card.Content>
+          <DataTable data={otaLogs} {columns} />
+        </Card.Content>
+      </div>
+    
       <ul class="list-disc pl-5">
         {#each otaLogs as log}
           <li class="mt-2">
