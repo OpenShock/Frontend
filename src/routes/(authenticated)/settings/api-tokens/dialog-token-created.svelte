@@ -2,7 +2,7 @@
   import * as Dialog from '$lib/components/ui/dialog';
   import { toast } from 'svelte-sonner';
 
-  import { Copy, KeyRound } from 'lucide-svelte';
+  import { Copy, KeyRound } from '@lucide/svelte';
 
   type Props = {
     open: boolean;

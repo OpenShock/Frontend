@@ -8,7 +8,7 @@
   import TokenGenerateDialog from './dialog-token-generate.svelte';
   import { ApiTokensStore, refreshApiToken, refreshApiTokens } from '$lib/stores/ApiTokensStore';
 
-  import RotateCcw from 'lucide-svelte/icons/rotate-ccw';
+  import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
 
   function apiTokenToTableToken(user: TokenResponse): ApiToken {
     return {

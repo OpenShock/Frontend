@@ -3,7 +3,7 @@
   import { ControlType, type Control } from '$lib/api/internal/v2';
   import { Button } from '$lib/components/ui/button';
 
-  import { Signal, Timer, Volume2, Waves, Zap } from 'lucide-svelte';
+  import { Signal, Timer, Volume2, Waves, Zap } from '@lucide/svelte';
 
   interface Props {
     shocker: ShockerResponse;

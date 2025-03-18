@@ -4,7 +4,7 @@
   import { toast } from 'svelte-sonner';
   import type { OnlineHub } from './columns';
 
-  import Ellipsis from 'lucide-svelte/icons/ellipsis';
+  import Ellipsis from '@lucide/svelte/icons/ellipsis';
 
   type Props = {
     hub: OnlineHub;

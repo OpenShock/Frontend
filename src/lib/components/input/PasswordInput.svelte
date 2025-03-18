@@ -9,7 +9,7 @@
   import TextInput from './TextInput.svelte';
   import type { AnyComponent } from '$lib/types/AnyComponent';
 
-  import { Eye, EyeOff } from 'lucide-svelte';
+  import { Eye, EyeOff } from '@lucide/svelte';
 
   interface Props {
     label: string;

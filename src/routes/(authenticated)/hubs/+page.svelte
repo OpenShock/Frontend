@@ -6,7 +6,7 @@
   import { columns, type Hub } from './columns';
   import DataTable from './data-table.svelte';
 
-  import RotateCcw from 'lucide-svelte/icons/rotate-ccw';
+  import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
 
   let data = $derived.by<Hub[]>(() => {
     if (!$OwnHubsStore || !$OnlineHubsStore) return [];

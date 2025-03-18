@@ -4,7 +4,7 @@
   import { Button } from '$lib/components/ui/button';
   import CircleSlider from './Internal/CircleSlider.svelte';
 
-  import { Volume2, Waves, Zap } from 'lucide-svelte';
+  import { Volume2, Waves, Zap } from '@lucide/svelte';
 
   interface Props {
     shocker: ShockerResponse;

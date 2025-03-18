@@ -1,7 +1,7 @@
 <script lang="ts">
   import CircleSlider from './Internal/CircleSlider.svelte';
 
-  import { Timer, Volume2, Zap } from 'lucide-svelte';
+  import { Timer, Volume2, Zap } from '@lucide/svelte';
 
   interface Props {
     shockIntensity: number;
