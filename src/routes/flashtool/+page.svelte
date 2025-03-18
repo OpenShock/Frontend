@@ -186,7 +186,7 @@
       </SheetTitle>
     </SheetHeader>
     <div
-      class="border-surface-500 flex h-max flex-grow flex-col-reverse overflow-auto overflow-y-auto rounded-md border p-4"
+      class="border-surface-500 flex h-max grow flex-col-reverse overflow-auto overflow-y-auto rounded-md border p-4"
     >
       <pre id="terminal" class="text-left text-xs">{terminalText}</pre>
     </div>
