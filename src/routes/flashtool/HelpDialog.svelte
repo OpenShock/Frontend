@@ -5,7 +5,7 @@
   import * as Dialog from '$lib/components/ui/dialog';
   import { ScrollArea } from '$lib/components/ui/scroll-area';
 
-  import { ArrowDownToLine } from 'lucide-svelte';
+  import { ArrowDownToLine } from '@lucide/svelte';
 
   interface Props {
     open: boolean;

@@ -6,7 +6,7 @@
   import { useSidebar } from '$lib/components/ui/sidebar';
   import { UserStore } from '$lib/stores/UserStore';
 
-  import Menu from 'lucide-svelte/icons/menu';
+  import Menu from '@lucide/svelte/icons/menu';
 
   let sidebar = useSidebar();
 </script>

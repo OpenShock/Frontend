@@ -5,7 +5,7 @@
   import type { Session } from './columns';
   import SessionRevokeDialog from './dialog-session-revoke.svelte';
 
-  import Ellipsis from 'lucide-svelte/icons/ellipsis';
+  import Ellipsis from '@lucide/svelte/icons/ellipsis';
 
   type Props = {
     session: Session;

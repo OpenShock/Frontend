@@ -8,7 +8,7 @@
   import { toast } from 'svelte-sonner';
   import LoadingCircle from './svg/LoadingCircle.svelte';
 
-  import Bug from 'lucide-svelte/icons/bug';
+  import Bug from '@lucide/svelte/icons/bug';
 
   interface Props {
     action: string;

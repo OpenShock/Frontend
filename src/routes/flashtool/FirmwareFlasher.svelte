@@ -6,7 +6,7 @@
   import FlashManager from '$lib/EspTool/FlashManager';
   import { Button } from '$lib/components/ui/button';
 
-  import { Microchip, TriangleAlert } from 'lucide-svelte';
+  import { Microchip, TriangleAlert } from '@lucide/svelte';
 
   interface Props {
     version: string;

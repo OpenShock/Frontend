@@ -10,7 +10,7 @@
   import * as Popover from '$lib/components/ui/popover';
   import { OwnHubsStore } from '$lib/stores/HubsStore';
 
-  import { Layers, Settings } from 'lucide-svelte';
+  import { Layers, Settings } from '@lucide/svelte';
 
   let shockers = $derived(Array.from($OwnHubsStore).flatMap(([, hub]) => hub.shockers));
 
