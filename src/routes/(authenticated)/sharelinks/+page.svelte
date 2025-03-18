@@ -4,7 +4,7 @@
   import { columns, type ShareLink } from './columns';
   import DataTable from './data-table.svelte';
 
-  import RotateCcw from 'lucide-svelte/icons/rotate-ccw';
+  import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
   import { refreshShareLinks, ShareLinksStore } from '$lib/stores/ShareLinkStore';
 
   let data = $derived.by<ShareLink[]>(() => {

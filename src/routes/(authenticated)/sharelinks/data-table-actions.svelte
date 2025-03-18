@@ -6,7 +6,7 @@
   import SharelinkDeleteDialog from './dialog-sharelink-delete.svelte';
   import SharelinkEditDialog from './dialog-sharelink-edit.svelte';
 
-  import Ellipsis from 'lucide-svelte/icons/ellipsis';
+  import Ellipsis from '@lucide/svelte/icons/ellipsis';
 
   type Props = {
     sharelink: ShareLink;
