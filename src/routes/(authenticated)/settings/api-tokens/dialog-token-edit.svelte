@@ -87,7 +87,7 @@
           {#each permissionTypes as category}
             <span>{category.name}</span>
             {#each category.perms as permission}
-              <label class="!mt-0 ml-4">
+              <label class="mt-0! ml-4">
                 <input
                   type="checkbox"
                   class="checkbox"

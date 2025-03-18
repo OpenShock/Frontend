@@ -2,6 +2,7 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import dns from 'dns';
 import { env } from 'process';
 import { defineConfig, loadEnv, type PluginOption, type UserConfig } from 'vite';
+import tailwindcss from "@tailwindcss/vite";
 import mkcert from 'vite-plugin-mkcert';
 
 function printRed(message: string) {
@@ -62,6 +63,8 @@ async function getPlugins(useLocalRedirect: boolean) {
 
   // Add the sveltekit plugin
   plugins.push(sveltekit());
+
+  plugins.push(tailwindcss());
 
   return plugins;
 }

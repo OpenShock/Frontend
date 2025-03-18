@@ -16,7 +16,7 @@
 {/snippet}
 
 <header
-  class="sticky top-0 z-50 flex w-full flex-row border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+  class="sticky top-0 z-50 flex w-full flex-row border-b border-border/40 bg-background/95 backdrop-blur-sm supports-backdrop-filter:bg-background/60"
 >
   {#if $UserStore.self}
     <button
@@ -33,7 +33,7 @@
     <div class="flex items-center space-x-4">
       <a
         href={$UserStore.self ? '/home' : '/'}
-        class="select-none overflow-hidden lg:!ml-0 lg:w-auto"
+        class="select-none overflow-hidden lg:ml-0! lg:w-auto"
         data-sveltekit-preload-data="hover"
         aria-label="OpenShock"
       >
