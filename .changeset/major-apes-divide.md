@@ -2,4 +2,4 @@
 'frontend': patch
 ---
 
-Updated Tailwind CSS to v4.0
+chore: Updated Tailwind CSS to v4.0
