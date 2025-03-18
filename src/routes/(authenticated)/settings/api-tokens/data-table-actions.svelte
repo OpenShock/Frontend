@@ -6,7 +6,7 @@
   import TokenDeleteDialog from './dialog-token-delete.svelte';
   import TokenEditDialog from './dialog-token-edit.svelte';
 
-  import Ellipsis from 'lucide-svelte/icons/ellipsis';
+  import Ellipsis from '@lucide/svelte/icons/ellipsis';
 
   type Props = {
     token: ApiToken;

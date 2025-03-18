@@ -9,7 +9,7 @@
   import { columns, type OnlineHub } from './columns';
   import DataTable from './data-table.svelte';
 
-  import RotateCcw from 'lucide-svelte/icons/rotate-ccw';
+  import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
 
   function apiHubToTableHub(hub: AdminOnlineDeviceResponse): OnlineHub {
     return {

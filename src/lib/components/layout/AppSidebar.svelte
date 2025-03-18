@@ -18,7 +18,7 @@
     UserPen,
     Wrench,
     Zap,
-  } from 'lucide-svelte';
+  } from '@lucide/svelte';
 
   interface Props {
     currentUserRoles: RoleType[];

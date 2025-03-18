@@ -19,7 +19,7 @@
   import { Label } from '$lib/components/ui/label';
   import { Sheet, SheetContent, SheetHeader, SheetTitle } from '$lib/components/ui/sheet';
 
-  import { MessageCircleQuestion, SquareTerminal } from 'lucide-svelte';
+  import { MessageCircleQuestion, SquareTerminal } from '@lucide/svelte';
 
   const isSupported = browser && 'serial' in navigator;
 
