@@ -16,7 +16,7 @@
 {/snippet}
 
 <header
-  class="sticky top-0 z-50 flex w-full flex-row border-b border-border/40 bg-background/95 backdrop-blur-sm supports-backdrop-filter:bg-background/60"
+  class="border-border/40 bg-background/95 supports-backdrop-filter:bg-background/60 sticky top-0 z-50 flex w-full flex-row border-b backdrop-blur-sm"
 >
   {#if $UserStore.self}
     <button
@@ -33,7 +33,7 @@
     <div class="flex items-center space-x-4">
       <a
         href={$UserStore.self ? '/home' : '/'}
-        class="select-none overflow-hidden lg:ml-0! lg:w-auto"
+        class="overflow-hidden select-none lg:ml-0! lg:w-auto"
         data-sveltekit-preload-data="hover"
         aria-label="OpenShock"
       >
@@ -52,7 +52,7 @@
     {#if $UserStore.self}
       <DropdownMenu.Root>
         <DropdownMenu.Trigger
-          class="cursor-pointer select-none text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
+          class="cursor-pointer text-gray-600 select-none hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
         >
           <img
             class="inline-block h-8 rounded-full"

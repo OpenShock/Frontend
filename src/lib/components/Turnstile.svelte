@@ -103,7 +103,7 @@
   {#if widgetState != 'mounted'}
     <!-- Turnstile placeholder -->
     <div
-      class="flex h-full select-none items-center justify-center gap-3 border border-[#e0e0e0] bg-[#fafafa] p-3 dark:border-[#666] dark:bg-[#222]"
+      class="flex h-full items-center justify-center gap-3 border border-[#e0e0e0] bg-[#fafafa] p-3 select-none dark:border-[#666] dark:bg-[#222]"
     >
       {#if dev}
         <Bug />

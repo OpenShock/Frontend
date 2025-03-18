@@ -53,7 +53,7 @@
   onmouseup={stopTimers}
   ontouchend={stopTimers}
   onmouseleave={stopTimers}
-  class={`h-10 select-none whitespace-nowrap rounded-md bg-[#7f1d1d] px-4 py-2 text-sm font-medium hover:bg-[#731a1a] focus:outline-hidden ${timer ? 'violent-shake' : ''}`}
+  class={`h-10 rounded-md bg-[#7f1d1d] px-4 py-2 text-sm font-medium whitespace-nowrap select-none hover:bg-[#731a1a] focus:outline-hidden ${timer ? 'violent-shake' : ''}`}
 >
   {buttonText}
 </button>

@@ -80,11 +80,11 @@
       <div class="grid gap-1.5 leading-none">
         <Label
           for="erase-before-flash"
-          class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
         >
           Erase before flashing
         </Label>
-        <p class="text-sm text-muted-foreground">
+        <p class="text-muted-foreground text-sm">
           Flash tool will erase all data on the device before flashing, in the process clearing any
           existing configs
         </p>
