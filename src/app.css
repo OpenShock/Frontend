@@ -65,10 +65,18 @@
 
 @layer base {
   * {
-    @apply border-border;
+    /* border-border */
+    --tw-border-opacity: 1;
+    border-color: hsl(var(--border) / var(--tw-border-opacity, 1));
   }
   body {
-    @apply bg-background text-foreground;
+    /* bg-background */
+    --tw-bg-opacity: 1;
+    background-color: hsl(var(--background) / var(--tw-bg-opacity, 1));
+  
+    /* text-foreground */
+    --tw-text-opacity: 1;
+    color: hsl(var(--foreground) / var(--tw-text-opacity, 1));
   }
   .kbd {
     @apply inline-flex min-h-[30px] items-center justify-center rounded-md border border-gray-200 bg-white px-1.5 py-1 font-mono text-sm text-gray-800 shadow-[0px_2px_0px_0px_rgba(0,0,0,0.08)];
@@ -79,7 +87,11 @@
   }
 
   .code {
-    @apply relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold;
+    @apply relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold;
+    
+    /* bg-muted */
+    --tw-bg-opacity: 1;
+    background-color: hsl(var(--muted) / var(--tw-bg-opacity, 1));
   }
 
   .hide-spinners {
