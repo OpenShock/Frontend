@@ -2,4 +2,4 @@
 'frontend': patch
 ---
 
-chore: Bump node and pnpm versions
+chore: Bump pnpm version
