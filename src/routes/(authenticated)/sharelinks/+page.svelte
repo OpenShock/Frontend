@@ -24,7 +24,7 @@
   <Card.Header>
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
       ShareLinks
-      <Button class="btn variant-filled-primary text-xl" onclick={refreshShareLinks}>
+      <Button class="text-xl" onclick={refreshShareLinks}>
         <RotateCcw />
         <span> Refresh </span>
       </Button>

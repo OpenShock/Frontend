@@ -1,8 +1,11 @@
 <script lang="ts">
-  import TextInput from '$lib/components/input/TextInput.svelte';
+  import { publicApi } from '$lib/api';
+  import type { PublicShareLinkResponse } from '$lib/api/internal/v1';
   import { Button } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
+  import { onMount } from 'svelte';
   import type { ShareLink } from './columns';
+  import { Pause, Play } from '@lucide/svelte';
 
   type Props = {
     open: boolean;
@@ -10,14 +13,40 @@
   };
 
   let { open = $bindable<boolean>(), sharelink }: Props = $props();
+
+  let details = $state<PublicShareLinkResponse>();
+
+  onMount(() => {
+    publicApi.publicGetShareLink(sharelink.id).then((response) => {
+      details = response.data;
+      console.log(response);
+    });
+  });
 </script>
 
 <Dialog.Root bind:open={() => open, (o) => (open = o)}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Edit ShareLink</Dialog.Title>
+      <Dialog.Title>Edit ShareLink {details?.name}</Dialog.Title>
     </Dialog.Header>
-    <TextInput label="Name" placeholder={sharelink.name} value={''} />
-    <Button>Apply</Button>
+    <ul>
+      {#each details?.devices ?? [] as device}
+        {#each device.shockers ?? [] as shocker}
+          <li class="m-2 flex items-center gap-2">
+            <Button>
+              <Pause />
+              <Play />
+            </Button>
+            {shocker.name}
+            <div class="flex-1"></div>
+            <Button>Shock</Button>
+            <Button>Vibrate</Button>
+            <Button>Sound</Button>
+            <Button>Remove</Button>
+          </li>
+        {/each}
+      {/each}
+    </ul>
+    <Button>Add</Button>
   </Dialog.Content>
 </Dialog.Root>

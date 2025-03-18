@@ -21,7 +21,7 @@ export function refreshShareLinks() {
     });
 }
 
-export function deleteShareLink(id: string) {
+export function removeShareLink(id: string) {
   ShareLinksStore.update((state) => {
     state.delete(id);
     return state;

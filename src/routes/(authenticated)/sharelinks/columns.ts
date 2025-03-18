@@ -32,7 +32,7 @@ export const columns: ColumnDef<ShareLink>[] = [
         const createdAt = getCreatedAt();
         return {
           render: () =>
-            `<div class="text-right font-medium" title="${createdAt}">${createdAt.toLocaleString()}</div>`,
+            `<div class="font-medium" title="${createdAt}">${createdAt?.toLocaleString()}</div>`,
         };
       });
 
@@ -41,13 +41,13 @@ export const columns: ColumnDef<ShareLink>[] = [
   },
   {
     accessorKey: 'expires_at',
-    header: CreateSortHeader<ShareLink>('Expires at'),
+    header: CreateSortHeader<ShareLink>('Expires'),
     cell: ({ row }) => {
       const expiresAtCellSnippet = createRawSnippet<[Date]>((getExpiresAt) => {
         const expiresAt = getExpiresAt();
         return {
           render: () =>
-            `<div class="text-right font-medium" title="${expiresAt}">${expiresAt.toLocaleString()}</div>`,
+            `<div class="font-medium" title="${expiresAt}">${expiresAt?.toLocaleString() ?? 'Never'}</div>`,
         };
       });
 
