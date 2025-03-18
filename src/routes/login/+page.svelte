@@ -56,6 +56,8 @@
       <Turnstile action="signin" bind:response={turnstileResponse} />
 
       <Button type="submit" disabled={!canSubmit}>Log In</Button>
+
+      <a class="text-blue-500 underline" href="/forgot-password">I forgot my password</a>
     </form>
   </CardContent>
 </div>
