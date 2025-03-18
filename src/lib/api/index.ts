@@ -5,7 +5,7 @@ import {
   AuthenticatedAccountApi,
   Configuration as ConfigurationV1,
   DeviceApi,
-  DevicesOtaApi as DevicesOtaV1Api,
+  DevicesOtaApi,
   DevicesApi as DevicesV1Api,
   PublicApi,
   SessionsApi,
@@ -19,7 +19,6 @@ import {
 import {
   AccountApi as AccountV2Api,
   Configuration as ConfigurationV2,
-  DevicesOtaApi as DevicesOtaV2Api,
   DevicesApi as DevicesV2Api,
   SharesApi as SharesV2Api,
   ShockerApi as ShockerV2Api,
@@ -69,8 +68,7 @@ export const adminApi = new AdminApi(DefaultApiV1Configuration);
 export const deviceApi = new DeviceApi(DefaultApiV1Configuration);
 export const devicesV1Api = new DevicesV1Api(DefaultApiV1Configuration);
 export const devicesV2Api = new DevicesV2Api(DefaultApiV2Configuration);
-export const devicesOtaV1Api = new DevicesOtaV1Api(DefaultApiV1Configuration);
-export const devicesOtaV2Api = new DevicesOtaV2Api(DefaultApiV2Configuration);
+export const devicesOtaApi = new DevicesOtaApi(DefaultApiV1Configuration);
 export const publicApi = new PublicApi(DefaultApiV1Configuration);
 export const sessionApi = new SessionsApi(DefaultApiV1Configuration);
 export const shareLinksApi = new ShareLinksApi(DefaultApiV1Configuration);

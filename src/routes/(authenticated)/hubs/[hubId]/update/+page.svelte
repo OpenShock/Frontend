@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import { devicesOtaV2Api } from '$lib/api';
-  import type { OtaItem } from '$lib/api/internal/v2';
+  import { devicesOtaApi } from '$lib/api';
+  import type { OtaItem } from '$lib/api/internal/v1';
   import * as Card from '$lib/components/ui/card';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { OnlineHubsStore } from '$lib/stores/HubsStore';
@@ -14,7 +14,7 @@
 
   async function fetchOtaLogs() {
     try {
-      const response = await devicesOtaV2Api.devicesOtaGetOtaUpdateHistory(hubId);
+      const response = await devicesOtaApi.devicesOtaGetOtaUpdateHistory(hubId);
       otaLogs = response.data ?? [];
     } catch (error) {
       handleApiError(error);
