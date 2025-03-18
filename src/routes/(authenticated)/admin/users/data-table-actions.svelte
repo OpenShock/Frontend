@@ -7,7 +7,7 @@
   import UserDeleteDialog from './dialog-user-delete.svelte';
   import UserEditDialog from './dialog-user-edit.svelte';
 
-  import Ellipsis from 'lucide-svelte/icons/ellipsis';
+  import Ellipsis from '@lucide/svelte/icons/ellipsis';
 
   type Props = {
     user: User;

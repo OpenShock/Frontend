@@ -18,7 +18,7 @@
     UserPen,
     Wrench,
     Zap,
-  } from 'lucide-svelte';
+  } from '@lucide/svelte';
 
   interface Props {
     currentUserRoles: RoleType[];
@@ -136,7 +136,7 @@
         {
           name: 'Danger Zone',
           Icon: TriangleAlert,
-          class: '!text-red-500',
+          class: 'text-red-500!',
           collapsible: { open: false },
           href: '/settings/danger-zone',
         },

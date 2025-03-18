@@ -8,7 +8,7 @@
   import { columns, type User } from './columns';
   import DataTable from './data-table.svelte';
 
-  import RotateCcw from 'lucide-svelte/icons/rotate-ccw';
+  import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
 
   function apiUserToTableDevice(user: AdminUsersView): User {
     return {

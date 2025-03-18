@@ -141,13 +141,13 @@
       {max}
       {step}
       aria-label="Value"
-      class="hide-spinners absolute left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] transform select-none border-none bg-transparent text-center text-xl font-bold"
+      class="hide-spinners absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] transform border-none bg-transparent text-center text-xl font-bold select-none"
     />
     <label
       id={labelId}
       for={inputId}
       aria-label="Name"
-      class="absolute bottom-0 left-[50%] -translate-x-[50%] translate-y-[10%] transform select-none text-center"
+      class="absolute bottom-0 left-[50%] -translate-x-[50%] translate-y-[10%] transform text-center select-none"
     >
       {name}
     </label>

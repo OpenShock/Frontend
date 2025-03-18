@@ -7,7 +7,7 @@
     type Channel,
   } from '$lib/api/firmwareCDN';
 
-  import { CircleCheckBig, TriangleAlert } from 'lucide-svelte';
+  import { CircleCheckBig, TriangleAlert } from '@lucide/svelte';
 
   /** Optional chip to constrain the list of boards to */
   //export let chip: string | null = null;

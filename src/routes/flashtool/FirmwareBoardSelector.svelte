@@ -11,7 +11,7 @@
   } from '$lib/components/ui/command';
   import { cn } from '$lib/utils';
 
-  import { Check, ChevronsUpDown } from 'lucide-svelte';
+  import { Check, ChevronsUpDown } from '@lucide/svelte';
 
   /** Optional chip to constrain the list of boards to */
   //export let chip: string | null = null;
