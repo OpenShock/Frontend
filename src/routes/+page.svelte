@@ -1,6 +1,6 @@
 <div class="container mx-auto flex h-full items-center justify-start space-x-8">
   <div class="flex flex-col">
-    <h1 class="text-5xl font-bold leading-none text-gray-800 dark:text-white">
+    <h1 class="text-5xl leading-none font-bold text-gray-800 dark:text-white">
       Welcome to <span class="text-blue-600">OpenShock</span>
     </h1>
     <p class="text-2xl font-light text-gray-600">[Put a slogan here]</p>

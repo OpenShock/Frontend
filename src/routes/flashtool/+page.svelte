@@ -19,7 +19,7 @@
   import { Label } from '$lib/components/ui/label';
   import { Sheet, SheetContent, SheetHeader, SheetTitle } from '$lib/components/ui/sheet';
 
-  import { MessageCircleQuestion, SquareTerminal } from 'lucide-svelte';
+  import { MessageCircleQuestion, SquareTerminal } from '@lucide/svelte';
 
   const isSupported = browser && 'serial' in navigator;
 
@@ -80,11 +80,11 @@
       <div class="grid gap-1.5 leading-none">
         <Label
           for="erase-before-flash"
-          class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
         >
           Erase before flashing
         </Label>
-        <p class="text-sm text-muted-foreground">
+        <p class="text-muted-foreground text-sm">
           Flash tool will erase all data on the device before flashing, in the process clearing any
           existing configs
         </p>
@@ -186,7 +186,7 @@
       </SheetTitle>
     </SheetHeader>
     <div
-      class="border-surface-500 flex h-max flex-grow flex-col-reverse overflow-auto overflow-y-auto rounded-md border p-4"
+      class="border-surface-500 flex h-max grow flex-col-reverse overflow-auto overflow-y-auto rounded-md border p-4"
     >
       <pre id="terminal" class="text-left text-xs">{terminalText}</pre>
     </div>

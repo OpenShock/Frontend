@@ -2,7 +2,7 @@
   import { Button } from '$lib/components/ui/button';
   import type { ComponentProps } from 'svelte';
 
-  import ArrowUpDown from 'lucide-svelte/icons/arrow-up-down';
+  import ArrowUpDown from '@lucide/svelte/icons/arrow-up-down';
 
   type Props = ComponentProps<typeof Button> & { name: string };
 

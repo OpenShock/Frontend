@@ -179,7 +179,7 @@
           {/if}
         </div>
         {#if 'message' in expireValidationResult}
-          <p class="text-xs text-{GetValResColor(expireValidationResult)} !mt-0">
+          <p class="text-xs text-{GetValResColor(expireValidationResult)} mt-0!">
             {expireValidationResult.message}
           </p>
         {:else}
@@ -193,7 +193,7 @@
           {#each permissionCategories as permission}
             <span>{capitalizeFirstLetter(permission.name)}</span>
             {#each permission.perms as perm}
-              <label class="!mt-0 ml-4">
+              <label class="mt-0! ml-4">
                 <input type="checkbox" class="checkbox" value={perm.key} bind:group={permissions} />
                 {capitalizeFirstLetter(perm.name)}
               </label>

@@ -10,7 +10,7 @@
   import { UserStore } from '$lib/stores/UserStore';
   import { toast } from 'svelte-sonner';
 
-  import { KeyRound, Mail, User } from 'lucide-svelte';
+  import { KeyRound, Mail, User } from '@lucide/svelte';
 
   let username = $state<string>('');
   let email = $state<string>('');

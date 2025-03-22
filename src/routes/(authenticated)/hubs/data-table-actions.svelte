@@ -7,7 +7,7 @@
   import HubEditDialog from './dialog-hub-edit.svelte';
   import HubUpdateDialog from './dialog-hub-update.svelte';
 
-  import Ellipsis from 'lucide-svelte/icons/ellipsis';
+  import Ellipsis from '@lucide/svelte/icons/ellipsis';
 
   type Props = {
     hub: Hub;

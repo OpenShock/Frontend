@@ -45,13 +45,13 @@
 <label class="label w-full">
   <span>{label}</span>
   <div class="flex flex-row items-center gap-2">
-    <div class="input-group input-group-divider flex flex-grow flex-row gap-2">
+    <div class="input-group input-group-divider flex grow flex-row gap-2">
       {#if Icon}
         <Icon />
       {/if}
       <Input
         {type}
-        class="input flex-grow"
+        class="input grow"
         title={label}
         {placeholder}
         {autocomplete}
@@ -76,7 +76,7 @@
     </div>
   </div>
   {#if validationResult?.message}
-    <p class="text-xs text-{GetValResColor(validationResult)} !mt-0">
+    <p class="text-xs text-{GetValResColor(validationResult)} mt-0!">
       {validationResult.message}
       {#if validationResult.link}
         <a
