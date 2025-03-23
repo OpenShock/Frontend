@@ -6,7 +6,7 @@ import { durationToString } from '$lib/utils/time';
 import type { TwColor } from '$lib/types/Tailwind';
 import DataTableActions from './data-table-actions.svelte';
 import { getReadableUserAgentName } from '$lib/utils/userAgent';
-import DataTableSortButton from './data-table-sort-button.svelte';
+import DataTableSortButton from '$lib/components/Table/SortButton.svelte';
 
 export type OnlineHubOwner = {
   id: string;
