@@ -2,7 +2,7 @@ import type { ColumnDef, StringOrTemplateHeader } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table';
 import { PermissionType } from '$lib/api/internal/v1';
-import DataTableSortButton from './data-table-sort-button.svelte';
+import DataTableSortButton from '$lib/components/Table/SortButton.svelte';
 import DataTableActions from './data-table-actions.svelte';
 import { elapsedToString } from '$lib/utils/time';
 

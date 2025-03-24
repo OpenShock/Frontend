@@ -4,7 +4,7 @@ import { getReadableUserAgentName } from '$lib/utils/userAgent';
 import type { ColumnDef, StringOrTemplateHeader } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
 import DataTableActions from './data-table-actions.svelte';
-import DataTableSortButton from './data-table-sort-button.svelte';
+import DataTableSortButton from '$lib/components/Table/SortButton.svelte';
 
 export type Session = {
   id: string;

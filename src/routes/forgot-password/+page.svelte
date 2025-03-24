@@ -38,7 +38,7 @@
 
       <Turnstile action="forgot-password" bind:response={turnstileResponse} />
 
-      <Button type="submit" disabled={!canSubmit}>Log In</Button>
+      <Button type="submit" disabled={!canSubmit}>I forgot my passord</Button>
     </form>
   </Card.Content>
 </div>
