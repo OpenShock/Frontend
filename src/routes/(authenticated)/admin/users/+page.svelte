@@ -30,8 +30,7 @@
   import { Input } from '$lib/components/ui/input';
   import { createSvelteTable } from '$lib/components/ui/data-table';
   import { columns, type User } from './columns';
-
-  import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
+  import { onMount } from 'svelte';
 
   function apiUserToTableDevice(user: AdminUsersView): User {
     return {
@@ -65,27 +64,12 @@
 
   const PerPage = 200;
 
+  let page = $state(1);
+  let filter = $state('');
+  let orderby = $state('name asc');
+
   let total = $state(0);
   let data = $state<User[]>([]);
-
-  let page = $state(1);
-
-  let nameFilterValue = $state('');
-  let emailFilterValue = $state('');
-
-  function fetchUsers($filter: string, $orderby: string, $page: number) {
-    adminApi
-      .adminGetUsers($filter, $orderby, ($page - 1) * PerPage, PerPage) /* filter, orderby, offset, limit */
-      .then((res) => {
-        if (res.data) {
-          total = res.total;
-          data = res.data.map(apiUserToTableDevice);
-        }
-      })
-      .catch(handleApiError);
-  }
-
-  $effect(() => fetchUsers('', 'name asc', page));
 
   let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: PerPage });
   let sorting = $state<SortingState>([]);
@@ -100,27 +84,6 @@
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    onPaginationChange: (updater) => {
-      if (typeof updater === 'function') {
-        pagination = updater(pagination);
-      } else {
-        pagination = updater;
-      }
-    },
-    onSortingChange: (updater) => {
-      if (typeof updater === 'function') {
-        sorting = updater(sorting);
-      } else {
-        sorting = updater;
-      }
-    },
-    onColumnFiltersChange: (updater) => {
-      if (typeof updater === 'function') {
-        columnFilters = updater(columnFilters);
-      } else {
-        columnFilters = updater;
-      }
-    },
     state: {
       get pagination() {
         return pagination;
@@ -133,6 +96,30 @@
       },
     },
   });
+
+  function fetchUsers() {
+    adminApi
+      .adminGetUsers(
+        filter.length > 0 ? filter : undefined,
+        orderby.length > 0 ? orderby : undefined,
+        (page - 1) * PerPage,
+        PerPage
+      )
+      .then((res) => {
+        if (res.data) {
+          total = res.total;
+          data = res.data.map(apiUserToTableDevice);
+        }
+      })
+      .catch(handleApiError);
+  }
+
+  function startSearch() {
+    page = 1;
+    fetchUsers();
+  }
+
+  onMount(fetchUsers);
 </script>
 
 <div class="container my-8">
@@ -144,19 +131,12 @@
   <CardContent>
     <div class="flex items-center space-x-4 py-4">
       <Input
-        placeholder="Filter names..."
-        bind:value={nameFilterValue}
-        class="max-w-sm"
+        placeholder="Input search query..."
+        bind:value={filter}
+        class="max-w-sm flex-1"
       />
-      <Input
-        placeholder="Filter emails..."
-        bind:value={emailFilterValue}
-        class="max-w-sm"
-      />
-      <div class="flex-1"></div>
-      <Button class="btn variant-filled-primary text-xl" onclick={fetchUsers}>
-        <RotateCcw />
-        <span> Refresh </span>
+      <Button class="text-xl cursor-pointer" onclick={startSearch}>
+        <span> Search </span>
       </Button>
     </div>
     <Table {table} {columns} />
