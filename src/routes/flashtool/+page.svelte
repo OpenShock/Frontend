@@ -237,7 +237,7 @@
     <TextInput
       label="Command"
       placeholder="Command"
-      button={{onClick: RunCommand}}
+      button={{ text: 'Run', onClick: RunCommand }}
       bind:value={terminalCommand}
     />
   </SheetContent>

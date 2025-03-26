@@ -130,6 +130,8 @@ export default class FlashManager {
     terminal: IEspLoaderTerminal
   ) {
     this.serialPort = loader.transport.device;
+    this.serialPortReader = null;
+    this.serialPortWriter = null;
     this.loader = loader;
     this.terminal = terminal;
     this.chip = loader.chip.CHIP_NAME;
