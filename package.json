@@ -64,7 +64,7 @@
 	},
 	"dependencies": {
 		"esptool-js": "^0.5.4",
-		"vite": "^6.2.3"
+		"vite": "^6.2.4"
 	},
 	"engines": {
 		"node": ">=20.19.0",
