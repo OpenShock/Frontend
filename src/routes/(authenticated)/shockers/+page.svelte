@@ -1,6 +1,6 @@
 <script lang="ts">
   import { shockerV2Api } from '$lib/api';
-  import type { Control, ControlType } from '$lib/api/internal/v2';
+  import { ControlType, type Control } from '$lib/api/internal/v2';
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import MapControlModule from '$lib/components/ControlModules/MapControlModule.svelte';
   import { ModuleType } from '$lib/components/ControlModules/ModuleType';
@@ -8,6 +8,7 @@
   import SimpleControlHeader from '$lib/components/ControlModules/SimpleControlHeader.svelte';
   import SimpleControlModule from '$lib/components/ControlModules/SimpleControlModule.svelte';
   import * as Popover from '$lib/components/ui/popover';
+  import { SignalR_Connection } from '$lib/signalr';
   import { OwnHubsStore } from '$lib/stores/HubsStore';
 
   import { Layers, Settings } from '@lucide/svelte';
@@ -20,10 +21,31 @@
   let vibrationIntensity = $state(25);
   let duration = $state(1);
 
+  function mapControlTypeToInt(controlType: ControlType): number {
+    switch (controlType) {
+      case ControlType.Stop:
+        return 0;
+      case ControlType.Shock:
+        return 1;
+      case ControlType.Vibrate:
+        return 2;
+      case ControlType.Sound:
+        return 3;
+      default:
+        return 0; // Invalid control type
+    }
+  }
+  
   function handleControlMessages(controls: Control[]) {
-    shockerV2Api.shockerSendControl({
-      shocks: controls,
-      customName: 'Custom name',
+    
+    const mappedControls = controls.map((control) => ({
+      ...control,
+      duration: control.duration * 1000,
+      type: mapControlTypeToInt(control.type)
+    }));
+
+    $SignalR_Connection?.send('ControlV2', mappedControls, null).catch((error) => {
+      console.error('Error sending control messages:', error);
     });
   }
   function handleSimpleControl(shockerId: string, controlType: ControlType) {
