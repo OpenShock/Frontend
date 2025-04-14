@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { ShockerResponse } from '$lib/api/internal/v1';
-  import { ControlType } from '$lib/api/internal/v2';
   import { Button } from '$lib/components/ui/button';
+  import { ControlType } from '$lib/signalr/models/ControlType';
 
   import { Volume2, Waves, Zap } from '@lucide/svelte';
 

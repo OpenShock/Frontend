@@ -1,23 +1,26 @@
 <script lang="ts">
   import type { ShockerResponse } from '$lib/api/internal/v1';
-  import { ControlType, type Control } from '$lib/api/internal/v2';
   import { Button } from '$lib/components/ui/button';
+  import { ControlDurationDefault, ControlIntensityDefault, ControlIntensityProps, ControlDurationProps } from '$lib/constants/ControlConstants';
+  import { SignalR_Connection } from '$lib/signalr';
+  import { ControlType } from '$lib/signalr/models/ControlType';
+  import { serializeControlMessages } from '$lib/signalr/serializers/Control';
   import CircleSlider from './Internal/CircleSlider.svelte';
 
   import { Volume2, Waves, Zap } from '@lucide/svelte';
 
   interface Props {
     shocker: ShockerResponse;
-    controlHandler: (controls: Control[]) => void;
   }
 
-  let { shocker, controlHandler }: Props = $props();
+  let { shocker }: Props = $props();
 
-  let intensity = $state(25);
-  let duration = $state(1);
+  let intensity = $state(ControlIntensityDefault);
+  let duration = $state(ControlDurationDefault);
 
   function ctrl(type: ControlType) {
-    controlHandler([{ id: shocker.id, type, intensity, duration }]);
+    if (!$SignalR_Connection) return;
+    serializeControlMessages($SignalR_Connection, [{ id: shocker.id, type, intensity, duration }]);
   }
 </script>
 
@@ -28,8 +31,8 @@
   <h2 class="text-lg font-bold">{shocker.name}</h2>
   <!-- Sliders -->
   <div class="flex items-center gap-2">
-    <CircleSlider name="Intensity" bind:value={intensity} min={0} max={100} step={1} />
-    <CircleSlider name="Duration" bind:value={duration} min={0.3} max={30} step={0.1} />
+    <CircleSlider name="Intensity" bind:value={intensity} {...ControlIntensityProps} />
+    <CircleSlider name="Duration" bind:value={duration} {...ControlDurationProps} />
   </div>
   <!-- Buttons -->
   <div class="flex w-full gap-2">

@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { shockerV2Api } from '$lib/api';
-  import { ControlType, type Control } from '$lib/api/internal/v2';
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import MapControlModule from '$lib/components/ControlModules/MapControlModule.svelte';
   import { ModuleType } from '$lib/components/ControlModules/ModuleType';
@@ -8,7 +6,10 @@
   import SimpleControlHeader from '$lib/components/ControlModules/SimpleControlHeader.svelte';
   import SimpleControlModule from '$lib/components/ControlModules/SimpleControlModule.svelte';
   import * as Popover from '$lib/components/ui/popover';
+  import { ControlDurationDefault, ControlIntensityDefault } from '$lib/constants/ControlConstants';
   import { SignalR_Connection } from '$lib/signalr';
+  import { ControlType } from '$lib/signalr/models/ControlType';
+  import { serializeControlMessages } from '$lib/signalr/serializers/Control';
   import { OwnHubsStore } from '$lib/stores/HubsStore';
 
   import { Layers, Settings } from '@lucide/svelte';
@@ -17,57 +18,33 @@
 
   let moduleType = $state<ModuleType>(ModuleType.ClassicControlModule);
 
-  let shockIntensity = $state(25);
-  let vibrationIntensity = $state(25);
-  let duration = $state(1);
-
-  function mapControlTypeToInt(controlType: ControlType): number {
-    switch (controlType) {
-      case ControlType.Stop:
-        return 0;
-      case ControlType.Shock:
-        return 1;
-      case ControlType.Vibrate:
-        return 2;
-      case ControlType.Sound:
-        return 3;
-      default:
-        return 0; // Invalid control type
-    }
-  }
+  let shockIntensity = $state(ControlIntensityDefault);
+  let vibrationIntensity = $state(ControlIntensityDefault);
+  let duration = $state(ControlDurationDefault);
   
-  function handleControlMessages(controls: Control[]) {
-    
-    const mappedControls = controls.map((control) => ({
-      ...control,
-      duration: control.duration * 1000,
-      type: mapControlTypeToInt(control.type)
-    }));
-
-    $SignalR_Connection?.send('ControlV2', mappedControls, null).catch((error) => {
-      console.error('Error sending control messages:', error);
-    });
-  }
   function handleSimpleControl(shockerId: string, controlType: ControlType) {
     let intensity: number;
     switch (controlType) {
-      case 'Stop':
+      case ControlType.Stop:
         intensity = 0;
         break;
-      case 'Shock':
+      case ControlType.Shock:
         intensity = shockIntensity;
         break;
-      case 'Vibrate':
+      case ControlType.Vibrate:
         intensity = vibrationIntensity;
         break;
-      case 'Sound':
+      case ControlType.Sound:
         intensity = 0;
         break;
       default:
         return;
     }
 
-    handleControlMessages([{ id: shockerId, type: controlType, intensity, duration }]);
+    if (!$SignalR_Connection) return;
+    serializeControlMessages($SignalR_Connection, [{ id: shockerId, type: controlType, intensity, duration }]).catch((error) => {
+      console.error('Error sending control messages:', error);
+    });
   }
 </script>
 
@@ -122,14 +99,14 @@
       <SimpleControlHeader bind:shockIntensity bind:vibrationIntensity bind:duration />
     {/if}
     {#if moduleType === ModuleType.MapControlModule}
-      <MapControlModule {shockers} controlHandler={handleControlMessages} />
+      <MapControlModule {shockers} />
     {:else}
       <div class="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {#each shockers ?? [] as shocker (shocker.id)}
           {#if moduleType === ModuleType.ClassicControlModule}
-            <ClassicControlModule {shocker} controlHandler={handleControlMessages} />
+            <ClassicControlModule {shocker} />
           {:else if moduleType === ModuleType.RichControlModule}
-            <RichControlModule {shocker} controlHandler={handleControlMessages} />
+            <RichControlModule {shocker} />
           {:else if moduleType === ModuleType.SimpleControlModule}
             <SimpleControlModule {shocker} controlHandler={handleSimpleControl} />
           {:else}
