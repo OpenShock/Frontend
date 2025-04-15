@@ -7,9 +7,6 @@
   import SimpleControlModule from '$lib/components/ControlModules/SimpleControlModule.svelte';
   import * as Popover from '$lib/components/ui/popover';
   import { ControlDurationDefault, ControlIntensityDefault } from '$lib/constants/ControlConstants';
-  import { SignalR_Connection } from '$lib/signalr';
-  import { ControlType } from '$lib/signalr/models/ControlType';
-  import { serializeControlMessages } from '$lib/signalr/serializers/Control';
   import { OwnHubsStore } from '$lib/stores/HubsStore';
 
   import { Layers, Settings } from '@lucide/svelte';
@@ -21,33 +18,6 @@
   let shockIntensity = $state(ControlIntensityDefault);
   let vibrationIntensity = $state(ControlIntensityDefault);
   let duration = $state(ControlDurationDefault);
-
-  function handleSimpleControl(shockerId: string, controlType: ControlType) {
-    let intensity: number;
-    switch (controlType) {
-      case ControlType.Stop:
-        intensity = 0;
-        break;
-      case ControlType.Shock:
-        intensity = shockIntensity;
-        break;
-      case ControlType.Vibrate:
-        intensity = vibrationIntensity;
-        break;
-      case ControlType.Sound:
-        intensity = 0;
-        break;
-      default:
-        return;
-    }
-
-    if (!$SignalR_Connection) return;
-    serializeControlMessages($SignalR_Connection, [
-      { id: shockerId, type: controlType, intensity, duration },
-    ]).catch((error) => {
-      console.error('Error sending control messages:', error);
-    });
-  }
 </script>
 
 <!-- Rounded bordered container -->
@@ -110,7 +80,7 @@
           {:else if moduleType === ModuleType.RichControlModule}
             <RichControlModule {shocker} />
           {:else if moduleType === ModuleType.SimpleControlModule}
-            <SimpleControlModule {shocker} controlHandler={handleSimpleControl} />
+            <SimpleControlModule {shocker} {shockIntensity} {vibrationIntensity} {duration} />
           {:else}
             <p>Unknown module type</p>
           {/if}
