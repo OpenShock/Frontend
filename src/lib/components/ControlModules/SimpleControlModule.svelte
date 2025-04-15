@@ -1,11 +1,10 @@
 <script lang="ts">
   import type { ShockerResponse } from '$lib/api/internal/v1';
-  import { Button } from '$lib/components/ui/button';
   import { SignalR_Connection } from '$lib/signalr';
   import { ControlType } from '$lib/signalr/models/ControlType';
   import { serializeControlMessages } from '$lib/signalr/serializers/Control';
 
-  import { Volume2, Waves, Zap } from '@lucide/svelte';
+  import ActionButton from './Internal/ActionButton.svelte';
 
   interface Props {
     shocker: ShockerResponse;
@@ -47,32 +46,8 @@
   <h2 class="w-full truncate px-4 text-center text-lg font-bold">{shocker.name}</h2>
   <!-- Buttons -->
   <div class="flex w-full gap-2">
-    <!-- Beep button -->
-    <Button
-      variant="secondary"
-      class="flex-1 cursor-pointer"
-      aria-label="Beep"
-      onclick={() => ctrl(ControlType.Sound)}
-    >
-      <Volume2 />
-    </Button>
-    <!-- Vibrate button -->
-    <Button
-      variant="secondary"
-      class="flex-1 cursor-pointer"
-      aria-label="Vibrate"
-      onclick={() => ctrl(ControlType.Vibrate)}
-    >
-      <Waves />
-    </Button>
-    <!-- Shock button -->
-    <Button
-      variant="secondary"
-      class="flex-1  cursor-pointer"
-      aria-label="Shock"
-      onclick={() => ctrl(ControlType.Shock)}
-    >
-      <Zap />
-    </Button>
+    <ActionButton {ctrl} type={ControlType.Sound} />
+    <ActionButton {ctrl} type={ControlType.Vibrate} />
+    <ActionButton {ctrl} type={ControlType.Shock} />
   </div>
 </div>
