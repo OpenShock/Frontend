@@ -9,7 +9,7 @@
   import { SignalR_Connection } from '$lib/signalr';
   import { ControlType } from '$lib/signalr/models/ControlType';
   import { serializeControlMessages } from '$lib/signalr/serializers/Control';
-  import ActionButton from './Internal/ActionButton.svelte';
+  import ActionButtons from './Internal/ActionButtons.svelte';
   import CircleSlider from './Internal/CircleSlider.svelte';
 
   interface Props {
@@ -38,9 +38,5 @@
     <CircleSlider name="Duration" bind:value={duration} {...ControlDurationProps} />
   </div>
   <!-- Buttons -->
-  <div class="flex w-full gap-2">
-    <ActionButton {ctrl} type={ControlType.Sound} />
-    <ActionButton {ctrl} type={ControlType.Vibrate} />
-    <ActionButton {ctrl} type={ControlType.Shock} />
-  </div>
+  <ActionButtons {ctrl} />
 </div>

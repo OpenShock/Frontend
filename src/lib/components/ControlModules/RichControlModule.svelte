@@ -11,7 +11,7 @@
   import { serializeControlMessages } from '$lib/signalr/serializers/Control';
 
   import { Signal, Timer } from '@lucide/svelte';
-  import ActionButton from './Internal/ActionButton.svelte';
+  import ActionButtons from './Internal/ActionButtons.svelte';
 
   interface Props {
     shocker: ShockerResponse;
@@ -43,9 +43,5 @@
     <p>{duration}s</p>
   </div>
   <!-- Buttons -->
-  <div class="flex w-full gap-2">
-    <ActionButton {ctrl} type={ControlType.Sound} />
-    <ActionButton {ctrl} type={ControlType.Vibrate} />
-    <ActionButton {ctrl} type={ControlType.Shock} />
-  </div>
+  <ActionButtons {ctrl} />
 </div>
