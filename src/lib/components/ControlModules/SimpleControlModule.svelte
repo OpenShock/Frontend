@@ -21,13 +21,13 @@
   class="border-surface-400-500-token flex flex-col items-center justify-center gap-2 overflow-hidden rounded-md border p-2"
 >
   <!-- Title -->
-  <h2 class="truncate text-lg font-bold">{shocker.name}</h2>
+  <h2 class="w-full truncate px-4 text-center text-lg font-bold">{shocker.name}</h2>
   <!-- Buttons -->
   <div class="flex w-full gap-2">
     <!-- Beep button -->
     <Button
       variant="secondary"
-      class="flex-1"
+      class="flex-1 cursor-pointer"
       aria-label="Beep"
       onclick={() => ctrl(ControlType.Sound)}
     >
@@ -36,7 +36,7 @@
     <!-- Vibrate button -->
     <Button
       variant="secondary"
-      class="flex-1"
+      class="flex-1 cursor-pointer"
       aria-label="Vibrate"
       onclick={() => ctrl(ControlType.Vibrate)}
     >
@@ -45,7 +45,7 @@
     <!-- Shock button -->
     <Button
       variant="secondary"
-      class="flex-1"
+      class="flex-1  cursor-pointer"
       aria-label="Shock"
       onclick={() => ctrl(ControlType.Shock)}
     >

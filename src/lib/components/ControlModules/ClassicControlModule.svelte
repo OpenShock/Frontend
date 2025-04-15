@@ -25,10 +25,10 @@
 </script>
 
 <div
-  class="border-surface-400-500-token flex flex-col items-center justify-center gap-2 rounded-md border p-2"
+  class="border-surface-400-500-token flex flex-col items-center justify-center gap-2 overflow-hidden rounded-md border p-2"
 >
   <!-- Title -->
-  <h2 class="text-lg font-bold">{shocker.name}</h2>
+  <h2 class="w-full truncate px-4 text-center text-lg font-bold">{shocker.name}</h2>
   <!-- Sliders -->
   <div class="flex items-center gap-2">
     <CircleSlider name="Intensity" bind:value={intensity} {...ControlIntensityProps} />
@@ -39,7 +39,7 @@
     <!-- Beep button -->
     <Button
       variant="secondary"
-      class="flex-1"
+      class="flex-1 cursor-pointer"
       aria-label="Beep"
       onclick={() => ctrl(ControlType.Sound)}
     >
@@ -48,7 +48,7 @@
     <!-- Vibrate button -->
     <Button
       variant="secondary"
-      class="flex-1"
+      class="flex-1 cursor-pointer"
       aria-label="Vibrate"
       onclick={() => ctrl(ControlType.Vibrate)}
     >
@@ -57,7 +57,7 @@
     <!-- Shock button -->
     <Button
       variant="secondary"
-      class="flex-1"
+      class="flex-1 cursor-pointer"
       aria-label="Shock"
       onclick={() => ctrl(ControlType.Shock)}
     >
