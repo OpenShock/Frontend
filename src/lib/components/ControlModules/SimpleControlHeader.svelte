@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { ControlIntensityProps, ControlDurationProps } from '$lib/constants/ControlConstants';
   import CircleSlider from './Internal/CircleSlider.svelte';
 
   import { Timer, Volume2, Zap } from '@lucide/svelte';
@@ -22,18 +23,18 @@
   <!-- Sliders -->
   <div class="grid flex-1 grid-cols-[24px_auto_40px] items-center gap-1 text-center">
     <Zap />
-    <input type="range" bind:value={shockIntensity} min="0" max="100" step="1" />
+    <input type="range" bind:value={shockIntensity} {...ControlIntensityProps} />
     <p>{shockIntensity}%</p>
     <Volume2 />
-    <input type="range" bind:value={vibrationIntensity} min="0" max="100" step="1" />
+    <input type="range" bind:value={vibrationIntensity} {...ControlIntensityProps} />
     <p>{vibrationIntensity}%</p>
     <Timer />
-    <input type="range" bind:value={duration} min="0.3" max="30" step="0.3" />
+    <input type="range" bind:value={duration} {...ControlDurationProps} />
     <p>{duration}s</p>
   </div>
   <div class="flex flex-1 flex-row justify-between">
-    <CircleSlider name="Shock" bind:value={shockIntensity} min={0} max={100} step={1} />
-    <CircleSlider name="Vibration" bind:value={vibrationIntensity} min={0} max={100} step={1} />
-    <CircleSlider name="Duration" bind:value={duration} min={0.3} max={30} step={0.3} />
+    <CircleSlider name="Shock" bind:value={shockIntensity} {...ControlIntensityProps} />
+    <CircleSlider name="Vibration" bind:value={vibrationIntensity} {...ControlIntensityProps} />
+    <CircleSlider name="Duration" bind:value={duration} {...ControlDurationProps} />
   </div>
 </div>

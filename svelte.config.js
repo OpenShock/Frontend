@@ -30,7 +30,7 @@ const config = {
   preprocess: [vitePreprocess()],
 
   vitePlugin: {
-    inspector: true,
+    inspector: process.env.NODE_ENV === 'development',
   },
   kit: {
     adapter: adapter({

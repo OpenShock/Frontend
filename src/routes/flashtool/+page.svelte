@@ -7,6 +7,7 @@
   import FlashManager from '$lib/EspTool/FlashManager';
   import SerialPortSelector from './SerialPortSelector.svelte';
   import { Button } from '$lib/components/ui/button';
+  import TextInput from '$lib/components/input/TextInput.svelte';
   import * as Card from '$lib/components/ui/card';
   import { Progress } from '$lib/components/ui/progress';
   import { FlashManagerStore } from '$lib/stores/FlashManagersStore';
@@ -30,6 +31,7 @@
 
   let terminalOpen = $state<boolean>(false);
   let terminalText = $state<string>('');
+  let terminalCommand = $state<string>('');
 
   const terminal = {
     clean: () => {
@@ -63,6 +65,43 @@
   let version = $state<string | null>(null);
   let board = $state<string | null>(null);
   let eraseBeforeFlash = $state<boolean>(false);
+
+  async function AppModeDevice() {
+    if (isFlashing) return;
+    try {
+      isFlashing = true;
+
+      if (!manager) {
+        terminal.writeLine(`Host-side error during reset: no device!`);
+        return;
+      }
+
+      await manager.ensureApplication(true);
+    } catch (e) {
+      terminal.writeLine(`Host-side error during reset: ${e}`);
+    } finally {
+      isFlashing = false;
+    }
+  }
+
+  async function RunCommand() {
+    if (isFlashing) return;
+    try {
+      isFlashing = true;
+
+      if (!manager) {
+        terminal.writeLine(`Couldn't send: no device!`);
+        return;
+      }
+
+      await manager.ensureApplication();
+      await manager.sendApplicationCommand(terminalCommand);
+    } catch (e) {
+      terminal.writeLine(`Couldn't send: ${e}`);
+    } finally {
+      isFlashing = false;
+    }
+  }
 </script>
 
 {#snippet mainContent()}
@@ -177,18 +216,27 @@
 </div>
 
 <Sheet bind:open={() => terminalOpen, (o) => (terminalOpen = o)}>
-  <SheetContent>
+  <SheetContent class="flex flex-col">
     <SheetHeader>
       <SheetTitle class="flex items-center">
         Console
         <div class="flex-1"></div>
         <Button class="m-2" onclick={() => (terminalText = '')}>Clear</Button>
+        <!-- Reset & start application -->
+        <Button onclick={AppModeDevice} disabled={!manager || isFlashing}>Reset</Button>
       </SheetTitle>
     </SheetHeader>
     <div
-      class="border-surface-500 flex h-max grow flex-col-reverse overflow-auto overflow-y-auto rounded-md border p-4"
+      class="border-surface-500 flex h-max shrink grow flex-col-reverse rounded-md border p-4"
+      style="overflow: scroll;"
     >
       <pre id="terminal" class="text-left text-xs">{terminalText}</pre>
     </div>
+    <TextInput
+      label="Command"
+      placeholder="Command"
+      button={{ text: 'Run', onClick: RunCommand }}
+      bind:value={terminalCommand}
+    />
   </SheetContent>
 </Sheet>
