@@ -223,13 +223,11 @@
         <div class="flex-1"></div>
         <Button class="m-2" onclick={() => (terminalText = '')}>Clear</Button>
         <!-- Reset & start application -->
-        <Button onclick={AppModeDevice} disabled={!manager || isFlashing}>
-          Reset
-        </Button>
+        <Button onclick={AppModeDevice} disabled={!manager || isFlashing}>Reset</Button>
       </SheetTitle>
     </SheetHeader>
     <div
-      class="border-surface-500 flex h-max grow shrink flex-col-reverse rounded-md border p-4"
+      class="border-surface-500 flex h-max shrink grow flex-col-reverse rounded-md border p-4"
       style="overflow: scroll;"
     >
       <pre id="terminal" class="text-left text-xs">{terminalText}</pre>

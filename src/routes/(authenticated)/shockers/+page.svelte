@@ -21,7 +21,7 @@
   let shockIntensity = $state(ControlIntensityDefault);
   let vibrationIntensity = $state(ControlIntensityDefault);
   let duration = $state(ControlDurationDefault);
-  
+
   function handleSimpleControl(shockerId: string, controlType: ControlType) {
     let intensity: number;
     switch (controlType) {
@@ -42,7 +42,9 @@
     }
 
     if (!$SignalR_Connection) return;
-    serializeControlMessages($SignalR_Connection, [{ id: shockerId, type: controlType, intensity, duration }]).catch((error) => {
+    serializeControlMessages($SignalR_Connection, [
+      { id: shockerId, type: controlType, intensity, duration },
+    ]).catch((error) => {
       console.error('Error sending control messages:', error);
     });
   }

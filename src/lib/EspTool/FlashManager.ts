@@ -11,7 +11,10 @@ import Latin1 from 'crypto-js/enc-latin1';
 /**
  * Reboots the chip in ESPLoader mode.
  */
-async function setupESPLoader(serialPort: SerialPort, terminal: IEspLoaderTerminal): Promise<ESPLoader | null> {
+async function setupESPLoader(
+  serialPort: SerialPort,
+  terminal: IEspLoaderTerminal
+): Promise<ESPLoader | null> {
   try {
     await serialPort.close(); // TODO: Find some way to detect if the port is already open
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -64,8 +67,8 @@ async function setupApplication(serialPort: SerialPort): Promise<SerialPort | nu
     await serialPort.open({
       baudRate: 115200,
       dataBits: 8,
-      parity: "none",
-      flowControl: "none"
+      parity: 'none',
+      flowControl: 'none',
     });
 
     // give it time
@@ -74,7 +77,7 @@ async function setupApplication(serialPort: SerialPort): Promise<SerialPort | nu
     // tell the chip to reset
     await serialPort.setSignals({
       dataTerminalReady: false,
-      requestToSend: true
+      requestToSend: true,
     });
 
     // give it more time
@@ -82,7 +85,7 @@ async function setupApplication(serialPort: SerialPort): Promise<SerialPort | nu
 
     await serialPort.setSignals({
       dataTerminalReady: false,
-      requestToSend: false
+      requestToSend: false,
     });
 
     // give it even more time to actually boot
@@ -125,10 +128,7 @@ export default class FlashManager {
    */
   private chip: string;
 
-  private constructor(
-    loader: ESPLoader,
-    terminal: IEspLoaderTerminal
-  ) {
+  private constructor(loader: ESPLoader, terminal: IEspLoaderTerminal) {
     this.serialPort = loader.transport.device;
     this.serialPortReader = null;
     this.serialPortWriter = null;
@@ -179,20 +179,20 @@ export default class FlashManager {
       try {
         await serialPortReader.cancel();
       } catch {
-          // try to shut everything off, silently fail
+        // try to shut everything off, silently fail
       }
     }
     if (serialPortWriter) {
       try {
         await serialPortWriter.close();
       } catch {
-          // try to shut everything off, silently fail
+        // try to shut everything off, silently fail
       }
     }
     try {
       await serialPort.close();
     } catch {
-        // try to shut everything off, silently fail
+      // try to shut everything off, silently fail
     }
     return serialPort;
   }
@@ -214,7 +214,7 @@ export default class FlashManager {
 
   async ensureApplication(forceReset?: boolean) {
     if (!this.serialPort) return false;
-    if ((!this.loader) && !forceReset) return true;
+    if (!this.loader && !forceReset) return true;
 
     let serialPort = await setupApplication(await this._cycleTransport());
     this.serialPort = serialPort;
@@ -231,8 +231,7 @@ export default class FlashManager {
           while (true) {
             // since we're using Transport APIs, and since they have no "no timeout" option, get as close as possible
             let b = await serialPortReader.read();
-            if (b.done)
-              break;
+            if (b.done) break;
             if (b.value) {
               for (let byte of b.value) {
                 // next byte
@@ -340,7 +339,7 @@ export default class FlashManager {
     if (!this.serialPortWriter) return false;
     if (this.loader) return false;
 
-    text += "\n";
+    text += '\n';
     let buffer = new TextEncoder().encode(text);
     try {
       await this.serialPortWriter.write(buffer);
