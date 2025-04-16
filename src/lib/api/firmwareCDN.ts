@@ -53,7 +53,7 @@ export async function FetchChannelVersion(channel: FirmwareChannel) {
   return (await DownloadText(`https://firmware.openshock.org/version-${channel}.txt`))?.trim();
 }
 
-export function FetchChannelBoards(version: string) {
+export function FetchVersionBoards(version: string) {
   return DownloadLines(`https://firmware.openshock.org/${version}/boards.txt`);
 }
 

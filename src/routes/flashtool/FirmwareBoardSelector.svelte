@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { FetchChannelBoards } from '$lib/api/firmwareCDN';
+  import { FetchVersionBoards } from '$lib/api/firmwareCDN';
   import { Popover, PopoverTrigger, PopoverContent } from '$lib/components/ui/popover';
   import { Button } from '$lib/components/ui/button';
   import {
@@ -27,7 +27,7 @@
   $effect(() => {
     if (version && !(version in boardsCache)) {
       let requestedVersion = version;
-      FetchChannelBoards(version).then((b) => {
+      FetchVersionBoards(version).then((b) => {
         boardsCache = { ...boardsCache, [requestedVersion]: b ?? [] };
       });
     }
