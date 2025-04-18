@@ -1,13 +1,12 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import { deviceApi, devicesOtaApi, devicesV1Api, devicesV2Api } from '$lib/api';
-  import type { OtaItem } from '$lib/api/internal/v1';
+  import { devicesOtaApi } from '$lib/api';
+  import type { OtaItem, OtaItemIReadOnlyCollectionBaseResponse } from '$lib/api/internal/v1';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { OnlineHubsStore } from '$lib/stores/HubsStore';
+  import { OnlineHubsStore, type HubOnlineState } from '$lib/stores/HubsStore';
   import { DownloadCloud, RotateCcw } from '@lucide/svelte';
-  import { onMount } from 'svelte';
   import {
     Table,
     TableHeader,
@@ -17,21 +16,25 @@
     TableCell,
   } from '$lib/components/ui/table';
   import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
+  import { SignalR_Connection } from '$lib/signalr';
+  import { Progress } from '$lib/components/ui/progress';
 
   let hubId = $derived(page.params.hubId);
+  let hub = $derived<HubOnlineState>($OnlineHubsStore.get(hubId) ?? { hubId, isOnline: false, firmwareVersion: null, otaInstall: null });
 
+  let isValidHubId = $state(false);
   let otaLogs = $state<OtaItem[]>([]);
-  let onlineInfo = $derived($OnlineHubsStore.get(hubId));
-  let isOnline = $derived(onlineInfo?.isOnline ?? false);
+  let version = $state<string | null>(null);
 
-  function fetchOtaLogs() {
-    devicesOtaApi
-      .devicesOtaGetOtaUpdateHistory(hubId)
-      .then((resp) => (otaLogs = resp.data ?? []))
-      .catch(handleApiError);
+  function handleGetOtaUpdateHistoryResponse(resp: OtaItemIReadOnlyCollectionBaseResponse){
+    otaLogs = resp.data ?? [];
+    isValidHubId = true;
   }
 
-  async function startUpdate() {}
+  function startUpdate() {
+    if (!isValidHubId || $SignalR_Connection === null || version === null) return;
+    $SignalR_Connection.invoke('OtaInstall', hubId, version);
+  }
 
   function decimalToHexString(number: number) {
     if (number < 0) {
@@ -41,9 +44,12 @@
     return number.toString(16).toUpperCase();
   }
 
-  let version = $state<string | null>(null);
-
-  onMount(fetchOtaLogs);
+  $effect(() => {
+    devicesOtaApi
+      .devicesOtaGetOtaUpdateHistory(hubId)
+      .then(handleGetOtaUpdateHistoryResponse)
+      .catch(handleApiError);
+  });
 </script>
 
 <div class="container my-8">
@@ -52,24 +58,34 @@
   </Card.Header>
   <Card.Content class="flex flex-col space-y-3">
     <div>
-      <p class={isOnline ? 'text-green-500' : 'text-red-500'}>
-        Status: {isOnline ? 'Online' : 'Offline'}
-      </p>
-      <p>Firmware Version: {onlineInfo?.firmwareVersion ?? 'Unavailable'}</p>
+      {#if hub.isOnline}
+        <p class="text-green-500">Status: Online</p>
+      {:else}
+        <p class="text-red-500">Status: Offline</p>
+      {/if}
+      <p>Firmware Version: {hub.firmwareVersion}</p>
     </div>
 
     <FirmwareChannelSelector bind:version />
 
-    {version}
-
-    <Button class="cursor-pointer text-xl" onclick={startUpdate}>
+    <Button class="cursor-pointer text-xl" onclick={startUpdate} disabled={!isValidHubId}>
       <DownloadCloud />
-      <span> Start Update </span>
+      <span> Update to {version} </span>
     </Button>
+
+    <h2 class="text-3xl font-semibold">Progress</h2>
+    <div class="grid grid-cols-[auto_1fr] grid-rows-2 gap-2 items-center">
+      Total
+      <Progress value={33} />
+      Task
+      <Progress value={(hub.otaInstall?.progress ?? 0) * 100} />
+    </div>
+    <p>{hub.otaInstall?.step}</p>
+    <p>Flashing...</p>
 
     <div class="flex w-full justify-between">
       <h2 class="text-3xl font-semibold">Logs</h2>
-      <Button class="cursor-pointer text-xl" onclick={fetchOtaLogs}>
+      <Button class="cursor-pointer text-xl" onclick={() => hubId = hubId}>
         <RotateCcw />
         <span> Refresh Logs </span>
       </Button>
