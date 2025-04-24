@@ -126,7 +126,7 @@
       <Dialog.Title>Generate a new API Token</Dialog.Title>
       <Dialog.Description>Example text</Dialog.Description>
     </Dialog.Header>
-    <form class="modal-form border-surface-500 rounded-container-token space-y-4 border p-4">
+    <form class="modal-form border-surface-500 rounded-container-token space-y-4">
       <TextInput
         label="Token Name"
         placeholder="Token name..."
@@ -154,23 +154,6 @@
 
         <div class="flex items-center gap-3">
           {#if expire === 'custom'}
-            <!--
-            <Calendar
-              type="single"
-              value={expireCustom as DateValue}
-              bind:placeholder
-              minValue={new CalendarDate(Date.now())}
-              maxValue={today(getLocalTimeZone())}
-              calendarLabel="Expiration Date"
-              onValueChange={(v) => {
-                if (v) {
-                  expireCustom = v.toDate(getLocalTimeZone());
-                } else {
-                  expireCustom = null;
-                }
-              }}
-            />
-            -->
             <input class="input w-1/2" type="datetime-local" bind:value={expireCustom} />
           {:else if expire !== 'never'}
             <p>Expire on {getExpireDate(expire, expireCustom)?.toLocaleString()}</p>
@@ -187,9 +170,9 @@
         {/if}
       </label>
 
-      <div>
+      <div class="mt-4">
         <h2>Permissions</h2>
-        <div class="border-surface-500 flex flex-col space-y-4 rounded-md border p-4">
+        <div class="border-surface-500 flex flex-col space-y-4 rounded-md border p-4 mt-3">
           {#each permissionCategories as permission}
             <span>{capitalizeFirstLetter(permission.name)}</span>
             {#each permission.perms as perm}
