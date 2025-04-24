@@ -1,8 +1,8 @@
 <script lang="ts">
   import * as Dialog from '$lib/components/ui/dialog';
-  import { toast } from 'svelte-sonner';
 
-  import { Copy, KeyRound } from '@lucide/svelte';
+  import { KeyRound } from '@lucide/svelte';
+  import { CopyInput } from '$lib/components/ui/copy-input';
 
   type Props = {
     open: boolean;
@@ -11,11 +11,7 @@
 
   let { open = $bindable(), token }: Props = $props();
 
-  function copyToken() {
-    if (token == null) return;
-    navigator.clipboard.writeText(token);
-    toast.success('Token copied to clipboard');
-  }
+
 </script>
 
 <Dialog.Root bind:open={() => open, (o) => (open = o)}>
@@ -27,17 +23,12 @@
       </Dialog.Description>
     </Dialog.Header>
     <div class="flex flex-col items-center space-y-4">
-      <div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
-        <KeyRound />
-        <input readonly type="text" value={token} />
-        <button
-          onclick={copyToken}
-          class="variant-filled-secondary"
-          style="outline-style: none;"
-          aria-label="Copy Token"
-        >
-          <Copy />
-        </button>
+      <div class="flex w-full items-center justify-between rounded-md  p-2">
+        <CopyInput value={token}>
+          {#snippet icon()}
+            <KeyRound size="20" />
+          {/snippet}
+        </CopyInput>
       </div>
     </div>
   </Dialog.Content>
