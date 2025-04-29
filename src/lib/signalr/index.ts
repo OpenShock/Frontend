@@ -6,6 +6,7 @@ import { get, writable, type Readable } from 'svelte/store';
 import { handleSignalrDeviceState } from './handlers/DeviceStatus';
 import { handleSignalrDeviceUpdate } from './handlers/DeviceUpdate';
 import { toast } from 'svelte-sonner';
+import { handleSignalrOtaInstallProgress, handleSignalrOtaInstallStarted, handleSignalrOtaInstallSucceeded } from './handlers/OtaInstall';
 
 const signalr_connection = writable<SR.HubConnection | null>(null);
 const signalr_state = writable<SR.HubConnectionState>(SR.HubConnectionState.Disconnected);
@@ -45,6 +46,9 @@ async function create_signalr_connection() {
 
   connection.on('DeviceStatus', handleSignalrDeviceState);
   connection.on('DeviceUpdate', handleSignalrDeviceUpdate);
+  connection.on('OtaInstallStarted', handleSignalrOtaInstallStarted);
+  connection.on('OtaInstallProgress', handleSignalrOtaInstallProgress);
+  connection.on('OtaInstallSucceeded', handleSignalrOtaInstallSucceeded);
 
   signalr_connection.set(connection);
 

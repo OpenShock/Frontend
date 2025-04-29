@@ -5,6 +5,7 @@ import {
   AuthenticatedAccountApi,
   Configuration as ConfigurationV1,
   DeviceApi,
+  DevicesOtaApi,
   DevicesApi as DevicesV1Api,
   PublicApi,
   SessionsApi,
@@ -67,6 +68,7 @@ export const adminApi = new AdminApi(DefaultApiV1Configuration);
 export const deviceApi = new DeviceApi(DefaultApiV1Configuration);
 export const devicesV1Api = new DevicesV1Api(DefaultApiV1Configuration);
 export const devicesV2Api = new DevicesV2Api(DefaultApiV2Configuration);
+export const devicesOtaApi = new DevicesOtaApi(DefaultApiV1Configuration);
 export const publicApi = new PublicApi(DefaultApiV1Configuration);
 export const sessionApi = new SessionsApi(DefaultApiV1Configuration);
 export const shareLinksApi = new ShareLinksApi(DefaultApiV1Configuration);

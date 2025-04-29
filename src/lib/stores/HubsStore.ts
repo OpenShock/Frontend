@@ -8,6 +8,12 @@ export type HubOnlineState = {
   hubId: string;
   isOnline: boolean;
   firmwareVersion: string | null;
+  otaInstall: {
+    id: number;
+    version: string;
+    step: number;
+    progress: number;
+  } | null;
 };
 
 export const OwnHubsStore = writable<Map<string, OwnHub>>(new Map());
