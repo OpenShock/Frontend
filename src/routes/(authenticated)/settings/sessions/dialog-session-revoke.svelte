@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { sessionApi } from '$lib/api';
+  import { sessionsApi } from '$lib/api';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
@@ -21,7 +21,7 @@
   }
 
   function revokeSession() {
-    sessionApi.sessionsDeleteSession(session.id).then(handleDeleted).catch(handleApiError);
+    sessionsApi.sessionsDeleteSession(session.id).then(handleDeleted).catch(handleApiError);
   }
 
   let readableUserAgent = $derived(

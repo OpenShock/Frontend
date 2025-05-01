@@ -2,25 +2,22 @@ import { PUBLIC_BACKEND_API_DOMAIN } from '$env/static/public';
 import {
   AccountApi as AccountV1Api,
   AdminApi,
-  AuthenticatedAccountApi,
+  APITokensApi,
   Configuration as ConfigurationV1,
-  DeviceApi,
-  DevicesApi as DevicesV1Api,
-  PublicApi,
+  HubManagementApi as HubManagementV1Api,
+  MetaApi,
   SessionsApi,
-  ShareLinksApi,
-  SharesApi as SharesV1Api,
-  ShockerApi as ShockerV1Api,
-  TokensApi,
+  ShockersApi as ShockersV1Api,
+  ShockerShareLinksApi,
+  ShockerSharesApi as ShockerSharesV1Api,
   UsersApi,
-  VersionApi,
 } from './internal/v1';
 import {
   AccountApi as AccountV2Api,
   Configuration as ConfigurationV2,
-  DevicesApi as DevicesV2Api,
-  SharesApi as SharesV2Api,
-  ShockerApi as ShockerV2Api,
+  HubManagementApi as HubManagementV2Api,
+  ShockersApi as ShockersV2Api,
+  ShockerSharesApi as ShockerSharesV2Api,
 } from './internal/v2';
 
 type Config = {
@@ -62,18 +59,15 @@ const DefaultApiV2Configuration = GetV2Config();
 
 export const accountV1Api = new AccountV1Api(DefaultApiV1Configuration);
 export const accountV2Api = new AccountV2Api(DefaultApiV2Configuration);
-export const authenticatedAccountApi = new AuthenticatedAccountApi(DefaultApiV1Configuration);
 export const adminApi = new AdminApi(DefaultApiV1Configuration);
-export const deviceApi = new DeviceApi(DefaultApiV1Configuration);
-export const devicesV1Api = new DevicesV1Api(DefaultApiV1Configuration);
-export const devicesV2Api = new DevicesV2Api(DefaultApiV2Configuration);
-export const publicApi = new PublicApi(DefaultApiV1Configuration);
-export const sessionApi = new SessionsApi(DefaultApiV1Configuration);
-export const shareLinksApi = new ShareLinksApi(DefaultApiV1Configuration);
-export const sharesV1Api = new SharesV1Api(DefaultApiV1Configuration);
-export const sharesV2Api = new SharesV2Api(DefaultApiV2Configuration);
-export const shockerV1Api = new ShockerV1Api(DefaultApiV1Configuration);
-export const shockerV2Api = new ShockerV2Api(DefaultApiV2Configuration);
-export const tokensApi = new TokensApi(DefaultApiV1Configuration);
+export const apiTokensApi = new APITokensApi(DefaultApiV1Configuration);
+export const hubManagementV1Api = new HubManagementV1Api(DefaultApiV1Configuration);
+export const hubManagementV2Api = new HubManagementV2Api(DefaultApiV2Configuration);
+export const metaApi = new MetaApi(DefaultApiV1Configuration);
+export const sessionsApi = new SessionsApi(DefaultApiV1Configuration);
+export const shockersV1Api = new ShockersV1Api(DefaultApiV1Configuration);
+export const shockersV2Api = new ShockersV2Api(DefaultApiV2Configuration);
+export const shockerShareLinksApi = new ShockerShareLinksApi(DefaultApiV1Configuration);
+export const shockerSharesV1Api = new ShockerSharesV1Api(DefaultApiV1Configuration);
+export const shockerSharesV2Api = new ShockerSharesV2Api(DefaultApiV2Configuration);
 export const usersApi = new UsersApi(DefaultApiV1Configuration);
-export const versionApi = new VersionApi(DefaultApiV1Configuration);

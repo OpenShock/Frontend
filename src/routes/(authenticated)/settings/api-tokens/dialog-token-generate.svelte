@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { tokensApi } from '$lib/api';
+  import { apiTokensApi } from '$lib/api';
   import { PermissionType } from '$lib/api/internal/v1';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
@@ -53,7 +53,7 @@
 
     const validUntil = expireDate == null ? undefined : expireDate;
 
-    tokensApi
+    apiTokensApi
       .tokensCreateToken({ name, validUntil, permissions })
       .then((res) => {
         if (!res.token) {

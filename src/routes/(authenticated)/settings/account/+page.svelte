@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { authenticatedAccountApi } from '$lib/api';
+  import { accountV1Api } from '$lib/api';
   import EmailInput from '$lib/components/input/EmailInput.svelte';
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
@@ -25,7 +25,7 @@
 
   async function submitUsername() {
     try {
-      await authenticatedAccountApi.authenticatedAccountChangeUsername({ username });
+      await accountV1Api.authenticatedAccountChangeUsername({ username });
 
       toast.success('Username changed successfully');
 

@@ -38,7 +38,7 @@ export interface CreateTokenRequest {
      * @type {Array<PermissionType>}
      * @memberof CreateTokenRequest
      */
-    permissions?: Array<PermissionType>;
+    permissions: Array<PermissionType>;
     /**
      * 
      * @type {Date}
@@ -52,6 +52,7 @@ export interface CreateTokenRequest {
  */
 export function instanceOfCreateTokenRequest(value: object): value is CreateTokenRequest {
     if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('permissions' in value) || value['permissions'] === undefined) return false;
     return true;
 }
 
@@ -66,7 +67,7 @@ export function CreateTokenRequestFromJSONTyped(json: any, ignoreDiscriminator: 
     return {
         
         'name': json['name'],
-        'permissions': json['permissions'] == null ? undefined : ((json['permissions'] as Array<any>).map(PermissionTypeFromJSON)),
+        'permissions': ((json['permissions'] as Array<any>).map(PermissionTypeFromJSON)),
         'validUntil': json['validUntil'] == null ? undefined : (new Date(json['validUntil'])),
     };
 }
@@ -83,7 +84,7 @@ export function CreateTokenRequestToJSONTyped(value?: CreateTokenRequest | null,
     return {
         
         'name': value['name'],
-        'permissions': value['permissions'] == null ? undefined : ((value['permissions'] as Array<any>).map(PermissionTypeToJSON)),
+        'permissions': ((value['permissions'] as Array<any>).map(PermissionTypeToJSON)),
         'validUntil': value['validUntil'] == null ? undefined : ((value['validUntil'] as any).toISOString()),
     };
 }
