@@ -118,7 +118,7 @@
   let createdDialog = $state(false);
 </script>
 
-<TokenCreatedDialog bind:open={createdDialog} {token} />
+<TokenCreatedDialog bind:token />
 
 <Dialog.Root bind:open={() => open, (o) => (open = o)}>
   <Dialog.Content>

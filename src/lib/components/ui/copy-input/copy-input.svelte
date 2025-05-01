@@ -7,7 +7,7 @@
 
 	type Props = {
 		value: string,
-		class: string,
+		class?: string,
 		icon?: Snippet
 	};
 

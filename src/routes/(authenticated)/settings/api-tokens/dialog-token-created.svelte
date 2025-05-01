@@ -5,16 +5,19 @@
   import { CopyInput } from '$lib/components/ui/copy-input';
 
   type Props = {
-    open: boolean;
     token: string | null;
   };
 
-  let { open = $bindable(), token }: Props = $props();
+  let { token = $bindable() }: Props = $props();
 
-
+  function onOpenChanged(open: boolean) {
+    if (!open) {
+      token = null;
+    }
+  }
 </script>
 
-<Dialog.Root bind:open={() => open, (o) => (open = o)}>
+<Dialog.Root bind:open={() => token != null, onOpenChanged}>
   <Dialog.Content>
     <Dialog.Header>
       <Dialog.Title>API Token Generated</Dialog.Title>
@@ -24,7 +27,7 @@
     </Dialog.Header>
     <div class="flex flex-col items-center space-y-4">
       <div class="flex w-full items-center justify-between rounded-md  p-2">
-        <CopyInput value={token}>
+        <CopyInput value={token ?? ''}>
           {#snippet icon()}
             <KeyRound size="20" />
           {/snippet}
