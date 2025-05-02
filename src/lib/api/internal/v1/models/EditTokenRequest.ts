@@ -38,7 +38,7 @@ export interface EditTokenRequest {
      * @type {Array<PermissionType>}
      * @memberof EditTokenRequest
      */
-    permissions: Array<PermissionType>;
+    permissions?: Array<PermissionType>;
 }
 
 /**
@@ -46,7 +46,6 @@ export interface EditTokenRequest {
  */
 export function instanceOfEditTokenRequest(value: object): value is EditTokenRequest {
     if (!('name' in value) || value['name'] === undefined) return false;
-    if (!('permissions' in value) || value['permissions'] === undefined) return false;
     return true;
 }
 
@@ -61,7 +60,7 @@ export function EditTokenRequestFromJSONTyped(json: any, ignoreDiscriminator: bo
     return {
         
         'name': json['name'],
-        'permissions': ((json['permissions'] as Array<any>).map(PermissionTypeFromJSON)),
+        'permissions': json['permissions'] == null ? undefined : ((json['permissions'] as Array<any>).map(PermissionTypeFromJSON)),
     };
 }
 
@@ -77,7 +76,7 @@ export function EditTokenRequestToJSONTyped(value?: EditTokenRequest | null, ign
     return {
         
         'name': value['name'],
-        'permissions': ((value['permissions'] as Array<any>).map(PermissionTypeToJSON)),
+        'permissions': value['permissions'] == null ? undefined : ((value['permissions'] as Array<any>).map(PermissionTypeToJSON)),
     };
 }
 
