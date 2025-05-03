@@ -13,7 +13,7 @@
   import type { Snippet } from 'svelte';
   import { browser } from '$app/environment';
   import '../app.css';
-  import { PUBLIC_DEVELOPMENT_BANNER, PUBLIC_TURNSTILE_SITE_KEY, PUBLIC_BACKEND_API_DOMAIN } from '$env/static/public';
+  import { PUBLIC_DEVELOPMENT_BANNER } from '$env/static/public';
 
   type Props = {
     children?: Snippet;
@@ -43,8 +43,11 @@
   <AppSidebar {currentUserRoles} />
   <div class="flex h-screen w-screen flex-1 flex-col overflow-hidden">
     {#if PUBLIC_DEVELOPMENT_BANNER === 'true'}
-      <div class="top-0 left-0 z-999 bg-[orangered] text-white text-center">
-        <p>This is the OpenShock <b>DEVELOPMENT</b> environment. <u>No data is saved</u>, and regularly overwritten by production data</p>
+      <div class="top-0 left-0 z-999 bg-[orangered] text-center text-white">
+        <p>
+          This is the OpenShock <b>DEVELOPMENT</b> environment. <u>No data is saved</u>, and
+          regularly overwritten by production data
+        </p>
       </div>
     {/if}
     <Header />

@@ -172,7 +172,7 @@
 
       <div class="mt-4">
         <h2>Permissions</h2>
-        <div class="border-surface-500 flex flex-col space-y-4 rounded-md border p-4 mt-3">
+        <div class="border-surface-500 mt-3 flex flex-col space-y-4 rounded-md border p-4">
           {#each permissionCategories as permission}
             <span>{capitalizeFirstLetter(permission.name)}</span>
             {#each permission.perms as perm}

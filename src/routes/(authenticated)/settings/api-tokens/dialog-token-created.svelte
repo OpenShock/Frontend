@@ -26,7 +26,7 @@
       </Dialog.Description>
     </Dialog.Header>
     <div class="flex flex-col items-center space-y-4">
-      <div class="flex w-full items-center justify-between rounded-md  p-2">
+      <div class="flex w-full items-center justify-between rounded-md p-2">
         <CopyInput value={token ?? ''}>
           {#snippet icon()}
             <KeyRound size="20" />
