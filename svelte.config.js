@@ -12,14 +12,13 @@ const isCloudflare = process.env.CF_PAGES === '1';
 const adapter = isCloudflare ? adapterCloudflare : adapterNode;
 
 function readEnv(path) {
-  return dotenv.config({ path, override: true })?.parsed ?? {};
+  return dotenv.config({ path })?.parsed ?? {};
 }
 
 // Read environment variables from .env files
-readEnv('.env');
-readEnv(`.env.${process.env.NODE_ENV}`);
 readEnv('.env.local');
-
+readEnv(`.env.${process.env.NODE_ENV}`);
+readEnv('.env');
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
