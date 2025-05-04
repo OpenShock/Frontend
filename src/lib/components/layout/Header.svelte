@@ -6,7 +6,7 @@
   import { useSidebar } from '$lib/components/ui/sidebar';
   import { UserStore } from '$lib/stores/UserStore';
 
-  import Menu from '@lucide/svelte/icons/menu';
+  import PanelLeft from '@lucide/svelte/icons/panel-left';
 
   let sidebar = useSidebar();
 </script>
@@ -24,27 +24,12 @@
         sidebar.toggle();
       }}
     >
-      <Menu size={32} class="mr-2 p-0 text-gray-500 sm:m-3" />
+      <PanelLeft size={24} class="mr-2 p-0 text-gray-400 sm:m-3" />
     </button>
   {/if}
   <div
     class={`flex flex-1 flex-row items-center justify-between space-x-2 py-2 ${$UserStore.self ? 'pr-2' : 'px-2'}`}
   >
-    <div class="flex items-center space-x-4">
-      <a
-        href={$UserStore.self ? '/home' : '/'}
-        class="overflow-hidden select-none lg:ml-0! lg:w-auto"
-        data-sveltekit-preload-data="hover"
-        aria-label="OpenShock"
-      >
-        <img
-          class="pointer-events-none inline-block h-6 sm:h-10"
-          src="/logo.svg"
-          alt="OpenShock Logo"
-        />
-      </a>
-    </div>
-
     <div class="flex-1"></div>
 
     <LightSwitch />
