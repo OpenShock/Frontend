@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { shareLinksApi } from '$lib/api';
+  import { shockerShareLinksApi } from '$lib/api';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
   import { removeShareLink } from '$lib/stores/ShareLinkStore';
@@ -13,7 +13,7 @@
   let { open = $bindable<boolean>(), sharelink }: Props = $props();
 
   function deleteShareLink() {
-    shareLinksApi
+    shockerShareLinksApi
       .shareLinksDeleteShareLink(sharelink.id)
       .then(() => {
         removeShareLink(sharelink.id);

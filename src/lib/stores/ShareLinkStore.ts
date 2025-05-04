@@ -1,4 +1,4 @@
-import { shareLinksApi } from '$lib/api';
+import { shockerShareLinksApi } from '$lib/api';
 import type { ShareLinkResponse } from '$lib/api/internal/v1';
 import { writable } from 'svelte/store';
 
@@ -7,7 +7,7 @@ export type ShareLink = ShareLinkResponse;
 export const ShareLinksStore = writable<Map<string, ShareLink>>(new Map());
 
 export function refreshShareLinks() {
-  shareLinksApi
+  shockerShareLinksApi
     .shareLinksList()
     .then((shareLinks) => {
       if (shareLinks.data === null || shareLinks.data === undefined) {

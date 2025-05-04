@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { publicApi } from '$lib/api';
+  import { shockerShareLinksApi } from '$lib/api';
   import type { PublicShareLinkResponse } from '$lib/api/internal/v1';
   import { Button } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
@@ -17,7 +17,7 @@
   let details = $state<PublicShareLinkResponse>();
 
   onMount(() => {
-    publicApi.publicGetShareLink(sharelink.id).then((response) => {
+    shockerShareLinksApi.publicGetShareLink(sharelink.id).then((response) => {
       details = response.data;
       console.log(response);
     });
