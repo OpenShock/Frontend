@@ -21,6 +21,11 @@
     navigator.clipboard.writeText(token.id);
     toast.success('ID copied to clipboard');
   }
+
+  function openDeleteDialog() {
+    deleteDialogOpen = true;
+    console.log('Delete dialog opened for token:', token);
+  }
 </script>
 
 <TokenEditDialog open={editDialogOpen} {token} />
@@ -38,6 +43,6 @@
   <DropdownMenu.Content>
     <DropdownMenu.Item onclick={copyId}>Copy ID</DropdownMenu.Item>
     <DropdownMenu.Item onclick={() => (editDialogOpen = true)}>Edit</DropdownMenu.Item>
-    <DropdownMenu.Item onclick={() => (deleteDialogOpen = true)}>Delete</DropdownMenu.Item>
+    <DropdownMenu.Item onclick={openDeleteDialog}>Delete</DropdownMenu.Item>
   </DropdownMenu.Content>
 </DropdownMenu.Root>

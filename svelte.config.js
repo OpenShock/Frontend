@@ -15,12 +15,10 @@ function readEnv(path) {
   return dotenv.config({ path })?.parsed ?? {};
 }
 
-const env = {
-  ...readEnv('.env'),
-  ...readEnv(`.env.${process.env.NODE_ENV}`),
-  ...readEnv('.env.local'),
-  ...process.env,
-};
+// Read environment variables from .env files
+readEnv('.env.local');
+readEnv(`.env.${process.env.NODE_ENV}`);
+readEnv('.env');
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -55,9 +53,9 @@ const config = {
         ],
         'connect-src': [
           'self',
-          'https://' + env.PUBLIC_BACKEND_API_DOMAIN,
-          'wss://' + env.PUBLIC_BACKEND_API_DOMAIN,
-          'wss://' + env.PUBLIC_GATEWAY_CSP_WILDCARD,
+          'https://' + process.env.PUBLIC_BACKEND_API_DOMAIN,
+          'wss://' + process.env.PUBLIC_BACKEND_API_DOMAIN,
+          'wss://' + process.env.PUBLIC_GATEWAY_CSP_WILDCARD,
           'https://firmware.openshock.org',
           'https://api.pwnedpasswords.com/range/',
           'https://cloudflareinsights.com',

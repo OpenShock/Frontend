@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { tokensApi } from '$lib/api';
+  import { apiTokensApi } from '$lib/api';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
@@ -21,7 +21,7 @@
   }
 
   function deleteToken() {
-    tokensApi.tokensDeleteToken(token.id).then(handleDeleted).catch(handleApiError);
+    apiTokensApi.tokenDeleteDeleteToken(token.id).then(handleDeleted).catch(handleApiError);
   }
 </script>
 

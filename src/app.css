@@ -116,3 +116,18 @@
     margin: 0;
   }
 }
+
+@layer base {
+  button:not([disabled]),
+  [role='button']:not([disabled]) {
+    cursor: pointer;
+  }
+}
+
+.transition-in-place {
+  display: grid;
+}
+
+.transition-in-place > * {
+  grid-area: 1/1/2/2;
+}
