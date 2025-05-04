@@ -39,7 +39,7 @@
 
 <Toaster />
 
-<SidebarProvider bind:open={() => isOpen && isLoggedIn, (o) => (isOpen = o)}>
+<SidebarProvider bind:open={isOpen}>
   <AppSidebar {currentUserRoles} />
   <div class="flex h-screen w-screen flex-1 flex-col overflow-hidden">
     {#if PUBLIC_DEVELOPMENT_BANNER === 'true'}

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { PUBLIC_DISCORD_INVITE_URL, PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
   import LightSwitch from '$lib/components/LightSwitch.svelte';
-  import { Button } from "$lib/components/ui/button/index.js";
+  import { Button } from '$lib/components/ui/button/index.js';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { useSidebar } from '$lib/components/ui/sidebar';
   import { UserStore } from '$lib/stores/UserStore';
@@ -16,15 +16,17 @@
 {/snippet}
 
 <header
-  class="border-border/40 bg-background/95 supports-backdrop-filter:bg-background/60 sticky top-0 z-50 flex w-full flex-row border-b backdrop-blur-sm items-center px-2 h-12"
+  class="border-border/40 bg-background/95 supports-backdrop-filter:bg-background/60 sticky top-0 z-50 flex h-12 w-full flex-row items-center border-b px-2 backdrop-blur-sm"
 >
-    <Button variant="ghost" class="h-8 w-8"
-      onclick={() => {
-        sidebar.toggle();
-      }}
-    >
-      <PanelLeft size={24} class="m-0 text-gray-600 dark:text-gray-300" />
-    </Button>
+  <Button
+    variant="ghost"
+    class="h-8 w-8"
+    onclick={() => {
+      sidebar.toggle();
+    }}
+  >
+    <PanelLeft size={24} class="m-0 text-gray-600 dark:text-gray-300" />
+  </Button>
   <div
     class={`flex flex-1 flex-row items-center justify-between space-x-2 py-2 ${$UserStore.self ? 'pr-2' : 'px-2'}`}
   >

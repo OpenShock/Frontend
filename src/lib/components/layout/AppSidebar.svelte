@@ -5,7 +5,6 @@
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import { Collapsible } from 'bits-ui';
   import { UserStore } from '$lib/stores/UserStore';
-  import * as Tooltip from '$lib/components/ui/tooltip';
 
   import {
     ChevronDown,
