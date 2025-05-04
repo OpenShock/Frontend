@@ -15,7 +15,7 @@
       buttonText = text;
       return;
     }
-    const timeLeft = 5 - (Date.now() - clickedAt) / 1000;
+    const timeLeft = 3 - (Date.now() - clickedAt) / 1000;
     if (timeLeft <= 0) {
       buttonText = text;
       return;
@@ -40,7 +40,7 @@
   function startConfirm() {
     stopTimers();
     clickedAt = Date.now();
-    timer = setTimeout(onconfirm, 5000);
+    timer = setTimeout(onconfirm, 3000);
     interval = setInterval(updateText, 100);
   }
 
@@ -63,7 +63,7 @@
     /* Start the shake animation and make the animation last for 0.5 seconds */
     animation:
       shake 0.5s,
-      glow 5s;
+      glow 3s;
 
     /* When the animation is finished, start again */
     animation-iteration-count: infinite;

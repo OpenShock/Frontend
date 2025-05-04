@@ -1,7 +1,7 @@
 <script lang="ts">
   import { PUBLIC_DISCORD_INVITE_URL, PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
   import LightSwitch from '$lib/components/LightSwitch.svelte';
-  import { Button } from '$lib/components/ui/button';
+  import { Button } from "$lib/components/ui/button/index.js";
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { useSidebar } from '$lib/components/ui/sidebar';
   import { UserStore } from '$lib/stores/UserStore';
@@ -16,17 +16,15 @@
 {/snippet}
 
 <header
-  class="border-border/40 bg-background/95 supports-backdrop-filter:bg-background/60 sticky top-0 z-50 flex w-full flex-row border-b backdrop-blur-sm"
+  class="border-border/40 bg-background/95 supports-backdrop-filter:bg-background/60 sticky top-0 z-50 flex w-full flex-row border-b backdrop-blur-sm items-center px-2 h-12"
 >
-  {#if $UserStore.self}
-    <button
+    <Button variant="ghost" class="h-8 w-8"
       onclick={() => {
         sidebar.toggle();
       }}
     >
-      <PanelLeft size={24} class="mr-2 p-0 text-gray-400 sm:m-3" />
-    </button>
-  {/if}
+      <PanelLeft size={24} class="m-0 text-gray-600 dark:text-gray-300" />
+    </Button>
   <div
     class={`flex flex-1 flex-row items-center justify-between space-x-2 py-2 ${$UserStore.self ? 'pr-2' : 'px-2'}`}
   >
@@ -37,7 +35,7 @@
     {#if $UserStore.self}
       <DropdownMenu.Root>
         <DropdownMenu.Trigger
-          class="cursor-pointer text-gray-600 select-none hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
+          class="cursor-pointer text-gray-600 select-none hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-200"
         >
           <img
             class="inline-block h-8 rounded-full"
