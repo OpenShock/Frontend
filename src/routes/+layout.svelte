@@ -29,8 +29,6 @@
   let meta = $derived(buildMetaData(page.url));
 
   let isOpen = $state(false);
-  let isLoggedIn = $derived($UserStore?.self !== null);
-  let currentUserRoles = $derived($UserStore?.self?.roles ?? []);
 </script>
 
 <BasicTags {...meta} />
@@ -40,7 +38,7 @@
 <Toaster />
 
 <SidebarProvider bind:open={isOpen}>
-  <AppSidebar {currentUserRoles} />
+  <AppSidebar />
   <div class="flex h-screen w-screen flex-1 flex-col overflow-hidden">
     {#if PUBLIC_DEVELOPMENT_BANNER === 'true'}
       <div class="top-0 left-0 z-999 bg-[orangered] text-center text-white">

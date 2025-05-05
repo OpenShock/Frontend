@@ -19,64 +19,69 @@
     UserPen,
     Wrench,
     Zap,
+    Cpu,
   } from '@lucide/svelte';
+  import type { ApiUserSelf } from '$lib/types/ApiUser';
 
-  interface Props {
-    currentUserRoles: RoleType[];
-  }
-
-  let { currentUserRoles }: Props = $props();
+  let currentUser = $derived($UserStore.self);
 
   let sidebarContext = Sidebar.useSidebar();
   let path = $derived(page.url.pathname);
 
-  type subItem = {
-    name: string;
-    class?: string;
-    href?: string;
-    target?: string;
-  };
-
-  type Menu = {
-    name: string;
-    Icon: AnyComponent;
-    class?: string;
-    href?: string;
-    target?: string;
-    collapsible?: { open: boolean };
-    subItems?: subItem[];
-  };
-
-  type Group = {
+  interface Entry {
     title: string;
-    roles?: RoleType[];
+    auth?: true | RoleType[];
+  }
+
+  interface Item extends Entry {
+    class?: string;
+    href?: string;
+    target?: string;
+  }
+
+  interface Menu extends Item {
+    Icon: AnyComponent;
+    collapsible?: { open: boolean };
+    subItems?: Item[];
+  }
+
+  interface Group extends Entry {
     collapsible?: { open: boolean };
     menus: Menu[];
-  };
+  }
 
   const groups: Group[] = [
     {
       title: 'General',
       menus: [
         {
-          name: 'Home',
+          title: 'Home',
+          auth: true,
           Icon: House,
           href: '/home',
         },
         {
-          name: 'Shockers',
+          title: 'Shockers',
+          auth: true,
           Icon: Zap,
           href: '/shockers',
         },
         {
-          name: 'Hubs',
+          title: 'Hubs',
+          auth: true,
           Icon: Router,
           href: '/hubs',
         },
         {
-          name: 'Shares',
+          title: 'Shares',
+          auth: true,
           Icon: Link,
           href: '/shares',
+        },
+        {
+          title: 'Flashtool',
+          Icon: Cpu,
+          href: '/flashtool',
         },
       ],
     },
@@ -85,31 +90,31 @@
   const footerGroups: Group[] = [
     {
       title: 'Admin',
-      roles: [RoleType.Admin, RoleType.System],
+      auth: [RoleType.Admin, RoleType.System],
       collapsible: { open: false },
       menus: [
         {
-          name: 'Monitoring',
+          title: 'Monitoring',
           Icon: SquareActivity,
           subItems: [
             {
-              name: 'Online Hubs',
+              title: 'Online Hubs',
               href: '/admin/online-hubs',
             },
           ],
         },
         {
-          name: 'Management',
+          title: 'Management',
           Icon: Wrench,
           subItems: [
             {
-              name: 'Users',
+              title: 'Users',
               href: '/admin/users',
             },
           ],
         },
         {
-          name: 'Hangfire',
+          title: 'Hangfire',
           Icon: Timer,
           href: '/hangfire',
           target: '_blank',
@@ -118,46 +123,49 @@
     },
     {
       title: 'Settings',
-      collapsible: { open: false },
+      auth: true,
       menus: [
         {
-          name: 'Account',
+          title: 'Account',
           Icon: UserPen,
           href: '/settings/account',
         },
         {
-          name: 'Sessions',
+          title: 'Sessions',
           Icon: MonitorSmartphone,
           href: '/settings/sessions',
         },
         {
-          name: 'API Tokens',
+          title: 'API Tokens',
           Icon: KeyRound,
           href: '/settings/api-tokens',
         },
         {
-          name: 'Danger Zone',
+          title: 'Danger Zone',
           Icon: TriangleAlert,
           class: 'text-red-500!',
-          collapsible: { open: false },
           href: '/settings/danger-zone',
         },
       ],
     },
   ];
 
-  function meetsReq(roles: RoleType[], group: Group) {
-    return group.roles?.some((role) => roles.includes(role)) ?? true;
+  function meetsReq(currentUser: ApiUserSelf | null, entry: Entry) {
+    if (!entry.auth) return true;
+    if (currentUser === null) return false;
+    if (entry.auth === true) return true;
+
+    return entry.auth.some((role) => currentUser.roles.includes(role));
   }
   function isPathMatch(path: string, href?: string) {
     return path === href || path.startsWith(href + '/');
   }
 </script>
 
-{#snippet menuSubItemSection(subItem: subItem)}
+{#snippet menuSubItemSection(subItem: Item)}
   <Sidebar.MenuSubButton class={subItem.class}>
     <a href={subItem.href}>
-      <span> {subItem.name}</span>
+      <span> {subItem.title}</span>
     </a>
   </Sidebar.MenuSubButton>
 {/snippet}
@@ -168,11 +176,11 @@
       {#snippet child({ props })}
         <a href={menu.href} {...props}>
           <menu.Icon />
-          <span>{menu.name}</span>
+          <span>{menu.title}</span>
         </a>
       {/snippet}
       {#snippet tooltipContent()}
-        {menu.name}
+        {menu.title}
       {/snippet}
     </Sidebar.MenuButton>
     <!--
@@ -182,30 +190,34 @@
   </Sidebar.MenuItem>
   {#if menu.subItems}
     <Sidebar.MenuSub>
-      {#each menu.subItems as subItem (subItem.name)}
-        {@render menuSubItemSection(subItem)}
+      {#each menu.subItems as subItem (subItem.title)}
+        {#if meetsReq(currentUser, subItem)}
+          {@render menuSubItemSection(subItem)}
+        {/if}
       {/each}
     </Sidebar.MenuSub>
   {/if}
 {/snippet}
 
-{#snippet groupContentSection(group: Group)}
+{#snippet groupContentSection(currentUser: ApiUserSelf | null, group: Group)}
   <Sidebar.GroupContent>
     <Sidebar.Menu>
-      {#each group.menus as menu (menu.name)}
-        {@render menuSection(menu)}
+      {#each group.menus as menu (menu.title)}
+        {#if meetsReq(currentUser, menu)}
+          {@render menuSection(menu)}
+        {/if}
       {/each}
     </Sidebar.Menu>
   </Sidebar.GroupContent>
 {/snippet}
 
-{#snippet groupsSection(userRoles: RoleType[], groups: Group[])}
+{#snippet groupsSection(currentUser: ApiUserSelf | null, groups: Group[])}
   {#each groups as group (group.title)}
-    {#if meetsReq(userRoles, group)}
+    {#if meetsReq(currentUser, group)}
       {#if group.collapsible === undefined}
         <Sidebar.Group>
           <Sidebar.GroupLabel>{group.title}</Sidebar.GroupLabel>
-          {@render groupContentSection(group)}
+          {@render groupContentSection(currentUser, group)}
         </Sidebar.Group>
       {:else}
         <Collapsible.Root
@@ -225,7 +237,7 @@
               {/snippet}
             </Sidebar.GroupLabel>
             <Collapsible.Content>
-              {@render groupContentSection(group)}
+              {@render groupContentSection(currentUser, group)}
             </Collapsible.Content>
           </Sidebar.Group>
         </Collapsible.Root>
@@ -250,9 +262,9 @@
     </a>
   </Sidebar.Header>
   <Sidebar.Content>
-    {@render groupsSection(currentUserRoles, groups)}
+    {@render groupsSection(currentUser, groups)}
     <div class="grow-1"></div>
-    {@render groupsSection(currentUserRoles, footerGroups)}
+    {@render groupsSection(currentUser, footerGroups)}
   </Sidebar.Content>
   <Sidebar.Footer></Sidebar.Footer>
 </Sidebar.Root>
