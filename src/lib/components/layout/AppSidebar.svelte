@@ -21,7 +21,6 @@
     Zap,
     Cpu,
   } from '@lucide/svelte';
-  import type { ApiUserSelf } from '$lib/types/ApiUser';
 
   let currentUser = $derived($UserStore.self);
 
@@ -30,7 +29,6 @@
 
   interface Entry {
     title: string;
-    auth?: true | RoleType[];
   }
 
   interface Item extends Entry {
@@ -50,113 +48,124 @@
     menus: Menu[];
   }
 
-  const groups: Group[] = [
-    {
-      title: 'General',
-      menus: [
-        {
-          title: 'Home',
-          auth: true,
-          Icon: House,
-          href: '/home',
-        },
+  let generalGroup = $derived.by<Group>(() => {
+    const isAuthenticated = !!currentUser;
+
+    let menus: Menu[] = [
+      {
+        title: 'Home',
+        Icon: House,
+        href: isAuthenticated ? '/home' : '/',
+      },
+    ];
+
+    if (isAuthenticated) {
+      menus = menus.concat([
         {
           title: 'Shockers',
-          auth: true,
           Icon: Zap,
           href: '/shockers',
         },
         {
           title: 'Hubs',
-          auth: true,
           Icon: Router,
           href: '/hubs',
         },
         {
           title: 'Shares',
-          auth: true,
           Icon: Link,
           href: '/shares',
         },
-        {
-          title: 'Flashtool',
-          Icon: Cpu,
-          href: '/flashtool',
-        },
-      ],
-    },
-  ];
+      ]);
+    }
 
-  const footerGroups: Group[] = [
-    {
-      title: 'Admin',
-      auth: [RoleType.Admin, RoleType.System],
-      collapsible: { open: false },
-      menus: [
-        {
-          title: 'Monitoring',
-          Icon: SquareActivity,
-          subItems: [
-            {
-              title: 'Online Hubs',
-              href: '/admin/online-hubs',
-            },
-          ],
-        },
-        {
-          title: 'Management',
-          Icon: Wrench,
-          subItems: [
-            {
-              title: 'Users',
-              href: '/admin/users',
-            },
-          ],
-        },
-        {
-          title: 'Hangfire',
-          Icon: Timer,
-          href: '/hangfire',
-          target: '_blank',
-        },
-      ],
-    },
-    {
-      title: 'Settings',
-      auth: true,
-      menus: [
-        {
-          title: 'Account',
-          Icon: UserPen,
-          href: '/settings/account',
-        },
-        {
-          title: 'Sessions',
-          Icon: MonitorSmartphone,
-          href: '/settings/sessions',
-        },
-        {
-          title: 'API Tokens',
-          Icon: KeyRound,
-          href: '/settings/api-tokens',
-        },
-        {
-          title: 'Danger Zone',
-          Icon: TriangleAlert,
-          class: 'text-red-500!',
-          href: '/settings/danger-zone',
-        },
-      ],
-    },
-  ];
+    menus.push({
+      title: 'Flashtool',
+      Icon: Cpu,
+      href: '/flashtool',
+    });
 
-  function meetsReq(currentUser: ApiUserSelf | null, entry: Entry) {
-    if (!entry.auth) return true;
-    if (currentUser === null) return false;
-    if (entry.auth === true) return true;
+    return {
+      title: 'General',
+      menus,
+    };
+  });
+  const adminGroup: Group = {
+    title: 'Admin',
+    collapsible: { open: false },
+    menus: [
+      {
+        title: 'Monitoring',
+        Icon: SquareActivity,
+        subItems: [
+          {
+            title: 'Online Hubs',
+            href: '/admin/online-hubs',
+          },
+        ],
+      },
+      {
+        title: 'Management',
+        Icon: Wrench,
+        subItems: [
+          {
+            title: 'Users',
+            href: '/admin/users',
+          },
+        ],
+      },
+      {
+        title: 'Hangfire',
+        Icon: Timer,
+        href: '/hangfire',
+        target: '_blank',
+      },
+    ],
+  };
+  const settingsGroup: Group = {
+    title: 'Settings',
+    menus: [
+      {
+        title: 'Account',
+        Icon: UserPen,
+        href: '/settings/account',
+      },
+      {
+        title: 'Sessions',
+        Icon: MonitorSmartphone,
+        href: '/settings/sessions',
+      },
+      {
+        title: 'API Tokens',
+        Icon: KeyRound,
+        href: '/settings/api-tokens',
+      },
+      {
+        title: 'Danger Zone',
+        Icon: TriangleAlert,
+        class: 'text-red-500!',
+        href: '/settings/danger-zone',
+      },
+    ],
+  };
 
-    return entry.auth.some((role) => currentUser.roles.includes(role));
-  }
+  let headerGroups = $derived([generalGroup]);
+  let footerGroups = $derived.by(() => {
+    const isAuthenticated = !!currentUser;
+
+    let groups: Group[] = [];
+
+    if (isAuthenticated) {
+      if (currentUser.roles.includes(RoleType.Admin)) {
+        groups.push(adminGroup);
+      }
+
+      groups.push(settingsGroup);
+    }
+
+    return groups;
+  });
+
   function isPathMatch(path: string, href?: string) {
     return path === href || path.startsWith(href + '/');
   }
@@ -191,57 +200,51 @@
   {#if menu.subItems}
     <Sidebar.MenuSub>
       {#each menu.subItems as subItem (subItem.title)}
-        {#if meetsReq(currentUser, subItem)}
-          {@render menuSubItemSection(subItem)}
-        {/if}
+        {@render menuSubItemSection(subItem)}
       {/each}
     </Sidebar.MenuSub>
   {/if}
 {/snippet}
 
-{#snippet groupContentSection(currentUser: ApiUserSelf | null, group: Group)}
+{#snippet groupContentSection(group: Group)}
   <Sidebar.GroupContent>
     <Sidebar.Menu>
       {#each group.menus as menu (menu.title)}
-        {#if meetsReq(currentUser, menu)}
-          {@render menuSection(menu)}
-        {/if}
+        {@render menuSection(menu)}
       {/each}
     </Sidebar.Menu>
   </Sidebar.GroupContent>
 {/snippet}
 
-{#snippet groupsSection(currentUser: ApiUserSelf | null, groups: Group[])}
+{#snippet groupsSection(groups: Group[])}
   {#each groups as group (group.title)}
-    {#if meetsReq(currentUser, group)}
-      {#if group.collapsible === undefined}
+    {#if group.collapsible === undefined}
+      <Sidebar.Group>
+        <Sidebar.GroupLabel>{group.title}</Sidebar.GroupLabel>
+        {@render groupContentSection(group)}
+      </Sidebar.Group>
+    {:else}
+      <Collapsible.Root
+        open={group.collapsible.open ||
+          (sidebarContext.state === 'collapsed' && !sidebarContext.isMobile)}
+        class="group/collapsible"
+      >
         <Sidebar.Group>
-          <Sidebar.GroupLabel>{group.title}</Sidebar.GroupLabel>
-          {@render groupContentSection(currentUser, group)}
+          <Sidebar.GroupLabel>
+            {#snippet child({ props })}
+              <Collapsible.Trigger {...props}>
+                {group.title}
+                <ChevronDown
+                  class="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180"
+                />
+              </Collapsible.Trigger>
+            {/snippet}
+          </Sidebar.GroupLabel>
+          <Collapsible.Content>
+            {@render groupContentSection(group)}
+          </Collapsible.Content>
         </Sidebar.Group>
-      {:else}
-        <Collapsible.Root
-          open={group.collapsible.open ||
-            (sidebarContext.state === 'collapsed' && !sidebarContext.isMobile)}
-          class="group/collapsible"
-        >
-          <Sidebar.Group>
-            <Sidebar.GroupLabel>
-              {#snippet child({ props })}
-                <Collapsible.Trigger {...props}>
-                  {group.title}
-                  <ChevronDown
-                    class="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180"
-                  />
-                </Collapsible.Trigger>
-              {/snippet}
-            </Sidebar.GroupLabel>
-            <Collapsible.Content>
-              {@render groupContentSection(currentUser, group)}
-            </Collapsible.Content>
-          </Sidebar.Group>
-        </Collapsible.Root>
-      {/if}
+      </Collapsible.Root>
     {/if}
   {/each}
 {/snippet}
@@ -262,9 +265,9 @@
     </a>
   </Sidebar.Header>
   <Sidebar.Content>
-    {@render groupsSection(currentUser, groups)}
+    {@render groupsSection(headerGroups)}
     <div class="grow-1"></div>
-    {@render groupsSection(currentUser, footerGroups)}
+    {@render groupsSection(footerGroups)}
   </Sidebar.Content>
   <Sidebar.Footer></Sidebar.Footer>
 </Sidebar.Root>
