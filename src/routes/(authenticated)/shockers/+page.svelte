@@ -7,9 +7,10 @@
   import SimpleControlModule from '$lib/components/ControlModules/SimpleControlModule.svelte';
   import * as Popover from '$lib/components/ui/popover';
   import { ControlDurationDefault, ControlIntensityDefault } from '$lib/constants/ControlConstants';
-  import { OwnHubsStore } from '$lib/stores/HubsStore';
+  import { OwnHubsStore, refreshOwnHubs } from '$lib/stores/HubsStore';
 
   import { Layers, Settings } from '@lucide/svelte';
+  import { onMount } from 'svelte';
 
   let shockers = $derived(Array.from($OwnHubsStore).flatMap(([, hub]) => hub.shockers));
 
@@ -18,6 +19,8 @@
   let shockIntensity = $state(ControlIntensityDefault);
   let vibrationIntensity = $state(ControlIntensityDefault);
   let duration = $state(ControlDurationDefault);
+
+  onMount(refreshOwnHubs);
 </script>
 
 <!-- Rounded bordered container -->

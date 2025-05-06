@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { Button } from "$lib/components/ui/button/index.js";
+  import { Button } from '$lib/components/ui/button/index.js';
   import * as Card from '$lib/components/ui/card/index.js';
-  import { ArrowBigRight } from "@lucide/svelte";
+  import { ArrowBigRight } from '@lucide/svelte';
 </script>
 
 <div class="container my-8 grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -14,9 +14,9 @@
       <p>Card Content</p>
     </Card.Content>
     <Card.Footer>
-        <Button class="ml-auto w-15">
-            <ArrowBigRight />
-        </Button>
+      <Button class="ml-auto w-15">
+        <ArrowBigRight />
+      </Button>
     </Card.Footer>
   </Card.Root>
   <Card.Root>
@@ -28,9 +28,9 @@
       <p>Card Content</p>
     </Card.Content>
     <Card.Footer>
-        <Button class="ml-auto w-15" href="/shares/links">
-            <ArrowBigRight />
-        </Button>
+      <Button class="ml-auto w-15" href="/shares/links">
+        <ArrowBigRight />
+      </Button>
     </Card.Footer>
   </Card.Root>
 </div>

@@ -2,7 +2,7 @@
   import { shockerShareLinksApi } from '$lib/api';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
-  import { removeShareLink } from '$lib/stores/ShareLinkStore';
+  import { toast } from 'svelte-sonner';
   import type { ShareLink } from './columns';
 
   type Props = {
@@ -16,7 +16,7 @@
     shockerShareLinksApi
       .shareLinksDeleteShareLink(sharelink.id)
       .then(() => {
-        removeShareLink(sharelink.id);
+        toast.success('Token sharelink successfully');
       })
       .finally(() => {
         open = false;

@@ -37,7 +37,3 @@ export function deleteApiToken(id: string) {
     return state;
   });
 }
-
-export function initializeApiTokenStore() {
-  refreshApiTokens();
-}

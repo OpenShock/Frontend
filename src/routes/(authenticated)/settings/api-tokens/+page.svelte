@@ -9,7 +9,6 @@
   import { ApiTokensStore, refreshApiToken, refreshApiTokens } from '$lib/stores/ApiTokensStore';
 
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
-  import { CopyInput } from '$lib/components/ui/copy-input';
 
   function apiTokenToTableToken(user: TokenResponse): ApiToken {
     return {

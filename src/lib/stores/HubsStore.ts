@@ -25,7 +25,3 @@ export function refreshOwnHubs() {
     })
     .catch(handleApiError);
 }
-
-export function initializeDevicesStore() {
-  refreshOwnHubs();
-}
