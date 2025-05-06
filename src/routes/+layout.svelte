@@ -9,7 +9,6 @@
   import { buildMetaData } from '$lib/metadata';
   import { initializeSignalR } from '$lib/signalr';
   import { initializeStores } from '$lib/stores';
-  import { UserStore } from '$lib/stores/UserStore';
   import type { Snippet } from 'svelte';
   import { browser } from '$app/environment';
   import '../app.css';
