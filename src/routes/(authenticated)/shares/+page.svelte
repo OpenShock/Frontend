@@ -14,9 +14,9 @@
       <p>Card Content</p>
     </Card.Content>
     <Card.Footer>
-      <Button class="ml-auto w-15">
-        <ArrowBigRight />
-      </Button>
+        <Button class="ml-auto w-15" href="/shares/users">
+            <ArrowBigRight />
+        </Button>
     </Card.Footer>
   </Card.Root>
   <Card.Root>
