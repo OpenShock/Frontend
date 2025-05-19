@@ -12,7 +12,6 @@
     Select,
     SelectContent,
     SelectGroup,
-    SelectGroupHeading,
     SelectItem,
     SelectTrigger,
   } from '$lib/components/ui/select';
