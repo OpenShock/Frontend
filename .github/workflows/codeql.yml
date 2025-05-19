@@ -4,24 +4,24 @@ on:
   push:
     branches: ['master', 'develop']
   pull_request:
-    branches: ['master']
+    branches: ['master', 'develop']
   schedule:
     - cron: '0 6 * * 1'
 
 jobs:
   analyze:
-    name: Analyze
+    name: Analyze (${{ matrix.language }})
     runs-on: 'ubuntu-latest'
-    timeout-minutes: 360
     permissions:
       actions: read
       contents: read
+      packages: read
       security-events: write
 
     strategy:
       fail-fast: false
       matrix:
-        language: ['javascript-typescript']
+        language: ['actions', 'javascript-typescript']
 
     steps:
       - name: Checkout repository
