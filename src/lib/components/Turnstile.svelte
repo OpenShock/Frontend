@@ -118,7 +118,7 @@
         target="_blank"
         rel="noreferrer"
       >
-        <CloudflareLogo class="mb-[1px] h-[26px]" />
+        <CloudflareLogo class="mb-px h-[26px]" />
       </a>
     </div>
   {/if}

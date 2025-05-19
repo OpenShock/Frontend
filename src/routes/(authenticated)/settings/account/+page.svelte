@@ -87,7 +87,7 @@
             Change your password
           </Accordion.Trigger>
           <Accordion.Content>
-            <div class="mx-[-1rem] rounded-lg border border-gray-700 p-5">
+            <div class="-mx-4 rounded-lg border border-gray-700 p-5">
               <PasswordInput
                 label="Current Password"
                 placeholder="Current Password"
