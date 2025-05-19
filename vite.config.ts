@@ -61,10 +61,10 @@ async function getPlugins(useLocalRedirect: boolean) {
     plugins.push(mkcert());
   }
 
+  plugins.push(tailwindcss());
+
   // Add the sveltekit plugin
   plugins.push(sveltekit());
-
-  plugins.push(tailwindcss());
 
   return plugins;
 }

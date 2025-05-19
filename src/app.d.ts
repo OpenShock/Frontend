@@ -1,16 +1,13 @@
-// See https://kit.svelte.dev/docs/types#app
-// for information about these interfaces
-
-/// <reference types="svelte" />
-/// <reference types="vite/client" />
-
 import type { TurnstileInstance } from '$lib/types/TurnstileInstance';
 
+// See https://svelte.dev/docs/kit/types#app.d.ts
+// for information about these interfaces
 declare global {
-  declare namespace App {
+  namespace App {
+    // interface Error {}
     // interface Locals {}
     // interface PageData {}
-    // interface Error {}
+    // interface PageState {}
     // interface Platform {}
   }
   declare interface Window {

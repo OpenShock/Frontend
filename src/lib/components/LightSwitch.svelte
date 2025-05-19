@@ -52,7 +52,7 @@
 
 <DropdownMenu.Root>
   <DropdownMenu.Trigger
-    class={buttonVariants({ variant: 'ghost' }) + ' h-8! w-8 text-gray-600 dark:text-gray-300'}
+    class={buttonVariants({ variant: 'ghost' }) + ' size-8! text-gray-600 dark:text-gray-300'}
   >
     <Sun class="size-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
     <Moon

@@ -11,8 +11,9 @@
   import { initializeStores } from '$lib/stores';
   import type { Snippet } from 'svelte';
   import { browser } from '$app/environment';
-  import '../app.css';
   import { PUBLIC_DEVELOPMENT_BANNER } from '$env/static/public';
+
+  import '../app.css';
 
   type Props = {
     children?: Snippet;

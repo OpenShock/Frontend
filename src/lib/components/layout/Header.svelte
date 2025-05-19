@@ -20,7 +20,7 @@
 >
   <Button
     variant="ghost"
-    class="h-8 w-8"
+    class="size-8"
     onclick={() => {
       sidebar.toggle();
     }}
