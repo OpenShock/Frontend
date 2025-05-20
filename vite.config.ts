@@ -28,7 +28,9 @@ async function ensureFqdnRedirect(expectedHost: string, fqdn: string) {
   printInfo(`   echo "${expectedHost} ${fqdn}" | sudo tee -a /etc/hosts\n`);
 
   console.log('Windows (PowerShell as Administrator):');
-  printInfo(`   Add-Content -Path "C:\\Windows\\System32\\drivers\\etc\\hosts" -Value "${expectedHost} ${fqdn}"\n`);
+  printInfo(
+    `   Add-Content -Path "C:\\Windows\\System32\\drivers\\etc\\hosts" -Value "${expectedHost} ${fqdn}"\n`
+  );
 
   printError('Then restart your development server');
   process.exit(1);
@@ -62,11 +64,7 @@ export default defineConfig(async ({ command, mode, isPreview }) => {
   const useLocalRedirect = isLocalServe && !isProduction && !isTruthy(env.CI);
 
   return defineConfig({
-    plugins: [
-      ...(useLocalRedirect ? [mkcert()] : []),
-      sveltekit(),
-      tailwindcss(),
-    ],
+    plugins: [...(useLocalRedirect ? [mkcert()] : []), sveltekit(), tailwindcss()],
     server: await getServerConfig(mode, useLocalRedirect),
     test: { include: ['src/**/*.{test,spec}.{js,ts}'] },
   });
