@@ -42,6 +42,10 @@
       progressPercent = progress * 100;
     }
 
+    progressName = 'Resetting...';
+    progressPercent = undefined;
+    await manager.ensureBootloader();
+
     progressName = 'Downloading firmware...';
     progressPercent = undefined;
     const firmware = await DownloadFirmwareBinary(version, board, progressCallback);
@@ -75,12 +79,13 @@
 
     progressName = 'Rebooting device... (Reconnect to power manually if stuck)';
     progressPercent = undefined;
-    await manager.hardReset();
+    await manager.ensureApplication();
 
     progressName = 'Rebooted device! Flashing complete.';
     progressPercent = 100;
   }
   async function FlashDevice() {
+    if (isFlashing) return;
     try {
       isFlashing = true;
       await FlashDeviceImpl();

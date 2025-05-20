@@ -50,7 +50,7 @@ export interface OwnerShockerResponse {
      * @type {Array<SharedDevice>}
      * @memberof OwnerShockerResponse
      */
-    devices?: Array<SharedDevice>;
+    devices: Array<SharedDevice>;
 }
 
 /**
@@ -60,6 +60,7 @@ export function instanceOfOwnerShockerResponse(value: object): value is OwnerSho
     if (!('id' in value) || value['id'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('image' in value) || value['image'] === undefined) return false;
+    if (!('devices' in value) || value['devices'] === undefined) return false;
     return true;
 }
 
@@ -76,7 +77,7 @@ export function OwnerShockerResponseFromJSONTyped(json: any, ignoreDiscriminator
         'id': json['id'],
         'name': json['name'],
         'image': json['image'],
-        'devices': json['devices'] == null ? undefined : ((json['devices'] as Array<any>).map(SharedDeviceFromJSON)),
+        'devices': ((json['devices'] as Array<any>).map(SharedDeviceFromJSON)),
     };
 }
 
@@ -94,7 +95,7 @@ export function OwnerShockerResponseToJSONTyped(value?: OwnerShockerResponse | n
         'id': value['id'],
         'name': value['name'],
         'image': value['image'],
-        'devices': value['devices'] == null ? undefined : ((value['devices'] as Array<any>).map(SharedDeviceToJSON)),
+        'devices': ((value['devices'] as Array<any>).map(SharedDeviceToJSON)),
     };
 }
 

@@ -1,14 +1,28 @@
-.DS_Store
+test-results
 node_modules
-.idea
-/build
+
+# Output
+.output
+.vercel
+.netlify
+.wrangler
 /.svelte-kit
-/package
+/build
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea
+
+# Env
 .env.local
-!.env.example
+
+# Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
-package-lock.json
 
-# Test files
-/test-results
+# Other package managers
+package-lock.json
+yarn.lock

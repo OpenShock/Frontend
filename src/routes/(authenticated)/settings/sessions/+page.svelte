@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { sessionApi } from '$lib/api';
+  import { sessionsApi } from '$lib/api';
   import type { LoginSessionResponse } from '$lib/api/internal/v1';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card';
@@ -24,7 +24,7 @@
   let data = $state<Session[]>([]);
 
   function fetchSessions() {
-    sessionApi
+    sessionsApi
       .sessionsListSessions()
       .then((res) => {
         data = res.map(apiSessionToTableSession);

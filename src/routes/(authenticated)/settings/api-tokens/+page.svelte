@@ -36,17 +36,21 @@
   <Card.Header>
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
       API Tokens
-      <Button class="btn variant-filled-primary" onclick={refreshApiTokens}>
-        <RotateCcw />
-        <span> Refresh </span>
-      </Button>
+      <div>
+        <Button class="btn variant-filled-primary" onclick={() => (showGenerateTokenModal = true)}>
+          <RotateCcw />
+          <span> Generate Token </span>
+        </Button>
+        <Button class="btn variant-filled-primary" onclick={refreshApiTokens}>
+          <RotateCcw />
+          Refresh
+        </Button>
+      </div>
     </Card.Title>
     <Card.Description>API Tokens are used to authenticate with the OpenShock API</Card.Description>
   </Card.Header>
   <Card.Content class="flex flex-col space-y-4">
     <DataTable {data} {columns} />
-    <div class="flex justify-end">
-      <Button onclick={() => (showGenerateTokenModal = true)}>Generate Token</Button>
-    </div>
+    <div class="flex justify-end"></div>
   </Card.Content>
 </div>

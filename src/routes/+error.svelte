@@ -11,14 +11,14 @@
     previousPage = from?.url.pathname || previousPage;
   });
 
-  let meta = $derived({
+  const meta = {
     title: 'Service Unavailable',
     description: 'OpenShock is currently unavailable',
     image: {
       src: '/logo.svg',
       alt: 'OpenShock Logo',
     },
-  });
+  };
 </script>
 
 <BasicTags {...meta} />

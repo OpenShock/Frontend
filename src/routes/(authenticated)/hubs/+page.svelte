@@ -1,12 +1,13 @@
 <script lang="ts">
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card';
-  import { OwnHubsStore, OnlineHubsStore } from '$lib/stores/HubsStore';
+  import { OwnHubsStore, OnlineHubsStore, refreshOwnHubs } from '$lib/stores/HubsStore';
   import { SemVer } from 'semver';
   import { columns, type Hub } from './columns';
   import DataTable from './data-table.svelte';
 
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
+  import { onMount } from 'svelte';
 
   let data = $derived.by<Hub[]>(() => {
     if (!$OwnHubsStore || !$OnlineHubsStore) return [];
@@ -34,6 +35,8 @@
       };
     });
   });
+
+  onMount(refreshOwnHubs);
 </script>
 
 <div class="container my-8">

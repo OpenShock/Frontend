@@ -15,9 +15,11 @@
 
 import * as runtime from '../runtime';
 import type {
+  ChangeEmailRequest,
+  ChangePasswordRequest,
   ChangeUsernameRequest,
+  LegacyEmptyResponse,
   Login,
-  ObjectBaseResponse,
   OpenShockProblem,
   PasswordResetProcessData,
   ResetRequest,
@@ -25,12 +27,16 @@ import type {
   UsernameCheckResponse,
 } from '../models/index';
 import {
+    ChangeEmailRequestFromJSON,
+    ChangeEmailRequestToJSON,
+    ChangePasswordRequestFromJSON,
+    ChangePasswordRequestToJSON,
     ChangeUsernameRequestFromJSON,
     ChangeUsernameRequestToJSON,
+    LegacyEmptyResponseFromJSON,
+    LegacyEmptyResponseToJSON,
     LoginFromJSON,
     LoginToJSON,
-    ObjectBaseResponseFromJSON,
-    ObjectBaseResponseToJSON,
     OpenShockProblemFromJSON,
     OpenShockProblemToJSON,
     PasswordResetProcessDataFromJSON,
@@ -70,6 +76,18 @@ export interface AccountSignUpRequest {
     signUp?: SignUp;
 }
 
+export interface AuthenticatedAccountChangeEmailRequest {
+    changeEmailRequest?: ChangeEmailRequest;
+}
+
+export interface AuthenticatedAccountChangePasswordRequest {
+    changePasswordRequest?: ChangePasswordRequest;
+}
+
+export interface AuthenticatedAccountChangeUsernameRequest {
+    changeUsernameRequest?: ChangeUsernameRequest;
+}
+
 /**
  * AccountApi - interface
  * 
@@ -100,12 +118,12 @@ export interface AccountApiInterface {
      * @throws {RequiredError}
      * @memberof AccountApiInterface
      */
-    accountLoginRaw(requestParameters: AccountLoginRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>>;
+    accountLoginRaw(requestParameters: AccountLoginRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>>;
 
     /**
      * Authenticate a user
      */
-    accountLogin(login?: Login, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse>;
+    accountLogin(login?: Login, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
 
     /**
      * 
@@ -128,12 +146,12 @@ export interface AccountApiInterface {
      * @throws {RequiredError}
      * @memberof AccountApiInterface
      */
-    accountPasswordResetCheckValidRaw(requestParameters: AccountPasswordResetCheckValidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>>;
+    accountPasswordResetCheckValidRaw(requestParameters: AccountPasswordResetCheckValidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>>;
 
     /**
      * Check if a password reset is in progress
      */
-    accountPasswordResetCheckValid(passwordResetId: string, secret: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse>;
+    accountPasswordResetCheckValid(passwordResetId: string, secret: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
 
     /**
      * 
@@ -145,12 +163,12 @@ export interface AccountApiInterface {
      * @throws {RequiredError}
      * @memberof AccountApiInterface
      */
-    accountPasswordResetCompleteRaw(requestParameters: AccountPasswordResetCompleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>>;
+    accountPasswordResetCompleteRaw(requestParameters: AccountPasswordResetCompleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>>;
 
     /**
      * Complete a password reset process
      */
-    accountPasswordResetComplete(passwordResetId: string, secret: string, passwordResetProcessData?: PasswordResetProcessData, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse>;
+    accountPasswordResetComplete(passwordResetId: string, secret: string, passwordResetProcessData?: PasswordResetProcessData, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
 
     /**
      * 
@@ -160,12 +178,12 @@ export interface AccountApiInterface {
      * @throws {RequiredError}
      * @memberof AccountApiInterface
      */
-    accountPasswordResetInitiateRaw(requestParameters: AccountPasswordResetInitiateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>>;
+    accountPasswordResetInitiateRaw(requestParameters: AccountPasswordResetInitiateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>>;
 
     /**
      * Initiate a password reset
      */
-    accountPasswordResetInitiate(resetRequest?: ResetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse>;
+    accountPasswordResetInitiate(resetRequest?: ResetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
 
     /**
      * 
@@ -175,12 +193,57 @@ export interface AccountApiInterface {
      * @throws {RequiredError}
      * @memberof AccountApiInterface
      */
-    accountSignUpRaw(requestParameters: AccountSignUpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>>;
+    accountSignUpRaw(requestParameters: AccountSignUpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>>;
 
     /**
      * Signs up a new user
      */
-    accountSignUp(signUp?: SignUp, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse>;
+    accountSignUp(signUp?: SignUp, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
+
+    /**
+     * 
+     * @summary Change the password of the current user
+     * @param {ChangeEmailRequest} [changeEmailRequest] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApiInterface
+     */
+    authenticatedAccountChangeEmailRaw(requestParameters: AuthenticatedAccountChangeEmailRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>>;
+
+    /**
+     * Change the password of the current user
+     */
+    authenticatedAccountChangeEmail(changeEmailRequest?: ChangeEmailRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
+
+    /**
+     * 
+     * @summary Change the password of the current user
+     * @param {ChangePasswordRequest} [changePasswordRequest] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApiInterface
+     */
+    authenticatedAccountChangePasswordRaw(requestParameters: AuthenticatedAccountChangePasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Change the password of the current user
+     */
+    authenticatedAccountChangePassword(changePasswordRequest?: ChangePasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * 
+     * @summary Change the username of the current user
+     * @param {ChangeUsernameRequest} [changeUsernameRequest] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApiInterface
+     */
+    authenticatedAccountChangeUsernameRaw(requestParameters: AuthenticatedAccountChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Change the username of the current user
+     */
+    authenticatedAccountChangeUsername(changeUsernameRequest?: ChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
 }
 
@@ -221,7 +284,7 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
     /**
      * Authenticate a user
      */
-    async accountLoginRaw(requestParameters: AccountLoginRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
+    async accountLoginRaw(requestParameters: AccountLoginRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -236,13 +299,13 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
             body: LoginToJSON(requestParameters['login']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => LegacyEmptyResponseFromJSON(jsonValue));
     }
 
     /**
      * Authenticate a user
      */
-    async accountLogin(login?: Login, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse> {
+    async accountLogin(login?: Login, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse> {
         const response = await this.accountLoginRaw({ login: login }, initOverrides);
         return await response.value();
     }
@@ -273,7 +336,7 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
     /**
      * Check if a password reset is in progress
      */
-    async accountPasswordResetCheckValidRaw(requestParameters: AccountPasswordResetCheckValidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
+    async accountPasswordResetCheckValidRaw(requestParameters: AccountPasswordResetCheckValidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>> {
         if (requestParameters['passwordResetId'] == null) {
             throw new runtime.RequiredError(
                 'passwordResetId',
@@ -299,13 +362,13 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => LegacyEmptyResponseFromJSON(jsonValue));
     }
 
     /**
      * Check if a password reset is in progress
      */
-    async accountPasswordResetCheckValid(passwordResetId: string, secret: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse> {
+    async accountPasswordResetCheckValid(passwordResetId: string, secret: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse> {
         const response = await this.accountPasswordResetCheckValidRaw({ passwordResetId: passwordResetId, secret: secret }, initOverrides);
         return await response.value();
     }
@@ -313,7 +376,7 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
     /**
      * Complete a password reset process
      */
-    async accountPasswordResetCompleteRaw(requestParameters: AccountPasswordResetCompleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
+    async accountPasswordResetCompleteRaw(requestParameters: AccountPasswordResetCompleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>> {
         if (requestParameters['passwordResetId'] == null) {
             throw new runtime.RequiredError(
                 'passwordResetId',
@@ -342,13 +405,13 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
             body: PasswordResetProcessDataToJSON(requestParameters['passwordResetProcessData']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => LegacyEmptyResponseFromJSON(jsonValue));
     }
 
     /**
      * Complete a password reset process
      */
-    async accountPasswordResetComplete(passwordResetId: string, secret: string, passwordResetProcessData?: PasswordResetProcessData, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse> {
+    async accountPasswordResetComplete(passwordResetId: string, secret: string, passwordResetProcessData?: PasswordResetProcessData, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse> {
         const response = await this.accountPasswordResetCompleteRaw({ passwordResetId: passwordResetId, secret: secret, passwordResetProcessData: passwordResetProcessData }, initOverrides);
         return await response.value();
     }
@@ -356,7 +419,7 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
     /**
      * Initiate a password reset
      */
-    async accountPasswordResetInitiateRaw(requestParameters: AccountPasswordResetInitiateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
+    async accountPasswordResetInitiateRaw(requestParameters: AccountPasswordResetInitiateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -371,13 +434,13 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
             body: ResetRequestToJSON(requestParameters['resetRequest']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => LegacyEmptyResponseFromJSON(jsonValue));
     }
 
     /**
      * Initiate a password reset
      */
-    async accountPasswordResetInitiate(resetRequest?: ResetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse> {
+    async accountPasswordResetInitiate(resetRequest?: ResetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse> {
         const response = await this.accountPasswordResetInitiateRaw({ resetRequest: resetRequest }, initOverrides);
         return await response.value();
     }
@@ -385,7 +448,7 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
     /**
      * Signs up a new user
      */
-    async accountSignUpRaw(requestParameters: AccountSignUpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ObjectBaseResponse>> {
+    async accountSignUpRaw(requestParameters: AccountSignUpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -400,15 +463,100 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
             body: SignUpToJSON(requestParameters['signUp']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ObjectBaseResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => LegacyEmptyResponseFromJSON(jsonValue));
     }
 
     /**
      * Signs up a new user
      */
-    async accountSignUp(signUp?: SignUp, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ObjectBaseResponse> {
+    async accountSignUp(signUp?: SignUp, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse> {
         const response = await this.accountSignUpRaw({ signUp: signUp }, initOverrides);
         return await response.value();
+    }
+
+    /**
+     * Change the password of the current user
+     */
+    async authenticatedAccountChangeEmailRaw(requestParameters: AuthenticatedAccountChangeEmailRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/1/account/email`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ChangeEmailRequestToJSON(requestParameters['changeEmailRequest']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => LegacyEmptyResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Change the password of the current user
+     */
+    async authenticatedAccountChangeEmail(changeEmailRequest?: ChangeEmailRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse> {
+        const response = await this.authenticatedAccountChangeEmailRaw({ changeEmailRequest: changeEmailRequest }, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Change the password of the current user
+     */
+    async authenticatedAccountChangePasswordRaw(requestParameters: AuthenticatedAccountChangePasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/1/account/password`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ChangePasswordRequestToJSON(requestParameters['changePasswordRequest']),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Change the password of the current user
+     */
+    async authenticatedAccountChangePassword(changePasswordRequest?: ChangePasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.authenticatedAccountChangePasswordRaw({ changePasswordRequest: changePasswordRequest }, initOverrides);
+    }
+
+    /**
+     * Change the username of the current user
+     */
+    async authenticatedAccountChangeUsernameRaw(requestParameters: AuthenticatedAccountChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/1/account/username`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ChangeUsernameRequestToJSON(requestParameters['changeUsernameRequest']),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Change the username of the current user
+     */
+    async authenticatedAccountChangeUsername(changeUsernameRequest?: ChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.authenticatedAccountChangeUsernameRaw({ changeUsernameRequest: changeUsernameRequest }, initOverrides);
     }
 
 }

@@ -44,7 +44,7 @@ export interface ShareLinkDevice {
      * @type {Array<ShareLinkShocker>}
      * @memberof ShareLinkDevice
      */
-    shockers?: Array<ShareLinkShocker>;
+    shockers: Array<ShareLinkShocker>;
 }
 
 /**
@@ -53,6 +53,7 @@ export interface ShareLinkDevice {
 export function instanceOfShareLinkDevice(value: object): value is ShareLinkDevice {
     if (!('id' in value) || value['id'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('shockers' in value) || value['shockers'] === undefined) return false;
     return true;
 }
 
@@ -68,7 +69,7 @@ export function ShareLinkDeviceFromJSONTyped(json: any, ignoreDiscriminator: boo
         
         'id': json['id'],
         'name': json['name'],
-        'shockers': json['shockers'] == null ? undefined : ((json['shockers'] as Array<any>).map(ShareLinkShockerFromJSON)),
+        'shockers': ((json['shockers'] as Array<any>).map(ShareLinkShockerFromJSON)),
     };
 }
 
@@ -85,7 +86,7 @@ export function ShareLinkDeviceToJSONTyped(value?: ShareLinkDevice | null, ignor
         
         'id': value['id'],
         'name': value['name'],
-        'shockers': value['shockers'] == null ? undefined : ((value['shockers'] as Array<any>).map(ShareLinkShockerToJSON)),
+        'shockers': ((value['shockers'] as Array<any>).map(ShareLinkShockerToJSON)),
     };
 }
 
