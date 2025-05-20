@@ -6,6 +6,7 @@ import { durationToString, elapsedToString } from '$lib/utils/time';
 import type { SemVer } from 'semver';
 import type { TwTextColor } from '$lib/types/Tailwind';
 import { getReadableUserAgentName } from '$lib/utils/userAgent';
+import { escapeHtml } from '$lib/utils/encoding';
 
 export function CreateSortHeader<TData>(name: string): StringOrTemplateHeader<TData, unknown> {
   return ({ column }) =>
@@ -31,42 +32,63 @@ export function CreateSimpleCellSnippet<TData extends object, K extends keyof TD
   };
 }
 
-type TableCell =
+export type TableCell =
   `<div class="px-4 font-medium${'' | ` ${TwTextColor}`}"${'' | ` title="${string}"`}>${string}</div>`;
-const CellNA: TableCell = '<div class="px-4 font-medium" title="N/A">N/A</div>';
-const CellOrangeNever: TableCell = '<div class="px-4 font-medium text-orange-500">Never</div>';
-const CellRedUnknown: TableCell = '<div class="px-4 font-medium text-red-500">Unknown</div>';
-const CellRedUnavailable: TableCell =
-  '<div class="px-4 font-medium text-red-500">Unavailable</div>';
+export const CellNotApplicable =
+  '<div class="px-4 font-medium" title="N/A">N/A</div>' as const satisfies TableCell;
+export const CellOrangeNever =
+  '<div class="px-4 font-medium text-orange-500">Never</div>' as const satisfies TableCell;
+export const CellRedUnknown =
+  '<div class="px-4 font-medium text-red-500">Unknown</div>' as const satisfies TableCell;
+export const CellRedUnavailable =
+  '<div class="px-4 font-medium text-red-500">Unavailable</div>' as const satisfies TableCell;
+export const CellGreenTrue =
+  '<div class="px-4 font-medium text-green-500">true</div>' as const satisfies TableCell;
+export const CellRedFalse =
+  '<div class="px-4 font-medium text-red-500">false</div>' as const satisfies TableCell;
+export const CellGreenOnline =
+  '<div class="px-4 font-medium text-green-500">online</div>' as const satisfies TableCell;
+export const CellRedOffline =
+  '<div class="px-4 font-medium text-red-500">offline</div>' as const satisfies TableCell;
+
+export const RenderCell = (content: string): TableCell =>
+  `<div class="px-4 font-medium">${escapeHtml(content)}</div>`;
+export const RenderRedCell = (content: string): TableCell =>
+  `<div class="px-4 font-medium text-red-500">${escapeHtml(content)}</div>`;
+export const RenderGreenCell = (content: string): TableCell =>
+  `<div class="px-4 font-medium text-green-500">${escapeHtml(content)}</div>`;
+export const RenderOrangeCell = (content: string): TableCell =>
+  `<div class="px-4 font-medium text-orange-500">${escapeHtml(content)}</div>`;
+export const RenderBlueCell = (content: string): TableCell =>
+  `<div class="px-4 font-medium text-blue-500">${escapeHtml(content)}</div>`;
+export const RenderCellWithTooltip = (content: string, tooltip: string): TableCell =>
+  `<div class="px-4 font-medium" title="${escapeHtml(tooltip)}">${escapeHtml(content)}</div>`;
 
 export const LocaleDateRenderer = (date: Date): TableCell =>
-  `<div class="px-4 font-medium" title="${date}">${date.toLocaleDateString()}</div>`;
+  RenderCellWithTooltip(date.toLocaleDateString(), date.toString());
 
 export const LocaleDateTimeRenderer = (date: Date): TableCell =>
-  `<div class="px-4 font-medium" title="${date}">${date.toLocaleString()}</div>`;
+  RenderCellWithTooltip(date.toLocaleString(), date.toString());
 
 export const TimeSinceDurationRenderer = (date: Date): TableCell =>
-  `<div class="px-4 font-medium" title="${date}">${durationToString(Date.now() - date.getTime())}</div>`;
+  RenderCellWithTooltip(durationToString(Date.now() - date.getTime()), date.toString());
 
 export const TimeSinceRelativeRenderer = (date: Date): TableCell =>
-  `<div class="px-4 font-medium" title="${date}">${elapsedToString(date.getTime() - Date.now())}</div>`;
+  RenderCellWithTooltip(elapsedToString(date.getTime() - Date.now()), date.toString());
 
-export const TimeSinceRelativeOrNeverRenderer = (date: Date | null | undefined): TableCell => {
-  if (!date) return CellOrangeNever;
-  return TimeSinceRelativeRenderer(date);
-};
+export const TimeSinceRelativeOrNeverRenderer = (date: Date | null | undefined): TableCell =>
+  date ? TimeSinceRelativeRenderer(date) : CellOrangeNever;
 
 export const NumberRenderer = (number: number | null): TableCell =>
-  number ? `<div class="px-4 font-medium" title="${number}">${number}</div>` : CellNA;
+  number ? RenderCell(number.toString()) : CellNotApplicable;
 
 export const UserAgentRenderer = (userAgent: string | null): TableCell => {
   if (!userAgent) return CellRedUnknown;
 
   const readableName = getReadableUserAgentName(userAgent);
-  if (!readableName)
-    return `<div class="px-4 font-medium text-orange-500" title="${userAgent}">${userAgent}</div>`;
+  if (!readableName) return RenderOrangeCell(userAgent);
 
-  return `<div class="px-4 font-medium" title="${userAgent}">${readableName}</div>`;
+  return RenderCellWithTooltip(readableName, userAgent);
 };
 
 export const FirmwareVersionRenderer = (firmwareVersion: SemVer | null): TableCell => {
@@ -74,15 +96,11 @@ export const FirmwareVersionRenderer = (firmwareVersion: SemVer | null): TableCe
 
   let firmwareVersionString = firmwareVersion.toString();
 
-  let color: TwTextColor;
   if (firmwareVersionString.length <= 0) {
-    firmwareVersionString = 'Invalid';
-    color = 'text-red-500';
+    return RenderRedCell('Invalid');
   } else if (firmwareVersionString === '0.0.0-local') {
-    color = 'text-orange-500';
-  } else {
-    color = 'text-white';
+    return RenderOrangeCell(firmwareVersionString);
   }
 
-  return `<div class="px-4 font-medium ${color}" title="${firmwareVersionString}">${firmwareVersionString}</div>`;
+  return RenderCell(firmwareVersionString);
 };

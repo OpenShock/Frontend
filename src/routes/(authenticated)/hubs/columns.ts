@@ -4,6 +4,8 @@ import { ShockerModelType } from '$lib/api/internal/v1';
 import DataTableActions from './data-table-actions.svelte';
 import type { SemVer } from 'semver';
 import {
+  CellGreenOnline,
+  CellRedOffline,
   CreateSimpleCellSnippet,
   CreateSortHeader,
   FirmwareVersionRenderer,
@@ -27,8 +29,7 @@ export type Hub = {
   created_at: Date;
 };
 
-const IsOnlineRenderer = (isOnline: boolean) =>
-  `<div class="px-4 font-medium ${isOnline ? 'text-green-500' : 'text-red-500'}">${isOnline ? 'Online' : 'Offline'}</div>`;
+const IsOnlineRenderer = (isOnline: boolean) => (isOnline ? CellGreenOnline : CellRedOffline);
 
 export const columns: ColumnDef<Hub>[] = [
   {

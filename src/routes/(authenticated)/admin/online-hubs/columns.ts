@@ -7,6 +7,7 @@ import {
   CreateSortHeader,
   FirmwareVersionRenderer,
   NumberRenderer,
+  RenderCellWithTooltip,
   TimeSinceDurationRenderer,
   UserAgentRenderer,
 } from '$lib/components/Table/ColumnUtils';
@@ -29,8 +30,7 @@ export type OnlineHub = {
   rssi: number | null;
 };
 
-const OwnerRenderer = (owner: OnlineHubOwner) =>
-  `<div class="px-4 font-medium" title="${owner.id}">${owner.name}</div>`;
+const OwnerRenderer = (owner: OnlineHubOwner) => RenderCellWithTooltip(owner.name, owner.id);
 
 export const columns: ColumnDef<OnlineHub>[] = [
   {
