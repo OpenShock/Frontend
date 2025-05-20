@@ -1,9 +1,18 @@
 <script lang="ts">
   import { PUBLIC_DISCORD_INVITE_URL, PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
   import LightSwitch from '$lib/components/LightSwitch.svelte';
+  import {
+    Breadcrumb,
+    BreadcrumbList,
+    BreadcrumbItem,
+    BreadcrumbSeparator,
+    BreadcrumbLink,
+    BreadcrumbPage,
+  } from '$lib/components/ui/breadcrumb';
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { useSidebar } from '$lib/components/ui/sidebar';
+  import { BreadCrumbStore } from '$lib/stores/BreadCrumbStore';
   import { UserStore } from '$lib/stores/UserStore';
 
   import PanelLeft from '@lucide/svelte/icons/panel-left';
@@ -27,6 +36,26 @@
   >
     <PanelLeft size={24} class="m-0 text-gray-600 dark:text-gray-300" />
   </Button>
+  {#if $BreadCrumbStore.length > 0}
+    <Breadcrumb>
+      <BreadcrumbList>
+        {#each $BreadCrumbStore as crumb, index}
+          <BreadcrumbItem>
+            {#if index < $BreadCrumbStore.length - 1}
+              <BreadcrumbLink href={crumb.href} class="text-gray-600 dark:text-gray-300">
+                {crumb.text}
+              </BreadcrumbLink>
+              <BreadcrumbSeparator class="text-gray-600 dark:text-gray-300" />
+            {:else}
+              <BreadcrumbPage class="text-gray-900 dark:text-gray-100">
+                {crumb.text}
+              </BreadcrumbPage>
+            {/if}
+          </BreadcrumbItem>
+        {/each}
+      </BreadcrumbList>
+    </Breadcrumb>
+  {/if}
   <div
     class={`flex flex-1 flex-row items-center justify-between space-x-2 py-2 ${$UserStore.self ? 'pr-2' : 'px-2'}`}
   >
