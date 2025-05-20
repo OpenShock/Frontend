@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import { devicesOtaApi } from '$lib/api';
-  import type { OtaItem, OtaItemIReadOnlyCollectionBaseResponse } from '$lib/api/internal/v1';
+  import { hubManagementV1Api } from '$lib/api';
+  import type { OtaItem, OtaItemIReadOnlyCollectionLegacyDataResponse } from '$lib/api/internal/v1';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
@@ -20,13 +20,20 @@
   import { Progress } from '$lib/components/ui/progress';
 
   let hubId = $derived(page.params.hubId);
-  let hub = $derived<HubOnlineState>($OnlineHubsStore.get(hubId) ?? { hubId, isOnline: false, firmwareVersion: null, otaInstall: null });
+  let hub = $derived<HubOnlineState>(
+    $OnlineHubsStore.get(hubId) ?? {
+      hubId,
+      isOnline: false,
+      firmwareVersion: null,
+      otaInstall: null,
+    }
+  );
 
   let isValidHubId = $state(false);
   let otaLogs = $state<OtaItem[]>([]);
   let version = $state<string | null>(null);
 
-  function handleGetOtaUpdateHistoryResponse(resp: OtaItemIReadOnlyCollectionBaseResponse){
+  function handleGetOtaUpdateHistoryResponse(resp: OtaItemIReadOnlyCollectionLegacyDataResponse) {
     otaLogs = resp.data ?? [];
     isValidHubId = true;
   }
@@ -45,7 +52,7 @@
   }
 
   $effect(() => {
-    devicesOtaApi
+    hubManagementV1Api
       .devicesOtaGetOtaUpdateHistory(hubId)
       .then(handleGetOtaUpdateHistoryResponse)
       .catch(handleApiError);
@@ -74,7 +81,7 @@
     </Button>
 
     <h2 class="text-3xl font-semibold">Progress</h2>
-    <div class="grid grid-cols-[auto_1fr] grid-rows-2 gap-2 items-center">
+    <div class="grid grid-cols-[auto_1fr] grid-rows-2 items-center gap-2">
       Total
       <Progress value={33} />
       Task
@@ -85,7 +92,7 @@
 
     <div class="flex w-full justify-between">
       <h2 class="text-3xl font-semibold">Logs</h2>
-      <Button class="cursor-pointer text-xl" onclick={() => hubId = hubId}>
+      <Button class="cursor-pointer text-xl" onclick={() => (hubId = hubId)}>
         <RotateCcw />
         <span> Refresh Logs </span>
       </Button>

@@ -1,6 +1,10 @@
 <script lang="ts">
   import * as ToggleGroup from '$lib/components/ui/toggle-group';
-  import { FetchChannelVersion, FirmwareChannels, type FirmwareChannel } from '$lib/api/firmwareCDN';
+  import {
+    FetchChannelVersion,
+    FirmwareChannels,
+    type FirmwareChannel,
+  } from '$lib/api/firmwareCDN';
 
   import { CircleCheckBig, TriangleAlert } from '@lucide/svelte';
 
@@ -38,11 +42,10 @@
     const currentChannel = channel;
 
     // Fetch the channel version from the API.
-    FetchChannelVersion(currentChannel)
-      .then(ver => {
-        version = ver ?? null;
-        versions[currentChannel] = version;
-      });
+    FetchChannelVersion(currentChannel).then((ver) => {
+      version = ver ?? null;
+      versions[currentChannel] = version;
+    });
   });
 </script>
 

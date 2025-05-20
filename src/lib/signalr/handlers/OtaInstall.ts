@@ -1,27 +1,34 @@
-import { OnlineHubsStore } from "$lib/stores/HubsStore";
+import { OnlineHubsStore } from '$lib/stores/HubsStore';
 
-export function handleSignalrOtaInstallStarted(hubId: string, updateId: number, targetVersion: string) {
+export function handleSignalrOtaInstallStarted(
+  hubId: string,
+  updateId: number,
+  targetVersion: string
+) {
   OnlineHubsStore.update((hubs) => {
     const hub = hubs.get(hubId);
-    if (hub)
-    {
+    if (hub) {
       hub.otaInstall = {
         id: updateId,
         version: targetVersion,
         step: 0,
-        progress: 0
-      }
+        progress: 0,
+      };
     }
 
     return hubs;
   });
 }
 
-export function handleSignalrOtaInstallProgress(hubId: string, updateId: number, step: number, progress: number) {
+export function handleSignalrOtaInstallProgress(
+  hubId: string,
+  updateId: number,
+  step: number,
+  progress: number
+) {
   OnlineHubsStore.update((hubs) => {
     const hub = hubs.get(hubId);
-    if (hub && hub.otaInstall?.id === updateId)
-    {
+    if (hub && hub.otaInstall?.id === updateId) {
       hub.otaInstall.step = step;
       hub.otaInstall.progress = progress;
     }
@@ -33,8 +40,7 @@ export function handleSignalrOtaInstallProgress(hubId: string, updateId: number,
 export function handleSignalrOtaInstallSucceeded(hubId: string, updateId: number) {
   OnlineHubsStore.update((hubs) => {
     const hub = hubs.get(hubId);
-    if (hub && hub.otaInstall?.id === updateId)
-    {
+    if (hub && hub.otaInstall?.id === updateId) {
       hub.otaInstall = null;
     }
 

@@ -6,7 +6,11 @@ import { get, writable, type Readable } from 'svelte/store';
 import { handleSignalrDeviceState } from './handlers/DeviceStatus';
 import { handleSignalrDeviceUpdate } from './handlers/DeviceUpdate';
 import { toast } from 'svelte-sonner';
-import { handleSignalrOtaInstallProgress, handleSignalrOtaInstallStarted, handleSignalrOtaInstallSucceeded } from './handlers/OtaInstall';
+import {
+  handleSignalrOtaInstallProgress,
+  handleSignalrOtaInstallStarted,
+  handleSignalrOtaInstallSucceeded,
+} from './handlers/OtaInstall';
 
 const signalr_connection = writable<SR.HubConnection | null>(null);
 const signalr_state = writable<SR.HubConnectionState>(SR.HubConnectionState.Disconnected);
