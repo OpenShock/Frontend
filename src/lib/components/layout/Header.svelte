@@ -1,12 +1,21 @@
 <script lang="ts">
   import { PUBLIC_DISCORD_INVITE_URL, PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
   import LightSwitch from '$lib/components/LightSwitch.svelte';
+  import {
+    Breadcrumb,
+    BreadcrumbList,
+    BreadcrumbItem,
+    BreadcrumbSeparator,
+    BreadcrumbLink,
+    BreadcrumbPage,
+  } from '$lib/components/ui/breadcrumb';
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { useSidebar } from '$lib/components/ui/sidebar';
+  import { BreadCrumbStore } from '$lib/stores/BreadCrumbStore';
   import { UserStore } from '$lib/stores/UserStore';
 
-  import Menu from '@lucide/svelte/icons/menu';
+  import PanelLeft from '@lucide/svelte/icons/panel-left';
 
   let sidebar = useSidebar();
 </script>
@@ -16,35 +25,40 @@
 {/snippet}
 
 <header
-  class="border-border/40 bg-background/95 supports-backdrop-filter:bg-background/60 sticky top-0 z-50 flex w-full flex-row border-b backdrop-blur-sm"
+  class="border-border/40 bg-background/95 supports-backdrop-filter:bg-background/60 sticky top-0 z-50 flex h-12 w-full flex-row items-center border-b px-2 backdrop-blur-sm"
 >
-  {#if $UserStore.self}
-    <button
-      onclick={() => {
-        sidebar.toggle();
-      }}
-    >
-      <Menu size={32} class="mr-2 p-0 text-gray-500 sm:m-3" />
-    </button>
+  <Button
+    variant="ghost"
+    class="size-8"
+    onclick={() => {
+      sidebar.toggle();
+    }}
+  >
+    <PanelLeft size={24} class="m-0 text-gray-600 dark:text-gray-300" />
+  </Button>
+  {#if $BreadCrumbStore.length > 0}
+    <Breadcrumb>
+      <BreadcrumbList>
+        {#each $BreadCrumbStore as crumb, index}
+          <BreadcrumbItem>
+            {#if index < $BreadCrumbStore.length - 1}
+              <BreadcrumbLink href={crumb.href} class="text-gray-600 dark:text-gray-300">
+                {crumb.text}
+              </BreadcrumbLink>
+              <BreadcrumbSeparator class="text-gray-600 dark:text-gray-300" />
+            {:else}
+              <BreadcrumbPage class="text-gray-900 dark:text-gray-100">
+                {crumb.text}
+              </BreadcrumbPage>
+            {/if}
+          </BreadcrumbItem>
+        {/each}
+      </BreadcrumbList>
+    </Breadcrumb>
   {/if}
   <div
     class={`flex flex-1 flex-row items-center justify-between space-x-2 py-2 ${$UserStore.self ? 'pr-2' : 'px-2'}`}
   >
-    <div class="flex items-center space-x-4">
-      <a
-        href={$UserStore.self ? '/home' : '/'}
-        class="overflow-hidden select-none lg:ml-0! lg:w-auto"
-        data-sveltekit-preload-data="hover"
-        aria-label="OpenShock"
-      >
-        <img
-          class="pointer-events-none inline-block h-6 sm:h-10"
-          src="/logo.svg"
-          alt="OpenShock Logo"
-        />
-      </a>
-    </div>
-
     <div class="flex-1"></div>
 
     <LightSwitch />
@@ -52,7 +66,7 @@
     {#if $UserStore.self}
       <DropdownMenu.Root>
         <DropdownMenu.Trigger
-          class="cursor-pointer text-gray-600 select-none hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
+          class="cursor-pointer text-gray-600 select-none hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-200"
         >
           <img
             class="inline-block h-8 rounded-full"

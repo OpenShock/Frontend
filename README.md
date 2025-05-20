@@ -9,7 +9,13 @@
 <table>
   <tr>
     <td>master</td>
-    <td><a href="https://github.com/OpenShock/Frontend/actions/workflows/ci-master.yml"><img src="https://github.com/OpenShock/Frontend/actions/workflows/ci-master.yml/badge.svg?branch=master" alt="Build Status" /></a></td>
+    <td><a href="https://github.com/OpenShock/Frontend/actions/workflows/ci-build.yml"><img src="https://github.com/OpenShock/Frontend/actions/workflows/ci-build.yml/badge.svg?branch=master" alt="Build Status" /></a></td>
+    <td><a href="https://github.com/OpenShock/Frontend/actions/workflows/codeql.yml"><img src="https://github.com/OpenShock/Frontend/actions/workflows/codeql.yml/badge.svg?branch=master" alt="CodeQL Status" /></a></td>
+  </tr>
+  <tr>
+    <td>develop</td>
+    <td><a href="https://github.com/OpenShock/Frontend/actions/workflows/ci-build.yml"><img src="https://github.com/OpenShock/Frontend/actions/workflows/ci-build.yml/badge.svg?branch=develop" alt="Build Status" /></a></td>
+    <td><a href="https://github.com/OpenShock/Frontend/actions/workflows/codeql.yml"><img src="https://github.com/OpenShock/Frontend/actions/workflows/codeql.yml/badge.svg?branch=develop" alt="CodeQL Status" /></a></td>
   </tr>
 </table>
 

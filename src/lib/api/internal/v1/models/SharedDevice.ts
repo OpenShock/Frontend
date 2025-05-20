@@ -44,7 +44,7 @@ export interface SharedDevice {
      * @type {Array<SharedShocker>}
      * @memberof SharedDevice
      */
-    shockers?: Array<SharedShocker>;
+    shockers: Array<SharedShocker>;
 }
 
 /**
@@ -53,6 +53,7 @@ export interface SharedDevice {
 export function instanceOfSharedDevice(value: object): value is SharedDevice {
     if (!('id' in value) || value['id'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('shockers' in value) || value['shockers'] === undefined) return false;
     return true;
 }
 
@@ -68,7 +69,7 @@ export function SharedDeviceFromJSONTyped(json: any, ignoreDiscriminator: boolea
         
         'id': json['id'],
         'name': json['name'],
-        'shockers': json['shockers'] == null ? undefined : ((json['shockers'] as Array<any>).map(SharedShockerFromJSON)),
+        'shockers': ((json['shockers'] as Array<any>).map(SharedShockerFromJSON)),
     };
 }
 
@@ -85,7 +86,7 @@ export function SharedDeviceToJSONTyped(value?: SharedDevice | null, ignoreDiscr
         
         'id': value['id'],
         'name': value['name'],
-        'shockers': value['shockers'] == null ? undefined : ((value['shockers'] as Array<any>).map(SharedShockerToJSON)),
+        'shockers': ((value['shockers'] as Array<any>).map(SharedShockerToJSON)),
     };
 }
 

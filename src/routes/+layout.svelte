@@ -9,10 +9,10 @@
   import { buildMetaData } from '$lib/metadata';
   import { initializeSignalR } from '$lib/signalr';
   import { initializeStores } from '$lib/stores';
-  import { UserStore } from '$lib/stores/UserStore';
   import type { Snippet } from 'svelte';
-  import { RoleType } from '$lib/api/internal/v1';
   import { browser } from '$app/environment';
+  import { PUBLIC_DEVELOPMENT_BANNER } from '$env/static/public';
+
   import '../app.css';
 
   type Props = {
@@ -29,8 +29,6 @@
   let meta = $derived(buildMetaData(page.url));
 
   let isOpen = $state(false);
-  let isLoggedIn = $derived($UserStore?.self !== null);
-  let currentUserRoles = $derived($UserStore?.self?.roles ?? []);
 </script>
 
 <BasicTags {...meta} />
@@ -39,9 +37,17 @@
 
 <Toaster />
 
-<SidebarProvider bind:open={() => isOpen && isLoggedIn, (o) => (isOpen = o)}>
-  <AppSidebar {currentUserRoles} />
+<SidebarProvider bind:open={isOpen}>
+  <AppSidebar />
   <div class="flex h-screen w-screen flex-1 flex-col overflow-hidden">
+    {#if PUBLIC_DEVELOPMENT_BANNER === 'true'}
+      <div class="top-0 left-0 z-999 bg-[orangered] text-center text-white">
+        <p>
+          This is the OpenShock <b>DEVELOPMENT</b> environment. <u>No data is saved</u>, and
+          regularly overwritten by production data
+        </p>
+      </div>
+    {/if}
     <Header />
     <main class="flex-1">
       {@render children?.()}

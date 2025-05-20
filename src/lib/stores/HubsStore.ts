@@ -1,4 +1,4 @@
-import { shockerV1Api } from '$lib/api';
+import { shockersV1Api } from '$lib/api';
 import type { ResponseDeviceWithShockers } from '$lib/api/internal/v1';
 import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 import { writable } from 'svelte/store';
@@ -20,7 +20,7 @@ export const OwnHubsStore = writable<Map<string, OwnHub>>(new Map());
 export const OnlineHubsStore = writable<Map<string, HubOnlineState>>(new Map());
 
 export function refreshOwnHubs() {
-  shockerV1Api
+  shockersV1Api
     .shockerListShockers()
     .then((response) => {
       if (!response.data) {
@@ -30,8 +30,4 @@ export function refreshOwnHubs() {
       OwnHubsStore.set(new Map(response.data.map((d) => [d.id, d])));
     })
     .catch(handleApiError);
-}
-
-export function initializeDevicesStore() {
-  refreshOwnHubs();
 }

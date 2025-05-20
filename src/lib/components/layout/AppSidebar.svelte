@@ -4,6 +4,7 @@
   import * as Sidebar from '$lib/components/ui/sidebar';
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import { Collapsible } from 'bits-ui';
+  import { UserStore } from '$lib/stores/UserStore';
 
   import {
     ChevronDown,
@@ -18,156 +19,177 @@
     UserPen,
     Wrench,
     Zap,
+    Cpu,
   } from '@lucide/svelte';
 
-  interface Props {
-    currentUserRoles: RoleType[];
-  }
+  let currentUser = $derived($UserStore.self);
 
-  let { currentUserRoles }: Props = $props();
-
+  let sidebarContext = Sidebar.useSidebar();
   let path = $derived(page.url.pathname);
 
-  type subItem = {
-    name: string;
-    class?: string;
-    href?: string;
-    target?: string;
-  };
-
-  type Menu = {
-    name: string;
-    Icon: AnyComponent;
-    class?: string;
-    href?: string;
-    target?: string;
-    collapsible?: { open: boolean };
-    subItems?: subItem[];
-  };
-
-  type Group = {
+  interface Entry {
     title: string;
-    roles?: RoleType[];
+  }
+
+  interface Item extends Entry {
+    class?: string;
+    href?: string;
+    target?: string;
+  }
+
+  interface Menu extends Item {
+    Icon: AnyComponent;
+    collapsible?: { open: boolean };
+    subItems?: Item[];
+  }
+
+  interface Group extends Entry {
     collapsible?: { open: boolean };
     menus: Menu[];
-  };
+  }
 
-  const groups: Group[] = [
-    {
-      title: 'General',
-      menus: [
+  let generalGroup = $derived.by<Group>(() => {
+    const isAuthenticated = !!currentUser;
+
+    let menus: Menu[] = [
+      {
+        title: 'Home',
+        Icon: House,
+        href: isAuthenticated ? '/home' : '/',
+      },
+    ];
+
+    if (isAuthenticated) {
+      menus = menus.concat([
         {
-          name: 'Home',
-          Icon: House,
-          href: '/home',
-        },
-        {
-          name: 'Shockers',
+          title: 'Shockers',
           Icon: Zap,
           href: '/shockers',
         },
         {
-          name: 'Hubs',
+          title: 'Hubs',
           Icon: Router,
           href: '/hubs',
         },
         {
-          name: 'Sharelinks',
+          title: 'Shares',
           Icon: Link,
-          href: '/sharelinks',
+          href: '/shares',
         },
-      ],
-    },
-  ];
+      ]);
+    }
 
-  const footerGroups: Group[] = [
-    {
-      title: 'Admin',
-      roles: [RoleType.Admin, RoleType.System],
-      collapsible: { open: false },
-      menus: [
-        {
-          name: 'Monitoring',
-          Icon: SquareActivity,
-          subItems: [
-            {
-              name: 'Online Hubs',
-              href: '/admin/online-hubs',
-            },
-          ],
-        },
-        {
-          name: 'Management',
-          Icon: Wrench,
-          subItems: [
-            {
-              name: 'Users',
-              href: '/admin/users',
-            },
-          ],
-        },
-        {
-          name: 'Hangfire',
-          Icon: Timer,
-          href: '/hangfire',
-          target: '_blank',
-        },
-      ],
-    },
-    {
-      title: 'Settings',
-      collapsible: { open: false },
-      menus: [
-        {
-          name: 'Account',
-          Icon: UserPen,
-          href: '/settings/account',
-        },
-        {
-          name: 'Sessions',
-          Icon: MonitorSmartphone,
-          href: '/settings/sessions',
-        },
-        {
-          name: 'API Tokens',
-          Icon: KeyRound,
-          href: '/settings/api-tokens',
-        },
-        {
-          name: 'Danger Zone',
-          Icon: TriangleAlert,
-          class: 'text-red-500!',
-          collapsible: { open: false },
-          href: '/settings/danger-zone',
-        },
-      ],
-    },
-  ];
+    menus.push({
+      title: 'Flashtool',
+      Icon: Cpu,
+      href: '/flashtool',
+    });
 
-  function meetsReq(roles: RoleType[], group: Group) {
-    return group.roles?.some((role) => roles.includes(role)) ?? true;
-  }
-  function isPathMatch(path: string, href: string) {
+    return {
+      title: 'General',
+      menus,
+    };
+  });
+  const adminGroup: Group = {
+    title: 'Admin',
+    collapsible: { open: false },
+    menus: [
+      {
+        title: 'Monitoring',
+        Icon: SquareActivity,
+        subItems: [
+          {
+            title: 'Online Hubs',
+            href: '/admin/online-hubs',
+          },
+        ],
+      },
+      {
+        title: 'Management',
+        Icon: Wrench,
+        subItems: [
+          {
+            title: 'Users',
+            href: '/admin/users',
+          },
+        ],
+      },
+      {
+        title: 'Hangfire',
+        Icon: Timer,
+        href: '/hangfire',
+        target: '_blank',
+      },
+    ],
+  };
+  const settingsGroup: Group = {
+    title: 'Settings',
+    menus: [
+      {
+        title: 'Account',
+        Icon: UserPen,
+        href: '/settings/account',
+      },
+      {
+        title: 'Sessions',
+        Icon: MonitorSmartphone,
+        href: '/settings/sessions',
+      },
+      {
+        title: 'API Tokens',
+        Icon: KeyRound,
+        href: '/settings/api-tokens',
+      },
+      {
+        title: 'Danger Zone',
+        Icon: TriangleAlert,
+        class: 'text-red-500!',
+        href: '/settings/danger-zone',
+      },
+    ],
+  };
+
+  let headerGroups = $derived([generalGroup]);
+  let footerGroups = $derived.by(() => {
+    const isAuthenticated = !!currentUser;
+
+    let groups: Group[] = [];
+
+    if (isAuthenticated) {
+      if (currentUser.roles.includes(RoleType.Admin)) {
+        groups.push(adminGroup);
+      }
+
+      groups.push(settingsGroup);
+    }
+
+    return groups;
+  });
+
+  function isPathMatch(path: string, href?: string) {
     return path === href || path.startsWith(href + '/');
   }
 </script>
 
-{#snippet menuSubItemSection(subItem: subItem)}
+{#snippet menuSubItemSection(subItem: Item)}
   <Sidebar.MenuSubButton class={subItem.class}>
     <a href={subItem.href}>
-      <span> {subItem.name}</span>
+      <span> {subItem.title}</span>
     </a>
   </Sidebar.MenuSubButton>
 {/snippet}
 
 {#snippet menuSection(menu: Menu)}
   <Sidebar.MenuItem>
-    <Sidebar.MenuButton class={menu.class}>
+    <Sidebar.MenuButton class={menu.class} isActive={isPathMatch(path, menu.href)}>
       {#snippet child({ props })}
         <a href={menu.href} {...props}>
           <menu.Icon />
-          <span>{menu.name}</span>
+          <span>{menu.title}</span>
         </a>
+      {/snippet}
+      {#snippet tooltipContent()}
+        {menu.title}
       {/snippet}
     </Sidebar.MenuButton>
     <!--
@@ -177,7 +199,7 @@
   </Sidebar.MenuItem>
   {#if menu.subItems}
     <Sidebar.MenuSub>
-      {#each menu.subItems as subItem (subItem.name)}
+      {#each menu.subItems as subItem (subItem.title)}
         {@render menuSubItemSection(subItem)}
       {/each}
     </Sidebar.MenuSub>
@@ -187,53 +209,65 @@
 {#snippet groupContentSection(group: Group)}
   <Sidebar.GroupContent>
     <Sidebar.Menu>
-      {#each group.menus as menu (menu.name)}
+      {#each group.menus as menu (menu.title)}
         {@render menuSection(menu)}
       {/each}
     </Sidebar.Menu>
   </Sidebar.GroupContent>
 {/snippet}
 
-{#snippet groupsSection(userRoles: RoleType[], groups: Group[])}
+{#snippet groupsSection(groups: Group[])}
   {#each groups as group (group.title)}
-    {#if meetsReq(userRoles, group)}
-      {#if group.collapsible === undefined}
+    {#if group.collapsible === undefined}
+      <Sidebar.Group>
+        <Sidebar.GroupLabel>{group.title}</Sidebar.GroupLabel>
+        {@render groupContentSection(group)}
+      </Sidebar.Group>
+    {:else}
+      <Collapsible.Root
+        open={group.collapsible.open ||
+          (sidebarContext.state === 'collapsed' && !sidebarContext.isMobile)}
+        class="group/collapsible"
+      >
         <Sidebar.Group>
-          <Sidebar.GroupLabel>{group.title}</Sidebar.GroupLabel>
-          {@render groupContentSection(group)}
+          <Sidebar.GroupLabel>
+            {#snippet child({ props })}
+              <Collapsible.Trigger {...props}>
+                {group.title}
+                <ChevronDown
+                  class="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180"
+                />
+              </Collapsible.Trigger>
+            {/snippet}
+          </Sidebar.GroupLabel>
+          <Collapsible.Content>
+            {@render groupContentSection(group)}
+          </Collapsible.Content>
         </Sidebar.Group>
-      {:else}
-        <Collapsible.Root open={group.collapsible.open} class="group/collapsible">
-          <Sidebar.Group>
-            <Sidebar.GroupLabel>
-              {#snippet child({ props })}
-                <Collapsible.Trigger {...props}>
-                  {group.title}
-                  <ChevronDown
-                    class="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180"
-                  />
-                </Collapsible.Trigger>
-              {/snippet}
-            </Sidebar.GroupLabel>
-            <Collapsible.Content>
-              {@render groupContentSection(group)}
-            </Collapsible.Content>
-          </Sidebar.Group>
-        </Collapsible.Root>
-      {/if}
+      </Collapsible.Root>
     {/if}
   {/each}
 {/snippet}
-
-<Sidebar.Root>
-  <!--
+<!-- group-data-[collapsible=icon]:opacity-0 -->
+<Sidebar.Root collapsible="icon">
   <Sidebar.Header>
+    <a href={$UserStore.self ? '/home' : '/'}>
+      <span class="pointer-events-none flex">
+        <img class="ml-[0.667px] h-7.5" src="/IconSpinning.svg" alt="OpenShock Logo" />
+        <span class="ml-1.5 grow">
+          <img
+            class="h-7.5 transition-opacity delay-100 duration-200 group-data-[collapsible=icon]:opacity-0 group-data-[collapsible=icon]:delay-0"
+            src="/LogoTextOnly.svg"
+            alt="OpenShock Logo"
+          />
+        </span>
+      </span>
+    </a>
   </Sidebar.Header>
-  -->
   <Sidebar.Content>
-    {@render groupsSection(currentUserRoles, groups)}
+    {@render groupsSection(headerGroups)}
+    <div class="grow-1"></div>
+    {@render groupsSection(footerGroups)}
   </Sidebar.Content>
-  <Sidebar.Footer>
-    {@render groupsSection(currentUserRoles, footerGroups)}
-  </Sidebar.Footer>
+  <Sidebar.Footer></Sidebar.Footer>
 </Sidebar.Root>

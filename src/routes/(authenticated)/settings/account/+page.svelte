@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { authenticatedAccountApi } from '$lib/api';
+  import { accountV1Api } from '$lib/api';
   import EmailInput from '$lib/components/input/EmailInput.svelte';
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
@@ -25,7 +25,7 @@
 
   async function submitUsername() {
     try {
-      await authenticatedAccountApi.authenticatedAccountChangeUsername({ username });
+      await accountV1Api.authenticatedAccountChangeUsername({ username });
 
       toast.success('Username changed successfully');
 
@@ -87,7 +87,7 @@
             Change your password
           </Accordion.Trigger>
           <Accordion.Content>
-            <div class="mx-[-1rem] rounded-lg border border-gray-700 p-5">
+            <div class="-mx-4 rounded-lg border border-gray-700 p-5">
               <PasswordInput
                 label="Current Password"
                 placeholder="Current Password"

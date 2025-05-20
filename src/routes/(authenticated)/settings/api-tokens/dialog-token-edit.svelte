@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { tokensApi } from '$lib/api';
+  import { apiTokensApi } from '$lib/api';
   import { PermissionType } from '$lib/api/internal/v1';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
@@ -26,7 +26,7 @@
   }
 
   function saveChanges() {
-    tokensApi
+    apiTokensApi
       .tokensEditToken(token.id, { name, permissions })
       .then(handleEdited)
       .catch(handleApiError);
