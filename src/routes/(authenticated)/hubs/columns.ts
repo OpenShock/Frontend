@@ -1,10 +1,14 @@
-import type { ColumnDef, StringOrTemplateHeader } from '@tanstack/table-core';
-import { createRawSnippet } from 'svelte';
-import { renderComponent, renderSnippet } from '$lib/components/ui/data-table';
+import type { ColumnDef } from '@tanstack/table-core';
+import { renderComponent } from '$lib/components/ui/data-table';
 import { ShockerModelType } from '$lib/api/internal/v1';
-import DataTableSortButton from '$lib/components/Table/SortButton.svelte';
 import DataTableActions from './data-table-actions.svelte';
 import type { SemVer } from 'semver';
+import {
+  CreateSimpleCellSnippet,
+  CreateSortHeader,
+  FirmwareVersionRenderer,
+  LocaleDateTimeRenderer,
+} from '$lib/components/Table/ColumnUtils';
 
 export type Shocker = {
   id: string;
@@ -23,63 +27,28 @@ export type Hub = {
   created_at: Date;
 };
 
-function CreateSortHeader<TData>(name: string): StringOrTemplateHeader<TData, unknown> {
-  return ({ column }) =>
-    renderComponent(DataTableSortButton, {
-      name,
-      onclick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
-    });
-}
+const IsOnlineRenderer = (isOnline: boolean) =>
+  `<div class="px-4 font-medium ${isOnline ? 'text-green-500' : 'text-red-500'}">${isOnline ? 'Online' : 'Offline'}</div>`;
 
 export const columns: ColumnDef<Hub>[] = [
   {
     accessorKey: 'name',
-    header: CreateSortHeader<Hub>('Name'),
+    header: CreateSortHeader('Name'),
   },
   {
     accessorKey: 'is_online',
-    header: CreateSortHeader<Hub>('Status'),
-    cell: ({ row }) => {
-      const isOnlineCellSnippet = createRawSnippet<[boolean]>((getIsOnline) => {
-        const isOnline = getIsOnline();
-        return {
-          render: () =>
-            `<div class="text-center font-medium ${isOnline ? 'text-green-500' : 'text-red-500'}">${isOnline ? 'Online' : 'Offline'}</div>`,
-        };
-      });
-
-      return renderSnippet(isOnlineCellSnippet, row.getValue<boolean>('is_online'));
-    },
+    header: CreateSortHeader('Status'),
+    cell: CreateSimpleCellSnippet('is_online', IsOnlineRenderer),
   },
   {
     accessorKey: 'firmware_version',
-    header: CreateSortHeader<Hub>('Version'),
-    cell: ({ row }) => {
-      const versionCellSnippet = createRawSnippet<[SemVer | null]>((getFirmwareVersion) => {
-        const firmwareVersion = getFirmwareVersion();
-        return {
-          render: () =>
-            `<div class="text-center font-medium">${firmwareVersion?.format() ?? ''}</div>`,
-        };
-      });
-
-      return renderSnippet(versionCellSnippet, row.getValue<SemVer | null>('firmware_version'));
-    },
+    header: CreateSortHeader('Version'),
+    cell: CreateSimpleCellSnippet('firmware_version', FirmwareVersionRenderer),
   },
   {
     accessorKey: 'created_at',
-    header: CreateSortHeader<Hub>('Created at'),
-    cell: ({ row }) => {
-      const createdAtCellSnippet = createRawSnippet<[Date]>((getCreatedAt) => {
-        const createdAt = getCreatedAt();
-        return {
-          render: () =>
-            `<div class="text-right font-medium" title="${createdAt}">${createdAt.toLocaleString()}</div>`,
-        };
-      });
-
-      return renderSnippet(createdAtCellSnippet, row.getValue<Date>('created_at'));
-    },
+    header: CreateSortHeader('Created at'),
+    cell: CreateSimpleCellSnippet('created_at', LocaleDateTimeRenderer),
   },
   {
     id: 'actions',

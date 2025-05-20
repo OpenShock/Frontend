@@ -1,8 +1,12 @@
-import type { ColumnDef, StringOrTemplateHeader } from '@tanstack/table-core';
-import { createRawSnippet } from 'svelte';
-import { renderComponent, renderSnippet } from '$lib/components/ui/data-table';
-import DataTableSortButton from '$lib/components/Table/SortButton.svelte';
+import type { ColumnDef } from '@tanstack/table-core';
+import { renderComponent } from '$lib/components/ui/data-table';
 import DataTableActions from './data-table-actions.svelte';
+import {
+  CreateSimpleCellSnippet,
+  CreateSortHeader,
+  TimeSinceRelativeOrNeverRenderer,
+  LocaleDateTimeRenderer,
+} from '$lib/components/Table/ColumnUtils';
 
 export type ShareLink = {
   id: string;
@@ -11,48 +15,20 @@ export type ShareLink = {
   expires_at: Date | null | undefined;
 };
 
-function CreateSortHeader<TData>(name: string): StringOrTemplateHeader<TData, unknown> {
-  return ({ column }) =>
-    renderComponent(DataTableSortButton, {
-      name,
-      onclick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
-    });
-}
-
 export const columns: ColumnDef<ShareLink>[] = [
   {
     accessorKey: 'name',
-    header: CreateSortHeader<ShareLink>('Name'),
+    header: CreateSortHeader('Name'),
   },
   {
     accessorKey: 'created_at',
-    header: CreateSortHeader<ShareLink>('Created at'),
-    cell: ({ row }) => {
-      const createdAtCellSnippet = createRawSnippet<[Date]>((getCreatedAt) => {
-        const createdAt = getCreatedAt();
-        return {
-          render: () =>
-            `<div class="font-medium" title="${createdAt}">${createdAt?.toLocaleString()}</div>`,
-        };
-      });
-
-      return renderSnippet(createdAtCellSnippet, row.getValue<Date>('created_at'));
-    },
+    header: CreateSortHeader('Created at'),
+    cell: CreateSimpleCellSnippet('created_at', LocaleDateTimeRenderer),
   },
   {
     accessorKey: 'expires_at',
-    header: CreateSortHeader<ShareLink>('Expires'),
-    cell: ({ row }) => {
-      const expiresAtCellSnippet = createRawSnippet<[Date]>((getExpiresAt) => {
-        const expiresAt = getExpiresAt();
-        return {
-          render: () =>
-            `<div class="font-medium" title="${expiresAt}">${expiresAt?.toLocaleString() ?? 'Never'}</div>`,
-        };
-      });
-
-      return renderSnippet(expiresAtCellSnippet, row.getValue<Date>('expires_at'));
-    },
+    header: CreateSortHeader('Expires'),
+    cell: CreateSimpleCellSnippet('expires_at', TimeSinceRelativeOrNeverRenderer),
   },
   {
     id: 'actions',

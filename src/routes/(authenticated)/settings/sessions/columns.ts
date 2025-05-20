@@ -1,10 +1,13 @@
-import { renderComponent, renderSnippet } from '$lib/components/ui/data-table';
-import { elapsedToString } from '$lib/utils/time';
-import { getReadableUserAgentName } from '$lib/utils/userAgent';
-import type { ColumnDef, StringOrTemplateHeader } from '@tanstack/table-core';
-import { createRawSnippet } from 'svelte';
+import { renderComponent } from '$lib/components/ui/data-table';
+import type { ColumnDef } from '@tanstack/table-core';
 import DataTableActions from './data-table-actions.svelte';
-import DataTableSortButton from '$lib/components/Table/SortButton.svelte';
+import {
+  CreateSimpleCellSnippet,
+  CreateSortHeader,
+  TimeSinceRelativeOrNeverRenderer,
+  TimeSinceRelativeRenderer,
+  UserAgentRenderer,
+} from '$lib/components/Table/ColumnUtils';
 
 export type Session = {
   id: string;
@@ -15,14 +18,6 @@ export type Session = {
   last_seen: Date | null;
 };
 
-function CreateSortHeader<TData>(name: string): StringOrTemplateHeader<TData, unknown> {
-  return ({ column }) =>
-    renderComponent(DataTableSortButton, {
-      name,
-      onclick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
-    });
-}
-
 export const columns: ColumnDef<Session>[] = [
   {
     accessorKey: 'ip',
@@ -31,75 +26,22 @@ export const columns: ColumnDef<Session>[] = [
   {
     accessorKey: 'user_agent',
     header: CreateSortHeader('User Agent'),
-    cell: ({ row }) => {
-      const userAgentCellSnippet = createRawSnippet<[string]>((getUserAgent) => {
-        const userAgent = getUserAgent();
-        const readableUserAgent = getReadableUserAgentName(userAgent);
-        return {
-          render: () =>
-            `<div class="text-left font-medium" title="${userAgent}">${readableUserAgent ?? userAgent}</div>`,
-        };
-      });
-
-      return renderSnippet(userAgentCellSnippet, row.getValue<string>('user_agent'));
-    },
+    cell: CreateSimpleCellSnippet('user_agent', UserAgentRenderer),
   },
   {
     accessorKey: 'created_at',
     header: CreateSortHeader('Created at'),
-    cell: ({ row }) => {
-      const createdAtCellSnippet = createRawSnippet<[Date]>((getCreatedAt) => {
-        const now = Date.now();
-        const createdAt = getCreatedAt();
-        const formattedTimeSpan = elapsedToString(now - createdAt.getTime());
-        return {
-          render: () =>
-            `<div class="text-right font-medium" title="${createdAt}">${formattedTimeSpan}</div>`,
-        };
-      });
-
-      return renderSnippet(createdAtCellSnippet, row.getValue<Date>('created_at'));
-    },
+    cell: CreateSimpleCellSnippet('created_at', TimeSinceRelativeRenderer),
   },
   {
     accessorKey: 'expires_at',
     header: CreateSortHeader('Expires at'),
-    cell: ({ row }) => {
-      const expiresAtCellSnippet = createRawSnippet<[Date]>((getExpiresAt) => {
-        const now = Date.now();
-        const expiresAt = getExpiresAt();
-        const formattedTimeSpan = elapsedToString(expiresAt.getTime() - now);
-        return {
-          render: () =>
-            `<div class="text-right font-medium" title="${expiresAt}">${formattedTimeSpan}</div>`,
-        };
-      });
-
-      return renderSnippet(expiresAtCellSnippet, row.getValue<Date>('expires_at'));
-    },
+    cell: CreateSimpleCellSnippet('expires_at', TimeSinceRelativeRenderer),
   },
   {
     accessorKey: 'last_seen',
     header: CreateSortHeader('Last seen'),
-    cell: ({ row }) => {
-      const lastSeenCellSnippet = createRawSnippet<[Date | null]>((getLastSeen) => {
-        const lastSeen = getLastSeen();
-        if (!lastSeen) {
-          return {
-            render: () => `<div class="text-left font-medium" title="N/A">N/A</div>`,
-          };
-        }
-
-        const now = Date.now();
-        const formattedTimeSpan = elapsedToString(lastSeen.getTime() - now);
-        return {
-          render: () =>
-            `<div class="text-right font-medium" title="${lastSeen}">${formattedTimeSpan}</div>`,
-        };
-      });
-
-      return renderSnippet(lastSeenCellSnippet, row.getValue<Date | null>('last_seen'));
-    },
+    cell: CreateSimpleCellSnippet('last_seen', TimeSinceRelativeOrNeverRenderer),
   },
   {
     id: 'actions',

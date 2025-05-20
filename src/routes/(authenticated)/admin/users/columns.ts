@@ -1,9 +1,12 @@
-import type { ColumnDef, StringOrTemplateHeader } from '@tanstack/table-core';
-import { createRawSnippet } from 'svelte';
-import { renderComponent, renderSnippet } from '$lib/components/ui/data-table';
+import type { ColumnDef } from '@tanstack/table-core';
+import { renderComponent } from '$lib/components/ui/data-table';
 import { PasswordHashingAlgorithm, RoleType } from '$lib/api/internal/v1';
-import DataTableSortButton from '$lib/components/Table/SortButton.svelte';
 import DataTableActions from './data-table-actions.svelte';
+import {
+  CreateSimpleCellSnippet,
+  CreateSortHeader,
+  LocaleDateTimeRenderer,
+} from '$lib/components/Table/ColumnUtils';
 
 export type User = {
   id: string;
@@ -15,84 +18,47 @@ export type User = {
   roles: RoleType[];
 };
 
-function CreateSortHeader<TData>(name: string): StringOrTemplateHeader<TData, unknown> {
-  return ({ column }) =>
-    renderComponent(DataTableSortButton, {
-      name,
-      onclick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
-    });
-}
+const PasswordHashTypeRenderer = (passwordHashType: PasswordHashingAlgorithm) => {
+  const isLegacy = passwordHashType !== PasswordHashingAlgorithm.BCrypt;
+  return `<div class="px-4 font-medium ${isLegacy ? 'text-orange-500' : ''}">${passwordHashType}</div>`;
+};
+
+const IsEmailActivatedRenderer = (emailActivated: boolean) =>
+  `<div class="px-4 font-medium ${emailActivated ? 'text-green-500' : 'text-red-500'}">${emailActivated}</div>`;
+
+const UserRolesRenderer = (roles: RoleType[]) => {
+  const isPrivileged = [RoleType.Admin, RoleType.System].some((role) => roles.includes(role));
+  return `<div class="px-4 font-medium ${isPrivileged ? 'text-blue-500' : ''}">${roles}</div>`;
+};
 
 export const columns: ColumnDef<User>[] = [
   {
     accessorKey: 'name',
-    header: CreateSortHeader<User>('Name'),
+    header: CreateSortHeader('Name'),
   },
   {
     accessorKey: 'email',
-    header: CreateSortHeader<User>('Email'),
+    header: CreateSortHeader('Email'),
   },
   {
     accessorKey: 'password_hash_type',
-    header: CreateSortHeader<User>('Password hash type'),
-    cell: ({ row }) => {
-      const passwordHashTypeCellSnippet = createRawSnippet<[string]>((getPasswordHashType) => {
-        const passwordHashType = getPasswordHashType();
-        const isLegacy = passwordHashType !== PasswordHashingAlgorithm.BCrypt;
-        return {
-          render: () =>
-            `<div class="text-center font-medium ${isLegacy ? 'text-orange-500' : ''}">${passwordHashType}</div>`,
-        };
-      });
-
-      return renderSnippet(passwordHashTypeCellSnippet, row.getValue<string>('password_hash_type'));
-    },
+    header: CreateSortHeader('Password hash type'),
+    cell: CreateSimpleCellSnippet('password_hash_type', PasswordHashTypeRenderer),
   },
   {
     accessorKey: 'created_at',
-    header: CreateSortHeader<User>('Created at'),
-    cell: ({ row }) => {
-      const createdAtCellSnippet = createRawSnippet<[Date]>((getCreatedAt) => {
-        const createdAt = getCreatedAt();
-        return {
-          render: () =>
-            `<div class="text-right font-medium" title="${createdAt}">${createdAt.toLocaleString()}</div>`,
-        };
-      });
-
-      return renderSnippet(createdAtCellSnippet, row.getValue<Date>('created_at'));
-    },
+    header: CreateSortHeader('Created at'),
+    cell: CreateSimpleCellSnippet('created_at', LocaleDateTimeRenderer),
   },
   {
     accessorKey: 'email_activated',
-    header: CreateSortHeader<User>('Email activated'),
-    cell: ({ row }) => {
-      const emailActivatedCellSnippet = createRawSnippet<[boolean]>((getEmailActivated) => {
-        const emailActivated = getEmailActivated();
-        return {
-          render: () =>
-            `<div class="text-center font-medium ${emailActivated ? 'text-green-500' : 'text-red-500'}">${emailActivated}</div>`,
-        };
-      });
-
-      return renderSnippet(emailActivatedCellSnippet, row.getValue<boolean>('email_activated'));
-    },
+    header: CreateSortHeader('Email activated'),
+    cell: CreateSimpleCellSnippet('email_activated', IsEmailActivatedRenderer),
   },
   {
     accessorKey: 'roles',
-    header: CreateSortHeader<User>('Roles'),
-    cell: ({ row }) => {
-      const rolesCellSnippet = createRawSnippet<[RoleType[]]>((getRoles) => {
-        const roles = getRoles();
-        const isPrivileged = [RoleType.Admin, RoleType.System].some((role) => roles.includes(role));
-        return {
-          render: () =>
-            `<div class="text-center font-medium ${isPrivileged ? 'text-blue-500' : ''}">${roles}</div>`,
-        };
-      });
-
-      return renderSnippet(rolesCellSnippet, row.getValue<RoleType[]>('roles'));
-    },
+    header: CreateSortHeader('Roles'),
+    cell: CreateSimpleCellSnippet('roles', UserRolesRenderer),
   },
   {
     id: 'actions',
