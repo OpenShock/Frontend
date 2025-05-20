@@ -4,10 +4,11 @@
   import { OwnHubsStore, OnlineHubsStore, refreshOwnHubs } from '$lib/stores/HubsStore';
   import { SemVer } from 'semver';
   import { columns, type Hub } from './columns';
-  import DataTable from './data-table.svelte';
+  import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
+  import type { SortingState } from '@tanstack/table-core';
+  import { onMount } from 'svelte';
 
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
-  import { onMount } from 'svelte';
 
   let data = $derived.by<Hub[]>(() => {
     if (!$OwnHubsStore || !$OnlineHubsStore) return [];
@@ -35,6 +36,7 @@
       };
     });
   });
+  let sorting = $state<SortingState>([]);
 
   onMount(refreshOwnHubs);
 </script>
@@ -51,6 +53,6 @@
     <Card.Description>This is a list of all hubs you own.</Card.Description>
   </Card.Header>
   <Card.Content>
-    <DataTable {data} {columns} />
+    <DataTable {data} {columns} {sorting} />
   </Card.Content>
 </div>

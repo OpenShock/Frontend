@@ -6,7 +6,9 @@
   import * as Card from '$lib/components/ui/card';
   import { onDestroy, onMount } from 'svelte';
   import { columns, type User } from './columns';
-  import DataTable from './data-table.svelte';
+  import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
+  import type { ColumnFiltersState, PaginationState, SortingState } from '@tanstack/table-core';
+  import { Input } from '$lib/components/ui/input';
 
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
 
@@ -40,7 +42,16 @@
   type FilterMap<TEntity> = { [K in keyof TEntity]: string };
   type OrderbyQuery<TEntity> = `${Extract<keyof TEntity, string>} ${'asc' | 'desc'}`;
 
+  let nameSearch = $state('');
+  let emailSearch = $state('');
+
   let data = $state<User[]>([]);
+  let sorting = $state<SortingState>([]);
+  let filters = $derived<ColumnFiltersState>([
+    { id: 'name', value: nameSearch },
+    { id: 'email', value: emailSearch },
+  ]);
+  let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: 10 });
 
   function fetchUsers() {
     adminApi
@@ -77,6 +88,10 @@
     </Card.Title>
   </Card.Header>
   <Card.Content>
-    <DataTable {data} {columns} />
+    <div class="flex items-center space-x-4 py-4">
+      <Input placeholder="Filter names..." bind:value={nameSearch} class="max-w-sm" />
+      <Input placeholder="Filter emails..." bind:value={emailSearch} class="max-w-sm" />
+    </div>
+    <DataTable {data} {columns} {sorting} {filters} {pagination} />
   </Card.Content>
 </div>

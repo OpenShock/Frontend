@@ -4,9 +4,10 @@
   import * as Card from '$lib/components/ui/card';
   import { onMount } from 'svelte';
   import { columns, type ApiToken } from './columns';
-  import DataTable from './data-table.svelte';
+  import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import TokenGenerateDialog from './dialog-token-generate.svelte';
   import { ApiTokensStore, refreshApiToken, refreshApiTokens } from '$lib/stores/ApiTokensStore';
+  import type { SortingState } from '@tanstack/table-core';
 
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
 
@@ -24,6 +25,7 @@
   let data = $derived<ApiToken[]>(
     Array.from($ApiTokensStore).map(([_, token]) => apiTokenToTableToken(token))
   );
+  let sorting = $state<SortingState>([]);
 
   let showGenerateTokenModal = $state<boolean>(false);
 
@@ -50,7 +52,7 @@
     <Card.Description>API Tokens are used to authenticate with the OpenShock API</Card.Description>
   </Card.Header>
   <Card.Content class="flex flex-col space-y-4">
-    <DataTable {data} {columns} />
+    <DataTable {data} {columns} {sorting} />
     <div class="flex justify-end"></div>
   </Card.Content>
 </div>

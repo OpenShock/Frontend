@@ -7,7 +7,8 @@
   import { SemVer } from 'semver';
   import { onDestroy, onMount } from 'svelte';
   import { columns, type OnlineHub } from './columns';
-  import DataTable from './data-table.svelte';
+  import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
+  import type { ColumnFiltersState, SortingState } from '@tanstack/table-core';
 
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
 
@@ -31,6 +32,8 @@
   }
 
   let data = $state<OnlineHub[]>([]);
+  let sorting = $state<SortingState>([]);
+  let filters = $state<ColumnFiltersState>([]);
 
   function fetchOnlineHubs() {
     adminApi
@@ -67,6 +70,6 @@
     </Card.Title>
   </Card.Header>
   <Card.Content>
-    <DataTable {data} {columns} />
+    <DataTable {data} {columns} {sorting} {filters} />
   </Card.Content>
 </div>

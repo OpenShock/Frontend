@@ -4,11 +4,13 @@
   import * as Card from '$lib/components/ui/card';
   import { onMount } from 'svelte';
   import { columns, type ShareLink } from './columns';
-  import DataTable from './data-table.svelte';
+  import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
+  import type { SortingState } from '@tanstack/table-core';
 
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
 
   let data = $state<ShareLink[]>([]);
+  let sorting = $state<SortingState>([]);
 
   function refreshShareLinks() {
     shockerShareLinksApi
@@ -47,6 +49,6 @@
     <Card.Description>This is a list of all the sharelinks you control.</Card.Description>
   </Card.Header>
   <Card.Content>
-    <DataTable {data} {columns} />
+    <DataTable {data} {columns} {sorting} />
   </Card.Content>
 </div>
