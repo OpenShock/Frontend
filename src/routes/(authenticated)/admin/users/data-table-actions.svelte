@@ -1,16 +1,15 @@
 <script lang="ts">
-  import { RoleType } from '$lib/api/internal/v1';
+  import { RoleType, type AdminUsersView } from '$lib/api/internal/v1';
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { toast } from 'svelte-sonner';
-  import type { User } from './columns';
   import UserDeleteDialog from './dialog-user-delete.svelte';
   import UserEditDialog from './dialog-user-edit.svelte';
 
   import Ellipsis from '@lucide/svelte/icons/ellipsis';
 
   type Props = {
-    user: User;
+    user: AdminUsersView;
   };
 
   let { user }: Props = $props();

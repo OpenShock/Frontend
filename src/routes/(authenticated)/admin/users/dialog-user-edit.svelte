@@ -1,16 +1,15 @@
 <script lang="ts">
-  import { RoleType } from '$lib/api/internal/v1';
+  import { RoleType, type AdminUsersView } from '$lib/api/internal/v1';
   import EmailInput from '$lib/components/input/EmailInput.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
   import { Button } from '$lib/components/ui/button';
   import { Checkbox } from '$lib/components/ui/checkbox';
   import * as Dialog from '$lib/components/ui/dialog';
-  import type { User } from './columns';
 
   type Props = {
     open: boolean;
-    user: User;
+    user: AdminUsersView;
   };
 
   let { open = $bindable<boolean>(), user }: Props = $props();
