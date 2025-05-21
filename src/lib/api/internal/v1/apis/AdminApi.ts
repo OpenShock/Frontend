@@ -25,6 +25,11 @@ import {
     AdminUsersViewPaginatedToJSON,
 } from '../models/index';
 
+export interface AdminDeactivateUserRequest {
+    userId: string;
+    deleteLater?: boolean;
+}
+
 export interface AdminDeleteUserRequest {
     userId: string;
 }
@@ -36,6 +41,10 @@ export interface AdminGetUsersRequest {
     $limit?: number;
 }
 
+export interface AdminReactivateUserRequest {
+    userId: string;
+}
+
 /**
  * AdminApi - interface
  * 
@@ -43,6 +52,22 @@ export interface AdminGetUsersRequest {
  * @interface AdminApiInterface
  */
 export interface AdminApiInterface {
+    /**
+     * 
+     * @summary Deactivates a user
+     * @param {string} userId 
+     * @param {boolean} [deleteLater] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminDeactivateUserRaw(requestParameters: AdminDeactivateUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Deactivates a user
+     */
+    adminDeactivateUser(userId: string, deleteLater?: boolean, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
     /**
      * 
      * @summary Deletes a user
@@ -90,12 +115,63 @@ export interface AdminApiInterface {
      */
     adminGetUsers($filter?: string, $orderby?: string, $offset?: number, $limit?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminUsersViewPaginated>;
 
+    /**
+     * 
+     * @summary Reactivates a user
+     * @param {string} userId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminReactivateUserRaw(requestParameters: AdminReactivateUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Reactivates a user
+     */
+    adminReactivateUser(userId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
 }
 
 /**
  * 
  */
 export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
+
+    /**
+     * Deactivates a user
+     */
+    async adminDeactivateUserRaw(requestParameters: AdminDeactivateUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['userId'] == null) {
+            throw new runtime.RequiredError(
+                'userId',
+                'Required parameter "userId" was null or undefined when calling adminDeactivateUser().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['deleteLater'] != null) {
+            queryParameters['deleteLater'] = requestParameters['deleteLater'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/1/admin/users/{userId}/deactivate`.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Deactivates a user
+     */
+    async adminDeactivateUser(userId: string, deleteLater?: boolean, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.adminDeactivateUserRaw({ userId: userId, deleteLater: deleteLater }, initOverrides);
+    }
 
     /**
      * Deletes a user
@@ -195,6 +271,38 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     async adminGetUsers($filter?: string, $orderby?: string, $offset?: number, $limit?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminUsersViewPaginated> {
         const response = await this.adminGetUsersRaw({ $filter: $filter, $orderby: $orderby, $offset: $offset, $limit: $limit }, initOverrides);
         return await response.value();
+    }
+
+    /**
+     * Reactivates a user
+     */
+    async adminReactivateUserRaw(requestParameters: AdminReactivateUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['userId'] == null) {
+            throw new runtime.RequiredError(
+                'userId',
+                'Required parameter "userId" was null or undefined when calling adminReactivateUser().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/1/admin/users/{userId}/reactivate`.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Reactivates a user
+     */
+    async adminReactivateUser(userId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.adminReactivateUserRaw({ userId: userId }, initOverrides);
     }
 
 }

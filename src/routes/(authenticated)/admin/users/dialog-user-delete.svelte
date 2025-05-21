@@ -1,11 +1,11 @@
 <script lang="ts">
+  import type { AdminUsersView } from '$lib/api/internal/v1';
   import AbsolutelySureButton from '$lib/components/AbsolutelySureButton.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
-  import type { User } from './columns';
 
   type Props = {
     open: boolean;
-    user: User;
+    user: AdminUsersView;
   };
 
   let { open = $bindable<boolean>(), user }: Props = $props();

@@ -8,7 +8,7 @@ import {
   MetaApi,
   SessionsApi,
   ShockersApi as ShockersV1Api,
-  ShockerShareLinksApi,
+  PublicShockerSharesApi,
   ShockerSharesApi as ShockerSharesV1Api,
   UsersApi,
 } from './internal/v1';
@@ -67,7 +67,7 @@ export const metaApi = new MetaApi(DefaultApiV1Configuration);
 export const sessionsApi = new SessionsApi(DefaultApiV1Configuration);
 export const shockersV1Api = new ShockersV1Api(DefaultApiV1Configuration);
 export const shockersV2Api = new ShockersV2Api(DefaultApiV2Configuration);
-export const shockerShareLinksApi = new ShockerShareLinksApi(DefaultApiV1Configuration);
+export const publicShockerSharesApi = new PublicShockerSharesApi(DefaultApiV1Configuration);
 export const shockerSharesV1Api = new ShockerSharesV1Api(DefaultApiV1Configuration);
 export const shockerSharesV2Api = new ShockerSharesV2Api(DefaultApiV2Configuration);
 export const usersApi = new UsersApi(DefaultApiV1Configuration);

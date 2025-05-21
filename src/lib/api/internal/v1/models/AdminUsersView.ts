@@ -60,22 +60,34 @@ export interface AdminUsersView {
     passwordHashType: PasswordHashingAlgorithm;
     /**
      * 
+     * @type {Array<RoleType>}
+     * @memberof AdminUsersView
+     */
+    roles: Array<RoleType>;
+    /**
+     * 
      * @type {Date}
      * @memberof AdminUsersView
      */
     createdAt: Date;
     /**
      * 
-     * @type {boolean}
+     * @type {Date}
      * @memberof AdminUsersView
      */
-    emailActivated: boolean;
+    activatedAt: Date | null;
     /**
      * 
-     * @type {Array<RoleType>}
+     * @type {Date}
      * @memberof AdminUsersView
      */
-    roles: Array<RoleType>;
+    deactivatedAt: Date | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AdminUsersView
+     */
+    deactivatedByUserId: string | null;
     /**
      * 
      * @type {number}
@@ -93,13 +105,13 @@ export interface AdminUsersView {
      * @type {number}
      * @memberof AdminUsersView
      */
-    shockerShareCount: number;
+    shockerUserShareCount: number;
     /**
      * 
      * @type {number}
      * @memberof AdminUsersView
      */
-    shockerShareLinkCount: number;
+    shockerPublicShareCount: number;
     /**
      * 
      * @type {number}
@@ -112,12 +124,6 @@ export interface AdminUsersView {
      * @memberof AdminUsersView
      */
     nameChangeRequestCount: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof AdminUsersView
-     */
-    userActivationCount: number;
     /**
      * 
      * @type {number}
@@ -148,16 +154,17 @@ export function instanceOfAdminUsersView(value: object): value is AdminUsersView
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('email' in value) || value['email'] === undefined) return false;
     if (!('passwordHashType' in value) || value['passwordHashType'] === undefined) return false;
-    if (!('createdAt' in value) || value['createdAt'] === undefined) return false;
-    if (!('emailActivated' in value) || value['emailActivated'] === undefined) return false;
     if (!('roles' in value) || value['roles'] === undefined) return false;
+    if (!('createdAt' in value) || value['createdAt'] === undefined) return false;
+    if (!('activatedAt' in value) || value['activatedAt'] === undefined) return false;
+    if (!('deactivatedAt' in value) || value['deactivatedAt'] === undefined) return false;
+    if (!('deactivatedByUserId' in value) || value['deactivatedByUserId'] === undefined) return false;
     if (!('apiTokenCount' in value) || value['apiTokenCount'] === undefined) return false;
     if (!('passwordResetCount' in value) || value['passwordResetCount'] === undefined) return false;
-    if (!('shockerShareCount' in value) || value['shockerShareCount'] === undefined) return false;
-    if (!('shockerShareLinkCount' in value) || value['shockerShareLinkCount'] === undefined) return false;
+    if (!('shockerUserShareCount' in value) || value['shockerUserShareCount'] === undefined) return false;
+    if (!('shockerPublicShareCount' in value) || value['shockerPublicShareCount'] === undefined) return false;
     if (!('emailChangeRequestCount' in value) || value['emailChangeRequestCount'] === undefined) return false;
     if (!('nameChangeRequestCount' in value) || value['nameChangeRequestCount'] === undefined) return false;
-    if (!('userActivationCount' in value) || value['userActivationCount'] === undefined) return false;
     if (!('deviceCount' in value) || value['deviceCount'] === undefined) return false;
     if (!('shockerCount' in value) || value['shockerCount'] === undefined) return false;
     if (!('shockerControlLogCount' in value) || value['shockerControlLogCount'] === undefined) return false;
@@ -178,16 +185,17 @@ export function AdminUsersViewFromJSONTyped(json: any, ignoreDiscriminator: bool
         'name': json['name'],
         'email': json['email'],
         'passwordHashType': PasswordHashingAlgorithmFromJSON(json['passwordHashType']),
-        'createdAt': (new Date(json['createdAt'])),
-        'emailActivated': json['emailActivated'],
         'roles': ((json['roles'] as Array<any>).map(RoleTypeFromJSON)),
+        'createdAt': (new Date(json['createdAt'])),
+        'activatedAt': (json['activatedAt'] == null ? null : new Date(json['activatedAt'])),
+        'deactivatedAt': (json['deactivatedAt'] == null ? null : new Date(json['deactivatedAt'])),
+        'deactivatedByUserId': json['deactivatedByUserId'],
         'apiTokenCount': json['apiTokenCount'],
         'passwordResetCount': json['passwordResetCount'],
-        'shockerShareCount': json['shockerShareCount'],
-        'shockerShareLinkCount': json['shockerShareLinkCount'],
+        'shockerUserShareCount': json['shockerUserShareCount'],
+        'shockerPublicShareCount': json['shockerPublicShareCount'],
         'emailChangeRequestCount': json['emailChangeRequestCount'],
         'nameChangeRequestCount': json['nameChangeRequestCount'],
-        'userActivationCount': json['userActivationCount'],
         'deviceCount': json['deviceCount'],
         'shockerCount': json['shockerCount'],
         'shockerControlLogCount': json['shockerControlLogCount'],
@@ -209,16 +217,17 @@ export function AdminUsersViewToJSONTyped(value?: AdminUsersView | null, ignoreD
         'name': value['name'],
         'email': value['email'],
         'passwordHashType': PasswordHashingAlgorithmToJSON(value['passwordHashType']),
-        'createdAt': ((value['createdAt']).toISOString()),
-        'emailActivated': value['emailActivated'],
         'roles': ((value['roles'] as Array<any>).map(RoleTypeToJSON)),
+        'createdAt': ((value['createdAt']).toISOString()),
+        'activatedAt': (value['activatedAt'] == null ? null : (value['activatedAt'] as any).toISOString()),
+        'deactivatedAt': (value['deactivatedAt'] == null ? null : (value['deactivatedAt'] as any).toISOString()),
+        'deactivatedByUserId': value['deactivatedByUserId'],
         'apiTokenCount': value['apiTokenCount'],
         'passwordResetCount': value['passwordResetCount'],
-        'shockerShareCount': value['shockerShareCount'],
-        'shockerShareLinkCount': value['shockerShareLinkCount'],
+        'shockerUserShareCount': value['shockerUserShareCount'],
+        'shockerPublicShareCount': value['shockerPublicShareCount'],
         'emailChangeRequestCount': value['emailChangeRequestCount'],
         'nameChangeRequestCount': value['nameChangeRequestCount'],
-        'userActivationCount': value['userActivationCount'],
         'deviceCount': value['deviceCount'],
         'shockerCount': value['shockerCount'],
         'shockerControlLogCount': value['shockerControlLogCount'],
