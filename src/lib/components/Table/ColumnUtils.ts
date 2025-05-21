@@ -16,9 +16,9 @@ import { escapeHtml } from '$lib/utils/encoding';
 
 function CreateSortHeader<TData>(name: string): StringOrTemplateHeader<TData, unknown> {
   return ({ column }) =>
-    renderComponent(DataTableSortButton, {
+    renderComponent(DataTableSortButton<TData>, {
       name,
-      onclick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
+      column,
     });
 }
 
@@ -61,7 +61,7 @@ export function CreateSortableColumnDef<
   renderer: (content: TData[TKey]) => TableCell,
   sortFunct?: 'auto' | ((a: TData[TKey], b: TData[TKey]) => number) | BuiltInSortingFn
 ): ColumnDef<TData> {
-  let sortingFn: SortingFnOption<TData> | undefined = undefined;
+  let sortingFn: SortingFnOption<TData>;
   if (sortFunct) {
     if (typeof sortFunct === 'string') {
       sortingFn = sortFunct;
@@ -69,6 +69,8 @@ export function CreateSortableColumnDef<
       sortingFn = (row_a, row_b) =>
         sortFunct(row_a.getValue(accessorKey), row_b.getValue(accessorKey));
     }
+  } else {
+    sortingFn = 'auto';
   }
 
   return {
