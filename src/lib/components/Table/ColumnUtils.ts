@@ -1,14 +1,20 @@
-import type { CellContext, ColumnDef, StringOrTemplateHeader } from '@tanstack/table-core';
+import type {
+  BuiltInSortingFn,
+  CellContext,
+  ColumnDef,
+  SortingFnOption,
+  StringOrTemplateHeader,
+} from '@tanstack/table-core';
 import DataTableSortButton from '$lib/components/Table/SortButton.svelte';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table';
 import { createRawSnippet } from 'svelte';
 import { durationToString, elapsedToString } from '$lib/utils/time';
-import type { SemVer } from 'semver';
+import { sort, type SemVer } from 'semver';
 import type { TwTextColor } from '$lib/types/Tailwind';
 import { getReadableUserAgentName } from '$lib/utils/userAgent';
 import { escapeHtml } from '$lib/utils/encoding';
 
-export function CreateSortHeader<TData>(name: string): StringOrTemplateHeader<TData, unknown> {
+function CreateSortHeader<TData>(name: string): StringOrTemplateHeader<TData, unknown> {
   return ({ column }) =>
     renderComponent(DataTableSortButton, {
       name,
@@ -16,7 +22,7 @@ export function CreateSortHeader<TData>(name: string): StringOrTemplateHeader<TD
     });
 }
 
-export function CreateSimpleCellSnippet<TData extends object, K extends keyof TData & string>(
+function CreateSimpleCellSnippet<TData extends object, K extends keyof TData & string>(
   key: K,
   renderer: (value: TData[K]) => string
 ): ColumnDef<TData, unknown>['cell'] {
@@ -33,13 +39,54 @@ export function CreateSimpleCellSnippet<TData extends object, K extends keyof TD
 }
 
 export type TableCell =
-  `<div class="px-4 font-medium${'' | ` ${TwTextColor}`}"${'' | ` title="${string}"`}>${string}</div>`;
+  `<div class="px-4${'' | ' font-medium'}${'' | ` ${TwTextColor}`}"${'' | ` title="${string}"`}>${string}</div>`;
+
+export function CreateColumnDef<TData extends object, TKey extends Extract<keyof TData, string>>(
+  accessorKey: TKey,
+  headerName: string,
+  renderer: (content: TData[TKey]) => TableCell
+): ColumnDef<TData> {
+  return {
+    accessorKey,
+    header: headerName,
+    cell: CreateSimpleCellSnippet(accessorKey, renderer),
+  };
+}
+export function CreateSortableColumnDef<
+  TData extends object,
+  TKey extends Extract<keyof TData, string>,
+>(
+  accessorKey: TKey,
+  headerName: string,
+  renderer: (content: TData[TKey]) => TableCell,
+  sortFunct?: 'auto' | ((a: TData[TKey], b: TData[TKey]) => number) | BuiltInSortingFn
+): ColumnDef<TData> {
+  let sortingFn: SortingFnOption<TData> | undefined = undefined;
+  if (sortFunct) {
+    if (typeof sortFunct === 'string') {
+      sortingFn = sortFunct;
+    } else {
+      sortingFn = (row_a, row_b) =>
+        sortFunct(row_a.getValue(accessorKey), row_b.getValue(accessorKey));
+    }
+  }
+
+  return {
+    accessorKey,
+    header: CreateSortHeader(headerName),
+    cell: CreateSimpleCellSnippet(accessorKey, renderer),
+    sortingFn,
+  };
+}
+
 export const CellNotApplicable =
   '<div class="px-4 font-medium" title="N/A">N/A</div>' as const satisfies TableCell;
 export const CellOrangeNever =
   '<div class="px-4 font-medium text-orange-500">Never</div>' as const satisfies TableCell;
 export const CellRedUnknown =
   '<div class="px-4 font-medium text-red-500">Unknown</div>' as const satisfies TableCell;
+export const CellRedInvalid =
+  '<div class="px-4 font-medium text-red-500">Invalid</div>' as const satisfies TableCell;
 export const CellRedUnavailable =
   '<div class="px-4 font-medium text-red-500">Unavailable</div>' as const satisfies TableCell;
 export const CellGreenTrue =
@@ -52,6 +99,8 @@ export const CellRedOffline =
   '<div class="px-4 font-medium text-red-500">offline</div>' as const satisfies TableCell;
 
 export const RenderCell = (content: string): TableCell =>
+  `<div class="px-4">${escapeHtml(content)}</div>`;
+export const RenderBoldCell = (content: string): TableCell =>
   `<div class="px-4 font-medium">${escapeHtml(content)}</div>`;
 export const RenderRedCell = (content: string): TableCell =>
   `<div class="px-4 font-medium text-red-500">${escapeHtml(content)}</div>`;
@@ -80,7 +129,7 @@ export const TimeSinceRelativeOrNeverRenderer = (date: Date | null | undefined):
   date ? TimeSinceRelativeRenderer(date) : CellOrangeNever;
 
 export const NumberRenderer = (number: number | null): TableCell =>
-  number ? RenderCell(number.toString()) : CellNotApplicable;
+  number ? RenderBoldCell(number.toString()) : CellNotApplicable;
 
 export const UserAgentRenderer = (userAgent: string | null): TableCell => {
   if (!userAgent) return CellRedUnknown;
@@ -91,16 +140,18 @@ export const UserAgentRenderer = (userAgent: string | null): TableCell => {
   return RenderCellWithTooltip(readableName, userAgent);
 };
 
-export const FirmwareVersionRenderer = (firmwareVersion: SemVer | null): TableCell => {
+export const FirmwareVersionRenderer = (firmwareVersion: SemVer | string | null): TableCell => {
   if (!firmwareVersion) return CellRedUnavailable;
 
-  let firmwareVersionString = firmwareVersion.toString();
-
-  if (firmwareVersionString.length <= 0) {
-    return RenderRedCell('Invalid');
-  } else if (firmwareVersionString === '0.0.0-local') {
-    return RenderOrangeCell(firmwareVersionString);
+  if (typeof firmwareVersion !== 'string') {
+    firmwareVersion = firmwareVersion.toString();
   }
 
-  return RenderCell(firmwareVersionString);
+  if (firmwareVersion.length <= 0) {
+    return CellRedInvalid;
+  } else if (firmwareVersion === '0.0.0-local') {
+    return RenderOrangeCell(firmwareVersion);
+  }
+
+  return RenderBoldCell(firmwareVersion);
 };

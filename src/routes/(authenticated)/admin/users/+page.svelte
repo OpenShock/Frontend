@@ -5,24 +5,12 @@
   import { Button } from '$lib/components/ui/button';
   import * as Card from '$lib/components/ui/card';
   import { onDestroy, onMount } from 'svelte';
-  import { columns, type User } from './columns';
+  import { columns } from './columns';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import type { ColumnFiltersState, PaginationState, SortingState } from '@tanstack/table-core';
   import { Input } from '$lib/components/ui/input';
 
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
-
-  function apiUserToTableDevice(user: AdminUsersView): User {
-    return {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      password_hash_type: user.passwordHashType,
-      created_at: user.createdAt,
-      email_activated: user.emailActivated,
-      roles: user.roles,
-    };
-  }
 
   type FilterOpType =
     | 'like'
@@ -45,7 +33,7 @@
   let nameSearch = $state('');
   let emailSearch = $state('');
 
-  let data = $state<User[]>([]);
+  let data = $state<AdminUsersView[]>([]);
   let sorting = $state<SortingState>([]);
   let filters = $derived<ColumnFiltersState>([
     { id: 'name', value: nameSearch },
@@ -58,7 +46,7 @@
       .adminGetUsers() /* filter, orderby, offset, limit */
       .then((res) => {
         if (res.data) {
-          data = res.data.map(apiUserToTableDevice);
+          data = res.data;
         }
       })
       .catch(handleApiError);

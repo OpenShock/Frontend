@@ -2,8 +2,9 @@ import { renderComponent } from '$lib/components/ui/data-table';
 import type { ColumnDef } from '@tanstack/table-core';
 import DataTableActions from './data-table-actions.svelte';
 import {
-  CreateSimpleCellSnippet,
-  CreateSortHeader,
+  CreateColumnDef,
+  CreateSortableColumnDef,
+  RenderCell,
   TimeSinceRelativeOrNeverRenderer,
   TimeSinceRelativeRenderer,
   UserAgentRenderer,
@@ -19,30 +20,11 @@ export type Session = {
 };
 
 export const columns: ColumnDef<Session>[] = [
-  {
-    accessorKey: 'ip',
-    header: 'Ip',
-  },
-  {
-    accessorKey: 'user_agent',
-    header: CreateSortHeader('User Agent'),
-    cell: CreateSimpleCellSnippet('user_agent', UserAgentRenderer),
-  },
-  {
-    accessorKey: 'created_at',
-    header: CreateSortHeader('Created at'),
-    cell: CreateSimpleCellSnippet('created_at', TimeSinceRelativeRenderer),
-  },
-  {
-    accessorKey: 'expires_at',
-    header: CreateSortHeader('Expires at'),
-    cell: CreateSimpleCellSnippet('expires_at', TimeSinceRelativeRenderer),
-  },
-  {
-    accessorKey: 'last_seen',
-    header: CreateSortHeader('Last seen'),
-    cell: CreateSimpleCellSnippet('last_seen', TimeSinceRelativeOrNeverRenderer),
-  },
+  CreateColumnDef('ip', 'Ip', RenderCell),
+  CreateSortableColumnDef('user_agent', 'User Agent', UserAgentRenderer),
+  CreateSortableColumnDef('created_at', 'Created at', TimeSinceRelativeRenderer),
+  CreateSortableColumnDef('expires_at', 'Expires at', TimeSinceRelativeRenderer),
+  CreateSortableColumnDef('last_seen', 'Last seen', TimeSinceRelativeOrNeverRenderer),
   {
     id: 'actions',
     cell: ({ row }) => {

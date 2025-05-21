@@ -3,10 +3,10 @@ import { renderComponent } from '$lib/components/ui/data-table';
 import { PermissionType } from '$lib/api/internal/v1';
 import DataTableActions from './data-table-actions.svelte';
 import {
-  CreateSimpleCellSnippet,
-  CreateSortHeader,
   TimeSinceRelativeOrNeverRenderer,
   LocaleDateRenderer,
+  RenderCell,
+  CreateSortableColumnDef,
 } from '$lib/components/Table/ColumnUtils';
 
 export type ApiToken = {
@@ -19,25 +19,10 @@ export type ApiToken = {
 };
 
 export const columns: ColumnDef<ApiToken>[] = [
-  {
-    accessorKey: 'name',
-    header: CreateSortHeader('Name'),
-  },
-  {
-    accessorKey: 'created_at',
-    header: CreateSortHeader('Created at'),
-    cell: CreateSimpleCellSnippet('created_at', LocaleDateRenderer),
-  },
-  {
-    accessorKey: 'expires_at',
-    header: CreateSortHeader('Expires at'),
-    cell: CreateSimpleCellSnippet('expires_at', TimeSinceRelativeOrNeverRenderer),
-  },
-  {
-    accessorKey: 'last_used',
-    header: CreateSortHeader('Last used'),
-    cell: CreateSimpleCellSnippet('last_used', TimeSinceRelativeOrNeverRenderer),
-  },
+  CreateSortableColumnDef('name', 'Name', RenderCell),
+  CreateSortableColumnDef('created_at', 'Created at', LocaleDateRenderer),
+  CreateSortableColumnDef('expires_at', 'Expires at', TimeSinceRelativeOrNeverRenderer),
+  CreateSortableColumnDef('last_used', 'Last used', TimeSinceRelativeOrNeverRenderer),
   {
     id: 'actions',
     cell: ({ row }) => {

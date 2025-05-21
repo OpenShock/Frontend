@@ -2,10 +2,10 @@ import type { ColumnDef } from '@tanstack/table-core';
 import { renderComponent } from '$lib/components/ui/data-table';
 import DataTableActions from './data-table-actions.svelte';
 import {
-  CreateSimpleCellSnippet,
-  CreateSortHeader,
   TimeSinceRelativeOrNeverRenderer,
   LocaleDateTimeRenderer,
+  RenderCell,
+  CreateSortableColumnDef,
 } from '$lib/components/Table/ColumnUtils';
 
 export type ShareLink = {
@@ -16,20 +16,9 @@ export type ShareLink = {
 };
 
 export const columns: ColumnDef<ShareLink>[] = [
-  {
-    accessorKey: 'name',
-    header: CreateSortHeader('Name'),
-  },
-  {
-    accessorKey: 'created_at',
-    header: CreateSortHeader('Created at'),
-    cell: CreateSimpleCellSnippet('created_at', LocaleDateTimeRenderer),
-  },
-  {
-    accessorKey: 'expires_at',
-    header: CreateSortHeader('Expires'),
-    cell: CreateSimpleCellSnippet('expires_at', TimeSinceRelativeOrNeverRenderer),
-  },
+  CreateSortableColumnDef('name', 'Name', RenderCell),
+  CreateSortableColumnDef('created_at', 'Created at', LocaleDateTimeRenderer),
+  CreateSortableColumnDef('expires_at', 'Expires', TimeSinceRelativeOrNeverRenderer),
   {
     id: 'actions',
     cell: ({ row }) => {

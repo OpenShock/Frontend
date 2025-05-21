@@ -6,10 +6,10 @@ import type { SemVer } from 'semver';
 import {
   CellGreenOnline,
   CellRedOffline,
-  CreateSimpleCellSnippet,
-  CreateSortHeader,
+  CreateSortableColumnDef,
   FirmwareVersionRenderer,
   LocaleDateTimeRenderer,
+  RenderCell,
 } from '$lib/components/Table/ColumnUtils';
 
 export type Shocker = {
@@ -32,25 +32,10 @@ export type Hub = {
 const IsOnlineRenderer = (isOnline: boolean) => (isOnline ? CellGreenOnline : CellRedOffline);
 
 export const columns: ColumnDef<Hub>[] = [
-  {
-    accessorKey: 'name',
-    header: CreateSortHeader('Name'),
-  },
-  {
-    accessorKey: 'is_online',
-    header: CreateSortHeader('Status'),
-    cell: CreateSimpleCellSnippet('is_online', IsOnlineRenderer),
-  },
-  {
-    accessorKey: 'firmware_version',
-    header: CreateSortHeader('Version'),
-    cell: CreateSimpleCellSnippet('firmware_version', FirmwareVersionRenderer),
-  },
-  {
-    accessorKey: 'created_at',
-    header: CreateSortHeader('Created at'),
-    cell: CreateSimpleCellSnippet('created_at', LocaleDateTimeRenderer),
-  },
+  CreateSortableColumnDef('name', 'Name', RenderCell),
+  CreateSortableColumnDef('is_online', 'Status', IsOnlineRenderer),
+  CreateSortableColumnDef('firmware_version', 'Version', FirmwareVersionRenderer),
+  CreateSortableColumnDef('created_at', 'Created at', LocaleDateTimeRenderer),
   {
     id: 'actions',
     cell: ({ row }) => {
