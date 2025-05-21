@@ -46,28 +46,14 @@ async function DownloadBinary(url: string, onProgress: (progress: number) => voi
   return await blob.arrayBuffer();
 }
 
-export const Channels = ['stable', 'beta', 'develop'] as const;
-export type Channel = (typeof Channels)[number];
-export type ChannelDict = { [key in (typeof Channels)[number]]?: string };
+export const FirmwareChannels = ['stable', 'beta', 'develop'] as const;
+export type FirmwareChannel = (typeof FirmwareChannels)[number];
 
-function DownloadChannelVersion(channel: Channel) {
-  return DownloadText(`https://firmware.openshock.org/version-${channel}.txt`);
+export async function FetchChannelVersion(channel: FirmwareChannel) {
+  return (await DownloadText(`https://firmware.openshock.org/version-${channel}.txt`))?.trim();
 }
 
-export async function GetFirmwareChannel(): Promise<ChannelDict> {
-  const channelDict: ChannelDict = {};
-
-  for (const channel of Channels) {
-    const version = await DownloadChannelVersion(channel);
-    if (version) {
-      channelDict[channel] = version;
-    }
-  }
-
-  return channelDict;
-}
-
-export function GetChannelBoards(version: string) {
+export function FetchVersionBoards(version: string) {
   return DownloadLines(`https://firmware.openshock.org/${version}/boards.txt`);
 }
 

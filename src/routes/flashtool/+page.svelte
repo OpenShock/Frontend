@@ -2,7 +2,7 @@
   import { browser } from '$app/environment';
   import { PUBLIC_DISCORD_INVITE_URL } from '$env/static/public';
   import FirmwareFlasher from './FirmwareFlasher.svelte';
-  import FirmwareChannelSelector from './FirmwareChannelSelector.svelte';
+  import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
   import FirmwareBoardSelector from './FirmwareBoardSelector.svelte';
   import FlashManager from '$lib/EspTool/FlashManager';
   import SerialPortSelector from './SerialPortSelector.svelte';

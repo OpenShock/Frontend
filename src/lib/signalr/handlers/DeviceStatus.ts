@@ -38,6 +38,7 @@ export function handleSignalrDeviceState(array: unknown) {
         hubId: entry.device,
         isOnline: entry.online,
         firmwareVersion: entry.firmwareVersion,
+        otaInstall: null,
       });
     });
 
