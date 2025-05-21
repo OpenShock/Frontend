@@ -5,8 +5,8 @@ apis/AdminApi.ts
 apis/HubEndpointsApi.ts
 apis/HubManagementApi.ts
 apis/MetaApi.ts
+apis/PublicShockerSharesApi.ts
 apis/SessionsApi.ts
-apis/ShockerShareLinksApi.ts
 apis/ShockerSharesApi.ts
 apis/ShockersApi.ts
 apis/UsersApi.ts
@@ -47,6 +47,8 @@ models/OpenShockProblem.ts
 models/OtaItem.ts
 models/OtaItemIReadOnlyCollectionLegacyDataResponse.ts
 models/OtaUpdateStatus.ts
+models/OwnPublicShareResponse.ts
+models/OwnPublicShareResponseIAsyncEnumerableLegacyDataResponse.ts
 models/OwnerShockerResponse.ts
 models/OwnerShockerResponseIEnumerableLegacyDataResponse.ts
 models/PasswordHashingAlgorithm.ts
@@ -54,8 +56,12 @@ models/PasswordResetProcessData.ts
 models/PauseReasonLegacyDataResponse.ts
 models/PauseRequest.ts
 models/PermissionType.ts
-models/PublicShareLinkResponse.ts
-models/PublicShareLinkResponseLegacyDataResponse.ts
+models/PublicShareCreate.ts
+models/PublicShareDevice.ts
+models/PublicShareEditShocker.ts
+models/PublicShareResponse.ts
+models/PublicShareResponseLegacyDataResponse.ts
+models/PublicShareShocker.ts
 models/ResetRequest.ts
 models/ResponseDevice.ts
 models/ResponseDeviceIAsyncEnumerableLegacyDataResponse.ts
@@ -68,13 +74,6 @@ models/ShareCodeInfo.ts
 models/ShareCodeInfoIAsyncEnumerableLegacyDataResponse.ts
 models/ShareInfo.ts
 models/ShareInfoIAsyncEnumerableLegacyDataResponse.ts
-models/ShareLinkCreate.ts
-models/ShareLinkDevice.ts
-models/ShareLinkEditShocker.ts
-models/ShareLinkResponse.ts
-models/ShareLinkResponseIAsyncEnumerableLegacyDataResponse.ts
-models/ShareLinkResponseLegacyDataResponse.ts
-models/ShareLinkShocker.ts
 models/SharedDevice.ts
 models/SharedShocker.ts
 models/ShockerLimits.ts

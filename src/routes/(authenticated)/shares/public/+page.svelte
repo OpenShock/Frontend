@@ -1,52 +1,46 @@
 <script lang="ts">
-  import { shockerShareLinksApi } from '$lib/api';
+  import { publicShockerSharesApi } from '$lib/api';
+  import type { OwnPublicShareResponse } from '$lib/api/internal/v1';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card';
   import { onMount } from 'svelte';
-  import { columns, type ShareLink } from './columns';
+  import { columns } from './columns';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import type { SortingState } from '@tanstack/table-core';
 
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
 
-  let data = $state<ShareLink[]>([]);
+  let data = $state<OwnPublicShareResponse[]>([]);
   let sorting = $state<SortingState>([]);
 
-  function refreshShareLinks() {
-    shockerShareLinksApi
+  function refreshPublicShares() {
+    publicShockerSharesApi
       .shareLinksList()
-      .then((shareLinks) => {
-        if (shareLinks.data === null || shareLinks.data === undefined) {
+      .then((publicShares) => {
+        if (publicShares.data === null || publicShares.data === undefined) {
           console.warn('Failed to get share links, but response was success!');
           return;
         }
-        data = shareLinks.data.map((shareLink) => {
-          return {
-            id: shareLink.id,
-            name: shareLink.name,
-            created_at: shareLink.createdOn,
-            expires_at: shareLink.expiresOn,
-          };
-        });
+        data = publicShares.data;
       })
       .catch((error) => {
         console.error(error); // TODO: Show toast
       });
   }
 
-  onMount(refreshShareLinks);
+  onMount(refreshPublicShares);
 </script>
 
 <div class="container my-8">
   <Card.Header>
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
-      ShareLinks
-      <Button class="text-xl" onclick={refreshShareLinks}>
+      Public Shares
+      <Button class="text-xl" onclick={refreshPublicShares}>
         <RotateCcw />
         <span> Refresh </span>
       </Button>
     </Card.Title>
-    <Card.Description>This is a list of all the sharelinks you control.</Card.Description>
+    <Card.Description>This is a list of all the public shares you control.</Card.Description>
   </Card.Header>
   <Card.Content>
     <DataTable {data} {columns} {sorting} />

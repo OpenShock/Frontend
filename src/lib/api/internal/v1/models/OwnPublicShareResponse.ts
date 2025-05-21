@@ -16,50 +16,50 @@ import { mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface ShareLinkResponse
+ * @interface OwnPublicShareResponse
  */
-export interface ShareLinkResponse {
+export interface OwnPublicShareResponse {
     /**
      * 
      * @type {string}
-     * @memberof ShareLinkResponse
+     * @memberof OwnPublicShareResponse
      */
     id: string;
     /**
      * 
      * @type {string}
-     * @memberof ShareLinkResponse
+     * @memberof OwnPublicShareResponse
      */
     name: string;
     /**
      * 
      * @type {Date}
-     * @memberof ShareLinkResponse
+     * @memberof OwnPublicShareResponse
      */
     createdOn: Date;
     /**
      * 
      * @type {Date}
-     * @memberof ShareLinkResponse
+     * @memberof OwnPublicShareResponse
      */
     expiresOn?: Date | null;
 }
 
 /**
- * Check if a given object implements the ShareLinkResponse interface.
+ * Check if a given object implements the OwnPublicShareResponse interface.
  */
-export function instanceOfShareLinkResponse(value: object): value is ShareLinkResponse {
+export function instanceOfOwnPublicShareResponse(value: object): value is OwnPublicShareResponse {
     if (!('id' in value) || value['id'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('createdOn' in value) || value['createdOn'] === undefined) return false;
     return true;
 }
 
-export function ShareLinkResponseFromJSON(json: any): ShareLinkResponse {
-    return ShareLinkResponseFromJSONTyped(json, false);
+export function OwnPublicShareResponseFromJSON(json: any): OwnPublicShareResponse {
+    return OwnPublicShareResponseFromJSONTyped(json, false);
 }
 
-export function ShareLinkResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShareLinkResponse {
+export function OwnPublicShareResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): OwnPublicShareResponse {
     if (json == null) {
         return json;
     }
@@ -72,11 +72,11 @@ export function ShareLinkResponseFromJSONTyped(json: any, ignoreDiscriminator: b
     };
 }
 
-export function ShareLinkResponseToJSON(json: any): ShareLinkResponse {
-    return ShareLinkResponseToJSONTyped(json, false);
+export function OwnPublicShareResponseToJSON(json: any): OwnPublicShareResponse {
+    return OwnPublicShareResponseToJSONTyped(json, false);
 }
 
-export function ShareLinkResponseToJSONTyped(value?: ShareLinkResponse | null, ignoreDiscriminator: boolean = false): any {
+export function OwnPublicShareResponseToJSONTyped(value?: OwnPublicShareResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

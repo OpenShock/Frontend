@@ -11,7 +11,6 @@
     Router,
     House,
     KeyRound,
-    Link,
     MonitorSmartphone,
     SquareActivity,
     Timer,
@@ -20,6 +19,8 @@
     Wrench,
     Zap,
     Cpu,
+    Users,
+    Link,
   } from '@lucide/svelte';
 
   let currentUser = $derived($UserStore.self);
@@ -72,9 +73,14 @@
           href: '/hubs',
         },
         {
-          title: 'Shares',
+          title: 'User Shares',
+          Icon: Users,
+          href: '/shares/user',
+        },
+        {
+          title: 'Public Shares',
           Icon: Link,
-          href: '/shares',
+          href: '/shares/public',
         },
       ]);
     }

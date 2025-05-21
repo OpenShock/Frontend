@@ -1,23 +1,23 @@
 <script lang="ts">
-  import { shockerShareLinksApi } from '$lib/api';
-  import type { PublicShareLinkResponse } from '$lib/api/internal/v1';
+  import { publicShockerSharesApi } from '$lib/api';
+  import type { OwnPublicShareResponse } from '$lib/api/internal/v1';
+  import type { PublicShareResponse } from '$lib/api/internal/v1';
   import { Button } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
   import { onMount } from 'svelte';
-  import type { ShareLink } from './columns';
   import { Pause, Play } from '@lucide/svelte';
 
   type Props = {
     open: boolean;
-    sharelink: ShareLink;
+    publicShare: OwnPublicShareResponse;
   };
 
-  let { open = $bindable<boolean>(), sharelink }: Props = $props();
+  let { open = $bindable<boolean>(), publicShare }: Props = $props();
 
-  let details = $state<PublicShareLinkResponse>();
+  let details = $state<PublicShareResponse>();
 
   onMount(() => {
-    shockerShareLinksApi.publicGetShareLink(sharelink.id).then((response) => {
+    publicShockerSharesApi.publicGetPublicShare(publicShare.id).then((response) => {
       details = response.data;
       console.log(response);
     });
@@ -27,7 +27,7 @@
 <Dialog.Root bind:open={() => open, (o) => (open = o)}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Edit ShareLink {details?.name}</Dialog.Title>
+      <Dialog.Title>Edit PublicShare {details?.name}</Dialog.Title>
     </Dialog.Header>
     <ul>
       {#each details?.devices ?? [] as device}

@@ -31,31 +31,31 @@ import {
 /**
  * 
  * @export
- * @interface ShareLinkShocker
+ * @interface PublicShareShocker
  */
-export interface ShareLinkShocker {
+export interface PublicShareShocker {
     /**
      * 
      * @type {string}
-     * @memberof ShareLinkShocker
+     * @memberof PublicShareShocker
      */
     id: string;
     /**
      * 
      * @type {string}
-     * @memberof ShareLinkShocker
+     * @memberof PublicShareShocker
      */
     name: string;
     /**
      * 
      * @type {ShockerPermissions}
-     * @memberof ShareLinkShocker
+     * @memberof PublicShareShocker
      */
     permissions: ShockerPermissions;
     /**
      * 
      * @type {ShockerLimits}
-     * @memberof ShareLinkShocker
+     * @memberof PublicShareShocker
      */
     limits: ShockerLimits;
     /**
@@ -63,20 +63,20 @@ export interface ShareLinkShocker {
      * 
      * Each bit corresponds to:
      * - 1: Shocker
-     * - 2: Share
-     * - 4: ShareLink
+     * - 2: UserShare
+     * - 4: PublicShare
      * 
-     * For example, a value of 6 (2 | 4) indicates both 'Share' and 'ShareLink' reasons.
+     * For example, a value of 6 (2 | 4) indicates both 'UserShare' and 'PublicShare' reasons.
      * @type {number}
-     * @memberof ShareLinkShocker
+     * @memberof PublicShareShocker
      */
     paused: number;
 }
 
 /**
- * Check if a given object implements the ShareLinkShocker interface.
+ * Check if a given object implements the PublicShareShocker interface.
  */
-export function instanceOfShareLinkShocker(value: object): value is ShareLinkShocker {
+export function instanceOfPublicShareShocker(value: object): value is PublicShareShocker {
     if (!('id' in value) || value['id'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('permissions' in value) || value['permissions'] === undefined) return false;
@@ -85,11 +85,11 @@ export function instanceOfShareLinkShocker(value: object): value is ShareLinkSho
     return true;
 }
 
-export function ShareLinkShockerFromJSON(json: any): ShareLinkShocker {
-    return ShareLinkShockerFromJSONTyped(json, false);
+export function PublicShareShockerFromJSON(json: any): PublicShareShocker {
+    return PublicShareShockerFromJSONTyped(json, false);
 }
 
-export function ShareLinkShockerFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShareLinkShocker {
+export function PublicShareShockerFromJSONTyped(json: any, ignoreDiscriminator: boolean): PublicShareShocker {
     if (json == null) {
         return json;
     }
@@ -103,11 +103,11 @@ export function ShareLinkShockerFromJSONTyped(json: any, ignoreDiscriminator: bo
     };
 }
 
-export function ShareLinkShockerToJSON(json: any): ShareLinkShocker {
-    return ShareLinkShockerToJSONTyped(json, false);
+export function PublicShareShockerToJSON(json: any): PublicShareShocker {
+    return PublicShareShockerToJSONTyped(json, false);
 }
 
-export function ShareLinkShockerToJSONTyped(value?: ShareLinkShocker | null, ignoreDiscriminator: boolean = false): any {
+export function PublicShareShockerToJSONTyped(value?: PublicShareShocker | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

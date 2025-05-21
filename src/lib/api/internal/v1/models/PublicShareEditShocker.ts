@@ -31,43 +31,43 @@ import {
 /**
  * 
  * @export
- * @interface ShareLinkEditShocker
+ * @interface PublicShareEditShocker
  */
-export interface ShareLinkEditShocker {
+export interface PublicShareEditShocker {
     /**
      * 
      * @type {ShockerPermissions}
-     * @memberof ShareLinkEditShocker
+     * @memberof PublicShareEditShocker
      */
     permissions: ShockerPermissions;
     /**
      * 
      * @type {ShockerLimits}
-     * @memberof ShareLinkEditShocker
+     * @memberof PublicShareEditShocker
      */
     limits: ShockerLimits;
     /**
      * 
      * @type {number}
-     * @memberof ShareLinkEditShocker
+     * @memberof PublicShareEditShocker
      */
     cooldown?: number | null;
 }
 
 /**
- * Check if a given object implements the ShareLinkEditShocker interface.
+ * Check if a given object implements the PublicShareEditShocker interface.
  */
-export function instanceOfShareLinkEditShocker(value: object): value is ShareLinkEditShocker {
+export function instanceOfPublicShareEditShocker(value: object): value is PublicShareEditShocker {
     if (!('permissions' in value) || value['permissions'] === undefined) return false;
     if (!('limits' in value) || value['limits'] === undefined) return false;
     return true;
 }
 
-export function ShareLinkEditShockerFromJSON(json: any): ShareLinkEditShocker {
-    return ShareLinkEditShockerFromJSONTyped(json, false);
+export function PublicShareEditShockerFromJSON(json: any): PublicShareEditShocker {
+    return PublicShareEditShockerFromJSONTyped(json, false);
 }
 
-export function ShareLinkEditShockerFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShareLinkEditShocker {
+export function PublicShareEditShockerFromJSONTyped(json: any, ignoreDiscriminator: boolean): PublicShareEditShocker {
     if (json == null) {
         return json;
     }
@@ -79,11 +79,11 @@ export function ShareLinkEditShockerFromJSONTyped(json: any, ignoreDiscriminator
     };
 }
 
-export function ShareLinkEditShockerToJSON(json: any): ShareLinkEditShocker {
-    return ShareLinkEditShockerToJSONTyped(json, false);
+export function PublicShareEditShockerToJSON(json: any): PublicShareEditShocker {
+    return PublicShareEditShockerToJSONTyped(json, false);
 }
 
-export function ShareLinkEditShockerToJSONTyped(value?: ShareLinkEditShocker | null, ignoreDiscriminator: boolean = false): any {
+export function PublicShareEditShockerToJSONTyped(value?: PublicShareEditShocker | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

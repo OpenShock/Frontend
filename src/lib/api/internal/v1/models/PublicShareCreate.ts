@@ -16,36 +16,36 @@ import { mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface ShareLinkCreate
+ * @interface PublicShareCreate
  */
-export interface ShareLinkCreate {
+export interface PublicShareCreate {
     /**
      * 
      * @type {string}
-     * @memberof ShareLinkCreate
+     * @memberof PublicShareCreate
      */
     name: string;
     /**
      * 
      * @type {Date}
-     * @memberof ShareLinkCreate
+     * @memberof PublicShareCreate
      */
     expiresOn?: Date | null;
 }
 
 /**
- * Check if a given object implements the ShareLinkCreate interface.
+ * Check if a given object implements the PublicShareCreate interface.
  */
-export function instanceOfShareLinkCreate(value: object): value is ShareLinkCreate {
+export function instanceOfPublicShareCreate(value: object): value is PublicShareCreate {
     if (!('name' in value) || value['name'] === undefined) return false;
     return true;
 }
 
-export function ShareLinkCreateFromJSON(json: any): ShareLinkCreate {
-    return ShareLinkCreateFromJSONTyped(json, false);
+export function PublicShareCreateFromJSON(json: any): PublicShareCreate {
+    return PublicShareCreateFromJSONTyped(json, false);
 }
 
-export function ShareLinkCreateFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShareLinkCreate {
+export function PublicShareCreateFromJSONTyped(json: any, ignoreDiscriminator: boolean): PublicShareCreate {
     if (json == null) {
         return json;
     }
@@ -56,11 +56,11 @@ export function ShareLinkCreateFromJSONTyped(json: any, ignoreDiscriminator: boo
     };
 }
 
-export function ShareLinkCreateToJSON(json: any): ShareLinkCreate {
-    return ShareLinkCreateToJSONTyped(json, false);
+export function PublicShareCreateToJSON(json: any): PublicShareCreate {
+    return PublicShareCreateToJSONTyped(json, false);
 }
 
-export function ShareLinkCreateToJSONTyped(value?: ShareLinkCreate | null, ignoreDiscriminator: boolean = false): any {
+export function PublicShareCreateToJSONTyped(value?: PublicShareCreate | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

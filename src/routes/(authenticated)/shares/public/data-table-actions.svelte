@@ -2,29 +2,29 @@
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { toast } from 'svelte-sonner';
-  import type { ShareLink } from './columns';
+  import type { OwnPublicShareResponse } from '$lib/api/internal/v1';
   import SharelinkDeleteDialog from './dialog-sharelink-delete.svelte';
   import SharelinkEditDialog from './dialog-sharelink-edit.svelte';
 
   import Ellipsis from '@lucide/svelte/icons/ellipsis';
 
   type Props = {
-    sharelink: ShareLink;
+    publicShare: OwnPublicShareResponse;
   };
 
-  let { sharelink }: Props = $props();
+  let { publicShare }: Props = $props();
 
   let editDialogOpen = $state<boolean>(false);
   let deleteDialogOpen = $state<boolean>(false);
 
   function copyId() {
-    navigator.clipboard.writeText(sharelink.id);
+    navigator.clipboard.writeText(publicShare.id);
     toast.success('ID copied to clipboard');
   }
 </script>
 
-<SharelinkEditDialog bind:open={editDialogOpen} {sharelink} />
-<SharelinkDeleteDialog bind:open={deleteDialogOpen} {sharelink} />
+<SharelinkEditDialog bind:open={editDialogOpen} {publicShare} />
+<SharelinkDeleteDialog bind:open={deleteDialogOpen} {publicShare} />
 
 <DropdownMenu.Root>
   <DropdownMenu.Trigger>

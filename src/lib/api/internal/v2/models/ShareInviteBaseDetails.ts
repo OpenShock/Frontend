@@ -31,76 +31,76 @@ import {
 /**
  * 
  * @export
- * @interface ShareRequestBaseDetails
+ * @interface ShareInviteBaseDetails
  */
-export interface ShareRequestBaseDetails {
+export interface ShareInviteBaseDetails {
     /**
      * 
      * @type {string}
-     * @memberof ShareRequestBaseDetails
+     * @memberof ShareInviteBaseDetails
      */
     id: string;
     /**
      * 
      * @type {Date}
-     * @memberof ShareRequestBaseDetails
+     * @memberof ShareInviteBaseDetails
      */
-    createdOn: Date;
+    createdAt: Date;
     /**
      * 
      * @type {GenericIni}
-     * @memberof ShareRequestBaseDetails
+     * @memberof ShareInviteBaseDetails
      */
     owner: GenericIni;
     /**
      * 
      * @type {GenericIni}
-     * @memberof ShareRequestBaseDetails
+     * @memberof ShareInviteBaseDetails
      */
     sharedWith: GenericIni;
     /**
      * 
      * @type {Array<ShockerPermLimitPairWithId>}
-     * @memberof ShareRequestBaseDetails
+     * @memberof ShareInviteBaseDetails
      */
     shockers: Array<ShockerPermLimitPairWithId>;
 }
 
 /**
- * Check if a given object implements the ShareRequestBaseDetails interface.
+ * Check if a given object implements the ShareInviteBaseDetails interface.
  */
-export function instanceOfShareRequestBaseDetails(value: object): value is ShareRequestBaseDetails {
+export function instanceOfShareInviteBaseDetails(value: object): value is ShareInviteBaseDetails {
     if (!('id' in value) || value['id'] === undefined) return false;
-    if (!('createdOn' in value) || value['createdOn'] === undefined) return false;
+    if (!('createdAt' in value) || value['createdAt'] === undefined) return false;
     if (!('owner' in value) || value['owner'] === undefined) return false;
     if (!('sharedWith' in value) || value['sharedWith'] === undefined) return false;
     if (!('shockers' in value) || value['shockers'] === undefined) return false;
     return true;
 }
 
-export function ShareRequestBaseDetailsFromJSON(json: any): ShareRequestBaseDetails {
-    return ShareRequestBaseDetailsFromJSONTyped(json, false);
+export function ShareInviteBaseDetailsFromJSON(json: any): ShareInviteBaseDetails {
+    return ShareInviteBaseDetailsFromJSONTyped(json, false);
 }
 
-export function ShareRequestBaseDetailsFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShareRequestBaseDetails {
+export function ShareInviteBaseDetailsFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShareInviteBaseDetails {
     if (json == null) {
         return json;
     }
     return {
         
         'id': json['id'],
-        'createdOn': (new Date(json['createdOn'])),
+        'createdAt': (new Date(json['createdAt'])),
         'owner': GenericIniFromJSON(json['owner']),
         'sharedWith': GenericIniFromJSON(json['sharedWith']),
         'shockers': ((json['shockers'] as Array<any>).map(ShockerPermLimitPairWithIdFromJSON)),
     };
 }
 
-export function ShareRequestBaseDetailsToJSON(json: any): ShareRequestBaseDetails {
-    return ShareRequestBaseDetailsToJSONTyped(json, false);
+export function ShareInviteBaseDetailsToJSON(json: any): ShareInviteBaseDetails {
+    return ShareInviteBaseDetailsToJSONTyped(json, false);
 }
 
-export function ShareRequestBaseDetailsToJSONTyped(value?: ShareRequestBaseDetails | null, ignoreDiscriminator: boolean = false): any {
+export function ShareInviteBaseDetailsToJSONTyped(value?: ShareInviteBaseDetails | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
@@ -108,7 +108,7 @@ export function ShareRequestBaseDetailsToJSONTyped(value?: ShareRequestBaseDetai
     return {
         
         'id': value['id'],
-        'createdOn': ((value['createdOn']).toISOString()),
+        'createdAt': ((value['createdAt']).toISOString()),
         'owner': GenericIniToJSON(value['owner']),
         'sharedWith': GenericIniToJSON(value['sharedWith']),
         'shockers': ((value['shockers'] as Array<any>).map(ShockerPermLimitPairWithIdToJSON)),

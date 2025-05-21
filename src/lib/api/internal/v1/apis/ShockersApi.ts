@@ -76,7 +76,7 @@ export interface ShockerGetShockerLogsRequest {
     limit?: number;
 }
 
-export interface ShockerGetShockerSharesRequest {
+export interface ShockerGetUserSharesRequest {
     shockerId: string;
 }
 
@@ -180,18 +180,18 @@ export interface ShockersApiInterface {
 
     /**
      * 
-     * @summary Get all shares for a shocker
+     * @summary Get all user shares for a shocker
      * @param {string} shockerId Id of the shocker
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ShockersApiInterface
      */
-    shockerGetShockerSharesRaw(requestParameters: ShockerGetShockerSharesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareInfoIAsyncEnumerableLegacyDataResponse>>;
+    shockerGetUserSharesRaw(requestParameters: ShockerGetUserSharesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareInfoIAsyncEnumerableLegacyDataResponse>>;
 
     /**
-     * Get all shares for a shocker
+     * Get all user shares for a shocker
      */
-    shockerGetShockerShares(shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareInfoIAsyncEnumerableLegacyDataResponse>;
+    shockerGetUserShares(shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareInfoIAsyncEnumerableLegacyDataResponse>;
 
     /**
      * 
@@ -493,13 +493,13 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
     }
 
     /**
-     * Get all shares for a shocker
+     * Get all user shares for a shocker
      */
-    async shockerGetShockerSharesRaw(requestParameters: ShockerGetShockerSharesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareInfoIAsyncEnumerableLegacyDataResponse>> {
+    async shockerGetUserSharesRaw(requestParameters: ShockerGetUserSharesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareInfoIAsyncEnumerableLegacyDataResponse>> {
         if (requestParameters['shockerId'] == null) {
             throw new runtime.RequiredError(
                 'shockerId',
-                'Required parameter "shockerId" was null or undefined when calling shockerGetShockerShares().'
+                'Required parameter "shockerId" was null or undefined when calling shockerGetUserShares().'
             );
         }
 
@@ -522,10 +522,10 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
     }
 
     /**
-     * Get all shares for a shocker
+     * Get all user shares for a shocker
      */
-    async shockerGetShockerShares(shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareInfoIAsyncEnumerableLegacyDataResponse> {
-        const response = await this.shockerGetShockerSharesRaw({ shockerId: shockerId }, initOverrides);
+    async shockerGetUserShares(shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareInfoIAsyncEnumerableLegacyDataResponse> {
+        const response = await this.shockerGetUserSharesRaw({ shockerId: shockerId }, initOverrides);
         return await response.value();
     }
 

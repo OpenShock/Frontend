@@ -7,23 +7,17 @@ import {
   RenderCell,
   CreateSortableColumnDef,
 } from '$lib/components/Table/ColumnUtils';
+import type { OwnPublicShareResponse } from '$lib/api/internal/v1';
 
-export type ShareLink = {
-  id: string;
-  name: string;
-  created_at: Date;
-  expires_at: Date | null | undefined;
-};
-
-export const columns: ColumnDef<ShareLink>[] = [
+export const columns: ColumnDef<OwnPublicShareResponse>[] = [
   CreateSortableColumnDef('name', 'Name', RenderCell),
-  CreateSortableColumnDef('created_at', 'Created at', LocaleDateTimeRenderer),
-  CreateSortableColumnDef('expires_at', 'Expires', TimeSinceRelativeOrNeverRenderer),
+  CreateSortableColumnDef('createdOn', 'Created at', LocaleDateTimeRenderer),
+  CreateSortableColumnDef('expiresOn', 'Expires', TimeSinceRelativeOrNeverRenderer),
   {
     id: 'actions',
     cell: ({ row }) => {
       // You can pass whatever you need from `row.original` to the component
-      return renderComponent(DataTableActions, { sharelink: row.original });
+      return renderComponent(DataTableActions, { publicShare: row.original });
     },
   },
 ];

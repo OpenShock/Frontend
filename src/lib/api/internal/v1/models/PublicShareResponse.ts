@@ -13,13 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
-import type { ShareLinkDevice } from './ShareLinkDevice';
+import type { PublicShareDevice } from './PublicShareDevice';
 import {
-    ShareLinkDeviceFromJSON,
-    ShareLinkDeviceFromJSONTyped,
-    ShareLinkDeviceToJSON,
-    ShareLinkDeviceToJSONTyped,
-} from './ShareLinkDevice';
+    PublicShareDeviceFromJSON,
+    PublicShareDeviceFromJSONTyped,
+    PublicShareDeviceToJSON,
+    PublicShareDeviceToJSONTyped,
+} from './PublicShareDevice';
 import type { GenericIni } from './GenericIni';
 import {
     GenericIniFromJSON,
@@ -31,51 +31,51 @@ import {
 /**
  * 
  * @export
- * @interface PublicShareLinkResponse
+ * @interface PublicShareResponse
  */
-export interface PublicShareLinkResponse {
+export interface PublicShareResponse {
     /**
      * 
      * @type {string}
-     * @memberof PublicShareLinkResponse
+     * @memberof PublicShareResponse
      */
     id: string;
     /**
      * 
      * @type {string}
-     * @memberof PublicShareLinkResponse
+     * @memberof PublicShareResponse
      */
     name: string;
     /**
      * 
      * @type {Date}
-     * @memberof PublicShareLinkResponse
+     * @memberof PublicShareResponse
      */
     createdOn: Date;
     /**
      * 
      * @type {Date}
-     * @memberof PublicShareLinkResponse
+     * @memberof PublicShareResponse
      */
     expiresOn?: Date | null;
     /**
      * 
      * @type {GenericIni}
-     * @memberof PublicShareLinkResponse
+     * @memberof PublicShareResponse
      */
     author: GenericIni;
     /**
      * 
-     * @type {Array<ShareLinkDevice>}
-     * @memberof PublicShareLinkResponse
+     * @type {Array<PublicShareDevice>}
+     * @memberof PublicShareResponse
      */
-    devices?: Array<ShareLinkDevice>;
+    devices?: Array<PublicShareDevice>;
 }
 
 /**
- * Check if a given object implements the PublicShareLinkResponse interface.
+ * Check if a given object implements the PublicShareResponse interface.
  */
-export function instanceOfPublicShareLinkResponse(value: object): value is PublicShareLinkResponse {
+export function instanceOfPublicShareResponse(value: object): value is PublicShareResponse {
     if (!('id' in value) || value['id'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('createdOn' in value) || value['createdOn'] === undefined) return false;
@@ -83,11 +83,11 @@ export function instanceOfPublicShareLinkResponse(value: object): value is Publi
     return true;
 }
 
-export function PublicShareLinkResponseFromJSON(json: any): PublicShareLinkResponse {
-    return PublicShareLinkResponseFromJSONTyped(json, false);
+export function PublicShareResponseFromJSON(json: any): PublicShareResponse {
+    return PublicShareResponseFromJSONTyped(json, false);
 }
 
-export function PublicShareLinkResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): PublicShareLinkResponse {
+export function PublicShareResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): PublicShareResponse {
     if (json == null) {
         return json;
     }
@@ -98,15 +98,15 @@ export function PublicShareLinkResponseFromJSONTyped(json: any, ignoreDiscrimina
         'createdOn': (new Date(json['createdOn'])),
         'expiresOn': json['expiresOn'] == null ? undefined : (new Date(json['expiresOn'])),
         'author': GenericIniFromJSON(json['author']),
-        'devices': json['devices'] == null ? undefined : ((json['devices'] as Array<any>).map(ShareLinkDeviceFromJSON)),
+        'devices': json['devices'] == null ? undefined : ((json['devices'] as Array<any>).map(PublicShareDeviceFromJSON)),
     };
 }
 
-export function PublicShareLinkResponseToJSON(json: any): PublicShareLinkResponse {
-    return PublicShareLinkResponseToJSONTyped(json, false);
+export function PublicShareResponseToJSON(json: any): PublicShareResponse {
+    return PublicShareResponseToJSONTyped(json, false);
 }
 
-export function PublicShareLinkResponseToJSONTyped(value?: PublicShareLinkResponse | null, ignoreDiscriminator: boolean = false): any {
+export function PublicShareResponseToJSONTyped(value?: PublicShareResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
@@ -118,7 +118,7 @@ export function PublicShareLinkResponseToJSONTyped(value?: PublicShareLinkRespon
         'createdOn': ((value['createdOn']).toISOString()),
         'expiresOn': value['expiresOn'] == null ? undefined : ((value['expiresOn'] as any).toISOString()),
         'author': GenericIniToJSON(value['author']),
-        'devices': value['devices'] == null ? undefined : ((value['devices'] as Array<any>).map(ShareLinkDeviceToJSON)),
+        'devices': value['devices'] == null ? undefined : ((value['devices'] as Array<any>).map(PublicShareDeviceToJSON)),
     };
 }
 

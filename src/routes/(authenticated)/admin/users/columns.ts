@@ -30,9 +30,13 @@ export const columns: ColumnDef<AdminUsersView>[] = [
   CreateSortableColumnDef('name', 'Name', RenderCell),
   CreateSortableColumnDef('email', 'Email', RenderCell),
   CreateSortableColumnDef('passwordHashType', 'Password hash type', PasswordHashTypeRenderer),
-  CreateSortableColumnDef('createdAt', 'Created at', LocaleDateTimeRenderer),
-  CreateSortableColumnDef('emailActivated', 'Email activated', IsEmailActivatedRenderer),
   CreateSortableColumnDef('roles', 'Roles', UserRolesRenderer),
+  CreateSortableColumnDef('createdAt', 'Created at', LocaleDateTimeRenderer),
+  CreateSortableColumnDef('activatedAt', 'Activated at', LocaleDateTimeRenderer),
+  CreateSortableColumnDef('deactivatedAt', 'Deactivated at', LocaleDateTimeRenderer),
+  CreateSortableColumnDef('deactivatedByUserId', 'Deactivated by', (a) =>
+    a ? RenderCell(a) : `<div class="px-4">test</div>`
+  ),
   {
     id: 'actions',
     cell: ({ row }) => {

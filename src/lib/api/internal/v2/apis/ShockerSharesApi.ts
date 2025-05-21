@@ -16,45 +16,35 @@
 import * as runtime from '../runtime';
 import type {
   CreateShareRequest,
-  GenericIni,
   OpenShockProblem,
-  ShareRequestBaseDetails,
-  ShareRequestBaseItem,
-  UserShareInfo,
+  ShareInviteBaseDetails,
+  V2UserShares,
 } from '../models/index';
 import {
     CreateShareRequestFromJSON,
     CreateShareRequestToJSON,
-    GenericIniFromJSON,
-    GenericIniToJSON,
     OpenShockProblemFromJSON,
     OpenShockProblemToJSON,
-    ShareRequestBaseDetailsFromJSON,
-    ShareRequestBaseDetailsToJSON,
-    ShareRequestBaseItemFromJSON,
-    ShareRequestBaseItemToJSON,
-    UserShareInfoFromJSON,
-    UserShareInfoToJSON,
+    ShareInviteBaseDetailsFromJSON,
+    ShareInviteBaseDetailsToJSON,
+    V2UserSharesFromJSON,
+    V2UserSharesToJSON,
 } from '../models/index';
 
-export interface SharesCreateShareRequest {
+export interface SharesCreateShareInviteRequest {
     createShareRequest?: CreateShareRequest;
 }
 
-export interface SharesDeleteRequestRequest {
+export interface SharesDeleteOutgoingInviteRequest {
     id: string;
 }
 
-export interface SharesDenyRequestRequest {
+export interface SharesDenyIncomingInviteRequest {
     id: string;
 }
 
-export interface SharesGetRequestRequest {
+export interface SharesRedeemInviteRequest {
     id: string;
-}
-
-export interface SharesGetSharesToUserRequest {
-    userId: string;
 }
 
 /**
@@ -71,24 +61,11 @@ export interface ShockerSharesApiInterface {
      * @throws {RequiredError}
      * @memberof ShockerSharesApiInterface
      */
-    sharesCreateShareRaw(requestParameters: SharesCreateShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>>;
+    sharesCreateShareInviteRaw(requestParameters: SharesCreateShareInviteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>>;
 
     /**
      */
-    sharesCreateShare(createShareRequest?: CreateShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
-
-    /**
-     * 
-     * @param {string} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ShockerSharesApiInterface
-     */
-    sharesDeleteRequestRaw(requestParameters: SharesDeleteRequestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
-
-    /**
-     */
-    sharesDeleteRequest(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    sharesCreateShareInvite(createShareRequest?: CreateShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
 
     /**
      * 
@@ -97,35 +74,11 @@ export interface ShockerSharesApiInterface {
      * @throws {RequiredError}
      * @memberof ShockerSharesApiInterface
      */
-    sharesDenyRequestRaw(requestParameters: SharesDenyRequestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+    sharesDeleteOutgoingInviteRaw(requestParameters: SharesDeleteOutgoingInviteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
      */
-    sharesDenyRequest(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ShockerSharesApiInterface
-     */
-    sharesGetIncomingRequestsListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ShareRequestBaseItem>>>;
-
-    /**
-     */
-    sharesGetIncomingRequestsList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ShareRequestBaseItem>>;
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ShockerSharesApiInterface
-     */
-    sharesGetOutstandingRequestsListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ShareRequestBaseItem>>>;
-
-    /**
-     */
-    sharesGetOutstandingRequestsList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ShareRequestBaseItem>>;
+    sharesDeleteOutgoingInvite(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -134,11 +87,11 @@ export interface ShockerSharesApiInterface {
      * @throws {RequiredError}
      * @memberof ShockerSharesApiInterface
      */
-    sharesGetRequestRaw(requestParameters: SharesGetRequestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareRequestBaseDetails>>;
+    sharesDenyIncomingInviteRaw(requestParameters: SharesDenyIncomingInviteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
      */
-    sharesGetRequest(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareRequestBaseDetails>;
+    sharesDenyIncomingInvite(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -146,24 +99,50 @@ export interface ShockerSharesApiInterface {
      * @throws {RequiredError}
      * @memberof ShockerSharesApiInterface
      */
-    sharesGetSharesByUsersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<GenericIni>>>;
+    sharesGetIncomingInvitesListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ShareInviteBaseDetails>>>;
 
     /**
      */
-    sharesGetSharesByUsers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<GenericIni>>;
+    sharesGetIncomingInvitesList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ShareInviteBaseDetails>>;
 
     /**
      * 
-     * @param {string} userId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ShockerSharesApiInterface
      */
-    sharesGetSharesToUserRaw(requestParameters: SharesGetSharesToUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UserShareInfo>>>;
+    sharesGetOutgoingInvitesListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ShareInviteBaseDetails>>>;
 
     /**
      */
-    sharesGetSharesToUser(userId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<UserShareInfo>>;
+    sharesGetOutgoingInvitesList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ShareInviteBaseDetails>>;
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ShockerSharesApiInterface
+     */
+    sharesGetSharesByUsersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<V2UserShares>>;
+
+    /**
+     */
+    sharesGetSharesByUsers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<V2UserShares>;
+
+    /**
+     * 
+     * @summary Accept a share request and share the shockers with the current user.
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ShockerSharesApiInterface
+     */
+    sharesRedeemInviteRaw(requestParameters: SharesRedeemInviteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Accept a share request and share the shockers with the current user.
+     */
+    sharesRedeemInvite(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
 }
 
@@ -174,7 +153,7 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
 
     /**
      */
-    async sharesCreateShareRaw(requestParameters: SharesCreateShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
+    async sharesCreateShareInviteRaw(requestParameters: SharesCreateShareInviteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -186,7 +165,7 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
         }
 
         const response = await this.request({
-            path: `/2/shares/requests`,
+            path: `/2/shares/invites`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -202,18 +181,18 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
 
     /**
      */
-    async sharesCreateShare(createShareRequest?: CreateShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
-        const response = await this.sharesCreateShareRaw({ createShareRequest: createShareRequest }, initOverrides);
+    async sharesCreateShareInvite(createShareRequest?: CreateShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+        const response = await this.sharesCreateShareInviteRaw({ createShareRequest: createShareRequest }, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async sharesDeleteRequestRaw(requestParameters: SharesDeleteRequestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async sharesDeleteOutgoingInviteRaw(requestParameters: SharesDeleteOutgoingInviteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling sharesDeleteRequest().'
+                'Required parameter "id" was null or undefined when calling sharesDeleteOutgoingInvite().'
             );
         }
 
@@ -226,7 +205,7 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
         }
 
         const response = await this.request({
-            path: `/2/shares/requests/outgoing/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/2/shares/invites/outgoing/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -237,17 +216,17 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
 
     /**
      */
-    async sharesDeleteRequest(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.sharesDeleteRequestRaw({ id: id }, initOverrides);
+    async sharesDeleteOutgoingInvite(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.sharesDeleteOutgoingInviteRaw({ id: id }, initOverrides);
     }
 
     /**
      */
-    async sharesDenyRequestRaw(requestParameters: SharesDenyRequestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async sharesDenyIncomingInviteRaw(requestParameters: SharesDenyIncomingInviteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling sharesDenyRequest().'
+                'Required parameter "id" was null or undefined when calling sharesDenyIncomingInvite().'
             );
         }
 
@@ -260,7 +239,7 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
         }
 
         const response = await this.request({
-            path: `/2/shares/requests/incoming/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/2/shares/invites/incoming/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -271,13 +250,13 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
 
     /**
      */
-    async sharesDenyRequest(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.sharesDenyRequestRaw({ id: id }, initOverrides);
+    async sharesDenyIncomingInvite(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.sharesDenyIncomingInviteRaw({ id: id }, initOverrides);
     }
 
     /**
      */
-    async sharesGetIncomingRequestsListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ShareRequestBaseItem>>> {
+    async sharesGetIncomingInvitesListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ShareInviteBaseDetails>>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -287,25 +266,25 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
         }
 
         const response = await this.request({
-            path: `/2/shares/requests/incoming`,
+            path: `/2/shares/invites/incoming`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ShareRequestBaseItemFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ShareInviteBaseDetailsFromJSON));
     }
 
     /**
      */
-    async sharesGetIncomingRequestsList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ShareRequestBaseItem>> {
-        const response = await this.sharesGetIncomingRequestsListRaw(initOverrides);
+    async sharesGetIncomingInvitesList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ShareInviteBaseDetails>> {
+        const response = await this.sharesGetIncomingInvitesListRaw(initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async sharesGetOutstandingRequestsListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ShareRequestBaseItem>>> {
+    async sharesGetOutgoingInvitesListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ShareInviteBaseDetails>>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -315,60 +294,25 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
         }
 
         const response = await this.request({
-            path: `/2/shares/requests/outstanding`,
+            path: `/2/shares/invites/outgoing`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ShareRequestBaseItemFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ShareInviteBaseDetailsFromJSON));
     }
 
     /**
      */
-    async sharesGetOutstandingRequestsList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ShareRequestBaseItem>> {
-        const response = await this.sharesGetOutstandingRequestsListRaw(initOverrides);
+    async sharesGetOutgoingInvitesList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ShareInviteBaseDetails>> {
+        const response = await this.sharesGetOutgoingInvitesListRaw(initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async sharesGetRequestRaw(requestParameters: SharesGetRequestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareRequestBaseDetails>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling sharesGetRequest().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
-
-        const response = await this.request({
-            path: `/2/shares/requests/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ShareRequestBaseDetailsFromJSON(jsonValue));
-    }
-
-    /**
-     */
-    async sharesGetRequest(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareRequestBaseDetails> {
-        const response = await this.sharesGetRequestRaw({ id: id }, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     */
-    async sharesGetSharesByUsersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<GenericIni>>> {
+    async sharesGetSharesByUsersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<V2UserShares>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -384,23 +328,24 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(GenericIniFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => V2UserSharesFromJSON(jsonValue));
     }
 
     /**
      */
-    async sharesGetSharesByUsers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<GenericIni>> {
+    async sharesGetSharesByUsers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<V2UserShares> {
         const response = await this.sharesGetSharesByUsersRaw(initOverrides);
         return await response.value();
     }
 
     /**
+     * Accept a share request and share the shockers with the current user.
      */
-    async sharesGetSharesToUserRaw(requestParameters: SharesGetSharesToUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UserShareInfo>>> {
-        if (requestParameters['userId'] == null) {
+    async sharesRedeemInviteRaw(requestParameters: SharesRedeemInviteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
-                'userId',
-                'Required parameter "userId" was null or undefined when calling sharesGetSharesToUser().'
+                'id',
+                'Required parameter "id" was null or undefined when calling sharesRedeemInvite().'
             );
         }
 
@@ -413,20 +358,20 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
         }
 
         const response = await this.request({
-            path: `/2/shares/{userId}`.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))),
-            method: 'GET',
+            path: `/2/shares/invites/incoming/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
             headers: headerParameters,
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(UserShareInfoFromJSON));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
+     * Accept a share request and share the shockers with the current user.
      */
-    async sharesGetSharesToUser(userId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<UserShareInfo>> {
-        const response = await this.sharesGetSharesToUserRaw({ userId: userId }, initOverrides);
-        return await response.value();
+    async sharesRedeemInvite(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.sharesRedeemInviteRaw({ id: id }, initOverrides);
     }
 
 }

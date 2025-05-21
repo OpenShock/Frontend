@@ -245,6 +245,20 @@ export interface AccountApiInterface {
      */
     authenticatedAccountChangeUsername(changeUsernameRequest?: ChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
+    /**
+     * 
+     * @summary Deactivate currently logged in account
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApiInterface
+     */
+    authenticatedAccountDeactivateRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>>;
+
+    /**
+     * Deactivate currently logged in account
+     */
+    authenticatedAccountDeactivate(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
+
 }
 
 /**
@@ -557,6 +571,36 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
      */
     async authenticatedAccountChangeUsername(changeUsernameRequest?: ChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.authenticatedAccountChangeUsernameRaw({ changeUsernameRequest: changeUsernameRequest }, initOverrides);
+    }
+
+    /**
+     * Deactivate currently logged in account
+     */
+    async authenticatedAccountDeactivateRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/1/account`,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<string>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
+    }
+
+    /**
+     * Deactivate currently logged in account
+     */
+    async authenticatedAccountDeactivate(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+        const response = await this.authenticatedAccountDeactivateRaw(initOverrides);
+        return await response.value();
     }
 
 }

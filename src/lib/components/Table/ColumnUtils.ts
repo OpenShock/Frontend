@@ -118,8 +118,8 @@ export const RenderCellWithTooltip = (content: string, tooltip: string): TableCe
 export const LocaleDateRenderer = (date: Date): TableCell =>
   RenderCellWithTooltip(date.toLocaleDateString(), date.toString());
 
-export const LocaleDateTimeRenderer = (date: Date): TableCell =>
-  RenderCellWithTooltip(date.toLocaleString(), date.toString());
+export const LocaleDateTimeRenderer = (date: Date | null): TableCell =>
+  date ? RenderCellWithTooltip(date.toLocaleString(), date.toString()) : RenderCell('Never');
 
 export const TimeSinceDurationRenderer = (date: Date): TableCell =>
   RenderCellWithTooltip(durationToString(Date.now() - date.getTime()), date.toString());
