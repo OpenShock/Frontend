@@ -1,16 +1,25 @@
 <script lang="ts">
+  import type { ColumnFiltersState, PaginationState, SortingState } from '@tanstack/table-core';
   import { adminApi } from '$lib/api';
   import type { AdminUsersView } from '$lib/api/internal/v1/models/AdminUsersView';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { Button } from '$lib/components/ui/button';
-  import * as Card from '$lib/components/ui/card';
+  import { CardHeader, CardTitle, CardContent } from '$lib/components/ui/card';
+  import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNextButton,
+    PaginationPrevButton,
+  } from '$lib/components/ui/pagination';
   import { onDestroy, onMount } from 'svelte';
   import { columns } from './columns';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
-  import type { ColumnFiltersState, PaginationState, SortingState } from '@tanstack/table-core';
   import { Input } from '$lib/components/ui/input';
 
-  import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
+  import Search from '@lucide/svelte/icons/search';
 
   type FilterOpType =
     | 'like'
@@ -30,16 +39,21 @@
   type FilterMap<TEntity> = { [K in keyof TEntity]: string };
   type OrderbyQuery<TEntity> = `${Extract<keyof TEntity, string>} ${'asc' | 'desc'}`;
 
+  const PerPage = 200;
+
+  let page = $state(1);
+  let total = $state(0);
   let nameSearch = $state('');
   let emailSearch = $state('');
 
   let data = $state<AdminUsersView[]>([]);
+
+  let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: PerPage });
   let sorting = $state<SortingState>([]);
   let filters = $derived<ColumnFiltersState>([
     { id: 'name', value: nameSearch },
     { id: 'email', value: emailSearch },
   ]);
-  let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: 10 });
 
   function fetchUsers() {
     adminApi
@@ -66,20 +80,45 @@
 </script>
 
 <div class="container my-8">
-  <Card.Header>
-    <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
+  <CardHeader>
+    <CardTitle class="flex items-center justify-between space-x-2 text-3xl">
       Users
-      <Button class="btn variant-filled-primary text-xl" onclick={fetchUsers}>
-        <RotateCcw />
-        <span> Refresh </span>
-      </Button>
-    </Card.Title>
-  </Card.Header>
-  <Card.Content>
-    <div class="flex items-center space-x-4 py-4">
-      <Input placeholder="Filter names..." bind:value={nameSearch} class="max-w-sm" />
-      <Input placeholder="Filter emails..." bind:value={emailSearch} class="max-w-sm" />
-    </div>
+      <div class="flex items-center justify-end space-x-2">
+        <Input placeholder="Filter names..." bind:value={nameSearch} class="max-w-sm" />
+        <Input placeholder="Filter emails..." bind:value={emailSearch} class="max-w-sm" />
+        <Button class="btn variant-filled-primary text-xl" onclick={fetchUsers}>
+          <Search />
+          <span> Search </span>
+        </Button>
+      </div>
+    </CardTitle>
+  </CardHeader>
+  <CardContent>
     <DataTable {data} {columns} {sorting} {filters} {pagination} />
-  </Card.Content>
+  </CardContent>
+  <Pagination count={total} perPage={PerPage} bind:page>
+    {#snippet children({ pages, currentPage })}
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationPrevButton />
+        </PaginationItem>
+        {#each pages as page (page.key)}
+          {#if page.type === 'ellipsis'}
+            <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem>
+          {:else}
+            <PaginationItem>
+              <PaginationLink {page} isActive={currentPage === page.value}>
+                {page.value}
+              </PaginationLink>
+            </PaginationItem>
+          {/if}
+        {/each}
+        <PaginationItem>
+          <PaginationNextButton />
+        </PaginationItem>
+      </PaginationContent>
+    {/snippet}
+  </Pagination>
 </div>
