@@ -1,21 +1,10 @@
 <script lang="ts">
-  import {
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    type ColumnFiltersState,
-    type PaginationState,
-    type SortingState,
-  } from '@tanstack/table-core';
+  import type { ColumnFiltersState, PaginationState, SortingState } from '@tanstack/table-core';
   import { adminApi } from '$lib/api';
   import type { AdminUsersView } from '$lib/api/internal/v1/models/AdminUsersView';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { Button } from '$lib/components/ui/button';
-  import {
-    CardHeader,
-    CardTitle,
-    CardContent
-  } from '$lib/components/ui/card';
+  import { CardHeader, CardTitle, CardContent } from '$lib/components/ui/card';
   import {
     Pagination,
     PaginationContent,
@@ -25,24 +14,12 @@
     PaginationNextButton,
     PaginationPrevButton,
   } from '$lib/components/ui/pagination';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import Table from '$lib/components/Table/TableTemplate.svelte';
+  import { onDestroy, onMount } from 'svelte';
+  import { columns } from './columns';
+  import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import { Input } from '$lib/components/ui/input';
-  import { createSvelteTable } from '$lib/components/ui/data-table';
-  import { columns, type User } from './columns';
-  import { onMount } from 'svelte';
 
-  function apiUserToTableDevice(user: AdminUsersView): User {
-    return {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      password_hash_type: user.passwordHashType,
-      created_at: user.createdAt,
-      email_activated: user.emailActivated,
-      roles: user.roles,
-    };
-  }
+  import Search from '@lucide/svelte/icons/search';
 
   type FilterOpType =
     | 'like'
@@ -65,81 +42,59 @@
   const PerPage = 200;
 
   let page = $state(1);
-  let filter = $state('');
-  let orderby = $state('name asc');
-
   let total = $state(0);
-  let data = $state<User[]>([]);
+  let nameSearch = $state('');
+  let emailSearch = $state('');
+
+  let data = $state<AdminUsersView[]>([]);
 
   let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: PerPage });
   let sorting = $state<SortingState>([]);
-  let columnFilters = $state<ColumnFiltersState>([]);
-
-  const table = createSvelteTable({
-    get data() {
-      return data;
-    },
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    state: {
-      get pagination() {
-        return pagination;
-      },
-      get sorting() {
-        return sorting;
-      },
-      get columnFilters() {
-        return columnFilters;
-      },
-    },
-  });
+  let filters = $derived<ColumnFiltersState>([
+    { id: 'name', value: nameSearch },
+    { id: 'email', value: emailSearch },
+  ]);
 
   function fetchUsers() {
     adminApi
-      .adminGetUsers(
-        filter.length > 0 ? filter : undefined,
-        orderby.length > 0 ? orderby : undefined,
-        (page - 1) * PerPage,
-        PerPage
-      )
+      .adminGetUsers() /* filter, orderby, offset, limit */
       .then((res) => {
         if (res.data) {
-          total = res.total;
-          data = res.data.map(apiUserToTableDevice);
+          data = res.data;
         }
       })
       .catch(handleApiError);
   }
 
-  function startSearch() {
-    page = 1;
+  let interval: ReturnType<typeof setInterval>;
+  onMount(() => {
     fetchUsers();
-  }
-
-  onMount(fetchUsers);
+    // Update timestamps every minute
+    interval = setInterval(() => {
+      data = Object.assign([], data);
+    }, 60000);
+  });
+  onDestroy(() => {
+    clearInterval(interval);
+  });
 </script>
 
 <div class="container my-8">
   <CardHeader>
     <CardTitle class="flex items-center justify-between space-x-2 text-3xl">
       Users
+      <div class="flex items-center justify-end space-x-2">
+        <Input placeholder="Filter names..." bind:value={nameSearch} class="max-w-sm" />
+        <Input placeholder="Filter emails..." bind:value={emailSearch} class="max-w-sm" />
+        <Button class="btn variant-filled-primary text-xl" onclick={fetchUsers}>
+          <Search />
+          <span> Search </span>
+        </Button>
+      </div>
     </CardTitle>
   </CardHeader>
   <CardContent>
-    <div class="flex items-center space-x-4 py-4">
-      <Input
-        placeholder="Input search query..."
-        bind:value={filter}
-        class="max-w-sm flex-1"
-      />
-      <Button class="text-xl cursor-pointer" onclick={startSearch}>
-        <span> Search </span>
-      </Button>
-    </div>
-    <Table {table} {columns} />
+    <DataTable {data} {columns} {sorting} {filters} {pagination} />
   </CardContent>
   <Pagination count={total} perPage={PerPage} bind:page>
     {#snippet children({ pages, currentPage })}
