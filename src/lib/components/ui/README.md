@@ -1,0 +1,46 @@
+## Post-Update Checklist for shadcn Components
+
+After updating your `shadcn` components with the CLI, complete the following steps to ensure everything integrates correctly:
+
+1. **Update `sonner` component if modified**
+
+   If the `sonner` component was modified by the CLI, it most likely went back to using the `svelte-sonner` package.
+   * Update it to use our own `ColorSchemeStore` implementation instead of the one from the `svelte-sonner` package.
+   * Remove `svelte-sonner` from `package.json`
+
+2. **Redirect utility imports**
+
+   * Replace every instance of
+
+     ```js
+     import ... from '$lib/utils.js'
+     ```
+
+     with:
+
+     ```js
+     import ... from '$lib/utils/shadcn'
+     ```
+
+     This can be done easily with a search and replace tool in your code editor.
+
+3. **Replace `shadcn` utils file if CLI generated one**
+
+   * If the CLI created `src/lib/utils.ts`, overwrite your existing `src/lib/utils/shadcn.ts` with it.
+
+4. **Apply consistent styling**
+
+   * Run the following command to apply consistent styling:
+
+     ```bash
+     pnpm run format
+     ```
+
+5. **Check code for any issues**
+
+   * Run the following commands to check for any issues:
+
+     ```bash
+     pnpm run lint
+     pnpm run check
+     ```
