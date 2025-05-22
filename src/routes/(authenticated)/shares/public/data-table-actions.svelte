@@ -1,12 +1,11 @@
 <script lang="ts">
+  import Ellipsis from '@lucide/svelte/icons/ellipsis';
+  import type { OwnPublicShareResponse } from '$lib/api/internal/v1';
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { toast } from 'svelte-sonner';
-  import type { OwnPublicShareResponse } from '$lib/api/internal/v1';
   import SharelinkDeleteDialog from './dialog-sharelink-delete.svelte';
   import SharelinkEditDialog from './dialog-sharelink-edit.svelte';
-
-  import Ellipsis from '@lucide/svelte/icons/ellipsis';
 
   type Props = {
     publicShare: OwnPublicShareResponse;

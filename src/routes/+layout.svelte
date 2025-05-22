@@ -1,5 +1,7 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
   import { page } from '$app/state';
+  import { PUBLIC_DEVELOPMENT_BANNER } from '$env/static/public';
   import AppSidebar from '$lib/components/layout/AppSidebar.svelte';
   import Footer from '$lib/components/layout/Footer.svelte';
   import Header from '$lib/components/layout/Header.svelte';
@@ -10,9 +12,6 @@
   import { initializeSignalR } from '$lib/signalr';
   import { initializeStores } from '$lib/stores';
   import type { Snippet } from 'svelte';
-  import { browser } from '$app/environment';
-  import { PUBLIC_DEVELOPMENT_BANNER } from '$env/static/public';
-
   import '../app.css';
 
   type Props = {

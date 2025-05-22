@@ -1,5 +1,5 @@
-import { durationToString } from './time';
 import { describe, expect, it } from 'vitest';
+import { durationToString } from './time';
 
 describe('time utils validator test', () => {
   it('convert 0 to 0 seconds', () => {

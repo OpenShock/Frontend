@@ -1,7 +1,5 @@
 import type { ColumnDef } from '@tanstack/table-core';
-import { SemVer } from 'semver';
-import { renderComponent } from '$lib/components/ui/data-table';
-import DataTableActions from './data-table-actions.svelte';
+import type { AdminOnlineDeviceResponse } from '$lib/api/internal/v1';
 import {
   CreateColumnDef,
   CreateSortableColumnDef,
@@ -12,7 +10,9 @@ import {
   TimeSinceDurationRenderer,
   UserAgentRenderer,
 } from '$lib/components/Table/ColumnUtils';
-import type { AdminOnlineDeviceResponse } from '$lib/api/internal/v1';
+import { renderComponent } from '$lib/components/ui/data-table';
+import { SemVer } from 'semver';
+import DataTableActions from './data-table-actions.svelte';
 
 export type OnlineHub = Omit<AdminOnlineDeviceResponse, 'firmwareVersion'> & {
   firmwareVersion: SemVer;

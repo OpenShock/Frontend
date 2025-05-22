@@ -1,16 +1,16 @@
 <script lang="ts">
+  import { DownloadCloud, RotateCcw } from '@lucide/svelte';
   import { page } from '$app/state';
   import { hubManagementV1Api } from '$lib/api';
   import type { OtaItem, OtaItemIReadOnlyCollectionLegacyDataResponse } from '$lib/api/internal/v1';
+  import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { OnlineHubsStore, type HubOnlineState } from '$lib/stores/HubsStore';
-  import { DownloadCloud, RotateCcw } from '@lucide/svelte';
-  import * as Table from '$lib/components/ui/table';
-  import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
-  import { SignalR_Connection } from '$lib/signalr';
   import { Progress } from '$lib/components/ui/progress';
+  import * as Table from '$lib/components/ui/table';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { SignalR_Connection } from '$lib/signalr';
+  import { type HubOnlineState, OnlineHubsStore } from '$lib/stores/HubsStore';
 
   let hubId = $derived(page.params.hubId);
   let hub = $derived<HubOnlineState>(

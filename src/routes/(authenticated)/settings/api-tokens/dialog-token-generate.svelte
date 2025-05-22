@@ -4,11 +4,11 @@
   import TextInput from '$lib/components/input/TextInput.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
+  import * as Select from '$lib/components/ui/select';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { GetValResColor, type ValidationResult } from '$lib/types/ValidationResult';
   import { toast } from 'svelte-sonner';
   import TokenCreatedDialog from './dialog-token-created.svelte';
-  import * as Select from '$lib/components/ui/select';
 
   type Props = {
     open: boolean;

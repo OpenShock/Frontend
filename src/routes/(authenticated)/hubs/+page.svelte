@@ -1,14 +1,13 @@
 <script lang="ts">
+  import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
+  import type { SortingState } from '@tanstack/table-core';
+  import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card';
-  import { OwnHubsStore, OnlineHubsStore, refreshOwnHubs } from '$lib/stores/HubsStore';
+  import { OnlineHubsStore, OwnHubsStore, refreshOwnHubs } from '$lib/stores/HubsStore';
   import { SemVer } from 'semver';
-  import { columns, type Hub } from './columns';
-  import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
-  import type { SortingState } from '@tanstack/table-core';
   import { onMount } from 'svelte';
-
-  import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
+  import { type Hub, columns } from './columns';
 
   let data = $derived.by<Hub[]>(() => {
     if (!$OwnHubsStore || !$OnlineHubsStore) return [];

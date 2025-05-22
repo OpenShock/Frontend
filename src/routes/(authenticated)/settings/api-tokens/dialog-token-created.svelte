@@ -1,8 +1,7 @@
 <script lang="ts">
-  import * as Dialog from '$lib/components/ui/dialog';
-  import CopyInput from '$lib/components/copy-input.svelte';
-
   import { KeyRound } from '@lucide/svelte';
+  import CopyInput from '$lib/components/copy-input.svelte';
+  import * as Dialog from '$lib/components/ui/dialog';
 
   type Props = {
     token: string | null;

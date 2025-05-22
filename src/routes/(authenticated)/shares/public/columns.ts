@@ -1,13 +1,13 @@
 import type { ColumnDef } from '@tanstack/table-core';
-import { renderComponent } from '$lib/components/ui/data-table';
-import DataTableActions from './data-table-actions.svelte';
+import type { OwnPublicShareResponse } from '$lib/api/internal/v1';
 import {
-  TimeSinceRelativeOrNeverRenderer,
+  CreateSortableColumnDef,
   LocaleDateTimeRenderer,
   RenderCell,
-  CreateSortableColumnDef,
+  TimeSinceRelativeOrNeverRenderer,
 } from '$lib/components/Table/ColumnUtils';
-import type { OwnPublicShareResponse } from '$lib/api/internal/v1';
+import { renderComponent } from '$lib/components/ui/data-table';
+import DataTableActions from './data-table-actions.svelte';
 
 export const columns: ColumnDef<OwnPublicShareResponse>[] = [
   CreateSortableColumnDef('name', 'Name', RenderCell),

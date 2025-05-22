@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Layers, Settings } from '@lucide/svelte';
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import MapControlModule from '$lib/components/ControlModules/MapControlModule.svelte';
   import { ModuleType } from '$lib/components/ControlModules/ModuleType';
@@ -8,8 +9,6 @@
   import * as Popover from '$lib/components/ui/popover';
   import { ControlDurationDefault, ControlIntensityDefault } from '$lib/constants/ControlConstants';
   import { OwnHubsStore, refreshOwnHubs } from '$lib/stores/HubsStore';
-
-  import { Layers, Settings } from '@lucide/svelte';
   import { onMount } from 'svelte';
 
   let shockers = $derived(Array.from($OwnHubsStore).flatMap(([, hub]) => hub.shockers));

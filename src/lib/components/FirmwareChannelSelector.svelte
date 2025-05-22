@@ -1,12 +1,11 @@
 <script lang="ts">
-  import * as ToggleGroup from '$lib/components/ui/toggle-group';
+  import { CircleCheckBig, TriangleAlert } from '@lucide/svelte';
   import {
     FetchChannelVersion,
-    FirmwareChannels,
     type FirmwareChannel,
+    FirmwareChannels,
   } from '$lib/api/firmwareCDN';
-
-  import { CircleCheckBig, TriangleAlert } from '@lucide/svelte';
+  import * as ToggleGroup from '$lib/components/ui/toggle-group';
 
   /** Optional chip to constrain the list of boards to */
   //export let chip: string | null = null;

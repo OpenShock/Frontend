@@ -1,11 +1,11 @@
 <script lang="ts">
-  import * as Avatar from '$lib/components/ui/avatar/index.js';
   import { Zap } from '@lucide/svelte';
-  import * as Tooltip from '$lib/components/ui/tooltip';
+  import type { V2UserSharesListItem } from '$lib/api/internal/v2';
+  import * as Avatar from '$lib/components/ui/avatar/index.js';
+  import { Badge } from '$lib/components/ui/badge';
   import * as Drawer from '$lib/components/ui/drawer/index.js';
   import * as Table from '$lib/components/ui/table/index.js';
-  import type { V2UserSharesListItem } from '$lib/api/internal/v2';
-  import { Badge } from '$lib/components/ui/badge';
+  import * as Tooltip from '$lib/components/ui/tooltip';
 
   type UserShareDrawerProps = {
     userShare: V2UserSharesListItem;

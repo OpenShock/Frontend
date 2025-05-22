@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Bug from '@lucide/svelte/icons/bug';
   import { dev } from '$app/environment';
   import { PUBLIC_TURNSTILE_DEV_BYPASS_VALUE, PUBLIC_TURNSTILE_SITE_KEY } from '$env/static/public';
   import CloudflareLogo from '$lib/components/svg/CloudflareLogo.svelte';
@@ -7,8 +8,6 @@
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
   import LoadingCircle from './svg/LoadingCircle.svelte';
-
-  import Bug from '@lucide/svelte/icons/bug';
 
   interface Props {
     action: string;

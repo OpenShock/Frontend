@@ -1,11 +1,10 @@
 <script lang="ts">
+  import { Check, ChevronsUpDown } from '@lucide/svelte';
   import { FetchVersionBoards } from '$lib/api/firmwareCDN';
-  import { Popover, PopoverTrigger, PopoverContent } from '$lib/components/ui/popover';
   import { Button } from '$lib/components/ui/button';
   import * as Command from '$lib/components/ui/command';
+  import { Popover, PopoverContent, PopoverTrigger } from '$lib/components/ui/popover';
   import { cn } from '$lib/utils';
-
-  import { Check, ChevronsUpDown } from '@lucide/svelte';
 
   /** Optional chip to constrain the list of boards to */
   //export let chip: string | null = null;

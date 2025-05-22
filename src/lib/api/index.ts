@@ -1,23 +1,23 @@
 import { PUBLIC_BACKEND_API_DOMAIN } from '$env/static/public';
 import {
+  APITokensApi,
   AccountApi as AccountV1Api,
   AdminApi,
-  APITokensApi,
   Configuration as ConfigurationV1,
   HubManagementApi as HubManagementV1Api,
   MetaApi,
-  SessionsApi,
-  ShockersApi as ShockersV1Api,
   PublicShockerSharesApi,
+  SessionsApi,
   ShockerSharesApi as ShockerSharesV1Api,
+  ShockersApi as ShockersV1Api,
   UsersApi,
 } from './internal/v1';
 import {
   AccountApi as AccountV2Api,
   Configuration as ConfigurationV2,
   HubManagementApi as HubManagementV2Api,
-  ShockersApi as ShockersV2Api,
   ShockerSharesApi as ShockerSharesV2Api,
+  ShockersApi as ShockersV2Api,
 } from './internal/v2';
 
 type Config = {

@@ -1,15 +1,14 @@
 <script lang="ts">
+  import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
+  import type { ColumnFiltersState, SortingState } from '@tanstack/table-core';
   import { adminApi } from '$lib/api';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import { Button } from '$lib/components/ui/button';
   import * as Card from '$lib/components/ui/card';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { SemVer } from 'semver';
   import { onMount } from 'svelte';
-  import { columns, type OnlineHub } from './columns';
-  import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
-  import type { ColumnFiltersState, SortingState } from '@tanstack/table-core';
-
-  import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
+  import { type OnlineHub, columns } from './columns';
 
   let data = $state<OnlineHub[]>([]);
   let sorting = $state<SortingState>([]);

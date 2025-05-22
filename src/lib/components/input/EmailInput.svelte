@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { ButtonSettings } from '$lib/components/input/impl/ButtonSettings';
   import TextInput from '$lib/components/input/TextInput.svelte';
+  import type { ButtonSettings } from '$lib/components/input/impl/ButtonSettings';
   import { validateEmail } from '$lib/inputvalidation/emailValidator';
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import type { ValidationResult } from '$lib/types/ValidationResult';

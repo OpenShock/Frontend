@@ -1,5 +1,5 @@
-import type { ValidationResult } from '$lib/types/ValidationResult';
 import { UsernameAvailability } from '$lib/api/internal/v2';
+import type { ValidationResult } from '$lib/types/ValidationResult';
 import { isEmailAddress } from './emailValidator';
 
 /* eslint-disable no-misleading-character-class */

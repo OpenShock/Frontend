@@ -1,11 +1,11 @@
+import * as SR from '@microsoft/signalr';
 import { browser, dev } from '$app/environment';
 import { PUBLIC_BACKEND_API_DOMAIN } from '$env/static/public';
 import { UserStore } from '$lib/stores/UserStore';
-import * as SR from '@microsoft/signalr';
-import { get, writable, type Readable } from 'svelte/store';
+import { toast } from 'svelte-sonner';
+import { type Readable, get, writable } from 'svelte/store';
 import { handleSignalrDeviceState } from './handlers/DeviceStatus';
 import { handleSignalrDeviceUpdate } from './handlers/DeviceUpdate';
-import { toast } from 'svelte-sonner';
 import {
   handleSignalrOtaInstallProgress,
   handleSignalrOtaInstallStarted,

@@ -1,12 +1,11 @@
 <script lang="ts">
+  import { Microchip, TriangleAlert } from '@lucide/svelte';
+  import FlashManager from '$lib/EspTool/FlashManager';
+  import { DownloadFirmwareBinary, GetFirmwareBinaryHash } from '$lib/api/firmwareCDN';
+  import { Button } from '$lib/components/ui/button';
   import { Progress } from '$lib/components/ui/progress';
   import WordArray from 'crypto-js/lib-typedarrays';
   import HashMD5 from 'crypto-js/md5';
-  import { DownloadFirmwareBinary, GetFirmwareBinaryHash } from '$lib/api/firmwareCDN';
-  import FlashManager from '$lib/EspTool/FlashManager';
-  import { Button } from '$lib/components/ui/button';
-
-  import { Microchip, TriangleAlert } from '@lucide/svelte';
 
   interface Props {
     version: string;

@@ -1,8 +1,7 @@
 <script lang="ts">
-  import { ControlIntensityProps, ControlDurationProps } from '$lib/constants/ControlConstants';
-  import CircleSlider from './Internal/CircleSlider.svelte';
-
   import { Timer, Volume2, Zap } from '@lucide/svelte';
+  import { ControlDurationProps, ControlIntensityProps } from '$lib/constants/ControlConstants';
+  import CircleSlider from './Internal/CircleSlider.svelte';
 
   interface Props {
     shockIntensity: number;

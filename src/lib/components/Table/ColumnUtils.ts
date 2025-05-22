@@ -7,12 +7,12 @@ import type {
 } from '@tanstack/table-core';
 import DataTableSortButton from '$lib/components/Table/SortButton.svelte';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table';
-import { createRawSnippet } from 'svelte';
-import { durationToString, elapsedToString } from '$lib/utils/time';
-import { sort, type SemVer } from 'semver';
 import type { TwTextColor } from '$lib/types/Tailwind';
-import { getReadableUserAgentName } from '$lib/utils/userAgent';
 import { escapeHtml } from '$lib/utils/encoding';
+import { durationToString, elapsedToString } from '$lib/utils/time';
+import { getReadableUserAgentName } from '$lib/utils/userAgent';
+import { type SemVer, sort } from 'semver';
+import { createRawSnippet } from 'svelte';
 
 function CreateSortHeader<TData>(name: string): StringOrTemplateHeader<TData, unknown> {
   return ({ column }) =>

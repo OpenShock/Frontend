@@ -2,11 +2,11 @@
   import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input';
   import * as Popover from '$lib/components/ui/popover';
+  import type { AnyComponent } from '$lib/types/AnyComponent';
   import { GetValResColor, type ValidationResult } from '$lib/types/ValidationResult';
   import type { Snippet } from 'svelte';
   import type { FullAutoFill } from 'svelte/elements';
   import type { ButtonSettings } from './impl/ButtonSettings';
-  import type { AnyComponent } from '$lib/types/AnyComponent';
 
   interface Props {
     type?: 'text' | 'password';

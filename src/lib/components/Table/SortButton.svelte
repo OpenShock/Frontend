@@ -1,9 +1,8 @@
 <script lang="ts" generics="TData">
-  import { Button } from '$lib/components/ui/button';
-  import type { Column } from '@tanstack/table-core';
-  import type { ComponentProps } from 'svelte';
-
   import { ArrowDown, ArrowUp, ArrowUpDown } from '@lucide/svelte';
+  import type { Column } from '@tanstack/table-core';
+  import { Button } from '$lib/components/ui/button';
+  import type { ComponentProps } from 'svelte';
 
   type Props = ComponentProps<typeof Button> & { name: string; column: Column<TData, unknown> };
 

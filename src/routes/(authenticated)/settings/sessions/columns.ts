@@ -1,6 +1,4 @@
-import { renderComponent } from '$lib/components/ui/data-table';
 import type { ColumnDef } from '@tanstack/table-core';
-import DataTableActions from './data-table-actions.svelte';
 import {
   CreateColumnDef,
   CreateSortableColumnDef,
@@ -9,6 +7,8 @@ import {
   TimeSinceRelativeRenderer,
   UserAgentRenderer,
 } from '$lib/components/Table/ColumnUtils';
+import { renderComponent } from '$lib/components/ui/data-table';
+import DataTableActions from './data-table-actions.svelte';
 
 export type Session = {
   id: string;

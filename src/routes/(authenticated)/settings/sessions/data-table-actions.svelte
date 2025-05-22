@@ -1,11 +1,10 @@
 <script lang="ts">
+  import Ellipsis from '@lucide/svelte/icons/ellipsis';
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { toast } from 'svelte-sonner';
   import type { Session } from './columns';
   import SessionRevokeDialog from './dialog-session-revoke.svelte';
-
-  import Ellipsis from '@lucide/svelte/icons/ellipsis';
 
   type Props = {
     session: Session;

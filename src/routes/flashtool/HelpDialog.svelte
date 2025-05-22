@@ -1,11 +1,10 @@
 <script lang="ts">
+  import { ArrowDownToLine } from '@lucide/svelte';
   import { PUBLIC_DISCORD_INVITE_URL } from '$env/static/public';
   import DiscordLogo from '$lib/components/svg/DiscordLogo.svelte';
   import { Button } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
   import { ScrollArea } from '$lib/components/ui/scroll-area';
-
-  import { ArrowDownToLine } from '@lucide/svelte';
 
   interface Props {
     open: boolean;

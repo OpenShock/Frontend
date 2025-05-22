@@ -1,13 +1,13 @@
 import type { ColumnDef } from '@tanstack/table-core';
-import { renderComponent } from '$lib/components/ui/data-table';
 import { PermissionType } from '$lib/api/internal/v1';
-import DataTableActions from './data-table-actions.svelte';
 import {
-  TimeSinceRelativeOrNeverRenderer,
+  CreateSortableColumnDef,
   LocaleDateRenderer,
   RenderCell,
-  CreateSortableColumnDef,
+  TimeSinceRelativeOrNeverRenderer,
 } from '$lib/components/Table/ColumnUtils';
+import { renderComponent } from '$lib/components/ui/data-table';
+import DataTableActions from './data-table-actions.svelte';
 
 export type ApiToken = {
   id: string;

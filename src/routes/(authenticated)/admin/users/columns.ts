@@ -1,7 +1,5 @@
 import type { ColumnDef } from '@tanstack/table-core';
-import { renderComponent } from '$lib/components/ui/data-table';
-import { PasswordHashingAlgorithm, RoleType, type AdminUsersView } from '$lib/api/internal/v1';
-import DataTableActions from './data-table-actions.svelte';
+import { type AdminUsersView, PasswordHashingAlgorithm, RoleType } from '$lib/api/internal/v1';
 import {
   CellGreenTrue,
   CellRedFalse,
@@ -12,6 +10,8 @@ import {
   RenderCell,
   RenderOrangeCell,
 } from '$lib/components/Table/ColumnUtils';
+import { renderComponent } from '$lib/components/ui/data-table';
+import DataTableActions from './data-table-actions.svelte';
 
 const PasswordHashTypeRenderer = (passwordHashType: PasswordHashingAlgorithm) => {
   if (passwordHashType !== PasswordHashingAlgorithm.BCrypt)

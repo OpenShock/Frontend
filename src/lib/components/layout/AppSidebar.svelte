@@ -1,27 +1,26 @@
 <script lang="ts">
-  import { page } from '$app/state';
-  import { RoleType } from '$lib/api/internal/v1';
-  import * as Sidebar from '$lib/components/ui/sidebar';
-  import type { AnyComponent } from '$lib/types/AnyComponent';
-  import { Collapsible } from 'bits-ui';
-  import { UserStore } from '$lib/stores/UserStore';
-
   import {
     ChevronDown,
-    Router,
+    Cpu,
     House,
     KeyRound,
+    Link,
     MonitorSmartphone,
+    Router,
     SquareActivity,
     Timer,
     TriangleAlert,
     UserPen,
+    Users,
     Wrench,
     Zap,
-    Cpu,
-    Users,
-    Link,
   } from '@lucide/svelte';
+  import { page } from '$app/state';
+  import { RoleType } from '$lib/api/internal/v1';
+  import * as Sidebar from '$lib/components/ui/sidebar';
+  import { UserStore } from '$lib/stores/UserStore';
+  import type { AnyComponent } from '$lib/types/AnyComponent';
+  import { Collapsible } from 'bits-ui';
 
   let currentUser = $derived($UserStore.self);
 

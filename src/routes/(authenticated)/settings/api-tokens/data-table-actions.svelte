@@ -1,12 +1,11 @@
 <script lang="ts">
+  import Ellipsis from '@lucide/svelte/icons/ellipsis';
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { toast } from 'svelte-sonner';
   import type { ApiToken } from './columns';
   import TokenDeleteDialog from './dialog-token-delete.svelte';
   import TokenEditDialog from './dialog-token-edit.svelte';
-
-  import Ellipsis from '@lucide/svelte/icons/ellipsis';
 
   type Props = {
     token: ApiToken;

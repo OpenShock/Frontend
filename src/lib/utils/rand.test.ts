@@ -1,5 +1,5 @@
-import { randStr } from './rand';
 import { describe, expect, it } from 'vitest';
+import { randStr } from './rand';
 
 describe('rand utils validator test', () => {
   it('generate random string with length 0 should return empty string', () => {

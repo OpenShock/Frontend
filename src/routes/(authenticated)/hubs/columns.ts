@@ -1,8 +1,5 @@
 import type { ColumnDef } from '@tanstack/table-core';
-import { renderComponent } from '$lib/components/ui/data-table';
 import { ShockerModelType } from '$lib/api/internal/v1';
-import DataTableActions from './data-table-actions.svelte';
-import type { SemVer } from 'semver';
 import {
   CellGreenOnline,
   CellRedOffline,
@@ -11,6 +8,9 @@ import {
   LocaleDateTimeRenderer,
   RenderCell,
 } from '$lib/components/Table/ColumnUtils';
+import { renderComponent } from '$lib/components/ui/data-table';
+import type { SemVer } from 'semver';
+import DataTableActions from './data-table-actions.svelte';
 
 export type Shocker = {
   id: string;

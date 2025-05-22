@@ -1,11 +1,11 @@
 <script lang="ts">
+  import { Pause, Play } from '@lucide/svelte';
   import { publicShockerSharesApi } from '$lib/api';
   import type { OwnPublicShareResponse } from '$lib/api/internal/v1';
   import type { PublicShareResponse } from '$lib/api/internal/v1';
   import { Button } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
   import { onMount } from 'svelte';
-  import { Pause, Play } from '@lucide/svelte';
 
   type Props = {
     open: boolean;

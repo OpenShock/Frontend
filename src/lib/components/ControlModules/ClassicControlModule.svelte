@@ -2,9 +2,9 @@
   import type { ShockerResponse } from '$lib/api/internal/v1';
   import {
     ControlDurationDefault,
+    ControlDurationProps,
     ControlIntensityDefault,
     ControlIntensityProps,
-    ControlDurationProps,
   } from '$lib/constants/ControlConstants';
   import { SignalR_Connection } from '$lib/signalr';
   import { ControlType } from '$lib/signalr/models/ControlType';

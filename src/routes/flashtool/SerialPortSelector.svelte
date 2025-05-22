@@ -1,8 +1,7 @@
 <script lang="ts">
+  import { Cpu, TriangleAlert, Unplug } from '@lucide/svelte';
   import { Button } from '$lib/components/ui/button';
   import { SerialPortsStore } from '$lib/stores/SerialPortsStore';
-
-  import { Cpu, TriangleAlert, Unplug } from '@lucide/svelte';
 
   interface Props {
     port?: SerialPort | null;

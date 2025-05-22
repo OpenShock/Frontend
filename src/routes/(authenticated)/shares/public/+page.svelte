@@ -1,14 +1,13 @@
 <script lang="ts">
+  import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
+  import type { SortingState } from '@tanstack/table-core';
   import { publicShockerSharesApi } from '$lib/api';
   import type { OwnPublicShareResponse } from '$lib/api/internal/v1';
+  import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card';
   import { onMount } from 'svelte';
   import { columns } from './columns';
-  import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
-  import type { SortingState } from '@tanstack/table-core';
-
-  import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
 
   let data = $state<OwnPublicShareResponse[]>([]);
   let sorting = $state<SortingState>([]);

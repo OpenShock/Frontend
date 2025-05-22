@@ -1,7 +1,7 @@
 <script lang="ts">
+  import { HubConnectionState } from '@microsoft/signalr';
   import { PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
   import { SignalR_State } from '$lib/signalr';
-  import { HubConnectionState } from '@microsoft/signalr';
 </script>
 
 <footer class="bottom-0 flex items-center justify-center px-2 text-sm sm:justify-between">

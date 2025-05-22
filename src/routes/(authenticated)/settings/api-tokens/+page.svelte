@@ -1,15 +1,14 @@
 <script lang="ts">
+  import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
+  import type { SortingState } from '@tanstack/table-core';
   import type { TokenResponse } from '$lib/api/internal/v1';
+  import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card';
-  import { onMount } from 'svelte';
-  import { columns, type ApiToken } from './columns';
-  import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
-  import TokenGenerateDialog from './dialog-token-generate.svelte';
   import { ApiTokensStore, refreshApiToken, refreshApiTokens } from '$lib/stores/ApiTokensStore';
-  import type { SortingState } from '@tanstack/table-core';
-
-  import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
+  import { onMount } from 'svelte';
+  import { type ApiToken, columns } from './columns';
+  import TokenGenerateDialog from './dialog-token-generate.svelte';
 
   function apiTokenToTableToken(user: TokenResponse): ApiToken {
     return {

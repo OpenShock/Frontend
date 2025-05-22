@@ -1,8 +1,8 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { accountV1Api } from '$lib/api';
-  import TextInput from '$lib/components/input/TextInput.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
+  import TextInput from '$lib/components/input/TextInput.svelte';
   import { Button } from '$lib/components/ui/button';
   import * as Card from '$lib/components/ui/card';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';

@@ -1,13 +1,12 @@
 <script lang="ts">
+  import Ellipsis from '@lucide/svelte/icons/ellipsis';
+  import { goto } from '$app/navigation';
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { toast } from 'svelte-sonner';
   import type { Hub } from './columns';
   import HubDeleteDialog from './dialog-hub-delete.svelte';
   import HubEditDialog from './dialog-hub-edit.svelte';
-
-  import Ellipsis from '@lucide/svelte/icons/ellipsis';
-  import { goto } from '$app/navigation';
 
   type Props = {
     hub: Hub;

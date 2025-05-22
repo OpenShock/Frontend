@@ -3,9 +3,9 @@
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { deleteApiToken } from '$lib/stores/ApiTokensStore';
   import { toast } from 'svelte-sonner';
   import type { ApiToken } from './columns';
-  import { deleteApiToken } from '$lib/stores/ApiTokensStore';
 
   type Props = {
     open: boolean;

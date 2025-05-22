@@ -1,5 +1,5 @@
-import { validatePassword, validatePasswordMatch } from './passwordValidator';
 import { describe, expect, it } from 'vitest';
+import { validatePassword, validatePasswordMatch } from './passwordValidator';
 
 describe('email validator test', () => {
   it('empty password should return null', () => {

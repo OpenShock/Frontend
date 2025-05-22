@@ -1,26 +1,25 @@
 <script lang="ts">
+  import { MessageCircleQuestion, SquareTerminal } from '@lucide/svelte';
   import { browser } from '$app/environment';
   import { PUBLIC_DISCORD_INVITE_URL } from '$env/static/public';
-  import FirmwareFlasher from './FirmwareFlasher.svelte';
-  import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
-  import FirmwareBoardSelector from './FirmwareBoardSelector.svelte';
   import FlashManager from '$lib/EspTool/FlashManager';
-  import SerialPortSelector from './SerialPortSelector.svelte';
-  import { Button } from '$lib/components/ui/button';
+  import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
-  import * as Card from '$lib/components/ui/card';
-  import { Progress } from '$lib/components/ui/progress';
-  import { FlashManagerStore } from '$lib/stores/FlashManagersStore';
-  import Bowser from 'bowser';
-  import HelpDialog from './HelpDialog.svelte';
   import ChromeLogo from '$lib/components/svg/ChromeLogo.svelte';
   import EdgeLogo from '$lib/components/svg/EdgeLogo.svelte';
   import OperaLogo from '$lib/components/svg/OperaLogo.svelte';
+  import { Button } from '$lib/components/ui/button';
+  import * as Card from '$lib/components/ui/card';
   import { Checkbox } from '$lib/components/ui/checkbox';
   import { Label } from '$lib/components/ui/label';
+  import { Progress } from '$lib/components/ui/progress';
   import { Sheet, SheetContent, SheetHeader, SheetTitle } from '$lib/components/ui/sheet';
-
-  import { MessageCircleQuestion, SquareTerminal } from '@lucide/svelte';
+  import { FlashManagerStore } from '$lib/stores/FlashManagersStore';
+  import Bowser from 'bowser';
+  import FirmwareBoardSelector from './FirmwareBoardSelector.svelte';
+  import FirmwareFlasher from './FirmwareFlasher.svelte';
+  import HelpDialog from './HelpDialog.svelte';
+  import SerialPortSelector from './SerialPortSelector.svelte';
 
   const isSupported = browser && 'serial' in navigator;
 

@@ -1,12 +1,12 @@
+import Latin1 from 'crypto-js/enc-latin1';
+import HashMD5 from 'crypto-js/md5';
 import {
   ESPLoader,
-  Transport,
-  type LoaderOptions,
-  type IEspLoaderTerminal,
   type FlashOptions,
+  type IEspLoaderTerminal,
+  type LoaderOptions,
+  Transport,
 } from 'esptool-js';
-import HashMD5 from 'crypto-js/md5';
-import Latin1 from 'crypto-js/enc-latin1';
 
 /**
  * Reboots the chip in ESPLoader mode.

@@ -1,17 +1,16 @@
 <script lang="ts">
+  import Search from '@lucide/svelte/icons/search';
   import type { ColumnFiltersState, PaginationState, SortingState } from '@tanstack/table-core';
   import { adminApi } from '$lib/api';
   import type { AdminUsersView } from '$lib/api/internal/v1/models/AdminUsersView';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import { Button } from '$lib/components/ui/button';
-  import { CardHeader, CardTitle, CardContent } from '$lib/components/ui/card';
+  import { CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
+  import { Input } from '$lib/components/ui/input';
   import * as Pagination from '$lib/components/ui/pagination';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onDestroy, onMount } from 'svelte';
   import { columns } from './columns';
-  import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
-  import { Input } from '$lib/components/ui/input';
-
-  import Search from '@lucide/svelte/icons/search';
 
   type FilterOpType =
     | 'like'

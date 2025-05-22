@@ -1,12 +1,12 @@
 <script lang="ts">
   import { accountV2Api } from '$lib/api';
-  import type { ButtonSettings } from '$lib/components/input/impl/ButtonSettings';
   import TextInput from '$lib/components/input/TextInput.svelte';
+  import type { ButtonSettings } from '$lib/components/input/impl/ButtonSettings';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import {
-    mapUsernameAvailability,
     UsernameCheckingAvailabilityValRes,
     UsernameInternalServerErrorValRes,
+    mapUsernameAvailability,
     validateUsername,
   } from '$lib/inputvalidation/usernameValidator';
   import type { AnyComponent } from '$lib/types/AnyComponent';

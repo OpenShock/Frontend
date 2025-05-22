@@ -1,16 +1,15 @@
 <script lang="ts">
+  import { Signal, Timer } from '@lucide/svelte';
   import type { ShockerResponse } from '$lib/api/internal/v1';
   import {
     ControlDurationDefault,
-    ControlIntensityDefault,
     ControlDurationProps,
+    ControlIntensityDefault,
     ControlIntensityProps,
   } from '$lib/constants/ControlConstants';
   import { SignalR_Connection } from '$lib/signalr';
   import { ControlType } from '$lib/signalr/models/ControlType';
   import { serializeControlMessages } from '$lib/signalr/serializers/Control';
-
-  import { Signal, Timer } from '@lucide/svelte';
   import ActionButtons from './Internal/ActionButtons.svelte';
 
   interface Props {

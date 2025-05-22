@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { KeyRound, Mail, User } from '@lucide/svelte';
   import { accountV1Api } from '$lib/api';
   import EmailInput from '$lib/components/input/EmailInput.svelte';
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
@@ -9,8 +10,6 @@
   import { validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
   import { UserStore } from '$lib/stores/UserStore';
   import { toast } from 'svelte-sonner';
-
-  import { KeyRound, Mail, User } from '@lucide/svelte';
 
   let username = $state<string>('');
   let email = $state<string>('');

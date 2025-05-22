@@ -1,8 +1,8 @@
-import * as child_process from 'node:child_process';
 import adapterCloudflare from '@sveltejs/adapter-cloudflare';
 import adapterNode from '@sveltejs/adapter-node';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import dotenv from 'dotenv';
+import * as child_process from 'node:child_process';
 import process from 'process';
 
 // Determine if we are running on Cloudflare Pages

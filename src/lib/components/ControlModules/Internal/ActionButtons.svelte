@@ -1,7 +1,7 @@
 <script lang="ts">
+  import { Volume2, Waves, Zap } from '@lucide/svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import { ControlType } from '$lib/signalr/models/ControlType';
-  import { Volume2, Waves, Zap } from '@lucide/svelte';
 
   type Props = {
     ctrl: (type: ControlType) => void;

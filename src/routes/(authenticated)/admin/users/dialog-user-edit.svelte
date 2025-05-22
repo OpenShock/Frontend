@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { RoleType, type AdminUsersView } from '$lib/api/internal/v1';
+  import { type AdminUsersView, RoleType } from '$lib/api/internal/v1';
   import EmailInput from '$lib/components/input/EmailInput.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';

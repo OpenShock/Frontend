@@ -3,7 +3,6 @@
   import { SignalR_Connection } from '$lib/signalr';
   import { ControlType } from '$lib/signalr/models/ControlType';
   import { serializeControlMessages } from '$lib/signalr/serializers/Control';
-
   import ActionButtons from './Internal/ActionButtons.svelte';
 
   interface Props {

@@ -1,5 +1,5 @@
 import { browser } from '$app/environment';
-import { writable, type Updater } from 'svelte/store';
+import { type Updater, writable } from 'svelte/store';
 
 function getLocalStoreState() {
   const scheme = localStorage.getItem('theme');

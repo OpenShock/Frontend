@@ -1,4 +1,5 @@
 <script lang="ts">
+  import PanelLeft from '@lucide/svelte/icons/panel-left';
   import { PUBLIC_DISCORD_INVITE_URL, PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
   import LightSwitch from '$lib/components/LightSwitch.svelte';
   import * as Breadcrumb from '$lib/components/ui/breadcrumb';
@@ -7,8 +8,6 @@
   import { useSidebar } from '$lib/components/ui/sidebar';
   import { BreadCrumbStore } from '$lib/stores/BreadCrumbStore';
   import { UserStore } from '$lib/stores/UserStore';
-
-  import PanelLeft from '@lucide/svelte/icons/panel-left';
 
   let sidebar = useSidebar();
 </script>
