@@ -150,7 +150,7 @@ src/           # Application source code
 
 - `.editorconfig` — Editor formatting consistency across IDEs.
 - `.prettierrc`, `.prettierignore` — Code formatting rules (Prettier).
-- `eslint.config.js`, `.eslintrc`, `.eslintignore` — Linting setup (ESLint).
+- `eslint.config.js` — Linting setup (ESLint).
 - `tsconfig.json` — TypeScript compiler configuration.
 - `vite.config.ts` — Vite bundler config.
 - `svelte.config.js` — SvelteKit configuration.
