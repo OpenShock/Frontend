@@ -8,10 +8,8 @@ import type {
 import DataTableSortButton from '$lib/components/Table/SortButton.svelte';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table';
 import type { TwTextColor } from '$lib/types/Tailwind';
-import { escapeHtml } from '$lib/utils/encoding';
-import { durationToString, elapsedToString } from '$lib/utils/time';
-import { getReadableUserAgentName } from '$lib/utils/userAgent';
-import { type SemVer, sort } from 'semver';
+import { escapeHtml, durationToString, elapsedToString, getReadableUserAgentName } from '$lib/utils';
+import { type SemVer } from 'semver';
 import { createRawSnippet } from 'svelte';
 
 function CreateSortHeader<TData>(name: string): StringOrTemplateHeader<TData, unknown> {
