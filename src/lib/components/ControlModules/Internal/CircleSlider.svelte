@@ -33,19 +33,17 @@
   let { name, value = $bindable(), min, max, step, tabindex = undefined }: Props = $props();
 
   let isTracking = false;
-  let canvasHandle = $state<HTMLDivElement | undefined>();
+  let element = $state<HTMLDivElement | undefined>();
 
-  function handlePointerMovement(event: MouseEvent | TouchEvent) {
-    if (!canvasHandle) return;
+  function handlePointerMovement(event: PointerEvent) {
+    if (!element) return;
+    element.setPointerCapture(event.pointerId);
 
-    const rect = canvasHandle.getBoundingClientRect();
+    const rect = element.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
 
-    const clientX = 'clientX' in event ? event.clientX : event.touches[0].clientX;
-    const clientY = 'clientY' in event ? event.clientY : event.touches[0].clientY;
-
-    const angle = Math.atan2(clientX - centerX, centerY - clientY) * RadToDeg;
+    const angle = Math.atan2(event.clientX - centerX, centerY - event.clientY) * RadToDeg;
 
     const fraction = clamp(angle / angleRange + 0.5, 0, 1);
 
@@ -56,7 +54,7 @@
     window.removeEventListener('pointermove', handlePointerMovement);
     window.removeEventListener('pointerup', stopTracking);
   }
-  function startTracking(event: MouseEvent | TouchEvent) {
+  function startTracking(event: PointerEvent) {
     event.preventDefault();
 
     if (!isTracking) {
@@ -95,7 +93,7 @@
   }
 </script>
 
-<div class="relative size-[150px]" bind:this={canvasHandle}>
+<div class="relative size-[150px]" bind:this={element}>
   <svg viewBox="0 0 {viewWidth} {viewHeight}" class="absolute size-[150px]">
     <path
       d={calcSvgPathData(angleEnd)}
