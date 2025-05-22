@@ -1,19 +1,22 @@
 <script lang="ts">
   import { RadToDeg, clamp, getCircleX, getCircleY, invLerp, lerp } from '$lib/utils/math';
-  import { randStr } from '$lib/utils/rand';
-  import { calcSvgArcProps } from '$lib/utils/svg';
   import { onDestroy } from 'svelte';
   import { cubicOut } from 'svelte/easing';
-  import { tweened } from 'svelte/motion';
+  import { Tween } from 'svelte/motion';
 
-  const viewSize = { x: 100, y: 100 };
-  const center = { x: viewSize.x / 2, y: viewSize.y / 2 };
+  const viewHeight = 100;
+  const viewWidth = 100;
+  const centerX = viewWidth / 2;
+  const centerY = viewHeight / 2;
   const radius = 40;
   const angleStart = 135;
   const angleEnd = 405;
   const angleRange = angleEnd - angleStart;
 
-  const id = randStr(8);
+  const arcStartX = centerX + getCircleX(radius, angleStart);
+  const arcStartY = centerY + getCircleY(radius, angleStart);
+
+  const id = $props.id();
   const inputId = id + '-input';
   const labelId = id + '-label';
   const guageId = id + '-guage';
@@ -29,14 +32,12 @@
 
   let { name, value = $bindable(), min, max, step, tabindex = undefined }: Props = $props();
 
+  let isTracking = false;
   let canvasHandle = $state<HTMLDivElement | undefined>();
 
-  function stupidUnfloatHack(value: number) {
-    // This is a stupid hack to avoid floating point errors, needed to make UI not look like shit
-    return Math.round((value + Number.EPSILON) * 100) / 100;
-  }
-  function trackingUpdated(event: MouseEvent | TouchEvent) {
+  function handlePointerMovement(event: MouseEvent | TouchEvent) {
     if (!canvasHandle) return;
+    event.ele;
 
     const rect = canvasHandle.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
@@ -51,105 +52,103 @@
 
     value = lerp(min, max, fraction);
   }
-  function trackingStopped() {
-    window.removeEventListener('touchmove', trackingUpdated);
-    window.removeEventListener('touchend', trackingStopped);
-    window.removeEventListener('mousemove', trackingUpdated);
-    window.removeEventListener('mouseup', trackingStopped);
+  function stopTracking() {
+    isTracking = false;
+    window.removeEventListener('pointermove', handlePointerMovement);
+    window.removeEventListener('pointerup', stopTracking);
   }
-  function trackingStarted(event: MouseEvent | TouchEvent) {
+  function startTracking(event: MouseEvent | TouchEvent) {
     event.preventDefault();
 
-    if (!canvasHandle) return;
-
-    if ('ontouchstart' in window) {
-      window.addEventListener('touchmove', trackingUpdated);
-      window.addEventListener('touchend', trackingStopped);
-    } else {
-      window.addEventListener('mousemove', trackingUpdated);
-      window.addEventListener('mouseup', trackingStopped);
+    if (!isTracking) {
+      isTracking = true;
+      window.addEventListener('pointermove', handlePointerMovement);
+      window.addEventListener('pointerup', stopTracking);
     }
 
-    trackingUpdated(event);
+    handlePointerMovement(event);
   }
-  onDestroy(trackingStopped);
+  onDestroy(stopTracking);
 
-  // Smooth animation
-  const animatedValue = tweened(value, {
+  // Smooth animation to snapped values
+  const tween = new Tween(value, {
     duration: 400,
     easing: cubicOut,
   });
 
-  // Sanitize and update value
+  // Update animated value based on value, step, min, and max
   $effect(() => {
-    if (value < min) value = min;
-    if (value > max) value = max;
-    value = stupidUnfloatHack(Math.round(value / step) * step);
-    animatedValue.set(value);
+    const stepped = Math.round(value / step) * step;
+    const rounded = Math.round((stepped + Number.EPSILON) * 100) / 100;
+    value = clamp(rounded, min, max);
+    tween.set(value);
   });
 
   // Update visual progress
-  let degrees = $derived(angleStart + invLerp(min, max, $animatedValue) * angleRange);
-  let progressProps = $derived(calcSvgArcProps(center, angleStart, degrees, radius, 10));
+  let degrees = $derived(angleStart + invLerp(min, max, tween.current) * angleRange);
+
+  function calcSvgPathData(angleEnd: number) {
+    const arcEndX = centerX + getCircleX(radius, angleEnd);
+    const arcEndY = centerY + getCircleY(radius, angleEnd);
+    const largeArcFlag = angleEnd - angleStart < 180 ? 0 : 1;
+
+    return `M ${arcStartX} ${arcStartY} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${arcEndX} ${arcEndY}`;
+  }
 </script>
 
-<div>
-  <div class="relative size-[150px]" bind:this={canvasHandle}>
-    <svg class="absolute size-[150px]" viewBox="0 0 {viewSize.x} {viewSize.y}">
-      <path
-        {...calcSvgArcProps(center, angleStart, angleEnd, radius, 20)}
-        fill="none"
-        stroke-linecap="round"
-        style:cursor="pointer"
-        style:stroke="rgb(27, 29, 30)"
-        ontouchstart={trackingStarted}
-        onmousedown={trackingStarted}
-        aria-hidden="true"
-      />
-      <path
-        {...progressProps}
-        fill="none"
-        stroke-linecap="round"
-        style:cursor="pointer"
-        style:stroke="rgb(0, 122, 255)"
-        ontouchstart={trackingStarted}
-        onmousedown={trackingStarted}
-        id={guageId}
-        aria-hidden="true"
-      />
-    </svg>
-    <div
-      class="absolute size-[30px] cursor-move rounded-full bg-white"
-      style:left={`${60 + getCircleX(60, degrees)}px`}
-      style:top={`${60 + getCircleY(60, degrees)}px`}
-      ontouchstart={trackingStarted}
-      onmousedown={trackingStarted}
-      role="slider"
-      {tabindex}
-      aria-valuemin={min}
-      aria-valuenow={value}
-      aria-valuemax={max}
-      aria-labelledby={labelId}
-      aria-controls={guageId}
-    ></div>
-    <input
-      id={inputId}
-      type="number"
-      {name}
-      {min}
-      bind:value
-      {max}
-      {step}
-      aria-label="Value"
-      class="hide-spinners absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] transform border-none bg-transparent text-center text-xl font-bold select-none"
+<div class="relative size-[150px]" bind:this={canvasHandle}>
+  <svg viewBox="0 0 {viewWidth} {viewHeight}" class="absolute size-[150px]">
+    <path
+      d={calcSvgPathData(angleEnd)}
+      fill="none"
+      stroke="rgb(27, 29, 30)"
+      stroke-width="20"
+      stroke-linecap="round"
+      cursor="pointer"
+      aria-hidden="true"
+      onpointerdown={startTracking}
     />
-    <label
-      id={labelId}
-      for={inputId}
-      aria-label="Name"
-      class="absolute bottom-0 left-[50%] -translate-x-[50%] translate-y-[10%] transform text-center select-none"
-    >
-      {name}
-    </label>
-  </div>
+    <path
+      id={guageId}
+      d={calcSvgPathData(degrees)}
+      fill="none"
+      stroke="rgb(0, 122, 255)"
+      stroke-width="10"
+      stroke-linecap="round"
+      cursor="pointer"
+      aria-hidden="true"
+      onpointerdown={startTracking}
+    />
+  </svg>
+  <div
+    onpointerdown={startTracking}
+    role="slider"
+    {tabindex}
+    aria-valuemin={min}
+    aria-valuenow={value}
+    aria-valuemax={max}
+    aria-labelledby={labelId}
+    aria-controls={guageId}
+    class="absolute size-[30px] cursor-move rounded-full bg-white"
+    style="top: {60 + getCircleY(60, degrees)}px; left: {60 + getCircleX(60, degrees)}px;"
+  ></div>
+  <input
+    id={inputId}
+    type="number"
+    {name}
+    {min}
+    bind:value
+    {max}
+    {step}
+    aria-label="Value"
+    class="hide-spinners absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] transform border-none bg-transparent text-center text-xl font-bold select-none"
+  />
+  <label
+    id={labelId}
+    for={inputId}
+    aria-label="Name"
+    class="absolute bottom-0 left-[50%] -translate-x-[50%] translate-y-[10%] transform text-center select-none"
+  >
+    {name}
+  </label>
 </div>
