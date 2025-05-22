@@ -1,6 +1,6 @@
 <script lang="ts">
   import { CircleCheckBig, Copy } from '@lucide/svelte';
-  import { cn } from '$lib/utils.js';
+  import { cn } from '$lib/utils';
   import type { Snippet } from 'svelte';
   import { toast } from 'svelte-sonner';
   import { fade, scale } from 'svelte/transition';
