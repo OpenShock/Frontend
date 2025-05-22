@@ -8,7 +8,12 @@ import type {
 import DataTableSortButton from '$lib/components/Table/SortButton.svelte';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table';
 import type { TwTextColor } from '$lib/types/Tailwind';
-import { escapeHtml, durationToString, elapsedToString, getReadableUserAgentName } from '$lib/utils';
+import {
+  durationToString,
+  elapsedToString,
+  escapeHtml,
+  getReadableUserAgentName,
+} from '$lib/utils';
 import { type SemVer } from 'semver';
 import { createRawSnippet } from 'svelte';
 
