@@ -7,14 +7,7 @@
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { OnlineHubsStore, type HubOnlineState } from '$lib/stores/HubsStore';
   import { DownloadCloud, RotateCcw } from '@lucide/svelte';
-  import {
-    Table,
-    TableHeader,
-    TableRow,
-    TableHead,
-    TableBody,
-    TableCell,
-  } from '$lib/components/ui/table';
+  import * as Table from '$lib/components/ui/table';
   import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
   import { SignalR_Connection } from '$lib/signalr';
   import { Progress } from '$lib/components/ui/progress';
@@ -97,27 +90,27 @@
         <span> Refresh Logs </span>
       </Button>
     </div>
-    <Table class="border-2">
-      <TableHeader>
-        <TableRow>
-          <TableHead>ID</TableHead>
-          <TableHead>Started At</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Version</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
+    <Table.Root class="border-2">
+      <Table.Header>
+        <Table.Row>
+          <Table.Head>ID</Table.Head>
+          <Table.Head>Started At</Table.Head>
+          <Table.Head>Status</Table.Head>
+          <Table.Head>Version</Table.Head>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
         {#each otaLogs as otaLog (otaLog.id)}
-          <TableRow>
-            <TableCell class="font-mono text-blue-200">{decimalToHexString(otaLog.id)}</TableCell>
-            <TableCell class="font-medium">{otaLog.startedAt.toDateString()}</TableCell>
-            <TableCell class={`font-medium${otaLog.status == 'Finished' ? '' : ' text-red-500'}`}
-              >{otaLog.status}</TableCell
-            >
-            <TableCell class="font-medium">{otaLog.version}</TableCell>
-          </TableRow>
+          <Table.Row>
+            <Table.Cell class="font-mono text-blue-200">{decimalToHexString(otaLog.id)}</Table.Cell>
+            <Table.Cell class="font-medium">{otaLog.startedAt.toDateString()}</Table.Cell>
+            <Table.Cell class={`font-medium${otaLog.status == 'Finished' ? '' : ' text-red-500'}`}>
+              {otaLog.status}
+            </Table.Cell>
+            <Table.Cell class="font-medium">{otaLog.version}</Table.Cell>
+          </Table.Row>
         {/each}
-      </TableBody>
-    </Table>
+      </Table.Body>
+    </Table.Root>
   </Card.Content>
 </div>

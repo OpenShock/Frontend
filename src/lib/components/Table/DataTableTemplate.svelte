@@ -1,13 +1,6 @@
 <script lang="ts" generics="TData, TValue">
   import { createSvelteTable, FlexRender } from '$lib/components/ui/data-table';
-  import {
-    Table as TableRoot,
-    TableHeader,
-    TableRow,
-    TableHead,
-    TableBody,
-    TableCell,
-  } from '$lib/components/ui/table';
+  import * as Table from '$lib/components/ui/table';
   import {
     getCoreRowModel,
     getFilteredRowModel,
@@ -83,37 +76,37 @@
 </script>
 
 <div class="max-h-[60vh] overflow-y-auto rounded-md border">
-  <TableRoot>
-    <TableHeader>
+  <Table.Root>
+    <Table.Header>
       {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
-        <TableRow>
+        <Table.Row>
           {#each headerGroup.headers as header (header.id)}
-            <TableHead>
+            <Table.Head>
               {#if !header.isPlaceholder}
                 <FlexRender
                   content={header.column.columnDef.header}
                   context={header.getContext()}
                 />
               {/if}
-            </TableHead>
+            </Table.Head>
           {/each}
-        </TableRow>
+        </Table.Row>
       {/each}
-    </TableHeader>
-    <TableBody>
+    </Table.Header>
+    <Table.Body>
       {#each table.getRowModel().rows as row (row.id)}
-        <TableRow data-state={row.getIsSelected() && 'selected'}>
+        <Table.Row data-state={row.getIsSelected() && 'selected'}>
           {#each row.getVisibleCells() as cell (cell.id)}
-            <TableCell>
+            <Table.Cell>
               <FlexRender content={cell.column.columnDef.cell} context={cell.getContext()} />
-            </TableCell>
+            </Table.Cell>
           {/each}
-        </TableRow>
+        </Table.Row>
       {:else}
-        <TableRow>
-          <TableCell colspan={columns.length} class="h-24 text-center">No results.</TableCell>
-        </TableRow>
+        <Table.Row>
+          <Table.Cell colspan={columns.length} class="h-24 text-center">No results.</Table.Cell>
+        </Table.Row>
       {/each}
-    </TableBody>
-  </TableRoot>
+    </Table.Body>
+  </Table.Root>
 </div>

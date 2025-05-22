@@ -1,14 +1,7 @@
 <script lang="ts">
   import { PUBLIC_DISCORD_INVITE_URL, PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
   import LightSwitch from '$lib/components/LightSwitch.svelte';
-  import {
-    Breadcrumb,
-    BreadcrumbList,
-    BreadcrumbItem,
-    BreadcrumbSeparator,
-    BreadcrumbLink,
-    BreadcrumbPage,
-  } from '$lib/components/ui/breadcrumb';
+  import * as Breadcrumb from '$lib/components/ui/breadcrumb';
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { useSidebar } from '$lib/components/ui/sidebar';
@@ -37,24 +30,24 @@
     <PanelLeft size={24} class="m-0 text-gray-600 dark:text-gray-300" />
   </Button>
   {#if $BreadCrumbStore.length > 0}
-    <Breadcrumb>
-      <BreadcrumbList>
+    <Breadcrumb.Root>
+      <Breadcrumb.List>
         {#each $BreadCrumbStore as crumb, index}
-          <BreadcrumbItem>
+          <Breadcrumb.Item>
             {#if index < $BreadCrumbStore.length - 1}
-              <BreadcrumbLink href={crumb.href} class="text-gray-600 dark:text-gray-300">
+              <Breadcrumb.Link href={crumb.href} class="text-gray-600 dark:text-gray-300">
                 {crumb.text}
-              </BreadcrumbLink>
-              <BreadcrumbSeparator class="text-gray-600 dark:text-gray-300" />
+              </Breadcrumb.Link>
+              <Breadcrumb.Separator class="text-gray-600 dark:text-gray-300" />
             {:else}
-              <BreadcrumbPage class="text-gray-900 dark:text-gray-100">
+              <Breadcrumb.Page class="text-gray-900 dark:text-gray-100">
                 {crumb.text}
-              </BreadcrumbPage>
+              </Breadcrumb.Page>
             {/if}
-          </BreadcrumbItem>
+          </Breadcrumb.Item>
         {/each}
-      </BreadcrumbList>
-    </Breadcrumb>
+      </Breadcrumb.List>
+    </Breadcrumb.Root>
   {/if}
   <div
     class={`flex flex-1 flex-row items-center justify-between space-x-2 py-2 ${$UserStore.self ? 'pr-2' : 'px-2'}`}

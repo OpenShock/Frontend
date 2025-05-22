@@ -8,13 +8,7 @@
   import { GetValResColor, type ValidationResult } from '$lib/types/ValidationResult';
   import { toast } from 'svelte-sonner';
   import TokenCreatedDialog from './dialog-token-created.svelte';
-  import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-  } from '$lib/components/ui/select';
+  import * as Select from '$lib/components/ui/select';
 
   type Props = {
     open: boolean;
@@ -135,21 +129,21 @@
 
       <label>
         <span>Expiration</span>
-        <Select type="single" name="expiration" bind:value={expire}>
-          <SelectTrigger class="w-[180px]">
+        <Select.Root type="single" name="expiration" bind:value={expire}>
+          <Select.Trigger class="w-[180px]">
             {expire}
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem value="never" label="Never">Never</SelectItem>
-              <SelectItem value="7days" label="7 days">7 days</SelectItem>
-              <SelectItem value="30days" label="30 days">30 days</SelectItem>
-              <SelectItem value="60days" label="60 days">60 days</SelectItem>
-              <SelectItem value="90days" label="90 days">90 days</SelectItem>
-              <SelectItem value="custom" label="Custom...">Custom...</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+          </Select.Trigger>
+          <Select.Content>
+            <Select.Group>
+              <Select.Item value="never" label="Never">Never</Select.Item>
+              <Select.Item value="7days" label="7 days">7 days</Select.Item>
+              <Select.Item value="30days" label="30 days">30 days</Select.Item>
+              <Select.Item value="60days" label="60 days">60 days</Select.Item>
+              <Select.Item value="90days" label="90 days">90 days</Select.Item>
+              <Select.Item value="custom" label="Custom...">Custom...</Select.Item>
+            </Select.Group>
+          </Select.Content>
+        </Select.Root>
 
         <div class="flex items-center gap-3">
           {#if expire === 'custom'}

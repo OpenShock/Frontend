@@ -5,15 +5,7 @@
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { Button } from '$lib/components/ui/button';
   import { CardHeader, CardTitle, CardContent } from '$lib/components/ui/card';
-  import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNextButton,
-    PaginationPrevButton,
-  } from '$lib/components/ui/pagination';
+  import * as Pagination from '$lib/components/ui/pagination';
   import { onDestroy, onMount } from 'svelte';
   import { columns } from './columns';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
@@ -96,29 +88,29 @@
   <CardContent>
     <DataTable {data} {columns} {sorting} {filters} {pagination} />
   </CardContent>
-  <Pagination count={total} perPage={PerPage} bind:page>
+  <Pagination.Root count={total} perPage={PerPage} bind:page>
     {#snippet children({ pages, currentPage })}
-      <PaginationContent>
-        <PaginationItem>
-          <PaginationPrevButton />
-        </PaginationItem>
+      <Pagination.Content>
+        <Pagination.Item>
+          <Pagination.PrevButton />
+        </Pagination.Item>
         {#each pages as page (page.key)}
           {#if page.type === 'ellipsis'}
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
+            <Pagination.Item>
+              <Pagination.Ellipsis />
+            </Pagination.Item>
           {:else}
-            <PaginationItem>
-              <PaginationLink {page} isActive={currentPage === page.value}>
+            <Pagination.Item>
+              <Pagination.Link {page} isActive={currentPage === page.value}>
                 {page.value}
-              </PaginationLink>
-            </PaginationItem>
+              </Pagination.Link>
+            </Pagination.Item>
           {/if}
         {/each}
-        <PaginationItem>
-          <PaginationNextButton />
-        </PaginationItem>
-      </PaginationContent>
+        <Pagination.Item>
+          <Pagination.NextButton />
+        </Pagination.Item>
+      </Pagination.Content>
     {/snippet}
-  </Pagination>
+  </Pagination.Root>
 </div>

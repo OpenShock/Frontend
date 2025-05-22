@@ -2,13 +2,7 @@
   import { FetchVersionBoards } from '$lib/api/firmwareCDN';
   import { Popover, PopoverTrigger, PopoverContent } from '$lib/components/ui/popover';
   import { Button } from '$lib/components/ui/button';
-  import {
-    Command,
-    CommandInput,
-    CommandEmpty,
-    CommandGroup,
-    CommandItem,
-  } from '$lib/components/ui/command';
+  import * as Command from '$lib/components/ui/command';
   import { cn } from '$lib/utils';
 
   import { Check, ChevronsUpDown } from '@lucide/svelte';
@@ -50,18 +44,18 @@
       </Button>
     </PopoverTrigger>
     <PopoverContent class="w-[240px] p-0">
-      <Command>
-        <CommandInput placeholder="Search boards..." />
-        <CommandEmpty>No board found.</CommandEmpty>
-        <CommandGroup>
+      <Command.Root>
+        <Command.Input placeholder="Search boards..." />
+        <Command.Empty>No board found.</Command.Empty>
+        <Command.Group>
           {#each boards as board}
-            <CommandItem value={board} onSelect={() => (selectedBoard = board)}>
+            <Command.Item value={board} onSelect={() => (selectedBoard = board)}>
               <Check class={cn('mr-2 size-4', selectedBoard !== board && 'text-transparent')} />
               {board}
-            </CommandItem>
+            </Command.Item>
           {/each}
-        </CommandGroup>
-      </Command>
+        </Command.Group>
+      </Command.Root>
     </PopoverContent>
   </Popover>
 </div>
