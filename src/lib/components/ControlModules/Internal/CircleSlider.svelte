@@ -37,7 +37,6 @@
 
   function handlePointerMovement(event: MouseEvent | TouchEvent) {
     if (!canvasHandle) return;
-    event.ele;
 
     const rect = canvasHandle.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
