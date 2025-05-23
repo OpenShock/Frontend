@@ -7,6 +7,7 @@ import process from 'process';
 
 // Determine if we are running on Cloudflare Pages
 const isCloudflare = process.env.CF_PAGES === '1';
+const isGithubActions = process.env.GITHUB_ACTIONS === 'true';
 
 // Use the appropriate adapter
 const adapter = isCloudflare ? adapterCloudflare : adapterNode;
@@ -15,10 +16,26 @@ function readEnv(path) {
   return dotenv.config({ path })?.parsed ?? {};
 }
 
+function getGitHash() {
+  if (isGithubActions) return process.env.GITHUB_SHA;
+  if (isCloudflare) return process.env.CF_COMMIT_SHA;
+
+  return child_process.execSync('git rev-parse HEAD').toString().trim();
+}
+function getGitBranch() {
+  if (isGithubActions) return process.env.GITHUB_REF_NAME;
+  if (isCloudflare) return process.env.CF_BRANCH;
+
+  return child_process.execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
+}
+
 // Read environment variables from .env files
 readEnv('.env.local');
 readEnv(`.env.${process.env.NODE_ENV}`);
 readEnv('.env');
+
+const commitHash = getGitHash();
+const branchName = getGitBranch();
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -68,7 +85,7 @@ const config = {
       },
     },
     version: {
-      name: process.env.GIT_HASH ?? child_process.execSync('git rev-parse HEAD').toString().trim(),
+      name: commitHash,
     },
   },
 };
