@@ -28,7 +28,15 @@ After updating your `shadcn` components with the CLI, complete the following ste
 
    * If the CLI created `src/lib/utils.ts`, overwrite your existing `src/lib/utils/shadcn.ts` with it.
 
-4. **Apply consistent styling**
+4. **Run tailwindcss migration utility**
+
+   * Shadcn-svelte still hasnt migrated to tailwindcss v4, so we need to run the migration utility to ensure everything is up to date.
+
+     ```bash
+     pnpx @tailwindcss/upgrade --force
+     ```
+
+5. **Apply consistent styling**
 
    * Run the following command to apply consistent styling:
 
@@ -36,7 +44,7 @@ After updating your `shadcn` components with the CLI, complete the following ste
      pnpm run format
      ```
 
-5. **Check code for any issues**
+6. **Check code for any issues**
 
    * Run the following commands to check for any issues:
 
