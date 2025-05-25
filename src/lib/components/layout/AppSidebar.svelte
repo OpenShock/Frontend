@@ -117,6 +117,10 @@
             title: 'Users',
             href: '/admin/users',
           },
+          {
+            title: 'Webhooks',
+            href: '/admin/webhooks',
+          },
         ],
       },
       {
