@@ -2,6 +2,11 @@
 
 After updating your `shadcn` components with the CLI, complete the following steps to ensure everything integrates correctly:
 
+### Modifications
+
+##### `sidebar.svelte`
+Change `ease-linear` for the sidebar to `ease-in-out` and increase the duration from 200ms to 300ms (`duration-300`)
+
 1. **Update `sonner` component if modified**
 
    If the `sonner` component was modified by the CLI, it most likely went back to using the `svelte-sonner` package.
