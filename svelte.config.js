@@ -8,7 +8,7 @@ import process from 'process';
 // Determine if we are running on Cloudflare Pages
 const isGithubActions = process.env.GITHUB_ACTIONS === 'true';
 const isCloudflare = process.env.CF_PAGES === '1';
-const isDocker = process.env.DOCKER = 'true';
+const isDocker = process.env.DOCKER === 'true';
 
 // Use the appropriate adapter
 const adapter = isCloudflare ? adapterCloudflare : adapterNode;
@@ -20,7 +20,7 @@ function readEnv(path) {
 function getGitHash() {
   if (isGithubActions) return process.env.GITHUB_SHA;
   if (isCloudflare) return process.env.CF_COMMIT_SHA;
-  if (isDocker) return process.env.GIT_COMMIT_SHA
+  if (isDocker) return process.env.GIT_COMMIT_SHA;
 
   return child_process.execSync('git rev-parse HEAD').toString().trim();
 }
