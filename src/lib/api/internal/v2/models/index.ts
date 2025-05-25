@@ -1,16 +1,17 @@
 /* tslint:disable */
 /* eslint-disable */
+export * from './BasicUserInfo';
 export * from './ChangeUsernameRequest';
 export * from './Control';
 export * from './ControlRequest';
 export * from './ControlType';
 export * from './CreateShareRequest';
-export * from './GenericIni';
 export * from './HubCreateRequest';
 export * from './LcgNodeResponseV2';
 export * from './LegacyEmptyResponse';
 export * from './LoginV2';
 export * from './OpenShockProblem';
+export * from './PasswordResetRequestV2';
 export * from './ShareInviteBaseDetails';
 export * from './ShockerLimits';
 export * from './ShockerPermLimitPairWithId';

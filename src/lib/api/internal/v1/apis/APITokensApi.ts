@@ -18,6 +18,7 @@ import type {
   CreateTokenRequest,
   EditTokenRequest,
   OpenShockProblem,
+  ReportTokensRequest,
   TokenCreatedResponse,
   TokenResponse,
 } from '../models/index';
@@ -28,6 +29,8 @@ import {
     EditTokenRequestToJSON,
     OpenShockProblemFromJSON,
     OpenShockProblemToJSON,
+    ReportTokensRequestFromJSON,
+    ReportTokensRequestToJSON,
     TokenCreatedResponseFromJSON,
     TokenCreatedResponseToJSON,
     TokenResponseFromJSON,
@@ -49,6 +52,10 @@ export interface TokensEditTokenRequest {
 
 export interface TokensGetTokenByIdRequest {
     tokenId: string;
+}
+
+export interface TokensReportTokensRequest {
+    reportTokensRequest?: ReportTokensRequest;
 }
 
 /**
@@ -132,6 +139,21 @@ export interface APITokensApiInterface {
      * List all tokens for the current user
      */
     tokensListTokens(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<TokenResponse>>;
+
+    /**
+     * 
+     * @summary Endpoint to delete potentially compromised api tokens
+     * @param {ReportTokensRequest} [reportTokensRequest] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof APITokensApiInterface
+     */
+    tokensReportTokensRaw(requestParameters: TokensReportTokensRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Endpoint to delete potentially compromised api tokens
+     */
+    tokensReportTokens(reportTokensRequest?: ReportTokensRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -311,6 +333,34 @@ export class APITokensApi extends runtime.BaseAPI implements APITokensApiInterfa
     async tokensListTokens(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<TokenResponse>> {
         const response = await this.tokensListTokensRaw(initOverrides);
         return await response.value();
+    }
+
+    /**
+     * Endpoint to delete potentially compromised api tokens
+     */
+    async tokensReportTokensRaw(requestParameters: TokensReportTokensRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/1/tokens/report`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ReportTokensRequestToJSON(requestParameters['reportTokensRequest']),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Endpoint to delete potentially compromised api tokens
+     */
+    async tokensReportTokens(reportTokensRequest?: ReportTokensRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.tokensReportTokensRaw({ reportTokensRequest: reportTokensRequest }, initOverrides);
     }
 
     /**

@@ -20,13 +20,13 @@ import {
     PublicShareDeviceToJSON,
     PublicShareDeviceToJSONTyped,
 } from './PublicShareDevice';
-import type { GenericIni } from './GenericIni';
+import type { BasicUserInfo } from './BasicUserInfo';
 import {
-    GenericIniFromJSON,
-    GenericIniFromJSONTyped,
-    GenericIniToJSON,
-    GenericIniToJSONTyped,
-} from './GenericIni';
+    BasicUserInfoFromJSON,
+    BasicUserInfoFromJSONTyped,
+    BasicUserInfoToJSON,
+    BasicUserInfoToJSONTyped,
+} from './BasicUserInfo';
 
 /**
  * 
@@ -60,10 +60,10 @@ export interface PublicShareResponse {
     expiresOn?: Date | null;
     /**
      * 
-     * @type {GenericIni}
+     * @type {BasicUserInfo}
      * @memberof PublicShareResponse
      */
-    author: GenericIni;
+    author: BasicUserInfo;
     /**
      * 
      * @type {Array<PublicShareDevice>}
@@ -97,7 +97,7 @@ export function PublicShareResponseFromJSONTyped(json: any, ignoreDiscriminator:
         'name': json['name'],
         'createdOn': (new Date(json['createdOn'])),
         'expiresOn': json['expiresOn'] == null ? undefined : (new Date(json['expiresOn'])),
-        'author': GenericIniFromJSON(json['author']),
+        'author': BasicUserInfoFromJSON(json['author']),
         'devices': json['devices'] == null ? undefined : ((json['devices'] as Array<any>).map(PublicShareDeviceFromJSON)),
     };
 }
@@ -117,7 +117,7 @@ export function PublicShareResponseToJSONTyped(value?: PublicShareResponse | nul
         'name': value['name'],
         'createdOn': ((value['createdOn']).toISOString()),
         'expiresOn': value['expiresOn'] == null ? undefined : ((value['expiresOn'] as any).toISOString()),
-        'author': GenericIniToJSON(value['author']),
+        'author': BasicUserInfoToJSON(value['author']),
         'devices': value['devices'] == null ? undefined : ((value['devices'] as Array<any>).map(PublicShareDeviceToJSON)),
     };
 }

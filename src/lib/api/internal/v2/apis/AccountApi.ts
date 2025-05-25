@@ -19,6 +19,7 @@ import type {
   LegacyEmptyResponse,
   LoginV2,
   OpenShockProblem,
+  PasswordResetRequestV2,
   SignUpV2,
   UsernameCheckResponse,
 } from '../models/index';
@@ -31,6 +32,8 @@ import {
     LoginV2ToJSON,
     OpenShockProblemFromJSON,
     OpenShockProblemToJSON,
+    PasswordResetRequestV2FromJSON,
+    PasswordResetRequestV2ToJSON,
     SignUpV2FromJSON,
     SignUpV2ToJSON,
     UsernameCheckResponseFromJSON,
@@ -43,6 +46,10 @@ export interface AccountCheckUsernameRequest {
 
 export interface AccountLoginV2Request {
     loginV2?: LoginV2;
+}
+
+export interface AccountPasswordResetInitiateV2Request {
+    passwordResetRequestV2?: PasswordResetRequestV2;
 }
 
 export interface AccountSignUpV2Request {
@@ -85,6 +92,21 @@ export interface AccountApiInterface {
      * Authenticate a user
      */
     accountLoginV2(loginV2?: LoginV2, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
+
+    /**
+     * 
+     * @summary Initiate a password reset
+     * @param {PasswordResetRequestV2} [passwordResetRequestV2] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApiInterface
+     */
+    accountPasswordResetInitiateV2Raw(requestParameters: AccountPasswordResetInitiateV2Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Initiate a password reset
+     */
+    accountPasswordResetInitiateV2(passwordResetRequestV2?: PasswordResetRequestV2, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -164,6 +186,34 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
     async accountLoginV2(loginV2?: LoginV2, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse> {
         const response = await this.accountLoginV2Raw({ loginV2: loginV2 }, initOverrides);
         return await response.value();
+    }
+
+    /**
+     * Initiate a password reset
+     */
+    async accountPasswordResetInitiateV2Raw(requestParameters: AccountPasswordResetInitiateV2Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/2/account/reset-password`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: PasswordResetRequestV2ToJSON(requestParameters['passwordResetRequestV2']),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Initiate a password reset
+     */
+    async accountPasswordResetInitiateV2(passwordResetRequestV2?: PasswordResetRequestV2, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.accountPasswordResetInitiateV2Raw({ passwordResetRequestV2: passwordResetRequestV2 }, initOverrides);
     }
 
     /**

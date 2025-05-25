@@ -20,13 +20,13 @@ import {
     ShockerPermissionsToJSON,
     ShockerPermissionsToJSONTyped,
 } from './ShockerPermissions';
-import type { GenericIni } from './GenericIni';
+import type { BasicUserInfo } from './BasicUserInfo';
 import {
-    GenericIniFromJSON,
-    GenericIniFromJSONTyped,
-    GenericIniToJSON,
-    GenericIniToJSONTyped,
-} from './GenericIni';
+    BasicUserInfoFromJSON,
+    BasicUserInfoFromJSONTyped,
+    BasicUserInfoToJSON,
+    BasicUserInfoToJSONTyped,
+} from './BasicUserInfo';
 import type { ShockerLimits } from './ShockerLimits';
 import {
     ShockerLimitsFromJSON,
@@ -43,10 +43,10 @@ import {
 export interface ShareInfo {
     /**
      * 
-     * @type {GenericIni}
+     * @type {BasicUserInfo}
      * @memberof ShareInfo
      */
-    sharedWith: GenericIni;
+    sharedWith: BasicUserInfo;
     /**
      * 
      * @type {Date}
@@ -95,7 +95,7 @@ export function ShareInfoFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     }
     return {
         
-        'sharedWith': GenericIniFromJSON(json['sharedWith']),
+        'sharedWith': BasicUserInfoFromJSON(json['sharedWith']),
         'createdOn': (new Date(json['createdOn'])),
         'permissions': ShockerPermissionsFromJSON(json['permissions']),
         'limits': ShockerLimitsFromJSON(json['limits']),
@@ -114,7 +114,7 @@ export function ShareInfoToJSONTyped(value?: ShareInfo | null, ignoreDiscriminat
 
     return {
         
-        'sharedWith': GenericIniToJSON(value['sharedWith']),
+        'sharedWith': BasicUserInfoToJSON(value['sharedWith']),
         'createdOn': ((value['createdOn']).toISOString()),
         'permissions': ShockerPermissionsToJSON(value['permissions']),
         'limits': ShockerLimitsToJSON(value['limits']),

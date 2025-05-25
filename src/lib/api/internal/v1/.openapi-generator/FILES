@@ -12,12 +12,14 @@ apis/ShockersApi.ts
 apis/UsersApi.ts
 apis/index.ts
 index.ts
+models/AddWebhookDto.ts
 models/AdminOnlineDeviceResponse.ts
 models/AdminOnlineDeviceResponseIEnumerableLegacyDataResponse.ts
 models/AdminUsersView.ts
 models/AdminUsersViewPaginated.ts
 models/ApiVersionResponse.ts
 models/ApiVersionResponseLegacyDataResponse.ts
+models/BasicUserInfo.ts
 models/BooleanLegacyDataResponse.ts
 models/ChangeEmailRequest.ts
 models/ChangePasswordRequest.ts
@@ -29,7 +31,6 @@ models/CreateTokenRequest.ts
 models/DeviceSelfResponse.ts
 models/DeviceSelfResponseLegacyDataResponse.ts
 models/EditTokenRequest.ts
-models/GenericIni.ts
 models/GuidLegacyDataResponse.ts
 models/HubEditRequest.ts
 models/LcgNodeResponse.ts
@@ -56,12 +57,14 @@ models/PasswordResetProcessData.ts
 models/PauseReasonLegacyDataResponse.ts
 models/PauseRequest.ts
 models/PermissionType.ts
+models/ProblemDetails.ts
 models/PublicShareCreate.ts
 models/PublicShareDevice.ts
 models/PublicShareEditShocker.ts
 models/PublicShareResponse.ts
 models/PublicShareResponseLegacyDataResponse.ts
 models/PublicShareShocker.ts
+models/ReportTokensRequest.ts
 models/ResetRequest.ts
 models/ResponseDevice.ts
 models/ResponseDeviceIAsyncEnumerableLegacyDataResponse.ts
@@ -96,5 +99,6 @@ models/UsernameAvailability.ts
 models/UsernameCheckResponse.ts
 models/UsernameError.ts
 models/UsernameErrorType.ts
+models/WebhookDto.ts
 models/index.ts
 runtime.ts

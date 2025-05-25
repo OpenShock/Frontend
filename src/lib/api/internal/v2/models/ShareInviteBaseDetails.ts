@@ -20,13 +20,13 @@ import {
     ShockerPermLimitPairWithIdToJSON,
     ShockerPermLimitPairWithIdToJSONTyped,
 } from './ShockerPermLimitPairWithId';
-import type { GenericIni } from './GenericIni';
+import type { BasicUserInfo } from './BasicUserInfo';
 import {
-    GenericIniFromJSON,
-    GenericIniFromJSONTyped,
-    GenericIniToJSON,
-    GenericIniToJSONTyped,
-} from './GenericIni';
+    BasicUserInfoFromJSON,
+    BasicUserInfoFromJSONTyped,
+    BasicUserInfoToJSON,
+    BasicUserInfoToJSONTyped,
+} from './BasicUserInfo';
 
 /**
  * 
@@ -48,16 +48,16 @@ export interface ShareInviteBaseDetails {
     createdAt: Date;
     /**
      * 
-     * @type {GenericIni}
+     * @type {BasicUserInfo}
      * @memberof ShareInviteBaseDetails
      */
-    owner: GenericIni;
+    owner: BasicUserInfo;
     /**
      * 
-     * @type {GenericIni}
+     * @type {BasicUserInfo}
      * @memberof ShareInviteBaseDetails
      */
-    sharedWith: GenericIni;
+    sharedWith: BasicUserInfo;
     /**
      * 
      * @type {Array<ShockerPermLimitPairWithId>}
@@ -90,8 +90,8 @@ export function ShareInviteBaseDetailsFromJSONTyped(json: any, ignoreDiscriminat
         
         'id': json['id'],
         'createdAt': (new Date(json['createdAt'])),
-        'owner': GenericIniFromJSON(json['owner']),
-        'sharedWith': GenericIniFromJSON(json['sharedWith']),
+        'owner': BasicUserInfoFromJSON(json['owner']),
+        'sharedWith': BasicUserInfoFromJSON(json['sharedWith']),
         'shockers': ((json['shockers'] as Array<any>).map(ShockerPermLimitPairWithIdFromJSON)),
     };
 }
@@ -109,8 +109,8 @@ export function ShareInviteBaseDetailsToJSONTyped(value?: ShareInviteBaseDetails
         
         'id': value['id'],
         'createdAt': ((value['createdAt']).toISOString()),
-        'owner': GenericIniToJSON(value['owner']),
-        'sharedWith': GenericIniToJSON(value['sharedWith']),
+        'owner': BasicUserInfoToJSON(value['owner']),
+        'sharedWith': BasicUserInfoToJSON(value['sharedWith']),
         'shockers': ((value['shockers'] as Array<any>).map(ShockerPermLimitPairWithIdToJSON)),
     };
 }

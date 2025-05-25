@@ -13,13 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
-import type { GenericIni } from './GenericIni';
+import type { BasicUserInfo } from './BasicUserInfo';
 import {
-    GenericIniFromJSON,
-    GenericIniFromJSONTyped,
-    GenericIniToJSON,
-    GenericIniToJSONTyped,
-} from './GenericIni';
+    BasicUserInfoFromJSON,
+    BasicUserInfoFromJSONTyped,
+    BasicUserInfoToJSON,
+    BasicUserInfoToJSONTyped,
+} from './BasicUserInfo';
 
 /**
  * 
@@ -41,10 +41,10 @@ export interface AdminOnlineDeviceResponse {
     name: string;
     /**
      * 
-     * @type {GenericIni}
+     * @type {BasicUserInfo}
      * @memberof AdminOnlineDeviceResponse
      */
-    owner: GenericIni;
+    owner: BasicUserInfo;
     /**
      * 
      * @type {string}
@@ -118,7 +118,7 @@ export function AdminOnlineDeviceResponseFromJSONTyped(json: any, ignoreDiscrimi
         
         'id': json['id'],
         'name': json['name'],
-        'owner': GenericIniFromJSON(json['owner']),
+        'owner': BasicUserInfoFromJSON(json['owner']),
         'firmwareVersion': json['firmwareVersion'],
         'gateway': json['gateway'],
         'connectedAt': (new Date(json['connectedAt'])),
@@ -142,7 +142,7 @@ export function AdminOnlineDeviceResponseToJSONTyped(value?: AdminOnlineDeviceRe
         
         'id': value['id'],
         'name': value['name'],
-        'owner': GenericIniToJSON(value['owner']),
+        'owner': BasicUserInfoToJSON(value['owner']),
         'firmwareVersion': value['firmwareVersion'],
         'gateway': value['gateway'],
         'connectedAt': ((value['connectedAt']).toISOString()),

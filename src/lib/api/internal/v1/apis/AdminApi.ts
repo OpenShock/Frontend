@@ -15,15 +15,28 @@
 
 import * as runtime from '../runtime';
 import type {
+  AddWebhookDto,
   AdminOnlineDeviceResponseIEnumerableLegacyDataResponse,
   AdminUsersViewPaginated,
+  ProblemDetails,
+  WebhookDto,
 } from '../models/index';
 import {
+    AddWebhookDtoFromJSON,
+    AddWebhookDtoToJSON,
     AdminOnlineDeviceResponseIEnumerableLegacyDataResponseFromJSON,
     AdminOnlineDeviceResponseIEnumerableLegacyDataResponseToJSON,
     AdminUsersViewPaginatedFromJSON,
     AdminUsersViewPaginatedToJSON,
+    ProblemDetailsFromJSON,
+    ProblemDetailsToJSON,
+    WebhookDtoFromJSON,
+    WebhookDtoToJSON,
 } from '../models/index';
+
+export interface AdminAddWebhookRequest {
+    addWebhookDto?: AddWebhookDto;
+}
 
 export interface AdminDeactivateUserRequest {
     userId: string;
@@ -45,6 +58,10 @@ export interface AdminReactivateUserRequest {
     userId: string;
 }
 
+export interface AdminRemoveWebhookRequest {
+    id: string;
+}
+
 /**
  * AdminApi - interface
  * 
@@ -52,6 +69,21 @@ export interface AdminReactivateUserRequest {
  * @interface AdminApiInterface
  */
 export interface AdminApiInterface {
+    /**
+     * 
+     * @summary Creates a webhook
+     * @param {AddWebhookDto} [addWebhookDto] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminAddWebhookRaw(requestParameters: AdminAddWebhookRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Creates a webhook
+     */
+    adminAddWebhook(addWebhookDto?: AddWebhookDto, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
     /**
      * 
      * @summary Deactivates a user
@@ -117,6 +149,20 @@ export interface AdminApiInterface {
 
     /**
      * 
+     * @summary List webhooks
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminListWebhooksRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<WebhookDto>>>;
+
+    /**
+     * List webhooks
+     */
+    adminListWebhooks(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<WebhookDto>>;
+
+    /**
+     * 
      * @summary Reactivates a user
      * @param {string} userId 
      * @param {*} [options] Override http request option.
@@ -130,12 +176,55 @@ export interface AdminApiInterface {
      */
     adminReactivateUser(userId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
+    /**
+     * 
+     * @summary Removes a webhook
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminRemoveWebhookRaw(requestParameters: AdminRemoveWebhookRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Removes a webhook
+     */
+    adminRemoveWebhook(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
 }
 
 /**
  * 
  */
 export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
+
+    /**
+     * Creates a webhook
+     */
+    async adminAddWebhookRaw(requestParameters: AdminAddWebhookRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/1/admin/webhooks`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: AddWebhookDtoToJSON(requestParameters['addWebhookDto']),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Creates a webhook
+     */
+    async adminAddWebhook(addWebhookDto?: AddWebhookDto, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.adminAddWebhookRaw({ addWebhookDto: addWebhookDto }, initOverrides);
+    }
 
     /**
      * Deactivates a user
@@ -274,6 +363,32 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     }
 
     /**
+     * List webhooks
+     */
+    async adminListWebhooksRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<WebhookDto>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/1/admin/webhooks`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(WebhookDtoFromJSON));
+    }
+
+    /**
+     * List webhooks
+     */
+    async adminListWebhooks(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<WebhookDto>> {
+        const response = await this.adminListWebhooksRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Reactivates a user
      */
     async adminReactivateUserRaw(requestParameters: AdminReactivateUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -303,6 +418,38 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
      */
     async adminReactivateUser(userId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.adminReactivateUserRaw({ userId: userId }, initOverrides);
+    }
+
+    /**
+     * Removes a webhook
+     */
+    async adminRemoveWebhookRaw(requestParameters: AdminRemoveWebhookRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling adminRemoveWebhook().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/1/admin/webhooks/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Removes a webhook
+     */
+    async adminRemoveWebhook(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.adminRemoveWebhookRaw({ id: id }, initOverrides);
     }
 
 }
