@@ -53,4 +53,5 @@ runs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         build-args: |
-          GIT_HASH=${{ github.sha }}
+          GIT_BRANCH=${{ github.head_ref || github.ref_name }}
+          GIT_COMMIT_SHA=${{ github.sha }}
