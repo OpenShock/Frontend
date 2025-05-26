@@ -7,7 +7,6 @@
   import type { ValidationResult } from '$lib/types/ValidationResult';
   import type { FullAutoFill } from 'svelte/elements';
   import TextInput from './TextInput.svelte';
-  import type { ButtonSettings } from './impl/ButtonSettings';
   import PasswordStrengthMeter from './impl/PasswordStrengthMeter.svelte';
 
   interface Props {
@@ -102,12 +101,6 @@
   $effect(() => {
     valid = validationResult?.valid ?? false;
   });
-
-  let button: ButtonSettings = $derived({
-    Icon: valueShown ? EyeOff : Eye,
-    class: 'cursor-pointer',
-    onClick: () => (valueShown = !valueShown),
-  });
 </script>
 
 <TextInput
@@ -118,7 +111,11 @@
   bind:value
   {validationResult}
   {Icon}
-  {button}
+  button={{
+    Icon: valueShown ? EyeOff : Eye,
+    class: 'cursor-pointer',
+    onClick: () => (valueShown = !valueShown),
+  }}
   {oninput}
 >
   {#snippet popup()}
