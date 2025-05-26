@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { WithElementRef } from "$lib/utils";
+	import type { WithElementRef } from "$lib/utils/shadcn";
 	import type { HTMLAttributes } from "svelte/elements";
 
 	let {

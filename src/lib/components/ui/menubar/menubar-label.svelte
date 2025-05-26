@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { cn, type WithElementRef } from "$lib/utils";
+	import { cn } from "$lib/utils/shadcn";
+	import { type WithElementRef } from "bits-ui";
 	import type { HTMLAttributes } from "svelte/elements";
 
 	let {
