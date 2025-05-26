@@ -121,17 +121,6 @@
   body {
     @apply bg-background text-foreground;
   }
-  .kbd {
-    @apply inline-flex min-h-[30px] items-center justify-center rounded-md border border-gray-200 bg-white px-1.5 py-1 font-mono text-sm text-gray-800 shadow-[0px_2px_0px_0px_rgba(0,0,0,0.08)];
-  }
-
-  .dark .kbd {
-    @apply border-neutral-700 bg-neutral-900 text-neutral-200 shadow-[0px_2px_0px_0px_rgba(255,255,255,0.1)];
-  }
-
-  .code {
-    @apply bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold;
-  }
 
   .hide-spinners {
     /* Hide spin buttons in Chrome, Safari, Edge */

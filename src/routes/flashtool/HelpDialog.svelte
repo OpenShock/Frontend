@@ -1,6 +1,8 @@
 <script lang="ts">
   import { ArrowDownToLine } from '@lucide/svelte';
   import { PUBLIC_DISCORD_INVITE_URL } from '$env/static/public';
+  import Code from '$lib/components/Code.svelte';
+  import Keyboard from '$lib/components/Keyboard.svelte';
   import DiscordLogo from '$lib/components/svg/DiscordLogo.svelte';
   import { Button } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
@@ -57,7 +59,7 @@
           <div class="pl-4">
             <p>
               Go to the folder where you extracted the zip file and run
-              <code class="code">CP210xVCPInstaller_x64.exe</code><br />
+              <Code>CP210xVCPInstaller_x64.exe</Code><br />
               Follow the instructions to install the drivers.
             </p>
           </div>
@@ -69,8 +71,8 @@
           <h4 class="h4">1. Open Device Manager</h4>
           <div class="pl-4">
             <p>
-              Press <kbd class="kbd">Win</kbd> + <kbd class="kbd">X</kbd> and select
-              <code class="code">Device Manager</code>.
+              Press <Keyboard>Win</Keyboard> + <Keyboard>X</Keyboard> and select
+              <Code>Device Manager</Code>.
             </p>
           </div>
         </div>
@@ -78,12 +80,11 @@
           <h4 class="h4">2. Find your device</h4>
           <div class="pl-4">
             <p>
-              Go to <code class="code">Ports (COM & LPT)</code> and look a device similar to one of the
-              following:
+              Go to <Code>Ports (COM & LPT)</Code> and look a device similar to one of the following:
             </p>
             <ul class="my-2 ml-6 list-disc [&>li]:mt-2">
-              <li><code class="code">Silicon Labs CP210x USB to UART Bridge</code></li>
-              <li><code class="code">Silicon Labs CP210x USB to UART Bridge (COM...)</code></li>
+              <li><Code>Silicon Labs CP210x USB to UART Bridge</Code></li>
+              <li><Code>Silicon Labs CP210x USB to UART Bridge (COM...)</Code></li>
             </ul>
             <p>
               If you don't see it in the list, make sure that your device is connected to your
@@ -95,17 +96,16 @@
           <h4 class="h4">3. Update drivers</h4>
           <div class="pl-4">
             <p>
-              Right click on the device and select <code class="code">Update Driver</code>.
+              Right click on the device and select <Code>Update Driver</Code>.
             </p>
             <p>
-              Select <code class="code">Browse my computer for drivers</code> and browse to the folder
-              where you extracted the zip file.
+              Select <Code>Browse my computer for drivers</Code> and browse to the folder where you extracted
+              the zip file.
             </p>
-            <p>Make sure that <code class="code">Include subfolders</code> option is checked.</p>
+            <p>Make sure that <Code>Include subfolders</Code> option is checked.</p>
             <p>
-              If successful, you should see <code class="code"
-                >Silicon Labs CP210x USB to UART Bridge</code
-              > in the list.
+              If successful, you should see <Code>Silicon Labs CP210x USB to UART Bridge</Code> in the
+              list.
             </p>
           </div>
         </div>
