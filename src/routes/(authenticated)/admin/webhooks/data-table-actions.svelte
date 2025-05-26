@@ -6,9 +6,9 @@
   import { toast } from 'svelte-sonner';
   import WebhookDeleteDialog from './dialog-webhook-delete.svelte';
 
-  type Props = {
+  interface Props {
     webhook: WebhookDto;
-  };
+  }
 
   let { webhook }: Props = $props();
 

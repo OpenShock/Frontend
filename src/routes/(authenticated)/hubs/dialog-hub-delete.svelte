@@ -3,10 +3,10 @@
   import * as Dialog from '$lib/components/ui/dialog';
   import type { Hub } from './columns';
 
-  type Props = {
+  interface Props {
     open: boolean;
     hub: Hub;
-  };
+  }
 
   let { open = $bindable<boolean>(), hub }: Props = $props();
 

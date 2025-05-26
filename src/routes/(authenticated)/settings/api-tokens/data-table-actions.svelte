@@ -7,9 +7,9 @@
   import TokenDeleteDialog from './dialog-token-delete.svelte';
   import TokenEditDialog from './dialog-token-edit.svelte';
 
-  type Props = {
+  interface Props {
     token: ApiToken;
-  };
+  }
 
   let { token }: Props = $props();
 

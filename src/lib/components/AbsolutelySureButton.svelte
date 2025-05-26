@@ -1,10 +1,10 @@
 <script lang="ts">
   import { onDestroy } from 'svelte';
 
-  type Props = {
+  interface Props {
     text: string;
     onconfirm: () => void;
-  };
+  }
 
   let { text, onconfirm }: Props = $props();
 

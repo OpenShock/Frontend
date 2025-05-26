@@ -7,10 +7,10 @@
   import type { ValidationResult } from '$lib/types/ValidationResult';
   import { toast } from 'svelte-sonner';
 
-  type Props = {
+  interface Props {
     open: boolean;
     onAdded: () => void;
-  };
+  }
 
   let { open = $bindable<boolean>(), onAdded }: Props = $props();
 

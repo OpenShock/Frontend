@@ -7,9 +7,9 @@
   import SharelinkDeleteDialog from './dialog-sharelink-delete.svelte';
   import SharelinkEditDialog from './dialog-sharelink-edit.svelte';
 
-  type Props = {
+  interface Props {
     publicShare: OwnPublicShareResponse;
-  };
+  }
 
   let { publicShare }: Props = $props();
 

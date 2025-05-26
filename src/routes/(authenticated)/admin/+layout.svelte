@@ -3,9 +3,9 @@
   import { UserStore } from '$lib/stores/UserStore';
   import type { Snippet } from 'svelte';
 
-  type Props = {
+  interface Props {
     children?: Snippet;
-  };
+  }
 
   let { children }: Props = $props();
 

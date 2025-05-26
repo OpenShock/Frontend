@@ -8,9 +8,9 @@
   import HubDeleteDialog from './dialog-hub-delete.svelte';
   import HubEditDialog from './dialog-hub-edit.svelte';
 
-  type Props = {
+  interface Props {
     hub: Hub;
-  };
+  }
 
   let { hub }: Props = $props();
 

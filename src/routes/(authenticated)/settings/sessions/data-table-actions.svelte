@@ -6,9 +6,9 @@
   import type { Session } from './columns';
   import SessionRevokeDialog from './dialog-session-revoke.svelte';
 
-  type Props = {
+  interface Props {
     session: Session;
-  };
+  }
 
   let { session }: Props = $props();
 

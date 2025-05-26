@@ -6,9 +6,9 @@
   import { toast } from 'svelte-sonner';
   import type { OnlineHub } from './columns';
 
-  type Props = {
+  interface Props {
     hub: OnlineHub;
-  };
+  }
 
   let { hub }: Props = $props();
 

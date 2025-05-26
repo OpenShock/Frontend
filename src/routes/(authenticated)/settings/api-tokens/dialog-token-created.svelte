@@ -3,9 +3,9 @@
   import CopyInput from '$lib/components/CopyInput.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
 
-  type Props = {
+  interface Props {
     token: string | null;
-  };
+  }
 
   let { token = $bindable() }: Props = $props();
 

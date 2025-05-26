@@ -7,9 +7,9 @@
   import UserDeleteDialog from './dialog-user-delete.svelte';
   import UserEditDialog from './dialog-user-edit.svelte';
 
-  type Props = {
+  interface Props {
     user: AdminUsersView;
-  };
+  }
 
   let { user }: Props = $props();
 

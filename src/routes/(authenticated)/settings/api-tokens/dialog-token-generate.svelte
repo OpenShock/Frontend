@@ -10,10 +10,10 @@
   import { toast } from 'svelte-sonner';
   import TokenCreatedDialog from './dialog-token-created.svelte';
 
-  type Props = {
+  interface Props {
     open: boolean;
     onGenerated: (id: string) => void;
-  };
+  }
 
   let { open = $bindable(), onGenerated }: Props = $props();
 

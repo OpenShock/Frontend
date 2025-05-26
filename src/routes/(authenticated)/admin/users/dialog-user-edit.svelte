@@ -7,10 +7,10 @@
   import { Checkbox } from '$lib/components/ui/checkbox';
   import * as Dialog from '$lib/components/ui/dialog';
 
-  type Props = {
+  interface Props {
     open: boolean;
     user: AdminUsersView;
-  };
+  }
 
   let { open = $bindable<boolean>(), user }: Props = $props();
 </script>

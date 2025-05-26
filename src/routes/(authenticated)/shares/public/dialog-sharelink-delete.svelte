@@ -5,10 +5,10 @@
   import * as Dialog from '$lib/components/ui/dialog';
   import { toast } from 'svelte-sonner';
 
-  type Props = {
+  interface Props {
     open: boolean;
     publicShare: OwnPublicShareResponse;
-  };
+  }
 
   let { open = $bindable<boolean>(), publicShare }: Props = $props();
 

@@ -7,10 +7,10 @@
   import { toast } from 'svelte-sonner';
   import type { Session } from './columns';
 
-  type Props = {
+  interface Props {
     open: boolean;
     session: Session;
-  };
+  }
 
   let { open = $bindable(), session }: Props = $props();
 

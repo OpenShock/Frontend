@@ -3,9 +3,9 @@
   import Button from '$lib/components/ui/button/button.svelte';
   import { ControlType } from '$lib/signalr/models/ControlType';
 
-  type Props = {
+  interface Props {
     ctrl: (type: ControlType) => void;
-  };
+  }
 
   let { ctrl }: Props = $props();
 </script>

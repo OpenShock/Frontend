@@ -6,10 +6,10 @@
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { toast } from 'svelte-sonner';
 
-  type Props = {
+  interface Props {
     open: boolean;
     webhook: WebhookDto;
-  };
+  }
 
   let { open = $bindable<boolean>(), webhook }: Props = $props();
 

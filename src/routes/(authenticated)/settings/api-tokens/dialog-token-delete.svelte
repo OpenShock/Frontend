@@ -7,10 +7,10 @@
   import { toast } from 'svelte-sonner';
   import type { ApiToken } from './columns';
 
-  type Props = {
+  interface Props {
     open: boolean;
     token: ApiToken;
-  };
+  }
 
   let { open = $bindable(), token }: Props = $props();
 

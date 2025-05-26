@@ -1,9 +1,9 @@
 <script lang="ts">
   import { getPasswordStrength } from '$lib/inputvalidation/passwordValidator';
 
-  type Props = {
+  interface Props {
     password: string;
-  };
+  }
 
   let { password }: Props = $props();
 

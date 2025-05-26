@@ -12,13 +12,13 @@
   import { FlexRender, createSvelteTable } from '$lib/components/ui/data-table';
   import * as Table from '$lib/components/ui/table';
 
-  type Props = {
+  interface Props {
     data: TData[];
     columns: ColumnDef<TData, TValue>[];
     sorting?: SortingState;
     filters?: ColumnFiltersState;
     pagination?: PaginationState;
-  };
+  }
 
   let {
     data,
