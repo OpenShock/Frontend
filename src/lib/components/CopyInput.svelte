@@ -3,7 +3,7 @@
   import { cn } from '$lib/utils';
   import type { Snippet } from 'svelte';
   import { toast } from 'svelte-sonner';
-  import { fade, scale } from 'svelte/transition';
+  import { scale } from 'svelte/transition';
 
   type Props = {
     value: string;
@@ -32,7 +32,7 @@
   {#if icon}
     {@render icon()}
   {/if}
-  <input class="no-outline mx-3 grow" type="text" bind:value readonly disabled />
+  <input class="outline-none! mx-3 grow" type="text" bind:value readonly disabled />
   <span>
     <button onclick={copyToken} class="transition-in-place">
       {#if copied}
@@ -47,9 +47,3 @@
     </button>
   </span>
 </form>
-
-<style>
-  .no-outline {
-    outline: none !important;
-  }
-</style>
