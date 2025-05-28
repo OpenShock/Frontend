@@ -138,7 +138,7 @@ export default class FlashManager {
   }
 
   static async Connect(serialPort: SerialPort, terminal: IEspLoaderTerminal) {
-    let espLoader = await setupESPLoader(serialPort, terminal);
+    const espLoader = await setupESPLoader(serialPort, terminal);
     if (espLoader != null) {
       return new FlashManager(espLoader, terminal);
     } else {
@@ -160,10 +160,10 @@ export default class FlashManager {
    * In addition, to reduce any weirdness, the FlashManager becomes 'disconnected' while it is switching states.
    */
   private async _cycleTransport(): Promise<SerialPort> {
-    let loader = this.loader;
-    let serialPort = this.serialPort!;
-    let serialPortReader = this.serialPortReader;
-    let serialPortWriter = this.serialPortWriter;
+    const loader = this.loader;
+    const serialPort = this.serialPort!;
+    const serialPortReader = this.serialPortReader;
+    const serialPortWriter = this.serialPortWriter;
     this.serialPort = null;
     this.serialPortReader = null;
     this.serialPortWriter = null;
@@ -201,9 +201,9 @@ export default class FlashManager {
     if (!this.serialPort) return false;
     if (this.loader && !forceReset) return true;
 
-    let serialPort = await this._cycleTransport();
+    const serialPort = await this._cycleTransport();
 
-    let loader = await setupESPLoader(serialPort, this.terminal);
+    const loader = await setupESPLoader(serialPort, this.terminal);
     if (loader) {
       // success (if a failure occurs we're left disconnected)
       this.serialPort = serialPort;
@@ -216,12 +216,12 @@ export default class FlashManager {
     if (!this.serialPort) return false;
     if (!this.loader && !forceReset) return true;
 
-    let serialPort = await setupApplication(await this._cycleTransport());
+    const serialPort = await setupApplication(await this._cycleTransport());
     this.serialPort = serialPort;
 
     if (serialPort) {
-      let serialPortReader = serialPort!.readable!.getReader();
-      let serialPortWriter = serialPort!.writable!.getWriter();
+      const serialPortReader = serialPort!.readable!.getReader();
+      const serialPortWriter = serialPort!.writable!.getWriter();
       this.serialPortReader = serialPortReader;
       this.serialPortWriter = serialPortWriter;
       // connect application to terminal
@@ -230,10 +230,10 @@ export default class FlashManager {
           let lineBuffer = [];
           while (true) {
             // since we're using Transport APIs, and since they have no "no timeout" option, get as close as possible
-            let b = await serialPortReader.read();
+            const b = await serialPortReader.read();
             if (b.done) break;
             if (b.value) {
-              for (let byte of b.value) {
+              for (const byte of b.value) {
                 // next byte
                 if (byte == 13) continue;
                 if (byte == 10) {
@@ -340,7 +340,7 @@ export default class FlashManager {
     if (this.loader) return false;
 
     text += '\n';
-    let buffer = new TextEncoder().encode(text);
+    const buffer = new TextEncoder().encode(text);
     try {
       await this.serialPortWriter.write(buffer);
       return true;
