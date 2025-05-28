@@ -2,7 +2,6 @@ import Latin1 from 'crypto-js/enc-latin1';
 import HashMD5 from 'crypto-js/md5';
 import {
   ESPLoader,
-  type FlashOptions,
   type IEspLoaderTerminal,
   type LoaderOptions,
   Transport,
@@ -306,22 +305,23 @@ export default class FlashManager {
       onProgress(written / total);
     }
 
-    const flashOptions = {
-      fileArray: [
-        {
+    try {
+      await this.loader.writeFlash({
+        fileArray: [{
           data: arrayBufferToString(data),
           address: 0,
+        }],
+        flashSize: 'keep',
+        flashMode: 'keep',
+        flashFreq: 'keep',
+        eraseAll,
+        compress: true,
+        reportProgress,
+        calculateMD5Hash: (image) => {
+          this.terminal.writeLine('Validating image...');
+          return HashMD5(Latin1.parse(image)).toString();
         },
-      ],
-      flashSize: 'keep',
-      eraseAll,
-      compress: true,
-      reportProgress,
-      calculateMD5Hash: (image) => HashMD5(Latin1.parse(image)).toString(),
-    } as FlashOptions;
-
-    try {
-      await this.loader.writeFlash(flashOptions);
+      });
       this.terminal.writeLine('Flash complete');
       return true;
     } catch (e) {
