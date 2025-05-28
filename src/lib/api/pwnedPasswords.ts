@@ -1,13 +1,12 @@
-import SHA1 from 'crypto-js/sha1';
+import { HashString } from "$lib/utils/crypto";
 
 export async function checkPwnedCount(password: string): Promise<number> {
   if (!password) {
     throw new Error('Password cannot be empty');
   }
 
-  const hash = SHA1(password).toString();
+  const hash = await HashString(password, 'SHA-1');
   const hashPrefix = hash.substring(0, 5);
-  const hashSuffix = hash.substring(5).toUpperCase();
 
   let raw: string;
   try {
@@ -18,6 +17,7 @@ export async function checkPwnedCount(password: string): Promise<number> {
     throw new Error('Error while fetching pwned passwords range');
   }
 
+  const hashSuffix = hash.substring(5).toUpperCase();
   const match = raw.split('\n').find((line) => line.startsWith(hashSuffix));
 
   if (match) {
