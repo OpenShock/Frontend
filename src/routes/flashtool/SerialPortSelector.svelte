@@ -2,6 +2,7 @@
   import { Cpu, TriangleAlert, Unplug } from '@lucide/svelte';
   import { Button } from '$lib/components/ui/button';
   import { SerialPortsStore } from '$lib/stores/SerialPortsStore';
+  import { NumberToHexPadded } from '$lib/utils/convert';
 
   interface Props {
     port?: SerialPort | null;
@@ -34,9 +35,6 @@
       });
   }
 
-  function NumberToHex(number: number) {
-    return number.toString(16).padStart(2, '0').toUpperCase();
-  }
   function GetHardwareID(serialPort: SerialPort | null) {
     const info = serialPort?.getInfo();
     if (!info || (!info.usbVendorId && !info.usbProductId)) {
@@ -45,10 +43,10 @@
 
     let parts: string[] = [];
     if (info.usbVendorId) {
-      parts.push(`VID_${NumberToHex(info.usbVendorId)}`);
+      parts.push(`VID_${NumberToHexPadded(info.usbVendorId, 4)}`);
     }
     if (info.usbProductId) {
-      parts.push(`PID_${NumberToHex(info.usbProductId)}`);
+      parts.push(`PID_${NumberToHexPadded(info.usbProductId, 4)}`);
     }
 
     return parts.join('&');

@@ -1,4 +1,4 @@
-import { HashString } from "$lib/utils/crypto";
+import { HashString } from '$lib/utils/crypto';
 
 export async function checkPwnedCount(password: string): Promise<number> {
   if (!password) {

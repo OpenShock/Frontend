@@ -1,11 +1,7 @@
+import { DecodeString, EncodeString } from '$lib/utils';
 import Latin1 from 'crypto-js/enc-latin1';
 import HashMD5 from 'crypto-js/md5';
-import {
-  ESPLoader,
-  type IEspLoaderTerminal,
-  type LoaderOptions,
-  Transport,
-} from 'esptool-js';
+import { ESPLoader, type IEspLoaderTerminal, type LoaderOptions, Transport } from 'esptool-js';
 
 /**
  * Reboots the chip in ESPLoader mode.
@@ -44,6 +40,18 @@ async function setupESPLoader(
 
 function sleep(ms: number): Promise<void> {
   return new Promise((f) => setTimeout(f, ms));
+}
+
+function appendBuffer(buffer: Uint8Array | null, data: Uint8Array): Uint8Array {
+  // Fast path: if buffer is null, just return data
+  if (!buffer) return data;
+
+  const newBuffer = new Uint8Array(buffer.length + data.length);
+
+  newBuffer.set(buffer, 0);
+  newBuffer.set(data, buffer.length);
+
+  return newBuffer;
 }
 
 /**
@@ -226,26 +234,44 @@ export default class FlashManager {
       // connect application to terminal
       (async () => {
         try {
-          let lineBuffer = [];
+          let lineBuffer: Uint8Array | null = null; // Buffer to hold data between chunks
+
           while (true) {
             // since we're using Transport APIs, and since they have no "no timeout" option, get as close as possible
-            const b = await serialPortReader.read();
-            if (b.done) break;
-            if (b.value) {
-              for (const byte of b.value) {
-                // next byte
-                if (byte == 13) continue;
-                if (byte == 10) {
-                  // write out line
-                  this.terminal.writeLine(new TextDecoder().decode(new Uint8Array(lineBuffer)));
-                  lineBuffer = [];
-                } else {
-                  lineBuffer.push(byte);
-                }
+            const { done, value } = await serialPortReader.read();
+            if (done) break; // Stream ended - exit the loop
+            if (!value) {
+              await sleep(1); // No data received, wait a bit
+              continue; // Skip to the next iteration
+            }
+
+            let start = 0; // Where to start reading from the value
+
+            // Process each byte in the received chunk
+            for (let i = 0; i < value.length; i++) {
+              const byte = value[i];
+
+              // Skip until we encounter a line terminator (LF or CR)
+              if (byte !== 10 && byte !== 13) continue;
+
+              // Copy all data from rstart to current index (i) into the buffer
+              if (i > start) {
+                lineBuffer = appendBuffer(lineBuffer, value.subarray(start, i));
               }
-            } else {
-              // if the port somehow returns all zero length buffers or something...
-              await sleep(1);
+
+              // Line Feed (\n): flush buffer as a complete line
+              if (byte === 10) {
+                this.terminal.writeLine(lineBuffer?.length ? DecodeString(lineBuffer) : '');
+                lineBuffer = null; // Reset buffer after flushing
+              }
+
+              // Set start to the next byte after the line terminator
+              start = i + 1;
+            }
+
+            // Push any remaining data in the buffer
+            if (start < value.length) {
+              lineBuffer = appendBuffer(lineBuffer, value.subarray(start));
             }
           }
         } catch (e) {
@@ -307,20 +333,19 @@ export default class FlashManager {
 
     try {
       await this.loader.writeFlash({
-        fileArray: [{
-          data: arrayBufferToString(data),
-          address: 0,
-        }],
+        fileArray: [
+          {
+            data: arrayBufferToString(data),
+            address: 0,
+          },
+        ],
         flashSize: 'keep',
         flashMode: 'keep',
         flashFreq: 'keep',
         eraseAll,
         compress: true,
         reportProgress,
-        calculateMD5Hash: (image) => {
-          this.terminal.writeLine('Validating image...');
-          return HashMD5(Latin1.parse(image)).toString();
-        },
+        calculateMD5Hash: (image) => HashMD5(Latin1.parse(image)).toString(),
       });
       this.terminal.writeLine('Flash complete');
       return true;
@@ -336,11 +361,9 @@ export default class FlashManager {
    * Returns false and ignores if not in application mode or if disconnected.
    */
   async sendApplicationCommand(text: string) {
-    if (!this.serialPortWriter) return false;
-    if (this.loader) return false;
+    if (!this.serialPortWriter || this.loader) return false;
 
-    text += '\n';
-    const buffer = new TextEncoder().encode(text);
+    const buffer = EncodeString(text + '\n');
     try {
       await this.serialPortWriter.write(buffer);
       return true;

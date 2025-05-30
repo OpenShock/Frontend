@@ -11,6 +11,7 @@
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { SignalR_Connection } from '$lib/signalr';
   import { type HubOnlineState, OnlineHubsStore } from '$lib/stores/HubsStore';
+  import { NumberToHexPadded } from '$lib/utils/convert';
 
   let hubId = $derived(page.params.hubId);
   let hub = $derived<HubOnlineState>(
@@ -34,14 +35,6 @@
   function startUpdate() {
     if (!isValidHubId || $SignalR_Connection === null || version === null) return;
     $SignalR_Connection.invoke('OtaInstall', hubId, version);
-  }
-
-  function decimalToHexString(number: number) {
-    if (number < 0) {
-      number = 0xffffffff + number + 1;
-    }
-
-    return number.toString(16).toUpperCase();
   }
 
   $effect(() => {
@@ -102,7 +95,9 @@
       <Table.Body>
         {#each otaLogs as otaLog (otaLog.id)}
           <Table.Row>
-            <Table.Cell class="font-mono text-blue-200">{decimalToHexString(otaLog.id)}</Table.Cell>
+            <Table.Cell class="font-mono text-blue-200">
+              {NumberToHexPadded(otaLog.id, 8)}
+            </Table.Cell>
             <Table.Cell class="font-medium">{otaLog.startedAt.toDateString()}</Table.Cell>
             <Table.Cell class={`font-medium${otaLog.status == 'Finished' ? '' : ' text-red-500'}`}>
               {otaLog.status}
