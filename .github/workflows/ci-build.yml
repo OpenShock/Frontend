@@ -12,6 +12,8 @@ name: ci-build
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout
@@ -48,6 +50,9 @@ jobs:
   build-container:
     runs-on: ubuntu-latest
     needs: test
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - name: Checkout
