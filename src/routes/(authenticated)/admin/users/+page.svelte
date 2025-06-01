@@ -77,7 +77,7 @@
       <div class="flex items-center justify-end space-x-2">
         <Input placeholder="Filter names..." bind:value={nameSearch} class="max-w-sm" />
         <Input placeholder="Filter emails..." bind:value={emailSearch} class="max-w-sm" />
-        <Button class="btn variant-filled-primary text-xl" onclick={fetchUsers}>
+        <Button class="text-xl" onclick={fetchUsers}>
           <Search />
           <span> Search </span>
         </Button>

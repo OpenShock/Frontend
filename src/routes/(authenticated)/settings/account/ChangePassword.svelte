@@ -49,6 +49,6 @@
   validate={validatePasswordMatch(passwordConfirm, password)}
 />
 
-<Button class="btn variant-filled-primary" type="submit" disabled={!canSubmitPassword}>
+<Button type="submit" disabled={!canSubmitPassword}>
   Change Password
 </Button>

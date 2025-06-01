@@ -38,11 +38,11 @@
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
       API Tokens
       <div>
-        <Button class="btn variant-filled-primary" onclick={() => (showGenerateTokenModal = true)}>
+        <Button onclick={() => (showGenerateTokenModal = true)}>
           <RotateCcw />
           <span> Generate Token </span>
         </Button>
-        <Button class="btn variant-filled-primary" onclick={refreshApiTokens}>
+        <Button onclick={refreshApiTokens}>
           <RotateCcw />
           Refresh
         </Button>

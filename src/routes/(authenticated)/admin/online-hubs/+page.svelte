@@ -31,7 +31,7 @@
   <Card.Header>
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
       Online Hubs: {data.length}
-      <Button class="btn variant-filled-primary text-xl" onclick={fetchOnlineHubs}>
+      <Button class="text-xl" onclick={fetchOnlineHubs}>
         <RotateCcw />
         <span> Refresh </span>
       </Button>

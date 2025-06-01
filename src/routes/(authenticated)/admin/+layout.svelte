@@ -1,5 +1,6 @@
 <script lang="ts">
   import { RoleType } from '$lib/api/internal/v1';
+  import { Button } from '$lib/components/ui/button';
   import { UserStore } from '$lib/stores/UserStore';
   import type { Snippet } from 'svelte';
 
@@ -19,5 +20,7 @@
   {@render children?.()}
 {:else}
   <h1 class="text-4xl">You do not have permission to access this page</h1>
-  <a href="/home" class="btn variant-filled-primary">Go Home</a>
+  <Button href="/home">
+    Go Home
+  </Button>
 {/if}

@@ -52,7 +52,7 @@
   <Card.Header>
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
       Sessions
-      <Button class="btn variant-filled-primary text-xl" onclick={fetchSessions}>
+      <Button class="text-xl" onclick={fetchSessions}>
         <RotateCcw />
         <span> Refresh </span>
       </Button>

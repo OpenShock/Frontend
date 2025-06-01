@@ -31,7 +31,7 @@
 
       <p>Are you sure you want to logout?</p>
 
-      <button class="btn variant-filled-primary" onclick={logout}> Logout </button>
+      <button onclick={logout}> Logout </button>
     </div>
   </div>
 {/if}
