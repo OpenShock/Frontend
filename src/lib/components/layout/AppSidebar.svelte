@@ -7,10 +7,9 @@
     Link,
     MonitorSmartphone,
     Router,
+    Settings,
     SquareActivity,
     Timer,
-    TriangleAlert,
-    UserPen,
     Users,
     Wrench,
     Zap,
@@ -135,9 +134,9 @@
     title: 'Settings',
     menus: [
       {
-        title: 'Account',
-        Icon: UserPen,
-        href: '/settings/account',
+        title: 'API Tokens',
+        Icon: KeyRound,
+        href: '/settings/api-tokens',
       },
       {
         title: 'Sessions',
@@ -145,16 +144,10 @@
         href: '/settings/sessions',
       },
       {
-        title: 'API Tokens',
-        Icon: KeyRound,
-        href: '/settings/api-tokens',
-      },
-      {
-        title: 'Danger Zone',
-        Icon: TriangleAlert,
-        class: 'text-red-500!',
-        href: '/settings/danger-zone',
-      },
+        title: 'Account Settings',
+        Icon: Settings,
+        href: '/settings/account',
+      }
     ],
   };
 
