@@ -3,7 +3,7 @@
 	import XIcon from "@lucide/svelte/icons/x";
 	import type { Snippet } from "svelte";
 	import * as Dialog from "./index.js";
-	import { cn, type WithoutChildrenOrChild } from "$lib/utils/shadcn";
+	import { cn, type WithoutChildrenOrChild } from "$lib/utils/shadcn.js";
 
 	let {
 		ref = $bindable(null),

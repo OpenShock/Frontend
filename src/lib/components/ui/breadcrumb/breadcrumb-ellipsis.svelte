@@ -1,7 +1,7 @@
 <script lang="ts">
 	import EllipsisIcon from "@lucide/svelte/icons/ellipsis";
 	import type { HTMLAttributes } from "svelte/elements";
-	import { cn, type WithElementRef, type WithoutChildren } from "$lib/utils/shadcn";
+	import { cn, type WithElementRef, type WithoutChildren } from "$lib/utils/shadcn.js";
 
 	let {
 		ref = $bindable(null),

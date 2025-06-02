@@ -38,6 +38,9 @@ importers:
       '@eslint/js':
         specifier: ^9.28.0
         version: 9.28.0
+      '@internationalized/date':
+        specifier: ^3.8.1
+        version: 3.8.1
       '@lucide/svelte':
         specifier: ^0.511.0
         version: 0.511.0(svelte@5.33.13)

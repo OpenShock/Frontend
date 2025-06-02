@@ -1,59 +1,45 @@
 ## Post-Update Checklist for shadcn Components
 
-After updating your `shadcn` components with the CLI, complete the following steps to ensure everything integrates correctly:
+After running the shadcn CLI to update your components, follow these steps to ensure everything integrates correctly.
+This process helps you isolate and address any changes the CLI made, then reapply your custom modifications.
 
-### Modifications
+### Steps to Follow
 
-##### `sidebar.svelte`
-Change `ease-linear` for the sidebar to `ease-in-out` and increase the duration from 200ms to 300ms (`duration-300`)
+To start off, we want to eliminate the bulk of the changes that the CLI made, this will make it easier to see what actual changes were made by inspecting the git diff.
 
-1. **Update `sonner` component if modified**
+To do this we will first migrate all the tailwindcss classes to tailwindcss v4, then format all the code to our code style.
+
+```bash
+pnpx @tailwindcss/upgrade --force
+pnpm run format
+```
+
+Now it should be easier to see what the CLI actually changed, and we can now proceed with the following steps:
+
+1. **Update `sidebar` component if modified**
+
+   If the `sidebar` component was modified by the CLI, it most likely went back to using `ease-linear` and `duration-200`.
+   * Change `ease-linear` for the sidebar to `ease-in-out`.
+   * Increase the duration from `duration-200` to `duration-300`.
+
+2. **Update `sonner` component if modified**
 
    If the `sonner` component was modified by the CLI, it most likely went back to using the `svelte-sonner` package.
    * Update it to use our own `ColorSchemeStore` implementation instead of the one from the `svelte-sonner` package.
    * Remove `svelte-sonner` from `package.json`
 
-2. **Redirect utility imports**
+3. **Run code formatting again**
 
-   * Replace every instance of
+   Now we need to run the code formatting again to ensure everything is consistent after the changes made in steps 1 and 2.
 
-     ```js
-     import ... from '$lib/utils.js'
-     ```
+   ```bash
+   pnpm run format
+   ```
 
-     with:
-
-     ```js
-     import ... from '$lib/utils/shadcn'
-     ```
-
-     This can be done easily with a search and replace tool in your code editor.
-
-3. **Replace `shadcn` utils file if CLI generated one**
-
-   * If the CLI created `src/lib/utils.ts`, overwrite your existing `src/lib/utils/shadcn.ts` with it.
-
-4. **Run tailwindcss migration utility**
-
-   * Shadcn-svelte still hasnt migrated to tailwindcss v4, so we need to run the migration utility to ensure everything is up to date.
-
-     ```bash
-     pnpx @tailwindcss/upgrade --force
-     ```
-
-5. **Apply consistent styling**
-
-   * Run the following command to apply consistent styling:
-
-     ```bash
-     pnpm run format
-     ```
-
-6. **Check code for any issues**
+4. **Check code for any issues**
 
    * Run the following commands to check for any issues:
 
      ```bash
-     pnpm run lint
      pnpm run check
      ```
