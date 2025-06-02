@@ -1,6 +1,7 @@
 <script lang="ts">
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
   import type { SortingState } from '@tanstack/table-core';
+  import Container from '$lib/components/Container.svelte';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card';
@@ -40,7 +41,7 @@
   onMount(refreshOwnHubs);
 </script>
 
-<div class="container my-8">
+<Container>
   <Card.Header>
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
       Hubs
@@ -54,4 +55,4 @@
   <Card.Content>
     <DataTable {data} {columns} {sorting} />
   </Card.Content>
-</div>
+</Container>

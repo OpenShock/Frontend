@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Container from '$lib/components/Container.svelte';
 </script>
 
-<div class="container mx-auto flex h-full items-center justify-center"></div>
+<Container>Home</Container>

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { accountV1Api } from '$lib/api';
+  import Container from '$lib/components/Container.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import { Button } from '$lib/components/ui/button';
@@ -28,7 +29,7 @@
   let canSubmit = $derived(emailAddress.length > 0 && turnstileResponse != null);
 </script>
 
-<div class="container my-8">
+<Container>
   <Card.Header>
     <Card.Title class="text-3xl">Forgot Password</Card.Title>
   </Card.Header>
@@ -41,4 +42,4 @@
       <Button type="submit" disabled={!canSubmit}>I forgot my passord</Button>
     </form>
   </Card.Content>
-</div>
+</Container>

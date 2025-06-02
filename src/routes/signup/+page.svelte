@@ -1,6 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { accountV2Api } from '$lib/api';
+  import Container from '$lib/components/Container.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
   import EmailInput from '$lib/components/input/EmailInput.svelte';
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
@@ -74,7 +75,7 @@
   </Dialog.Content>
 </Dialog.Root>
 
-<div class="container my-8">
+<Container>
   <Card.Header>
     <Card.Title class="text-3xl">Sign Up</Card.Title>
   </Card.Header>
@@ -109,4 +110,4 @@
       <Button type="submit" disabled={!canSubmit}>Sign Up</Button>
     </form>
   </Card.Content>
-</div>
+</Container>

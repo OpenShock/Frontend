@@ -3,6 +3,7 @@
   import type { ColumnFiltersState, PaginationState, SortingState } from '@tanstack/table-core';
   import { adminApi } from '$lib/api';
   import type { AdminUsersView } from '$lib/api/internal/v1/models/AdminUsersView';
+  import Container from '$lib/components/Container.svelte';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import { Button } from '$lib/components/ui/button';
   import { CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
@@ -70,7 +71,7 @@
   });
 </script>
 
-<div class="container my-8">
+<Container>
   <CardHeader>
     <CardTitle class="flex items-center justify-between space-x-2 text-3xl">
       Users
@@ -112,4 +113,4 @@
       </Pagination.Content>
     {/snippet}
   </Pagination.Root>
-</div>
+</Container>

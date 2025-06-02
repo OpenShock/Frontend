@@ -1,4 +1,8 @@
-<div class="container mx-auto flex h-full items-center justify-start space-x-8">
+<script lang="ts">
+  import Container from '$lib/components/Container.svelte';
+</script>
+
+<Container>
   <div class="flex flex-col">
     <h1 class="text-5xl leading-none font-bold text-gray-800 dark:text-white">
       Welcome to <span class="text-blue-600">OpenShock</span>
@@ -17,4 +21,4 @@
     </div>
   </div>
   <div class="placeholder h-3/4 w-1/2 rounded-none"></div>
-</div>
+</Container>

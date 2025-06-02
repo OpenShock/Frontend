@@ -2,6 +2,7 @@
   import type { SortingState } from '@tanstack/table-core';
   import { adminApi } from '$lib/api';
   import type { WebhookDto } from '$lib/api/internal/v1';
+  import Container from '$lib/components/Container.svelte';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import { Button } from '$lib/components/ui/button';
   import { CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
@@ -29,7 +30,7 @@
 
 <WebhookAddDialog bind:open={addDialogOpen} onAdded={fetchWebhooks} />
 
-<div class="container my-8">
+<Container>
   <CardHeader>
     <CardTitle class="flex items-center justify-between space-x-2 text-3xl">
       Webhooks
@@ -39,4 +40,4 @@
   <CardContent>
     <DataTable {data} {columns} {sorting} />
   </CardContent>
-</div>
+</Container>

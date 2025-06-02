@@ -3,6 +3,7 @@
   import { browser } from '$app/environment';
   import { PUBLIC_DISCORD_INVITE_URL } from '$env/static/public';
   import FlashManager from '$lib/EspTool/FlashManager';
+  import Container from '$lib/components/Container.svelte';
   import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import ChromeLogo from '$lib/components/svg/ChromeLogo.svelte';
@@ -187,7 +188,7 @@
 
 <HelpDialog open={showHelpDialog} onClose={() => (showHelpDialog = false)} />
 
-<div class="container my-8">
+<Container>
   <Card.Header class="flex flex-row justify-between">
     <Card.Title class="text-3xl">Flash Tool</Card.Title>
     {#if isSupported}
@@ -212,7 +213,7 @@
       Loading...
     {/if}
   </Card.Content>
-</div>
+</Container>
 
 <Sheet bind:open={() => terminalOpen, (o) => (terminalOpen = o)}>
   <SheetContent class="flex flex-col">

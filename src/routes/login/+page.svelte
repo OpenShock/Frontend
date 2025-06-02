@@ -1,6 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { accountV2Api } from '$lib/api';
+  import Container from '$lib/components/Container.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
@@ -34,7 +35,7 @@
   );
 </script>
 
-<div class="container my-8">
+<Container>
   <CardHeader>
     <CardTitle class="text-3xl">Login</CardTitle>
   </CardHeader>
@@ -60,4 +61,4 @@
       <a class="text-blue-500 underline" href="/forgot-password">I forgot my password</a>
     </form>
   </CardContent>
-</div>
+</Container>

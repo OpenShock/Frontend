@@ -2,6 +2,7 @@
   import { browser } from '$app/environment';
   import { goto } from '$app/navigation';
   import { accountV1Api, usersApi } from '$lib/api';
+  import Container from '$lib/components/Container.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { UserStore } from '$lib/stores/UserStore';
   import { onMount } from 'svelte';
@@ -25,7 +26,7 @@
 </script>
 
 {#if browser && $UserStore.self}
-  <div class="container mx-auto flex h-full items-center justify-center">
+  <Container>
     <div class="flex flex-col space-y-4">
       <h2 class="h2">Logout</h2>
 
@@ -33,5 +34,5 @@
 
       <button onclick={logout}> Logout </button>
     </div>
-  </div>
+  </Container>
 {/if}

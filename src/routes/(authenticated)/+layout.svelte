@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Container from '$lib/components/Container.svelte';
   import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
   import { Button } from '$lib/components/ui/button';
   import { UserStore } from '$lib/stores/UserStore';
@@ -12,14 +13,14 @@
 </script>
 
 {#if $UserStore.loading}
-  <div class="container mx-auto flex h-full flex-col items-center justify-center gap-4">
+  <Container>
     <LoadingCircle class="size-20" />
-  </div>
+  </Container>
 {:else if $UserStore.self === null}
-  <div class="container mx-auto flex h-full flex-col items-center justify-center gap-4">
+  <Container>
     <h1 class="text-4xl">You need to be logged in to access this page</h1>
     <Button href="/login">Login</Button>
-  </div>
+  </Container>
 {:else}
   {@render children?.()}
 {/if}

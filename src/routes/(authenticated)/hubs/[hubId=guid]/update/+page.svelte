@@ -3,6 +3,7 @@
   import { page } from '$app/state';
   import { hubManagementV1Api } from '$lib/api';
   import type { OtaItem, OtaItemIReadOnlyCollectionLegacyDataResponse } from '$lib/api/internal/v1';
+  import Container from '$lib/components/Container.svelte';
   import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card';
@@ -45,7 +46,7 @@
   });
 </script>
 
-<div class="container my-8">
+<Container>
   <Card.Header>
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">Update Hub</Card.Title>
   </Card.Header>
@@ -108,4 +109,4 @@
       </Table.Body>
     </Table.Root>
   </Card.Content>
-</div>
+</Container>
