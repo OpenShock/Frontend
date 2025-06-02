@@ -1,4 +1,10 @@
-import * as SR from '@microsoft/signalr';
+import {
+  HttpTransportType,
+  type HubConnection,
+  HubConnectionBuilder,
+  HubConnectionState,
+  LogLevel,
+} from '@microsoft/signalr';
 import { browser, dev } from '$app/environment';
 import { PUBLIC_BACKEND_API_DOMAIN } from '$env/static/public';
 import { UserStore } from '$lib/stores/UserStore';
@@ -12,8 +18,8 @@ import {
   handleSignalrOtaInstallSucceeded,
 } from './handlers/OtaInstall';
 
-const signalr_connection = writable<SR.HubConnection | null>(null);
-const signalr_state = writable<SR.HubConnectionState>(SR.HubConnectionState.Disconnected);
+const signalr_connection = writable<HubConnection | null>(null);
+const signalr_state = writable<HubConnectionState>(HubConnectionState.Disconnected);
 
 async function create_signalr_connection() {
   let connection = get(signalr_connection);
@@ -21,32 +27,32 @@ async function create_signalr_connection() {
     return;
   }
 
-  connection = new SR.HubConnectionBuilder()
-    .configureLogging(dev ? SR.LogLevel.Debug : SR.LogLevel.Information)
+  connection = new HubConnectionBuilder()
+    .configureLogging(dev ? LogLevel.Debug : LogLevel.Information)
     .withUrl(`https://${PUBLIC_BACKEND_API_DOMAIN}/1/hubs/user`, {
-      transport: SR.HttpTransportType.WebSockets,
+      transport: HttpTransportType.WebSockets,
       skipNegotiation: true,
     })
     .withAutomaticReconnect([0, 1000, 2000, 5000, 10000, 10000, 15000, 30000, 60000])
     .build();
 
   connection.onclose(() => {
-    signalr_state.set(SR.HubConnectionState.Disconnected);
+    signalr_state.set(HubConnectionState.Disconnected);
   });
 
   connection.onreconnecting(() => {
-    signalr_state.set(SR.HubConnectionState.Reconnecting);
+    signalr_state.set(HubConnectionState.Reconnecting);
   });
 
   connection.onreconnected(() => {
-    signalr_state.set(SR.HubConnectionState.Connected);
+    signalr_state.set(HubConnectionState.Connected);
   });
 
   connection.on('Welcome', (message) => {
     console.log(message);
   });
 
-  connection.on('Log', (log) => {});
+  connection.on('Log', () => { });
 
   connection.on('DeviceStatus', handleSignalrDeviceState);
   connection.on('DeviceUpdate', handleSignalrDeviceUpdate);
@@ -71,11 +77,11 @@ function destroy_signalr_connection() {
 
 export const SignalR_State = {
   subscribe: signalr_state.subscribe,
-} as Readable<SR.HubConnectionState>;
+} as Readable<HubConnectionState>;
 
 export const SignalR_Connection = {
   subscribe: signalr_connection.subscribe,
-} as Readable<SR.HubConnection | null>;
+} as Readable<HubConnection | null>;
 
 export function initializeSignalR() {
   if (!browser) return;
@@ -86,12 +92,12 @@ export function initializeSignalR() {
     } else {
       create_signalr_connection()
         .then(() => {
-          signalr_state.set(SR.HubConnectionState.Connected);
+          signalr_state.set(HubConnectionState.Connected);
         })
         .catch((e) => {
           console.error(e);
           toast.error('Failed to connect to server!');
-          signalr_state.set(SR.HubConnectionState.Disconnected);
+          signalr_state.set(HubConnectionState.Disconnected);
         });
     }
   });
