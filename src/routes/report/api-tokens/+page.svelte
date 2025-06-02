@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { OctagonAlert } from '@lucide/svelte';
+  import OctagonAlert from '@lucide/svelte/icons/octagon-alert';
   import { goto } from '$app/navigation';
   import { apiTokensApi } from '$lib/api';
   import Turnstile from '$lib/components/Turnstile.svelte';

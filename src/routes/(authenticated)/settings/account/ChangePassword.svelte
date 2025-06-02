@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { KeyRound } from '@lucide/svelte';
+  import KeyRound from '@lucide/svelte/icons/key-round';
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
   import { Button } from '$lib/components/ui/button';
   import { validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';

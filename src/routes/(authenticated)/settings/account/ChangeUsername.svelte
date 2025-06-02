@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { User } from '@lucide/svelte';
+  import User from '@lucide/svelte/icons/user';
   import { accountV1Api } from '$lib/api';
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';

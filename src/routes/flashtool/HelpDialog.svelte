@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ArrowDownToLine } from '@lucide/svelte';
+  import ArrowDownToLine from '@lucide/svelte/icons/arrow-down-to-line';
   import { PUBLIC_DISCORD_INVITE_URL } from '$env/static/public';
   import Code from '$lib/components/Code.svelte';
   import Keyboard from '$lib/components/Keyboard.svelte';

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Mail } from '@lucide/svelte';
+  import Mail from '@lucide/svelte/icons/mail';
   import EmailInput from '$lib/components/input/EmailInput.svelte';
   import type { ApiUserSelf } from '$lib/types/ApiUser';
 

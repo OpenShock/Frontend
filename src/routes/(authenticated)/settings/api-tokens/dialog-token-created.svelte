@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { KeyRound } from '@lucide/svelte';
+  import KeyRound from '@lucide/svelte/icons/key-round';
   import CopyInput from '$lib/components/CopyInput.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
 

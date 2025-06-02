@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Zap } from '@lucide/svelte';
+  import Zap from '@lucide/svelte/icons/zap';
   import type { V2UserSharesListItem } from '$lib/api/internal/v2';
   import * as Avatar from '$lib/components/ui/avatar/index.js';
   import { Badge } from '$lib/components/ui/badge';
