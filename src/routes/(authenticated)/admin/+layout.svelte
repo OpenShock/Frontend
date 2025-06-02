@@ -20,7 +20,5 @@
   {@render children?.()}
 {:else}
   <h1 class="text-4xl">You do not have permission to access this page</h1>
-  <Button href="/home">
-    Go Home
-  </Button>
+  <Button href="/home">Go Home</Button>
 {/if}

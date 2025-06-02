@@ -6,11 +6,11 @@
   import RichControlModule from '$lib/components/ControlModules/RichControlModule.svelte';
   import SimpleControlHeader from '$lib/components/ControlModules/SimpleControlHeader.svelte';
   import SimpleControlModule from '$lib/components/ControlModules/SimpleControlModule.svelte';
+  import { Button } from '$lib/components/ui/button';
   import * as Popover from '$lib/components/ui/popover';
   import { ControlDurationDefault, ControlIntensityDefault } from '$lib/constants/ControlConstants';
   import { OwnHubsStore, refreshOwnHubs } from '$lib/stores/HubsStore';
   import { onMount } from 'svelte';
-  import { Button } from '$lib/components/ui/button';
 
   let shockers = $derived(Array.from($OwnHubsStore).flatMap(([, hub]) => hub.shockers));
 
@@ -33,26 +33,18 @@
       <Popover.Root>
         <Popover.Trigger><Layers /></Popover.Trigger>
         <Popover.Content class="flex">
-            <Button variant="ghost"
-              onclick={() => (moduleType = ModuleType.ClassicControlModule)}
-            >
-              Classic
-            </Button>
-            <Button variant="ghost"
-              onclick={() => (moduleType = ModuleType.RichControlModule)}
-            >
-              Rich
-            </Button>
-            <Button variant="ghost"
-              onclick={() => (moduleType = ModuleType.SimpleControlModule)}
-            >
-              Simple
-            </Button>
-            <Button variant="ghost"
-              onclick={() => (moduleType = ModuleType.MapControlModule)}
-            >
-              Map
-            </Button>
+          <Button variant="ghost" onclick={() => (moduleType = ModuleType.ClassicControlModule)}>
+            Classic
+          </Button>
+          <Button variant="ghost" onclick={() => (moduleType = ModuleType.RichControlModule)}>
+            Rich
+          </Button>
+          <Button variant="ghost" onclick={() => (moduleType = ModuleType.SimpleControlModule)}>
+            Simple
+          </Button>
+          <Button variant="ghost" onclick={() => (moduleType = ModuleType.MapControlModule)}>
+            Map
+          </Button>
         </Popover.Content>
       </Popover.Root>
       <!-- Options button -->

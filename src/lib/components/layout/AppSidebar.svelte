@@ -147,7 +147,7 @@
         title: 'Account Settings',
         Icon: Settings,
         href: '/settings/account',
-      }
+      },
     ],
   };
 

@@ -49,6 +49,4 @@
   validate={validatePasswordMatch(passwordConfirm, password)}
 />
 
-<Button type="submit" disabled={!canSubmitPassword}>
-  Change Password
-</Button>
+<Button type="submit" disabled={!canSubmitPassword}>Change Password</Button>
