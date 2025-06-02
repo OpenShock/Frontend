@@ -1,11 +1,9 @@
 <script lang="ts">
   import { Microchip, TriangleAlert } from '@lucide/svelte';
   import FlashManager from '$lib/EspTool/FlashManager';
-  import { DownloadFirmwareBinary, GetFirmwareBinaryHash } from '$lib/api/firmwareCDN';
+  import { DownloadAndVerifyBoardBinary } from '$lib/api/firmwareCDN';
   import { Button } from '$lib/components/ui/button';
   import { Progress } from '$lib/components/ui/progress';
-  import WordArray from 'crypto-js/lib-typedarrays';
-  import HashMD5 from 'crypto-js/md5';
 
   interface Props {
     version: string;
@@ -47,28 +45,10 @@
 
     progressName = 'Downloading firmware...';
     progressPercent = undefined;
-    const firmware = await DownloadFirmwareBinary(version, board, progressCallback);
+    const firmware = await DownloadAndVerifyBoardBinary(version, board, 'firmware.bin');
     if (!firmware) {
       progressName = null;
       error = 'Failed to download firmware.';
-      return;
-    }
-
-    progressName = 'Fetching firmware hash...';
-    progressPercent = undefined;
-    const firmwareHash = await GetFirmwareBinaryHash(version, board);
-    if (!firmwareHash) {
-      progressName = null;
-      error = 'Failed to get firmware hash.';
-      return;
-    }
-
-    progressName = 'Verifying firmware hash...';
-    progressPercent = undefined;
-    const firmwareHashVerified = HashMD5(WordArray.create(firmware)).toString();
-    if (firmwareHashVerified !== firmwareHash) {
-      progressName = null;
-      error = 'Firmware hash verification failed.';
       return;
     }
 

@@ -316,11 +316,10 @@ export default class FlashManager {
     }
   }
 
-  async flash(data: ArrayBuffer, eraseAll: boolean, onProgress: (progress: number) => void) {
+  async flash(data: Uint8Array, eraseAll: boolean, onProgress: (progress: number) => void) {
     if (!this.loader) return false;
 
-    function arrayBufferToString(buffer: ArrayBuffer) {
-      const array = new Uint8Array(buffer);
+    function arrayBufferToString(array: Uint8Array) {
       let str = '';
       for (let i = 0; i < array.length; ++i) {
         str += String.fromCharCode(array[i]);
