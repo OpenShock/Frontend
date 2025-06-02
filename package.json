@@ -65,7 +65,7 @@
 		"vitest": "^3.1.4"
 	},
 	"dependencies": {
-		"esptool-js": "^0.5.4",
+		"esptool-js": "^0.5.5",
 		"vite": "^6.3.5"
 	},
 	"engines": {
@@ -84,7 +84,7 @@
 		],
 		"patchedDependencies": {
 			"@microsoft/signalr@8.0.7": "patches/@microsoft__signalr@8.0.7.patch",
-			"esptool-js@0.5.4": "patches/esptool-js@0.5.4.patch"
+			"esptool-js@0.5.5": "patches/esptool-js@0.5.5.patch"
 		},
 		"overrides": {
 			"cookie@<0.7.0": ">=0.7.0"

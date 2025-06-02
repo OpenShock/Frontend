@@ -11,17 +11,17 @@ patchedDependencies:
   '@microsoft/signalr@8.0.7':
     hash: ae77219bc9dd03b77011df9a4d1a1b670685d7fabb7990775c94dde1b4b2a328
     path: patches/@microsoft__signalr@8.0.7.patch
-  esptool-js@0.5.4:
-    hash: 7606a7af4bb276824630e79efdf45cf3bcde51b23560e1ddf4182b0189adc9a1
-    path: patches/esptool-js@0.5.4.patch
+  esptool-js@0.5.5:
+    hash: cad49750a8c45073dfbdcb5cdeba79b369a95609a98eebad2a755a2ef3a6f441
+    path: patches/esptool-js@0.5.5.patch
 
 importers:
 
   .:
     dependencies:
       esptool-js:
-        specifier: ^0.5.4
-        version: 0.5.4(patch_hash=7606a7af4bb276824630e79efdf45cf3bcde51b23560e1ddf4182b0189adc9a1)
+        specifier: ^0.5.5
+        version: 0.5.5(patch_hash=cad49750a8c45073dfbdcb5cdeba79b369a95609a98eebad2a755a2ef3a6f441)
       vite:
         specifier: ^6.3.5
         version: 6.3.5(@types/node@22.15.21)(jiti@2.4.2)(lightningcss@1.30.1)
@@ -1520,8 +1520,8 @@ packages:
     engines: {node: '>=4'}
     hasBin: true
 
-  esptool-js@0.5.4:
-    resolution: {integrity: sha512-B+XcbbPBjfmnMHVGktGlNI85BbEIQs02y4hoYuqM25q6yVPqLE3bxce/KWtKXH4IGruWTkEujqdKxNeWEV2BDg==}
+  esptool-js@0.5.5:
+    resolution: {integrity: sha512-bDAfypqw32BREq0Ve6QE8ADBHMzqwCrG/GN8GYZAhnQEjKa4JBWyr+yHa4jlmutKPQAT00/Tzy3LorQOzFS3IA==}
 
   esquery@1.6.0:
     resolution: {integrity: sha512-ca9pw9fomFcKPvFLXhBKUK90ZvGibiGOvRJNbjljY7s7uq/5YO4BOzcYtJqExdx99rF6aAcnRxHmcUHcz6sQsg==}
@@ -4217,7 +4217,7 @@ snapshots:
 
   esprima@4.0.1: {}
 
-  esptool-js@0.5.4(patch_hash=7606a7af4bb276824630e79efdf45cf3bcde51b23560e1ddf4182b0189adc9a1):
+  esptool-js@0.5.5(patch_hash=cad49750a8c45073dfbdcb5cdeba79b369a95609a98eebad2a755a2ef3a6f441):
     dependencies:
       atob-lite: 2.0.0
       pako: 2.1.0
