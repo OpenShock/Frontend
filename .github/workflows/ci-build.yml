@@ -42,14 +42,10 @@ jobs:
         shell: bash
         run: pnpx playwright install --with-deps
 
-      - name: Spoof host
-        shell: bash
-        run: |
-          echo "127.0.0.1 local.openshock.app" | sudo tee -a /etc/hosts
-
       - name: Test
         shell: bash
-        run: pnpm test
+        #run: pnpm test # TODO: Run dev full infra containers locally, seed them with data, and run tests against them. (alotta work, but worth it)
+        run: pnpm test:unit
 
   build-container:
     runs-on: ubuntu-latest
