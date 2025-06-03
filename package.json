@@ -70,11 +70,11 @@
 		"vite": "^6.3.5"
 	},
 	"engines": {
-		"node": ">=22.14.0",
+		"node": ">=22.15.1",
 		"pnpm": ">=10.11.0"
 	},
 	"volta": {
-		"node": "22.14.0"
+		"node": "22.15.1"
 	},
 	"packageManager": "pnpm@10.11.0",
 	"pnpm": {
