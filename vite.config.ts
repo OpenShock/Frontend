@@ -61,7 +61,7 @@ export default defineConfig(async ({ command, mode, isPreview }) => {
   const isProduction = mode === 'production' && (isTruthy(env.DOCKER) || isTruthy(env.CF_PAGES));
 
   // If we are running locally, ensure that local.{PUBLIC_SITE_DOMAIN} resolves to localhost, and then use mkcert to generate a certificate
-  const useLocalRedirect = isLocalServe && !isProduction && !isTruthy(env.CI);
+  const useLocalRedirect = isLocalServe && !isProduction && (isTruthy(env.CI) ? (isPreview ?? false) : true);
 
   return defineConfig({
     plugins: [...(useLocalRedirect ? [mkcert()] : []), sveltekit(), tailwindcss()],
