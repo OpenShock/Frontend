@@ -42,10 +42,14 @@ jobs:
         shell: bash
         run: pnpx playwright install --with-deps
 
+      - name: Spoof host
+        shell: bash
+        run: |
+          echo "127.0.0.1 local.openshock.app" | sudo tee -a /etc/hosts
+
       - name: Test
         shell: bash
-        #run: pnpm test # TODO: Fix intehration tests
-        run: pnpm test:unit
+        run: pnpm test
 
   build-container:
     runs-on: ubuntu-latest
