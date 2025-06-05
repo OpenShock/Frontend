@@ -24,7 +24,7 @@
     buttonText = `Hold for ${timeLeft.toFixed(1)}s`;
   }
 
-  let timer: TimeoutHandle | null = null;
+  let timer = $state<TimeoutHandle | null>(null);
   let interval: IntervalHandle | null = null;
   function stopTimers() {
     if (timer) {
