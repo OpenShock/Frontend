@@ -28,7 +28,7 @@
     label,
     placeholder,
     autocomplete,
-    value = $bindable(''),
+    value = $bindable(),
     validationResult,
     Icon,
     button,
