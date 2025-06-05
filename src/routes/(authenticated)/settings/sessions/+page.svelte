@@ -8,7 +8,7 @@
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { onDestroy, onMount } from 'svelte';
+  import { onMount } from 'svelte';
   import { type Session, columns } from './columns';
 
   function apiSessionToTableSession(session: LoginSessionResponse): Session {
@@ -34,18 +34,17 @@
       .catch(handleApiError);
   }
 
-  let interval: ReturnType<typeof setInterval>;
   onMount(() => {
     fetchSessions();
+
     // Update timestamps every 5 seconds
-    interval = setInterval(() => {
+    const interval = setInterval(() => {
       if (data) {
         data = Object.assign([], data);
       }
     }, 5000);
-  });
-  onDestroy(() => {
-    clearInterval(interval);
+
+    return () => clearInterval(interval);
   });
 </script>
 

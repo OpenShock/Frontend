@@ -10,7 +10,7 @@
   import { Input } from '$lib/components/ui/input';
   import * as Pagination from '$lib/components/ui/pagination';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { onDestroy, onMount } from 'svelte';
+  import { onMount } from 'svelte';
   import { columns } from './columns';
 
   type FilterOpType =
@@ -58,16 +58,15 @@
       .catch(handleApiError);
   }
 
-  let interval: ReturnType<typeof setInterval>;
   onMount(() => {
     fetchUsers();
+
     // Update timestamps every minute
-    interval = setInterval(() => {
+    const interval = setInterval(() => {
       data = Object.assign([], data);
     }, 60000);
-  });
-  onDestroy(() => {
-    clearInterval(interval);
+
+    return () => clearInterval(interval);
   });
 </script>
 
