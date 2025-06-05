@@ -37,16 +37,16 @@
   }: Props = $props();
 </script>
 
-<label for={inputId} class="label w-full">
+<label for={inputId} class="w-full">
   <span>{label}</span>
-  <div class="relative group input-group input-group-divider flex grow flex-row items-center gap-2">
+  <div class="relative flex grow flex-row items-center gap-2">
     {#if Icon}
       <Icon />
     {/if}
     <Input
       id={inputId}
       {type}
-      class="input grow"
+      class="grow"
       title={label}
       {placeholder}
       {autocomplete}
@@ -66,7 +66,7 @@
     {#if button}
       <Button
         type="button"
-        class={button.class ?? 'variant-filled-primary disabled:opacity-50'}
+        class={button.class ?? 'disabled:opacity-50'}
         onclick={button.onClick}
         disabled={button.submits &&
           (validationResult === null || (validationResult && !validationResult.valid))}
