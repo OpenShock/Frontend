@@ -18,7 +18,6 @@
     Icon?: AnyComponent;
     button?: ButtonSettings;
     popup?: Snippet;
-    oninput?: (input: string) => void | undefined;
   }
 
   const id = $props.id();
@@ -34,15 +33,7 @@
     Icon,
     button,
     popup,
-    oninput,
   }: Props = $props();
-
-  function handleInput(event: Event & { currentTarget: HTMLInputElement }) {
-    value = event.currentTarget.value;
-    if (oninput) {
-      oninput(value);
-    }
-  }
 </script>
 
 <label for={inputId} class="label w-full">
@@ -58,8 +49,7 @@
       title={label}
       {placeholder}
       {autocomplete}
-      {value}
-      oninput={handleInput}
+      bind:value
       aria-invalid={validationResult ? !validationResult.valid : undefined}
       aria-describedby={validationResult ? validationId : undefined}
     />

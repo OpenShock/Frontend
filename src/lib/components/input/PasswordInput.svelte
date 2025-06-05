@@ -19,7 +19,6 @@
     validate?: boolean | 'string' | 'pwned' | ValidationResult | null;
     showStrengthMeter?: boolean;
     Icon?: AnyComponent;
-    oninput?: (value: string) => void | undefined;
   }
 
   let {
@@ -32,7 +31,6 @@
     validate = false,
     showStrengthMeter = false,
     Icon,
-    oninput,
   }: Props = $props();
 
   let validationResult = $state<ValidationResult | null>(null);
@@ -116,7 +114,6 @@
     class: 'cursor-pointer',
     onClick: () => (valueShown = !valueShown),
   }}
-  {oninput}
 >
   {#snippet popup()}
     {#if showStrengthMeter}

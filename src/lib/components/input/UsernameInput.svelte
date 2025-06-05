@@ -22,7 +22,6 @@
     validate?: boolean;
     Icon?: AnyComponent;
     button?: ButtonSettings;
-    oninput?: (value: string) => void | undefined;
   }
 
   let {
@@ -34,7 +33,6 @@
     validate = true,
     Icon,
     button,
-    oninput,
   }: Props = $props();
 
   let validationResult = $state<ValidationResult | null>(null);
@@ -87,13 +85,4 @@
   });
 </script>
 
-<TextInput
-  {label}
-  {placeholder}
-  {autocomplete}
-  bind:value
-  {validationResult}
-  {Icon}
-  {button}
-  {oninput}
-/>
+<TextInput {label} {placeholder} {autocomplete} bind:value {validationResult} {Icon} {button} />
