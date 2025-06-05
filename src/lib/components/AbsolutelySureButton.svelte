@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { IntervalHandle, TimeoutHandle } from '$lib/types/WAPI';
   import { onDestroy } from 'svelte';
 
   interface Props {
@@ -8,10 +9,10 @@
 
   let { text, onconfirm }: Props = $props();
 
-  let clickedAt = $state<number | undefined>();
+  let clickedAt = $state<number | null>(null);
   let buttonText = $state<string>(text);
   function updateText() {
-    if (clickedAt === undefined) {
+    if (clickedAt === null) {
       buttonText = text;
       return;
     }
@@ -23,18 +24,18 @@
     buttonText = `Hold for ${timeLeft.toFixed(1)}s`;
   }
 
-  let timer = $state<ReturnType<typeof setTimeout> | undefined>();
-  let interval = $state<ReturnType<typeof setInterval> | undefined>();
+  let timer: TimeoutHandle | null = null;
+  let interval: IntervalHandle | null = null;
   function stopTimers() {
     if (timer) {
       clearTimeout(timer);
-      timer = undefined;
+      timer = null;
     }
     if (interval) {
       clearInterval(interval);
-      interval = undefined;
+      interval = null;
     }
-    clickedAt = undefined;
+    clickedAt = null;
     updateText();
   }
   function startConfirm() {

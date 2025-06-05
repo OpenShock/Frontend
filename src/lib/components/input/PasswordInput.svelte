@@ -5,6 +5,7 @@
   import { validatePassword } from '$lib/inputvalidation/passwordValidator';
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import type { ValidationResult } from '$lib/types/ValidationResult';
+  import type { TimeoutHandle } from '$lib/types/WAPI';
   import type { FullAutoFill } from 'svelte/elements';
   import TextInput from './TextInput.svelte';
   import PasswordStrengthMeter from './impl/PasswordStrengthMeter.svelte';
@@ -34,7 +35,7 @@
   }: Props = $props();
 
   let validationResult = $state<ValidationResult | null>(null);
-  let passwordDebounce: ReturnType<typeof setTimeout> | null = null;
+  let passwordDebounce: TimeoutHandle | null = null;
   function checkHIBP(str: string) {
     // Stop the previous debounce timer if it exists
     if (passwordDebounce) clearTimeout(passwordDebounce);

@@ -11,6 +11,7 @@
   } from '$lib/inputvalidation/usernameValidator';
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import type { ValidationResult } from '$lib/types/ValidationResult';
+  import type { TimeoutHandle } from '$lib/types/WAPI';
   import type { FullAutoFill } from 'svelte/elements';
 
   interface Props {
@@ -36,7 +37,7 @@
   }: Props = $props();
 
   let validationResult = $state<ValidationResult | null>(null);
-  let usernameDebounce: ReturnType<typeof setTimeout> | null = null;
+  let usernameDebounce: TimeoutHandle | null = null;
   function checkUsernameAvailability() {
     // Stop the previous debounce timer if it exists
     if (usernameDebounce) clearTimeout(usernameDebounce);
