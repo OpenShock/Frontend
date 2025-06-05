@@ -4,7 +4,7 @@
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import { GetValResColor, type ValidationResult } from '$lib/types/ValidationResult';
   import type { Snippet } from 'svelte';
-  import type { FullAutoFill } from 'svelte/elements';
+  import type { FocusEventHandler, FullAutoFill } from 'svelte/elements';
   import type { ButtonSettings } from './impl/ButtonSettings';
 
   interface Props {
@@ -17,6 +17,7 @@
     Icon?: AnyComponent;
     button?: ButtonSettings;
     popup?: Snippet;
+    onblur?: FocusEventHandler<HTMLInputElement> | null;
   }
 
   const id = $props.id();
@@ -32,6 +33,7 @@
     Icon,
     button,
     popup,
+    onblur,
   }: Props = $props();
 </script>
 
@@ -49,6 +51,7 @@
       {placeholder}
       {autocomplete}
       bind:value
+      {onblur}
       aria-invalid={validationResult ? !validationResult.valid : undefined}
       aria-describedby={validationResult ? validationId : undefined}
     />

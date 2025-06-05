@@ -10,7 +10,7 @@
   let { percent, text, color } = $derived(getPasswordStrength(password));
 </script>
 
-<div class="card w-72 p-4 shadow-xl">
+<div class="card w-72 p-4 shadow-xl" aria-hidden="true">
   <div class="flex flex-row items-center space-x-1">
     <p class="text-sm text-gray-500">Password strength:</p>
     <p class={`text-sm text-${color}`}>{text}</p>

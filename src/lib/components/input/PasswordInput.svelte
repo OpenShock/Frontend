@@ -100,7 +100,28 @@
   $effect(() => {
     valid = validationResult?.valid ?? false;
   });
+
+  // Logic to hide the popup after 3 seconds of inactivity
+  let showPopup = $state(false);
+  let typingTimeout: ReturnType<typeof setTimeout> | null = null;
+  $effect(() => {
+    // If value is not empty, set isTyping to true, then start a timeout to set it to false after 3 seconds
+    if (showStrengthMeter && value.length) {
+      showPopup = true;
+      if (typingTimeout) clearTimeout(typingTimeout);
+      typingTimeout = setTimeout(() => {
+        showPopup = false;
+      }, 500);
+    } else {
+      // If value is empty, set isTyping to false
+      showPopup = false;
+    }
+  });
 </script>
+
+{#snippet popup()}
+  <PasswordStrengthMeter password={value} />
+{/snippet}
 
 <TextInput
   type={valueShown ? 'text' : 'password'}
@@ -115,10 +136,6 @@
     class: 'cursor-pointer',
     onClick: () => (valueShown = !valueShown),
   }}
->
-  {#snippet popup()}
-    {#if showStrengthMeter}
-      <PasswordStrengthMeter password={value} />
-    {/if}
-  {/snippet}
-</TextInput>
+  onblur={() => (showPopup = false)}
+  popup={showPopup ? popup : undefined}
+/>
