@@ -1,6 +1,5 @@
 // userAgent.test.ts
-
-import { describe, it, expect, test } from 'vitest';
+import { describe, expect, it, test } from 'vitest';
 import { getReadableUserAgentName } from './userAgent';
 
 describe('getReadableUserAgentName', () => {

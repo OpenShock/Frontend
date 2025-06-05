@@ -52,7 +52,7 @@ async function create_signalr_connection() {
     console.log(message);
   });
 
-  connection.on('Log', () => { });
+  connection.on('Log', () => {});
 
   connection.on('DeviceStatus', handleSignalrDeviceState);
   connection.on('DeviceUpdate', handleSignalrDeviceUpdate);
