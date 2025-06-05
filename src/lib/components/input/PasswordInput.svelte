@@ -1,13 +1,13 @@
 <script lang="ts">
   import { Eye, EyeOff } from '@lucide/svelte';
   import { checkPwnedCount } from '$lib/api/pwnedPasswords';
+  import TextInput from '$lib/components/input/TextInput.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { validatePassword } from '$lib/inputvalidation/passwordValidator';
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import type { ValidationResult } from '$lib/types/ValidationResult';
   import type { TimeoutHandle } from '$lib/types/WAPI';
   import type { FullAutoFill } from 'svelte/elements';
-  import TextInput from './TextInput.svelte';
   import PasswordStrengthMeter from './impl/PasswordStrengthMeter.svelte';
 
   interface Props {

@@ -1,4 +1,4 @@
-import type { ControlType } from './ControlType';
+import type { ControlType } from '$lib/signalr/models/ControlType';
 
 export interface Control {
   id: string;

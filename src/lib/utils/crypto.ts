@@ -1,4 +1,4 @@
-import { EncodeString } from './encoding';
+import { EncodeString } from '$lib/utils/encoding';
 
 export const ArrayBufferToHex = (buffer: ArrayBuffer) =>
   Array.from(new Uint8Array(buffer))

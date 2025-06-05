@@ -1,4 +1,4 @@
-import type { TwColor } from './Tailwind';
+import type { TwColor } from '$lib/types/Tailwind';
 
 export type ValidationResult = {
   valid: boolean;

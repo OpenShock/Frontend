@@ -1,6 +1,6 @@
 import { FetchError, RequiredError, ResponseError } from '$lib/api/internal/v1';
+import type { ProblemDetails } from '$lib/errorhandling/ProblemDetails';
 import { toast } from 'svelte-sonner';
-import type { ProblemDetails } from './ProblemDetails';
 
 export type HandleProblemCallback = (problem: ProblemDetails) => boolean;
 

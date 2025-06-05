@@ -3,11 +3,11 @@
   import { dev } from '$app/environment';
   import { PUBLIC_TURNSTILE_DEV_BYPASS_VALUE, PUBLIC_TURNSTILE_SITE_KEY } from '$env/static/public';
   import CloudflareLogo from '$lib/components/svg/CloudflareLogo.svelte';
+  import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
   import { ColorSchemeStore } from '$lib/stores/ColorSchemeStore';
   import type { TurnstileInstance } from '$lib/types/TurnstileInstance';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
-  import LoadingCircle from './svg/LoadingCircle.svelte';
 
   interface Props {
     action: string;

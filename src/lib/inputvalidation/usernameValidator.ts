@@ -1,6 +1,6 @@
 import { UsernameAvailability } from '$lib/api/internal/v2';
+import { isEmailAddress } from '$lib/inputvalidation/emailValidator';
 import type { ValidationResult } from '$lib/types/ValidationResult';
-import { isEmailAddress } from './emailValidator';
 
 /* eslint-disable no-misleading-character-class */
 

@@ -10,7 +10,7 @@
   import { SignalR_Connection } from '$lib/signalr';
   import { ControlType } from '$lib/signalr/models/ControlType';
   import { serializeControlMessages } from '$lib/signalr/serializers/Control';
-  import ActionButtons from './Internal/ActionButtons.svelte';
+  import ActionButtons from './impl/ActionButtons.svelte';
 
   interface Props {
     shocker: ShockerResponse;

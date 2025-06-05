@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Moon, Sun } from '@lucide/svelte';
+  import AbsolutelySureButton from '$lib/components/AbsolutelySureButton.svelte';
   import { buttonVariants } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
@@ -9,7 +10,6 @@
     willActivateLightMode,
   } from '$lib/stores/ColorSchemeStore';
   import { toast } from 'svelte-sonner';
-  import AbsolutelySureButton from './AbsolutelySureButton.svelte';
 
   let pendingScheme = $state<'light' | 'dark' | 'system' | undefined>();
   function handleOpenChanged(open: boolean) {
