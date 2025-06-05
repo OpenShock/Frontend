@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Layers, Settings } from '@lucide/svelte';
+  import Container from '$lib/components/Container.svelte';
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import MapControlModule from '$lib/components/ControlModules/MapControlModule.svelte';
   import { ModuleType } from '$lib/components/ControlModules/ModuleType';
@@ -26,31 +27,33 @@
 {#if $OwnHubsStore == null}
   <p>Loading...</p>
 {:else}
-  <div class="flex items-center justify-between">
-    <h1 class="text-2xl font-bold">Shockers</h1>
-    <div>
-      <!-- Mode button -->
-      <Popover.Root>
-        <Popover.Trigger><Layers /></Popover.Trigger>
-        <Popover.Content class="flex">
-          <Button variant="ghost" onclick={() => (moduleType = ModuleType.ClassicControlModule)}>
-            Classic
-          </Button>
-          <Button variant="ghost" onclick={() => (moduleType = ModuleType.RichControlModule)}>
-            Rich
-          </Button>
-          <Button variant="ghost" onclick={() => (moduleType = ModuleType.SimpleControlModule)}>
-            Simple
-          </Button>
-          <Button variant="ghost" onclick={() => (moduleType = ModuleType.MapControlModule)}>
-            Map
-          </Button>
-        </Popover.Content>
-      </Popover.Root>
-      <!-- Options button -->
-      <Button variant="ghost" class="p-0!" aria-label="Options">
-        <Settings />
-      </Button>
+  <Container>
+    <div class="flex">
+      <h1 class="text-2xl font-bold">Shockers</h1>
+      <div>
+        <!-- Mode button -->
+        <Popover.Root>
+          <Popover.Trigger><Layers /></Popover.Trigger>
+          <Popover.Content class="flex">
+            <Button variant="ghost" onclick={() => (moduleType = ModuleType.ClassicControlModule)}>
+              Classic
+            </Button>
+            <Button variant="ghost" onclick={() => (moduleType = ModuleType.RichControlModule)}>
+              Rich
+            </Button>
+            <Button variant="ghost" onclick={() => (moduleType = ModuleType.SimpleControlModule)}>
+              Simple
+            </Button>
+            <Button variant="ghost" onclick={() => (moduleType = ModuleType.MapControlModule)}>
+              Map
+            </Button>
+          </Popover.Content>
+        </Popover.Root>
+        <!-- Options button -->
+        <Button variant="ghost" class="p-0!" aria-label="Options">
+          <Settings />
+        </Button>
+      </div>
     </div>
     <hr class="border-2" />
     {#if moduleType === ModuleType.SimpleControlModule}
@@ -73,5 +76,5 @@
         {/each}
       </div>
     {/if}
-  </div>
+  </Container>
 {/if}

@@ -77,7 +77,7 @@
 
 <Container>
   <Card.Header>
-    <Card.Title class="text-3xl">Sign Up</Card.Title>
+    <Card.Title class="text-3xl text-nowrap">Sign Up</Card.Title>
   </Card.Header>
   <Card.Content>
     <form class="flex flex-col space-y-2" onsubmit={handleSubmission}>
