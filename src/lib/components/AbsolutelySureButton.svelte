@@ -49,11 +49,9 @@
 </script>
 
 <button
-  onmousedown={startConfirm}
-  ontouchstart={startConfirm}
-  onmouseup={stopTimers}
-  ontouchend={stopTimers}
-  onmouseleave={stopTimers}
+  onpointerdown={startConfirm}
+  onpointerup={stopTimers}
+  onpointerleave={stopTimers}
   class={`h-10 rounded-md bg-[#7f1d1d] px-4 py-2 text-sm font-medium whitespace-nowrap select-none hover:bg-[#731a1a] focus:outline-hidden ${timer ? 'violent-shake' : ''}`}
 >
   {buttonText}
