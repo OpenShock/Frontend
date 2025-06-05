@@ -21,6 +21,9 @@
     oninput?: (input: string) => void | undefined;
   }
 
+  const id = $props.id();
+  const inputId = id + '-input';
+  const validationId = id + '-validation';
   let {
     type = 'text',
     label,
@@ -42,55 +45,56 @@
   }
 </script>
 
-<label class="label w-full">
+<label for={inputId} class="label w-full">
   <span>{label}</span>
-  <div class="flex flex-row items-center gap-2">
-    <div class="input-group input-group-divider flex grow flex-row gap-2">
-      {#if Icon}
-        <Icon />
-      {/if}
-      <Input
-        {type}
-        class="input grow"
-        title={label}
-        {placeholder}
-        {autocomplete}
-        {value}
-        oninput={handleInput}
-      />
-      {#if button}
-        <Button
-          type="button"
-          class={button.class ?? 'variant-filled-primary disabled:opacity-50'}
-          onclick={button.onClick}
-          disabled={button.submits &&
-            (validationResult === null || (validationResult && !validationResult.valid))}
-        >
-          {#if 'Icon' in button}
-            <button.Icon />
-          {:else if 'text' in button}
-            {button.text}
-          {/if}
-        </Button>
-      {/if}
-    </div>
+  <div class="input-group input-group-divider flex grow flex-row items-center gap-2">
+    {#if Icon}
+      <Icon />
+    {/if}
+    <Input
+      id={inputId}
+      {type}
+      class="input grow"
+      title={label}
+      {placeholder}
+      {autocomplete}
+      {value}
+      oninput={handleInput}
+      aria-invalid={validationResult ? !validationResult.valid : undefined}
+      aria-describedby={validationResult ? validationId : undefined}
+    />
+    {#if button}
+      <Button
+        type="button"
+        class={button.class ?? 'variant-filled-primary disabled:opacity-50'}
+        onclick={button.onClick}
+        disabled={button.submits &&
+          (validationResult === null || (validationResult && !validationResult.valid))}
+      >
+        {#if 'Icon' in button}
+          <button.Icon />
+        {:else if 'text' in button}
+          {button.text}
+        {/if}
+      </Button>
+    {/if}
   </div>
   {#if validationResult?.message}
-    <p class="text-xs text-{GetValResColor(validationResult)} mt-0!">
+    <p id={validationId} class="text-xs text-{GetValResColor(validationResult)} mt-0! h-4 truncate">
       {validationResult.message}
       {#if validationResult.link}
         <a
           href={validationResult.link.href}
           target="_blank"
           rel="noreferrer"
-          class="text-xs text-blue-500 underline"
+          class="text-blue-500 underline"
         >
           {validationResult.link.text}
         </a>
       {/if}
     </p>
   {:else}
-    <div class="h-3"></div>
+    <div class="h-4"></div>
   {/if}
   {#if popup}
     <Popover.Root>
