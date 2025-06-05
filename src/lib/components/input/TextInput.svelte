@@ -1,7 +1,6 @@
 <script lang="ts">
   import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input';
-  import * as Popover from '$lib/components/ui/popover';
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import { GetValResColor, type ValidationResult } from '$lib/types/ValidationResult';
   import type { Snippet } from 'svelte';
@@ -38,7 +37,7 @@
 
 <label for={inputId} class="label w-full">
   <span>{label}</span>
-  <div class="input-group input-group-divider flex grow flex-row items-center gap-2">
+  <div class="relative group input-group input-group-divider flex grow flex-row items-center gap-2">
     {#if Icon}
       <Icon />
     {/if}
@@ -53,6 +52,14 @@
       aria-invalid={validationResult ? !validationResult.valid : undefined}
       aria-describedby={validationResult ? validationId : undefined}
     />
+    {#if popup}
+      <div
+        class="absolute left-0 top-full mt-1 w-full z-10 bg-white dark:bg-gray-800 shadow-lg rounded-md border border-gray-200 dark:border-gray-700 p-3"
+        role="tooltip"
+      >
+        {@render popup()}
+      </div>
+    {/if}
     {#if button}
       <Button
         type="button"
@@ -85,12 +92,5 @@
     </p>
   {:else}
     <div class="h-4"></div>
-  {/if}
-  {#if popup}
-    <Popover.Root>
-      <Popover.Content>
-        {@render popup()}
-      </Popover.Content>
-    </Popover.Root>
   {/if}
 </label>
