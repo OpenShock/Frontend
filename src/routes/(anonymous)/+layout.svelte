@@ -8,7 +8,7 @@
 
   $effect(() => {
     if (!$UserStore.loading && $UserStore.self) {
-      goto(page.url.searchParams.get('redirect') ?? '/login');
+      goto(page.url.searchParams.get('redirect') ?? '/home');
     }
   });
 </script>
