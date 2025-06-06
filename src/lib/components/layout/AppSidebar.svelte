@@ -253,7 +253,7 @@
 <!-- group-data-[collapsible=icon]:opacity-0 -->
 <Sidebar.Root collapsible="icon">
   <Sidebar.Header>
-    <a href={$UserStore.self ? '/home' : '/'}>
+    <a href={currentUser ? '/home' : '/'}>
       <span class="pointer-events-none flex">
         <img class="ml-[0.667px] h-7.5" src="/IconSpinning.svg" alt="OpenShock Logo" />
         <span class="ml-1.5 grow">
