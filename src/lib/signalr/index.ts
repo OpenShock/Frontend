@@ -5,9 +5,8 @@ import {
   HubConnectionState,
   LogLevel,
 } from '@microsoft/signalr';
-import { browser, dev } from '$app/environment';
+import { dev } from '$app/environment';
 import { PUBLIC_BACKEND_API_DOMAIN } from '$env/static/public';
-import { UserStore } from '$lib/stores/UserStore';
 import { toast } from 'svelte-sonner';
 import { type Readable, get, writable } from 'svelte/store';
 import { handleSignalrDeviceState } from './handlers/DeviceStatus';
@@ -21,7 +20,7 @@ import {
 const signalr_connection = writable<HubConnection | null>(null);
 const signalr_state = writable<HubConnectionState>(HubConnectionState.Disconnected);
 
-async function create_signalr_connection() {
+export async function initializeSignalR() {
   let connection = get(signalr_connection);
   if (connection) {
     return;
@@ -62,16 +61,30 @@ async function create_signalr_connection() {
 
   signalr_connection.set(connection);
 
-  await connection.start();
+  try {
+    await connection.start();
+    signalr_state.set(HubConnectionState.Connected);
+  } catch (error) {
+    console.error(error);
+    toast.error('Failed to connect to server!');
+    signalr_state.set(HubConnectionState.Disconnected);
+  }
 }
 
-function destroy_signalr_connection() {
-  if (signalr_connection) {
+export async function destroySignalR() {
+  if (!signalr_connection) return;
+
+  try {
     const connection = get(signalr_connection);
     if (connection) {
-      connection.stop();
-      signalr_connection.set(null);
+      await connection.stop();
     }
+  } catch (error) {
+    console.error(error);
+    toast.error('Encountered error while disconnecting from server!');
+  } finally {
+    signalr_connection.set(null);
+    signalr_state.set(HubConnectionState.Disconnected);
   }
 }
 
@@ -82,23 +95,3 @@ export const SignalR_State = {
 export const SignalR_Connection = {
   subscribe: signalr_connection.subscribe,
 } as Readable<HubConnection | null>;
-
-export function initializeSignalR() {
-  if (!browser) return;
-
-  UserStore.subscribe(({ self }) => {
-    if (self === null) {
-      destroy_signalr_connection();
-    } else {
-      create_signalr_connection()
-        .then(() => {
-          signalr_state.set(HubConnectionState.Connected);
-        })
-        .catch((e) => {
-          console.error(e);
-          toast.error('Failed to connect to server!');
-          signalr_state.set(HubConnectionState.Disconnected);
-        });
-    }
-  });
-}

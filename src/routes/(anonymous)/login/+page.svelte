@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { page } from '$app/state';
   import { accountV2Api } from '$lib/api';
   import Container from '$lib/components/Container.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
@@ -14,20 +15,20 @@
   let password = $state<string>('');
   let turnstileResponse = $state<string | null>(null);
 
-  function handleSubmission(e: SubmitEvent) {
+  async function handleSubmission(e: SubmitEvent) {
     e.preventDefault();
 
     if (!usernameOrEmail || !password || !turnstileResponse) {
       return;
     }
 
-    accountV2Api
-      .accountLoginV2({ usernameOrEmail, password, turnstileResponse })
-      .then(() => {
-        UserStore.refreshSelf();
-        goto('/home');
-      })
-      .catch(handleApiError);
+    try {
+      await accountV2Api.accountLoginV2({ usernameOrEmail, password, turnstileResponse });
+      await UserStore.refreshSelf();
+      goto(page.url.searchParams.get('redirect') ?? '/home');
+    } catch (error) {
+      handleApiError(error);
+    }
   }
 
   let canSubmit = $derived(

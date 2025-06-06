@@ -1,7 +1,7 @@
 <script lang="ts">
   import { shockerSharesV2Api } from '$lib/api';
   import type { V2UserShares } from '$lib/api/internal/v2';
-  import * as Table from '$lib/components/ui/table/index.js';
+  import * as Table from '$lib/components/ui/table';
   import { onMount } from 'svelte';
   import UserShareDrawer from './UserShareDrawer.svelte';
 

@@ -100,7 +100,6 @@ export function willActivateLightMode(value: 'dark' | 'light' | 'system') {
 export function initializeDarkModeStore() {
   const schemePreference = getColorSchemePreference();
   setHtmlDarkModeSelector(schemePreference === 'dark');
-  set(schemePreference);
 
   window
     .matchMedia('(prefers-color-scheme: light)')
