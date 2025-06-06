@@ -13,8 +13,11 @@ export const prerender = true;
 export function load() {
   if (!browser) return; // Just to be safe that the code below definetly runs in browser
 
+  console.log('(anonymous)/+layout.ts (browser) - entry');
+
   // On loading in the anonymous section, check if cookie is set, if it is send us to the authenticated section
   if (get(IsAuthenticated)) {
+    console.log('(anonymous)/+layout.ts (browser) - redirect');
     goto('/home');
   }
 

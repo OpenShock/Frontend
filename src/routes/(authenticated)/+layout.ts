@@ -11,8 +11,11 @@ export const prerender = false;
 export function load({ url }) {
   if (!browser) return; // Yeah please dont run on server
 
+  console.log('(anonymous)/+layout.ts (browser) - entry');
+
   // On loading in the anonymous section, check if cookie is set, if it is send us to the authenticated section
   if (!get(IsAuthenticated)) {
+    console.log('(anonymous)/+layout.ts (browser) - redirect');
     goto(`/login?redirect=${url.pathname}`);
   }
 };
