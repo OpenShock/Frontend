@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { browser } from '$app/environment';
   import { page } from '$app/state';
   import { PUBLIC_DEVELOPMENT_BANNER } from '$env/static/public';
   import AppSidebar from '$lib/components/layout/AppSidebar.svelte';
@@ -9,8 +8,6 @@
   import { SidebarProvider } from '$lib/components/ui/sidebar';
   import { Toaster } from '$lib/components/ui/sonner';
   import { buildMetaData } from '$lib/metadata';
-  import { initializeSignalR } from '$lib/signalr';
-  import { initializeStores } from '$lib/stores';
   import type { Snippet } from 'svelte';
   import '../app.css';
 
@@ -19,11 +16,6 @@
   }
 
   let { children }: Props = $props();
-
-  if (browser) {
-    initializeStores();
-    initializeSignalR();
-  }
 
   let meta = $derived(buildMetaData(page.url));
 
