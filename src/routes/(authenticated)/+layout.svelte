@@ -1,15 +1,19 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
+  import { page } from '$app/state';
   import Container from '$lib/components/Container.svelte';
   import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
   import { Button } from '$lib/components/ui/button';
   import { UserStore } from '$lib/stores/UserStore';
   import type { Snippet } from 'svelte';
 
-  interface Props {
-    children?: Snippet;
-  }
+  let { children }: { children: Snippet } = $props();
 
-  let { children }: Props = $props();
+  $effect(() => {
+    if (!$UserStore.loading && !$UserStore.self) {
+      goto(page.url.searchParams.get('redirect') ?? '/login');
+    }
+  });
 </script>
 
 {#if $UserStore.loading}
@@ -22,5 +26,5 @@
     <Button href="/login">Login</Button>
   </Container>
 {:else}
-  {@render children?.()}
+  {@render children()}
 {/if}
