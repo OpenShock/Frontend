@@ -5,7 +5,7 @@
   import { UserStore } from '$lib/stores/UserStore';
   import type { Snippet } from 'svelte';
 
-  let { children }: { children: Snippet } = $props();
+  let { children }: { children?: Snippet } = $props();
 
   $effect(() => {
     if (!$UserStore.loading && !$UserStore.self) goto('/login');
@@ -17,5 +17,5 @@
     <LoadingCircle class="size-20" />
   </Container>
 {:else}
-  {@render children()}
+  {@render children?.()}
 {/if}
