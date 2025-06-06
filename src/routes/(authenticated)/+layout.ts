@@ -1,6 +1,6 @@
 import { browser } from '$app/environment';
-import { goto } from '$app/navigation';
 import { IsAuthenticated } from '$lib/stores/AuthenticatedStore';
+import { redirect } from '@sveltejs/kit';
 import { get } from 'svelte/store';
 
 // The pages below this one will be different from user-to-user so cannot be prerendered and really shouldnt be server rendered
@@ -16,6 +16,6 @@ export function load({ url }) {
   // On loading in the anonymous section, check if cookie is set, if it is send us to the authenticated section
   if (!get(IsAuthenticated)) {
     console.log('(anonymous)/+layout.ts (browser) - redirect');
-    goto(`/login?redirect=${url.pathname}`);
+    redirect(302, `/login?redirect=${url.pathname}`);
   }
 };

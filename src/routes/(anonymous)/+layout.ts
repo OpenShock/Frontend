@@ -1,7 +1,7 @@
 import { browser } from '$app/environment';
-import { goto } from '$app/navigation';
 import { IsAuthenticated } from '$lib/stores/AuthenticatedStore';
 import { UserStore } from '$lib/stores/UserStore';
+import { redirect } from '@sveltejs/kit';
 import { get } from 'svelte/store';
 
 // Makes the load function only run in browser
@@ -18,7 +18,7 @@ export function load() {
   // On loading in the anonymous section, check if cookie is set, if it is send us to the authenticated section
   if (get(IsAuthenticated)) {
     console.log('(anonymous)/+layout.ts (browser) - redirect');
-    goto('/home');
+    redirect(302, '/home');
   }
 
   // If we make it to the anonymous section, make sure that userstore is clear, else behaviour will look weird

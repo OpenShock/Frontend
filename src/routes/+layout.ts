@@ -1,5 +1,4 @@
 import { browser } from '$app/environment';
-import { goto } from '$app/navigation';
 import { accountV1Api } from '$lib/api/index.js';
 import { initializeSignalR } from '$lib/signalr';
 import { IsAuthenticated } from '$lib/stores/AuthenticatedStore';
@@ -7,6 +6,7 @@ import { initializeDarkModeStore } from '$lib/stores/ColorSchemeStore.js';
 import { initializeFlashManagersStore } from '$lib/stores/FlashManagersStore.js';
 import { initializeSerialPortsStore } from '$lib/stores/SerialPortsStore.js';
 import { initializeUserStore, UserStore } from '$lib/stores/UserStore.js';
+import { redirect } from '@sveltejs/kit';
 import { get } from 'svelte/store';
 
 // Set the default for the application
@@ -32,7 +32,7 @@ export async function load({ data, url }) {
     }
 
     // Go to landing page
-    goto('/');
+    redirect(302, '/');
     return;
   }
 
