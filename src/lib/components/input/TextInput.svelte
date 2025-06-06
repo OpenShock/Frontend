@@ -57,7 +57,7 @@
     />
     {#if popup}
       <div
-        class="absolute left-0 top-full mt-1 w-full z-10 bg-white dark:bg-gray-800 shadow-lg rounded-md border border-gray-200 dark:border-gray-700 p-3"
+        class="absolute left-0 top-full mt-1 w-full z-10 bg-white dark:bg-gray-800 shadow-lg rounded-md border border-gray-200 dark:border-gray-700 p-1"
         role="tooltip"
       >
         {@render popup()}
