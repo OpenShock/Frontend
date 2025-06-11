@@ -35,7 +35,7 @@
 		"@trivago/prettier-plugin-sort-imports": "^5.2.2",
 		"@types/crypto-js": "^4.2.2",
 		"@types/eslint": "^9.6.1",
-		"@types/node": "^22.15.30",
+		"@types/node": "22.15.31",
 		"@types/semver": "^7.7.0",
 		"@types/w3c-web-serial": "^1.0.8",
 		"bits-ui": "2.6.0",
@@ -70,11 +70,11 @@
 		"vite": "^6.3.5"
 	},
 	"engines": {
-		"node": ">=22.15.1",
+		"node": ">=22.16.0",
 		"pnpm": ">=10.11.0"
 	},
 	"volta": {
-		"node": "22.15.1"
+		"node": "22.16.0"
 	},
 	"packageManager": "pnpm@10.11.1",
 	"pnpm": {
