@@ -28,7 +28,7 @@
   <p>Loading...</p>
 {:else}
   <Container>
-    <div class="flex">
+    <div class="w-full flex content-center justify-between">
       <h1 class="text-2xl font-bold">Shockers</h1>
       <div>
         <!-- Mode button -->

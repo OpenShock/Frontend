@@ -52,4 +52,5 @@
   });
 </script>
 
+Don't worry about this module right now, its a work in progress :)
 <canvas bind:this={canvas} width="2000" height="1300" class="size-full"></canvas>
