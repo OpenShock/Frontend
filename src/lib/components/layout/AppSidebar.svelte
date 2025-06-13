@@ -31,7 +31,6 @@
   }
 
   interface Item extends Entry {
-    class?: string;
     href?: string;
     target?: string;
   }
@@ -174,7 +173,10 @@
 </script>
 
 {#snippet menuSubItemSection(subItem: Item)}
-  <Sidebar.MenuSubButton class={subItem.class}>
+  <Sidebar.MenuSubButton
+    class="data-[active=true]:border-r-3 data-[active=true]:border-[grey]"
+    isActive={isPathMatch(path, subItem.href)}
+  >
     <a href={subItem.href}>
       <span> {subItem.title}</span>
     </a>
@@ -183,7 +185,10 @@
 
 {#snippet menuSection(menu: Menu)}
   <Sidebar.MenuItem>
-    <Sidebar.MenuButton class={menu.class} isActive={isPathMatch(path, menu.href)}>
+    <Sidebar.MenuButton
+      class="data-[active=true]:border-r-3 data-[active=true]:border-[grey]"
+      isActive={isPathMatch(path, menu.href)}
+    >
       {#snippet child({ props })}
         <a href={menu.href} {...props}>
           <menu.Icon />
