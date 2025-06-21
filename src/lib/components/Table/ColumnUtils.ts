@@ -131,7 +131,7 @@ export const TimeSinceRelativeRenderer = (date: Date): TableCell =>
   RenderCellWithTooltip(elapsedToString(date.getTime() - Date.now()), date.toString());
 
 export const TimeSinceRelativeOrNeverRenderer = (date: Date | null | undefined): TableCell =>
-  date ? TimeSinceRelativeRenderer(date) : CellOrangeNever;
+  date ? date.getTime() > 0 ? TimeSinceRelativeRenderer(date) : CellOrangeNever : CellOrangeNever;
 
 export const NumberRenderer = (number: number | null): TableCell =>
   number ? RenderBoldCell(number.toString()) : CellNotApplicable;
