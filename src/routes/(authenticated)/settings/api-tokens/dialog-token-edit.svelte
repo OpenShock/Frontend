@@ -13,9 +13,10 @@
   interface Props {
     open: boolean;
     token: ApiToken;
+    onSave: (id: string) => void;
   }
 
-  let { open = $bindable(), token }: Props = $props();
+  let { open = $bindable(), token, onSave }: Props = $props();
 
   let name = $state<string>('');
   let permissions = $state<PermissionType[]>([]);
@@ -24,6 +25,8 @@
     // TODO: do something
     toast.success('Token edited successfully');
     open = false;
+
+    onSave(token.id);
   }
 
   function saveChanges() {
