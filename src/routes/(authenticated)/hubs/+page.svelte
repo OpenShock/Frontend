@@ -42,7 +42,7 @@
 </script>
 
 <Container>
-  <Card.Header>
+  <Card.Header class="w-full">
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
       Hubs
       <Button class="btn variant-filled-primary text-xl" onclick={() => {}}>
@@ -52,7 +52,7 @@
     </Card.Title>
     <Card.Description>This is a list of all hubs you own.</Card.Description>
   </Card.Header>
-  <Card.Content>
+  <Card.Content class="w-full">
     <DataTable {data} {columns} {sorting} />
   </Card.Content>
 </Container>

@@ -49,7 +49,7 @@
 </script>
 
 <Container>
-  <Card.Header>
+  <Card.Header class="w-full">
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
       Sessions
       <Button class="text-xl" onclick={fetchSessions}>
@@ -62,7 +62,7 @@
       recognize.
     </Card.Description>
   </Card.Header>
-  <Card.Content>
+  <Card.Content class="w-full">
     <DataTable {data} {columns} {sorting} />
   </Card.Content>
 </Container>

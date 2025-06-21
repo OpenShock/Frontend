@@ -32,7 +32,7 @@
 </script>
 
 <Container>
-  <Card.Header>
+  <Card.Header class="w-full">
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
       Public Shares
       <Button class="text-xl" onclick={refreshPublicShares}>
@@ -42,7 +42,7 @@
     </Card.Title>
     <Card.Description>This is a list of all the public shares you control.</Card.Description>
   </Card.Header>
-  <Card.Content>
+  <Card.Content class="w-full">
     <DataTable {data} {columns} {sorting} />
   </Card.Content>
 </Container>

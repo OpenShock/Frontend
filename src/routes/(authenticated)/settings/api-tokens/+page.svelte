@@ -35,7 +35,7 @@
 <TokenGenerateDialog bind:open={showGenerateTokenModal} onGenerated={(id) => refreshApiToken(id)} />
 
 <Container>
-  <Card.Header>
+  <Card.Header class="w-full">
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
       API Tokens
       <div>
@@ -51,7 +51,7 @@
     </Card.Title>
     <Card.Description>API Tokens are used to authenticate with the OpenShock API</Card.Description>
   </Card.Header>
-  <Card.Content class="flex flex-col space-y-4">
+  <Card.Content class="flex flex-col space-y-4 w-full">
     <DataTable {data} {columns} {sorting} />
     <div class="flex justify-end"></div>
   </Card.Content>
