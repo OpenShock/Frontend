@@ -6,9 +6,9 @@
   import * as Dialog from '$lib/components/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import type { ValidationResult } from '$lib/types/ValidationResult';
+  import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
   import type { ApiToken } from './columns';
-  import { onMount } from 'svelte';
 
   interface Props {
     open: boolean;
