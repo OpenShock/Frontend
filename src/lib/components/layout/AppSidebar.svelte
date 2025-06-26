@@ -16,14 +16,28 @@
   } from '@lucide/svelte';
   import { page } from '$app/state';
   import { RoleType } from '$lib/api/internal/v1';
-  import * as Sidebar from '$lib/components/ui/sidebar';
+  import {
+    Content,
+    Footer,
+    Group,
+    GroupContent,
+    GroupLabel,
+    Header,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuSub,
+    MenuSubButton,
+    Root,
+    useSidebar,
+  } from '$lib/components/ui/sidebar';
   import { UserStore } from '$lib/stores/UserStore';
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import { Collapsible } from 'bits-ui';
 
   let currentUser = $derived($UserStore.self);
 
-  let sidebarContext = Sidebar.useSidebar();
+  let sidebarContext = useSidebar();
   let path = $derived(page.url.pathname);
 
   interface Entry {
@@ -174,18 +188,18 @@
 </script>
 
 {#snippet menuSubItemSection(subItem: Item)}
-  <Sidebar.MenuSubButton
+  <MenuSubButton
     class={subItem.class}
     isActive={isPathMatch(path, subItem.href)}
     href={subItem.href}
   >
     {subItem.title}
-  </Sidebar.MenuSubButton>
+  </MenuSubButton>
 {/snippet}
 
 {#snippet menuSection(menu: Menu)}
-  <Sidebar.MenuItem>
-    <Sidebar.MenuButton class={menu.class} isActive={isPathMatch(path, menu.href)}>
+  <MenuItem>
+    <MenuButton class={menu.class} isActive={isPathMatch(path, menu.href)}>
       {#snippet child({ props })}
         <a href={menu.href} {...props}>
           <menu.Icon />
@@ -195,46 +209,46 @@
       {#snippet tooltipContent()}
         {menu.title}
       {/snippet}
-    </Sidebar.MenuButton>
+    </MenuButton>
     <!--
-    <Sidebar.MenuAction>
-    </Sidebar.MenuAction>
+    <MenuAction>
+    </MenuAction>
     -->
-  </Sidebar.MenuItem>
+  </MenuItem>
   {#if menu.subItems}
-    <Sidebar.MenuSub>
+    <MenuSub>
       {#each menu.subItems as subItem (subItem.title)}
         {@render menuSubItemSection(subItem)}
       {/each}
-    </Sidebar.MenuSub>
+    </MenuSub>
   {/if}
 {/snippet}
 
 {#snippet groupContentSection(group: Group)}
-  <Sidebar.GroupContent>
-    <Sidebar.Menu>
+  <GroupContent>
+    <Menu>
       {#each group.menus as menu (menu.title)}
         {@render menuSection(menu)}
       {/each}
-    </Sidebar.Menu>
-  </Sidebar.GroupContent>
+    </Menu>
+  </GroupContent>
 {/snippet}
 
 {#snippet groupsSection(groups: Group[])}
   {#each groups as group (group.title)}
     {#if group.collapsible === undefined}
-      <Sidebar.Group>
-        <Sidebar.GroupLabel>{group.title}</Sidebar.GroupLabel>
+      <Group>
+        <GroupLabel>{group.title}</GroupLabel>
         {@render groupContentSection(group)}
-      </Sidebar.Group>
+      </Group>
     {:else}
       <Collapsible.Root
         open={group.collapsible.open ||
           (sidebarContext.state === 'collapsed' && !sidebarContext.isMobile)}
         class="group/collapsible"
       >
-        <Sidebar.Group>
-          <Sidebar.GroupLabel>
+        <Group>
+          <GroupLabel>
             {#snippet child({ props })}
               <Collapsible.Trigger {...props}>
                 {group.title}
@@ -243,18 +257,18 @@
                 />
               </Collapsible.Trigger>
             {/snippet}
-          </Sidebar.GroupLabel>
+          </GroupLabel>
           <Collapsible.Content>
             {@render groupContentSection(group)}
           </Collapsible.Content>
-        </Sidebar.Group>
+        </Group>
       </Collapsible.Root>
     {/if}
   {/each}
 {/snippet}
 <!-- group-data-[collapsible=icon]:opacity-0 -->
-<Sidebar.Root collapsible="icon">
-  <Sidebar.Header>
+<Root collapsible="icon">
+  <Header>
     <a href={currentUser ? '/home' : '/'}>
       <span class="pointer-events-none flex">
         <img class="ml-[0.667px] h-7.5" src="/IconSpinning.svg" alt="OpenShock Logo" />
@@ -267,11 +281,11 @@
         </span>
       </span>
     </a>
-  </Sidebar.Header>
-  <Sidebar.Content>
+  </Header>
+  <Content>
     {@render groupsSection(headerGroups)}
     <div class="grow-1"></div>
     {@render groupsSection(footerGroups)}
-  </Sidebar.Content>
-  <Sidebar.Footer></Sidebar.Footer>
-</Sidebar.Root>
+  </Content>
+  <Footer></Footer>
+</Root>
