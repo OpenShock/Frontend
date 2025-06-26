@@ -58,10 +58,6 @@
           Refresh
         </Button>
       </div>
-      <Button class="btn variant-filled-primary text-xl" onclick={() => {}}>
-        <RotateCcw />
-        <span> Add </span>
-      </Button>
     </Card.Title>
     <Card.Description>This is a list of all hubs you own.</Card.Description>
   </Card.Header>
