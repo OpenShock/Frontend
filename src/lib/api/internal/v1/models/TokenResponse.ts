@@ -111,7 +111,7 @@ export function TokenResponseToJSONTyped(value?: TokenResponse | null, ignoreDis
         'id': value['id'],
         'name': value['name'],
         'createdOn': ((value['createdOn']).toISOString()),
-        'validUntil': (value['validUntil'] == null ? null : (value['validUntil'] as any).toISOString()),
+        'validUntil': ((value['validUntil'] as any).toISOString()),
         'lastUsed': ((value['lastUsed']).toISOString()),
         'permissions': ((value['permissions'] as Array<any>).map(PermissionTypeToJSON)),
     };

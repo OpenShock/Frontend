@@ -195,8 +195,12 @@ export class APITokensApi extends runtime.BaseAPI implements APITokensApiInterfa
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/tokens/{tokenId}`;
+        urlPath = urlPath.replace(`{${"tokenId"}}`, encodeURIComponent(String(requestParameters['tokenId'])));
+
         const response = await this.request({
-            path: `/1/tokens/{tokenId}`.replace(`{${"tokenId"}}`, encodeURIComponent(String(requestParameters['tokenId']))),
+            path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -222,8 +226,11 @@ export class APITokensApi extends runtime.BaseAPI implements APITokensApiInterfa
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/1/tokens`;
+
         const response = await this.request({
-            path: `/1/tokens`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -258,8 +265,12 @@ export class APITokensApi extends runtime.BaseAPI implements APITokensApiInterfa
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/1/tokens/{tokenId}`;
+        urlPath = urlPath.replace(`{${"tokenId"}}`, encodeURIComponent(String(requestParameters['tokenId'])));
+
         const response = await this.request({
-            path: `/1/tokens/{tokenId}`.replace(`{${"tokenId"}}`, encodeURIComponent(String(requestParameters['tokenId']))),
+            path: urlPath,
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
@@ -291,8 +302,12 @@ export class APITokensApi extends runtime.BaseAPI implements APITokensApiInterfa
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/1/tokens/{tokenId}`;
+        urlPath = urlPath.replace(`{${"tokenId"}}`, encodeURIComponent(String(requestParameters['tokenId'])));
+
         const response = await this.request({
-            path: `/1/tokens/{tokenId}`.replace(`{${"tokenId"}}`, encodeURIComponent(String(requestParameters['tokenId']))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -317,8 +332,11 @@ export class APITokensApi extends runtime.BaseAPI implements APITokensApiInterfa
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/1/tokens`;
+
         const response = await this.request({
-            path: `/1/tokens`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -345,8 +363,11 @@ export class APITokensApi extends runtime.BaseAPI implements APITokensApiInterfa
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/1/tokens/report`;
+
         const response = await this.request({
-            path: `/1/tokens/report`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -375,8 +396,11 @@ export class APITokensApi extends runtime.BaseAPI implements APITokensApiInterfa
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/tokens/self`;
+
         const response = await this.request({
-            path: `/1/tokens/self`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

@@ -140,8 +140,11 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/2/account/username/check`;
+
         const response = await this.request({
-            path: `/2/account/username/check`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -169,8 +172,11 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/2/account/login`;
+
         const response = await this.request({
-            path: `/2/account/login`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -198,8 +204,11 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/2/account/reset-password`;
+
         const response = await this.request({
-            path: `/2/account/reset-password`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -226,8 +235,11 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/2/account/signup`;
+
         const response = await this.request({
-            path: `/2/account/signup`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,

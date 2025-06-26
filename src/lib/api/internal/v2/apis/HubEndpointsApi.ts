@@ -74,8 +74,11 @@ export class HubEndpointsApi extends runtime.BaseAPI implements HubEndpointsApiI
             headerParameters["DeviceToken"] = await this.configuration.apiKey("DeviceToken"); // HubToken authentication
         }
 
+
+        let urlPath = `/2/device/assignLCG`;
+
         const response = await this.request({
-            path: `/2/device/assignLCG`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

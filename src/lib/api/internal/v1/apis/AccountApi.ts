@@ -276,8 +276,11 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/1/account/username/check`;
+
         const response = await this.request({
-            path: `/1/account/username/check`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -305,8 +308,11 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/1/account/login`;
+
         const response = await this.request({
-            path: `/1/account/login`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -331,8 +337,11 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/1/account/logout`;
+
         const response = await this.request({
-            path: `/1/account/logout`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -369,8 +378,13 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/1/account/recover/{passwordResetId}/{secret}`;
+        urlPath = urlPath.replace(`{${"passwordResetId"}}`, encodeURIComponent(String(requestParameters['passwordResetId'])));
+        urlPath = urlPath.replace(`{${"secret"}}`, encodeURIComponent(String(requestParameters['secret'])));
+
         const response = await this.request({
-            path: `/1/account/recover/{passwordResetId}/{secret}`.replace(`{${"passwordResetId"}}`, encodeURIComponent(String(requestParameters['passwordResetId']))).replace(`{${"secret"}}`, encodeURIComponent(String(requestParameters['secret']))),
+            path: urlPath,
             method: 'HEAD',
             headers: headerParameters,
             query: queryParameters,
@@ -411,8 +425,13 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/1/account/recover/{passwordResetId}/{secret}`;
+        urlPath = urlPath.replace(`{${"passwordResetId"}}`, encodeURIComponent(String(requestParameters['passwordResetId'])));
+        urlPath = urlPath.replace(`{${"secret"}}`, encodeURIComponent(String(requestParameters['secret'])));
+
         const response = await this.request({
-            path: `/1/account/recover/{passwordResetId}/{secret}`.replace(`{${"passwordResetId"}}`, encodeURIComponent(String(requestParameters['passwordResetId']))).replace(`{${"secret"}}`, encodeURIComponent(String(requestParameters['secret']))),
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -440,8 +459,11 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/1/account/reset`;
+
         const response = await this.request({
-            path: `/1/account/reset`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -469,8 +491,11 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/1/account/signup`;
+
         const response = await this.request({
-            path: `/1/account/signup`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -498,8 +523,11 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/1/account/email`;
+
         const response = await this.request({
-            path: `/1/account/email`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -527,8 +555,11 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/1/account/password`;
+
         const response = await this.request({
-            path: `/1/account/password`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -555,8 +586,11 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/1/account/username`;
+
         const response = await this.request({
-            path: `/1/account/username`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -581,8 +615,11 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/1/account`;
+
         const response = await this.request({
-            path: `/1/account`,
+            path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,

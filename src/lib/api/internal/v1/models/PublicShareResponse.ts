@@ -116,7 +116,7 @@ export function PublicShareResponseToJSONTyped(value?: PublicShareResponse | nul
         'id': value['id'],
         'name': value['name'],
         'createdOn': ((value['createdOn']).toISOString()),
-        'expiresOn': value['expiresOn'] == null ? undefined : ((value['expiresOn'] as any).toISOString()),
+        'expiresOn': value['expiresOn'] === null ? null : ((value['expiresOn'] as any)?.toISOString()),
         'author': BasicUserInfoToJSON(value['author']),
         'devices': value['devices'] == null ? undefined : ((value['devices'] as Array<any>).map(PublicShareDeviceToJSON)),
     };

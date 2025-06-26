@@ -105,7 +105,7 @@ export function LoginSessionResponseToJSONTyped(value?: LoginSessionResponse | n
         'userAgent': value['userAgent'],
         'created': ((value['created']).toISOString()),
         'expires': ((value['expires']).toISOString()),
-        'lastUsed': (value['lastUsed'] == null ? null : (value['lastUsed'] as any).toISOString()),
+        'lastUsed': ((value['lastUsed'] as any).toISOString()),
     };
 }
 

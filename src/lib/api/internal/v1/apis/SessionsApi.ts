@@ -96,8 +96,12 @@ export class SessionsApi extends runtime.BaseAPI implements SessionsApiInterface
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/1/sessions/{sessionId}`;
+        urlPath = urlPath.replace(`{${"sessionId"}}`, encodeURIComponent(String(requestParameters['sessionId'])));
+
         const response = await this.request({
-            path: `/1/sessions/{sessionId}`.replace(`{${"sessionId"}}`, encodeURIComponent(String(requestParameters['sessionId']))),
+            path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -120,8 +124,11 @@ export class SessionsApi extends runtime.BaseAPI implements SessionsApiInterface
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/1/sessions/self`;
+
         const response = await this.request({
-            path: `/1/sessions/self`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -145,8 +152,11 @@ export class SessionsApi extends runtime.BaseAPI implements SessionsApiInterface
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/1/sessions`;
+
         const response = await this.request({
-            path: `/1/sessions`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

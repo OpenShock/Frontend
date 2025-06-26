@@ -234,8 +234,12 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/1/public/shares/links/{publicShareId}`;
+        urlPath = urlPath.replace(`{${"publicShareId"}}`, encodeURIComponent(String(requestParameters['publicShareId'])));
+
         const response = await this.request({
-            path: `/1/public/shares/links/{publicShareId}`.replace(`{${"publicShareId"}}`, encodeURIComponent(String(requestParameters['publicShareId']))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -278,8 +282,13 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/shares/links/{publicShareId}/{shockerId}`;
+        urlPath = urlPath.replace(`{${"publicShareId"}}`, encodeURIComponent(String(requestParameters['publicShareId'])));
+        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
+
         const response = await this.request({
-            path: `/1/shares/links/{publicShareId}/{shockerId}`.replace(`{${"publicShareId"}}`, encodeURIComponent(String(requestParameters['publicShareId']))).replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))),
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -310,8 +319,11 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/shares/links`;
+
         const response = await this.request({
-            path: `/1/shares/links`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -348,8 +360,12 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/shares/links/{publicShareId}`;
+        urlPath = urlPath.replace(`{${"publicShareId"}}`, encodeURIComponent(String(requestParameters['publicShareId'])));
+
         const response = await this.request({
-            path: `/1/shares/links/{publicShareId}`.replace(`{${"publicShareId"}}`, encodeURIComponent(String(requestParameters['publicShareId']))),
+            path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -394,8 +410,13 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/shares/links/{publicShareId}/{shockerId}`;
+        urlPath = urlPath.replace(`{${"publicShareId"}}`, encodeURIComponent(String(requestParameters['publicShareId'])));
+        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
+
         const response = await this.request({
-            path: `/1/shares/links/{publicShareId}/{shockerId}`.replace(`{${"publicShareId"}}`, encodeURIComponent(String(requestParameters['publicShareId']))).replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))),
+            path: urlPath,
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
@@ -429,8 +450,11 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/shares/links`;
+
         const response = await this.request({
-            path: `/1/shares/links`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -475,8 +499,13 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/shares/links/{publicShareId}/{shockerId}/pause`;
+        urlPath = urlPath.replace(`{${"publicShareId"}}`, encodeURIComponent(String(requestParameters['publicShareId'])));
+        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
+
         const response = await this.request({
-            path: `/1/shares/links/{publicShareId}/{shockerId}/pause`.replace(`{${"publicShareId"}}`, encodeURIComponent(String(requestParameters['publicShareId']))).replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))),
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -520,8 +549,13 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/shares/links/{publicShareId}/{shockerId}`;
+        urlPath = urlPath.replace(`{${"publicShareId"}}`, encodeURIComponent(String(requestParameters['publicShareId'])));
+        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
+
         const response = await this.request({
-            path: `/1/shares/links/{publicShareId}/{shockerId}`.replace(`{${"publicShareId"}}`, encodeURIComponent(String(requestParameters['publicShareId']))).replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))),
+            path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,

@@ -75,8 +75,11 @@ export class MetaApi extends runtime.BaseAPI implements MetaApiInterface {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/1/public/stats`;
+
         const response = await this.request({
-            path: `/1/public/stats`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -101,8 +104,11 @@ export class MetaApi extends runtime.BaseAPI implements MetaApiInterface {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/1`;
+
         const response = await this.request({
-            path: `/1`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

@@ -164,8 +164,11 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/2/shares/invites`;
+
         const response = await this.request({
-            path: `/2/shares/invites`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -204,8 +207,12 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/2/shares/invites/outgoing/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/2/shares/invites/outgoing/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -238,8 +245,12 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/2/shares/invites/incoming/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/2/shares/invites/incoming/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -265,8 +276,11 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/2/shares/invites/incoming`;
+
         const response = await this.request({
-            path: `/2/shares/invites/incoming`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -293,8 +307,11 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/2/shares/invites/outgoing`;
+
         const response = await this.request({
-            path: `/2/shares/invites/outgoing`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -321,8 +338,11 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/2/shares`;
+
         const response = await this.request({
-            path: `/2/shares`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -357,8 +377,12 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/2/shares/invites/incoming/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/2/shares/invites/incoming/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,

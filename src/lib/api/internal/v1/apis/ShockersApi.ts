@@ -391,8 +391,12 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/shockers/{shockerId}`;
+        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
+
         const response = await this.request({
-            path: `/1/shockers/{shockerId}`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))),
+            path: urlPath,
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
@@ -429,8 +433,12 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/shockers/{shockerId}`;
+        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
+
         const response = await this.request({
-            path: `/1/shockers/{shockerId}`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -474,8 +482,12 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/shockers/{shockerId}/logs`;
+        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
+
         const response = await this.request({
-            path: `/1/shockers/{shockerId}/logs`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -511,8 +523,12 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/shockers/{shockerId}/shares`;
+        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
+
         const response = await this.request({
-            path: `/1/shockers/{shockerId}/shares`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -541,8 +557,11 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/shockers/shared`;
+
         const response = await this.request({
-            path: `/1/shockers/shared`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -571,8 +590,11 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/shockers/own`;
+
         const response = await this.request({
-            path: `/1/shockers/own`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -610,8 +632,12 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/shockers/{shockerId}/pause`;
+        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
+
         const response = await this.request({
-            path: `/1/shockers/{shockerId}/pause`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))),
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -643,8 +669,11 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/shockers`;
+
         const response = await this.request({
-            path: `/1/shockers`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -681,8 +710,12 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/shockers/{shockerId}`;
+        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
+
         const response = await this.request({
-            path: `/1/shockers/{shockerId}`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))),
+            path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -713,8 +746,11 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/shockers/control`;
+
         const response = await this.request({
-            path: `/1/shockers/control`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -753,8 +789,12 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/shockers/{shockerId}/shares`;
+        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
+
         const response = await this.request({
-            path: `/1/shockers/{shockerId}/shares`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))),
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -791,8 +831,12 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/shockers/{shockerId}/shareCodes`;
+        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
+
         const response = await this.request({
-            path: `/1/shockers/{shockerId}/shareCodes`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -837,8 +881,13 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/shockers/{shockerId}/shares/{sharedWithUserId}/pause`;
+        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
+        urlPath = urlPath.replace(`{${"sharedWithUserId"}}`, encodeURIComponent(String(requestParameters['sharedWithUserId'])));
+
         const response = await this.request({
-            path: `/1/shockers/{shockerId}/shares/{sharedWithUserId}/pause`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))).replace(`{${"sharedWithUserId"}}`, encodeURIComponent(String(requestParameters['sharedWithUserId']))),
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -882,8 +931,13 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/shockers/{shockerId}/shares/{sharedWithUserId}`;
+        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
+        urlPath = urlPath.replace(`{${"sharedWithUserId"}}`, encodeURIComponent(String(requestParameters['sharedWithUserId'])));
+
         const response = await this.request({
-            path: `/1/shockers/{shockerId}/shares/{sharedWithUserId}`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))).replace(`{${"sharedWithUserId"}}`, encodeURIComponent(String(requestParameters['sharedWithUserId']))),
+            path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -927,8 +981,13 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/shockers/{shockerId}/shares/{sharedWithUserId}`;
+        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
+        urlPath = urlPath.replace(`{${"sharedWithUserId"}}`, encodeURIComponent(String(requestParameters['sharedWithUserId'])));
+
         const response = await this.request({
-            path: `/1/shockers/{shockerId}/shares/{sharedWithUserId}`.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId']))).replace(`{${"sharedWithUserId"}}`, encodeURIComponent(String(requestParameters['sharedWithUserId']))),
+            path: urlPath,
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,

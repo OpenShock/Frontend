@@ -208,8 +208,11 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/1/admin/webhooks`;
+
         const response = await this.request({
-            path: `/1/admin/webhooks`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -245,8 +248,12 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/1/admin/users/{userId}/deactivate`;
+        urlPath = urlPath.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId'])));
+
         const response = await this.request({
-            path: `/1/admin/users/{userId}/deactivate`.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))),
+            path: urlPath,
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
@@ -277,8 +284,12 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/1/admin/users/{userId}`;
+        urlPath = urlPath.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId'])));
+
         const response = await this.request({
-            path: `/1/admin/users/{userId}`.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))),
+            path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -302,8 +313,11 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/1/admin/monitoring/onlineDevices`;
+
         const response = await this.request({
-            path: `/1/admin/monitoring/onlineDevices`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -344,8 +358,11 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/1/admin/users`;
+
         const response = await this.request({
-            path: `/1/admin/users`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -370,8 +387,11 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/1/admin/webhooks`;
+
         const response = await this.request({
-            path: `/1/admin/webhooks`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -403,8 +423,12 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/1/admin/users/{userId}/reactivate`;
+        urlPath = urlPath.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId'])));
+
         const response = await this.request({
-            path: `/1/admin/users/{userId}/reactivate`.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))),
+            path: urlPath,
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
@@ -435,8 +459,12 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/1/admin/webhooks/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/1/admin/webhooks/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,

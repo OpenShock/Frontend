@@ -62,8 +62,11 @@ export class UsersApi extends runtime.BaseAPI implements UsersApiInterface {
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/users/self`;
+
         const response = await this.request({
-            path: `/1/users/self`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

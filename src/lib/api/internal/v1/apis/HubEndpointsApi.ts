@@ -123,8 +123,11 @@ export class HubEndpointsApi extends runtime.BaseAPI implements HubEndpointsApiI
             headerParameters["DeviceToken"] = await this.configuration.apiKey("DeviceToken"); // HubToken authentication
         }
 
+
+        let urlPath = `/1/device/assignLCG`;
+
         const response = await this.request({
-            path: `/1/device/assignLCG`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -153,8 +156,11 @@ export class HubEndpointsApi extends runtime.BaseAPI implements HubEndpointsApiI
             headerParameters["DeviceToken"] = await this.configuration.apiKey("DeviceToken"); // HubToken authentication
         }
 
+
+        let urlPath = `/1/device/self`;
+
         const response = await this.request({
-            path: `/1/device/self`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -190,8 +196,12 @@ export class HubEndpointsApi extends runtime.BaseAPI implements HubEndpointsApiI
             headerParameters["DeviceToken"] = await this.configuration.apiKey("DeviceToken"); // HubToken authentication
         }
 
+
+        let urlPath = `/1/device/pair/{pairCode}`;
+        urlPath = urlPath.replace(`{${"pairCode"}}`, encodeURIComponent(String(requestParameters['pairCode'])));
+
         const response = await this.request({
-            path: `/1/device/pair/{pairCode}`.replace(`{${"pairCode"}}`, encodeURIComponent(String(requestParameters['pairCode']))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -227,8 +237,12 @@ export class HubEndpointsApi extends runtime.BaseAPI implements HubEndpointsApiI
             headerParameters["DeviceToken"] = await this.configuration.apiKey("DeviceToken"); // HubToken authentication
         }
 
+
+        let urlPath = `/1/pair/{pairCode}`;
+        urlPath = urlPath.replace(`{${"pairCode"}}`, encodeURIComponent(String(requestParameters['pairCode'])));
+
         const response = await this.request({
-            path: `/1/pair/{pairCode}`.replace(`{${"pairCode"}}`, encodeURIComponent(String(requestParameters['pairCode']))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

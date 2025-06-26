@@ -84,7 +84,7 @@ export function CreateTokenRequestToJSONTyped(value?: CreateTokenRequest | null,
         
         'name': value['name'],
         'permissions': value['permissions'] == null ? undefined : ((value['permissions'] as Array<any>).map(PermissionTypeToJSON)),
-        'validUntil': value['validUntil'] == null ? undefined : ((value['validUntil'] as any).toISOString()),
+        'validUntil': value['validUntil'] === null ? null : ((value['validUntil'] as any)?.toISOString()),
     };
 }
 

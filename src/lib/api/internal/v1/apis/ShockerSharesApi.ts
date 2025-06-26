@@ -96,8 +96,12 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/shares/code/{shareCodeId}`;
+        urlPath = urlPath.replace(`{${"shareCodeId"}}`, encodeURIComponent(String(requestParameters['shareCodeId'])));
+
         const response = await this.request({
-            path: `/1/shares/code/{shareCodeId}`.replace(`{${"shareCodeId"}}`, encodeURIComponent(String(requestParameters['shareCodeId']))),
+            path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -133,8 +137,12 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/shares/code/{shareCodeId}`;
+        urlPath = urlPath.replace(`{${"shareCodeId"}}`, encodeURIComponent(String(requestParameters['shareCodeId'])));
+
         const response = await this.request({
-            path: `/1/shares/code/{shareCodeId}`.replace(`{${"shareCodeId"}}`, encodeURIComponent(String(requestParameters['shareCodeId']))),
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,

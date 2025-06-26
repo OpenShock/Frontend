@@ -75,8 +75,11 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/2/shockers/control`;
+
         const response = await this.request({
-            path: `/2/shockers/control`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,

@@ -69,8 +69,11 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/2/devices`;
+
         const response = await this.request({
-            path: `/2/devices`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,

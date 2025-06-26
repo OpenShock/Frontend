@@ -251,8 +251,11 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/devices`;
+
         const response = await this.request({
-            path: `/1/devices`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -294,8 +297,12 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/devices/{deviceId}`;
+        urlPath = urlPath.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId'])));
+
         const response = await this.request({
-            path: `/1/devices/{deviceId}`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId']))),
+            path: urlPath,
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
@@ -331,8 +338,12 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/devices/{deviceId}`;
+        urlPath = urlPath.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId'])));
+
         const response = await this.request({
-            path: `/1/devices/{deviceId}`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId']))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -368,8 +379,12 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/devices/{deviceId}/lcg`;
+        urlPath = urlPath.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId'])));
+
         const response = await this.request({
-            path: `/1/devices/{deviceId}/lcg`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId']))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -405,8 +420,12 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/devices/{deviceId}/pair`;
+        urlPath = urlPath.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId'])));
+
         const response = await this.request({
-            path: `/1/devices/{deviceId}/pair`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId']))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -442,8 +461,12 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/devices/{deviceId}/shockers`;
+        urlPath = urlPath.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId'])));
+
         const response = await this.request({
-            path: `/1/devices/{deviceId}/shockers`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId']))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -472,8 +495,11 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/devices`;
+
         const response = await this.request({
-            path: `/1/devices`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -505,8 +531,12 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/1/devices/{deviceId}/ota`;
+        urlPath = urlPath.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId'])));
+
         const response = await this.request({
-            path: `/1/devices/{deviceId}/ota`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId']))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -542,8 +572,12 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/devices/{deviceId}`;
+        urlPath = urlPath.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId'])));
+
         const response = await this.request({
-            path: `/1/devices/{deviceId}`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId']))),
+            path: urlPath,
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
@@ -583,8 +617,12 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
             headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
         }
 
+
+        let urlPath = `/1/devices/{deviceId}`;
+        urlPath = urlPath.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId'])));
+
         const response = await this.request({
-            path: `/1/devices/{deviceId}`.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId']))),
+            path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
