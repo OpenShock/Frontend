@@ -174,10 +174,12 @@
 </script>
 
 {#snippet menuSubItemSection(subItem: Item)}
-  <Sidebar.MenuSubButton class={subItem.class} isActive={isPathMatch(path, subItem.href)}>
-    <a href={subItem.href}>
-      <span> {subItem.title}</span>
-    </a>
+  <Sidebar.MenuSubButton
+    class={subItem.class}
+    isActive={isPathMatch(path, subItem.href)}
+    href={subItem.href}
+  >
+    {subItem.title}
   </Sidebar.MenuSubButton>
 {/snippet}
 
