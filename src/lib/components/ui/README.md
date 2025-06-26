@@ -21,6 +21,7 @@ Now it should be easier to see what the CLI actually changed, and we can now pro
    If the `sidebar` component was modified by the CLI, it most likely went back to using `ease-linear` and `duration-200`.
    * Change `ease-linear` for the sidebar to `ease-in-out`.
    * Increase the duration from `duration-200` to `duration-300`.
+   * If the `sidebar-menu-sub` component was modified, ensure that the `ml-*` classes were not reverted back to `mx-*` classes.
 
 2. **Update `sonner` component if modified**
 
