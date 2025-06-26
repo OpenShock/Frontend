@@ -1,5 +1,6 @@
 <script lang="ts">
   import { hubManagementV1Api } from '$lib/api';
+  import CopyInput from '$lib/components/CopyInput.svelte';
   import { Button } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
@@ -12,14 +13,12 @@
 
   let { open = $bindable<boolean>(), hub }: Props = $props();
 
-  let confirmed = $state(false);
+  let newToken = $state<string | null>(null);
 
-  function onSubmit() {
+  async function onSubmit() {
     hubManagementV1Api
       .devicesRegenerateDeviceToken(hub.id)
-      .then(() => {
-        confirmed = true;
-      })
+      .then((token) => (newToken = token))
       .catch(handleApiError);
   }
 </script>
@@ -29,7 +28,7 @@
     <Dialog.Header>
       <Dialog.Title>Regenerate Token</Dialog.Title>
       <Dialog.Description>
-        {#if !confirmed}
+        {#if newToken === null}
           Are you sure you want to regenerate the token for <strong>{hub.name}</strong>?<br />
           This will invalidate the current token and generate a new one. Make sure to update any configurations
           that use the old token.<br />
@@ -40,10 +39,12 @@
         {/if}
       </Dialog.Description>
     </Dialog.Header>
-    {#if !confirmed}
+    {#if newToken === null}
       <Button onclick={onSubmit}>Regenerate Token</Button>
     {:else}
-      <p class="text-sm text-muted-foreground">New token: {'AAA'}</p>
+      <span class="text-sm text-muted-foreground"> The new token is: </span>
+      <CopyInput class="max-w-40" value={newToken} />
+      <Button onclick={() => (open = false)}>Close</Button>
     {/if}
   </Dialog.Content>
 </Dialog.Root>

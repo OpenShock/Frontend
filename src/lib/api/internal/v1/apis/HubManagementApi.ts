@@ -210,12 +210,12 @@ export interface HubManagementApiInterface {
      * @throws {RequiredError}
      * @memberof HubManagementApiInterface
      */
-    devicesRegenerateDeviceTokenRaw(requestParameters: DevicesRegenerateDeviceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+    devicesRegenerateDeviceTokenRaw(requestParameters: DevicesRegenerateDeviceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>>;
 
     /**
      * Regenerate a device token
      */
-    devicesRegenerateDeviceToken(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    devicesRegenerateDeviceToken(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
 
     /**
      * 
@@ -526,7 +526,7 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
     /**
      * Regenerate a device token
      */
-    async devicesRegenerateDeviceTokenRaw(requestParameters: DevicesRegenerateDeviceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async devicesRegenerateDeviceTokenRaw(requestParameters: DevicesRegenerateDeviceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
         if (requestParameters['deviceId'] == null) {
             throw new runtime.RequiredError(
                 'deviceId',
@@ -549,14 +549,19 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<string>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
     }
 
     /**
      * Regenerate a device token
      */
-    async devicesRegenerateDeviceToken(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.devicesRegenerateDeviceTokenRaw({ deviceId: deviceId }, initOverrides);
+    async devicesRegenerateDeviceToken(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+        const response = await this.devicesRegenerateDeviceTokenRaw({ deviceId: deviceId }, initOverrides);
+        return await response.value();
     }
 
     /**
