@@ -7,6 +7,7 @@ import type {
 } from '@tanstack/table-core';
 import DataTableSortButton from '$lib/components/Table/SortButton.svelte';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table';
+import { isDate } from '$lib/typeguards';
 import type { TwTextColor } from '$lib/types/Tailwind';
 import {
   durationToString,
@@ -16,7 +17,6 @@ import {
 } from '$lib/utils';
 import { type SemVer } from 'semver';
 import { createRawSnippet } from 'svelte';
-import { isDate } from '$lib/typeguards';
 
 function CreateSortHeader<TData>(name: string): StringOrTemplateHeader<TData, unknown> {
   return ({ column }) =>
@@ -129,10 +129,12 @@ export const TimeSinceDurationRenderer = (date: Date): TableCell =>
   RenderCellWithTooltip(durationToString(Date.now() - date.getTime()), date.toString());
 
 export const TimeSinceRelativeRenderer = (date: Date): TableCell =>
-  RenderCellWithTooltip(elapsedToString(date.getTime() - Date.now()), date.toString());
+  date.getTime() > 0
+    ? RenderCellWithTooltip(elapsedToString(date.getTime() - Date.now()), date.toString())
+    : CellOrangeNever;
 
 export const TimeSinceRelativeOrNeverRenderer = (date: Date | null | undefined): TableCell =>
-  isDate(date) ? (date.getTime() > 0 ? TimeSinceRelativeRenderer(date) : CellOrangeNever) : CellOrangeNever; // The isDate check is a workaround, for some reason if the input data is undefined, it will be transformed to a empty object and throws an error when trying to access getTime().
+  isDate(date) ? TimeSinceRelativeRenderer(date) : CellOrangeNever; // The isDate check is a workaround, for some reason if the input data is undefined, it will be transformed to a empty object and throws an error when trying to access getTime().
 
 export const NumberRenderer = (number: number | null): TableCell =>
   number ? RenderBoldCell(number.toString()) : CellNotApplicable;
