@@ -10,3 +10,6 @@ export function isNumber(value: unknown): value is number {
 export function isArrayBuffer(value: unknown): value is ArrayBuffer {
   return value instanceof ArrayBuffer;
 }
+export function isDate(value: unknown): value is Date {
+  return value instanceof Date && !isNaN(value.getTime());
+}

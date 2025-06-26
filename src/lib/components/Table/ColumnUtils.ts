@@ -16,6 +16,7 @@ import {
 } from '$lib/utils';
 import { type SemVer } from 'semver';
 import { createRawSnippet } from 'svelte';
+import { isDate } from '$lib/typeguards';
 
 function CreateSortHeader<TData>(name: string): StringOrTemplateHeader<TData, unknown> {
   return ({ column }) =>
@@ -131,7 +132,7 @@ export const TimeSinceRelativeRenderer = (date: Date): TableCell =>
   RenderCellWithTooltip(elapsedToString(date.getTime() - Date.now()), date.toString());
 
 export const TimeSinceRelativeOrNeverRenderer = (date: Date | null | undefined): TableCell =>
-  date ? (date.getTime() > 0 ? TimeSinceRelativeRenderer(date) : CellOrangeNever) : CellOrangeNever;
+  isDate(date) ? (date.getTime() > 0 ? TimeSinceRelativeRenderer(date) : CellOrangeNever) : CellOrangeNever; // The isDate check is a workaround, for some reason if the input data is undefined, it will be transformed to a empty object and throws an error when trying to access getTime().
 
 export const NumberRenderer = (number: number | null): TableCell =>
   number ? RenderBoldCell(number.toString()) : CellNotApplicable;
