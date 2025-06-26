@@ -7,6 +7,7 @@
   import type { Hub } from './columns';
   import HubDeleteDialog from './dialog-hub-delete.svelte';
   import HubEditDialog from './dialog-hub-edit.svelte';
+  import RegenerateTokenDialog from './dialog-hub-regenerate-token.svelte';
 
   interface Props {
     hub: Hub;
@@ -14,6 +15,7 @@
 
   let { hub }: Props = $props();
 
+  let regenerateTokenDialogOpen = $state<boolean>(false);
   let editDialogOpen = $state<boolean>(false);
   let deleteDialogOpen = $state<boolean>(false);
 
@@ -23,6 +25,7 @@
   }
 </script>
 
+<RegenerateTokenDialog bind:open={regenerateTokenDialogOpen} {hub} />
 <HubEditDialog bind:open={editDialogOpen} {hub} />
 <HubDeleteDialog bind:open={deleteDialogOpen} {hub} />
 
@@ -38,6 +41,9 @@
   <DropdownMenu.Content>
     <DropdownMenu.Item onclick={copyId}>Copy ID</DropdownMenu.Item>
     <DropdownMenu.Item onclick={() => goto(`/hubs/${hub.id}/update`)}>Update</DropdownMenu.Item>
+    <DropdownMenu.Item onclick={() => (regenerateTokenDialogOpen = true)}>
+      Regenerate Token
+    </DropdownMenu.Item>
     <DropdownMenu.Item onclick={() => (editDialogOpen = true)}>Edit</DropdownMenu.Item>
     <DropdownMenu.Item onclick={() => (deleteDialogOpen = true)}>Delete</DropdownMenu.Item>
   </DropdownMenu.Content>
