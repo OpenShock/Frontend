@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Plus } from '@lucide/svelte';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
   import type { SortingState } from '@tanstack/table-core';
   import Container from '$lib/components/Container.svelte';
@@ -38,6 +39,8 @@
   });
   let sorting = $state<SortingState>([]);
 
+  let showAddHubModal = $state<boolean>(false);
+
   onMount(refreshOwnHubs);
 </script>
 
@@ -45,9 +48,19 @@
   <Card.Header class="w-full">
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
       Hubs
+      <div>
+        <Button onclick={() => (showAddHubModal = true)}>
+          <Plus />
+          Add Hub
+        </Button>
+        <Button onclick={refreshOwnHubs}>
+          <RotateCcw />
+          Refresh
+        </Button>
+      </div>
       <Button class="btn variant-filled-primary text-xl" onclick={() => {}}>
         <RotateCcw />
-        <span> Refresh </span>
+        <span> Add </span>
       </Button>
     </Card.Title>
     <Card.Description>This is a list of all hubs you own.</Card.Description>

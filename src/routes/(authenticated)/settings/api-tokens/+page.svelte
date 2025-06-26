@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Plus from '@lucide/svelte/icons/plus';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
   import type { SortingState } from '@tanstack/table-core';
   import type { TokenResponse } from '$lib/api/internal/v1';
@@ -40,8 +41,8 @@
       API Tokens
       <div>
         <Button onclick={() => (showGenerateTokenModal = true)}>
-          <RotateCcw />
-          <span> Generate Token </span>
+          <Plus />
+          Generate Token
         </Button>
         <Button onclick={refreshApiTokens}>
           <RotateCcw />
