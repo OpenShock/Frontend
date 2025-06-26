@@ -34,6 +34,6 @@
         <strong>This action is irreversible.</strong>
       </Dialog.Description>
     </Dialog.Header>
-    <Button onclick={onDeleteClicked}>Delete</Button>
+    <Button variant="destructive" onclick={onDeleteClicked}>Delete</Button>
   </Dialog.Content>
 </Dialog.Root>
