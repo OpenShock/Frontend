@@ -1,11 +1,11 @@
 <script lang="ts">
   import Ellipsis from '@lucide/svelte/icons/ellipsis';
+  import { goto } from '$app/navigation';
   import type { OwnPublicShareResponse } from '$lib/api/internal/v1';
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { toast } from 'svelte-sonner';
-  import SharelinkDeleteDialog from './dialog-sharelink-delete.svelte';
-  import SharelinkEditDialog from './dialog-sharelink-edit.svelte';
+  import SharelinkDeleteDialog from './dialog-publicshare-delete.svelte';
 
   interface Props {
     publicShare: OwnPublicShareResponse;
@@ -13,7 +13,6 @@
 
   let { publicShare }: Props = $props();
 
-  let editDialogOpen = $state<boolean>(false);
   let deleteDialogOpen = $state<boolean>(false);
 
   function copyId() {
@@ -22,7 +21,6 @@
   }
 </script>
 
-<SharelinkEditDialog bind:open={editDialogOpen} {publicShare} />
 <SharelinkDeleteDialog bind:open={deleteDialogOpen} {publicShare} />
 
 <DropdownMenu.Root>
@@ -36,7 +34,9 @@
   </DropdownMenu.Trigger>
   <DropdownMenu.Content>
     <DropdownMenu.Item onclick={copyId}>Copy ID</DropdownMenu.Item>
-    <DropdownMenu.Item onclick={() => (editDialogOpen = true)}>Edit</DropdownMenu.Item>
+    <DropdownMenu.Item onclick={() => goto(`/shares/public/${publicShare.id}/edit`)}
+      >Edit</DropdownMenu.Item
+    >
     <DropdownMenu.Item onclick={() => (deleteDialogOpen = true)}>Delete</DropdownMenu.Item>
   </DropdownMenu.Content>
 </DropdownMenu.Root>

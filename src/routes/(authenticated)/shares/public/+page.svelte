@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Plus from '@lucide/svelte/icons/plus';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
   import type { SortingState } from '@tanstack/table-core';
   import { publicShockerSharesApi } from '$lib/api';
@@ -12,6 +13,8 @@
 
   let data = $state<OwnPublicShareResponse[]>([]);
   let sorting = $state<SortingState>([]);
+
+  let showAddShareModal = $state<boolean>(false);
 
   function refreshPublicShares() {
     publicShockerSharesApi
@@ -35,12 +38,18 @@
   <Card.Header class="w-full">
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
       Public Shares
-      <Button class="text-xl" onclick={refreshPublicShares}>
-        <RotateCcw />
-        <span> Refresh </span>
-      </Button>
+      <div>
+        <Button onclick={() => (showAddShareModal = true)}>
+          <Plus />
+          Add Share
+        </Button>
+        <Button onclick={refreshPublicShares}>
+          <RotateCcw />
+          Refresh
+        </Button>
+      </div>
     </Card.Title>
-    <Card.Description>This is a list of all the public shares you control.</Card.Description>
+    <Card.Description>This is a list of all the public shares you own.</Card.Description>
   </Card.Header>
   <Card.Content class="w-full">
     <DataTable {data} {columns} {sorting} />
