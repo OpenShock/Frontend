@@ -3,7 +3,7 @@
   import type { V2UserShares } from '$lib/api/internal/v2';
   import * as Table from '$lib/components/ui/table';
   import { onMount } from 'svelte';
-  import UserShareDrawer from './UserShareDrawer.svelte';
+  import UserShareItem from './UserShareItem.svelte';
 
   let userShares = $state<V2UserShares>({ outgoing: [], incoming: [] });
 
@@ -25,7 +25,7 @@
   <Table.Root>
     <Table.Body>
       {#each userShares.outgoing as userShare (userShare.id)}
-        <UserShareDrawer {userShare} />
+        <UserShareItem {userShare} />
       {/each}
     </Table.Body>
   </Table.Root>

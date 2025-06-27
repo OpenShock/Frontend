@@ -7,13 +7,13 @@
   import * as Table from '$lib/components/ui/table';
   import * as Tooltip from '$lib/components/ui/tooltip';
 
-  type UserShareDrawerProps = {
+  type Props = {
     userShare: V2UserSharesListItem;
   };
 
   let editDrawer = $state(false);
 
-  let { userShare }: UserShareDrawerProps = $props();
+  let { userShare }: Props = $props();
 </script>
 
 <Drawer.Root open={editDrawer} onOpenChange={(newState) => (editDrawer = newState)}>
