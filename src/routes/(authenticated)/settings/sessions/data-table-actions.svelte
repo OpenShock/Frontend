@@ -1,13 +1,13 @@
 <script lang="ts">
   import Ellipsis from '@lucide/svelte/icons/ellipsis';
+  import type { LoginSessionResponse } from '$lib/api/internal/v1';
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { toast } from 'svelte-sonner';
-  import type { Session } from './columns';
   import SessionRevokeDialog from './dialog-session-revoke.svelte';
 
   interface Props {
-    session: Session;
+    session: LoginSessionResponse;
   }
 
   let { session }: Props = $props();

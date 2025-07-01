@@ -9,28 +9,16 @@
   import * as Card from '$lib/components/ui/card';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
-  import { type Session, columns } from './columns';
+  import { toast } from 'svelte-sonner';
+  import { columns } from './columns';
 
-  function apiSessionToTableSession(session: LoginSessionResponse): Session {
-    return {
-      id: session.id,
-      ip: session.ip,
-      user_agent: session.userAgent,
-      created_at: session.created,
-      expires_at: session.expires,
-      last_seen: session.lastUsed,
-    };
-  }
-
-  let data = $state<Session[]>([]);
+  let data = $state<LoginSessionResponse[]>([]);
   let sorting = $state<SortingState>([]);
 
   function fetchSessions() {
     sessionsApi
       .sessionsListSessions()
-      .then((res) => {
-        data = res.map(apiSessionToTableSession);
-      })
+      .then((res) => (data = res))
       .catch(handleApiError);
   }
 
@@ -52,7 +40,13 @@
   <Card.Header class="w-full">
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
       Sessions
-      <Button class="text-xl" onclick={fetchSessions}>
+      <Button
+        class="text-xl"
+        onclick={() => {
+          fetchSessions();
+          toast.success('Sessions refreshed successfully');
+        }}
+      >
         <RotateCcw />
         <span> Refresh </span>
       </Button>

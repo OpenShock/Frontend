@@ -1,15 +1,15 @@
 <script lang="ts">
   import { sessionsApi } from '$lib/api';
+  import type { LoginSessionResponse } from '$lib/api/internal/v1';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { getReadableUserAgentName } from '$lib/utils/userAgent';
   import { toast } from 'svelte-sonner';
-  import type { Session } from './columns';
 
   interface Props {
     open: boolean;
-    session: Session;
+    session: LoginSessionResponse;
   }
 
   let { open = $bindable(), session }: Props = $props();
@@ -25,7 +25,7 @@
   }
 
   let readableUserAgent = $derived(
-    getReadableUserAgentName(session.user_agent) ?? session.user_agent
+    getReadableUserAgentName(session.userAgent) ?? session.userAgent
   );
 </script>
 
