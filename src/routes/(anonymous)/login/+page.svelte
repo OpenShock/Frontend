@@ -11,8 +11,8 @@
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { UserStore } from '$lib/stores/UserStore';
 
-  let usernameOrEmail = $state<string>('');
-  let password = $state<string>('');
+  let usernameOrEmail = $state('');
+  let password = $state('');
   let turnstileResponse = $state<string | null>(null);
 
   async function handleSubmission(e: SubmitEvent) {
