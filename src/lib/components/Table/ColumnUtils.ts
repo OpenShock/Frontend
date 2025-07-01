@@ -8,7 +8,6 @@ import type {
 import DataTableSortButton from '$lib/components/Table/SortButton.svelte';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table';
 import { isDate } from '$lib/typeguards';
-import type { TwTextColor } from '$lib/types/Tailwind';
 import {
   durationToString,
   elapsedToString,
@@ -42,8 +41,10 @@ function CreateSimpleCellSnippet<TData extends object, K extends keyof TData & s
   };
 }
 
+type AcceptableTextColor = 'blue' | 'green' | 'orange' | 'red';
+type AcceptableTextShade = 500;
 export type TableCell =
-  `<div class="px-4${'' | ' font-medium'}${'' | ` ${TwTextColor}`}"${'' | ` title="${string}"`}>${string}</div>`;
+  `<div class="px-4${'' | ' font-medium'}${'' | ` text-${AcceptableTextColor}-${AcceptableTextShade}`}"${'' | ` title="${string}"`}>${string}</div>`;
 
 export function CreateColumnDef<TData extends object, TKey extends Extract<keyof TData, string>>(
   accessorKey: TKey,
@@ -85,39 +86,29 @@ export function CreateSortableColumnDef<
   };
 }
 
-export const CellNotApplicable =
-  '<div class="px-4 font-medium" title="N/A">N/A</div>' as const satisfies TableCell;
-export const CellOrangeNever =
-  '<div class="px-4 font-medium text-orange-500">Never</div>' as const satisfies TableCell;
-export const CellRedUnknown =
-  '<div class="px-4 font-medium text-red-500">Unknown</div>' as const satisfies TableCell;
-export const CellRedInvalid =
-  '<div class="px-4 font-medium text-red-500">Invalid</div>' as const satisfies TableCell;
-export const CellRedUnavailable =
-  '<div class="px-4 font-medium text-red-500">Unavailable</div>' as const satisfies TableCell;
-export const CellGreenTrue =
-  '<div class="px-4 font-medium text-green-500">true</div>' as const satisfies TableCell;
-export const CellRedFalse =
-  '<div class="px-4 font-medium text-red-500">false</div>' as const satisfies TableCell;
-export const CellGreenOnline =
-  '<div class="px-4 font-medium text-green-500">online</div>' as const satisfies TableCell;
-export const CellRedOffline =
-  '<div class="px-4 font-medium text-red-500">offline</div>' as const satisfies TableCell;
+const UnsafeRenderCellWithTooltip: (content: string, tooltip: string) => TableCell = (content, tooltip) => `<div class="px-4 font-medium" title="${tooltip}">${content}</div>`;
+const UnsafeRenderColoredCell: (content: string, color: AcceptableTextColor) => TableCell = (content, color) => `<div class="px-4 font-medium text-${color}-500">${content}</div>`;
+
+export const CellNotApplicable = UnsafeRenderCellWithTooltip('N/A', 'Not applicable');
+export const CellOrangeNever = UnsafeRenderColoredCell('Never', 'orange');
+export const CellRedUnknown = UnsafeRenderColoredCell('Unknown', 'red');
+export const CellRedInvalid = UnsafeRenderColoredCell('Invalid', 'red');
+export const CellRedUnavailable = UnsafeRenderColoredCell('Unavailable', 'red');
+export const CellRedNone = UnsafeRenderColoredCell('None', 'red');
+export const CellGreenTrue = UnsafeRenderColoredCell('true', 'green');
+export const CellRedFalse = UnsafeRenderColoredCell('false', 'red');
+export const CellGreenOnline = UnsafeRenderColoredCell('online', 'green');
+export const CellRedOffline = UnsafeRenderColoredCell('offline', 'red');
 
 export const RenderCell = (content: string): TableCell =>
   `<div class="px-4">${escapeHtml(content)}</div>`;
 export const RenderBoldCell = (content: string): TableCell =>
   `<div class="px-4 font-medium">${escapeHtml(content)}</div>`;
-export const RenderRedCell = (content: string): TableCell =>
-  `<div class="px-4 font-medium text-red-500">${escapeHtml(content)}</div>`;
-export const RenderGreenCell = (content: string): TableCell =>
-  `<div class="px-4 font-medium text-green-500">${escapeHtml(content)}</div>`;
-export const RenderOrangeCell = (content: string): TableCell =>
-  `<div class="px-4 font-medium text-orange-500">${escapeHtml(content)}</div>`;
-export const RenderBlueCell = (content: string): TableCell =>
-  `<div class="px-4 font-medium text-blue-500">${escapeHtml(content)}</div>`;
-export const RenderCellWithTooltip = (content: string, tooltip: string): TableCell =>
-  `<div class="px-4 font-medium" title="${escapeHtml(tooltip)}">${escapeHtml(content)}</div>`;
+export const RenderRedCell = (content: string): TableCell => UnsafeRenderColoredCell(escapeHtml(content), 'red');
+export const RenderGreenCell = (content: string): TableCell => UnsafeRenderColoredCell(escapeHtml(content), 'green');
+export const RenderOrangeCell = (content: string): TableCell => UnsafeRenderColoredCell(escapeHtml(content), 'orange');
+export const RenderBlueCell = (content: string): TableCell => UnsafeRenderColoredCell(escapeHtml(content), 'blue');
+export const RenderCellWithTooltip = (content: string, tooltip: string): TableCell => UnsafeRenderCellWithTooltip(escapeHtml(content), escapeHtml(tooltip));
 
 export const LocaleDateRenderer = (date: Date): TableCell =>
   RenderCellWithTooltip(date.toLocaleDateString(), date.toString());

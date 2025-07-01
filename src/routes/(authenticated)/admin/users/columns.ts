@@ -1,8 +1,6 @@
 import type { ColumnDef } from '@tanstack/table-core';
 import { type AdminUsersView, PasswordHashingAlgorithm, RoleType } from '$lib/api/internal/v1';
 import {
-  CellGreenTrue,
-  CellRedFalse,
   CreateSortableColumnDef,
   LocaleDateTimeRenderer,
   RenderBlueCell,
@@ -19,8 +17,6 @@ const PasswordHashTypeRenderer = (passwordHashType: PasswordHashingAlgorithm) =>
   return RenderBoldCell(passwordHashType);
 };
 
-const IsEmailActivatedRenderer = (emailActivated: boolean) =>
-  emailActivated ? CellGreenTrue : CellRedFalse;
 const UserRolesRenderer = (roles: RoleType[]) => {
   const isPrivileged = [RoleType.Admin, RoleType.System].some((role) => roles.includes(role));
   return isPrivileged ? RenderBlueCell(roles.toString()) : RenderBoldCell(roles.toString());
