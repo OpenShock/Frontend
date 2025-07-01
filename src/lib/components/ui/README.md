@@ -10,7 +10,6 @@ To start off, we want to eliminate the bulk of the changes that the CLI made, th
 To do this we will first migrate all the tailwindcss classes to tailwindcss v4, then format all the code to our code style.
 
 ```bash
-pnpx @tailwindcss/upgrade --force
 pnpm run format
 ```
 
