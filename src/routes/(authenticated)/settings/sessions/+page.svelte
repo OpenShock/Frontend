@@ -1,19 +1,47 @@
 <script lang="ts">
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
-  import type { SortingState } from '@tanstack/table-core';
+  import type { ColumnDef, SortingState } from '@tanstack/table-core';
   import { sessionsApi } from '$lib/api';
   import type { LoginSessionResponse } from '$lib/api/internal/v1';
   import Container from '$lib/components/Container.svelte';
+  import {
+    CreateColumnDef,
+    CreateSortableColumnDef,
+    RenderCell,
+    TimeSinceRelativeOrNeverRenderer,
+    TimeSinceRelativeRenderer,
+    UserAgentRenderer,
+  } from '$lib/components/Table/ColumnUtils';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card';
+  import { renderComponent } from '$lib/components/ui/data-table';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
-  import { columns } from './columns';
+  import DataTableActions from './data-table-actions.svelte';
 
   let data = $state<LoginSessionResponse[]>([]);
   let sorting = $state<SortingState>([]);
+
+  function onRevoked(sessionId: string) {
+    data = data.filter((s) => s.id !== sessionId);
+  }
+
+  const columns: ColumnDef<LoginSessionResponse>[] = [
+    CreateColumnDef('ip', 'Ip', RenderCell),
+    CreateSortableColumnDef('userAgent', 'User Agent', UserAgentRenderer),
+    CreateSortableColumnDef('created', 'Created at', TimeSinceRelativeRenderer),
+    CreateSortableColumnDef('expires', 'Expires at', TimeSinceRelativeRenderer),
+    CreateSortableColumnDef('lastUsed', 'Last seen', TimeSinceRelativeOrNeverRenderer),
+    {
+      id: 'actions',
+      cell: ({ row }) => {
+        // You can pass whatever you need from `row.original` to the component
+        return renderComponent(DataTableActions, { session: row.original, onRevoked });
+      },
+    },
+  ];
 
   function fetchSessions() {
     sessionsApi

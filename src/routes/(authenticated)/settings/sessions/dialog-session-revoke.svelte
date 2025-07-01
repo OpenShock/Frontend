@@ -10,13 +10,16 @@
   interface Props {
     open: boolean;
     session: LoginSessionResponse;
+    onRevoked: (sessionId: string) => void;
   }
 
-  let { open = $bindable(), session }: Props = $props();
+  let { open = $bindable(), session, onRevoked }: Props = $props();
 
   function handleDeleted() {
-    // TODO: do something
+    onRevoked(session.id);
+
     toast.success('Session revoked successfully');
+
     open = false;
   }
 

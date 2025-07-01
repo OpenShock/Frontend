@@ -8,9 +8,10 @@
 
   interface Props {
     session: LoginSessionResponse;
+    onRevoked: (sessionId: string) => void;
   }
 
-  let { session }: Props = $props();
+  let { session, onRevoked }: Props = $props();
 
   let revokeDialogOpen = $state<boolean>(false);
 
@@ -20,7 +21,7 @@
   }
 </script>
 
-<SessionRevokeDialog bind:open={revokeDialogOpen} {session} />
+<SessionRevokeDialog bind:open={revokeDialogOpen} {session} {onRevoked} />
 
 <DropdownMenu.Root>
   <DropdownMenu.Trigger>
