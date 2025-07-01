@@ -1,38 +1,39 @@
 <script lang="ts">
   import { apiTokensApi } from '$lib/api';
-  import { PermissionType } from '$lib/api/internal/v1';
+  import { PermissionType, type TokenResponse } from '$lib/api/internal/v1';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { updateOrRefreshApiToken } from '$lib/stores/ApiTokensStore';
   import type { ValidationResult } from '$lib/types/ValidationResult';
-  import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
-  import type { ApiToken } from './columns';
 
   interface Props {
     open: boolean;
-    token: ApiToken;
-    onSave: (id: string) => void;
+    token: TokenResponse;
   }
 
-  let { open = $bindable(), token, onSave }: Props = $props();
+  let { open = $bindable(), token }: Props = $props();
 
-  let name = $state<string>('');
-  let permissions = $state<PermissionType[]>([]);
-
-  function handleEdited() {
-    // TODO: do something
-    toast.success('Token edited successfully');
-    open = false;
-
-    onSave(token.id);
-  }
+  let name = $state(token.name);
+  let permissions = $state(token.permissions);
 
   function saveChanges() {
     apiTokensApi
       .tokensEditToken(token.id, { name, permissions })
-      .then(handleEdited)
+      .then(() => {
+        updateOrRefreshApiToken(token.id, (token) => {
+          return {
+            ...token,
+            name,
+            permissions,
+          };
+        });
+
+        toast.success('Token edited successfully');
+        open = false;
+      })
       .catch(handleApiError);
   }
 
@@ -72,11 +73,6 @@
   }
 
   let nameValidationResult = $derived(nameValidation(name));
-
-  onMount(() => {
-    name = token.name;
-    permissions = token.permissions;
-  });
 </script>
 
 <Dialog.Root bind:open={() => open, (o) => (open = o)}>

@@ -6,16 +6,16 @@
   import * as Dialog from '$lib/components/ui/dialog';
   import * as Select from '$lib/components/ui/select';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { refreshApiToken } from '$lib/stores/ApiTokensStore';
   import { GetValResColor, type ValidationResult } from '$lib/types/ValidationResult';
   import { toast } from 'svelte-sonner';
   import TokenCreatedDialog from './dialog-token-created.svelte';
 
   interface Props {
     open: boolean;
-    onGenerated: (id: string) => void;
   }
 
-  let { open = $bindable(), onGenerated }: Props = $props();
+  let { open = $bindable() }: Props = $props();
 
   let name = $state<string>('');
   let expire = $state<'never' | `${number}days` | 'custom'>('never');
@@ -54,10 +54,12 @@
           return;
         }
         token = res.token;
-        onGenerated(res.id);
+
+        refreshApiToken(res.id);
+
         toast.success('Token created successfully');
+
         open = false;
-        createdDialog = true;
       })
       .catch(handleApiError);
   }
@@ -107,8 +109,6 @@
 
   let nameValidationResult = $derived(nameValidation(name));
   let expireValidationResult = $derived(expireValidation(expire, expireCustom));
-
-  let createdDialog = $state(false);
 </script>
 
 <TokenCreatedDialog bind:token />

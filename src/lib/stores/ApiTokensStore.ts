@@ -20,6 +20,23 @@ export function refreshApiToken(id: string) {
     });
 }
 
+export function updateOrRefreshApiToken(id: string, updater: (token: ApiToken) => ApiToken) {
+  let updated = false;
+
+  ApiTokensStore.update((state) => {
+    const existingToken = state.get(id);
+    if (existingToken) {
+      state.set(id, updater(existingToken));
+      updated = true;
+    }
+    return state;
+  });
+
+  if (!updated) {
+    refreshApiToken(id);
+  }
+}
+
 export function refreshApiTokens() {
   apiTokensApi
     .tokensListTokens()

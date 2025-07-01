@@ -2,30 +2,17 @@
   import Plus from '@lucide/svelte/icons/plus';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
   import type { SortingState } from '@tanstack/table-core';
-  import type { TokenResponse } from '$lib/api/internal/v1';
   import Container from '$lib/components/Container.svelte';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card';
-  import { ApiTokensStore, refreshApiToken, refreshApiTokens } from '$lib/stores/ApiTokensStore';
+  import { ApiTokensStore, refreshApiTokens } from '$lib/stores/ApiTokensStore';
   import { onMount } from 'svelte';
-  import { type ApiToken, columns } from './columns';
+  import { toast } from 'svelte-sonner';
+  import { columns } from './columns';
   import TokenGenerateDialog from './dialog-token-generate.svelte';
 
-  function apiTokenToTableToken(user: TokenResponse): ApiToken {
-    return {
-      id: user.id,
-      name: user.name,
-      created_at: user.createdOn,
-      expires_at: user.validUntil,
-      last_used: user.lastUsed,
-      permissions: user.permissions,
-    };
-  }
-
-  let data = $derived<ApiToken[]>(
-    Array.from($ApiTokensStore).map(([_, token]) => apiTokenToTableToken(token))
-  );
+  let data = $derived($ApiTokensStore.values().toArray());
   let sorting = $state<SortingState>([]);
 
   let showGenerateTokenModal = $state<boolean>(false);
@@ -33,7 +20,7 @@
   onMount(refreshApiTokens);
 </script>
 
-<TokenGenerateDialog bind:open={showGenerateTokenModal} onGenerated={(id) => refreshApiToken(id)} />
+<TokenGenerateDialog bind:open={showGenerateTokenModal} />
 
 <Container>
   <Card.Header class="w-full">
@@ -44,7 +31,12 @@
           <Plus />
           Generate Token
         </Button>
-        <Button onclick={refreshApiTokens}>
+        <Button
+          onclick={() => {
+            refreshApiTokens();
+            toast.success('Tokens refreshed successfully');
+          }}
+        >
           <RotateCcw />
           Refresh
         </Button>
