@@ -12,7 +12,7 @@
   import { columns } from './columns';
   import TokenGenerateDialog from './dialog-token-generate.svelte';
 
-  let data = $derived($ApiTokensStore.values().toArray());
+  let data = $derived(Array.from($ApiTokensStore.values()));
   let sorting = $state<SortingState>([]);
 
   let showGenerateTokenModal = $state<boolean>(false);
