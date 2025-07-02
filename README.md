@@ -160,7 +160,19 @@ src/           # Application source code
 
 ### 🌐 Environment Variables
 
-- `.env`, `.env.development`, `.env.production`, `.env.test` — Environment-specific config files (e.g., API keys, endpoints).
+This project leverages [Vite's environment handling](https://vite.dev/guide/env-and-mode.html), following SvelteKit's default convention: publicly accessible variables must be prefixed with `PUBLIC_`, while non-prefixed variables remain server-side and secure.
+
+Environment variables are loaded in this priority:
+
+1. System environment variables
+2. `.env.{mode}.local`
+3. `.env.{mode}`
+4. `.env.local`
+5. `.env`
+
+With this import order, system environment variables will override any `.env` files, making sure CI/CD and production environments can set their own variables without needing to modify the codebase.
+
+Any file ending with `.local` are meant for setting local development variables **and should not be committed to Git**.
 
 ### 🐳 Containerization
 
