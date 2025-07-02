@@ -15,14 +15,13 @@
   import { Label } from '$lib/components/ui/label';
   import { Progress } from '$lib/components/ui/progress';
   import { Sheet, SheetContent, SheetHeader, SheetTitle } from '$lib/components/ui/sheet';
+  import { isSerialSupported } from '$lib/constants/WebApiSupport';
   import { FlashManagerStore } from '$lib/stores/FlashManagersStore';
   import Bowser from 'bowser';
   import FirmwareBoardSelector from './FirmwareBoardSelector.svelte';
   import FirmwareFlasher from './FirmwareFlasher.svelte';
   import HelpDialog from './HelpDialog.svelte';
   import SerialPortSelector from './SerialPortSelector.svelte';
-
-  const isSupported = browser && 'serial' in navigator;
 
   let port = $state<SerialPort | null>(null);
   let manager = $state<FlashManager | null>(null);
@@ -191,7 +190,7 @@
 <Container>
   <Card.Header class="w-full flex flex-row justify-between">
     <Card.Title class="text-3xl">Flash Tool</Card.Title>
-    {#if isSupported}
+    {#if isSerialSupported}
       <div>
         <Button variant="outline" onclick={() => (terminalOpen = !terminalOpen)}>
           <SquareTerminal />
@@ -205,7 +204,7 @@
     {/if}
   </Card.Header>
   <Card.Content class="w-full flex flex-col gap-4">
-    {#if isSupported}
+    {#if isSerialSupported}
       {@render mainContent()}
     {:else if browser}
       {@render unsupportedBrowser()}

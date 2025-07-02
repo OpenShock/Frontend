@@ -1,3 +1,4 @@
+import { isSerialSupported } from '$lib/constants/WebApiSupport';
 import FlashManager from '$lib/EspTool/FlashManager';
 import type { IEspLoaderTerminal } from 'esptool-js';
 import { get, writable } from 'svelte/store';
@@ -56,7 +57,7 @@ export const FlashManagerStore = {
 };
 
 export function initializeFlashManagersStore() {
-  if ('serial' in navigator) {
-    navigator.serial.addEventListener('disconnect', (e) => removePort(e.target as SerialPort));
-  }
+  if (isSerialSupported) return;
+
+  navigator.serial.addEventListener('disconnect', (e) => removePort(e.target as SerialPort));
 }

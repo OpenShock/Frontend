@@ -1,3 +1,4 @@
+import { isSerialSupported } from '$lib/constants/WebApiSupport';
 import { writable } from 'svelte/store';
 
 const { update, subscribe } = writable<SerialPort[]>([]);
@@ -11,15 +12,19 @@ function removePort(port: SerialPort) {
 
 export const SerialPortsStore = {
   requestPort: async (options: SerialPortRequestOptions) => {
+    if (!isSerialSupported) return null;
+
     const port = await navigator.serial.requestPort(options);
+
     addPort(port);
+
     return port;
   },
   subscribe,
 };
 
 export function initializeSerialPortsStore() {
-  if (!('serial' in navigator)) return;
+  if (!isSerialSupported) return;
 
   navigator.serial.addEventListener('connect', (e) => addPort(e.target as SerialPort));
   navigator.serial.addEventListener('disconnect', (e) => removePort(e.target as SerialPort));
