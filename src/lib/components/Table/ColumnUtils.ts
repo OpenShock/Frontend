@@ -86,8 +86,14 @@ export function CreateSortableColumnDef<
   };
 }
 
-const UnsafeRenderCellWithTooltip: (content: string, tooltip: string) => TableCell = (content, tooltip) => `<div class="px-4 font-medium" title="${tooltip}">${content}</div>`;
-const UnsafeRenderColoredCell: (content: string, color: AcceptableTextColor) => TableCell = (content, color) => `<div class="px-4 font-medium text-${color}-500">${content}</div>`;
+const UnsafeRenderCellWithTooltip: (content: string, tooltip: string) => TableCell = (
+  content,
+  tooltip
+) => `<div class="px-4 font-medium" title="${tooltip}">${content}</div>`;
+const UnsafeRenderColoredCell: (content: string, color: AcceptableTextColor) => TableCell = (
+  content,
+  color
+) => `<div class="px-4 font-medium text-${color}-500">${content}</div>`;
 
 export const CellNotApplicable = UnsafeRenderCellWithTooltip('N/A', 'Not applicable');
 export const CellOrangeNever = UnsafeRenderColoredCell('Never', 'orange');
@@ -104,11 +110,16 @@ export const RenderCell = (content: string): TableCell =>
   `<div class="px-4">${escapeHtml(content)}</div>`;
 export const RenderBoldCell = (content: string): TableCell =>
   `<div class="px-4 font-medium">${escapeHtml(content)}</div>`;
-export const RenderRedCell = (content: string): TableCell => UnsafeRenderColoredCell(escapeHtml(content), 'red');
-export const RenderGreenCell = (content: string): TableCell => UnsafeRenderColoredCell(escapeHtml(content), 'green');
-export const RenderOrangeCell = (content: string): TableCell => UnsafeRenderColoredCell(escapeHtml(content), 'orange');
-export const RenderBlueCell = (content: string): TableCell => UnsafeRenderColoredCell(escapeHtml(content), 'blue');
-export const RenderCellWithTooltip = (content: string, tooltip: string): TableCell => UnsafeRenderCellWithTooltip(escapeHtml(content), escapeHtml(tooltip));
+export const RenderRedCell = (content: string): TableCell =>
+  UnsafeRenderColoredCell(escapeHtml(content), 'red');
+export const RenderGreenCell = (content: string): TableCell =>
+  UnsafeRenderColoredCell(escapeHtml(content), 'green');
+export const RenderOrangeCell = (content: string): TableCell =>
+  UnsafeRenderColoredCell(escapeHtml(content), 'orange');
+export const RenderBlueCell = (content: string): TableCell =>
+  UnsafeRenderColoredCell(escapeHtml(content), 'blue');
+export const RenderCellWithTooltip = (content: string, tooltip: string): TableCell =>
+  UnsafeRenderCellWithTooltip(escapeHtml(content), escapeHtml(tooltip));
 
 export const LocaleDateRenderer = (date: Date): TableCell =>
   RenderCellWithTooltip(date.toLocaleDateString(), date.toString());
