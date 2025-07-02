@@ -4,6 +4,17 @@ import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 import { writable } from 'svelte/store';
 
 export type OwnHub = ResponseDeviceWithShockers;
+
+export enum OtaUpdateProgressTask {
+  FetchingMetadata = 0,
+  PreparingForUpdate = 1,
+  FlashingFilesystem = 2,
+  VerifyingFilesystem = 3,
+  FlashingApplication = 4,
+  MarkingApplicationBootable = 5,
+  Rebooting = 6,
+}
+
 export type HubOnlineState = {
   hubId: string;
   isOnline: boolean;
@@ -11,7 +22,7 @@ export type HubOnlineState = {
   otaInstall: {
     id: number;
     version: string;
-    task: number;
+    task: OtaUpdateProgressTask;
     progress: number;
   } | null;
 };

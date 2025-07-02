@@ -1,16 +1,6 @@
-import { OnlineHubsStore } from '$lib/stores/HubsStore';
+import { OnlineHubsStore, OtaUpdateProgressTask } from '$lib/stores/HubsStore';
 import { isNumber, isString } from '$lib/typeguards';
 import { toast } from 'svelte-sonner';
-
-enum OtaUpdateProgressTask {
-  FetchingMetadata = 0,
-  PreparingForUpdate = 1,
-  FlashingFilesystem = 2,
-  VerifyingFilesystem = 3,
-  FlashingApplication = 4,
-  MarkingApplicationBootable = 5,
-  Rebooting = 6,
-}
 
 function isOtaUpdateProgressTask(value: unknown): value is OtaUpdateProgressTask {
   return (
