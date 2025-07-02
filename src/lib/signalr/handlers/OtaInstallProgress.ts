@@ -1,21 +1,7 @@
-import { OnlineHubsStore, OtaUpdateProgressTask } from '$lib/stores/HubsStore';
+import { isOtaUpdateProgressTask } from '$lib/signalr/models/OtaUpdateProgressTask';
+import { OnlineHubsStore } from '$lib/stores/HubsStore';
 import { isNumber, isString } from '$lib/typeguards';
 import { toast } from 'svelte-sonner';
-
-function isOtaUpdateProgressTask(value: unknown): value is OtaUpdateProgressTask {
-  return (
-    isNumber(value) &&
-    [
-      OtaUpdateProgressTask.FetchingMetadata,
-      OtaUpdateProgressTask.PreparingForUpdate,
-      OtaUpdateProgressTask.FlashingFilesystem,
-      OtaUpdateProgressTask.VerifyingFilesystem,
-      OtaUpdateProgressTask.FlashingApplication,
-      OtaUpdateProgressTask.MarkingApplicationBootable,
-      OtaUpdateProgressTask.Rebooting,
-    ].includes(value)
-  );
-}
 
 /**
  * Handles OTA install progress updates for a hub.
