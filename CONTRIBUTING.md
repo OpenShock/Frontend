@@ -13,7 +13,6 @@ Do you want to contribute to OpenShock? We'd love to have you! Here are some way
 - **Trunk-Based Development**: Our repository follows the `trunk-based development` strategy. This entails using feature branches for all new development, which are subsequently merged into the `master` branch upon completion.
 
 - **Branch Naming Conventions**:
-
   - Bug fixes: `bugfix/bug-name`.
   - Features: `feature/feature-name`.
   - Housekeeping tasks: `chore/chore-name`.
@@ -21,14 +20,12 @@ Do you want to contribute to OpenShock? We'd love to have you! Here are some way
   - Documentation: `docs/document-name`. (This applies to `README.md`, `CONTRIBUTING.md`, `LICENSE`, etc...)
 
 - **Pull Requests**:
-
   - Pull requests are used to merge feature, bug fixe, and chore branches into the `master` branch.
   - A minimum of one other developer must review the pull request before merging.
   - All pull requests must pass the automated tests before being merged.
   - All pull requests must be squashed and merged.
 
 - **Hotfixes**:
-
   - Hotfixes will always be branched off the latest tag.
   - Hotfixes do not require a pull request, but needs to be merged by a project maintainer.
   - The hotfix workflow is as follows:
@@ -38,7 +35,6 @@ Do you want to contribute to OpenShock? We'd love to have you! Here are some way
     4. Squash and merge the hotfix back into the `master` branch.
 
 - **Releases**:
-
   - Releases are initiated by creating a new tag on the `master` branch, following semantic versioning principles. Tags are named `vX.Y.Z`.
   - The release workflow is as follows:
     1. Create a new tag on the `master` branch.

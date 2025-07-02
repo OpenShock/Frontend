@@ -9,16 +9,16 @@ import { dev } from '$app/environment';
 import { PUBLIC_BACKEND_API_DOMAIN } from '$env/static/public';
 import { toast } from 'svelte-sonner';
 import { type Readable, get, writable } from 'svelte/store';
-import { handleSignalrDeviceStatus } from './handlers/DeviceStatus';
-import { handleSignalrDeviceUpdate } from './handlers/DeviceUpdate';
-import { handleSignalrLog } from './handlers/Log';
 import {
+  handleSignalrDeviceStatus,
+  handleSignalrDeviceUpdate,
+  handleSignalrLog,
   handleSignalrOtaInstallFailed,
   handleSignalrOtaInstallProgress,
   handleSignalrOtaInstallStarted,
   handleSignalrOtaInstallSucceeded,
   handleSignalrOtaRollback,
-} from './handlers/OtaInstall';
+} from './handlers';
 
 const signalr_connection = writable<HubConnection | null>(null);
 const signalr_state = writable<HubConnectionState>(HubConnectionState.Disconnected);
