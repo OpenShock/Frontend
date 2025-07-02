@@ -74,7 +74,7 @@
       Task
       <Progress value={(hub.otaInstall?.progress ?? 0) * 100} />
     </div>
-    <p>{hub.otaInstall?.step}</p>
+    <p>{hub.otaInstall?.task}</p>
     <p>Flashing...</p>
 
     <div class="flex w-full justify-between">

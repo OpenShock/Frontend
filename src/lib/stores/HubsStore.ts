@@ -11,7 +11,7 @@ export type HubOnlineState = {
   otaInstall: {
     id: number;
     version: string;
-    step: number;
+    task: number;
     progress: number;
   } | null;
 };

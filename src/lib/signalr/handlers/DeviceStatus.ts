@@ -1,33 +1,28 @@
 import { OnlineHubsStore } from '$lib/stores/HubsStore';
+import { isObject } from '$lib/typeguards';
 import { toast } from 'svelte-sonner';
 
-type SignalrHub = {
+interface DeviceOnlineState {
   device: string;
   online: boolean;
   firmwareVersion: string | null;
-};
+}
 
-function isValidSignalrHubArray(array: unknown): array is SignalrHub[] {
-  if (!Array.isArray(array)) {
-    return false;
-  }
-
-  return array.every(
-    (item) =>
-      typeof item === 'object' &&
-      item !== null &&
-      'device' in item &&
-      'online' in item &&
-      'firmwareVersion' in item &&
-      typeof item.device === 'string' &&
-      typeof item.online === 'boolean' &&
-      (typeof item.firmwareVersion === 'string' || item.firmwareVersion === null)
+function isDeviceOnlineState(value: unknown): value is DeviceOnlineState {
+  return (
+    isObject(value) &&
+    'device' in value &&
+    'online' in value &&
+    'firmwareVersion' in value &&
+    typeof value.device === 'string' &&
+    typeof value.online === 'boolean' &&
+    (typeof value.firmwareVersion === 'string' || value.firmwareVersion === null)
   );
 }
 
-export function handleSignalrDeviceState(array: unknown) {
-  if (!isValidSignalrHubArray(array)) {
-    console.error('Received invalid SignalR DeviceState event', array);
+export function handleSignalrDeviceStatus(array: unknown) {
+  if (!Array.isArray(array) || !array.every(isDeviceOnlineState)) {
+    console.error('Received invalid SignalR DeviceStatus event', array);
     toast.error('Received invalid update from server!');
     return;
   }

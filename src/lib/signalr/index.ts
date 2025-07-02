@@ -9,12 +9,15 @@ import { dev } from '$app/environment';
 import { PUBLIC_BACKEND_API_DOMAIN } from '$env/static/public';
 import { toast } from 'svelte-sonner';
 import { type Readable, get, writable } from 'svelte/store';
-import { handleSignalrDeviceState } from './handlers/DeviceStatus';
+import { handleSignalrDeviceStatus } from './handlers/DeviceStatus';
 import { handleSignalrDeviceUpdate } from './handlers/DeviceUpdate';
+import { handleSignalrLog } from './handlers/Log';
 import {
+  handleSignalrOtaInstallFailed,
   handleSignalrOtaInstallProgress,
   handleSignalrOtaInstallStarted,
   handleSignalrOtaInstallSucceeded,
+  handleSignalrOtaRollback,
 } from './handlers/OtaInstall';
 
 const signalr_connection = writable<HubConnection | null>(null);
@@ -47,17 +50,22 @@ export async function initializeSignalR() {
     signalr_state.set(HubConnectionState.Connected);
   });
 
-  connection.on('Welcome', (message) => {
-    console.log(message);
+  // Look up in OpenShock API repository: Common/Hubs/IUserHub.cs
+  connection.on('Welcome', () => {
+    // Arg is the SignalR connectionId
+    signalr_state.set(HubConnectionState.Connected);
   });
 
-  connection.on('Log', () => {});
+  connection.on('Log', handleSignalrLog);
 
-  connection.on('DeviceStatus', handleSignalrDeviceState);
+  connection.on('DeviceStatus', handleSignalrDeviceStatus);
   connection.on('DeviceUpdate', handleSignalrDeviceUpdate);
+
   connection.on('OtaInstallStarted', handleSignalrOtaInstallStarted);
   connection.on('OtaInstallProgress', handleSignalrOtaInstallProgress);
   connection.on('OtaInstallSucceeded', handleSignalrOtaInstallSucceeded);
+  connection.on('OtaInstallFailed', handleSignalrOtaInstallFailed);
+  connection.on('OtaRollback', handleSignalrOtaRollback);
 
   signalr_connection.set(connection);
 
