@@ -1,21 +1,20 @@
 import adapterCloudflare from '@sveltejs/adapter-cloudflare';
 import adapterNode from '@sveltejs/adapter-node';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
-import dotenv from 'dotenv';
 import * as child_process from 'node:child_process';
 import process from 'process';
+import { loadEnv } from 'vite';
 
 // Determine if we are running on Cloudflare Pages
 const isGithubActions = process.env.GITHUB_ACTIONS === 'true';
 const isCloudflare = process.env.CF_PAGES === '1';
 const isDocker = process.env.DOCKER === 'true';
+const mode = process.env.NODE_ENV;
+
+const dotenv = { ...process.env, ...loadEnv(mode, process.cwd(), 'PUBLIC_') };
 
 // Use the appropriate adapter
 const adapter = isCloudflare ? adapterCloudflare : adapterNode;
-
-function readEnv(path) {
-  return dotenv.config({ path })?.parsed ?? {};
-}
 
 function getGitHash() {
   if (isGithubActions) return process.env.GITHUB_SHA;
@@ -32,11 +31,6 @@ function getGitBranch() {
   return child_process.execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
 }
 
-// Read environment variables from .env files
-readEnv('.env.local');
-readEnv(`.env.${process.env.NODE_ENV}`);
-readEnv('.env');
-
 const commitHash = getGitHash();
 const branchName = getGitBranch();
 
@@ -48,7 +42,7 @@ const config = {
   preprocess: vitePreprocess(),
 
   vitePlugin: {
-    inspector: process.env.NODE_ENV === 'development',
+    inspector: mode === 'development',
   },
   kit: {
     adapter: adapter({
@@ -73,9 +67,9 @@ const config = {
         ],
         'connect-src': [
           'self',
-          'https://' + process.env.PUBLIC_BACKEND_API_DOMAIN,
-          'wss://' + process.env.PUBLIC_BACKEND_API_DOMAIN,
-          'wss://' + process.env.PUBLIC_GATEWAY_CSP_WILDCARD,
+          'https://' + dotenv.PUBLIC_BACKEND_API_DOMAIN,
+          'wss://' + dotenv.PUBLIC_BACKEND_API_DOMAIN,
+          'wss://' + dotenv.PUBLIC_GATEWAY_CSP_WILDCARD,
           'https://firmware.openshock.org',
           'https://api.pwnedpasswords.com/range/',
           'https://cloudflareinsights.com',

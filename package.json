@@ -42,7 +42,6 @@
 		"bowser": "^2.11.0",
 		"clsx": "^2.1.1",
 		"crypto-js": "^4.2.0",
-		"dotenv": "^17.0.0",
 		"eslint": "^9.30.0",
 		"eslint-config-prettier": "^10.1.5",
 		"eslint-plugin-svelte": "^3.10.1",
