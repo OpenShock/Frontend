@@ -42,7 +42,7 @@ export async function handleApiError(
     return;
   }
 
-  if ('cause' in error) {
+  if (Object.hasOwn(error, 'cause')) {
     console.error('Got unknown error type: ' + JSON.stringify(error)); // TODO: Display toast
     return;
   }

@@ -2,7 +2,7 @@ import { isObject, isString } from '$lib/typeguards';
 
 export interface ControlLogSender {
   connectionId: string;
-  additionalItems: { [key: string]: object };
+  additionalItems: object;
   id: string;
   name: string;
   image: string;
@@ -12,18 +12,17 @@ export interface ControlLogSender {
 export function isControlLogSender(value: unknown): value is ControlLogSender {
   return (
     isObject(value) &&
-    'connectionId' in value &&
+    Object.hasOwn(value, 'connectionId') &&
+    Object.hasOwn(value, 'additionalItems') &&
+    Object.hasOwn(value, 'id') &&
+    Object.hasOwn(value, 'name') &&
+    Object.hasOwn(value, 'image') &&
+    Object.hasOwn(value, 'customName') &&
     isString(value.connectionId) &&
-    'additionalItems' in value &&
     isObject(value.additionalItems) &&
-    Object.values(value.additionalItems).every(isObject) &&
-    'id' in value &&
     isString(value.id) &&
-    'name' in value &&
     isString(value.name) &&
-    'image' in value &&
     isString(value.image) &&
-    'customName' in value &&
     (value.customName === null || isString(value.customName))
   );
 }

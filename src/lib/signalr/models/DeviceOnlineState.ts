@@ -1,4 +1,4 @@
-import { isObject } from '$lib/typeguards';
+import { isBoolean, isObject, isString } from '$lib/typeguards';
 
 export interface DeviceOnlineState {
   device: string;
@@ -9,11 +9,11 @@ export interface DeviceOnlineState {
 export function isDeviceOnlineState(value: unknown): value is DeviceOnlineState {
   return (
     isObject(value) &&
-    'device' in value &&
-    'online' in value &&
-    'firmwareVersion' in value &&
-    typeof value.device === 'string' &&
-    typeof value.online === 'boolean' &&
-    (typeof value.firmwareVersion === 'string' || value.firmwareVersion === null)
+    Object.hasOwn(value, 'device') &&
+    Object.hasOwn(value, 'online') &&
+    Object.hasOwn(value, 'firmwareVersion') &&
+    isString(value.device) &&
+    isBoolean(value.online) &&
+    (value.firmwareVersion === null || isString(value.firmwareVersion))
   );
 }

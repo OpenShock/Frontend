@@ -15,24 +15,24 @@ export interface ControlLog {
 function isControlLogShockerInfo(value: unknown): value is ControlLogShockerInfo {
   return (
     isObject(value) &&
-    'id' in value &&
+    Object.hasOwn(value, 'id') &&
+    Object.hasOwn(value, 'name') &&
     isString(value.id) &&
-    'name' in value &&
     isString(value.name)
   );
 }
 export function isControlLog(value: unknown): value is ControlLog {
   return (
     isObject(value) &&
-    'shocker' in value &&
+    Object.hasOwn(value, 'shocker') &&
+    Object.hasOwn(value, 'type') &&
+    Object.hasOwn(value, 'intensity') &&
+    Object.hasOwn(value, 'duration') &&
+    Object.hasOwn(value, 'executedAt') &&
     isControlLogShockerInfo(value.shocker) &&
-    'type' in value &&
     isNumber(value.type) &&
-    'intensity' in value &&
     isNumber(value.intensity) &&
-    'duration' in value &&
     isNumber(value.duration) &&
-    'executedAt' in value &&
     isString(value.executedAt)
   );
 }

@@ -64,6 +64,9 @@ export default defineConfig(async ({ command, mode, isPreview }) => {
   const useLocalRedirect = isLocalServe && !isProduction && !isTruthy(env.CI);
 
   return defineConfig({
+    build: {
+      target: 'es2022'
+    },
     plugins: [...(useLocalRedirect ? [mkcert()] : []), sveltekit(), tailwindcss()],
     server: await getServerConfig(mode, useLocalRedirect),
     test: { include: ['src/**/*.{test,spec}.{js,ts}'] },
