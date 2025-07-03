@@ -9,6 +9,7 @@
   import { Button } from '$lib/components/ui/button';
   import * as Card from '$lib/components/ui/card';
   import * as Dialog from '$lib/components/ui/dialog';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
   import { toast } from 'svelte-sonner';
 
@@ -56,6 +57,7 @@
         turnstileResponse,
       })
       .then(() => (accountCreated = true))
+      .catch(handleApiError)
       .finally(() => {
         turnstileResponse = null;
       });
@@ -75,39 +77,35 @@
   </Dialog.Content>
 </Dialog.Root>
 
-<Container>
-  <Card.Header>
-    <Card.Title class="text-3xl text-nowrap">Sign Up</Card.Title>
-  </Card.Header>
-  <Card.Content>
-    <form class="flex flex-col space-y-2" onsubmit={handleSubmission}>
-      <UsernameInput
-        label="Username"
-        placeholder="Username"
-        bind:value={username}
-        bind:valid={usernameValid}
-      />
-      <EmailInput label="Email" placeholder="Email" bind:value={email} bind:valid={emailValid} />
-      <PasswordInput
-        label="Password"
-        placeholder="Password"
-        autocomplete="new-password"
-        bind:value={password}
-        bind:valid={passwordValid}
-        validate={true}
-        showStrengthMeter={true}
-      />
-      <PasswordInput
-        label="Confirm Password"
-        placeholder="Confirm Password"
-        autocomplete="new-password"
-        bind:value={passwordConfirm}
-        validate={validatePasswordMatch(passwordConfirm, password)}
-      />
+<Container class="items-center">
+  <form class="flex flex-col gap-2" onsubmit={handleSubmission}>
+    <div class="text-3xl font-semibold text-nowrap">Sign Up</div>
+    <UsernameInput
+      label="Username"
+      placeholder="Username"
+      bind:value={username}
+      bind:valid={usernameValid}
+    />
+    <EmailInput label="Email" placeholder="Email" bind:value={email} bind:valid={emailValid} />
+    <PasswordInput
+      label="Password"
+      placeholder="Password"
+      autocomplete="new-password"
+      bind:value={password}
+      bind:valid={passwordValid}
+      validate={true}
+      showStrengthMeter={true}
+    />
+    <PasswordInput
+      label="Confirm Password"
+      placeholder="Confirm Password"
+      autocomplete="new-password"
+      bind:value={passwordConfirm}
+      validate={validatePasswordMatch(passwordConfirm, password)}
+    />
 
-      <Turnstile action="signup" bind:response={turnstileResponse} />
+    <Turnstile action="signup" bind:response={turnstileResponse} />
 
-      <Button type="submit" disabled={!canSubmit}>Sign Up</Button>
-    </form>
-  </Card.Content>
+    <Button type="submit" disabled={!canSubmit}>Sign Up</Button>
+  </form>
 </Container>

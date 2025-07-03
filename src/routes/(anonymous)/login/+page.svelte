@@ -54,7 +54,7 @@
 </script>
 
 <Container class="items-center">
-  <form class="flex flex-col gap-4" onsubmit={handleSubmission}>
+  <form class="flex flex-col gap-2" onsubmit={handleSubmission}>
     <div class="text-3xl font-semibold">Login</div>
 
     <TextInput
@@ -64,6 +64,7 @@
       bind:value={usernameOrEmail}
       validationResult={usernameError}
     />
+
     <PasswordInput
       label="Password"
       placeholder="Password"
