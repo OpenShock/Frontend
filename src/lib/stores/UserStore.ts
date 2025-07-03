@@ -64,7 +64,7 @@ async function refreshSelf(): Promise<boolean> {
   } catch (error) {
     reset();
 
-    handleApiError(error, problem => problem.type !== 'Authentication.CookieMissingOrInvalid');
+    handleApiError(error, (problem) => problem.type !== 'Authentication.CookieMissingOrInvalid');
 
     return false;
   }

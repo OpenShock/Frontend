@@ -1,4 +1,4 @@
-import { isNumber, isObject, isString } from "$lib/typeguards";
+import { isNumber, isObject, isString } from '$lib/typeguards';
 
 export interface ProblemDetails {
   type: string;
