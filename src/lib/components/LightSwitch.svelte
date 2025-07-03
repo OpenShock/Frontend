@@ -9,6 +9,7 @@
     getDarkReaderState,
     willActivateLightMode,
   } from '$lib/stores/ColorSchemeStore';
+  import { cn } from '$lib/utils';
   import { toast } from 'svelte-sonner';
 
   let pendingScheme = $state<'light' | 'dark' | 'system' | undefined>();
@@ -51,7 +52,7 @@
 
 <DropdownMenu.Root>
   <DropdownMenu.Trigger
-    class={buttonVariants({ variant: 'ghost' }) + ' size-8! text-gray-600 dark:text-gray-300'}
+    class={cn(buttonVariants({ variant: 'ghost' }), 'size-8! text-gray-600 dark:text-gray-300')}
   >
     <Sun class="size-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
     <Moon
@@ -60,8 +61,14 @@
     <span class="sr-only">Toggle theme</span>
   </DropdownMenu.Trigger>
   <DropdownMenu.Content align="end">
-    <DropdownMenu.Item onclick={() => evaluateLightSwitch('light')}>Light</DropdownMenu.Item>
-    <DropdownMenu.Item onclick={() => evaluateLightSwitch('dark')}>Dark</DropdownMenu.Item>
-    <DropdownMenu.Item onclick={() => evaluateLightSwitch('system')}>System</DropdownMenu.Item>
+    <DropdownMenu.Item class="cursor-pointer" onclick={() => evaluateLightSwitch('light')}
+      >Light</DropdownMenu.Item
+    >
+    <DropdownMenu.Item class="cursor-pointer" onclick={() => evaluateLightSwitch('dark')}
+      >Dark</DropdownMenu.Item
+    >
+    <DropdownMenu.Item class="cursor-pointer" onclick={() => evaluateLightSwitch('system')}
+      >System</DropdownMenu.Item
+    >
   </DropdownMenu.Content>
 </DropdownMenu.Root>

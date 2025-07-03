@@ -14,10 +14,7 @@ declare global {
     turnstile: TurnstileInstance | undefined;
   }
   interface ObjectConstructor {
-    hasOwn<T extends object, K extends PropertyKey>(
-      o: T,
-      prop: K,
-    ): o is T & Record<K, unknown>;
+    hasOwn<T extends object, K extends PropertyKey>(o: T, prop: K): o is T & Record<K, unknown>;
   }
 }
 

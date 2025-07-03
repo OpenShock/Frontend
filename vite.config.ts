@@ -65,7 +65,7 @@ export default defineConfig(async ({ command, mode, isPreview }) => {
 
   return defineConfig({
     build: {
-      target: 'es2022'
+      target: 'es2022',
     },
     plugins: [...(useLocalRedirect ? [mkcert()] : []), sveltekit(), tailwindcss()],
     server: await getServerConfig(mode, useLocalRedirect),

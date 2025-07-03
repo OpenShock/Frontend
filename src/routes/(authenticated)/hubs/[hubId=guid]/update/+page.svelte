@@ -2,7 +2,11 @@
   import { DownloadCloud, RotateCcw } from '@lucide/svelte';
   import { page } from '$app/state';
   import { hubManagementV1Api } from '$lib/api';
-  import type { OtaItem, OtaItemIReadOnlyCollectionLegacyDataResponse } from '$lib/api/internal/v1';
+  import {
+    type OtaItem,
+    type OtaItemIReadOnlyCollectionLegacyDataResponse,
+    OtaUpdateStatus,
+  } from '$lib/api/internal/v1';
   import Container from '$lib/components/Container.svelte';
   import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
@@ -12,6 +16,7 @@
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { SignalR_Connection } from '$lib/signalr';
   import { type HubOnlineState, OnlineHubsStore } from '$lib/stores/HubsStore';
+  import { cn } from '$lib/utils';
   import { NumberToHexPadded } from '$lib/utils/convert';
 
   let hubId = $derived(page.params.hubId);
@@ -100,7 +105,11 @@
               {NumberToHexPadded(otaLog.id, 8)}
             </Table.Cell>
             <Table.Cell class="font-medium">{otaLog.startedAt.toDateString()}</Table.Cell>
-            <Table.Cell class={`font-medium${otaLog.status == 'Finished' ? '' : ' text-red-500'}`}>
+            <Table.Cell
+              class={cn('font-medium', {
+                'text-red-500': otaLog.status !== OtaUpdateStatus.Finished,
+              })}
+            >
               {otaLog.status}
             </Table.Cell>
             <Table.Cell class="font-medium">{otaLog.version}</Table.Cell>

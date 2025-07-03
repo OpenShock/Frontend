@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { IntervalHandle, TimeoutHandle } from '$lib/types/WAPI';
+  import { cn } from '$lib/utils';
   import { onDestroy } from 'svelte';
 
   interface Props {
@@ -52,7 +53,10 @@
   onpointerdown={startConfirm}
   onpointerup={stopTimers}
   onpointerleave={stopTimers}
-  class={`h-10 rounded-md bg-[#7f1d1d] px-4 py-2 text-sm font-medium whitespace-nowrap select-none hover:bg-[#731a1a] focus:outline-hidden ${timer ? 'violent-shake' : ''}`}
+  class={cn(
+    'h-10 rounded-md bg-[#7f1d1d] px-4 py-2 text-sm font-medium whitespace-nowrap select-none hover:bg-[#731a1a] focus:outline-hidden',
+    { 'violent-shake': timer !== null }
+  )}
 >
   {buttonText}
 </button>

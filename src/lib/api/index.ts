@@ -3,6 +3,7 @@ import {
   APITokensApi,
   AccountApi as AccountV1Api,
   AdminApi,
+  type ConfigurationParameters,
   Configuration as ConfigurationV1,
   HubManagementApi as HubManagementV1Api,
   MetaApi,
@@ -20,11 +21,6 @@ import {
   ShockersApi as ShockersV2Api,
 } from './internal/v2';
 
-type Config = {
-  basePath?: string;
-  credentials?: RequestCredentials;
-};
-
 function GetBasePath() {
   const domain = (PUBLIC_BACKEND_API_DOMAIN || undefined) as string | undefined;
 
@@ -39,23 +35,15 @@ function GetBasePath() {
   return 'https://' + domain; // TODO: Add configurable protocol
 }
 
-function GetConfig(): Config {
+function GetConfig(): ConfigurationParameters {
   return {
     basePath: GetBasePath(),
     credentials: 'include',
   };
 }
 
-export function GetV1Config() {
-  return new ConfigurationV1(GetConfig());
-}
-
-export function GetV2Config() {
-  return new ConfigurationV2(GetConfig());
-}
-
-const DefaultApiV1Configuration = GetV1Config();
-const DefaultApiV2Configuration = GetV2Config();
+const DefaultApiV1Configuration = new ConfigurationV1(GetConfig());
+const DefaultApiV2Configuration = new ConfigurationV2(GetConfig());
 
 export const accountV1Api = new AccountV1Api(DefaultApiV1Configuration);
 export const accountV2Api = new AccountV2Api(DefaultApiV2Configuration);
