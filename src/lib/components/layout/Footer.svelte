@@ -4,7 +4,7 @@
   import { SignalR_State } from '$lib/signalr';
 </script>
 
-<footer class="bottom-0 flex items-center justify-center px-2 text-sm sm:justify-between">
+<footer class="bottom-0 flex items-center justify-between px-2 text-sm">
   <div>
     Made with
     <span style="color: #e25555;">&#9829;</span>
