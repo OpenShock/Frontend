@@ -68,6 +68,7 @@
         type="button"
         class={button.class ?? 'disabled:opacity-50'}
         onclick={button.onClick}
+        variant="ghost"
         disabled={button.submits &&
           (validationResult === null || (validationResult && !validationResult.valid))}
       >

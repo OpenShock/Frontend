@@ -7,13 +7,25 @@
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import { Button } from '$lib/components/ui/button';
-  import { CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
+  import {
+    type ValidationProblemDetails,
+    isValidationError,
+  } from '$lib/errorhandling/ValidationProblemDetails';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { UserStore } from '$lib/stores/UserStore';
+  import type { ValidationResult } from '$lib/types/ValidationResult';
 
   let usernameOrEmail = $state('');
   let password = $state('');
   let turnstileResponse = $state<string | null>(null);
+
+  let usernameError = $state<ValidationResult | null>(null);
+  let passwordError = $state<ValidationResult | null>(null);
+
+  function mapToValRes(problem: ValidationProblemDetails, key: string): ValidationResult | null {
+    const errors = problem.errors[key];
+    return errors ? { valid: false, message: errors[0] } : null;
+  }
 
   async function handleSubmission(e: SubmitEvent) {
     e.preventDefault();
@@ -27,7 +39,12 @@
       await UserStore.refreshSelf();
       goto(page.url.searchParams.get('redirect') ?? '/home');
     } catch (error) {
-      handleApiError(error);
+      handleApiError(error, (problem) => {
+        if (!isValidationError(problem)) return true;
+        usernameError = mapToValRes(problem, 'UsernameOrEmail');
+        passwordError = mapToValRes(problem, 'Password');
+        return false;
+      });
     }
   }
 
@@ -36,30 +53,29 @@
   );
 </script>
 
-<Container>
-  <CardHeader>
-    <CardTitle class="text-3xl">Login</CardTitle>
-  </CardHeader>
-  <CardContent>
-    <form class="flex flex-col space-y-4" onsubmit={handleSubmission}>
-      <TextInput
-        label="Username or Email"
-        placeholder="Username or Email"
-        autocomplete="on"
-        bind:value={usernameOrEmail}
-      />
-      <PasswordInput
-        label="Password"
-        placeholder="Password"
-        autocomplete="new-password"
-        bind:value={password}
-      />
+<Container class="items-center">
+  <form class="flex flex-col gap-4" onsubmit={handleSubmission}>
+    <div class="text-3xl font-semibold">Login</div>
 
-      <Turnstile action="signin" bind:response={turnstileResponse} />
+    <TextInput
+      label="Username or Email"
+      placeholder="Username or Email"
+      autocomplete="on"
+      bind:value={usernameOrEmail}
+      validationResult={usernameError}
+    />
+    <PasswordInput
+      label="Password"
+      placeholder="Password"
+      autocomplete="new-password"
+      bind:value={password}
+      validate={passwordError}
+    />
 
-      <Button type="submit" disabled={!canSubmit}>Log In</Button>
+    <Turnstile action="signin" bind:response={turnstileResponse} />
 
-      <a class="text-blue-500 underline" href="/forgot-password">I forgot my password</a>
-    </form>
-  </CardContent>
+    <Button type="submit" disabled={!canSubmit}>Log In</Button>
+
+    <a class="text-blue-500 underline" href="/forgot-password">I forgot my password</a>
+  </form>
 </Container>
