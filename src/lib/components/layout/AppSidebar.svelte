@@ -33,6 +33,7 @@
   } from '$lib/components/ui/sidebar';
   import { UserStore } from '$lib/stores/UserStore';
   import type { AnyComponent } from '$lib/types/AnyComponent';
+  import { isMobile, isSerialSupported } from '$lib/utils/compatibility';
   import { Collapsible } from 'bits-ui';
 
   let currentUser = $derived($UserStore.self);
@@ -97,11 +98,14 @@
       ]);
     }
 
-    menus.push({
-      title: 'Flashtool',
-      Icon: Cpu,
-      href: '/flashtool',
-    });
+    // Only time we dont show the menu is if its on a mobile device without serial support
+    if (!(!isSerialSupported && isMobile)) {
+      menus.push({
+        title: 'Flashtool',
+        Icon: Cpu,
+        href: '/flashtool',
+      });
+    }
 
     return {
       title: 'General',

@@ -1,4 +1,4 @@
-import { isSerialSupported } from '$lib/constants/WebApiSupport';
+import { isSerialSupported } from '$lib/utils/compatibility';
 import { writable } from 'svelte/store';
 
 const { update, subscribe } = writable<SerialPort[]>([]);

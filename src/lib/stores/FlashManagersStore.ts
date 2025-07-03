@@ -1,5 +1,5 @@
 import FlashManager from '$lib/EspTool/FlashManager';
-import { isSerialSupported } from '$lib/constants/WebApiSupport';
+import { isSerialSupported } from '$lib/utils/compatibility';
 import type { IEspLoaderTerminal } from 'esptool-js';
 import { get, writable } from 'svelte/store';
 

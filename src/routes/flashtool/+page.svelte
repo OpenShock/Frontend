@@ -15,8 +15,8 @@
   import { Label } from '$lib/components/ui/label';
   import { Progress } from '$lib/components/ui/progress';
   import { Sheet, SheetContent, SheetHeader, SheetTitle } from '$lib/components/ui/sheet';
-  import { isSerialSupported } from '$lib/constants/WebApiSupport';
   import { FlashManagerStore } from '$lib/stores/FlashManagersStore';
+  import { isSerialSupported } from '$lib/utils/compatibility';
   import Bowser from 'bowser';
   import FirmwareBoardSelector from './FirmwareBoardSelector.svelte';
   import FirmwareFlasher from './FirmwareFlasher.svelte';
