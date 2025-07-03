@@ -57,7 +57,7 @@ export const FlashManagerStore = {
 };
 
 export function initializeFlashManagersStore() {
-  if (isSerialSupported) return;
+  if (!isSerialSupported) return;
 
   navigator.serial.addEventListener('disconnect', (e) => removePort(e.target as SerialPort));
 }
