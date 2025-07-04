@@ -3,6 +3,7 @@ import tailwindcss from '@tailwindcss/vite';
 import dns from 'dns/promises';
 import { env } from 'process';
 import { defineConfig, loadEnv } from 'vite';
+import devtoolsJson from 'vite-plugin-devtools-json';
 import mkcert from 'vite-plugin-mkcert';
 
 function printColor(message: string, colorCode: string) {
@@ -67,7 +68,7 @@ export default defineConfig(async ({ command, mode, isPreview }) => {
     build: {
       target: 'es2022',
     },
-    plugins: [...(useLocalRedirect ? [mkcert()] : []), sveltekit(), tailwindcss()],
+    plugins: [...(useLocalRedirect ? [mkcert()] : []), sveltekit(), tailwindcss(), devtoolsJson()],
     server: await getServerConfig(mode, useLocalRedirect),
     test: { include: ['src/**/*.{test,spec}.{js,ts}'] },
   });
