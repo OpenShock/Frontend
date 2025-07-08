@@ -1,15 +1,21 @@
 import { browser } from '$app/environment';
 import { type Updater, writable } from 'svelte/store';
 
-function getLocalStoreState() {
+export enum LightMode {
+  Dark = 'dark',
+  Light = 'light',
+  System = 'system',
+}
+
+function getLocalStoreState(): LightMode {
   const scheme = localStorage.getItem('theme');
-  if (scheme === 'dark' || scheme === 'light' || scheme === 'system') {
-    return scheme;
+  if (scheme !== null && Object.values(LightMode).includes(scheme as LightMode)) {
+    return scheme as LightMode;
   }
 
-  localStorage.setItem('theme', 'system');
+  localStorage.setItem('theme', LightMode.System);
 
-  return 'system';
+  return LightMode.System;
 }
 
 export function getDarkReaderState() {
@@ -17,11 +23,7 @@ export function getDarkReaderState() {
 
   const proxyInjected = rootHtml.getAttribute('data-darkreader-proxy-injected');
   const metaElement = rootHtml.querySelector('head meta[name="darkreader"]');
-
-  let scheme = rootHtml.getAttribute('data-darkreader-scheme');
-  if (scheme === 'auto') {
-    scheme = 'system';
-  }
+  const scheme = rootHtml.getAttribute('data-darkreader-scheme');
 
   return {
     isInjected: proxyInjected === 'true',
@@ -30,36 +32,34 @@ export function getDarkReaderState() {
   };
 }
 
-function getColorSchemePreference() {
+function getColorSchemePreference(): LightMode {
   // If we are not in a browser environment, return default
   if (!browser) {
-    return 'system';
+    return LightMode.System;
   }
 
   // Check if local storage has a theme stored
   const localStoreState = getLocalStoreState();
-  if (localStoreState !== 'system') {
+  if (localStoreState !== LightMode.System) {
     return localStoreState;
   }
 
   // If a user has Dark Reader extension installed, assume they prefer dark mode
   const darkReaderState = getDarkReaderState();
   if (darkReaderState.isInjected) {
-    return 'dark';
+    return LightMode.Dark;
   }
 
   // Check if the user has a system theme preference for light mode
   if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-    return 'light';
+    return LightMode.Light;
   }
 
   // Default to dark mode
-  return 'dark';
+  return LightMode.Dark;
 }
 
-const { set, update, subscribe } = writable<'dark' | 'light' | 'system'>(
-  getColorSchemePreference()
-);
+const { set, update, subscribe } = writable<LightMode>(getColorSchemePreference());
 
 function setHtmlDarkModeSelector(value: boolean) {
   document.documentElement.classList.toggle('dark', value);
@@ -67,21 +67,21 @@ function setHtmlDarkModeSelector(value: boolean) {
 
 function handleSchemePreferenceChange() {
   const scheme = getColorSchemePreference();
-  setHtmlDarkModeSelector(scheme === 'dark');
+  setHtmlDarkModeSelector(scheme === LightMode.Dark);
 }
 
 export const ColorSchemeStore = {
-  set: (value: 'dark' | 'light' | 'system') => {
+  set: (value: LightMode) => {
     localStorage.setItem('theme', value);
     set(value);
     handleSchemePreferenceChange();
   },
-  update: (updater: Updater<'dark' | 'light' | 'system'>) => {
+  update: (updater: Updater<LightMode>) => {
     update((value) => {
       const oldValue = value;
       const newValue = updater(value);
       if (oldValue !== newValue) {
-        setHtmlDarkModeSelector(newValue === 'dark');
+        setHtmlDarkModeSelector(newValue === LightMode.Dark);
         localStorage.setItem('theme', newValue);
       }
       return newValue;
@@ -90,16 +90,9 @@ export const ColorSchemeStore = {
   subscribe,
 };
 
-export function willActivateLightMode(value: 'dark' | 'light' | 'system') {
-  return (
-    value === 'light' ||
-    (value === 'system' && window.matchMedia('(prefers-color-scheme: light)').matches)
-  );
-}
-
 export function initializeDarkModeStore() {
   const schemePreference = getColorSchemePreference();
-  setHtmlDarkModeSelector(schemePreference === 'dark');
+  setHtmlDarkModeSelector(schemePreference === LightMode.Dark);
 
   window
     .matchMedia('(prefers-color-scheme: light)')
@@ -111,6 +104,6 @@ export function initializeDarkModeStore() {
   window.addEventListener('storage', (event) => {
     if (event.key !== 'theme') return;
 
-    setHtmlDarkModeSelector(event.newValue === 'dark');
+    setHtmlDarkModeSelector(event.newValue === LightMode.Dark);
   });
 }

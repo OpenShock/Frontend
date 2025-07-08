@@ -4,10 +4,11 @@
   import { PUBLIC_TURNSTILE_DEV_BYPASS_VALUE, PUBLIC_TURNSTILE_SITE_KEY } from '$env/static/public';
   import CloudflareLogo from '$lib/components/svg/CloudflareLogo.svelte';
   import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
-  import { ColorSchemeStore } from '$lib/stores/ColorSchemeStore';
+  import { ColorSchemeStore, LightMode } from '$lib/stores/ColorSchemeStore';
   import type { TurnstileInstance } from '$lib/types/TurnstileInstance';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
+  import LightSwitch from './LightSwitch.svelte';
 
   interface Props {
     action: string;
@@ -47,10 +48,9 @@
     setTimeout(resetWidget, 5000);
   }
 
-  let cfColorScheme = $derived($ColorSchemeStore === 'system' ? 'auto' : $ColorSchemeStore) as
-    | 'dark'
-    | 'light'
-    | 'auto';
+  let cfColorScheme = $derived(
+    $ColorSchemeStore === LightMode.System ? 'auto' : $ColorSchemeStore
+  ) as 'dark' | 'light' | 'auto';
 
   $effect(() => {
     if (!turnstile || !element || widgetState != 'mounted' || widgetId) return;
