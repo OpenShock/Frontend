@@ -45,12 +45,7 @@ const config = {
     inspector: mode === 'development',
   },
   kit: {
-    adapter: adapter({
-      routes: {
-        include: ['/*'],
-        exclude: ['<all>'],
-      },
-    }),
+    adapter: adapter(),
     csp: {
       mode: 'hash',
       directives: {
