@@ -2,6 +2,7 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
 import dns from 'dns/promises';
 import { env } from 'process';
+import license from 'rollup-plugin-license';
 import { defineConfig, loadEnv } from 'vite';
 import devtoolsJson from 'vite-plugin-devtools-json';
 import mkcert from 'vite-plugin-mkcert';
@@ -68,8 +69,27 @@ export default defineConfig(async ({ command, mode, isPreview }) => {
     build: {
       target: 'es2022',
     },
-    plugins: [...(useLocalRedirect ? [mkcert()] : []), sveltekit(), tailwindcss(), devtoolsJson()],
+    plugins: [
+      ...(useLocalRedirect ? [mkcert()] : []),
+      sveltekit(),
+      tailwindcss(),
+      devtoolsJson(),
+      license({
+        thirdParty: {
+          includePrivate: true,
+          includeSelf: true,
+          multipleVersions: true,
+          output: {
+            file: './.svelte-kit/output/client/LICENSES.txt', // TODO: This seems like a hack, check if theres a better way...
+          },
+        },
+      }),
+    ],
     server: await getServerConfig(mode, useLocalRedirect),
     test: { include: ['src/**/*.{test,spec}.{js,ts}'] },
+    esbuild: {
+      legalComments: 'none',
+      banner: '/*! For licenses information, see LICENSES.txt */',
+    },
   });
 });
