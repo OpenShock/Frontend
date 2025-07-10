@@ -61,7 +61,7 @@
     </Card.Title>
     <Card.Description>This is a list of all hubs you own.</Card.Description>
   </Card.Header>
-  <Card.Content class="w-full">
+  <div class="w-full">
     <DataTable {data} {columns} {sorting} />
-  </Card.Content>
+  </div>
 </Container>
