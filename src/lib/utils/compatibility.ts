@@ -21,6 +21,7 @@ export const isMobile = mobilecheck();
 export const isSerialSupported =
   browser &&
   'serial' in navigator &&
+  navigator.serial !== undefined &&
   typeof navigator.serial.getPorts === 'function' &&
   typeof navigator.serial.requestPort === 'function' &&
   typeof navigator.serial.addEventListener === 'function';
