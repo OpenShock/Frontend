@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Plus } from '@lucide/svelte';
+  import { Plus, Router } from '@lucide/svelte';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
   import type { SortingState } from '@tanstack/table-core';
   import Container from '$lib/components/Container.svelte';
@@ -10,6 +10,9 @@
   import { SemVer } from 'semver';
   import { onMount } from 'svelte';
   import { type Hub, columns } from './columns';
+  import DataTableActions from './data-table-actions.svelte';
+
+  let innerWidth = $state<number>(0);
 
   let data = $derived.by<Hub[]>(() => {
     if (!$OwnHubsStore || !$OnlineHubsStore) return [];
@@ -44,6 +47,7 @@
   onMount(refreshOwnHubs);
 </script>
 
+<svelte:window bind:innerWidth />
 <Container>
   <Card.Header class="w-full">
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
@@ -61,7 +65,26 @@
     </Card.Title>
     <Card.Description>This is a list of all hubs you own.</Card.Description>
   </Card.Header>
-  <div class="w-full">
-    <DataTable {data} {columns} {sorting} />
+  <div class="w-full p-6 gap-6 grid">
+    {#if innerWidth < 800}
+      {#each data as hub (hub.id)}
+        <div class="flex items-center justify-between gap-4">
+          <div class="flex items-center gap-4">
+            <Router class="size-8" />
+            <div class="flex flex-col">
+              <strong>{hub.name}</strong>
+              {#if hub.firmware_version}
+                <span>{hub.firmware_version}</span>
+              {:else}
+                <span class="text-red-500">Offline</span>
+              {/if}
+            </div>
+          </div>
+          <DataTableActions {hub} />
+        </div>
+      {/each}
+    {:else}
+      <DataTable {data} {columns} {sorting} />
+    {/if}
   </div>
 </Container>
