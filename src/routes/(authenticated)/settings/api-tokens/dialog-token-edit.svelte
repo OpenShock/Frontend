@@ -36,10 +36,6 @@
     }
   }
 
-  function capitalizeFirstLetter(string: string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-
   type PermissionCategory = {
     name: string;
     perms: { name: string; key: string }[];
@@ -92,11 +88,16 @@
         <h2>Permissions</h2>
         <div class="border-surface-500 mt-3 flex flex-col space-y-4 rounded-md border p-4">
           {#each permissionCategories as permission}
-            <span>{capitalizeFirstLetter(permission.name)}</span>
+            <span class="capitalize">{permission.name}</span>
             {#each permission.perms as perm}
               <label class="mt-0! ml-4">
-                <input type="checkbox" class="checkbox" value={perm.key} bind:group={permissions} />
-                {capitalizeFirstLetter(perm.name)}
+                <input
+                  type="checkbox"
+                  class="checkbox capitalize"
+                  value={perm.key}
+                  bind:group={permissions}
+                />
+                {perm.name}
               </label>
             {/each}
           {/each}
@@ -104,6 +105,8 @@
       </div>
     </form>
 
-    <Button variant="default" onclick={saveChanges}>Save Changes</Button>
+    <Button variant="default" onclick={saveChanges} disabled={!nameValidationResult.valid}>
+      Save Changes
+    </Button>
   </Dialog.Content>
 </Dialog.Root>
