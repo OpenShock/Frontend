@@ -23,7 +23,6 @@
 
   function openDeleteDialog() {
     deleteDialogOpen = true;
-    console.log('Delete dialog opened for token:', token);
   }
 </script>
 
