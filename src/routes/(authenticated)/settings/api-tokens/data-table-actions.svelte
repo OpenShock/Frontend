@@ -9,9 +9,11 @@
 
   interface Props {
     token: TokenResponse;
+    onEdit: (id: string, updater: (token: TokenResponse) => TokenResponse) => void;
+    onDeleted: (id: string) => void;
   }
 
-  let { token }: Props = $props();
+  let { token, onEdit, onDeleted }: Props = $props();
 
   let editDialogOpen = $state<boolean>(false);
   let deleteDialogOpen = $state<boolean>(false);
@@ -23,11 +25,12 @@
 
   function openDeleteDialog() {
     deleteDialogOpen = true;
+    console.log('Delete dialog opened for token:', $state.snapshot(token));
   }
 </script>
 
-<TokenEditDialog open={editDialogOpen} {token} />
-<TokenDeleteDialog open={deleteDialogOpen} {token} />
+<TokenEditDialog open={editDialogOpen} {token} {onEdit} />
+<TokenDeleteDialog open={deleteDialogOpen} {token} {onDeleted} />
 
 <DropdownMenu.Root>
   <DropdownMenu.Trigger>
@@ -39,8 +42,10 @@
     {/snippet}
   </DropdownMenu.Trigger>
   <DropdownMenu.Content>
-    <DropdownMenu.Item onclick={copyId}>Copy ID</DropdownMenu.Item>
-    <DropdownMenu.Item onclick={() => (editDialogOpen = true)}>Edit</DropdownMenu.Item>
-    <DropdownMenu.Item onclick={openDeleteDialog}>Delete</DropdownMenu.Item>
+    <DropdownMenu.Item class="cursor-pointer" onclick={copyId}>Copy ID</DropdownMenu.Item>
+    <DropdownMenu.Item class="cursor-pointer" onclick={() => (editDialogOpen = true)}
+      >Edit</DropdownMenu.Item
+    >
+    <DropdownMenu.Item class="cursor-pointer" onclick={openDeleteDialog}>Delete</DropdownMenu.Item>
   </DropdownMenu.Content>
 </DropdownMenu.Root>

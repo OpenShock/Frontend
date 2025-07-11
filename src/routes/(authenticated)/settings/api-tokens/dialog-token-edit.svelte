@@ -5,36 +5,35 @@
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { updateOrRefreshApiToken } from '$lib/stores/ApiTokensStore';
   import type { ValidationResult } from '$lib/types/ValidationResult';
   import { toast } from 'svelte-sonner';
 
   interface Props {
     open: boolean;
     token: TokenResponse;
+    onEdit: (id: string, updater: (token: TokenResponse) => TokenResponse) => void;
   }
 
-  let { open = $bindable(), token }: Props = $props();
+  let { open = $bindable(), token, onEdit }: Props = $props();
 
   let name = $state(token.name);
   let permissions = $state(token.permissions);
 
-  function saveChanges() {
-    apiTokensApi
-      .tokensEditToken(token.id, { name, permissions })
-      .then(() => {
-        updateOrRefreshApiToken(token.id, (token) => {
-          return {
-            ...token,
-            name,
-            permissions,
-          };
-        });
-
-        toast.success('Token edited successfully');
-        open = false;
-      })
-      .catch(handleApiError);
+  async function saveChanges() {
+    try {
+      await apiTokensApi.tokensEditToken(token.id, { name, permissions });
+      onEdit(token.id, (token) => {
+        return {
+          ...token,
+          name,
+          permissions,
+        };
+      });
+      toast.success('Token edited successfully');
+      open = false;
+    } catch (error) {
+      await handleApiError(error);
+    }
   }
 
   function capitalizeFirstLetter(string: string) {
@@ -75,7 +74,7 @@
   let nameValidationResult = $derived(nameValidation(name));
 </script>
 
-<Dialog.Root bind:open={() => open, (o) => (open = o)}>
+<Dialog.Root bind:open>
   <Dialog.Content>
     <Dialog.Header>
       <Dialog.Title>Edit API Token</Dialog.Title>

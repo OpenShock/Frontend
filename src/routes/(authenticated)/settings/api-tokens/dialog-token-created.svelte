@@ -16,7 +16,7 @@
   }
 </script>
 
-<Dialog.Root bind:open={() => token != null, onOpenChanged}>
+<Dialog.Root bind:open={() => token !== null, onOpenChanged}>
   <Dialog.Content>
     <Dialog.Header>
       <Dialog.Title>API Token Generated</Dialog.Title>
@@ -26,7 +26,7 @@
     </Dialog.Header>
     <div class="flex flex-col items-center space-y-4">
       <div class="flex w-full items-center justify-between rounded-md p-2">
-        <CopyInput value={token ?? ''}>
+        <CopyInput value={token!}>
           {#snippet icon()}
             <KeyRound size="20" />
           {/snippet}

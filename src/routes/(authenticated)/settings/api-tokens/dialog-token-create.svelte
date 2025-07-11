@@ -1,27 +1,35 @@
 <script lang="ts">
   import { apiTokensApi } from '$lib/api';
-  import { PermissionType } from '$lib/api/internal/v1';
+  import { PermissionType, type TokenCreatedResponse } from '$lib/api/internal/v1';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
   import * as Select from '$lib/components/ui/select';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { refreshApiToken } from '$lib/stores/ApiTokensStore';
   import { GetValResColor, type ValidationResult } from '$lib/types/ValidationResult';
-  import { toast } from 'svelte-sonner';
-  import TokenCreatedDialog from './dialog-token-created.svelte';
 
   interface Props {
     open: boolean;
+    onCreated: (token: TokenCreatedResponse) => void;
   }
 
-  let { open = $bindable() }: Props = $props();
+  let { open = $bindable(), onCreated }: Props = $props();
 
   let name = $state<string>('');
   let expire = $state<'never' | `${number}days` | 'custom'>('never');
   let expireCustom = $state<Date | null>(null);
   let permissions = $state<PermissionType[]>([PermissionType.ShockersUse]);
-  let token = $state<string | null>(null);
+
+  function onOpenChange(o: boolean) {
+    // Stupid hack because when this dialog closes its state is never cleared... ._.
+    if (!o) {
+      name = '';
+      expire = 'never';
+      expireCustom = null;
+      permissions = [PermissionType.ShockersUse];
+    }
+    open = o;
+  }
 
   function getExpireDate(expireType: string, customExpireDate: Date | null): Date | null {
     switch (expireType) {
@@ -46,22 +54,13 @@
 
     const validUntil = expireDate == null ? undefined : expireDate;
 
-    apiTokensApi
-      .tokensCreateToken({ name, validUntil, permissions })
-      .then((res) => {
-        if (!res.token) {
-          toast.error('Received invalid response from server');
-          return;
-        }
-        token = res.token;
-
-        refreshApiToken(res.id);
-
-        toast.success('Token created successfully');
-
-        open = false;
-      })
-      .catch(handleApiError);
+    try {
+      const createdToken = await apiTokensApi.tokensCreateToken({ name, validUntil, permissions });
+      onCreated(createdToken);
+      open = false;
+    } catch (error) {
+      await handleApiError(error);
+    }
   }
 
   type PermissionCategory = {
@@ -111,9 +110,7 @@
   let expireValidationResult = $derived(expireValidation(expire, expireCustom));
 </script>
 
-<TokenCreatedDialog bind:token />
-
-<Dialog.Root bind:open={() => open, (o) => (open = o)}>
+<Dialog.Root bind:open={() => open, onOpenChange}>
   <Dialog.Content>
     <Dialog.Header>
       <Dialog.Title>Generate a new API Token</Dialog.Title>

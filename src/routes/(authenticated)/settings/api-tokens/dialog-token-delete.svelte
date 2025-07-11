@@ -4,27 +4,27 @@
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { deleteApiToken } from '$lib/stores/ApiTokensStore';
   import { toast } from 'svelte-sonner';
 
   interface Props {
     open: boolean;
     token: TokenResponse;
+    onDeleted: (id: string) => void;
   }
 
-  let { open = $bindable(), token }: Props = $props();
+  let { open = $bindable(), token, onDeleted }: Props = $props();
 
-  function deleteToken() {
-    apiTokensApi
-      .tokenDeleteDeleteToken(token.id)
-      .then(() => {
-        deleteApiToken(token.id);
+  async function deleteToken() {
+    try {
+      await apiTokensApi.tokenDeleteDeleteToken(token.id);
+      onDeleted(token.id);
 
-        toast.success('Token deleted successfully');
+      toast.success('Token deleted successfully');
 
-        open = false;
-      })
-      .catch(handleApiError);
+      open = false;
+    } catch (error) {
+      await handleApiError(error);
+    }
   }
 </script>
 
