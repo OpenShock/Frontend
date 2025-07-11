@@ -54,9 +54,9 @@
 
         // Map the response to a validation result
         validationResult = mapUsernameAvailability(response.availability);
-      } catch (e) {
+      } catch (error) {
         // Show an error toast
-        await handleApiError(e);
+        await handleApiError(error);
 
         // Set the validation result to the internal server error state
         validationResult = UsernameInternalServerErrorValRes;

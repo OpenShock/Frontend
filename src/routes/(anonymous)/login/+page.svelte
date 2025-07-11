@@ -39,11 +39,11 @@
       await UserStore.refreshSelf();
       goto(page.url.searchParams.get('redirect') ?? '/home');
     } catch (error) {
-      handleApiError(error, (problem) => {
-        if (!isValidationError(problem)) return true;
+      await handleApiError(error, (problem) => {
+        if (!isValidationError(problem)) return false;
         usernameError = mapToValRes(problem, 'UsernameOrEmail');
         passwordError = mapToValRes(problem, 'Password');
-        return false;
+        return true;
       });
     }
   }

@@ -26,11 +26,11 @@
       username = '';
     } catch (e) {
       await handleApiError(e, (problem) => {
-        if (problem.type === 'Account.Username.Invalid') {
-          toast.error('Invalid Username');
-          return true;
-        }
-        return false;
+        if (problem.type !== 'Account.Username.Invalid') return false;
+
+        toast.error('Invalid Username');
+
+        return true;
       });
     }
   }

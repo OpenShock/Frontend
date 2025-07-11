@@ -20,8 +20,8 @@
     loading = true;
     try {
       newToken = await hubManagementV1Api.devicesRegenerateDeviceToken(hub.id);
-    } catch (e) {
-      handleApiError(e);
+    } catch (error) {
+      await handleApiError(error);
     } finally {
       loading = false;
     }

@@ -55,7 +55,7 @@ async function handleResponseError(
   console.trace();
   console.groupEnd();
 
-  if (handleProblemCallback && !handleProblemCallback(problem)) return;
+  if (handleProblemCallback && handleProblemCallback(problem)) return;
 
   toast.error(problem.title);
 }
@@ -96,4 +96,7 @@ export async function handleApiError(
   }
 
   toast.error('Internal error occured');
+}
+export function createApiErrorHandler(handleProblemCallback: HandleProblemCallback) {
+  return (error: unknown) => handleApiError(error, handleProblemCallback);
 }

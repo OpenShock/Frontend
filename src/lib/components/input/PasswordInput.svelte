@@ -65,9 +65,9 @@
           // Password is ok, return the successful validation result from the basic validation step
           validationResult = { valid: true };
         }
-      } catch (e) {
+      } catch (error) {
         // Show an error toast
-        await handleApiError(e);
+        await handleApiError(error);
 
         // We shouldnt block the user from submitting the form if the pwned password check fails
         validationResult = { valid: true };
