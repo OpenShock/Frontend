@@ -29,27 +29,30 @@
   let sorting = $state<SortingState>([]);
 
   function onCreated(token: TokenCreatedResponse) {
-    data = [
-      ...data,
-      {
-        id: token.id,
-        name: token.name,
-        createdOn: token.createdAt,
-        validUntil: token.validUntil,
-        lastUsed: token.lastUsed,
-        permissions: token.permissions,
-      },
-    ];
+    data.push({
+      id: token.id,
+      name: token.name,
+      createdOn: token.createdAt,
+      validUntil: token.validUntil,
+      lastUsed: token.lastUsed,
+      permissions: token.permissions,
+    });
     createdTokenSecret = token.token;
     toast.success('Token created successfully');
   }
 
   function onEdit(id: string, updater: (token: TokenResponse) => TokenResponse) {
-    data = data.map((token) => (token.id === id ? updater(token) : token));
+    const idx = data.findIndex((token) => token.id === id);
+    if (idx === -1) return;
+
+    data[idx] = updater(data[idx]);
   }
 
   async function onDeleted(id: string) {
-    data = data.filter((token) => token.id !== id);
+    const idx = data.findIndex((token) => token.id === id);
+    if (idx === -1) return;
+
+    data.splice(idx, 1);
   }
 
   const columns: ColumnDef<TokenResponse>[] = [
@@ -112,6 +115,5 @@
   </Card.Header>
   <Card.Content class="flex flex-col space-y-4 w-full">
     <DataTable {data} {columns} {sorting} />
-    <div class="flex justify-end"></div>
   </Card.Content>
 </Container>

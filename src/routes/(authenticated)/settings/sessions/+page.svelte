@@ -27,7 +27,10 @@
   let sorting = $state<SortingState>([]);
 
   function onRevoked(sessionId: string) {
-    data = data.filter((s) => s.id !== sessionId);
+    const idx = data.findIndex((session) => session.id === sessionId);
+    if (idx === -1) return;
+
+    data.splice(idx, 1);
   }
 
   const columns: ColumnDef<LoginSessionResponse>[] = [

@@ -25,7 +25,7 @@
     buttonText = `Hold for ${timeLeft.toFixed(1)}s`;
   }
 
-  let timer = $state<TimeoutHandle | null>(null);
+  let timer: TimeoutHandle | null = null;
   let interval: IntervalHandle | null = null;
   function stopTimers() {
     if (timer) {
@@ -55,7 +55,7 @@
   onpointerleave={stopTimers}
   class={cn(
     'h-10 rounded-md bg-[#7f1d1d] px-4 py-2 text-sm font-medium whitespace-nowrap select-none hover:bg-[#731a1a] focus:outline-hidden',
-    { 'violent-shake': timer !== null }
+    { 'violent-shake': clickedAt !== null }
   )}
 >
   {buttonText}

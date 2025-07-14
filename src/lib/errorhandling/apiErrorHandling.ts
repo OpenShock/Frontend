@@ -4,6 +4,7 @@ import {
   isFetchError,
   isRequiredError,
   isResponseError,
+  isTypeError,
 } from '$lib/typeguards/errorGuards';
 import { toast } from 'svelte-sonner';
 import { isValidationError as isValidationProblem } from './ValidationProblemDetails';
@@ -76,7 +77,13 @@ export async function handleApiError(
   }
 
   if (isFetchError(error)) {
-    console.error('Got FetchError', error);
+    const cause = error.cause;
+    if (isTypeError(cause)) {
+      console.error(cause);
+    } else {
+      console.error('Got unknown fetch error', cause);
+    }
+
     toast.error('Network error occured');
     return;
   }

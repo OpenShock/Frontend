@@ -8,8 +8,9 @@
   import { SidebarProvider } from '$lib/components/ui/sidebar';
   import { Toaster } from '$lib/components/ui/sonner';
   import { buildMetaData } from '$lib/metadata';
-  import type { Snippet } from 'svelte';
+  import { type Snippet, onMount } from 'svelte';
   import '../app.css';
+  import { initializeApp } from '$lib/init';
 
   interface Props {
     children?: Snippet;
@@ -20,6 +21,10 @@
   let meta = $derived(buildMetaData(page.url));
 
   let isOpen = $state(false);
+
+  onMount(async () => {
+    await initializeApp(!page.url.pathname.startsWith('/logout'));
+  });
 </script>
 
 <BasicTags {...meta} />

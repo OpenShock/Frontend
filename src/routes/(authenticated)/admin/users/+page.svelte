@@ -1,115 +1,111 @@
 <script lang="ts">
   import Search from '@lucide/svelte/icons/search';
-  import type { ColumnFiltersState, PaginationState, SortingState } from '@tanstack/table-core';
+  import type { SortingState } from '@tanstack/table-core';
   import { adminApi } from '$lib/api';
-  import type { AdminUsersView } from '$lib/api/internal/v1/models/AdminUsersView';
+  import type { AdminUsersView, AdminUsersViewPaginated } from '$lib/api/internal/v1';
   import Container from '$lib/components/Container.svelte';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
+  import PaginationFooter from '$lib/components/Table/PaginationFooter.svelte';
   import { Button } from '$lib/components/ui/button';
-  import { CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
+  import { CardHeader, CardTitle } from '$lib/components/ui/card';
   import { Input } from '$lib/components/ui/input';
-  import * as Pagination from '$lib/components/ui/pagination';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { onMount } from 'svelte';
   import { columns } from './columns';
 
-  type FilterOpType =
-    | 'like'
-    | '=='
-    | 'eq'
-    | '!='
-    | 'neq'
-    | '<'
-    | 'lt'
-    | '>'
-    | 'gt'
-    | '<='
-    | 'lte'
-    | '>='
-    | 'gte';
-  type Filter<TEntity> = `${Extract<keyof TEntity, string>} ${FilterOpType} ${string}`;
-  type FilterMap<TEntity> = { [K in keyof TEntity]: string };
-  type OrderbyQuery<TEntity> = `${Extract<keyof TEntity, string>} ${'asc' | 'desc'}`;
+  let isFetching = $state(false);
 
-  const PerPage = 200;
+  let requestedPage = $state(1);
+  let requestedPageSize = $state(10);
 
-  let page = $state(1);
+  let page = $state(0);
+  let perPage = $state(0);
   let total = $state(0);
+  let data = $state<AdminUsersView[]>([]);
+
   let nameSearch = $state('');
   let emailSearch = $state('');
 
-  let data = $state<AdminUsersView[]>([]);
-
-  let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: PerPage });
   let sorting = $state<SortingState>([]);
-  let filters = $derived<ColumnFiltersState>([
-    { id: 'name', value: nameSearch },
-    { id: 'email', value: emailSearch },
-  ]);
 
-  function fetchUsers() {
-    adminApi
-      .adminGetUsers() /* filter, orderby, offset, limit */
-      .then((res) => {
-        if (res.data) {
-          data = res.data;
-        }
-      })
-      .catch(handleApiError);
+  let filterQuery = $state<string>();
+  let orderByQuery = $derived(
+    sorting.length > 0 ? sorting[0].id + ' ' + (sorting[0].desc ? 'desc' : 'asc') : undefined
+  );
+
+  function escapeQuotes(str: string) {
+    if (/[ '"\\]/.test(str)) {
+      const escaped = str.replace(/(['"\\])/g, '\\$1');
+      return `'${escaped}'`;
+    }
+    return str;
   }
 
-  onMount(() => {
-    fetchUsers();
+  function onSearchSubmit() {
+    let queries = [];
 
-    // Update timestamps every minute
-    const interval = setInterval(() => {
-      data = Object.assign([], data);
-    }, 60000);
+    if (nameSearch.length > 0) {
+      queries.push(`name eq ${escapeQuotes(nameSearch)}`);
+    }
 
-    return () => clearInterval(interval);
+    if (emailSearch.length > 0) {
+      queries.push(`email eq ${escapeQuotes(emailSearch)}`);
+    }
+
+    if (queries.length > 0) {
+      filterQuery = queries.join(' and ');
+    } else {
+      filterQuery = undefined;
+    }
+  }
+
+  function handleResponse(response: AdminUsersViewPaginated) {
+    total = response.total;
+    data = response.data;
+    perPage = response.limit;
+    if (page !== requestedPage) {
+      console.warn('Page response mismatch!');
+    }
+    page = Math.floor(response.offset / response.limit) + 1;
+  }
+
+  $effect(() => {
+    const offset = (requestedPage - 1) * requestedPageSize;
+
+    isFetching = true;
+    adminApi
+      .adminGetUsers(filterQuery, orderByQuery, offset, requestedPageSize)
+      .then(handleResponse)
+      .catch(handleApiError)
+      .finally(() => (isFetching = false));
   });
 </script>
 
 <Container>
-  <CardHeader>
+  <CardHeader class="w-full">
     <CardTitle class="flex items-center justify-between space-x-2 text-3xl">
       Users
       <div class="flex items-center justify-end space-x-2">
         <Input placeholder="Filter names..." bind:value={nameSearch} class="max-w-sm" />
         <Input placeholder="Filter emails..." bind:value={emailSearch} class="max-w-sm" />
-        <Button class="text-xl" onclick={fetchUsers}>
+        <Button class="text-xl" onclick={onSearchSubmit} disabled={isFetching}>
           <Search />
           <span> Search </span>
         </Button>
       </div>
     </CardTitle>
   </CardHeader>
-  <CardContent>
-    <DataTable {data} {columns} {sorting} {filters} {pagination} />
-  </CardContent>
-  <Pagination.Root count={total} perPage={PerPage} bind:page>
-    {#snippet children({ pages, currentPage })}
-      <Pagination.Content>
-        <Pagination.Item>
-          <Pagination.PrevButton />
-        </Pagination.Item>
-        {#each pages as page (page.key)}
-          {#if page.type === 'ellipsis'}
-            <Pagination.Item>
-              <Pagination.Ellipsis />
-            </Pagination.Item>
-          {:else}
-            <Pagination.Item>
-              <Pagination.Link {page} isActive={currentPage === page.value}>
-                {page.value}
-              </Pagination.Link>
-            </Pagination.Item>
-          {/if}
-        {/each}
-        <Pagination.Item>
-          <Pagination.NextButton />
-        </Pagination.Item>
-      </Pagination.Content>
-    {/snippet}
-  </Pagination.Root>
+  <div class="w-full p-6 gap-6 grid">
+    <DataTable
+      {data}
+      {columns}
+      bind:sorting
+      pagination={{ pageIndex: page - 1, pageSize: perPage }}
+    />
+    <PaginationFooter
+      count={total}
+      {perPage}
+      bind:page={() => page, (p) => (requestedPage = p)}
+      disabled={isFetching}
+    />
+  </div>
 </Container>

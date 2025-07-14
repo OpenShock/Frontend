@@ -8,7 +8,6 @@
   import type { TurnstileInstance } from '$lib/types/TurnstileInstance';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
-  import LightSwitch from './LightSwitch.svelte';
 
   interface Props {
     action: string;

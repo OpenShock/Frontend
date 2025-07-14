@@ -4,17 +4,15 @@
   import { publicShockerSharesApi } from '$lib/api';
   import type { PublicShareResponse } from '$lib/api/internal/v1';
   import { Button } from '$lib/components/ui/button';
-  import { onMount } from 'svelte';
-
-  let shareId = $derived(page.params.shareId);
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 
   let details = $state<PublicShareResponse>();
 
-  onMount(() => {
-    publicShockerSharesApi.publicGetPublicShare(shareId).then((response) => {
-      details = response.data;
-      console.log(response);
-    });
+  $effect(() => {
+    publicShockerSharesApi
+      .publicGetPublicShare(page.params.shareId)
+      .then((response) => (details = response.data))
+      .catch(handleApiError);
   });
 </script>
 

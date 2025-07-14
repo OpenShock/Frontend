@@ -74,7 +74,7 @@
     ];
 
     if (isAuthenticated) {
-      menus = menus.concat([
+      menus.push(
         {
           title: 'Shockers',
           Icon: Zap,
@@ -94,8 +94,8 @@
           title: 'Public Shares',
           Icon: Link,
           href: '/shares/public',
-        },
-      ]);
+        }
+      );
     }
 
     // Only time we dont show the menu is if its on a mobile device without serial support

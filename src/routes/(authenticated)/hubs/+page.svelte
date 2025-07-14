@@ -6,13 +6,14 @@
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card';
+  import { IsMobile } from '$lib/hooks/is-mobile.svelte';
   import { OnlineHubsStore, OwnHubsStore, refreshOwnHubs } from '$lib/stores/HubsStore';
   import { SemVer } from 'semver';
   import { onMount } from 'svelte';
   import { type Hub, columns } from './columns';
   import DataTableActions from './data-table-actions.svelte';
 
-  let innerWidth = $state<number>(0);
+  const isMobile = new IsMobile();
 
   let data = $derived.by<Hub[]>(() => {
     if (!$OwnHubsStore || !$OnlineHubsStore) return [];
@@ -47,7 +48,6 @@
   onMount(refreshOwnHubs);
 </script>
 
-<svelte:window bind:innerWidth />
 <Container>
   <Card.Header class="w-full">
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
@@ -66,7 +66,7 @@
     <Card.Description>This is a list of all hubs you own.</Card.Description>
   </Card.Header>
   <div class="w-full p-6 gap-6 grid">
-    {#if innerWidth < 800}
+    {#if isMobile.current}
       {#each data as hub (hub.id)}
         <div class="flex items-center justify-between gap-4">
           <div class="flex items-center gap-4">
