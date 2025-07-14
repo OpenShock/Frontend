@@ -40,22 +40,34 @@
     return str;
   }
 
+  /**
+   * Build a single filter clause for `key` and `searchString`.
+   * - If there is any unescaped `%`, uses `ilike`.
+   * - Otherwise uses `eq`.
+   */
+  function createSearchQuery(key: string, searchString: string): string | undefined {
+    if (!searchString) return undefined;
+
+    // Detect any % not preceded by a backslash
+    const hasWildcard = /(^|[^\\])%/.test(searchString);
+
+    // Wrap & escape quotes/backslashes as before
+    const escaped = escapeQuotes(searchString);
+
+    const operator = hasWildcard ? 'ilike' : 'eq';
+    return `${key} ${operator} ${escaped}`;
+  }
+
   function onSearchSubmit() {
-    let queries = [];
+    const queries: string[] = [];
 
-    if (nameSearch.length > 0) {
-      queries.push(`name eq ${escapeQuotes(nameSearch)}`);
-    }
+    const nameQ = createSearchQuery('name', nameSearch);
+    if (nameQ) queries.push(nameQ);
 
-    if (emailSearch.length > 0) {
-      queries.push(`email eq ${escapeQuotes(emailSearch)}`);
-    }
+    const emailQ = createSearchQuery('email', emailSearch);
+    if (emailQ) queries.push(emailQ);
 
-    if (queries.length > 0) {
-      filterQuery = queries.join(' and ');
-    } else {
-      filterQuery = undefined;
-    }
+    filterQuery = queries.length > 0 ? queries.join(' and ') : undefined;
   }
 
   function handleResponse(response: AdminUsersViewPaginated) {
