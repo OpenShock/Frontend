@@ -1,15 +1,14 @@
 <script lang="ts">
-  import Search from '@lucide/svelte/icons/search';
   import type { SortingState } from '@tanstack/table-core';
   import { adminApi } from '$lib/api';
   import type { AdminUsersView, AdminUsersViewPaginated } from '$lib/api/internal/v1';
   import Container from '$lib/components/Container.svelte';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import PaginationFooter from '$lib/components/Table/PaginationFooter.svelte';
-  import { Button } from '$lib/components/ui/button';
   import { CardHeader, CardTitle } from '$lib/components/ui/card';
   import { Input } from '$lib/components/ui/input';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import type { TimeoutHandle } from '$lib/types/WAPI';
   import { columns } from './columns';
 
   let isFetching = $state(false);
@@ -58,18 +57,6 @@
     return `${key} ${operator} ${escaped}`;
   }
 
-  function onSearchSubmit() {
-    const queries: string[] = [];
-
-    const nameQ = createSearchQuery('name', nameSearch);
-    if (nameQ) queries.push(nameQ);
-
-    const emailQ = createSearchQuery('email', emailSearch);
-    if (emailQ) queries.push(emailQ);
-
-    filterQuery = queries.length > 0 ? queries.join(' and ') : undefined;
-  }
-
   function handleResponse(response: AdminUsersViewPaginated) {
     total = response.total;
     data = response.data;
@@ -79,6 +66,27 @@
     }
     page = Math.floor(response.offset / response.limit) + 1;
   }
+
+  let searchDebounce: TimeoutHandle | null = null;
+  $effect(() => {
+    if (searchDebounce) clearTimeout(searchDebounce);
+
+    const queries: string[] = [];
+
+    const nameQ = createSearchQuery('name', nameSearch);
+    if (nameQ) queries.push(nameQ);
+
+    const emailQ = createSearchQuery('email', emailSearch);
+    if (emailQ) queries.push(emailQ);
+
+    const query = queries.length > 0 ? queries.join(' and ') : undefined;
+    if (query === filterQuery) return;
+
+    searchDebounce = setTimeout(() => {
+      filterQuery = query;
+      searchDebounce = null;
+    }, 800);
+  });
 
   $effect(() => {
     const offset = (requestedPage - 1) * requestedPageSize;
@@ -99,10 +107,6 @@
       <div class="flex items-center justify-end space-x-2">
         <Input placeholder="Filter names..." bind:value={nameSearch} class="max-w-sm" />
         <Input placeholder="Filter emails..." bind:value={emailSearch} class="max-w-sm" />
-        <Button class="text-xl" onclick={onSearchSubmit} disabled={isFetching}>
-          <Search />
-          <span> Search </span>
-        </Button>
       </div>
     </CardTitle>
   </CardHeader>
