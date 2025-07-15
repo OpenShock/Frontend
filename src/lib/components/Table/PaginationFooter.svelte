@@ -9,12 +9,12 @@
     Root,
   } from '$lib/components/ui/pagination';
 
-  type Props = {
+  interface Props {
     count: number;
     perPage: number;
     page: number;
     disabled?: boolean;
-  };
+  }
 
   let { count, perPage, page = $bindable(), disabled }: Props = $props();
 </script>

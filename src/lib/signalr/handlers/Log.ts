@@ -1,6 +1,8 @@
 import { isControlLog } from '$lib/signalr/models/ControlLog';
 import { isControlLogSender } from '$lib/signalr/models/ControlLogSender';
+import { TriggerEvent } from '$lib/stores/ShockEventListenerStore';
 import { toast } from 'svelte-sonner';
+import { ControlType } from '../models/ControlType';
 
 export function handleSignalrLog(sender: unknown, logs: unknown) {
   if (!isControlLogSender(sender) || !Array.isArray(logs) || !logs.every(isControlLog)) {
@@ -25,11 +27,15 @@ export function handleSignalrLog(sender: unknown, logs: unknown) {
   logs.forEach((log, index) => {
     console.group(`Log #${index + 1} - ${new Date(log.executedAt).toLocaleString()}`);
     console.log('Shocker:', `${log.shocker.name} (${log.shocker.id})`);
-    console.log('Type:', log.type);
+    console.log('Type:', ControlType[log.type]);
     console.log('Intensity:', log.intensity);
     console.log('Duration (ms):', log.duration);
     console.groupEnd();
   });
 
   console.groupEnd();
+
+  logs.forEach((log) => {
+    TriggerEvent(log.shocker.id, log.type, log.duration, log.intensity);
+  });
 }

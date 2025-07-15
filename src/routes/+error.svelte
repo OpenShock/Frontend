@@ -32,7 +32,7 @@
 />
 <TwitterSummaryTags type="summary" {...meta} site="@OpenShockORG" creator="@OpenShockORG" />
 
-<div class="absolute top-1/2 left-1/2 -translate-x-[50%] -translate-y-[50%] text-center">
+<div class="absolute top-1/2 left-1/2 -translate-1/2 text-center">
   <div class="text-9xl">{page.status}</div>
   <div class="big">
     {page.error?.message ?? 'Something went wrong.'}

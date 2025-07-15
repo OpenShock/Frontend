@@ -25,25 +25,20 @@
     buttonText = `Hold for ${timeLeft.toFixed(1)}s`;
   }
 
-  let timer: TimeoutHandle | null = null;
-  let interval: IntervalHandle | null = null;
+  let timeoutHandle: TimeoutHandle | undefined;
+  let intervalHandle: IntervalHandle | undefined;
   function stopTimers() {
-    if (timer) {
-      clearTimeout(timer);
-      timer = null;
-    }
-    if (interval) {
-      clearInterval(interval);
-      interval = null;
-    }
+    clearTimeout(timeoutHandle);
+    clearInterval(intervalHandle);
+
     clickedAt = null;
     updateText();
   }
   function startConfirm() {
     stopTimers();
     clickedAt = Date.now();
-    timer = setTimeout(onconfirm, 3000);
-    interval = setInterval(updateText, 100);
+    timeoutHandle = setTimeout(onconfirm, 3000);
+    intervalHandle = setInterval(updateText, 100);
   }
 
   onDestroy(stopTimers);

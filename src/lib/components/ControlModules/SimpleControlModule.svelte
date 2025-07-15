@@ -3,6 +3,7 @@
   import { SignalR_Connection } from '$lib/signalr';
   import { ControlType } from '$lib/signalr/models/ControlType';
   import { serializeControlMessages } from '$lib/signalr/serializers/Control';
+  import ControlListener from './ControlListener.svelte';
   import ActionButtons from './impl/ActionButtons.svelte';
 
   interface Props {
@@ -10,9 +11,12 @@
     shockIntensity: number;
     vibrationIntensity: number;
     duration: number;
+    disabled?: boolean;
   }
 
-  let { shocker, shockIntensity, vibrationIntensity, duration }: Props = $props();
+  let { shocker, shockIntensity, vibrationIntensity, duration, disabled }: Props = $props();
+
+  let active = $state<ControlType | null>(null);
 
   function ctrl(type: ControlType) {
     let intensity: number;
@@ -38,11 +42,13 @@
   }
 </script>
 
+<ControlListener shockerId={shocker.id} bind:active />
+
 <div
   class="border-surface-400-500-token flex flex-col items-center justify-center gap-2 overflow-hidden rounded-md border p-2"
 >
   <!-- Title -->
   <h2 class="w-full truncate px-4 text-center text-lg font-bold">{shocker.name}</h2>
   <!-- Buttons -->
-  <ActionButtons {ctrl} />
+  <ActionButtons {ctrl} {duration} {active} {disabled} />
 </div>

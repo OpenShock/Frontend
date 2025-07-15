@@ -7,9 +7,9 @@
   import * as Table from '$lib/components/ui/table';
   import * as Tooltip from '$lib/components/ui/tooltip';
 
-  type Props = {
+  interface Props {
     userShare: V2UserSharesListItem;
-  };
+  }
 
   let editDrawer = $state(false);
 

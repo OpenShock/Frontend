@@ -1,4 +1,5 @@
 import { isNumber, isObject, isString } from '$lib/typeguards';
+import { ControlType, isControlType } from './ControlType';
 
 interface ControlLogShockerInfo {
   id: string;
@@ -6,7 +7,7 @@ interface ControlLogShockerInfo {
 }
 export interface ControlLog {
   shocker: ControlLogShockerInfo;
-  type: number;
+  type: ControlType;
   intensity: number;
   duration: number;
   executedAt: string;
@@ -30,7 +31,7 @@ export function isControlLog(value: unknown): value is ControlLog {
     Object.hasOwn(value, 'duration') &&
     Object.hasOwn(value, 'executedAt') &&
     isControlLogShockerInfo(value.shocker) &&
-    isNumber(value.type) &&
+    isControlType(value.type) &&
     isNumber(value.intensity) &&
     isNumber(value.duration) &&
     isString(value.executedAt)

@@ -5,11 +5,11 @@
   import { toast } from 'svelte-sonner';
   import { scale } from 'svelte/transition';
 
-  type Props = {
+  interface Props {
     value: string;
     class?: string;
     icon?: Snippet;
-  };
+  }
 
   let { value, class: className, icon }: Props = $props();
 

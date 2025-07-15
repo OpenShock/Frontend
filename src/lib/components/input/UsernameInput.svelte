@@ -37,10 +37,10 @@
   }: Props = $props();
 
   let validationResult = $state<ValidationResult | null>(null);
-  let usernameDebounce: TimeoutHandle | null = null;
+  let usernameDebounce: TimeoutHandle | undefined;
   function checkUsernameAvailability() {
     // Stop the previous debounce timer if it exists
-    if (usernameDebounce) clearTimeout(usernameDebounce);
+    clearTimeout(usernameDebounce);
 
     // Set the validation result to the checking availability state
     validationResult = UsernameCheckingAvailabilityValRes;
@@ -61,9 +61,6 @@
         // Set the validation result to the internal server error state
         validationResult = UsernameInternalServerErrorValRes;
       }
-
-      // Clear the debounce timer
-      usernameDebounce = null;
     }, 250);
   }
 

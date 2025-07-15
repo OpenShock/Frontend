@@ -67,9 +67,9 @@
     page = Math.floor(response.offset / response.limit) + 1;
   }
 
-  let searchDebounce: TimeoutHandle | null = null;
+  let searchDebounce: TimeoutHandle | undefined;
   $effect(() => {
-    if (searchDebounce) clearTimeout(searchDebounce);
+    clearTimeout(searchDebounce);
 
     const queries: string[] = [];
 
@@ -82,10 +82,7 @@
     const query = queries.length > 0 ? queries.join(' and ') : undefined;
     if (query === filterQuery) return;
 
-    searchDebounce = setTimeout(() => {
-      filterQuery = query;
-      searchDebounce = null;
-    }, 800);
+    searchDebounce = setTimeout(() => (filterQuery = query), 800);
   });
 
   $effect(() => {

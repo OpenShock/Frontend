@@ -9,23 +9,28 @@
   import { SignalR_Connection } from '$lib/signalr';
   import { ControlType } from '$lib/signalr/models/ControlType';
   import { serializeControlMessages } from '$lib/signalr/serializers/Control';
+  import ControlListener from './ControlListener.svelte';
   import ActionButtons from './impl/ActionButtons.svelte';
   import CircleSlider from './impl/CircleSlider.svelte';
 
   interface Props {
     shocker: ShockerResponse;
+    disabled?: boolean;
   }
 
-  let { shocker }: Props = $props();
+  let { shocker, disabled }: Props = $props();
 
   let intensity = $state(ControlIntensityDefault);
   let duration = $state(ControlDurationDefault);
+  let active = $state<ControlType | null>(null);
 
   function ctrl(type: ControlType) {
     if (!$SignalR_Connection) return;
     serializeControlMessages($SignalR_Connection, [{ id: shocker.id, type, intensity, duration }]);
   }
 </script>
+
+<ControlListener shockerId={shocker.id} bind:active />
 
 <div
   class="border-surface-400-500-token flex flex-col items-center justify-center gap-2 overflow-hidden rounded-md border p-2"
@@ -38,5 +43,5 @@
     <CircleSlider name="Duration" bind:value={duration} {...ControlDurationProps} />
   </div>
   <!-- Buttons -->
-  <ActionButtons {ctrl} />
+  <ActionButtons {ctrl} {duration} {active} {disabled} />
 </div>

@@ -35,10 +35,10 @@
   }: Props = $props();
 
   let validationResult = $state<ValidationResult | null>(null);
-  let passwordDebounce: TimeoutHandle | null = null;
+  let passwordDebounce: TimeoutHandle | undefined;
   function checkHIBP(str: string) {
     // Stop the previous debounce timer if it exists
-    if (passwordDebounce) clearTimeout(passwordDebounce);
+    clearTimeout(passwordDebounce);
 
     // Set the validation result to the checking availability state
     validationResult = { valid: false, message: 'Checking password...' };

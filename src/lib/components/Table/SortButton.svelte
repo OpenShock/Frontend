@@ -2,7 +2,10 @@
   import { ArrowDown, ArrowUp, ArrowUpDown } from '@lucide/svelte';
   import type { Column } from '@tanstack/table-core';
 
-  type Props = { name: string; column: Column<TData, unknown> };
+  interface Props {
+    name: string;
+    column: Column<TData, unknown>;
+  }
 
   let { name, column }: Props = $props();
 
