@@ -71,7 +71,7 @@
   button {
     flex: 1;
     cursor: pointer;
-    border-width: 5px;
+    border-width: 2px;
   }
 
   button.active {
@@ -81,12 +81,15 @@
   @keyframes party {
     0% {
       border-color: #0ff;
+      box-shadow: 0 0 8px #0ff;
     }
     50% {
       border-color: #00f;
+      box-shadow: 0 0 8px #00f;
     }
     100% {
       border-color: #0ff;
+      box-shadow: 0 0 8px #0ff;
     }
   }
 </style>
