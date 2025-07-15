@@ -8,15 +8,15 @@
   import { cn } from '$lib/utils';
   import { toast } from 'svelte-sonner';
 
-  let pendingScheme = $state<LightMode | undefined>();
+  let pendingScheme = $state<LightMode | null>(null);
   function handleOpenChanged(open: boolean) {
     if (open) return;
-    pendingScheme = undefined;
+    pendingScheme = null;
   }
   function confirm() {
     if (!pendingScheme) return;
     ColorSchemeStore.set(pendingScheme);
-    pendingScheme = undefined;
+    pendingScheme = null;
   }
 
   // Decision matrix
@@ -57,7 +57,7 @@
   }
 </script>
 
-<Dialog.Root bind:open={() => pendingScheme !== undefined, handleOpenChanged}>
+<Dialog.Root bind:open={() => pendingScheme !== null, handleOpenChanged}>
   <Dialog.Content>
     <Dialog.Header>
       <Dialog.Title>Switch to light mode</Dialog.Title>

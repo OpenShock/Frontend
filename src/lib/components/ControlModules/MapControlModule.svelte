@@ -20,10 +20,10 @@
     serializeControlMessages($SignalR_Connection, [{ id: '', type, intensity, duration }]);
   }
 
-  let canvas = $state<HTMLCanvasElement | undefined>();
+  let canvas: HTMLCanvasElement;
 
   onMount(() => {
-    const ctx = canvas?.getContext('2d');
+    const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
     // Draw human body

@@ -22,7 +22,7 @@
   }: Props = $props();
 
   let progressName = $state<string | null>(null);
-  let progressPercent = $state<number | undefined>(undefined);
+  let progressPercent = $state<number | null>(null);
   let error = $state<string | null>(null);
 
   async function FlashDeviceImpl() {
@@ -40,11 +40,11 @@
     }
 
     progressName = 'Resetting...';
-    progressPercent = undefined;
+    progressPercent = null;
     await manager.ensureBootloader();
 
     progressName = 'Downloading firmware...';
-    progressPercent = undefined;
+    progressPercent = null;
     const firmware = await DownloadAndVerifyBoardBinary(version, board, 'firmware.bin');
     if (!firmware) {
       progressName = null;
@@ -53,11 +53,11 @@
     }
 
     progressName = 'Flashing firmware...';
-    progressPercent = undefined;
+    progressPercent = null;
     await manager.flash(firmware, eraseBeforeFlash, progressCallback);
 
     progressName = 'Rebooting device... (Reconnect to power manually if stuck)';
-    progressPercent = undefined;
+    progressPercent = null;
     await manager.ensureApplication();
 
     progressName = 'Rebooted device! Flashing complete.';
@@ -93,7 +93,7 @@
     {:else}
       <span>
         Flash Progress: {progressName ?? 'Idle'}
-        {#if progressPercent !== undefined}
+        {#if progressPercent !== null}
           ({progressPercent.toFixed(2)}%)
         {/if}
       </span>

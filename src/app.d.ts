@@ -11,7 +11,7 @@ declare global {
     // interface Platform {}
   }
   declare interface Window {
-    turnstile: TurnstileInstance | undefined;
+    turnstile?: TurnstileInstance;
   }
   interface Navigator {
     userAgentData?: {

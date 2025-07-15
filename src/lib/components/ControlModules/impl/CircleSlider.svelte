@@ -27,16 +27,15 @@
     min: number;
     max: number;
     step: number;
-    tabindex?: number | null | undefined;
+    tabindex?: number | null;
   }
 
-  let { name, value = $bindable(), min, max, step, tabindex = undefined }: Props = $props();
+  let { name, value = $bindable(), min, max, step, tabindex }: Props = $props();
 
   let isTracking = false;
-  let element = $state<HTMLDivElement | undefined>();
+  let element: HTMLDivElement;
 
   function handlePointerMovement(event: PointerEvent) {
-    if (!element) return;
     element.setPointerCapture(event.pointerId);
 
     const rect = element.getBoundingClientRect();
