@@ -80,16 +80,16 @@
 
   @keyframes party {
     0% {
-      border-color: #0ff;
-      box-shadow: 0 0 8px #0ff;
+      border-color: #0dd;
+      box-shadow: 0 0 8px #0dd;
     }
     50% {
-      border-color: #00f;
-      box-shadow: 0 0 8px #00f;
+      border-color: #07d;
+      box-shadow: 0 0 8px #07d;
     }
     100% {
-      border-color: #0ff;
-      box-shadow: 0 0 8px #0ff;
+      border-color: #0dd;
+      box-shadow: 0 0 8px #0dd;
     }
   }
 </style>
