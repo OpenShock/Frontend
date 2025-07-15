@@ -75,7 +75,7 @@
   }
 
   button.active {
-    animation: party 0.1s ease-in-out infinite;
+    animation: party 0.33s ease-in-out infinite;
   }
 
   @keyframes party {
