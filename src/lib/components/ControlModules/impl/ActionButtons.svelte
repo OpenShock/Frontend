@@ -46,7 +46,7 @@
   {#each Buttons as { type, Icon }}
     <button
       class={cn(buttonClasses, {
-        active: type === active,
+        active: type === active || type === selfActive,
       })}
       aria-label={ControlType[type]}
       onclick={() => trigger(type)}
