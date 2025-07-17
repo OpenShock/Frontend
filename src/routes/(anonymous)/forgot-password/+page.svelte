@@ -3,43 +3,47 @@
   import { accountV1Api } from '$lib/api';
   import Container from '$lib/components/Container.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
-  import TextInput from '$lib/components/input/TextInput.svelte';
+  import EmailInput from '$lib/components/input/EmailInput.svelte';
   import { Button } from '$lib/components/ui/button';
-  import * as Card from '$lib/components/ui/card';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 
-  let emailAddress = $state<string>('');
+  let email = $state<string>('');
+  let emailValid = $state(false);
+
   let turnstileResponse = $state<string | null>(null);
 
   function handleSubmission(e: SubmitEvent) {
     e.preventDefault();
 
-    if (!emailAddress || !turnstileResponse) {
+    if (!email || !turnstileResponse) {
       return;
     }
 
     accountV1Api
-      .accountPasswordResetInitiate({ email: emailAddress })
+      .accountPasswordResetInitiate({ email })
       .then(() => {
         goto('/login');
       })
       .catch(handleApiError);
   }
 
-  let canSubmit = $derived(emailAddress.length > 0 && turnstileResponse != null);
+  let canSubmit = $derived(emailValid && turnstileResponse != null);
 </script>
 
-<Container>
-  <Card.Header>
-    <Card.Title class="text-3xl">Forgot Password</Card.Title>
-  </Card.Header>
-  <Card.Content>
-    <form class="flex flex-col space-y-4" onsubmit={handleSubmission}>
-      <TextInput label="Email" placeholder="Email" autocomplete="on" bind:value={emailAddress} />
+<Container class="items-center">
+  <form class="flex flex-col space-y-4" onsubmit={handleSubmission}>
+    <div class="text-3xl font-semibold">Forgot Password</div>
 
-      <Turnstile action="forgot-password" bind:response={turnstileResponse} />
+    <EmailInput
+      label="Email"
+      placeholder="Email"
+      autocomplete="on"
+      bind:value={email}
+      bind:valid={emailValid}
+    />
 
-      <Button type="submit" disabled={!canSubmit}>I forgot my passord</Button>
-    </form>
-  </Card.Content>
+    <Turnstile action="forgot-password" bind:response={turnstileResponse} />
+
+    <Button type="submit" disabled={!canSubmit}>I forgot my passord</Button>
+  </form>
 </Container>
