@@ -2,7 +2,6 @@
   import { MessageCircleQuestion, SquareTerminal } from '@lucide/svelte';
   import { browser } from '$app/environment';
   import { PUBLIC_DISCORD_INVITE_URL } from '$env/static/public';
-  import FlashManager from '$lib/EspTool/FlashManager';
   import Container from '$lib/components/Container.svelte';
   import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
@@ -15,11 +14,11 @@
   import { Label } from '$lib/components/ui/label';
   import { Progress } from '$lib/components/ui/progress';
   import { Sheet, SheetContent, SheetHeader, SheetTitle } from '$lib/components/ui/sheet';
-  import { FlashManagerStore } from '$lib/stores/FlashManagersStore';
   import { isSerialSupported } from '$lib/utils/compatibility';
   import Bowser from 'bowser';
   import FirmwareBoardSelector from './FirmwareBoardSelector.svelte';
   import FirmwareFlasher from './FirmwareFlasher.svelte';
+  import FlashManager from './FlashManager';
   import HelpDialog from './HelpDialog.svelte';
   import SerialPortSelector from './SerialPortSelector.svelte';
 
@@ -47,14 +46,12 @@
   $effect(() => {
     if (port && !manager) {
       connectFailed = false;
-      FlashManagerStore.getManager(port, terminal).then((m) => {
+      FlashManager.Connect(port, terminal).then((m) => {
         manager = m;
-        if (!manager) {
-          connectFailed = true;
-        }
+        connectFailed = !manager;
       });
     } else if (!port && manager) {
-      FlashManagerStore.removeManager(manager);
+      manager.disconnect();
       manager = null;
     }
   });

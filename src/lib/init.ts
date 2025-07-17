@@ -1,6 +1,5 @@
 import { browser } from '$app/environment';
 import { initializeDarkModeStore } from '$lib/stores/ColorSchemeStore';
-import { initializeFlashManagersStore } from '$lib/stores/FlashManagersStore';
 import { initializeSerialPortsStore } from '$lib/stores/SerialPortsStore';
 import { UserStore } from '$lib/stores/UserStore';
 import { get, writable } from 'svelte/store';
@@ -16,7 +15,6 @@ export async function initializeApp(initializeAuth: boolean) {
   isInitializedStore.set(true);
 
   initializeDarkModeStore();
-  initializeFlashManagersStore(); // TODO: Move this OUT of here
   initializeSerialPortsStore(); // TODO: Move this OUT of here
 
   if (!initializeAuth) return;

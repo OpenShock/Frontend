@@ -1,9 +1,9 @@
 <script lang="ts">
   import { Microchip, TriangleAlert } from '@lucide/svelte';
-  import FlashManager from '$lib/EspTool/FlashManager';
   import { DownloadAndVerifyBoardBinary } from '$lib/api/firmwareCDN';
   import { Button } from '$lib/components/ui/button';
   import { Progress } from '$lib/components/ui/progress';
+  import FlashManager from './FlashManager';
 
   interface Props {
     version: string;
