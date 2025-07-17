@@ -15,12 +15,10 @@
   });
 </script>
 
-<section
-  class="flex flex-col items-center justify-center h-full text-white text-center space-y-6 px-6"
->
+<section class="flex flex-col items-center justify-center h-full text-white text-center space-y-6">
   <span class="flex">
-    <img class="h-20 pr-4" src="/IconSpinning.svg" alt="logo" />
-    <img class="h-20" src="/LogoBakedFont.svg" alt="logo" />
+    <img class="h-9 pr-2 sm:h-14 md:h-20 md:pr-4" src="/IconSpinning.svg" alt="logo" />
+    <img class="h-9 sm:h-14 md:h-20" src="/LogoBakedFont.svg" alt="logo" />
   </span>
   <p class="text-lg md:text-2xl opacity-75">
     The go-to platform for safe, reliable, real low-latency remote shocking.<br />
