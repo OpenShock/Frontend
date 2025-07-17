@@ -5,20 +5,7 @@ export async function load({ setHeaders }): Promise<{ ok: false, error: string }
     'cache-control': 'public, max-age=300'
   })
 
-  let deviceCount: number;
+  const { data } = await metaApi.publicGetOnlineDevicesStatistics();
 
-  try {
-    const { data } = await metaApi.publicGetOnlineDevicesStatistics();
-
-    deviceCount = data.devicesOnline;
-  } catch (e) {
-    console.error(e);
-
-    return {
-      ok: false,
-      error: 'Failed to fetch device count',
-    };
-  }
-
-  return { ok: true, deviceCount };
+  return { ok: true, deviceCount: data.devicesOnline };
 }
