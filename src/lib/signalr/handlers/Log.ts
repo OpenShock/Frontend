@@ -28,8 +28,10 @@ export function handleSignalrLog(sender: unknown, logs: unknown) {
     console.group(`Log #${index + 1} - ${new Date(log.executedAt).toLocaleString()}`);
     console.log('Shocker:', `${log.shocker.name} (${log.shocker.id})`);
     console.log('Type:', ControlType[log.type]);
-    console.log('Intensity:', log.intensity);
-    console.log('Duration (ms):', log.duration);
+    if (log.type !== ControlType.Stop) {
+      console.log('Intensity:', log.intensity);
+      console.log('Duration (ms):', log.duration);
+    }
     console.groupEnd();
   });
 
