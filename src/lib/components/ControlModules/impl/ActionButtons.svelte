@@ -48,7 +48,7 @@
       class={cn(buttonClasses, {
         active: type === active || type === selfActive,
       })}
-      aria-label={ControlType[type]}
+      title={ControlType[type]}
       onclick={() => trigger(type)}
       {disabled}
     >

@@ -28,7 +28,7 @@
 <header
   class="border-border/40 bg-background/95 supports-backdrop-filter:bg-background/60 sticky top-0 z-50 flex h-12 w-full flex-row items-center border-b px-2 backdrop-blur-sm"
 >
-  <Button variant="ghost" class="size-8" onclick={() => sidebar.toggle()}>
+  <Button variant="ghost" class="size-8" title="Open Sidebar" onclick={() => sidebar.toggle()}>
     <PanelLeft size={24} class="m-0 text-gray-600 dark:text-gray-300" />
   </Button>
   {#if $BreadCrumbStore.length > 0}
@@ -85,10 +85,10 @@
       {@render headerItem('Login', '/login')}
       {@render headerItem('Sign Up', '/signup')}
       <div class="hidden sm:flex sm:flex-row">
-        <a href={PUBLIC_GITHUB_PROJECT_URL} class="p-2" aria-label="GitHub">
+        <a href={PUBLIC_GITHUB_PROJECT_URL} class="p-2" title="Project GitHub">
           <GithubIcon class="size-6 fill-black dark:fill-white" />
         </a>
-        <a href={PUBLIC_DISCORD_INVITE_URL} class="p-2" aria-label="Discord">
+        <a href={PUBLIC_DISCORD_INVITE_URL} class="p-2" title="Community Discord">
           <DiscordIcon class="size-6 fill-black dark:fill-white" />
         </a>
       </div>
