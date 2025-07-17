@@ -77,6 +77,6 @@
 
     <Button type="submit" disabled={!canSubmit}>Log In</Button>
 
-    <a class="text-blue-500 underline" href="/forgot-password">I forgot my password</a>
+    <a class=" text-sm opacity-75 hover:underline" href="/forgot-password">Forgot your password?</a>
   </form>
 </Container>
