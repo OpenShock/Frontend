@@ -1,18 +1,5 @@
 <script lang="ts">
-  import { metaApi } from '$lib/api';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { onMount } from 'svelte';
-
-  let deviceCount = $state(0);
-
-  onMount(async () => {
-    try {
-      const { data } = await metaApi.publicGetOnlineDevicesStatistics();
-      deviceCount = data.devicesOnline;
-    } catch (err) {
-      handleApiError(err);
-    }
-  });
+  let { data } = $props();
 </script>
 
 <section class="flex flex-col items-center justify-center h-full text-white text-center space-y-6">
@@ -22,7 +9,9 @@
   </span>
   <p class="text-lg md:text-2xl opacity-75">
     The go-to platform for safe, reliable, real low-latency remote shocking.<br />
-    <span class="font-semibold">{deviceCount}</span> people online right now.
+    {#if data.ok}
+      <span class="font-semibold">{data.deviceCount}</span> people online right now.
+    {/if}
   </p>
   <div class="flex space-x-4 pt-8 text-sm opacity-75">
     <a href="https://openshock.org" target="_blank" rel="noopener" class="hover:underline">

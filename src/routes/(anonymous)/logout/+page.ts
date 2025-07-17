@@ -3,6 +3,8 @@ import { goto } from '$app/navigation';
 import { accountV1Api } from '$lib/api';
 import { destroyAuth } from '$lib/init';
 
+export const prerender = false;
+
 export async function load() {
   if (!browser) return; // Do not run the following on server
 
