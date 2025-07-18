@@ -21,21 +21,7 @@
   let mounted = $state<boolean>(false);
   let widgetId = $state<string | undefined>();
 
-  function resetWidget() {
-    if (window.turnstile && widgetId) window.turnstile.reset(widgetId);
-  }
-  function handleExpired() {
-    response = null;
-    // Reset the widget after 5 seconds to prevent the user from spamming the button
-    setTimeout(resetWidget, 5000);
-  }
-  function handleTimeout() {
-    response = null;
-    // Reset the widget after 5 seconds to prevent the user from spamming the button
-    setTimeout(resetWidget, 5000);
-  }
-  function handleError() {
-    toast.warning('Turnstile encountered an error');
+  function invalidateResponse() {
     response = null;
   }
 
@@ -50,9 +36,9 @@
       cData,
       theme,
       callback: (token) => (response = token),
-      'expired-callback': handleExpired,
-      'timeout-callback': handleTimeout,
-      'error-callback': handleError,
+      'expired-callback': invalidateResponse,
+      'timeout-callback': invalidateResponse,
+      'error-callback': invalidateResponse,
     });
   }
 
