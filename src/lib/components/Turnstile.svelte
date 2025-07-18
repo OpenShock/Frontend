@@ -1,6 +1,6 @@
 <script lang="ts">
   import Bug from '@lucide/svelte/icons/bug';
-  import { dev } from '$app/environment';
+  import { browser, dev } from '$app/environment';
   import { PUBLIC_TURNSTILE_DEV_BYPASS_VALUE, PUBLIC_TURNSTILE_SITE_KEY } from '$env/static/public';
   import CloudflareLogo from '$lib/components/svg/CloudflareLogo.svelte';
   import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
@@ -58,16 +58,18 @@
 
   onMount(() => {
     if (dev) {
-      console.log('Turnstile is disabled in dev mode');
-      toast.warning('Turnstile is disabled in dev mode');
       response = PUBLIC_TURNSTILE_DEV_BYPASS_VALUE;
       return;
     }
 
-    // If turstile doesnt load, then the index.html is proabably missing the script tag (https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/#explicitly-render-the-turnstile-widget)
+    // Check that Cloudflare Turnstile has been loaded.
+    // If `window.turnstile` is undefined, it usually means the <script> tag wasn't injected.
+    // If this error occured under a page that wasnt server-side rendered or prerendered then the script tag never got injected into the html served to browser.
+    // The script tag will need to get moved into the app.html tag if this is the case, but normally Turnstile should only be used in places where a user isnt auth, places that are pre-renderable.
+    // See: https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/#explicitly-render-the-turnstile-widget
     if (!window.turnstile) {
-      console.error('Failed to load Cloudflare Turnstile resource!');
-      toast.error('Failed to load Cloudflare Turnstile resource!');
+      console.error('Failed to load Cloudflare Turnstile (Check Turnstile.svelte for more info)');
+      toast.error('Internal Error');
       return;
     }
 
@@ -78,6 +80,15 @@
     };
   });
 </script>
+
+<svelte:head>
+  {#if !browser && !dev}
+    <script
+      src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+      defer
+    ></script>
+  {/if}
+</svelte:head>
 
 <!-- see: https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/#widget-size -->
 <div class="mx-auto h-[65px] w-[300px]" bind:this={element}>
