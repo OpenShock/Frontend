@@ -86,6 +86,11 @@
           href: '/hubs',
         },
         {
+          title: 'DG-Lab',
+          Icon: Router,
+          href: '/dg-lab',
+        },
+        {
           title: 'User Shares',
           Icon: Users,
           href: '/shares/user',

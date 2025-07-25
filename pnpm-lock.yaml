@@ -19,6 +19,9 @@ importers:
 
   .:
     dependencies:
+      '@types/web-bluetooth':
+        specifier: ^0.0.21
+        version: 0.0.21
       esptool-js:
         specifier: ^0.5.6
         version: 0.5.6(patch_hash=3de7383a419f0052ff49515476d3b0feb41cf8c80589a9d37fb1aa80566ae34a)
@@ -1100,6 +1103,9 @@ packages:
 
   '@types/w3c-web-serial@1.0.8':
     resolution: {integrity: sha512-QQOT+bxQJhRGXoZDZGLs3ksLud1dMNnMiSQtBA0w8KXvLpXX4oM4TZb6J0GgJ8UbCaHo5s9/4VQT8uXy9JER2A==}
+
+  '@types/web-bluetooth@0.0.21':
+    resolution: {integrity: sha512-oIQLCGWtcFZy2JW77j9k8nHzAOpqMHLQejDA48XXMWH6tjCQHz5RCFz1bzsmROyL6PUm+LLnUiI4BCn221inxA==}
 
   '@typescript-eslint/eslint-plugin@8.36.0':
     resolution: {integrity: sha512-lZNihHUVB6ZZiPBNgOQGSxUASI7UJWhT8nHyUGCnaQ28XFCw98IfrMCG3rUl1uwUWoAvodJQby2KTs79UTcrAg==}
@@ -3846,6 +3852,8 @@ snapshots:
   '@types/semver@7.7.0': {}
 
   '@types/w3c-web-serial@1.0.8': {}
+
+  '@types/web-bluetooth@0.0.21': {}
 
   '@typescript-eslint/eslint-plugin@8.36.0(@typescript-eslint/parser@8.36.0(eslint@9.31.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.31.0(jiti@2.4.2))(typescript@5.8.3)':
     dependencies:
