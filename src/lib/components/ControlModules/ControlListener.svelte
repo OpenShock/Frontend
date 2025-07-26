@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { ShockerResponse } from '$lib/api/internal/v1';
   import { ControlType } from '$lib/signalr/models/ControlType';
   import {
     AddListener,
@@ -11,20 +10,28 @@
 
   interface Props {
     shockerId: string;
+    state: ShockerState;
+  }
+
+  export interface ShockerState {
     active: ControlType | null;
+    intensity: number;
+    duration: number;
   }
 
   const id = $props.id();
-  let { shockerId, active = $bindable() }: Props = $props();
+  let { shockerId, state = $bindable() }: Props = $props();
 
   let timeoutHandle: TimeoutHandle | undefined;
 
   const onEvent: ListenerSignature = (sid, controlType, duration, intensity) => {
     clearTimeout(timeoutHandle);
 
-    active = controlType;
+    state.active = controlType;
+    state.intensity = intensity;
+    state.duration = duration;
 
-    timeoutHandle = setTimeout(() => (active = null), duration);
+    timeoutHandle = setTimeout(() => (state.active = null), duration);
   };
 
   onMount(() => {

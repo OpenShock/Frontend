@@ -1,6 +1,6 @@
   import { toast } from 'svelte-sonner';
 import DeviceVersion from '../models/DeviceVersion';
-import { getChannelWaveDataV3 } from './encoder';
+import { getBF, getChannelWaveDataV3 } from './encoder';
   
 class DGLab3 {
 
@@ -11,6 +11,13 @@ class DGLab3 {
         count = 0; // AB channel writing counter
         errorCount = 0; // writing failure counter
         selectedOption = 'a';
+
+        aIntensity: number = 100; // A channel intensity
+        bIntensity: number = 100; // B channel intensity
+        aFrequency: number = 10; // A channel frequency
+        bFrequency: number = 10; // B channel frequency
+        aIntensityLimit: number = 10; // A channel intensity upper limit
+        bIntensityLimit: number = 10; // B channel intensity upper limit
 
         prefixArr = ['D-LAB', '47']; // Prefix for scanned Bluetooth names
         serviceIdArr: Array<BluetoothServiceUUID> = [
@@ -133,6 +140,21 @@ class DGLab3 {
                     console.log('Services obtained successfully。');
                     console.log('Connected device');
                     this.showSuccessToast('Connected device');
+
+
+                this.gattServer!.getPrimaryService(serviceId)
+                    .then(service => {
+                        // get characteristic of channel A & B
+                        return service.getCharacteristic('0000150a-0000-1000-8000-00805f9b34fb');
+                    })
+                    .then(characteristicA => {
+                        characteristicA.writeValue(getBF(200, 200, 160, 160, 0, 0));
+                    }).then(() => {
+                        console.log('Setup upper limit');
+                    })
+                    .catch(error => {
+                        console.error('Error during intensity write: ' + error);
+                    });
                 })
                 .catch(error => {
                     console.error('Error: ' + error);
@@ -199,19 +221,27 @@ class DGLab3 {
                 return;
             }
 
+            if (this.aIntensityLimit <= 0 && this.bIntensityLimit <= 0) {
+                return;
+            } 
+
             let serviceId = this.serviceIdArr[this.deviceVersion - 2];
+
+            // random 4 bits serial number
+            const serialNumber = Math.floor(Math.random() * 16); // 0-15
 
             if (this.deviceVersion === DeviceVersion.V3_0) {
                 const myVal = getChannelWaveDataV3(
-                    0xB0,
-                    0,
-                    0, // aIntensityLimit
-                    0, // bIntensityLimit
-                    10,  // aFrequency
-                    100,  // aIntensity
-                    10,  // bFrequency
-                    100   // bIntensity
+                    (0 << 4) | 0b1111, // serial number and interpretation method
+                    this.aIntensityLimit, // aIntensityLimit
+                    this.bIntensityLimit, // bIntensityLimit
+                    this.aFrequency,  // aFrequency
+                    this.aIntensity,  // aIntensity
+                    this.bFrequency,  // bFrequency
+                    this.bIntensity   // bIntensity
                 );
+
+                console.log('myVal', myVal);
 
                 this.gattServer!.getPrimaryService(serviceId)
                     .then(service => {
