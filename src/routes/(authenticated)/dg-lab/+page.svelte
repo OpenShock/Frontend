@@ -37,15 +37,19 @@ import { Slider } from '$lib/components/ui/slider';
 
     if(shockerStateA.active === ControlType.Shock) {
       const finalAIntensity = lerp(0, localAIntensityMax, shockerStateA.intensity / 100)
-      const finalBIntensity = lerp(0, localBIntensityMax, shockerStateB.intensity / 100)
 
       aIntensityLimit = finalAIntensity;
-      bIntensityLimit = finalBIntensity;
-      return;
+    } else {
+      aIntensityLimit = 0;
     }
 
-    aIntensityLimit = 0;
-    bIntensityLimit = 0;
+    if(shockerStateB.active === ControlType.Shock) {
+      const finalBIntensity = lerp(0, localBIntensityMax, shockerStateB.intensity / 100)
+
+      bIntensityLimit = finalBIntensity;
+    } else {
+      bIntensityLimit = 0;
+    }
   });
 
   $effect(() => {
