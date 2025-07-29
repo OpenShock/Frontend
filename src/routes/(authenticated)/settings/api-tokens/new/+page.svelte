@@ -105,7 +105,10 @@
       return;
     }
 
-    const redirectUriReplaced = (windowQueryParams as QueryParamsType).redirectUri.replace('%', tokenSecret);;
+    const redirectUriReplaced = (windowQueryParams as QueryParamsType).redirectUri.replace(
+      '%',
+      tokenSecret
+    );
 
     console.log('Redirecting to:', redirectUriReplaced);
     window.location.href = redirectUriReplaced;
@@ -151,7 +154,12 @@
         >
       </Card.Content>
       <Card.Footer class="flex justify-end space-x-2">
-        <Button class="m-w-16" onclick={allowRequest} disabled={creatingToken && !tokenSecret} color="yellow">
+        <Button
+          class="m-w-16"
+          onclick={allowRequest}
+          disabled={creatingToken && !tokenSecret}
+          color="yellow"
+        >
           {#if tokenSecret}
             <span>Open Again</span>
           {:else if creatingToken}
