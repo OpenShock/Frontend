@@ -1,5 +1,5 @@
 import { browser } from '$app/environment';
-import { initializeDarkModeStore } from '$lib/stores/ColorSchemeStore';
+import { initializeDarkModeStore } from '$lib/stores/ColorSchemeStore.svelte';
 import { initializeSerialPortsStore } from '$lib/stores/SerialPortsStore';
 import { UserStore } from '$lib/stores/UserStore';
 import { get, writable } from 'svelte/store';
