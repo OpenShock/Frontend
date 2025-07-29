@@ -10,7 +10,9 @@
   import Header from './Header.svelte';
   import Sidebar from './Sidebar.svelte';
   import '../app.css';
+  import { browser } from '$app/environment';
   import { initializeApp } from '$lib/init';
+  import { isMobile } from '$lib/utils/compatibility';
 
   interface Props {
     children?: Snippet;
@@ -20,11 +22,14 @@
 
   let meta = $derived(buildMetaData(page.url));
 
-  let isOpen = $state(false);
-
-  onMount(async () => {
-    await initializeApp(!page.url.pathname.startsWith('/logout'));
+  let isOpen = $state(
+    !browser || isMobile ? false : localStorage.getItem('sidebarOpen') === 'true'
+  );
+  $effect(() => {
+    if (!isMobile) localStorage.setItem('sidebarOpen', isOpen ? 'true' : 'false');
   });
+
+  onMount(() => initializeApp(!page.url.pathname.startsWith('/logout')));
 </script>
 
 <BasicTags {...meta} />
