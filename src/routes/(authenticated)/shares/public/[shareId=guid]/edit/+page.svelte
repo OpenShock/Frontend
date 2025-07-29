@@ -9,8 +9,11 @@
   let details = $state<PublicShareResponse>();
 
   $effect(() => {
+    let shareId = page.params.shareId;
+    if (shareId === undefined) return;
+
     publicShockerSharesApi
-      .publicGetPublicShare(page.params.shareId)
+      .publicGetPublicShare(shareId)
       .then((response) => (details = response.data))
       .catch(handleApiError);
   });
