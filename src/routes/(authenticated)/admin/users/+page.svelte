@@ -1,20 +1,63 @@
 <script lang="ts">
   import type { SortingState } from '@tanstack/table-core';
+  import type { ColumnDef } from '@tanstack/table-core';
   import { adminApi } from '$lib/api';
   import type { AdminUsersView, AdminUsersViewPaginated } from '$lib/api/internal/v1';
+  import { PasswordHashingAlgorithm, RoleType } from '$lib/api/internal/v1';
   import Container from '$lib/components/Container.svelte';
+  import {
+    CreateSortableColumnDef,
+    LocaleDateTimeRenderer,
+    RenderBlueCell,
+    RenderBoldCell,
+    RenderCell,
+    RenderOrangeCell,
+    RenderRedCell,
+  } from '$lib/components/Table/ColumnUtils';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import PaginationFooter from '$lib/components/Table/PaginationFooter.svelte';
   import { CardHeader, CardTitle } from '$lib/components/ui/card';
+  import { renderComponent } from '$lib/components/ui/data-table';
   import { Input } from '$lib/components/ui/input';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import type { TimeoutHandle } from '$lib/types/WAPI';
-  import { columns } from './columns';
+  import DataTableActions from './data-table-actions.svelte';
+
+  const PasswordHashTypeRenderer = (passwordHashType: PasswordHashingAlgorithm) => {
+    if (passwordHashType !== PasswordHashingAlgorithm.BCrypt)
+      return RenderOrangeCell(passwordHashType);
+    return RenderBoldCell(passwordHashType);
+  };
+
+  const UserRolesRenderer = (roles: RoleType[]) => {
+    const isPrivileged = [RoleType.Admin, RoleType.System].some((role) => roles.includes(role));
+    return isPrivileged ? RenderBlueCell(roles.toString()) : RenderBoldCell(roles.toString());
+  };
+
+  const columns: ColumnDef<AdminUsersView>[] = [
+    CreateSortableColumnDef('name', 'Name', RenderCell),
+    CreateSortableColumnDef('email', 'Email', RenderCell),
+    CreateSortableColumnDef('passwordHashType', 'Password hash type', PasswordHashTypeRenderer),
+    CreateSortableColumnDef('roles', 'Roles', UserRolesRenderer),
+    CreateSortableColumnDef('createdAt', 'Created at', LocaleDateTimeRenderer),
+    CreateSortableColumnDef('activatedAt', 'Activated at', LocaleDateTimeRenderer),
+    CreateSortableColumnDef('deactivatedAt', 'Deactivated at', LocaleDateTimeRenderer),
+    CreateSortableColumnDef('deactivatedByUserId', 'Deactivated by', (a) =>
+      a ? RenderCell(a) : RenderRedCell('None')
+    ),
+    {
+      id: 'actions',
+      cell: ({ row }) => {
+        // You can pass whatever you need from `row.original` to the component
+        return renderComponent(DataTableActions, { user: row.original });
+      },
+    },
+  ];
 
   let isFetching = $state(false);
 
   let requestedPage = $state(1);
-  let requestedPageSize = $state(10);
+  let requestedPageSize = $state(100);
 
   let page = $state(0);
   let perPage = $state(0);

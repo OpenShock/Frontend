@@ -81,6 +81,7 @@ export * from './StatsResponseLegacyDataResponse';
 export * from './StringLegacyDataResponse';
 export * from './TokenCreatedResponse';
 export * from './TokenResponse';
+export * from './UserPatchDto';
 export * from './UserSelfResponse';
 export * from './UserSelfResponseLegacyDataResponse';
 export * from './UsernameAvailability';

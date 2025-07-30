@@ -19,6 +19,7 @@ import type {
   AdminOnlineDeviceResponseIEnumerableLegacyDataResponse,
   AdminUsersViewPaginated,
   ProblemDetails,
+  UserPatchDto,
   WebhookDto,
 } from '../models/index';
 import {
@@ -30,6 +31,8 @@ import {
     AdminUsersViewPaginatedToJSON,
     ProblemDetailsFromJSON,
     ProblemDetailsToJSON,
+    UserPatchDtoFromJSON,
+    UserPatchDtoToJSON,
     WebhookDtoFromJSON,
     WebhookDtoToJSON,
 } from '../models/index';
@@ -52,6 +55,11 @@ export interface AdminGetUsersRequest {
     $orderby?: string;
     $offset?: number;
     $limit?: number;
+}
+
+export interface AdminModifyUserRequest {
+    userId: string;
+    userPatchDto?: UserPatchDto;
 }
 
 export interface AdminReactivateUserRequest {
@@ -160,6 +168,22 @@ export interface AdminApiInterface {
      * List webhooks
      */
     adminListWebhooks(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<WebhookDto>>;
+
+    /**
+     * 
+     * @summary Edits a user
+     * @param {string} userId 
+     * @param {UserPatchDto} [userPatchDto] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminModifyUserRaw(requestParameters: AdminModifyUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Edits a user
+     */
+    adminModifyUser(userId: string, userPatchDto?: UserPatchDto, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -406,6 +430,45 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     async adminListWebhooks(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<WebhookDto>> {
         const response = await this.adminListWebhooksRaw(initOverrides);
         return await response.value();
+    }
+
+    /**
+     * Edits a user
+     */
+    async adminModifyUserRaw(requestParameters: AdminModifyUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['userId'] == null) {
+            throw new runtime.RequiredError(
+                'userId',
+                'Required parameter "userId" was null or undefined when calling adminModifyUser().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/1/admin/users/{userId}`;
+        urlPath = urlPath.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UserPatchDtoToJSON(requestParameters['userPatchDto']),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Edits a user
+     */
+    async adminModifyUser(userId: string, userPatchDto?: UserPatchDto, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.adminModifyUserRaw({ userId: userId, userPatchDto: userPatchDto }, initOverrides);
     }
 
     /**

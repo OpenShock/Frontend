@@ -93,6 +93,7 @@ models/StatsResponseLegacyDataResponse.ts
 models/StringLegacyDataResponse.ts
 models/TokenCreatedResponse.ts
 models/TokenResponse.ts
+models/UserPatchDto.ts
 models/UserSelfResponse.ts
 models/UserSelfResponseLegacyDataResponse.ts
 models/UsernameAvailability.ts
