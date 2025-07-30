@@ -17,16 +17,16 @@
 
   let username = $state<string>('');
   let usernameValid = $state(true);
-  let usernameReady = $derived(usernameValid && username.length > 0 && username != user.name);
+  let usernameSet = $derived(username.length > 0 && username != user.name);
   let email = $state<string>('');
   let emailValid = $state(true);
-  let emailReady = $derived(emailValid && email.length > 0 && email != user.email);
+  let emailSet = $derived(email.length > 0 && email != user.email);
 
   function sendit() {
     adminApi
       .adminModifyUser(user.id, {
-        name: usernameReady ? username : null,
-        email: emailReady ? email : null,
+        name: usernameSet ? username : null,
+        email: emailSet ? email : null,
       })
       .then(() => (open = false))
       .catch(handleApiError);
@@ -53,6 +53,13 @@
         {/each}
       </div>
     </div>
-    <Button onclick={sendit} disabled={usernameReady && emailReady}>Apply</Button>
+    <Button
+      onclick={sendit}
+      disabled={(usernameSet && !usernameValid) ||
+        (emailSet && !emailValid) ||
+        (!usernameSet && !emailSet)}
+    >
+      Apply
+    </Button>
   </Dialog.Content>
 </Dialog.Root>
