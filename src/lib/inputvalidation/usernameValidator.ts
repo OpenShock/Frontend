@@ -1,3 +1,4 @@
+import { type UsernameCheckResponse, UsernameErrorType } from '$lib/api/internal/v1';
 import { UsernameAvailability } from '$lib/api/internal/v2';
 import { isEmailAddress } from '$lib/inputvalidation/emailValidator';
 import type { ValidationResult } from '$lib/types/ValidationResult';
@@ -61,6 +62,11 @@ export const UsernameTakenValRes: ValidationResult = {
   message: 'Username is already taken',
 };
 
+export const UsernameInvalidValRes: ValidationResult = {
+  valid: false,
+  message: 'Username invalid',
+};
+
 export const UsernameAvailabilityUnknownValRes: ValidationResult = {
   valid: false,
   message: 'Unknown username availability',
@@ -108,13 +114,27 @@ export function validateUsername(value: string): ValidationResult | null {
   return { valid: true };
 }
 
-export function mapUsernameAvailability(availability: UsernameAvailability): ValidationResult {
+export function mapUsernameCheckResponse({
+  availability,
+  error,
+}: UsernameCheckResponse): ValidationResult {
   switch (availability) {
     case UsernameAvailability.Available:
       return UsernameAvailableValRes;
     case UsernameAvailability.Taken:
       return UsernameTakenValRes;
+    case UsernameAvailability.Invalid:
+      break;
     default:
       return UsernameAvailabilityUnknownValRes;
   }
+
+  if (!error) {
+    return UsernameInvalidValRes;
+  }
+
+  return {
+    valid: false,
+    message: error.message,
+  };
 }

@@ -5,7 +5,7 @@
   import {
     UsernameCheckingAvailabilityValRes,
     UsernameInternalServerErrorValRes,
-    mapUsernameAvailability,
+    mapUsernameCheckResponse,
     validateUsername,
   } from '$lib/inputvalidation/usernameValidator';
   import type { AnyComponent } from '$lib/types/AnyComponent';
@@ -53,7 +53,7 @@
         const response = await accountV2Api.accountCheckUsername({ username: value });
 
         // Map the response to a validation result
-        validationResult = mapUsernameAvailability(response.availability);
+        validationResult = mapUsernameCheckResponse(response);
       } catch (error) {
         // Show an error toast
         await handleApiError(error);

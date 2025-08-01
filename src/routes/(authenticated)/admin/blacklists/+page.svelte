@@ -6,6 +6,7 @@
     MatchTypeEnum,
     type UserNameBlacklistDto,
   } from '$lib/api/internal/v1';
+  import EmailInput from '$lib/components/input/EmailInput.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import { Button } from '$lib/components/ui/button';
   import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
@@ -14,7 +15,6 @@
   import { Separator } from '$lib/components/ui/separator';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import type { TimeoutHandle } from '$lib/types/WAPI';
-  import EmailInput from '$lib/components/input/EmailInput.svelte';
 
   // --- state ---
   let usernameEntry = $state<string>('');
@@ -144,7 +144,7 @@
       loadEmails('');
       return;
     }
-    
+
     if (!emailEntryValid) return;
 
     emailDebounce = setTimeout(() => loadEmails(emailEntry), 400);
