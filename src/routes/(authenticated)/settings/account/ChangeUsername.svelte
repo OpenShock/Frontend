@@ -2,6 +2,7 @@
   import User from '@lucide/svelte/icons/user';
   import { accountV1Api } from '$lib/api';
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
+  import { Button } from '$lib/components/ui/button';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { UserStore } from '$lib/stores/UserStore';
   import type { ApiUserSelf } from '$lib/types/ApiUser';
@@ -42,5 +43,8 @@
   autocomplete="off"
   bind:value={username}
   Icon={User}
-  button={{ text: 'Change', submits: true, onClick: submitUsername }}
-/>
+>
+  {#snippet after()}
+    <Button type="button" onclick={submitUsername} variant="ghost">Change</Button>
+  {/snippet}
+</UsernameInput>

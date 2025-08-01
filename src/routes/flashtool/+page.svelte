@@ -228,11 +228,10 @@
     >
       <pre id="terminal" class="text-left text-xs">{terminalText}</pre>
     </div>
-    <TextInput
-      label="Command"
-      placeholder="Command"
-      button={{ text: 'Run', onClick: RunCommand }}
-      bind:value={terminalCommand}
-    />
+    <TextInput label="Command" placeholder="Command" bind:value={terminalCommand}>
+      {#snippet after()}
+        <Button type="button" onclick={RunCommand} variant="ghost">Run</Button>
+      {/snippet}
+    </TextInput>
   </SheetContent>
 </Sheet>

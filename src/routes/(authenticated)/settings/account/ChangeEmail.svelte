@@ -1,6 +1,7 @@
 <script lang="ts">
   import Mail from '@lucide/svelte/icons/mail';
   import EmailInput from '$lib/components/input/EmailInput.svelte';
+  import { Button } from '$lib/components/ui/button';
   import type { ApiUserSelf } from '$lib/types/ApiUser';
 
   interface Props {
@@ -22,5 +23,8 @@
   autocomplete="off"
   bind:value={email}
   Icon={Mail}
-  button={{ text: 'Change', submits: true, onClick: submitEmail }}
-/>
+>
+  {#snippet after()}
+    <Button type="button" onclick={submitEmail} variant="ghost">Change</Button>
+  {/snippet}
+</EmailInput>

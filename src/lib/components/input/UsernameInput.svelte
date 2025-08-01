@@ -1,7 +1,6 @@
 <script lang="ts">
   import { accountV2Api } from '$lib/api';
   import TextInput from '$lib/components/input/TextInput.svelte';
-  import type { ButtonSettings } from '$lib/components/input/impl/ButtonSettings';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import {
     UsernameCheckingAvailabilityValRes,
@@ -12,6 +11,7 @@
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import type { ValidationResult } from '$lib/types/ValidationResult';
   import type { TimeoutHandle } from '$lib/types/WAPI';
+  import type { Snippet } from 'svelte';
   import type { FullAutoFill } from 'svelte/elements';
 
   interface Props {
@@ -22,7 +22,7 @@
     valid?: boolean;
     validate?: boolean;
     Icon?: AnyComponent;
-    button?: ButtonSettings;
+    after?: Snippet;
   }
 
   let {
@@ -33,7 +33,7 @@
     valid = $bindable(false),
     validate = true,
     Icon,
-    button,
+    after,
   }: Props = $props();
 
   let validationResult = $state<ValidationResult | null>(null);
@@ -83,4 +83,4 @@
   });
 </script>
 
-<TextInput {label} {placeholder} {autocomplete} bind:value {validationResult} {Icon} {button} />
+<TextInput {label} {placeholder} {autocomplete} bind:value {validationResult} {Icon} {after} />

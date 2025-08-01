@@ -2,6 +2,7 @@
   import { Eye, EyeOff } from '@lucide/svelte';
   import { checkPwnedCount } from '$lib/api/pwnedPasswords';
   import TextInput from '$lib/components/input/TextInput.svelte';
+  import { Button } from '$lib/components/ui/button';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { validatePassword } from '$lib/inputvalidation/passwordValidator';
   import type { AnyComponent } from '$lib/types/AnyComponent';
@@ -131,11 +132,22 @@
   bind:value
   {validationResult}
   {Icon}
-  button={{
-    Icon: valueShown ? EyeOff : Eye,
-    class: 'cursor-pointer',
-    onClick: () => (valueShown = !valueShown),
-  }}
   onblur={() => (showPopup = false)}
   popup={showPopup ? popup : undefined}
-/>
+>
+  {#snippet after()}
+    <Button
+      type="button"
+      class="cursor-pointer"
+      onclick={() => (valueShown = !valueShown)}
+      variant="ghost"
+      disabled={validationResult === null || (validationResult && !validationResult.valid)}
+    >
+      {#if valueShown}
+        <EyeOff />
+      {:else}
+        <Eye />
+      {/if}
+    </Button>
+  {/snippet}
+</TextInput>

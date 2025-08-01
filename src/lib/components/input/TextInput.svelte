@@ -1,21 +1,19 @@
 <script lang="ts">
-  import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input';
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import { GetValResColor, type ValidationResult } from '$lib/types/ValidationResult';
   import type { Snippet } from 'svelte';
   import type { FocusEventHandler, FullAutoFill } from 'svelte/elements';
-  import type { ButtonSettings } from './impl/ButtonSettings';
 
   interface Props {
     type?: 'text' | 'password';
-    label: string;
+    label?: string;
     placeholder?: string;
     autocomplete?: FullAutoFill;
     value: string;
     validationResult?: ValidationResult | null;
     Icon?: AnyComponent;
-    button?: ButtonSettings;
+    after?: Snippet;
     popup?: Snippet;
     onblur?: FocusEventHandler<HTMLInputElement> | null;
   }
@@ -31,14 +29,16 @@
     value = $bindable(),
     validationResult,
     Icon,
-    button,
+    after,
     popup,
     onblur,
   }: Props = $props();
 </script>
 
 <label for={inputId} class="w-full">
-  <span>{label}</span>
+  {#if label}
+    <span>{label}</span>
+  {/if}
   <div class="relative flex grow flex-row items-center gap-2">
     {#if Icon}
       <Icon />
@@ -63,21 +63,8 @@
         {@render popup()}
       </div>
     {/if}
-    {#if button}
-      <Button
-        type="button"
-        class={button.class ?? 'disabled:opacity-50'}
-        onclick={button.onClick}
-        variant="ghost"
-        disabled={button.submits &&
-          (validationResult === null || (validationResult && !validationResult.valid))}
-      >
-        {#if 'Icon' in button}
-          <button.Icon />
-        {:else if 'text' in button}
-          {button.text}
-        {/if}
-      </Button>
+    {#if after}
+      {@render after()}
     {/if}
   </div>
   {#if validationResult?.message}
