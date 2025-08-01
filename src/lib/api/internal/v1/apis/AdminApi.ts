@@ -15,27 +15,47 @@
 
 import * as runtime from '../runtime';
 import type {
+  AddEmailProviderBlacklistDto,
+  AddUsernameBlacklistDto,
   AddWebhookDto,
   AdminOnlineDeviceResponseIEnumerableLegacyDataResponse,
   AdminUsersViewPaginated,
+  EmailProviderBlacklistDto,
   ProblemDetails,
+  UserNameBlacklistDto,
   UserPatchDto,
   WebhookDto,
 } from '../models/index';
 import {
+    AddEmailProviderBlacklistDtoFromJSON,
+    AddEmailProviderBlacklistDtoToJSON,
+    AddUsernameBlacklistDtoFromJSON,
+    AddUsernameBlacklistDtoToJSON,
     AddWebhookDtoFromJSON,
     AddWebhookDtoToJSON,
     AdminOnlineDeviceResponseIEnumerableLegacyDataResponseFromJSON,
     AdminOnlineDeviceResponseIEnumerableLegacyDataResponseToJSON,
     AdminUsersViewPaginatedFromJSON,
     AdminUsersViewPaginatedToJSON,
+    EmailProviderBlacklistDtoFromJSON,
+    EmailProviderBlacklistDtoToJSON,
     ProblemDetailsFromJSON,
     ProblemDetailsToJSON,
+    UserNameBlacklistDtoFromJSON,
+    UserNameBlacklistDtoToJSON,
     UserPatchDtoFromJSON,
     UserPatchDtoToJSON,
     WebhookDtoFromJSON,
     WebhookDtoToJSON,
 } from '../models/index';
+
+export interface AdminAddEmailProviderBlacklistRequest {
+    addEmailProviderBlacklistDto?: AddEmailProviderBlacklistDto;
+}
+
+export interface AdminAddUsernameBlacklistRequest {
+    addUsernameBlacklistDto?: AddUsernameBlacklistDto;
+}
 
 export interface AdminAddWebhookRequest {
     addWebhookDto?: AddWebhookDto;
@@ -66,6 +86,14 @@ export interface AdminReactivateUserRequest {
     userId: string;
 }
 
+export interface AdminRemoveEmailProviderBlacklistRequest {
+    id: string;
+}
+
+export interface AdminRemoveUsernameBlacklistRequest {
+    id: string;
+}
+
 export interface AdminRemoveWebhookRequest {
     id: string;
 }
@@ -77,6 +105,32 @@ export interface AdminRemoveWebhookRequest {
  * @interface AdminApiInterface
  */
 export interface AdminApiInterface {
+    /**
+     * 
+     * @param {AddEmailProviderBlacklistDto} [addEmailProviderBlacklistDto] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminAddEmailProviderBlacklistRaw(requestParameters: AdminAddEmailProviderBlacklistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     */
+    adminAddEmailProviderBlacklist(addEmailProviderBlacklistDto?: AddEmailProviderBlacklistDto, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * 
+     * @param {AddUsernameBlacklistDto} [addUsernameBlacklistDto] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminAddUsernameBlacklistRaw(requestParameters: AdminAddUsernameBlacklistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     */
+    adminAddUsernameBlacklist(addUsernameBlacklistDto?: AddUsernameBlacklistDto, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
     /**
      * 
      * @summary Creates a webhook
@@ -157,6 +211,30 @@ export interface AdminApiInterface {
 
     /**
      * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminListEmailProviderBlacklistRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<EmailProviderBlacklistDto>>>;
+
+    /**
+     */
+    adminListEmailProviderBlacklist(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<EmailProviderBlacklistDto>>;
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminListUsernameBlacklistRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UserNameBlacklistDto>>>;
+
+    /**
+     */
+    adminListUsernameBlacklist(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<UserNameBlacklistDto>>;
+
+    /**
+     * 
      * @summary List webhooks
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -202,6 +280,32 @@ export interface AdminApiInterface {
 
     /**
      * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminRemoveEmailProviderBlacklistRaw(requestParameters: AdminRemoveEmailProviderBlacklistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     */
+    adminRemoveEmailProviderBlacklist(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminRemoveUsernameBlacklistRaw(requestParameters: AdminRemoveUsernameBlacklistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     */
+    adminRemoveUsernameBlacklist(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * 
      * @summary Removes a webhook
      * @param {string} id 
      * @param {*} [options] Override http request option.
@@ -221,6 +325,64 @@ export interface AdminApiInterface {
  * 
  */
 export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
+
+    /**
+     */
+    async adminAddEmailProviderBlacklistRaw(requestParameters: AdminAddEmailProviderBlacklistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/1/admin/blacklist/emailProviders`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: AddEmailProviderBlacklistDtoToJSON(requestParameters['addEmailProviderBlacklistDto']),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async adminAddEmailProviderBlacklist(addEmailProviderBlacklistDto?: AddEmailProviderBlacklistDto, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.adminAddEmailProviderBlacklistRaw({ addEmailProviderBlacklistDto: addEmailProviderBlacklistDto }, initOverrides);
+    }
+
+    /**
+     */
+    async adminAddUsernameBlacklistRaw(requestParameters: AdminAddUsernameBlacklistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/1/admin/blacklist/usernames`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: AddUsernameBlacklistDtoToJSON(requestParameters['addUsernameBlacklistDto']),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async adminAddUsernameBlacklist(addUsernameBlacklistDto?: AddUsernameBlacklistDto, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.adminAddUsernameBlacklistRaw({ addUsernameBlacklistDto: addUsernameBlacklistDto }, initOverrides);
+    }
 
     /**
      * Creates a webhook
@@ -404,6 +566,60 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     }
 
     /**
+     */
+    async adminListEmailProviderBlacklistRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<EmailProviderBlacklistDto>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/1/admin/blacklist/emailProviders`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(EmailProviderBlacklistDtoFromJSON));
+    }
+
+    /**
+     */
+    async adminListEmailProviderBlacklist(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<EmailProviderBlacklistDto>> {
+        const response = await this.adminListEmailProviderBlacklistRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async adminListUsernameBlacklistRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UserNameBlacklistDto>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/1/admin/blacklist/usernames`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(UserNameBlacklistDtoFromJSON));
+    }
+
+    /**
+     */
+    async adminListUsernameBlacklist(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<UserNameBlacklistDto>> {
+        const response = await this.adminListUsernameBlacklistRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
      * List webhooks
      */
     async adminListWebhooksRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<WebhookDto>>> {
@@ -505,6 +721,74 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
      */
     async adminReactivateUser(userId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.adminReactivateUserRaw({ userId: userId }, initOverrides);
+    }
+
+    /**
+     */
+    async adminRemoveEmailProviderBlacklistRaw(requestParameters: AdminRemoveEmailProviderBlacklistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling adminRemoveEmailProviderBlacklist().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/1/admin/blacklist/emailProviders/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async adminRemoveEmailProviderBlacklist(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.adminRemoveEmailProviderBlacklistRaw({ id: id }, initOverrides);
+    }
+
+    /**
+     */
+    async adminRemoveUsernameBlacklistRaw(requestParameters: AdminRemoveUsernameBlacklistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling adminRemoveUsernameBlacklist().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/1/admin/blacklist/usernames/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async adminRemoveUsernameBlacklist(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.adminRemoveUsernameBlacklistRaw({ id: id }, initOverrides);
     }
 
     /**

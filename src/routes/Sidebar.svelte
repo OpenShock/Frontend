@@ -135,6 +135,10 @@
             href: '/admin/users',
           },
           {
+            title: 'Blacklists',
+            href: '/admin/blacklists',
+          },
+          {
             title: 'Webhooks',
             href: '/admin/webhooks',
           },

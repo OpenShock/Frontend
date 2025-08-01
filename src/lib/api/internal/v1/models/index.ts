@@ -1,5 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
+export * from './AddEmailProviderBlacklistDto';
+export * from './AddUsernameBlacklistDto';
 export * from './AddWebhookDto';
 export * from './AdminOnlineDeviceResponse';
 export * from './AdminOnlineDeviceResponseIEnumerableLegacyDataResponse';
@@ -19,6 +21,7 @@ export * from './CreateTokenRequest';
 export * from './DeviceSelfResponse';
 export * from './DeviceSelfResponseLegacyDataResponse';
 export * from './EditTokenRequest';
+export * from './EmailProviderBlacklistDto';
 export * from './GuidLegacyDataResponse';
 export * from './HubEditRequest';
 export * from './LcgNodeResponse';
@@ -30,6 +33,7 @@ export * from './LogEntry';
 export * from './LogEntryIAsyncEnumerableLegacyDataResponse';
 export * from './Login';
 export * from './LoginSessionResponse';
+export * from './MatchTypeEnum';
 export * from './MinimalShocker';
 export * from './NewShocker';
 export * from './OpenShockProblem';
@@ -81,6 +85,7 @@ export * from './StatsResponseLegacyDataResponse';
 export * from './StringLegacyDataResponse';
 export * from './TokenCreatedResponse';
 export * from './TokenResponse';
+export * from './UserNameBlacklistDto';
 export * from './UserPatchDto';
 export * from './UserSelfResponse';
 export * from './UserSelfResponseLegacyDataResponse';

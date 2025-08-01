@@ -12,6 +12,8 @@ apis/ShockersApi.ts
 apis/UsersApi.ts
 apis/index.ts
 index.ts
+models/AddEmailProviderBlacklistDto.ts
+models/AddUsernameBlacklistDto.ts
 models/AddWebhookDto.ts
 models/AdminOnlineDeviceResponse.ts
 models/AdminOnlineDeviceResponseIEnumerableLegacyDataResponse.ts
@@ -31,6 +33,7 @@ models/CreateTokenRequest.ts
 models/DeviceSelfResponse.ts
 models/DeviceSelfResponseLegacyDataResponse.ts
 models/EditTokenRequest.ts
+models/EmailProviderBlacklistDto.ts
 models/GuidLegacyDataResponse.ts
 models/HubEditRequest.ts
 models/LcgNodeResponse.ts
@@ -42,6 +45,7 @@ models/LogEntry.ts
 models/LogEntryIAsyncEnumerableLegacyDataResponse.ts
 models/Login.ts
 models/LoginSessionResponse.ts
+models/MatchTypeEnum.ts
 models/MinimalShocker.ts
 models/NewShocker.ts
 models/OpenShockProblem.ts
@@ -93,6 +97,7 @@ models/StatsResponseLegacyDataResponse.ts
 models/StringLegacyDataResponse.ts
 models/TokenCreatedResponse.ts
 models/TokenResponse.ts
+models/UserNameBlacklistDto.ts
 models/UserPatchDto.ts
 models/UserSelfResponse.ts
 models/UserSelfResponseLegacyDataResponse.ts
