@@ -14,6 +14,7 @@
   import { Separator } from '$lib/components/ui/separator';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import type { TimeoutHandle } from '$lib/types/WAPI';
+  import EmailInput from '$lib/components/input/EmailInput.svelte';
 
   // --- state ---
   let usernameEntry = $state<string>('');
@@ -22,6 +23,7 @@
   let isLoadingUsernames = $state(false);
 
   let emailEntry = $state<string>('');
+  let emailEntryValid = $state(false);
   let emailBlacklist = $state<EmailProviderBlacklistDto[]>([]);
   let isLoadingEmails = $state(false);
 
@@ -142,6 +144,8 @@
       loadEmails('');
       return;
     }
+    
+    if (!emailEntryValid) return;
 
     emailDebounce = setTimeout(() => loadEmails(emailEntry), 400);
   });
@@ -199,14 +203,14 @@
   <Card>
     <CardHeader>
       <CardTitle>Email-Provider Blacklist</CardTitle>
-      <TextInput placeholder="e.g. gmail.com" bind:value={emailEntry}>
+      <EmailInput placeholder="e.g. gmail.com" bind:value={emailEntry} bind:valid={emailEntryValid}>
         {#snippet after()}
           <Button onclick={addEmailEntry} disabled={isLoadingEmails}>Add</Button>
           <Button onclick={addEmailsBatch} disabled={isLoadingEmails}
             >Batch Upload From Clipboard</Button
           >
         {/snippet}
-      </TextInput>
+      </EmailInput>
     </CardHeader>
     <CardContent>
       <ScrollArea class="max-h-64">

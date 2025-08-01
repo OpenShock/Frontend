@@ -7,7 +7,7 @@
   import type { FullAutoFill } from 'svelte/elements';
 
   interface Props {
-    label: string;
+    label?: string;
     placeholder?: string;
     autocomplete?: FullAutoFill;
     value: string;
