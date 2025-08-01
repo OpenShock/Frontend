@@ -77,6 +77,14 @@ export interface AdminGetUsersRequest {
     $limit?: number;
 }
 
+export interface AdminListEmailProviderBlacklistRequest {
+    match?: string;
+}
+
+export interface AdminListUsernameBlacklistRequest {
+    match?: string;
+}
+
 export interface AdminModifyUserRequest {
     userId: string;
     userPatchDto?: UserPatchDto;
@@ -211,27 +219,29 @@ export interface AdminApiInterface {
 
     /**
      * 
+     * @param {string} [match] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AdminApiInterface
      */
-    adminListEmailProviderBlacklistRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<EmailProviderBlacklistDto>>>;
+    adminListEmailProviderBlacklistRaw(requestParameters: AdminListEmailProviderBlacklistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<EmailProviderBlacklistDto>>>;
 
     /**
      */
-    adminListEmailProviderBlacklist(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<EmailProviderBlacklistDto>>;
+    adminListEmailProviderBlacklist(match?: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<EmailProviderBlacklistDto>>;
 
     /**
      * 
+     * @param {string} [match] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AdminApiInterface
      */
-    adminListUsernameBlacklistRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UserNameBlacklistDto>>>;
+    adminListUsernameBlacklistRaw(requestParameters: AdminListUsernameBlacklistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UserNameBlacklistDto>>>;
 
     /**
      */
-    adminListUsernameBlacklist(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<UserNameBlacklistDto>>;
+    adminListUsernameBlacklist(match?: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<UserNameBlacklistDto>>;
 
     /**
      * 
@@ -567,8 +577,12 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
     /**
      */
-    async adminListEmailProviderBlacklistRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<EmailProviderBlacklistDto>>> {
+    async adminListEmailProviderBlacklistRaw(requestParameters: AdminListEmailProviderBlacklistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<EmailProviderBlacklistDto>>> {
         const queryParameters: any = {};
+
+        if (requestParameters['match'] != null) {
+            queryParameters['match'] = requestParameters['match'];
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -587,15 +601,19 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
     /**
      */
-    async adminListEmailProviderBlacklist(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<EmailProviderBlacklistDto>> {
-        const response = await this.adminListEmailProviderBlacklistRaw(initOverrides);
+    async adminListEmailProviderBlacklist(match?: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<EmailProviderBlacklistDto>> {
+        const response = await this.adminListEmailProviderBlacklistRaw({ match: match }, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async adminListUsernameBlacklistRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UserNameBlacklistDto>>> {
+    async adminListUsernameBlacklistRaw(requestParameters: AdminListUsernameBlacklistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UserNameBlacklistDto>>> {
         const queryParameters: any = {};
+
+        if (requestParameters['match'] != null) {
+            queryParameters['match'] = requestParameters['match'];
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -614,8 +632,8 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
     /**
      */
-    async adminListUsernameBlacklist(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<UserNameBlacklistDto>> {
-        const response = await this.adminListUsernameBlacklistRaw(initOverrides);
+    async adminListUsernameBlacklist(match?: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<UserNameBlacklistDto>> {
+        const response = await this.adminListUsernameBlacklistRaw({ match: match }, initOverrides);
         return await response.value();
     }
 
