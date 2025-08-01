@@ -174,8 +174,8 @@
         {/snippet}
       </TextInput>
     </CardHeader>
-    <CardContent>
-      <ScrollArea class="max-h-64">
+    <CardContent class="overflow-clip">
+      <ScrollArea>
         <div class="space-y-2">
           {#each limit(usernameBlacklist, 10) as item (item.id)}
             <div class="flex items-center justify-between text-sm">
@@ -212,8 +212,8 @@
         {/snippet}
       </EmailInput>
     </CardHeader>
-    <CardContent>
-      <ScrollArea class="max-h-64">
+    <CardContent class="overflow-clip">
+      <ScrollArea>
         <div class="space-y-2">
           {#each limit(emailBlacklist, 10) as item (item.id)}
             <div class="flex items-center justify-between text-sm">
