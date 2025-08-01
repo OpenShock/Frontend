@@ -21,17 +21,17 @@ import { mapValues } from '../runtime';
 export interface AddEmailProviderBlacklistDto {
     /**
      * 
-     * @type {string}
+     * @type {Array<string>}
      * @memberof AddEmailProviderBlacklistDto
      */
-    domain: string;
+    domains: Array<string>;
 }
 
 /**
  * Check if a given object implements the AddEmailProviderBlacklistDto interface.
  */
 export function instanceOfAddEmailProviderBlacklistDto(value: object): value is AddEmailProviderBlacklistDto {
-    if (!('domain' in value) || value['domain'] === undefined) return false;
+    if (!('domains' in value) || value['domains'] === undefined) return false;
     return true;
 }
 
@@ -45,7 +45,7 @@ export function AddEmailProviderBlacklistDtoFromJSONTyped(json: any, ignoreDiscr
     }
     return {
         
-        'domain': json['domain'],
+        'domains': json['domains'],
     };
 }
 
@@ -60,7 +60,7 @@ export function AddEmailProviderBlacklistDtoToJSONTyped(value?: AddEmailProvider
 
     return {
         
-        'domain': value['domain'],
+        'domains': value['domains'],
     };
 }
 

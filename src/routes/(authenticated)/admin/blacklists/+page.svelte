@@ -13,6 +13,7 @@
   import * as Select from '$lib/components/ui/select';
   import { Separator } from '$lib/components/ui/separator';
   import { onMount } from 'svelte';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 
   // --- state ---
   let usernameEntry = $state<string>('');
@@ -54,17 +55,20 @@
     adminApi.adminRemoveUsernameBlacklist(id).then(loadUsernames);
   }
 
+  function uploadDomains(domains: string[]) {
+    return adminApi
+      .adminAddEmailProviderBlacklist({ domains })
+      .then(loadEmails)
+      .catch(handleApiError);
+  }
+
   // --- email-provider handlers ---
   function addEmail() {
-    if (!emailEntry.trim()) return;
-    adminApi
-      .adminAddEmailProviderBlacklist({
-        domain: emailEntry,
-      })
-      .then(() => {
-        emailEntry = '';
-        loadEmails();
-      });
+    uploadDomains([emailEntry]);
+    emailEntry = '';
+  }
+  function addEmailsBatch() {
+    navigator.clipboard.readText().then((text) => uploadDomains(text.split(/\r|\n/).filter(s => s.trim().length != 0)));
   }
   function removeEmail(id: string) {
     adminApi.adminRemoveEmailProviderBlacklist(id).then(loadEmails);
@@ -126,6 +130,7 @@
       <div class="mt-4 flex items-center gap-2">
         <TextInput label="Email domain" placeholder="e.g. gmail.com" bind:value={emailEntry} />
         <Button onclick={addEmail}>Add</Button>
+        <Button onclick={addEmailsBatch}>Batch Upload From Clipboard</Button>
       </div>
     </CardHeader>
     <CardContent>
