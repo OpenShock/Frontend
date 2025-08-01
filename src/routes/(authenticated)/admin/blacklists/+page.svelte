@@ -12,8 +12,8 @@
   import { ScrollArea } from '$lib/components/ui/scroll-area';
   import * as Select from '$lib/components/ui/select';
   import { Separator } from '$lib/components/ui/separator';
-  import { onMount } from 'svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { onMount } from 'svelte';
 
   // --- state ---
   let usernameEntry = $state<string>('');
@@ -68,7 +68,9 @@
     emailEntry = '';
   }
   function addEmailsBatch() {
-    navigator.clipboard.readText().then((text) => uploadDomains(text.split(/\r|\n/).filter(s => s.trim().length != 0)));
+    navigator.clipboard
+      .readText()
+      .then((text) => uploadDomains(text.split(/\r|\n/).filter((s) => s.trim().length != 0)));
   }
   function removeEmail(id: string) {
     adminApi.adminRemoveEmailProviderBlacklist(id).then(loadEmails);
