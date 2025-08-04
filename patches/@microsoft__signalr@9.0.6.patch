@@ -1,8 +1,8 @@
 diff --git a/dist/esm/Utils.js b/dist/esm/Utils.js
-index 5a5448a35e688184a8922d03ae9d1fe475f2ee44..56d4b763e137e0183a1485e4751d485cdbf3cbdc 100644
+index a4e7ff651850b69e801950fc39a95c8b21ae0f13..9bd6ff86a8de8a06c65403dee56aaedd1e5adcef 100644
 --- a/dist/esm/Utils.js
 +++ b/dist/esm/Utils.js
-@@ -186,7 +186,7 @@ export function constructUserAgent(version, os, runtime, runtimeVersion) {
+@@ -187,7 +187,7 @@ export function constructUserAgent(version, os, runtime, runtimeVersion) {
      return userAgent;
  }
  // eslint-disable-next-line spaced-comment
@@ -11,7 +11,7 @@ index 5a5448a35e688184a8922d03ae9d1fe475f2ee44..56d4b763e137e0183a1485e4751d485c
      if (Platform.isNode) {
          switch (process.platform) {
              case "win32":
-@@ -204,7 +204,7 @@ export function constructUserAgent(version, os, runtime, runtimeVersion) {
+@@ -205,7 +205,7 @@ export function constructUserAgent(version, os, runtime, runtimeVersion) {
      }
  }
  // eslint-disable-next-line spaced-comment
