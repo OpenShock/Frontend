@@ -12,6 +12,7 @@
   import HubDeleteDialog from './dialog-hub-delete.svelte';
   import HubEditDialog from './dialog-hub-edit.svelte';
   import RegenerateTokenDialog from './dialog-hub-regenerate-token.svelte';
+  import PairDialog from './dialog-hub-pair.svelte';
 
   interface Props {
     hub: Hub;
@@ -19,6 +20,7 @@
 
   let { hub }: Props = $props();
 
+  let pairDialogOpen = $state<boolean>(false);
   let regenerateTokenDialogOpen = $state<boolean>(false);
   let editDialogOpen = $state<boolean>(false);
   let deleteDialogOpen = $state<boolean>(false);
@@ -29,6 +31,7 @@
   }
 </script>
 
+<PairDialog bind:open={pairDialogOpen} {hub} />
 <RegenerateTokenDialog bind:open={regenerateTokenDialogOpen} {hub} />
 <HubEditDialog bind:open={editDialogOpen} {hub} />
 <HubDeleteDialog bind:open={deleteDialogOpen} {hub} />
@@ -53,6 +56,9 @@
       onclick={() => serializeEmergencyStopMessage(get(SignalR_Connection), hub.id)}
     >
       Emergency Stop
+    </DropdownMenu.Item>
+    <DropdownMenu.Item onclick={() => (pairDialogOpen = true)}>
+      Pair
     </DropdownMenu.Item>
     <DropdownMenu.Item onclick={() => (regenerateTokenDialogOpen = true)}>
       Regenerate Token
