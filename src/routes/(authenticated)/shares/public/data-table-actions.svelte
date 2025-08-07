@@ -9,9 +9,10 @@
 
   interface Props {
     publicShare: OwnPublicShareResponse;
+    onChange: () => void;
   }
 
-  let { publicShare }: Props = $props();
+  let { publicShare, onChange }: Props = $props();
 
   let deleteDialogOpen = $state<boolean>(false);
 
@@ -21,7 +22,7 @@
   }
 </script>
 
-<SharelinkDeleteDialog bind:open={deleteDialogOpen} {publicShare} />
+<SharelinkDeleteDialog bind:open={deleteDialogOpen} {publicShare} onDeleted={onChange} />
 
 <DropdownMenu.Root>
   <DropdownMenu.Trigger>
