@@ -11,8 +11,8 @@
   import type { Hub } from './columns';
   import HubDeleteDialog from './dialog-hub-delete.svelte';
   import HubEditDialog from './dialog-hub-edit.svelte';
-  import RegenerateTokenDialog from './dialog-hub-regenerate-token.svelte';
   import PairDialog from './dialog-hub-pair.svelte';
+  import RegenerateTokenDialog from './dialog-hub-regenerate-token.svelte';
 
   interface Props {
     hub: Hub;
@@ -57,9 +57,7 @@
     >
       Emergency Stop
     </DropdownMenu.Item>
-    <DropdownMenu.Item onclick={() => (pairDialogOpen = true)}>
-      Pair
-    </DropdownMenu.Item>
+    <DropdownMenu.Item onclick={() => (pairDialogOpen = true)}>Pair</DropdownMenu.Item>
     <DropdownMenu.Item onclick={() => (regenerateTokenDialogOpen = true)}>
       Regenerate Token
     </DropdownMenu.Item>

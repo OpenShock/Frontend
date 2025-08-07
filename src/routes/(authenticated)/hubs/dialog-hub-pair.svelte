@@ -38,7 +38,9 @@
 <Dialog bind:open={() => open, setOpen}>
   <Content>
     <Header>
-      <Title>{loading ? 'Generating...' : code ? 'Pair code generated' : 'Generate pair code?'}</Title>
+      <Title
+        >{loading ? 'Generating...' : code ? 'Pair code generated' : 'Generate pair code?'}</Title
+      >
       {#if !loading}
         <Description>
           {#if code}
@@ -47,7 +49,8 @@
           {:else}
             You are about to generate a pair code for <strong>{hub.name}</strong><br />
             It will be vaild for 15 minutes after its creation.<br />
-            There is only one active pair code per hub, newly generated ones will override the older active ones.<br />
+            There is only one active pair code per hub, newly generated ones will override the older
+            active ones.<br />
           {/if}
         </Description>
       {/if}
