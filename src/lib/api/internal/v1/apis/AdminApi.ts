@@ -20,6 +20,9 @@ import type {
   AddWebhookDto,
   AdminOnlineDeviceResponseIEnumerableLegacyDataResponse,
   AdminUsersViewPaginated,
+  ConfigurationAddItemRequest,
+  ConfigurationItemDto,
+  ConfigurationUpdateItemRequest,
   EmailProviderBlacklistDto,
   ProblemDetails,
   UserNameBlacklistDto,
@@ -37,6 +40,12 @@ import {
     AdminOnlineDeviceResponseIEnumerableLegacyDataResponseToJSON,
     AdminUsersViewPaginatedFromJSON,
     AdminUsersViewPaginatedToJSON,
+    ConfigurationAddItemRequestFromJSON,
+    ConfigurationAddItemRequestToJSON,
+    ConfigurationItemDtoFromJSON,
+    ConfigurationItemDtoToJSON,
+    ConfigurationUpdateItemRequestFromJSON,
+    ConfigurationUpdateItemRequestToJSON,
     EmailProviderBlacklistDtoFromJSON,
     EmailProviderBlacklistDtoToJSON,
     ProblemDetailsFromJSON,
@@ -59,6 +68,18 @@ export interface AdminAddUsernameBlacklistRequest {
 
 export interface AdminAddWebhookRequest {
     addWebhookDto?: AddWebhookDto;
+}
+
+export interface AdminConfigurationAddRequest {
+    configurationAddItemRequest?: ConfigurationAddItemRequest;
+}
+
+export interface AdminConfigurationDeleteRequest {
+    name: string;
+}
+
+export interface AdminConfigurationUpdateRequest {
+    configurationUpdateItemRequest?: ConfigurationUpdateItemRequest;
 }
 
 export interface AdminDeactivateUserRequest {
@@ -153,6 +174,65 @@ export interface AdminApiInterface {
      * Creates a webhook
      */
     adminAddWebhook(addWebhookDto?: AddWebhookDto, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * 
+     * @summary Adds a new configuration
+     * @param {ConfigurationAddItemRequest} [configurationAddItemRequest] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminConfigurationAddRaw(requestParameters: AdminConfigurationAddRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Adds a new configuration
+     */
+    adminConfigurationAdd(configurationAddItemRequest?: ConfigurationAddItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * 
+     * @summary Deletes a configuration
+     * @param {string} name 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminConfigurationDeleteRaw(requestParameters: AdminConfigurationDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Deletes a configuration
+     */
+    adminConfigurationDelete(name: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * 
+     * @summary Gets all configuration items
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminConfigurationListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ConfigurationItemDto>>>;
+
+    /**
+     * Gets all configuration items
+     */
+    adminConfigurationList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ConfigurationItemDto>>;
+
+    /**
+     * 
+     * @summary Updates an existing configuration
+     * @param {ConfigurationUpdateItemRequest} [configurationUpdateItemRequest] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminConfigurationUpdateRaw(requestParameters: AdminConfigurationUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Updates an existing configuration
+     */
+    adminConfigurationUpdate(configurationUpdateItemRequest?: ConfigurationUpdateItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -423,6 +503,133 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
      */
     async adminAddWebhook(addWebhookDto?: AddWebhookDto, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.adminAddWebhookRaw({ addWebhookDto: addWebhookDto }, initOverrides);
+    }
+
+    /**
+     * Adds a new configuration
+     */
+    async adminConfigurationAddRaw(requestParameters: AdminConfigurationAddRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/1/admin/config`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ConfigurationAddItemRequestToJSON(requestParameters['configurationAddItemRequest']),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Adds a new configuration
+     */
+    async adminConfigurationAdd(configurationAddItemRequest?: ConfigurationAddItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.adminConfigurationAddRaw({ configurationAddItemRequest: configurationAddItemRequest }, initOverrides);
+    }
+
+    /**
+     * Deletes a configuration
+     */
+    async adminConfigurationDeleteRaw(requestParameters: AdminConfigurationDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling adminConfigurationDelete().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/1/admin/config/{name}`;
+        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Deletes a configuration
+     */
+    async adminConfigurationDelete(name: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.adminConfigurationDeleteRaw({ name: name }, initOverrides);
+    }
+
+    /**
+     * Gets all configuration items
+     */
+    async adminConfigurationListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ConfigurationItemDto>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/1/admin/config`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ConfigurationItemDtoFromJSON));
+    }
+
+    /**
+     * Gets all configuration items
+     */
+    async adminConfigurationList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ConfigurationItemDto>> {
+        const response = await this.adminConfigurationListRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Updates an existing configuration
+     */
+    async adminConfigurationUpdateRaw(requestParameters: AdminConfigurationUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/1/admin/config`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ConfigurationUpdateItemRequestToJSON(requestParameters['configurationUpdateItemRequest']),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Updates an existing configuration
+     */
+    async adminConfigurationUpdate(configurationUpdateItemRequest?: ConfigurationUpdateItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.adminConfigurationUpdateRaw({ configurationUpdateItemRequest: configurationUpdateItemRequest }, initOverrides);
     }
 
     /**

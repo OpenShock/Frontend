@@ -142,6 +142,10 @@
             title: 'Webhooks',
             href: '/admin/webhooks',
           },
+          {
+            title: 'Configuration',
+            href: '/admin/config',
+          },
         ],
       },
       {

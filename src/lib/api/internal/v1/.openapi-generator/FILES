@@ -26,6 +26,10 @@ models/BooleanLegacyDataResponse.ts
 models/ChangeEmailRequest.ts
 models/ChangePasswordRequest.ts
 models/ChangeUsernameRequest.ts
+models/ConfigurationAddItemRequest.ts
+models/ConfigurationItemDto.ts
+models/ConfigurationUpdateItemRequest.ts
+models/ConfigurationValueType.ts
 models/Control.ts
 models/ControlLogSenderLight.ts
 models/ControlType.ts
