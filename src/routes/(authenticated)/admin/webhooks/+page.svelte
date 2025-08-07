@@ -1,15 +1,35 @@
 <script lang="ts">
   import type { SortingState } from '@tanstack/table-core';
+  import type { ColumnDef } from '@tanstack/table-core';
   import { adminApi } from '$lib/api';
   import type { WebhookDto } from '$lib/api/internal/v1';
   import Container from '$lib/components/Container.svelte';
+  import {
+    CreateSortableColumnDef,
+    LocaleDateTimeRenderer,
+    RenderCell,
+  } from '$lib/components/Table/ColumnUtils';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import { Button } from '$lib/components/ui/button';
   import { CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
+  import { renderComponent } from '$lib/components/ui/data-table';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
-  import { columns } from './columns';
+  import DataTableActions from './data-table-actions.svelte';
   import WebhookAddDialog from './dialog-webhook-add.svelte';
+
+  const columns: ColumnDef<WebhookDto>[] = [
+    CreateSortableColumnDef('name', 'Name', RenderCell),
+    CreateSortableColumnDef('url', 'Url', RenderCell),
+    CreateSortableColumnDef('createdAt', 'Created at', LocaleDateTimeRenderer),
+    {
+      id: 'actions',
+      cell: ({ row }) => {
+        // You can pass whatever you need from `row.original` to the component
+        return renderComponent(DataTableActions, { webhook: row.original });
+      },
+    },
+  ];
 
   let data = $state<WebhookDto[]>([]);
   let sorting = $state<SortingState>([]);
@@ -31,13 +51,13 @@
 <WebhookAddDialog bind:open={addDialogOpen} onAdded={fetchWebhooks} />
 
 <Container>
-  <CardHeader>
+  <CardHeader class="w-full">
     <CardTitle class="flex items-center justify-between space-x-2 text-3xl">
       Webhooks
       <Button onclick={() => (addDialogOpen = true)}>Add new</Button>
     </CardTitle>
   </CardHeader>
-  <CardContent>
+  <div class="w-full p-6 gap-6 grid">
     <DataTable {data} {columns} {sorting} />
-  </CardContent>
+  </div>
 </Container>
