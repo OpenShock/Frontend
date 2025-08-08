@@ -6,7 +6,6 @@
     MatchTypeEnum,
     type UserNameBlacklistDto,
   } from '$lib/api/internal/v1';
-  import EmailInput from '$lib/components/input/EmailInput.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import { Button } from '$lib/components/ui/button';
   import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
@@ -14,6 +13,7 @@
   import * as Select from '$lib/components/ui/select';
   import { Separator } from '$lib/components/ui/separator';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import type { ValidationResult } from '$lib/types/ValidationResult';
   import type { TimeoutHandle } from '$lib/types/WAPI';
 
   // --- state ---
@@ -23,7 +23,13 @@
   let isLoadingUsernames = $state(false);
 
   let emailEntry = $state<string>('');
-  let emailEntryValid = $state(false);
+  let emailEntryValid = $derived<ValidationResult>(
+    emailEntry.length > 0
+      ? /^[A-Z-]+\.[A-Z]{2,24}$/i.test(emailEntry)
+        ? { valid: true }
+        : { valid: false, message: 'Invalid domain' }
+      : { valid: false }
+  );
   let emailBlacklist = $state<EmailProviderBlacklistDto[]>([]);
   let isLoadingEmails = $state(false);
 
@@ -38,11 +44,11 @@
   }
 
   // --- API calls ---
-  async function loadUsernames(filter: string) {
+  async function loadUsernames() {
     isLoadingUsernames = true;
     try {
       usernameBlacklist = await adminApi.adminListUsernameBlacklist(
-        filter.length > 0 ? filter : undefined
+        usernameEntry.length > 0 ? usernameEntry : undefined
       );
     } catch (err) {
       handleApiError(err);
@@ -51,11 +57,11 @@
     }
   }
 
-  async function loadEmails(filter: string) {
+  async function loadEmails() {
     isLoadingEmails = true;
     try {
       emailBlacklist = await adminApi.adminListEmailProviderBlacklist(
-        filter.length > 0 ? filter : undefined
+        emailEntry.length > 0 ? emailEntry : undefined
       );
     } catch (err) {
       handleApiError(err);
@@ -71,16 +77,18 @@
 
     try {
       await adminApi.adminAddUsernameBlacklist({ value, matchType: matchTypeEntry });
-      loadUsernames(value);
     } catch (err) {
       handleApiError(err);
+    } finally {
+      usernameEntry = '';
+      loadUsernames();
     }
   }
 
   async function removeUsername(id: string) {
     try {
       await adminApi.adminRemoveUsernameBlacklist(id);
-      loadUsernames(usernameEntry);
+      loadUsernames();
     } catch (err) {
       handleApiError(err);
     }
@@ -98,7 +106,8 @@
     const value = emailEntry.trim();
     if (!value) return;
     await addEmail(value);
-    loadEmails(value);
+    emailEntry = '';
+    loadEmails();
   }
 
   async function addEmailsBatch() {
@@ -110,7 +119,8 @@
         .filter((s) => s.length > 0);
       if (domains.length) {
         await adminApi.adminAddEmailProviderBlacklist({ domains });
-        loadEmails('');
+        emailEntry = '';
+        loadEmails();
       }
     } catch (err) {
       handleApiError(err);
@@ -120,7 +130,7 @@
   async function removeEmail(id: string) {
     try {
       await adminApi.adminRemoveEmailProviderBlacklist(id);
-      loadEmails(emailEntry);
+      loadEmails();
     } catch (err) {
       handleApiError(err);
     }
@@ -130,24 +140,24 @@
   $effect(() => {
     clearTimeout(usernameDebounce);
     if (usernameEntry.length == 0) {
-      loadUsernames('');
+      loadUsernames();
       return;
     }
 
-    usernameDebounce = setTimeout(() => loadUsernames(usernameEntry), 400);
+    usernameDebounce = setTimeout(() => loadUsernames(), 400);
   });
 
   let emailDebounce: TimeoutHandle | undefined;
   $effect(() => {
     clearTimeout(emailDebounce);
     if (emailEntry.length == 0) {
-      loadEmails('');
+      loadEmails();
       return;
     }
 
     if (!emailEntryValid) return;
 
-    emailDebounce = setTimeout(() => loadEmails(emailEntry), 400);
+    emailDebounce = setTimeout(() => loadEmails(), 400);
   });
 </script>
 
@@ -156,7 +166,7 @@
   <Card>
     <CardHeader>
       <CardTitle>Username Blacklist</CardTitle>
-      <TextInput placeholder="e.g. baduser123" bind:value={usernameEntry}>
+      <TextInput autocomplete="off" placeholder="e.g. baduser123" bind:value={usernameEntry}>
         {#snippet after()}
           <Select.Root type="single" name="matchType" bind:value={matchTypeEntry}>
             <Select.Trigger class="w-[150px]">{triggerLabel}</Select.Trigger>
@@ -203,14 +213,20 @@
   <Card>
     <CardHeader>
       <CardTitle>Email-Provider Blacklist</CardTitle>
-      <EmailInput placeholder="e.g. gmail.com" bind:value={emailEntry} bind:valid={emailEntryValid}>
+      <TextInput
+        type="url"
+        autocomplete="off"
+        placeholder="e.g. gmail.com"
+        bind:value={emailEntry}
+        validationResult={emailEntryValid}
+      >
         {#snippet after()}
           <Button onclick={addEmailEntry} disabled={isLoadingEmails}>Add</Button>
           <Button onclick={addEmailsBatch} disabled={isLoadingEmails}
             >Batch Upload From Clipboard</Button
           >
         {/snippet}
-      </EmailInput>
+      </TextInput>
     </CardHeader>
     <CardContent class="overflow-clip">
       <ScrollArea>
