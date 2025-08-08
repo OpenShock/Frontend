@@ -36,8 +36,8 @@
   bind:value={password}
   bind:valid={passwordValid}
   Icon={KeyRound}
-  validate={true}
-  showStrengthMeter={true}
+  validate
+  showStrengthMeter
 />
 
 <PasswordInput

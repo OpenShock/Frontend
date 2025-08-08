@@ -93,8 +93,8 @@
       autocomplete="new-password"
       bind:value={password}
       bind:valid={passwordValid}
-      validate={true}
-      showStrengthMeter={true}
+      validate
+      showStrengthMeter
     />
     <PasswordInput
       label="Confirm Password"

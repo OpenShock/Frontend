@@ -37,4 +37,13 @@
   });
 </script>
 
-<TextInput {label} {placeholder} {autocomplete} bind:value {validationResult} {Icon} {after} />
+<TextInput
+  type="email"
+  {label}
+  {placeholder}
+  {autocomplete}
+  bind:value
+  {validationResult}
+  {Icon}
+  {after}
+/>

@@ -2,11 +2,12 @@
   import { Input } from '$lib/components/ui/input';
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import { GetValResColor, type ValidationResult } from '$lib/types/ValidationResult';
+  import { cn } from '$lib/utils/shadcn.js';
   import type { Snippet } from 'svelte';
   import type { FocusEventHandler, FullAutoFill } from 'svelte/elements';
 
   interface Props {
-    type?: 'text' | 'password';
+    type?: 'text' | 'email' | 'password' | 'search' | 'url';
     label?: string;
     placeholder?: string;
     autocomplete?: FullAutoFill;
@@ -19,7 +20,6 @@
   }
 
   const id = $props.id();
-  const inputId = id + '-input';
   const validationId = id + '-validation';
   let {
     type = 'text',
@@ -35,7 +35,7 @@
   }: Props = $props();
 </script>
 
-<label for={inputId} class="w-full">
+<label class="w-full">
   {#if label}
     <span>{label}</span>
   {/if}
@@ -44,7 +44,6 @@
       <Icon />
     {/if}
     <Input
-      id={inputId}
       {type}
       class="grow"
       title={label}
@@ -53,7 +52,7 @@
       bind:value
       {onblur}
       aria-invalid={validationResult ? !validationResult.valid : undefined}
-      aria-describedby={validationResult ? validationId : undefined}
+      aria-describedby={validationResult?.message ? validationId : undefined}
     />
     {#if popup}
       <div
@@ -68,7 +67,13 @@
     {/if}
   </div>
   {#if validationResult?.message}
-    <p id={validationId} class="text-xs text-{GetValResColor(validationResult)} mt-0! h-4 truncate">
+    <p
+      id={validationId}
+      class={cn('text-xs !mt-0 h-4 truncate', `text-${GetValResColor(validationResult)}`)}
+      role="status"
+      aria-atomic="true"
+      aria-live="polite"
+    >
       {validationResult.message}
       {#if validationResult.link}
         <a
@@ -82,6 +87,6 @@
       {/if}
     </p>
   {:else}
-    <div class="h-4"></div>
+    <div class="h-4" aria-hidden="true"></div>
   {/if}
 </label>

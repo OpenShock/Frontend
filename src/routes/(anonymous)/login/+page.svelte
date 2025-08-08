@@ -60,7 +60,7 @@
     <TextInput
       label="Username or Email"
       placeholder="Username or Email"
-      autocomplete="on"
+      autocomplete="username"
       bind:value={usernameOrEmail}
       validationResult={usernameError}
     />
@@ -68,7 +68,7 @@
     <PasswordInput
       label="Password"
       placeholder="Password"
-      autocomplete="new-password"
+      autocomplete="current-password"
       bind:value={password}
       validate={passwordError}
     />
