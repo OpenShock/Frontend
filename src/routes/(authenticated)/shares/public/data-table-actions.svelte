@@ -35,9 +35,9 @@
   </DropdownMenu.Trigger>
   <DropdownMenu.Content>
     <DropdownMenu.Item onclick={copyId}>Copy ID</DropdownMenu.Item>
-    <DropdownMenu.Item onclick={() => goto(`/shares/public/${publicShare.id}/edit`)}
-      >Edit</DropdownMenu.Item
-    >
+    <DropdownMenu.Item onclick={() => goto(`/shares/public/${publicShare.id}/edit`)}>
+      Edit
+    </DropdownMenu.Item>
     <DropdownMenu.Item onclick={() => (deleteDialogOpen = true)}>Delete</DropdownMenu.Item>
   </DropdownMenu.Content>
 </DropdownMenu.Root>

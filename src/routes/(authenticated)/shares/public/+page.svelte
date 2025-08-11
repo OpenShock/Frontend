@@ -19,8 +19,9 @@
   import { onMount } from 'svelte';
   import DataTableActions from './data-table-actions.svelte';
   import CreatePublicShareDialog from './dialog-publicshare-create.svelte';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 
-  export const columns: ColumnDef<OwnPublicShareResponse>[] = [
+  const columns: ColumnDef<OwnPublicShareResponse>[] = [
     CreateSortableColumnDef('name', 'Name', RenderCell),
     CreateSortableColumnDef('createdOn', 'Created at', LocaleDateTimeRenderer),
     CreateSortableColumnDef('expiresOn', 'Expires', TimeSinceRelativeOrNeverRenderer),
@@ -45,15 +46,13 @@
     publicShockerSharesApi
       .shareLinksList()
       .then((publicShares) => {
-        if (publicShares.data === null || publicShares.data === undefined) {
+        if (publicShares.data === null) {
           console.warn('Failed to get share links, but response was success!');
           return;
         }
         data = publicShares.data;
       })
-      .catch((error) => {
-        console.error(error); // TODO: Show toast
-      });
+      .catch(handleApiError);
   }
 
   onMount(refreshPublicShares);
