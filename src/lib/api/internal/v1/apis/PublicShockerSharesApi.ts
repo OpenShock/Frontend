@@ -278,10 +278,6 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
-
 
         let urlPath = `/1/shares/links/{publicShareId}/{shockerId}`;
         urlPath = urlPath.replace(`{${"publicShareId"}}`, encodeURIComponent(String(requestParameters['publicShareId'])));
@@ -314,10 +310,6 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
         const headerParameters: runtime.HTTPHeaders = {};
 
         headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
 
 
         let urlPath = `/1/shares/links`;
@@ -355,10 +347,6 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
 
 
         let urlPath = `/1/shares/links/{publicShareId}`;
@@ -406,10 +394,6 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
 
         headerParameters['Content-Type'] = 'application/json';
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
-
 
         let urlPath = `/1/shares/links/{publicShareId}/{shockerId}`;
         urlPath = urlPath.replace(`{${"publicShareId"}}`, encodeURIComponent(String(requestParameters['publicShareId'])));
@@ -445,10 +429,6 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
 
 
         let urlPath = `/1/shares/links`;
@@ -495,10 +475,6 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
 
         headerParameters['Content-Type'] = 'application/json';
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
-
 
         let urlPath = `/1/shares/links/{publicShareId}/{shockerId}/pause`;
         urlPath = urlPath.replace(`{${"publicShareId"}}`, encodeURIComponent(String(requestParameters['publicShareId'])));
@@ -544,10 +520,6 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
 
 
         let urlPath = `/1/shares/links/{publicShareId}/{shockerId}`;

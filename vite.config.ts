@@ -3,7 +3,7 @@ import tailwindcss from '@tailwindcss/vite';
 import dns from 'dns/promises';
 import { env } from 'process';
 import license from 'rollup-plugin-license';
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig, loadEnv, type PluginOption } from 'vite';
 import devtoolsJson from 'vite-plugin-devtools-json';
 import mkcert from 'vite-plugin-mkcert';
 
@@ -38,6 +38,31 @@ async function ensureFqdnRedirect(expectedHost: string, fqdn: string) {
   process.exit(1);
 }
 
+function getPlugins(useLocalRedirect: boolean): PluginOption[] {
+  const plugins: PluginOption = [];
+
+  if (useLocalRedirect) {
+    plugins.push(mkcert());
+  }
+
+  plugins.push(sveltekit());
+  plugins.push(tailwindcss());
+  plugins.push(devtoolsJson());
+
+  plugins.push(license({
+    thirdParty: {
+      includePrivate: true,
+      includeSelf: true,
+      multipleVersions: true,
+      output: {
+        file: './.svelte-kit/output/client/LICENSES.txt', // TODO: This seems like a hack, check if theres a better way...
+      },
+    },
+  }) as PluginOption); // TODO: Figure out why typescript thinks this is incompatible ("as PluginOption" is mandatory for svelte check to succeed)
+
+  return plugins;
+}
+
 async function getServerConfig(mode: string, useLocalRedirect: boolean) {
   if (!useLocalRedirect) return undefined;
 
@@ -69,22 +94,7 @@ export default defineConfig(async ({ command, mode, isPreview }) => {
     build: {
       target: 'es2022',
     },
-    plugins: [
-      ...(useLocalRedirect ? [mkcert()] : []),
-      sveltekit(),
-      tailwindcss(),
-      devtoolsJson(),
-      license({
-        thirdParty: {
-          includePrivate: true,
-          includeSelf: true,
-          multipleVersions: true,
-          output: {
-            file: './.svelte-kit/output/client/LICENSES.txt', // TODO: This seems like a hack, check if theres a better way...
-          },
-        },
-      }),
-    ],
+    plugins: getPlugins(useLocalRedirect),
     server: await getServerConfig(mode, useLocalRedirect),
     test: { include: ['src/**/*.{test,spec}.{js,ts}'] },
     esbuild: {

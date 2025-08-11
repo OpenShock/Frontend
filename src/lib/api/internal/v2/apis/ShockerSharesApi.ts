@@ -160,10 +160,6 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
 
         headerParameters['Content-Type'] = 'application/json';
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
-
 
         let urlPath = `/2/shares/invites`;
 
@@ -203,10 +199,6 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
-
 
         let urlPath = `/2/shares/invites/outgoing/{id}`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
@@ -241,10 +233,6 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
-
 
         let urlPath = `/2/shares/invites/incoming/{id}`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
@@ -271,10 +259,6 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
 
 
         let urlPath = `/2/shares/invites/incoming`;
@@ -303,10 +287,6 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
-
 
         let urlPath = `/2/shares/invites/outgoing`;
 
@@ -333,10 +313,6 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
 
 
         let urlPath = `/2/shares`;
@@ -372,10 +348,6 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
 
 
         let urlPath = `/2/shares/invites/incoming/{id}`;
