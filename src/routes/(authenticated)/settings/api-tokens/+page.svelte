@@ -49,10 +49,7 @@
   }
 
   async function onDeleted(id: string) {
-    const idx = data.findIndex((token) => token.id === id);
-    if (idx === -1) return;
-
-    data.splice(idx, 1);
+    data = data.filter((t) => t.id !== id);
   }
 
   const columns: ColumnDef<TokenResponse>[] = [

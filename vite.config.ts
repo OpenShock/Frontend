@@ -3,7 +3,7 @@ import tailwindcss from '@tailwindcss/vite';
 import dns from 'dns/promises';
 import { env } from 'process';
 import license from 'rollup-plugin-license';
-import { defineConfig, loadEnv, type PluginOption } from 'vite';
+import { type PluginOption, defineConfig, loadEnv } from 'vite';
 import devtoolsJson from 'vite-plugin-devtools-json';
 import mkcert from 'vite-plugin-mkcert';
 
@@ -49,16 +49,18 @@ function getPlugins(useLocalRedirect: boolean): PluginOption[] {
   plugins.push(tailwindcss());
   plugins.push(devtoolsJson());
 
-  plugins.push(license({
-    thirdParty: {
-      includePrivate: true,
-      includeSelf: true,
-      multipleVersions: true,
-      output: {
-        file: './.svelte-kit/output/client/LICENSES.txt', // TODO: This seems like a hack, check if theres a better way...
+  plugins.push(
+    license({
+      thirdParty: {
+        includePrivate: true,
+        includeSelf: true,
+        multipleVersions: true,
+        output: {
+          file: './.svelte-kit/output/client/LICENSES.txt', // TODO: This seems like a hack, check if theres a better way...
+        },
       },
-    },
-  }) as PluginOption); // TODO: Figure out why typescript thinks this is incompatible ("as PluginOption" is mandatory for svelte check to succeed)
+    }) as PluginOption
+  ); // TODO: Figure out why typescript thinks this is incompatible ("as PluginOption" is mandatory for svelte check to succeed)
 
   return plugins;
 }

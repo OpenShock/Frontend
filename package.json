@@ -74,7 +74,7 @@
 	"volta": {
 		"node": "24.4.0"
 	},
-	"packageManager": "pnpm@10.14.0",
+	"packageManager": "pnpm@10.15.0",
 	"pnpm": {
 		"onlyBuiltDependencies": [
 			"@tailwindcss/oxide",

@@ -16,10 +16,10 @@
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card';
   import { renderComponent } from '$lib/components/ui/data-table';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
   import DataTableActions from './data-table-actions.svelte';
   import CreatePublicShareDialog from './dialog-publicshare-create.svelte';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 
   const columns: ColumnDef<OwnPublicShareResponse>[] = [
     CreateSortableColumnDef('name', 'Name', RenderCell),
