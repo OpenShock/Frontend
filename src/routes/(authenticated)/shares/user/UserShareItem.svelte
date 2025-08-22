@@ -1,26 +1,29 @@
 <script lang="ts">
+  import { Loader, Pause, Save, Volume2, Waves, Zap } from '@lucide/svelte';
+  import { shockerSharesV1Api, shockerSharesV2Api, shockersV1Api } from '$lib/api';
   import type {
     ShockerLimits,
     ShockerPermissions,
     V2UserSharesListItem,
   } from '$lib/api/internal/v2';
   import { ComparePermissionsAndLimits } from '$lib/comparers/UserShareComparer';
+  import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
   import * as Avatar from '$lib/components/ui/avatar';
   import { Badge } from '$lib/components/ui/badge';
+  import { Button } from '$lib/components/ui/button';
   import * as Drawer from '$lib/components/ui/drawer';
   import Label from '$lib/components/ui/label/label.svelte';
   import Slider from '$lib/components/ui/slider/slider.svelte';
+  import Switch from '$lib/components/ui/switch/switch.svelte';
   import * as Table from '$lib/components/ui/table';
   import * as Tabs from '$lib/components/ui/tabs';
+  import * as ToggleGroup from '$lib/components/ui/toggle-group/index.js';
   import * as Tooltip from '$lib/components/ui/tooltip';
+  import MultiPauseToggle from '$lib/components/utils/MultiPauseToggle.svelte';
+  import PauseToggle from '$lib/components/utils/PauseToggle.svelte';
   import { onMount } from 'svelte';
-  import * as ToggleGroup from "$lib/components/ui/toggle-group/index.js";
-  import { Loader, Save, Volume2, Waves, Zap } from '@lucide/svelte';
-  import Switch from '$lib/components/ui/switch/switch.svelte';
-  import PermissionSwitch from './PermissionSwitch.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import { shockerSharesV1Api, shockerSharesV2Api, shockersV1Api } from '$lib/api';
   import { toast } from 'svelte-sonner';
+  import PermissionSwitch from './PermissionSwitch.svelte';
 
   interface Props {
     userShare: V2UserSharesListItem;
@@ -31,8 +34,8 @@
 
   let { userShare }: Props = $props();
 
-  const unionRestrictions = userShare.shares.every((share) =>
-    ComparePermissionsAndLimits(share, userShare.shares[0])
+  let isUniformRestrictions = $state(
+    userShare.shares.every((share) => ComparePermissionsAndLimits(share, userShare.shares[0]))
   );
 
   let uniformPermissions = $state({
@@ -47,19 +50,35 @@
     duration: 30_000,
   });
 
+  let shares = $state(
+    userShare.shares.map((share) => ({
+      ...share,
+      limits: {
+        intensity: share.limits.intensity ?? 100,
+        duration: share.limits.duration ?? 30_000,
+      },
+      permissions: {
+        live: share.permissions.live ?? false,
+        shock: share.permissions.shock ?? false,
+        vibrate: share.permissions.vibrate ?? false,
+        sound: share.permissions.sound ?? false,
+      },
+    }))
+  );
+
   onMount(() => {
-    if (userShare.shares.length === 0) {
+    if (shares.length === 0) {
       console.error('User share has no shares to edit.');
       return;
     }
 
-    const limit = userShare.shares[0].limits;
+    const limit = shares[0].limits;
     uniformLimits = {
       intensity: limit.intensity === null ? 100 : limit.intensity,
       duration: limit.duration === null ? 30_000 : limit.duration,
     };
 
-    const permission = userShare.shares[0].permissions;
+    const permission = shares[0].permissions;
     uniformPermissions = {
       live: permission.live ?? false,
       shock: permission.shock ?? false,
@@ -73,13 +92,14 @@
     saving = true;
 
     let savePromise;
-    if (uniformRestrictions) {
+    if (isUniformRestrictions) {
       savePromise = saveUniform();
     } else {
       savePromise = saveIndividual();
     }
 
     savePromise.finally(() => {
+      editDrawer = false;
       saving = false;
     });
   }
@@ -87,17 +107,20 @@
   async function saveUniform() {
     let promises: Promise<void>[] = [];
 
-    userShare.shares.forEach(share => {
-        promises.push(
-          shockersV1Api.shockerShockerShareCodeUpdate(share.id, userShare.id, {
+    shares.forEach((share) => {
+      promises.push(
+        shockersV1Api
+          .shockerShockerShareCodeUpdate(share.id, userShare.id, {
             limits: {
               intensity: uniformLimits.intensity === 100 ? null : uniformLimits.intensity,
-            duration: uniformLimits.duration === 30_000 ? null : uniformLimits.duration,
-          },
-          permissions: uniformPermissions
-        }).catch((error) => {
-          toast.error(`Failed to update share ${share.id}: ${error.message}`);
-        }));
+              duration: uniformLimits.duration === 30_000 ? null : uniformLimits.duration,
+            },
+            permissions: uniformPermissions,
+          })
+          .catch((error) => {
+            toast.error(`Failed to update share ${share.id}: ${error.message}`);
+          })
+      );
     });
 
     return Promise.all(promises);
@@ -106,35 +129,31 @@
   async function saveIndividual() {
     let promises: Promise<void>[] = [];
 
-    userShare.shares.forEach(share => {
-        promises.push(
-          shockersV1Api.shockerShockerShareCodeUpdate(share.id, userShare.id, {
+    shares.forEach((share) => {
+      promises.push(
+        shockersV1Api
+          .shockerShockerShareCodeUpdate(share.id, userShare.id, {
             limits: {
-              intensity: share.intensity === 100 ? null : share.intensity,
-              duration: share.duration === 30_000 ? null : share.duration,
+              intensity: share.limits.intensity === 100 ? null : share.limits.intensity,
+              duration: share.limits.duration === 30_000 ? null : share.limits.duration,
             },
-            permissions: share.permissions
-          }).catch((error) => {
+            permissions: share.permissions,
+          })
+          .catch((error) => {
             toast.error(`Failed to update share ${share.id}: ${error.message}`);
-        }));
+          })
+      );
     });
 
     return Promise.all(promises);
   }
-
 </script>
 
-<style>
-    :global(.data-\[vaul-drawer-direction\=right\]\:sm\:max-w-sm) {
-    &[data-vaul-drawer-direction="right"] {
-      @media (width >= 40rem) {
-        max-width: 33rem;
-      }
-    }
-  }
-</style>
-
-<Drawer.Root open={editDrawer} onOpenChange={(newState) => (editDrawer = newState)} direction="right">
+<Drawer.Root
+  open={editDrawer}
+  onOpenChange={(newState) => (editDrawer = newState)}
+  direction="right"
+>
   <Drawer.Content>
     <div class="mx-auto w-full max-w-lg">
       <Drawer.Header>
@@ -150,7 +169,7 @@
         >
       </Drawer.Header>
       <div class="p-4 pb-0 mb-5">
-        <Tabs.Root value={uniformPermissions ? 'uniform' : 'individual'}>
+        <Tabs.Root value={isUniformRestrictions ? 'uniform' : 'individual'}>
           <div class="flex items-center justify-between">
             <p class="text-md font-bold grow self-end border-b border-b-neutral-800 mr-[-15px]">
               Limits and Permissions
@@ -165,6 +184,13 @@
           <Tabs.Content value="uniform">
             <!-- Intensity Slider -->
             <div class="flex flex-col gap-2">
+              <MultiPauseToggle
+                shockers={shares.map((share) => ({
+                  shockerId: share.id,
+                  paused: share.paused,
+                  userShareUserId: userShare.id,
+                }))}
+              />
               <div>
                 <Label class="mb-3 text-sm">Intensity: {uniformLimits.intensity}%</Label>
                 <Slider
@@ -187,7 +213,7 @@
                 />
               </div>
 
-              <br>
+              <br />
 
               <div class="flex gap-3">
                 <PermissionSwitch icon={Zap} enabled={uniformPermissions.shock} />
@@ -195,16 +221,62 @@
                 <PermissionSwitch icon={Volume2} enabled={uniformPermissions.sound} />
                 <PermissionSwitch icon={Volume2} enabled={uniformPermissions.live} />
               </div>
-                
             </div>
           </Tabs.Content>
-          <Tabs.Content value="individual"></Tabs.Content>
+          <Tabs.Content value="individual" class="flex flex-col gap-8">
+            {#each shares as share}
+              <div class="flex flex-col gap-2 border-1 border-neutral-800 p-4 rounded-md">
+                <div class="flex justify-between">
+                  <span>
+                    <Badge>{share.name}</Badge>
+                  </span>
+                  <PauseToggle
+                    shockerId={share.id}
+                    paused={share.paused}
+                    userShareUserId={userShare.id}
+                  />
+                </div>
+                <div>
+                  <Label class="mb-3 text-sm">Intensity: {share.limits.intensity}%</Label>
+                  <Slider
+                    type="single"
+                    bind:value={share.limits.intensity}
+                    min={0}
+                    max={100}
+                    step={1}
+                  />
+                </div>
+
+                <div>
+                  <Label class="mb-3 text-sm">Duration: {share.limits.duration / 1000}s</Label>
+                  <Slider
+                    type="single"
+                    bind:value={share.limits.duration}
+                    min={0}
+                    max={30_000}
+                    step={100}
+                  />
+                </div>
+
+                <br />
+
+                <div class="flex gap-3">
+                  <PermissionSwitch icon={Zap} enabled={share.permissions.shock} />
+                  <PermissionSwitch icon={Waves} enabled={share.permissions.vibrate} />
+                  <PermissionSwitch icon={Volume2} enabled={share.permissions.sound} />
+                  <PermissionSwitch icon={Volume2} enabled={share.permissions.live} />
+                </div>
+              </div>
+            {/each}
+          </Tabs.Content>
         </Tabs.Root>
       </div>
 
       <Drawer.Footer class="flex flex-row justify-between mx-20">
         <Drawer.Close>Cancel</Drawer.Close>
-        <Button onClick={handleSave}>Save {saving && <LoadingSpinner />}</Button>
+        <Button onclick={handleSave}
+          >Save {#if saving}<LoadingCircle />{/if}</Button
+        >
       </Drawer.Footer>
     </div>
   </Drawer.Content>
@@ -239,3 +311,13 @@
     </Tooltip.Root>
   </Table.Cell>
 </Table.Row>
+
+<style>
+  :global(.data-\[vaul-drawer-direction\=right\]\:sm\:max-w-sm) {
+    &[data-vaul-drawer-direction='right'] {
+      @media (width >= 40rem) {
+        max-width: 33rem;
+      }
+    }
+  }
+</style>
