@@ -9,6 +9,7 @@
 
   interface Props {
     shockers: PauseToggleProps[];
+    onPausedChange: (paused: boolean) => void;
   }
 
   interface PauseToggleProps {
@@ -17,7 +18,7 @@
     userShareUserId: string | undefined;
   }
 
-  let { shockers }: Props = $props();
+  let { shockers, onPausedChange }: Props = $props();
   let requestInProgress = $state(false);
 
   let pausedBooleans = $derived(() => {
@@ -50,6 +51,7 @@
       })
       .finally(() => {
         requestInProgress = false;
+        onPausedChange(pause);
       });
   }
 

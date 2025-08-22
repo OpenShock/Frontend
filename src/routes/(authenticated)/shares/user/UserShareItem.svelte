@@ -117,6 +117,14 @@
             },
             permissions: uniformPermissions,
           })
+          .then(() => {
+            // Update the list copy of the share
+            const index = userShare.shares.findIndex((s) => s.id === share.id);
+            if (index !== -1) {
+              userShare.shares[index].permissions = uniformPermissions;
+              userShare.shares[index].limits = uniformLimits;
+            }
+          })
           .catch((error) => {
             toast.error(`Failed to update share ${share.id}: ${error.message}`);
           })
@@ -138,6 +146,13 @@
               duration: share.limits.duration === 30_000 ? null : share.limits.duration,
             },
             permissions: share.permissions,
+          })
+          .then(() => {
+            // Update the list copy of the share
+            const index = userShare.shares.findIndex((s) => s.id === share.id);
+            if (index !== -1) {
+              userShare.shares[index] = { ...userShare.shares[index], ...share };
+            }
           })
           .catch((error) => {
             toast.error(`Failed to update share ${share.id}: ${error.message}`);
@@ -190,6 +205,10 @@
                   paused: share.paused,
                   userShareUserId: userShare.id,
                 }))}
+                onPausedChange={(paused) => {
+                  shares.forEach((share) => (share.paused = paused)); // Update the local copy of the shares
+                  userShare.shares.forEach((share) => (share.paused = paused)); // Update the actual lists shares
+                }}
               />
               <div>
                 <Label class="mb-3 text-sm">Intensity: {uniformLimits.intensity}%</Label>
@@ -232,8 +251,15 @@
                   </span>
                   <PauseToggle
                     shockerId={share.id}
-                    paused={share.paused}
+                    bind:paused={share.paused}
                     userShareUserId={userShare.id}
+                    onPausedChange={(paused) => {
+                      userShare.shares.forEach((s) => {
+                        if (s.id === share.id) {
+                          s.paused = paused; // Update the actual shares list
+                        }
+                      });
+                    }}
                   />
                 </div>
                 <div>
@@ -261,10 +287,10 @@
                 <br />
 
                 <div class="flex gap-3">
-                  <PermissionSwitch icon={Zap} enabled={share.permissions.shock} />
-                  <PermissionSwitch icon={Waves} enabled={share.permissions.vibrate} />
-                  <PermissionSwitch icon={Volume2} enabled={share.permissions.sound} />
-                  <PermissionSwitch icon={Volume2} enabled={share.permissions.live} />
+                  <PermissionSwitch icon={Zap} bind:enabled={share.permissions.shock} />
+                  <PermissionSwitch icon={Waves} bind:enabled={share.permissions.vibrate} />
+                  <PermissionSwitch icon={Volume2} bind:enabled={share.permissions.sound} />
+                  <PermissionSwitch icon={Volume2} bind:enabled={share.permissions.live} />
                 </div>
               </div>
             {/each}

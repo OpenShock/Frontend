@@ -10,9 +10,10 @@
     shockerId: string;
     paused: boolean;
     userShareUserId: string | undefined;
+    onPausedChange: (paused: boolean) => void;
   }
 
-  let { shockerId, paused = $bindable(), userShareUserId }: Props = $props();
+  let { shockerId, paused = $bindable(), userShareUserId, onPausedChange }: Props = $props();
   let requestInProgress = $state(false);
 
   function handleClick() {
@@ -38,6 +39,7 @@
       })
       .finally(() => {
         requestInProgress = false;
+        onPausedChange(paused);
       });
   }
 </script>
