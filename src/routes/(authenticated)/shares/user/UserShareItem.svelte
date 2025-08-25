@@ -32,7 +32,7 @@
   let editDrawer = $state(false);
   let saving = $state(false);
 
-  let { userShare }: Props = $props();
+  let { userShare = $bindable() }: Props = $props();
 
   let isUniformRestrictions = $state(
     userShare.shares.every((share) => ComparePermissionsAndLimits(share, userShare.shares[0]))

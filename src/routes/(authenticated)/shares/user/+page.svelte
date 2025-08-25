@@ -24,8 +24,8 @@
 <div class="overflow-y-auto rounded-md border p-0">
   <Table.Root>
     <Table.Body>
-      {#each userShares.outgoing as userShare (userShare.id)}
-        <UserShareItem {userShare} />
+      {#each userShares.outgoing as userShare, i (userShare.id)}
+        <UserShareItem bind:userShare={userShares.outgoing[i]} />
       {/each}
     </Table.Body>
   </Table.Root>
