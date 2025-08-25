@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Pause, Play } from '@lucide/svelte';
+  import { LoaderCircle, Pause, Play } from '@lucide/svelte';
   import { shockersV1Api } from '$lib/api';
   import type { BooleanLegacyDataResponse } from '$lib/api/internal/v1';
   import { Button } from '$lib/components/ui/button';
@@ -44,9 +44,9 @@
   }
 </script>
 
-<Button onclick={handleClick}>
+<Button onclick={handleClick} disabled={requestInProgress} class="size-9" variant={paused ? 'destructive' : 'default'}>
   {#if requestInProgress}
-    <LoadingCircle />
+    <LoaderCircle class="animate-spin" />
   {:else if paused}
     <Play />
   {:else}

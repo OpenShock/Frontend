@@ -1,12 +1,9 @@
 <script lang="ts">
-  import { Asterisk, Pause, Play } from '@lucide/svelte';
+  import { Asterisk, LoaderCircle, Pause, Play } from '@lucide/svelte';
   import { shockersV1Api } from '$lib/api';
   import type { BooleanLegacyDataResponse } from '$lib/api/internal/v1';
   import { Button } from '$lib/components/ui/button';
   import { toast } from 'svelte-sonner';
-  import LoadingCircle from '../svg/LoadingCircle.svelte';
-  import { onMount } from 'svelte';
-
   interface Props {
     shockers: PauseToggleProps[];
     onPausedChange: (paused: boolean) => void;
@@ -32,7 +29,8 @@
   });
 
 
-  function handleClick() {
+  function handleClick(e: MouseEvent) {
+    e.stopPropagation();
     if(requestInProgress) return;
     requestInProgress = true;
 
@@ -78,9 +76,9 @@
 
 </script>
 
-<Button disabled={requestInProgress} onclick={handleClick}>
+<Button disabled={requestInProgress} onclick={handleClick} class="size-9" variant={pausedBooleans() === 'allTrue' ? 'destructive' : 'default'}>
   {#if requestInProgress}
-    <LoadingCircle />
+    <LoaderCircle class="animate-spin" />
   {:else if pausedBooleans() === "allTrue"}
     <Play />
   {:else if pausedBooleans() === "allFalse"}

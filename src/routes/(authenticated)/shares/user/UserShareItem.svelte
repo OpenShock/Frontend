@@ -336,6 +336,19 @@
       </Tooltip.Content>
     </Tooltip.Root>
   </Table.Cell>
+  <Table.Cell>
+      <MultiPauseToggle
+    shockers={shares.map((share) => ({
+      shockerId: share.id,
+      paused: share.paused,
+      userShareUserId: userShare.id,
+    }))}
+    onPausedChange={(paused) => {
+      shares.forEach((share) => (share.paused = paused)); // Update the local copy of the shares
+      userShare.shares.forEach((share) => (share.paused = paused)); // Update the actual lists shares
+    }}
+  />
+  </Table.Cell>
 </Table.Row>
 
 <style>
