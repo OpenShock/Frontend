@@ -36,6 +36,14 @@ function setSelfName(name: string) {
   });
 }
 
+async function setSelf(user: ApiUserSelf) {
+  update((state) => ({
+    ...state,
+    self: user,
+    all: updateAllFromSelf(state.all, user),
+  }));
+}
+
 async function refreshSelf(): Promise<boolean> {
   update((v) => ({ ...v, loading: true }));
 
@@ -80,6 +88,7 @@ export const UserStore = {
   set,
   update,
   setSelfName,
+  setSelf,
   refreshSelf,
   reset,
 };

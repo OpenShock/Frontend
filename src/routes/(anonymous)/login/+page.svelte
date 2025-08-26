@@ -35,8 +35,14 @@
     }
 
     try {
-      await accountV2Api.accountLoginV2({ usernameOrEmail, password, turnstileResponse });
-      await UserStore.refreshSelf();
+      const account = await accountV2Api.accountLoginV2({ usernameOrEmail, password, turnstileResponse });
+      UserStore.setSelf({
+        id: account.accountId,
+        name: account.accountName,
+        avatar: account.profileImage,
+        email: account.accountEmail,
+        roles: account.accountRoles,
+      });
       goto(page.url.searchParams.get('redirect') ?? '/home');
     } catch (error) {
       await handleApiError(error, (problem) => {
