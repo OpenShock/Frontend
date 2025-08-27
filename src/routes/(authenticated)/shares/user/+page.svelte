@@ -25,7 +25,7 @@
   <Table.Root>
     <Table.Body>
       {#each userShares.outgoing as userShare, i (userShare.id)}
-        <UserShareItem bind:userShare={userShares.outgoing[i]} />
+        <UserShareItem bind:userShare={userShares.outgoing[i]} onUpdated={refreshUserShares} />
       {/each}
     </Table.Body>
   </Table.Root>
