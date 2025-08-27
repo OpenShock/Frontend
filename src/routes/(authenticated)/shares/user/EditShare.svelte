@@ -132,13 +132,12 @@
 
   $effect(() => {
     // Nice instant state update to indicate what is happening to the share limits
-    if (isUniformRestrictions) {
       shares.forEach((share) => {
-        share.permissions = uniformPermissions;
-        share.limits = uniformLimits;
+        share.permissions = { ...uniformPermissions };
+        share.limits = { ...uniformLimits };
       });
-    }
   });
+
 </script>
 
 <Drawer.Root
@@ -235,15 +234,15 @@
               Change restrictions for individual shockers
             </p>
             <div class="flex flex-col gap-8 overflow-x-auto">
-              {#each shares as share}
+              {#each shares as share, i (share.id)}
                 <div class="flex flex-col gap-2 border-1 border-neutral-800 p-4 rounded-md">
                   <div class="flex justify-between">
                     <span>
-                      <Badge>{share.name}</Badge>
+                      <Badge>{shares[i].name}</Badge>
                     </span>
                     <PauseToggle
-                      shockerId={share.id}
-                      bind:paused={share.paused}
+                      shockerId={shares[i].id}
+                      bind:paused={shares[i].paused}
                       userShareUserId={userShare.id}
                       onPausedChange={(paused) => {
                         userShare.shares.forEach((s) => {
@@ -255,10 +254,10 @@
                     />
                   </div>
                   <div>
-                    <Label class="mb-3 text-sm">Intensity: {share.limits.intensity}%</Label>
+                    <Label class="mb-3 text-sm">Intensity: {shares[i].limits.intensity}%</Label>
                     <Slider
                       type="single"
-                      bind:value={share.limits.intensity}
+                      bind:value={shares[i].limits.intensity}
                       min={0}
                       max={100}
                       step={1}
@@ -266,10 +265,10 @@
                   </div>
 
                   <div>
-                    <Label class="mb-3 text-sm">Duration: {share.limits.duration / 1000}s</Label>
+                    <Label class="mb-3 text-sm">Duration: {shares[i].limits.duration / 1000}s</Label>
                     <Slider
                       type="single"
-                      bind:value={share.limits.duration}
+                      bind:value={shares[i].limits.duration}
                       min={0}
                       max={30_000}
                       step={100}
@@ -279,10 +278,10 @@
                   <br />
 
                   <div class="flex gap-3">
-                    <PermissionSwitch icon={Zap} bind:enabled={share.permissions.shock} />
-                    <PermissionSwitch icon={Waves} bind:enabled={share.permissions.vibrate} />
-                    <PermissionSwitch icon={Volume2} bind:enabled={share.permissions.sound} />
-                    <PermissionSwitch icon={Volume2} bind:enabled={share.permissions.live} />
+                    <PermissionSwitch icon={Zap} bind:enabled={shares[i].permissions.shock} />
+                    <PermissionSwitch icon={Waves} bind:enabled={shares[i].permissions.vibrate} />
+                    <PermissionSwitch icon={Volume2} bind:enabled={shares[i].permissions.sound} />
+                    <PermissionSwitch icon={Volume2} bind:enabled={shares[i].permissions.live} />
                   </div>
                 </div>
               {/each}
