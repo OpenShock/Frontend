@@ -113,8 +113,8 @@
 <Dialog.Root bind:open={() => open, onOpenChange}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Generate a new API Token</Dialog.Title>
-      <Dialog.Description>Example text</Dialog.Description>
+      <Dialog.Title>New API Token</Dialog.Title>
+      <Dialog.Description>Please make sure to select the appropriate permissions for the token.</Dialog.Description>
     </Dialog.Header>
     <form class="modal-form border-surface-500 rounded-container-token space-y-4">
       <TextInput

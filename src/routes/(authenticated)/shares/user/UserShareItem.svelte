@@ -8,21 +8,18 @@
   import * as Tooltip from '$lib/components/ui/tooltip';
   import MultiPauseToggle from '$lib/components/utils/MultiPauseToggle.svelte';
   import { Zap } from '@lucide/svelte';
-  import EditShare from './EditShare.svelte';
+  import EditShare from './edit-share.svelte';
 
   interface Props {
     userShare: V2UserSharesListItem;
-    onUpdated: () => void;
+    onOpenEdit: () => void;
   }
 
-  let editDrawer = $state(false);
-  let { userShare = $bindable(), onUpdated }: Props = $props();
+  let { userShare = $bindable(), onOpenEdit }: Props = $props();
 
 </script>
 
-<EditShare bind:userShare={userShare} onUpdated={onUpdated} bind:editDrawer={editDrawer} />
-
-<Table.Row onclick={() => (editDrawer = true)}>
+<Table.Row onclick={onOpenEdit}>
   <Table.Cell class="flex items-center font-medium">
     <Avatar.Root class="h-15 w-15">
       <Avatar.Image src={userShare.image} alt="User Avatar" />
