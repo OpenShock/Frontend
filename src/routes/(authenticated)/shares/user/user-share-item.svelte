@@ -8,7 +8,6 @@
   import * as Tooltip from '$lib/components/ui/tooltip';
   import MultiPauseToggle from '$lib/components/utils/MultiPauseToggle.svelte';
   import { Zap } from '@lucide/svelte';
-  import EditShare from './edit-share.svelte';
 
   interface Props {
     userShare: V2UserSharesListItem;

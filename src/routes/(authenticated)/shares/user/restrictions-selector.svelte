@@ -2,8 +2,7 @@
   import { ChartNoAxesGantt, Volume2, Waves, Zap } from '@lucide/svelte';
   import Label from '$lib/components/ui/label/label.svelte';
   import { Slider } from '$lib/components/ui/slider';
-  import MultiPauseToggle from '$lib/components/utils/MultiPauseToggle.svelte';
-  import PermissionSwitch from './PermissionSwitch.svelte';
+  import PermissionSwitch from './permission-switch.svelte';
 
   interface Props {
     permissions: {

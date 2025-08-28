@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { Volume2, Waves, Zap } from '@lucide/svelte';
   import { shockersV1Api } from '$lib/api';
   import type { V2UserSharesListItem } from '$lib/api/internal/v2';
   import { ComparePermissionsAndLimits } from '$lib/comparers/UserShareComparer';
@@ -8,14 +7,11 @@
   import { Badge } from '$lib/components/ui/badge';
   import { Button } from '$lib/components/ui/button';
   import * as Drawer from '$lib/components/ui/drawer';
-  import Label from '$lib/components/ui/label/label.svelte';
-  import Slider from '$lib/components/ui/slider/slider.svelte';
   import * as Tabs from '$lib/components/ui/tabs';
   import MultiPauseToggle from '$lib/components/utils/MultiPauseToggle.svelte';
   import PauseToggle from '$lib/components/utils/PauseToggle.svelte';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
-  import PermissionSwitch from './PermissionSwitch.svelte';
   import RestrictionsSelector from './restrictions-selector.svelte';
 
   interface Props {

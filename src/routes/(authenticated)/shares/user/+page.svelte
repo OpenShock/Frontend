@@ -3,19 +3,22 @@
   import type { V2UserShares, V2UserSharesListItem } from '$lib/api/internal/v2';
   import * as Table from '$lib/components/ui/table';
   import { onMount } from 'svelte';
-  import UserShareItem from './UserShareItem.svelte';
+  import UserShareItem from './user-share-item.svelte';
   import { Button } from '$lib/components/ui/button';
   import { Plus, RectangleEllipsis, User } from '@lucide/svelte';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import DialogShareCodeCreate from './dialog-share-code-create.svelte';
   import { OwnHubsStore, refreshOwnHubs } from '$lib/stores/HubsStore';
   import EditShare from './edit-share.svelte';
+  import DialogShareCodeCreated from './dialog-share-code-created.svelte';
 
   let createDialogOpen = $state(false);
   let userShares = $state<V2UserShares>({ outgoing: [], incoming: [] });
   let editShareDrawerOpen = $state(false);
   let editShareDrawerOpenCount = $state(0);
   let editIndex = $state(0);
+
+  let createdCode = $state<string | null>(null);
 
   function refreshUserShares() {
     shockerSharesV2Api
@@ -26,6 +29,11 @@
       .catch((error) => {
         console.error(error); // TODO: Show toast
       });
+  }
+
+  function onCreatedCode(code: string) {
+    createdCode = code;
+    refreshUserShares();
   }
 
   onMount(() => {
@@ -40,7 +48,8 @@
   }
 </script>
 
-<DialogShareCodeCreate bind:open={createDialogOpen} onCreated={refreshUserShares} />
+<DialogShareCodeCreate bind:open={createDialogOpen} onCreated={onCreatedCode} />
+<DialogShareCodeCreated bind:code={createdCode} />
 
 {#key editShareDrawerOpenCount}
   {#if userShares.outgoing[editIndex] !== undefined}

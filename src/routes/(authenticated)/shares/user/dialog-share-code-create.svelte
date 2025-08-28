@@ -6,6 +6,7 @@
   import MultiSelectCombobox from '$lib/components/ui/multi-select-combobox/multi-select-combobox.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { OwnHubsStore } from '$lib/stores/HubsStore';
+  import RestrictionsSelector from './restrictions-selector.svelte';
 
   let availableShockers = $derived(
     Array.from($OwnHubsStore)
@@ -23,20 +24,33 @@
 
   let { open = $bindable(), onCreated }: Props = $props();
 
-  let shockerIds = $state<string[]>([]);
-  let restrictions = $state<ShockerPermLimitPair>(getDefaultRestrictions());
+  interface ShockerPermLimitPairButNotNull {
+        permissions: {
+        shock: boolean;
+        vibrate: boolean;
+        sound: boolean;
+        live: boolean;
+      };
+      limits: {
+        intensity: number;
+        duration: number;
+      };
+  }
 
-  function getDefaultRestrictions(): ShockerPermLimitPair {
+  let shockerIds = $state<string[]>([]);
+  let restrictions = $state<ShockerPermLimitPairButNotNull>(getDefaultRestrictions());
+
+  function getDefaultRestrictions(): ShockerPermLimitPairButNotNull {
     return {
       limits: {
-        duration: 30_000,
-        intensity: 100,
+        duration: 10_000,
+        intensity: 25,
       },
       permissions: {
-        shock: false,
-        vibrate: false,
-        sound: false,
-        live: false,
+        shock: true,
+        vibrate: true,
+        sound: true,
+        live: true,
       },
     };
   }
@@ -53,10 +67,10 @@
     try {
       const createdCode = await shockerSharesV2Api.sharesCreateShareInvite({
         shockers: shockerIds.map((id) => ({
-          shockerId: id,
-          permissions: restrictions.permissions,
-          limits: restrictions.limits,
-        })),
+          id: id,
+          permissions: { ...restrictions.permissions },
+          limits: { ...restrictions.limits },
+        }))
       });
       onCreated(createdCode);
       open = false;
@@ -81,6 +95,8 @@
         placeholder="Select shockers to share..."
         noMatchText="Not matching shockers"
       ></MultiSelectCombobox>
+
+      <RestrictionsSelector bind:permissions={restrictions.permissions} bind:limits={restrictions.limits} />
     </form>
     <Button onclick={onFormSubmit}>Create</Button>
   </Dialog.Content>
