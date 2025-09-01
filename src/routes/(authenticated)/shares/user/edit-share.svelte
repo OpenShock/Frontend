@@ -127,7 +127,7 @@
 
   $effect(() => {
     // Nice instant state update to indicate what is happening to the share limits
-    if(editDrawer && isUniformRestrictions) {
+    if (editDrawer && isUniformRestrictions) {
       shares.forEach((share) => {
         share.permissions = { ...uniformPermissions };
         share.limits = { ...uniformLimits };
@@ -135,17 +135,10 @@
     }
   });
 
-  function onOpenChange(open: boolean) {
-
-  }
-
+  function onOpenChange(open: boolean) {}
 </script>
 
-<Drawer.Root
-  bind:open={editDrawer}
-  onOpenChange={onOpenChange}
-  direction="right"
->
+<Drawer.Root bind:open={editDrawer} {onOpenChange} direction="right">
   <Drawer.Content>
     <div class="mx-auto w-full">
       <Drawer.Header>

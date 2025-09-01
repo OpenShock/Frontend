@@ -1,13 +1,11 @@
 <script lang="ts">
-  import type {
-    V2UserSharesListItem,
-  } from '$lib/api/internal/v2';
+  import { Zap } from '@lucide/svelte';
+  import type { V2UserSharesListItem } from '$lib/api/internal/v2';
   import * as Avatar from '$lib/components/ui/avatar';
   import { Badge } from '$lib/components/ui/badge';
   import * as Table from '$lib/components/ui/table';
   import * as Tooltip from '$lib/components/ui/tooltip';
   import MultiPauseToggle from '$lib/components/utils/MultiPauseToggle.svelte';
-  import { Zap } from '@lucide/svelte';
 
   interface Props {
     userShare: V2UserSharesListItem;
@@ -15,7 +13,6 @@
   }
 
   let { userShare = $bindable(), onOpenEdit }: Props = $props();
-
 </script>
 
 <Table.Row onclick={onOpenEdit}>

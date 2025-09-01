@@ -20,9 +20,7 @@
   <Dialog.Content>
     <Dialog.Header>
       <Dialog.Title>Share Code Generated</Dialog.Title>
-      <Dialog.Description>
-        Please copy share code!
-      </Dialog.Description>
+      <Dialog.Description>Please copy share code!</Dialog.Description>
     </Dialog.Header>
     <div class="flex flex-col items-center space-y-4">
       <div class="flex w-full items-center justify-between rounded-md p-2">
