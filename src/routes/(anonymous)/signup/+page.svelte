@@ -7,8 +7,8 @@
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
   import { Button } from '$lib/components/ui/button';
-  import * as Card from '$lib/components/ui/card';
   import * as Dialog from '$lib/components/ui/dialog';
+  import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
   import { toast } from 'svelte-sonner';
@@ -42,25 +42,35 @@
     }
   }
 
-  function handleSubmission(ev: SubmitEvent) {
-    ev.preventDefault();
+  async function handleSubmission(e: SubmitEvent) {
+    e.preventDefault();
 
     if (!username || !email || !password || !passwordConfirm || !turnstileResponse) {
       return;
     }
 
-    accountV2Api
-      .accountSignUpV2({
+    try {
+      await accountV2Api.accountSignUpV2({
         username,
         password,
         email,
         turnstileResponse,
-      })
-      .then(() => (accountCreated = true))
-      .catch(handleApiError)
-      .finally(() => {
-        turnstileResponse = null;
       });
+      accountCreated = true;
+    } catch (error) {
+      await handleApiError(error, (problem) => {
+        if (!isValidationError(problem)) return false;
+
+        console.log(mapToValRes(problem, 'Username'));
+        console.log(mapToValRes(problem, 'Password'));
+        console.log(mapToValRes(problem, 'Email'));
+        console.log(mapToValRes(problem, 'TurnstileResponse'));
+
+        return true;
+      });
+    } finally {
+      turnstileResponse = null;
+    }
   }
 </script>
 

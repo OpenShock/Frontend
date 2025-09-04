@@ -28,16 +28,16 @@
   let { open = $bindable(), onCreatedCode, onInvitedUser }: Props = $props();
 
   interface ShockerPermLimitPairButNotNull {
-        permissions: {
-        shock: boolean;
-        vibrate: boolean;
-        sound: boolean;
-        live: boolean;
-      };
-      limits: {
-        intensity: number;
-        duration: number;
-      };
+    permissions: {
+      shock: boolean;
+      vibrate: boolean;
+      sound: boolean;
+      live: boolean;
+    };
+    limits: {
+      intensity: number;
+      duration: number;
+    };
   }
 
   let shockerIds = $state<string[]>([]);
@@ -75,7 +75,7 @@
           id: id,
           permissions: { ...restrictions.permissions },
           limits: { ...restrictions.limits },
-        }))
+        })),
       });
 
       if(fetchedUser) {
@@ -108,7 +108,10 @@
         noMatchText="Not matching shockers"
       ></MultiSelectCombobox>
 
-      <RestrictionsSelector bind:permissions={restrictions.permissions} bind:limits={restrictions.limits} />
+      <RestrictionsSelector
+        bind:permissions={restrictions.permissions}
+        bind:limits={restrictions.limits}
+      />
     </form>
     <Button onclick={onFormSubmit} class="flex items-center">
       {#if fetchedUser}

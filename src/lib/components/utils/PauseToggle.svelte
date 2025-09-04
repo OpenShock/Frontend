@@ -44,7 +44,12 @@
   }
 </script>
 
-<Button onclick={handleClick} disabled={requestInProgress} class="size-9" variant={paused ? 'destructive' : 'default'}>
+<Button
+  onclick={handleClick}
+  disabled={requestInProgress}
+  class="size-9"
+  variant={paused ? 'destructive' : 'default'}
+>
   {#if requestInProgress}
     <LoaderCircle class="animate-spin" />
   {:else if paused}

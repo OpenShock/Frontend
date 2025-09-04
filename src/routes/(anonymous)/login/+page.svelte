@@ -7,10 +7,7 @@
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import { Button } from '$lib/components/ui/button';
-  import {
-    type ValidationProblemDetails,
-    isValidationError,
-  } from '$lib/errorhandling/ValidationProblemDetails';
+  import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { UserStore } from '$lib/stores/UserStore';
   import type { ValidationResult } from '$lib/types/ValidationResult';
@@ -22,11 +19,6 @@
   let usernameError = $state<ValidationResult | null>(null);
   let passwordError = $state<ValidationResult | null>(null);
 
-  function mapToValRes(problem: ValidationProblemDetails, key: string): ValidationResult | null {
-    const errors = problem.errors[key];
-    return errors ? { valid: false, message: errors[0] } : null;
-  }
-
   async function handleSubmission(e: SubmitEvent) {
     e.preventDefault();
 
@@ -35,7 +27,11 @@
     }
 
     try {
-      const account = await accountV2Api.accountLoginV2({ usernameOrEmail, password, turnstileResponse });
+      const account = await accountV2Api.accountLoginV2({
+        usernameOrEmail,
+        password,
+        turnstileResponse,
+      });
       UserStore.setSelf({
         id: account.accountId,
         name: account.accountName,

@@ -4,6 +4,7 @@
   import type { BooleanLegacyDataResponse } from '$lib/api/internal/v1';
   import { Button } from '$lib/components/ui/button';
   import { toast } from 'svelte-sonner';
+
   interface Props {
     shockers: PauseToggleProps[];
     onPausedChange: (paused: boolean) => void;
@@ -19,22 +20,21 @@
   let requestInProgress = $state(false);
 
   let pausedBooleans = $derived(() => {
-    if (shockers.every(item => item.paused)) {
-      return "allTrue";
+    if (shockers.every((item) => item.paused)) {
+      return 'allTrue';
     }
-    if (shockers.every(item => !item.paused)) {
-      return "allFalse";
+    if (shockers.every((item) => !item.paused)) {
+      return 'allFalse';
     }
-    return "mixed";
+    return 'mixed';
   });
-
 
   function handleClick(e: MouseEvent) {
     e.stopPropagation();
-    if(requestInProgress) return;
+    if (requestInProgress) return;
     requestInProgress = true;
 
-    const pause = pausedBooleans() !== "allTrue";
+    const pause = pausedBooleans() !== 'allTrue';
 
     let pauseRequests: Promise<void>[] = [];
 
@@ -57,33 +57,43 @@
     let pauseRequest: Promise<BooleanLegacyDataResponse>;
 
     if (shocker.userShareUserId) {
-      pauseRequest = shockersV1Api.shockerShockerShareCodePause(shocker.shockerId, shocker.userShareUserId, {
-        pause: pause
-      });
+      pauseRequest = shockersV1Api.shockerShockerShareCodePause(
+        shocker.shockerId,
+        shocker.userShareUserId,
+        {
+          pause: pause,
+        }
+      );
     } else {
       pauseRequest = shockersV1Api.shockerPauseShocker(shocker.shockerId, { pause: pause });
     }
 
-    pauseRequest.then((newPausedState) => {
-      shocker.paused = newPausedState.data;
-    }).catch((error) => {
-      toast.error(`Failed to set shocker pause state`);
-      console.error(error);
-    });
+    pauseRequest
+      .then((newPausedState) => {
+        shocker.paused = newPausedState.data;
+      })
+      .catch((error) => {
+        toast.error(`Failed to set shocker pause state`);
+        console.error(error);
+      });
 
     await pauseRequest;
   }
-
 </script>
 
-<Button disabled={requestInProgress} onclick={handleClick} class="size-9" variant={pausedBooleans() === 'allTrue' ? 'destructive' : 'default'}>
+<Button
+  disabled={requestInProgress}
+  onclick={handleClick}
+  class="size-9"
+  variant={pausedBooleans() === 'allTrue' ? 'destructive' : 'default'}
+>
   {#if requestInProgress}
     <LoaderCircle class="animate-spin" />
-  {:else if pausedBooleans() === "allTrue"}
+  {:else if pausedBooleans() === 'allTrue'}
     <Play />
-  {:else if pausedBooleans() === "allFalse"}
+  {:else if pausedBooleans() === 'allFalse'}
     <Pause />
-  {:else if pausedBooleans() === "mixed"}
+  {:else if pausedBooleans() === 'mixed'}
     <Asterisk />
   {/if}
 </Button>
