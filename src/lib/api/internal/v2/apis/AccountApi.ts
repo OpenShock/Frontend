@@ -16,7 +16,6 @@
 import * as runtime from '../runtime';
 import type {
   ChangeUsernameRequest,
-  LegacyEmptyResponse,
   LoginV2,
   LoginV2OkResponse,
   OpenShockProblem,
@@ -27,8 +26,6 @@ import type {
 import {
     ChangeUsernameRequestFromJSON,
     ChangeUsernameRequestToJSON,
-    LegacyEmptyResponseFromJSON,
-    LegacyEmptyResponseToJSON,
     LoginV2FromJSON,
     LoginV2ToJSON,
     LoginV2OkResponseFromJSON,
@@ -157,12 +154,12 @@ export interface AccountApiInterface {
      * @throws {RequiredError}
      * @memberof AccountApiInterface
      */
-    accountSignUpV2Raw(requestParameters: AccountSignUpV2Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>>;
+    accountSignUpV2Raw(requestParameters: AccountSignUpV2Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
      * Signs up a new user
      */
-    accountSignUpV2(signUpV2?: SignUpV2, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
+    accountSignUpV2(signUpV2?: SignUpV2, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
 }
 
@@ -333,7 +330,7 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
     /**
      * Signs up a new user
      */
-    async accountSignUpV2Raw(requestParameters: AccountSignUpV2Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>> {
+    async accountSignUpV2Raw(requestParameters: AccountSignUpV2Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -351,15 +348,14 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
             body: SignUpV2ToJSON(requestParameters['signUpV2']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => LegacyEmptyResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Signs up a new user
      */
-    async accountSignUpV2(signUpV2?: SignUpV2, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse> {
-        const response = await this.accountSignUpV2Raw({ signUpV2: signUpV2 }, initOverrides);
-        return await response.value();
+    async accountSignUpV2(signUpV2?: SignUpV2, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.accountSignUpV2Raw({ signUpV2: signUpV2 }, initOverrides);
     }
 
 }

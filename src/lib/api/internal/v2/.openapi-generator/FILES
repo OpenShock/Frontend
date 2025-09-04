@@ -1,4 +1,3 @@
-.openapi-generator-ignore
 apis/AccountApi.ts
 apis/HubEndpointsApi.ts
 apis/HubManagementApi.ts

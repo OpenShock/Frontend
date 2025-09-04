@@ -12,7 +12,7 @@
   import PauseToggle from '$lib/components/utils/PauseToggle.svelte';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
-  import RestrictionsSelector from './restrictions-selector.svelte';
+  import RestrictionsSelector from '../restrictions-selector.svelte';
 
   interface Props {
     userShare: V2UserSharesListItem;

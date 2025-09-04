@@ -1,12 +1,14 @@
 <script lang="ts">
   import { shockerSharesV2Api } from '$lib/api';
-  import { type ShockerPermLimitPair } from '$lib/api/internal/v1';
+  import { type BasicUserInfo, type ShockerPermLimitPair } from '$lib/api/internal/v1';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
   import MultiSelectCombobox from '$lib/components/ui/multi-select-combobox/multi-select-combobox.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { OwnHubsStore } from '$lib/stores/HubsStore';
+  import { Code, User } from '@lucide/svelte';
   import RestrictionsSelector from './restrictions-selector.svelte';
+  import UserSelector from './user-selector.svelte';
 
   let availableShockers = $derived(
     Array.from($OwnHubsStore)
@@ -19,10 +21,11 @@
 
   interface Props {
     open: boolean;
-    onCreated: (code: string) => void;
+    onCreatedCode: (code: string) => void;
+    onInvitedUser: (user: BasicUserInfo) => void;
   }
 
-  let { open = $bindable(), onCreated }: Props = $props();
+  let { open = $bindable(), onCreatedCode, onInvitedUser }: Props = $props();
 
   interface ShockerPermLimitPairButNotNull {
         permissions: {
@@ -39,6 +42,7 @@
 
   let shockerIds = $state<string[]>([]);
   let restrictions = $state<ShockerPermLimitPairButNotNull>(getDefaultRestrictions());
+  let fetchedUser = $state<BasicUserInfo | null>(null);
 
   function getDefaultRestrictions(): ShockerPermLimitPairButNotNull {
     return {
@@ -66,13 +70,19 @@
   async function onFormSubmit() {
     try {
       const createdCode = await shockerSharesV2Api.sharesCreateShareInvite({
+        user: fetchedUser?.id,
         shockers: shockerIds.map((id) => ({
           id: id,
           permissions: { ...restrictions.permissions },
           limits: { ...restrictions.limits },
         }))
       });
-      onCreated(createdCode);
+
+      if(fetchedUser) {
+        onInvitedUser(fetchedUser);
+      } else {
+        onCreatedCode(createdCode);
+      }
       open = false;
     } catch (error) {
       await handleApiError(error);
@@ -84,10 +94,12 @@
   <Dialog.Content>
     <Dialog.Header>
       <Dialog.Title>New Share Code</Dialog.Title>
-      <Dialog.Description>Example text</Dialog.Description>
+      <Dialog.Description>Create a Share Code or Invite</Dialog.Description>
     </Dialog.Header>
 
     <form class="modal-form border-surface-500 rounded-container-token space-y-4 min-w-0">
+      <UserSelector bind:fetchedUser />
+
       <MultiSelectCombobox
         bind:selected={shockerIds}
         options={availableShockers}
@@ -98,6 +110,14 @@
 
       <RestrictionsSelector bind:permissions={restrictions.permissions} bind:limits={restrictions.limits} />
     </form>
-    <Button onclick={onFormSubmit}>Create</Button>
+    <Button onclick={onFormSubmit} class="flex items-center">
+      {#if fetchedUser}
+        <User />
+        Send Share Invite
+      {:else}
+        <Code />
+        Create Share Code
+      {/if}
+    </Button>
   </Dialog.Content>
 </Dialog.Root>
