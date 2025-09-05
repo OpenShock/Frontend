@@ -45,6 +45,7 @@
       <Tabs.List>
         <Tabs.Trigger value="shares" onclick={() => navigateTo('outgoing')}>Shares</Tabs.Trigger>
         <Tabs.Trigger value="outstanding" onclick={() => navigateTo('outstanding')}>Outstanding Invites & Codes</Tabs.Trigger>
+        <Tabs.Trigger value="incoming" onclick={() => navigateTo('incoming')}>Shared with Me</Tabs.Trigger>
       </Tabs.List>
     </Tabs.Root>
 

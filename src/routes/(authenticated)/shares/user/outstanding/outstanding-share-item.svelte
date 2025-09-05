@@ -7,6 +7,9 @@
   import * as Table from '$lib/components/ui/table';
   import * as Tooltip from '$lib/components/ui/tooltip';
   import { toast } from 'svelte-sonner';
+  import { openConfirmDialog } from '$lib/stores/ConfirmDialogStore';
+  import { createRawSnippet, type Snippet } from 'svelte';
+  import { shockerSharesV2Api } from '$lib/api';
 
   interface Props {
     shareInvite: ShareInviteBaseDetails;
@@ -19,10 +22,30 @@
     toast.success('Code copied to clipboard');
   }
 
-  function removeInvite() {
+  function removeInviteCall(value: ShareInviteBaseDetails) {
+    shockerSharesV2Api.sharesDeleteOutgoingInvite(shareInvite.id).then(() => {
+      toast.success(`Removed invite ${value.id}`);
+    });
+  }
 
+  function removeInvite() {
+    openConfirmDialog({
+      title: 'Remove Invite',
+      confirmButtonText: 'Remove',
+      data: shareInvite,
+      onConfirm: removeInviteCall,
+      descSnippet: confirmDesc
+    });
   }
 </script>
+
+{#snippet confirmDesc(invite: ShareInviteBaseDetails)}
+  {#if invite.sharedWith}
+    <p>Are you sure you want to remove the invite for <strong>{invite.sharedWith.name}</strong>?</p>
+  {:else}
+    <p>Are you sure you want to remove the invite with code <strong>{invite.id}</strong>?</p>
+  {/if}
+{/snippet}
 
 <Table.Row>
   <Table.Cell class="flex items-center font-medium">

@@ -13,6 +13,7 @@
   import { browser } from '$app/environment';
   import { initializeApp } from '$lib/init';
   import { isMobile } from '$lib/utils/compatibility';
+  import DialogManager from '$lib/components/confirm-dialog/dialog-manager.svelte';
 
   interface Props {
     children?: Snippet;
@@ -37,6 +38,8 @@
 <TwitterSummaryTags type="summary" {...meta} site="@OpenShockORG" creator="@OpenShockORG" />
 
 <Toaster />
+
+<DialogManager />
 
 <SidebarProvider bind:open={isOpen}>
   <Sidebar />
