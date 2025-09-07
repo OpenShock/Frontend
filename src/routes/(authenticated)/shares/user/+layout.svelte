@@ -1,21 +1,32 @@
 <script lang="ts">
   import { Plus } from '@lucide/svelte';
+  import { goto } from '$app/navigation';
+  import { page } from '$app/state';
   import type { BasicUserInfo } from '$lib/api/internal/v1';
   import { Button } from '$lib/components/ui/button';
   import * as Tabs from '$lib/components/ui/tabs/index.js';
-  import {  refreshOwnHubs } from '$lib/stores/HubsStore';
+  import { refreshOwnHubs } from '$lib/stores/HubsStore';
   import { type Snippet, onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
   import DialogShareCodeCreate from './dialog-share-code-create.svelte';
   import DialogShareCodeCreated from './dialog-share-code-created.svelte';
-  import { goto } from '$app/navigation';
-  import { page } from '$app/state';
 
   let createDialogOpen = $state(false);
 
   let createdCode = $state<string | null>(null);
 
-  let tab = $derived(page.url.pathname.includes('outstanding') ? 'outstanding' : 'shares');
+  let tab = $derived(() => {
+    switch (page.url.pathname) {
+      case '/shares/user/outgoing':
+        return 'shares';
+      case '/shares/user/incoming':
+        return 'incoming';
+      case '/shares/user/outstanding':
+        return 'outstanding';
+      default:
+        return 'shares';
+    }
+  });
 
   let { children }: { children?: Snippet } = $props();
 
@@ -41,11 +52,15 @@
 
 <div class="h-full m-8 mt-4 flex flex-col gap-4">
   <div class="flex-none flex w-full">
-    <Tabs.Root value={tab} class="w-[400px]">
+    <Tabs.Root value={tab()} class="w-[400px]">
       <Tabs.List>
         <Tabs.Trigger value="shares" onclick={() => navigateTo('outgoing')}>Shares</Tabs.Trigger>
-        <Tabs.Trigger value="outstanding" onclick={() => navigateTo('outstanding')}>Outstanding Invites & Codes</Tabs.Trigger>
-        <Tabs.Trigger value="incoming" onclick={() => navigateTo('incoming')}>Shared with Me</Tabs.Trigger>
+        <Tabs.Trigger value="outstanding" onclick={() => navigateTo('outstanding')}
+          >Outstanding Invites & Codes</Tabs.Trigger
+        >
+        <Tabs.Trigger value="incoming" onclick={() => navigateTo('incoming')}
+          >Shared with Me</Tabs.Trigger
+        >
       </Tabs.List>
     </Tabs.Root>
 

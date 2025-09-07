@@ -4,13 +4,10 @@
   import UserShareItem from './user-share-item.svelte';
   import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
   import { UserShares, refreshUserShares } from '$lib/stores/UserSharesStore';
-  import { onMount } from 'svelte';
 
   let editShareDrawerOpen = $state(false);
   let editShareDrawerOpenCount = $state(0);
   let editIndex = $state(0);
-  let a = $state(0);
-
   let refreshPromise = $state(refreshUserShares())
 
   function openEditDrawer(userShareIndex: number) {
@@ -18,12 +15,6 @@
     editShareDrawerOpenCount += 1;
     editShareDrawerOpen = true;
   }
-
-  onMount(() => {
-    UserShares.subscribe((value) => {
-      console.log(value);
-    }); // logs '0'
-  });
 </script>
 
 {#key editShareDrawerOpenCount}
@@ -35,9 +26,6 @@
   {/if}
 {/key}
 
-<button onclick={() => a += 1}>aaa</button>
-
-{#key a}
 {#await refreshPromise}
 <div class="flex justify-center items-center h-full w-full">
 <LoadingCircle />
@@ -59,5 +47,4 @@
 {:catch error}
   <div class="text-red-500">Failed to load shares: {error.message}</div>
 {/await}
-{/key}
 
