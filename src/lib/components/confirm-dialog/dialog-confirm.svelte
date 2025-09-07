@@ -1,12 +1,13 @@
 <script lang="ts" generics="T">
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
+  import { LoaderCircle } from '@lucide/svelte';
   import type { Snippet } from 'svelte';
 
   interface Props {
     open: boolean;
     data: T;
-    onConfirm: (value: T) => void;
+    onConfirm: (value: T) => Promise<void> | void;
     title: string;
     desc?: string;
     confirmButtonText: string;
@@ -14,6 +15,17 @@
   }
 
   let { open = $bindable(), data, onConfirm, title, desc, confirmButtonText, descSnippet }: Props = $props();
+  let promiseRunning = $state(false);
+  
+  function click() {
+    promiseRunning = true;
+
+    Promise.resolve(onConfirm(data))
+      .finally(() => {
+        open = false;
+        promiseRunning = false;
+      });
+  }
 
 </script>
 
@@ -28,6 +40,6 @@
         {/if}
       </Dialog.Description>
     </Dialog.Header>
-    <Button variant="destructive" onclick={() => onConfirm(data)}>{confirmButtonText}</Button>
+    <Button disabled={promiseRunning} variant="destructive" onclick={click}>{#if promiseRunning}<LoaderCircle class="animate-spin" />{/if}{confirmButtonText}</Button>
   </Dialog.Content>
 </Dialog.Root>

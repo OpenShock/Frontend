@@ -8,8 +8,8 @@
   import * as Tooltip from '$lib/components/ui/tooltip';
   import { toast } from 'svelte-sonner';
   import { openConfirmDialog } from '$lib/stores/ConfirmDialogStore';
-  import { createRawSnippet, type Snippet } from 'svelte';
   import { shockerSharesV2Api } from '$lib/api';
+  import { refreshOutgoingInvites } from '$lib/stores/UserSharesStore';
 
   interface Props {
     shareInvite: ShareInviteBaseDetails;
@@ -22,10 +22,19 @@
     toast.success('Code copied to clipboard');
   }
 
-  function removeInviteCall(value: ShareInviteBaseDetails) {
-    shockerSharesV2Api.sharesDeleteOutgoingInvite(shareInvite.id).then(() => {
-      toast.success(`Removed invite ${value.id}`);
-    });
+  async function removeInviteCall(value: ShareInviteBaseDetails) {
+    try {
+      await shockerSharesV2Api.sharesDeleteOutgoingInvite(shareInvite.id);
+      if(shareInvite.sharedWith) {
+        toast.success(`Removed invite for ${shareInvite.sharedWith.name} (${shareInvite.id})`);
+      } else {
+        toast.success(`Removed invite ${value.id}`);
+      }
+    } catch (error) {
+      toast.error(`Failed to remove invite ${value.id}`);
+    } finally {
+      refreshOutgoingInvites();
+    }
   }
 
   function removeInvite() {

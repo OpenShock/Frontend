@@ -9,6 +9,7 @@
   import { Code, User } from '@lucide/svelte';
   import RestrictionsSelector from './restrictions-selector.svelte';
   import UserSelector from './user-selector.svelte';
+  import { refreshOutgoingInvites } from '$lib/stores/UserSharesStore';
 
   let availableShockers = $derived(
     Array.from($OwnHubsStore)
@@ -63,6 +64,7 @@
     if (!o) {
       shockerIds = [];
       restrictions = getDefaultRestrictions();
+      fetchedUser = null;
     }
     open = o;
   }
@@ -86,6 +88,8 @@
       open = false;
     } catch (error) {
       await handleApiError(error);
+    } finally {
+      refreshOutgoingInvites();
     }
   }
 </script>

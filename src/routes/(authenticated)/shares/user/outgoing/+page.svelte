@@ -1,45 +1,43 @@
 <script lang="ts">
-  import { shockerSharesV2Api } from '$lib/api';
-  import type { V2UserShares, } from '$lib/api/internal/v2';
   import * as Table from '$lib/components/ui/table';
-  import { toast } from 'svelte-sonner';
   import EditShare from './edit-share.svelte';
   import UserShareItem from './user-share-item.svelte';
   import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
+  import { UserShares, refreshUserShares } from '$lib/stores/UserSharesStore';
+  import { onMount } from 'svelte';
 
-  let userShares = $state<V2UserShares>({ outgoing: [], incoming: [] });
   let editShareDrawerOpen = $state(false);
   let editShareDrawerOpenCount = $state(0);
   let editIndex = $state(0);
+  let a = $state(0);
 
   let refreshPromise = $state(refreshUserShares())
-
-  async function refreshUserShares() {
-    try {
-      userShares = await shockerSharesV2Api.sharesGetSharesByUsers();
-    } catch (error) {
-      toast.error('Failed to fetch user shares');
-      console.error(error);
-      throw error;
-    }
-  }
 
   function openEditDrawer(userShareIndex: number) {
     editIndex = userShareIndex;
     editShareDrawerOpenCount += 1;
     editShareDrawerOpen = true;
   }
+
+  onMount(() => {
+    UserShares.subscribe((value) => {
+      console.log(value);
+    }); // logs '0'
+  });
 </script>
 
 {#key editShareDrawerOpenCount}
-  {#if userShares.outgoing[editIndex] !== undefined}
+  {#if $UserShares.outgoing[editIndex] !== undefined}
     <EditShare
-      bind:userShare={userShares.outgoing[editIndex]}
+      storeIndex={editIndex}
       bind:editDrawer={editShareDrawerOpen}
     />
   {/if}
 {/key}
 
+<button onclick={() => a += 1}>aaa</button>
+
+{#key a}
 {#await refreshPromise}
 <div class="flex justify-center items-center h-full w-full">
 <LoadingCircle />
@@ -48,9 +46,9 @@
 <div class="rounded-md border overflow-y-auto mb-6">
   <Table.Root>
     <Table.Body>
-      {#each userShares.outgoing as userShare, i (userShare.id)}
-        <UserShareItem
-          bind:userShare={userShares.outgoing[i]}
+      {#each $UserShares.outgoing as userShare, i (userShare.id)}
+        <UserShareItem 
+          storeIndex={i}
           onOpenEdit={() => openEditDrawer(i)}
         />
       {/each}
@@ -61,4 +59,5 @@
 {:catch error}
   <div class="text-red-500">Failed to load shares: {error.message}</div>
 {/await}
+{/key}
 

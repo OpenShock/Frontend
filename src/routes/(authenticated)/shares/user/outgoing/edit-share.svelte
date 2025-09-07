@@ -10,18 +10,22 @@
   import * as Tabs from '$lib/components/ui/tabs';
   import MultiPauseToggle from '$lib/components/utils/MultiPauseToggle.svelte';
   import PauseToggle from '$lib/components/utils/PauseToggle.svelte';
+  import { UserShares } from '$lib/stores/UserSharesStore';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
+  import { derived } from 'svelte/store';
   import RestrictionsSelector from '../restrictions-selector.svelte';
 
   interface Props {
-    userShare: V2UserSharesListItem;
+    storeIndex: number;
     editDrawer: boolean;
   }
 
   let saving = $state(false);
 
-  let { userShare = $bindable(), editDrawer = $bindable() }: Props = $props();
+  let { storeIndex, editDrawer = $bindable() }: Props = $props();
+
+  let userShare = derived(UserShares, ($a) => $a.outgoing[storeIndex]);
   let isUniformRestrictions = $state(false);
 
   let uniformPermissions = $state({
@@ -31,13 +35,32 @@
     sound: false,
   });
 
+  interface EditableShare {
+    limits: {
+      intensity: number;
+      duration: number;
+    };
+    permissions: {
+      live: boolean;
+      shock: boolean;
+      vibrate: boolean;
+      sound: boolean;
+    };
+    id: string;
+    name: string;
+    createdOn: Date;
+    paused: boolean;
+  }
+
+  let shares = $state<EditableShare[]>([]);
+
   let uniformLimits = $state({
     intensity: 1,
     duration: 300,
   });
 
-  let shares = $state(
-    userShare.shares.map((share) => ({
+  onMount(() => {
+    shares = $userShare.shares.map((share) => ({
       ...share,
       limits: {
         intensity: share.limits.intensity ?? 100,
@@ -49,17 +72,15 @@
         vibrate: share.permissions.vibrate ?? false,
         sound: share.permissions.sound ?? false,
       },
-    }))
-  );
+    }));
 
-  onMount(() => {
     if (shares.length === 0) {
       console.error('User share has no shares to edit.');
       return;
     }
 
-    isUniformRestrictions = userShare.shares.every((share) =>
-      ComparePermissionsAndLimits(share, userShare.shares[0])
+    isUniformRestrictions = $userShare.shares.every((share) =>
+      ComparePermissionsAndLimits(share, $userShare.shares[0])
     );
 
     const limit = shares[0].limits;
@@ -95,7 +116,7 @@
     shares.forEach((share) => {
       promises.push(
         shockersV1Api
-          .shockerShockerShareCodeUpdate(share.id, userShare.id, {
+          .shockerShockerShareCodeUpdate(share.id, $userShare.id, {
             limits: {
               intensity: share.limits.intensity === 100 ? null : share.limits.intensity,
               duration: share.limits.duration === 30_000 ? null : share.limits.duration,
@@ -104,9 +125,15 @@
           })
           .then(() => {
             // Update the list copy of the share
-            const index = userShare.shares.findIndex((s) => s.id === share.id);
+            const index = $userShare.shares.findIndex((s) => s.id === share.id);
             if (index !== -1) {
-              userShare.shares[index] = { ...userShare.shares[index], ...share };
+              UserShares.update((u) => {
+                u.outgoing[storeIndex].shares[index] = {
+                  ...u.outgoing[storeIndex].shares[index],
+                  ...share,
+                };
+                return u;
+              });
             }
           })
           .catch((error) => {
@@ -145,12 +172,12 @@
         <Drawer.Description>Edit shares for</Drawer.Description>
         <Drawer.Title class="flex items-center gap-2 mt-1">
           <Avatar.Root class="size-10">
-            <Avatar.Image src={userShare.image} alt="User Avatar" />
+            <Avatar.Image src={$userShare.image} alt="User Avatar" />
             <Avatar.Fallback>
-              {userShare.name.charAt(0)}
+              {$userShare.name.charAt(0)}
             </Avatar.Fallback>
           </Avatar.Root>
-          <b>{userShare.name}</b></Drawer.Title
+          <b>{$userShare.name}</b></Drawer.Title
         >
       </Drawer.Header>
       <div class="p-4 pb-0 mb-5">
@@ -181,11 +208,16 @@
                     shockers={shares.map((share) => ({
                       shockerId: share.id,
                       paused: share.paused,
-                      userShareUserId: userShare.id,
+                      userShareUserId: $userShare.id,
                     }))}
                     onPausedChange={(paused) => {
                       shares.forEach((share) => (share.paused = paused)); // Update the local copy of the shares
-                      userShare.shares.forEach((share) => (share.paused = paused)); // Update the actual lists shares
+                      
+                      // Update the actual store shares
+                      UserShares.update((current) => {
+                        current.outgoing[storeIndex].shares.forEach((share) => (share.paused = paused));
+                        return current;
+                      });
                     }}
                   />
                 </span>
@@ -211,12 +243,15 @@
                     <PauseToggle
                       shockerId={shares[i].id}
                       bind:paused={shares[i].paused}
-                      userShareUserId={userShare.id}
+                      userShareUserId={$userShare.id}
                       onPausedChange={(paused) => {
-                        userShare.shares.forEach((s) => {
-                          if (s.id === share.id) {
-                            s.paused = paused; // Update the actual shares list
-                          }
+                        UserShares.update((current) => {
+                          current.outgoing[storeIndex].shares.forEach((s) => {
+                            if (s.id === share.id) {
+                              s.paused = paused; // Update the store shares list
+                            }
+                          });
+                          return current;
                         });
                       }}
                     />

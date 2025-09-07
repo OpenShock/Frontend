@@ -1,25 +1,11 @@
 <script lang="ts">
-  import { shockerSharesV2Api } from '$lib/api';
-  import type { ShareInviteBaseDetails } from '$lib/api/internal/v2';
   import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
-  import { toast } from 'svelte-sonner';
   import * as Table from '$lib/components/ui/table';
-  import { onMount } from 'svelte';
   import OutstandingShareItem from './outstanding-share-item.svelte';
+  import { OutgoingOutstandingInvites, refreshOutgoingInvites } from '$lib/stores/UserSharesStore';
 
-  let outgoingInvites = $state<ShareInviteBaseDetails[]>([]);
   let outgoingInvitesPromise = $state(refreshOutgoingInvites())
 
-  async function refreshOutgoingInvites() {
-    try {
-      outgoingInvites = await shockerSharesV2Api.sharesGetOutgoingInvitesList();
-
-    } catch (error) {
-      toast.error('Failed to fetch user shares');
-      console.error(error);
-      throw error;
-    }
-  }
 </script>
 
 {#await outgoingInvitesPromise}
@@ -30,7 +16,7 @@
 <div class="rounded-md border overflow-y-auto mb-6">
   <Table.Root>
     <Table.Body>
-      {#each outgoingInvites as outgoingInvite, i (outgoingInvite.id)}
+      {#each $OutgoingOutstandingInvites as outgoingInvite, i (outgoingInvite.id)}
         <OutstandingShareItem shareInvite={outgoingInvite} />
       {/each}
     </Table.Body>

@@ -8,11 +8,12 @@
   let dialogOpen = $state(false);
 
   onMount(()=> {
-    ConfirmDialogStore.subscribe((value) => {
+    const sub = ConfirmDialogStore.subscribe((value) => {
       dialogData = value;
       dialogCounter += 1;
       dialogOpen = true;
     })
+    return () => sub();
   });
 
 </script>
