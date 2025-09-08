@@ -167,8 +167,8 @@
 
 <Drawer.Root bind:open={editDrawer} {onOpenChange} direction="right">
   <Drawer.Content>
-    <div class="mx-auto w-full">
-      <Drawer.Header>
+    <div class="mx-auto w-full max-h-[100vh] flex flex-col">
+      <Drawer.Header class="shrink-0">
         <Drawer.Description>Edit shares for</Drawer.Description>
         <Drawer.Title class="flex items-center gap-2 mt-1">
           <Avatar.Root class="size-10">
@@ -180,94 +180,99 @@
           <b>{$userShare.name}</b></Drawer.Title
         >
       </Drawer.Header>
-      <div class="p-4 pb-0 mb-5">
+      <div class="p-4 pb-0 mb-5 min-h-0">
         <Tabs.Root
           value={isUniformRestrictions ? 'uniform' : 'individual'}
           onValueChange={onTabChanged}
+          class="flex flex-col h-full"
         >
-          <div class="flex items-center justify-between">
-            <p class="text-lg font-bold grow self-end border-b border-b-neutral-800 mr-[-15px]">
-              Limits and Permissions
-            </p>
+          <div>
+            <div class="flex items-center justify-between shrink-0">
+              <p class="text-lg font-bold grow self-end border-b border-b-neutral-800 mr-[-15px]">
+                Limits and Permissions
+              </p>
 
-            <Tabs.List>
-              <Tabs.Trigger value="uniform">User</Tabs.Trigger>
-              <Tabs.Trigger value="individual">Shockers</Tabs.Trigger>
-            </Tabs.List>
+              <Tabs.List>
+                <Tabs.Trigger value="uniform">User</Tabs.Trigger>
+                <Tabs.Trigger value="individual">Shockers</Tabs.Trigger>
+              </Tabs.List>
+            </div>
+            <p class="mb-6 text-neutral-400 text-[10pt] text-right">
+              {isUniformRestrictions
+                ? 'Apply same restrictions to all shockers'
+                : 'Change restrictions for individual shockers'}
+            </p>
           </div>
 
-          <Tabs.Content value="uniform">
-            <p class="mb-6 text-neutral-400 text-[10pt] mt-[-10px] text-right">
-              Apply same restrictions to all shockers
-            </p>
-            <!-- Intensity Slider -->
-            <div class="flex flex-col gap-2 border-1 border-neutral-800 p-4 rounded-md h-75">
-              <span class="flex">
-                <span class="ml-auto">
-                  <MultiPauseToggle
-                    shockers={shares.map((share) => ({
-                      shockerId: share.id,
-                      paused: share.paused,
-                      userShareUserId: $userShare.id,
-                    }))}
-                    onPausedChange={(paused) => {
-                      shares.forEach((share) => (share.paused = paused)); // Update the local copy of the shares
-                      
-                      // Update the actual store shares
-                      UserShares.update((current) => {
-                        current.outgoing[storeIndex].shares.forEach((share) => (share.paused = paused));
-                        return current;
-                      });
-                    }}
-                  />
-                </span>
-              </span>
-
-              <RestrictionsSelector
-                bind:permissions={uniformPermissions}
-                bind:limits={uniformLimits}
-              />
-            </div>
-          </Tabs.Content>
-          <Tabs.Content value="individual">
-            <p class="mb-6 text-neutral-400 text-[10pt] mt-[-10px] text-right">
-              Change restrictions for individual shockers
-            </p>
-            <div class="flex flex-col gap-8 overflow-x-auto max-h-[30rem]">
-              {#each shares as share, i (share.id)}
-                <div class="flex flex-col gap-2 border-1 border-neutral-800 p-4 rounded-md">
-                  <div class="flex justify-between">
-                    <span>
-                      <Badge>{shares[i].name}</Badge>
-                    </span>
-                    <PauseToggle
-                      shockerId={shares[i].id}
-                      bind:paused={shares[i].paused}
-                      userShareUserId={$userShare.id}
+          <div class="overflow-y-auto">
+            <Tabs.Content value="uniform">
+              <div class="flex flex-col gap-2 border-1 border-neutral-800 p-4 rounded-md h-75">
+                <span class="flex">
+                  <span class="ml-auto">
+                    <MultiPauseToggle
+                      shockers={shares.map((share) => ({
+                        shockerId: share.id,
+                        paused: share.paused,
+                        userShareUserId: $userShare.id,
+                      }))}
                       onPausedChange={(paused) => {
+                        shares.forEach((share) => (share.paused = paused)); // Update the local copy of the shares
+
+                        // Update the actual store shares
                         UserShares.update((current) => {
-                          current.outgoing[storeIndex].shares.forEach((s) => {
-                            if (s.id === share.id) {
-                              s.paused = paused; // Update the store shares list
-                            }
-                          });
+                          current.outgoing[storeIndex].shares.forEach(
+                            (share) => (share.paused = paused)
+                          );
                           return current;
                         });
                       }}
                     />
+                  </span>
+                </span>
+
+                <RestrictionsSelector
+                  bind:permissions={uniformPermissions}
+                  bind:limits={uniformLimits}
+                />
+              </div>
+            </Tabs.Content>
+            <Tabs.Content value="individual">
+              <div class="flex flex-col gap-8">
+                {#each shares as share, i (share.id)}
+                  <div class="flex flex-col gap-2 border-1 border-neutral-800 p-4 rounded-md">
+                    <div class="flex justify-between">
+                      <span>
+                        <Badge>{shares[i].name}</Badge>
+                      </span>
+                      <PauseToggle
+                        shockerId={shares[i].id}
+                        bind:paused={shares[i].paused}
+                        userShareUserId={$userShare.id}
+                        onPausedChange={(paused) => {
+                          UserShares.update((current) => {
+                            current.outgoing[storeIndex].shares.forEach((s) => {
+                              if (s.id === share.id) {
+                                s.paused = paused; // Update the store shares list
+                              }
+                            });
+                            return current;
+                          });
+                        }}
+                      />
+                    </div>
+                    <RestrictionsSelector
+                      bind:permissions={shares[i].permissions}
+                      bind:limits={shares[i].limits}
+                    />
                   </div>
-                  <RestrictionsSelector
-                    bind:permissions={shares[i].permissions}
-                    bind:limits={shares[i].limits}
-                  />
-                </div>
-              {/each}
-            </div>
-          </Tabs.Content>
+                {/each}
+              </div>
+            </Tabs.Content>
+          </div>
         </Tabs.Root>
       </div>
 
-      <Drawer.Footer class="flex flex-row justify-between mx-20">
+      <Drawer.Footer class="flex flex-row justify-between mx-20 shrink-0">
         <Drawer.Close>Cancel</Drawer.Close>
         <Button onclick={handleSave}
           >Save {#if saving}<LoadingCircle />{/if}</Button
