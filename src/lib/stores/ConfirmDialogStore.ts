@@ -6,7 +6,7 @@ export interface ConfirmDialogContext<T> {
     onConfirm: (value: T) => void;
     title: string;
     desc?: string;
-    confirmButtonText: string;
+    confirmButtonText?: string;
     descSnippet?: Snippet<[T]>;
 }
 

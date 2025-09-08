@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { shockersV1Api } from '$lib/api';
+  import { Trash } from '@lucide/svelte';
+  import { shockerSharesV2Api, shockersV1Api } from '$lib/api';
   import type { V2UserSharesListItem } from '$lib/api/internal/v2';
   import { ComparePermissionsAndLimits } from '$lib/comparers/UserShareComparer';
   import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
@@ -10,6 +11,8 @@
   import * as Tabs from '$lib/components/ui/tabs';
   import MultiPauseToggle from '$lib/components/utils/MultiPauseToggle.svelte';
   import PauseToggle from '$lib/components/utils/PauseToggle.svelte';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { ConfirmDialogStore, openConfirmDialog } from '$lib/stores/ConfirmDialogStore';
   import { UserShares } from '$lib/stores/UserSharesStore';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
@@ -18,6 +21,7 @@
 
   interface Props {
     storeIndex: number;
+    sharedWithUserId: string;
     editDrawer: boolean;
   }
 
@@ -148,6 +152,26 @@
     });
   }
 
+  async function deleteShockerShare(shockerId: EditableShare) {
+    try {
+      await shockersV1Api.shockerShockerShareCodeRemove(shockerId.id, $userShare.id);
+      toast.success(`Successfully removed shocker share ${shockerId}`);
+    } catch (error) {
+      handleApiError(error);
+      throw error;
+    }
+  }
+
+  function handleDeleteClick(shocker: EditableShare) {
+    openConfirmDialog({
+      title: 'Confirm Deletion',
+      descSnippet: deleteConfirmDesc,
+      data: shocker,
+      onConfirm: deleteShockerShare,
+      confirmButtonText: 'Remove'
+    });
+  }
+
   function onTabChanged(value: string) {
     isUniformRestrictions = value === 'uniform';
   }
@@ -161,11 +185,13 @@
       });
     }
   });
-
-  function onOpenChange(open: boolean) {}
 </script>
 
-<Drawer.Root bind:open={editDrawer} {onOpenChange} direction="right">
+{#snippet deleteConfirmDesc (shocker: EditableShare)}
+  <p>Are you sure you want to remove the shocker share <strong>{shocker.name}</strong> for <strong>{$userShare.name}</strong>?</p>
+{/snippet}
+
+<Drawer.Root bind:open={editDrawer} direction="right">
   <Drawer.Content>
     <div class="mx-auto w-full max-h-[100vh] flex flex-col">
       <Drawer.Header class="shrink-0">
@@ -244,21 +270,26 @@
                       <span>
                         <Badge>{shares[i].name}</Badge>
                       </span>
-                      <PauseToggle
-                        shockerId={shares[i].id}
-                        bind:paused={shares[i].paused}
-                        userShareUserId={$userShare.id}
-                        onPausedChange={(paused) => {
-                          UserShares.update((current) => {
-                            current.outgoing[storeIndex].shares.forEach((s) => {
-                              if (s.id === share.id) {
-                                s.paused = paused; // Update the store shares list
-                              }
+                      <span>
+                        <PauseToggle
+                          shockerId={shares[i].id}
+                          bind:paused={shares[i].paused}
+                          userShareUserId={$userShare.id}
+                          onPausedChange={(paused) => {
+                            UserShares.update((current) => {
+                              current.outgoing[storeIndex].shares.forEach((s) => {
+                                if (s.id === share.id) {
+                                  s.paused = paused; // Update the store shares list
+                                }
+                              });
+                              return current;
                             });
-                            return current;
-                          });
-                        }}
-                      />
+                          }}
+                        />
+                        <Button variant="destructive" onclick={() => handleDeleteClick(shares[i])} class="ml-4">
+                          <Trash />
+                        </Button>
+                      </span>
                     </div>
                     <RestrictionsSelector
                       bind:permissions={shares[i].permissions}

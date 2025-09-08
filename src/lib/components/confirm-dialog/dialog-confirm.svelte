@@ -40,6 +40,6 @@
         {/if}
       </Dialog.Description>
     </Dialog.Header>
-    <Button disabled={promiseRunning} variant="destructive" onclick={click}>{#if promiseRunning}<LoaderCircle class="animate-spin" />{/if}{confirmButtonText}</Button>
+    <Button disabled={promiseRunning} variant="destructive" onclick={click}>{#if promiseRunning}<LoaderCircle class="animate-spin" />{/if}{confirmButtonText ? confirmButtonText : 'Confirm'}</Button>
   </Dialog.Content>
 </Dialog.Root>
