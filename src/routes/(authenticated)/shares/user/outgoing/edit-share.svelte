@@ -21,7 +21,6 @@
 
   interface Props {
     storeIndex: number;
-    sharedWithUserId: string;
     editDrawer: boolean;
   }
 
@@ -168,7 +167,7 @@
       descSnippet: deleteConfirmDesc,
       data: shocker,
       onConfirm: deleteShockerShare,
-      confirmButtonText: 'Remove'
+      confirmButtonText: 'Remove',
     });
   }
 
@@ -187,8 +186,11 @@
   });
 </script>
 
-{#snippet deleteConfirmDesc (shocker: EditableShare)}
-  <p>Are you sure you want to remove the shocker share <strong>{shocker.name}</strong> for <strong>{$userShare.name}</strong>?</p>
+{#snippet deleteConfirmDesc(shocker: EditableShare)}
+  <p>
+    Are you sure you want to remove the shocker share <strong>{shocker.name}</strong> for
+    <strong>{$userShare.name}</strong>?
+  </p>
 {/snippet}
 
 <Drawer.Root bind:open={editDrawer} direction="right">
@@ -286,7 +288,11 @@
                             });
                           }}
                         />
-                        <Button variant="destructive" onclick={() => handleDeleteClick(shares[i])} class="ml-4">
+                        <Button
+                          variant="destructive"
+                          onclick={() => handleDeleteClick(shares[i])}
+                          class="ml-4"
+                        >
                           <Trash />
                         </Button>
                       </span>

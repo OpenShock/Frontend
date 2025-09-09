@@ -1,9 +1,9 @@
+import { dev } from '$app/environment';
 import { isControlLog } from '$lib/signalr/models/ControlLog';
 import { isControlLogSender } from '$lib/signalr/models/ControlLogSender';
 import { TriggerEvent } from '$lib/stores/ShockEventListenerStore';
 import { toast } from 'svelte-sonner';
 import { ControlType } from '../models/ControlType';
-import { dev } from '$app/environment';
 
 export function handleSignalrLog(sender: unknown, logs: unknown) {
   if (!isControlLogSender(sender) || !Array.isArray(logs) || !logs.every(isControlLog)) {

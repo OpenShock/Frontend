@@ -1,15 +1,15 @@
 <script lang="ts">
   import { Key, X, Zap } from '@lucide/svelte';
+  import { shockerSharesV2Api } from '$lib/api';
   import type { ShareInviteBaseDetails } from '$lib/api/internal/v2';
   import * as Avatar from '$lib/components/ui/avatar';
   import { Badge } from '$lib/components/ui/badge';
   import { Button } from '$lib/components/ui/button';
   import * as Table from '$lib/components/ui/table';
   import * as Tooltip from '$lib/components/ui/tooltip';
-  import { toast } from 'svelte-sonner';
   import { openConfirmDialog } from '$lib/stores/ConfirmDialogStore';
-  import { shockerSharesV2Api } from '$lib/api';
   import { refreshOutgoingInvites } from '$lib/stores/UserSharesStore';
+  import { toast } from 'svelte-sonner';
 
   interface Props {
     shareInvite: ShareInviteBaseDetails;
@@ -25,7 +25,7 @@
   async function removeInviteCall(value: ShareInviteBaseDetails) {
     try {
       await shockerSharesV2Api.sharesDeleteOutgoingInvite(shareInvite.id);
-      if(shareInvite.sharedWith) {
+      if (shareInvite.sharedWith) {
         toast.success(`Removed invite for ${shareInvite.sharedWith.name} (${shareInvite.id})`);
       } else {
         toast.success(`Removed invite ${value.id}`);
@@ -43,7 +43,7 @@
       confirmButtonText: 'Remove',
       data: shareInvite,
       onConfirm: removeInviteCall,
-      descSnippet: confirmDesc
+      descSnippet: confirmDesc,
     });
   }
 </script>
@@ -71,9 +71,11 @@
         <Avatar.Fallback>CODE</Avatar.Fallback>
       </Avatar.Root>
       <Badge class="ml-4 cursor-pointer" onclick={copyCode} variant="outline">
-        <span class="flex items-center gap-2 transition duration-150 ease-in-out not-hover:blur-[4px]">
-        <Key class="size-3" />
-        {shareInvite.id}
+        <span
+          class="flex items-center gap-2 transition duration-150 ease-in-out not-hover:blur-[4px]"
+        >
+          <Key class="size-3" />
+          {shareInvite.id}
         </span>
       </Badge>
     {/if}

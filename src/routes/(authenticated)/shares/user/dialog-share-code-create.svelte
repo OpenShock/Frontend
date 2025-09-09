@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Code, User } from '@lucide/svelte';
   import { shockerSharesV2Api } from '$lib/api';
   import { type BasicUserInfo, type ShockerPermLimitPair } from '$lib/api/internal/v1';
   import Button from '$lib/components/ui/button/button.svelte';
@@ -6,10 +7,9 @@
   import MultiSelectCombobox from '$lib/components/ui/multi-select-combobox/multi-select-combobox.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { OwnHubsStore } from '$lib/stores/HubsStore';
-  import { Code, User } from '@lucide/svelte';
+  import { refreshOutgoingInvites } from '$lib/stores/UserSharesStore';
   import RestrictionsSelector from './restrictions-selector.svelte';
   import UserSelector from './user-selector.svelte';
-  import { refreshOutgoingInvites } from '$lib/stores/UserSharesStore';
 
   let availableShockers = $derived(
     Array.from($OwnHubsStore)
@@ -80,7 +80,7 @@
         })),
       });
 
-      if(fetchedUser) {
+      if (fetchedUser) {
         onInvitedUser(fetchedUser);
       } else {
         onCreatedCode(createdCode);

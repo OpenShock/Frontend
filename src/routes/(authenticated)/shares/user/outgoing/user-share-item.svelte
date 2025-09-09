@@ -36,7 +36,9 @@
           <p class="ml-2 inline-block sm:hidden">{$userShare.shares.length}</p>
           <div class="hidden sm:inline-block">
             {#each $userShare.shares as share}
-              <Badge class="ml-2" variant={share.paused ? 'destructive' : 'default'}>{share.name}</Badge>
+              <Badge class="ml-2" variant={share.paused ? 'destructive' : 'default'}
+                >{share.name}</Badge
+              >
             {/each}
           </div>
         </span>

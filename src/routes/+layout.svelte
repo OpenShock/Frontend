@@ -11,9 +11,9 @@
   import Sidebar from './Sidebar.svelte';
   import '../app.css';
   import { browser } from '$app/environment';
+  import DialogManager from '$lib/components/confirm-dialog/dialog-manager.svelte';
   import { initializeApp } from '$lib/init';
   import { isMobile } from '$lib/utils/compatibility';
-  import DialogManager from '$lib/components/confirm-dialog/dialog-manager.svelte';
 
   interface Props {
     children?: Snippet;

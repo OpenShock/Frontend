@@ -1,3 +1,4 @@
+import { dev } from '$app/environment';
 import { type ProblemDetails, isProblemDetails } from '$lib/errorhandling/ProblemDetails';
 import {
   isError,
@@ -8,7 +9,6 @@ import {
 } from '$lib/typeguards/errorGuards';
 import { toast } from 'svelte-sonner';
 import { isValidationError as isValidationProblem } from './ValidationProblemDetails';
-import { dev } from '$app/environment';
 
 export type HandleProblemCallback = (problem: ProblemDetails) => boolean;
 
