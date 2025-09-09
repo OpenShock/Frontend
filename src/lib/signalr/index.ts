@@ -30,7 +30,7 @@ export async function initializeSignalR() {
   }
 
   connection = new HubConnectionBuilder()
-    .configureLogging(dev ? LogLevel.Debug : LogLevel.Information)
+    .configureLogging(dev ? LogLevel.Debug : LogLevel.Warning)
     .withUrl(`https://${PUBLIC_BACKEND_API_DOMAIN}/1/hubs/user`, {
       transport: HttpTransportType.WebSockets,
       skipNegotiation: true,
