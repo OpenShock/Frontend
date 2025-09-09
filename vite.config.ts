@@ -102,6 +102,7 @@ export default defineConfig(async ({ command, mode, isPreview }) => {
     esbuild: {
       legalComments: 'none',
       banner: '/*! For licenses information, see LICENSES.txt */',
+      drop: mode === 'production' ? ['console', 'debugger'] : [],
     },
   });
 });
