@@ -103,7 +103,7 @@ export default defineConfig(async ({ command, mode, isPreview }) => {
       legalComments: 'none',
       banner: '/*! For licenses information, see LICENSES.txt */',
       drop: mode === 'production' ? ['debugger'] : [],
-      pure: mode === 'production' ? ['console.log', 'console.debug'] : [],
+      pure: mode === 'production' ? ['console.log', 'console.debug', 'console.trace'] : [],
     },
   });
 });
