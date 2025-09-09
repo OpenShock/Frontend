@@ -8,6 +8,7 @@ import {
 } from '$lib/typeguards/errorGuards';
 import { toast } from 'svelte-sonner';
 import { isValidationError as isValidationProblem } from './ValidationProblemDetails';
+import { dev } from '$app/environment';
 
 export type HandleProblemCallback = (problem: ProblemDetails) => boolean;
 
@@ -34,27 +35,29 @@ async function handleResponseError(
     return null;
   }
 
-  console.groupCollapsed(`%cAPI Error: ${problem.title}`, 'color: red; font-weight: bold;');
-  console.log('%cType:      ', 'font-weight: bold;', problem.type);
-  console.log('%cStatus:    ', 'font-weight: bold;', problem.status);
-  console.log('%cRequest ID:', 'font-weight: bold;', problem.requestId);
-  if (problem.detail) {
-    console.log('%cDetail:    ', 'font-style: italic;', problem.detail);
-  }
-  if (isValidationProblem(problem)) {
-    // nicely tabulate the field errors
-    console.groupCollapsed('%cField errors', 'font-style: italic;');
-    for (const [field, messages] of Object.entries(problem.errors)) {
-      console.group(`${field}`);
-      messages.forEach((msg) => console.log(`• ${msg}`));
-      console.groupEnd();
+  if (dev) {
+    console.groupCollapsed(`%cAPI Error: ${problem.title}`, 'color: red; font-weight: bold;');
+    console.log('%cType:      ', 'font-weight: bold;', problem.type);
+    console.log('%cStatus:    ', 'font-weight: bold;', problem.status);
+    console.log('%cRequest ID:', 'font-weight: bold;', problem.requestId);
+    if (problem.detail) {
+      console.log('%cDetail:    ', 'font-style: italic;', problem.detail);
     }
-    console.groupEnd(); // end Field errors
+    if (isValidationProblem(problem)) {
+      // nicely tabulate the field errors
+      console.groupCollapsed('%cField errors', 'font-style: italic;');
+      for (const [field, messages] of Object.entries(problem.errors)) {
+        console.group(`${field}`);
+        messages.forEach((msg) => console.log(`• ${msg}`));
+        console.groupEnd();
+      }
+      console.groupEnd(); // end Field errors
+    }
+    // allow peeking at the full object if you need it
+    console.log('%cFull payload:', 'font-weight: normal;', problem);
+    console.trace();
+    console.groupEnd();
   }
-  // allow peeking at the full object if you need it
-  console.log('%cFull payload:', 'font-weight: normal;', problem);
-  console.trace();
-  console.groupEnd();
 
   if (handleProblemCallback && handleProblemCallback(problem)) return;
 
