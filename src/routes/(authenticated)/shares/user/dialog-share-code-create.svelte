@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { Code, User } from '@lucide/svelte';
+  import { Barcode, Code, User } from '@lucide/svelte';
   import { shockerSharesV2Api } from '$lib/api';
-  import { type BasicUserInfo, type ShockerPermLimitPair } from '$lib/api/internal/v1';
+  import { type BasicUserInfo } from '$lib/api/internal/v1';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
   import MultiSelectCombobox from '$lib/components/ui/multi-select-combobox/multi-select-combobox.svelte';
@@ -122,7 +122,7 @@
         <User />
         Send Share Invite
       {:else}
-        <Code />
+        <Barcode />
         Create Share Code
       {/if}
     </Button>

@@ -19,6 +19,7 @@ import type {
   OpenShockProblem,
   ShareInviteBaseDetails,
   V2UserShares,
+  V2UserSharesListItem,
 } from '../models/index';
 import {
     CreateShareRequestFromJSON,
@@ -29,6 +30,8 @@ import {
     ShareInviteBaseDetailsToJSON,
     V2UserSharesFromJSON,
     V2UserSharesToJSON,
+    V2UserSharesListItemFromJSON,
+    V2UserSharesListItemToJSON,
 } from '../models/index';
 
 export interface SharesCreateShareInviteRequest {
@@ -137,12 +140,12 @@ export interface ShockerSharesApiInterface {
      * @throws {RequiredError}
      * @memberof ShockerSharesApiInterface
      */
-    sharesRedeemInviteRaw(requestParameters: SharesRedeemInviteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+    sharesRedeemInviteRaw(requestParameters: SharesRedeemInviteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<V2UserSharesListItem>>;
 
     /**
      * Accept a share request and share the shockers with the current user.
      */
-    sharesRedeemInvite(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    sharesRedeemInvite(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<V2UserSharesListItem>;
 
 }
 
@@ -337,7 +340,7 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
     /**
      * Accept a share request and share the shockers with the current user.
      */
-    async sharesRedeemInviteRaw(requestParameters: SharesRedeemInviteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async sharesRedeemInviteRaw(requestParameters: SharesRedeemInviteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<V2UserSharesListItem>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -360,14 +363,15 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => V2UserSharesListItemFromJSON(jsonValue));
     }
 
     /**
      * Accept a share request and share the shockers with the current user.
      */
-    async sharesRedeemInvite(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.sharesRedeemInviteRaw({ id: id }, initOverrides);
+    async sharesRedeemInvite(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<V2UserSharesListItem> {
+        const response = await this.sharesRedeemInviteRaw({ id: id }, initOverrides);
+        return await response.value();
     }
 
 }

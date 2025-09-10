@@ -112,15 +112,15 @@ export interface ShockerShockerShareCodePauseRequest {
     pauseRequest?: PauseRequest;
 }
 
-export interface ShockerShockerShareCodeRemoveRequest {
-    shockerId: string;
-    sharedWithUserId: string;
-}
-
 export interface ShockerShockerShareCodeUpdateRequest {
     shockerId: string;
     sharedWithUserId: string;
     shockerPermLimitPair?: ShockerPermLimitPair;
+}
+
+export interface ShockerShockerShareRemoveRequest {
+    shockerId: string;
+    sharedWithUserId: string;
 }
 
 /**
@@ -332,22 +332,6 @@ export interface ShockersApiInterface {
 
     /**
      * 
-     * @summary Remove a share code for a shocker
-     * @param {string} shockerId 
-     * @param {string} sharedWithUserId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ShockersApiInterface
-     */
-    shockerShockerShareCodeRemoveRaw(requestParameters: ShockerShockerShareCodeRemoveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
-
-    /**
-     * Remove a share code for a shocker
-     */
-    shockerShockerShareCodeRemove(shockerId: string, sharedWithUserId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
-
-    /**
-     * 
      * @summary Update a share for a shocker
      * @param {string} shockerId 
      * @param {string} sharedWithUserId 
@@ -362,6 +346,22 @@ export interface ShockersApiInterface {
      * Update a share for a shocker
      */
     shockerShockerShareCodeUpdate(shockerId: string, sharedWithUserId: string, shockerPermLimitPair?: ShockerPermLimitPair, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * 
+     * @summary Remove a share for a shocker
+     * @param {string} shockerId 
+     * @param {string} sharedWithUserId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ShockersApiInterface
+     */
+    shockerShockerShareRemoveRaw(requestParameters: ShockerShockerShareRemoveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Remove a share for a shocker
+     */
+    shockerShockerShareRemove(shockerId: string, sharedWithUserId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
 }
 
@@ -906,54 +906,6 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
     }
 
     /**
-     * Remove a share code for a shocker
-     */
-    async shockerShockerShareCodeRemoveRaw(requestParameters: ShockerShockerShareCodeRemoveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['shockerId'] == null) {
-            throw new runtime.RequiredError(
-                'shockerId',
-                'Required parameter "shockerId" was null or undefined when calling shockerShockerShareCodeRemove().'
-            );
-        }
-
-        if (requestParameters['sharedWithUserId'] == null) {
-            throw new runtime.RequiredError(
-                'sharedWithUserId',
-                'Required parameter "sharedWithUserId" was null or undefined when calling shockerShockerShareCodeRemove().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
-
-
-        let urlPath = `/1/shockers/{shockerId}/shares/{sharedWithUserId}`;
-        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
-        urlPath = urlPath.replace(`{${"sharedWithUserId"}}`, encodeURIComponent(String(requestParameters['sharedWithUserId'])));
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Remove a share code for a shocker
-     */
-    async shockerShockerShareCodeRemove(shockerId: string, sharedWithUserId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.shockerShockerShareCodeRemoveRaw({ shockerId: shockerId, sharedWithUserId: sharedWithUserId }, initOverrides);
-    }
-
-    /**
      * Update a share for a shocker
      */
     async shockerShockerShareCodeUpdateRaw(requestParameters: ShockerShockerShareCodeUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -1002,6 +954,54 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
      */
     async shockerShockerShareCodeUpdate(shockerId: string, sharedWithUserId: string, shockerPermLimitPair?: ShockerPermLimitPair, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.shockerShockerShareCodeUpdateRaw({ shockerId: shockerId, sharedWithUserId: sharedWithUserId, shockerPermLimitPair: shockerPermLimitPair }, initOverrides);
+    }
+
+    /**
+     * Remove a share for a shocker
+     */
+    async shockerShockerShareRemoveRaw(requestParameters: ShockerShockerShareRemoveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['shockerId'] == null) {
+            throw new runtime.RequiredError(
+                'shockerId',
+                'Required parameter "shockerId" was null or undefined when calling shockerShockerShareRemove().'
+            );
+        }
+
+        if (requestParameters['sharedWithUserId'] == null) {
+            throw new runtime.RequiredError(
+                'sharedWithUserId',
+                'Required parameter "sharedWithUserId" was null or undefined when calling shockerShockerShareRemove().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
+        }
+
+
+        let urlPath = `/1/shockers/{shockerId}/shares/{sharedWithUserId}`;
+        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
+        urlPath = urlPath.replace(`{${"sharedWithUserId"}}`, encodeURIComponent(String(requestParameters['sharedWithUserId'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Remove a share for a shocker
+     */
+    async shockerShockerShareRemove(shockerId: string, sharedWithUserId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.shockerShockerShareRemoveRaw({ shockerId: shockerId, sharedWithUserId: sharedWithUserId }, initOverrides);
     }
 
 }

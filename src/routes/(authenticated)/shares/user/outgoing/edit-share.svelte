@@ -153,7 +153,7 @@
 
   async function deleteShockerShare(shockerId: EditableShare) {
     try {
-      await shockersV1Api.shockerShockerShareCodeRemove(shockerId.id, $userShare.id);
+      await shockersV1Api.shockerShockerShareRemove(shockerId.id, $userShare.id);
       toast.success(`Successfully removed shocker share ${shockerId}`);
     } catch (error) {
       handleApiError(error);

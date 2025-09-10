@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Plus } from '@lucide/svelte';
+  import { Barcode, Plus } from '@lucide/svelte';
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import type { BasicUserInfo } from '$lib/api/internal/v1';
@@ -10,9 +10,10 @@
   import { toast } from 'svelte-sonner';
   import DialogShareCodeCreate from './dialog-share-code-create.svelte';
   import DialogShareCodeCreated from './dialog-share-code-created.svelte';
+  import DialogShareCodeRedeem from './dialog-share-code-redeem.svelte';
 
   let createDialogOpen = $state(false);
-
+  let redeemDialogOpen = $state(false);
   let createdCode = $state<string | null>(null);
 
   let tab = $derived(() => {
@@ -49,6 +50,7 @@
 
 <DialogShareCodeCreate bind:open={createDialogOpen} {onCreatedCode} {onInvitedUser} />
 <DialogShareCodeCreated bind:code={createdCode} />
+<DialogShareCodeRedeem bind:open={redeemDialogOpen} />
 
 <div class="h-full m-8 mt-4 flex flex-col gap-4">
   <div class="flex-none flex w-full">
@@ -66,10 +68,16 @@
 
     <div class="flex-grow"></div>
 
-    <Button onclick={() => (createDialogOpen = true)} class="self-end">
-      <Plus />
-      New Share
-    </Button>
+    <span>
+      <Button onclick={() => (redeemDialogOpen = true)} class="self-end">
+        <Barcode />
+        Redeem Code
+      </Button>
+      <Button onclick={() => (createDialogOpen = true)} class="self-end">
+        <Plus />
+        New Share
+      </Button>
+    </span>
   </div>
 
   {@render children?.()}

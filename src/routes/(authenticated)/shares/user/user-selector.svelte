@@ -39,7 +39,7 @@
     <Avatar.Image src={fetchedUser?.image} alt="User Avatar" />
     <Avatar.Fallback>?</Avatar.Fallback>
   </Avatar.Root>
-  <Input bind:value={userInput} />
+  <Input bind:value={userInput} placeholder="Enter user name" />
   <Button onclick={check} disabled={!inputModified()} type="submit">
     {#if inputModified()}
       <Search />
