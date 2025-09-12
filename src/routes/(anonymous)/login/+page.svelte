@@ -9,6 +9,7 @@
   import { Button } from '$lib/components/ui/button';
   import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { initializeSignalR } from '$lib/signalr';
   import { UserStore } from '$lib/stores/UserStore';
   import type { ValidationResult } from '$lib/types/ValidationResult';
 
@@ -39,6 +40,7 @@
         email: account.accountEmail,
         roles: account.accountRoles,
       });
+      await initializeSignalR();
       goto(page.url.searchParams.get('redirect') ?? '/home');
     } catch (error) {
       await handleApiError(error, (problem) => {

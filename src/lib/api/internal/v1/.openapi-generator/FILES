@@ -18,8 +18,8 @@ models/AdminOnlineDeviceResponse.ts
 models/AdminOnlineDeviceResponseIEnumerableLegacyDataResponse.ts
 models/AdminUsersView.ts
 models/AdminUsersViewPaginated.ts
-models/ApiVersionResponse.ts
-models/ApiVersionResponseLegacyDataResponse.ts
+models/BackendInfoResponse.ts
+models/BackendInfoResponseLegacyDataResponse.ts
 models/BasicUserInfo.ts
 models/BooleanLegacyDataResponse.ts
 models/ChangeEmailRequest.ts
