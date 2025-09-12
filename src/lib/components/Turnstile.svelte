@@ -10,11 +10,15 @@
 
   interface Props {
     action: string;
-    cData: string;
+    cData?: string;
     response: string | null;
   }
 
-  let { action, cData, response = $bindable(dev ? PUBLIC_TURNSTILE_DEV_BYPASS_VALUE : null) }: Props = $props();
+  let {
+    action,
+    cData,
+    response = $bindable(dev ? PUBLIC_TURNSTILE_DEV_BYPASS_VALUE : null),
+  }: Props = $props();
 
   let element: HTMLDivElement;
 

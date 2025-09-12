@@ -1,7 +1,8 @@
 import { browser } from '$app/environment';
 import { goto } from '$app/navigation';
 import { accountV1Api } from '$lib/api';
-import { destroyAuth } from '$lib/init';
+import { destroySignalR } from '$lib/signalr';
+import { UserStore } from '$lib/stores/UserStore';
 
 export const prerender = false;
 
@@ -17,7 +18,8 @@ export async function load() {
 
   try {
     // Clear local context
-    await destroyAuth();
+    UserStore.reset();
+    await destroySignalR();
   } catch (error) {
     console.error(error);
   }
