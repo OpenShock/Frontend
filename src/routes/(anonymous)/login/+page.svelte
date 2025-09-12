@@ -52,6 +52,14 @@
     }
   }
 
+  async function startOAuth() {
+    const provider = "discord";
+    const domain = "localhost"; // PUBLIC_BACKEND_API_DOMAIN
+
+    // Set the current URL as the redirect URL so we can come back here after OAuth
+    window.location.href = `https://${domain}/1/oauth/${provider}/authorize`;
+  }
+
   let canSubmit = $derived(
     usernameOrEmail.length > 0 && password.length > 0 && turnstileResponse != null
   );
@@ -82,5 +90,7 @@
     <Button type="submit" disabled={!canSubmit}>Log In</Button>
 
     <a class=" text-sm opacity-75 hover:underline" href="/forgot-password">Forgot your password?</a>
+
+    <Button type="button" onclick={startOAuth}>Log In With Discord</Button>
   </form>
 </Container>

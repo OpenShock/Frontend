@@ -20,8 +20,10 @@ import type {
   ChangeUsernameRequest,
   LegacyEmptyResponse,
   Login,
+  OAuthConnectionResponse,
   OpenShockProblem,
   PasswordResetProcessData,
+  ProblemDetails,
   ResetRequest,
   SignUp,
   UsernameCheckResponse,
@@ -37,10 +39,14 @@ import {
     LegacyEmptyResponseToJSON,
     LoginFromJSON,
     LoginToJSON,
+    OAuthConnectionResponseFromJSON,
+    OAuthConnectionResponseToJSON,
     OpenShockProblemFromJSON,
     OpenShockProblemToJSON,
     PasswordResetProcessDataFromJSON,
     PasswordResetProcessDataToJSON,
+    ProblemDetailsFromJSON,
+    ProblemDetailsToJSON,
     ResetRequestFromJSON,
     ResetRequestToJSON,
     SignUpFromJSON,
@@ -76,6 +82,10 @@ export interface AccountSignUpRequest {
     signUp?: SignUp;
 }
 
+export interface AuthenticatedAccountAddOAuthConnectionRequest {
+    provider: string;
+}
+
 export interface AuthenticatedAccountChangeEmailRequest {
     changeEmailRequest?: ChangeEmailRequest;
 }
@@ -86,6 +96,10 @@ export interface AuthenticatedAccountChangePasswordRequest {
 
 export interface AuthenticatedAccountChangeUsernameRequest {
     changeUsernameRequest?: ChangeUsernameRequest;
+}
+
+export interface AuthenticatedAccountRemoveOAuthConnectionRequest {
+    provider: string;
 }
 
 /**
@@ -201,6 +215,22 @@ export interface AccountApiInterface {
     accountSignUp(signUp?: SignUp, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
 
     /**
+     * Initiates the OAuth flow (link mode) for a given provider.    On success this returns a `302 Found` to the provider\'s authorization page.  After consent, the OAuth middleware will call the internal callback and finally  redirect to `/1/oauth/{provider}/handoff`.
+     * @summary Start linking an OAuth provider to the current account.
+     * @param {string} provider Provider key (e.g. &#x60;discord&#x60;).
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApiInterface
+     */
+    authenticatedAccountAddOAuthConnectionRaw(requestParameters: AuthenticatedAccountAddOAuthConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Initiates the OAuth flow (link mode) for a given provider.    On success this returns a `302 Found` to the provider\'s authorization page.  After consent, the OAuth middleware will call the internal callback and finally  redirect to `/1/oauth/{provider}/handoff`.
+     * Start linking an OAuth provider to the current account.
+     */
+    authenticatedAccountAddOAuthConnection(provider: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
      * 
      * @summary Change the password of the current user
      * @param {ChangeEmailRequest} [changeEmailRequest] 
@@ -258,6 +288,35 @@ export interface AccountApiInterface {
      * Deactivate currently logged in account
      */
     authenticatedAccountDeactivate(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
+
+    /**
+     * 
+     * @summary List OAuth connections linked to the current user.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApiInterface
+     */
+    authenticatedAccountListOAuthConnectionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<OAuthConnectionResponse>>>;
+
+    /**
+     * List OAuth connections linked to the current user.
+     */
+    authenticatedAccountListOAuthConnections(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<OAuthConnectionResponse>>;
+
+    /**
+     * 
+     * @summary Remove an existing OAuth connection for the current user.
+     * @param {string} provider Provider key (e.g. &#x60;discord&#x60;).
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApiInterface
+     */
+    authenticatedAccountRemoveOAuthConnectionRaw(requestParameters: AuthenticatedAccountRemoveOAuthConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Remove an existing OAuth connection for the current user.
+     */
+    authenticatedAccountRemoveOAuthConnection(provider: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
 }
 
@@ -514,6 +573,44 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
     }
 
     /**
+     * Initiates the OAuth flow (link mode) for a given provider.    On success this returns a `302 Found` to the provider\'s authorization page.  After consent, the OAuth middleware will call the internal callback and finally  redirect to `/1/oauth/{provider}/handoff`.
+     * Start linking an OAuth provider to the current account.
+     */
+    async authenticatedAccountAddOAuthConnectionRaw(requestParameters: AuthenticatedAccountAddOAuthConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['provider'] == null) {
+            throw new runtime.RequiredError(
+                'provider',
+                'Required parameter "provider" was null or undefined when calling authenticatedAccountAddOAuthConnection().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/1/account/connections/{provider}/link`;
+        urlPath = urlPath.replace(`{${"provider"}}`, encodeURIComponent(String(requestParameters['provider'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Initiates the OAuth flow (link mode) for a given provider.    On success this returns a `302 Found` to the provider\'s authorization page.  After consent, the OAuth middleware will call the internal callback and finally  redirect to `/1/oauth/{provider}/handoff`.
+     * Start linking an OAuth provider to the current account.
+     */
+    async authenticatedAccountAddOAuthConnection(provider: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.authenticatedAccountAddOAuthConnectionRaw({ provider: provider }, initOverrides);
+    }
+
+    /**
      * Change the password of the current user
      */
     async authenticatedAccountChangeEmailRaw(requestParameters: AuthenticatedAccountChangeEmailRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>> {
@@ -638,6 +735,71 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
     async authenticatedAccountDeactivate(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         const response = await this.authenticatedAccountDeactivateRaw(initOverrides);
         return await response.value();
+    }
+
+    /**
+     * List OAuth connections linked to the current user.
+     */
+    async authenticatedAccountListOAuthConnectionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<OAuthConnectionResponse>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/1/account/connections`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(OAuthConnectionResponseFromJSON));
+    }
+
+    /**
+     * List OAuth connections linked to the current user.
+     */
+    async authenticatedAccountListOAuthConnections(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<OAuthConnectionResponse>> {
+        const response = await this.authenticatedAccountListOAuthConnectionsRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Remove an existing OAuth connection for the current user.
+     */
+    async authenticatedAccountRemoveOAuthConnectionRaw(requestParameters: AuthenticatedAccountRemoveOAuthConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['provider'] == null) {
+            throw new runtime.RequiredError(
+                'provider',
+                'Required parameter "provider" was null or undefined when calling authenticatedAccountRemoveOAuthConnection().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/1/account/connections/{provider}`;
+        urlPath = urlPath.replace(`{${"provider"}}`, encodeURIComponent(String(requestParameters['provider'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Remove an existing OAuth connection for the current user.
+     */
+    async authenticatedAccountRemoveOAuthConnection(provider: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.authenticatedAccountRemoveOAuthConnectionRaw({ provider: provider }, initOverrides);
     }
 
 }
