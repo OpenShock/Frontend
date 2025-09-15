@@ -1,6 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
+  import { PUBLIC_BACKEND_API_DOMAIN } from '$env/static/public';
   import { accountV2Api } from '$lib/api';
   import Container from '$lib/components/Container.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
@@ -54,10 +55,9 @@
 
   async function startOAuth() {
     const provider = "discord";
-    const domain = "localhost"; // PUBLIC_BACKEND_API_DOMAIN
 
     // Set the current URL as the redirect URL so we can come back here after OAuth
-    window.location.href = `https://${domain}/1/oauth/${provider}/authorize`;
+    window.location.href = `https://${PUBLIC_BACKEND_API_DOMAIN}/1/oauth/${provider}/authorize`;
   }
 
   let canSubmit = $derived(

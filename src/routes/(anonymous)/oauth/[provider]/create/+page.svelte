@@ -50,12 +50,12 @@
 
   onMount(() => {
     oauthApi.oAuthOAuthSignupGetData(page.params.provider!).then(data => {
-        if (data.suggestedUsername) {
-            username = data.suggestedUsername;
+        if (data.displayName) {
+            username = data.displayName;
             usernameValid = true;
         }
-        if (data.suggestedEmail) {
-            email = data.suggestedEmail;
+        if (data.email) {
+            email = data.email;
             emailValid = true;
         }
     });
