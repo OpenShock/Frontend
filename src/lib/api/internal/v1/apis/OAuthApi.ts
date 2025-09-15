@@ -15,16 +15,16 @@
 
 import * as runtime from '../runtime';
 import type {
+  LoginV2OkResponse,
   OAuthFinalizeRequest,
-  OAuthFinalizeResponse,
   OAuthSignupDataResponse,
   OpenShockProblem,
 } from '../models/index';
 import {
+    LoginV2OkResponseFromJSON,
+    LoginV2OkResponseToJSON,
     OAuthFinalizeRequestFromJSON,
     OAuthFinalizeRequestToJSON,
-    OAuthFinalizeResponseFromJSON,
-    OAuthFinalizeResponseToJSON,
     OAuthSignupDataResponseFromJSON,
     OAuthSignupDataResponseToJSON,
     OpenShockProblemFromJSON,
@@ -71,7 +71,7 @@ export interface OAuthApiInterface {
     oAuthListOAuthProviders(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>>;
 
     /**
-     * Initiates an OAuth challenge in \"login-or-create\" mode.    Returns `302` redirect to the provider authorization page.
+     * Initiates an OAuth challenge in \"login-or-create\" mode.   Returns `302` redirect to the provider authorization page.
      * @summary Start OAuth authorization for a given provider (login-or-create flow).
      * @param {string} provider Provider key (e.g. &#x60;discord&#x60;).
      * @param {*} [options] Override http request option.
@@ -81,13 +81,13 @@ export interface OAuthApiInterface {
     oAuthOAuthAuthorizeRaw(requestParameters: OAuthOAuthAuthorizeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
-     * Initiates an OAuth challenge in \"login-or-create\" mode.    Returns `302` redirect to the provider authorization page.
+     * Initiates an OAuth challenge in \"login-or-create\" mode.   Returns `302` redirect to the provider authorization page.
      * Start OAuth authorization for a given provider (login-or-create flow).
      */
     oAuthOAuthAuthorize(provider: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
-     * Reads the temp OAuth flow principal (flow cookie set by middleware).  If a matching connection exists -> signs in and redirects home.  Otherwise -> redirects frontend to continue the chosen flow.
+     * Reads the temp OAuth flow principal (flow cookie set by middleware). If a matching connection exists -> signs in and redirects home. Otherwise -> redirects frontend to continue the chosen flow.
      * @summary Handoff after provider callback. Decides next step (create, link, or direct sign-in).
      * @param {string} provider 
      * @param {*} [options] Override http request option.
@@ -97,13 +97,13 @@ export interface OAuthApiInterface {
     oAuthOAuthHandOffRaw(requestParameters: OAuthOAuthHandOffRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
-     * Reads the temp OAuth flow principal (flow cookie set by middleware).  If a matching connection exists -> signs in and redirects home.  Otherwise -> redirects frontend to continue the chosen flow.
+     * Reads the temp OAuth flow principal (flow cookie set by middleware). If a matching connection exists -> signs in and redirects home. Otherwise -> redirects frontend to continue the chosen flow.
      * Handoff after provider callback. Decides next step (create, link, or direct sign-in).
      */
     oAuthOAuthHandOff(provider: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
-     * Authenticates via the temporary OAuth flow cookie (set during the provider callback).  Sets the regular session cookie on success. No access/refresh tokens are returned.
+     * Authenticates via the temporary OAuth flow cookie (set during the provider callback). Sets the regular session cookie on success. No access/refresh tokens are returned.
      * @summary Finalize an OAuth flow by creating a new account with the external identity.
      * @param {string} provider Provider key (e.g. &#x60;discord&#x60;).
      * @param {OAuthFinalizeRequest} [oAuthFinalizeRequest] Request body containing optional &#x60;Email&#x60; and &#x60;Username&#x60; overrides.
@@ -111,16 +111,16 @@ export interface OAuthApiInterface {
      * @throws {RequiredError}
      * @memberof OAuthApiInterface
      */
-    oAuthOAuthSignupFinalizeRaw(requestParameters: OAuthOAuthSignupFinalizeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OAuthFinalizeResponse>>;
+    oAuthOAuthSignupFinalizeRaw(requestParameters: OAuthOAuthSignupFinalizeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LoginV2OkResponse>>;
 
     /**
-     * Authenticates via the temporary OAuth flow cookie (set during the provider callback).  Sets the regular session cookie on success. No access/refresh tokens are returned.
+     * Authenticates via the temporary OAuth flow cookie (set during the provider callback). Sets the regular session cookie on success. No access/refresh tokens are returned.
      * Finalize an OAuth flow by creating a new account with the external identity.
      */
-    oAuthOAuthSignupFinalize(provider: string, oAuthFinalizeRequest?: OAuthFinalizeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OAuthFinalizeResponse>;
+    oAuthOAuthSignupFinalize(provider: string, oAuthFinalizeRequest?: OAuthFinalizeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LoginV2OkResponse>;
 
     /**
-     * Returns basic identity information from the external provider (e.g., email, display name)  together with the expiration time of the current flow.  Access to this endpoint requires the temporary OAuth flow cookie and is restricted to the user  who initiated the flow.
+     * Returns basic identity information from the external provider (e.g., email, display name) together with the expiration time of the current flow. Access to this endpoint requires the temporary OAuth flow cookie and is restricted to the user who initiated the flow.
      * @summary Provides temporary OAuth handoff details for the active signup flow.
      * @param {string} provider The provider key (e.g. &#x60;discord&#x60;).
      * @param {*} [options] Override http request option.
@@ -130,7 +130,7 @@ export interface OAuthApiInterface {
     oAuthOAuthSignupGetDataRaw(requestParameters: OAuthOAuthSignupGetDataRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OAuthSignupDataResponse>>;
 
     /**
-     * Returns basic identity information from the external provider (e.g., email, display name)  together with the expiration time of the current flow.  Access to this endpoint requires the temporary OAuth flow cookie and is restricted to the user  who initiated the flow.
+     * Returns basic identity information from the external provider (e.g., email, display name) together with the expiration time of the current flow. Access to this endpoint requires the temporary OAuth flow cookie and is restricted to the user who initiated the flow.
      * Provides temporary OAuth handoff details for the active signup flow.
      */
     oAuthOAuthSignupGetData(provider: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OAuthSignupDataResponse>;
@@ -174,7 +174,7 @@ export class OAuthApi extends runtime.BaseAPI implements OAuthApiInterface {
     }
 
     /**
-     * Initiates an OAuth challenge in \"login-or-create\" mode.    Returns `302` redirect to the provider authorization page.
+     * Initiates an OAuth challenge in \"login-or-create\" mode.   Returns `302` redirect to the provider authorization page.
      * Start OAuth authorization for a given provider (login-or-create flow).
      */
     async oAuthOAuthAuthorizeRaw(requestParameters: OAuthOAuthAuthorizeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -204,7 +204,7 @@ export class OAuthApi extends runtime.BaseAPI implements OAuthApiInterface {
     }
 
     /**
-     * Initiates an OAuth challenge in \"login-or-create\" mode.    Returns `302` redirect to the provider authorization page.
+     * Initiates an OAuth challenge in \"login-or-create\" mode.   Returns `302` redirect to the provider authorization page.
      * Start OAuth authorization for a given provider (login-or-create flow).
      */
     async oAuthOAuthAuthorize(provider: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
@@ -212,7 +212,7 @@ export class OAuthApi extends runtime.BaseAPI implements OAuthApiInterface {
     }
 
     /**
-     * Reads the temp OAuth flow principal (flow cookie set by middleware).  If a matching connection exists -> signs in and redirects home.  Otherwise -> redirects frontend to continue the chosen flow.
+     * Reads the temp OAuth flow principal (flow cookie set by middleware). If a matching connection exists -> signs in and redirects home. Otherwise -> redirects frontend to continue the chosen flow.
      * Handoff after provider callback. Decides next step (create, link, or direct sign-in).
      */
     async oAuthOAuthHandOffRaw(requestParameters: OAuthOAuthHandOffRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -242,7 +242,7 @@ export class OAuthApi extends runtime.BaseAPI implements OAuthApiInterface {
     }
 
     /**
-     * Reads the temp OAuth flow principal (flow cookie set by middleware).  If a matching connection exists -> signs in and redirects home.  Otherwise -> redirects frontend to continue the chosen flow.
+     * Reads the temp OAuth flow principal (flow cookie set by middleware). If a matching connection exists -> signs in and redirects home. Otherwise -> redirects frontend to continue the chosen flow.
      * Handoff after provider callback. Decides next step (create, link, or direct sign-in).
      */
     async oAuthOAuthHandOff(provider: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
@@ -250,10 +250,10 @@ export class OAuthApi extends runtime.BaseAPI implements OAuthApiInterface {
     }
 
     /**
-     * Authenticates via the temporary OAuth flow cookie (set during the provider callback).  Sets the regular session cookie on success. No access/refresh tokens are returned.
+     * Authenticates via the temporary OAuth flow cookie (set during the provider callback). Sets the regular session cookie on success. No access/refresh tokens are returned.
      * Finalize an OAuth flow by creating a new account with the external identity.
      */
-    async oAuthOAuthSignupFinalizeRaw(requestParameters: OAuthOAuthSignupFinalizeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OAuthFinalizeResponse>> {
+    async oAuthOAuthSignupFinalizeRaw(requestParameters: OAuthOAuthSignupFinalizeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LoginV2OkResponse>> {
         if (requestParameters['provider'] == null) {
             throw new runtime.RequiredError(
                 'provider',
@@ -279,20 +279,20 @@ export class OAuthApi extends runtime.BaseAPI implements OAuthApiInterface {
             body: OAuthFinalizeRequestToJSON(requestParameters['oAuthFinalizeRequest']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OAuthFinalizeResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => LoginV2OkResponseFromJSON(jsonValue));
     }
 
     /**
-     * Authenticates via the temporary OAuth flow cookie (set during the provider callback).  Sets the regular session cookie on success. No access/refresh tokens are returned.
+     * Authenticates via the temporary OAuth flow cookie (set during the provider callback). Sets the regular session cookie on success. No access/refresh tokens are returned.
      * Finalize an OAuth flow by creating a new account with the external identity.
      */
-    async oAuthOAuthSignupFinalize(provider: string, oAuthFinalizeRequest?: OAuthFinalizeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OAuthFinalizeResponse> {
+    async oAuthOAuthSignupFinalize(provider: string, oAuthFinalizeRequest?: OAuthFinalizeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LoginV2OkResponse> {
         const response = await this.oAuthOAuthSignupFinalizeRaw({ provider: provider, oAuthFinalizeRequest: oAuthFinalizeRequest }, initOverrides);
         return await response.value();
     }
 
     /**
-     * Returns basic identity information from the external provider (e.g., email, display name)  together with the expiration time of the current flow.  Access to this endpoint requires the temporary OAuth flow cookie and is restricted to the user  who initiated the flow.
+     * Returns basic identity information from the external provider (e.g., email, display name) together with the expiration time of the current flow. Access to this endpoint requires the temporary OAuth flow cookie and is restricted to the user who initiated the flow.
      * Provides temporary OAuth handoff details for the active signup flow.
      */
     async oAuthOAuthSignupGetDataRaw(requestParameters: OAuthOAuthSignupGetDataRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OAuthSignupDataResponse>> {
@@ -322,7 +322,7 @@ export class OAuthApi extends runtime.BaseAPI implements OAuthApiInterface {
     }
 
     /**
-     * Returns basic identity information from the external provider (e.g., email, display name)  together with the expiration time of the current flow.  Access to this endpoint requires the temporary OAuth flow cookie and is restricted to the user  who initiated the flow.
+     * Returns basic identity information from the external provider (e.g., email, display name) together with the expiration time of the current flow. Access to this endpoint requires the temporary OAuth flow cookie and is restricted to the user who initiated the flow.
      * Provides temporary OAuth handoff details for the active signup flow.
      */
     async oAuthOAuthSignupGetData(provider: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OAuthSignupDataResponse> {

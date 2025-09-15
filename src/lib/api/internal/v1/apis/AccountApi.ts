@@ -215,7 +215,7 @@ export interface AccountApiInterface {
     accountSignUp(signUp?: SignUp, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
 
     /**
-     * Initiates the OAuth flow (link mode) for a given provider.    On success this returns a `302 Found` to the provider\'s authorization page.  After consent, the OAuth middleware will call the internal callback and finally  redirect to `/1/oauth/{provider}/handoff`.
+     * Initiates the OAuth flow (link mode) for a given provider.   On success this returns a `302 Found` to the provider\'s authorization page. After consent, the OAuth middleware will call the internal callback and finally redirect to `/1/oauth/{provider}/handoff`.
      * @summary Start linking an OAuth provider to the current account.
      * @param {string} provider Provider key (e.g. &#x60;discord&#x60;).
      * @param {*} [options] Override http request option.
@@ -225,7 +225,7 @@ export interface AccountApiInterface {
     authenticatedAccountAddOAuthConnectionRaw(requestParameters: AuthenticatedAccountAddOAuthConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
-     * Initiates the OAuth flow (link mode) for a given provider.    On success this returns a `302 Found` to the provider\'s authorization page.  After consent, the OAuth middleware will call the internal callback and finally  redirect to `/1/oauth/{provider}/handoff`.
+     * Initiates the OAuth flow (link mode) for a given provider.   On success this returns a `302 Found` to the provider\'s authorization page. After consent, the OAuth middleware will call the internal callback and finally redirect to `/1/oauth/{provider}/handoff`.
      * Start linking an OAuth provider to the current account.
      */
     authenticatedAccountAddOAuthConnection(provider: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
@@ -573,7 +573,7 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
     }
 
     /**
-     * Initiates the OAuth flow (link mode) for a given provider.    On success this returns a `302 Found` to the provider\'s authorization page.  After consent, the OAuth middleware will call the internal callback and finally  redirect to `/1/oauth/{provider}/handoff`.
+     * Initiates the OAuth flow (link mode) for a given provider.   On success this returns a `302 Found` to the provider\'s authorization page. After consent, the OAuth middleware will call the internal callback and finally redirect to `/1/oauth/{provider}/handoff`.
      * Start linking an OAuth provider to the current account.
      */
     async authenticatedAccountAddOAuthConnectionRaw(requestParameters: AuthenticatedAccountAddOAuthConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -603,7 +603,7 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
     }
 
     /**
-     * Initiates the OAuth flow (link mode) for a given provider.    On success this returns a `302 Found` to the provider\'s authorization page.  After consent, the OAuth middleware will call the internal callback and finally  redirect to `/1/oauth/{provider}/handoff`.
+     * Initiates the OAuth flow (link mode) for a given provider.   On success this returns a `302 Found` to the provider\'s authorization page. After consent, the OAuth middleware will call the internal callback and finally redirect to `/1/oauth/{provider}/handoff`.
      * Start linking an OAuth provider to the current account.
      */
     async authenticatedAccountAddOAuthConnection(provider: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {

@@ -49,12 +49,12 @@ models/LogEntry.ts
 models/LogEntryIAsyncEnumerableLegacyDataResponse.ts
 models/Login.ts
 models/LoginSessionResponse.ts
+models/LoginV2OkResponse.ts
 models/MatchTypeEnum.ts
 models/MinimalShocker.ts
 models/NewShocker.ts
 models/OAuthConnectionResponse.ts
 models/OAuthFinalizeRequest.ts
-models/OAuthFinalizeResponse.ts
 models/OAuthSignupDataResponse.ts
 models/OpenShockProblem.ts
 models/OtaItem.ts
