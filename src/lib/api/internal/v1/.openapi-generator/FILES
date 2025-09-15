@@ -4,6 +4,7 @@ apis/AdminApi.ts
 apis/HubEndpointsApi.ts
 apis/HubManagementApi.ts
 apis/MetaApi.ts
+apis/OAuthApi.ts
 apis/PublicShockerSharesApi.ts
 apis/SessionsApi.ts
 apis/ShockerSharesApi.ts
@@ -48,9 +49,13 @@ models/LogEntry.ts
 models/LogEntryIAsyncEnumerableLegacyDataResponse.ts
 models/Login.ts
 models/LoginSessionResponse.ts
+models/LoginV2OkResponse.ts
 models/MatchTypeEnum.ts
 models/MinimalShocker.ts
 models/NewShocker.ts
+models/OAuthConnectionResponse.ts
+models/OAuthFinalizeRequest.ts
+models/OAuthSignupDataResponse.ts
 models/OpenShockProblem.ts
 models/OtaItem.ts
 models/OtaItemIReadOnlyCollectionLegacyDataResponse.ts

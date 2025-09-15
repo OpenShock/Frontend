@@ -7,6 +7,7 @@ import {
   Configuration as ConfigurationV1,
   HubManagementApi as HubManagementV1Api,
   MetaApi,
+  OAuthApi,
   PublicShockerSharesApi,
   SessionsApi,
   ShockerSharesApi as ShockerSharesV1Api,
@@ -59,3 +60,4 @@ export const publicShockerSharesApi = new PublicShockerSharesApi(DefaultApiV1Con
 export const shockerSharesV1Api = new ShockerSharesV1Api(DefaultApiV1Configuration);
 export const shockerSharesV2Api = new ShockerSharesV2Api(DefaultApiV2Configuration);
 export const usersApi = new UsersApi(DefaultApiV1Configuration);
+export const oauthApi = new OAuthApi(DefaultApiV1Configuration);
