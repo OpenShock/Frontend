@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import { oauthApi } from '$lib/api';
   import Container from '$lib/components/Container.svelte';
@@ -7,6 +8,7 @@
   import { Button } from '$lib/components/ui/button';
   import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { UserStore } from '$lib/stores/UserStore';
   import { onMount } from 'svelte';
 
   let username = $state<string>('');
@@ -29,11 +31,26 @@
     }
 
     try {
-        await oauthApi.oAuthOAuthSignupFinalize(page.params.provider!, {
+        const account = await oauthApi.oAuthOAuthSignupFinalize(page.params.provider!, {
             username,
             email,
             password,
         });
+        
+        if (!account.isVerified) {
+            goto('/login?message=signup-success');
+            return;
+        }
+
+        UserStore.setSelf({
+          id: account.accountId,
+          name: account.accountName,
+          avatar: account.profileImage,
+          email: account.accountEmail,
+          roles: account.accountRoles,
+        });
+
+        goto('/home');
     } catch (error) {
       await handleApiError(error, (problem) => {
         if (!isValidationError(problem)) return false;
@@ -49,16 +66,21 @@
   }
 
   onMount(() => {
-    oauthApi.oAuthOAuthSignupGetData(page.params.provider!).then(data => {
-        if (data.displayName) {
-            username = data.displayName;
-            usernameValid = true;
-        }
-        if (data.email) {
-            email = data.email;
-            emailValid = true;
-        }
-    });
+    oauthApi.oAuthOAuthSignupGetData(page.params.provider!)
+      .then(data => {
+          if (data.displayName) {
+              username = data.displayName;
+              usernameValid = true;
+          }
+          if (data.email) {
+              email = data.email;
+              emailValid = true;
+          }
+      })
+      .catch(err => {
+          console.error('Failed to fetch OAuth signup data', err);
+          goto('/login');
+      });
   });
 </script>
 
