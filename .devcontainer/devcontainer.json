@@ -10,6 +10,7 @@
     "ghcr.io/devcontainers/features/node:1": {
       "version": "24.7.0"
     },
+    "ghcr.io/devcontainers/features/java:1": {},
     "ghcr.io/devcontainers/features/git-lfs:1": {}
   },
 
@@ -23,6 +24,9 @@
   "customizations": {
     "vscode": {
       "extensions": [
+        "svelte.svelte-vscode",
+        "bradlc.vscode-tailwindcss",
+        "dbaeumer.vscode-eslint"
       ]
     }
   }
