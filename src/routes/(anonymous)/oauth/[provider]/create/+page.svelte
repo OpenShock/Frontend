@@ -19,9 +19,7 @@
 
   let password = $state('');
 
-  let canSubmit = $derived(
-    usernameValid && emailValid
-  );
+  let canSubmit = $derived(usernameValid && emailValid);
 
   async function handleSubmission(e: SubmitEvent) {
     e.preventDefault();
@@ -31,26 +29,26 @@
     }
 
     try {
-        const account = await oauthApi.oAuthOAuthSignupFinalize(page.params.provider!, {
-            username,
-            email,
-            password,
-        });
-        
-        if (!account.isVerified) {
-            goto('/login?message=signup-success');
-            return;
-        }
+      const account = await oauthApi.oAuthOAuthSignupFinalize(page.params.provider!, {
+        username,
+        email,
+        password,
+      });
 
-        UserStore.setSelf({
-          id: account.accountId,
-          name: account.accountName,
-          avatar: account.profileImage,
-          email: account.accountEmail,
-          roles: account.accountRoles,
-        });
+      if (!account.isVerified) {
+        goto('/login?message=signup-success');
+        return;
+      }
 
-        goto('/home');
+      UserStore.setSelf({
+        id: account.accountId,
+        name: account.accountName,
+        avatar: account.profileImage,
+        email: account.accountEmail,
+        roles: account.accountRoles,
+      });
+
+      goto('/home');
     } catch (error) {
       await handleApiError(error, (problem) => {
         if (!isValidationError(problem)) return false;
@@ -66,27 +64,30 @@
   }
 
   onMount(() => {
-    oauthApi.oAuthOAuthSignupGetData(page.params.provider!)
-      .then(data => {
-          if (data.displayName) {
-              username = data.displayName;
-              usernameValid = true;
-          }
-          if (data.email) {
-              email = data.email;
-              emailValid = true;
-          }
+    oauthApi
+      .oAuthOAuthSignupGetData(page.params.provider!)
+      .then((data) => {
+        if (data.displayName) {
+          username = data.displayName;
+          usernameValid = true;
+        }
+        if (data.email) {
+          email = data.email;
+          emailValid = true;
+        }
       })
-      .catch(err => {
-          console.error('Failed to fetch OAuth signup data', err);
-          goto('/login');
+      .catch((err) => {
+        console.error('Failed to fetch OAuth signup data', err);
+        goto('/login');
       });
   });
 </script>
 
 <Container class="items-center">
   <form class="flex flex-col gap-2" onsubmit={handleSubmission}>
-    <div class="text-3xl font-semibold text-nowrap">Sign Up With <span class="capitalize">{page.params.provider}</span></div>
+    <div class="text-3xl font-semibold text-nowrap">
+      Sign Up With <span class="capitalize">{page.params.provider}</span>
+    </div>
     <UsernameInput
       label="Username"
       placeholder="Username"

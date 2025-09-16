@@ -3,6 +3,7 @@
     ChevronDown,
     Cpu,
     House,
+    IdCard,
     KeyRound,
     Link,
     MonitorSmartphone,
@@ -168,6 +169,11 @@
         title: 'Sessions',
         Icon: MonitorSmartphone,
         href: '/settings/sessions',
+      },
+      {
+        title: 'Connections',
+        Icon: IdCard,
+        href: '/settings/connections',
       },
       {
         title: 'Account Settings',
