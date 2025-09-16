@@ -16,8 +16,9 @@ export async function GetJson<T>(
   transformer: (data: unknown) => T
 ): Promise<T> {
   const res = await fetch(BaseUrl + path, {
-    headers: { accept: 'application/json' },
     method: 'GET',
+    headers: { accept: 'application/json' },
+    credentials: 'include',
     redirect: 'error',
   });
 
@@ -50,6 +51,7 @@ export async function PostJson<T>(
       accept: 'application/json',
     },
     body: JSON.stringify(body),
+    credentials: 'include',
     redirect: 'error',
   });
 
