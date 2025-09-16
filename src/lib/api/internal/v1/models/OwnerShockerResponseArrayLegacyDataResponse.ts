@@ -24,37 +24,37 @@ import {
 /**
  * 
  * @export
- * @interface OwnerShockerResponseIEnumerableLegacyDataResponse
+ * @interface OwnerShockerResponseArrayLegacyDataResponse
  */
-export interface OwnerShockerResponseIEnumerableLegacyDataResponse {
+export interface OwnerShockerResponseArrayLegacyDataResponse {
     /**
      * 
      * @type {string}
-     * @memberof OwnerShockerResponseIEnumerableLegacyDataResponse
+     * @memberof OwnerShockerResponseArrayLegacyDataResponse
      */
     message: string;
     /**
      * 
      * @type {Array<OwnerShockerResponse>}
-     * @memberof OwnerShockerResponseIEnumerableLegacyDataResponse
+     * @memberof OwnerShockerResponseArrayLegacyDataResponse
      */
     data: Array<OwnerShockerResponse> | null;
 }
 
 /**
- * Check if a given object implements the OwnerShockerResponseIEnumerableLegacyDataResponse interface.
+ * Check if a given object implements the OwnerShockerResponseArrayLegacyDataResponse interface.
  */
-export function instanceOfOwnerShockerResponseIEnumerableLegacyDataResponse(value: object): value is OwnerShockerResponseIEnumerableLegacyDataResponse {
+export function instanceOfOwnerShockerResponseArrayLegacyDataResponse(value: object): value is OwnerShockerResponseArrayLegacyDataResponse {
     if (!('message' in value) || value['message'] === undefined) return false;
     if (!('data' in value) || value['data'] === undefined) return false;
     return true;
 }
 
-export function OwnerShockerResponseIEnumerableLegacyDataResponseFromJSON(json: any): OwnerShockerResponseIEnumerableLegacyDataResponse {
-    return OwnerShockerResponseIEnumerableLegacyDataResponseFromJSONTyped(json, false);
+export function OwnerShockerResponseArrayLegacyDataResponseFromJSON(json: any): OwnerShockerResponseArrayLegacyDataResponse {
+    return OwnerShockerResponseArrayLegacyDataResponseFromJSONTyped(json, false);
 }
 
-export function OwnerShockerResponseIEnumerableLegacyDataResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): OwnerShockerResponseIEnumerableLegacyDataResponse {
+export function OwnerShockerResponseArrayLegacyDataResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): OwnerShockerResponseArrayLegacyDataResponse {
     if (json == null) {
         return json;
     }
@@ -65,11 +65,11 @@ export function OwnerShockerResponseIEnumerableLegacyDataResponseFromJSONTyped(j
     };
 }
 
-export function OwnerShockerResponseIEnumerableLegacyDataResponseToJSON(json: any): OwnerShockerResponseIEnumerableLegacyDataResponse {
-    return OwnerShockerResponseIEnumerableLegacyDataResponseToJSONTyped(json, false);
+export function OwnerShockerResponseArrayLegacyDataResponseToJSON(json: any): OwnerShockerResponseArrayLegacyDataResponse {
+    return OwnerShockerResponseArrayLegacyDataResponseToJSONTyped(json, false);
 }
 
-export function OwnerShockerResponseIEnumerableLegacyDataResponseToJSONTyped(value?: OwnerShockerResponseIEnumerableLegacyDataResponse | null, ignoreDiscriminator: boolean = false): any {
+export function OwnerShockerResponseArrayLegacyDataResponseToJSONTyped(value?: OwnerShockerResponseArrayLegacyDataResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

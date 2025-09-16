@@ -82,10 +82,6 @@ export interface AccountSignUpRequest {
     signUp?: SignUp;
 }
 
-export interface AuthenticatedAccountAddOAuthConnectionRequest {
-    provider: string;
-}
-
 export interface AuthenticatedAccountChangeEmailRequest {
     changeEmailRequest?: ChangeEmailRequest;
 }
@@ -213,22 +209,6 @@ export interface AccountApiInterface {
      * Signs up a new user
      */
     accountSignUp(signUp?: SignUp, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
-
-    /**
-     * Initiates the OAuth flow (link mode) for a given provider.   On success this returns a `302 Found` to the provider\'s authorization page. After consent, the OAuth middleware will call the internal callback and finally redirect to `/1/oauth/{provider}/handoff`.
-     * @summary Start linking an OAuth provider to the current account.
-     * @param {string} provider Provider key (e.g. &#x60;discord&#x60;).
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AccountApiInterface
-     */
-    authenticatedAccountAddOAuthConnectionRaw(requestParameters: AuthenticatedAccountAddOAuthConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
-
-    /**
-     * Initiates the OAuth flow (link mode) for a given provider.   On success this returns a `302 Found` to the provider\'s authorization page. After consent, the OAuth middleware will call the internal callback and finally redirect to `/1/oauth/{provider}/handoff`.
-     * Start linking an OAuth provider to the current account.
-     */
-    authenticatedAccountAddOAuthConnection(provider: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -570,44 +550,6 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
     async accountSignUp(signUp?: SignUp, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse> {
         const response = await this.accountSignUpRaw({ signUp: signUp }, initOverrides);
         return await response.value();
-    }
-
-    /**
-     * Initiates the OAuth flow (link mode) for a given provider.   On success this returns a `302 Found` to the provider\'s authorization page. After consent, the OAuth middleware will call the internal callback and finally redirect to `/1/oauth/{provider}/handoff`.
-     * Start linking an OAuth provider to the current account.
-     */
-    async authenticatedAccountAddOAuthConnectionRaw(requestParameters: AuthenticatedAccountAddOAuthConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['provider'] == null) {
-            throw new runtime.RequiredError(
-                'provider',
-                'Required parameter "provider" was null or undefined when calling authenticatedAccountAddOAuthConnection().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-
-        let urlPath = `/1/account/connections/{provider}/link`;
-        urlPath = urlPath.replace(`{${"provider"}}`, encodeURIComponent(String(requestParameters['provider'])));
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Initiates the OAuth flow (link mode) for a given provider.   On success this returns a `302 Found` to the provider\'s authorization page. After consent, the OAuth middleware will call the internal callback and finally redirect to `/1/oauth/{provider}/handoff`.
-     * Start linking an OAuth provider to the current account.
-     */
-    async authenticatedAccountAddOAuthConnection(provider: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.authenticatedAccountAddOAuthConnectionRaw({ provider: provider }, initOverrides);
     }
 
     /**

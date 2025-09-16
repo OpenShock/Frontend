@@ -24,37 +24,37 @@ import {
 /**
  * 
  * @export
- * @interface ShareCodeInfoIAsyncEnumerableLegacyDataResponse
+ * @interface ShareCodeInfoArrayLegacyDataResponse
  */
-export interface ShareCodeInfoIAsyncEnumerableLegacyDataResponse {
+export interface ShareCodeInfoArrayLegacyDataResponse {
     /**
      * 
      * @type {string}
-     * @memberof ShareCodeInfoIAsyncEnumerableLegacyDataResponse
+     * @memberof ShareCodeInfoArrayLegacyDataResponse
      */
     message: string;
     /**
      * 
      * @type {Array<ShareCodeInfo>}
-     * @memberof ShareCodeInfoIAsyncEnumerableLegacyDataResponse
+     * @memberof ShareCodeInfoArrayLegacyDataResponse
      */
     data: Array<ShareCodeInfo> | null;
 }
 
 /**
- * Check if a given object implements the ShareCodeInfoIAsyncEnumerableLegacyDataResponse interface.
+ * Check if a given object implements the ShareCodeInfoArrayLegacyDataResponse interface.
  */
-export function instanceOfShareCodeInfoIAsyncEnumerableLegacyDataResponse(value: object): value is ShareCodeInfoIAsyncEnumerableLegacyDataResponse {
+export function instanceOfShareCodeInfoArrayLegacyDataResponse(value: object): value is ShareCodeInfoArrayLegacyDataResponse {
     if (!('message' in value) || value['message'] === undefined) return false;
     if (!('data' in value) || value['data'] === undefined) return false;
     return true;
 }
 
-export function ShareCodeInfoIAsyncEnumerableLegacyDataResponseFromJSON(json: any): ShareCodeInfoIAsyncEnumerableLegacyDataResponse {
-    return ShareCodeInfoIAsyncEnumerableLegacyDataResponseFromJSONTyped(json, false);
+export function ShareCodeInfoArrayLegacyDataResponseFromJSON(json: any): ShareCodeInfoArrayLegacyDataResponse {
+    return ShareCodeInfoArrayLegacyDataResponseFromJSONTyped(json, false);
 }
 
-export function ShareCodeInfoIAsyncEnumerableLegacyDataResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShareCodeInfoIAsyncEnumerableLegacyDataResponse {
+export function ShareCodeInfoArrayLegacyDataResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShareCodeInfoArrayLegacyDataResponse {
     if (json == null) {
         return json;
     }
@@ -65,11 +65,11 @@ export function ShareCodeInfoIAsyncEnumerableLegacyDataResponseFromJSONTyped(jso
     };
 }
 
-export function ShareCodeInfoIAsyncEnumerableLegacyDataResponseToJSON(json: any): ShareCodeInfoIAsyncEnumerableLegacyDataResponse {
-    return ShareCodeInfoIAsyncEnumerableLegacyDataResponseToJSONTyped(json, false);
+export function ShareCodeInfoArrayLegacyDataResponseToJSON(json: any): ShareCodeInfoArrayLegacyDataResponse {
+    return ShareCodeInfoArrayLegacyDataResponseToJSONTyped(json, false);
 }
 
-export function ShareCodeInfoIAsyncEnumerableLegacyDataResponseToJSONTyped(value?: ShareCodeInfoIAsyncEnumerableLegacyDataResponse | null, ignoreDiscriminator: boolean = false): any {
+export function ShareCodeInfoArrayLegacyDataResponseToJSONTyped(value?: ShareCodeInfoArrayLegacyDataResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

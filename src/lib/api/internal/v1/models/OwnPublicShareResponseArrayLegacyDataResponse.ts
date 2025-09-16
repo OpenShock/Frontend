@@ -24,37 +24,37 @@ import {
 /**
  * 
  * @export
- * @interface OwnPublicShareResponseIAsyncEnumerableLegacyDataResponse
+ * @interface OwnPublicShareResponseArrayLegacyDataResponse
  */
-export interface OwnPublicShareResponseIAsyncEnumerableLegacyDataResponse {
+export interface OwnPublicShareResponseArrayLegacyDataResponse {
     /**
      * 
      * @type {string}
-     * @memberof OwnPublicShareResponseIAsyncEnumerableLegacyDataResponse
+     * @memberof OwnPublicShareResponseArrayLegacyDataResponse
      */
     message: string;
     /**
      * 
      * @type {Array<OwnPublicShareResponse>}
-     * @memberof OwnPublicShareResponseIAsyncEnumerableLegacyDataResponse
+     * @memberof OwnPublicShareResponseArrayLegacyDataResponse
      */
     data: Array<OwnPublicShareResponse> | null;
 }
 
 /**
- * Check if a given object implements the OwnPublicShareResponseIAsyncEnumerableLegacyDataResponse interface.
+ * Check if a given object implements the OwnPublicShareResponseArrayLegacyDataResponse interface.
  */
-export function instanceOfOwnPublicShareResponseIAsyncEnumerableLegacyDataResponse(value: object): value is OwnPublicShareResponseIAsyncEnumerableLegacyDataResponse {
+export function instanceOfOwnPublicShareResponseArrayLegacyDataResponse(value: object): value is OwnPublicShareResponseArrayLegacyDataResponse {
     if (!('message' in value) || value['message'] === undefined) return false;
     if (!('data' in value) || value['data'] === undefined) return false;
     return true;
 }
 
-export function OwnPublicShareResponseIAsyncEnumerableLegacyDataResponseFromJSON(json: any): OwnPublicShareResponseIAsyncEnumerableLegacyDataResponse {
-    return OwnPublicShareResponseIAsyncEnumerableLegacyDataResponseFromJSONTyped(json, false);
+export function OwnPublicShareResponseArrayLegacyDataResponseFromJSON(json: any): OwnPublicShareResponseArrayLegacyDataResponse {
+    return OwnPublicShareResponseArrayLegacyDataResponseFromJSONTyped(json, false);
 }
 
-export function OwnPublicShareResponseIAsyncEnumerableLegacyDataResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): OwnPublicShareResponseIAsyncEnumerableLegacyDataResponse {
+export function OwnPublicShareResponseArrayLegacyDataResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): OwnPublicShareResponseArrayLegacyDataResponse {
     if (json == null) {
         return json;
     }
@@ -65,11 +65,11 @@ export function OwnPublicShareResponseIAsyncEnumerableLegacyDataResponseFromJSON
     };
 }
 
-export function OwnPublicShareResponseIAsyncEnumerableLegacyDataResponseToJSON(json: any): OwnPublicShareResponseIAsyncEnumerableLegacyDataResponse {
-    return OwnPublicShareResponseIAsyncEnumerableLegacyDataResponseToJSONTyped(json, false);
+export function OwnPublicShareResponseArrayLegacyDataResponseToJSON(json: any): OwnPublicShareResponseArrayLegacyDataResponse {
+    return OwnPublicShareResponseArrayLegacyDataResponseToJSONTyped(json, false);
 }
 
-export function OwnPublicShareResponseIAsyncEnumerableLegacyDataResponseToJSONTyped(value?: OwnPublicShareResponseIAsyncEnumerableLegacyDataResponse | null, ignoreDiscriminator: boolean = false): any {
+export function OwnPublicShareResponseArrayLegacyDataResponseToJSONTyped(value?: OwnPublicShareResponseArrayLegacyDataResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

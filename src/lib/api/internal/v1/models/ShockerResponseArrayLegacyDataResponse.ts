@@ -24,37 +24,37 @@ import {
 /**
  * 
  * @export
- * @interface ShockerResponseIAsyncEnumerableLegacyDataResponse
+ * @interface ShockerResponseArrayLegacyDataResponse
  */
-export interface ShockerResponseIAsyncEnumerableLegacyDataResponse {
+export interface ShockerResponseArrayLegacyDataResponse {
     /**
      * 
      * @type {string}
-     * @memberof ShockerResponseIAsyncEnumerableLegacyDataResponse
+     * @memberof ShockerResponseArrayLegacyDataResponse
      */
     message: string;
     /**
      * 
      * @type {Array<ShockerResponse>}
-     * @memberof ShockerResponseIAsyncEnumerableLegacyDataResponse
+     * @memberof ShockerResponseArrayLegacyDataResponse
      */
     data: Array<ShockerResponse> | null;
 }
 
 /**
- * Check if a given object implements the ShockerResponseIAsyncEnumerableLegacyDataResponse interface.
+ * Check if a given object implements the ShockerResponseArrayLegacyDataResponse interface.
  */
-export function instanceOfShockerResponseIAsyncEnumerableLegacyDataResponse(value: object): value is ShockerResponseIAsyncEnumerableLegacyDataResponse {
+export function instanceOfShockerResponseArrayLegacyDataResponse(value: object): value is ShockerResponseArrayLegacyDataResponse {
     if (!('message' in value) || value['message'] === undefined) return false;
     if (!('data' in value) || value['data'] === undefined) return false;
     return true;
 }
 
-export function ShockerResponseIAsyncEnumerableLegacyDataResponseFromJSON(json: any): ShockerResponseIAsyncEnumerableLegacyDataResponse {
-    return ShockerResponseIAsyncEnumerableLegacyDataResponseFromJSONTyped(json, false);
+export function ShockerResponseArrayLegacyDataResponseFromJSON(json: any): ShockerResponseArrayLegacyDataResponse {
+    return ShockerResponseArrayLegacyDataResponseFromJSONTyped(json, false);
 }
 
-export function ShockerResponseIAsyncEnumerableLegacyDataResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShockerResponseIAsyncEnumerableLegacyDataResponse {
+export function ShockerResponseArrayLegacyDataResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShockerResponseArrayLegacyDataResponse {
     if (json == null) {
         return json;
     }
@@ -65,11 +65,11 @@ export function ShockerResponseIAsyncEnumerableLegacyDataResponseFromJSONTyped(j
     };
 }
 
-export function ShockerResponseIAsyncEnumerableLegacyDataResponseToJSON(json: any): ShockerResponseIAsyncEnumerableLegacyDataResponse {
-    return ShockerResponseIAsyncEnumerableLegacyDataResponseToJSONTyped(json, false);
+export function ShockerResponseArrayLegacyDataResponseToJSON(json: any): ShockerResponseArrayLegacyDataResponse {
+    return ShockerResponseArrayLegacyDataResponseToJSONTyped(json, false);
 }
 
-export function ShockerResponseIAsyncEnumerableLegacyDataResponseToJSONTyped(value?: ShockerResponseIAsyncEnumerableLegacyDataResponse | null, ignoreDiscriminator: boolean = false): any {
+export function ShockerResponseArrayLegacyDataResponseToJSONTyped(value?: ShockerResponseArrayLegacyDataResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

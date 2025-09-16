@@ -39,15 +39,15 @@ export interface SharesCreateShareInviteRequest {
 }
 
 export interface SharesDeleteOutgoingInviteRequest {
-    id: string;
+    inviteId: string;
 }
 
 export interface SharesDenyIncomingInviteRequest {
-    id: string;
+    inviteId: string;
 }
 
 export interface SharesRedeemInviteRequest {
-    id: string;
+    inviteId: string;
 }
 
 /**
@@ -72,7 +72,7 @@ export interface ShockerSharesApiInterface {
 
     /**
      * 
-     * @param {string} id 
+     * @param {string} inviteId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ShockerSharesApiInterface
@@ -81,11 +81,11 @@ export interface ShockerSharesApiInterface {
 
     /**
      */
-    sharesDeleteOutgoingInvite(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    sharesDeleteOutgoingInvite(inviteId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
-     * @param {string} id 
+     * @param {string} inviteId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ShockerSharesApiInterface
@@ -94,7 +94,7 @@ export interface ShockerSharesApiInterface {
 
     /**
      */
-    sharesDenyIncomingInvite(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    sharesDenyIncomingInvite(inviteId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -135,7 +135,7 @@ export interface ShockerSharesApiInterface {
     /**
      * 
      * @summary Accept a share request and share the shockers with the current user.
-     * @param {string} id 
+     * @param {string} inviteId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ShockerSharesApiInterface
@@ -145,7 +145,7 @@ export interface ShockerSharesApiInterface {
     /**
      * Accept a share request and share the shockers with the current user.
      */
-    sharesRedeemInvite(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<V2UserSharesListItem>;
+    sharesRedeemInvite(inviteId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<V2UserSharesListItem>;
 
 }
 
@@ -191,10 +191,10 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
     /**
      */
     async sharesDeleteOutgoingInviteRaw(requestParameters: SharesDeleteOutgoingInviteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['id'] == null) {
+        if (requestParameters['inviteId'] == null) {
             throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling sharesDeleteOutgoingInvite().'
+                'inviteId',
+                'Required parameter "inviteId" was null or undefined when calling sharesDeleteOutgoingInvite().'
             );
         }
 
@@ -203,8 +203,8 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
         const headerParameters: runtime.HTTPHeaders = {};
 
 
-        let urlPath = `/2/shares/invites/outgoing/{id}`;
-        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+        let urlPath = `/2/shares/invites/outgoing/{inviteId}`;
+        urlPath = urlPath.replace(`{${"inviteId"}}`, encodeURIComponent(String(requestParameters['inviteId'])));
 
         const response = await this.request({
             path: urlPath,
@@ -218,17 +218,17 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
 
     /**
      */
-    async sharesDeleteOutgoingInvite(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.sharesDeleteOutgoingInviteRaw({ id: id }, initOverrides);
+    async sharesDeleteOutgoingInvite(inviteId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.sharesDeleteOutgoingInviteRaw({ inviteId: inviteId }, initOverrides);
     }
 
     /**
      */
     async sharesDenyIncomingInviteRaw(requestParameters: SharesDenyIncomingInviteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['id'] == null) {
+        if (requestParameters['inviteId'] == null) {
             throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling sharesDenyIncomingInvite().'
+                'inviteId',
+                'Required parameter "inviteId" was null or undefined when calling sharesDenyIncomingInvite().'
             );
         }
 
@@ -237,8 +237,8 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
         const headerParameters: runtime.HTTPHeaders = {};
 
 
-        let urlPath = `/2/shares/invites/incoming/{id}`;
-        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+        let urlPath = `/2/shares/invites/incoming/{inviteId}`;
+        urlPath = urlPath.replace(`{${"inviteId"}}`, encodeURIComponent(String(requestParameters['inviteId'])));
 
         const response = await this.request({
             path: urlPath,
@@ -252,8 +252,8 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
 
     /**
      */
-    async sharesDenyIncomingInvite(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.sharesDenyIncomingInviteRaw({ id: id }, initOverrides);
+    async sharesDenyIncomingInvite(inviteId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.sharesDenyIncomingInviteRaw({ inviteId: inviteId }, initOverrides);
     }
 
     /**
@@ -341,10 +341,10 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
      * Accept a share request and share the shockers with the current user.
      */
     async sharesRedeemInviteRaw(requestParameters: SharesRedeemInviteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<V2UserSharesListItem>> {
-        if (requestParameters['id'] == null) {
+        if (requestParameters['inviteId'] == null) {
             throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling sharesRedeemInvite().'
+                'inviteId',
+                'Required parameter "inviteId" was null or undefined when calling sharesRedeemInvite().'
             );
         }
 
@@ -353,8 +353,8 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
         const headerParameters: runtime.HTTPHeaders = {};
 
 
-        let urlPath = `/2/shares/invites/incoming/{id}`;
-        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+        let urlPath = `/2/shares/invites/incoming/{inviteId}`;
+        urlPath = urlPath.replace(`{${"inviteId"}}`, encodeURIComponent(String(requestParameters['inviteId'])));
 
         const response = await this.request({
             path: urlPath,
@@ -369,8 +369,8 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
     /**
      * Accept a share request and share the shockers with the current user.
      */
-    async sharesRedeemInvite(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<V2UserSharesListItem> {
-        const response = await this.sharesRedeemInviteRaw({ id: id }, initOverrides);
+    async sharesRedeemInvite(inviteId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<V2UserSharesListItem> {
+        const response = await this.sharesRedeemInviteRaw({ inviteId: inviteId }, initOverrides);
         return await response.value();
     }
 

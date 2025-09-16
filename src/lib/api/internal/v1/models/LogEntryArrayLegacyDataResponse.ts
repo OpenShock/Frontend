@@ -24,37 +24,37 @@ import {
 /**
  * 
  * @export
- * @interface LogEntryIAsyncEnumerableLegacyDataResponse
+ * @interface LogEntryArrayLegacyDataResponse
  */
-export interface LogEntryIAsyncEnumerableLegacyDataResponse {
+export interface LogEntryArrayLegacyDataResponse {
     /**
      * 
      * @type {string}
-     * @memberof LogEntryIAsyncEnumerableLegacyDataResponse
+     * @memberof LogEntryArrayLegacyDataResponse
      */
     message: string;
     /**
      * 
      * @type {Array<LogEntry>}
-     * @memberof LogEntryIAsyncEnumerableLegacyDataResponse
+     * @memberof LogEntryArrayLegacyDataResponse
      */
     data: Array<LogEntry> | null;
 }
 
 /**
- * Check if a given object implements the LogEntryIAsyncEnumerableLegacyDataResponse interface.
+ * Check if a given object implements the LogEntryArrayLegacyDataResponse interface.
  */
-export function instanceOfLogEntryIAsyncEnumerableLegacyDataResponse(value: object): value is LogEntryIAsyncEnumerableLegacyDataResponse {
+export function instanceOfLogEntryArrayLegacyDataResponse(value: object): value is LogEntryArrayLegacyDataResponse {
     if (!('message' in value) || value['message'] === undefined) return false;
     if (!('data' in value) || value['data'] === undefined) return false;
     return true;
 }
 
-export function LogEntryIAsyncEnumerableLegacyDataResponseFromJSON(json: any): LogEntryIAsyncEnumerableLegacyDataResponse {
-    return LogEntryIAsyncEnumerableLegacyDataResponseFromJSONTyped(json, false);
+export function LogEntryArrayLegacyDataResponseFromJSON(json: any): LogEntryArrayLegacyDataResponse {
+    return LogEntryArrayLegacyDataResponseFromJSONTyped(json, false);
 }
 
-export function LogEntryIAsyncEnumerableLegacyDataResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): LogEntryIAsyncEnumerableLegacyDataResponse {
+export function LogEntryArrayLegacyDataResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): LogEntryArrayLegacyDataResponse {
     if (json == null) {
         return json;
     }
@@ -65,11 +65,11 @@ export function LogEntryIAsyncEnumerableLegacyDataResponseFromJSONTyped(json: an
     };
 }
 
-export function LogEntryIAsyncEnumerableLegacyDataResponseToJSON(json: any): LogEntryIAsyncEnumerableLegacyDataResponse {
-    return LogEntryIAsyncEnumerableLegacyDataResponseToJSONTyped(json, false);
+export function LogEntryArrayLegacyDataResponseToJSON(json: any): LogEntryArrayLegacyDataResponse {
+    return LogEntryArrayLegacyDataResponseToJSONTyped(json, false);
 }
 
-export function LogEntryIAsyncEnumerableLegacyDataResponseToJSONTyped(value?: LogEntryIAsyncEnumerableLegacyDataResponse | null, ignoreDiscriminator: boolean = false): any {
+export function LogEntryArrayLegacyDataResponseToJSONTyped(value?: LogEntryArrayLegacyDataResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

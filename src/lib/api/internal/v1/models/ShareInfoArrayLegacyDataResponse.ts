@@ -24,37 +24,37 @@ import {
 /**
  * 
  * @export
- * @interface ShareInfoIAsyncEnumerableLegacyDataResponse
+ * @interface ShareInfoArrayLegacyDataResponse
  */
-export interface ShareInfoIAsyncEnumerableLegacyDataResponse {
+export interface ShareInfoArrayLegacyDataResponse {
     /**
      * 
      * @type {string}
-     * @memberof ShareInfoIAsyncEnumerableLegacyDataResponse
+     * @memberof ShareInfoArrayLegacyDataResponse
      */
     message: string;
     /**
      * 
      * @type {Array<ShareInfo>}
-     * @memberof ShareInfoIAsyncEnumerableLegacyDataResponse
+     * @memberof ShareInfoArrayLegacyDataResponse
      */
     data: Array<ShareInfo> | null;
 }
 
 /**
- * Check if a given object implements the ShareInfoIAsyncEnumerableLegacyDataResponse interface.
+ * Check if a given object implements the ShareInfoArrayLegacyDataResponse interface.
  */
-export function instanceOfShareInfoIAsyncEnumerableLegacyDataResponse(value: object): value is ShareInfoIAsyncEnumerableLegacyDataResponse {
+export function instanceOfShareInfoArrayLegacyDataResponse(value: object): value is ShareInfoArrayLegacyDataResponse {
     if (!('message' in value) || value['message'] === undefined) return false;
     if (!('data' in value) || value['data'] === undefined) return false;
     return true;
 }
 
-export function ShareInfoIAsyncEnumerableLegacyDataResponseFromJSON(json: any): ShareInfoIAsyncEnumerableLegacyDataResponse {
-    return ShareInfoIAsyncEnumerableLegacyDataResponseFromJSONTyped(json, false);
+export function ShareInfoArrayLegacyDataResponseFromJSON(json: any): ShareInfoArrayLegacyDataResponse {
+    return ShareInfoArrayLegacyDataResponseFromJSONTyped(json, false);
 }
 
-export function ShareInfoIAsyncEnumerableLegacyDataResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShareInfoIAsyncEnumerableLegacyDataResponse {
+export function ShareInfoArrayLegacyDataResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ShareInfoArrayLegacyDataResponse {
     if (json == null) {
         return json;
     }
@@ -65,11 +65,11 @@ export function ShareInfoIAsyncEnumerableLegacyDataResponseFromJSONTyped(json: a
     };
 }
 
-export function ShareInfoIAsyncEnumerableLegacyDataResponseToJSON(json: any): ShareInfoIAsyncEnumerableLegacyDataResponse {
-    return ShareInfoIAsyncEnumerableLegacyDataResponseToJSONTyped(json, false);
+export function ShareInfoArrayLegacyDataResponseToJSON(json: any): ShareInfoArrayLegacyDataResponse {
+    return ShareInfoArrayLegacyDataResponseToJSONTyped(json, false);
 }
 
-export function ShareInfoIAsyncEnumerableLegacyDataResponseToJSONTyped(value?: ShareInfoIAsyncEnumerableLegacyDataResponse | null, ignoreDiscriminator: boolean = false): any {
+export function ShareInfoArrayLegacyDataResponseToJSONTyped(value?: ShareInfoArrayLegacyDataResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

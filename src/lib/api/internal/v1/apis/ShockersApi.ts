@@ -19,14 +19,14 @@ import type {
   Control,
   GuidLegacyDataResponse,
   LegacyEmptyResponse,
-  LogEntryIAsyncEnumerableLegacyDataResponse,
+  LogEntryArrayLegacyDataResponse,
   NewShocker,
   OpenShockProblem,
-  OwnerShockerResponseIEnumerableLegacyDataResponse,
+  OwnerShockerResponseArrayLegacyDataResponse,
   PauseRequest,
-  ResponseDeviceWithShockersIAsyncEnumerableLegacyDataResponse,
-  ShareCodeInfoIAsyncEnumerableLegacyDataResponse,
-  ShareInfoIAsyncEnumerableLegacyDataResponse,
+  ResponseDeviceWithShockersArrayLegacyDataResponse,
+  ShareCodeInfoArrayLegacyDataResponse,
+  ShareInfoArrayLegacyDataResponse,
   ShockerPermLimitPair,
   ShockerWithDeviceLegacyDataResponse,
 } from '../models/index';
@@ -39,22 +39,22 @@ import {
     GuidLegacyDataResponseToJSON,
     LegacyEmptyResponseFromJSON,
     LegacyEmptyResponseToJSON,
-    LogEntryIAsyncEnumerableLegacyDataResponseFromJSON,
-    LogEntryIAsyncEnumerableLegacyDataResponseToJSON,
+    LogEntryArrayLegacyDataResponseFromJSON,
+    LogEntryArrayLegacyDataResponseToJSON,
     NewShockerFromJSON,
     NewShockerToJSON,
     OpenShockProblemFromJSON,
     OpenShockProblemToJSON,
-    OwnerShockerResponseIEnumerableLegacyDataResponseFromJSON,
-    OwnerShockerResponseIEnumerableLegacyDataResponseToJSON,
+    OwnerShockerResponseArrayLegacyDataResponseFromJSON,
+    OwnerShockerResponseArrayLegacyDataResponseToJSON,
     PauseRequestFromJSON,
     PauseRequestToJSON,
-    ResponseDeviceWithShockersIAsyncEnumerableLegacyDataResponseFromJSON,
-    ResponseDeviceWithShockersIAsyncEnumerableLegacyDataResponseToJSON,
-    ShareCodeInfoIAsyncEnumerableLegacyDataResponseFromJSON,
-    ShareCodeInfoIAsyncEnumerableLegacyDataResponseToJSON,
-    ShareInfoIAsyncEnumerableLegacyDataResponseFromJSON,
-    ShareInfoIAsyncEnumerableLegacyDataResponseToJSON,
+    ResponseDeviceWithShockersArrayLegacyDataResponseFromJSON,
+    ResponseDeviceWithShockersArrayLegacyDataResponseToJSON,
+    ShareCodeInfoArrayLegacyDataResponseFromJSON,
+    ShareCodeInfoArrayLegacyDataResponseToJSON,
+    ShareInfoArrayLegacyDataResponseFromJSON,
+    ShareInfoArrayLegacyDataResponseToJSON,
     ShockerPermLimitPairFromJSON,
     ShockerPermLimitPairToJSON,
     ShockerWithDeviceLegacyDataResponseFromJSON,
@@ -171,12 +171,12 @@ export interface ShockersApiInterface {
      * @throws {RequiredError}
      * @memberof ShockersApiInterface
      */
-    shockerGetShockerLogsRaw(requestParameters: ShockerGetShockerLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LogEntryIAsyncEnumerableLegacyDataResponse>>;
+    shockerGetShockerLogsRaw(requestParameters: ShockerGetShockerLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LogEntryArrayLegacyDataResponse>>;
 
     /**
      * Get the logs for a shocker
      */
-    shockerGetShockerLogs(shockerId: string, offset?: number, limit?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LogEntryIAsyncEnumerableLegacyDataResponse>;
+    shockerGetShockerLogs(shockerId: string, offset?: number, limit?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LogEntryArrayLegacyDataResponse>;
 
     /**
      * 
@@ -186,12 +186,12 @@ export interface ShockersApiInterface {
      * @throws {RequiredError}
      * @memberof ShockersApiInterface
      */
-    shockerGetUserSharesRaw(requestParameters: ShockerGetUserSharesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareInfoIAsyncEnumerableLegacyDataResponse>>;
+    shockerGetUserSharesRaw(requestParameters: ShockerGetUserSharesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareInfoArrayLegacyDataResponse>>;
 
     /**
      * Get all user shares for a shocker
      */
-    shockerGetUserShares(shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareInfoIAsyncEnumerableLegacyDataResponse>;
+    shockerGetUserShares(shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareInfoArrayLegacyDataResponse>;
 
     /**
      * 
@@ -200,12 +200,12 @@ export interface ShockersApiInterface {
      * @throws {RequiredError}
      * @memberof ShockersApiInterface
      */
-    shockerListSharedShockersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OwnerShockerResponseIEnumerableLegacyDataResponse>>;
+    shockerListSharedShockersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OwnerShockerResponseArrayLegacyDataResponse>>;
 
     /**
      * List all shockers shared with the authenticated user.
      */
-    shockerListSharedShockers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OwnerShockerResponseIEnumerableLegacyDataResponse>;
+    shockerListSharedShockers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OwnerShockerResponseArrayLegacyDataResponse>;
 
     /**
      * 
@@ -214,12 +214,12 @@ export interface ShockersApiInterface {
      * @throws {RequiredError}
      * @memberof ShockersApiInterface
      */
-    shockerListShockersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponseDeviceWithShockersIAsyncEnumerableLegacyDataResponse>>;
+    shockerListShockersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponseDeviceWithShockersArrayLegacyDataResponse>>;
 
     /**
      * List all shockers belonging to the authenticated user.
      */
-    shockerListShockers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseDeviceWithShockersIAsyncEnumerableLegacyDataResponse>;
+    shockerListShockers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseDeviceWithShockersArrayLegacyDataResponse>;
 
     /**
      * 
@@ -306,12 +306,12 @@ export interface ShockersApiInterface {
      * @throws {RequiredError}
      * @memberof ShockersApiInterface
      */
-    shockerShockerShareCodeListRaw(requestParameters: ShockerShockerShareCodeListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareCodeInfoIAsyncEnumerableLegacyDataResponse>>;
+    shockerShockerShareCodeListRaw(requestParameters: ShockerShockerShareCodeListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareCodeInfoArrayLegacyDataResponse>>;
 
     /**
      * List all share codes for a shocker
      */
-    shockerShockerShareCodeList(shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareCodeInfoIAsyncEnumerableLegacyDataResponse>;
+    shockerShockerShareCodeList(shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareCodeInfoArrayLegacyDataResponse>;
 
     /**
      * 
@@ -458,7 +458,7 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
     /**
      * Get the logs for a shocker
      */
-    async shockerGetShockerLogsRaw(requestParameters: ShockerGetShockerLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LogEntryIAsyncEnumerableLegacyDataResponse>> {
+    async shockerGetShockerLogsRaw(requestParameters: ShockerGetShockerLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LogEntryArrayLegacyDataResponse>> {
         if (requestParameters['shockerId'] == null) {
             throw new runtime.RequiredError(
                 'shockerId',
@@ -493,13 +493,13 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => LogEntryIAsyncEnumerableLegacyDataResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => LogEntryArrayLegacyDataResponseFromJSON(jsonValue));
     }
 
     /**
      * Get the logs for a shocker
      */
-    async shockerGetShockerLogs(shockerId: string, offset?: number, limit?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LogEntryIAsyncEnumerableLegacyDataResponse> {
+    async shockerGetShockerLogs(shockerId: string, offset?: number, limit?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LogEntryArrayLegacyDataResponse> {
         const response = await this.shockerGetShockerLogsRaw({ shockerId: shockerId, offset: offset, limit: limit }, initOverrides);
         return await response.value();
     }
@@ -507,7 +507,7 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
     /**
      * Get all user shares for a shocker
      */
-    async shockerGetUserSharesRaw(requestParameters: ShockerGetUserSharesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareInfoIAsyncEnumerableLegacyDataResponse>> {
+    async shockerGetUserSharesRaw(requestParameters: ShockerGetUserSharesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareInfoArrayLegacyDataResponse>> {
         if (requestParameters['shockerId'] == null) {
             throw new runtime.RequiredError(
                 'shockerId',
@@ -534,13 +534,13 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ShareInfoIAsyncEnumerableLegacyDataResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ShareInfoArrayLegacyDataResponseFromJSON(jsonValue));
     }
 
     /**
      * Get all user shares for a shocker
      */
-    async shockerGetUserShares(shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareInfoIAsyncEnumerableLegacyDataResponse> {
+    async shockerGetUserShares(shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareInfoArrayLegacyDataResponse> {
         const response = await this.shockerGetUserSharesRaw({ shockerId: shockerId }, initOverrides);
         return await response.value();
     }
@@ -548,7 +548,7 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
     /**
      * List all shockers shared with the authenticated user.
      */
-    async shockerListSharedShockersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OwnerShockerResponseIEnumerableLegacyDataResponse>> {
+    async shockerListSharedShockersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OwnerShockerResponseArrayLegacyDataResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -567,13 +567,13 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OwnerShockerResponseIEnumerableLegacyDataResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => OwnerShockerResponseArrayLegacyDataResponseFromJSON(jsonValue));
     }
 
     /**
      * List all shockers shared with the authenticated user.
      */
-    async shockerListSharedShockers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OwnerShockerResponseIEnumerableLegacyDataResponse> {
+    async shockerListSharedShockers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OwnerShockerResponseArrayLegacyDataResponse> {
         const response = await this.shockerListSharedShockersRaw(initOverrides);
         return await response.value();
     }
@@ -581,7 +581,7 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
     /**
      * List all shockers belonging to the authenticated user.
      */
-    async shockerListShockersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponseDeviceWithShockersIAsyncEnumerableLegacyDataResponse>> {
+    async shockerListShockersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponseDeviceWithShockersArrayLegacyDataResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -600,13 +600,13 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ResponseDeviceWithShockersIAsyncEnumerableLegacyDataResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ResponseDeviceWithShockersArrayLegacyDataResponseFromJSON(jsonValue));
     }
 
     /**
      * List all shockers belonging to the authenticated user.
      */
-    async shockerListShockers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseDeviceWithShockersIAsyncEnumerableLegacyDataResponse> {
+    async shockerListShockers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseDeviceWithShockersArrayLegacyDataResponse> {
         const response = await this.shockerListShockersRaw(initOverrides);
         return await response.value();
     }
@@ -815,7 +815,7 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
     /**
      * List all share codes for a shocker
      */
-    async shockerShockerShareCodeListRaw(requestParameters: ShockerShockerShareCodeListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareCodeInfoIAsyncEnumerableLegacyDataResponse>> {
+    async shockerShockerShareCodeListRaw(requestParameters: ShockerShockerShareCodeListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareCodeInfoArrayLegacyDataResponse>> {
         if (requestParameters['shockerId'] == null) {
             throw new runtime.RequiredError(
                 'shockerId',
@@ -842,13 +842,13 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ShareCodeInfoIAsyncEnumerableLegacyDataResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ShareCodeInfoArrayLegacyDataResponseFromJSON(jsonValue));
     }
 
     /**
      * List all share codes for a shocker
      */
-    async shockerShockerShareCodeList(shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareCodeInfoIAsyncEnumerableLegacyDataResponse> {
+    async shockerShockerShareCodeList(shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareCodeInfoArrayLegacyDataResponse> {
         const response = await this.shockerShockerShareCodeListRaw({ shockerId: shockerId }, initOverrides);
         return await response.value();
     }

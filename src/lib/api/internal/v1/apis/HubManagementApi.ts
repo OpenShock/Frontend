@@ -19,9 +19,9 @@ import type {
   LcgResponseLegacyDataResponse,
   OpenShockProblem,
   OtaItemIReadOnlyCollectionLegacyDataResponse,
-  ResponseDeviceIAsyncEnumerableLegacyDataResponse,
+  ResponseDeviceArrayLegacyDataResponse,
   ResponseDeviceWithTokenLegacyDataResponse,
-  ShockerResponseIAsyncEnumerableLegacyDataResponse,
+  ShockerResponseArrayLegacyDataResponse,
   StringLegacyDataResponse,
 } from '../models/index';
 import {
@@ -33,12 +33,12 @@ import {
     OpenShockProblemToJSON,
     OtaItemIReadOnlyCollectionLegacyDataResponseFromJSON,
     OtaItemIReadOnlyCollectionLegacyDataResponseToJSON,
-    ResponseDeviceIAsyncEnumerableLegacyDataResponseFromJSON,
-    ResponseDeviceIAsyncEnumerableLegacyDataResponseToJSON,
+    ResponseDeviceArrayLegacyDataResponseFromJSON,
+    ResponseDeviceArrayLegacyDataResponseToJSON,
     ResponseDeviceWithTokenLegacyDataResponseFromJSON,
     ResponseDeviceWithTokenLegacyDataResponseToJSON,
-    ShockerResponseIAsyncEnumerableLegacyDataResponseFromJSON,
-    ShockerResponseIAsyncEnumerableLegacyDataResponseToJSON,
+    ShockerResponseArrayLegacyDataResponseFromJSON,
+    ShockerResponseArrayLegacyDataResponseToJSON,
     StringLegacyDataResponseFromJSON,
     StringLegacyDataResponseToJSON,
 } from '../models/index';
@@ -166,12 +166,12 @@ export interface HubManagementApiInterface {
      * @throws {RequiredError}
      * @memberof HubManagementApiInterface
      */
-    devicesGetShockersRaw(requestParameters: DevicesGetShockersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShockerResponseIAsyncEnumerableLegacyDataResponse>>;
+    devicesGetShockersRaw(requestParameters: DevicesGetShockersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShockerResponseArrayLegacyDataResponse>>;
 
     /**
      * Get all shockers for a device
      */
-    devicesGetShockers(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShockerResponseIAsyncEnumerableLegacyDataResponse>;
+    devicesGetShockers(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShockerResponseArrayLegacyDataResponse>;
 
     /**
      * 
@@ -180,12 +180,12 @@ export interface HubManagementApiInterface {
      * @throws {RequiredError}
      * @memberof HubManagementApiInterface
      */
-    devicesListDevicesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponseDeviceIAsyncEnumerableLegacyDataResponse>>;
+    devicesListDevicesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponseDeviceArrayLegacyDataResponse>>;
 
     /**
      * Get all devices for the current user
      */
-    devicesListDevices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseDeviceIAsyncEnumerableLegacyDataResponse>;
+    devicesListDevices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseDeviceArrayLegacyDataResponse>;
 
     /**
      * 
@@ -445,7 +445,7 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
     /**
      * Get all shockers for a device
      */
-    async devicesGetShockersRaw(requestParameters: DevicesGetShockersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShockerResponseIAsyncEnumerableLegacyDataResponse>> {
+    async devicesGetShockersRaw(requestParameters: DevicesGetShockersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShockerResponseArrayLegacyDataResponse>> {
         if (requestParameters['deviceId'] == null) {
             throw new runtime.RequiredError(
                 'deviceId',
@@ -472,13 +472,13 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ShockerResponseIAsyncEnumerableLegacyDataResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ShockerResponseArrayLegacyDataResponseFromJSON(jsonValue));
     }
 
     /**
      * Get all shockers for a device
      */
-    async devicesGetShockers(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShockerResponseIAsyncEnumerableLegacyDataResponse> {
+    async devicesGetShockers(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShockerResponseArrayLegacyDataResponse> {
         const response = await this.devicesGetShockersRaw({ deviceId: deviceId }, initOverrides);
         return await response.value();
     }
@@ -486,7 +486,7 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
     /**
      * Get all devices for the current user
      */
-    async devicesListDevicesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponseDeviceIAsyncEnumerableLegacyDataResponse>> {
+    async devicesListDevicesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponseDeviceArrayLegacyDataResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -505,13 +505,13 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ResponseDeviceIAsyncEnumerableLegacyDataResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ResponseDeviceArrayLegacyDataResponseFromJSON(jsonValue));
     }
 
     /**
      * Get all devices for the current user
      */
-    async devicesListDevices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseDeviceIAsyncEnumerableLegacyDataResponse> {
+    async devicesListDevices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseDeviceArrayLegacyDataResponse> {
         const response = await this.devicesListDevicesRaw(initOverrides);
         return await response.value();
     }

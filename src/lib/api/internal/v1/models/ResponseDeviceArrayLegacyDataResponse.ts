@@ -24,37 +24,37 @@ import {
 /**
  * 
  * @export
- * @interface ResponseDeviceIAsyncEnumerableLegacyDataResponse
+ * @interface ResponseDeviceArrayLegacyDataResponse
  */
-export interface ResponseDeviceIAsyncEnumerableLegacyDataResponse {
+export interface ResponseDeviceArrayLegacyDataResponse {
     /**
      * 
      * @type {string}
-     * @memberof ResponseDeviceIAsyncEnumerableLegacyDataResponse
+     * @memberof ResponseDeviceArrayLegacyDataResponse
      */
     message: string;
     /**
      * 
      * @type {Array<ResponseDevice>}
-     * @memberof ResponseDeviceIAsyncEnumerableLegacyDataResponse
+     * @memberof ResponseDeviceArrayLegacyDataResponse
      */
     data: Array<ResponseDevice> | null;
 }
 
 /**
- * Check if a given object implements the ResponseDeviceIAsyncEnumerableLegacyDataResponse interface.
+ * Check if a given object implements the ResponseDeviceArrayLegacyDataResponse interface.
  */
-export function instanceOfResponseDeviceIAsyncEnumerableLegacyDataResponse(value: object): value is ResponseDeviceIAsyncEnumerableLegacyDataResponse {
+export function instanceOfResponseDeviceArrayLegacyDataResponse(value: object): value is ResponseDeviceArrayLegacyDataResponse {
     if (!('message' in value) || value['message'] === undefined) return false;
     if (!('data' in value) || value['data'] === undefined) return false;
     return true;
 }
 
-export function ResponseDeviceIAsyncEnumerableLegacyDataResponseFromJSON(json: any): ResponseDeviceIAsyncEnumerableLegacyDataResponse {
-    return ResponseDeviceIAsyncEnumerableLegacyDataResponseFromJSONTyped(json, false);
+export function ResponseDeviceArrayLegacyDataResponseFromJSON(json: any): ResponseDeviceArrayLegacyDataResponse {
+    return ResponseDeviceArrayLegacyDataResponseFromJSONTyped(json, false);
 }
 
-export function ResponseDeviceIAsyncEnumerableLegacyDataResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ResponseDeviceIAsyncEnumerableLegacyDataResponse {
+export function ResponseDeviceArrayLegacyDataResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ResponseDeviceArrayLegacyDataResponse {
     if (json == null) {
         return json;
     }
@@ -65,11 +65,11 @@ export function ResponseDeviceIAsyncEnumerableLegacyDataResponseFromJSONTyped(js
     };
 }
 
-export function ResponseDeviceIAsyncEnumerableLegacyDataResponseToJSON(json: any): ResponseDeviceIAsyncEnumerableLegacyDataResponse {
-    return ResponseDeviceIAsyncEnumerableLegacyDataResponseToJSONTyped(json, false);
+export function ResponseDeviceArrayLegacyDataResponseToJSON(json: any): ResponseDeviceArrayLegacyDataResponse {
+    return ResponseDeviceArrayLegacyDataResponseToJSONTyped(json, false);
 }
 
-export function ResponseDeviceIAsyncEnumerableLegacyDataResponseToJSONTyped(value?: ResponseDeviceIAsyncEnumerableLegacyDataResponse | null, ignoreDiscriminator: boolean = false): any {
+export function ResponseDeviceArrayLegacyDataResponseToJSONTyped(value?: ResponseDeviceArrayLegacyDataResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

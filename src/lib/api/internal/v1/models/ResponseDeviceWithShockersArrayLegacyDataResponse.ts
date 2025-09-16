@@ -24,37 +24,37 @@ import {
 /**
  * 
  * @export
- * @interface ResponseDeviceWithShockersIAsyncEnumerableLegacyDataResponse
+ * @interface ResponseDeviceWithShockersArrayLegacyDataResponse
  */
-export interface ResponseDeviceWithShockersIAsyncEnumerableLegacyDataResponse {
+export interface ResponseDeviceWithShockersArrayLegacyDataResponse {
     /**
      * 
      * @type {string}
-     * @memberof ResponseDeviceWithShockersIAsyncEnumerableLegacyDataResponse
+     * @memberof ResponseDeviceWithShockersArrayLegacyDataResponse
      */
     message: string;
     /**
      * 
      * @type {Array<ResponseDeviceWithShockers>}
-     * @memberof ResponseDeviceWithShockersIAsyncEnumerableLegacyDataResponse
+     * @memberof ResponseDeviceWithShockersArrayLegacyDataResponse
      */
     data: Array<ResponseDeviceWithShockers> | null;
 }
 
 /**
- * Check if a given object implements the ResponseDeviceWithShockersIAsyncEnumerableLegacyDataResponse interface.
+ * Check if a given object implements the ResponseDeviceWithShockersArrayLegacyDataResponse interface.
  */
-export function instanceOfResponseDeviceWithShockersIAsyncEnumerableLegacyDataResponse(value: object): value is ResponseDeviceWithShockersIAsyncEnumerableLegacyDataResponse {
+export function instanceOfResponseDeviceWithShockersArrayLegacyDataResponse(value: object): value is ResponseDeviceWithShockersArrayLegacyDataResponse {
     if (!('message' in value) || value['message'] === undefined) return false;
     if (!('data' in value) || value['data'] === undefined) return false;
     return true;
 }
 
-export function ResponseDeviceWithShockersIAsyncEnumerableLegacyDataResponseFromJSON(json: any): ResponseDeviceWithShockersIAsyncEnumerableLegacyDataResponse {
-    return ResponseDeviceWithShockersIAsyncEnumerableLegacyDataResponseFromJSONTyped(json, false);
+export function ResponseDeviceWithShockersArrayLegacyDataResponseFromJSON(json: any): ResponseDeviceWithShockersArrayLegacyDataResponse {
+    return ResponseDeviceWithShockersArrayLegacyDataResponseFromJSONTyped(json, false);
 }
 
-export function ResponseDeviceWithShockersIAsyncEnumerableLegacyDataResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ResponseDeviceWithShockersIAsyncEnumerableLegacyDataResponse {
+export function ResponseDeviceWithShockersArrayLegacyDataResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ResponseDeviceWithShockersArrayLegacyDataResponse {
     if (json == null) {
         return json;
     }
@@ -65,11 +65,11 @@ export function ResponseDeviceWithShockersIAsyncEnumerableLegacyDataResponseFrom
     };
 }
 
-export function ResponseDeviceWithShockersIAsyncEnumerableLegacyDataResponseToJSON(json: any): ResponseDeviceWithShockersIAsyncEnumerableLegacyDataResponse {
-    return ResponseDeviceWithShockersIAsyncEnumerableLegacyDataResponseToJSONTyped(json, false);
+export function ResponseDeviceWithShockersArrayLegacyDataResponseToJSON(json: any): ResponseDeviceWithShockersArrayLegacyDataResponse {
+    return ResponseDeviceWithShockersArrayLegacyDataResponseToJSONTyped(json, false);
 }
 
-export function ResponseDeviceWithShockersIAsyncEnumerableLegacyDataResponseToJSONTyped(value?: ResponseDeviceWithShockersIAsyncEnumerableLegacyDataResponse | null, ignoreDiscriminator: boolean = false): any {
+export function ResponseDeviceWithShockersArrayLegacyDataResponseToJSONTyped(value?: ResponseDeviceWithShockersArrayLegacyDataResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
