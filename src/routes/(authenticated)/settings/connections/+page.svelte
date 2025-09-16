@@ -86,7 +86,7 @@
   async function beginLink(providerKey: string) {
     actionBusy = providerKey;
     try {
-      window.location.href = `https://${PUBLIC_BACKEND_API_DOMAIN}/1/oauth/${providerKey}/authorize`;
+      window.location.href = `https://${PUBLIC_BACKEND_API_DOMAIN}/1/account/connections/${providerKey}/link`;
     } catch (err) {
       await handleApiError(err);
     } finally {
