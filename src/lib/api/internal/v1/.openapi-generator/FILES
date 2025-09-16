@@ -4,7 +4,6 @@ apis/AdminApi.ts
 apis/HubEndpointsApi.ts
 apis/HubManagementApi.ts
 apis/MetaApi.ts
-apis/OAuthApi.ts
 apis/PublicShockerSharesApi.ts
 apis/SessionsApi.ts
 apis/ShockerSharesApi.ts

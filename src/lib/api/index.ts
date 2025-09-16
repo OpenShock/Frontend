@@ -7,7 +7,6 @@ import {
   Configuration as ConfigurationV1,
   HubManagementApi as HubManagementV1Api,
   MetaApi,
-  OAuthApi,
   PublicShockerSharesApi,
   SessionsApi,
   ShockerSharesApi as ShockerSharesV1Api,

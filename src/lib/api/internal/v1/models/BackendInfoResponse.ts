@@ -57,6 +57,12 @@ export interface BackendInfoResponse {
     turnstileSiteKey: string | null;
     /**
      * 
+     * @type {Array<string>}
+     * @memberof BackendInfoResponse
+     */
+    oAuthProviders: Array<string>;
+    /**
+     * 
      * @type {boolean}
      * @memberof BackendInfoResponse
      */
@@ -73,6 +79,7 @@ export function instanceOfBackendInfoResponse(value: object): value is BackendIn
     if (!('frontendUrl' in value) || value['frontendUrl'] === undefined) return false;
     if (!('shortLinkUrl' in value) || value['shortLinkUrl'] === undefined) return false;
     if (!('turnstileSiteKey' in value) || value['turnstileSiteKey'] === undefined) return false;
+    if (!('oAuthProviders' in value) || value['oAuthProviders'] === undefined) return false;
     if (!('isUserAuthenticated' in value) || value['isUserAuthenticated'] === undefined) return false;
     return true;
 }
@@ -93,6 +100,7 @@ export function BackendInfoResponseFromJSONTyped(json: any, ignoreDiscriminator:
         'frontendUrl': json['frontendUrl'],
         'shortLinkUrl': json['shortLinkUrl'],
         'turnstileSiteKey': json['turnstileSiteKey'],
+        'oAuthProviders': json['oAuthProviders'],
         'isUserAuthenticated': json['isUserAuthenticated'],
     };
 }
@@ -114,6 +122,7 @@ export function BackendInfoResponseToJSONTyped(value?: BackendInfoResponse | nul
         'frontendUrl': value['frontendUrl'],
         'shortLinkUrl': value['shortLinkUrl'],
         'turnstileSiteKey': value['turnstileSiteKey'],
+        'oAuthProviders': value['oAuthProviders'],
         'isUserAuthenticated': value['isUserAuthenticated'],
     };
 }

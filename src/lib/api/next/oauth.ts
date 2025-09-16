@@ -3,12 +3,7 @@ import type { LoginOkResponse, OAuthFinalizeRequest, OAuthSignupData } from './m
 import {
   TransformLoginOkResponse,
   TransformOAuthSignupData,
-  ValidateStringArray,
 } from './transformers';
-
-export function OAuthListProviders(): Promise<string[]> {
-  return GetJson<string[]>('/1/oauth/providers', 200, ValidateStringArray);
-}
 
 export function GetOAuthAuthorizeUrl(provider: string, flow: 'LoginOrCreate' | 'Link') {
   const providerEnc = encodeURIComponent(provider);

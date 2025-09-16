@@ -6,7 +6,6 @@
   import { page } from '$app/state';
   import { accountV1Api } from '$lib/api';
   import type { OAuthConnectionResponse } from '$lib/api/internal/v1/models';
-  import { OAuthListProviders } from '$lib/api/next/oauth';
   import Container from '$lib/components/Container.svelte';
   import { Button } from '$lib/components/ui/button';
   import * as Card from '$lib/components/ui/card';
@@ -26,7 +25,7 @@
   let queryStatus = $derived(page.url.searchParams.get('status'));
 
   // Data
-  let providers = $state<string[]>([]);
+  let providers = $state<string[]>(JSON.parse(sessionStorage.getItem('oAuthProviders') ?? '[]'));
   let connections = $state<OAuthConnectionResponse[]>([]);
 
   // Disconnect dialog
@@ -54,16 +53,7 @@
     loadingConnections = true;
 
     try {
-      const [provResp, connResp] = await Promise.all([
-        OAuthListProviders(),
-        accountV1Api.authenticatedAccountListOAuthConnections(),
-      ]);
-
-      // Normalize providers into a simple { key, label } list.
-      // We accept several possible backend shapes to be robust.
-      providers = provResp;
-
-      connections = connResp ?? [];
+      connections = await accountV1Api.authenticatedAccountListOAuthConnections();
     } catch (err) {
       await handleApiError(err);
     } finally {

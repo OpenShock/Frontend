@@ -6,7 +6,7 @@ import { UserStore } from '$lib/stores/UserStore';
 
 export async function init() {
   const {
-    data: { version, commit, shortLinkUrl, turnstileSiteKey, isUserAuthenticated },
+    data: { version, commit, shortLinkUrl, turnstileSiteKey, oAuthProviders, isUserAuthenticated },
   } = await metaApi.versionGetBackendInfo();
 
   if (version != null) sessionStorage.setItem('backendVersion', String(version));
@@ -14,6 +14,8 @@ export async function init() {
   if (shortLinkUrl != null) sessionStorage.setItem('shortLinkUrl', String(shortLinkUrl));
   if (turnstileSiteKey != null)
     sessionStorage.setItem('turnstileSiteKey', String(turnstileSiteKey));
+  if (oAuthProviders != null)
+    sessionStorage.setItem('oAuthProviders', JSON.stringify(oAuthProviders));
 
   // init client-side stores
   initializeDarkModeStore();
