@@ -3,6 +3,7 @@
   import { page } from '$app/state';
   import { PUBLIC_BACKEND_API_DOMAIN } from '$env/static/public';
   import { accountV2Api } from '$lib/api';
+  import { OAuthAuthorize } from '$lib/api/next/oauth';
   import Container from '$lib/components/Container.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
@@ -55,9 +56,7 @@
 
   async function startOAuth() {
     const provider = 'discord';
-
-    // Set the current URL as the redirect URL so we can come back here after OAuth
-    window.location.href = `https://${PUBLIC_BACKEND_API_DOMAIN}/1/oauth/${provider}/authorize`;
+    await OAuthAuthorize(provider, 'LoginOrCreate');
   }
 
   let canSubmit = $derived(

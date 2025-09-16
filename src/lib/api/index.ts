@@ -59,5 +59,4 @@ export const shockersV2Api = new ShockersV2Api(DefaultApiV2Configuration);
 export const publicShockerSharesApi = new PublicShockerSharesApi(DefaultApiV1Configuration);
 export const shockerSharesV1Api = new ShockerSharesV1Api(DefaultApiV1Configuration);
 export const shockerSharesV2Api = new ShockerSharesV2Api(DefaultApiV2Configuration);
-export const oauthApi = new OAuthApi(DefaultApiV1Configuration);
 export const usersApi = new UsersApi(DefaultApiV1Configuration);

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
-  import { oauthApi } from '$lib/api';
+  import { OAuthSignupFinalize, OAuthSignupGetData } from '$lib/api/next/oauth';
   import Container from '$lib/components/Container.svelte';
   import EmailInput from '$lib/components/input/EmailInput.svelte';
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
@@ -29,7 +29,7 @@
     }
 
     try {
-      const account = await oauthApi.oAuthOAuthSignupFinalize(page.params.provider!, {
+      const account = await OAuthSignupFinalize(page.params.provider!, {
         username,
         email,
         password,
@@ -64,8 +64,7 @@
   }
 
   onMount(() => {
-    oauthApi
-      .oAuthOAuthSignupGetData(page.params.provider!)
+    OAuthSignupGetData(page.params.provider!)
       .then((data) => {
         if (data.displayName) {
           username = data.displayName;

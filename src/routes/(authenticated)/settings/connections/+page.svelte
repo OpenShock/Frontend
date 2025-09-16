@@ -4,9 +4,9 @@
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
   import Unlink from '@lucide/svelte/icons/unlink';
   import { page } from '$app/state';
-  import { PUBLIC_BACKEND_API_DOMAIN } from '$env/static/public';
-  import { accountV1Api, oauthApi } from '$lib/api';
-  import type { OAuthConnectionResponse } from '$lib/api/internal/v1';
+  import { accountV1Api } from '$lib/api';
+  import type { OAuthConnectionResponse } from '$lib/api/internal/v1/models';
+  import { OAuthAuthorize, OAuthListProviders } from '$lib/api/next/oauth';
   import Container from '$lib/components/Container.svelte';
   import { Button } from '$lib/components/ui/button';
   import * as Card from '$lib/components/ui/card';
@@ -56,7 +56,7 @@
 
     try {
       const [provResp, connResp] = await Promise.all([
-        oauthApi.oAuthListOAuthProviders(),
+        OAuthListProviders(),
         accountV1Api.authenticatedAccountListOAuthConnections(),
       ]);
 
@@ -86,7 +86,7 @@
   async function beginLink(providerKey: string) {
     actionBusy = providerKey;
     try {
-      window.location.href = `https://${PUBLIC_BACKEND_API_DOMAIN}/1/account/connections/${providerKey}/link`;
+      await OAuthAuthorize(providerKey, 'Link');
     } catch (err) {
       await handleApiError(err);
     } finally {
