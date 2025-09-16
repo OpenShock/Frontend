@@ -66,33 +66,3 @@ export async function PostJson<T>(
 
   return transformer(data);
 }
-
-export async function PostRedirect(
-  path: Path,
-  expectedStatus: 302 | 303 | 307 | 308 = 302
-): Promise<void> {
-  const url = BaseUrl + path;
-  const res = await fetch(url, { method: 'POST', redirect: 'manual' });
-
-  if (res.status !== expectedStatus) {
-    throw new ResponseError(res, `Unexpected status ${res.status} for POST ${url}`);
-  }
-
-  const loc = res.headers.get('Location');
-  if (!loc) throw new ResponseError(res, 'Missing Location header');
-
-  const target = new URL(loc, url); // handles absolute or relative
-
-  // Restrict which domains we can be redirected to
-  const allowedHosts = new Set([PUBLIC_BACKEND_API_DOMAIN, 'accounts.google.com', 'github.com']);
-
-  if (!allowedHosts.has(target.hostname)) {
-    throw new ResponseError(res, `Blocked redirect to disallowed host ${target.href}`);
-  }
-
-  if (target.protocol !== 'https:') {
-    throw new ResponseError(res, `Blocked non-HTTPS redirect to ${target.href}`);
-  }
-
-  window.location.assign(target.toString());
-}

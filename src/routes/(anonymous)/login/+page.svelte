@@ -1,9 +1,8 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
-  import { PUBLIC_BACKEND_API_DOMAIN } from '$env/static/public';
   import { accountV2Api } from '$lib/api';
-  import { OAuthAuthorize } from '$lib/api/next/oauth';
+  import { GetOAuthAuthorizeUrl } from '$lib/api/next/oauth';
   import Container from '$lib/components/Container.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
@@ -54,11 +53,6 @@
     }
   }
 
-  async function startOAuth() {
-    const provider = 'discord';
-    await OAuthAuthorize(provider, 'LoginOrCreate');
-  }
-
   let canSubmit = $derived(
     usernameOrEmail.length > 0 && password.length > 0 && turnstileResponse != null
   );
@@ -89,7 +83,9 @@
     <Button type="submit" disabled={!canSubmit}>Log In</Button>
 
     <a class=" text-sm opacity-75 hover:underline" href="/forgot-password">Forgot your password?</a>
-
-    <Button type="button" onclick={startOAuth}>Log In With Discord</Button>
+  </form>
+  
+  <form action={GetOAuthAuthorizeUrl('discord', 'LoginOrCreate')} method="POST">
+    <Button type="submit">Log In With Discord</Button>
   </form>
 </Container>

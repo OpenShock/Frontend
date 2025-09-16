@@ -1,4 +1,4 @@
-import { GetJson, PostJson, PostRedirect } from './base';
+import { GetBackendUrl, GetJson, PostJson } from './base';
 import type { LoginOkResponse, OAuthFinalizeRequest, OAuthSignupData } from './models';
 import {
   TransformLoginOkResponse,
@@ -10,10 +10,10 @@ export function OAuthListProviders(): Promise<string[]> {
   return GetJson<string[]>('/1/oauth/providers', 200, ValidateStringArray);
 }
 
-export function OAuthAuthorize(provider: string, flow: 'LoginOrCreate' | 'Link') {
+export function GetOAuthAuthorizeUrl(provider: string, flow: 'LoginOrCreate' | 'Link') {
   const providerEnc = encodeURIComponent(provider);
   const flowEnc = encodeURIComponent(flow);
-  return PostRedirect(`/1/oauth/${providerEnc}/authorize?flow=${flowEnc}`, 302);
+  return GetBackendUrl(`/1/oauth/${providerEnc}/authorize?flow=${flowEnc}`);
 }
 
 export async function OAuthSignupGetData(provider: string) {

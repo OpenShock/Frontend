@@ -6,7 +6,7 @@
   import { page } from '$app/state';
   import { accountV1Api } from '$lib/api';
   import type { OAuthConnectionResponse } from '$lib/api/internal/v1/models';
-  import { OAuthAuthorize, OAuthListProviders } from '$lib/api/next/oauth';
+  import { OAuthListProviders } from '$lib/api/next/oauth';
   import Container from '$lib/components/Container.svelte';
   import { Button } from '$lib/components/ui/button';
   import * as Card from '$lib/components/ui/card';
@@ -21,7 +21,6 @@
   let loading = $state(false); // overall refresh button state
   let loadingProviders = $state(true);
   let loadingConnections = $state(true);
-  let actionBusy = $state<string | null>(null); // providerKey currently acting on
 
   // From redirect (?status=)
   let queryStatus = $derived(page.url.searchParams.get('status'));
@@ -82,18 +81,6 @@
     return connections.find((c) => c.providerKey === key)?.displayName ?? null;
   }
 
-  // Start an OAuth flow via your backend redirect
-  async function beginLink(providerKey: string) {
-    actionBusy = providerKey;
-    try {
-      await OAuthAuthorize(providerKey, 'Link');
-    } catch (err) {
-      await handleApiError(err);
-    } finally {
-      actionBusy = null;
-    }
-  }
-
   // Open confirm dialog for disconnect
   function confirmDisconnect(providerKey: string) {
     const existing = connections.find((c) => c.providerKey === providerKey);
@@ -145,13 +132,8 @@
           {:else}
             {#each providers as p}
               {#if !isConnected(p)}
-                <Dropdown.Item
-                  onclick={() => beginLink(p)}
-                  data-provider={p}
-                  disabled={actionBusy === p}
-                >
-                  <Link2 class="mr-2 size-4" />
-                  {actionBusy === p ? `Starting ${p}…` : p}
+                <Dropdown.Item>
+                  <Link2 class="mr-2 size-4" /> <!-- TODO: Form + button [POST] -->
                 </Dropdown.Item>
               {/if}
             {/each}
