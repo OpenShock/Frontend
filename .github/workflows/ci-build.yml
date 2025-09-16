@@ -12,6 +12,7 @@ name: ci-build
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: read
 
@@ -49,6 +50,7 @@ jobs:
 
   build-container:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     needs: test
     permissions:
       contents: read
