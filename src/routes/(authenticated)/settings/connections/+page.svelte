@@ -15,6 +15,7 @@
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
   import DisconnectDialog from './dialog-oauth-disconnect.svelte';
+  import { GetOAuthAuthorizeUrl } from '$lib/api/next/oauth';
 
   // ---------- state
   let loading = $state(false); // overall refresh button state
@@ -27,6 +28,8 @@
   // Data
   let providers = $state<string[]>(JSON.parse(sessionStorage.getItem('oAuthProviders') ?? '[]'));
   let connections = $state<OAuthConnectionResponse[]>([]);
+
+  $inspect(providers);
 
   // Disconnect dialog
   let disconnectDialog = $state<{ open: boolean; providerKey?: string; displayName?: string }>({
@@ -120,10 +123,15 @@
           {#if loadingProviders}
             <Dropdown.Item disabled>Loading…</Dropdown.Item>
           {:else}
-            {#each providers as p}
-              {#if !isConnected(p)}
+            {#each providers as provider}
+              {#if !isConnected(provider)}
                 <Dropdown.Item>
-                  <Link2 class="mr-2 size-4" /> <!-- TODO: Form + button [POST] -->
+                  <Link2 class="mr-2 size-4" />
+                  <form action={GetOAuthAuthorizeUrl(provider, 'Link')} method="POST">
+                    <button type="submit" class="w-full text-left">
+                      {provider}
+                    </button>
+                  </form>
                 </Dropdown.Item>
               {/if}
             {/each}
