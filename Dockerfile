@@ -1,6 +1,6 @@
 # Define versions as build arguments for easy updates
 ARG NODE_VERSION=24.7.0
-ARG PNPM_VERSION=10.5.0
+ARG PNPM_VERSION=10.17.0
 ARG ALPINE_VERSION=3.22
 ARG PNPM_URL="https://github.com/pnpm/pnpm/releases/download/v${PNPM_VERSION}/pnpm-linuxstatic-x64"
 
@@ -24,8 +24,8 @@ COPY package.json .
 COPY pnpm-lock.yaml .
 COPY patches/ patches/
 
-# Install deps (avoiding frozen-lockfile because it stalled CI/CD)
-RUN pnpm install --strict-peer-dependencies
+# Install deps
+RUN pnpm install --frozen-lockfile --strict-peer-dependencies
 
 # Copy full source after dependencies are cached
 COPY . .
@@ -60,7 +60,7 @@ COPY --from=build /app/patches/ patches/
 COPY --from=build /app/build build/
 
 # Install only production dependencies
-RUN pnpm install --strict-peer-dependencies
+RUN pnpm install --frozen-lockfile --strict-peer-dependencies
 
 # Start the app
 CMD ["node","build/index.js"]
