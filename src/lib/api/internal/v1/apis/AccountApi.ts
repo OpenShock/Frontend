@@ -262,12 +262,12 @@ export interface AccountApiInterface {
      * @throws {RequiredError}
      * @memberof AccountApiInterface
      */
-    authenticatedAccountDeactivateRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>>;
+    authenticatedAccountDeactivateRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
      * Deactivate currently logged in account
      */
-    authenticatedAccountDeactivate(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
+    authenticatedAccountDeactivate(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -649,7 +649,7 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
     /**
      * Deactivate currently logged in account
      */
-    async authenticatedAccountDeactivateRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
+    async authenticatedAccountDeactivateRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -664,19 +664,14 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<string>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Deactivate currently logged in account
      */
-    async authenticatedAccountDeactivate(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
-        const response = await this.authenticatedAccountDeactivateRaw(initOverrides);
-        return await response.value();
+    async authenticatedAccountDeactivate(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.authenticatedAccountDeactivateRaw(initOverrides);
     }
 
     /**
