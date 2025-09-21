@@ -84,7 +84,7 @@
 
     <a class=" text-sm opacity-75 hover:underline" href="/forgot-password">Forgot your password?</a>
   </form>
-  
+
   <form action={GetOAuthAuthorizeUrl('discord', 'LoginOrCreate')} method="POST">
     <Button type="submit">Log In With Discord</Button>
   </form>

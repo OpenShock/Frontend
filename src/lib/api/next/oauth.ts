@@ -1,9 +1,6 @@
 import { GetBackendUrl, GetJson, PostJson } from './base';
 import type { LoginOkResponse, OAuthFinalizeRequest, OAuthSignupData } from './models';
-import {
-  TransformLoginOkResponse,
-  TransformOAuthSignupData,
-} from './transformers';
+import { TransformLoginOkResponse, TransformOAuthSignupData } from './transformers';
 
 export function GetOAuthAuthorizeUrl(provider: string, flow: 'LoginOrCreate' | 'Link') {
   const providerEnc = encodeURIComponent(provider);
@@ -13,7 +10,11 @@ export function GetOAuthAuthorizeUrl(provider: string, flow: 'LoginOrCreate' | '
 
 export async function OAuthSignupGetData(provider: string) {
   const providerEnc = encodeURIComponent(provider);
-  return GetJson<OAuthSignupData>(`/1/oauth/${providerEnc}/signup-data`, 200, TransformOAuthSignupData);
+  return GetJson<OAuthSignupData>(
+    `/1/oauth/${providerEnc}/signup-data`,
+    200,
+    TransformOAuthSignupData
+  );
 }
 
 export async function OAuthSignupFinalize(
@@ -21,5 +22,10 @@ export async function OAuthSignupFinalize(
   payload: OAuthFinalizeRequest
 ): Promise<LoginOkResponse> {
   const providerEnc = encodeURIComponent(provider);
-  return PostJson(`/1/oauth/${providerEnc}/signup-finalize`, payload, 200, TransformLoginOkResponse);
+  return PostJson(
+    `/1/oauth/${providerEnc}/signup-finalize`,
+    payload,
+    200,
+    TransformLoginOkResponse
+  );
 }

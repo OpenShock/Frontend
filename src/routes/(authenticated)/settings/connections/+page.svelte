@@ -6,6 +6,7 @@
   import { page } from '$app/state';
   import { accountV1Api } from '$lib/api';
   import type { OAuthConnectionResponse } from '$lib/api/internal/v1/models';
+  import { GetOAuthAuthorizeUrl } from '$lib/api/next/oauth';
   import Container from '$lib/components/Container.svelte';
   import { Button } from '$lib/components/ui/button';
   import * as Card from '$lib/components/ui/card';
@@ -15,7 +16,6 @@
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
   import DisconnectDialog from './dialog-oauth-disconnect.svelte';
-  import { GetOAuthAuthorizeUrl } from '$lib/api/next/oauth';
 
   // ---------- state
   let loading = $state(false); // overall refresh button state
