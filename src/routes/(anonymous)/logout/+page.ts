@@ -4,6 +4,8 @@ import { accountV1Api } from '$lib/api';
 import { destroySignalR } from '$lib/signalr';
 import { UserStore } from '$lib/stores/UserStore';
 
+export const prerender = false;
+
 export async function load() {
   if (!browser) return; // Do not run the following on server
 

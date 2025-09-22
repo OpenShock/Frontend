@@ -40,16 +40,8 @@ import {
     UsernameCheckResponseToJSON,
 } from '../models/index';
 
-export interface AccountActivateRequest {
-    token?: string;
-}
-
 export interface AccountCheckUsernameRequest {
     changeUsernameRequest?: ChangeUsernameRequest;
-}
-
-export interface AccountEmailVerifyRequest {
-    token?: string;
 }
 
 export interface AccountLoginV2Request {
@@ -73,21 +65,6 @@ export interface AccountSignUpV2Request {
 export interface AccountApiInterface {
     /**
      * 
-     * @summary Activate account
-     * @param {string} [token] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AccountApiInterface
-     */
-    accountActivateRaw(requestParameters: AccountActivateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
-
-    /**
-     * Activate account
-     */
-    accountActivate(token?: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
-
-    /**
-     * 
      * @summary Check if a username is available
      * @param {ChangeUsernameRequest} [changeUsernameRequest] 
      * @param {*} [options] Override http request option.
@@ -100,21 +77,6 @@ export interface AccountApiInterface {
      * Check if a username is available
      */
     accountCheckUsername(changeUsernameRequest?: ChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UsernameCheckResponse>;
-
-    /**
-     * 
-     * @summary Verify account email
-     * @param {string} [token] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AccountApiInterface
-     */
-    accountEmailVerifyRaw(requestParameters: AccountEmailVerifyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
-
-    /**
-     * Verify account email
-     */
-    accountEmailVerify(token?: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -169,38 +131,6 @@ export interface AccountApiInterface {
 export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
 
     /**
-     * Activate account
-     */
-    async accountActivateRaw(requestParameters: AccountActivateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        if (requestParameters['token'] != null) {
-            queryParameters['token'] = requestParameters['token'];
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-
-        let urlPath = `/2/account/activate`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Activate account
-     */
-    async accountActivate(token?: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.accountActivateRaw({ token: token }, initOverrides);
-    }
-
-    /**
      * Check if a username is available
      */
     async accountCheckUsernameRaw(requestParameters: AccountCheckUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UsernameCheckResponse>> {
@@ -230,38 +160,6 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
     async accountCheckUsername(changeUsernameRequest?: ChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UsernameCheckResponse> {
         const response = await this.accountCheckUsernameRaw({ changeUsernameRequest: changeUsernameRequest }, initOverrides);
         return await response.value();
-    }
-
-    /**
-     * Verify account email
-     */
-    async accountEmailVerifyRaw(requestParameters: AccountEmailVerifyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        if (requestParameters['token'] != null) {
-            queryParameters['token'] = requestParameters['token'];
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-
-        let urlPath = `/2/account/verify-email`;
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Verify account email
-     */
-    async accountEmailVerify(token?: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.accountEmailVerifyRaw({ token: token }, initOverrides);
     }
 
     /**
