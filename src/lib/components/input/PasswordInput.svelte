@@ -8,6 +8,7 @@
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import type { ValidationResult } from '$lib/types/ValidationResult';
   import type { TimeoutHandle } from '$lib/types/WAPI';
+  import type { Snippet } from 'svelte';
   import type { FullAutoFill } from 'svelte/elements';
   import PasswordStrengthMeter from './impl/PasswordStrengthMeter.svelte';
 
@@ -133,7 +134,7 @@
   {validationResult}
   {Icon}
   onblur={() => (showPopup = false)}
-  popup={showPopup ? popup : undefined}
+  popup={showPopup ? (popup as Snippet) : undefined}
 >
   {#snippet after()}
     <Button
@@ -141,7 +142,7 @@
       class="cursor-pointer"
       onclick={() => (valueShown = !valueShown)}
       variant="ghost"
-      disabled={validationResult === null || (validationResult && !validationResult.valid)}
+      disabled={value.length == 0}
     >
       {#if valueShown}
         <EyeOff />

@@ -36,6 +36,15 @@ function setSelfName(name: string) {
   });
 }
 
+function setSelfEmail(email: string) {
+  update((state) => {
+    if (!state.self) return state;
+    state.self.email = email;
+    state.all = updateAllFromSelf(state.all, state.self);
+    return state;
+  });
+}
+
 async function setSelf(user: ApiUserSelf) {
   update((state) => ({
     ...state,
@@ -88,6 +97,7 @@ export const UserStore = {
   set,
   update,
   setSelfName,
+  setSelfEmail,
   setSelf,
   refreshSelf,
   reset,

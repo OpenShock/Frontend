@@ -14,9 +14,16 @@
 
   let { account }: Props = $props();
 
-  let username = $state<string>('');
+  let loading = $state(false);
 
-  async function submitUsername() {
+  let username = $state<string>('');
+  let usernameValid = $state(false);
+
+  async function submitUsername(e: Event) {
+    e.preventDefault();
+    if (loading) return;
+    loading = true;
+
     try {
       await accountV1Api.authenticatedAccountChangeUsername({ username });
 
@@ -33,6 +40,8 @@
 
         return true;
       });
+    } finally {
+      loading = false;
     }
   }
 </script>
@@ -42,9 +51,16 @@
   placeholder={account.name}
   autocomplete="off"
   bind:value={username}
+  bind:valid={usernameValid}
   Icon={User}
 >
   {#snippet after()}
-    <Button type="button" onclick={submitUsername} variant="ghost">Change</Button>
+    <Button
+      type="button"
+      onclick={submitUsername}
+      disabled={!usernameValid || username === account.email || loading}
+    >
+      Change
+    </Button>
   {/snippet}
 </UsernameInput>
