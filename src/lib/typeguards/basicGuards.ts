@@ -16,3 +16,7 @@ export function isArrayBuffer(value: unknown): value is ArrayBuffer {
 export function isDate(value: unknown): value is Date {
   return value instanceof Date;
 }
+
+export function isStringOrNull(value: unknown): value is string | null {
+  return isString(value) || value === null;
+}

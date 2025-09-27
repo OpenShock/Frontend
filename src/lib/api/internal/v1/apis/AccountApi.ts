@@ -20,8 +20,10 @@ import type {
   ChangeUsernameRequest,
   LegacyEmptyResponse,
   Login,
+  OAuthConnectionResponse,
   OpenShockProblem,
   PasswordResetProcessData,
+  ProblemDetails,
   ResetRequest,
   SignUp,
   UsernameCheckResponse,
@@ -37,10 +39,14 @@ import {
     LegacyEmptyResponseToJSON,
     LoginFromJSON,
     LoginToJSON,
+    OAuthConnectionResponseFromJSON,
+    OAuthConnectionResponseToJSON,
     OpenShockProblemFromJSON,
     OpenShockProblemToJSON,
     PasswordResetProcessDataFromJSON,
     PasswordResetProcessDataToJSON,
+    ProblemDetailsFromJSON,
+    ProblemDetailsToJSON,
     ResetRequestFromJSON,
     ResetRequestToJSON,
     SignUpFromJSON,
@@ -49,8 +55,16 @@ import {
     UsernameCheckResponseToJSON,
 } from '../models/index';
 
+export interface AccountActivateRequest {
+    token?: string;
+}
+
 export interface AccountCheckUsernameRequest {
     changeUsernameRequest?: ChangeUsernameRequest;
+}
+
+export interface AccountEmailVerifyRequest {
+    token?: string;
 }
 
 export interface AccountLoginRequest {
@@ -88,6 +102,10 @@ export interface AuthenticatedAccountChangeUsernameRequest {
     changeUsernameRequest?: ChangeUsernameRequest;
 }
 
+export interface AuthenticatedAccountRemoveOAuthConnectionRequest {
+    provider: string;
+}
+
 /**
  * AccountApi - interface
  * 
@@ -95,6 +113,21 @@ export interface AuthenticatedAccountChangeUsernameRequest {
  * @interface AccountApiInterface
  */
 export interface AccountApiInterface {
+    /**
+     * 
+     * @summary Activate account
+     * @param {string} [token] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApiInterface
+     */
+    accountActivateRaw(requestParameters: AccountActivateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Activate account
+     */
+    accountActivate(token?: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
     /**
      * 
      * @summary Check if a username is available
@@ -109,6 +142,21 @@ export interface AccountApiInterface {
      * Check if a username is available
      */
     accountCheckUsername(changeUsernameRequest?: ChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UsernameCheckResponse>;
+
+    /**
+     * 
+     * @summary Verify account email
+     * @param {string} [token] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApiInterface
+     */
+    accountEmailVerifyRaw(requestParameters: AccountEmailVerifyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Verify account email
+     */
+    accountEmailVerify(token?: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -252,12 +300,41 @@ export interface AccountApiInterface {
      * @throws {RequiredError}
      * @memberof AccountApiInterface
      */
-    authenticatedAccountDeactivateRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>>;
+    authenticatedAccountDeactivateRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
      * Deactivate currently logged in account
      */
-    authenticatedAccountDeactivate(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
+    authenticatedAccountDeactivate(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * 
+     * @summary List OAuth connections linked to the current user.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApiInterface
+     */
+    authenticatedAccountListOAuthConnectionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<OAuthConnectionResponse>>>;
+
+    /**
+     * List OAuth connections linked to the current user.
+     */
+    authenticatedAccountListOAuthConnections(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<OAuthConnectionResponse>>;
+
+    /**
+     * 
+     * @summary Remove an existing OAuth connection for the current user.
+     * @param {string} provider Provider key (e.g. &#x60;discord&#x60;).
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApiInterface
+     */
+    authenticatedAccountRemoveOAuthConnectionRaw(requestParameters: AuthenticatedAccountRemoveOAuthConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Remove an existing OAuth connection for the current user.
+     */
+    authenticatedAccountRemoveOAuthConnection(provider: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
 }
 
@@ -265,6 +342,38 @@ export interface AccountApiInterface {
  * 
  */
 export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
+
+    /**
+     * Activate account
+     */
+    async accountActivateRaw(requestParameters: AccountActivateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['token'] != null) {
+            queryParameters['token'] = requestParameters['token'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/1/account/activate`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Activate account
+     */
+    async accountActivate(token?: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.accountActivateRaw({ token: token }, initOverrides);
+    }
 
     /**
      * Check if a username is available
@@ -296,6 +405,38 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
     async accountCheckUsername(changeUsernameRequest?: ChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UsernameCheckResponse> {
         const response = await this.accountCheckUsernameRaw({ changeUsernameRequest: changeUsernameRequest }, initOverrides);
         return await response.value();
+    }
+
+    /**
+     * Verify account email
+     */
+    async accountEmailVerifyRaw(requestParameters: AccountEmailVerifyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['token'] != null) {
+            queryParameters['token'] = requestParameters['token'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/1/account/verify-email`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Verify account email
+     */
+    async accountEmailVerify(token?: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.accountEmailVerifyRaw({ token: token }, initOverrides);
     }
 
     /**
@@ -610,7 +751,7 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
     /**
      * Deactivate currently logged in account
      */
-    async authenticatedAccountDeactivateRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
+    async authenticatedAccountDeactivateRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -625,19 +766,79 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<string>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Deactivate currently logged in account
      */
-    async authenticatedAccountDeactivate(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
-        const response = await this.authenticatedAccountDeactivateRaw(initOverrides);
+    async authenticatedAccountDeactivate(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.authenticatedAccountDeactivateRaw(initOverrides);
+    }
+
+    /**
+     * List OAuth connections linked to the current user.
+     */
+    async authenticatedAccountListOAuthConnectionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<OAuthConnectionResponse>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/1/account/connections`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(OAuthConnectionResponseFromJSON));
+    }
+
+    /**
+     * List OAuth connections linked to the current user.
+     */
+    async authenticatedAccountListOAuthConnections(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<OAuthConnectionResponse>> {
+        const response = await this.authenticatedAccountListOAuthConnectionsRaw(initOverrides);
         return await response.value();
+    }
+
+    /**
+     * Remove an existing OAuth connection for the current user.
+     */
+    async authenticatedAccountRemoveOAuthConnectionRaw(requestParameters: AuthenticatedAccountRemoveOAuthConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['provider'] == null) {
+            throw new runtime.RequiredError(
+                'provider',
+                'Required parameter "provider" was null or undefined when calling authenticatedAccountRemoveOAuthConnection().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/1/account/connections/{provider}`;
+        urlPath = urlPath.replace(`{${"provider"}}`, encodeURIComponent(String(requestParameters['provider'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Remove an existing OAuth connection for the current user.
+     */
+    async authenticatedAccountRemoveOAuthConnection(provider: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.authenticatedAccountRemoveOAuthConnectionRaw({ provider: provider }, initOverrides);
     }
 
 }

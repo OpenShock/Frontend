@@ -16,3 +16,7 @@ updates:
       npm-dependencies:
         patterns:
           - '*' # Group all updates together
+  - package-ecosystem: 'devcontainers'
+    directory: '/'
+    schedule:
+      interval: weekly

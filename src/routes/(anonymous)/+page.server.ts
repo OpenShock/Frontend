@@ -3,6 +3,9 @@ import { Configuration, MetaApi } from '$lib/api/internal/v1';
 
 type ResponseType = Promise<{ ok: false; error: string } | { ok: true; deviceCount: number }>;
 
+export const ssr = true;
+export const prerender = false;
+
 export async function load({ setHeaders }): ResponseType {
   setHeaders({
     'cache-control': 'public, max-age=300',

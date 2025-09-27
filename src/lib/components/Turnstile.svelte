@@ -1,20 +1,24 @@
 <script lang="ts">
   import Bug from '@lucide/svelte/icons/bug';
   import { dev } from '$app/environment';
-  import { PUBLIC_TURNSTILE_DEV_BYPASS_VALUE, PUBLIC_TURNSTILE_SITE_KEY } from '$env/static/public';
+  import { PUBLIC_TURNSTILE_DEV_BYPASS_VALUE } from '$env/static/public';
   import CloudflareLogo from '$lib/components/svg/CloudflareLogo.svelte';
   import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
-  import { ColorSchemeStore, LightMode } from '$lib/stores/ColorSchemeStore';
+  import { ColorScheme, colorScheme } from '$lib/stores/ColorSchemeStore.svelte';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
 
   interface Props {
     action: string;
     cData?: string;
-    response?: string | null;
+    response: string | null;
   }
 
-  let { action, cData, response = $bindable(null) }: Props = $props();
+  let {
+    action,
+    cData,
+    response = $bindable(dev ? PUBLIC_TURNSTILE_DEV_BYPASS_VALUE : null),
+  }: Props = $props();
 
   let element: HTMLDivElement;
 
@@ -28,10 +32,10 @@
   function renderTurnstile() {
     mounted = true;
 
-    const theme = $ColorSchemeStore === LightMode.System ? 'auto' : $ColorSchemeStore;
+    const theme = colorScheme.Value === ColorScheme.System ? 'auto' : colorScheme.Value;
 
     widgetId = window.turnstile!.render(element, {
-      sitekey: PUBLIC_TURNSTILE_SITE_KEY,
+      sitekey: sessionStorage.getItem('turnstileSiteKey')!,
       action,
       cData,
       theme,
@@ -43,10 +47,7 @@
   }
 
   onMount(() => {
-    if (dev) {
-      response = PUBLIC_TURNSTILE_DEV_BYPASS_VALUE;
-      return;
-    }
+    if (dev) return;
 
     // Check that Cloudflare Turnstile has been loaded.
     // If `window.turnstile` is undefined, it usually means the <script> tag wasn't injected.

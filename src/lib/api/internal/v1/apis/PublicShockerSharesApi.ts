@@ -18,7 +18,7 @@ import type {
   GuidLegacyDataResponse,
   LegacyEmptyResponse,
   OpenShockProblem,
-  OwnPublicShareResponseIAsyncEnumerableLegacyDataResponse,
+  OwnPublicShareResponseArrayLegacyDataResponse,
   PauseReasonLegacyDataResponse,
   PauseRequest,
   PublicShareCreate,
@@ -32,8 +32,8 @@ import {
     LegacyEmptyResponseToJSON,
     OpenShockProblemFromJSON,
     OpenShockProblemToJSON,
-    OwnPublicShareResponseIAsyncEnumerableLegacyDataResponseFromJSON,
-    OwnPublicShareResponseIAsyncEnumerableLegacyDataResponseToJSON,
+    OwnPublicShareResponseArrayLegacyDataResponseFromJSON,
+    OwnPublicShareResponseArrayLegacyDataResponseToJSON,
     PauseReasonLegacyDataResponseFromJSON,
     PauseReasonLegacyDataResponseToJSON,
     PauseRequestFromJSON,
@@ -172,12 +172,12 @@ export interface PublicShockerSharesApiInterface {
      * @throws {RequiredError}
      * @memberof PublicShockerSharesApiInterface
      */
-    shareLinksListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OwnPublicShareResponseIAsyncEnumerableLegacyDataResponse>>;
+    shareLinksListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OwnPublicShareResponseArrayLegacyDataResponse>>;
 
     /**
      * Get all public shares for the current user
      */
-    shareLinksList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OwnPublicShareResponseIAsyncEnumerableLegacyDataResponse>;
+    shareLinksList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OwnPublicShareResponseArrayLegacyDataResponse>;
 
     /**
      * 
@@ -278,10 +278,6 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
-
 
         let urlPath = `/1/shares/links/{publicShareId}/{shockerId}`;
         urlPath = urlPath.replace(`{${"publicShareId"}}`, encodeURIComponent(String(requestParameters['publicShareId'])));
@@ -314,10 +310,6 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
         const headerParameters: runtime.HTTPHeaders = {};
 
         headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
 
 
         let urlPath = `/1/shares/links`;
@@ -355,10 +347,6 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
 
 
         let urlPath = `/1/shares/links/{publicShareId}`;
@@ -406,10 +394,6 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
 
         headerParameters['Content-Type'] = 'application/json';
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
-
 
         let urlPath = `/1/shares/links/{publicShareId}/{shockerId}`;
         urlPath = urlPath.replace(`{${"publicShareId"}}`, encodeURIComponent(String(requestParameters['publicShareId'])));
@@ -441,14 +425,10 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
     /**
      * Get all public shares for the current user
      */
-    async shareLinksListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OwnPublicShareResponseIAsyncEnumerableLegacyDataResponse>> {
+    async shareLinksListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OwnPublicShareResponseArrayLegacyDataResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
 
 
         let urlPath = `/1/shares/links`;
@@ -460,13 +440,13 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OwnPublicShareResponseIAsyncEnumerableLegacyDataResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => OwnPublicShareResponseArrayLegacyDataResponseFromJSON(jsonValue));
     }
 
     /**
      * Get all public shares for the current user
      */
-    async shareLinksList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OwnPublicShareResponseIAsyncEnumerableLegacyDataResponse> {
+    async shareLinksList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OwnPublicShareResponseArrayLegacyDataResponse> {
         const response = await this.shareLinksListRaw(initOverrides);
         return await response.value();
     }
@@ -494,10 +474,6 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
         const headerParameters: runtime.HTTPHeaders = {};
 
         headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
 
 
         let urlPath = `/1/shares/links/{publicShareId}/{shockerId}/pause`;
@@ -544,10 +520,6 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
-        }
 
 
         let urlPath = `/1/shares/links/{publicShareId}/{shockerId}`;

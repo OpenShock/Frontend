@@ -22,7 +22,8 @@ export enum UsernameErrorType {
     TooLong = 'TooLong',
     StartOrEndWithWhitespace = 'StartOrEndWithWhitespace',
     ResembleEmail = 'ResembleEmail',
-    ObnoxiousCharacters = 'ObnoxiousCharacters'
+    ObnoxiousCharacters = 'ObnoxiousCharacters',
+    Blacklisted = 'Blacklisted'
 }
 
 

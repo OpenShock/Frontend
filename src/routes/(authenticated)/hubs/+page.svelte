@@ -12,6 +12,7 @@
   import { onMount } from 'svelte';
   import { type Hub, columns } from './columns';
   import DataTableActions from './data-table-actions.svelte';
+  import HubCreateDialog from './dialog-hub-create.svelte';
 
   const isMobile = new IsMobile();
 
@@ -47,6 +48,8 @@
 
   onMount(refreshOwnHubs);
 </script>
+
+<HubCreateDialog bind:open={showAddHubModal} />
 
 <Container>
   <Card.Header class="w-full">

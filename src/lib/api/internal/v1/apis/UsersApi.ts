@@ -15,12 +15,22 @@
 
 import * as runtime from '../runtime';
 import type {
+  BasicUserInfo,
+  OpenShockProblem,
   UserSelfResponseLegacyDataResponse,
 } from '../models/index';
 import {
+    BasicUserInfoFromJSON,
+    BasicUserInfoToJSON,
+    OpenShockProblemFromJSON,
+    OpenShockProblemToJSON,
     UserSelfResponseLegacyDataResponseFromJSON,
     UserSelfResponseLegacyDataResponseToJSON,
 } from '../models/index';
+
+export interface UsersGetByNameRequest {
+    username: string;
+}
 
 /**
  * UsersApi - interface
@@ -29,6 +39,19 @@ import {
  * @interface UsersApiInterface
  */
 export interface UsersApiInterface {
+    /**
+     * 
+     * @param {string} username 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApiInterface
+     */
+    usersGetByNameRaw(requestParameters: UsersGetByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BasicUserInfo>>;
+
+    /**
+     */
+    usersGetByName(username: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BasicUserInfo>;
+
     /**
      * 
      * @summary Get the current user\'s information.
@@ -49,6 +72,45 @@ export interface UsersApiInterface {
  * 
  */
 export class UsersApi extends runtime.BaseAPI implements UsersApiInterface {
+
+    /**
+     */
+    async usersGetByNameRaw(requestParameters: UsersGetByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BasicUserInfo>> {
+        if (requestParameters['username'] == null) {
+            throw new runtime.RequiredError(
+                'username',
+                'Required parameter "username" was null or undefined when calling usersGetByName().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
+        }
+
+
+        let urlPath = `/1/users/by-name/{username}`;
+        urlPath = urlPath.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters['username'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => BasicUserInfoFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async usersGetByName(username: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BasicUserInfo> {
+        const response = await this.usersGetByNameRaw({ username: username }, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Get the current user\'s information.

@@ -1,36 +1,29 @@
 <script lang="ts">
-  import { Pause, Play } from '@lucide/svelte';
   import { page } from '$app/state';
   import { publicShockerSharesApi } from '$lib/api';
   import type { PublicShareResponse } from '$lib/api/internal/v1';
   import { Button } from '$lib/components/ui/button';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import SharedDevice from './SharedDevice.svelte';
 
-  let details = $state<PublicShareResponse>();
+  let details = $state<PublicShareResponse | null>(null);
 
+  // Fetch share details
   $effect(() => {
+    const shareId = page.params.shareId;
+    if (!shareId) return;
+
     publicShockerSharesApi
-      .publicGetPublicShare(page.params.shareId)
-      .then((response) => (details = response.data))
+      .publicGetPublicShare(shareId)
+      .then((res) => (details = res.data))
       .catch(handleApiError);
   });
 </script>
 
-<ul>
-  {#each details?.devices ?? [] as device}
-    {#each device.shockers ?? [] as shocker}
-      <li class="m-2 flex items-center gap-2">
-        <Button>
-          <Pause />
-          <Play />
-        </Button>
-        {shocker.name}
-        <div class="flex-1"></div>
-        <Button>Shock</Button>
-        <Button>Vibrate</Button>
-        <Button>Sound</Button>
-        <Button>Remove</Button>
-      </li>
-    {/each}
+{#if details}
+  Editing share "{details.name}"
+  <Button>Add</Button>
+  {#each details.devices ?? [] as device}
+    <SharedDevice {device} />
   {/each}
-</ul>
+{/if}

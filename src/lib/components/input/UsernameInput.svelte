@@ -1,17 +1,17 @@
 <script lang="ts">
   import { accountV2Api } from '$lib/api';
   import TextInput from '$lib/components/input/TextInput.svelte';
-  import type { ButtonSettings } from '$lib/components/input/impl/ButtonSettings';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import {
     UsernameCheckingAvailabilityValRes,
     UsernameInternalServerErrorValRes,
-    mapUsernameAvailability,
+    mapUsernameCheckResponse,
     validateUsername,
   } from '$lib/inputvalidation/usernameValidator';
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import type { ValidationResult } from '$lib/types/ValidationResult';
   import type { TimeoutHandle } from '$lib/types/WAPI';
+  import type { Snippet } from 'svelte';
   import type { FullAutoFill } from 'svelte/elements';
 
   interface Props {
@@ -22,7 +22,7 @@
     valid?: boolean;
     validate?: boolean;
     Icon?: AnyComponent;
-    button?: ButtonSettings;
+    after?: Snippet;
   }
 
   let {
@@ -33,7 +33,7 @@
     valid = $bindable(false),
     validate = true,
     Icon,
-    button,
+    after,
   }: Props = $props();
 
   let validationResult = $state<ValidationResult | null>(null);
@@ -53,7 +53,7 @@
         const response = await accountV2Api.accountCheckUsername({ username: value });
 
         // Map the response to a validation result
-        validationResult = mapUsernameAvailability(response.availability);
+        validationResult = mapUsernameCheckResponse(response);
       } catch (error) {
         // Show an error toast
         await handleApiError(error);
@@ -83,4 +83,13 @@
   });
 </script>
 
-<TextInput {label} {placeholder} {autocomplete} bind:value {validationResult} {Icon} {button} />
+<TextInput
+  type="text"
+  {label}
+  {placeholder}
+  {autocomplete}
+  bind:value
+  {validationResult}
+  {Icon}
+  {after}
+/>

@@ -36,8 +36,8 @@
   const columns: ColumnDef<LoginSessionResponse>[] = [
     CreateColumnDef('ip', 'Ip', RenderCell),
     CreateSortableColumnDef('userAgent', 'User Agent', UserAgentRenderer),
-    CreateSortableColumnDef('created', 'Created at', TimeSinceRelativeRenderer),
-    CreateSortableColumnDef('expires', 'Expires at', TimeSinceRelativeRenderer),
+    CreateSortableColumnDef('created', 'Created', TimeSinceRelativeRenderer),
+    CreateSortableColumnDef('expires', 'Expires', TimeSinceRelativeRenderer),
     CreateSortableColumnDef('lastUsed', 'Last seen', TimeSinceRelativeOrNeverRenderer),
     {
       id: 'actions',

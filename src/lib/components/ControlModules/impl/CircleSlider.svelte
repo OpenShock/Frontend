@@ -4,6 +4,7 @@
   import { cubicOut } from 'svelte/easing';
   import { Tween } from 'svelte/motion';
 
+  // Gauge constants
   const viewHeight = 100;
   const viewWidth = 100;
   const centerX = viewWidth / 2;
@@ -12,14 +13,14 @@
   const angleStart = 135;
   const angleEnd = 405;
   const angleRange = angleEnd - angleStart;
-
   const arcStartX = centerX + getCircleX(radius, angleStart);
   const arcStartY = centerY + getCircleY(radius, angleStart);
 
+  // Unique gauge IDs
   const id = $props.id();
   const inputId = id + '-input';
   const labelId = id + '-label';
-  const guageId = id + '-guage';
+  const gaugeId = id + '-gauge';
 
   interface Props {
     name: string;
@@ -32,38 +33,74 @@
 
   let { name, value = $bindable(), min, max, step, tabindex }: Props = $props();
 
+  // Non-reactive variables for keeping track of slider state
   let isTracking = false;
-  let element: HTMLDivElement;
+  let element: SVGSVGElement;
+  let lastFraction: number | null = null;
 
-  function handlePointerMovement(event: PointerEvent) {
-    element.setPointerCapture(event.pointerId);
-
+  // --- helpers ---
+  function fractionFromEvent(event: PointerEvent) {
     const rect = element.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
 
-    const angle = Math.atan2(event.clientX - centerX, centerY - event.clientY) * RadToDeg;
+    const angle = Math.atan2(event.clientX - cx, cy - event.clientY) * RadToDeg;
 
-    const fraction = clamp(angle / angleRange + 0.5, 0, 1);
-
-    value = lerp(min, max, fraction);
+    // Map angle to [0..1] relative to our arc
+    return clamp(angle / angleRange + 0.5, 0, 1);
   }
+
+  function applyWrapProtection(fraction: number) {
+    if (lastFraction === null) return fraction;
+
+    const diff = Math.abs(fraction - lastFraction);
+
+    // If the diff is large, it means we jumped across the bottom.
+    // Require going via 0.5 (top) before wrapping.
+    if (diff > 0.5) {
+      if (lastFraction > 0.75 && fraction < 0.25) {
+        // Trying to jump from max to min
+        return 1; // stick to max
+      } else if (lastFraction < 0.25 && fraction > 0.75) {
+        // Trying to jump from min to max
+        return 0; // stick to min
+      }
+    }
+    return fraction;
+  }
+
+  function updateValueFromFraction(fraction: number) {
+    value = lerp(min, max, fraction);
+    lastFraction = fraction;
+  }
+
+  // Pointer handlers
+  function handlePointerMoveDrag(event: PointerEvent) {
+    updateValueFromFraction(applyWrapProtection(fractionFromEvent(event)));
+  }
+
   function stopTracking() {
     isTracking = false;
-    window.removeEventListener('pointermove', handlePointerMovement);
+    window.removeEventListener('pointermove', handlePointerMoveDrag);
     window.removeEventListener('pointerup', stopTracking);
+    lastFraction = null; // reset for next interaction
   }
+
   function startTracking(event: PointerEvent) {
     event.preventDefault();
 
+    // Always jump to exact pointer position on start (wrap protection OFF)
+    updateValueFromFraction(fractionFromEvent(event));
+
+    element.setPointerCapture(event.pointerId);
+
     if (!isTracking) {
       isTracking = true;
-      window.addEventListener('pointermove', handlePointerMovement);
+      window.addEventListener('pointermove', handlePointerMoveDrag);
       window.addEventListener('pointerup', stopTracking);
     }
-
-    handlePointerMovement(event);
   }
+
   onDestroy(stopTracking);
 
   // Smooth animation to snapped values
@@ -74,7 +111,7 @@
 
   // Update animated value based on value, step, min, and max
   $effect(() => {
-    const stepped = Math.round(value / step) * step;
+    const stepped = Math.round((value - min) / step) * step + min;
     const rounded = Math.round((stepped + Number.EPSILON) * 100) / 100;
     value = clamp(rounded, min, max);
     tween.set(value);
@@ -92,42 +129,45 @@
   }
 </script>
 
-<div class="relative size-[150px]" bind:this={element}>
-  <svg viewBox="0 0 {viewWidth} {viewHeight}" class="absolute size-[150px]">
+<div class="relative size-[150px] select-none">
+  <svg viewBox="0 0 {viewWidth} {viewHeight}" class="absolute size-[150px]" bind:this={element}>
+    <!-- background arc -->
     <path
       d={calcSvgPathData(angleEnd)}
-      fill="none"
-      stroke="rgb(27, 29, 30)"
-      stroke-width="20"
+      class="fill-none stroke-neutral-200 dark:stroke-neutral-800 stroke-[20] cursor-pointer"
       stroke-linecap="round"
-      cursor="pointer"
       aria-hidden="true"
       onpointerdown={startTracking}
     />
+
+    <!-- foreground arc -->
     <path
-      id={guageId}
+      id={gaugeId}
       d={calcSvgPathData(degrees)}
-      fill="none"
-      stroke="rgb(0, 122, 255)"
-      stroke-width="10"
+      class="fill-none stroke-blue-500 dark:stroke-blue-400 stroke-[10] cursor-pointer"
       stroke-linecap="round"
-      cursor="pointer"
       aria-hidden="true"
       onpointerdown={startTracking}
+    />
+
+    <!-- knob -->
+    <circle
+      r="10"
+      cx={centerX + getCircleX(radius, degrees)}
+      cy={centerY + getCircleY(radius, degrees)}
+      onpointerdown={startTracking}
+      role="slider"
+      tabindex={tabindex ?? 0}
+      aria-valuemin={min}
+      aria-valuenow={value}
+      aria-valuemax={max}
+      aria-labelledby={labelId}
+      aria-controls={gaugeId}
+      class="fill-white dark:fill-neutral-900 stroke-neutral-400 dark:stroke-neutral-700 cursor-move outline-none focus:ring-2 focus:ring-blue-500/60 drop-shadow-md"
     />
   </svg>
-  <div
-    onpointerdown={startTracking}
-    role="slider"
-    {tabindex}
-    aria-valuemin={min}
-    aria-valuenow={value}
-    aria-valuemax={max}
-    aria-labelledby={labelId}
-    aria-controls={guageId}
-    class="absolute size-[30px] cursor-move rounded-full bg-white"
-    style="top: {60 + getCircleY(60, degrees)}px; left: {60 + getCircleX(60, degrees)}px;"
-  ></div>
+
+  <!-- numeric input -->
   <input
     id={inputId}
     type="number"
@@ -137,13 +177,15 @@
     {max}
     {step}
     aria-label="Value"
-    class="hide-spinners absolute top-1/2 left-1/2 -translate-1/2 transform border-none bg-transparent text-center text-xl font-bold select-none w-10"
+    class="hide-spinners absolute top-1/2 left-1/2 -translate-1/2 border-none bg-transparent text-center text-xl font-bold w-10 text-gray-900 dark:text-gray-100 focus:outline-none"
   />
+
+  <!-- gauge label -->
   <label
     id={labelId}
     for={inputId}
     aria-label="Name"
-    class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/10 transform text-center select-none"
+    class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/10 text-center text-neutral-600 dark:text-neutral-300"
   >
     {name}
   </label>

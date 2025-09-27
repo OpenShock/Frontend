@@ -10,7 +10,9 @@
   import Header from './Header.svelte';
   import Sidebar from './Sidebar.svelte';
   import '../app.css';
-  import { initializeApp } from '$lib/init';
+  import { browser } from '$app/environment';
+  import DialogManager from '$lib/components/confirm-dialog/dialog-manager.svelte';
+  import { isMobile } from '$lib/utils/compatibility';
 
   interface Props {
     children?: Snippet;
@@ -20,10 +22,11 @@
 
   let meta = $derived(buildMetaData(page.url));
 
-  let isOpen = $state(false);
-
-  onMount(async () => {
-    await initializeApp(!page.url.pathname.startsWith('/logout'));
+  let isOpen = $state(
+    !browser || isMobile ? false : localStorage.getItem('sidebarOpen') === 'true'
+  );
+  $effect(() => {
+    if (!isMobile) localStorage.setItem('sidebarOpen', isOpen ? 'true' : 'false');
   });
 </script>
 
@@ -33,11 +36,13 @@
 
 <Toaster />
 
+<DialogManager />
+
 <SidebarProvider bind:open={isOpen}>
   <Sidebar />
   <div class="flex h-screen w-screen flex-1 flex-col overflow-hidden">
     {#if PUBLIC_DEVELOPMENT_BANNER === 'true'}
-      <div class="top-0 left-0 z-999 bg-[orangered] text-center text-white">
+      <div class="top-0 left-0 z-1 bg-[orangered] text-center text-white flex-none">
         <p>
           This is the OpenShock <b>DEVELOPMENT</b> environment. <u>No data is saved</u>, and
           regularly overwritten by production data
@@ -45,7 +50,7 @@
       </div>
     {/if}
     <Header />
-    <main class="flex-1">
+    <main class="flex-1 min-h-0 overflow-hidden">
       {@render children?.()}
     </main>
     <Footer />

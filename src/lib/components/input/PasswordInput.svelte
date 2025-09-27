@@ -2,11 +2,13 @@
   import { Eye, EyeOff } from '@lucide/svelte';
   import { checkPwnedCount } from '$lib/api/pwnedPasswords';
   import TextInput from '$lib/components/input/TextInput.svelte';
+  import { Button } from '$lib/components/ui/button';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { validatePassword } from '$lib/inputvalidation/passwordValidator';
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import type { ValidationResult } from '$lib/types/ValidationResult';
   import type { TimeoutHandle } from '$lib/types/WAPI';
+  import type { Snippet } from 'svelte';
   import type { FullAutoFill } from 'svelte/elements';
   import PasswordStrengthMeter from './impl/PasswordStrengthMeter.svelte';
 
@@ -131,11 +133,22 @@
   bind:value
   {validationResult}
   {Icon}
-  button={{
-    Icon: valueShown ? EyeOff : Eye,
-    class: 'cursor-pointer',
-    onClick: () => (valueShown = !valueShown),
-  }}
   onblur={() => (showPopup = false)}
-  popup={showPopup ? popup : undefined}
-/>
+  popup={showPopup ? (popup as Snippet) : undefined}
+>
+  {#snippet after()}
+    <Button
+      type="button"
+      class="cursor-pointer"
+      onclick={() => (valueShown = !valueShown)}
+      variant="ghost"
+      disabled={value.length == 0}
+    >
+      {#if valueShown}
+        <EyeOff />
+      {:else}
+        <Eye />
+      {/if}
+    </Button>
+  {/snippet}
+</TextInput>

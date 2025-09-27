@@ -3,6 +3,7 @@
     ChevronDown,
     Cpu,
     House,
+    IdCard,
     KeyRound,
     Link,
     MonitorSmartphone,
@@ -140,8 +141,16 @@
             href: '/admin/users',
           },
           {
+            title: 'Blacklists',
+            href: '/admin/blacklists',
+          },
+          {
             title: 'Webhooks',
             href: '/admin/webhooks',
+          },
+          {
+            title: 'Configuration',
+            href: '/admin/config',
           },
         ],
       },
@@ -165,6 +174,11 @@
         title: 'Sessions',
         Icon: MonitorSmartphone,
         href: '/settings/sessions',
+      },
+      {
+        title: 'Connections',
+        Icon: IdCard,
+        href: '/settings/connections',
       },
       {
         title: 'Account Settings',

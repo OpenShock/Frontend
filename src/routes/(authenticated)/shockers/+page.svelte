@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Layers, Settings } from '@lucide/svelte';
+  import { Layers, OctagonAlert, Settings, StopCircle } from '@lucide/svelte';
   import Container from '$lib/components/Container.svelte';
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import MapControlModule from '$lib/components/ControlModules/MapControlModule.svelte';
@@ -31,6 +31,10 @@
     <div class="w-full flex content-center justify-between">
       <h1 class="text-2xl font-bold">Shockers</h1>
       <div>
+        <!-- Emergency Stop Button -->
+        <Button variant="secondary" class="border-2 text-red-500">
+          <OctagonAlert size="64" /> STOP
+        </Button>
         <!-- Mode button -->
         <Popover.Root>
           <Popover.Trigger><Layers /></Popover.Trigger>

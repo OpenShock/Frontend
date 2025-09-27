@@ -1,27 +1,25 @@
 <script lang="ts">
-  import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input';
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import { GetValResColor, type ValidationResult } from '$lib/types/ValidationResult';
+  import { cn } from '$lib/utils/shadcn.js';
   import type { Snippet } from 'svelte';
   import type { FocusEventHandler, FullAutoFill } from 'svelte/elements';
-  import type { ButtonSettings } from './impl/ButtonSettings';
 
   interface Props {
-    type?: 'text' | 'password';
-    label: string;
+    type?: 'text' | 'email' | 'password' | 'search' | 'url';
+    label?: string;
     placeholder?: string;
     autocomplete?: FullAutoFill;
     value: string;
     validationResult?: ValidationResult | null;
     Icon?: AnyComponent;
-    button?: ButtonSettings;
+    after?: Snippet;
     popup?: Snippet;
     onblur?: FocusEventHandler<HTMLInputElement> | null;
   }
 
   const id = $props.id();
-  const inputId = id + '-input';
   const validationId = id + '-validation';
   let {
     type = 'text',
@@ -31,20 +29,21 @@
     value = $bindable(),
     validationResult,
     Icon,
-    button,
+    after,
     popup,
     onblur,
   }: Props = $props();
 </script>
 
-<label for={inputId} class="w-full">
-  <span>{label}</span>
+<label class="w-full">
+  {#if label}
+    <span>{label}</span>
+  {/if}
   <div class="relative flex grow flex-row items-center gap-2">
     {#if Icon}
       <Icon />
     {/if}
     <Input
-      id={inputId}
       {type}
       class="grow"
       title={label}
@@ -53,7 +52,7 @@
       bind:value
       {onblur}
       aria-invalid={validationResult ? !validationResult.valid : undefined}
-      aria-describedby={validationResult ? validationId : undefined}
+      aria-describedby={validationResult?.message ? validationId : undefined}
     />
     {#if popup}
       <div
@@ -63,25 +62,18 @@
         {@render popup()}
       </div>
     {/if}
-    {#if button}
-      <Button
-        type="button"
-        class={button.class ?? 'disabled:opacity-50'}
-        onclick={button.onClick}
-        variant="ghost"
-        disabled={button.submits &&
-          (validationResult === null || (validationResult && !validationResult.valid))}
-      >
-        {#if 'Icon' in button}
-          <button.Icon />
-        {:else if 'text' in button}
-          {button.text}
-        {/if}
-      </Button>
+    {#if after}
+      {@render after()}
     {/if}
   </div>
   {#if validationResult?.message}
-    <p id={validationId} class="text-xs text-{GetValResColor(validationResult)} mt-0! h-4 truncate">
+    <p
+      id={validationId}
+      class={cn('text-xs !mt-0 h-4 truncate', `text-${GetValResColor(validationResult)}`)}
+      role="status"
+      aria-atomic="true"
+      aria-live="polite"
+    >
       {validationResult.message}
       {#if validationResult.link}
         <a
@@ -95,6 +87,6 @@
       {/if}
     </p>
   {:else}
-    <div class="h-4"></div>
+    <div class="h-4" aria-hidden="true"></div>
   {/if}
 </label>

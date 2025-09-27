@@ -15,12 +15,12 @@
 
 import * as runtime from '../runtime';
 import type {
-  ApiVersionResponseLegacyDataResponse,
+  BackendInfoResponseLegacyDataResponse,
   StatsResponseLegacyDataResponse,
 } from '../models/index';
 import {
-    ApiVersionResponseLegacyDataResponseFromJSON,
-    ApiVersionResponseLegacyDataResponseToJSON,
+    BackendInfoResponseLegacyDataResponseFromJSON,
+    BackendInfoResponseLegacyDataResponseToJSON,
     StatsResponseLegacyDataResponseFromJSON,
     StatsResponseLegacyDataResponseToJSON,
 } from '../models/index';
@@ -53,12 +53,12 @@ export interface MetaApiInterface {
      * @throws {RequiredError}
      * @memberof MetaApiInterface
      */
-    versionGetBackendVersionRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ApiVersionResponseLegacyDataResponse>>;
+    versionGetBackendInfoRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BackendInfoResponseLegacyDataResponse>>;
 
     /**
      * Gets the version of the OpenShock backend.
      */
-    versionGetBackendVersion(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ApiVersionResponseLegacyDataResponse>;
+    versionGetBackendInfo(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BackendInfoResponseLegacyDataResponse>;
 
 }
 
@@ -99,7 +99,7 @@ export class MetaApi extends runtime.BaseAPI implements MetaApiInterface {
     /**
      * Gets the version of the OpenShock backend.
      */
-    async versionGetBackendVersionRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ApiVersionResponseLegacyDataResponse>> {
+    async versionGetBackendInfoRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BackendInfoResponseLegacyDataResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -114,14 +114,14 @@ export class MetaApi extends runtime.BaseAPI implements MetaApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ApiVersionResponseLegacyDataResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => BackendInfoResponseLegacyDataResponseFromJSON(jsonValue));
     }
 
     /**
      * Gets the version of the OpenShock backend.
      */
-    async versionGetBackendVersion(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ApiVersionResponseLegacyDataResponse> {
-        const response = await this.versionGetBackendVersionRaw(initOverrides);
+    async versionGetBackendInfo(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BackendInfoResponseLegacyDataResponse> {
+        const response = await this.versionGetBackendInfoRaw(initOverrides);
         return await response.value();
     }
 

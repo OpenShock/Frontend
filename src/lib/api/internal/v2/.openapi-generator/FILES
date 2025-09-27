@@ -1,4 +1,3 @@
-.openapi-generator-ignore
 apis/AccountApi.ts
 apis/HubEndpointsApi.ts
 apis/HubManagementApi.ts
@@ -16,8 +15,10 @@ models/HubCreateRequest.ts
 models/LcgNodeResponseV2.ts
 models/LegacyEmptyResponse.ts
 models/LoginV2.ts
+models/LoginV2OkResponse.ts
 models/OpenShockProblem.ts
 models/PasswordResetRequestV2.ts
+models/RoleType.ts
 models/ShareInviteBaseDetails.ts
 models/ShockerLimits.ts
 models/ShockerPermLimitPairWithId.ts
