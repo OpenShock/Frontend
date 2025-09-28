@@ -103,9 +103,9 @@ export function LoginSessionResponseToJSONTyped(value?: LoginSessionResponse | n
         'id': value['id'],
         'ip': value['ip'],
         'userAgent': value['userAgent'],
-        'created': ((value['created']).toISOString()),
-        'expires': ((value['expires']).toISOString()),
-        'lastUsed': ((value['lastUsed'] as any).toISOString()),
+        'created': value['created'].toISOString(),
+        'expires': value['expires'].toISOString(),
+        'lastUsed': value['lastUsed'] == null ? value['lastUsed'] : value['lastUsed'].toISOString(),
     };
 }
 

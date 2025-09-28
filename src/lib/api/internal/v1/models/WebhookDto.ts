@@ -87,7 +87,7 @@ export function WebhookDtoToJSONTyped(value?: WebhookDto | null, ignoreDiscrimin
         'id': value['id'],
         'name': value['name'],
         'url': value['url'],
-        'createdAt': ((value['createdAt']).toISOString()),
+        'createdAt': value['createdAt'].toISOString(),
     };
 }
 

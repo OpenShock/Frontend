@@ -114,8 +114,8 @@ export function ConfigurationItemDtoToJSONTyped(value?: ConfigurationItemDto | n
         'description': value['description'],
         'type': ConfigurationValueTypeToJSON(value['type']),
         'value': value['value'],
-        'updatedAt': ((value['updatedAt']).toISOString()),
-        'createdAt': ((value['createdAt']).toISOString()),
+        'updatedAt': value['updatedAt'].toISOString(),
+        'createdAt': value['createdAt'].toISOString(),
     };
 }
 

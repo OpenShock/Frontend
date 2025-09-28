@@ -78,7 +78,7 @@ export function ResponseDeviceToJSONTyped(value?: ResponseDevice | null, ignoreD
         
         'id': value['id'],
         'name': value['name'],
-        'createdOn': ((value['createdOn']).toISOString()),
+        'createdOn': value['createdOn'].toISOString(),
     };
 }
 

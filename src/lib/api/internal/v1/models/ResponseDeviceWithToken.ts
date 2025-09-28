@@ -86,7 +86,7 @@ export function ResponseDeviceWithTokenToJSONTyped(value?: ResponseDeviceWithTok
         
         'id': value['id'],
         'name': value['name'],
-        'createdOn': ((value['createdOn']).toISOString()),
+        'createdOn': value['createdOn'].toISOString(),
         'token': value['token'],
     };
 }

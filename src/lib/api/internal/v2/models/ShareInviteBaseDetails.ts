@@ -108,7 +108,7 @@ export function ShareInviteBaseDetailsToJSONTyped(value?: ShareInviteBaseDetails
     return {
         
         'id': value['id'],
-        'createdAt': ((value['createdAt']).toISOString()),
+        'createdAt': value['createdAt'].toISOString(),
         'owner': BasicUserInfoToJSON(value['owner']),
         'sharedWith': BasicUserInfoToJSON(value['sharedWith']),
         'shockers': ((value['shockers'] as Array<any>).map(ShockerPermLimitPairWithIdToJSON)),

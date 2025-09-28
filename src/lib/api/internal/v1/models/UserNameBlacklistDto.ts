@@ -97,7 +97,7 @@ export function UserNameBlacklistDtoToJSONTyped(value?: UserNameBlacklistDto | n
         'id': value['id'],
         'value': value['value'],
         'matchType': MatchTypeEnumToJSON(value['matchType']),
-        'createdAt': ((value['createdAt']).toISOString()),
+        'createdAt': value['createdAt'].toISOString(),
     };
 }
 

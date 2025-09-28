@@ -123,7 +123,7 @@ export function ShockerWithDeviceToJSONTyped(value?: ShockerWithDevice | null, i
         'model': ShockerModelTypeToJSON(value['model']),
         'name': value['name'],
         'isPaused': value['isPaused'],
-        'createdOn': ((value['createdOn']).toISOString()),
+        'createdOn': value['createdOn'].toISOString(),
         'device': value['device'],
     };
 }

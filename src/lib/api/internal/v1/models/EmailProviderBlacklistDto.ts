@@ -78,7 +78,7 @@ export function EmailProviderBlacklistDtoToJSONTyped(value?: EmailProviderBlackl
         
         'id': value['id'],
         'domain': value['domain'],
-        'createdAt': ((value['createdAt']).toISOString()),
+        'createdAt': value['createdAt'].toISOString(),
     };
 }
 

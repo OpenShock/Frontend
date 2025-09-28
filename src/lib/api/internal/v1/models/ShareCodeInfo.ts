@@ -69,7 +69,7 @@ export function ShareCodeInfoToJSONTyped(value?: ShareCodeInfo | null, ignoreDis
     return {
         
         'id': value['id'],
-        'createdOn': ((value['createdOn']).toISOString()),
+        'createdOn': value['createdOn'].toISOString(),
     };
 }
 

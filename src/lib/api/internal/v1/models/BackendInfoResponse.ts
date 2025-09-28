@@ -118,7 +118,7 @@ export function BackendInfoResponseToJSONTyped(value?: BackendInfoResponse | nul
         
         'version': value['version'],
         'commit': value['commit'],
-        'currentTime': ((value['currentTime']).toISOString()),
+        'currentTime': value['currentTime'].toISOString(),
         'frontendUrl': value['frontendUrl'],
         'shortLinkUrl': value['shortLinkUrl'],
         'turnstileSiteKey': value['turnstileSiteKey'],

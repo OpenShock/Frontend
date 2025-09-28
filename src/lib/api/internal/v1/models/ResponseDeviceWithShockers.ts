@@ -94,7 +94,7 @@ export function ResponseDeviceWithShockersToJSONTyped(value?: ResponseDeviceWith
         
         'id': value['id'],
         'name': value['name'],
-        'createdOn': ((value['createdOn']).toISOString()),
+        'createdOn': value['createdOn'].toISOString(),
         'shockers': ((value['shockers'] as Array<any>).map(ShockerResponseToJSON)),
     };
 }

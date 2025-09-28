@@ -119,9 +119,9 @@ export function TokenCreatedResponseToJSONTyped(value?: TokenCreatedResponse | n
         'id': value['id'],
         'name': value['name'],
         'token': value['token'],
-        'createdAt': ((value['createdAt']).toISOString()),
-        'validUntil': ((value['validUntil'] as any).toISOString()),
-        'lastUsed': ((value['lastUsed']).toISOString()),
+        'createdAt': value['createdAt'].toISOString(),
+        'validUntil': value['validUntil'] == null ? value['validUntil'] : value['validUntil'].toISOString(),
+        'lastUsed': value['lastUsed'].toISOString(),
         'permissions': ((value['permissions'] as Array<any>).map(PermissionTypeToJSON)),
     };
 }

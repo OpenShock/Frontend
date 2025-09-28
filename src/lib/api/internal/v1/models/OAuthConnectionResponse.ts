@@ -87,7 +87,7 @@ export function OAuthConnectionResponseToJSONTyped(value?: OAuthConnectionRespon
         'providerKey': value['providerKey'],
         'externalId': value['externalId'],
         'displayName': value['displayName'],
-        'linkedAt': ((value['linkedAt']).toISOString()),
+        'linkedAt': value['linkedAt'].toISOString(),
     };
 }
 

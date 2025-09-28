@@ -124,7 +124,7 @@ export function UserShareInfoToJSONTyped(value?: UserShareInfo | null, ignoreDis
         
         'id': value['id'],
         'name': value['name'],
-        'createdOn': ((value['createdOn']).toISOString()),
+        'createdOn': value['createdOn'].toISOString(),
         'permissions': ShockerPermissionsToJSON(value['permissions']),
         'limits': ShockerLimitsToJSON(value['limits']),
         'paused': value['paused'],
