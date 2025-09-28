@@ -1,8 +1,9 @@
+.openapi-generator-ignore
 apis/AccountApi.ts
 apis/HubEndpointsApi.ts
 apis/HubManagementApi.ts
-apis/ShockerSharesApi.ts
 apis/ShockersApi.ts
+apis/UserShockerSharesApi.ts
 apis/index.ts
 index.ts
 models/BasicUserInfo.ts
@@ -18,6 +19,9 @@ models/LoginV2.ts
 models/LoginV2OkResponse.ts
 models/OpenShockProblem.ts
 models/PasswordResetRequestV2.ts
+models/PauseUserShareShockersRequest.ts
+models/PauseUserShareShockersResponse.ts
+models/RemoveUserSharesResponse.ts
 models/RoleType.ts
 models/ShareInviteBaseDetails.ts
 models/ShockerLimits.ts
