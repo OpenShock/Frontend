@@ -77,6 +77,10 @@ async function getServerConfig(mode: string, useLocalRedirect: boolean) {
     process.exit(1);
   }
 
+  if(domain === 'localhost') {
+    return { host: 'localhost', port: 8080, proxy: {} };
+  }
+
   const host = `local.${domain}`;
 
   // Ensure we have the host entry redirecting to localhost
