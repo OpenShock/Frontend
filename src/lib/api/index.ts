@@ -17,7 +17,7 @@ import {
   AccountApi as AccountV2Api,
   Configuration as ConfigurationV2,
   HubManagementApi as HubManagementV2Api,
-  ShockerSharesApi as ShockerSharesV2Api,
+  UserShockerSharesApi as ShockerSharesV2Api,
   ShockersApi as ShockersV2Api,
 } from './internal/v2';
 

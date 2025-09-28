@@ -17,7 +17,7 @@
   let {
     action,
     cData,
-    response = $bindable(dev ? PUBLIC_TURNSTILE_DEV_BYPASS_VALUE : null),
+    response = $bindable(),
   }: Props = $props();
 
   let element: HTMLDivElement;
@@ -47,7 +47,10 @@
   }
 
   onMount(() => {
-    if (dev) return;
+    if (dev) {
+      response = PUBLIC_TURNSTILE_DEV_BYPASS_VALUE;
+      return;
+    }
 
     // Check that Cloudflare Turnstile has been loaded.
     // If `window.turnstile` is undefined, it usually means the <script> tag wasn't injected.
