@@ -31,7 +31,7 @@
 
   async function onFormSubmit() {
     try {
-      redeemPromise = shockerSharesV2Api.sharesRedeemInvite(userInput);
+      redeemPromise = shockerSharesV2Api.userSharesRedeemInvite(userInput);
       await redeemPromise;
       redeemed = true;
       await refreshUserShares();

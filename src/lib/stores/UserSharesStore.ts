@@ -8,7 +8,7 @@ export const OutgoingOutstandingInvites = writable<ShareInviteBaseDetails[]>([])
 
 export async function refreshUserShares() {
   try {
-    UserShares.set(await shockerSharesV2Api.sharesGetSharesByUsers());
+    UserShares.set(await shockerSharesV2Api.userSharesGetSharesByUsers());
   } catch (error) {
     handleApiError(error);
     throw error;
@@ -17,7 +17,7 @@ export async function refreshUserShares() {
 
 export async function refreshOutgoingInvites() {
   try {
-    OutgoingOutstandingInvites.set(await shockerSharesV2Api.sharesGetOutgoingInvitesList());
+    OutgoingOutstandingInvites.set(await shockerSharesV2Api.userSharesGetOutgoingInvitesList());
   } catch (error) {
     handleApiError(error);
     throw error;

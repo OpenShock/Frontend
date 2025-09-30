@@ -71,7 +71,7 @@
 
   async function onFormSubmit() {
     try {
-      const createdCode = await shockerSharesV2Api.sharesCreateShareInvite({
+      const createdCode = await shockerSharesV2Api.userSharesCreateShareInvite({
         user: fetchedUser?.id,
         shockers: shockerIds.map((id) => ({
           id: id,

@@ -24,7 +24,7 @@
 
   async function removeInviteCall(value: ShareInviteBaseDetails) {
     try {
-      await shockerSharesV2Api.sharesDeleteOutgoingInvite(shareInvite.id);
+      await shockerSharesV2Api.userSharesDeleteOutgoingInvite(shareInvite.id);
       if (shareInvite.sharedWith) {
         toast.success(`Removed invite for ${shareInvite.sharedWith.name} (${shareInvite.id})`);
       } else {
