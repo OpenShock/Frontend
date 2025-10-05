@@ -1,6 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { accountV2Api } from '$lib/api';
+  import AbsolutelySureButton from '$lib/components/AbsolutelySureButton.svelte';
   import Container from '$lib/components/Container.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
   import EmailInput from '$lib/components/input/EmailInput.svelte';
@@ -72,6 +73,8 @@
       turnstileResponse = null;
     }
   }
+
+  let ack = $state(false);
 </script>
 
 <Dialog.Root bind:open={() => accountCreated, onOpenChange}>
@@ -88,6 +91,10 @@
 </Dialog.Root>
 
 <Container class="items-center">
+  {#if !ack}
+    <div class="text-5xl font-semibold text-nowrap text-red-500">Do not use this frontend to register a new account, this is a WIP, please go to https://openshock.app</div>
+    <AbsolutelySureButton text="I acknowledge that I have read this message and that this frontend is not functional yet." onconfirm={() => (ack = true)} />
+    {:else}
   <form class="flex flex-col gap-2" onsubmit={handleSubmission}>
     <div class="text-3xl font-semibold text-nowrap">Sign Up</div>
     <UsernameInput
@@ -118,4 +125,5 @@
 
     <Button type="submit" disabled={!canSubmit}>Sign Up</Button>
   </form>
+  {/if}
 </Container>
