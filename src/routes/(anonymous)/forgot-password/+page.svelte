@@ -6,6 +6,7 @@
   import EmailInput from '$lib/components/input/EmailInput.svelte';
   import { Button } from '$lib/components/ui/button';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { toast } from 'svelte-sonner';
 
   let email = $state<string>('');
   let emailValid = $state(false);
@@ -22,6 +23,7 @@
     accountV1Api
       .accountPasswordResetInitiate({ email })
       .then(() => {
+        toast.success('Reset password request has been sent to the given email');
         goto('/login');
       })
       .catch(handleApiError);
