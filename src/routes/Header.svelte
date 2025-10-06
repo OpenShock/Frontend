@@ -12,16 +12,17 @@
   import { BreadCrumbStore } from '$lib/stores/BreadCrumbStore';
   import { UserStore } from '$lib/stores/UserStore';
   import { cn } from '$lib/utils';
+  import type { Pathname } from '$app/types';
 
   let sidebar = useSidebar();
 </script>
 
-{#snippet dropdownItem(name: string, url: string)}
+{#snippet dropdownItem(name: string, url: Pathname)}
   <DropdownMenu.Item class="cursor-pointer" onclick={() => goto(url)}>
     {name}
   </DropdownMenu.Item>
 {/snippet}
-{#snippet headerItem(text: string, href: string)}
+{#snippet headerItem(text: string, href: Pathname)}
   <Button {href}>{text}</Button>
 {/snippet}
 
