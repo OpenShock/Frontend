@@ -1,6 +1,7 @@
 <script lang="ts">
   import { accountV2Api } from '$lib/api';
   import TextInput from '$lib/components/input/TextInput.svelte';
+  import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import {
     UsernameCheckingAvailabilityValRes,
@@ -36,11 +37,19 @@
     after,
   }: Props = $props();
 
+  let checkResponses = $state<Map<string, ValidationResult>>(new Map());
   let validationResult = $state<ValidationResult | null>(null);
   let usernameDebounce: TimeoutHandle | undefined;
-  function checkUsernameAvailability() {
+  function checkUsernameAvailability(username: string) {
     // Stop the previous debounce timer if it exists
     clearTimeout(usernameDebounce);
+
+    const entry = checkResponses.get(username);
+    if (entry !== undefined) {
+      validationResult = entry;
+      usernameDebounce = undefined;
+      return;
+    }
 
     // Set the validation result to the checking availability state
     validationResult = UsernameCheckingAvailabilityValRes;
@@ -50,16 +59,29 @@
       // 250ms has passed, check if the username is available
       try {
         // Make the API request
-        const response = await accountV2Api.accountCheckUsername({ username: value });
+        const response = await accountV2Api.accountCheckUsername({ username });
 
         // Map the response to a validation result
         validationResult = mapUsernameCheckResponse(response);
+
+        checkResponses.set(username, validationResult);
       } catch (error) {
         // Show an error toast
-        await handleApiError(error);
+        await handleApiError(error, (err) => {
+          if (!isValidationError(err)) {
+            // Set the validation result to the internal server error state
+            validationResult = UsernameInternalServerErrorValRes;
+            return false;
+          }
 
-        // Set the validation result to the internal server error state
-        validationResult = UsernameInternalServerErrorValRes;
+          const apiValRes = mapToValRes(err, 'Username');
+          if (apiValRes !== null) {
+            validationResult = apiValRes;
+            return true;
+          }
+
+          return false;
+        });
       }
     }, 250);
   }
@@ -69,7 +91,7 @@
       const valRes = validateUsername(value);
       if (valRes?.valid) {
         // Basic validation passed, check availability
-        checkUsernameAvailability();
+        checkUsernameAvailability(value);
       } else {
         // Basic validation failed, return the failed validation result
         validationResult = valRes;
