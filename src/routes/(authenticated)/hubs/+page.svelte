@@ -13,6 +13,7 @@
   import { type Hub, columns } from './columns';
   import DataTableActions from './data-table-actions.svelte';
   import HubCreateDialog from './dialog-hub-create.svelte';
+  import { breadcrumbs } from '$lib/state/Breadcrumbs.svelte';
 
   const isMobile = new IsMobile();
 
@@ -46,6 +47,7 @@
 
   let showAddHubModal = $state<boolean>(false);
 
+  breadcrumbs.push('Hubs', '/hubs');
   onMount(refreshOwnHubs);
 </script>
 
