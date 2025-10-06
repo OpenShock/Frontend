@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { RotateCcw } from '@lucide/svelte';
   import type { SortingState } from '@tanstack/table-core';
   import type { ColumnDef } from '@tanstack/table-core';
   import { adminApi } from '$lib/api';
@@ -55,6 +56,10 @@
     <CardTitle class="flex items-center justify-between space-x-2 text-3xl">
       Webhooks
       <Button onclick={() => (addDialogOpen = true)}>Add new</Button>
+      <Button class="text-xl" onclick={fetchWebhooks}>
+        <RotateCcw />
+        <span> Refresh </span>
+      </Button>
     </CardTitle>
   </CardHeader>
   <div class="w-full p-6 gap-6 grid">
