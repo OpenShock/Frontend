@@ -4,6 +4,7 @@
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { SignalR_Connection } from '$lib/signalr';
+  import { serializeCaptivePortalMessage } from '$lib/signalr/serializers/CaptivePortal';
   import { serializeEmergencyStopMessage } from '$lib/signalr/serializers/EmergencyStop';
   import { serializeRebootMessage } from '$lib/signalr/serializers/Reboot';
   import { toast } from 'svelte-sonner';
@@ -56,6 +57,16 @@
       onclick={() => serializeEmergencyStopMessage($SignalR_Connection, hub.id)}
     >
       Emergency Stop
+    </DropdownMenu.Item>
+    <DropdownMenu.Item
+      onclick={() => serializeCaptivePortalMessage($SignalR_Connection, hub.id, true)}
+    >
+      Enable Wi-Fi hotspot
+    </DropdownMenu.Item>
+    <DropdownMenu.Item
+      onclick={() => serializeCaptivePortalMessage($SignalR_Connection, hub.id, false)}
+    >
+      Disable Wi-Fi hotspot
     </DropdownMenu.Item>
     <DropdownMenu.Item onclick={() => (pairDialogOpen = true)}>Pair</DropdownMenu.Item>
     <DropdownMenu.Item onclick={() => (regenerateTokenDialogOpen = true)}>
