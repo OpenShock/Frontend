@@ -48,12 +48,12 @@
   <DropdownMenu.Content>
     <DropdownMenu.Item onclick={copyId}>Copy ID</DropdownMenu.Item>
     <DropdownMenu.Item onclick={() => goto(`/hubs/${hub.id}/update`)}>Update</DropdownMenu.Item>
-    <DropdownMenu.Item onclick={() => serializeRebootMessage(get(SignalR_Connection), hub.id)}>
+    <DropdownMenu.Item onclick={() => serializeRebootMessage($SignalR_Connection, hub.id)}>
       Reboot
     </DropdownMenu.Item>
     <DropdownMenu.Item
       class="text-red-500"
-      onclick={() => serializeEmergencyStopMessage(get(SignalR_Connection), hub.id)}
+      onclick={() => serializeEmergencyStopMessage($SignalR_Connection, hub.id)}
     >
       Emergency Stop
     </DropdownMenu.Item>

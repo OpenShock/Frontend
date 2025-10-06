@@ -11,6 +11,7 @@
   import * as Table from '$lib/components/ui/table';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { SignalR_Connection } from '$lib/signalr';
+  import { serializeOtaInstallMessage } from '$lib/signalr/serializers/OtaInstall';
   import { type HubOnlineState, OnlineHubsStore } from '$lib/stores/HubsStore';
   import { cn } from '$lib/utils';
   import { NumberToHexPadded } from '$lib/utils/convert';
@@ -21,7 +22,7 @@
 
   function startUpdate() {
     if ($SignalR_Connection === null || hub === null || version === null) return;
-    $SignalR_Connection.invoke('OtaInstall', hub.hubId, version);
+    serializeOtaInstallMessage($SignalR_Connection, hub.hubId, version);
   }
 
   let isLoading = $state<boolean>(false);
