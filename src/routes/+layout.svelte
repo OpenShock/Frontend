@@ -12,6 +12,7 @@
   import '../app.css';
   import { browser } from '$app/environment';
   import DialogManager from '$lib/components/confirm-dialog/dialog-manager.svelte';
+  import { SidebarOpen } from '$lib/states/SidebarState.svelte';
   import { isMobile } from '$lib/utils/compatibility';
 
   interface Props {
@@ -22,11 +23,9 @@
 
   let meta = $derived(buildMetaData(page.url));
 
-  let isOpen = $state(
-    !browser || isMobile ? false : localStorage.getItem('sidebarOpen') === 'true'
-  );
+  let isOpen = $state(!browser || isMobile ? false : SidebarOpen.Value);
   $effect(() => {
-    if (!isMobile) localStorage.setItem('sidebarOpen', isOpen ? 'true' : 'false');
+    if (!isMobile) SidebarOpen.Value = isOpen;
   });
 </script>
 
@@ -38,7 +37,7 @@
 
 <DialogManager />
 
-<SidebarProvider bind:open={isOpen}>
+<SidebarProvider bind:open={SidebarOpen.Value}>
   <Sidebar />
   <div class="flex h-screen w-screen flex-1 flex-col overflow-hidden">
     {#if PUBLIC_DEVELOPMENT_BANNER === 'true'}
