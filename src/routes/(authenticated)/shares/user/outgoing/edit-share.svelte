@@ -65,6 +65,7 @@
   onMount(() => {
     shares = $userShare.shares.map((share) => ({
       ...share,
+      paused: share.paused !== 0,
       limits: {
         intensity: share.limits.intensity ?? 100,
         duration: share.limits.duration ?? 30_000,
@@ -134,6 +135,7 @@
                 u.outgoing[storeIndex].shares[index] = {
                   ...u.outgoing[storeIndex].shares[index],
                   ...share,
+                  paused: share.paused ? 2 : 0,
                 };
                 return u;
               });
@@ -249,7 +251,8 @@
                         // Update the actual store shares
                         UserShares.update((current) => {
                           current.outgoing[storeIndex].shares.forEach(
-                            (share) => (share.paused = paused)
+                            (share) =>
+                              (share.paused = paused ? share.paused | 2 : share.paused & ~2)
                           );
                           return current;
                         });
@@ -281,7 +284,7 @@
                             UserShares.update((current) => {
                               current.outgoing[storeIndex].shares.forEach((s) => {
                                 if (s.id === share.id) {
-                                  s.paused = paused; // Update the store shares list
+                                  s.paused = paused ? s.paused | 2 : s.paused & ~2; // Update the store shares list
                                 }
                               });
                               return current;

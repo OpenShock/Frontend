@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Zap } from '@lucide/svelte';
-  import type { V2UserSharesListItem } from '$lib/api/internal/v2';
+  import type { UserShareInfo, V2UserSharesListItem } from '$lib/api/internal/v2';
   import * as Avatar from '$lib/components/ui/avatar';
   import { Badge } from '$lib/components/ui/badge';
   import * as Table from '$lib/components/ui/table';
@@ -52,12 +52,14 @@
     <MultiPauseToggle
       shockers={$userShare.shares.map((share) => ({
         shockerId: share.id,
-        paused: share.paused,
+        paused: share.paused !== 0,
         userShareUserId: $userShare.id,
       }))}
       onPausedChange={(paused) => {
         UserShares.update((current) => {
-          current.outgoing[storeIndex].shares.forEach((share) => (share.paused = paused));
+          current.outgoing[storeIndex].shares.forEach(
+            (share) => (share.paused = paused ? share.paused | 2 : share.paused & ~2)
+          );
           return current;
         });
       }}
