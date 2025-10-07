@@ -10,10 +10,8 @@
   import Header from './Header.svelte';
   import Sidebar from './Sidebar.svelte';
   import '../app.css';
-  import { browser } from '$app/environment';
   import DialogManager from '$lib/components/confirm-dialog/dialog-manager.svelte';
-  import { SidebarOpen } from '$lib/states/SidebarState.svelte';
-  import { isMobile } from '$lib/utils/compatibility';
+  import { SidebarOpen } from '$lib/state/SidebarState.svelte';
 
   interface Props {
     children?: Snippet;
@@ -22,11 +20,6 @@
   let { children }: Props = $props();
 
   let meta = $derived(buildMetaData(page.url));
-
-  let isOpen = $state(!browser || isMobile ? false : SidebarOpen.Value);
-  $effect(() => {
-    if (!isMobile) SidebarOpen.Value = isOpen;
-  });
 </script>
 
 <BasicTags {...meta} />

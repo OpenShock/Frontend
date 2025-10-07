@@ -1,9 +1,10 @@
 import { browser } from "$app/environment";
+import { isMobile } from "$lib/utils/compatibility";
 
 const KEY = 'sidebarOpen';
 
 function init() {
-  if (!browser) return false;
+  if (!browser || isMobile) return false;
 
   const valueStr = localStorage.getItem(KEY);
   const value = valueStr === 'true';
@@ -24,6 +25,8 @@ export const SidebarOpen = {
   },
   set Value(value: boolean) {
     state = value;
-    localStorage.setItem(KEY, value ? 'true' : 'false');
+    if (browser && !isMobile) {
+      localStorage.setItem(KEY, value ? 'true' : 'false');
+    }
   }
 };
