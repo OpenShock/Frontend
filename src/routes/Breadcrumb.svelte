@@ -1,6 +1,6 @@
 <script lang="ts">
-  import * as Breadcrumb from "$lib/components/ui/breadcrumb";
-  import { breadcrumbs } from "$lib/state/Breadcrumbs.svelte";
+  import * as Breadcrumb from '$lib/components/ui/breadcrumb';
+  import { breadcrumbs } from '$lib/state/Breadcrumbs.svelte';
 </script>
 
 {#if breadcrumbs.State.length > 0}

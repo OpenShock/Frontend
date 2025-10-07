@@ -21,5 +21,5 @@ export const breadcrumbs = {
       };
     });
   },
-  clear: () => state = [],
+  clear: () => (state = []),
 };

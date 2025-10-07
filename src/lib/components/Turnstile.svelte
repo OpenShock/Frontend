@@ -14,11 +14,7 @@
     response: string | null;
   }
 
-  let {
-    action,
-    cData,
-    response = $bindable(),
-  }: Props = $props();
+  let { action, cData, response = $bindable() }: Props = $props();
 
   let element: HTMLDivElement;
 

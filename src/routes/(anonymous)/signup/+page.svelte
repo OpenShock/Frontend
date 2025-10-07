@@ -92,38 +92,44 @@
 
 <Container class="items-center">
   {#if !ack}
-    <div class="text-5xl font-semibold text-nowrap text-red-500">Do not use this frontend to register a new account, this is a WIP, please go to https://openshock.app</div>
-    <AbsolutelySureButton text="I acknowledge that I have read this message and that this frontend is not functional yet." onconfirm={() => (ack = true)} />
-    {:else}
-  <form class="flex flex-col gap-2" onsubmit={handleSubmission}>
-    <div class="text-3xl font-semibold text-nowrap">Sign Up</div>
-    <UsernameInput
-      label="Username"
-      placeholder="Username"
-      bind:value={username}
-      bind:valid={usernameValid}
+    <div class="text-5xl font-semibold text-nowrap text-red-500">
+      Do not use this frontend to register a new account, this is a WIP, please go to
+      https://openshock.app
+    </div>
+    <AbsolutelySureButton
+      text="I acknowledge that I have read this message and that this frontend is not functional yet."
+      onconfirm={() => (ack = true)}
     />
-    <EmailInput label="Email" placeholder="Email" bind:value={email} bind:valid={emailValid} />
-    <PasswordInput
-      label="Password"
-      placeholder="Password"
-      autocomplete="new-password"
-      bind:value={password}
-      bind:valid={passwordValid}
-      validate
-      showStrengthMeter
-    />
-    <PasswordInput
-      label="Confirm Password"
-      placeholder="Confirm Password"
-      autocomplete="new-password"
-      bind:value={passwordConfirm}
-      validate={validatePasswordMatch(passwordConfirm, password)}
-    />
+  {:else}
+    <form class="flex flex-col gap-2" onsubmit={handleSubmission}>
+      <div class="text-3xl font-semibold text-nowrap">Sign Up</div>
+      <UsernameInput
+        label="Username"
+        placeholder="Username"
+        bind:value={username}
+        bind:valid={usernameValid}
+      />
+      <EmailInput label="Email" placeholder="Email" bind:value={email} bind:valid={emailValid} />
+      <PasswordInput
+        label="Password"
+        placeholder="Password"
+        autocomplete="new-password"
+        bind:value={password}
+        bind:valid={passwordValid}
+        validate
+        showStrengthMeter
+      />
+      <PasswordInput
+        label="Confirm Password"
+        placeholder="Confirm Password"
+        autocomplete="new-password"
+        bind:value={passwordConfirm}
+        validate={validatePasswordMatch(passwordConfirm, password)}
+      />
 
-    <Turnstile action="signup" bind:response={turnstileResponse} />
+      <Turnstile action="signup" bind:response={turnstileResponse} />
 
-    <Button type="submit" disabled={!canSubmit}>Sign Up</Button>
-  </form>
+      <Button type="submit" disabled={!canSubmit}>Sign Up</Button>
+    </form>
   {/if}
 </Container>

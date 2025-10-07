@@ -16,6 +16,7 @@
     Zap,
   } from '@lucide/svelte';
   import { page } from '$app/state';
+  import type { Pathname } from '$app/types';
   import { RoleType } from '$lib/api/internal/v1';
   import {
     Content,
@@ -36,7 +37,6 @@
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import { isMobile, isSerialSupported } from '$lib/utils/compatibility';
   import { Collapsible } from 'bits-ui';
-  import type { Pathname } from '$app/types';
 
   let currentUser = $derived($UserStore.self);
 

@@ -1,6 +1,7 @@
 <script lang="ts">
   import PanelLeft from '@lucide/svelte/icons/panel-left';
   import { goto } from '$app/navigation';
+  import type { Pathname } from '$app/types';
   import { PUBLIC_DISCORD_INVITE_URL, PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
   import LightSwitch from '$lib/components/LightSwitch.svelte';
   import DiscordIcon from '$lib/components/svg/DiscordIcon.svelte';
@@ -11,7 +12,6 @@
   import { UserStore } from '$lib/stores/UserStore';
   import { cn } from '$lib/utils';
   import Breadcrumb from './Breadcrumb.svelte';
-  import type { Pathname } from '$app/types';
 
   let sidebar = useSidebar();
 </script>

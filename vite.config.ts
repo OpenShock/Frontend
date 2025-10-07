@@ -77,7 +77,7 @@ async function getServerConfig(mode: string, useLocalRedirect: boolean) {
     process.exit(1);
   }
 
-  if(domain === 'localhost') {
+  if (domain === 'localhost') {
     return { host: 'localhost', port: 8080, proxy: {} };
   }
 

@@ -7,13 +7,13 @@
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card';
   import { IsMobile } from '$lib/hooks/is-mobile.svelte';
+  import { breadcrumbs } from '$lib/state/Breadcrumbs.svelte';
   import { OnlineHubsStore, OwnHubsStore, refreshOwnHubs } from '$lib/stores/HubsStore';
   import { SemVer } from 'semver';
   import { onMount } from 'svelte';
   import { type Hub, columns } from './columns';
   import DataTableActions from './data-table-actions.svelte';
   import HubCreateDialog from './dialog-hub-create.svelte';
-  import { breadcrumbs } from '$lib/state/Breadcrumbs.svelte';
 
   const isMobile = new IsMobile();
 
