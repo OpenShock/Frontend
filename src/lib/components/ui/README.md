@@ -28,6 +28,11 @@ Now it should be easier to see what the CLI actually changed, and we can now pro
    * Update it to use our own `ColorSchemeStore` implementation instead of the one from the `svelte-sonner` package.
    * Remove `svelte-sonner` from `package.json`
 
+3. **Update `slider` component if modified**
+
+   If the `slider` component was modified by the CLI, it most likely removed the `cursor-w-resize` tailwind class.
+   * Revert the change before committing.
+
 3. **Run code formatting again**
 
    Now we need to run the code formatting again to ensure everything is consistent after the changes made in steps 1 and 2.
