@@ -1,6 +1,9 @@
 <script lang="ts">
   import Container from '$lib/components/Container.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
+  import { breadcrumbs } from '$lib/state/Breadcrumbs.svelte';
+
+  breadcrumbs.push('Home', '/home');
 </script>
 
 <Container>

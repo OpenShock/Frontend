@@ -5,23 +5,23 @@
   import LightSwitch from '$lib/components/LightSwitch.svelte';
   import DiscordIcon from '$lib/components/svg/DiscordIcon.svelte';
   import GithubIcon from '$lib/components/svg/GithubIcon.svelte';
-  import * as Breadcrumb from '$lib/components/ui/breadcrumb';
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { useSidebar } from '$lib/components/ui/sidebar';
-  import { BreadCrumbStore } from '$lib/stores/BreadCrumbStore';
   import { UserStore } from '$lib/stores/UserStore';
   import { cn } from '$lib/utils';
+  import Breadcrumb from './Breadcrumb.svelte';
+  import type { Pathname } from '$app/types';
 
   let sidebar = useSidebar();
 </script>
 
-{#snippet dropdownItem(name: string, url: string)}
+{#snippet dropdownItem(name: string, url: Pathname)}
   <DropdownMenu.Item class="cursor-pointer" onclick={() => goto(url)}>
     {name}
   </DropdownMenu.Item>
 {/snippet}
-{#snippet headerItem(text: string, href: string)}
+{#snippet headerItem(text: string, href: Pathname)}
   <Button {href}>{text}</Button>
 {/snippet}
 
@@ -31,26 +31,7 @@
   <Button variant="ghost" class="size-8" title="Open Sidebar" onclick={() => sidebar.toggle()}>
     <PanelLeft size={24} class="m-0 text-gray-600 dark:text-gray-300" />
   </Button>
-  {#if $BreadCrumbStore.length > 0}
-    <Breadcrumb.Root>
-      <Breadcrumb.List>
-        {#each $BreadCrumbStore as crumb, index}
-          <Breadcrumb.Item>
-            {#if index < $BreadCrumbStore.length - 1}
-              <Breadcrumb.Link href={crumb.href} class="text-gray-600 dark:text-gray-300">
-                {crumb.text}
-              </Breadcrumb.Link>
-              <Breadcrumb.Separator class="text-gray-600 dark:text-gray-300" />
-            {:else}
-              <Breadcrumb.Page class="text-gray-900 dark:text-gray-100">
-                {crumb.text}
-              </Breadcrumb.Page>
-            {/if}
-          </Breadcrumb.Item>
-        {/each}
-      </Breadcrumb.List>
-    </Breadcrumb.Root>
-  {/if}
+  <Breadcrumb />
   <div
     class={cn(
       'flex flex-1 flex-row items-center justify-between space-x-2 py-2',

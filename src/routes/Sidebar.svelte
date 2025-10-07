@@ -36,6 +36,7 @@
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import { isMobile, isSerialSupported } from '$lib/utils/compatibility';
   import { Collapsible } from 'bits-ui';
+  import type { Pathname } from '$app/types';
 
   let currentUser = $derived($UserStore.self);
 
@@ -48,7 +49,7 @@
 
   interface Item extends Entry {
     class?: string;
-    href?: string;
+    href?: Pathname;
     target?: string;
   }
 
