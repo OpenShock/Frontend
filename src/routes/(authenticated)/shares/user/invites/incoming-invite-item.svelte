@@ -21,10 +21,10 @@
 
   let { shareInvite = $bindable() }: Props = $props();
 
-  async function acceptInvite(invite: ShareInviteBaseDetails) {
+  async function acceptInvite() {
     try {
-      await shockerSharesV2Api.userSharesRedeemInvite(invite.id);
-      toast.success(`Accepted share invite for ${invite.owner.name}`);
+      await shockerSharesV2Api.userSharesRedeemInvite(shareInvite.id);
+      toast.success(`Accepted share invite for ${shareInvite.owner.name}`);
     } catch (error) {
       handleApiError(error);
     } finally {
@@ -97,7 +97,7 @@
   </Table.Cell>
   <Table.Cell class="w-0 flex-none">
     <Tooltip.Root>
-      <Tooltip.Trigger class={cn('size-9 mr-4', buttonVariants({ variant: 'default' }))}>
+      <Tooltip.Trigger class={cn('size-9 mr-4', buttonVariants({ variant: 'default' }))} onclick={acceptInvite}>
         <Check />
       </Tooltip.Trigger>
       <Tooltip.Content>
