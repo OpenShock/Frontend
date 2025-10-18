@@ -34,7 +34,7 @@
 <OpenGraphTags type="website" {...meta} url={page.url.origin} />
 <TwitterSummaryTags type="summary" {...meta} site="@OpenShockORG" creator="@OpenShockORG" />
 
-<Toaster />
+<Toaster position="top-center" />
 
 <DialogManager />
 

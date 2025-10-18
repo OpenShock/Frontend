@@ -4,7 +4,8 @@ import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 import { writable } from 'svelte/store';
 
 export const UserShares = writable<V2UserShares>({ outgoing: [], incoming: [] });
-export const OutgoingOutstandingInvites = writable<ShareInviteBaseDetails[]>([]);
+export const OutgoingInvites = writable<ShareInviteBaseDetails[]>([]);
+export const IncomingInvites = writable<ShareInviteBaseDetails[]>([]);
 
 export async function refreshUserShares() {
   try {
@@ -17,7 +18,16 @@ export async function refreshUserShares() {
 
 export async function refreshOutgoingInvites() {
   try {
-    OutgoingOutstandingInvites.set(await shockerSharesV2Api.userSharesGetOutgoingInvitesList());
+    OutgoingInvites.set(await shockerSharesV2Api.userSharesGetOutgoingInvitesList());
+  } catch (error) {
+    handleApiError(error);
+    throw error;
+  }
+}
+
+export async function refreshIncomingInvites() {
+  try {
+    IncomingInvites.set(await shockerSharesV2Api.userSharesGetIncomingInvitesList());
   } catch (error) {
     handleApiError(error);
     throw error;

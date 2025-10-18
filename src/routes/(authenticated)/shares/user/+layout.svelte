@@ -22,8 +22,8 @@
         return 'shares';
       case '/shares/user/incoming':
         return 'incoming';
-      case '/shares/user/outstanding':
-        return 'outstanding';
+      case '/shares/user/invites':
+        return 'invites';
       default:
         return 'shares';
     }
@@ -57,12 +57,10 @@
     <Tabs.Root value={tab()} class="w-[400px]">
       <Tabs.List>
         <Tabs.Trigger value="shares" onclick={() => navigateTo('outgoing')}>Shares</Tabs.Trigger>
-        <Tabs.Trigger value="outstanding" onclick={() => navigateTo('outstanding')}
-          >Outstanding Invites & Codes</Tabs.Trigger
-        >
         <Tabs.Trigger value="incoming" onclick={() => navigateTo('incoming')}
           >Shared with Me</Tabs.Trigger
         >
+        <Tabs.Trigger value="invites" onclick={() => navigateTo('invites')}>Invites</Tabs.Trigger>
       </Tabs.List>
     </Tabs.Root>
 

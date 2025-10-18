@@ -132,10 +132,12 @@
             const index = $userShare.shares.findIndex((s) => s.id === share.id);
             if (index !== -1) {
               UserShares.update((u) => {
+                const item = u.outgoing[storeIndex].shares[index];
+
                 u.outgoing[storeIndex].shares[index] = {
-                  ...u.outgoing[storeIndex].shares[index],
+                  ...item,
                   ...share,
-                  paused: share.paused ? 2 : 0,
+                  paused: share.paused ? item.paused | 2 : item.paused & ~2,
                 };
                 return u;
               });

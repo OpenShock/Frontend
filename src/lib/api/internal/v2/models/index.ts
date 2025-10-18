@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export * from './BasicUserInfo';
+export * from './BulkUserShareShockersUpdateRequest';
 export * from './ChangeUsernameRequest';
 export * from './Control';
 export * from './ControlRequest';
@@ -20,6 +21,7 @@ export * from './RoleType';
 export * from './ShareInviteBaseDetails';
 export * from './ShockerLimits';
 export * from './ShockerPermLimitPairWithId';
+export * from './ShockerPermLimitPairWithIdAndName';
 export * from './ShockerPermissions';
 export * from './SignUpV2';
 export * from './UserShareInfo';

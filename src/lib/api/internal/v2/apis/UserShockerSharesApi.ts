@@ -15,6 +15,7 @@
 
 import * as runtime from '../runtime';
 import type {
+  BulkUserShareShockersUpdateRequest,
   CreateShareRequest,
   OpenShockProblem,
   PauseUserShareShockersRequest,
@@ -25,6 +26,8 @@ import type {
   V2UserSharesListItem,
 } from '../models/index';
 import {
+    BulkUserShareShockersUpdateRequestFromJSON,
+    BulkUserShareShockersUpdateRequestToJSON,
     CreateShareRequestFromJSON,
     CreateShareRequestToJSON,
     OpenShockProblemFromJSON,
@@ -51,6 +54,11 @@ export interface UserSharesBulkPauseUserShareShockersRequest {
 export interface UserSharesBulkRemoveUserShareShockersRequest {
     userId: string;
     requestBody?: Array<string>;
+}
+
+export interface UserSharesBulkUserShareShockersUpdateRequest {
+    userId: string;
+    bulkUserShareShockersUpdateRequest?: BulkUserShareShockersUpdateRequest;
 }
 
 export interface UserSharesCreateShareInviteRequest {
@@ -103,6 +111,22 @@ export interface UserShockerSharesApiInterface {
     /**
      */
     userSharesBulkRemoveUserShareShockers(userId: string, requestBody?: Array<string>, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RemoveUserSharesResponse>;
+
+    /**
+     * 
+     * @summary Update user shares for a shocker
+     * @param {string} userId 
+     * @param {BulkUserShareShockersUpdateRequest} [bulkUserShareShockersUpdateRequest] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserShockerSharesApiInterface
+     */
+    userSharesBulkUserShareShockersUpdateRaw(requestParameters: UserSharesBulkUserShareShockersUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Update user shares for a shocker
+     */
+    userSharesBulkUserShareShockersUpdate(userId: string, bulkUserShareShockersUpdateRequest?: BulkUserShareShockersUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -275,6 +299,45 @@ export class UserShockerSharesApi extends runtime.BaseAPI implements UserShocker
     async userSharesBulkRemoveUserShareShockers(userId: string, requestBody?: Array<string>, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RemoveUserSharesResponse> {
         const response = await this.userSharesBulkRemoveUserShareShockersRaw({ userId: userId, requestBody: requestBody }, initOverrides);
         return await response.value();
+    }
+
+    /**
+     * Update user shares for a shocker
+     */
+    async userSharesBulkUserShareShockersUpdateRaw(requestParameters: UserSharesBulkUserShareShockersUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['userId'] == null) {
+            throw new runtime.RequiredError(
+                'userId',
+                'Required parameter "userId" was null or undefined when calling userSharesBulkUserShareShockersUpdate().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/2/shares/user/{userId}/shockers`;
+        urlPath = urlPath.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: BulkUserShareShockersUpdateRequestToJSON(requestParameters['bulkUserShareShockersUpdateRequest']),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Update user shares for a shocker
+     */
+    async userSharesBulkUserShareShockersUpdate(userId: string, bulkUserShareShockersUpdateRequest?: BulkUserShareShockersUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.userSharesBulkUserShareShockersUpdateRaw({ userId: userId, bulkUserShareShockersUpdateRequest: bulkUserShareShockersUpdateRequest }, initOverrides);
     }
 
     /**

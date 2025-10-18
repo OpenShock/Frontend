@@ -7,7 +7,9 @@
   import * as Tooltip from '$lib/components/ui/tooltip';
   import MultiPauseToggle from '$lib/components/utils/MultiPauseToggle.svelte';
   import { UserShares } from '$lib/stores/UserSharesStore';
+  import { ShockerPause } from '$lib/utils';
   import { derived } from 'svelte/store';
+  import PermissionTooltip from '../permission-tooltip.svelte';
 
   interface Props {
     storeIndex: number;
@@ -29,30 +31,32 @@
     <p class="ml-4">{$userShare.name}</p>
   </Table.Cell>
   <Table.Cell>
-    <Tooltip.Root>
-      <Tooltip.Trigger>
-        <span class="bg-sidebar flex items-center rounded-2xl px-1.5 py-0.5 ring-1 ring-slate-800">
-          <Zap size="15" />
-          <p class="ml-2 inline-block sm:hidden">{$userShare.shares.length}</p>
-          <div class="hidden sm:inline-block">
-            {#each $userShare.shares as share}
-              <Badge class="ml-2" variant={share.paused ? 'destructive' : 'default'}
+    <span
+      class="bg-sidebar flex items-center rounded-2xl px-1.5 py-0.5 ring-1 ring-slate-800 w-max"
+    >
+      <Zap size="15" />
+      <p class="ml-2 inline-block sm:hidden">{$userShare.shares.length}</p>
+      <div class="hidden sm:inline-block">
+        {#each $userShare.shares as share}
+          <Tooltip.Root>
+            <Tooltip.Trigger>
+              <Badge class="ml-2" variant={share.paused !== 0 ? 'destructive' : 'default'}
                 >{share.name}</Badge
               >
-            {/each}
-          </div>
-        </span>
-      </Tooltip.Trigger>
-      <Tooltip.Content>
-        <p>Shared shockers</p>
-      </Tooltip.Content>
-    </Tooltip.Root>
+            </Tooltip.Trigger>
+            <Tooltip.Content>
+              <PermissionTooltip permAndLimits={share} />
+            </Tooltip.Content>
+          </Tooltip.Root>
+        {/each}
+      </div>
+    </span>
   </Table.Cell>
   <Table.Cell>
     <MultiPauseToggle
       shockers={$userShare.shares.map((share) => ({
         shockerId: share.id,
-        paused: share.paused !== 0,
+        paused: (share.paused & ShockerPause.SHARE) !== 0,
         userShareUserId: $userShare.id,
       }))}
       onPausedChange={(paused) => {

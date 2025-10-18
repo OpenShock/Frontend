@@ -5,3 +5,4 @@ export * from './rand';
 export * from './shadcn';
 export * from './time';
 export * from './userAgent';
+export * from './shockerPause';
