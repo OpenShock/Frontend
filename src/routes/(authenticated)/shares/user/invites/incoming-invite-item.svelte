@@ -69,35 +69,31 @@
     <p class="ml-4">{shareInvite.owner.name}</p>
   </Table.Cell>
   <Table.Cell class="flex-auto">
-    <Tooltip.Root>
-      <Tooltip.Trigger>
-        <span
-          class="bg-sidebar flex items-center rounded-2xl px-1.5 py-0.5 ring-1 ring-slate-800 w-max"
-        >
-          <Zap size="15" />
-          <p class="ml-2 inline-block sm:hidden">{shareInvite.shockers.length}</p>
-          <div class="hidden sm:inline-block">
-            {#each shareInvite.shockers as shocker}
-              <Tooltip.Root>
-                <Tooltip.Trigger>
-                  <Badge class="ml-2">{shocker.name}</Badge>
-                </Tooltip.Trigger>
-                <Tooltip.Content>
-                  <PermissionTooltip permAndLimits={shocker} />
-                </Tooltip.Content>
-              </Tooltip.Root>
-            {/each}
-          </div>
-        </span>
-      </Tooltip.Trigger>
-      <Tooltip.Content>
-        <p>Shared shockers</p>
-      </Tooltip.Content>
-    </Tooltip.Root>
+    <span
+      class="bg-sidebar flex items-center rounded-2xl px-1.5 py-0.5 ring-1 ring-slate-800 w-max"
+    >
+      <Zap size="15" />
+      <p class="ml-2 inline-block sm:hidden">{shareInvite.shockers.length}</p>
+      <div class="hidden sm:inline-block">
+        {#each shareInvite.shockers as shocker}
+          <Tooltip.Root>
+            <Tooltip.Trigger>
+              <Badge class="ml-2">{shocker.name}</Badge>
+            </Tooltip.Trigger>
+            <Tooltip.Content>
+              <PermissionTooltip permAndLimits={shocker} />
+            </Tooltip.Content>
+          </Tooltip.Root>
+        {/each}
+      </div>
+    </span>
   </Table.Cell>
   <Table.Cell class="w-0 flex-none">
     <Tooltip.Root>
-      <Tooltip.Trigger class={cn('size-9 mr-4', buttonVariants({ variant: 'default' }))} onclick={acceptInvite}>
+      <Tooltip.Trigger
+        class={cn('size-9 mr-4', buttonVariants({ variant: 'default' }))}
+        onclick={acceptInvite}
+      >
         <Check />
       </Tooltip.Trigger>
       <Tooltip.Content>

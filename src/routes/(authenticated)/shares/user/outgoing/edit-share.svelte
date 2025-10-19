@@ -1,7 +1,6 @@
 <script lang="ts">
   import { Trash } from '@lucide/svelte';
-  import { shockerSharesV2Api, shockersV1Api } from '$lib/api';
-  import type { V2UserSharesListItem } from '$lib/api/internal/v2';
+  import { shockersV1Api } from '$lib/api';
   import { ComparePermissionsAndLimits } from '$lib/comparers/UserShareComparer';
   import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
   import * as Avatar from '$lib/components/ui/avatar';
@@ -12,8 +11,8 @@
   import MultiPauseToggle from '$lib/components/utils/MultiPauseToggle.svelte';
   import PauseToggle from '$lib/components/utils/PauseToggle.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { ConfirmDialogStore, openConfirmDialog } from '$lib/stores/ConfirmDialogStore';
-  import { UserShares } from '$lib/stores/UserSharesStore';
+  import { openConfirmDialog } from '$lib/stores/ConfirmDialogStore';
+  import { UserShares, refreshUserShares } from '$lib/stores/UserSharesStore';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
   import { derived } from 'svelte/store';
@@ -155,13 +154,15 @@
     });
   }
 
-  async function deleteShockerShare(shockerId: EditableShare) {
+  async function deleteShockerShare(shocker: EditableShare) {
     try {
-      await shockersV1Api.shockerShockerShareRemove(shockerId.id, $userShare.id);
-      toast.success(`Successfully removed shocker share ${shockerId}`);
+      await shockersV1Api.shockerShockerShareRemove(shocker.id, $userShare.id);
+      toast.success(`Successfully removed shocker share ${shocker.name}`);
     } catch (error) {
       handleApiError(error);
       throw error;
+    } finally {
+      refreshUserShares();
     }
   }
 

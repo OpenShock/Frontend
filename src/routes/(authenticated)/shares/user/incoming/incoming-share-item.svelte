@@ -15,9 +15,10 @@
 
   interface Props {
     share: V2UserSharesListItem;
+    onOpenEdit: () => void;
   }
 
-  let { share = $bindable() }: Props = $props();
+  let { share = $bindable(), onOpenEdit }: Props = $props();
 
   async function removeShareCall(value: V2UserSharesListItem) {
     try {
@@ -44,7 +45,7 @@
   <p>Are you sure you want to remove the share for <strong>{invite.name}</strong>?</p>
 {/snippet}
 
-<Table.Row>
+<Table.Row onclick={onOpenEdit}>
   <Table.Cell class="flex items-center font-medium">
     <Avatar.Root class="h-15 w-15">
       <Avatar.Image src={share.image} alt="User Avatar" />
