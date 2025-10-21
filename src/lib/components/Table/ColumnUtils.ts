@@ -1,6 +1,5 @@
 import type {
   BuiltInSortingFn,
-  CellContext,
   ColumnDef,
   SortingFnOption,
   StringOrTemplateHeader,
@@ -29,16 +28,11 @@ function CreateSimpleCellSnippet<TData extends object, K extends keyof TData & s
   key: K,
   renderer: (value: TData[K]) => string
 ): ColumnDef<TData, unknown>['cell'] {
-  return ({ row }: CellContext<TData, unknown>) => {
-    const value = row.getValue(key) as TData[K];
+  const snippet = createRawSnippet<[{ value: TData[K] }]>((getValue) => ({
+    render: () => renderer(getValue().value),
+  }));
 
-    return renderSnippet(
-      createRawSnippet<[TData[K]]>((getValue) => ({
-        render: () => renderer(getValue()),
-      })),
-      value
-    );
-  };
+  return ({ row }) => renderSnippet(snippet, { value: row.original[key] });
 }
 
 type AcceptableTextColor = 'blue' | 'green' | 'orange' | 'red';
