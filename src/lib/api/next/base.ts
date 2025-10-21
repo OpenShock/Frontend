@@ -1,21 +1,15 @@
-import { PUBLIC_BACKEND_API_DOMAIN } from '$env/static/public';
+import { PUBLIC_BACKEND_API_URL } from '$env/static/public';
 import { ResponseError } from './ResponseError';
-
-const BaseUrl = `https://${PUBLIC_BACKEND_API_DOMAIN}`;
 
 type ApiVersion = 1 | 2;
 export type Path = `/${ApiVersion}/${string}`;
-
-export function GetBackendUrl(path: Path) {
-  return BaseUrl + path;
-}
 
 export async function GetJson<T>(
   path: Path,
   expectedStatus = 200,
   transformer: (data: unknown) => T
 ): Promise<T> {
-  const res = await fetch(BaseUrl + path, {
+  const res = await fetch(new URL(path, PUBLIC_BACKEND_API_URL), {
     method: 'GET',
     headers: { accept: 'application/json' },
     credentials: 'include',
@@ -42,7 +36,7 @@ export async function PostJson<T>(
   expectedStatus = 200,
   transformer: (data: unknown) => T
 ): Promise<T> {
-  const url = GetBackendUrl(path);
+  const url = new URL(path, PUBLIC_BACKEND_API_URL);
 
   const res = await fetch(url, {
     method: 'POST',

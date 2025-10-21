@@ -1,4 +1,5 @@
-import { PUBLIC_BACKEND_API_DOMAIN } from '$env/static/public';
+import { PUBLIC_BACKEND_API_URL } from '$env/static/public';
+
 import {
   APITokensApi,
   AccountApi as AccountV1Api,
@@ -22,17 +23,16 @@ import {
 } from './internal/v2';
 
 function GetBasePath() {
-  const domain = (PUBLIC_BACKEND_API_DOMAIN || undefined) as string | undefined;
-
-  if (!domain) {
-    return undefined;
+  if (!PUBLIC_BACKEND_API_URL) {
+    throw new Error('PUBLIC_BACKEND_API_URL is not set in the environment');
   }
 
-  if (!/^[a-z0-9.-]+$/i.test(domain)) {
-    return undefined;
+  try {
+    const parsedUrl = new URL(PUBLIC_BACKEND_API_URL);
+    return parsedUrl.toString();
+  } catch (error: any) {
+    throw new Error('PUBLIC_BACKEND_API_URL is not a valid URL', error);
   }
-
-  return 'https://' + domain; // TODO: Add configurable protocol
 }
 
 function GetConfig(): ConfigurationParameters {

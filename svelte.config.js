@@ -2,6 +2,7 @@ import adapterCloudflare from '@sveltejs/adapter-cloudflare';
 import adapterNode from '@sveltejs/adapter-node';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import * as child_process from 'node:child_process';
+import { get } from 'node:http';
 import process from 'process';
 import { loadEnv } from 'vite';
 
@@ -31,6 +32,28 @@ function getGitBranch() {
   return child_process.execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
 }
 
+function getWsUrlFromHttpUrl(url) {
+  if (url.startsWith('https://')) {
+    return url.replace('https://', 'wss://');
+  } else if (url.startsWith('http://')) {
+    return url.replace('http://', 'ws://');
+  }
+
+  throw new Error(`Invalid URL was provided, it must start with http:// or https:// [${url}]`);
+}
+
+function getSvelteBasePath() {
+  try {
+    const url = new URL(dotenv.PUBLIC_SITE_URL);
+    const path = url.pathname === '/' ? '' : url.pathname;
+    console.log(`Using base path: [${path}] from PUBLIC_SITE_URL: ${dotenv.PUBLIC_SITE_URL}`);
+    return path;
+  } catch (error) {
+    throw new Error(`PUBLIC_SITE_URL is not a valid URL: ${error.message}`, error);
+  }
+
+}
+
 const commitHash = getGitHash();
 const branchName = getGitBranch();
 
@@ -49,6 +72,9 @@ const config = {
   },
   kit: {
     adapter: adapter(),
+    paths: {
+      base: getSvelteBasePath()
+    },
     csp: {
       mode: 'hash',
       directives: {
@@ -65,9 +91,10 @@ const config = {
         ],
         'connect-src': [
           'self',
-          'https://' + dotenv.PUBLIC_BACKEND_API_DOMAIN,
-          'wss://' + dotenv.PUBLIC_BACKEND_API_DOMAIN,
-          'wss://' + dotenv.PUBLIC_GATEWAY_CSP_WILDCARD,
+          dotenv.PUBLIC_BACKEND_API_URL,
+          getWsUrlFromHttpUrl(dotenv.PUBLIC_BACKEND_API_URL),
+          dotenv.PUBLIC_GATEWAY_CSP_WILDCARD,
+          getWsUrlFromHttpUrl(dotenv.PUBLIC_GATEWAY_CSP_WILDCARD),
           'https://firmware.openshock.org',
           'https://api.pwnedpasswords.com/range/',
           'https://cloudflareinsights.com',
