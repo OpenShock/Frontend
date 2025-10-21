@@ -5,13 +5,13 @@ import { TransformLoginOkResponse, TransformOAuthSignupData } from './transforme
 export function GetOAuthAuthorizeUrl(provider: string, flow: 'LoginOrCreate' | 'Link') {
   const providerEnc = encodeURIComponent(provider);
   const flowEnc = encodeURIComponent(flow);
-  return GetBackendUrl(`/1/oauth/${providerEnc}/authorize?flow=${flowEnc}`);
+  return GetBackendUrl(`1/oauth/${providerEnc}/authorize?flow=${flowEnc}`);
 }
 
 export async function OAuthSignupGetData(provider: string) {
   const providerEnc = encodeURIComponent(provider);
   return GetJson<OAuthSignupData>(
-    `/1/oauth/${providerEnc}/signup-data`,
+    `1/oauth/${providerEnc}/signup-data`,
     200,
     TransformOAuthSignupData
   );
@@ -23,7 +23,7 @@ export async function OAuthSignupFinalize(
 ): Promise<LoginOkResponse> {
   const providerEnc = encodeURIComponent(provider);
   return PostJson(
-    `/1/oauth/${providerEnc}/signup-finalize`,
+    `1/oauth/${providerEnc}/signup-finalize`,
     payload,
     200,
     TransformLoginOkResponse
