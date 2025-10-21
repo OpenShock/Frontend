@@ -48,7 +48,7 @@ function getSvelteBasePath() {
     console.log(`Using base path: [${path}] from PUBLIC_SITE_URL: ${dotenv.PUBLIC_SITE_URL}`);
     return path;
   } catch (error) {
-    throw new Error(`PUBLIC_SITE_URL is not a valid URL: ${error.message}`, error);
+    throw new Error(`PUBLIC_SITE_URL is not a valid URL: ${error.message}`, { cause: error });
   }
 
 }
