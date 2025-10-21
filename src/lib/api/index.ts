@@ -31,7 +31,7 @@ function GetBasePath() {
     const parsedUrl = new URL(PUBLIC_BACKEND_API_URL);
     return parsedUrl.toString();
   } catch (error: any) {
-    throw new Error('PUBLIC_BACKEND_API_URL is not a valid URL', error);
+    throw new Error('PUBLIC_BACKEND_API_URL is not a valid URL', { cause: error });
   }
 }
 
