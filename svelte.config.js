@@ -2,7 +2,6 @@ import adapterCloudflare from '@sveltejs/adapter-cloudflare';
 import adapterNode from '@sveltejs/adapter-node';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import * as child_process from 'node:child_process';
-import { get } from 'node:http';
 import process from 'process';
 import { loadEnv } from 'vite';
 
