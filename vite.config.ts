@@ -66,16 +66,15 @@ function getPlugins(useLocalRedirect: boolean): PluginOption[] {
 }
 
 async function getServerConfig(mode: string, useLocalRedirect: boolean) {
-  if (!useLocalRedirect) return undefined;
-
   const vars = { ...env, ...loadEnv(mode, process.cwd(), ['PUBLIC_']) };
-  const domain = vars.PUBLIC_SITE_DOMAIN;
-
-  // Load environment variables
-  if (!domain) {
-    printError('PUBLIC_SITE_DOMAIN must be set in your environment');
+  if(!vars.PUBLIC_SITE_URL) {
+    printError('PUBLIC_SITE_URL must be set in your environment');
     process.exit(1);
   }
+
+  if (!useLocalRedirect) return undefined;
+
+  const domain = new URL(vars.PUBLIC_SITE_URL).hostname;
 
   if (domain === 'localhost') {
     return { host: 'localhost', port: 8080, proxy: {} };
@@ -93,7 +92,7 @@ export default defineConfig(async ({ command, mode, isPreview }) => {
   const isLocalServe = command === 'serve' || isPreview === true;
   const isProduction = mode === 'production' && (isTruthy(env.DOCKER) || isTruthy(env.CF_PAGES));
 
-  // If we are running locally, ensure that local.{PUBLIC_SITE_DOMAIN} resolves to localhost, and then use mkcert to generate a certificate
+  // If we are running locally, ensure that local.{PUBLIC_SITE_URL} resolves to localhost, and then use mkcert to generate a certificate
   const useLocalRedirect = isLocalServe && !isProduction && !isTruthy(env.CI);
 
   return defineConfig({
