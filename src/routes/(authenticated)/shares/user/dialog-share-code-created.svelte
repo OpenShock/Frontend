@@ -2,12 +2,15 @@
   import KeyRound from '@lucide/svelte/icons/key-round';
   import CopyInput from '$lib/components/CopyInput.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
+  import { Link } from '@lucide/svelte';
+  import { PUBLIC_SITE_SHORT_URL } from '$env/static/public';
 
   interface Props {
     code: string | null;
   }
 
   let { code = $bindable() }: Props = $props();
+  let link = $derived(() => new URL(`/usc/${code}`, PUBLIC_SITE_SHORT_URL).toString());
 
   function onOpenChanged(open: boolean) {
     if (!open) {
@@ -20,13 +23,19 @@
   <Dialog.Content>
     <Dialog.Header>
       <Dialog.Title>Share Code Generated</Dialog.Title>
-      <Dialog.Description>Please copy share code!</Dialog.Description>
+      <Dialog.Description>Please copy share code or code link!</Dialog.Description>
     </Dialog.Header>
     <div class="flex flex-col items-center space-y-4">
-      <div class="flex w-full items-center justify-between rounded-md p-2">
+      <div class="flex w-full items-center justify-between rounded-md p-2 flex-col gap-2">
         <CopyInput value={code!}>
           {#snippet icon()}
             <KeyRound size="20" />
+          {/snippet}
+        </CopyInput>
+
+        <CopyInput value={link()}>
+          {#snippet icon()}
+            <Link size="20" />
           {/snippet}
         </CopyInput>
       </div>

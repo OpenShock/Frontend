@@ -13,10 +13,10 @@
 
   interface Props {
     open: boolean;
+    userInput: string;
   }
 
-  let { open = $bindable() }: Props = $props();
-  let userInput = $state<string>('');
+  let { open = $bindable(), userInput = $bindable() }: Props = $props();
   let redeemPromise = $state<Promise<V2UserSharesListItem> | null>(null);
   let redeemed = $state<boolean>(false);
 

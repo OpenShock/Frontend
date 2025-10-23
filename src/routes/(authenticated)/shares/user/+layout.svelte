@@ -15,6 +15,7 @@
   let createDialogOpen = $state(false);
   let redeemDialogOpen = $state(false);
   let createdCode = $state<string | null>(null);
+  let redeemUserInput = $state<string>('');
 
   let tab = $derived(() => {
     switch (page.url.pathname) {
@@ -45,12 +46,19 @@
 
   onMount(() => {
     refreshOwnHubs();
+
+    // Check for redeem query param and redeem pop
+    if(page.url.searchParams.has('redeem')) {
+      const code = page.url.searchParams.get('redeem');
+      redeemDialogOpen = true;
+      redeemUserInput = code ?? '';
+    }
   });
 </script>
 
 <DialogShareCodeCreate bind:open={createDialogOpen} {onCreatedCode} {onInvitedUser} />
 <DialogShareCodeCreated bind:code={createdCode} />
-<DialogShareCodeRedeem bind:open={redeemDialogOpen} />
+<DialogShareCodeRedeem bind:open={redeemDialogOpen} bind:userInput={redeemUserInput} />
 
 <div class="h-full m-8 mt-4 flex flex-col gap-4">
   <div class="flex-none flex w-full">

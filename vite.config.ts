@@ -80,7 +80,11 @@ async function getServerConfig(mode: string, useLocalRedirect: boolean) {
     return { host: 'localhost', port: 8080, proxy: {} };
   }
 
-  const host = `local.${domain}`;
+  let host = domain;
+
+  if(!domain.startsWith('local.')) {
+    host = `local.${domain}`;
+  }
 
   // Ensure we have the host entry redirecting to localhost
   await ensureFqdnRedirect('127.0.0.1', host);

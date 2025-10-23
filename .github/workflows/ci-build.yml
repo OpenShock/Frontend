@@ -66,5 +66,4 @@ jobs:
           registry-path: ${{ github.repository_owner }}/frontend
           registry-username: ${{ github.actor }}
           registry-password: ${{ secrets.GITHUB_TOKEN }}
-          artifact-name: frontend
           push-image: ${{ github.ref_type == 'branch' && github.event_name != 'pull_request' && (github.ref_name == 'master' || github.ref_name == 'develop')  }}
