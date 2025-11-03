@@ -1,5 +1,4 @@
 import { PUBLIC_BACKEND_API_URL } from '$env/static/public';
-
 import {
   APITokensApi,
   AccountApi as AccountV1Api,

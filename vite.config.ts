@@ -68,7 +68,7 @@ function getPlugins(useLocalRedirect: boolean): PluginOption[] {
 
 async function getServerConfig(mode: string, useLocalRedirect: boolean) {
   const vars = { ...env, ...loadEnv(mode, process.cwd(), ['PUBLIC_']) };
-  if(!vars.PUBLIC_SITE_URL) {
+  if (!vars.PUBLIC_SITE_URL) {
     printError('PUBLIC_SITE_URL must be set in your environment');
     process.exit(1);
   }
@@ -83,7 +83,7 @@ async function getServerConfig(mode: string, useLocalRedirect: boolean) {
 
   let host = domain;
 
-  if(!domain.startsWith('local.')) {
+  if (!domain.startsWith('local.')) {
     host = `local.${domain}`;
   }
 

@@ -22,10 +22,5 @@ export async function OAuthSignupFinalize(
   payload: OAuthFinalizeRequest
 ): Promise<LoginOkResponse> {
   const providerEnc = encodeURIComponent(provider);
-  return PostJson(
-    `1/oauth/${providerEnc}/signup-finalize`,
-    payload,
-    200,
-    TransformLoginOkResponse
-  );
+  return PostJson(`1/oauth/${providerEnc}/signup-finalize`, payload, 200, TransformLoginOkResponse);
 }

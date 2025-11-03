@@ -10,9 +10,9 @@
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { openConfirmDialog } from '$lib/stores/ConfirmDialogStore';
   import { UserShares, refreshUserShares } from '$lib/stores/UserSharesStore';
+  import { UserStore } from '$lib/stores/UserStore';
   import { toast } from 'svelte-sonner';
   import { derived } from 'svelte/store';
-  import { UserStore } from '$lib/stores/UserStore';
 
   interface Props {
     storeIndex: number;
@@ -76,7 +76,7 @@
             {#each $userShare.shares as shocker (shocker.id)}
               <Table.Row>
                 <Table.Cell>
-                    {shocker.name}
+                  {shocker.name}
                 </Table.Cell>
                 <Table.Cell class="w-0">
                   <Button variant="destructive" onclick={() => handleDeleteClick(shocker)}>

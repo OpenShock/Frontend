@@ -48,7 +48,7 @@
     refreshOwnHubs();
 
     // Check for redeem query param and redeem pop
-    if(page.url.searchParams.has('redeem')) {
+    if (page.url.searchParams.has('redeem')) {
       const code = page.url.searchParams.get('redeem');
       redeemDialogOpen = true;
       redeemUserInput = code ?? '';

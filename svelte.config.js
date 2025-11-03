@@ -48,9 +48,10 @@ function getSvelteBasePath() {
     console.log(`Using base path: [${path}] from PUBLIC_SITE_URL: ${dotenv.PUBLIC_SITE_URL}`);
     return path;
   } catch (error) {
-    throw new Error(`PUBLIC_SITE_URL is not a valid URL: ${dotenv.PUBLIC_SITE_URL}`, { cause: error });
+    throw new Error(`PUBLIC_SITE_URL is not a valid URL: ${dotenv.PUBLIC_SITE_URL}`, {
+      cause: error,
+    });
   }
-
 }
 
 const commitHash = getGitHash();
@@ -72,7 +73,7 @@ const config = {
   kit: {
     adapter: adapter(),
     paths: {
-      base: getSvelteBasePath()
+      base: getSvelteBasePath(),
     },
     csp: {
       mode: 'hash',
