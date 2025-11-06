@@ -27,3 +27,7 @@ export async function init() {
     await Promise.all([UserStore.refreshSelf(), initializeSignalR()]);
   }
 }
+
+export function handleError() {
+
+}
