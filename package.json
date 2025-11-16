@@ -88,6 +88,9 @@
 		"patchedDependencies": {
 			"@microsoft/signalr@9.0.6": "patches/@microsoft__signalr@9.0.6.patch",
 			"esptool-js@0.5.7": "patches/esptool-js@0.5.7.patch"
+		},
+		"overrides": {
+			"cookie@<0.7.0": ">=0.7.0"
 		}
 	}
 }
