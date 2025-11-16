@@ -90,7 +90,8 @@
 			"esptool-js@0.5.7": "patches/esptool-js@0.5.7.patch"
 		},
 		"overrides": {
-			"cookie@<0.7.0": ">=0.7.0"
+			"cookie@<0.7.0": ">=0.7.0",
+			"js-yaml@<4.1.1": ">=4.1.1"
 		}
 	}
 }
