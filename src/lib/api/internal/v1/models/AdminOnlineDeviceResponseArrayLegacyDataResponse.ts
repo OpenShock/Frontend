@@ -24,37 +24,37 @@ import {
 /**
  * 
  * @export
- * @interface AdminOnlineDeviceResponseIEnumerableLegacyDataResponse
+ * @interface AdminOnlineDeviceResponseArrayLegacyDataResponse
  */
-export interface AdminOnlineDeviceResponseIEnumerableLegacyDataResponse {
+export interface AdminOnlineDeviceResponseArrayLegacyDataResponse {
     /**
      * 
      * @type {string}
-     * @memberof AdminOnlineDeviceResponseIEnumerableLegacyDataResponse
+     * @memberof AdminOnlineDeviceResponseArrayLegacyDataResponse
      */
     message: string;
     /**
      * 
      * @type {Array<AdminOnlineDeviceResponse>}
-     * @memberof AdminOnlineDeviceResponseIEnumerableLegacyDataResponse
+     * @memberof AdminOnlineDeviceResponseArrayLegacyDataResponse
      */
     data: Array<AdminOnlineDeviceResponse> | null;
 }
 
 /**
- * Check if a given object implements the AdminOnlineDeviceResponseIEnumerableLegacyDataResponse interface.
+ * Check if a given object implements the AdminOnlineDeviceResponseArrayLegacyDataResponse interface.
  */
-export function instanceOfAdminOnlineDeviceResponseIEnumerableLegacyDataResponse(value: object): value is AdminOnlineDeviceResponseIEnumerableLegacyDataResponse {
+export function instanceOfAdminOnlineDeviceResponseArrayLegacyDataResponse(value: object): value is AdminOnlineDeviceResponseArrayLegacyDataResponse {
     if (!('message' in value) || value['message'] === undefined) return false;
     if (!('data' in value) || value['data'] === undefined) return false;
     return true;
 }
 
-export function AdminOnlineDeviceResponseIEnumerableLegacyDataResponseFromJSON(json: any): AdminOnlineDeviceResponseIEnumerableLegacyDataResponse {
-    return AdminOnlineDeviceResponseIEnumerableLegacyDataResponseFromJSONTyped(json, false);
+export function AdminOnlineDeviceResponseArrayLegacyDataResponseFromJSON(json: any): AdminOnlineDeviceResponseArrayLegacyDataResponse {
+    return AdminOnlineDeviceResponseArrayLegacyDataResponseFromJSONTyped(json, false);
 }
 
-export function AdminOnlineDeviceResponseIEnumerableLegacyDataResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): AdminOnlineDeviceResponseIEnumerableLegacyDataResponse {
+export function AdminOnlineDeviceResponseArrayLegacyDataResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): AdminOnlineDeviceResponseArrayLegacyDataResponse {
     if (json == null) {
         return json;
     }
@@ -65,11 +65,11 @@ export function AdminOnlineDeviceResponseIEnumerableLegacyDataResponseFromJSONTy
     };
 }
 
-export function AdminOnlineDeviceResponseIEnumerableLegacyDataResponseToJSON(json: any): AdminOnlineDeviceResponseIEnumerableLegacyDataResponse {
-    return AdminOnlineDeviceResponseIEnumerableLegacyDataResponseToJSONTyped(json, false);
+export function AdminOnlineDeviceResponseArrayLegacyDataResponseToJSON(json: any): AdminOnlineDeviceResponseArrayLegacyDataResponse {
+    return AdminOnlineDeviceResponseArrayLegacyDataResponseToJSONTyped(json, false);
 }
 
-export function AdminOnlineDeviceResponseIEnumerableLegacyDataResponseToJSONTyped(value?: AdminOnlineDeviceResponseIEnumerableLegacyDataResponse | null, ignoreDiscriminator: boolean = false): any {
+export function AdminOnlineDeviceResponseArrayLegacyDataResponseToJSONTyped(value?: AdminOnlineDeviceResponseArrayLegacyDataResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

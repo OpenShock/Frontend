@@ -4,7 +4,7 @@ export * from './AddEmailProviderBlacklistDto';
 export * from './AddUsernameBlacklistDto';
 export * from './AddWebhookDto';
 export * from './AdminOnlineDeviceResponse';
-export * from './AdminOnlineDeviceResponseIEnumerableLegacyDataResponse';
+export * from './AdminOnlineDeviceResponseArrayLegacyDataResponse';
 export * from './AdminUsersView';
 export * from './AdminUsersViewPaginated';
 export * from './BackendInfoResponse';

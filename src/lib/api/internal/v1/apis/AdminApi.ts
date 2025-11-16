@@ -18,7 +18,7 @@ import type {
   AddEmailProviderBlacklistDto,
   AddUsernameBlacklistDto,
   AddWebhookDto,
-  AdminOnlineDeviceResponseIEnumerableLegacyDataResponse,
+  AdminOnlineDeviceResponseArrayLegacyDataResponse,
   AdminUsersViewPaginated,
   ConfigurationAddItemRequest,
   ConfigurationItemDto,
@@ -37,8 +37,8 @@ import {
     AddUsernameBlacklistDtoToJSON,
     AddWebhookDtoFromJSON,
     AddWebhookDtoToJSON,
-    AdminOnlineDeviceResponseIEnumerableLegacyDataResponseFromJSON,
-    AdminOnlineDeviceResponseIEnumerableLegacyDataResponseToJSON,
+    AdminOnlineDeviceResponseArrayLegacyDataResponseFromJSON,
+    AdminOnlineDeviceResponseArrayLegacyDataResponseToJSON,
     AdminUsersViewPaginatedFromJSON,
     AdminUsersViewPaginatedToJSON,
     ConfigurationAddItemRequestFromJSON,
@@ -275,12 +275,12 @@ export interface AdminApiInterface {
      * @throws {RequiredError}
      * @memberof AdminApiInterface
      */
-    adminGetOnlineDevicesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AdminOnlineDeviceResponseIEnumerableLegacyDataResponse>>;
+    adminGetOnlineDevicesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AdminOnlineDeviceResponseArrayLegacyDataResponse>>;
 
     /**
      * Gets all online devices
      */
-    adminGetOnlineDevices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminOnlineDeviceResponseIEnumerableLegacyDataResponse>;
+    adminGetOnlineDevices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminOnlineDeviceResponseArrayLegacyDataResponse>;
 
     /**
      * 
@@ -714,7 +714,7 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     /**
      * Gets all online devices
      */
-    async adminGetOnlineDevicesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AdminOnlineDeviceResponseIEnumerableLegacyDataResponse>> {
+    async adminGetOnlineDevicesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AdminOnlineDeviceResponseArrayLegacyDataResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -729,13 +729,13 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AdminOnlineDeviceResponseIEnumerableLegacyDataResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => AdminOnlineDeviceResponseArrayLegacyDataResponseFromJSON(jsonValue));
     }
 
     /**
      * Gets all online devices
      */
-    async adminGetOnlineDevices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminOnlineDeviceResponseIEnumerableLegacyDataResponse> {
+    async adminGetOnlineDevices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminOnlineDeviceResponseArrayLegacyDataResponse> {
         const response = await this.adminGetOnlineDevicesRaw(initOverrides);
         return await response.value();
     }
