@@ -28,9 +28,6 @@ export class ShareLinkSignalr {
       return;
     }
 
-    // simulate delay
-    await new Promise((resolve) => setTimeout(resolve, 5000));
-
     console.debug('Initializing Public Share SignalR connection...');
 
     const connection = new HubConnectionBuilder()

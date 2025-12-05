@@ -25,7 +25,7 @@
   let active = $state<ControlType | null>(null);
 
   function ctrl(type: ControlType) {
-    control({ id: shocker.id, type, intensity, duration });
+    control({ id: shocker.id, type, intensity, duration: duration * 1000 });
   }
 </script>
 
