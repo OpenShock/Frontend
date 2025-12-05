@@ -10,6 +10,7 @@
   import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { toast } from 'svelte-sonner';
+  import { resolve } from '$app/paths';
 
   function isValid(str: string): boolean {
     return /^[0-9a-zA-Z]{32,64}$/i.test(str);
@@ -28,7 +29,7 @@
 
     try {
       await apiTokensApi.tokensReportTokens({ turnstileResponse, secrets });
-      goto('/login');
+      goto(resolve('/login'));
     } catch (err) {
       await handleApiError(err);
     }
