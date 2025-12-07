@@ -3,7 +3,6 @@
   import { apiTokensApi } from '$lib/api';
   import { PermissionType, type TokenCreatedResponse } from '$lib/api/internal/v1';
   import DateTimePicker from '$lib/components/datetime-picker/date-time-picker.svelte';
-  import TimePickerInput from '$lib/components/datetime-picker/time-picker-input.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
@@ -73,7 +72,6 @@
     if (expire === 'custom' && !expireCustom) {
       return { valid: false, message: 'Expire date is required' };
     }
-
     return { valid: true };
   }
 
@@ -160,7 +158,7 @@
         <span>Expiration</span>
         <Select.Root type="single" name="expiration" bind:value={expire}>
           <Select.Trigger class="w-[180px]">
-            {expire}
+            {selectedExpiration?.label}
           </Select.Trigger>
           <Select.Content>
             <Select.Group>
