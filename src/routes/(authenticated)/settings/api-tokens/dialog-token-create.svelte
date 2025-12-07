@@ -1,12 +1,16 @@
 <script lang="ts">
+  import type { ZonedDateTime } from '@internationalized/date';
   import { apiTokensApi } from '$lib/api';
   import { PermissionType, type TokenCreatedResponse } from '$lib/api/internal/v1';
+  import DateTimePicker from '$lib/components/datetime-picker/date-time-picker.svelte';
+  import TimePickerInput from '$lib/components/datetime-picker/time-picker-input.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
   import * as Select from '$lib/components/ui/select';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { GetValResColor, type ValidationResult } from '$lib/types/ValidationResult';
+  import { elapsedToString } from '$lib/utils';
 
   interface Props {
     open: boolean;
@@ -17,7 +21,7 @@
 
   let name = $state<string>('');
   let expire = $state<'never' | `${number}days` | 'custom'>('never');
-  let expireCustom = $state<Date | null>(null);
+  let expireCustom = $state<ZonedDateTime | undefined>(undefined);
   let permissions = $state<PermissionType[]>([PermissionType.ShockersUse]);
 
   function onOpenChange(o: boolean) {
@@ -25,42 +29,10 @@
     if (!o) {
       name = '';
       expire = 'never';
-      expireCustom = null;
+      expireCustom = undefined;
       permissions = [PermissionType.ShockersUse];
     }
     open = o;
-  }
-
-  function getExpireDate(expireType: string, customExpireDate: Date | null): Date | null {
-    switch (expireType) {
-      case 'never':
-        return null;
-      case '7days':
-        return new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-      case '30days':
-        return new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
-      case '60days':
-        return new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
-      case '90days':
-        return new Date(Date.now() + 90 * 24 * 60 * 60 * 1000);
-      case 'custom':
-        return customExpireDate;
-    }
-    return null;
-  }
-
-  async function onFormSubmit() {
-    const expireDate = getExpireDate(expire, expireCustom);
-
-    const validUntil = expireDate == null ? undefined : expireDate;
-
-    try {
-      const createdToken = await apiTokensApi.tokensCreateToken({ name, validUntil, permissions });
-      onCreated(createdToken);
-      open = false;
-    } catch (error) {
-      await handleApiError(error);
-    }
   }
 
   type PermissionCategory = {
@@ -87,14 +59,17 @@
       return { valid: false, message: 'Name is required' };
     }
 
-    if (name.length > 64) {
+    if (name.length > 32) {
       return { valid: false, message: 'Name is too long' };
     }
 
     return { valid: true };
   }
 
-  function expireValidation(expire: string, expireCustom: Date | null): ValidationResult {
+  function expireValidation(
+    expire: string,
+    expireCustom: ZonedDateTime | undefined
+  ): ValidationResult {
     if (expire === 'custom' && !expireCustom) {
       return { valid: false, message: 'Expire date is required' };
     }
@@ -108,6 +83,61 @@
 
   let nameValidationResult = $derived(nameValidation(name));
   let expireValidationResult = $derived(expireValidation(expire, expireCustom));
+
+  const expirationOptions = [
+    { value: 'never', label: 'Never', getDate: () => null },
+    {
+      value: 'custom',
+      label: 'Custom',
+      getDate: () => (expireCustom !== undefined ? expireCustom.toDate() : null),
+    }, // see GetExpireDate
+    {
+      value: '1days',
+      label: '1 Day',
+      getDate: () => new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
+    },
+    {
+      value: '7days',
+      label: '7 Days',
+      getDate: () => new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    },
+    {
+      value: '30days',
+      label: '30 Days',
+      getDate: () => new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+    },
+    {
+      value: '90days',
+      label: '90 Days',
+      getDate: () => new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+    },
+    {
+      value: '180days',
+      label: '180 Days',
+      getDate: () => new Date(Date.now() + 180 * 24 * 60 * 60 * 1000),
+    },
+    {
+      value: '365days',
+      label: '365 Days',
+      getDate: () => new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
+    },
+  ];
+
+  let selectedExpiration = $derived(expirationOptions.find((option) => option.value === expire));
+  let expireDate = $derived(selectedExpiration?.getDate());
+
+  async function onFormSubmit() {
+    const validUntil = expireDate == undefined ? null : expireDate;
+
+    try {
+      const createdToken = await apiTokensApi.tokensCreateToken({ name, validUntil, permissions });
+      onCreated(createdToken);
+      open = false;
+      onOpenChange(false);
+    } catch (error) {
+      await handleApiError(error);
+    }
+  }
 </script>
 
 <Dialog.Root bind:open={() => open, onOpenChange}>
@@ -134,31 +164,28 @@
           </Select.Trigger>
           <Select.Content>
             <Select.Group>
-              <Select.Item value="never" label="Never">Never</Select.Item>
-              <Select.Item value="7days" label="7 days">7 days</Select.Item>
-              <Select.Item value="30days" label="30 days">30 days</Select.Item>
-              <Select.Item value="60days" label="60 days">60 days</Select.Item>
-              <Select.Item value="90days" label="90 days">90 days</Select.Item>
-              <Select.Item value="custom" label="Custom...">Custom...</Select.Item>
+              {#each expirationOptions as option}
+                <Select.Item value={option.value} label={option.label}>{option.label}</Select.Item>
+              {/each}
             </Select.Group>
           </Select.Content>
         </Select.Root>
 
-        <div class="flex items-center gap-3">
-          {#if expire === 'custom'}
-            <input class="input w-1/2" type="datetime-local" bind:value={expireCustom} />
-          {:else if expire !== 'never'}
-            <p>Expire on {getExpireDate(expire, expireCustom)?.toLocaleString()}</p>
-          {:else}
-            <p>The token will never expire</p>
-          {/if}
-        </div>
+        {#if expire === 'custom'}
+          <div class="my-2 w-1/2">
+            <DateTimePicker bind:date={expireCustom} />
+          </div>
+        {/if}
         {#if 'message' in expireValidationResult}
-          <p class="text-xs text-{GetValResColor(expireValidationResult)} mt-0!">
+          <p class="text-xs text-{GetValResColor(expireValidationResult)}">
             {expireValidationResult.message}
           </p>
-        {:else}
-          <div class="h-3"></div>
+        {:else if expire === 'never'}
+          <p class="text-xs">The token will never expire</p>
+        {:else if expireDate}
+          <p class="text-xs" aria-label={expireDate.toLocaleString()}>
+            The token will expire {elapsedToString(expireDate.getTime() - Date.now())} ({expireDate.toLocaleString()})
+          </p>
         {/if}
       </label>
 
