@@ -12,6 +12,7 @@
   import ControlListener from './ControlListener.svelte';
   import ActionButtons from './impl/ActionButtons.svelte';
   import CircleSlider from './impl/CircleSlider.svelte';
+  import ShockerMenu from './impl/ShockerMenu.svelte';
 
   interface Props {
     shocker: ShockerResponse;
@@ -36,7 +37,12 @@
   class="border-surface-400-500-token flex flex-col items-center justify-center gap-2 overflow-hidden rounded-md border p-2"
 >
   <!-- Title -->
-  <h2 class="w-full truncate px-4 text-center text-lg font-bold">{shocker.name}</h2>
+  <h2 class="w-full truncate px-4 text-center text-lg font-bold flex justify-between">
+    <span>
+      {shocker.name}
+    </span>
+    <ShockerMenu {shocker} />
+  </h2>
   <!-- Sliders -->
   <div class="flex items-center gap-2">
     <CircleSlider name="Intensity" bind:value={intensity} {...ControlIntensityProps} />
