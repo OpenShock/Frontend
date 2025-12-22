@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Layers, OctagonAlert, Settings, StopCircle } from '@lucide/svelte';
+  import { Layers, LogsIcon, OctagonAlert, Settings, StopCircle } from '@lucide/svelte';
   import Container from '$lib/components/Container.svelte';
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import MapControlModule from '$lib/components/ControlModules/MapControlModule.svelte';
@@ -56,6 +56,9 @@
         <!-- Options button -->
         <Button variant="ghost" class="p-0!" aria-label="Options">
           <Settings />
+        </Button>
+        <Button variant="ghost" aria-label="Logs" href="/shockers/logs">
+          <LogsIcon />
         </Button>
       </div>
     </div>
