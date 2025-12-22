@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { ColumnDef, SortingState } from '@tanstack/table-core';
+  import type { LogEntryWithHub } from '$lib/api/internal/v1/index.js';
   import Container from '$lib/components/Container.svelte';
   import {
     CreateSortableColumnDef,
@@ -9,13 +10,12 @@
   } from '$lib/components/Table/ColumnUtils';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import * as Card from '$lib/components/ui/card';
-  import type { ShockerLogEntry } from './+page.js';
 
   let { data } = $props();
 
   let sorting = $state<SortingState>([{ id: 'createdOn', desc: true }]);
 
-  const columns: ColumnDef<ShockerLogEntry>[] = [
+  const columns: ColumnDef<LogEntryWithHub>[] = [
     CreateSortableColumnDef('hubName', 'Hub', (h) => RenderCell(h)),
     CreateSortableColumnDef('shockerName', 'Shocker', (s) => RenderCell(s)),
     CreateSortableColumnDef('createdOn', 'Time', LocaleDateTimeRenderer),
