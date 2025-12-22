@@ -27,6 +27,7 @@ import type {
   ResponseDeviceWithShockersArrayLegacyDataResponse,
   ShareCodeInfoArrayLegacyDataResponse,
   ShareInfoArrayLegacyDataResponse,
+  ShockerLogsResponse,
   ShockerPermLimitPair,
   ShockerWithDeviceLegacyDataResponse,
 } from '../models/index';
@@ -55,6 +56,8 @@ import {
     ShareCodeInfoArrayLegacyDataResponseToJSON,
     ShareInfoArrayLegacyDataResponseFromJSON,
     ShareInfoArrayLegacyDataResponseToJSON,
+    ShockerLogsResponseFromJSON,
+    ShockerLogsResponseToJSON,
     ShockerPermLimitPairFromJSON,
     ShockerPermLimitPairToJSON,
     ShockerWithDeviceLegacyDataResponseFromJSON,
@@ -64,6 +67,11 @@ import {
 export interface ShockerEditShockerRequest {
     shockerId: string;
     newShocker?: NewShocker;
+}
+
+export interface ShockerGetAllShockerLogsRequest {
+    offset?: number;
+    limit?: number;
 }
 
 export interface ShockerGetShockerByIdRequest {
@@ -145,6 +153,22 @@ export interface ShockersApiInterface {
      * Edit a shocker
      */
     shockerEditShocker(shockerId: string, newShocker?: NewShocker, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
+
+    /**
+     * 
+     * @summary Get the logs for all shockers
+     * @param {number} [offset] 
+     * @param {number} [limit] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ShockersApiInterface
+     */
+    shockerGetAllShockerLogsRaw(requestParameters: ShockerGetAllShockerLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShockerLogsResponse>>;
+
+    /**
+     * Get the logs for all shockers
+     */
+    shockerGetAllShockerLogs(offset?: number, limit?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShockerLogsResponse>;
 
     /**
      * 
@@ -411,6 +435,47 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
      */
     async shockerEditShocker(shockerId: string, newShocker?: NewShocker, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse> {
         const response = await this.shockerEditShockerRaw({ shockerId: shockerId, newShocker: newShocker }, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get the logs for all shockers
+     */
+    async shockerGetAllShockerLogsRaw(requestParameters: ShockerGetAllShockerLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShockerLogsResponse>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
+        }
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["OpenShockToken"] = await this.configuration.apiKey("OpenShockToken"); // ApiToken authentication
+        }
+
+
+        let urlPath = `/1/shockers/logs`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ShockerLogsResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Get the logs for all shockers
+     */
+    async shockerGetAllShockerLogs(offset?: number, limit?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShockerLogsResponse> {
+        const response = await this.shockerGetAllShockerLogsRaw({ offset: offset, limit: limit }, initOverrides);
         return await response.value();
     }
 

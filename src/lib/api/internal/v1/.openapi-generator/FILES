@@ -47,6 +47,7 @@ models/LcgResponseLegacyDataResponse.ts
 models/LegacyEmptyResponse.ts
 models/LogEntry.ts
 models/LogEntryArrayLegacyDataResponse.ts
+models/LogEntryWithHub.ts
 models/Login.ts
 models/LoginSessionResponse.ts
 models/MatchTypeEnum.ts
@@ -89,6 +90,7 @@ models/ShareInfoArrayLegacyDataResponse.ts
 models/SharedDevice.ts
 models/SharedShocker.ts
 models/ShockerLimits.ts
+models/ShockerLogsResponse.ts
 models/ShockerModelType.ts
 models/ShockerPermLimitPair.ts
 models/ShockerPermissions.ts
