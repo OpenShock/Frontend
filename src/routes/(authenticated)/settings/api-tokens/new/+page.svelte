@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import { apiTokensApi } from '$lib/api';
   import { PermissionType, instanceOfPermissionType } from '$lib/api/internal/v1';
   import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
@@ -168,7 +169,7 @@
             Allow
           {/if}
         </Button>
-        <Button class="w-16" href="/" variant="outline">Deny</Button>
+        <Button class="w-16" href={resolve('/')} variant="outline">Deny</Button>
       </Card.Footer>
     {/if}
   </Card.Root>
