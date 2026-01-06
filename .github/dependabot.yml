@@ -14,12 +14,6 @@ updates:
       - '*'
     multi-ecosystem-group: maintenance
 
-  - package-ecosystem: devcontainers
-    directory: /
-    patterns:
-      - '*'
-    multi-ecosystem-group: maintenance
-
   - package-ecosystem: github-actions
     directory: /
     patterns:
