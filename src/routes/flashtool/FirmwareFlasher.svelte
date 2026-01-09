@@ -2,6 +2,7 @@
   import { Microchip, TriangleAlert } from '@lucide/svelte';
   import { DownloadAndVerifyBoardBinary } from '$lib/api/firmwareCDN';
   import { Button } from '$lib/components/ui/button';
+  import * as Dialog from '$lib/components/ui/dialog';
   import { Progress } from '$lib/components/ui/progress';
   import FlashManager from './FlashManager';
 
@@ -10,6 +11,7 @@
     board: string;
     manager: FlashManager;
     eraseBeforeFlash: boolean;
+    showNonStableWarning: boolean;
     isFlashing?: boolean;
   }
 
@@ -18,9 +20,11 @@
     board,
     manager,
     eraseBeforeFlash,
+    showNonStableWarning,
     isFlashing = $bindable(false),
   }: Props = $props();
 
+  let riskAcknowledgeStatus = $state<'none' | 'shown' | 'accepted'>('none');
   let progressName = $state<string | null>(null);
   let progressPercent = $state<number | null>(null);
   let error = $state<string | null>(null);
@@ -65,6 +69,10 @@
   }
   async function FlashDevice() {
     if (isFlashing) return;
+    if (showNonStableWarning && riskAcknowledgeStatus !== 'accepted') {
+      riskAcknowledgeStatus = 'shown';
+      return;
+    }
     try {
       isFlashing = true;
       await FlashDeviceImpl();
@@ -75,6 +83,39 @@
     }
   }
 </script>
+
+<!-- Risk acknowledgement modal -->
+<Dialog.Root open={riskAcknowledgeStatus === 'shown'}>
+  <Dialog.Content>
+    <Dialog.Header>
+      <Dialog.Title>⚠️ Unstable Firmware Warning</Dialog.Title>
+      <Dialog.Description>
+        You are about to install <strong class="text-red-500">experimental, non-stable firmware</strong>.
+        <br /><br />
+        This firmware is <strong class="text-red-500">not intended for general use</strong> and may contain
+        serious bugs, regressions, or incomplete features.
+        <br /><br />
+        <strong class="text-red-500">No support is provided for issues caused by non-stable firmware.</strong>
+      </Dialog.Description>
+    </Dialog.Header>
+
+    <div class="flex justify-end gap-2">
+      <Button
+        variant="secondary"
+        onclick={() => (riskAcknowledgeStatus = 'none')}
+      >
+        Cancel
+      </Button>
+
+      <Button
+        variant="destructive"
+        onclick={() => (riskAcknowledgeStatus = 'accepted')}
+      >
+        I UNDERSTAND AND ACCEPT ALL RISKS
+      </Button>
+    </div>
+  </Dialog.Content>
+</Dialog.Root>
 
 <div class="flex flex-col items-stretch justify-start gap-4">
   <!-- Flash button -->

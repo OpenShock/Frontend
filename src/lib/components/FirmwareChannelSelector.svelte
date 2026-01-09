@@ -61,12 +61,14 @@
     {#if channel === 'stable'}
       <CircleCheckBig color="#22c55e" />
       <p class="text-green-500">This is the recommended channel.</p>
+      <!--
     {:else if channel === 'beta'}
       <TriangleAlert color="#eab308" />
       <p class="text-yellow-500">This channel might contain bugs.</p>
+    -->
     {:else}
       <TriangleAlert color="#ef4444" />
-      <p class="text-red-500">Avoid this channel unless you know what you're doing.</p>
+      <p class="text-red-500 font-bold">DO NOT USE THIS UNLESS YOU KNOW WHAT YOU ARE DOING</p>
     {/if}
   </div>
 </div>
