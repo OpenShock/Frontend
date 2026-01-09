@@ -84,8 +84,11 @@
   }
 </script>
 
-
-<RiskAcknowledgementModal open={showNonStableWarning && riskAcknowledgeStatus !== 'accepted'} onAccept={() => riskAcknowledgeStatus = 'accepted'} onCancel={() => riskAcknowledgeStatus = 'none'} />
+<RiskAcknowledgementModal
+  open={showNonStableWarning && riskAcknowledgeStatus !== 'accepted'}
+  onAccept={() => (riskAcknowledgeStatus = 'accepted')}
+  onCancel={() => (riskAcknowledgeStatus = 'none')}
+/>
 
 <div class="flex flex-col items-stretch justify-start gap-4">
   <!-- Flash button -->

@@ -33,7 +33,7 @@
     after,
     popup,
     onblur,
-    onpaste
+    onpaste,
   }: Props = $props();
 </script>
 

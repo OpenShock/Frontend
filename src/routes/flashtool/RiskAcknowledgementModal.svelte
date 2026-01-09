@@ -1,7 +1,7 @@
 <script lang="ts">
-  import * as Dialog from '$lib/components/ui/dialog';
-  import { Button } from '$lib/components/ui/button';
   import TextInput from '$lib/components/input/TextInput.svelte';
+  import { Button } from '$lib/components/ui/button';
+  import * as Dialog from '$lib/components/ui/dialog';
 
   interface Props {
     open: boolean;
@@ -17,10 +17,7 @@
   let acknowledgeText = $state('');
   let acknowledgeChecked = $state(false);
 
-  let canAccept = $derived(
-    acknowledgeChecked &&
-    acknowledgeText === REQUIRED_TEXT
-  );
+  let canAccept = $derived(acknowledgeChecked && acknowledgeText === REQUIRED_TEXT);
 
   // Reset + start countdown when dialog opens
   $effect(() => {
@@ -47,8 +44,7 @@
         </p>
 
         <p>
-          This may permanently brick your device, require manual recovery,
-          or render it unusable.
+          This may permanently brick your device, require manual recovery, or render it unusable.
         </p>
 
         <p class="text-red-500 font-semibold">
@@ -65,10 +61,7 @@
       </Dialog.Description>
     </Dialog.Header>
 
-    <TextInput
-      bind:value={acknowledgeText}
-      onpaste={handlePaste}
-    />
+    <TextInput bind:value={acknowledgeText} onpaste={handlePaste} />
 
     <label class="flex items-center gap-2 text-sm">
       <input type="checkbox" bind:checked={acknowledgeChecked} />
@@ -76,15 +69,9 @@
     </label>
 
     <div class="flex justify-end gap-2">
-      <Button variant="secondary" onclick={() => onCancel?.()}>
-        Abort
-      </Button>
+      <Button variant="secondary" onclick={() => onCancel?.()}>Abort</Button>
 
-      <Button
-        variant="destructive"
-        disabled={!canAccept}
-        onclick={onAccept}
-      >
+      <Button variant="destructive" disabled={!canAccept} onclick={onAccept}>
         I ACCEPT FULL RESPONSIBILITY
       </Button>
     </div>

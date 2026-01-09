@@ -83,7 +83,9 @@
 
     <Button type="submit" disabled={!canSubmit}>Log In</Button>
 
-    <a class=" text-sm opacity-75 hover:underline" href={resolve('/forgot-password')}>Forgot your password?</a>
+    <a class=" text-sm opacity-75 hover:underline" href={resolve('/forgot-password')}>
+      Forgot your password?
+    </a>
   </form>
 
   <form action={GetOAuthAuthorizeUrl('discord', 'LoginOrCreate')} method="POST">

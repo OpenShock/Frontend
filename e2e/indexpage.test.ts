@@ -9,7 +9,9 @@ test('index page has expected content', async ({ page }) => {
 
   // Check the text paragraph exists and includes "The go-to platform"
   const paragraph = await page.locator('section p');
-  await expect(paragraph).toContainText('The go-to platform for safe, reliable, real low-latency remote shocking.');
+  await expect(paragraph).toContainText(
+    'The go-to platform for safe, reliable, real low-latency remote shocking.'
+  );
 
   // Check that it includes the people online count text
   await expect(paragraph).toContainText('people online right now');
