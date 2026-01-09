@@ -16,7 +16,9 @@
 
   let { open = $bindable(), token, onEdit }: Props = $props();
 
+  // svelte-ignore state_referenced_locally
   let name = $state(token.name);
+  // svelte-ignore state_referenced_locally
   let permissions = $state(token.permissions);
 
   async function saveChanges() {

@@ -15,7 +15,9 @@
 
   let { open = $bindable<boolean>(), item, onEdited }: Props = $props();
 
+  // svelte-ignore state_referenced_locally
   let description = $state(item.description);
+  // svelte-ignore state_referenced_locally
   let value = $state(item.value);
 
   let valid = $derived(value.length > 0);
