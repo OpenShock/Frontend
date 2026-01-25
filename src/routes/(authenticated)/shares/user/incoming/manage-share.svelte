@@ -2,7 +2,6 @@
   import { Trash } from '@lucide/svelte';
   import { shockersV1Api } from '$lib/api';
   import type { UserShareInfo } from '$lib/api/internal/v2';
-  import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
   import * as Avatar from '$lib/components/ui/avatar';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Drawer from '$lib/components/ui/drawer';

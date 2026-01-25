@@ -2,6 +2,7 @@
   import { Trash } from '@lucide/svelte';
   import { shockersV1Api } from '$lib/api';
   import { ComparePermissionsAndLimits } from '$lib/comparers/UserShareComparer';
+  import RestrictionsSelector from '$lib/components/shares/restrictions-selector.svelte';
   import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
   import * as Avatar from '$lib/components/ui/avatar';
   import { Badge } from '$lib/components/ui/badge';
@@ -16,7 +17,6 @@
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
   import { derived } from 'svelte/store';
-  import RestrictionsSelector from '../restrictions-selector.svelte';
 
   interface Props {
     storeIndex: number;

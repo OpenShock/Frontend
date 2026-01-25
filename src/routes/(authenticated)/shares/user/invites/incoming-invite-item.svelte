@@ -1,19 +1,18 @@
 <script lang="ts">
-  import { Check, Key, X, Zap } from '@lucide/svelte';
+  import { Check, X, Zap } from '@lucide/svelte';
   import { shockerSharesV2Api } from '$lib/api';
   import type { ShareInviteBaseDetails } from '$lib/api/internal/v2';
+  import PermissionTooltip from '$lib/components/shares/permission-tooltip.svelte';
   import * as Avatar from '$lib/components/ui/avatar';
   import { Badge } from '$lib/components/ui/badge';
-  import { Button } from '$lib/components/ui/button';
   import { buttonVariants } from '$lib/components/ui/button/index.js';
   import * as Table from '$lib/components/ui/table';
   import * as Tooltip from '$lib/components/ui/tooltip';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { openConfirmDialog } from '$lib/stores/ConfirmDialogStore';
-  import { refreshIncomingInvites, refreshOutgoingInvites } from '$lib/stores/UserSharesStore';
+  import { refreshIncomingInvites } from '$lib/stores/UserSharesStore';
   import { cn } from '$lib/utils';
   import { toast } from 'svelte-sonner';
-  import PermissionTooltip from '../permission-tooltip.svelte';
 
   interface Props {
     shareInvite: ShareInviteBaseDetails;

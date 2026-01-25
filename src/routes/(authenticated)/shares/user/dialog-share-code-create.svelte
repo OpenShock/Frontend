@@ -2,14 +2,14 @@
   import { Barcode, Code, User } from '@lucide/svelte';
   import { shockerSharesV2Api } from '$lib/api';
   import { type BasicUserInfo } from '$lib/api/internal/v1';
+  import RestrictionsSelector from '$lib/components/shares/restrictions-selector.svelte';
+  import UserSelector from '$lib/components/shares/user-selector.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
   import MultiSelectCombobox from '$lib/components/ui/multi-select-combobox/multi-select-combobox.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { OwnHubsStore } from '$lib/stores/HubsStore';
   import { refreshOutgoingInvites } from '$lib/stores/UserSharesStore';
-  import RestrictionsSelector from './restrictions-selector.svelte';
-  import UserSelector from './user-selector.svelte';
 
   let availableShockers = $derived(
     Array.from($OwnHubsStore)

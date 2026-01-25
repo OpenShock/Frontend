@@ -6,7 +6,7 @@
     device: PublicShareDevice;
   }
 
-  let { device }: Props = $props();
+  let { device = $bindable() }: Props = $props();
 </script>
 
 <section class="mt-6">

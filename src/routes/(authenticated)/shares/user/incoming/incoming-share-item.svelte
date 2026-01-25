@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { Key, X, Zap } from '@lucide/svelte';
-  import { shockerSharesV2Api } from '$lib/api';
-  import type { UserShareInfo, V2UserSharesListItem } from '$lib/api/internal/v2';
+  import { X, Zap } from '@lucide/svelte';
+  import type { V2UserSharesListItem } from '$lib/api/internal/v2';
+  import PermissionTooltip from '$lib/components/shares/permission-tooltip.svelte';
   import * as Avatar from '$lib/components/ui/avatar';
   import { Badge } from '$lib/components/ui/badge';
   import { Button } from '$lib/components/ui/button';
@@ -11,7 +11,6 @@
   import { openConfirmDialog } from '$lib/stores/ConfirmDialogStore';
   import { refreshOutgoingInvites } from '$lib/stores/UserSharesStore';
   import { toast } from 'svelte-sonner';
-  import PermissionTooltip from '../permission-tooltip.svelte';
 
   interface Props {
     share: V2UserSharesListItem;

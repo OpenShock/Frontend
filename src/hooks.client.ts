@@ -28,6 +28,4 @@ export async function init() {
   }
 }
 
-export function handleError() {
-
-}
+export function handleError() {}
