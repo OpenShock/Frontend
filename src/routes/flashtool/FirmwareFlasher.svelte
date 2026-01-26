@@ -4,12 +4,14 @@
   import { Button } from '$lib/components/ui/button';
   import { Progress } from '$lib/components/ui/progress';
   import FlashManager from './FlashManager';
+  import RiskAcknowledgementModal from './RiskAcknowledgementModal.svelte';
 
   interface Props {
     version: string;
     board: string;
     manager: FlashManager;
     eraseBeforeFlash: boolean;
+    showNonStableWarning: boolean;
     isFlashing?: boolean;
   }
 
@@ -18,9 +20,11 @@
     board,
     manager,
     eraseBeforeFlash,
+    showNonStableWarning,
     isFlashing = $bindable(false),
   }: Props = $props();
 
+  let riskAcknowledgeStatus = $state<'none' | 'shown' | 'accepted'>('none');
   let progressName = $state<string | null>(null);
   let progressPercent = $state<number | null>(null);
   let error = $state<string | null>(null);
@@ -65,6 +69,10 @@
   }
   async function FlashDevice() {
     if (isFlashing) return;
+    if (showNonStableWarning && riskAcknowledgeStatus !== 'accepted') {
+      riskAcknowledgeStatus = 'shown';
+      return;
+    }
     try {
       isFlashing = true;
       await FlashDeviceImpl();
@@ -75,6 +83,12 @@
     }
   }
 </script>
+
+<RiskAcknowledgementModal
+  open={showNonStableWarning && riskAcknowledgeStatus !== 'accepted'}
+  onAccept={() => (riskAcknowledgeStatus = 'accepted')}
+  onCancel={() => (riskAcknowledgeStatus = 'none')}
+/>
 
 <div class="flex flex-col items-stretch justify-start gap-4">
   <!-- Flash button -->

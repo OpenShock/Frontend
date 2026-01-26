@@ -15,6 +15,7 @@
     Wrench,
     Zap,
   } from '@lucide/svelte';
+  import { asset, resolve } from '$app/paths';
   import { page } from '$app/state';
   import type { Pathname } from '$app/types';
   import { RoleType } from '$lib/api/internal/v1';
@@ -288,9 +289,9 @@
 <!-- group-data-[collapsible=icon]:opacity-0 -->
 <Root collapsible="icon">
   <Header>
-    <a href={currentUser ? '/home' : '/'}>
+    <a href={resolve(currentUser ? '/home' : '/')}>
       <span class="pointer-events-none flex">
-        <img class="ml-[0.667px] h-7.5" src="/IconSpinning.svg" alt="OpenShock Logo" />
+        <img class="ml-[0.667px] h-7.5" src={asset('/IconSpinning.svg')} alt="OpenShock Logo" />
         <span class="ml-1.5 grow">
           <img
             class="h-7.5 transition-opacity delay-100 duration-200 group-data-[collapsible=icon]:opacity-0 group-data-[collapsible=icon]:delay-0"
@@ -303,7 +304,7 @@
   </Header>
   <Content>
     {@render groupsSection(headerGroups)}
-    <div class="grow-1"></div>
+    <div class="grow"></div>
     {@render groupsSection(footerGroups)}
   </Content>
   <Footer></Footer>

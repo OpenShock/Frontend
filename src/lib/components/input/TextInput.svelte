@@ -4,7 +4,7 @@
   import { GetValResColor, type ValidationResult } from '$lib/types/ValidationResult';
   import { cn } from '$lib/utils/shadcn.js';
   import type { Snippet } from 'svelte';
-  import type { FocusEventHandler, FullAutoFill } from 'svelte/elements';
+  import type { ClipboardEventHandler, FocusEventHandler, FullAutoFill } from 'svelte/elements';
 
   interface Props {
     type?: 'text' | 'email' | 'password' | 'search' | 'url';
@@ -17,6 +17,7 @@
     after?: Snippet;
     popup?: Snippet;
     onblur?: FocusEventHandler<HTMLInputElement> | null;
+    onpaste?: ClipboardEventHandler<HTMLInputElement> | null;
   }
 
   const id = $props.id();
@@ -32,6 +33,7 @@
     after,
     popup,
     onblur,
+    onpaste,
   }: Props = $props();
 </script>
 
@@ -51,6 +53,7 @@
       {autocomplete}
       bind:value
       {onblur}
+      {onpaste}
       aria-invalid={validationResult ? !validationResult.valid : undefined}
       aria-describedby={validationResult?.message ? validationId : undefined}
     />
@@ -69,7 +72,7 @@
   {#if validationResult?.message}
     <p
       id={validationId}
-      class={cn('text-xs !mt-0 h-4 truncate', `text-${GetValResColor(validationResult)}`)}
+      class={cn('text-xs mt-0! h-4 truncate', `text-${GetValResColor(validationResult)}`)}
       role="status"
       aria-atomic="true"
       aria-live="polite"

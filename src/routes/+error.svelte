@@ -1,11 +1,11 @@
 <script lang="ts">
   import { afterNavigate } from '$app/navigation';
-  import { base } from '$app/paths';
+  import { asset, resolve } from '$app/paths';
   import { page } from '$app/state';
   import { PUBLIC_SITE_NAME } from '$env/static/public';
   import { BasicTags, OpenGraphTags, TwitterSummaryTags } from '$lib/components/metadata';
 
-  let previousPage = $state<string>(base);
+  let previousPage = $state<string>(resolve('/'));
 
   afterNavigate(({ from }) => {
     previousPage = from?.url?.pathname || previousPage;
@@ -15,7 +15,7 @@
     title: 'Service Unavailable',
     description: 'OpenShock is currently unavailable',
     image: {
-      src: '/logo.svg',
+      src: asset('/logo.svg'),
       alt: 'OpenShock Logo',
     },
   };

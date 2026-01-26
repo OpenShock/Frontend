@@ -2,6 +2,7 @@
   import { MessageCircleQuestion, SquareTerminal } from '@lucide/svelte';
   import { browser } from '$app/environment';
   import { PUBLIC_DISCORD_INVITE_URL } from '$env/static/public';
+  import type { FirmwareChannel } from '$lib/api/firmwareCDN';
   import Container from '$lib/components/Container.svelte';
   import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
@@ -58,6 +59,7 @@
 
   let showHelpDialog = $state(false);
 
+  let channel = $state<FirmwareChannel>('stable');
   let version = $state<string | null>(null);
   let board = $state<string | null>(null);
   let eraseBeforeFlash = $state<boolean>(false);
@@ -105,7 +107,7 @@
 
   {#if manager}
     <h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">Select Channel</h3>
-    <FirmwareChannelSelector bind:version disabled={isFlashing} />
+    <FirmwareChannelSelector bind:channel bind:version disabled={isFlashing} />
 
     <h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">Select Board</h3>
     <FirmwareBoardSelector {version} bind:selectedBoard={board} disabled={isFlashing} />
@@ -127,7 +129,14 @@
     </div>
 
     {#if version && board}
-      <FirmwareFlasher {version} {board} {manager} {eraseBeforeFlash} bind:isFlashing />
+      <FirmwareFlasher
+        {version}
+        {board}
+        {manager}
+        {eraseBeforeFlash}
+        showNonStableWarning={channel !== 'stable'}
+        bind:isFlashing
+      />
     {/if}
   {:else if port && !connectFailed}
     <div class="flex flex-col items-center gap-2">

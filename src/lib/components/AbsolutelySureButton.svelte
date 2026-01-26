@@ -11,6 +11,7 @@
   let { text, onconfirm }: Props = $props();
 
   let clickedAt = $state<number | null>(null);
+  // svelte-ignore state_referenced_locally
   let buttonText = $state<string>(text);
   function updateText() {
     if (clickedAt === null) {

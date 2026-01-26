@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import { accountV2Api } from '$lib/api';
   import { GetOAuthAuthorizeUrl } from '$lib/api/next/oauth';
@@ -82,7 +83,9 @@
 
     <Button type="submit" disabled={!canSubmit}>Log In</Button>
 
-    <a class=" text-sm opacity-75 hover:underline" href="/forgot-password">Forgot your password?</a>
+    <a class=" text-sm opacity-75 hover:underline" href={resolve('/forgot-password')}>
+      Forgot your password?
+    </a>
   </form>
 
   <form action={GetOAuthAuthorizeUrl('discord', 'LoginOrCreate')} method="POST">
