@@ -31,12 +31,13 @@
   }
 
   function onFormSubmit() {
-    onAddedShockers(
-      shockerIds.map((id) => ({
-        id,
-        name: availableShockers.find((shocker) => shocker.value === id)?.label || '',
-      }))
-    );
+    const selectedShockers = shockerIds.map((id) => ({
+      id,
+      name: availableShockers.find((shocker) => shocker.value === id)?.label || '',
+    }));
+    shockerIds = [];
+    open = false;
+    onAddedShockers(selectedShockers);
   }
 </script>
 

@@ -6,7 +6,7 @@
   import * as Tooltip from '$lib/components/ui/tooltip/index.js';
   import { ShareLinkSignalr } from '$lib/sharelink-signalr/index.svelte';
   import type { Control } from '$lib/signalr/models/Control';
-  import { onMount } from 'svelte';
+  import { onMount, untrack } from 'svelte';
 
   interface Props {
     shareLinkRoot: PublicShareResponse;
@@ -15,7 +15,7 @@
 
   const { shareLinkRoot, guestName }: Props = $props();
 
-  const shareLinkSignalr = new ShareLinkSignalr(shareLinkRoot.id, guestName);
+  const shareLinkSignalr = untrack(() => new ShareLinkSignalr(shareLinkRoot.id, guestName));
 
   onMount(() => {
     shareLinkSignalr.initializeSignalR();

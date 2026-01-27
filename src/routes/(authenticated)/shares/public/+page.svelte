@@ -19,7 +19,6 @@
   import * as Card from '$lib/components/ui/card';
   import { renderComponent, renderSnippet } from '$lib/components/ui/data-table';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { refreshOwnHubs } from '$lib/stores/HubsStore';
   import { createRawSnippet, onMount } from 'svelte';
   import DataTableActions from './data-table-actions.svelte';
   import CreatePublicShareDialog from './dialog-publicshare-create.svelte';
@@ -59,7 +58,6 @@
   }
 
   onMount(() => {
-    refreshOwnHubs();
     refreshPublicShares();
   });
 </script>
