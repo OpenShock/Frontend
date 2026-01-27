@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
   BooleanLegacyDataResponse,
   Control,
+  DeviceWithShockersResponseArrayLegacyDataResponse,
   GuidLegacyDataResponse,
   LegacyEmptyResponse,
   LogEntryArrayLegacyDataResponse,
@@ -24,7 +25,6 @@ import type {
   OpenShockProblem,
   OwnerShockerResponseArrayLegacyDataResponse,
   PauseRequest,
-  ResponseDeviceWithShockersArrayLegacyDataResponse,
   ShareCodeInfoArrayLegacyDataResponse,
   ShareInfoArrayLegacyDataResponse,
   ShockerLogsResponse,
@@ -36,6 +36,8 @@ import {
     BooleanLegacyDataResponseToJSON,
     ControlFromJSON,
     ControlToJSON,
+    DeviceWithShockersResponseArrayLegacyDataResponseFromJSON,
+    DeviceWithShockersResponseArrayLegacyDataResponseToJSON,
     GuidLegacyDataResponseFromJSON,
     GuidLegacyDataResponseToJSON,
     LegacyEmptyResponseFromJSON,
@@ -50,8 +52,6 @@ import {
     OwnerShockerResponseArrayLegacyDataResponseToJSON,
     PauseRequestFromJSON,
     PauseRequestToJSON,
-    ResponseDeviceWithShockersArrayLegacyDataResponseFromJSON,
-    ResponseDeviceWithShockersArrayLegacyDataResponseToJSON,
     ShareCodeInfoArrayLegacyDataResponseFromJSON,
     ShareCodeInfoArrayLegacyDataResponseToJSON,
     ShareInfoArrayLegacyDataResponseFromJSON,
@@ -238,12 +238,12 @@ export interface ShockersApiInterface {
      * @throws {RequiredError}
      * @memberof ShockersApiInterface
      */
-    shockerListShockersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponseDeviceWithShockersArrayLegacyDataResponse>>;
+    shockerListShockersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DeviceWithShockersResponseArrayLegacyDataResponse>>;
 
     /**
      * List all shockers belonging to the authenticated user.
      */
-    shockerListShockers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseDeviceWithShockersArrayLegacyDataResponse>;
+    shockerListShockers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DeviceWithShockersResponseArrayLegacyDataResponse>;
 
     /**
      * 
@@ -646,7 +646,7 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
     /**
      * List all shockers belonging to the authenticated user.
      */
-    async shockerListShockersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponseDeviceWithShockersArrayLegacyDataResponse>> {
+    async shockerListShockersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DeviceWithShockersResponseArrayLegacyDataResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -665,13 +665,13 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ResponseDeviceWithShockersArrayLegacyDataResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => DeviceWithShockersResponseArrayLegacyDataResponseFromJSON(jsonValue));
     }
 
     /**
      * List all shockers belonging to the authenticated user.
      */
-    async shockerListShockers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseDeviceWithShockersArrayLegacyDataResponse> {
+    async shockerListShockers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DeviceWithShockersResponseArrayLegacyDataResponse> {
         const response = await this.shockerListShockersRaw(initOverrides);
         return await response.value();
     }

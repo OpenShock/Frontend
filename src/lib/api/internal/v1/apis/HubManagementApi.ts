@@ -15,16 +15,20 @@
 
 import * as runtime from '../runtime';
 import type {
+  DeviceResponseArrayLegacyDataResponse,
+  DeviceWithTokenResponseLegacyDataResponse,
   HubEditRequest,
   LcgResponseLegacyDataResponse,
   OpenShockProblem,
   OtaItemIReadOnlyCollectionLegacyDataResponse,
-  ResponseDeviceArrayLegacyDataResponse,
-  ResponseDeviceWithTokenLegacyDataResponse,
   ShockerResponseArrayLegacyDataResponse,
   StringLegacyDataResponse,
 } from '../models/index';
 import {
+    DeviceResponseArrayLegacyDataResponseFromJSON,
+    DeviceResponseArrayLegacyDataResponseToJSON,
+    DeviceWithTokenResponseLegacyDataResponseFromJSON,
+    DeviceWithTokenResponseLegacyDataResponseToJSON,
     HubEditRequestFromJSON,
     HubEditRequestToJSON,
     LcgResponseLegacyDataResponseFromJSON,
@@ -33,10 +37,6 @@ import {
     OpenShockProblemToJSON,
     OtaItemIReadOnlyCollectionLegacyDataResponseFromJSON,
     OtaItemIReadOnlyCollectionLegacyDataResponseToJSON,
-    ResponseDeviceArrayLegacyDataResponseFromJSON,
-    ResponseDeviceArrayLegacyDataResponseToJSON,
-    ResponseDeviceWithTokenLegacyDataResponseFromJSON,
-    ResponseDeviceWithTokenLegacyDataResponseToJSON,
     ShockerResponseArrayLegacyDataResponseFromJSON,
     ShockerResponseArrayLegacyDataResponseToJSON,
     StringLegacyDataResponseFromJSON,
@@ -121,12 +121,12 @@ export interface HubManagementApiInterface {
      * @throws {RequiredError}
      * @memberof HubManagementApiInterface
      */
-    devicesGetDeviceByIdRaw(requestParameters: DevicesGetDeviceByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponseDeviceWithTokenLegacyDataResponse>>;
+    devicesGetDeviceByIdRaw(requestParameters: DevicesGetDeviceByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DeviceWithTokenResponseLegacyDataResponse>>;
 
     /**
      * Get a device by its id
      */
-    devicesGetDeviceById(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseDeviceWithTokenLegacyDataResponse>;
+    devicesGetDeviceById(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DeviceWithTokenResponseLegacyDataResponse>;
 
     /**
      * 
@@ -180,12 +180,12 @@ export interface HubManagementApiInterface {
      * @throws {RequiredError}
      * @memberof HubManagementApiInterface
      */
-    devicesListDevicesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponseDeviceArrayLegacyDataResponse>>;
+    devicesListDevicesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DeviceResponseArrayLegacyDataResponse>>;
 
     /**
      * Get all devices for the current user
      */
-    devicesListDevices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseDeviceArrayLegacyDataResponse>;
+    devicesListDevices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DeviceResponseArrayLegacyDataResponse>;
 
     /**
      * 
@@ -322,7 +322,7 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
     /**
      * Get a device by its id
      */
-    async devicesGetDeviceByIdRaw(requestParameters: DevicesGetDeviceByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponseDeviceWithTokenLegacyDataResponse>> {
+    async devicesGetDeviceByIdRaw(requestParameters: DevicesGetDeviceByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DeviceWithTokenResponseLegacyDataResponse>> {
         if (requestParameters['deviceId'] == null) {
             throw new runtime.RequiredError(
                 'deviceId',
@@ -349,13 +349,13 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ResponseDeviceWithTokenLegacyDataResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => DeviceWithTokenResponseLegacyDataResponseFromJSON(jsonValue));
     }
 
     /**
      * Get a device by its id
      */
-    async devicesGetDeviceById(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseDeviceWithTokenLegacyDataResponse> {
+    async devicesGetDeviceById(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DeviceWithTokenResponseLegacyDataResponse> {
         const response = await this.devicesGetDeviceByIdRaw({ deviceId: deviceId }, initOverrides);
         return await response.value();
     }
@@ -486,7 +486,7 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
     /**
      * Get all devices for the current user
      */
-    async devicesListDevicesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponseDeviceArrayLegacyDataResponse>> {
+    async devicesListDevicesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DeviceResponseArrayLegacyDataResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -505,13 +505,13 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ResponseDeviceArrayLegacyDataResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => DeviceResponseArrayLegacyDataResponseFromJSON(jsonValue));
     }
 
     /**
      * Get all devices for the current user
      */
-    async devicesListDevices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponseDeviceArrayLegacyDataResponse> {
+    async devicesListDevices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DeviceResponseArrayLegacyDataResponse> {
         const response = await this.devicesListDevicesRaw(initOverrides);
         return await response.value();
     }
