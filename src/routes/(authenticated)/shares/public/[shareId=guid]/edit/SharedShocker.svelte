@@ -122,7 +122,7 @@
     <!-- Duration Slider -->
     <div class="space-y-1">
       <Label>Duration: {durationSeconds}s</Label>
-      <Slider type="single" bind:value={durationSeconds} min={1} max={30} step={1} />
+      <Slider type="single" bind:value={durationSeconds} min={1} max={30} step={0.1} />
     </div>
 
     <!-- Intensity Slider -->

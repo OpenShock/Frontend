@@ -11,9 +11,10 @@
     duration: number;
     active?: ControlType | null;
     disabled?: boolean;
+    disabledControls?: Partial<Record<ControlType, boolean>>;
   }
 
-  let { ctrl, duration, active, disabled }: Props = $props();
+  let { ctrl, duration, active, disabled, disabledControls = {} }: Props = $props();
 
   let selfActive = $state<ControlType | null>(null);
   let timeoutHandle: TimeoutHandle | undefined;
@@ -44,13 +45,14 @@
 
 <div>
   {#each Buttons as { type, Icon }}
+    {@const isDisabled = disabled || disabledControls[type]}
     <button
       class={cn(buttonClasses, {
         active: type === active || type === selfActive,
       })}
       title={ControlType[type]}
       onclick={() => trigger(type)}
-      {disabled}
+      disabled={isDisabled}
     >
       {#if type === selfActive}
         <Loader class="animate-spin" />
