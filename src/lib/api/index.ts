@@ -30,9 +30,12 @@ function GetBasePath() {
     const parsedUrl = new URL(PUBLIC_BACKEND_API_URL);
     // Remove trailing slash unless the path is just "/"
     let basePath = parsedUrl.toString();
-    if (basePath.endsWith('/') && basePath.length > parsedUrl.origin.length + 1) {
+
+    // Remove trailing slash if present
+    if (basePath.endsWith('/')) {
       basePath = basePath.slice(0, -1);
     }
+
     return basePath;
   } catch (error: any) {
     throw new Error('PUBLIC_BACKEND_API_URL is not a valid URL', { cause: error });
