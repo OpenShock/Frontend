@@ -35,7 +35,7 @@ function GetBasePath() {
     if (basePath.endsWith('/')) {
       basePath = basePath.slice(0, -1);
     }
-    console.log(basePath);
+
     return basePath;
   } catch (error: any) {
     throw new Error('PUBLIC_BACKEND_API_URL is not a valid URL', { cause: error });
