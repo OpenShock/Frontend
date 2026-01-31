@@ -35,10 +35,6 @@ export interface DevicePairRequest {
     pairCode: string;
 }
 
-export interface DevicePairDEPRECATEDRequest {
-    pairCode: string;
-}
-
 /**
  * HubEndpointsApi - interface
  * 
@@ -88,21 +84,6 @@ export interface HubEndpointsApiInterface {
      * Pair a device with a pair code.
      */
     devicePair(pairCode: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StringLegacyDataResponse>;
-
-    /**
-     * 
-     * @summary Pair a device with a pair code.
-     * @param {string} pairCode The pair code to pair with.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof HubEndpointsApiInterface
-     */
-    devicePairDEPRECATEDRaw(requestParameters: DevicePairDEPRECATEDRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StringLegacyDataResponse>>;
-
-    /**
-     * Pair a device with a pair code.
-     */
-    devicePairDEPRECATED(pairCode: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StringLegacyDataResponse>;
 
 }
 
@@ -215,47 +196,6 @@ export class HubEndpointsApi extends runtime.BaseAPI implements HubEndpointsApiI
      */
     async devicePair(pairCode: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StringLegacyDataResponse> {
         const response = await this.devicePairRaw({ pairCode: pairCode }, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Pair a device with a pair code.
-     */
-    async devicePairDEPRECATEDRaw(requestParameters: DevicePairDEPRECATEDRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StringLegacyDataResponse>> {
-        if (requestParameters['pairCode'] == null) {
-            throw new runtime.RequiredError(
-                'pairCode',
-                'Required parameter "pairCode" was null or undefined when calling devicePairDEPRECATED().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["DeviceToken"] = await this.configuration.apiKey("DeviceToken"); // HubToken authentication
-        }
-
-
-        let urlPath = `/1/pair/{pairCode}`;
-        urlPath = urlPath.replace(`{${"pairCode"}}`, encodeURIComponent(String(requestParameters['pairCode'])));
-
-        const response = await this.request({
-            path: urlPath,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => StringLegacyDataResponseFromJSON(jsonValue));
-    }
-
-    /**
-     * Pair a device with a pair code.
-     */
-    async devicePairDEPRECATED(pairCode: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StringLegacyDataResponse> {
-        const response = await this.devicePairDEPRECATEDRaw({ pairCode: pairCode }, initOverrides);
         return await response.value();
     }
 

@@ -1,10 +1,10 @@
 import { shockersV1Api } from '$lib/api';
-import type { ResponseDeviceWithShockers } from '$lib/api/internal/v1';
+import type { DeviceWithShockersResponse } from '$lib/api/internal/v1';
 import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 import type { OtaUpdateProgressTask } from '$lib/signalr/models/OtaUpdateProgressTask';
 import { writable } from 'svelte/store';
 
-export type OwnHub = ResponseDeviceWithShockers;
+export type OwnHub = DeviceWithShockersResponse;
 export type HubOnlineState = {
   hubId: string;
   isOnline: boolean;

@@ -24,39 +24,39 @@ import {
 /**
  * 
  * @export
- * @interface ResponseDeviceWithShockers
+ * @interface DeviceWithShockersResponse
  */
-export interface ResponseDeviceWithShockers {
+export interface DeviceWithShockersResponse {
     /**
      * 
      * @type {string}
-     * @memberof ResponseDeviceWithShockers
+     * @memberof DeviceWithShockersResponse
      */
     id: string;
     /**
      * 
      * @type {string}
-     * @memberof ResponseDeviceWithShockers
+     * @memberof DeviceWithShockersResponse
      */
     name: string;
     /**
      * 
      * @type {Date}
-     * @memberof ResponseDeviceWithShockers
+     * @memberof DeviceWithShockersResponse
      */
     createdOn: Date;
     /**
      * 
      * @type {Array<ShockerResponse>}
-     * @memberof ResponseDeviceWithShockers
+     * @memberof DeviceWithShockersResponse
      */
     shockers: Array<ShockerResponse>;
 }
 
 /**
- * Check if a given object implements the ResponseDeviceWithShockers interface.
+ * Check if a given object implements the DeviceWithShockersResponse interface.
  */
-export function instanceOfResponseDeviceWithShockers(value: object): value is ResponseDeviceWithShockers {
+export function instanceOfDeviceWithShockersResponse(value: object): value is DeviceWithShockersResponse {
     if (!('id' in value) || value['id'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('createdOn' in value) || value['createdOn'] === undefined) return false;
@@ -64,11 +64,11 @@ export function instanceOfResponseDeviceWithShockers(value: object): value is Re
     return true;
 }
 
-export function ResponseDeviceWithShockersFromJSON(json: any): ResponseDeviceWithShockers {
-    return ResponseDeviceWithShockersFromJSONTyped(json, false);
+export function DeviceWithShockersResponseFromJSON(json: any): DeviceWithShockersResponse {
+    return DeviceWithShockersResponseFromJSONTyped(json, false);
 }
 
-export function ResponseDeviceWithShockersFromJSONTyped(json: any, ignoreDiscriminator: boolean): ResponseDeviceWithShockers {
+export function DeviceWithShockersResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): DeviceWithShockersResponse {
     if (json == null) {
         return json;
     }
@@ -81,11 +81,11 @@ export function ResponseDeviceWithShockersFromJSONTyped(json: any, ignoreDiscrim
     };
 }
 
-export function ResponseDeviceWithShockersToJSON(json: any): ResponseDeviceWithShockers {
-    return ResponseDeviceWithShockersToJSONTyped(json, false);
+export function DeviceWithShockersResponseToJSON(json: any): DeviceWithShockersResponse {
+    return DeviceWithShockersResponseToJSONTyped(json, false);
 }
 
-export function ResponseDeviceWithShockersToJSONTyped(value?: ResponseDeviceWithShockers | null, ignoreDiscriminator: boolean = false): any {
+export function DeviceWithShockersResponseToJSONTyped(value?: DeviceWithShockersResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

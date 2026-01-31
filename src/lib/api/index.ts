@@ -21,33 +21,38 @@ import {
   ShockersApi as ShockersV2Api,
 } from './internal/v2';
 
-function GetBasePath() {
+function GetBasePath(): string {
   if (!PUBLIC_BACKEND_API_URL) {
     throw new Error('PUBLIC_BACKEND_API_URL is not set in the environment');
   }
 
   try {
-    const parsedUrl = new URL(PUBLIC_BACKEND_API_URL);
-    // Remove trailing slash unless the path is just "/"
-    let basePath = parsedUrl.toString();
-    if (basePath.endsWith('/') && basePath.length > parsedUrl.origin.length + 1) {
-      basePath = basePath.slice(0, -1);
+    const url = new URL(PUBLIC_BACKEND_API_URL);
+
+    if (url.protocol !== 'https:') {
+      throw new Error('PUBLIC_BACKEND_API_URL must be a HTTPS url');
     }
-    return basePath;
-  } catch (error: any) {
+
+    if (url.search || url.hash) {
+      throw new Error('PUBLIC_BACKEND_API_URL must not contain query parameters or hash');
+    }
+
+    // Normalize pathname
+    let pathname = url.pathname === '/' ? '' : url.pathname.replace(/\/+$/, '');
+
+    return `${url.origin}${pathname}`;
+  } catch (error) {
     throw new Error('PUBLIC_BACKEND_API_URL is not a valid URL', { cause: error });
   }
 }
 
-function GetConfig(): ConfigurationParameters {
-  return {
-    basePath: GetBasePath(),
-    credentials: 'include',
-  };
-}
+const API_CONFIG: ConfigurationParameters = {
+  basePath: GetBasePath(),
+  credentials: 'include',
+};
 
-const DefaultApiV1Configuration = new ConfigurationV1(GetConfig());
-const DefaultApiV2Configuration = new ConfigurationV2(GetConfig());
+const DefaultApiV1Configuration = new ConfigurationV1(API_CONFIG);
+const DefaultApiV2Configuration = new ConfigurationV2(API_CONFIG);
 
 export const accountV1Api = new AccountV1Api(DefaultApiV1Configuration);
 export const accountV2Api = new AccountV2Api(DefaultApiV2Configuration);

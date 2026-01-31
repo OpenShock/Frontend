@@ -34,8 +34,14 @@ models/Control.ts
 models/ControlLogSenderLight.ts
 models/ControlType.ts
 models/CreateTokenRequest.ts
+models/DeviceResponse.ts
+models/DeviceResponseArrayLegacyDataResponse.ts
 models/DeviceSelfResponse.ts
 models/DeviceSelfResponseLegacyDataResponse.ts
+models/DeviceWithShockersResponse.ts
+models/DeviceWithShockersResponseArrayLegacyDataResponse.ts
+models/DeviceWithTokenResponse.ts
+models/DeviceWithTokenResponseLegacyDataResponse.ts
 models/EditTokenRequest.ts
 models/EmailProviderBlacklistDto.ts
 models/GuidLegacyDataResponse.ts
@@ -76,12 +82,6 @@ models/PublicShareResponseLegacyDataResponse.ts
 models/PublicShareShocker.ts
 models/ReportTokensRequest.ts
 models/ResetRequest.ts
-models/ResponseDevice.ts
-models/ResponseDeviceArrayLegacyDataResponse.ts
-models/ResponseDeviceWithShockers.ts
-models/ResponseDeviceWithShockersArrayLegacyDataResponse.ts
-models/ResponseDeviceWithToken.ts
-models/ResponseDeviceWithTokenLegacyDataResponse.ts
 models/RoleType.ts
 models/ShareCodeInfo.ts
 models/ShareCodeInfoArrayLegacyDataResponse.ts

@@ -16,51 +16,44 @@ import { mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface ResponseDeviceWithToken
+ * @interface DeviceResponse
  */
-export interface ResponseDeviceWithToken {
+export interface DeviceResponse {
     /**
      * 
      * @type {string}
-     * @memberof ResponseDeviceWithToken
+     * @memberof DeviceResponse
      */
     id: string;
     /**
      * 
      * @type {string}
-     * @memberof ResponseDeviceWithToken
+     * @memberof DeviceResponse
      */
     name: string;
     /**
      * 
      * @type {Date}
-     * @memberof ResponseDeviceWithToken
+     * @memberof DeviceResponse
      */
     createdOn: Date;
-    /**
-     * 
-     * @type {string}
-     * @memberof ResponseDeviceWithToken
-     */
-    token: string | null;
 }
 
 /**
- * Check if a given object implements the ResponseDeviceWithToken interface.
+ * Check if a given object implements the DeviceResponse interface.
  */
-export function instanceOfResponseDeviceWithToken(value: object): value is ResponseDeviceWithToken {
+export function instanceOfDeviceResponse(value: object): value is DeviceResponse {
     if (!('id' in value) || value['id'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('createdOn' in value) || value['createdOn'] === undefined) return false;
-    if (!('token' in value) || value['token'] === undefined) return false;
     return true;
 }
 
-export function ResponseDeviceWithTokenFromJSON(json: any): ResponseDeviceWithToken {
-    return ResponseDeviceWithTokenFromJSONTyped(json, false);
+export function DeviceResponseFromJSON(json: any): DeviceResponse {
+    return DeviceResponseFromJSONTyped(json, false);
 }
 
-export function ResponseDeviceWithTokenFromJSONTyped(json: any, ignoreDiscriminator: boolean): ResponseDeviceWithToken {
+export function DeviceResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): DeviceResponse {
     if (json == null) {
         return json;
     }
@@ -69,15 +62,14 @@ export function ResponseDeviceWithTokenFromJSONTyped(json: any, ignoreDiscrimina
         'id': json['id'],
         'name': json['name'],
         'createdOn': (new Date(json['createdOn'])),
-        'token': json['token'],
     };
 }
 
-export function ResponseDeviceWithTokenToJSON(json: any): ResponseDeviceWithToken {
-    return ResponseDeviceWithTokenToJSONTyped(json, false);
+export function DeviceResponseToJSON(json: any): DeviceResponse {
+    return DeviceResponseToJSONTyped(json, false);
 }
 
-export function ResponseDeviceWithTokenToJSONTyped(value?: ResponseDeviceWithToken | null, ignoreDiscriminator: boolean = false): any {
+export function DeviceResponseToJSONTyped(value?: DeviceResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
@@ -87,7 +79,6 @@ export function ResponseDeviceWithTokenToJSONTyped(value?: ResponseDeviceWithTok
         'id': value['id'],
         'name': value['name'],
         'createdOn': value['createdOn'].toISOString(),
-        'token': value['token'],
     };
 }
 

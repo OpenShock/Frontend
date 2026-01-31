@@ -2,7 +2,7 @@ import { PUBLIC_BACKEND_API_URL } from '$env/static/public';
 import { ResponseError } from './ResponseError';
 
 type ApiVersion = 1 | 2;
-export type Path = `${ApiVersion}/${string}`;
+export type Path = `${ApiVersion}` | `${ApiVersion}/${string}`;
 
 export async function GetJson<T>(
   path: Path,
