@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { AdminUsersView } from '$lib/api/internal/v1';
-  import AbsolutelySureButton from '$lib/components/AbsolutelySureButton.svelte';
+  import { Button } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
 
   interface Props {
@@ -21,6 +21,6 @@
         <strong>This action is irreversible.</strong>
       </Dialog.Description>
     </Dialog.Header>
-    <AbsolutelySureButton text="Delete" onconfirm={() => {}} />
+    <Button variant="destructive" onclick={() => {}}>Delete</Button>
   </Dialog.Content>
 </Dialog.Root>
