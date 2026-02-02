@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Zap } from '@lucide/svelte';
-  import type { UserShareInfo, V2UserSharesListItem } from '$lib/api/internal/v2';
+  import PermissionTooltip from '$lib/components/shares/permission-tooltip.svelte';
   import * as Avatar from '$lib/components/ui/avatar';
   import { Badge } from '$lib/components/ui/badge';
   import * as Table from '$lib/components/ui/table';
@@ -9,7 +9,6 @@
   import { UserShares } from '$lib/stores/UserSharesStore';
   import { ShockerPause } from '$lib/utils';
   import { derived } from 'svelte/store';
-  import PermissionTooltip from '../permission-tooltip.svelte';
 
   interface Props {
     storeIndex: number;

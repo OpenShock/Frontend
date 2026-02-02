@@ -1,6 +1,7 @@
 <script lang="ts">
   import OctagonAlert from '@lucide/svelte/icons/octagon-alert';
   import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
   import { apiTokensApi } from '$lib/api';
   import Turnstile from '$lib/components/Turnstile.svelte';
   import { Button } from '$lib/components/ui/button';
@@ -28,7 +29,7 @@
 
     try {
       await apiTokensApi.tokensReportTokens({ turnstileResponse, secrets });
-      goto('/login');
+      goto(resolve('/login'));
     } catch (err) {
       await handleApiError(err);
     }
