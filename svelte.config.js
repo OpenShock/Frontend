@@ -32,13 +32,11 @@ function getGitBranch() {
 }
 
 function getWsUrlFromHttpUrl(url) {
-  if (url.startsWith('https://')) {
-    return url.replace('https://', 'wss://');
-  } else if (url.startsWith('http://')) {
-    return url.replace('http://', 'ws://');
+  if (!url.startsWith('https://') && !url.startsWith('http://')) {
+    throw new Error(`Invalid URL [${url}]`);
   }
 
-  throw new Error(`Invalid URL was provided, it must start with http:// or https:// [${url}]`);
+  return 'ws' + url.substring(4); // Funny trick
 }
 
 function getSvelteBasePath() {
