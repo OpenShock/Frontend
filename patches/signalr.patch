@@ -1,0 +1,22 @@
+diff --git a/dist/esm/Utils.js b/dist/esm/Utils.js
+index 6b06f16eb5e5439fa8442021cdc44709ca202248..1e8f47ad2a687106697ab3e36d3fac60f290a035 100644
+--- a/dist/esm/Utils.js
++++ b/dist/esm/Utils.js
+@@ -187,7 +187,7 @@ export function constructUserAgent(version, os, runtime, runtimeVersion) {
+     return userAgent;
+ }
+ // eslint-disable-next-line spaced-comment
+-/*#__PURE__*/ function getOsName() {
++/*#__NO_SIDE_EFFECTS__*/ function getOsName() {
+     if (Platform.isNode) {
+         switch (process.platform) {
+             case "win32":
+@@ -205,7 +205,7 @@ export function constructUserAgent(version, os, runtime, runtimeVersion) {
+     }
+ }
+ // eslint-disable-next-line spaced-comment
+-/*#__PURE__*/ function getRuntimeVersion() {
++/*#__NO_SIDE_EFFECTS__*/ function getRuntimeVersion() {
+     if (Platform.isNode) {
+         return process.versions.node;
+     }

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { hubManagementV1Api } from '$lib/api';
+  import { Badge } from '$lib/components/ui/badge';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
@@ -23,10 +24,15 @@
 <Dialog.Root bind:open={() => open, (o) => (open = o)}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Delete hub</Dialog.Title>
+      <Dialog.Title>Are you sure?</Dialog.Title>
       <Dialog.Description>
-        Are you sure you want to delete <strong>{hub.name}</strong>?<br />
-        <strong>This action is irreversible.</strong>
+        You are about to delete hub "<strong>{hub.name}</strong>"<br />
+        This will also delete the following shockers:
+        <div class="pt-2 flex gap-2 text-sm justify-center sm:justify-start">
+          {#each hub.shockers as shocker}
+            <Badge>{shocker.name}</Badge>
+          {/each}
+        </div>
       </Dialog.Description>
     </Dialog.Header>
     <Button variant="destructive" onclick={deleteHub}>Delete</Button>

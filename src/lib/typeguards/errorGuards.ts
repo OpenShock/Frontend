@@ -40,3 +40,6 @@ export function isRequiredError(error: Error): error is RequiredErrorV1 | Requir
     error.name === 'RequiredError'
   );
 }
+export function isTypeError(error: Error): error is TypeError {
+  return error instanceof TypeError || error.name === 'TypeError';
+}

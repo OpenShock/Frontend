@@ -1,115 +1,167 @@
 <script lang="ts">
-  import Search from '@lucide/svelte/icons/search';
-  import type { ColumnFiltersState, PaginationState, SortingState } from '@tanstack/table-core';
+  import type { SortingState } from '@tanstack/table-core';
+  import type { ColumnDef } from '@tanstack/table-core';
   import { adminApi } from '$lib/api';
-  import type { AdminUsersView } from '$lib/api/internal/v1/models/AdminUsersView';
+  import type { AdminUsersView, AdminUsersViewPaginated } from '$lib/api/internal/v1';
+  import { PasswordHashingAlgorithm, RoleType } from '$lib/api/internal/v1';
   import Container from '$lib/components/Container.svelte';
+  import {
+    CreateSortableColumnDef,
+    LocaleDateTimeRenderer,
+    RenderBlueCell,
+    RenderBoldCell,
+    RenderCell,
+    RenderOrangeCell,
+    RenderRedCell,
+  } from '$lib/components/Table/ColumnUtils';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import { CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
+  import PaginationFooter from '$lib/components/Table/PaginationFooter.svelte';
+  import { CardHeader, CardTitle } from '$lib/components/ui/card';
+  import { renderComponent } from '$lib/components/ui/data-table';
   import { Input } from '$lib/components/ui/input';
-  import * as Pagination from '$lib/components/ui/pagination';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { onMount } from 'svelte';
-  import { columns } from './columns';
+  import type { TimeoutHandle } from '$lib/types/WAPI';
+  import DataTableActions from './data-table-actions.svelte';
 
-  type FilterOpType =
-    | 'like'
-    | '=='
-    | 'eq'
-    | '!='
-    | 'neq'
-    | '<'
-    | 'lt'
-    | '>'
-    | 'gt'
-    | '<='
-    | 'lte'
-    | '>='
-    | 'gte';
-  type Filter<TEntity> = `${Extract<keyof TEntity, string>} ${FilterOpType} ${string}`;
-  type FilterMap<TEntity> = { [K in keyof TEntity]: string };
-  type OrderbyQuery<TEntity> = `${Extract<keyof TEntity, string>} ${'asc' | 'desc'}`;
+  const PasswordHashTypeRenderer = (passwordHashType: PasswordHashingAlgorithm) => {
+    if (passwordHashType !== PasswordHashingAlgorithm.BCrypt)
+      return RenderOrangeCell(passwordHashType);
+    return RenderBoldCell(passwordHashType);
+  };
 
-  const PerPage = 200;
+  const UserRolesRenderer = (roles: RoleType[]) => {
+    const isPrivileged = [RoleType.Admin, RoleType.System].some((role) => roles.includes(role));
+    return isPrivileged ? RenderBlueCell(roles.toString()) : RenderBoldCell(roles.toString());
+  };
 
-  let page = $state(1);
+  const columns: ColumnDef<AdminUsersView>[] = [
+    CreateSortableColumnDef('name', 'Name', RenderCell),
+    CreateSortableColumnDef('email', 'Email', RenderCell),
+    CreateSortableColumnDef('passwordHashType', 'Password hash type', PasswordHashTypeRenderer),
+    CreateSortableColumnDef('roles', 'Roles', UserRolesRenderer),
+    CreateSortableColumnDef('createdAt', 'Created at', LocaleDateTimeRenderer),
+    CreateSortableColumnDef('activatedAt', 'Activated at', LocaleDateTimeRenderer),
+    CreateSortableColumnDef('deactivatedAt', 'Deactivated at', LocaleDateTimeRenderer),
+    CreateSortableColumnDef('deactivatedByUserId', 'Deactivated by', (a) =>
+      a ? RenderCell(a) : RenderRedCell('None')
+    ),
+    {
+      id: 'actions',
+      cell: ({ row }) => {
+        // You can pass whatever you need from `row.original` to the component
+        return renderComponent(DataTableActions, { user: row.original });
+      },
+    },
+  ];
+
+  let isFetching = $state(false);
+
+  let requestedPage = $state(1);
+  let requestedPageSize = $state(100);
+
+  let page = $state(0);
+  let perPage = $state(0);
   let total = $state(0);
+  let data = $state<AdminUsersView[]>([]);
+
   let nameSearch = $state('');
   let emailSearch = $state('');
 
-  let data = $state<AdminUsersView[]>([]);
-
-  let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: PerPage });
   let sorting = $state<SortingState>([]);
-  let filters = $derived<ColumnFiltersState>([
-    { id: 'name', value: nameSearch },
-    { id: 'email', value: emailSearch },
-  ]);
 
-  function fetchUsers() {
-    adminApi
-      .adminGetUsers() /* filter, orderby, offset, limit */
-      .then((res) => {
-        if (res.data) {
-          data = res.data;
-        }
-      })
-      .catch(handleApiError);
+  let filterQuery = $state<string>();
+  let orderByQuery = $derived(
+    sorting.length > 0 ? sorting[0].id + ' ' + (sorting[0].desc ? 'desc' : 'asc') : undefined
+  );
+
+  function escapeQuotes(str: string) {
+    if (/[ '"\\]/.test(str)) {
+      const escaped = str.replace(/(['"\\])/g, '\\$1');
+      return `'${escaped}'`;
+    }
+    return str;
   }
 
-  onMount(() => {
-    fetchUsers();
+  /**
+   * Build a single filter clause for `key` and `searchString`.
+   * - If there is any unescaped `%`, uses `ilike`.
+   * - Otherwise uses `eq`.
+   */
+  function createSearchQuery(key: string, searchString: string): string | undefined {
+    if (!searchString) return undefined;
 
-    // Update timestamps every minute
-    const interval = setInterval(() => {
-      data = Object.assign([], data);
-    }, 60000);
+    // Detect any % not preceded by a backslash
+    const hasWildcard = /(^|[^\\])%/.test(searchString);
 
-    return () => clearInterval(interval);
+    // Wrap & escape quotes/backslashes as before
+    const escaped = escapeQuotes(searchString);
+
+    const operator = hasWildcard ? 'ilike' : 'eq';
+    return `${key} ${operator} ${escaped}`;
+  }
+
+  function handleResponse(response: AdminUsersViewPaginated) {
+    total = response.total;
+    data = response.data;
+    perPage = response.limit;
+    if (page !== requestedPage) {
+      console.warn('Page response mismatch!');
+    }
+    page = Math.floor(response.offset / response.limit) + 1;
+  }
+
+  let searchDebounce: TimeoutHandle | undefined;
+  $effect(() => {
+    clearTimeout(searchDebounce);
+
+    const queries: string[] = [];
+
+    const nameQ = createSearchQuery('name', nameSearch);
+    if (nameQ) queries.push(nameQ);
+
+    const emailQ = createSearchQuery('email', emailSearch);
+    if (emailQ) queries.push(emailQ);
+
+    const query = queries.length > 0 ? queries.join(' and ') : undefined;
+    if (query === filterQuery) return;
+
+    searchDebounce = setTimeout(() => (filterQuery = query), 800);
+  });
+
+  $effect(() => {
+    const offset = (requestedPage - 1) * requestedPageSize;
+
+    isFetching = true;
+    adminApi
+      .adminGetUsers(filterQuery, orderByQuery, offset, requestedPageSize)
+      .then(handleResponse)
+      .catch(handleApiError)
+      .finally(() => (isFetching = false));
   });
 </script>
 
 <Container>
-  <CardHeader>
+  <CardHeader class="w-full">
     <CardTitle class="flex items-center justify-between space-x-2 text-3xl">
       Users
       <div class="flex items-center justify-end space-x-2">
         <Input placeholder="Filter names..." bind:value={nameSearch} class="max-w-sm" />
         <Input placeholder="Filter emails..." bind:value={emailSearch} class="max-w-sm" />
-        <Button class="text-xl" onclick={fetchUsers}>
-          <Search />
-          <span> Search </span>
-        </Button>
       </div>
     </CardTitle>
   </CardHeader>
-  <CardContent>
-    <DataTable {data} {columns} {sorting} {filters} {pagination} />
-  </CardContent>
-  <Pagination.Root count={total} perPage={PerPage} bind:page>
-    {#snippet children({ pages, currentPage })}
-      <Pagination.Content>
-        <Pagination.Item>
-          <Pagination.PrevButton />
-        </Pagination.Item>
-        {#each pages as page (page.key)}
-          {#if page.type === 'ellipsis'}
-            <Pagination.Item>
-              <Pagination.Ellipsis />
-            </Pagination.Item>
-          {:else}
-            <Pagination.Item>
-              <Pagination.Link {page} isActive={currentPage === page.value}>
-                {page.value}
-              </Pagination.Link>
-            </Pagination.Item>
-          {/if}
-        {/each}
-        <Pagination.Item>
-          <Pagination.NextButton />
-        </Pagination.Item>
-      </Pagination.Content>
-    {/snippet}
-  </Pagination.Root>
+  <div class="w-full p-6 gap-6 grid">
+    <DataTable
+      {data}
+      {columns}
+      bind:sorting
+      pagination={{ pageIndex: page - 1, pageSize: perPage }}
+    />
+    <PaginationFooter
+      count={total}
+      {perPage}
+      bind:page={() => page, (p) => (requestedPage = p)}
+      disabled={isFetching}
+    />
+  </div>
 </Container>

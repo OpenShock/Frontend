@@ -1,24 +1,27 @@
 <script lang="ts">
-  import Container from '$lib/components/Container.svelte';
+  import { asset } from '$app/paths';
+
+  let { data } = $props();
 </script>
 
-<Container>
-  <div class="flex flex-col">
-    <h1 class="text-5xl leading-none font-bold text-gray-800 dark:text-white">
-      Welcome to <span class="text-blue-600">OpenShock</span>
-    </h1>
-    <p class="text-2xl font-light text-gray-600">[Put a slogan here]</p>
-    <div class="mt-8 flex flex-row items-center justify-start space-x-4">
-      <a href="signup" class="rounded bg-blue-600 px-4 py-2 font-bold text-white hover:bg-blue-700">
-        Get Started
-      </a>
-      <a
-        href="https://wiki.openshock.org/"
-        class="rounded bg-gray-200 px-4 py-2 font-bold text-gray-700 hover:bg-gray-300"
-      >
-        Documentation
-      </a>
-    </div>
+<section class="flex flex-col items-center justify-center h-full text-white text-center space-y-6">
+  <span class="flex">
+    <img class="h-9 pr-2 sm:h-14 md:h-20 md:pr-4" src={asset('/IconSpinning.svg')} alt="logo" />
+    <img class="h-9 sm:h-14 md:h-20" src={asset('/LogoBakedFont.svg')} alt="logo" />
+  </span>
+  <p class="text-lg md:text-2xl opacity-75">
+    The go-to platform for safe, reliable, real low-latency remote shocking.<br />
+    {#if data.ok}
+      <span class="font-semibold">{data.deviceCount}</span> people online right now.
+    {/if}
+  </p>
+  <div class="flex space-x-4 pt-8 text-sm opacity-75">
+    <a href="https://openshock.org" target="_blank" rel="noopener" class="hover:underline">
+      Learn More
+    </a>
+    <span>·</span>
+    <a href="https://wiki.openshock.org" target="_blank" rel="noopener" class="hover:underline">
+      Wiki
+    </a>
   </div>
-  <div class="placeholder h-3/4 w-1/2 rounded-none"></div>
-</Container>
+</section>

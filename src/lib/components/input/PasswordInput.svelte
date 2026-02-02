@@ -2,11 +2,13 @@
   import { Eye, EyeOff } from '@lucide/svelte';
   import { checkPwnedCount } from '$lib/api/pwnedPasswords';
   import TextInput from '$lib/components/input/TextInput.svelte';
+  import { Button } from '$lib/components/ui/button';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { validatePassword } from '$lib/inputvalidation/passwordValidator';
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import type { ValidationResult } from '$lib/types/ValidationResult';
   import type { TimeoutHandle } from '$lib/types/WAPI';
+  import type { Snippet } from 'svelte';
   import type { FullAutoFill } from 'svelte/elements';
   import PasswordStrengthMeter from './impl/PasswordStrengthMeter.svelte';
 
@@ -35,10 +37,10 @@
   }: Props = $props();
 
   let validationResult = $state<ValidationResult | null>(null);
-  let passwordDebounce: TimeoutHandle | null = null;
+  let passwordDebounce: TimeoutHandle | undefined;
   function checkHIBP(str: string) {
     // Stop the previous debounce timer if it exists
-    if (passwordDebounce) clearTimeout(passwordDebounce);
+    clearTimeout(passwordDebounce);
 
     // Set the validation result to the checking availability state
     validationResult = { valid: false, message: 'Checking password...' };
@@ -65,9 +67,9 @@
           // Password is ok, return the successful validation result from the basic validation step
           validationResult = { valid: true };
         }
-      } catch (e) {
+      } catch (error) {
         // Show an error toast
-        await handleApiError(e);
+        await handleApiError(error);
 
         // We shouldnt block the user from submitting the form if the pwned password check fails
         validationResult = { valid: true };
@@ -131,11 +133,22 @@
   bind:value
   {validationResult}
   {Icon}
-  button={{
-    Icon: valueShown ? EyeOff : Eye,
-    class: 'cursor-pointer',
-    onClick: () => (valueShown = !valueShown),
-  }}
   onblur={() => (showPopup = false)}
-  popup={showPopup ? popup : undefined}
-/>
+  popup={showPopup ? (popup as Snippet) : undefined}
+>
+  {#snippet after()}
+    <Button
+      type="button"
+      class="cursor-pointer"
+      onclick={() => (valueShown = !valueShown)}
+      variant="ghost"
+      disabled={value.length == 0}
+    >
+      {#if valueShown}
+        <EyeOff />
+      {:else}
+        <Eye />
+      {/if}
+    </Button>
+  {/snippet}
+</TextInput>

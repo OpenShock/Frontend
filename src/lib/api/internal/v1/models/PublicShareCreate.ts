@@ -68,7 +68,7 @@ export function PublicShareCreateToJSONTyped(value?: PublicShareCreate | null, i
     return {
         
         'name': value['name'],
-        'expiresOn': value['expiresOn'] === null ? null : ((value['expiresOn'] as any)?.toISOString()),
+        'expiresOn': value['expiresOn'] == null ? value['expiresOn'] : value['expiresOn'].toISOString(),
     };
 }
 

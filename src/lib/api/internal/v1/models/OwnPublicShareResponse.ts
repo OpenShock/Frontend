@@ -85,8 +85,8 @@ export function OwnPublicShareResponseToJSONTyped(value?: OwnPublicShareResponse
         
         'id': value['id'],
         'name': value['name'],
-        'createdOn': ((value['createdOn']).toISOString()),
-        'expiresOn': value['expiresOn'] === null ? null : ((value['expiresOn'] as any)?.toISOString()),
+        'createdOn': value['createdOn'].toISOString(),
+        'expiresOn': value['expiresOn'] == null ? value['expiresOn'] : value['expiresOn'].toISOString(),
     };
 }
 

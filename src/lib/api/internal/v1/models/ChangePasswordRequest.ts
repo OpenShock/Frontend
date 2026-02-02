@@ -24,7 +24,7 @@ export interface ChangePasswordRequest {
      * @type {string}
      * @memberof ChangePasswordRequest
      */
-    oldPassword: string;
+    currentPassword: string;
     /**
      * 
      * @type {string}
@@ -37,7 +37,7 @@ export interface ChangePasswordRequest {
  * Check if a given object implements the ChangePasswordRequest interface.
  */
 export function instanceOfChangePasswordRequest(value: object): value is ChangePasswordRequest {
-    if (!('oldPassword' in value) || value['oldPassword'] === undefined) return false;
+    if (!('currentPassword' in value) || value['currentPassword'] === undefined) return false;
     if (!('newPassword' in value) || value['newPassword'] === undefined) return false;
     return true;
 }
@@ -52,7 +52,7 @@ export function ChangePasswordRequestFromJSONTyped(json: any, ignoreDiscriminato
     }
     return {
         
-        'oldPassword': json['oldPassword'],
+        'currentPassword': json['currentPassword'],
         'newPassword': json['newPassword'],
     };
 }
@@ -68,7 +68,7 @@ export function ChangePasswordRequestToJSONTyped(value?: ChangePasswordRequest |
 
     return {
         
-        'oldPassword': value['oldPassword'],
+        'currentPassword': value['currentPassword'],
         'newPassword': value['newPassword'],
     };
 }

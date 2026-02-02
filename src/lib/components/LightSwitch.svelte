@@ -5,25 +5,50 @@
   import * as Dialog from '$lib/components/ui/dialog';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import {
-    ColorSchemeStore,
+    ColorScheme,
+    colorScheme,
     getDarkReaderState,
-    willActivateLightMode,
-  } from '$lib/stores/ColorSchemeStore';
+  } from '$lib/stores/ColorSchemeStore.svelte';
   import { cn } from '$lib/utils';
   import { toast } from 'svelte-sonner';
 
-  let pendingScheme = $state<'light' | 'dark' | 'system' | undefined>();
+  let pendingScheme = $state<ColorScheme | null>(null);
   function handleOpenChanged(open: boolean) {
     if (open) return;
-    pendingScheme = undefined;
+    pendingScheme = null;
   }
   function confirm() {
     if (!pendingScheme) return;
-    ColorSchemeStore.set(pendingScheme);
-    pendingScheme = undefined;
+    colorScheme.Value = pendingScheme;
+    pendingScheme = null;
   }
-  function evaluateLightSwitch(scheme: 'light' | 'dark' | 'system') {
-    if (willActivateLightMode(scheme) && scheme !== $ColorSchemeStore) {
+
+  // Decision matrix
+  //        light  dark system pending
+  //  light false false  false
+  //   dark true  false  check
+  // system check false  false
+  // current
+  function isGoingNuclear(current: ColorScheme, pending: ColorScheme) {
+    // There will definetly be no transition from dark -> light
+    if (current === pending || current === ColorScheme.Light || pending === ColorScheme.Dark)
+      return false;
+
+    const currentDark = current === ColorScheme.Dark;
+    const pendingLight = pending === ColorScheme.Light;
+    if (currentDark && pendingLight) return true; // Change will definetly go from dark to light
+
+    // Now either current or pending is system, so we need to query the browser preference
+    if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+      // System prefers lightmode, if the current mode is dark the transition will happen
+      return currentDark;
+    }
+
+    // system prefers darkmode, if pending is light then the transition will happen
+    return pendingLight;
+  }
+  function evaluateLightSwitch(scheme: ColorScheme) {
+    if (isGoingNuclear(colorScheme.Value, scheme)) {
       const darkreader = getDarkReaderState();
       if (darkreader.isActive) {
         toast.warning('DarkReader is enabled, activating light mode will have no effect!');
@@ -32,11 +57,11 @@
       pendingScheme = scheme;
       return;
     }
-    ColorSchemeStore.set(scheme);
+    colorScheme.Value = scheme;
   }
 </script>
 
-<Dialog.Root bind:open={() => pendingScheme !== undefined, handleOpenChanged}>
+<Dialog.Root bind:open={() => pendingScheme !== null, handleOpenChanged}>
   <Dialog.Content>
     <Dialog.Header>
       <Dialog.Title>Switch to light mode</Dialog.Title>
@@ -61,14 +86,11 @@
     <span class="sr-only">Toggle theme</span>
   </DropdownMenu.Trigger>
   <DropdownMenu.Content align="end">
-    <DropdownMenu.Item class="cursor-pointer" onclick={() => evaluateLightSwitch('light')}
-      >Light</DropdownMenu.Item
-    >
-    <DropdownMenu.Item class="cursor-pointer" onclick={() => evaluateLightSwitch('dark')}
-      >Dark</DropdownMenu.Item
-    >
-    <DropdownMenu.Item class="cursor-pointer" onclick={() => evaluateLightSwitch('system')}
-      >System</DropdownMenu.Item
-    >
+    {#each Object.values(ColorScheme) as value}
+      <DropdownMenu.Item
+        class="cursor-pointer capitalize"
+        onclick={() => evaluateLightSwitch(value)}>{value}</DropdownMenu.Item
+      >
+    {/each}
   </DropdownMenu.Content>
 </DropdownMenu.Root>

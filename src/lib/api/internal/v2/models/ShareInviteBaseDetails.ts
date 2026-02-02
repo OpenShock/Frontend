@@ -13,13 +13,6 @@
  */
 
 import { mapValues } from '../runtime';
-import type { ShockerPermLimitPairWithId } from './ShockerPermLimitPairWithId';
-import {
-    ShockerPermLimitPairWithIdFromJSON,
-    ShockerPermLimitPairWithIdFromJSONTyped,
-    ShockerPermLimitPairWithIdToJSON,
-    ShockerPermLimitPairWithIdToJSONTyped,
-} from './ShockerPermLimitPairWithId';
 import type { BasicUserInfo } from './BasicUserInfo';
 import {
     BasicUserInfoFromJSON,
@@ -27,6 +20,13 @@ import {
     BasicUserInfoToJSON,
     BasicUserInfoToJSONTyped,
 } from './BasicUserInfo';
+import type { ShockerPermLimitPairWithIdAndName } from './ShockerPermLimitPairWithIdAndName';
+import {
+    ShockerPermLimitPairWithIdAndNameFromJSON,
+    ShockerPermLimitPairWithIdAndNameFromJSONTyped,
+    ShockerPermLimitPairWithIdAndNameToJSON,
+    ShockerPermLimitPairWithIdAndNameToJSONTyped,
+} from './ShockerPermLimitPairWithIdAndName';
 
 /**
  * 
@@ -60,10 +60,10 @@ export interface ShareInviteBaseDetails {
     sharedWith: BasicUserInfo;
     /**
      * 
-     * @type {Array<ShockerPermLimitPairWithId>}
+     * @type {Array<ShockerPermLimitPairWithIdAndName>}
      * @memberof ShareInviteBaseDetails
      */
-    shockers: Array<ShockerPermLimitPairWithId>;
+    shockers: Array<ShockerPermLimitPairWithIdAndName>;
 }
 
 /**
@@ -92,7 +92,7 @@ export function ShareInviteBaseDetailsFromJSONTyped(json: any, ignoreDiscriminat
         'createdAt': (new Date(json['createdAt'])),
         'owner': BasicUserInfoFromJSON(json['owner']),
         'sharedWith': BasicUserInfoFromJSON(json['sharedWith']),
-        'shockers': ((json['shockers'] as Array<any>).map(ShockerPermLimitPairWithIdFromJSON)),
+        'shockers': ((json['shockers'] as Array<any>).map(ShockerPermLimitPairWithIdAndNameFromJSON)),
     };
 }
 
@@ -108,10 +108,10 @@ export function ShareInviteBaseDetailsToJSONTyped(value?: ShareInviteBaseDetails
     return {
         
         'id': value['id'],
-        'createdAt': ((value['createdAt']).toISOString()),
+        'createdAt': value['createdAt'].toISOString(),
         'owner': BasicUserInfoToJSON(value['owner']),
         'sharedWith': BasicUserInfoToJSON(value['sharedWith']),
-        'shockers': ((value['shockers'] as Array<any>).map(ShockerPermLimitPairWithIdToJSON)),
+        'shockers': ((value['shockers'] as Array<any>).map(ShockerPermLimitPairWithIdAndNameToJSON)),
     };
 }
 

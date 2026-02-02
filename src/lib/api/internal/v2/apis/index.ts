@@ -3,5 +3,5 @@
 export * from './AccountApi';
 export * from './HubEndpointsApi';
 export * from './HubManagementApi';
-export * from './ShockerSharesApi';
 export * from './ShockersApi';
+export * from './UserShockerSharesApi';

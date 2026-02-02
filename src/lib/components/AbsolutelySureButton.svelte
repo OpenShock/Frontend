@@ -11,6 +11,7 @@
   let { text, onconfirm }: Props = $props();
 
   let clickedAt = $state<number | null>(null);
+  // svelte-ignore state_referenced_locally
   let buttonText = $state<string>(text);
   function updateText() {
     if (clickedAt === null) {
@@ -25,25 +26,20 @@
     buttonText = `Hold for ${timeLeft.toFixed(1)}s`;
   }
 
-  let timer = $state<TimeoutHandle | null>(null);
-  let interval: IntervalHandle | null = null;
+  let timeoutHandle: TimeoutHandle | undefined;
+  let intervalHandle: IntervalHandle | undefined;
   function stopTimers() {
-    if (timer) {
-      clearTimeout(timer);
-      timer = null;
-    }
-    if (interval) {
-      clearInterval(interval);
-      interval = null;
-    }
+    clearTimeout(timeoutHandle);
+    clearInterval(intervalHandle);
+
     clickedAt = null;
     updateText();
   }
   function startConfirm() {
     stopTimers();
     clickedAt = Date.now();
-    timer = setTimeout(onconfirm, 3000);
-    interval = setInterval(updateText, 100);
+    timeoutHandle = setTimeout(onconfirm, 3000);
+    intervalHandle = setInterval(updateText, 100);
   }
 
   onDestroy(stopTimers);
@@ -55,7 +51,7 @@
   onpointerleave={stopTimers}
   class={cn(
     'h-10 rounded-md bg-[#7f1d1d] px-4 py-2 text-sm font-medium whitespace-nowrap select-none hover:bg-[#731a1a] focus:outline-hidden',
-    { 'violent-shake': timer !== null }
+    { 'violent-shake': clickedAt !== null }
   )}
 >
   {buttonText}

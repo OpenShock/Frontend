@@ -8,15 +8,17 @@
   interface Props {
     open: boolean;
     publicShare: OwnPublicShareResponse;
+    onDeleted: () => void;
   }
 
-  let { open = $bindable<boolean>(), publicShare }: Props = $props();
+  let { open = $bindable<boolean>(), publicShare, onDeleted }: Props = $props();
 
   function deleteShareLink() {
     publicShockerSharesApi
       .shareLinksDeletePublicShare(publicShare.id)
       .then(() => {
-        toast.success('Token publicShare successfully');
+        onDeleted();
+        toast.success('Deleted publicShare successfully');
       })
       .finally(() => {
         open = false;

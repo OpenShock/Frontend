@@ -2,6 +2,7 @@
   import User from '@lucide/svelte/icons/user';
   import { accountV1Api } from '$lib/api';
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
+  import { Button } from '$lib/components/ui/button';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { UserStore } from '$lib/stores/UserStore';
   import type { ApiUserSelf } from '$lib/types/ApiUser';
@@ -13,9 +14,16 @@
 
   let { account }: Props = $props();
 
-  let username = $state<string>('');
+  let loading = $state(false);
 
-  async function submitUsername() {
+  let username = $state<string>('');
+  let usernameValid = $state(false);
+
+  async function submitUsername(e: Event) {
+    e.preventDefault();
+    if (loading) return;
+    loading = true;
+
     try {
       await accountV1Api.authenticatedAccountChangeUsername({ username });
 
@@ -26,12 +34,14 @@
       username = '';
     } catch (e) {
       await handleApiError(e, (problem) => {
-        if (problem.type === 'Account.Username.Invalid') {
-          toast.error('Invalid Username');
-          return true;
-        }
-        return false;
+        if (problem.type !== 'Account.Username.Invalid') return false;
+
+        toast.error('Invalid Username');
+
+        return true;
       });
+    } finally {
+      loading = false;
     }
   }
 </script>
@@ -41,6 +51,16 @@
   placeholder={account.name}
   autocomplete="off"
   bind:value={username}
+  bind:valid={usernameValid}
   Icon={User}
-  button={{ text: 'Change', submits: true, onClick: submitUsername }}
-/>
+>
+  {#snippet after()}
+    <Button
+      type="button"
+      onclick={submitUsername}
+      disabled={!usernameValid || username === account.email || loading}
+    >
+      Change
+    </Button>
+  {/snippet}
+</UsernameInput>

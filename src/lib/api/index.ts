@@ -1,4 +1,4 @@
-import { PUBLIC_BACKEND_API_DOMAIN } from '$env/static/public';
+import { PUBLIC_BACKEND_API_URL } from '$env/static/public';
 import {
   APITokensApi,
   AccountApi as AccountV1Api,
@@ -17,33 +17,42 @@ import {
   AccountApi as AccountV2Api,
   Configuration as ConfigurationV2,
   HubManagementApi as HubManagementV2Api,
-  ShockerSharesApi as ShockerSharesV2Api,
+  UserShockerSharesApi as ShockerSharesV2Api,
   ShockersApi as ShockersV2Api,
 } from './internal/v2';
 
-function GetBasePath() {
-  const domain = (PUBLIC_BACKEND_API_DOMAIN || undefined) as string | undefined;
-
-  if (!domain) {
-    return undefined;
+function GetBasePath(): string {
+  if (!PUBLIC_BACKEND_API_URL) {
+    throw new Error('PUBLIC_BACKEND_API_URL is not set in the environment');
   }
 
-  if (!/^[a-z0-9.-]+$/i.test(domain)) {
-    return undefined;
+  try {
+    const url = new URL(PUBLIC_BACKEND_API_URL);
+
+    if (url.protocol !== 'https:') {
+      throw new Error('PUBLIC_BACKEND_API_URL must be a HTTPS url');
+    }
+
+    if (url.search || url.hash) {
+      throw new Error('PUBLIC_BACKEND_API_URL must not contain query parameters or hash');
+    }
+
+    // Normalize pathname
+    let pathname = url.pathname === '/' ? '' : url.pathname.replace(/\/+$/, '');
+
+    return `${url.origin}${pathname}`;
+  } catch (error) {
+    throw new Error('PUBLIC_BACKEND_API_URL is not a valid URL', { cause: error });
   }
-
-  return 'https://' + domain; // TODO: Add configurable protocol
 }
 
-function GetConfig(): ConfigurationParameters {
-  return {
-    basePath: GetBasePath(),
-    credentials: 'include',
-  };
-}
+const API_CONFIG: ConfigurationParameters = {
+  basePath: GetBasePath(),
+  credentials: 'include',
+};
 
-const DefaultApiV1Configuration = new ConfigurationV1(GetConfig());
-const DefaultApiV2Configuration = new ConfigurationV2(GetConfig());
+const DefaultApiV1Configuration = new ConfigurationV1(API_CONFIG);
+const DefaultApiV2Configuration = new ConfigurationV2(API_CONFIG);
 
 export const accountV1Api = new AccountV1Api(DefaultApiV1Configuration);
 export const accountV2Api = new AccountV2Api(DefaultApiV2Configuration);

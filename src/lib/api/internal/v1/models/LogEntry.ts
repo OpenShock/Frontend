@@ -118,7 +118,7 @@ export function LogEntryToJSONTyped(value?: LogEntry | null, ignoreDiscriminator
     return {
         
         'id': value['id'],
-        'createdOn': ((value['createdOn']).toISOString()),
+        'createdOn': value['createdOn'].toISOString(),
         'type': ControlTypeToJSON(value['type']),
         'controlledBy': ControlLogSenderLightToJSON(value['controlledBy']),
         'intensity': value['intensity'],

@@ -2,25 +2,96 @@
   import Plus from '@lucide/svelte/icons/plus';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
   import type { SortingState } from '@tanstack/table-core';
+  import type { ColumnDef } from '@tanstack/table-core';
+  import { apiTokensApi } from '$lib/api';
+  import type { TokenCreatedResponse, TokenResponse } from '$lib/api/internal/v1';
   import Container from '$lib/components/Container.svelte';
+  import {
+    CreateSortableColumnDef,
+    LocaleDateRenderer,
+    RenderCell,
+    TimeSinceRelativeOrNeverRenderer,
+  } from '$lib/components/Table/ColumnUtils';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card';
-  import { ApiTokensStore, refreshApiTokens } from '$lib/stores/ApiTokensStore';
+  import { renderComponent } from '$lib/components/ui/data-table';
+  import type { ProblemDetails } from '$lib/errorhandling/ProblemDetails';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
-  import { columns } from './columns';
-  import TokenGenerateDialog from './dialog-token-generate.svelte';
+  import DataTableActions from './data-table-actions.svelte';
+  import TokenCreateDialog from './dialog-token-create.svelte';
+  import TokenCreatedDialog from './dialog-token-created.svelte';
 
-  let data = $derived(Array.from($ApiTokensStore.values()));
+  let loading = $state<boolean>(false);
+  let data = $state<TokenResponse[]>([]);
   let sorting = $state<SortingState>([]);
 
-  let showGenerateTokenModal = $state<boolean>(false);
+  function onCreated(token: TokenCreatedResponse) {
+    data.push({
+      id: token.id,
+      name: token.name,
+      createdOn: token.createdAt,
+      validUntil: token.validUntil,
+      lastUsed: token.lastUsed,
+      permissions: token.permissions,
+    });
+    createdTokenSecret = token.token;
+    toast.success('Token created successfully');
+  }
 
-  onMount(refreshApiTokens);
+  function onEdit(id: string, updater: (token: TokenResponse) => TokenResponse) {
+    const idx = data.findIndex((token) => token.id === id);
+    if (idx === -1) return;
+
+    data[idx] = updater(data[idx]);
+  }
+
+  async function onDeleted(id: string) {
+    data = data.filter((t) => t.id !== id);
+  }
+
+  const columns: ColumnDef<TokenResponse>[] = [
+    CreateSortableColumnDef('name', 'Name', RenderCell),
+    CreateSortableColumnDef('createdOn', 'Created at', LocaleDateRenderer),
+    CreateSortableColumnDef('validUntil', 'Expires at', TimeSinceRelativeOrNeverRenderer),
+    CreateSortableColumnDef('lastUsed', 'Last used', TimeSinceRelativeOrNeverRenderer),
+    {
+      id: 'actions',
+      cell: ({ row }) => {
+        // You can pass whatever you need from `row.original` to the component
+        return renderComponent(DataTableActions, { token: row.original, onEdit, onDeleted });
+      },
+    },
+  ];
+
+  let showGenerateTokenModal = $state<boolean>(false);
+  let createdTokenSecret = $state<string | null>(null);
+
+  function handleProblem(problem: ProblemDetails): boolean {
+    return false;
+  }
+
+  async function loadTokens(successMessage?: string) {
+    loading = true;
+    try {
+      data = await apiTokensApi.tokensListTokens();
+      if (successMessage) {
+        toast.success(successMessage);
+      }
+    } catch (error) {
+      await handleApiError(error, handleProblem);
+    } finally {
+      loading = false;
+    }
+  }
+
+  onMount(loadTokens);
 </script>
 
-<TokenGenerateDialog bind:open={showGenerateTokenModal} />
+<TokenCreateDialog bind:open={showGenerateTokenModal} {onCreated} />
+<TokenCreatedDialog bind:token={createdTokenSecret} />
 
 <Container>
   <Card.Header class="w-full">
@@ -31,12 +102,7 @@
           <Plus />
           Generate Token
         </Button>
-        <Button
-          onclick={() => {
-            refreshApiTokens();
-            toast.success('Tokens refreshed successfully');
-          }}
-        >
+        <Button onclick={() => loadTokens('Tokens refreshed successfully')}>
           <RotateCcw />
           Refresh
         </Button>
@@ -46,6 +112,5 @@
   </Card.Header>
   <Card.Content class="flex flex-col space-y-4 w-full">
     <DataTable {data} {columns} {sorting} />
-    <div class="flex justify-end"></div>
   </Card.Content>
 </Container>

@@ -1,105 +1,73 @@
 <script lang="ts">
   import Bug from '@lucide/svelte/icons/bug';
   import { dev } from '$app/environment';
-  import { PUBLIC_TURNSTILE_DEV_BYPASS_VALUE, PUBLIC_TURNSTILE_SITE_KEY } from '$env/static/public';
+  import { PUBLIC_TURNSTILE_DEV_BYPASS_VALUE } from '$env/static/public';
   import CloudflareLogo from '$lib/components/svg/CloudflareLogo.svelte';
   import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
-  import { ColorSchemeStore } from '$lib/stores/ColorSchemeStore';
-  import type { TurnstileInstance } from '$lib/types/TurnstileInstance';
+  import { ColorScheme, colorScheme } from '$lib/stores/ColorSchemeStore.svelte';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
 
   interface Props {
     action: string;
     cData?: string;
-    response?: string | null;
+    response: string | null;
   }
 
-  let { action, cData, response = $bindable(null) }: Props = $props();
+  let { action, cData, response = $bindable() }: Props = $props();
 
-  let turnstile = $state<TurnstileInstance | undefined>();
-  let element = $state<HTMLDivElement | undefined>();
+  let element: HTMLDivElement;
+
+  let mounted = $state<boolean>(false);
   let widgetId = $state<string | undefined>();
-  let widgetState = $state<'unmounted' | 'mounting' | 'mounted'>('unmounted');
 
-  function resetWidget() {
-    if (turnstile && widgetId) turnstile.reset(widgetId);
-  }
-  function removeWidget() {
-    if (turnstile && widgetId) turnstile.remove(widgetId);
-    widgetId = undefined;
-  }
-  function handleExpired() {
+  function invalidateResponse() {
     response = null;
-    // Reset the widget after 5 seconds to prevent the user from spamming the button
-    setTimeout(resetWidget, 5000);
-  }
-  function handleTimeout() {
-    response = null;
-    // Reset the widget after 5 seconds to prevent the user from spamming the button
-    setTimeout(resetWidget, 5000);
-  }
-  function handleError() {
-    toast.warning('Turnstile encountered an error');
-
-    response = null;
-    // Reset the widget after 5 seconds to prevent the user from spamming the button
-    setTimeout(resetWidget, 5000);
   }
 
-  let cfColorScheme = $derived($ColorSchemeStore === 'system' ? 'auto' : $ColorSchemeStore) as
-    | 'dark'
-    | 'light'
-    | 'auto';
+  function renderTurnstile() {
+    mounted = true;
 
-  $effect(() => {
-    if (!turnstile || !element || widgetState != 'mounted' || widgetId) return;
+    const theme = colorScheme.Value === ColorScheme.System ? 'auto' : colorScheme.Value;
 
-    if (widgetId) {
-      removeWidget();
-
-      widgetState = 'mounting';
-      turnstile.ready(() => (widgetState = 'mounted'));
-      return;
-    }
-
-    widgetId = turnstile.render(element, {
-      sitekey: PUBLIC_TURNSTILE_SITE_KEY,
+    widgetId = window.turnstile!.render(element, {
+      sitekey: sessionStorage.getItem('turnstileSiteKey')!,
       action,
       cData,
-      theme: cfColorScheme,
+      theme,
       callback: (token) => (response = token),
-      'expired-callback': handleExpired,
-      'timeout-callback': handleTimeout,
-      'error-callback': handleError,
+      'expired-callback': invalidateResponse,
+      'timeout-callback': invalidateResponse,
+      'error-callback': invalidateResponse,
     });
-  });
+  }
 
   onMount(() => {
     if (dev) {
-      console.log('Turnstile is disabled in dev mode');
-      toast.warning('Turnstile is disabled in dev mode');
       response = PUBLIC_TURNSTILE_DEV_BYPASS_VALUE;
       return;
     }
 
-    // If turstile doesnt load, then the index.html is proabably missing the script tag (https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/#explicitly-render-the-turnstile-widget)
+    // Check that Cloudflare Turnstile has been loaded.
+    // If `window.turnstile` is undefined, it usually means the <script> tag wasn't injected.
+    // See: https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/#explicitly-render-the-turnstile-widget
     if (!window.turnstile) {
-      console.error('Failed to load Cloudflare Turnstile resource!');
-      toast.error('Failed to load Cloudflare Turnstile resource!');
+      console.error('Failed to load Cloudflare Turnstile');
+      toast.error('Internal Error');
       return;
     }
 
-    turnstile = window.turnstile;
+    window.turnstile.ready(renderTurnstile);
 
-    widgetState = 'mounting';
-    turnstile.ready(() => (widgetState = 'mounted'));
+    return () => {
+      if (widgetId) window.turnstile?.remove(widgetId);
+    };
   });
 </script>
 
 <!-- see: https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/#widget-size -->
 <div class="mx-auto h-[65px] w-[300px]" bind:this={element}>
-  {#if widgetState != 'mounted'}
+  {#if !mounted}
     <!-- Turnstile placeholder -->
     <div
       class="flex h-full items-center justify-center gap-3 border border-[#e0e0e0] bg-[#fafafa] p-3 select-none dark:border-[#666] dark:bg-[#222]"

@@ -1,14 +1,15 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { accountV2Api } from '$lib/api';
+  import AbsolutelySureButton from '$lib/components/AbsolutelySureButton.svelte';
   import Container from '$lib/components/Container.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
   import EmailInput from '$lib/components/input/EmailInput.svelte';
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
   import { Button } from '$lib/components/ui/button';
-  import * as Card from '$lib/components/ui/card';
   import * as Dialog from '$lib/components/ui/dialog';
+  import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
   import { toast } from 'svelte-sonner';
@@ -42,26 +43,38 @@
     }
   }
 
-  function handleSubmission(ev: SubmitEvent) {
-    ev.preventDefault();
+  async function handleSubmission(e: SubmitEvent) {
+    e.preventDefault();
 
     if (!username || !email || !password || !passwordConfirm || !turnstileResponse) {
       return;
     }
 
-    accountV2Api
-      .accountSignUpV2({
+    try {
+      await accountV2Api.accountSignUpV2({
         username,
         password,
         email,
         turnstileResponse,
-      })
-      .then(() => (accountCreated = true))
-      .catch(handleApiError)
-      .finally(() => {
-        turnstileResponse = null;
       });
+      accountCreated = true;
+    } catch (error) {
+      await handleApiError(error, (problem) => {
+        if (!isValidationError(problem)) return false;
+
+        console.log(mapToValRes(problem, 'Username'));
+        console.log(mapToValRes(problem, 'Password'));
+        console.log(mapToValRes(problem, 'Email'));
+        console.log(mapToValRes(problem, 'TurnstileResponse'));
+
+        return true;
+      });
+    } finally {
+      turnstileResponse = null;
+    }
   }
+
+  let ack = $state(false);
 </script>
 
 <Dialog.Root bind:open={() => accountCreated, onOpenChange}>
@@ -78,34 +91,45 @@
 </Dialog.Root>
 
 <Container class="items-center">
-  <form class="flex flex-col gap-2" onsubmit={handleSubmission}>
-    <div class="text-3xl font-semibold text-nowrap">Sign Up</div>
-    <UsernameInput
-      label="Username"
-      placeholder="Username"
-      bind:value={username}
-      bind:valid={usernameValid}
+  {#if !ack}
+    <div class="text-5xl font-semibold text-nowrap text-red-500">
+      Do not use this frontend to register a new account, this is a WIP, please go to
+      https://openshock.app
+    </div>
+    <AbsolutelySureButton
+      text="I acknowledge that I have read this message and that this frontend is not functional yet."
+      onconfirm={() => (ack = true)}
     />
-    <EmailInput label="Email" placeholder="Email" bind:value={email} bind:valid={emailValid} />
-    <PasswordInput
-      label="Password"
-      placeholder="Password"
-      autocomplete="new-password"
-      bind:value={password}
-      bind:valid={passwordValid}
-      validate={true}
-      showStrengthMeter={true}
-    />
-    <PasswordInput
-      label="Confirm Password"
-      placeholder="Confirm Password"
-      autocomplete="new-password"
-      bind:value={passwordConfirm}
-      validate={validatePasswordMatch(passwordConfirm, password)}
-    />
+  {:else}
+    <form class="flex flex-col gap-2" onsubmit={handleSubmission}>
+      <div class="text-3xl font-semibold text-nowrap">Sign Up</div>
+      <UsernameInput
+        label="Username"
+        placeholder="Username"
+        bind:value={username}
+        bind:valid={usernameValid}
+      />
+      <EmailInput label="Email" placeholder="Email" bind:value={email} bind:valid={emailValid} />
+      <PasswordInput
+        label="Password"
+        placeholder="Password"
+        autocomplete="new-password"
+        bind:value={password}
+        bind:valid={passwordValid}
+        validate
+        showStrengthMeter
+      />
+      <PasswordInput
+        label="Confirm Password"
+        placeholder="Confirm Password"
+        autocomplete="new-password"
+        bind:value={passwordConfirm}
+        validate={validatePasswordMatch(passwordConfirm, password)}
+      />
 
-    <Turnstile action="signup" bind:response={turnstileResponse} />
+      <Turnstile action="signup" bind:response={turnstileResponse} />
 
-    <Button type="submit" disabled={!canSubmit}>Sign Up</Button>
-  </form>
+      <Button type="submit" disabled={!canSubmit}>Sign Up</Button>
+    </form>
+  {/if}
 </Container>

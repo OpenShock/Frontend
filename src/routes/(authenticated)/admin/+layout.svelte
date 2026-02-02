@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import { RoleType } from '$lib/api/internal/v1';
   import { Button } from '$lib/components/ui/button';
   import { UserStore } from '$lib/stores/UserStore';
@@ -20,5 +21,5 @@
   {@render children?.()}
 {:else}
   <h1 class="text-4xl">You do not have permission to access this page</h1>
-  <Button href="/home">Go Home</Button>
+  <Button href={resolve('/home')}>Go Home</Button>
 {/if}

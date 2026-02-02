@@ -2,10 +2,10 @@
   "$schema": "./node_modules/@openapitools/openapi-generator-cli/config.schema.json",
   "spaces": 2,
   "generator-cli": {
-    "version": "7.14.0",
+    "version": "7.19.0",
     "generators": {
       "v1": {
-        "inputSpec": "https://api.openshock.app/swagger/1/swagger.json",
+        "inputSpec": "https://api.openshock.dev/swagger/1/swagger.json",
         "generatorName": "typescript-fetch",
         "output": "src/lib/api/internal/v1",
         "additionalProperties": {
@@ -20,7 +20,7 @@
         }
       },
       "v2": {
-        "inputSpec": "https://api.openshock.app/swagger/2/swagger.json",
+        "inputSpec": "https://api.openshock.dev/swagger/2/swagger.json",
         "generatorName": "typescript-fetch",
         "output": "src/lib/api/internal/v2",
         "additionalProperties": {

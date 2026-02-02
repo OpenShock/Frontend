@@ -1,17 +1,17 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import { accountV2Api } from '$lib/api';
+  import { GetOAuthAuthorizeUrl } from '$lib/api/next/oauth';
   import Container from '$lib/components/Container.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import { Button } from '$lib/components/ui/button';
-  import {
-    type ValidationProblemDetails,
-    isValidationError,
-  } from '$lib/errorhandling/ValidationProblemDetails';
+  import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { initializeSignalR } from '$lib/signalr';
   import { UserStore } from '$lib/stores/UserStore';
   import type { ValidationResult } from '$lib/types/ValidationResult';
 
@@ -22,11 +22,6 @@
   let usernameError = $state<ValidationResult | null>(null);
   let passwordError = $state<ValidationResult | null>(null);
 
-  function mapToValRes(problem: ValidationProblemDetails, key: string): ValidationResult | null {
-    const errors = problem.errors[key];
-    return errors ? { valid: false, message: errors[0] } : null;
-  }
-
   async function handleSubmission(e: SubmitEvent) {
     e.preventDefault();
 
@@ -35,15 +30,26 @@
     }
 
     try {
-      await accountV2Api.accountLoginV2({ usernameOrEmail, password, turnstileResponse });
-      await UserStore.refreshSelf();
+      const account = await accountV2Api.accountLoginV2({
+        usernameOrEmail,
+        password,
+        turnstileResponse,
+      });
+      UserStore.setSelf({
+        id: account.accountId,
+        name: account.accountName,
+        avatar: account.profileImage,
+        email: account.accountEmail,
+        roles: account.accountRoles,
+      });
+      await initializeSignalR();
       goto(page.url.searchParams.get('redirect') ?? '/home');
     } catch (error) {
-      handleApiError(error, (problem) => {
-        if (!isValidationError(problem)) return true;
+      await handleApiError(error, (problem) => {
+        if (!isValidationError(problem)) return false;
         usernameError = mapToValRes(problem, 'UsernameOrEmail');
         passwordError = mapToValRes(problem, 'Password');
-        return false;
+        return true;
       });
     }
   }
@@ -60,7 +66,7 @@
     <TextInput
       label="Username or Email"
       placeholder="Username or Email"
-      autocomplete="on"
+      autocomplete="username"
       bind:value={usernameOrEmail}
       validationResult={usernameError}
     />
@@ -68,7 +74,7 @@
     <PasswordInput
       label="Password"
       placeholder="Password"
-      autocomplete="new-password"
+      autocomplete="current-password"
       bind:value={password}
       validate={passwordError}
     />
@@ -77,6 +83,12 @@
 
     <Button type="submit" disabled={!canSubmit}>Log In</Button>
 
-    <a class="text-blue-500 underline" href="/forgot-password">I forgot my password</a>
+    <a class=" text-sm opacity-75 hover:underline" href={resolve('/forgot-password')}>
+      Forgot your password?
+    </a>
+  </form>
+
+  <form action={GetOAuthAuthorizeUrl('discord', 'LoginOrCreate')} method="POST">
+    <Button type="submit">Log In With Discord</Button>
   </form>
 </Container>

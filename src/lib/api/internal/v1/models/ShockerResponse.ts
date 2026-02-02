@@ -115,7 +115,7 @@ export function ShockerResponseToJSONTyped(value?: ShockerResponse | null, ignor
         'model': ShockerModelTypeToJSON(value['model']),
         'name': value['name'],
         'isPaused': value['isPaused'],
-        'createdOn': ((value['createdOn']).toISOString()),
+        'createdOn': value['createdOn'].toISOString(),
     };
 }
 

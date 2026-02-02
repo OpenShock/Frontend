@@ -3,10 +3,16 @@
   import { goto } from '$app/navigation';
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+  import { SignalR_Connection } from '$lib/signalr';
+  import { serializeCaptivePortalMessage } from '$lib/signalr/serializers/CaptivePortal';
+  import { serializeEmergencyStopMessage } from '$lib/signalr/serializers/EmergencyStop';
+  import { serializeRebootMessage } from '$lib/signalr/serializers/Reboot';
   import { toast } from 'svelte-sonner';
+  import { get } from 'svelte/store';
   import type { Hub } from './columns';
   import HubDeleteDialog from './dialog-hub-delete.svelte';
   import HubEditDialog from './dialog-hub-edit.svelte';
+  import PairDialog from './dialog-hub-pair.svelte';
   import RegenerateTokenDialog from './dialog-hub-regenerate-token.svelte';
 
   interface Props {
@@ -15,6 +21,7 @@
 
   let { hub }: Props = $props();
 
+  let pairDialogOpen = $state<boolean>(false);
   let regenerateTokenDialogOpen = $state<boolean>(false);
   let editDialogOpen = $state<boolean>(false);
   let deleteDialogOpen = $state<boolean>(false);
@@ -25,6 +32,7 @@
   }
 </script>
 
+<PairDialog bind:open={pairDialogOpen} {hub} />
 <RegenerateTokenDialog bind:open={regenerateTokenDialogOpen} {hub} />
 <HubEditDialog bind:open={editDialogOpen} {hub} />
 <HubDeleteDialog bind:open={deleteDialogOpen} {hub} />
@@ -41,6 +49,26 @@
   <DropdownMenu.Content>
     <DropdownMenu.Item onclick={copyId}>Copy ID</DropdownMenu.Item>
     <DropdownMenu.Item onclick={() => goto(`/hubs/${hub.id}/update`)}>Update</DropdownMenu.Item>
+    <DropdownMenu.Item onclick={() => serializeRebootMessage($SignalR_Connection, hub.id)}>
+      Reboot
+    </DropdownMenu.Item>
+    <DropdownMenu.Item
+      class="text-red-500"
+      onclick={() => serializeEmergencyStopMessage($SignalR_Connection, hub.id)}
+    >
+      Emergency Stop
+    </DropdownMenu.Item>
+    <DropdownMenu.Item
+      onclick={() => serializeCaptivePortalMessage($SignalR_Connection, hub.id, true)}
+    >
+      Enable Wi-Fi hotspot
+    </DropdownMenu.Item>
+    <DropdownMenu.Item
+      onclick={() => serializeCaptivePortalMessage($SignalR_Connection, hub.id, false)}
+    >
+      Disable Wi-Fi hotspot
+    </DropdownMenu.Item>
+    <DropdownMenu.Item onclick={() => (pairDialogOpen = true)}>Pair</DropdownMenu.Item>
     <DropdownMenu.Item onclick={() => (regenerateTokenDialogOpen = true)}>
       Regenerate Token
     </DropdownMenu.Item>

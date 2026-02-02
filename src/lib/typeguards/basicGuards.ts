@@ -1,4 +1,4 @@
-export function isObject(value: unknown): value is object {
+export function isObject(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && !Array.isArray(value) && value !== null;
 }
 export function isString(value: unknown): value is string {
@@ -15,4 +15,8 @@ export function isArrayBuffer(value: unknown): value is ArrayBuffer {
 }
 export function isDate(value: unknown): value is Date {
   return value instanceof Date;
+}
+
+export function isStringOrNull(value: unknown): value is string | null {
+  return isString(value) || value === null;
 }

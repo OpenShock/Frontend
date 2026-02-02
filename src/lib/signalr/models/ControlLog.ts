@@ -1,4 +1,6 @@
-import { isNumber, isObject, isString } from '$lib/typeguards';
+import { isObject } from '$lib/typeguards';
+import { HasNumber, HasString } from '$lib/typeguards/propGuards';
+import { ControlType, isControlType } from './ControlType';
 
 interface ControlLogShockerInfo {
   id: string;
@@ -6,33 +8,24 @@ interface ControlLogShockerInfo {
 }
 export interface ControlLog {
   shocker: ControlLogShockerInfo;
-  type: number;
+  type: ControlType;
   intensity: number;
   duration: number;
   executedAt: string;
 }
 
 function isControlLogShockerInfo(value: unknown): value is ControlLogShockerInfo {
-  return (
-    isObject(value) &&
-    Object.hasOwn(value, 'id') &&
-    Object.hasOwn(value, 'name') &&
-    isString(value.id) &&
-    isString(value.name)
-  );
+  return isObject(value) && HasString(value, 'id') && HasString(value, 'name');
 }
 export function isControlLog(value: unknown): value is ControlLog {
   return (
     isObject(value) &&
     Object.hasOwn(value, 'shocker') &&
     Object.hasOwn(value, 'type') &&
-    Object.hasOwn(value, 'intensity') &&
-    Object.hasOwn(value, 'duration') &&
-    Object.hasOwn(value, 'executedAt') &&
+    HasNumber(value, 'intensity') &&
+    HasNumber(value, 'duration') &&
+    HasString(value, 'executedAt') &&
     isControlLogShockerInfo(value.shocker) &&
-    isNumber(value.type) &&
-    isNumber(value.intensity) &&
-    isNumber(value.duration) &&
-    isString(value.executedAt)
+    isControlType(value.type)
   );
 }

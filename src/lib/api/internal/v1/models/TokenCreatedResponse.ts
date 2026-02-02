@@ -13,6 +13,14 @@
  */
 
 import { mapValues } from '../runtime';
+import type { PermissionType } from './PermissionType';
+import {
+    PermissionTypeFromJSON,
+    PermissionTypeFromJSONTyped,
+    PermissionTypeToJSON,
+    PermissionTypeToJSONTyped,
+} from './PermissionType';
+
 /**
  * 
  * @export
@@ -24,21 +32,56 @@ export interface TokenCreatedResponse {
      * @type {string}
      * @memberof TokenCreatedResponse
      */
-    token: string;
+    id: string;
     /**
      * 
      * @type {string}
      * @memberof TokenCreatedResponse
      */
-    id: string;
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TokenCreatedResponse
+     */
+    token: string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof TokenCreatedResponse
+     */
+    createdAt: Date;
+    /**
+     * 
+     * @type {Date}
+     * @memberof TokenCreatedResponse
+     */
+    validUntil: Date | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof TokenCreatedResponse
+     */
+    lastUsed: Date;
+    /**
+     * 
+     * @type {Array<PermissionType>}
+     * @memberof TokenCreatedResponse
+     */
+    permissions: Array<PermissionType>;
 }
 
 /**
  * Check if a given object implements the TokenCreatedResponse interface.
  */
 export function instanceOfTokenCreatedResponse(value: object): value is TokenCreatedResponse {
-    if (!('token' in value) || value['token'] === undefined) return false;
     if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('token' in value) || value['token'] === undefined) return false;
+    if (!('createdAt' in value) || value['createdAt'] === undefined) return false;
+    if (!('validUntil' in value) || value['validUntil'] === undefined) return false;
+    if (!('lastUsed' in value) || value['lastUsed'] === undefined) return false;
+    if (!('permissions' in value) || value['permissions'] === undefined) return false;
     return true;
 }
 
@@ -52,8 +95,13 @@ export function TokenCreatedResponseFromJSONTyped(json: any, ignoreDiscriminator
     }
     return {
         
-        'token': json['token'],
         'id': json['id'],
+        'name': json['name'],
+        'token': json['token'],
+        'createdAt': (new Date(json['createdAt'])),
+        'validUntil': (json['validUntil'] == null ? null : new Date(json['validUntil'])),
+        'lastUsed': (new Date(json['lastUsed'])),
+        'permissions': ((json['permissions'] as Array<any>).map(PermissionTypeFromJSON)),
     };
 }
 
@@ -68,8 +116,13 @@ export function TokenCreatedResponseToJSONTyped(value?: TokenCreatedResponse | n
 
     return {
         
-        'token': value['token'],
         'id': value['id'],
+        'name': value['name'],
+        'token': value['token'],
+        'createdAt': value['createdAt'].toISOString(),
+        'validUntil': value['validUntil'] == null ? value['validUntil'] : value['validUntil'].toISOString(),
+        'lastUsed': value['lastUsed'].toISOString(),
+        'permissions': ((value['permissions'] as Array<any>).map(PermissionTypeToJSON)),
     };
 }
 

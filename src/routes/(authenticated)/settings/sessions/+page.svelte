@@ -16,23 +16,28 @@
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card';
   import { renderComponent } from '$lib/components/ui/data-table';
+  import type { ProblemDetails } from '$lib/errorhandling/ProblemDetails';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
   import DataTableActions from './data-table-actions.svelte';
 
+  let loading = $state<boolean>(false);
   let data = $state<LoginSessionResponse[]>([]);
   let sorting = $state<SortingState>([]);
 
   function onRevoked(sessionId: string) {
-    data = data.filter((s) => s.id !== sessionId);
+    const idx = data.findIndex((session) => session.id === sessionId);
+    if (idx === -1) return;
+
+    data.splice(idx, 1);
   }
 
   const columns: ColumnDef<LoginSessionResponse>[] = [
     CreateColumnDef('ip', 'Ip', RenderCell),
     CreateSortableColumnDef('userAgent', 'User Agent', UserAgentRenderer),
-    CreateSortableColumnDef('created', 'Created at', TimeSinceRelativeRenderer),
-    CreateSortableColumnDef('expires', 'Expires at', TimeSinceRelativeRenderer),
+    CreateSortableColumnDef('created', 'Created', TimeSinceRelativeRenderer),
+    CreateSortableColumnDef('expires', 'Expires', TimeSinceRelativeRenderer),
     CreateSortableColumnDef('lastUsed', 'Last seen', TimeSinceRelativeOrNeverRenderer),
     {
       id: 'actions',
@@ -43,11 +48,24 @@
     },
   ];
 
-  function fetchSessions() {
-    sessionsApi
-      .sessionsListSessions()
-      .then((res) => (data = res))
-      .catch(handleApiError);
+  function handleProblem(problem: ProblemDetails): boolean {
+    return false;
+  }
+
+  async function fetchSessions() {
+    loading = true;
+    try {
+      data = await sessionsApi.sessionsListSessions();
+    } catch (error) {
+      await handleApiError(error, handleProblem);
+    } finally {
+      loading = false;
+    }
+  }
+
+  async function onRefreshClicked() {
+    await fetchSessions();
+    toast.success('Sessions refreshed successfully');
   }
 
   onMount(() => {
@@ -68,13 +86,7 @@
   <Card.Header class="w-full">
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
       Sessions
-      <Button
-        class="text-xl"
-        onclick={() => {
-          fetchSessions();
-          toast.success('Sessions refreshed successfully');
-        }}
-      >
+      <Button class="text-xl" onclick={onRefreshClicked}>
         <RotateCcw />
         <span> Refresh </span>
       </Button>

@@ -36,6 +36,23 @@ function setSelfName(name: string) {
   });
 }
 
+function setSelfEmail(email: string) {
+  update((state) => {
+    if (!state.self) return state;
+    state.self.email = email;
+    state.all = updateAllFromSelf(state.all, state.self);
+    return state;
+  });
+}
+
+async function setSelf(user: ApiUserSelf) {
+  update((state) => ({
+    ...state,
+    self: user,
+    all: updateAllFromSelf(state.all, user),
+  }));
+}
+
 async function refreshSelf(): Promise<boolean> {
   update((v) => ({ ...v, loading: true }));
 
@@ -64,7 +81,10 @@ async function refreshSelf(): Promise<boolean> {
   } catch (error) {
     reset();
 
-    handleApiError(error, (problem) => problem.type !== 'Authentication.CookieMissingOrInvalid');
+    await handleApiError(
+      error,
+      (problem) => problem.type === 'Authentication.CookieMissingOrInvalid'
+    );
 
     return false;
   }
@@ -77,6 +97,8 @@ export const UserStore = {
   set,
   update,
   setSelfName,
+  setSelfEmail,
+  setSelf,
   refreshSelf,
   reset,
 };

@@ -30,7 +30,7 @@
       await apiTokensApi.tokensReportTokens({ turnstileResponse, secrets });
       goto('/login');
     } catch (err) {
-      handleApiError(err);
+      await handleApiError(err);
     }
   }
 

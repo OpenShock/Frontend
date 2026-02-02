@@ -115,7 +115,7 @@ export function ShareInfoToJSONTyped(value?: ShareInfo | null, ignoreDiscriminat
     return {
         
         'sharedWith': BasicUserInfoToJSON(value['sharedWith']),
-        'createdOn': ((value['createdOn']).toISOString()),
+        'createdOn': value['createdOn'].toISOString(),
         'permissions': ShockerPermissionsToJSON(value['permissions']),
         'limits': ShockerLimitsToJSON(value['limits']),
         'paused': value['paused'],

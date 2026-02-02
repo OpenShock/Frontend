@@ -2,7 +2,7 @@
   import { MessageCircleQuestion, SquareTerminal } from '@lucide/svelte';
   import { browser } from '$app/environment';
   import { PUBLIC_DISCORD_INVITE_URL } from '$env/static/public';
-  import FlashManager from '$lib/EspTool/FlashManager';
+  import type { FirmwareChannel } from '$lib/api/firmwareCDN';
   import Container from '$lib/components/Container.svelte';
   import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
@@ -15,11 +15,11 @@
   import { Label } from '$lib/components/ui/label';
   import { Progress } from '$lib/components/ui/progress';
   import { Sheet, SheetContent, SheetHeader, SheetTitle } from '$lib/components/ui/sheet';
-  import { FlashManagerStore } from '$lib/stores/FlashManagersStore';
   import { isSerialSupported } from '$lib/utils/compatibility';
   import { UAParser } from 'ua-parser-js';
   import FirmwareBoardSelector from './FirmwareBoardSelector.svelte';
   import FirmwareFlasher from './FirmwareFlasher.svelte';
+  import FlashManager from './FlashManager';
   import HelpDialog from './HelpDialog.svelte';
   import SerialPortSelector from './SerialPortSelector.svelte';
 
@@ -47,20 +47,19 @@
   $effect(() => {
     if (port && !manager) {
       connectFailed = false;
-      FlashManagerStore.getManager(port, terminal).then((m) => {
+      FlashManager.Connect(port, terminal).then((m) => {
         manager = m;
-        if (!manager) {
-          connectFailed = true;
-        }
+        connectFailed = !manager;
       });
     } else if (!port && manager) {
-      FlashManagerStore.removeManager(manager);
+      manager.disconnect();
       manager = null;
     }
   });
 
   let showHelpDialog = $state(false);
 
+  let channel = $state<FirmwareChannel>('stable');
   let version = $state<string | null>(null);
   let board = $state<string | null>(null);
   let eraseBeforeFlash = $state<boolean>(false);
@@ -108,7 +107,7 @@
 
   {#if manager}
     <h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">Select Channel</h3>
-    <FirmwareChannelSelector bind:version disabled={isFlashing} />
+    <FirmwareChannelSelector bind:channel bind:version disabled={isFlashing} />
 
     <h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">Select Board</h3>
     <FirmwareBoardSelector {version} bind:selectedBoard={board} disabled={isFlashing} />
@@ -130,7 +129,14 @@
     </div>
 
     {#if version && board}
-      <FirmwareFlasher {version} {board} {manager} {eraseBeforeFlash} bind:isFlashing />
+      <FirmwareFlasher
+        {version}
+        {board}
+        {manager}
+        {eraseBeforeFlash}
+        showNonStableWarning={channel !== 'stable'}
+        bind:isFlashing
+      />
     {/if}
   {:else if port && !connectFailed}
     <div class="flex flex-col items-center gap-2">
@@ -231,11 +237,10 @@
     >
       <pre id="terminal" class="text-left text-xs">{terminalText}</pre>
     </div>
-    <TextInput
-      label="Command"
-      placeholder="Command"
-      button={{ text: 'Run', onClick: RunCommand }}
-      bind:value={terminalCommand}
-    />
+    <TextInput label="Command" placeholder="Command" bind:value={terminalCommand}>
+      {#snippet after()}
+        <Button type="button" onclick={RunCommand} variant="ghost">Run</Button>
+      {/snippet}
+    </TextInput>
   </SheetContent>
 </Sheet>

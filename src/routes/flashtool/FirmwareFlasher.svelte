@@ -1,15 +1,17 @@
 <script lang="ts">
   import { Microchip, TriangleAlert } from '@lucide/svelte';
-  import FlashManager from '$lib/EspTool/FlashManager';
   import { DownloadAndVerifyBoardBinary } from '$lib/api/firmwareCDN';
   import { Button } from '$lib/components/ui/button';
   import { Progress } from '$lib/components/ui/progress';
+  import FlashManager from './FlashManager';
+  import RiskAcknowledgementModal from './RiskAcknowledgementModal.svelte';
 
   interface Props {
     version: string;
     board: string;
     manager: FlashManager;
     eraseBeforeFlash: boolean;
+    showNonStableWarning: boolean;
     isFlashing?: boolean;
   }
 
@@ -18,11 +20,13 @@
     board,
     manager,
     eraseBeforeFlash,
+    showNonStableWarning,
     isFlashing = $bindable(false),
   }: Props = $props();
 
+  let riskAcknowledgeStatus = $state<'none' | 'shown' | 'accepted'>('none');
   let progressName = $state<string | null>(null);
-  let progressPercent = $state<number | undefined>(undefined);
+  let progressPercent = $state<number | null>(null);
   let error = $state<string | null>(null);
 
   async function FlashDeviceImpl() {
@@ -40,11 +44,11 @@
     }
 
     progressName = 'Resetting...';
-    progressPercent = undefined;
+    progressPercent = null;
     await manager.ensureBootloader();
 
     progressName = 'Downloading firmware...';
-    progressPercent = undefined;
+    progressPercent = null;
     const firmware = await DownloadAndVerifyBoardBinary(version, board, 'firmware.bin');
     if (!firmware) {
       progressName = null;
@@ -53,11 +57,11 @@
     }
 
     progressName = 'Flashing firmware...';
-    progressPercent = undefined;
+    progressPercent = null;
     await manager.flash(firmware, eraseBeforeFlash, progressCallback);
 
     progressName = 'Rebooting device... (Reconnect to power manually if stuck)';
-    progressPercent = undefined;
+    progressPercent = null;
     await manager.ensureApplication();
 
     progressName = 'Rebooted device! Flashing complete.';
@@ -65,6 +69,10 @@
   }
   async function FlashDevice() {
     if (isFlashing) return;
+    if (showNonStableWarning && riskAcknowledgeStatus !== 'accepted') {
+      riskAcknowledgeStatus = 'shown';
+      return;
+    }
     try {
       isFlashing = true;
       await FlashDeviceImpl();
@@ -75,6 +83,12 @@
     }
   }
 </script>
+
+<RiskAcknowledgementModal
+  open={showNonStableWarning && riskAcknowledgeStatus !== 'accepted'}
+  onAccept={() => (riskAcknowledgeStatus = 'accepted')}
+  onCancel={() => (riskAcknowledgeStatus = 'none')}
+/>
 
 <div class="flex flex-col items-stretch justify-start gap-4">
   <!-- Flash button -->
@@ -93,7 +107,7 @@
     {:else}
       <span>
         Flash Progress: {progressName ?? 'Idle'}
-        {#if progressPercent !== undefined}
+        {#if progressPercent !== null}
           ({progressPercent.toFixed(2)}%)
         {/if}
       </span>

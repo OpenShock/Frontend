@@ -11,7 +11,7 @@
 
 <div
   class={cn(
-    'container mx-auto flex h-full flex-col items-start justify-start gap-4 p-12',
+    'container mx-auto flex h-full flex-col items-start justify-start gap-4 p-0 sm:p-12',
     classname
   )}
 >

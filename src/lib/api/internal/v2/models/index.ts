@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export * from './BasicUserInfo';
+export * from './BulkUserShareShockersUpdateRequest';
 export * from './ChangeUsernameRequest';
 export * from './Control';
 export * from './ControlRequest';
@@ -10,11 +11,17 @@ export * from './HubCreateRequest';
 export * from './LcgNodeResponseV2';
 export * from './LegacyEmptyResponse';
 export * from './LoginV2';
+export * from './LoginV2OkResponse';
 export * from './OpenShockProblem';
 export * from './PasswordResetRequestV2';
+export * from './PauseUserShareShockersRequest';
+export * from './PauseUserShareShockersResponse';
+export * from './RemoveUserSharesResponse';
+export * from './RoleType';
 export * from './ShareInviteBaseDetails';
 export * from './ShockerLimits';
 export * from './ShockerPermLimitPairWithId';
+export * from './ShockerPermLimitPairWithIdAndName';
 export * from './ShockerPermissions';
 export * from './SignUpV2';
 export * from './UserShareInfo';

@@ -17,84 +17,82 @@
 		"test:unit": "vitest"
 	},
 	"devDependencies": {
-		"@changesets/changelog-github": "^0.5.1",
-		"@changesets/cli": "^2.29.5",
-		"@eslint/compat": "^1.3.1",
-		"@eslint/js": "^9.30.0",
-		"@internationalized/date": "^3.8.2",
-		"@lucide/svelte": "^0.525.0",
-		"@microsoft/signalr": "^8.0.7",
-		"@playwright/test": "^1.53.2",
-		"@sveltejs/adapter-cloudflare": "^7.0.4",
-		"@sveltejs/adapter-node": "^5.2.12",
-		"@sveltejs/kit": "^2.22.2",
-		"@sveltejs/vite-plugin-svelte": "^5.1.0",
-		"@tailwindcss/forms": "^0.5.10",
-		"@tailwindcss/typography": "^0.5.16",
-		"@tailwindcss/vite": "^4.1.11",
+		"@changesets/changelog-github": "^0.5.2",
+		"@changesets/cli": "^2.29.8",
+		"@eslint/compat": "^2.0.2",
+		"@eslint/js": "^9.39.2",
+		"@internationalized/date": "^3.10.1",
+		"@lucide/svelte": "^0.563.1",
+		"@microsoft/signalr": "^10.0.0",
+		"@playwright/test": "^1.58.1",
+		"@sveltejs/adapter-cloudflare": "^7.2.6",
+		"@sveltejs/adapter-node": "^5.5.2",
+		"@sveltejs/kit": "^2.50.1",
+		"@sveltejs/vite-plugin-svelte": "^6.2.4",
+		"@tailwindcss/vite": "^4.1.18",
 		"@tanstack/table-core": "^8.21.3",
-		"@trivago/prettier-plugin-sort-imports": "^5.2.2",
+		"@trivago/prettier-plugin-sort-imports": "^6.0.2",
 		"@types/crypto-js": "^4.2.2",
-		"@types/eslint": "^9.6.1",
-		"@types/node": "22.15.31",
-		"@types/semver": "^7.7.0",
+		"@types/node": "^25.2.0",
+		"@types/semver": "^7.7.1",
 		"@types/w3c-web-serial": "^1.0.8",
-		"bits-ui": "2.8.10",
+		"bits-ui": "2.15.5",
 		"clsx": "^2.1.1",
 		"crypto-js": "^4.2.0",
-		"@vitest/browser": "^3.2.3",
-		"eslint": "^9.30.0",
-		"eslint-config-prettier": "^10.1.5",
-		"eslint-plugin-svelte": "^3.10.1",
-		"globals": "^16.2.0",
-		"playwright": "^1.53.0",
-		"prettier": "^3.6.2",
-		"prettier-plugin-svelte": "^3.4.0",
-		"prettier-plugin-tailwindcss": "^0.6.13",
-		"semver": "^7.7.2",
-		"svelte": "^5.34.9",
-		"svelte-check": "^4.2.2",
-		"svelte-sonner": "^1.0.5",
-		"tailwind-merge": "^3.3.1",
-		"tailwind-variants": "^1.0.0",
-		"tailwindcss": "^4.1.11",
-		"tw-animate-css": "^1.3.4",
-		"typescript": "^5.8.3",
-		"typescript-eslint": "^8.35.1",
-		"ua-parser-js": "2.0.4",
+		"eslint": "^9.39.2",
+		"eslint-config-prettier": "^10.1.8",
+		"eslint-plugin-svelte": "^3.14.0",
+		"formsnap": "^2.0.1",
+		"globals": "^17.3.0",
+		"prettier": "^3.8.1",
+		"prettier-plugin-svelte": "^3.4.1",
+		"prettier-plugin-tailwindcss": "^0.7.2",
+		"rollup-plugin-license": "^3.6.0",
+		"semver": "^7.7.3",
+		"svelte": "^5.49.1",
+		"svelte-check": "^4.3.6",
+		"svelte-sonner": "^1.0.7",
+		"sveltekit-superforms": "^2.29.1",
+		"tailwind-merge": "^3.4.0",
+		"tailwind-variants": "^3.2.2",
+		"tailwindcss": "^4.1.18",
+		"tw-animate-css": "^1.4.0",
+		"typescript": "^5.9.3",
+		"typescript-eslint": "^8.54.0",
+		"ua-parser-js": "2.0.8",
 		"vaul-svelte": "1.0.0-next.7",
-		"vite-plugin-devtools-json": "^0.2.0",
-		"vite-plugin-mkcert": "^1.17.8",
-		"vitest": "^3.2.4",
+		"vite-plugin-devtools-json": "^1.0.0",
+		"vite-plugin-mkcert": "^1.17.9",
+		"vitest": "^4.0.18",
 		"vitest-browser-svelte": "^1.0.0"
 	},
 	"dependencies": {
-		"esptool-js": "^0.5.6",
-		"vite": "^6.3.5"
+		"esptool-js": "^0.5.7",
+		"vite": "^7.3.1"
 	},
 	"engines": {
-		"node": ">=22.16.0",
-		"pnpm": ">=10.12.4"
+		"node": ">=24.12.0",
+		"pnpm": ">=10.27.0"
 	},
 	"volta": {
-		"node": "22.16.0"
+		"node": "24.12.0"
 	},
-	"packageManager": "pnpm@10.12.4",
+	"packageManager": "pnpm@10.28.2",
 	"pnpm": {
 		"onlyBuiltDependencies": [
 			"@tailwindcss/oxide",
 			"esbuild",
+			"sharp",
 			"workerd"
 		],
 		"patchedDependencies": {
-			"@microsoft/signalr@8.0.7": "patches/@microsoft__signalr@8.0.7.patch",
-			"esptool-js@0.5.6": "patches/esptool-js@0.5.6.patch"
+			"@microsoft/signalr@10.0.0": "patches/signalr.patch",
+			"esptool-js@0.5.7": "patches/esptool.patch"
 		},
 		"overrides": {
-			"cookie@<0.7.0": ">=0.7.0"
-		},
-		"ignoredBuiltDependencies": [
-			"sharp"
-		]
+			"cookie@<0.7.0": ">=0.7.0",
+			"js-yaml@<4.1.1": ">=4.1.1",
+			"valibot@>=0.31.0 <1.2.0": ">=1.2.0"
+		}
 	}
 }

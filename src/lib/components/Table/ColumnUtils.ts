@@ -1,6 +1,5 @@
 import type {
   BuiltInSortingFn,
-  CellContext,
   ColumnDef,
   SortingFnOption,
   StringOrTemplateHeader,
@@ -29,22 +28,17 @@ function CreateSimpleCellSnippet<TData extends object, K extends keyof TData & s
   key: K,
   renderer: (value: TData[K]) => string
 ): ColumnDef<TData, unknown>['cell'] {
-  return ({ row }: CellContext<TData, unknown>) => {
-    const value = row.getValue(key) as TData[K];
+  const snippet = createRawSnippet<[{ value: TData[K] }]>((getValue) => ({
+    render: () => renderer(getValue().value),
+  }));
 
-    return renderSnippet(
-      createRawSnippet<[TData[K]]>((getValue) => ({
-        render: () => renderer(getValue()),
-      })),
-      value
-    );
-  };
+  return ({ row }) => renderSnippet(snippet, { value: row.original[key] });
 }
 
 type AcceptableTextColor = 'blue' | 'green' | 'orange' | 'red';
 type AcceptableTextShade = 500;
 export type TableCell =
-  `<div class="px-4${'' | ' font-medium'}${'' | ` text-${AcceptableTextColor}-${AcceptableTextShade}`}"${'' | ` title="${string}"`}>${string}</div>`;
+  `<div class="text-xs sm:text-sm${'' | ' font-medium'}${'' | ` text-${AcceptableTextColor}-${AcceptableTextShade}`}"${'' | ` title="${string}"`}>${string}</div>`;
 
 export function CreateColumnDef<TData extends object, TKey extends Extract<keyof TData, string>>(
   accessorKey: TKey,
@@ -89,11 +83,11 @@ export function CreateSortableColumnDef<
 const UnsafeRenderCellWithTooltip: (content: string, tooltip: string) => TableCell = (
   content,
   tooltip
-) => `<div class="px-4 font-medium" title="${tooltip}">${content}</div>`;
+) => `<div class="text-xs sm:text-sm font-medium" title="${tooltip}">${content}</div>`;
 const UnsafeRenderColoredCell: (content: string, color: AcceptableTextColor) => TableCell = (
   content,
   color
-) => `<div class="px-4 font-medium text-${color}-500">${content}</div>`;
+) => `<div class="text-xs sm:text-sm font-medium text-${color}-500">${content}</div>`;
 
 export const CellNotApplicable = UnsafeRenderCellWithTooltip('N/A', 'Not applicable');
 export const CellOrangeNever = UnsafeRenderColoredCell('Never', 'orange');
@@ -107,9 +101,9 @@ export const CellGreenOnline = UnsafeRenderColoredCell('online', 'green');
 export const CellRedOffline = UnsafeRenderColoredCell('offline', 'red');
 
 export const RenderCell = (content: string): TableCell =>
-  `<div class="px-4">${escapeHtml(content)}</div>`;
+  `<div class="text-xs sm:text-sm">${escapeHtml(content)}</div>`;
 export const RenderBoldCell = (content: string): TableCell =>
-  `<div class="px-4 font-medium">${escapeHtml(content)}</div>`;
+  `<div class="text-xs sm:text-sm font-medium">${escapeHtml(content)}</div>`;
 export const RenderRedCell = (content: string): TableCell =>
   UnsafeRenderColoredCell(escapeHtml(content), 'red');
 export const RenderGreenCell = (content: string): TableCell =>

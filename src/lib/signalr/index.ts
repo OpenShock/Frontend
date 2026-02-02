@@ -6,7 +6,7 @@ import {
   LogLevel,
 } from '@microsoft/signalr';
 import { dev } from '$app/environment';
-import { PUBLIC_BACKEND_API_DOMAIN } from '$env/static/public';
+import { PUBLIC_BACKEND_API_URL } from '$env/static/public';
 import { toast } from 'svelte-sonner';
 import { type Readable, get, writable } from 'svelte/store';
 import {
@@ -30,8 +30,8 @@ export async function initializeSignalR() {
   }
 
   connection = new HubConnectionBuilder()
-    .configureLogging(dev ? LogLevel.Debug : LogLevel.Information)
-    .withUrl(`https://${PUBLIC_BACKEND_API_DOMAIN}/1/hubs/user`, {
+    .configureLogging(dev ? LogLevel.Debug : LogLevel.Warning)
+    .withUrl(new URL(`1/hubs/user`, PUBLIC_BACKEND_API_URL).toString(), {
       transport: HttpTransportType.WebSockets,
       skipNegotiation: true,
     })

@@ -1,15 +1,21 @@
 <script lang="ts">
-  import { Plus } from '@lucide/svelte';
+  import { Plus, Router } from '@lucide/svelte';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
   import type { SortingState } from '@tanstack/table-core';
   import Container from '$lib/components/Container.svelte';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card';
+  import { IsMobile } from '$lib/hooks/is-mobile.svelte';
+  import { breadcrumbs } from '$lib/state/Breadcrumbs.svelte';
   import { OnlineHubsStore, OwnHubsStore, refreshOwnHubs } from '$lib/stores/HubsStore';
   import { SemVer } from 'semver';
   import { onMount } from 'svelte';
   import { type Hub, columns } from './columns';
+  import DataTableActions from './data-table-actions.svelte';
+  import HubCreateDialog from './dialog-hub-create.svelte';
+
+  const isMobile = new IsMobile();
 
   let data = $derived.by<Hub[]>(() => {
     if (!$OwnHubsStore || !$OnlineHubsStore) return [];
@@ -41,8 +47,11 @@
 
   let showAddHubModal = $state<boolean>(false);
 
+  breadcrumbs.push('Hubs', '/hubs');
   onMount(refreshOwnHubs);
 </script>
+
+<HubCreateDialog bind:open={showAddHubModal} />
 
 <Container>
   <Card.Header class="w-full">
@@ -61,7 +70,26 @@
     </Card.Title>
     <Card.Description>This is a list of all hubs you own.</Card.Description>
   </Card.Header>
-  <Card.Content class="w-full">
-    <DataTable {data} {columns} {sorting} />
-  </Card.Content>
+  <div class="w-full p-6 gap-6 grid">
+    {#if isMobile.current}
+      {#each data as hub (hub.id)}
+        <div class="flex items-center justify-between gap-4">
+          <div class="flex items-center gap-4">
+            <Router class="size-8" />
+            <div class="flex flex-col">
+              <strong>{hub.name}</strong>
+              {#if hub.firmware_version}
+                <span>{hub.firmware_version}</span>
+              {:else}
+                <span class="text-red-500">Offline</span>
+              {/if}
+            </div>
+          </div>
+          <DataTableActions {hub} />
+        </div>
+      {/each}
+    {:else}
+      <DataTable {data} {columns} {sorting} />
+    {/if}
+  </div>
 </Container>

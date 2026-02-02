@@ -3,9 +3,11 @@ import { UAParser } from 'ua-parser-js';
 
 const current = new UAParser(navigator.userAgent || navigator.vendor);
 
-function checkSerialSupport(): { supported: true } | { supported: false, reason: string } {
-  if (!browser) return { supported: false, reason: 'Not a browser' };
+function checkIsMobile() {
+  return navigator.userAgentData?.mobile || current.getDevice().type === 'mobile';
+}
 
+function checkSerialSupport(): { supported: true } | { supported: false, reason: string } {
   const supported = 'serial' in navigator &&
     typeof navigator.serial.getPorts === 'function' &&
     typeof navigator.serial.requestPort === 'function' &&
@@ -26,6 +28,6 @@ function checkSerialSupport(): { supported: true } | { supported: false, reason:
   return { supported: false, reason: 'Upgrade your browser' }
 }
 
-export const isMobile = browser && (navigator.userAgentData?.mobile || current.getDevice().type === 'mobile');
-export const serialSupport = checkSerialSupport();
+export const isMobile = browser && checkIsMobile();
+export const serialSupport = browser ? { supported: false, reason: 'Browser not detected' } as const : checkSerialSupport();
 

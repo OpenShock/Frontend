@@ -1,4 +1,5 @@
-import { isNumber, isObject, isString } from '$lib/typeguards';
+import { isObject, isString } from '$lib/typeguards';
+import { HasNumber, HasString } from '$lib/typeguards/propGuards';
 
 export interface ProblemDetails {
   type: string;
@@ -11,14 +12,10 @@ export interface ProblemDetails {
 export function isProblemDetails(value: unknown): value is ProblemDetails {
   return (
     isObject(value) &&
-    Object.hasOwn(value, 'type') &&
-    Object.hasOwn(value, 'title') &&
-    Object.hasOwn(value, 'status') &&
-    Object.hasOwn(value, 'requestId') &&
-    (Object.hasOwn(value, 'detail') ? isString(value.detail) : true) &&
-    isString(value.type) &&
-    isString(value.title) &&
-    isNumber(value.status) &&
-    isString(value.requestId)
+    HasString(value, 'type') &&
+    HasString(value, 'title') &&
+    HasNumber(value, 'status') &&
+    HasString(value, 'requestId') &&
+    (Object.hasOwn(value, 'detail') ? isString(value.detail) : true)
   );
 }

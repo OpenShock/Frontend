@@ -32,6 +32,7 @@
     get data() {
       return data;
     },
+    /* svelte-ignore state_referenced_locally */
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: sorting ? getSortedRowModel() : undefined,
@@ -75,7 +76,7 @@
   });
 </script>
 
-<div class="max-h-[60vh] overflow-y-auto rounded-md border">
+<div class="max-h-[60vh] overflow-y-auto rounded-none sm:rounded-md border">
   <Table.Root>
     <Table.Header>
       {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}

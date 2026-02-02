@@ -1,7 +1,10 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
   import { accountV1Api } from '$lib/api';
   import { Button } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { toast } from 'svelte-sonner';
 
   let deactivateDialogOpen = $state(false);
 
@@ -9,12 +12,12 @@
     accountV1Api
       .authenticatedAccountDeactivate()
       .then(() => {
-        // Handle successful deactivation, e.g., redirect to a confirmation page
-        console.log('Account deactivated successfully');
+        toast.success('Account deactivated successfully');
+        goto('/');
       })
-      .catch((error) => {
-        // Handle error, e.g., show an error message
-        console.error('Error deactivating account:', error);
+      .catch(handleApiError)
+      .finally(() => {
+        deactivateDialogOpen = false;
       });
   }
 </script>

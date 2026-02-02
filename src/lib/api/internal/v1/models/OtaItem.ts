@@ -103,7 +103,7 @@ export function OtaItemToJSONTyped(value?: OtaItem | null, ignoreDiscriminator: 
     return {
         
         'id': value['id'],
-        'startedAt': ((value['startedAt']).toISOString()),
+        'startedAt': value['startedAt'].toISOString(),
         'status': OtaUpdateStatusToJSON(value['status']),
         'version': value['version'],
         'message': value['message'],

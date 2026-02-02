@@ -65,11 +65,18 @@ export interface UserShareInfo {
      */
     limits: ShockerLimits;
     /**
+     * An integer representing the reason(s) for the shocker being paused, expressed as a bitfield where reasons are OR'd together.
      * 
-     * @type {boolean}
+     * Each bit corresponds to:
+     * - 1: Shocker
+     * - 2: UserShare
+     * - 4: PublicShare
+     * 
+     * For example, a value of 6 (2 | 4) indicates both 'UserShare' and 'PublicShare' reasons.
+     * @type {number}
      * @memberof UserShareInfo
      */
-    paused: boolean;
+    paused: number;
 }
 
 /**
@@ -117,7 +124,7 @@ export function UserShareInfoToJSONTyped(value?: UserShareInfo | null, ignoreDis
         
         'id': value['id'],
         'name': value['name'],
-        'createdOn': ((value['createdOn']).toISOString()),
+        'createdOn': value['createdOn'].toISOString(),
         'permissions': ShockerPermissionsToJSON(value['permissions']),
         'limits': ShockerLimitsToJSON(value['limits']),
         'paused': value['paused'],

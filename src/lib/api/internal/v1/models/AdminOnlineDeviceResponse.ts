@@ -145,9 +145,9 @@ export function AdminOnlineDeviceResponseToJSONTyped(value?: AdminOnlineDeviceRe
         'owner': BasicUserInfoToJSON(value['owner']),
         'firmwareVersion': value['firmwareVersion'],
         'gateway': value['gateway'],
-        'connectedAt': ((value['connectedAt']).toISOString()),
+        'connectedAt': value['connectedAt'].toISOString(),
         'userAgent': value['userAgent'],
-        'bootedAt': ((value['bootedAt']).toISOString()),
+        'bootedAt': value['bootedAt'].toISOString(),
         'latencyMs': value['latencyMs'],
         'rssi': value['rssi'],
     };
