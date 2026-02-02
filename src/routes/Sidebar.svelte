@@ -9,6 +9,7 @@
     MonitorSmartphone,
     Router,
     Settings,
+    Share2,
     SquareActivity,
     Timer,
     Users,
@@ -81,7 +82,12 @@
         {
           title: 'Shockers',
           Icon: Zap,
-          href: '/shockers',
+          href: '/shockers/own',
+        },
+        {
+          title: 'Shared Shockers',
+          Icon: Share2,
+          href: '/shockers/shared',
         },
         {
           title: 'Hubs',
