@@ -37,6 +37,8 @@
 		"@types/w3c-web-serial": "^1.0.8",
 		"bits-ui": "2.15.5",
 		"bowser": "^2.13.1",
+		"boxen": "^8.0.1",
+		"chalk": "^5.6.2",
 		"clsx": "^2.1.1",
 		"crypto-js": "^4.2.0",
 		"eslint": "^9.39.2",
