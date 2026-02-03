@@ -56,11 +56,11 @@
   $effect(() => fetchOtaLogs(page.params.hubId));
 </script>
 
-<Container>
+<Container class="w-full max-w-none">
   <Card.Header>
-    <Card.Title class="flex items-center justify-between space-x-2 text-3xl">Update Hub</Card.Title>
+    <Card.Title class="text-3xl whitespace-nowrap">Update Hub</Card.Title>
   </Card.Header>
-  <Card.Content class="flex flex-col space-y-3">
+  <Card.Content class="w-full flex flex-col space-y-3">
     {#if hub}
       <div>
         {#if hub.isOnline}
@@ -83,9 +83,9 @@
       </Button>
 
       <h2 class="text-3xl font-semibold">Progress</h2>
-      <div class="grid grid-cols-[auto_1fr] grid-rows-2 items-center gap-2">
+      <div class="grid w-full grid-cols-[auto_1fr] grid-rows-2 items-center gap-2">
         Total
-        <Progress value={33} />
+        <Progress value={0} />
         Task
         <Progress value={(hub.otaInstall?.progress ?? 0) * 100} />
       </div>
@@ -103,7 +103,7 @@
           <span> Refresh Logs </span>
         </Button>
       </div>
-      <Table.Root class="border-2">
+      <Table.Root class="w-full border-2">
         <Table.Header>
           <Table.Row>
             <Table.Head>ID</Table.Head>
