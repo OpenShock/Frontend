@@ -1,3 +1,5 @@
+import { dev } from '$app/environment';
+import { PUBLIC_BACKEND_API_URL } from '$env/static/public';
 import {
   HttpTransportType,
   type HubConnection,
@@ -5,8 +7,6 @@ import {
   HubConnectionState,
   LogLevel,
 } from '@microsoft/signalr';
-import { dev } from '$app/environment';
-import { PUBLIC_BACKEND_API_URL } from '$env/static/public';
 import { toast } from 'svelte-sonner';
 import { type Readable, get, writable } from 'svelte/store';
 import {

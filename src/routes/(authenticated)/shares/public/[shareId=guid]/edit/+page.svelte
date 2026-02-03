@@ -100,7 +100,7 @@
 
 <DialogAddShocker bind:open={showAddShockerModal} {onAddedShockers} />
 
-<Container class="h-full flex flex-col">
+<Container class="flex h-full flex-col">
   <Card.Header class="w-full">
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
       Edit Public Share: {publicShareData?.name ?? 'Loading...'}
@@ -119,9 +119,9 @@
       Configure the shockers and their limits for this public share link.
     </Card.Description>
   </Card.Header>
-  <Card.Content class="flex flex-col space-y-4 w-full overflow-auto">
+  <Card.Content class="flex w-full flex-col space-y-4 overflow-auto">
     {#await publicShareRequest}
-      <div class="flex justify-center items-center h-full w-full">
+      <div class="flex h-full w-full items-center justify-center">
         <LoadingCircle />
       </div>
     {:then}
@@ -130,13 +130,13 @@
           <SharedDevice {shareId} bind:device={publicShareData.devices[i]} {onShockerRemoved} />
         {/each}
       {:else}
-        <div class="flex flex-col items-center justify-center h-32 text-muted-foreground">
+        <div class="text-muted-foreground flex h-32 flex-col items-center justify-center">
           <p>No shockers added to this share yet.</p>
           <p class="text-sm">Click "Add Shocker" to get started.</p>
         </div>
       {/if}
     {:catch error}
-      <div class="flex flex-col items-center justify-center h-full">
+      <div class="flex h-full flex-col items-center justify-center">
         <p>Error fetching public share details</p>
         <pre>{error.message}</pre>
       </div>

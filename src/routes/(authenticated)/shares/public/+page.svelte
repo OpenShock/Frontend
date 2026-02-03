@@ -64,7 +64,7 @@
 
 <CreatePublicShareDialog bind:open={showAddShareModal} onCreated={refreshPublicShares} />
 
-<Container class="h-full flex flex-col">
+<Container class="flex h-full flex-col">
   <Card.Header class="w-full">
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
       Public Shares
@@ -86,7 +86,7 @@
       anyone can access.</Card.Description
     >
   </Card.Header>
-  <Card.Content class="flex flex-col space-y-4 w-full overflow-auto">
+  <Card.Content class="flex w-full flex-col space-y-4 overflow-auto">
     <DataTable
       {data}
       {columns}

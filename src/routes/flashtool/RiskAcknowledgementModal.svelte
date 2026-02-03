@@ -47,7 +47,7 @@
           This may permanently brick your device, require manual recovery, or render it unusable.
         </p>
 
-        <p class="text-red-500 font-semibold">
+        <p class="font-semibold text-red-500">
           We will NOT provide support for issues caused by this firmware.
         </p>
 
@@ -55,7 +55,7 @@
           To proceed, type the following phrase <strong>exactly</strong>:
         </p>
 
-        <code class="block rounded bg-muted p-2 text-sm font-mono">
+        <code class="bg-muted block rounded p-2 font-mono text-sm">
           {REQUIRED_TEXT}
         </code>
       </Dialog.Description>

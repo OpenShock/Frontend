@@ -56,10 +56,10 @@
 
 <Drawer.Root bind:open={editDrawer} direction="right">
   <Drawer.Content>
-    <div class="mx-auto w-full max-h-[100vh] flex flex-col">
+    <div class="mx-auto flex max-h-[100vh] w-full flex-col">
       <Drawer.Header class="shrink-0">
         <Drawer.Description>Manage Shares from</Drawer.Description>
-        <Drawer.Title class="flex items-center gap-2 mt-1">
+        <Drawer.Title class="mt-1 flex items-center gap-2">
           <Avatar.Root class="size-10">
             <Avatar.Image src={$userShare.image} alt="User Avatar" />
             <Avatar.Fallback>
@@ -69,7 +69,7 @@
           <b>{$userShare.name}</b></Drawer.Title
         >
       </Drawer.Header>
-      <div class="rounded-md border overflow-y-auto m-4">
+      <div class="m-4 overflow-y-auto rounded-md border">
         <Table.Root>
           <Table.Body>
             {#each $userShare.shares as shocker (shocker.id)}

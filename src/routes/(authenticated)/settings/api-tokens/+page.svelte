@@ -110,7 +110,7 @@
     </Card.Title>
     <Card.Description>API Tokens are used to authenticate with the OpenShock API</Card.Description>
   </Card.Header>
-  <Card.Content class="flex flex-col space-y-4 w-full">
+  <Card.Content class="flex w-full flex-col space-y-4">
     <DataTable {data} {columns} {sorting} />
   </Card.Content>
 </Container>

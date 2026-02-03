@@ -59,7 +59,7 @@
     />
     {#if popup}
       <div
-        class="absolute left-0 top-full mt-1 w-full z-10 bg-white dark:bg-gray-800 shadow-lg rounded-md border border-gray-200 dark:border-gray-700 p-1"
+        class="absolute top-full left-0 z-10 mt-1 w-full rounded-md border border-gray-200 bg-white p-1 shadow-lg dark:border-gray-700 dark:bg-gray-800"
         role="tooltip"
       >
         {@render popup()}
@@ -72,7 +72,7 @@
   {#if validationResult?.message}
     <p
       id={validationId}
-      class={cn('text-xs mt-0! h-4 truncate', `text-${GetValResColor(validationResult)}`)}
+      class={cn('mt-0! h-4 truncate text-xs', `text-${GetValResColor(validationResult)}`)}
       role="status"
       aria-atomic="true"
       aria-live="polite"

@@ -5,14 +5,10 @@
   "singleQuote": true,
   "trailingComma": "es5",
   "printWidth": 100,
-  "importOrder": ["^@.*", "^\\$.*", "^[a-zA-Z].*", "^\\..*"],
-  "importOrderSeparation": false,
-  "importOrderSortSpecifiers": true,
-  "importOrderSideEffects": false,
   "plugins": [
     "prettier-plugin-svelte",
     "prettier-plugin-tailwindcss",
-    "@trivago/prettier-plugin-sort-imports"
+    "prettier-plugin-organize-imports"
   ],
   "overrides": [
     { "files": "*.svelte", "options": { "parser": "svelte" } },

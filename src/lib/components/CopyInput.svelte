@@ -32,7 +32,7 @@
   {#if icon}
     {@render icon()}
   {/if}
-  <input class="outline-none! mx-3 grow" type="text" bind:value readonly disabled />
+  <input class="mx-3 grow outline-none!" type="text" bind:value readonly disabled />
   <span>
     <button onclick={copyToken} class="transition-in-place">
       {#if copied}

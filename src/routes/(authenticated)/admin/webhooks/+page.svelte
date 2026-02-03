@@ -62,7 +62,7 @@
       </Button>
     </CardTitle>
   </CardHeader>
-  <div class="w-full p-6 gap-6 grid">
+  <div class="grid w-full gap-6 p-6">
     <DataTable {data} {columns} {sorting} />
   </div>
 </Container>

@@ -13,7 +13,7 @@
 </script>
 
 <button
-  class="text-xs sm:text-sm flex items-center"
+  class="flex items-center text-xs sm:text-sm"
   onclick={() => column.toggleSorting(direction === 'asc')}
 >
   {name}

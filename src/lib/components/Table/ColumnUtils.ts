@@ -1,9 +1,3 @@
-import type {
-  BuiltInSortingFn,
-  ColumnDef,
-  SortingFnOption,
-  StringOrTemplateHeader,
-} from '@tanstack/table-core';
 import DataTableSortButton from '$lib/components/Table/SortButton.svelte';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table';
 import { isDate } from '$lib/typeguards';
@@ -13,6 +7,12 @@ import {
   escapeHtml,
   getReadableUserAgentName,
 } from '$lib/utils';
+import type {
+  BuiltInSortingFn,
+  ColumnDef,
+  SortingFnOption,
+  StringOrTemplateHeader,
+} from '@tanstack/table-core';
 import { type SemVer } from 'semver';
 import { createRawSnippet } from 'svelte';
 

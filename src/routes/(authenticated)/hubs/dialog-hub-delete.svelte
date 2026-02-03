@@ -28,7 +28,7 @@
       <Dialog.Description>
         You are about to delete hub "<strong>{hub.name}</strong>"<br />
         This will also delete the following shockers:
-        <div class="pt-2 flex gap-2 text-sm justify-center sm:justify-start">
+        <div class="flex justify-center gap-2 pt-2 text-sm sm:justify-start">
           {#each hub.shockers as shocker}
             <Badge>{shocker.name}</Badge>
           {/each}

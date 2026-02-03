@@ -60,7 +60,7 @@
   <Card.Header>
     <Card.Title class="text-3xl whitespace-nowrap">Update Hub</Card.Title>
   </Card.Header>
-  <Card.Content class="w-full flex flex-col space-y-3">
+  <Card.Content class="flex w-full flex-col space-y-3">
     {#if hub}
       <div>
         {#if hub.isOnline}

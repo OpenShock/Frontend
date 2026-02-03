@@ -120,7 +120,7 @@
   });
 </script>
 
-<div class="flex items-center justify-center h-full w-full">
+<div class="flex h-full w-full items-center justify-center">
   <Card.Root class="w-lg max-w-2xl">
     {#if 'error' in windowQueryParams}
       <Card.Header>

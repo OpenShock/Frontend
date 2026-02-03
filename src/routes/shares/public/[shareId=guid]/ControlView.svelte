@@ -30,9 +30,9 @@
   }
 </script>
 
-<div class="flex flex-col gap-15 w-full h-full m-5">
-  <div class="flex flex-row w-full content-between">
-    <div class="flex flex-col w-full">
+<div class="m-5 flex h-full w-full flex-col gap-15">
+  <div class="flex w-full flex-row content-between">
+    <div class="flex w-full flex-col">
       <h1 class="text-2xl font-bold">Public Share: {shareLinkRoot.name}</h1>
       <p
         class={shareLinkSignalr.getState() === HubConnectionState.Connected
@@ -47,7 +47,7 @@
       <Tooltip.Root delayDuration={250}>
         <Tooltip.Trigger>
           <span
-            class="flex flex-row items-center mr-10 rounded-md py-2 px-4 outline-1 outline-gray-500"
+            class="mr-10 flex flex-row items-center rounded-md px-4 py-2 outline-1 outline-gray-500"
           >
             <Avatar.Root class="h-10 w-10">
               <Avatar.Image src={shareLinkRoot.author.image} alt="User Avatar" />
@@ -65,7 +65,7 @@
     </Tooltip.Provider>
   </div>
 
-  <div class="flex flex-row gap-5 justify-center">
+  <div class="flex flex-row justify-center gap-5">
     {#each shareLinkRoot.devices!.flatMap((device) => device.shockers) as shocker (shocker.id)}
       <PublicShareClassicControlModule {shocker} {control} />
     {/each}

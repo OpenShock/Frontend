@@ -69,17 +69,17 @@
   <!-- Title -->
   <h2 class="w-full truncate px-4 text-center text-lg font-bold">{shocker.name}</h2>
 
-  <div class="grow flex flex-col items-center justify-center">
+  <div class="flex grow flex-col items-center justify-center">
     <!-- Pause indicator -->
     {#if isPaused}
-      <div class="flex items-center gap-1 text-sm text-destructive">
+      <div class="text-destructive flex items-center gap-1 text-sm">
         <Pause size={14} />
         <span>Paused at {pauseReason} level</span>
       </div>
     {/if}
 
     <!-- Limits -->
-    <div class="flex gap-3 text-xs text-muted-foreground">
+    <div class="text-muted-foreground flex gap-3 text-xs">
       <span class="flex items-center gap-1" title="Max Intensity">
         <Gauge size={14} />
         {maxIntensity}%

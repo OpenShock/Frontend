@@ -194,7 +194,7 @@
 <HelpDialog open={showHelpDialog} onClose={() => (showHelpDialog = false)} />
 
 <Container>
-  <Card.Header class="w-full flex flex-row justify-between">
+  <Card.Header class="flex w-full flex-row justify-between">
     <Card.Title class="text-3xl">Flash Tool</Card.Title>
     {#if isSerialSupported}
       <div>
@@ -209,7 +209,7 @@
       </div>
     {/if}
   </Card.Header>
-  <Card.Content class="w-full flex flex-col gap-4">
+  <Card.Content class="flex w-full flex-col gap-4">
     {#if isSerialSupported}
       {@render mainContent()}
     {:else if browser}

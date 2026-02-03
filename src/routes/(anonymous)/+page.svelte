@@ -4,12 +4,12 @@
   let { data } = $props();
 </script>
 
-<section class="flex flex-col items-center justify-center h-full text-white text-center space-y-6">
+<section class="flex h-full flex-col items-center justify-center space-y-6 text-center text-white">
   <span class="flex">
     <img class="h-9 pr-2 sm:h-14 md:h-20 md:pr-4" src={asset('/IconSpinning.svg')} alt="logo" />
     <img class="h-9 sm:h-14 md:h-20" src={asset('/LogoBakedFont.svg')} alt="logo" />
   </span>
-  <p class="text-lg md:text-2xl opacity-75">
+  <p class="text-lg opacity-75 md:text-2xl">
     The go-to platform for safe, reliable, real low-latency remote shocking.<br />
     {#if data.ok}
       <span class="font-semibold">{data.deviceCount}</span> people online right now.

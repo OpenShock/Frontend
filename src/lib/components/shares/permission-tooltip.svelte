@@ -21,7 +21,7 @@
 </script>
 
 <div class="flex flex-col gap-2">
-  <div class="flex gap-2 justify-center">
+  <div class="flex justify-center gap-2">
     {#if pausedReason}
       <Badge variant="destructive" class="w-max">Paused at {pausedReason} Level</Badge>
     {/if}
@@ -40,7 +40,7 @@
       <ChartNoAxesGantt color="white" />
     </span>
   </div>
-  <div class="flex gap-2 justify-center">
+  <div class="flex justify-center gap-2">
     <span class="text-sm"><Gauge />{shockerShare.limits.intensity ?? 100}%</span>
     <span class="text-sm"><ClockFading />{(shockerShare.limits.duration ?? 30_000) / 1000}s</span>
   </div>

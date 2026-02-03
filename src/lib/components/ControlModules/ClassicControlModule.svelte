@@ -37,7 +37,7 @@
   class="border-surface-400-500-token flex flex-col items-center justify-center gap-2 overflow-hidden rounded-md border p-2"
 >
   <!-- Title -->
-  <h2 class="w-full px-4 text-center text-lg font-bold flex justify-between">
+  <h2 class="flex w-full justify-between px-4 text-center text-lg font-bold">
     <span>
       {shocker.name}
     </span>
