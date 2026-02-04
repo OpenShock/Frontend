@@ -62,13 +62,13 @@
 <DialogShareCodeCreated bind:code={createdCode} />
 <DialogShareCodeRedeem bind:open={redeemDialogOpen} bind:userInput={redeemUserInput} />
 
-<Container class="h-full flex flex-col">
+<Container class="flex h-full flex-col">
   <Card.Header class="w-full">
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
       User Shares
     </Card.Title>
     <Card.Description>Direct permanent shares with users</Card.Description>
-    <div class="flex-none flex w-full">
+    <div class="flex w-full flex-none">
       <Tabs.Root value={tab()} class="w-[400px]">
         <Tabs.List>
           <Tabs.Trigger value="shares" onclick={() => navigateTo('outgoing')}>Shares</Tabs.Trigger>
@@ -93,7 +93,7 @@
       </span>
     </div>
   </Card.Header>
-  <Card.Content class="flex flex-col space-y-4 w-full overflow-auto">
+  <Card.Content class="flex w-full flex-col space-y-4 overflow-auto">
     {@render children?.()}
   </Card.Content>
 </Container>

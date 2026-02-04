@@ -1,7 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { accountV2Api } from '$lib/api';
-  import AbsolutelySureButton from '$lib/components/AbsolutelySureButton.svelte';
   import Container from '$lib/components/Container.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
   import EmailInput from '$lib/components/input/EmailInput.svelte';
@@ -96,10 +95,9 @@
       Do not use this frontend to register a new account, this is a WIP, please go to
       https://openshock.app
     </div>
-    <AbsolutelySureButton
-      text="I acknowledge that I have read this message and that this frontend is not functional yet."
-      onconfirm={() => (ack = true)}
-    />
+    <Button variant="destructive" onclick={() => (ack = true)}>
+      I acknowledge that I have read this message and that this frontend is not functional yet.
+    </Button>
   {:else}
     <form class="flex flex-col gap-2" onsubmit={handleSubmission}>
       <div class="text-3xl font-semibold text-nowrap">Sign Up</div>

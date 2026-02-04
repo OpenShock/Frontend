@@ -55,7 +55,7 @@
   {#if entered}
     <ControlView {shareLinkRoot} {guestName} />
   {:else}
-    <div class="flex items-center justify-center w-full h-full">
+    <div class="flex h-full w-full items-center justify-center">
       <Card.Root class="w-[400px]">
         <Card.Header class="text-center">
           <Card.Title class="text-xl">Public Share Link</Card.Title>

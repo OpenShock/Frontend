@@ -32,21 +32,17 @@ function getGitBranch() {
 }
 
 function getWsUrlFromHttpUrl(url) {
-  if (url.startsWith('https://')) {
-    return url.replace('https://', 'wss://');
-  } else if (url.startsWith('http://')) {
-    return url.replace('http://', 'ws://');
+  if (!url.startsWith('https://') && !url.startsWith('http://')) {
+    throw new Error(`Invalid URL [${url}]`);
   }
 
-  throw new Error(`Invalid URL was provided, it must start with http:// or https:// [${url}]`);
+  return 'ws' + url.substring(4); // Funny trick
 }
 
 function getSvelteBasePath() {
   try {
     const url = new URL(dotenv.PUBLIC_SITE_URL);
-    const path = url.pathname === '/' ? '' : url.pathname;
-    console.log(`Using base path: [${path}] from PUBLIC_SITE_URL: ${dotenv.PUBLIC_SITE_URL}`);
-    return path;
+    return url.pathname === '/' ? '' : url.pathname;
   } catch (error) {
     throw new Error(`PUBLIC_SITE_URL is not a valid URL: ${dotenv.PUBLIC_SITE_URL}`, {
       cause: error,

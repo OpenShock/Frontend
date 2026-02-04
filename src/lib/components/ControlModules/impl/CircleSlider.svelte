@@ -134,7 +134,7 @@
     <!-- background arc -->
     <path
       d={calcSvgPathData(angleEnd)}
-      class="fill-none stroke-neutral-200 dark:stroke-neutral-800 stroke-[20] cursor-pointer"
+      class="cursor-pointer fill-none stroke-neutral-200 stroke-[20] dark:stroke-neutral-800"
       stroke-linecap="round"
       aria-hidden="true"
       onpointerdown={startTracking}
@@ -144,7 +144,7 @@
     <path
       id={gaugeId}
       d={calcSvgPathData(degrees)}
-      class="fill-none stroke-blue-500 dark:stroke-blue-400 stroke-[10] cursor-pointer"
+      class="cursor-pointer fill-none stroke-blue-500 stroke-[10] dark:stroke-blue-400"
       stroke-linecap="round"
       aria-hidden="true"
       onpointerdown={startTracking}
@@ -163,7 +163,7 @@
       aria-valuemax={max}
       aria-labelledby={labelId}
       aria-controls={gaugeId}
-      class="fill-white dark:fill-neutral-900 stroke-neutral-400 dark:stroke-neutral-700 cursor-move outline-none focus:ring-2 focus:ring-blue-500/60 drop-shadow-md"
+      class="cursor-move fill-white stroke-neutral-400 drop-shadow-md outline-none focus:ring-2 focus:ring-blue-500/60 dark:fill-neutral-900 dark:stroke-neutral-700"
     />
   </svg>
 
@@ -177,7 +177,7 @@
     {max}
     {step}
     aria-label="Value"
-    class="hide-spinners absolute top-1/2 left-1/2 -translate-1/2 border-none bg-transparent text-center text-xl font-bold w-10 text-gray-900 dark:text-gray-100 focus:outline-none"
+    class="hide-spinners absolute top-1/2 left-1/2 w-10 -translate-1/2 border-none bg-transparent text-center text-xl font-bold text-gray-900 focus:outline-none dark:text-gray-100"
   />
 
   <!-- gauge label -->

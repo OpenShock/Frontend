@@ -12,7 +12,7 @@
 </script>
 
 <button
-  class="border-1 border-neutral-800 rounded-lg p-4 w-30 h-30 flex flex-col gap-4 items-center justify-center cursor-pointer hover:bg-neutral-800 transition-colors duration-300"
+  class="flex h-30 w-30 cursor-pointer flex-col items-center justify-center gap-4 rounded-lg border-1 border-neutral-800 p-4 transition-colors duration-300 hover:bg-neutral-800"
   aria-label="Toggle permission"
   onclick={() => (enabled = !enabled)}
 >

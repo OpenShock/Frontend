@@ -50,7 +50,7 @@
       >
     </Dialog.Header>
 
-    <form class="modal-form border-surface-500 rounded-container-token space-y-4 min-w-0">
+    <form class="modal-form border-surface-500 rounded-container-token min-w-0 space-y-4">
       <MultiSelectCombobox
         bind:selected={shockerIds}
         options={availableShockers}

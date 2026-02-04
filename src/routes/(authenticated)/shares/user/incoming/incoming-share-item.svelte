@@ -56,7 +56,7 @@
   </Table.Cell>
   <Table.Cell>
     <span
-      class="bg-sidebar flex items-center rounded-2xl px-1.5 py-0.5 ring-1 ring-slate-800 w-max"
+      class="bg-sidebar flex w-max items-center rounded-2xl px-1.5 py-0.5 ring-1 ring-slate-800"
     >
       <Zap size="15" />
       <p class="ml-2 inline-block sm:hidden">{share.shares.length}</p>

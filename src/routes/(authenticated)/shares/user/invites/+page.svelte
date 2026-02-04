@@ -17,11 +17,11 @@
 <h1 class="text-3xl font-semibold">Outgoing</h1>
 
 {#await outgoingInvitesPromise}
-  <div class="flex justify-center items-center h-full w-full">
+  <div class="flex h-full w-full items-center justify-center">
     <LoadingCircle />
   </div>
 {:then fetched}
-  <div class="rounded-md border overflow-y-auto mb-6">
+  <div class="mb-6 overflow-y-auto rounded-md border">
     <Table.Root>
       <Table.Body>
         {#each $OutgoingInvites as invite, i (invite.id)}
@@ -37,11 +37,11 @@
 <h1 class="text-3xl font-semibold">Incoming</h1>
 
 {#await incomingInvitesPromise}
-  <div class="flex justify-center items-center h-full w-full">
+  <div class="flex h-full w-full items-center justify-center">
     <LoadingCircle />
   </div>
 {:then fetched}
-  <div class="rounded-md border overflow-y-auto mb-6">
+  <div class="mb-6 overflow-y-auto rounded-md border">
     <Table.Root>
       <Table.Body>
         {#each $IncomingInvites as invite, i (invite.id)}

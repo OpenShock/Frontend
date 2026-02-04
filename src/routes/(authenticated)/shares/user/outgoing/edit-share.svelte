@@ -200,10 +200,10 @@
 
 <Drawer.Root bind:open={editDrawer} direction="right">
   <Drawer.Content>
-    <div class="mx-auto w-full max-h-[100vh] flex flex-col">
+    <div class="mx-auto flex max-h-[100vh] w-full flex-col">
       <Drawer.Header class="shrink-0">
         <Drawer.Description>Edit shares for</Drawer.Description>
-        <Drawer.Title class="flex items-center gap-2 mt-1">
+        <Drawer.Title class="mt-1 flex items-center gap-2">
           <Avatar.Root class="size-10">
             <Avatar.Image src={$userShare.image} alt="User Avatar" />
             <Avatar.Fallback>
@@ -213,15 +213,15 @@
           <b>{$userShare.name}</b></Drawer.Title
         >
       </Drawer.Header>
-      <div class="p-4 pb-0 mb-5 min-h-0">
+      <div class="mb-5 min-h-0 p-4 pb-0">
         <Tabs.Root
           value={isUniformRestrictions ? 'uniform' : 'individual'}
           onValueChange={onTabChanged}
-          class="flex flex-col h-full"
+          class="flex h-full flex-col"
         >
           <div>
-            <div class="flex items-center justify-between shrink-0">
-              <p class="text-lg font-bold grow self-end border-b border-b-neutral-800 mr-[-15px]">
+            <div class="flex shrink-0 items-center justify-between">
+              <p class="mr-[-15px] grow self-end border-b border-b-neutral-800 text-lg font-bold">
                 Limits and Permissions
               </p>
 
@@ -230,7 +230,7 @@
                 <Tabs.Trigger value="individual">Shockers</Tabs.Trigger>
               </Tabs.List>
             </div>
-            <p class="mb-6 text-neutral-400 text-[10pt] text-right">
+            <p class="mb-6 text-right text-[10pt] text-neutral-400">
               {isUniformRestrictions
                 ? 'Apply same restrictions to all shockers'
                 : 'Change restrictions for individual shockers'}
@@ -239,7 +239,7 @@
 
           <div class="overflow-y-auto">
             <Tabs.Content value="uniform">
-              <div class="flex flex-col gap-2 border-1 border-neutral-800 p-4 rounded-md h-75">
+              <div class="flex h-75 flex-col gap-2 rounded-md border-1 border-neutral-800 p-4">
                 <span class="flex">
                   <span class="ml-auto">
                     <MultiPauseToggle
@@ -273,7 +273,7 @@
             <Tabs.Content value="individual">
               <div class="flex flex-col gap-8">
                 {#each shares as share, i (share.id)}
-                  <div class="flex flex-col gap-2 border-1 border-neutral-800 p-4 rounded-md">
+                  <div class="flex flex-col gap-2 rounded-md border-1 border-neutral-800 p-4">
                     <div class="flex justify-between">
                       <span>
                         <Badge>{shares[i].name}</Badge>
@@ -315,7 +315,7 @@
         </Tabs.Root>
       </div>
 
-      <Drawer.Footer class="flex flex-row justify-between mx-20 shrink-0">
+      <Drawer.Footer class="mx-20 flex shrink-0 flex-row justify-between">
         <Drawer.Close>Cancel</Drawer.Close>
         <Button onclick={handleSave}
           >Save {#if saving}<LoadingCircle />{/if}</Button

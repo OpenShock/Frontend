@@ -34,7 +34,7 @@
   });
 </script>
 
-<form class="flex gap-2 items-center" onsubmit={check}>
+<form class="flex items-center gap-2" onsubmit={check}>
   <Avatar.Root class={(fetchedUser ? 'border-3 border-green-500' : '') + ' h-15 w-15'}>
     <Avatar.Image src={fetchedUser?.image} alt="User Avatar" />
     <Avatar.Fallback>?</Avatar.Fallback>

@@ -1,4 +1,3 @@
-import type { ColumnDef } from '@tanstack/table-core';
 import type { AdminOnlineDeviceResponse } from '$lib/api/internal/v1';
 import {
   CreateColumnDef,
@@ -11,6 +10,7 @@ import {
   UserAgentRenderer,
 } from '$lib/components/Table/ColumnUtils';
 import { renderComponent } from '$lib/components/ui/data-table';
+import type { ColumnDef } from '@tanstack/table-core';
 import { SemVer } from 'semver';
 import DataTableActions from './data-table-actions.svelte';
 

@@ -1,4 +1,3 @@
-import type { ColumnDef } from '@tanstack/table-core';
 import { ShockerModelType } from '$lib/api/internal/v1';
 import {
   CellGreenOnline,
@@ -9,6 +8,7 @@ import {
   RenderCell,
 } from '$lib/components/Table/ColumnUtils';
 import { renderComponent } from '$lib/components/ui/data-table';
+import type { ColumnDef } from '@tanstack/table-core';
 import type { SemVer } from 'semver';
 import DataTableActions from './data-table-actions.svelte';
 

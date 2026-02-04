@@ -35,7 +35,7 @@
     </Card.Title>
     <Card.Description>These are the logs for all shockers.</Card.Description>
   </Card.Header>
-  <div class="w-full p-6 gap-6 grid">
+  <div class="grid w-full gap-6 p-6">
     <DataTable data={data.logs} {columns} bind:sorting />
   </div>
 </Container>

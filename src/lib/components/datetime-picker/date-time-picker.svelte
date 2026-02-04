@@ -78,7 +78,7 @@
     {date ? df.format(date.toDate()) : 'Pick a date'}
   </Popover.Trigger>
   <Popover.Content bind:ref={contentRef} class="w-auto p-0">
-    <div class="flex p-2 border-b">
+    <div class="flex border-b p-2">
       <TimePicker
         bind:time
         setTime={(time) => {

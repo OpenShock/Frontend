@@ -70,7 +70,7 @@
     </Card.Title>
     <Card.Description>This is a list of all hubs you own.</Card.Description>
   </Card.Header>
-  <div class="w-full p-6 gap-6 grid">
+  <div class="grid w-full gap-6 p-6">
     {#if isMobile.current}
       {#each data as hub (hub.id)}
         <div class="flex items-center justify-between gap-4">

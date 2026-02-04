@@ -54,7 +54,7 @@
     {#if !loading}
       {#if newToken}
         <div>
-          <strong class="text-sm text-muted-foreground font-medium">New token:</strong>
+          <strong class="text-muted-foreground text-sm font-medium">New token:</strong>
           <CopyInput value={newToken} />
         </div>
         <Button onclick={() => setOpen(false)}>Code has been copied, close</Button>

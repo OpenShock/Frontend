@@ -24,11 +24,11 @@
 {/key}
 
 {#await refreshPromise}
-  <div class="flex justify-center items-center h-full w-full">
+  <div class="flex h-full w-full items-center justify-center">
     <LoadingCircle />
   </div>
 {:then fetched}
-  <div class="rounded-md border overflow-y-auto mb-6">
+  <div class="mb-6 overflow-y-auto rounded-md border">
     <Table.Root>
       <Table.Body>
         {#each $UserShares.outgoing as userShare, i (userShare.id)}

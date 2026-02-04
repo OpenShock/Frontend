@@ -26,7 +26,7 @@
       <Dialog.Description>Please copy share code or code link!</Dialog.Description>
     </Dialog.Header>
     <div class="flex flex-col items-center space-y-4">
-      <div class="flex w-full items-center justify-between rounded-md p-2 flex-col gap-2">
+      <div class="flex w-full flex-col items-center justify-between gap-2 rounded-md p-2">
         <CopyInput value={code!}>
           {#snippet icon()}
             <KeyRound size="20" />

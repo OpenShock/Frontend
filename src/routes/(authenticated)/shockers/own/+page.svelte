@@ -29,7 +29,7 @@
   <p>Loading...</p>
 {:else}
   <Container>
-    <div class="w-full flex content-center justify-between">
+    <div class="flex w-full content-center justify-between">
       <h1 class="text-2xl font-bold">Shockers</h1>
       <div>
         <!-- Emergency Stop Button -->

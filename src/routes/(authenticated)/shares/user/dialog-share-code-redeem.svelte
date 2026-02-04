@@ -50,7 +50,7 @@
       <Dialog.Description>Enter the share code to redeem</Dialog.Description>
     </Dialog.Header>
 
-    <form class="modal-form border-surface-500 rounded-container-token space-y-4 min-w-0">
+    <form class="modal-form border-surface-500 rounded-container-token min-w-0 space-y-4">
       <Input
         bind:value={userInput}
         disabled={redeemPromise !== null}
@@ -64,7 +64,7 @@
           <div class="flex flex-col gap-2">
             <p class="text-green-500">Redeemed successfully!</p>
 
-            <span class="flex gap-2 items-center">
+            <span class="flex items-center gap-2">
               <Avatar.Root class="h-15 w-15">
                 <Avatar.Image src={result.image} alt="User Avatar" />
                 <Avatar.Fallback>{result.name.charAt(0)}</Avatar.Fallback>
@@ -73,7 +73,7 @@
             </span>
 
             <span
-              class="bg-sidebar flex items-center rounded-2xl px-1.5 py-0.5 ring-1 ring-slate-800 h-[26px]"
+              class="bg-sidebar flex h-[26px] items-center rounded-2xl px-1.5 py-0.5 ring-1 ring-slate-800"
             >
               <Zap size="15" />
               <p class="ml-2 inline-block sm:hidden">{result.shares.length}</p>
@@ -99,7 +99,7 @@
       {:else}
         <Button
           onclick={onFormSubmit}
-          class="flex items-center w-full"
+          class="flex w-full items-center"
           disabled={redeemPromise !== null}
         >
           <Barcode />

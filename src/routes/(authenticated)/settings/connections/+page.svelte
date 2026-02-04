@@ -166,7 +166,7 @@
             <div class="flex items-center justify-between rounded-xl border p-4">
               <div class="min-w-0">
                 <div class="truncate text-base font-medium">{p}</div>
-                <div class="truncate text-sm text-muted-foreground">
+                <div class="text-muted-foreground truncate text-sm">
                   {displayFor(p) ?? p}
                 </div>
               </div>

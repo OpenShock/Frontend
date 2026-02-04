@@ -161,7 +161,7 @@
   });
 </script>
 
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-8">
+<div class="grid grid-cols-1 gap-6 p-8 md:grid-cols-2">
   <!-- Username Blacklist -->
   <Card>
     <CardHeader>
@@ -191,7 +191,7 @@
             <div class="flex items-center justify-between text-sm">
               <div class="flex items-center space-x-2">
                 <span>{item.value}</span>
-                <span class="px-2 py-0.5 text-xs rounded bg-gray-800">{item.matchType}</span>
+                <span class="rounded bg-gray-800 px-2 py-0.5 text-xs">{item.matchType}</span>
               </div>
               <Button
                 variant="ghost"

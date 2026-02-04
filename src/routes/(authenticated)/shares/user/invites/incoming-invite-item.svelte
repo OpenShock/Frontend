@@ -58,7 +58,7 @@
 {/snippet}
 
 <Table.Row>
-  <Table.Cell class="flex items-center font-medium flex-auto">
+  <Table.Cell class="flex flex-auto items-center font-medium">
     <Avatar.Root class="h-15 w-15">
       <Avatar.Image src={shareInvite.owner.image} alt="User Avatar" />
       <Avatar.Fallback>
@@ -69,7 +69,7 @@
   </Table.Cell>
   <Table.Cell class="flex-auto">
     <span
-      class="bg-sidebar flex items-center rounded-2xl px-1.5 py-0.5 ring-1 ring-slate-800 w-max"
+      class="bg-sidebar flex w-max items-center rounded-2xl px-1.5 py-0.5 ring-1 ring-slate-800"
     >
       <Zap size="15" />
       <p class="ml-2 inline-block sm:hidden">{shareInvite.shockers.length}</p>
@@ -90,7 +90,7 @@
   <Table.Cell class="w-0 flex-none">
     <Tooltip.Root>
       <Tooltip.Trigger
-        class={cn('size-9 mr-4', buttonVariants({ variant: 'default' }))}
+        class={cn('mr-4 size-9', buttonVariants({ variant: 'default' }))}
         onclick={acceptInvite}
       >
         <Check />
@@ -102,7 +102,7 @@
 
     <Tooltip.Root>
       <Tooltip.Trigger
-        class={cn('size-9 mr-4', buttonVariants({ variant: 'destructive' }))}
+        class={cn('mr-4 size-9', buttonVariants({ variant: 'destructive' }))}
         onclick={denyInvite}
       >
         <X />
