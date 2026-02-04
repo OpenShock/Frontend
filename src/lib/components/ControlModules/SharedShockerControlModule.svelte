@@ -48,7 +48,7 @@
         id: shocker.id,
         type,
         intensity: clampedIntensity,
-        duration: clampedDuration * 1000,
+        duration: clampedDuration,
       },
     ]);
   }
