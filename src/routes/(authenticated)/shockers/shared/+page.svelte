@@ -42,13 +42,9 @@
               </Avatar.Root>
               <div>
                 <h2 class="text-xl font-semibold">{owner.name}</h2>
+                {@const totalShockers = owner.devices.reduce((acc, d) => acc + d.shockers.length, 0)}
                 <p class="text-sm text-muted-foreground">
-                  {owner.devices.reduce((acc, d) => acc + d.shockers.length, 0)} shocker{owner.devices.reduce(
-                    (acc, d) => acc + d.shockers.length,
-                    0
-                  ) !== 1
-                    ? 's'
-                    : ''}
+                  {totalShockers} shocker{totalShockers !== 1 ? 's' : ''}
                 </p>
               </div>
             </div>
