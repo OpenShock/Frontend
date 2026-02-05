@@ -16,24 +16,24 @@
   <p>Loading...</p>
 {:else}
   <Container>
-    <div class="w-full flex content-center justify-between">
+    <div class="flex w-full content-center justify-between">
       <h1 class="text-2xl font-bold">Shared Shockers</h1>
     </div>
     <hr class="border-2" />
 
     {#if !hasSharedShockers}
-      <div class="flex flex-col items-center justify-center py-12 text-muted-foreground">
+      <div class="text-muted-foreground flex flex-col items-center justify-center py-12">
         <User size={48} class="mb-4 opacity-50" />
         <p class="text-lg">No shockers have been shared with you yet.</p>
         <p class="text-sm">When someone shares their shockers with you, they'll appear here.</p>
       </div>
     {:else}
-      <div class="flex flex-col gap-6 mt-4">
+      <div class="mt-4 flex flex-col gap-6">
         {#each $SharedHubsStore as owner (owner.id)}
           <!-- Owner Section -->
-          <div class="border rounded-lg p-4">
+          <div class="rounded-lg border p-4">
             <!-- Owner Header -->
-            <div class="flex items-center gap-3 mb-4">
+            <div class="mb-4 flex items-center gap-3">
               <Avatar.Root class="h-10 w-10">
                 <Avatar.Image src={owner.image} alt={owner.name} />
                 <Avatar.Fallback>
@@ -42,8 +42,11 @@
               </Avatar.Root>
               <div>
                 <h2 class="text-xl font-semibold">{owner.name}</h2>
-                {@const totalShockers = owner.devices.reduce((acc, d) => acc + d.shockers.length, 0)}
-                <p class="text-sm text-muted-foreground">
+                {@const totalShockers = owner.devices.reduce(
+                  (acc, d) => acc + d.shockers.length,
+                  0
+                )}
+                <p class="text-muted-foreground text-sm">
                   {totalShockers} shocker{totalShockers !== 1 ? 's' : ''}
                 </p>
               </div>
@@ -54,7 +57,7 @@
               {#each owner.devices as device (device.id)}
                 <!-- Device/Hub Header -->
                 <div class="bg-muted/30 rounded-md p-3">
-                  <div class="flex items-center gap-2 mb-3">
+                  <div class="mb-3 flex items-center gap-2">
                     <Router size={18} />
                     <span class="font-medium">{device.name}</span>
                     {#if $OnlineHubsStore.get(device.id)?.isOnline}
