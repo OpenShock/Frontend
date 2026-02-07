@@ -50,7 +50,7 @@
       </div>
     {/if}
     <Header />
-    <main class="flex-1 min-h-0 overflow-x-hidden">
+    <main class="min-h-0 flex-1 overflow-x-hidden">
       {@render children?.()}
     </main>
     <Footer />

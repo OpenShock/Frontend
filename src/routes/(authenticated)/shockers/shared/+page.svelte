@@ -30,6 +30,7 @@
     {:else}
       <div class="mt-4 flex flex-col gap-6">
         {#each $SharedHubsStore as owner (owner.id)}
+          {@const totalShockers = owner.devices.reduce((acc, d) => acc + d.shockers.length, 0)}
           <!-- Owner Section -->
           <div class="rounded-lg border p-4">
             <!-- Owner Header -->
@@ -42,10 +43,6 @@
               </Avatar.Root>
               <div>
                 <h2 class="text-xl font-semibold">{owner.name}</h2>
-                {@const totalShockers = owner.devices.reduce(
-                  (acc, d) => acc + d.shockers.length,
-                  0
-                )}
                 <p class="text-muted-foreground text-sm">
                   {totalShockers} shocker{totalShockers !== 1 ? 's' : ''}
                 </p>
