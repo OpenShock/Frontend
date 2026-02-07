@@ -5,10 +5,18 @@
   import { cn } from '$lib/utils/shadcn.js';
   import type { Snippet } from 'svelte';
   import type { ClipboardEventHandler, FocusEventHandler, FullAutoFill } from 'svelte/elements';
+  import {
+    FieldGroup,
+    Field,
+    FieldLabel,
+    FieldDescription,
+    FieldSeparator,
+  } from '$lib/components/ui/field/index.js';
 
   interface Props {
     type?: 'text' | 'email' | 'password' | 'search' | 'url';
     label?: string;
+    labelSnippet?: Snippet<[string]>;
     placeholder?: string;
     autocomplete?: FullAutoFill;
     value: string;
@@ -25,6 +33,7 @@
   let {
     type = 'text',
     label,
+    labelSnippet,
     placeholder,
     autocomplete,
     value = $bindable(),
@@ -37,15 +46,21 @@
   }: Props = $props();
 </script>
 
-<label class="w-full">
-  {#if label}
-    <span>{label}</span>
+<Field>
+  {#if labelSnippet}
+    {@render labelSnippet(id)}
   {/if}
+
+  {#if label}
+    <FieldLabel for={id}>{label}</FieldLabel>
+  {/if}
+
   <div class="relative flex grow flex-row items-center gap-2">
     {#if Icon}
       <Icon />
     {/if}
     <Input
+      {id}
       {type}
       class="grow"
       title={label}
@@ -92,4 +107,4 @@
   {:else}
     <div class="h-4" aria-hidden="true"></div>
   {/if}
-</label>
+</Field>

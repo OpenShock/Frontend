@@ -11,6 +11,8 @@
   import type { Snippet } from 'svelte';
   import type { FullAutoFill } from 'svelte/elements';
   import PasswordStrengthMeter from './impl/PasswordStrengthMeter.svelte';
+  import { FieldLabel } from '../ui/field';
+  import { resolve } from '$app/paths';
 
   interface Props {
     label: string;
@@ -127,7 +129,6 @@
 
 <TextInput
   type={valueShown ? 'text' : 'password'}
-  {label}
   {placeholder}
   {autocomplete}
   bind:value
@@ -136,13 +137,23 @@
   onblur={() => (showPopup = false)}
   popup={showPopup ? (popup as Snippet) : undefined}
 >
+  {#snippet labelSnippet(id: string)}
+    <div class="flex items-center">
+      <FieldLabel for={id}>Password</FieldLabel>
+      <a
+        href={resolve('/forgot-password')}
+        class="ms-auto text-sm underline-offset-4 hover:underline"
+      >
+        Forgot your password?
+      </a>
+    </div>
+  {/snippet}
   {#snippet after()}
     <Button
       type="button"
       class="cursor-pointer"
       onclick={() => (valueShown = !valueShown)}
       variant="ghost"
-      disabled={value.length == 0}
     >
       {#if valueShown}
         <EyeOff />
