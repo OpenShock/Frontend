@@ -151,9 +151,10 @@
   {#snippet after()}
     <Button
       type="button"
-      class="cursor-pointer"
+      class="h-7 w-7 cursor-pointer"
       onclick={() => (valueShown = !valueShown)}
       variant="ghost"
+      size="icon"
     >
       {#if valueShown}
         <EyeOff />

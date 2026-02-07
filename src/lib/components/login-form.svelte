@@ -125,7 +125,9 @@
     </Card.Content>
   </Card.Root>
   <FieldDescription class="px-6 text-center">
-    By clicking continue, you agree to our <a href="##">Terms of Service</a>
-    and <a href="##">Privacy Policy</a>.
+    By clicking continue, you agree to our <a href="https://openshock.org/tos" target="_blank"
+      >Terms of Service</a
+    >
+    and <a href="https://openshock.org/privacy" target="_blank">Privacy Policy</a>.
   </FieldDescription>
 </div>
