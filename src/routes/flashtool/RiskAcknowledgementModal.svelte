@@ -1,5 +1,4 @@
 <script lang="ts">
-  import TextInput from '$lib/components/input/TextInput.svelte';
   import { Button } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
 
@@ -10,27 +9,7 @@
   }
 
   let { open, onAccept, onCancel }: Props = $props();
-
-  const REQUIRED_TEXT = 'I UNDERSTAND THIS CAN BREAK MY DEVICE';
-  const PASTE_REPLACEMENT = 'I DID NOT READ THE WARNING, I JUST COPY-PASTED';
-
-  let acknowledgeText = $state('');
   let acknowledgeChecked = $state(false);
-
-  let canAccept = $derived(acknowledgeChecked && acknowledgeText === REQUIRED_TEXT);
-
-  // Reset + start countdown when dialog opens
-  $effect(() => {
-    if (!open) return;
-
-    acknowledgeText = '';
-    acknowledgeChecked = false;
-  });
-
-  function handlePaste(e: ClipboardEvent) {
-    e.preventDefault();
-    acknowledgeText = PASTE_REPLACEMENT;
-  }
 </script>
 
 <Dialog.Root {open}>
@@ -50,18 +29,8 @@
         <p class="font-semibold text-red-500">
           We will NOT provide support for issues caused by this firmware.
         </p>
-
-        <p>
-          To proceed, type the following phrase <strong>exactly</strong>:
-        </p>
-
-        <code class="bg-muted block rounded p-2 font-mono text-sm">
-          {REQUIRED_TEXT}
-        </code>
       </Dialog.Description>
     </Dialog.Header>
-
-    <TextInput bind:value={acknowledgeText} onpaste={handlePaste} />
 
     <label class="flex items-center gap-2 text-sm">
       <input type="checkbox" bind:checked={acknowledgeChecked} />
@@ -71,7 +40,7 @@
     <div class="flex justify-end gap-2">
       <Button variant="secondary" onclick={() => onCancel?.()}>Abort</Button>
 
-      <Button variant="destructive" disabled={!canAccept} onclick={onAccept}>
+      <Button variant="destructive" disabled={!acknowledgeChecked} onclick={onAccept}>
         I ACCEPT FULL RESPONSIBILITY
       </Button>
     </div>
