@@ -63,7 +63,7 @@
       class={cn(
         'flex w-full items-center',
         after &&
-          'border-input bg-background dark:bg-input/30 h-9 rounded-md border pr-1 shadow-xs transition-[color,box-shadow] has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-ring/50 has-[input:focus-visible]:ring-[3px] has-[input[aria-invalid=true]]:ring-destructive/20 dark:has-[input[aria-invalid=true]]:ring-destructive/40 has-[input[aria-invalid=true]]:border-destructive',
+          'border-input bg-background dark:bg-input/30 has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-ring/50 has-[input[aria-invalid=true]]:ring-destructive/20 dark:has-[input[aria-invalid=true]]:ring-destructive/40 has-[input[aria-invalid=true]]:border-destructive h-9 rounded-md border pr-1 shadow-xs transition-[color,box-shadow] has-[input:focus-visible]:ring-[3px]'
       )}
     >
       <Input
@@ -72,7 +72,7 @@
         class={cn(
           after
             ? 'flex-1 border-0 bg-transparent shadow-none focus-visible:ring-0 dark:bg-transparent'
-            : 'grow',
+            : 'grow'
         )}
         title={label}
         {placeholder}
@@ -89,7 +89,7 @@
     </div>
     {#if popup}
       <div
-        class="absolute top-full left-0 z-10 mt-1 w-full rounded-md border border-gray-200 bg-white p-1 shadow-lg dark:border-gray-700 dark:bg-gray-800"
+        class="absolute top-full left-0 z-10 mt-1 w-full rounded-md border border-gray-200 bg-white p-2 shadow-lg dark:border-gray-700 dark:bg-gray-800"
         role="tooltip"
       >
         {@render popup()}
@@ -99,7 +99,7 @@
   {#if validationResult?.message}
     <p
       id={validationId}
-      class={cn('mt-0! h-4 truncate text-xs', `text-${GetValResColor(validationResult)}`)}
+      class={cn('-mt-2! mb-2 h-4 truncate text-xs', `text-${GetValResColor(validationResult)}`)}
       role="status"
       aria-atomic="true"
       aria-live="polite"
@@ -117,6 +117,6 @@
       {/if}
     </p>
   {:else}
-    <div class="h-4" aria-hidden="true"></div>
+    <div class="-mt-2! mb-2 h-4" aria-hidden="true"></div>
   {/if}
 </Field>

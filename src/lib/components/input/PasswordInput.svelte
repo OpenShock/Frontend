@@ -24,6 +24,7 @@
     validate?: boolean | 'string' | 'pwned' | ValidationResult | null;
     showStrengthMeter?: boolean;
     Icon?: AnyComponent;
+    showForget?: boolean;
   }
 
   let {
@@ -36,6 +37,7 @@
     validate = false,
     showStrengthMeter = false,
     Icon,
+    showForget = true,
   }: Props = $props();
 
   let validationResult = $state<ValidationResult | null>(null);
@@ -139,13 +141,15 @@
 >
   {#snippet labelSnippet(id: string)}
     <div class="flex items-center">
-      <FieldLabel for={id}>Password</FieldLabel>
-      <a
-        href={resolve('/forgot-password')}
-        class="ms-auto text-sm underline-offset-4 hover:underline"
-      >
-        Forgot your password?
-      </a>
+      <FieldLabel for={id}>{label}</FieldLabel>
+      {#if showForget}
+        <a
+          href={resolve('/forgot-password')}
+          class="ms-auto text-sm underline-offset-4 hover:underline"
+        >
+          Forgot your password?
+        </a>
+      {/if}
     </div>
   {/snippet}
   {#snippet after()}

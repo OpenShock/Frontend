@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import { OAuthSignupFinalize, OAuthSignupGetData } from '$lib/api/next/oauth';
   import Container from '$lib/components/Container.svelte';
@@ -48,7 +49,7 @@
         roles: account.accountRoles,
       });
 
-      goto('/home');
+      goto(resolve('/home'));
     } catch (error) {
       await handleApiError(error, (problem) => {
         if (!isValidationError(problem)) return false;
