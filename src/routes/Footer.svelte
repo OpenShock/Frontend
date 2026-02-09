@@ -1,10 +1,8 @@
 <script lang="ts">
   import { HubConnectionState } from '@microsoft/signalr';
-  import { browser } from '$app/environment';
   import { PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
   import { SignalR_State } from '$lib/signalr';
-
-  const version = browser && sessionStorage.getItem('backendVersion');
+  import { backendMetadata } from '$lib/state/BackendMetadata.svelte';
 </script>
 
 <footer class="bottom-0 flex flex-none items-center justify-between px-2 text-sm">
@@ -14,10 +12,9 @@
     by the <a target="_blank" href={PUBLIC_GITHUB_PROJECT_URL}> OpenShock Team</a>
   </div>
   <div>
-    {#if version}
-      {@const commit = sessionStorage.getItem('backendCommit')}
-      <span title={commit ? `Commit ${commit}` : undefined} class="text-blue-500">
-        API {version}
+    {#if backendMetadata.State.version}
+      <span title={`Commit ${backendMetadata.State.commit}`} class="text-blue-500">
+        API {backendMetadata.State.version}
       </span>
     {/if}
     <span

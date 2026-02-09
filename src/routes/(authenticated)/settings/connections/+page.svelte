@@ -16,6 +16,7 @@
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
   import DisconnectDialog from './dialog-oauth-disconnect.svelte';
+  import { backendMetadata } from '$lib/state/BackendMetadata.svelte';
 
   // ---------- state
   let loading = $state(false); // overall refresh button state
@@ -26,10 +27,7 @@
   let queryStatus = $derived(page.url.searchParams.get('status'));
 
   // Data
-  let providers = $state<string[]>(JSON.parse(sessionStorage.getItem('oAuthProviders') ?? '[]'));
   let connections = $state<OAuthConnectionResponse[]>([]);
-
-  $inspect(providers);
 
   // Disconnect dialog
   let disconnectDialog = $state<{ open: boolean; providerKey?: string; displayName?: string }>({
@@ -123,7 +121,7 @@
           {#if loadingProviders}
             <Dropdown.Item disabled>Loading…</Dropdown.Item>
           {:else}
-            {#each providers as provider}
+            {#each backendMetadata.State.oAuthProviders as provider}
               {#if !isConnected(provider)}
                 <Dropdown.Item>
                   <Link2 class="mr-2 size-4" />
@@ -161,7 +159,7 @@
       </div>
     {:else}
       <div class="grid gap-3 md:grid-cols-2">
-        {#each providers as p}
+        {#each backendMetadata.State.oAuthProviders as p}
           {#if isConnected(p)}
             <div class="flex items-center justify-between rounded-xl border p-4">
               <div class="min-w-0">
