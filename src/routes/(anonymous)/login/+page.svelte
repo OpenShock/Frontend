@@ -1,7 +1,5 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import { page } from '$app/state';
   import { accountV2Api } from '$lib/api';
   import { GetOAuthAuthorizeUrl } from '$lib/api/next/oauth';
   import Container from '$lib/components/Container.svelte';
@@ -14,6 +12,7 @@
   import { initializeSignalR } from '$lib/signalr';
   import { UserStore } from '$lib/stores/UserStore';
   import type { ValidationResult } from '$lib/types/ValidationResult';
+  import { gotoQueryRedirectOrFallback } from '$lib/utils/url';
 
   let usernameOrEmail = $state('');
   let password = $state('');
@@ -42,8 +41,10 @@
         email: account.accountEmail,
         roles: account.accountRoles,
       });
-      await initializeSignalR();
-      goto(page.url.searchParams.get('redirect') ?? '/home');
+
+      initializeSignalR(); // Fire and forget
+
+      gotoQueryRedirectOrFallback('/home', 'redirect');
     } catch (error) {
       await handleApiError(error, (problem) => {
         if (!isValidationError(problem)) return false;

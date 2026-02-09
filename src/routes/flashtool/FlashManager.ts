@@ -12,7 +12,7 @@ async function setupESPLoader(
 ): Promise<ESPLoader | null> {
   try {
     await serialPort.close(); // TODO: Find some way to detect if the port is already open
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   } catch (e) {
     /* empty */
   }
@@ -60,7 +60,7 @@ function appendBuffer(buffer: Uint8Array | null, data: Uint8Array): Uint8Array {
 async function setupApplication(serialPort: SerialPort): Promise<SerialPort | null> {
   try {
     await serialPort.close(); // TODO: Find some way to detect if the port is already open
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   } catch (e) {
     /* empty */
   }

@@ -1,4 +1,6 @@
 <script lang="ts">
+  /* eslint-disable svelte/no-navigation-without-resolve */
+
   import { Input } from '$lib/components/ui/input';
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import { GetValResColor, type ValidationResult } from '$lib/types/ValidationResult';
@@ -79,6 +81,7 @@
     >
       {validationResult.message}
       {#if validationResult.link}
+        <!-- This must not be resolved, it in some cases points to external websites (HaveIBeenPwned) -->
         <a
           href={validationResult.link.href}
           target="_blank"

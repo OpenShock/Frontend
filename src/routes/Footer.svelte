@@ -1,4 +1,6 @@
 <script lang="ts">
+  /* eslint-disable svelte/no-navigation-without-resolve */
+
   import { HubConnectionState } from '@microsoft/signalr';
   import { PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
   import { SignalR_State } from '$lib/signalr';

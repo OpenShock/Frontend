@@ -17,9 +17,9 @@
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card';
-  import { renderComponent, renderSnippet } from '$lib/components/ui/data-table';
+  import { renderComponent } from '$lib/components/ui/data-table';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { createRawSnippet, onMount } from 'svelte';
+  import { onMount } from 'svelte';
   import DataTableActions from './data-table-actions.svelte';
   import CreatePublicShareDialog from './dialog-publicshare-create.svelte';
 

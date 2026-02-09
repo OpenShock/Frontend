@@ -144,7 +144,7 @@
           <b>{windowQueryParams.name}</b> is requesting an API Token with the following permissions:
         </span>
         <ul class="list-disc pl-5">
-          {#each windowQueryParams.permissions as permission}
+          {#each windowQueryParams.permissions as permission (permission)}
             <li>{permission}</li>
           {/each}
         </ul>

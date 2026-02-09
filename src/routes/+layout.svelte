@@ -5,7 +5,7 @@
   import { SidebarProvider } from '$lib/components/ui/sidebar';
   import { Toaster } from '$lib/components/ui/sonner';
   import { buildMetaData } from '$lib/metadata';
-  import { type Snippet, onMount } from 'svelte';
+  import { type Snippet } from 'svelte';
   import Footer from './Footer.svelte';
   import Header from './Header.svelte';
   import Sidebar from './Sidebar.svelte';

@@ -1,14 +1,16 @@
 <script lang="ts">
   import { afterNavigate } from '$app/navigation';
-  import { asset, resolve } from '$app/paths';
+  import { asset, base } from '$app/paths';
   import { page } from '$app/state';
+  import type { Pathname } from '$app/types';
   import { PUBLIC_SITE_NAME } from '$env/static/public';
   import { BasicTags, OpenGraphTags, TwitterSummaryTags } from '$lib/components/metadata';
+  import { unsafeResolve } from '$lib/utils/url';
 
-  let previousPage = $state<string>(resolve('/'));
+  let previousPage = $state<Pathname>('/');
 
   afterNavigate(({ from }) => {
-    previousPage = from?.url?.pathname || previousPage;
+    previousPage = (from?.url?.pathname || '/') as Pathname;
   });
 
   const meta = {
@@ -37,6 +39,8 @@
   <div class="big">
     {page.error?.message ?? 'Something went wrong.'}
     <br />
-    <a href={previousPage}>Go back</a>
+    <!-- I know this is deprecated buy resolve() is too strict to be used here... -->
+    <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+    <a href={unsafeResolve(previousPage)}>Go back</a>
   </div>
 </div>

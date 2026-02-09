@@ -61,7 +61,7 @@
       <Zap size="15" />
       <p class="ml-2 inline-block sm:hidden">{share.shares.length}</p>
       <div class="hidden sm:inline-block">
-        {#each share.shares as shocker}
+        {#each share.shares as shocker (shocker.id)}
           <Tooltip.Root>
             <Tooltip.Trigger>
               <Badge class="ml-2" variant={shocker.paused !== 0 ? 'destructive' : 'default'}

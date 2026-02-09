@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
   import { accountV2Api } from '$lib/api';
   import Container from '$lib/components/Container.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
@@ -38,7 +39,7 @@
       toast.success(
         'Account created successfully. Please check your email to verify your account.'
       );
-      goto('/login');
+      goto(resolve('/login'));
     }
   }
 

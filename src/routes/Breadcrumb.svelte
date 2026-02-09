@@ -6,7 +6,7 @@
 {#if breadcrumbs.State.length > 0}
   <Breadcrumb.Root>
     <Breadcrumb.List>
-      {#each breadcrumbs.State as crumb, index}
+      {#each breadcrumbs.State as crumb, index (index)}
         <Breadcrumb.Item>
           {#if index < breadcrumbs.State.length - 1}
             <Breadcrumb.Link href={crumb.href} class="text-gray-600 dark:text-gray-300">

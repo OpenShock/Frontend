@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ChartNoAxesGantt, ClockFading, Gauge, Pause } from '@lucide/svelte';
+  import { ClockFading, Gauge, Pause } from '@lucide/svelte';
   import type { SharedShocker } from '$lib/api/internal/v1';
   import {
     ControlDurationDefault,

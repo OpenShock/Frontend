@@ -44,7 +44,7 @@
 </script>
 
 <div>
-  {#each Buttons as { type, Icon }}
+  {#each Buttons as { type, Icon } (type)}
     {@const isDisabled = disabled || disabledControls[type]}
     <button
       class={cn(buttonClasses, {

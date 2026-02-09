@@ -5,6 +5,7 @@
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { toast } from 'svelte-sonner';
   import type { OnlineHub } from './columns';
+  import { resolve } from '$app/paths';
 
   interface Props {
     hub: OnlineHub;
@@ -34,7 +35,7 @@
   <DropdownMenu.Content>
     <DropdownMenu.Item onclick={copyId}>Copy ID</DropdownMenu.Item>
     <DropdownMenu.Item onclick={copyUserId}>Copy User ID</DropdownMenu.Item>
-    <DropdownMenu.Item onclick={() => goto(`/admin/users/${hub.owner.id}`)}>
+    <DropdownMenu.Item onclick={() => goto(resolve(`/admin/users/${hub.owner.id}`))}>
       View User
     </DropdownMenu.Item>
     <DropdownMenu.Item>Edit</DropdownMenu.Item>
