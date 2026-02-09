@@ -11,6 +11,8 @@
   import type { Snippet } from 'svelte';
   import type { FullAutoFill } from 'svelte/elements';
   import PasswordStrengthMeter from './impl/PasswordStrengthMeter.svelte';
+  import { FieldLabel } from '../ui/field';
+  import { resolve } from '$app/paths';
 
   interface Props {
     label: string;
@@ -22,6 +24,7 @@
     validate?: boolean | 'string' | 'pwned' | ValidationResult | null;
     showStrengthMeter?: boolean;
     Icon?: AnyComponent;
+    showForget?: boolean;
   }
 
   let {
@@ -34,6 +37,7 @@
     validate = false,
     showStrengthMeter = false,
     Icon,
+    showForget = true,
   }: Props = $props();
 
   let validationResult = $state<ValidationResult | null>(null);
@@ -127,7 +131,6 @@
 
 <TextInput
   type={valueShown ? 'text' : 'password'}
-  {label}
   {placeholder}
   {autocomplete}
   bind:value
@@ -136,13 +139,26 @@
   onblur={() => (showPopup = false)}
   popup={showPopup ? (popup as Snippet) : undefined}
 >
+  {#snippet labelSnippet(id: string)}
+    <div class="flex items-center">
+      <FieldLabel for={id}>{label}</FieldLabel>
+      {#if showForget}
+        <a
+          href={resolve('/forgot-password')}
+          class="ms-auto text-sm underline-offset-4 hover:underline"
+        >
+          Forgot your password?
+        </a>
+      {/if}
+    </div>
+  {/snippet}
   {#snippet after()}
     <Button
       type="button"
-      class="cursor-pointer"
+      class="h-7 w-7 cursor-pointer"
       onclick={() => (valueShown = !valueShown)}
       variant="ghost"
-      disabled={value.length == 0}
+      size="icon"
     >
       {#if valueShown}
         <EyeOff />

@@ -301,7 +301,7 @@
         <span class="ml-1.5 grow">
           <img
             class="h-7.5 transition-opacity delay-100 duration-200 group-data-[collapsible=icon]:opacity-0 group-data-[collapsible=icon]:delay-0"
-            src="/LogoTextOnly.svg"
+            src={asset('/LogoTextOnly.svg')}
             alt="OpenShock Logo"
           />
         </span>

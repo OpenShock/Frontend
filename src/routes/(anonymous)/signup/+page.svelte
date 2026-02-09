@@ -1,133 +1,17 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
-  import { accountV2Api } from '$lib/api';
+  import { asset } from '$app/paths';
   import Container from '$lib/components/Container.svelte';
-  import Turnstile from '$lib/components/Turnstile.svelte';
-  import EmailInput from '$lib/components/input/EmailInput.svelte';
-  import PasswordInput from '$lib/components/input/PasswordInput.svelte';
-  import UsernameInput from '$lib/components/input/UsernameInput.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
-  import { toast } from 'svelte-sonner';
-
-  let username = $state<string>('');
-  let usernameValid = $state<boolean>(false);
-
-  let email = $state('');
-  let emailValid = $state(false);
-
-  let password = $state('');
-  let passwordValid = $state(false);
-
-  let passwordConfirm = $state('');
-
-  let turnstileResponse = $state<string | null>(null);
-
-  let canSubmit = $derived(
-    usernameValid && emailValid && passwordValid && password == passwordConfirm && turnstileResponse
-  );
-
-  let accountCreated = $state(false);
-
-  function onOpenChange(open: boolean) {
-    if (!open) {
-      accountCreated = false;
-      toast.success(
-        'Account created successfully. Please check your email to verify your account.'
-      );
-      goto('/login');
-    }
-  }
-
-  async function handleSubmission(e: SubmitEvent) {
-    e.preventDefault();
-
-    if (!username || !email || !password || !passwordConfirm || !turnstileResponse) {
-      return;
-    }
-
-    try {
-      await accountV2Api.accountSignUpV2({
-        username,
-        password,
-        email,
-        turnstileResponse,
-      });
-      accountCreated = true;
-    } catch (error) {
-      await handleApiError(error, (problem) => {
-        if (!isValidationError(problem)) return false;
-
-        console.log(mapToValRes(problem, 'Username'));
-        console.log(mapToValRes(problem, 'Password'));
-        console.log(mapToValRes(problem, 'Email'));
-        console.log(mapToValRes(problem, 'TurnstileResponse'));
-
-        return true;
-      });
-    } finally {
-      turnstileResponse = null;
-    }
-  }
-
-  let ack = $state(false);
+  import SignupForm from '$lib/components/auth/signup-form.svelte';
 </script>
 
-<Dialog.Root bind:open={() => accountCreated, onOpenChange}>
-  <Dialog.Content>
-    <Dialog.Header>
-      <Dialog.Title>Account created</Dialog.Title>
-      <Dialog.Description>
-        Your account has been created. Please check your email to verify your account.
-
-        <!-- TODO: button to go to login screen -->
-      </Dialog.Description>
-    </Dialog.Header>
-  </Dialog.Content>
-</Dialog.Root>
-
-<Container class="items-center">
-  {#if !ack}
-    <div class="text-5xl font-semibold text-nowrap text-red-500">
-      Do not use this frontend to register a new account, this is a WIP, please go to
-      https://openshock.app
-    </div>
-    <Button variant="destructive" onclick={() => (ack = true)}>
-      I acknowledge that I have read this message and that this frontend is not functional yet.
-    </Button>
-  {:else}
-    <form class="flex flex-col gap-2" onsubmit={handleSubmission}>
-      <div class="text-3xl font-semibold text-nowrap">Sign Up</div>
-      <UsernameInput
-        label="Username"
-        placeholder="Username"
-        bind:value={username}
-        bind:valid={usernameValid}
-      />
-      <EmailInput label="Email" placeholder="Email" bind:value={email} bind:valid={emailValid} />
-      <PasswordInput
-        label="Password"
-        placeholder="Password"
-        autocomplete="new-password"
-        bind:value={password}
-        bind:valid={passwordValid}
-        validate
-        showStrengthMeter
-      />
-      <PasswordInput
-        label="Confirm Password"
-        placeholder="Confirm Password"
-        autocomplete="new-password"
-        bind:value={passwordConfirm}
-        validate={validatePasswordMatch(passwordConfirm, password)}
-      />
-
-      <Turnstile action="signup" bind:response={turnstileResponse} />
-
-      <Button type="submit" disabled={!canSubmit}>Sign Up</Button>
-    </form>
-  {/if}
+<Container class="items-center-safe justify-center-safe p-4">
+  <span class="flex items-center gap-2 self-center font-medium">
+    <img class="ml-[0.667px] h-7.5" src={asset('/IconSpinning.svg')} alt="OpenShock Logo" />
+    <img
+      class="h-7.5 transition-opacity delay-100 duration-200 group-data-[collapsible=icon]:opacity-0 group-data-[collapsible=icon]:delay-0"
+      src={asset('/LogoTextOnly.svg')}
+      alt="OpenShock Logo"
+    />
+  </span>
+  <SignupForm />
 </Container>

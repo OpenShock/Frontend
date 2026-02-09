@@ -5,10 +5,18 @@
   import { cn } from '$lib/utils/shadcn.js';
   import type { Snippet } from 'svelte';
   import type { ClipboardEventHandler, FocusEventHandler, FullAutoFill } from 'svelte/elements';
+  import {
+    FieldGroup,
+    Field,
+    FieldLabel,
+    FieldDescription,
+    FieldSeparator,
+  } from '$lib/components/ui/field/index.js';
 
   interface Props {
     type?: 'text' | 'email' | 'password' | 'search' | 'url';
     label?: string;
+    labelSnippet?: Snippet<[string]>;
     placeholder?: string;
     autocomplete?: FullAutoFill;
     value: string;
@@ -25,6 +33,7 @@
   let {
     type = 'text',
     label,
+    labelSnippet,
     placeholder,
     autocomplete,
     value = $bindable(),
@@ -37,42 +46,60 @@
   }: Props = $props();
 </script>
 
-<label class="w-full">
-  {#if label}
-    <span>{label}</span>
+<Field>
+  {#if labelSnippet}
+    {@render labelSnippet(id)}
   {/if}
+
+  {#if label}
+    <FieldLabel for={id}>{label}</FieldLabel>
+  {/if}
+
   <div class="relative flex grow flex-row items-center gap-2">
     {#if Icon}
       <Icon />
     {/if}
-    <Input
-      {type}
-      class="grow"
-      title={label}
-      {placeholder}
-      {autocomplete}
-      bind:value
-      {onblur}
-      {onpaste}
-      aria-invalid={validationResult ? !validationResult.valid : undefined}
-      aria-describedby={validationResult?.message ? validationId : undefined}
-    />
+    <div
+      class={cn(
+        'flex w-full items-center',
+        after &&
+          'border-input bg-background dark:bg-input/30 has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-ring/50 has-[input[aria-invalid=true]]:ring-destructive/20 dark:has-[input[aria-invalid=true]]:ring-destructive/40 has-[input[aria-invalid=true]]:border-destructive h-9 rounded-md border pr-1 shadow-xs transition-[color,box-shadow] has-[input:focus-visible]:ring-[3px]'
+      )}
+    >
+      <Input
+        {id}
+        {type}
+        class={cn(
+          after
+            ? 'flex-1 border-0 bg-transparent shadow-none focus-visible:ring-0 dark:bg-transparent'
+            : 'grow'
+        )}
+        title={label}
+        {placeholder}
+        {autocomplete}
+        bind:value
+        {onblur}
+        {onpaste}
+        aria-invalid={validationResult ? !validationResult.valid : undefined}
+        aria-describedby={validationResult?.message ? validationId : undefined}
+      />
+      {#if after}
+        {@render after()}
+      {/if}
+    </div>
     {#if popup}
       <div
-        class="absolute top-full left-0 z-10 mt-1 w-full rounded-md border border-gray-200 bg-white p-1 shadow-lg dark:border-gray-700 dark:bg-gray-800"
+        class="absolute top-full left-0 z-10 mt-1 w-full rounded-md border border-gray-200 bg-white p-2 shadow-lg dark:border-gray-700 dark:bg-gray-800"
         role="tooltip"
       >
         {@render popup()}
       </div>
     {/if}
-    {#if after}
-      {@render after()}
-    {/if}
   </div>
   {#if validationResult?.message}
     <p
       id={validationId}
-      class={cn('mt-0! h-4 truncate text-xs', `text-${GetValResColor(validationResult)}`)}
+      class={cn('-mt-2! mb-2 h-4 truncate text-xs', `text-${GetValResColor(validationResult)}`)}
       role="status"
       aria-atomic="true"
       aria-live="polite"
@@ -90,6 +117,6 @@
       {/if}
     </p>
   {:else}
-    <div class="h-4" aria-hidden="true"></div>
+    <div class="-mt-2! mb-2 h-4" aria-hidden="true"></div>
   {/if}
-</label>
+</Field>
