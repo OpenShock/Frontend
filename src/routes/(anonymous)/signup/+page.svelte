@@ -1,7 +1,7 @@
 <script lang="ts">
   import { asset } from '$app/paths';
   import Container from '$lib/components/Container.svelte';
-  import SignupForm from '$lib/components/signup-form.svelte';
+  import SignupForm from '$lib/components/auth/signup-form.svelte';
 </script>
 
 <Container class="items-center-safe justify-center-safe p-4">

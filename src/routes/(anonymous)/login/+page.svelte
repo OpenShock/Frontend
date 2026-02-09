@@ -1,6 +1,6 @@
 <script lang="ts">
   import Container from '$lib/components/Container.svelte';
-  import LoginForm from '$lib/components/login-form.svelte';
+  import LoginForm from '$lib/components/auth/login-form.svelte';
   import { asset, resolve } from '$app/paths';
 </script>
 

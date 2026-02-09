@@ -3,22 +3,21 @@
   import { Button } from '$lib/components/ui/button/index.js';
   import * as Card from '$lib/components/ui/card/index.js';
   import * as Field from '$lib/components/ui/field/index.js';
-  import { Input } from '$lib/components/ui/input/index.js';
   import type { HTMLAttributes } from 'svelte/elements';
-  import UsernameInput from './input/UsernameInput.svelte';
+  import UsernameInput from '../input/UsernameInput.svelte';
   import { goto } from '$app/navigation';
-  import { asset, resolve } from '$app/paths';
+  import { resolve } from '$app/paths';
   import { accountV2Api } from '$lib/api';
-  import Container from '$lib/components/Container.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
   import EmailInput from '$lib/components/input/EmailInput.svelte';
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
-  import SignupForm from '$lib/components/signup-form.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
   import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
   import { toast } from 'svelte-sonner';
+  import FieldSeparator from '../ui/field/field-separator.svelte';
+  import OauthButtons from './oauth-buttons.svelte';
 
   let { class: className, ...restProps }: HTMLAttributes<HTMLDivElement> = $props();
 
@@ -106,8 +105,13 @@
       <Card.Description>Enter your email below to create your account</Card.Description>
     </Card.Header>
     <Card.Content>
-      <form onsubmit={handleSubmission}>
-        <Field.Group>
+      <Field.Group>
+        <OauthButtons />
+        <FieldSeparator class="*:data-[slot=field-separator-content]:bg-card">
+          Or continue with
+        </FieldSeparator>
+
+        <form onsubmit={handleSubmission}>
           <div class="my-1 flex flex-col gap-1">
             <UsernameInput
               label="Username"
@@ -141,14 +145,14 @@
             />
             <Turnstile action="signup" bind:response={turnstileResponse} />
           </div>
-          <Field.Field>
+          <Field.Field class="mt-5">
             <Button type="submit" disabled={!canSubmit}>Create Account</Button>
             <Field.Description class="text-center">
               Already have an account? <a href={resolve('/login')}>Sign in</a>
             </Field.Description>
           </Field.Field>
-        </Field.Group>
-      </form>
+        </form>
+      </Field.Group>
     </Card.Content>
   </Card.Root>
   <Field.Description class="px-6 text-center">

@@ -4,18 +4,14 @@
   import {
     FieldGroup,
     Field,
-    FieldLabel,
     FieldDescription,
     FieldSeparator,
   } from '$lib/components/ui/field/index.js';
-  import { Input } from '$lib/components/ui/input/index.js';
   import { cn } from '$lib/utils';
   import type { HTMLAttributes } from 'svelte/elements';
-  import { GetOAuthAuthorizeUrl } from '$lib/api/next/oauth';
-  import DiscordIcon from './svg/DiscordIcon.svelte';
-  import TextInput from './input/TextInput.svelte';
+  import TextInput from '../input/TextInput.svelte';
   import type { ValidationResult } from '$lib/types/ValidationResult';
-  import PasswordInput from './input/PasswordInput.svelte';
+  import PasswordInput from '../input/PasswordInput.svelte';
   let { class: className, ...restProps }: HTMLAttributes<HTMLDivElement> = $props();
   import Turnstile from '$lib/components/Turnstile.svelte';
   import { resolve } from '$app/paths';
@@ -26,6 +22,7 @@
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
   import { page } from '$app/state';
+  import OauthButtons from './oauth-buttons.svelte';
 
   let usernameOrEmail = $state('');
   let password = $state('');
@@ -79,18 +76,7 @@
     </Card.Header>
     <Card.Content>
       <FieldGroup>
-        <Field>
-          <form action={GetOAuthAuthorizeUrl('discord', 'LoginOrCreate')} method="POST">
-            <Button variant="outline" type="submit" class="w-full"
-              ><DiscordIcon /> Login with Discord</Button
-            >
-          </form>
-          <form action={GetOAuthAuthorizeUrl('twitter', 'LoginOrCreate')} method="POST">
-            <Button variant="outline" type="submit" class="w-full"
-              ><DiscordIcon /> Login with X (Twitter)</Button
-            >
-          </form>
-        </Field>
+        <OauthButtons />
         <FieldSeparator class="*:data-[slot=field-separator-content]:bg-card">
           Or continue with
         </FieldSeparator>
