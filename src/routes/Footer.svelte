@@ -1,13 +1,11 @@
 <script lang="ts">
   import { HubConnectionState } from '@microsoft/signalr';
-  import { browser } from '$app/environment';
   import { PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
   import { SignalR_State } from '$lib/signalr';
   import { Wifi, WifiOff } from '@lucide/svelte';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
   import { Button } from '$lib/components/ui/button';
-
-  const version = browser && sessionStorage.getItem('backendVersion');
+  import { backendMetadata } from '$lib/state/BackendMetadata.svelte';
 </script>
 
 <footer
@@ -48,13 +46,12 @@
                 </p></td
               >
             </tr>
-            {#if version}
-              {@const commit = sessionStorage.getItem('backendCommit')}
-              <tr>
-                <td>Backend Version</td>
-                <td title={commit ? `Commit ${commit}` : undefined}>{version}</td>
-              </tr>
-            {/if}
+            <tr>
+              <td>Backend Version</td>
+              <td title={`Commit ${backendMetadata.State.commit}`}
+                >{backendMetadata.State.version}</td
+              >
+            </tr>
           </tbody>
         </table>
       </DropdownMenu.Content>

@@ -7,6 +7,7 @@
   import { ColorScheme, colorScheme } from '$lib/stores/ColorSchemeStore.svelte';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
+  import { backendMetadata } from '$lib/state/BackendMetadata.svelte';
 
   interface Props {
     action: string;
@@ -31,7 +32,7 @@
     const theme = colorScheme.Value === ColorScheme.System ? 'auto' : colorScheme.Value;
 
     widgetId = window.turnstile!.render(element, {
-      sitekey: sessionStorage.getItem('turnstileSiteKey')!,
+      sitekey: backendMetadata.State.turnstileSiteKey!,
       action,
       cData,
       theme,
@@ -45,6 +46,10 @@
   onMount(() => {
     if (dev) {
       response = PUBLIC_TURNSTILE_DEV_BYPASS_VALUE;
+      return;
+    }
+    if (!backendMetadata.State.turnstileSiteKey) {
+      console.error('Backend did not provide a Turnstile site key!');
       return;
     }
 

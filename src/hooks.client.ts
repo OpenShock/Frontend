@@ -1,21 +1,11 @@
-import { metaApi } from '$lib/api';
 import { initializeSignalR } from '$lib/signalr';
+import { backendMetadata } from '$lib/state/BackendMetadata.svelte';
 import { initializeDarkModeStore } from '$lib/stores/ColorSchemeStore.svelte';
 import { initializeSerialPortsStore } from '$lib/stores/SerialPortsStore';
 import { UserStore } from '$lib/stores/UserStore';
 
 export async function init() {
-  const {
-    data: { version, commit, shortLinkUrl, turnstileSiteKey, oAuthProviders, isUserAuthenticated },
-  } = await metaApi.versionGetBackendInfo();
-
-  if (version != null) sessionStorage.setItem('backendVersion', String(version));
-  if (commit != null) sessionStorage.setItem('backendCommit', String(commit));
-  if (shortLinkUrl != null) sessionStorage.setItem('shortLinkUrl', String(shortLinkUrl));
-  if (turnstileSiteKey != null)
-    sessionStorage.setItem('turnstileSiteKey', String(turnstileSiteKey));
-  if (oAuthProviders != null)
-    sessionStorage.setItem('oAuthProviders', JSON.stringify(oAuthProviders));
+  const { isUserAuthenticated } = await backendMetadata.init();
 
   // init client-side stores
   initializeDarkModeStore();
