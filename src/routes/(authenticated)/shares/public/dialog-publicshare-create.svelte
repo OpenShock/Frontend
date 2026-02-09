@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { type DateValue, ZonedDateTime, getLocalTimeZone, today } from '@internationalized/date';
+  import { type DateValue, ZonedDateTime, getLocalTimeZone } from '@internationalized/date';
   import { publicShockerSharesApi } from '$lib/api';
   import DateTimePicker from '$lib/components/datetime-picker/date-time-picker.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
