@@ -33,7 +33,7 @@ export class ShareLinkSignalr {
     const connection = new HubConnectionBuilder()
       .configureLogging(dev ? LogLevel.Debug : LogLevel.Warning)
       .withUrl(
-        /* eslint-disable svelte/prefer-svelte-reactivity */
+        /* eslint-disable-next-line svelte/prefer-svelte-reactivity */
         new URL(
           `1/hubs/share/link/${this.shareLinkId}?name=${this.customName}`,
           PUBLIC_BACKEND_API_URL

@@ -1,10 +1,10 @@
 <script lang="ts">
+  /* eslint-disable svelte/no-navigation-without-resolve */
+
   import { HubConnectionState } from '@microsoft/signalr';
   import { PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
   import { SignalR_State } from '$lib/signalr';
   import { backendMetadata } from '$lib/state/BackendMetadata.svelte';
-
-  /* eslint-disable svelte/no-navigation-without-resolve */
 </script>
 
 <footer class="bottom-0 flex flex-none items-center justify-between px-2 text-sm">
