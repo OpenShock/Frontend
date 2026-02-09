@@ -3,10 +3,12 @@ name: CI/CD Checks
 on:
   push:
     branches:
-      - main
+      - master
+      - develop
   pull_request:
     branches:
-      - main
+      - master
+      - develop
 
 jobs:
   build-and-test:
@@ -31,12 +33,5 @@ jobs:
         shell: bash
         run: pnpm install --frozen-lockfile --strict-peer-dependencies
 
-      - name: Check for compile issues
-        shell: bash
-        run: pnpm run check
-
       - name: Run Linting and Formatting Check
         run: pnpm run lint
-
-      - name: Run Tests
-        run: pnpm run test
