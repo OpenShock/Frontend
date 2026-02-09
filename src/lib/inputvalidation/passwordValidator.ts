@@ -68,7 +68,7 @@ export function getPasswordStrength(value: string): {
     text = 'None';
     color = 'gray-500';
   } else {
-    percent = Math.min((calculateStringEntropy(value) / 120) * 100, 100);
+    percent = Math.min((calculateStringEntropy(value) / 120) * 170, 100);
 
     if (percent < 30) {
       text = 'Very weak';
