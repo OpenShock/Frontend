@@ -1,16 +1,11 @@
 <script lang="ts">
   import { CircleUser, LogIn, Undo2 } from '@lucide/svelte';
-  import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import { publicShockerSharesApi } from '$lib/api';
   import type { PublicShareResponse } from '$lib/api/internal/v1';
-  import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
-  import PublicShareClassicControlModule from '$lib/components/ControlModules/PublicShareClassicControlModule.svelte';
-  import SimpleControlModule from '$lib/components/ControlModules/SimpleControlModule.svelte';
   import { Button } from '$lib/components/ui/button';
   import * as Card from '$lib/components/ui/card/index.js';
-  import * as Form from '$lib/components/ui/form/index.js';
   import Input from '$lib/components/ui/input/input.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { UserStore } from '$lib/stores/UserStore';

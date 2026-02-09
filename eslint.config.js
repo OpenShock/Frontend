@@ -53,6 +53,7 @@ export default ts.config(
       'pnpm-lock.yaml',
       'package-lock.json',
       'yarn.lock',
+      'src/lib/api/internal'
     ],
   }
 );

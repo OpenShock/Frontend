@@ -51,7 +51,6 @@ function getSvelteBasePath() {
 }
 
 const commitHash = getGitHash();
-const branchName = getGitBranch();
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {

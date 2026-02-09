@@ -2,10 +2,11 @@
   import { afterNavigate } from '$app/navigation';
   import { asset, resolve } from '$app/paths';
   import { page } from '$app/state';
+  import type { Pathname } from '$app/types';
   import { PUBLIC_SITE_NAME } from '$env/static/public';
   import { BasicTags, OpenGraphTags, TwitterSummaryTags } from '$lib/components/metadata';
 
-  let previousPage = $state<string>(resolve('/'));
+  let previousPage = $state<Pathname>('/');
 
   afterNavigate(({ from }) => {
     previousPage = from?.url?.pathname || previousPage;
@@ -37,6 +38,6 @@
   <div class="big">
     {page.error?.message ?? 'Something went wrong.'}
     <br />
-    <a href={previousPage}>Go back</a>
+    <a href={resolve(previousPage)}>Go back</a>
   </div>
 </div>

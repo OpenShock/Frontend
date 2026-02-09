@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Barcode, Code, User } from '@lucide/svelte';
+  import { Barcode, User } from '@lucide/svelte';
   import { shockerSharesV2Api } from '$lib/api';
   import { type BasicUserInfo } from '$lib/api/internal/v1';
   import RestrictionsSelector from '$lib/components/shares/restrictions-selector.svelte';

@@ -38,7 +38,7 @@ function GetBasePath(): string {
     }
 
     // Normalize pathname
-    let pathname = url.pathname === '/' ? '' : url.pathname.replace(/\/+$/, '');
+    const pathname = url.pathname === '/' ? '' : url.pathname.replace(/\/+$/, '');
 
     return `${url.origin}${pathname}`;
   } catch (error) {
