@@ -14,7 +14,8 @@
 		"format": "prettier --write .",
 		"test": "npm run test:unit -- --run && npm run test:e2e",
 		"test:e2e": "playwright test",
-		"test:unit": "vitest"
+		"test:unit": "vitest",
+		"regen-api": "node scripts/regenerate-api.js"
 	},
 	"devDependencies": {
 		"@changesets/changelog-github": "^0.5.2",
