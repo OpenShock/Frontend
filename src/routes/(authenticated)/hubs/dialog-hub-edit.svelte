@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { hubManagementV1Api, hubManagementV2Api } from '$lib/api';
+  import { hubManagementV1Api } from '$lib/api';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import { Button } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';

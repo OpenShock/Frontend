@@ -162,7 +162,7 @@
           </Select.Trigger>
           <Select.Content>
             <Select.Group>
-              {#each expirationOptions as option}
+              {#each expirationOptions as option (option.label)}
                 <Select.Item value={option.value} label={option.label}>{option.label}</Select.Item>
               {/each}
             </Select.Group>
@@ -190,9 +190,9 @@
       <div class="mt-4">
         <h2>Permissions</h2>
         <div class="border-surface-500 mt-3 flex flex-col space-y-4 rounded-md border p-4">
-          {#each permissionCategories as permission}
+          {#each permissionCategories as permission (permission.name)}
             <span>{capitalizeFirstLetter(permission.name)}</span>
-            {#each permission.perms as perm}
+            {#each permission.perms as perm (perm.key)}
               <label class="mt-0! ml-4">
                 <input type="checkbox" class="checkbox" value={perm.key} bind:group={permissions} />
                 {capitalizeFirstLetter(perm.name)}

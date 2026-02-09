@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import { accountV1Api } from '$lib/api';
   import Container from '$lib/components/Container.svelte';
@@ -12,7 +13,7 @@
     if (!secret) return;
     accountV1Api
       .accountActivate(secret)
-      .then(() => goto('/login'))
+      .then(() => goto(resolve('/login')))
       .catch(handleApiError);
   }
 </script>

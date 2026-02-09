@@ -1,8 +1,9 @@
 <script lang="ts">
+  import type { ChildrenFunc } from '$lib/types/ChildrenFunc';
   import { cn } from '$lib/utils';
 
   interface Props {
-    children: () => any;
+    children: ChildrenFunc;
     class?: string;
   }
 

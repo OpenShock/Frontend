@@ -16,7 +16,7 @@
     Wrench,
     Zap,
   } from '@lucide/svelte';
-  import { asset, resolve } from '$app/paths';
+  import { asset, base, resolve } from '$app/paths';
   import { page } from '$app/state';
   import type { Pathname } from '$app/types';
   import { RoleType } from '$lib/api/internal/v1';
@@ -39,6 +39,7 @@
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import { isMobile, isSerialSupported } from '$lib/utils/compatibility';
   import { Collapsible } from 'bits-ui';
+  import { unsafeResolve } from '$lib/utils/url';
 
   let currentUser = $derived($UserStore.self);
 
@@ -227,7 +228,9 @@
   <MenuItem>
     <MenuButton class={menu.class} isActive={isPathMatch(path, menu.href)}>
       {#snippet child({ props })}
-        <a href={menu.href} {...props}>
+        <!-- I know this is deprecated buy resolve() is too strict to be used here... -->
+        <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+        <a href={unsafeResolve(menu.href)} {...props}>
           <menu.Icon />
           <span>{menu.title}</span>
         </a>

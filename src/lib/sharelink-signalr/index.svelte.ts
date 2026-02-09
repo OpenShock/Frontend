@@ -33,6 +33,7 @@ export class ShareLinkSignalr {
     const connection = new HubConnectionBuilder()
       .configureLogging(dev ? LogLevel.Debug : LogLevel.Warning)
       .withUrl(
+        /* eslint-disable svelte/prefer-svelte-reactivity */
         new URL(
           `1/hubs/share/link/${this.shareLinkId}?name=${this.customName}`,
           PUBLIC_BACKEND_API_URL
@@ -58,8 +59,7 @@ export class ShareLinkSignalr {
     });
 
     // Look up in OpenShock API repository: Common/Hubs/IPublicShareHub.cs
-    connection.on('Welcome', (authType) => {
-      // Arg is the AuthType
+    connection.on('Welcome', (/* authType */) => {
       this.signalr_state = HubConnectionState.Connected;
     });
 

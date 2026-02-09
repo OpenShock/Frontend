@@ -1,5 +1,6 @@
 import { browser } from '$app/environment';
 import { goto } from '$app/navigation';
+import { resolve } from '$app/paths';
 import { accountV1Api } from '$lib/api';
 import { destroySignalR } from '$lib/signalr';
 import { UserStore } from '$lib/stores/UserStore';
@@ -25,5 +26,5 @@ export async function load() {
   }
 
   // Go to landing page
-  goto('/');
+  goto(resolve('/'));
 }

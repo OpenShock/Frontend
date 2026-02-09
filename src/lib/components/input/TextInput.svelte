@@ -1,8 +1,10 @@
 <script lang="ts">
+  import { base } from '$app/paths';
   import { Input } from '$lib/components/ui/input';
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import { GetValResColor, type ValidationResult } from '$lib/types/ValidationResult';
   import { cn } from '$lib/utils/shadcn.js';
+  import { unsafeResolve } from '$lib/utils/url';
   import type { Snippet } from 'svelte';
   import type { ClipboardEventHandler, FocusEventHandler, FullAutoFill } from 'svelte/elements';
 
@@ -35,6 +37,8 @@
     onblur,
     onpaste,
   }: Props = $props();
+
+  /* eslint-disable svelte/no-navigation-without-resolve */
 </script>
 
 <label class="w-full">
@@ -79,6 +83,7 @@
     >
       {validationResult.message}
       {#if validationResult.link}
+        <!-- This must not be resolved, it in some cases points to external websites (HaveIBeenPwned) -->
         <a
           href={validationResult.link.href}
           target="_blank"

@@ -12,7 +12,7 @@
   } from '$lib/components/Table/ColumnUtils';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import { Button } from '$lib/components/ui/button';
-  import { CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
+  import { CardHeader, CardTitle } from '$lib/components/ui/card';
   import { renderComponent } from '$lib/components/ui/data-table';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';

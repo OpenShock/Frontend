@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import { OAuthSignupFinalize, OAuthSignupGetData } from '$lib/api/next/oauth';
   import Container from '$lib/components/Container.svelte';
@@ -36,7 +37,8 @@
       });
 
       if (!account.isVerified) {
-        goto('/login?message=signup-success');
+        /* eslint-disable-next-line svelte/no-navigation-without-resolve */
+        goto(resolve('/login') + '?message=signup-success');
         return;
       }
 
@@ -48,7 +50,7 @@
         roles: account.accountRoles,
       });
 
-      goto('/home');
+      goto(resolve('/home'));
     } catch (error) {
       await handleApiError(error, (problem) => {
         if (!isValidationError(problem)) return false;
@@ -77,7 +79,7 @@
       })
       .catch((err) => {
         console.error('Failed to fetch OAuth signup data', err);
-        goto('/login');
+        goto(resolve('/login'));
       });
   });
 </script>

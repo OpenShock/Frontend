@@ -79,7 +79,7 @@
     <meta property="og:locale" content={metaLocale} />
   {/if}
   {#if locales}
-    {#each locales as locale}
+    {#each locales as locale (locale)}
       <meta property="og:locale:alternate" content={locale} />
     {/each}
   {/if}

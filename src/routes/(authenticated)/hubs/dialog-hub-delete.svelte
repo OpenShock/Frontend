@@ -29,7 +29,7 @@
         You are about to delete hub "<strong>{hub.name}</strong>"<br />
         This will also delete the following shockers:
         <div class="flex justify-center gap-2 pt-2 text-sm sm:justify-start">
-          {#each hub.shockers as shocker}
+          {#each hub.shockers as shocker (shocker.id)}
             <Badge>{shocker.name}</Badge>
           {/each}
         </div>
