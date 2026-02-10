@@ -90,8 +90,8 @@ function getPlugins(useLocalRedirect: boolean): PluginOption[] {
     plugins.push(mkcert());
   }
 
-  plugins.push(sveltekit());
   plugins.push(tailwindcss());
+  plugins.push(sveltekit());
   plugins.push(devtoolsJson());
 
   plugins.push(
