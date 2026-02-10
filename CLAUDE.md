@@ -103,7 +103,9 @@ This project uses Svelte 5 with runes enabled and modern AST. Use the new APIs:
   let count = $state(0);
   let doubled = $derived(count * 2);
 
-  $effect(() => { /* side effects */ });
+  $effect(() => {
+    /* side effects */
+  });
 </script>
 ```
 

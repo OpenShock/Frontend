@@ -3,9 +3,7 @@
     "svelte": {
       "type": "stdio",
       "command": "pnpx",
-      "args": [
-        "@sveltejs/mcp"
-      ],
+      "args": ["@sveltejs/mcp"],
       "env": {}
     }
   }
