@@ -16,6 +16,7 @@ export function handleSignalrDeviceStatus(array: unknown) {
         isOnline: entry.online,
         firmwareVersion: entry.firmwareVersion,
         otaInstall: null,
+        otaResult: null,
       });
     });
 
