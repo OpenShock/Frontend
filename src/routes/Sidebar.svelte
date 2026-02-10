@@ -230,7 +230,7 @@
       {#snippet child({ props })}
         <!-- I know this is deprecated buy resolve() is too strict to be used here... -->
         <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-        <a href={unsafeResolve(menu.href)} {...props}>
+        <a href={menu.href ? unsafeResolve(menu.href) : undefined} {...props}>
           <menu.Icon />
           <span>{menu.title}</span>
         </a>
