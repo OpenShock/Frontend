@@ -63,6 +63,7 @@
           // If the redirect parameter is not a valid URL, fall back to the default.
         }
       }
+      // eslint-disable-next-line svelte/no-navigation-without-resolve
       goto(redirectPath);
     } catch (error) {
       await handleApiError(error, (problem) => {

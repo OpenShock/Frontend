@@ -15,6 +15,8 @@ pnpm run test:e2e       # Playwright E2E tests
 pnpm run regen-api      # Regenerate OpenAPI TypeScript clients (requires Java)
 ```
 
+Always use pnpm instead of npm or yarn. This also goes for npx, use pnpx.
+
 ## Architecture
 
 ### Directory Layout
