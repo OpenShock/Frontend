@@ -50,7 +50,20 @@
         roles: account.accountRoles,
       });
       await initializeSignalR();
-      goto(page.url.searchParams.get('redirect') ?? '/home');
+
+      const redirectParam = page.url.searchParams.get('redirect');
+      let redirectPath = '/home';
+      if (redirectParam) {
+        try {
+          const redirectUrl = new URL(redirectParam, page.url.origin);
+          if (redirectUrl.origin === page.url.origin) {
+            redirectPath = redirectUrl.pathname + redirectUrl.search + redirectUrl.hash;
+          }
+        } catch {
+          // If the redirect parameter is not a valid URL, fall back to the default.
+        }
+      }
+      goto(redirectPath);
     } catch (error) {
       await handleApiError(error, (problem) => {
         if (!isValidationError(problem)) return false;

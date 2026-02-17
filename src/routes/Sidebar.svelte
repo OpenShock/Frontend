@@ -16,7 +16,7 @@
     Wrench,
     Zap,
   } from '@lucide/svelte';
-  import { asset, base, resolve } from '$app/paths';
+  import { asset, resolve } from '$app/paths';
   import { page } from '$app/state';
   import type { Pathname } from '$app/types';
   import { RoleType } from '$lib/api/internal/v1';

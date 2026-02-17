@@ -4,7 +4,6 @@
   import { Button } from '$lib/components/ui/button/index.js';
   import * as Card from '$lib/components/ui/card/index.js';
   import * as Field from '$lib/components/ui/field/index.js';
-  import type { HTMLAttributes } from 'svelte/elements';
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';

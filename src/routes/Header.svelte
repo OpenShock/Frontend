@@ -14,7 +14,6 @@
   import { UserStore } from '$lib/stores/UserStore';
   import { cn } from '$lib/utils';
   import Breadcrumb from './Breadcrumb.svelte';
-  import { base } from '$app/paths';
   import { unsafeResolve } from '$lib/utils/url';
 
   let sidebar = useSidebar();
