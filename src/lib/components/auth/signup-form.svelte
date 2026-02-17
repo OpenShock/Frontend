@@ -69,11 +69,6 @@
       await handleApiError(error, (problem) => {
         if (!isValidationError(problem)) return false;
 
-        console.log(mapToValRes(problem, 'Username'));
-        console.log(mapToValRes(problem, 'Password'));
-        console.log(mapToValRes(problem, 'Email'));
-        console.log(mapToValRes(problem, 'TurnstileResponse'));
-
         return true;
       });
     }
