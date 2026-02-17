@@ -1,10 +1,11 @@
 on:
   push:
-    tags:
-      - '*.*'
-      - '*.*.*'
     branches:
-      - '*'
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+    types: [ opened, reopened, synchronize ]
   workflow_dispatch: # Manually invoked by user.
 
 name: ci-build

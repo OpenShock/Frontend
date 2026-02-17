@@ -3,12 +3,11 @@ name: ci-lint
 on:
   push:
     branches:
-      - master
-      - develop
+      - '**'
   pull_request:
     branches:
-      - master
-      - develop
+      - '**'
+    types: [ opened, reopened, synchronize ]
 
 permissions:
   contents: read
