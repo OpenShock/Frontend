@@ -72,7 +72,7 @@
   <Card.Root>
     <Card.Header class="text-center">
       <Card.Title class="text-xl">Welcome back</Card.Title>
-      <Card.Description>Login with your Discord or Twitter account</Card.Description>
+      <Card.Description>Log in with one of your connected accounts</Card.Description>
     </Card.Header>
     <Card.Content>
       <FieldGroup>
