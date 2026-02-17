@@ -46,7 +46,7 @@
   }: Props = $props();
 </script>
 
-<Field>
+<Field class="gap-2">
   {#if labelSnippet}
     {@render labelSnippet(id)}
   {/if}

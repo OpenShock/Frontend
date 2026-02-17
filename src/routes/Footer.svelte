@@ -46,12 +46,14 @@
                 </p></td
               >
             </tr>
-            <tr>
-              <td>Backend Version</td>
-              <td title={`Commit ${backendMetadata.State.commit}`}
-                >{backendMetadata.State.version}</td
-              >
-            </tr>
+            {#if backendMetadata.State}
+              <tr>
+                <td>Backend Version</td>
+                <td title={`Commit ${backendMetadata.State.commit}`}
+                  >{backendMetadata.State.version}</td
+                >
+              </tr>
+            {/if}
           </tbody>
         </table>
       </DropdownMenu.Content>
