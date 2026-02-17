@@ -8,12 +8,12 @@
   import { serializeEmergencyStopMessage } from '$lib/signalr/serializers/EmergencyStop';
   import { serializeRebootMessage } from '$lib/signalr/serializers/Reboot';
   import { toast } from 'svelte-sonner';
-  import { get } from 'svelte/store';
   import type { Hub } from './columns';
   import HubDeleteDialog from './dialog-hub-delete.svelte';
   import HubEditDialog from './dialog-hub-edit.svelte';
   import PairDialog from './dialog-hub-pair.svelte';
   import RegenerateTokenDialog from './dialog-hub-regenerate-token.svelte';
+  import { resolve } from '$app/paths';
 
   interface Props {
     hub: Hub;
@@ -48,7 +48,9 @@
   </DropdownMenu.Trigger>
   <DropdownMenu.Content>
     <DropdownMenu.Item onclick={copyId}>Copy ID</DropdownMenu.Item>
-    <DropdownMenu.Item onclick={() => goto(`/hubs/${hub.id}/update`)}>Update</DropdownMenu.Item>
+    <DropdownMenu.Item onclick={() => goto(resolve(`/hubs/${hub.id}/update`))}
+      >Update</DropdownMenu.Item
+    >
     <DropdownMenu.Item onclick={() => serializeRebootMessage($SignalR_Connection, hub.id)}>
       Reboot
     </DropdownMenu.Item>

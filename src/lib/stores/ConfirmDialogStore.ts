@@ -10,6 +10,7 @@ export interface ConfirmDialogContext<T> {
   descSnippet?: Snippet<[T]>;
 }
 
+/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 export const ConfirmDialogStore = writable<ConfirmDialogContext<any> | null>(null);
 
 export function openConfirmDialog<T>(context: ConfirmDialogContext<T>) {

@@ -16,7 +16,7 @@
   }
 
   let { storeIndex, onOpenEdit }: Props = $props();
-  let userShare = derived(UserShares, ($a) => $a.outgoing[storeIndex]);
+  let userShare = derived(UserShares, (a) => a.outgoing[storeIndex]);
 </script>
 
 <Table.Row onclick={onOpenEdit}>
@@ -36,7 +36,7 @@
       <Zap size="15" />
       <p class="ml-2 inline-block sm:hidden">{$userShare.shares.length}</p>
       <div class="hidden sm:inline-block">
-        {#each $userShare.shares as share}
+        {#each $userShare.shares as share (share.id)}
           <Tooltip.Root>
             <Tooltip.Trigger>
               <Badge class="ml-2" variant={share.paused !== 0 ? 'destructive' : 'default'}

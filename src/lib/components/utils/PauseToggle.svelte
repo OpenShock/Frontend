@@ -4,7 +4,6 @@
   import type { BooleanLegacyDataResponse } from '$lib/api/internal/v1';
   import { Button } from '$lib/components/ui/button';
   import { toast } from 'svelte-sonner';
-  import LoadingCircle from '../svg/LoadingCircle.svelte';
 
   interface Props {
     shockerId: string;

@@ -134,9 +134,10 @@ export function getDateByType(time: Time, type: TimePickerType) {
       return getValidMinuteOrSecond(String(time.second));
     case 'hours':
       return getValidHour(String(time.hour));
-    case '12hours':
+    case '12hours': {
       const hours = display12HourValue(time.hour);
       return getValid12Hour(String(hours));
+    }
     default:
       return '00';
   }

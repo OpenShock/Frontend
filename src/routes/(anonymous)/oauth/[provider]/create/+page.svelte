@@ -37,7 +37,8 @@
       });
 
       if (!account.isVerified) {
-        goto('/login?message=signup-success');
+        /* eslint-disable-next-line svelte/no-navigation-without-resolve */
+        goto(resolve('/login') + '?message=signup-success');
         return;
       }
 
@@ -78,7 +79,7 @@
       })
       .catch((err) => {
         console.error('Failed to fetch OAuth signup data', err);
-        goto('/login');
+        goto(resolve('/login'));
       });
   });
 </script>

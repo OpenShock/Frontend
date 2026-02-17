@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
   import { accountV1Api } from '$lib/api';
   import Container from '$lib/components/Container.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
@@ -24,7 +25,7 @@
       .accountPasswordResetInitiate({ email })
       .then(() => {
         toast.success('Reset password request has been sent to the given email');
-        goto('/login');
+        goto(resolve('/login'));
       })
       .catch(handleApiError);
   }

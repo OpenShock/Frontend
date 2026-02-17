@@ -1,7 +1,7 @@
 import { asset } from '$app/paths';
 import { PUBLIC_SITE_DESCRIPTION, PUBLIC_SITE_NAME } from '$env/static/public';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 function getPageTitleAndDescription(url: URL): { title: string; description: string } {
   const title = PUBLIC_SITE_NAME.trim();
   const details = PUBLIC_SITE_DESCRIPTION.trim();

@@ -4,6 +4,7 @@
   import type { ShockerResponse } from '$lib/api/internal/v1';
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+  import { resolve } from '$app/paths';
 
   interface Props {
     shocker: ShockerResponse;
@@ -12,7 +13,7 @@
   let { shocker }: Props = $props();
 
   function viewLogs() {
-    goto(`/shockers/logs/${shocker.id}`);
+    goto(resolve(`/shockers/logs/${shocker.id}`));
   }
 </script>
 

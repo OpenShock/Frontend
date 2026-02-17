@@ -47,7 +47,7 @@
         <Command.Input placeholder="Search boards..." />
         <Command.Empty>No board found.</Command.Empty>
         <Command.Group>
-          {#each boards as board}
+          {#each boards as board (board)}
             <Command.Item value={board} onSelect={() => (selectedBoard = board)}>
               <Check class={cn('mr-2 size-4', selectedBoard !== board && 'text-transparent')} />
               {board}

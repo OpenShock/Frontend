@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
   import Container from '$lib/components/Container.svelte';
   import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
   import { UserStore } from '$lib/stores/UserStore';
@@ -8,7 +9,7 @@
   let { children }: { children?: Snippet } = $props();
 
   $effect(() => {
-    if (!$UserStore.loading && !$UserStore.self) goto('/login');
+    if (!$UserStore.loading && !$UserStore.self) goto(resolve('/login'));
   });
 </script>
 

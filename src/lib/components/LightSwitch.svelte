@@ -85,7 +85,7 @@
     <span class="sr-only">Toggle theme</span>
   </DropdownMenu.Trigger>
   <DropdownMenu.Content align="end">
-    {#each Object.values(ColorScheme) as value}
+    {#each Object.values(ColorScheme) as value (value)}
       <DropdownMenu.Item
         class="cursor-pointer capitalize"
         onclick={() => evaluateLightSwitch(value)}>{value}</DropdownMenu.Item

@@ -11,7 +11,7 @@
   }
 
   let userInput = $state('');
-  let { fetchedUser = $bindable(null) } = $props();
+  let { fetchedUser = $bindable(null) }: Props = $props();
 
   function check(event: Event) {
     event.preventDefault();

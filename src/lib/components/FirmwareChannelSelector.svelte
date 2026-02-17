@@ -50,7 +50,7 @@
 
 <div class="flex flex-row items-center justify-start gap-2">
   <ToggleGroup.Root type="single" bind:value={channel} {disabled}>
-    {#each FirmwareChannels as key}
+    {#each FirmwareChannels as key (key)}
       <ToggleGroup.Item class="cursor-pointer capitalize" value={key} {disabled}>
         {key}
       </ToggleGroup.Item>

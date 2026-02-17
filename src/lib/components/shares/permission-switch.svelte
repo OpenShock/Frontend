@@ -4,6 +4,7 @@
   import type { Component } from 'svelte';
 
   interface Props {
+    /* eslint-disable-next-line @typescript-eslint/no-empty-object-type */
     icon: Component<IconProps, {}, ''>;
     enabled: boolean;
   }

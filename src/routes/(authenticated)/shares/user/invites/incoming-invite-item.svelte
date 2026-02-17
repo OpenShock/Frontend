@@ -74,7 +74,7 @@
       <Zap size="15" />
       <p class="ml-2 inline-block sm:hidden">{shareInvite.shockers.length}</p>
       <div class="hidden sm:inline-block">
-        {#each shareInvite.shockers as shocker}
+        {#each shareInvite.shockers as shocker (shocker.id)}
           <Tooltip.Root>
             <Tooltip.Trigger>
               <Badge class="ml-2">{shocker.name}</Badge>

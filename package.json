@@ -74,13 +74,13 @@
 		"vite": "^7.3.1"
 	},
 	"engines": {
-		"node": ">=24.12.0",
-		"pnpm": ">=10.28.2"
+		"node": "^24.12.0",
+		"pnpm": "^10.29.2"
 	},
 	"volta": {
 		"node": "24.12.0"
 	},
-	"packageManager": "pnpm@10.28.2",
+	"packageManager": "pnpm@10.29.2",
 	"pnpm": {
 		"onlyBuiltDependencies": [
 			"@tailwindcss/oxide",

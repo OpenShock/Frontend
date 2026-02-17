@@ -42,6 +42,6 @@ export function HasStringArray<K extends string>(
   return (
     Object.hasOwn(obj, key) &&
     Array.isArray(obj[key]) &&
-    obj[key].every((item: any) => isString(item))
+    obj[key].every((item: unknown) => isString(item))
   );
 }

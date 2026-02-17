@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Barcode, Code, User, Zap } from '@lucide/svelte';
+  import { Barcode, Zap } from '@lucide/svelte';
   import { shockerSharesV2Api } from '$lib/api';
   import type { V2UserSharesListItem } from '$lib/api/internal/v2';
   import * as Avatar from '$lib/components/ui/avatar';
@@ -78,7 +78,7 @@
               <Zap size="15" />
               <p class="ml-2 inline-block sm:hidden">{result.shares.length}</p>
               <div class="hidden sm:inline-block">
-                {#each result.shares as share}
+                {#each result.shares as share (share.id)}
                   <Tooltip.Root>
                     <Tooltip.Trigger class="flex items-center">
                       <Badge class="ml-2" variant={share.paused ? 'destructive' : 'default'}

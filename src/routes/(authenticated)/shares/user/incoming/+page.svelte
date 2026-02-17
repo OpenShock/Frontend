@@ -28,7 +28,7 @@
   <div class="flex h-full w-full items-center justify-center">
     <LoadingCircle />
   </div>
-{:then fetched}
+{:then}
   <div class="mb-6 overflow-y-auto rounded-md border">
     <Table.Root>
       <Table.Body>

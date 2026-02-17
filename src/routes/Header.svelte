@@ -1,4 +1,6 @@
 <script lang="ts">
+  /* eslint-disable svelte/no-navigation-without-resolve */
+
   import PanelLeft from '@lucide/svelte/icons/panel-left';
   import { goto } from '$app/navigation';
   import type { Pathname } from '$app/types';
@@ -12,17 +14,20 @@
   import { UserStore } from '$lib/stores/UserStore';
   import { cn } from '$lib/utils';
   import Breadcrumb from './Breadcrumb.svelte';
+  import { base } from '$app/paths';
+  import { unsafeResolve } from '$lib/utils/url';
 
   let sidebar = useSidebar();
 </script>
 
 {#snippet dropdownItem(name: string, url: Pathname)}
-  <DropdownMenu.Item class="cursor-pointer" onclick={() => goto(url)}>
+  <!-- I know this is deprecated buy resolve() is too strict to be used here... -->
+  <DropdownMenu.Item class="cursor-pointer" onclick={() => goto(unsafeResolve(url))}>
     {name}
   </DropdownMenu.Item>
 {/snippet}
 {#snippet headerItem(text: string, href: Pathname)}
-  <Button {href}>{text}</Button>
+  <Button href={unsafeResolve(href)}>{text}</Button>
 {/snippet}
 
 <header

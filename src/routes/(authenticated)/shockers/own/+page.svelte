@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Layers, LogsIcon, OctagonAlert, Settings, StopCircle } from '@lucide/svelte';
+  import { Layers, LogsIcon, OctagonAlert, Settings } from '@lucide/svelte';
   import { resolve } from '$app/paths';
   import Container from '$lib/components/Container.svelte';
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';

@@ -3,6 +3,7 @@
   import { onMount } from 'svelte';
   import DialogConfirm from './dialog-confirm.svelte';
 
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   let dialogData: ConfirmDialogContext<any> | null = $state(null);
   let dialogCounter = $state(0);
   let dialogOpen = $state(false);

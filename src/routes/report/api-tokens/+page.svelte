@@ -69,7 +69,7 @@
     <!-- Token Preview -->
     <span class="mb-2 block text-sm font-medium text-gray-700">Detected Tokens</span>
     <ScrollArea class="h-48 rounded-md border bg-gray-50 p-3">
-      {#each secrets as secret}
+      {#each secrets as secret (secret)}
         <p
           class="mb-1 rounded px-2 py-1 font-mono text-sm break-all
                 {isValid(secret) ? 'bg-green-200 text-gray-800' : 'bg-red-200 text-red-700'}"

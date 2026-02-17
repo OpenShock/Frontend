@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { ShockerResponse } from '$lib/api/internal/v1';
   import { ControlType } from '$lib/signalr/models/ControlType';
   import {
     AddListener,

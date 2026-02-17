@@ -1,6 +1,6 @@
 <script lang="ts">
   import Ellipsis from '@lucide/svelte/icons/ellipsis';
-  import { RoleType, type WebhookDto } from '$lib/api/internal/v1';
+  import { type WebhookDto } from '$lib/api/internal/v1';
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { toast } from 'svelte-sonner';

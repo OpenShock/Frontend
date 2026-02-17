@@ -13,6 +13,7 @@
   import DialogShareCodeCreate from './dialog-share-code-create.svelte';
   import DialogShareCodeCreated from './dialog-share-code-created.svelte';
   import DialogShareCodeRedeem from './dialog-share-code-redeem.svelte';
+  import { resolve } from '$app/paths';
 
   let createDialogOpen = $state(false);
   let redeemDialogOpen = $state(false);
@@ -42,8 +43,8 @@
     toast.success(`Sent a shocker invite to ${user.name}`);
   }
 
-  function navigateTo(path: string) {
-    goto('/shares/user/' + path);
+  function navigateTo(path: 'incoming' | 'outgoing' | 'invites') {
+    goto(resolve(`/shares/user/${path}`));
   }
 
   onMount(() => {

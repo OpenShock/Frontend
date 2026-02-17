@@ -79,12 +79,7 @@
   </Popover.Trigger>
   <Popover.Content bind:ref={contentRef} class="w-auto p-0">
     <div class="flex border-b p-2">
-      <TimePicker
-        bind:time
-        setTime={(time) => {
-          time && setTime(time);
-        }}
-      />
+      <TimePicker bind:time setTime={(time) => time && setTime(time)} />
     </div>
 
     <Calendar {onValueChange} type="single" bind:value={dateValue} />
