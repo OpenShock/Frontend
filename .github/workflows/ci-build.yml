@@ -1,16 +1,18 @@
 on:
   push:
-    tags:
-      - '*.*'
-      - '*.*.*'
     branches:
-      - '*'
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+    types: [opened, reopened, synchronize]
   workflow_dispatch: # Manually invoked by user.
 
 name: ci-build
 
 jobs:
   test:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:

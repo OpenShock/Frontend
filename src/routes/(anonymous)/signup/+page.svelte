@@ -1,18 +1,24 @@
 <script lang="ts">
+  import { asset } from '$app/paths';
+  import Container from '$lib/components/Container.svelte';
+  import { Button } from '$lib/components/ui/button/index.js';
+  import * as Card from '$lib/components/ui/card/index.js';
+  import * as Field from '$lib/components/ui/field/index.js';
+  import UsernameInput from '$lib/components/input/UsernameInput.svelte';
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { accountV2Api } from '$lib/api';
-  import Container from '$lib/components/Container.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
   import EmailInput from '$lib/components/input/EmailInput.svelte';
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
-  import UsernameInput from '$lib/components/input/UsernameInput.svelte';
-  import { Button } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
   import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
   import { toast } from 'svelte-sonner';
+  import FieldSeparator from '$lib/components/ui/field/field-separator.svelte';
+  import OauthButtons from '$lib/components/auth/oauth-buttons.svelte';
+  import { ChevronLeft, Mail } from '@lucide/svelte';
 
   let username = $state<string>('');
   let usernameValid = $state<boolean>(false);
@@ -32,6 +38,8 @@
   );
 
   let accountCreated = $state(false);
+
+  let useEmail = $state(false);
 
   function onOpenChange(open: boolean) {
     if (!open) {
@@ -69,66 +77,113 @@
 
         return true;
       });
-    } finally {
-      turnstileResponse = null;
     }
   }
-
-  let ack = $state(false);
 </script>
 
-<Dialog.Root bind:open={() => accountCreated, onOpenChange}>
-  <Dialog.Content>
-    <Dialog.Header>
-      <Dialog.Title>Account created</Dialog.Title>
-      <Dialog.Description>
-        Your account has been created. Please check your email to verify your account.
+<Container class="items-center-safe justify-center-safe p-4">
+  <span class="flex items-center gap-2 self-center font-medium">
+    <img class="ml-[0.667px] h-7.5" src={asset('/IconSpinning.svg')} alt="OpenShock Logo" />
+    <img
+      class="h-7.5 transition-opacity delay-100 duration-200 group-data-[collapsible=icon]:opacity-0 group-data-[collapsible=icon]:delay-0"
+      src={asset('/LogoTextOnly.svg')}
+      alt="OpenShock Logo"
+    />
+  </span>
+  <Dialog.Root bind:open={() => accountCreated, onOpenChange}>
+    <Dialog.Content>
+      <Dialog.Header>
+        <Dialog.Title>Welcome! Thank you for signing up! ❤️</Dialog.Title>
+        <Dialog.Description>
+          <div class="flex flex-col gap-4">
+            <p>Your account has been created. 🎉 Please check your email to verify your account.</p>
+            <p>After verifying your email, you can log in to your account.</p>
 
-        <!-- TODO: button to go to login screen -->
-      </Dialog.Description>
-    </Dialog.Header>
-  </Dialog.Content>
-</Dialog.Root>
+            <Button variant="default" size="sm" class="mt-4" onclick={() => goto(resolve('/login'))}
+              >Ok</Button
+            >
+          </div>
+        </Dialog.Description>
+      </Dialog.Header>
+    </Dialog.Content>
+  </Dialog.Root>
 
-<Container class="items-center">
-  {#if !ack}
-    <div class="text-5xl font-semibold text-nowrap text-red-500">
-      Do not use this frontend to register a new account, this is a WIP, please go to
-      https://openshock.app
-    </div>
-    <Button variant="destructive" onclick={() => (ack = true)}>
-      I acknowledge that I have read this message and that this frontend is not functional yet.
-    </Button>
-  {:else}
-    <form class="flex flex-col gap-2" onsubmit={handleSubmission}>
-      <div class="text-3xl font-semibold text-nowrap">Sign Up</div>
-      <UsernameInput
-        label="Username"
-        placeholder="Username"
-        bind:value={username}
-        bind:valid={usernameValid}
-      />
-      <EmailInput label="Email" placeholder="Email" bind:value={email} bind:valid={emailValid} />
-      <PasswordInput
-        label="Password"
-        placeholder="Password"
-        autocomplete="new-password"
-        bind:value={password}
-        bind:valid={passwordValid}
-        validate
-        showStrengthMeter
-      />
-      <PasswordInput
-        label="Confirm Password"
-        placeholder="Confirm Password"
-        autocomplete="new-password"
-        bind:value={passwordConfirm}
-        validate={validatePasswordMatch(passwordConfirm, password)}
-      />
-
-      <Turnstile action="signup" bind:response={turnstileResponse} />
-
-      <Button type="submit" disabled={!canSubmit}>Sign Up</Button>
-    </form>
-  {/if}
+  <div class="flex max-w-sm flex-col gap-6">
+    <Card.Root>
+      <Card.Header class="text-center">
+        <Card.Title class="text-xl">Create your account</Card.Title>
+        <Card.Description
+          >{#if useEmail}Signing up using email{:else}Choose your preferred sign-up method{/if}</Card.Description
+        >
+      </Card.Header>
+      <Card.Content>
+        <Field.Group>
+          {#if useEmail}
+            <form onsubmit={handleSubmission}>
+              <div class="my-1 flex flex-col gap-1">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  class="text-muted-foreground hover:text-foreground -mx-2 -mt-2 mb-2 w-fit gap-1"
+                  onclick={() => (useEmail = false)}
+                >
+                  <ChevronLeft class="size-4" />
+                  Back
+                </Button>
+                <UsernameInput
+                  label="Username"
+                  placeholder="John OpenShock"
+                  bind:value={username}
+                  bind:valid={usernameValid}
+                />
+                <EmailInput
+                  label="Email"
+                  placeholder="john@example.com"
+                  bind:value={email}
+                  bind:valid={emailValid}
+                />
+                <PasswordInput
+                  label="Password"
+                  placeholder="Password"
+                  autocomplete="new-password"
+                  bind:value={password}
+                  bind:valid={passwordValid}
+                  validate
+                  showStrengthMeter
+                  showForget={false}
+                />
+                <PasswordInput
+                  label="Confirm Password"
+                  placeholder="Confirm Password"
+                  autocomplete="new-password"
+                  bind:value={passwordConfirm}
+                  validate={validatePasswordMatch(passwordConfirm, password)}
+                  showForget={false}
+                />
+                <Turnstile action="signup" bind:response={turnstileResponse} />
+              </div>
+              <Field.Field class="mt-5">
+                <Button type="submit" disabled={!canSubmit}>Create Account</Button>
+                <Field.Description class="text-center">
+                  Already have an account? <a href={resolve('/login')}>Sign in</a>
+                </Field.Description>
+              </Field.Field>
+            </form>
+          {:else}
+            <OauthButtons verb="Signup" />
+            <FieldSeparator class="*:data-[slot=field-separator-content]:bg-card">Or</FieldSeparator
+            >
+            <Button variant="outline" class="w-full" onclick={() => (useEmail = true)}>
+              <Mail />Signup with Email
+            </Button>
+          {/if}
+        </Field.Group>
+      </Card.Content>
+    </Card.Root>
+    <Field.Description class="px-6 text-center">
+      By clicking continue, you agree to our <a href="https://openshock.org/tos">Terms of Service</a
+      >
+      and <a href="https://openshock.org/privacy">Privacy Policy</a>.
+    </Field.Description>
+  </div>
 </Container>

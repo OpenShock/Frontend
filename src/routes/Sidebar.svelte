@@ -16,7 +16,7 @@
     Wrench,
     Zap,
   } from '@lucide/svelte';
-  import { asset, base, resolve } from '$app/paths';
+  import { asset, resolve } from '$app/paths';
   import { page } from '$app/state';
   import type { Pathname } from '$app/types';
   import { RoleType } from '$lib/api/internal/v1';
@@ -304,7 +304,7 @@
         <span class="ml-1.5 grow">
           <img
             class="h-7.5 transition-opacity delay-100 duration-200 group-data-[collapsible=icon]:opacity-0 group-data-[collapsible=icon]:delay-0"
-            src="/LogoTextOnly.svg"
+            src={asset('/LogoTextOnly.svg')}
             alt="OpenShock Logo"
           />
         </span>

@@ -6,7 +6,7 @@
   import type { Pathname } from '$app/types';
   import { PUBLIC_DISCORD_INVITE_URL, PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
   import LightSwitch from '$lib/components/LightSwitch.svelte';
-  import DiscordIcon from '$lib/components/svg/DiscordIcon.svelte';
+  import DiscordLogo from '$lib/components/svg/DiscordLogo.svelte';
   import GithubIcon from '$lib/components/svg/GithubIcon.svelte';
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
@@ -14,7 +14,6 @@
   import { UserStore } from '$lib/stores/UserStore';
   import { cn } from '$lib/utils';
   import Breadcrumb from './Breadcrumb.svelte';
-  import { base } from '$app/paths';
   import { unsafeResolve } from '$lib/utils/url';
 
   let sidebar = useSidebar();
@@ -75,7 +74,7 @@
           <GithubIcon class="size-6 fill-black dark:fill-white" />
         </a>
         <a href={PUBLIC_DISCORD_INVITE_URL} class="p-2" title="Community Discord">
-          <DiscordIcon class="size-6 fill-black dark:fill-white" />
+          <DiscordLogo class="size-6 fill-black dark:fill-white" />
         </a>
       </div>
     {/if}
