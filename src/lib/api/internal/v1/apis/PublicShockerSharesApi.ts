@@ -88,6 +88,14 @@ export interface ShareLinksRemoveShockerRequest {
  */
 export interface PublicShockerSharesApiInterface {
     /**
+     * Creates request options for publicGetPublicShare without sending the request
+     * @param {string} publicShareId 
+     * @throws {RequiredError}
+     * @memberof PublicShockerSharesApiInterface
+     */
+    publicGetPublicShareRequestOpts(requestParameters: PublicGetPublicShareRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Gets information about a public share.
      * @param {string} publicShareId 
@@ -101,6 +109,15 @@ export interface PublicShockerSharesApiInterface {
      * Gets information about a public share.
      */
     publicGetPublicShare(publicShareId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PublicShareResponseLegacyDataResponse>;
+
+    /**
+     * Creates request options for shareLinksAddShocker without sending the request
+     * @param {string} publicShareId 
+     * @param {string} shockerId 
+     * @throws {RequiredError}
+     * @memberof PublicShockerSharesApiInterface
+     */
+    shareLinksAddShockerRequestOpts(requestParameters: ShareLinksAddShockerRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -119,6 +136,14 @@ export interface PublicShockerSharesApiInterface {
     shareLinksAddShocker(publicShareId: string, shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
 
     /**
+     * Creates request options for shareLinksCreatePublicShare without sending the request
+     * @param {PublicShareCreate} [publicShareCreate] 
+     * @throws {RequiredError}
+     * @memberof PublicShockerSharesApiInterface
+     */
+    shareLinksCreatePublicShareRequestOpts(requestParameters: ShareLinksCreatePublicShareRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Create a new public share
      * @param {PublicShareCreate} [publicShareCreate] 
@@ -134,6 +159,14 @@ export interface PublicShockerSharesApiInterface {
     shareLinksCreatePublicShare(publicShareCreate?: PublicShareCreate, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GuidLegacyDataResponse>;
 
     /**
+     * Creates request options for shareLinksDeletePublicShare without sending the request
+     * @param {string} publicShareId 
+     * @throws {RequiredError}
+     * @memberof PublicShockerSharesApiInterface
+     */
+    shareLinksDeletePublicShareRequestOpts(requestParameters: ShareLinksDeletePublicShareRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Deletes a public share
      * @param {string} publicShareId 
@@ -147,6 +180,16 @@ export interface PublicShockerSharesApiInterface {
      * Deletes a public share
      */
     shareLinksDeletePublicShare(publicShareId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
+
+    /**
+     * Creates request options for shareLinksEditShocker without sending the request
+     * @param {string} publicShareId 
+     * @param {string} shockerId 
+     * @param {PublicShareEditShocker} [publicShareEditShocker] 
+     * @throws {RequiredError}
+     * @memberof PublicShockerSharesApiInterface
+     */
+    shareLinksEditShockerRequestOpts(requestParameters: ShareLinksEditShockerRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -166,6 +209,13 @@ export interface PublicShockerSharesApiInterface {
     shareLinksEditShocker(publicShareId: string, shockerId: string, publicShareEditShocker?: PublicShareEditShocker, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
 
     /**
+     * Creates request options for shareLinksList without sending the request
+     * @throws {RequiredError}
+     * @memberof PublicShockerSharesApiInterface
+     */
+    shareLinksListRequestOpts(): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Get all public shares for the current user
      * @param {*} [options] Override http request option.
@@ -178,6 +228,16 @@ export interface PublicShockerSharesApiInterface {
      * Get all public shares for the current user
      */
     shareLinksList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OwnPublicShareResponseArrayLegacyDataResponse>;
+
+    /**
+     * Creates request options for shareLinksPauseShocker without sending the request
+     * @param {string} publicShareId 
+     * @param {string} shockerId 
+     * @param {PauseRequest} [pauseRequest] 
+     * @throws {RequiredError}
+     * @memberof PublicShockerSharesApiInterface
+     */
+    shareLinksPauseShockerRequestOpts(requestParameters: ShareLinksPauseShockerRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -195,6 +255,15 @@ export interface PublicShockerSharesApiInterface {
      * Pause a shocker in a public share
      */
     shareLinksPauseShocker(publicShareId: string, shockerId: string, pauseRequest?: PauseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PauseReasonLegacyDataResponse>;
+
+    /**
+     * Creates request options for shareLinksRemoveShocker without sending the request
+     * @param {string} publicShareId 
+     * @param {string} shockerId 
+     * @throws {RequiredError}
+     * @memberof PublicShockerSharesApiInterface
+     */
+    shareLinksRemoveShockerRequestOpts(requestParameters: ShareLinksRemoveShockerRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -220,9 +289,9 @@ export interface PublicShockerSharesApiInterface {
 export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicShockerSharesApiInterface {
 
     /**
-     * Gets information about a public share.
+     * Creates request options for publicGetPublicShare without sending the request
      */
-    async publicGetPublicShareRaw(requestParameters: PublicGetPublicShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PublicShareResponseLegacyDataResponse>> {
+    async publicGetPublicShareRequestOpts(requestParameters: PublicGetPublicShareRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['publicShareId'] == null) {
             throw new runtime.RequiredError(
                 'publicShareId',
@@ -238,12 +307,20 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
         let urlPath = `/1/public/shares/links/{publicShareId}`;
         urlPath = urlPath.replace(`{${"publicShareId"}}`, encodeURIComponent(String(requestParameters['publicShareId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Gets information about a public share.
+     */
+    async publicGetPublicShareRaw(requestParameters: PublicGetPublicShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PublicShareResponseLegacyDataResponse>> {
+        const requestOptions = await this.publicGetPublicShareRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => PublicShareResponseLegacyDataResponseFromJSON(jsonValue));
     }
@@ -257,9 +334,9 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
     }
 
     /**
-     * Add a shocker to a public share
+     * Creates request options for shareLinksAddShocker without sending the request
      */
-    async shareLinksAddShockerRaw(requestParameters: ShareLinksAddShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>> {
+    async shareLinksAddShockerRequestOpts(requestParameters: ShareLinksAddShockerRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['publicShareId'] == null) {
             throw new runtime.RequiredError(
                 'publicShareId',
@@ -283,12 +360,20 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
         urlPath = urlPath.replace(`{${"publicShareId"}}`, encodeURIComponent(String(requestParameters['publicShareId'])));
         urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Add a shocker to a public share
+     */
+    async shareLinksAddShockerRaw(requestParameters: ShareLinksAddShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>> {
+        const requestOptions = await this.shareLinksAddShockerRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => LegacyEmptyResponseFromJSON(jsonValue));
     }
@@ -302,9 +387,9 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
     }
 
     /**
-     * Create a new public share
+     * Creates request options for shareLinksCreatePublicShare without sending the request
      */
-    async shareLinksCreatePublicShareRaw(requestParameters: ShareLinksCreatePublicShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GuidLegacyDataResponse>> {
+    async shareLinksCreatePublicShareRequestOpts(requestParameters: ShareLinksCreatePublicShareRequest): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -314,13 +399,21 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
 
         let urlPath = `/1/shares/links`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: PublicShareCreateToJSON(requestParameters['publicShareCreate']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Create a new public share
+     */
+    async shareLinksCreatePublicShareRaw(requestParameters: ShareLinksCreatePublicShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GuidLegacyDataResponse>> {
+        const requestOptions = await this.shareLinksCreatePublicShareRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => GuidLegacyDataResponseFromJSON(jsonValue));
     }
@@ -334,9 +427,9 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
     }
 
     /**
-     * Deletes a public share
+     * Creates request options for shareLinksDeletePublicShare without sending the request
      */
-    async shareLinksDeletePublicShareRaw(requestParameters: ShareLinksDeletePublicShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>> {
+    async shareLinksDeletePublicShareRequestOpts(requestParameters: ShareLinksDeletePublicShareRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['publicShareId'] == null) {
             throw new runtime.RequiredError(
                 'publicShareId',
@@ -352,12 +445,20 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
         let urlPath = `/1/shares/links/{publicShareId}`;
         urlPath = urlPath.replace(`{${"publicShareId"}}`, encodeURIComponent(String(requestParameters['publicShareId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Deletes a public share
+     */
+    async shareLinksDeletePublicShareRaw(requestParameters: ShareLinksDeletePublicShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>> {
+        const requestOptions = await this.shareLinksDeletePublicShareRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => LegacyEmptyResponseFromJSON(jsonValue));
     }
@@ -371,9 +472,9 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
     }
 
     /**
-     * Edit a shocker in a public share
+     * Creates request options for shareLinksEditShocker without sending the request
      */
-    async shareLinksEditShockerRaw(requestParameters: ShareLinksEditShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
+    async shareLinksEditShockerRequestOpts(requestParameters: ShareLinksEditShockerRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['publicShareId'] == null) {
             throw new runtime.RequiredError(
                 'publicShareId',
@@ -399,13 +500,21 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
         urlPath = urlPath.replace(`{${"publicShareId"}}`, encodeURIComponent(String(requestParameters['publicShareId'])));
         urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
             body: PublicShareEditShockerToJSON(requestParameters['publicShareEditShocker']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Edit a shocker in a public share
+     */
+    async shareLinksEditShockerRaw(requestParameters: ShareLinksEditShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
+        const requestOptions = await this.shareLinksEditShockerRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         if (this.isJsonMime(response.headers.get('content-type'))) {
             return new runtime.JSONApiResponse<string>(response);
@@ -423,9 +532,9 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
     }
 
     /**
-     * Get all public shares for the current user
+     * Creates request options for shareLinksList without sending the request
      */
-    async shareLinksListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OwnPublicShareResponseArrayLegacyDataResponse>> {
+    async shareLinksListRequestOpts(): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -433,12 +542,20 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
 
         let urlPath = `/1/shares/links`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Get all public shares for the current user
+     */
+    async shareLinksListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OwnPublicShareResponseArrayLegacyDataResponse>> {
+        const requestOptions = await this.shareLinksListRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => OwnPublicShareResponseArrayLegacyDataResponseFromJSON(jsonValue));
     }
@@ -452,9 +569,9 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
     }
 
     /**
-     * Pause a shocker in a public share
+     * Creates request options for shareLinksPauseShocker without sending the request
      */
-    async shareLinksPauseShockerRaw(requestParameters: ShareLinksPauseShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PauseReasonLegacyDataResponse>> {
+    async shareLinksPauseShockerRequestOpts(requestParameters: ShareLinksPauseShockerRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['publicShareId'] == null) {
             throw new runtime.RequiredError(
                 'publicShareId',
@@ -480,13 +597,21 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
         urlPath = urlPath.replace(`{${"publicShareId"}}`, encodeURIComponent(String(requestParameters['publicShareId'])));
         urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: PauseRequestToJSON(requestParameters['pauseRequest']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Pause a shocker in a public share
+     */
+    async shareLinksPauseShockerRaw(requestParameters: ShareLinksPauseShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PauseReasonLegacyDataResponse>> {
+        const requestOptions = await this.shareLinksPauseShockerRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => PauseReasonLegacyDataResponseFromJSON(jsonValue));
     }
@@ -500,9 +625,9 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
     }
 
     /**
-     * Remove a shocker from a public share
+     * Creates request options for shareLinksRemoveShocker without sending the request
      */
-    async shareLinksRemoveShockerRaw(requestParameters: ShareLinksRemoveShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>> {
+    async shareLinksRemoveShockerRequestOpts(requestParameters: ShareLinksRemoveShockerRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['publicShareId'] == null) {
             throw new runtime.RequiredError(
                 'publicShareId',
@@ -526,12 +651,20 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
         urlPath = urlPath.replace(`{${"publicShareId"}}`, encodeURIComponent(String(requestParameters['publicShareId'])));
         urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Remove a shocker from a public share
+     */
+    async shareLinksRemoveShockerRaw(requestParameters: ShareLinksRemoveShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>> {
+        const requestOptions = await this.shareLinksRemoveShockerRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => LegacyEmptyResponseFromJSON(jsonValue));
     }

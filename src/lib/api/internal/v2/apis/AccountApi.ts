@@ -64,6 +64,14 @@ export interface AccountSignUpV2Request {
  */
 export interface AccountApiInterface {
     /**
+     * Creates request options for accountCheckUsername without sending the request
+     * @param {ChangeUsernameRequest} [changeUsernameRequest] 
+     * @throws {RequiredError}
+     * @memberof AccountApiInterface
+     */
+    accountCheckUsernameRequestOpts(requestParameters: AccountCheckUsernameRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Check if a username is available
      * @param {ChangeUsernameRequest} [changeUsernameRequest] 
@@ -77,6 +85,14 @@ export interface AccountApiInterface {
      * Check if a username is available
      */
     accountCheckUsername(changeUsernameRequest?: ChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UsernameCheckResponse>;
+
+    /**
+     * Creates request options for accountLoginV2 without sending the request
+     * @param {LoginV2} [loginV2] 
+     * @throws {RequiredError}
+     * @memberof AccountApiInterface
+     */
+    accountLoginV2RequestOpts(requestParameters: AccountLoginV2Request): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -94,6 +110,14 @@ export interface AccountApiInterface {
     accountLoginV2(loginV2?: LoginV2, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LoginV2OkResponse>;
 
     /**
+     * Creates request options for accountPasswordResetInitiateV2 without sending the request
+     * @param {PasswordResetRequestV2} [passwordResetRequestV2] 
+     * @throws {RequiredError}
+     * @memberof AccountApiInterface
+     */
+    accountPasswordResetInitiateV2RequestOpts(requestParameters: AccountPasswordResetInitiateV2Request): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Initiate a password reset
      * @param {PasswordResetRequestV2} [passwordResetRequestV2] 
@@ -107,6 +131,14 @@ export interface AccountApiInterface {
      * Initiate a password reset
      */
     accountPasswordResetInitiateV2(passwordResetRequestV2?: PasswordResetRequestV2, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * Creates request options for accountSignUpV2 without sending the request
+     * @param {SignUpV2} [signUpV2] 
+     * @throws {RequiredError}
+     * @memberof AccountApiInterface
+     */
+    accountSignUpV2RequestOpts(requestParameters: AccountSignUpV2Request): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -131,9 +163,9 @@ export interface AccountApiInterface {
 export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
 
     /**
-     * Check if a username is available
+     * Creates request options for accountCheckUsername without sending the request
      */
-    async accountCheckUsernameRaw(requestParameters: AccountCheckUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UsernameCheckResponse>> {
+    async accountCheckUsernameRequestOpts(requestParameters: AccountCheckUsernameRequest): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -143,13 +175,21 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
 
         let urlPath = `/2/account/username/check`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: ChangeUsernameRequestToJSON(requestParameters['changeUsernameRequest']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Check if a username is available
+     */
+    async accountCheckUsernameRaw(requestParameters: AccountCheckUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UsernameCheckResponse>> {
+        const requestOptions = await this.accountCheckUsernameRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => UsernameCheckResponseFromJSON(jsonValue));
     }
@@ -163,9 +203,9 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
     }
 
     /**
-     * Authenticate a user
+     * Creates request options for accountLoginV2 without sending the request
      */
-    async accountLoginV2Raw(requestParameters: AccountLoginV2Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LoginV2OkResponse>> {
+    async accountLoginV2RequestOpts(requestParameters: AccountLoginV2Request): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -175,13 +215,21 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
 
         let urlPath = `/2/account/login`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: LoginV2ToJSON(requestParameters['loginV2']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Authenticate a user
+     */
+    async accountLoginV2Raw(requestParameters: AccountLoginV2Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LoginV2OkResponse>> {
+        const requestOptions = await this.accountLoginV2RequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => LoginV2OkResponseFromJSON(jsonValue));
     }
@@ -195,9 +243,9 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
     }
 
     /**
-     * Initiate a password reset
+     * Creates request options for accountPasswordResetInitiateV2 without sending the request
      */
-    async accountPasswordResetInitiateV2Raw(requestParameters: AccountPasswordResetInitiateV2Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async accountPasswordResetInitiateV2RequestOpts(requestParameters: AccountPasswordResetInitiateV2Request): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -207,13 +255,21 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
 
         let urlPath = `/2/account/reset-password`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: PasswordResetRequestV2ToJSON(requestParameters['passwordResetRequestV2']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Initiate a password reset
+     */
+    async accountPasswordResetInitiateV2Raw(requestParameters: AccountPasswordResetInitiateV2Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.accountPasswordResetInitiateV2RequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
@@ -226,9 +282,9 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
     }
 
     /**
-     * Signs up a new user
+     * Creates request options for accountSignUpV2 without sending the request
      */
-    async accountSignUpV2Raw(requestParameters: AccountSignUpV2Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async accountSignUpV2RequestOpts(requestParameters: AccountSignUpV2Request): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -238,13 +294,21 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
 
         let urlPath = `/2/account/signup`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: SignUpV2ToJSON(requestParameters['signUpV2']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Signs up a new user
+     */
+    async accountSignUpV2Raw(requestParameters: AccountSignUpV2Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.accountSignUpV2RequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }

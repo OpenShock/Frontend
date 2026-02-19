@@ -37,6 +37,14 @@ export interface SessionsDeleteSessionRequest {
  */
 export interface SessionsApiInterface {
     /**
+     * Creates request options for sessionsDeleteSession without sending the request
+     * @param {string} sessionId 
+     * @throws {RequiredError}
+     * @memberof SessionsApiInterface
+     */
+    sessionsDeleteSessionRequestOpts(requestParameters: SessionsDeleteSessionRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @param {string} sessionId 
      * @param {*} [options] Override http request option.
@@ -48,6 +56,13 @@ export interface SessionsApiInterface {
     /**
      */
     sessionsDeleteSession(sessionId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * Creates request options for sessionsGetSelfSession without sending the request
+     * @throws {RequiredError}
+     * @memberof SessionsApiInterface
+     */
+    sessionsGetSelfSessionRequestOpts(): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -62,6 +77,13 @@ export interface SessionsApiInterface {
      * Gets information about the current token used to access this endpoint
      */
     sessionsGetSelfSession(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LoginSessionResponse>;
+
+    /**
+     * Creates request options for sessionsListSessions without sending the request
+     * @throws {RequiredError}
+     * @memberof SessionsApiInterface
+     */
+    sessionsListSessionsRequestOpts(): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -83,8 +105,9 @@ export interface SessionsApiInterface {
 export class SessionsApi extends runtime.BaseAPI implements SessionsApiInterface {
 
     /**
+     * Creates request options for sessionsDeleteSession without sending the request
      */
-    async sessionsDeleteSessionRaw(requestParameters: SessionsDeleteSessionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async sessionsDeleteSessionRequestOpts(requestParameters: SessionsDeleteSessionRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['sessionId'] == null) {
             throw new runtime.RequiredError(
                 'sessionId',
@@ -100,12 +123,19 @@ export class SessionsApi extends runtime.BaseAPI implements SessionsApiInterface
         let urlPath = `/1/sessions/{sessionId}`;
         urlPath = urlPath.replace(`{${"sessionId"}}`, encodeURIComponent(String(requestParameters['sessionId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     */
+    async sessionsDeleteSessionRaw(requestParameters: SessionsDeleteSessionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.sessionsDeleteSessionRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
@@ -117,9 +147,9 @@ export class SessionsApi extends runtime.BaseAPI implements SessionsApiInterface
     }
 
     /**
-     * Gets information about the current token used to access this endpoint
+     * Creates request options for sessionsGetSelfSession without sending the request
      */
-    async sessionsGetSelfSessionRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LoginSessionResponse>> {
+    async sessionsGetSelfSessionRequestOpts(): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -127,12 +157,20 @@ export class SessionsApi extends runtime.BaseAPI implements SessionsApiInterface
 
         let urlPath = `/1/sessions/self`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Gets information about the current token used to access this endpoint
+     */
+    async sessionsGetSelfSessionRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LoginSessionResponse>> {
+        const requestOptions = await this.sessionsGetSelfSessionRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => LoginSessionResponseFromJSON(jsonValue));
     }
@@ -146,8 +184,9 @@ export class SessionsApi extends runtime.BaseAPI implements SessionsApiInterface
     }
 
     /**
+     * Creates request options for sessionsListSessions without sending the request
      */
-    async sessionsListSessionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<LoginSessionResponse>>> {
+    async sessionsListSessionsRequestOpts(): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -155,12 +194,19 @@ export class SessionsApi extends runtime.BaseAPI implements SessionsApiInterface
 
         let urlPath = `/1/sessions`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     */
+    async sessionsListSessionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<LoginSessionResponse>>> {
+        const requestOptions = await this.sessionsListSessionsRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(LoginSessionResponseFromJSON));
     }

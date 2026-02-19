@@ -37,6 +37,14 @@ export interface DeviceGetLiveControlGatewayV2Request {
  */
 export interface HubEndpointsApiInterface {
     /**
+     * Creates request options for deviceGetLiveControlGatewayV2 without sending the request
+     * @param {number} [version] 
+     * @throws {RequiredError}
+     * @memberof HubEndpointsApiInterface
+     */
+    deviceGetLiveControlGatewayV2RequestOpts(requestParameters: DeviceGetLiveControlGatewayV2Request): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Gets the best suited LCG node for the client
      * @param {number} [version] 
@@ -59,9 +67,9 @@ export interface HubEndpointsApiInterface {
 export class HubEndpointsApi extends runtime.BaseAPI implements HubEndpointsApiInterface {
 
     /**
-     * Gets the best suited LCG node for the client
+     * Creates request options for deviceGetLiveControlGatewayV2 without sending the request
      */
-    async deviceGetLiveControlGatewayV2Raw(requestParameters: DeviceGetLiveControlGatewayV2Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LcgNodeResponseV2>> {
+    async deviceGetLiveControlGatewayV2RequestOpts(requestParameters: DeviceGetLiveControlGatewayV2Request): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         if (requestParameters['version'] != null) {
@@ -77,12 +85,20 @@ export class HubEndpointsApi extends runtime.BaseAPI implements HubEndpointsApiI
 
         let urlPath = `/2/device/assignLCG`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Gets the best suited LCG node for the client
+     */
+    async deviceGetLiveControlGatewayV2Raw(requestParameters: DeviceGetLiveControlGatewayV2Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LcgNodeResponseV2>> {
+        const requestOptions = await this.deviceGetLiveControlGatewayV2RequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => LcgNodeResponseV2FromJSON(jsonValue));
     }

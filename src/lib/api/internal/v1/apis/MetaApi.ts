@@ -33,6 +33,13 @@ import {
  */
 export interface MetaApiInterface {
     /**
+     * Creates request options for publicGetOnlineDevicesStatistics without sending the request
+     * @throws {RequiredError}
+     * @memberof MetaApiInterface
+     */
+    publicGetOnlineDevicesStatisticsRequestOpts(): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Gets online devices statistics
      * @param {*} [options] Override http request option.
@@ -45,6 +52,13 @@ export interface MetaApiInterface {
      * Gets online devices statistics
      */
     publicGetOnlineDevicesStatistics(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StatsResponseLegacyDataResponse>;
+
+    /**
+     * Creates request options for versionGetBackendInfo without sending the request
+     * @throws {RequiredError}
+     * @memberof MetaApiInterface
+     */
+    versionGetBackendInfoRequestOpts(): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -68,9 +82,9 @@ export interface MetaApiInterface {
 export class MetaApi extends runtime.BaseAPI implements MetaApiInterface {
 
     /**
-     * Gets online devices statistics
+     * Creates request options for publicGetOnlineDevicesStatistics without sending the request
      */
-    async publicGetOnlineDevicesStatisticsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StatsResponseLegacyDataResponse>> {
+    async publicGetOnlineDevicesStatisticsRequestOpts(): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -78,12 +92,20 @@ export class MetaApi extends runtime.BaseAPI implements MetaApiInterface {
 
         let urlPath = `/1/public/stats`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Gets online devices statistics
+     */
+    async publicGetOnlineDevicesStatisticsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StatsResponseLegacyDataResponse>> {
+        const requestOptions = await this.publicGetOnlineDevicesStatisticsRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => StatsResponseLegacyDataResponseFromJSON(jsonValue));
     }
@@ -97,9 +119,9 @@ export class MetaApi extends runtime.BaseAPI implements MetaApiInterface {
     }
 
     /**
-     * Gets the version of the OpenShock backend.
+     * Creates request options for versionGetBackendInfo without sending the request
      */
-    async versionGetBackendInfoRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BackendInfoResponseLegacyDataResponse>> {
+    async versionGetBackendInfoRequestOpts(): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -107,12 +129,20 @@ export class MetaApi extends runtime.BaseAPI implements MetaApiInterface {
 
         let urlPath = `/1`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Gets the version of the OpenShock backend.
+     */
+    async versionGetBackendInfoRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BackendInfoResponseLegacyDataResponse>> {
+        const requestOptions = await this.versionGetBackendInfoRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => BackendInfoResponseLegacyDataResponseFromJSON(jsonValue));
     }

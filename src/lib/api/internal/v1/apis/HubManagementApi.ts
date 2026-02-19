@@ -84,6 +84,13 @@ export interface DevicesRemoveDeviceRequest {
  */
 export interface HubManagementApiInterface {
     /**
+     * Creates request options for devicesCreateDevice without sending the request
+     * @throws {RequiredError}
+     * @memberof HubManagementApiInterface
+     */
+    devicesCreateDeviceRequestOpts(): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Create a new device for the current user
      * @param {*} [options] Override http request option.
@@ -96,6 +103,15 @@ export interface HubManagementApiInterface {
      * Create a new device for the current user
      */
     devicesCreateDevice(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
+
+    /**
+     * Creates request options for devicesEditDevice without sending the request
+     * @param {string} deviceId 
+     * @param {HubEditRequest} [hubEditRequest] 
+     * @throws {RequiredError}
+     * @memberof HubManagementApiInterface
+     */
+    devicesEditDeviceRequestOpts(requestParameters: DevicesEditDeviceRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -114,6 +130,14 @@ export interface HubManagementApiInterface {
     devicesEditDevice(deviceId: string, hubEditRequest?: HubEditRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
+     * Creates request options for devicesGetDeviceById without sending the request
+     * @param {string} deviceId 
+     * @throws {RequiredError}
+     * @memberof HubManagementApiInterface
+     */
+    devicesGetDeviceByIdRequestOpts(requestParameters: DevicesGetDeviceByIdRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Get a device by its id
      * @param {string} deviceId 
@@ -127,6 +151,14 @@ export interface HubManagementApiInterface {
      * Get a device by its id
      */
     devicesGetDeviceById(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DeviceWithTokenResponseLegacyDataResponse>;
+
+    /**
+     * Creates request options for devicesGetLiveControlGatewayInfo without sending the request
+     * @param {string} deviceId 
+     * @throws {RequiredError}
+     * @memberof HubManagementApiInterface
+     */
+    devicesGetLiveControlGatewayInfoRequestOpts(requestParameters: DevicesGetLiveControlGatewayInfoRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -144,6 +176,14 @@ export interface HubManagementApiInterface {
     devicesGetLiveControlGatewayInfo(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LcgResponseLegacyDataResponse>;
 
     /**
+     * Creates request options for devicesGetPairCode without sending the request
+     * @param {string} deviceId 
+     * @throws {RequiredError}
+     * @memberof HubManagementApiInterface
+     */
+    devicesGetPairCodeRequestOpts(requestParameters: DevicesGetPairCodeRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Get a pair code for a device
      * @param {string} deviceId 
@@ -157,6 +197,14 @@ export interface HubManagementApiInterface {
      * Get a pair code for a device
      */
     devicesGetPairCode(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StringLegacyDataResponse>;
+
+    /**
+     * Creates request options for devicesGetShockers without sending the request
+     * @param {string} deviceId The device id
+     * @throws {RequiredError}
+     * @memberof HubManagementApiInterface
+     */
+    devicesGetShockersRequestOpts(requestParameters: DevicesGetShockersRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -174,6 +222,13 @@ export interface HubManagementApiInterface {
     devicesGetShockers(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShockerResponseArrayLegacyDataResponse>;
 
     /**
+     * Creates request options for devicesListDevices without sending the request
+     * @throws {RequiredError}
+     * @memberof HubManagementApiInterface
+     */
+    devicesListDevicesRequestOpts(): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Get all devices for the current user
      * @param {*} [options] Override http request option.
@@ -186,6 +241,14 @@ export interface HubManagementApiInterface {
      * Get all devices for the current user
      */
     devicesListDevices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DeviceResponseArrayLegacyDataResponse>;
+
+    /**
+     * Creates request options for devicesOtaGetOtaUpdateHistory without sending the request
+     * @param {string} deviceId Id of the device
+     * @throws {RequiredError}
+     * @memberof HubManagementApiInterface
+     */
+    devicesOtaGetOtaUpdateHistoryRequestOpts(requestParameters: DevicesOtaGetOtaUpdateHistoryRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -203,6 +266,14 @@ export interface HubManagementApiInterface {
     devicesOtaGetOtaUpdateHistory(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OtaItemIReadOnlyCollectionLegacyDataResponse>;
 
     /**
+     * Creates request options for devicesRegenerateDeviceToken without sending the request
+     * @param {string} deviceId The id of the device to regenerate the token for
+     * @throws {RequiredError}
+     * @memberof HubManagementApiInterface
+     */
+    devicesRegenerateDeviceTokenRequestOpts(requestParameters: DevicesRegenerateDeviceTokenRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Regenerate a device token
      * @param {string} deviceId The id of the device to regenerate the token for
@@ -216,6 +287,14 @@ export interface HubManagementApiInterface {
      * Regenerate a device token
      */
     devicesRegenerateDeviceToken(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
+
+    /**
+     * Creates request options for devicesRemoveDevice without sending the request
+     * @param {string} deviceId The id of the device to delete
+     * @throws {RequiredError}
+     * @memberof HubManagementApiInterface
+     */
+    devicesRemoveDeviceRequestOpts(requestParameters: DevicesRemoveDeviceRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -240,9 +319,9 @@ export interface HubManagementApiInterface {
 export class HubManagementApi extends runtime.BaseAPI implements HubManagementApiInterface {
 
     /**
-     * Create a new device for the current user
+     * Creates request options for devicesCreateDevice without sending the request
      */
-    async devicesCreateDeviceRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
+    async devicesCreateDeviceRequestOpts(): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -254,12 +333,20 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
 
         let urlPath = `/1/devices`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Create a new device for the current user
+     */
+    async devicesCreateDeviceRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
+        const requestOptions = await this.devicesCreateDeviceRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
 
         if (this.isJsonMime(response.headers.get('content-type'))) {
             return new runtime.JSONApiResponse<string>(response);
@@ -277,9 +364,9 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
     }
 
     /**
-     * Edit a device
+     * Creates request options for devicesEditDevice without sending the request
      */
-    async devicesEditDeviceRaw(requestParameters: DevicesEditDeviceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async devicesEditDeviceRequestOpts(requestParameters: DevicesEditDeviceRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['deviceId'] == null) {
             throw new runtime.RequiredError(
                 'deviceId',
@@ -301,13 +388,21 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
         let urlPath = `/1/devices/{deviceId}`;
         urlPath = urlPath.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
             body: HubEditRequestToJSON(requestParameters['hubEditRequest']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Edit a device
+     */
+    async devicesEditDeviceRaw(requestParameters: DevicesEditDeviceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.devicesEditDeviceRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
@@ -320,9 +415,9 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
     }
 
     /**
-     * Get a device by its id
+     * Creates request options for devicesGetDeviceById without sending the request
      */
-    async devicesGetDeviceByIdRaw(requestParameters: DevicesGetDeviceByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DeviceWithTokenResponseLegacyDataResponse>> {
+    async devicesGetDeviceByIdRequestOpts(requestParameters: DevicesGetDeviceByIdRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['deviceId'] == null) {
             throw new runtime.RequiredError(
                 'deviceId',
@@ -342,12 +437,20 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
         let urlPath = `/1/devices/{deviceId}`;
         urlPath = urlPath.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Get a device by its id
+     */
+    async devicesGetDeviceByIdRaw(requestParameters: DevicesGetDeviceByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DeviceWithTokenResponseLegacyDataResponse>> {
+        const requestOptions = await this.devicesGetDeviceByIdRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => DeviceWithTokenResponseLegacyDataResponseFromJSON(jsonValue));
     }
@@ -361,9 +464,9 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
     }
 
     /**
-     * Get LCG info for a device if it is online and connected to a LCG node
+     * Creates request options for devicesGetLiveControlGatewayInfo without sending the request
      */
-    async devicesGetLiveControlGatewayInfoRaw(requestParameters: DevicesGetLiveControlGatewayInfoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LcgResponseLegacyDataResponse>> {
+    async devicesGetLiveControlGatewayInfoRequestOpts(requestParameters: DevicesGetLiveControlGatewayInfoRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['deviceId'] == null) {
             throw new runtime.RequiredError(
                 'deviceId',
@@ -383,12 +486,20 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
         let urlPath = `/1/devices/{deviceId}/lcg`;
         urlPath = urlPath.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Get LCG info for a device if it is online and connected to a LCG node
+     */
+    async devicesGetLiveControlGatewayInfoRaw(requestParameters: DevicesGetLiveControlGatewayInfoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LcgResponseLegacyDataResponse>> {
+        const requestOptions = await this.devicesGetLiveControlGatewayInfoRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => LcgResponseLegacyDataResponseFromJSON(jsonValue));
     }
@@ -402,9 +513,9 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
     }
 
     /**
-     * Get a pair code for a device
+     * Creates request options for devicesGetPairCode without sending the request
      */
-    async devicesGetPairCodeRaw(requestParameters: DevicesGetPairCodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StringLegacyDataResponse>> {
+    async devicesGetPairCodeRequestOpts(requestParameters: DevicesGetPairCodeRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['deviceId'] == null) {
             throw new runtime.RequiredError(
                 'deviceId',
@@ -424,12 +535,20 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
         let urlPath = `/1/devices/{deviceId}/pair`;
         urlPath = urlPath.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Get a pair code for a device
+     */
+    async devicesGetPairCodeRaw(requestParameters: DevicesGetPairCodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StringLegacyDataResponse>> {
+        const requestOptions = await this.devicesGetPairCodeRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => StringLegacyDataResponseFromJSON(jsonValue));
     }
@@ -443,9 +562,9 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
     }
 
     /**
-     * Get all shockers for a device
+     * Creates request options for devicesGetShockers without sending the request
      */
-    async devicesGetShockersRaw(requestParameters: DevicesGetShockersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShockerResponseArrayLegacyDataResponse>> {
+    async devicesGetShockersRequestOpts(requestParameters: DevicesGetShockersRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['deviceId'] == null) {
             throw new runtime.RequiredError(
                 'deviceId',
@@ -465,12 +584,20 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
         let urlPath = `/1/devices/{deviceId}/shockers`;
         urlPath = urlPath.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Get all shockers for a device
+     */
+    async devicesGetShockersRaw(requestParameters: DevicesGetShockersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShockerResponseArrayLegacyDataResponse>> {
+        const requestOptions = await this.devicesGetShockersRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ShockerResponseArrayLegacyDataResponseFromJSON(jsonValue));
     }
@@ -484,9 +611,9 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
     }
 
     /**
-     * Get all devices for the current user
+     * Creates request options for devicesListDevices without sending the request
      */
-    async devicesListDevicesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DeviceResponseArrayLegacyDataResponse>> {
+    async devicesListDevicesRequestOpts(): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -498,12 +625,20 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
 
         let urlPath = `/1/devices`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Get all devices for the current user
+     */
+    async devicesListDevicesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DeviceResponseArrayLegacyDataResponse>> {
+        const requestOptions = await this.devicesListDevicesRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => DeviceResponseArrayLegacyDataResponseFromJSON(jsonValue));
     }
@@ -517,9 +652,9 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
     }
 
     /**
-     * Gets the OTA update history for a device
+     * Creates request options for devicesOtaGetOtaUpdateHistory without sending the request
      */
-    async devicesOtaGetOtaUpdateHistoryRaw(requestParameters: DevicesOtaGetOtaUpdateHistoryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OtaItemIReadOnlyCollectionLegacyDataResponse>> {
+    async devicesOtaGetOtaUpdateHistoryRequestOpts(requestParameters: DevicesOtaGetOtaUpdateHistoryRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['deviceId'] == null) {
             throw new runtime.RequiredError(
                 'deviceId',
@@ -535,12 +670,20 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
         let urlPath = `/1/devices/{deviceId}/ota`;
         urlPath = urlPath.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Gets the OTA update history for a device
+     */
+    async devicesOtaGetOtaUpdateHistoryRaw(requestParameters: DevicesOtaGetOtaUpdateHistoryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OtaItemIReadOnlyCollectionLegacyDataResponse>> {
+        const requestOptions = await this.devicesOtaGetOtaUpdateHistoryRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => OtaItemIReadOnlyCollectionLegacyDataResponseFromJSON(jsonValue));
     }
@@ -554,9 +697,9 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
     }
 
     /**
-     * Regenerate a device token
+     * Creates request options for devicesRegenerateDeviceToken without sending the request
      */
-    async devicesRegenerateDeviceTokenRaw(requestParameters: DevicesRegenerateDeviceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
+    async devicesRegenerateDeviceTokenRequestOpts(requestParameters: DevicesRegenerateDeviceTokenRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['deviceId'] == null) {
             throw new runtime.RequiredError(
                 'deviceId',
@@ -576,12 +719,20 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
         let urlPath = `/1/devices/{deviceId}`;
         urlPath = urlPath.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Regenerate a device token
+     */
+    async devicesRegenerateDeviceTokenRaw(requestParameters: DevicesRegenerateDeviceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
+        const requestOptions = await this.devicesRegenerateDeviceTokenRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         if (this.isJsonMime(response.headers.get('content-type'))) {
             return new runtime.JSONApiResponse<string>(response);
@@ -599,9 +750,9 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
     }
 
     /**
-     * Remove a device from current user\'s account
+     * Creates request options for devicesRemoveDevice without sending the request
      */
-    async devicesRemoveDeviceRaw(requestParameters: DevicesRemoveDeviceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async devicesRemoveDeviceRequestOpts(requestParameters: DevicesRemoveDeviceRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['deviceId'] == null) {
             throw new runtime.RequiredError(
                 'deviceId',
@@ -621,12 +772,20 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
         let urlPath = `/1/devices/{deviceId}`;
         urlPath = urlPath.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Remove a device from current user\'s account
+     */
+    async devicesRemoveDeviceRaw(requestParameters: DevicesRemoveDeviceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.devicesRemoveDeviceRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }

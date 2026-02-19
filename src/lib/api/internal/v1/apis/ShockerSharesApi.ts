@@ -41,6 +41,14 @@ export interface SharesLinkShareCodeRequest {
  */
 export interface ShockerSharesApiInterface {
     /**
+     * Creates request options for sharesDeleteShareCode without sending the request
+     * @param {string} shareCodeId 
+     * @throws {RequiredError}
+     * @memberof ShockerSharesApiInterface
+     */
+    sharesDeleteShareCodeRequestOpts(requestParameters: SharesDeleteShareCodeRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Delete a share code
      * @param {string} shareCodeId 
@@ -54,6 +62,14 @@ export interface ShockerSharesApiInterface {
      * Delete a share code
      */
     sharesDeleteShareCode(shareCodeId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
+
+    /**
+     * Creates request options for sharesLinkShareCode without sending the request
+     * @param {string} shareCodeId 
+     * @throws {RequiredError}
+     * @memberof ShockerSharesApiInterface
+     */
+    sharesLinkShareCodeRequestOpts(requestParameters: SharesLinkShareCodeRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -78,9 +94,9 @@ export interface ShockerSharesApiInterface {
 export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesApiInterface {
 
     /**
-     * Delete a share code
+     * Creates request options for sharesDeleteShareCode without sending the request
      */
-    async sharesDeleteShareCodeRaw(requestParameters: SharesDeleteShareCodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>> {
+    async sharesDeleteShareCodeRequestOpts(requestParameters: SharesDeleteShareCodeRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['shareCodeId'] == null) {
             throw new runtime.RequiredError(
                 'shareCodeId',
@@ -96,12 +112,20 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
         let urlPath = `/1/shares/code/{shareCodeId}`;
         urlPath = urlPath.replace(`{${"shareCodeId"}}`, encodeURIComponent(String(requestParameters['shareCodeId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Delete a share code
+     */
+    async sharesDeleteShareCodeRaw(requestParameters: SharesDeleteShareCodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>> {
+        const requestOptions = await this.sharesDeleteShareCodeRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => LegacyEmptyResponseFromJSON(jsonValue));
     }
@@ -115,9 +139,9 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
     }
 
     /**
-     * Link a share code to your account
+     * Creates request options for sharesLinkShareCode without sending the request
      */
-    async sharesLinkShareCodeRaw(requestParameters: SharesLinkShareCodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>> {
+    async sharesLinkShareCodeRequestOpts(requestParameters: SharesLinkShareCodeRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['shareCodeId'] == null) {
             throw new runtime.RequiredError(
                 'shareCodeId',
@@ -133,12 +157,20 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
         let urlPath = `/1/shares/code/{shareCodeId}`;
         urlPath = urlPath.replace(`{${"shareCodeId"}}`, encodeURIComponent(String(requestParameters['shareCodeId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Link a share code to your account
+     */
+    async sharesLinkShareCodeRaw(requestParameters: SharesLinkShareCodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>> {
+        const requestOptions = await this.sharesLinkShareCodeRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => LegacyEmptyResponseFromJSON(jsonValue));
     }

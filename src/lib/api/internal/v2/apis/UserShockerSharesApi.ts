@@ -85,6 +85,15 @@ export interface UserSharesRedeemInviteRequest {
  */
 export interface UserShockerSharesApiInterface {
     /**
+     * Creates request options for userSharesBulkPauseUserShareShockers without sending the request
+     * @param {string} userId 
+     * @param {PauseUserShareShockersRequest} [pauseUserShareShockersRequest] 
+     * @throws {RequiredError}
+     * @memberof UserShockerSharesApiInterface
+     */
+    userSharesBulkPauseUserShareShockersRequestOpts(requestParameters: UserSharesBulkPauseUserShareShockersRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @param {string} userId 
      * @param {PauseUserShareShockersRequest} [pauseUserShareShockersRequest] 
@@ -99,6 +108,15 @@ export interface UserShockerSharesApiInterface {
     userSharesBulkPauseUserShareShockers(userId: string, pauseUserShareShockersRequest?: PauseUserShareShockersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PauseUserShareShockersResponse>;
 
     /**
+     * Creates request options for userSharesBulkRemoveUserShareShockers without sending the request
+     * @param {string} userId 
+     * @param {Array<string>} [requestBody] 
+     * @throws {RequiredError}
+     * @memberof UserShockerSharesApiInterface
+     */
+    userSharesBulkRemoveUserShareShockersRequestOpts(requestParameters: UserSharesBulkRemoveUserShareShockersRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @param {string} userId 
      * @param {Array<string>} [requestBody] 
@@ -111,6 +129,15 @@ export interface UserShockerSharesApiInterface {
     /**
      */
     userSharesBulkRemoveUserShareShockers(userId: string, requestBody?: Array<string>, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RemoveUserSharesResponse>;
+
+    /**
+     * Creates request options for userSharesBulkUserShareShockersUpdate without sending the request
+     * @param {string} userId 
+     * @param {BulkUserShareShockersUpdateRequest} [bulkUserShareShockersUpdateRequest] 
+     * @throws {RequiredError}
+     * @memberof UserShockerSharesApiInterface
+     */
+    userSharesBulkUserShareShockersUpdateRequestOpts(requestParameters: UserSharesBulkUserShareShockersUpdateRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -129,6 +156,14 @@ export interface UserShockerSharesApiInterface {
     userSharesBulkUserShareShockersUpdate(userId: string, bulkUserShareShockersUpdateRequest?: BulkUserShareShockersUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
+     * Creates request options for userSharesCreateShareInvite without sending the request
+     * @param {CreateShareRequest} [createShareRequest] 
+     * @throws {RequiredError}
+     * @memberof UserShockerSharesApiInterface
+     */
+    userSharesCreateShareInviteRequestOpts(requestParameters: UserSharesCreateShareInviteRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @param {CreateShareRequest} [createShareRequest] 
      * @param {*} [options] Override http request option.
@@ -140,6 +175,14 @@ export interface UserShockerSharesApiInterface {
     /**
      */
     userSharesCreateShareInvite(createShareRequest?: CreateShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
+
+    /**
+     * Creates request options for userSharesDeleteOutgoingInvite without sending the request
+     * @param {string} inviteId 
+     * @throws {RequiredError}
+     * @memberof UserShockerSharesApiInterface
+     */
+    userSharesDeleteOutgoingInviteRequestOpts(requestParameters: UserSharesDeleteOutgoingInviteRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -155,6 +198,14 @@ export interface UserShockerSharesApiInterface {
     userSharesDeleteOutgoingInvite(inviteId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
+     * Creates request options for userSharesDenyIncomingInvite without sending the request
+     * @param {string} inviteId 
+     * @throws {RequiredError}
+     * @memberof UserShockerSharesApiInterface
+     */
+    userSharesDenyIncomingInviteRequestOpts(requestParameters: UserSharesDenyIncomingInviteRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @param {string} inviteId 
      * @param {*} [options] Override http request option.
@@ -166,6 +217,13 @@ export interface UserShockerSharesApiInterface {
     /**
      */
     userSharesDenyIncomingInvite(inviteId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * Creates request options for userSharesGetIncomingInvitesList without sending the request
+     * @throws {RequiredError}
+     * @memberof UserShockerSharesApiInterface
+     */
+    userSharesGetIncomingInvitesListRequestOpts(): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -180,6 +238,13 @@ export interface UserShockerSharesApiInterface {
     userSharesGetIncomingInvitesList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ShareInviteBaseDetails>>;
 
     /**
+     * Creates request options for userSharesGetOutgoingInvitesList without sending the request
+     * @throws {RequiredError}
+     * @memberof UserShockerSharesApiInterface
+     */
+    userSharesGetOutgoingInvitesListRequestOpts(): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -192,6 +257,13 @@ export interface UserShockerSharesApiInterface {
     userSharesGetOutgoingInvitesList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ShareInviteBaseDetails>>;
 
     /**
+     * Creates request options for userSharesGetSharesByUsers without sending the request
+     * @throws {RequiredError}
+     * @memberof UserShockerSharesApiInterface
+     */
+    userSharesGetSharesByUsersRequestOpts(): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -202,6 +274,14 @@ export interface UserShockerSharesApiInterface {
     /**
      */
     userSharesGetSharesByUsers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<V2UserShares>;
+
+    /**
+     * Creates request options for userSharesRedeemInvite without sending the request
+     * @param {string} inviteId 
+     * @throws {RequiredError}
+     * @memberof UserShockerSharesApiInterface
+     */
+    userSharesRedeemInviteRequestOpts(requestParameters: UserSharesRedeemInviteRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -226,8 +306,9 @@ export interface UserShockerSharesApiInterface {
 export class UserShockerSharesApi extends runtime.BaseAPI implements UserShockerSharesApiInterface {
 
     /**
+     * Creates request options for userSharesBulkPauseUserShareShockers without sending the request
      */
-    async userSharesBulkPauseUserShareShockersRaw(requestParameters: UserSharesBulkPauseUserShareShockersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PauseUserShareShockersResponse>> {
+    async userSharesBulkPauseUserShareShockersRequestOpts(requestParameters: UserSharesBulkPauseUserShareShockersRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['userId'] == null) {
             throw new runtime.RequiredError(
                 'userId',
@@ -245,13 +326,20 @@ export class UserShockerSharesApi extends runtime.BaseAPI implements UserShocker
         let urlPath = `/2/shares/user/{userId}/shockers/pause`;
         urlPath = urlPath.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: PauseUserShareShockersRequestToJSON(requestParameters['pauseUserShareShockersRequest']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     */
+    async userSharesBulkPauseUserShareShockersRaw(requestParameters: UserSharesBulkPauseUserShareShockersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PauseUserShareShockersResponse>> {
+        const requestOptions = await this.userSharesBulkPauseUserShareShockersRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => PauseUserShareShockersResponseFromJSON(jsonValue));
     }
@@ -264,8 +352,9 @@ export class UserShockerSharesApi extends runtime.BaseAPI implements UserShocker
     }
 
     /**
+     * Creates request options for userSharesBulkRemoveUserShareShockers without sending the request
      */
-    async userSharesBulkRemoveUserShareShockersRaw(requestParameters: UserSharesBulkRemoveUserShareShockersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RemoveUserSharesResponse>> {
+    async userSharesBulkRemoveUserShareShockersRequestOpts(requestParameters: UserSharesBulkRemoveUserShareShockersRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['userId'] == null) {
             throw new runtime.RequiredError(
                 'userId',
@@ -283,13 +372,20 @@ export class UserShockerSharesApi extends runtime.BaseAPI implements UserShocker
         let urlPath = `/2/shares/user/{userId}/shockers`;
         urlPath = urlPath.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
             body: requestParameters['requestBody'],
-        }, initOverrides);
+        };
+    }
+
+    /**
+     */
+    async userSharesBulkRemoveUserShareShockersRaw(requestParameters: UserSharesBulkRemoveUserShareShockersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RemoveUserSharesResponse>> {
+        const requestOptions = await this.userSharesBulkRemoveUserShareShockersRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => RemoveUserSharesResponseFromJSON(jsonValue));
     }
@@ -302,9 +398,9 @@ export class UserShockerSharesApi extends runtime.BaseAPI implements UserShocker
     }
 
     /**
-     * Update user shares for a shocker
+     * Creates request options for userSharesBulkUserShareShockersUpdate without sending the request
      */
-    async userSharesBulkUserShareShockersUpdateRaw(requestParameters: UserSharesBulkUserShareShockersUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async userSharesBulkUserShareShockersUpdateRequestOpts(requestParameters: UserSharesBulkUserShareShockersUpdateRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['userId'] == null) {
             throw new runtime.RequiredError(
                 'userId',
@@ -322,13 +418,21 @@ export class UserShockerSharesApi extends runtime.BaseAPI implements UserShocker
         let urlPath = `/2/shares/user/{userId}/shockers`;
         urlPath = urlPath.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
             body: BulkUserShareShockersUpdateRequestToJSON(requestParameters['bulkUserShareShockersUpdateRequest']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Update user shares for a shocker
+     */
+    async userSharesBulkUserShareShockersUpdateRaw(requestParameters: UserSharesBulkUserShareShockersUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.userSharesBulkUserShareShockersUpdateRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
@@ -341,8 +445,9 @@ export class UserShockerSharesApi extends runtime.BaseAPI implements UserShocker
     }
 
     /**
+     * Creates request options for userSharesCreateShareInvite without sending the request
      */
-    async userSharesCreateShareInviteRaw(requestParameters: UserSharesCreateShareInviteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
+    async userSharesCreateShareInviteRequestOpts(requestParameters: UserSharesCreateShareInviteRequest): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -352,13 +457,20 @@ export class UserShockerSharesApi extends runtime.BaseAPI implements UserShocker
 
         let urlPath = `/2/shares/user/invites`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: CreateShareRequestToJSON(requestParameters['createShareRequest']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     */
+    async userSharesCreateShareInviteRaw(requestParameters: UserSharesCreateShareInviteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
+        const requestOptions = await this.userSharesCreateShareInviteRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         if (this.isJsonMime(response.headers.get('content-type'))) {
             return new runtime.JSONApiResponse<string>(response);
@@ -375,8 +487,9 @@ export class UserShockerSharesApi extends runtime.BaseAPI implements UserShocker
     }
 
     /**
+     * Creates request options for userSharesDeleteOutgoingInvite without sending the request
      */
-    async userSharesDeleteOutgoingInviteRaw(requestParameters: UserSharesDeleteOutgoingInviteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async userSharesDeleteOutgoingInviteRequestOpts(requestParameters: UserSharesDeleteOutgoingInviteRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['inviteId'] == null) {
             throw new runtime.RequiredError(
                 'inviteId',
@@ -392,12 +505,19 @@ export class UserShockerSharesApi extends runtime.BaseAPI implements UserShocker
         let urlPath = `/2/shares/user/invites/outgoing/{inviteId}`;
         urlPath = urlPath.replace(`{${"inviteId"}}`, encodeURIComponent(String(requestParameters['inviteId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     */
+    async userSharesDeleteOutgoingInviteRaw(requestParameters: UserSharesDeleteOutgoingInviteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.userSharesDeleteOutgoingInviteRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
@@ -409,8 +529,9 @@ export class UserShockerSharesApi extends runtime.BaseAPI implements UserShocker
     }
 
     /**
+     * Creates request options for userSharesDenyIncomingInvite without sending the request
      */
-    async userSharesDenyIncomingInviteRaw(requestParameters: UserSharesDenyIncomingInviteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async userSharesDenyIncomingInviteRequestOpts(requestParameters: UserSharesDenyIncomingInviteRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['inviteId'] == null) {
             throw new runtime.RequiredError(
                 'inviteId',
@@ -426,12 +547,19 @@ export class UserShockerSharesApi extends runtime.BaseAPI implements UserShocker
         let urlPath = `/2/shares/user/invites/incoming/{inviteId}`;
         urlPath = urlPath.replace(`{${"inviteId"}}`, encodeURIComponent(String(requestParameters['inviteId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     */
+    async userSharesDenyIncomingInviteRaw(requestParameters: UserSharesDenyIncomingInviteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.userSharesDenyIncomingInviteRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
@@ -443,8 +571,9 @@ export class UserShockerSharesApi extends runtime.BaseAPI implements UserShocker
     }
 
     /**
+     * Creates request options for userSharesGetIncomingInvitesList without sending the request
      */
-    async userSharesGetIncomingInvitesListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ShareInviteBaseDetails>>> {
+    async userSharesGetIncomingInvitesListRequestOpts(): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -452,12 +581,19 @@ export class UserShockerSharesApi extends runtime.BaseAPI implements UserShocker
 
         let urlPath = `/2/shares/user/invites/incoming`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     */
+    async userSharesGetIncomingInvitesListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ShareInviteBaseDetails>>> {
+        const requestOptions = await this.userSharesGetIncomingInvitesListRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ShareInviteBaseDetailsFromJSON));
     }
@@ -470,8 +606,9 @@ export class UserShockerSharesApi extends runtime.BaseAPI implements UserShocker
     }
 
     /**
+     * Creates request options for userSharesGetOutgoingInvitesList without sending the request
      */
-    async userSharesGetOutgoingInvitesListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ShareInviteBaseDetails>>> {
+    async userSharesGetOutgoingInvitesListRequestOpts(): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -479,12 +616,19 @@ export class UserShockerSharesApi extends runtime.BaseAPI implements UserShocker
 
         let urlPath = `/2/shares/user/invites/outgoing`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     */
+    async userSharesGetOutgoingInvitesListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ShareInviteBaseDetails>>> {
+        const requestOptions = await this.userSharesGetOutgoingInvitesListRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ShareInviteBaseDetailsFromJSON));
     }
@@ -497,8 +641,9 @@ export class UserShockerSharesApi extends runtime.BaseAPI implements UserShocker
     }
 
     /**
+     * Creates request options for userSharesGetSharesByUsers without sending the request
      */
-    async userSharesGetSharesByUsersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<V2UserShares>> {
+    async userSharesGetSharesByUsersRequestOpts(): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -506,12 +651,19 @@ export class UserShockerSharesApi extends runtime.BaseAPI implements UserShocker
 
         let urlPath = `/2/shares/user`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     */
+    async userSharesGetSharesByUsersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<V2UserShares>> {
+        const requestOptions = await this.userSharesGetSharesByUsersRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => V2UserSharesFromJSON(jsonValue));
     }
@@ -524,9 +676,9 @@ export class UserShockerSharesApi extends runtime.BaseAPI implements UserShocker
     }
 
     /**
-     * Accept a share request and share the shockers with the current user.
+     * Creates request options for userSharesRedeemInvite without sending the request
      */
-    async userSharesRedeemInviteRaw(requestParameters: UserSharesRedeemInviteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<V2UserSharesListItem>> {
+    async userSharesRedeemInviteRequestOpts(requestParameters: UserSharesRedeemInviteRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['inviteId'] == null) {
             throw new runtime.RequiredError(
                 'inviteId',
@@ -542,12 +694,20 @@ export class UserShockerSharesApi extends runtime.BaseAPI implements UserShocker
         let urlPath = `/2/shares/user/invites/incoming/{inviteId}`;
         urlPath = urlPath.replace(`{${"inviteId"}}`, encodeURIComponent(String(requestParameters['inviteId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Accept a share request and share the shockers with the current user.
+     */
+    async userSharesRedeemInviteRaw(requestParameters: UserSharesRedeemInviteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<V2UserSharesListItem>> {
+        const requestOptions = await this.userSharesRedeemInviteRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => V2UserSharesListItemFromJSON(jsonValue));
     }

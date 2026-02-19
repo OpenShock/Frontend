@@ -16,11 +16,10 @@
   import { accountV2Api } from '$lib/api';
   import { UserStore } from '$lib/stores/UserStore';
   import { initializeSignalR } from '$lib/signalr';
-  import { goto } from '$app/navigation';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
-  import { page } from '$app/state';
   import OauthButtons from '$lib/components/auth/oauth-buttons.svelte';
+  import { gotoQueryRedirectOrFallback } from '$lib/utils/url';
 
   let usernameOrEmail = $state('');
   let password = $state('');
@@ -51,20 +50,7 @@
       });
       await initializeSignalR();
 
-      const redirectParam = page.url.searchParams.get('redirect');
-      let redirectPath = '/home';
-      if (redirectParam) {
-        try {
-          const redirectUrl = new URL(redirectParam, page.url.origin);
-          if (redirectUrl.origin === page.url.origin) {
-            redirectPath = redirectUrl.pathname + redirectUrl.search + redirectUrl.hash;
-          }
-        } catch {
-          // If the redirect parameter is not a valid URL, fall back to the default.
-        }
-      }
-      // eslint-disable-next-line svelte/no-navigation-without-resolve
-      goto(redirectPath);
+      gotoQueryRedirectOrFallback('/home', 'redirect');
     } catch (error) {
       await handleApiError(error, (problem) => {
         if (!isValidationError(problem)) return false;
