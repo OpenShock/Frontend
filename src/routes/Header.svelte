@@ -16,7 +16,7 @@
   import Breadcrumb from './Breadcrumb.svelte';
   import { unsafeResolve } from '$lib/utils/url';
   import { resolve } from '$app/paths';
-  import { ArrowBigUpDash, LogIn } from '@lucide/svelte';
+  import { ArrowBigUpDash, LogIn, UserPlus } from '@lucide/svelte';
 
   let sidebar = useSidebar();
 </script>
@@ -66,8 +66,8 @@
         </DropdownMenu.Content>
       </DropdownMenu.Root>
     {:else}
-      <Button variant="outline" href={resolve('/login')}><LogIn /> Login</Button>
-      <Button variant="outline" href={resolve('/signup')}><ArrowBigUpDash /> Sign Up</Button>
+      <Button variant="outline" href={resolve('/login')}>Login <LogIn /></Button>
+      <Button variant="outline" href={resolve('/signup')}>Sign Up <UserPlus /></Button>
       <div class="hidden sm:flex sm:flex-row">
         <a href={PUBLIC_GITHUB_PROJECT_URL} class="p-2" title="Project GitHub">
           <GithubIcon class="size-6 fill-black dark:fill-white" />
