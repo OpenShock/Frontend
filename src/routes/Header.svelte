@@ -1,5 +1,5 @@
 <script lang="ts">
-  /* eslint-disable svelte/no-navigation-without-resolve */
+  /* eslint-disable svelte/no-navigation-without-resolve -- uses prefixBase for dynamic navigation and external URLs */
 
   import PanelLeft from '@lucide/svelte/icons/panel-left';
   import { goto } from '$app/navigation';

@@ -4,7 +4,7 @@
   import type { Component } from 'svelte';
 
   interface Props {
-    /* eslint-disable-next-line @typescript-eslint/no-empty-object-type */
+    /* eslint-disable-next-line @typescript-eslint/no-empty-object-type -- Component type signature requires empty object for events/slots */
     icon: Component<IconProps, {}, ''>;
     enabled: boolean;
   }

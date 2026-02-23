@@ -1,5 +1,5 @@
 <script lang="ts">
-  /* eslint-disable svelte/no-navigation-without-resolve */
+  /* eslint-disable svelte/no-navigation-without-resolve -- only contains external URLs */
 
   import { HubConnectionState } from '@microsoft/signalr';
   import { PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
