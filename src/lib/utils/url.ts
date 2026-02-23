@@ -2,7 +2,16 @@ import { goto } from '$app/navigation';
 import { asset, base, match } from '$app/paths';
 import { page } from '$app/state';
 import type { Asset, Pathname } from '$app/types';
+import { browser } from '$app/environment';
 import { PUBLIC_BACKEND_API_URL, PUBLIC_SITE_SHORT_URL, PUBLIC_SITE_URL } from '$env/static/public';
+import { redirectSanitized } from '$lib/state/RedirectSanitized.svelte';
+
+// ---------------------------------------------------------------------------
+// Constants
+// ---------------------------------------------------------------------------
+
+/** Default query parameter name used for login/signup redirect targets. */
+export const REDIRECT_QUERY_PARAM = 'redirect';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -124,51 +133,93 @@ export function getSiteShortURL(path: Pathname): URL {
 // ---------------------------------------------------------------------------
 
 /**
+ * Returns `true` when the given string is a same-origin HTTP(S) URL
+ * relative to `PUBLIC_SITE_URL`.
+ *
+ * This is a pure, synchronous check — it does **not** verify that the
+ * pathname matches a known route (that requires an async `match()` call).
+ *
+ * @param value - The raw redirect value to validate
+ * @returns Whether the value is a safe, same-origin redirect target
+ */
+export function isValidRedirectParam(value: string): boolean {
+  try {
+    const expected = new URL(PUBLIC_SITE_URL);
+    const parsed = new URL(value, expected);
+
+    const isHttp = parsed.protocol === 'http:' || parsed.protocol === 'https:';
+    const sameOrigin = parsed.origin === expected.origin;
+
+    return isHttp && sameOrigin;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Strips an invalid redirect query parameter from the current URL bar.
+ *
+ * Reads the given query parameter from `window.location`. If it is
+ * present and fails {@link isValidRedirectParam}, the parameter is
+ * removed via the native History API so the user never sees a suspicious
+ * value in their address bar. No-ops on the server.
+ *
+ * Uses native browser APIs instead of SvelteKit's `replaceState` so it
+ * can safely run in `hooks.client.ts` `init()` — before SvelteKit's
+ * router is initialised.
+ *
+ * @param queryParam - Name of the query parameter to check (default {@link REDIRECT_QUERY_PARAM})
+ */
+export function sanitizeRedirectSearchParam(queryParam: string = REDIRECT_QUERY_PARAM): void {
+  if (!browser) return;
+
+  const url = new URL(window.location.href);
+  const value = url.searchParams.get(queryParam);
+  if (value === null) return;
+
+  if (!isValidRedirectParam(value)) {
+    url.searchParams.delete(queryParam);
+    history.replaceState(history.state, '', url);
+    redirectSanitized.set();
+  }
+}
+
+/**
  * Navigates to a redirect target read from a URL query parameter,
  * falling back to a safe internal pathname when the parameter is
  * missing or doesn't match a known route.
  *
- * Only the **pathname** portion of the redirect value is used;
- * query strings and hash fragments in the redirect parameter are
- * intentionally stripped to keep the value {@link Pathname}-safe.
+ * The pathname, query string, and hash fragment from the redirect
+ * parameter are preserved when the target is valid. Only same-origin,
+ * HTTP(S) URLs whose pathname matches a known route are accepted;
+ * everything else falls back to {@link fallback}.
  *
  * @param fallback   - Safe fallback pathname if redirect is missing/invalid
  * @param queryParam - Name of the query parameter holding the redirect target
  *
  * @example
  * ```ts
- * // URL: /login?redirect=/settings/account
+ * // URL: /login?redirect=/settings/account%3Ftab%3Dsecurity
  * await gotoQueryRedirectOrFallback('/dashboard', 'redirect');
- * // → navigates to /settings/account (if it matches a route)
+ * // → navigates to /settings/account?tab=security (if it matches a route)
  * // → otherwise navigates to /dashboard
  * ```
  */
 export async function gotoQueryRedirectOrFallback(
   fallback: Pathname,
-  queryParam: string = 'redirect'
+  queryParam: string = REDIRECT_QUERY_PARAM
 ) {
   let target: Pathname = fallback;
 
   const redirectParam = page.url.searchParams.get(queryParam);
 
-  if (redirectParam !== null) {
-    try {
-      const expected = new URL(PUBLIC_SITE_URL);
-      const parsed = new URL(redirectParam, expected);
+  if (redirectParam !== null && isValidRedirectParam(redirectParam)) {
+    const parsed = new URL(redirectParam, PUBLIC_SITE_URL);
+    const pathname = parsed.pathname;
 
-      const isHttp = parsed.protocol === 'http:' || parsed.protocol === 'https:';
-      const sameOrigin = parsed.origin === expected.origin;
-
-      if (isHttp && sameOrigin) {
-        const pathname = parsed.pathname;
-
-        const matched = await match(pathname);
-        if (matched !== null) {
-          target = (pathname + parsed.search) as Pathname;
-        }
-      }
-    } catch {
-      // ignore invalid URLs
+    const matched = await match(pathname);
+    if (matched !== null) {
+      target = (pathname + parsed.search + parsed.hash) as Pathname;
     }
   }
 

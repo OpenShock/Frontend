@@ -22,7 +22,7 @@
 </script>
 
 {#snippet dropdownItem(name: string, url: Pathname)}
-  <!-- I know this is deprecated buy resolve() is too strict to be used here... -->
+  <!-- prefixBase is used here because resolve() requires a route ID, not a plain pathname -->
   <DropdownMenu.Item class="cursor-pointer" onclick={() => goto(prefixBase(url))}>
     {name}
   </DropdownMenu.Item>

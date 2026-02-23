@@ -39,7 +39,8 @@ function GetBasePath(): string {
 
     return `${url.origin}${pathname}`;
   } catch (error) {
-    throw new Error('PUBLIC_BACKEND_API_URL is not a valid URL', { cause: error });
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(`PUBLIC_BACKEND_API_URL is not a valid URL: ${message}`, { cause: error });
   }
 }
 

@@ -45,6 +45,15 @@
       };
     }
 
+    try {
+      const parsed = new URL(redirectUri);
+      if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+        return { error: 'redirect_uri must use an HTTP or HTTPS scheme.' };
+      }
+    } catch {
+      return { error: 'redirect_uri is not a valid URL.' };
+    }
+
     const permissionsArray = permissions.split(',');
     if (permissionsArray.length === 0) {
       return {
