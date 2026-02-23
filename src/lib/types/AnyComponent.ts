@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any -- type must accept any component props/events/slots signatures */
 
 import type { Component, SvelteComponent } from 'svelte';
 

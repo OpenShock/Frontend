@@ -24,7 +24,7 @@ function getGitHash() {
   return child_process.execSync('git rev-parse HEAD').toString().trim();
 }
 
-/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars -- kept for future build-time branch detection */
 function getGitBranch() {
   if (isGithubActions) return process.env.GITHUB_REF_NAME;
   if (isCloudflare) return process.env.CF_BRANCH;

@@ -3,7 +3,7 @@ import { getSiteAssetURL } from './utils/url';
 
 const LogoSvgAssetURL = getSiteAssetURL('/logo.svg');
 
-/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars -- kept for future per-page metadata customization */
 function getPageTitleAndDescription(url: URL): { title: string; description: string } {
   const title = PUBLIC_SITE_NAME.trim();
   const details = PUBLIC_SITE_DESCRIPTION.trim();
