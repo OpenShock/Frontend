@@ -1,11 +1,11 @@
 <script lang="ts">
   import { afterNavigate } from '$app/navigation';
-  import { asset, base } from '$app/paths';
+  import { asset } from '$app/paths';
   import { page } from '$app/state';
   import type { Pathname } from '$app/types';
   import { PUBLIC_SITE_NAME } from '$env/static/public';
   import { BasicTags, OpenGraphTags, TwitterSummaryTags } from '$lib/components/metadata';
-  import { unsafeResolve } from '$lib/utils/url';
+  import { prefixBase } from '$lib/utils/url';
 
   let previousPage = $state<Pathname>('/');
 
@@ -41,6 +41,6 @@
     <br />
     <!-- I know this is deprecated buy resolve() is too strict to be used here... -->
     <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-    <a href={unsafeResolve(previousPage)}>Go back</a>
+    <a href={prefixBase(previousPage)}>Go back</a>
   </div>
 </div>

@@ -8,6 +8,8 @@
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
   import type { QueryParamsType } from './queryParamsType';
+  import { page } from '$app/state';
+  import { browser } from '$app/environment';
 
   let windowQueryParams = $state<
     | QueryParamsType
@@ -26,12 +28,11 @@
     | {
         error: string;
       } {
-    if (typeof window === 'undefined') {
+    if (!browser) {
       throw new Error('getQueryParams can only be called in the browser');
     }
 
-    const queryString = window.location.search;
-    const params = new URLSearchParams(queryString);
+    const params = page.url.searchParams;
 
     const name = params.get('name');
     const redirectUri = params.get('redirect_uri');

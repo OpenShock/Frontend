@@ -1,4 +1,5 @@
 import { PUBLIC_BACKEND_API_URL } from '$env/static/public';
+import { getBackendURL } from '$lib/utils/url';
 import {
   APITokensApi,
   AccountApi as AccountV1Api,
@@ -27,18 +28,14 @@ function GetBasePath(): string {
   }
 
   try {
-    const url = new URL(PUBLIC_BACKEND_API_URL);
+    const url = getBackendURL();
 
-    if (url.protocol !== 'https:') {
-      throw new Error('PUBLIC_BACKEND_API_URL must be a HTTPS url');
+    if (url.pathname === '/') {
+      return url.origin;
     }
 
-    if (url.search || url.hash) {
-      throw new Error('PUBLIC_BACKEND_API_URL must not contain query parameters or hash');
-    }
-
-    // Normalize pathname
-    const pathname = url.pathname === '/' ? '' : url.pathname.replace(/\/+$/, '');
+    // Trim trailing slashes
+    const pathname = url.pathname.replace(/\/+$/, '');
 
     return `${url.origin}${pathname}`;
   } catch (error) {

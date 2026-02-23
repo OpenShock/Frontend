@@ -39,7 +39,7 @@
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import { isMobile, isSerialSupported } from '$lib/utils/compatibility';
   import { Collapsible } from 'bits-ui';
-  import { unsafeResolve } from '$lib/utils/url';
+  import { prefixBase } from '$lib/utils/url';
 
   let currentUser = $derived($UserStore.self);
 
@@ -230,7 +230,7 @@
       {#snippet child({ props })}
         <!-- I know this is deprecated buy resolve() is too strict to be used here... -->
         <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-        <a href={menu.href ? unsafeResolve(menu.href) : undefined} {...props}>
+        <a href={menu.href ? prefixBase(menu.href) : undefined} {...props}>
           <menu.Icon />
           <span>{menu.title}</span>
         </a>

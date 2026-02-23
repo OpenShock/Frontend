@@ -1,11 +1,12 @@
-import { GetBackendUrl, GetJson, PostJson } from './base';
+import { getBackendURL } from '$lib/utils/url';
+import { GetJson, PostJson } from './base';
 import type { LoginOkResponse, OAuthFinalizeRequest, OAuthSignupData } from './models';
 import { TransformLoginOkResponse, TransformOAuthSignupData } from './transformers';
 
 export function GetOAuthAuthorizeUrl(provider: string, flow: 'LoginOrCreate' | 'Link'): string {
   const providerEnc = encodeURIComponent(provider);
   const flowEnc = encodeURIComponent(flow);
-  return GetBackendUrl(`1/oauth/${providerEnc}/authorize?flow=${flowEnc}`).toString();
+  return getBackendURL(`1/oauth/${providerEnc}/authorize?flow=${flowEnc}`).href;
 }
 
 export async function OAuthSignupGetData(provider: string) {
