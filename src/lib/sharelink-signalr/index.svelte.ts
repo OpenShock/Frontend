@@ -11,7 +11,11 @@ import {
 import { toast } from 'svelte-sonner';
 
 function GetShareLinkURL(shareLinkId: string, customName: string | null) {
-  return getBackendURL(`1/hubs/share/link/${shareLinkId}?name=${customName}`).href;
+  const url = getBackendURL(`1/hubs/share/link/${encodeURIComponent(shareLinkId)}`);
+  if (customName !== null) {
+    url.searchParams.set('name', customName || '');
+  }
+  return url.href;
 }
 
 export class ShareLinkSignalr {
