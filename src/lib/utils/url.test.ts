@@ -74,7 +74,6 @@ vi.mock('$env/static/public', () => ({
 
 // Import after mocks are set up
 const {
-  REDIRECT_QUERY_PARAM,
   getBackendURL,
   prefixBase,
   getSiteURL,

@@ -50,7 +50,7 @@
       });
       await initializeSignalR();
 
-      gotoQueryRedirectOrFallback('/home');
+      await gotoQueryRedirectOrFallback('/home');
     } catch (error) {
       await handleApiError(error, (problem) => {
         if (!isValidationError(problem)) return false;

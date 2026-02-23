@@ -7,7 +7,7 @@
 
   $effect(() => {
     if (!$UserStore.loading && $UserStore.self) {
-      gotoQueryRedirectOrFallback('/home');
+      void gotoQueryRedirectOrFallback('/home');
     }
   });
 </script>
