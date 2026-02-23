@@ -4,11 +4,7 @@ import { backendMetadata } from '$lib/state/BackendMetadata.svelte';
 import { initializeDarkModeStore } from '$lib/stores/ColorSchemeStore.svelte';
 import { initializeSerialPortsStore } from '$lib/stores/SerialPortsStore';
 import { UserStore } from '$lib/stores/UserStore';
-import { sanitizeRedirectSearchParam } from '$lib/utils/url';
-
 export async function init() {
-  sanitizeRedirectSearchParam();
-
   initBackendMetadata().catch((error) => {
     handleApiError(error);
   });

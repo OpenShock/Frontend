@@ -4,8 +4,6 @@ import { asset, base, match } from '$app/paths';
 import { page } from '$app/state';
 import type { Asset, Pathname } from '$app/types';
 import { PUBLIC_BACKEND_API_URL, PUBLIC_SITE_SHORT_URL, PUBLIC_SITE_URL } from '$env/static/public';
-import { redirectSanitized } from '$lib/state/RedirectSanitized.svelte';
-
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
@@ -187,24 +185,23 @@ export function isValidRedirectParam(value: string): boolean {
  * removed via the native History API so the user never sees a suspicious
  * value in their address bar. No-ops on the server.
  *
- * Uses native browser APIs instead of SvelteKit's `replaceState` so it
- * can safely run in `hooks.client.ts` `init()` — before SvelteKit's
- * router is initialised.
- *
  * @param queryParam - Name of the query parameter to check (default {@link REDIRECT_QUERY_PARAM})
+ * @returns `true` when a malicious parameter was stripped, `false` otherwise
  */
-export function sanitizeRedirectSearchParam(queryParam: string = REDIRECT_QUERY_PARAM): void {
-  if (!browser) return;
+export function sanitizeRedirectSearchParam(queryParam: string = REDIRECT_QUERY_PARAM): boolean {
+  if (!browser) return false;
 
   const url = new URL(window.location.href);
   const value = url.searchParams.get(queryParam);
-  if (value === null) return;
+  if (value === null) return false;
 
   if (!isValidRedirectParam(value)) {
     url.searchParams.delete(queryParam);
     history.replaceState(history.state, '', url);
-    redirectSanitized.set();
+    return true;
   }
+
+  return false;
 }
 
 /**

@@ -13,8 +13,6 @@
   import { browser } from '$app/environment';
   import DialogManager from '$lib/components/confirm-dialog/dialog-manager.svelte';
   import { isMobile } from '$lib/utils/compatibility';
-  import { redirectSanitized } from '$lib/state/RedirectSanitized.svelte';
-  import { toast } from 'svelte-sonner';
 
   interface Props {
     children?: Snippet;
@@ -29,13 +27,6 @@
   );
   $effect(() => {
     if (!isMobile) localStorage.setItem('sidebarOpen', isOpen ? 'true' : 'false');
-  });
-
-  $effect(() => {
-    if (redirectSanitized.value) {
-      redirectSanitized.reset();
-      toast.warning('An invalid redirect URL was removed for your safety.');
-    }
   });
 </script>
 
