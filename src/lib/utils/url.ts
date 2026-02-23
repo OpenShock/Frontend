@@ -1,8 +1,8 @@
+import { browser } from '$app/environment';
 import { goto } from '$app/navigation';
 import { asset, base, match } from '$app/paths';
 import { page } from '$app/state';
 import type { Asset, Pathname } from '$app/types';
-import { browser } from '$app/environment';
 import { PUBLIC_BACKEND_API_URL, PUBLIC_SITE_SHORT_URL, PUBLIC_SITE_URL } from '$env/static/public';
 import { redirectSanitized } from '$lib/state/RedirectSanitized.svelte';
 
