@@ -89,6 +89,21 @@ export function prefixBase(path: Pathname): string {
 }
 
 /**
+ * Strips the configured SvelteKit {@link base} path prefix from a pathname.
+ *
+ * Returns the pathname unchanged when it does not start with the base path.
+ *
+ * @param path - A pathname that may include the base prefix
+ * @returns The pathname without the base prefix
+ */
+export function stripBase(path: string): string {
+  if (base && path.startsWith(base)) {
+    return path.slice(base.length) || '/';
+  }
+  return path;
+}
+
+/**
  * Builds a fully-qualified site URL from an internal pathname.
  *
  * @param path         - Internal pathname (e.g. `/settings/account`)
@@ -126,6 +141,14 @@ export function getSiteShortURL(path: Pathname): URL {
   const url = new URL(PUBLIC_SITE_SHORT_URL);
   url.pathname = url.pathname.replace(/\/+$/, '') + path;
   return url;
+}
+
+/**
+ * Returns `true` when the request URL's origin matches the configured
+ * short-link domain (`PUBLIC_SITE_SHORT_URL`).
+ */
+export function isShortLinkOrigin(url: URL): boolean {
+  return url.origin === new URL(PUBLIC_SITE_SHORT_URL).origin;
 }
 
 // ---------------------------------------------------------------------------
@@ -215,9 +238,22 @@ export async function gotoQueryRedirectOrFallback(
 
   if (redirectParam !== null && isValidRedirectParam(redirectParam)) {
     const parsed = new URL(redirectParam, PUBLIC_SITE_URL);
-    const pathname = parsed.pathname;
+    let pathname = parsed.pathname;
 
-    const matched = await match(pathname);
+    let matched = await match(pathname);
+
+    // If match fails, try stripping the base path prefix (the redirect
+    // value may already include the base, e.g. from page.url.pathname).
+    if (matched === null) {
+      const stripped = stripBase(pathname);
+      if (stripped !== pathname) {
+        matched = await match(stripped);
+        if (matched !== null) {
+          pathname = stripped;
+        }
+      }
+    }
+
     if (matched !== null) {
       target = (pathname + parsed.search + parsed.hash) as Pathname;
     }
