@@ -134,7 +134,6 @@ export function getSiteShortURL(path: Pathname): URL {
  *
  * @param fallback   - Safe fallback pathname if redirect is missing/invalid
  * @param queryParam - Name of the query parameter holding the redirect target
- * @returns Never - `goto()` does not return
  *
  * @example
  * ```ts
@@ -147,29 +146,31 @@ export function getSiteShortURL(path: Pathname): URL {
 export async function gotoQueryRedirectOrFallback(
   fallback: Pathname,
   queryParam: string = 'redirect'
-): Promise<never> {
+) {
   let target: Pathname = fallback;
 
   const redirectParam = page.url.searchParams.get(queryParam);
 
   if (redirectParam !== null) {
-    // Extract only the pathname, discarding any query string or fragment
-    // that could have been smuggled into the parameter value.
-    let pathname: string | null;
     try {
-      pathname = new URL(redirectParam, 'http://dummy').pathname;
-    } catch {
-      pathname = null;
-    }
+      const expected = new URL(PUBLIC_SITE_URL);
+      const parsed = new URL(redirectParam, expected);
 
-    if (pathname !== null) {
-      const matched = await match(pathname);
-      if (matched !== null) {
-        target = pathname as Pathname;
+      const isHttp = parsed.protocol === 'http:' || parsed.protocol === 'https:';
+      const sameHost = parsed.hostname === expected.hostname;
+
+      if (isHttp && sameHost) {
+        const pathname = parsed.pathname;
+
+        const matched = await match(pathname);
+        if (matched !== null) {
+          target = (pathname + parsed.search) as Pathname;
+        }
       }
+    } catch {
+      // ignore invalid URLs
     }
   }
 
   await goto(prefixBase(target));
-  throw new Error('Unreachable: goto() should not return');
 }
