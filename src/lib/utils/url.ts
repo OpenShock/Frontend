@@ -197,6 +197,7 @@ export function sanitizeRedirectSearchParam(queryParam: string = REDIRECT_QUERY_
   if (!isValidRedirectParam(value)) {
     const sanitized = new URL(page.url);
     sanitized.searchParams.delete(queryParam);
+    /* eslint-disable-next-line svelte/no-navigation-without-resolve -- sanitized is already a full URL */
     replaceState(sanitized, {});
     return true;
   }
@@ -256,6 +257,6 @@ export async function gotoQueryRedirectOrFallback(
     }
   }
 
-  /* eslint-disable-next-line svelte/no-navigation-without-resolve */
+  /* eslint-disable-next-line svelte/no-navigation-without-resolve -- target is already a resolved pathname, prefixBase just adds the base path */
   await goto(prefixBase(target));
 }
