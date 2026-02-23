@@ -4,7 +4,7 @@ import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = ({ params }) => {
   return redirect(
-    308,
+    303,
     getSiteURL('/shares/user/outgoing', new URLSearchParams({ redeem: params.code }))
   );
 };

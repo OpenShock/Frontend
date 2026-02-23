@@ -157,9 +157,9 @@ export async function gotoQueryRedirectOrFallback(
       const parsed = new URL(redirectParam, expected);
 
       const isHttp = parsed.protocol === 'http:' || parsed.protocol === 'https:';
-      const sameHost = parsed.hostname === expected.hostname;
+      const sameOrigin = parsed.origin === expected.origin;
 
-      if (isHttp && sameHost) {
+      if (isHttp && sameOrigin) {
         const pathname = parsed.pathname;
 
         const matched = await match(pathname);
