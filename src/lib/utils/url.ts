@@ -1,5 +1,4 @@
-import { browser } from '$app/environment';
-import { goto } from '$app/navigation';
+import { goto, replaceState } from '$app/navigation';
 import { asset, base, match } from '$app/paths';
 import { page } from '$app/state';
 import type { Asset, Pathname } from '$app/types';
@@ -180,24 +179,25 @@ export function isValidRedirectParam(value: string): boolean {
 /**
  * Strips an invalid redirect query parameter from the current URL bar.
  *
- * Reads the given query parameter from `window.location`. If it is
- * present and fails {@link isValidRedirectParam}, the parameter is
- * removed via the native History API so the user never sees a suspicious
- * value in their address bar. No-ops on the server.
+ * Reads the given query parameter from SvelteKit's {@link page} state.
+ * If it is present and fails {@link isValidRedirectParam}, the parameter
+ * is removed via SvelteKit's {@link replaceState} so the user never sees
+ * a suspicious value in their address bar.
+ *
+ * Must be called after the SvelteKit router is initialised (e.g. in
+ * `onMount`).
  *
  * @param queryParam - Name of the query parameter to check (default {@link REDIRECT_QUERY_PARAM})
  * @returns `true` when a malicious parameter was stripped, `false` otherwise
  */
 export function sanitizeRedirectSearchParam(queryParam: string = REDIRECT_QUERY_PARAM): boolean {
-  if (!browser) return false;
-
-  const url = new URL(window.location.href);
-  const value = url.searchParams.get(queryParam);
+  const value = page.url.searchParams.get(queryParam);
   if (value === null) return false;
 
   if (!isValidRedirectParam(value)) {
-    url.searchParams.delete(queryParam);
-    history.replaceState(history.state, '', url);
+    const sanitized = new URL(page.url);
+    sanitized.searchParams.delete(queryParam);
+    replaceState(sanitized, {});
     return true;
   }
 

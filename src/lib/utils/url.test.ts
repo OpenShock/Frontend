@@ -9,10 +9,10 @@ const mocks = {
   asset: (p: string) => p,
   match: vi.fn<(path: string) => Promise<string | null>>().mockResolvedValue(null),
   goto: vi.fn<(url: string) => Promise<void>>().mockResolvedValue(undefined),
+  replaceState: vi.fn(),
   page: {
     url: new URL('https://openshock.app/login'),
   },
-  browser: true,
   PUBLIC_BACKEND_API_URL: 'https://api.openshock.app/',
   PUBLIC_SITE_URL: 'https://openshock.app/',
   PUBLIC_SITE_SHORT_URL: 'https://shockl.ink/',
@@ -28,12 +28,7 @@ vi.mock('$app/paths', () => ({
 
 vi.mock('$app/navigation', () => ({
   goto: (...args: unknown[]) => mocks.goto(args[0] as string),
-}));
-
-vi.mock('$app/environment', () => ({
-  get browser() {
-    return mocks.browser;
-  },
+  replaceState: (...args: unknown[]) => mocks.replaceState(args[0], args[1]),
 }));
 
 vi.mock('svelte-sonner', () => ({
@@ -274,78 +269,56 @@ describe('isValidRedirectParam', () => {
 // ---------------------------------------------------------------------------
 
 describe('sanitizeRedirectSearchParam', () => {
-  const historyReplaceState = vi.fn();
-
-  function setWindowLocation(href: string) {
-    const url = new URL(href);
-    // Provide a minimal window.location with an href getter
-    (globalThis as Record<string, unknown>).window = {
-      location: { href: url.href },
-    };
-    // Provide history.replaceState
-    (globalThis as Record<string, unknown>).history = {
-      state: null,
-      replaceState: historyReplaceState,
-    };
-  }
-
   beforeEach(() => {
     mocks.PUBLIC_SITE_URL = 'https://openshock.app/';
-    mocks.browser = true;
-    historyReplaceState.mockClear();
-  });
-
-  afterEach(() => {
-    delete (globalThis as Record<string, unknown>).window;
-    delete (globalThis as Record<string, unknown>).history;
+    mocks.replaceState.mockClear();
   });
 
   it('strips an invalid redirect param and returns true', () => {
-    setWindowLocation('https://openshock.app/login?redirect=https://evil.com/steal');
+    mocks.page = {
+      url: new URL('https://openshock.app/login?redirect=https://evil.com/steal'),
+    };
 
     const result = sanitizeRedirectSearchParam();
 
     expect(result).toBe(true);
-    expect(historyReplaceState).toHaveBeenCalledOnce();
-    const calledUrl = historyReplaceState.mock.calls[0][2] as URL;
+    expect(mocks.replaceState).toHaveBeenCalledOnce();
+    const calledUrl = mocks.replaceState.mock.calls[0][0] as URL;
     expect(calledUrl.searchParams.has('redirect')).toBe(false);
   });
 
   it('preserves a valid redirect param and returns false', () => {
-    setWindowLocation('https://openshock.app/login?redirect=/dashboard');
+    mocks.page = {
+      url: new URL('https://openshock.app/login?redirect=/dashboard'),
+    };
 
     const result = sanitizeRedirectSearchParam();
 
     expect(result).toBe(false);
-    expect(historyReplaceState).not.toHaveBeenCalled();
+    expect(mocks.replaceState).not.toHaveBeenCalled();
   });
 
   it('returns false when the param is missing', () => {
-    setWindowLocation('https://openshock.app/login');
+    mocks.page = {
+      url: new URL('https://openshock.app/login'),
+    };
 
     const result = sanitizeRedirectSearchParam();
 
     expect(result).toBe(false);
-    expect(historyReplaceState).not.toHaveBeenCalled();
-  });
-
-  it('returns false on the server', () => {
-    mocks.browser = false;
-
-    const result = sanitizeRedirectSearchParam();
-
-    expect(result).toBe(false);
-    expect(historyReplaceState).not.toHaveBeenCalled();
+    expect(mocks.replaceState).not.toHaveBeenCalled();
   });
 
   it('uses a custom query param name', () => {
-    setWindowLocation('https://openshock.app/login?return=javascript:alert(1)');
+    mocks.page = {
+      url: new URL('https://openshock.app/login?return=javascript:alert(1)'),
+    };
 
     const result = sanitizeRedirectSearchParam('return');
 
     expect(result).toBe(true);
-    expect(historyReplaceState).toHaveBeenCalledOnce();
-    const calledUrl = historyReplaceState.mock.calls[0][2] as URL;
+    expect(mocks.replaceState).toHaveBeenCalledOnce();
+    const calledUrl = mocks.replaceState.mock.calls[0][0] as URL;
     expect(calledUrl.searchParams.has('return')).toBe(false);
   });
 });
