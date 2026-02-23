@@ -172,5 +172,6 @@ export async function gotoQueryRedirectOrFallback(
     }
   }
 
+  /* eslint-disable-next-line svelte/no-navigation-without-resolve */
   await goto(prefixBase(target));
 }
