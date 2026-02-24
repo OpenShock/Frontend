@@ -2,15 +2,16 @@
   import { afterNavigate } from '$app/navigation';
   import { asset } from '$app/paths';
   import { page } from '$app/state';
-  import type { Pathname } from '$app/types';
   import { PUBLIC_SITE_NAME } from '$env/static/public';
   import { BasicTags, OpenGraphTags, TwitterSummaryTags } from '$lib/components/metadata';
-  import { prefixBase } from '$lib/utils/url';
+  import { isValidRedirectURL, prefixBase, stripBase } from '$lib/utils/url';
 
-  let previousPage = $state<Pathname>('/');
+  let previousPath = $state<string>(prefixBase('/'));
 
   afterNavigate(({ from }) => {
-    previousPage = (from?.url?.pathname || '/') as Pathname;
+    if (from !== null && isValidRedirectURL(from.url)) {
+      previousPath = from.url.pathname;
+    }
   });
 
   const meta = {
@@ -41,6 +42,6 @@
     <br />
     <!-- prefixBase is used here because resolve() requires a route ID, not a plain pathname -->
     <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-    <a href={prefixBase(previousPage)}>Go back</a>
+    <a href={previousPath}>Go back</a>
   </div>
 </div>

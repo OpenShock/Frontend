@@ -153,6 +153,25 @@ export function isShortLinkOrigin(url: URL): boolean {
 // ---------------------------------------------------------------------------
 
 /**
+ * Returns `true` when the given URL is a same-origin HTTP(S) URL
+ * relative to `PUBLIC_SITE_URL`.
+ *
+ * This is a pure, synchronous check — it does **not** verify that the
+ * pathname matches a known route (that requires an async `match()` call).
+ *
+ * @param value - The raw redirect url to validate
+ * @returns Whether the value is a safe, same-origin redirect target
+ */
+export function isValidRedirectURL(url: URL): boolean {
+  const expected = new URL(PUBLIC_SITE_URL);
+
+  const isHttp = url.protocol === 'http:' || url.protocol === 'https:';
+  const sameOrigin = url.origin === expected.origin;
+
+  return isHttp && sameOrigin;
+}
+
+/**
  * Returns `true` when the given string is a same-origin HTTP(S) URL
  * relative to `PUBLIC_SITE_URL`.
  *
@@ -164,13 +183,7 @@ export function isShortLinkOrigin(url: URL): boolean {
  */
 export function isValidRedirectParam(value: string): boolean {
   try {
-    const expected = new URL(PUBLIC_SITE_URL);
-    const parsed = new URL(value, expected);
-
-    const isHttp = parsed.protocol === 'http:' || parsed.protocol === 'https:';
-    const sameOrigin = parsed.origin === expected.origin;
-
-    return isHttp && sameOrigin;
+    return isValidRedirectURL(new URL(value));
   } catch {
     return false;
   }

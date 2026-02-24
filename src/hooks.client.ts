@@ -4,6 +4,7 @@ import { backendMetadata } from '$lib/state/BackendMetadata.svelte';
 import { initializeDarkModeStore } from '$lib/stores/ColorSchemeStore.svelte';
 import { initializeSerialPortsStore } from '$lib/stores/SerialPortsStore';
 import { UserStore } from '$lib/stores/UserStore';
+
 export async function init() {
   initBackendMetadata().catch((error) => {
     handleApiError(error);
