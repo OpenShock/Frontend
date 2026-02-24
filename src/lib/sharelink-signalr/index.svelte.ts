@@ -1,6 +1,6 @@
 import { dev } from '$app/environment';
-import { PUBLIC_BACKEND_API_URL } from '$env/static/public';
 import type { Control } from '$lib/signalr/models/Control';
+import { getBackendURL } from '$lib/utils/url';
 import {
   HttpTransportType,
   type HubConnection,
@@ -9,6 +9,14 @@ import {
   LogLevel,
 } from '@microsoft/signalr';
 import { toast } from 'svelte-sonner';
+
+function GetShareLinkURL(shareLinkId: string, customName: string | null) {
+  const url = getBackendURL(`1/hubs/share/link/${encodeURIComponent(shareLinkId)}`);
+  if (customName !== null) {
+    url.searchParams.set('name', customName || '');
+  }
+  return url.href;
+}
 
 export class ShareLinkSignalr {
   readonly shareLinkId: string;
@@ -32,17 +40,10 @@ export class ShareLinkSignalr {
 
     const connection = new HubConnectionBuilder()
       .configureLogging(dev ? LogLevel.Debug : LogLevel.Warning)
-      .withUrl(
-        /* eslint-disable-next-line svelte/prefer-svelte-reactivity */
-        new URL(
-          `1/hubs/share/link/${this.shareLinkId}?name=${this.customName}`,
-          PUBLIC_BACKEND_API_URL
-        ).toString(),
-        {
-          transport: HttpTransportType.WebSockets,
-          skipNegotiation: true,
-        }
-      )
+      .withUrl(GetShareLinkURL(this.shareLinkId, this.customName), {
+        transport: HttpTransportType.WebSockets,
+        skipNegotiation: true,
+      })
       .withAutomaticReconnect([0, 1000, 2000, 5000, 10000, 10000, 15000, 30000, 60000])
       .build();
 

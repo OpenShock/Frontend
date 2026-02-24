@@ -14,16 +14,16 @@
   import { UserStore } from '$lib/stores/UserStore';
   import { cn } from '$lib/utils';
   import Breadcrumb from './Breadcrumb.svelte';
-  import { unsafeResolve } from '$lib/utils/url';
+  import { prefixBase } from '$lib/utils/url';
   import { resolve } from '$app/paths';
-  import { ArrowBigUpDash, LogIn, UserPlus } from '@lucide/svelte';
+  import { LogIn, UserPlus } from '@lucide/svelte';
 
   let sidebar = useSidebar();
 </script>
 
 {#snippet dropdownItem(name: string, url: Pathname)}
-  <!-- I know this is deprecated buy resolve() is too strict to be used here... -->
-  <DropdownMenu.Item class="cursor-pointer" onclick={() => goto(unsafeResolve(url))}>
+  <!-- prefixBase is used here because resolve() requires a route ID, not a plain pathname -->
+  <DropdownMenu.Item class="cursor-pointer" onclick={() => goto(prefixBase(url))}>
     {name}
   </DropdownMenu.Item>
 {/snippet}
