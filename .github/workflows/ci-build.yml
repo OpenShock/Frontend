@@ -41,9 +41,11 @@ jobs:
         shell: bash
         run: pnpm run check
 
-      - name: Install playwright
-        shell: bash
-        run: pnpx playwright install --with-deps
+      # TODO: Uncomment when e2e tests are enabled (pnpm test). Consider caching
+      # Playwright browsers with actions/cache keyed on the Playwright version.
+      #- name: Install playwright
+      #  shell: bash
+      #  run: pnpx playwright install --with-deps
 
       - name: Test
         shell: bash
