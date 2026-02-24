@@ -86,21 +86,6 @@ export function prefixBase(path: Pathname): string {
 }
 
 /**
- * Strips the configured SvelteKit {@link base} path prefix from a pathname.
- *
- * Returns the pathname unchanged when it does not start with the base path.
- *
- * @param path - A pathname that may include the base prefix
- * @returns The pathname without the base prefix
- */
-export function stripBase(path: string): string {
-  if (base && path.startsWith(base)) {
-    return path.slice(base.length) || '/';
-  }
-  return path;
-}
-
-/**
  * Builds a fully-qualified site URL from an internal pathname.
  *
  * @param path         - Internal pathname (e.g. `/settings/account`)
@@ -183,9 +168,16 @@ export function isValidRedirectURL(url: URL): boolean {
  */
 export function isValidRedirectParam(value: string): boolean {
   try {
+    // Try as absolute URL first — gets real origin checking
     return isValidRedirectURL(new URL(value));
   } catch {
-    return false;
+    // Relative path — resolve against our origin to catch protocol-relative
+    // URLs like //evil.com, then verify the result is still same-origin
+    try {
+      return isValidRedirectURL(new URL(value, PUBLIC_SITE_URL));
+    } catch {
+      return false;
+    }
   }
 }
 
@@ -216,6 +208,21 @@ export function sanitizeRedirectSearchParam(queryParam: string = REDIRECT_QUERY_
   }
 
   return false;
+}
+
+/**
+ * Strips the configured SvelteKit {@link base} path prefix from a pathname.
+ *
+ * Returns the pathname unchanged when it does not start with the base path.
+ *
+ * @param path - A pathname that may include the base prefix
+ * @returns The pathname without the base prefix
+ */
+function stripBase(path: string): string {
+  if (base && path.startsWith(base)) {
+    return path.slice(base.length) || '/';
+  }
+  return path;
 }
 
 /**
@@ -251,18 +258,16 @@ export async function gotoQueryRedirectOrFallback(
     const parsed = new URL(redirectParam, PUBLIC_SITE_URL);
     let pathname = parsed.pathname;
 
-    let matched = await match(pathname);
+    // Try stripping the base path prefix first (the redirect value
+    // likely includes the base, e.g. from page.url.pathname).
+    const stripped = stripBase(pathname);
+    let matched = stripped !== pathname ? await match(stripped) : null;
 
-    // If match fails, try stripping the base path prefix (the redirect
-    // value may already include the base, e.g. from page.url.pathname).
-    if (matched === null) {
-      const stripped = stripBase(pathname);
-      if (stripped !== pathname) {
-        matched = await match(stripped);
-        if (matched !== null) {
-          pathname = stripped;
-        }
-      }
+    if (matched !== null) {
+      pathname = stripped;
+    } else {
+      // Fall back to matching the raw pathname (already base-less).
+      matched = await match(pathname);
     }
 
     if (matched !== null) {

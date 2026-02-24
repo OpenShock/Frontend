@@ -60,6 +60,7 @@ const {
   getSiteURL,
   getSiteAssetURL,
   getSiteShortURL,
+  isValidRedirectURL,
   isValidRedirectParam,
   sanitizeRedirectSearchParam,
   gotoQueryRedirectOrFallback,
@@ -223,6 +224,32 @@ describe('getSiteShortURL', () => {
   it('preserves the short URL origin', () => {
     const url = getSiteShortURL('/t/code' as never);
     expect(url.origin).toBe('https://shockl.ink');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// isValidRedirectURL
+// ---------------------------------------------------------------------------
+
+describe('isValidRedirectURL', () => {
+  beforeEach(() => {
+    mocks.PUBLIC_SITE_URL = 'https://openshock.app/';
+  });
+
+  it('accepts a same-origin HTTPS URL', () => {
+    expect(isValidRedirectURL(new URL('https://openshock.app/dashboard'))).toBe(true);
+  });
+
+  it('rejects a cross-origin URL', () => {
+    expect(isValidRedirectURL(new URL('https://evil.com/steal'))).toBe(false);
+  });
+
+  it('rejects javascript: protocol', () => {
+    expect(isValidRedirectURL(new URL('javascript:alert(1)'))).toBe(false);
+  });
+
+  it('rejects same host but different port', () => {
+    expect(isValidRedirectURL(new URL('https://openshock.app:8080/admin'))).toBe(false);
   });
 });
 

@@ -4,7 +4,7 @@
   import { page } from '$app/state';
   import { PUBLIC_SITE_NAME } from '$env/static/public';
   import { BasicTags, OpenGraphTags, TwitterSummaryTags } from '$lib/components/metadata';
-  import { isValidRedirectURL, prefixBase, stripBase } from '$lib/utils/url';
+  import { isValidRedirectURL, prefixBase } from '$lib/utils/url';
 
   let previousPath = $state<string>(prefixBase('/'));
 
