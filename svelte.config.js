@@ -79,11 +79,7 @@ const config = {
         'child-src': ['https://challenges.cloudflare.com'],
         'frame-src': ['https://challenges.cloudflare.com'], // Deprecated
         'style-src': ['self', 'unsafe-inline'],
-        'img-src': [
-          'self',
-          'https://*.wp.com',
-          'https://www.gravatar.com',
-        ],
+        'img-src': ['self', 'https://*.wp.com', 'https://www.gravatar.com'],
         'connect-src': [
           'self',
           dotenv.PUBLIC_BACKEND_API_URL,
