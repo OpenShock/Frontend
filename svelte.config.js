@@ -78,7 +78,7 @@ const config = {
         'default-src': ['self'],
         'child-src': ['https://challenges.cloudflare.com'],
         'frame-src': ['https://challenges.cloudflare.com'], // Deprecated
-        'style-src': ['self'],
+        'style-src': ['self', 'unsafe-inline'],
         'img-src': [
           'self',
           'https://*.wp.com',
