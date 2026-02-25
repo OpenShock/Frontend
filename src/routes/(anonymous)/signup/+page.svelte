@@ -19,6 +19,7 @@
   import FieldSeparator from '$lib/components/ui/field/field-separator.svelte';
   import OauthButtons from '$lib/components/auth/oauth-buttons.svelte';
   import { ChevronLeft, Mail } from '@lucide/svelte';
+  import { backendMetadata } from '$lib/state/BackendMetadata.svelte';
 
   let username = $state<string>('');
   let usernameValid = $state<boolean>(false);
@@ -40,6 +41,11 @@
   let accountCreated = $state(false);
 
   let useEmail = $state(false);
+
+  $effect(() => {
+    const providers = backendMetadata?.State?.oAuthProviders;
+    useEmail = providers === undefined || providers.length === 0;
+  });
 
   function onOpenChange(open: boolean) {
     if (!open) {

@@ -20,6 +20,7 @@
   import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
   import OauthButtons from '$lib/components/auth/oauth-buttons.svelte';
   import { gotoQueryRedirectOrFallback } from '$lib/utils/url';
+  import { backendMetadata } from '$lib/state/BackendMetadata.svelte';
 
   let usernameOrEmail = $state('');
   let password = $state('');
@@ -61,6 +62,11 @@
     }
   }
 
+  let oauthProviders = $derived(backendMetadata.State?.oAuthProviders);
+  function isArrayPopulated<T>(array: T[] | undefined): array is T[] {
+    return array !== undefined && array.length > 0;
+  }
+
   let canSubmit = $derived(
     usernameOrEmail.length > 0 && password.length > 0 && turnstileResponse != null
   );
@@ -79,14 +85,26 @@
     <Card.Root>
       <Card.Header class="text-center">
         <Card.Title class="text-xl">Welcome back</Card.Title>
-        <Card.Description>Login with your Discord or Twitter account</Card.Description>
+        {#if isArrayPopulated(oauthProviders)}
+          {#if oauthProviders.length === 1}
+            <Card.Description>Login with your {oauthProviders[0]} account</Card.Description>
+          {:else if oauthProviders.length === 2}
+            <Card.Description
+              >Login with your {oauthProviders[0]} or {oauthProviders[1]} account</Card.Description
+            >
+          {:else}
+            <Card.Description>Login with one of the following</Card.Description>
+          {/if}
+        {/if}
       </Card.Header>
       <Card.Content>
         <FieldGroup>
           <OauthButtons />
-          <FieldSeparator class="*:data-[slot=field-separator-content]:bg-card">
-            Or continue with
-          </FieldSeparator>
+          {#if isArrayPopulated(oauthProviders)}
+            <FieldSeparator class="*:data-[slot=field-separator-content]:bg-card">
+              Or continue with
+            </FieldSeparator>
+          {/if}
           <form onsubmit={handleSubmission}>
             <div>
               <div class="my-1 flex flex-col gap-1">
