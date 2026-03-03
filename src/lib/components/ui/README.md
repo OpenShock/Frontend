@@ -1,50 +1,47 @@
-## Post-Update Checklist for shadcn Components
+# Updating shadcn-svelte Components
 
-After running the shadcn CLI to update your components, follow these steps to ensure everything integrates correctly.
-This process helps you isolate and address any changes the CLI made, then reapply your custom modifications.
+Everything in this directory comes from the shadcn-svelte registry **except** `multi-select-combobox`.
 
-### Steps to Follow
+## How to Update
 
-To start off, we want to eliminate the bulk of the changes that the CLI made, this will make it easier to see what actual changes were made by inspecting the git diff.
-
-To do this we will first migrate all the tailwindcss classes to tailwindcss v4, then format all the code to our code style.
+Run the update script from the project root:
 
 ```bash
-pnpm run format
+./scripts/update-shadcn.sh
 ```
 
-Now it should be easier to see what the CLI actually changed, and we can now proceed with the following steps:
+This will automatically:
+1. Delete all shadcn component directories (preserving `multi-select-combobox`)
+2. Re-add them from the registry
+3. Remove unwanted dependencies the CLI adds
+4. Upgrade all dependencies to latest
+5. Reapply project-specific customizations (see below)
+6. Format and type-check the result
 
-1. **Update `sidebar` component if modified**
+Review the git diff before committing.
 
-   If the `sidebar` component was modified by the CLI, it most likely went back to using `ease-linear` and `duration-200`.
-   * Change `ease-linear` for the sidebar to `ease-in-out`.
-   * Increase the duration from `duration-200` to `duration-300`.
-   * If the `sidebar-menu-sub` component was modified, ensure that the `ml-*` classes were not reverted back to `mx-*` classes.
+## Custom Modifications
 
-2. **Update `sonner` component if modified**
+These are automatically applied by the script, but documented here for reference.
 
-   If the `sonner` component was modified by the CLI, it most likely went back to using the `svelte-sonner` package.
-   * Update it to use our own `ColorSchemeStore` implementation instead of the one from the `svelte-sonner` package.
-   * Remove `svelte-sonner` from `package.json`
+### Sidebar (`sidebar.svelte`)
 
-3. **Update `slider` component if modified**
+- Change `ease-linear` to `ease-in-out`
+- Change `duration-200` to `duration-300`
 
-   If the `slider` component was modified by the CLI, it most likely removed the `cursor-w-resize` tailwind class.
-   * Revert the change before committing.
+### Sidebar submenu (`sidebar-menu-sub.svelte`)
 
-3. **Run code formatting again**
+- Change `mx-3.5` to `ml-3.5`
+- Change `px-2.5` to `pl-2.5`
 
-   Now we need to run the code formatting again to ensure everything is consistent after the changes made in steps 1 and 2.
+### Sonner (`sonner.svelte`)
 
-   ```bash
-   pnpm run format
-   ```
+- Uses our own `ColorSchemeStore` instead of `mode-watcher`
 
-4. **Check code for any issues**
+### Slider (`slider.svelte`)
 
-   * Run the following commands to check for any issues:
+- Add `cursor-w-resize` to the thumb
 
-     ```bash
-     pnpm run check
-     ```
+### Toggle group (`toggle-group.svelte`)
+
+- Add `// svelte-ignore state_referenced_locally` to suppress false warnings
