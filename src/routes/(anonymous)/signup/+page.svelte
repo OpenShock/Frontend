@@ -20,6 +20,7 @@
   import OauthButtons from '$lib/components/auth/oauth-buttons.svelte';
   import { ChevronLeft, Mail } from '@lucide/svelte';
   import { backendMetadata } from '$lib/state/BackendMetadata.svelte';
+  import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte';
 
   let username = $state<string>('');
   let usernameValid = $state<boolean>(false);
@@ -85,9 +86,12 @@
       });
     }
   }
+
+  let oauthProviders = $derived(backendMetadata.State?.oAuthProviders);
+  let anyOAuthProviders = $derived(oauthProviders !== undefined && oauthProviders.length > 0);
 </script>
 
-<Container class="items-center-safe justify-center-safe p-4">
+<Container class="items-center-safe justify-center-safe p-0!">
   <span class="flex items-center gap-2 self-center font-medium">
     <img class="ml-[0.667px] h-7.5" src={asset('/IconSpinning.svg')} alt="OpenShock Logo" />
     <img
@@ -118,24 +122,37 @@
     <Card.Root>
       <Card.Header class="text-center">
         <Card.Title class="text-xl">Create your account</Card.Title>
-        <Card.Description
-          >{#if useEmail}Signing up using email{:else}Choose your preferred sign-up method{/if}</Card.Description
-        >
+        <Card.Description>
+          {#if backendMetadata.State === null}
+            Loading available sign-up methods
+          {:else if useEmail}
+            Signing up using email
+          {:else}
+            Choose your preferred sign-up method
+          {/if}
+        </Card.Description>
       </Card.Header>
       <Card.Content>
         <Field.Group>
-          {#if useEmail}
+          {#if backendMetadata.State === null}
+            <Skeleton class="h-9 w-full"></Skeleton>
+            <Skeleton class="h-1 w-full"></Skeleton>
+            <Skeleton class="h-9 w-full"></Skeleton>
+          {:else if useEmail}
             <form onsubmit={handleSubmission}>
               <div class="my-1 flex flex-col gap-1">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  class="text-muted-foreground hover:text-foreground -mx-2 -mt-2 mb-2 w-fit gap-1"
-                  onclick={() => (useEmail = false)}
-                >
-                  <ChevronLeft class="size-4" />
-                  Back
-                </Button>
+                {#if anyOAuthProviders}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    class="text-muted-foreground hover:text-foreground -mx-2 -mt-2 mb-2 w-fit gap-1"
+                    onclick={() => (useEmail = false)}
+                  >
+                    <ChevronLeft class="size-4" />
+                    Back
+                  </Button>
+                {/if}
+
                 <UsernameInput
                   label="Username"
                   placeholder="John OpenShock"
@@ -176,9 +193,12 @@
               </Field.Field>
             </form>
           {:else}
-            <OauthButtons verb="Signup" />
-            <FieldSeparator class="*:data-[slot=field-separator-content]:bg-card">Or</FieldSeparator
-            >
+            {#if anyOAuthProviders}
+              <OauthButtons verb="Signup" />
+              <FieldSeparator class="*:data-[slot=field-separator-content]:bg-card"
+                >Or</FieldSeparator
+              >
+            {/if}
             <Button variant="outline" class="w-full" onclick={() => (useEmail = true)}>
               <Mail />Signup with Email
             </Button>
@@ -187,7 +207,8 @@
       </Card.Content>
     </Card.Root>
     <Field.Description class="px-6 text-center">
-      By clicking continue, you agree to our <a href="https://openshock.org/tos">Terms of Service</a
+      By clicking Create Account, you agree to our <a href="https://openshock.org/tos"
+        >Terms of Service</a
       >
       and <a href="https://openshock.org/privacy">Privacy Policy</a>.
     </Field.Description>

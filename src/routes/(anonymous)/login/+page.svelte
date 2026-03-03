@@ -21,6 +21,7 @@
   import OauthButtons from '$lib/components/auth/oauth-buttons.svelte';
   import { gotoQueryRedirectOrFallback } from '$lib/utils/url';
   import { backendMetadata } from '$lib/state/BackendMetadata.svelte';
+  import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte';
 
   let usernameOrEmail = $state('');
   let password = $state('');
@@ -63,16 +64,14 @@
   }
 
   let oauthProviders = $derived(backendMetadata.State?.oAuthProviders);
-  function isArrayPopulated<T>(array: T[] | undefined): array is T[] {
-    return array !== undefined && array.length > 0;
-  }
+  let anyOAuthProviders = $derived(oauthProviders !== undefined && oauthProviders.length > 0);
 
   let canSubmit = $derived(
     usernameOrEmail.length > 0 && password.length > 0 && turnstileResponse != null
   );
 </script>
 
-<Container class="items-center-safe justify-center-safe p-4">
+<Container class="items-center-safe justify-center-safe p-0!">
   <span class="flex items-center gap-2 self-center font-medium">
     <img class="ml-[0.667px] h-7.5" src={asset('/IconSpinning.svg')} alt="OpenShock Logo" />
     <img
@@ -85,58 +84,65 @@
     <Card.Root>
       <Card.Header class="text-center">
         <Card.Title class="text-xl">Welcome back</Card.Title>
-        {#if isArrayPopulated(oauthProviders)}
-          {#if oauthProviders.length === 1}
-            <Card.Description>Login with your {oauthProviders[0]} account</Card.Description>
-          {:else if oauthProviders.length === 2}
-            <Card.Description
-              >Login with your {oauthProviders[0]} or {oauthProviders[1]} account</Card.Description
-            >
+        <Card.Description>
+          {#if backendMetadata.State === null}
+            Loading available login methods
+          {:else if anyOAuthProviders}
+            Login with one of these methods
           {:else}
-            <Card.Description>Login with one of the following</Card.Description>
+            Login with your OpenShock Account
           {/if}
-        {/if}
+        </Card.Description>
       </Card.Header>
       <Card.Content>
         <FieldGroup>
-          <OauthButtons />
-          {#if isArrayPopulated(oauthProviders)}
-            <FieldSeparator class="*:data-[slot=field-separator-content]:bg-card">
-              Or continue with
-            </FieldSeparator>
-          {/if}
-          <form onsubmit={handleSubmission}>
-            <div>
-              <div class="my-1 flex flex-col gap-1">
-                <TextInput
-                  label="Username or Email"
-                  autocomplete="username"
-                  bind:value={usernameOrEmail}
-                  validationResult={usernameError}
-                />
+          {#if backendMetadata.State === null}
+            <Skeleton class="h-9 w-full"></Skeleton>
+            <Skeleton class="h-1 w-full"></Skeleton>
+            <Skeleton class="h-9 w-full"></Skeleton>
+            <Skeleton class="h-9 w-full"></Skeleton>
+            <Skeleton class="h-16 w-full"></Skeleton>
+            <Skeleton class="h-9 w-full"></Skeleton>
+          {:else}
+            {#if anyOAuthProviders}
+              <OauthButtons />
+              <FieldSeparator class="*:data-[slot=field-separator-content]:bg-card">
+                Or continue with
+              </FieldSeparator>
+            {/if}
+            <form onsubmit={handleSubmission}>
+              <div>
+                <div class="my-1 flex flex-col gap-1">
+                  <TextInput
+                    label="Username or Email"
+                    autocomplete="username"
+                    bind:value={usernameOrEmail}
+                    validationResult={usernameError}
+                  />
 
-                <PasswordInput
-                  label="Password"
-                  autocomplete="current-password"
-                  bind:value={password}
-                  validate={passwordError}
-                />
+                  <PasswordInput
+                    label="Password"
+                    autocomplete="current-password"
+                    bind:value={password}
+                    validate={passwordError}
+                  />
 
-                <Turnstile action="signin" bind:response={turnstileResponse} />
+                  <Turnstile action="signin" bind:response={turnstileResponse} />
+                </div>
+                <Field class="mt-5">
+                  <Button type="submit" disabled={!canSubmit}>Login</Button>
+                  <FieldDescription class="text-center">
+                    Don't have an account? <a href={resolve('/signup')}>Sign up</a>
+                  </FieldDescription>
+                </Field>
               </div>
-              <Field class="mt-5">
-                <Button type="submit" disabled={!canSubmit}>Login</Button>
-                <FieldDescription class="text-center">
-                  Don't have an account? <a href={resolve('/signup')}>Sign up</a>
-                </FieldDescription>
-              </Field>
-            </div>
-          </form>
+            </form>
+          {/if}
         </FieldGroup>
       </Card.Content>
     </Card.Root>
     <FieldDescription class="px-6 text-center">
-      By clicking continue, you agree to our <a href="https://openshock.org/tos" target="_blank"
+      By clicking Login, you agree to our <a href="https://openshock.org/tos" target="_blank"
         >Terms of Service</a
       >
       and <a href="https://openshock.org/privacy" target="_blank">Privacy Policy</a>.

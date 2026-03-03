@@ -11,7 +11,8 @@ export const backendMetadata = {
     const response = await metaApi.versionGetBackendInfo();
     if (!response.data) throw new Error(`Failed to get backend info: ${response.message}`);
 
-    state = response.data;
-    return response.data;
+    const responseData = response.data;
+    state = responseData;
+    return responseData;
   },
 };
