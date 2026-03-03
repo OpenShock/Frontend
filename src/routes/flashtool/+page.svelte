@@ -15,8 +15,7 @@
   import { Label } from '$lib/components/ui/label';
   import { Progress } from '$lib/components/ui/progress';
   import { Sheet, SheetContent, SheetHeader, SheetTitle } from '$lib/components/ui/sheet';
-  import { isSerialSupported } from '$lib/utils/compatibility';
-  import Bowser from 'bowser';
+  import { getBrowserName, isSerialSupported } from '$lib/utils/compatibility';
   import FirmwareBoardSelector from './FirmwareBoardSelector.svelte';
   import FirmwareFlasher from './FirmwareFlasher.svelte';
   import FlashManager from './FlashManager';
@@ -168,7 +167,7 @@
 
 {#snippet unsupportedBrowser()}
   <h3>Your browser does not support this feature.</h3>
-  {#if ['Chrome', 'Edge', 'Opera'].includes(Bowser.getParser(navigator.userAgent).getBrowserName())}
+  {#if ['Chrome', 'Edge', 'Opera'].includes(getBrowserName())}
     <h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">
       Please update your browser to the latest version.
     </h3>

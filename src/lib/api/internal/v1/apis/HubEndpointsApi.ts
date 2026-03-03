@@ -43,6 +43,13 @@ export interface DevicePairRequest {
  */
 export interface HubEndpointsApiInterface {
     /**
+     * Creates request options for deviceGetLiveControlGateway without sending the request
+     * @throws {RequiredError}
+     * @memberof HubEndpointsApiInterface
+     */
+    deviceGetLiveControlGatewayRequestOpts(): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Gets the best suited LCG node for the client
      * @param {*} [options] Override http request option.
@@ -57,6 +64,13 @@ export interface HubEndpointsApiInterface {
     deviceGetLiveControlGateway(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LcgNodeResponseLegacyDataResponse>;
 
     /**
+     * Creates request options for deviceGetSelf without sending the request
+     * @throws {RequiredError}
+     * @memberof HubEndpointsApiInterface
+     */
+    deviceGetSelfRequestOpts(): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Gets information about the authenticated device.
      * @param {*} [options] Override http request option.
@@ -69,6 +83,14 @@ export interface HubEndpointsApiInterface {
      * Gets information about the authenticated device.
      */
     deviceGetSelf(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DeviceSelfResponseLegacyDataResponse>;
+
+    /**
+     * Creates request options for devicePair without sending the request
+     * @param {string} pairCode The pair code to pair with.
+     * @throws {RequiredError}
+     * @memberof HubEndpointsApiInterface
+     */
+    devicePairRequestOpts(requestParameters: DevicePairRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -93,9 +115,9 @@ export interface HubEndpointsApiInterface {
 export class HubEndpointsApi extends runtime.BaseAPI implements HubEndpointsApiInterface {
 
     /**
-     * Gets the best suited LCG node for the client
+     * Creates request options for deviceGetLiveControlGateway without sending the request
      */
-    async deviceGetLiveControlGatewayRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LcgNodeResponseLegacyDataResponse>> {
+    async deviceGetLiveControlGatewayRequestOpts(): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -107,12 +129,20 @@ export class HubEndpointsApi extends runtime.BaseAPI implements HubEndpointsApiI
 
         let urlPath = `/1/device/assignLCG`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Gets the best suited LCG node for the client
+     */
+    async deviceGetLiveControlGatewayRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LcgNodeResponseLegacyDataResponse>> {
+        const requestOptions = await this.deviceGetLiveControlGatewayRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => LcgNodeResponseLegacyDataResponseFromJSON(jsonValue));
     }
@@ -126,9 +156,9 @@ export class HubEndpointsApi extends runtime.BaseAPI implements HubEndpointsApiI
     }
 
     /**
-     * Gets information about the authenticated device.
+     * Creates request options for deviceGetSelf without sending the request
      */
-    async deviceGetSelfRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DeviceSelfResponseLegacyDataResponse>> {
+    async deviceGetSelfRequestOpts(): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -140,12 +170,20 @@ export class HubEndpointsApi extends runtime.BaseAPI implements HubEndpointsApiI
 
         let urlPath = `/1/device/self`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Gets information about the authenticated device.
+     */
+    async deviceGetSelfRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DeviceSelfResponseLegacyDataResponse>> {
+        const requestOptions = await this.deviceGetSelfRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => DeviceSelfResponseLegacyDataResponseFromJSON(jsonValue));
     }
@@ -159,9 +197,9 @@ export class HubEndpointsApi extends runtime.BaseAPI implements HubEndpointsApiI
     }
 
     /**
-     * Pair a device with a pair code.
+     * Creates request options for devicePair without sending the request
      */
-    async devicePairRaw(requestParameters: DevicePairRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StringLegacyDataResponse>> {
+    async devicePairRequestOpts(requestParameters: DevicePairRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['pairCode'] == null) {
             throw new runtime.RequiredError(
                 'pairCode',
@@ -181,12 +219,20 @@ export class HubEndpointsApi extends runtime.BaseAPI implements HubEndpointsApiI
         let urlPath = `/1/device/pair/{pairCode}`;
         urlPath = urlPath.replace(`{${"pairCode"}}`, encodeURIComponent(String(requestParameters['pairCode'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Pair a device with a pair code.
+     */
+    async devicePairRaw(requestParameters: DevicePairRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StringLegacyDataResponse>> {
+        const requestOptions = await this.devicePairRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => StringLegacyDataResponseFromJSON(jsonValue));
     }

@@ -1,16 +1,18 @@
 on:
   push:
-    tags:
-      - '*.*'
-      - '*.*.*'
     branches:
-      - '*'
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+    types: [opened, reopened, synchronize]
   workflow_dispatch: # Manually invoked by user.
 
 name: ci-build
 
 jobs:
   test:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -39,9 +41,11 @@ jobs:
         shell: bash
         run: pnpm run check
 
-      - name: Install playwright
-        shell: bash
-        run: pnpx playwright install --with-deps
+      # TODO: Uncomment when e2e tests are enabled (pnpm test). Consider caching
+      # Playwright browsers with actions/cache keyed on the Playwright version.
+      #- name: Install playwright
+      #  shell: bash
+      #  run: pnpx playwright install --with-deps
 
       - name: Test
         shell: bash

@@ -22,9 +22,7 @@
 
   let meta = $derived(buildMetaData(page.url));
 
-  let isOpen = $state(
-    !browser || isMobile ? false : localStorage.getItem('sidebarOpen') === 'true'
-  );
+  let isOpen = $state(browser && !isMobile && localStorage.getItem('sidebarOpen') === 'true');
   $effect(() => {
     if (!isMobile) localStorage.setItem('sidebarOpen', isOpen ? 'true' : 'false');
   });

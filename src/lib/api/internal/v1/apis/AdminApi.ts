@@ -138,6 +138,14 @@ export interface AdminRemoveWebhookRequest {
  */
 export interface AdminApiInterface {
     /**
+     * Creates request options for adminAddEmailProviderBlacklist without sending the request
+     * @param {AddEmailProviderBlacklistDto} [addEmailProviderBlacklistDto] 
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminAddEmailProviderBlacklistRequestOpts(requestParameters: AdminAddEmailProviderBlacklistRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @param {AddEmailProviderBlacklistDto} [addEmailProviderBlacklistDto] 
      * @param {*} [options] Override http request option.
@@ -151,6 +159,14 @@ export interface AdminApiInterface {
     adminAddEmailProviderBlacklist(addEmailProviderBlacklistDto?: AddEmailProviderBlacklistDto, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
+     * Creates request options for adminAddUsernameBlacklist without sending the request
+     * @param {AddUsernameBlacklistDto} [addUsernameBlacklistDto] 
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminAddUsernameBlacklistRequestOpts(requestParameters: AdminAddUsernameBlacklistRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @param {AddUsernameBlacklistDto} [addUsernameBlacklistDto] 
      * @param {*} [options] Override http request option.
@@ -162,6 +178,14 @@ export interface AdminApiInterface {
     /**
      */
     adminAddUsernameBlacklist(addUsernameBlacklistDto?: AddUsernameBlacklistDto, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * Creates request options for adminAddWebhook without sending the request
+     * @param {AddWebhookDto} [addWebhookDto] 
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminAddWebhookRequestOpts(requestParameters: AdminAddWebhookRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -179,6 +203,14 @@ export interface AdminApiInterface {
     adminAddWebhook(addWebhookDto?: AddWebhookDto, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
+     * Creates request options for adminConfigurationAdd without sending the request
+     * @param {ConfigurationAddItemRequest} [configurationAddItemRequest] 
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminConfigurationAddRequestOpts(requestParameters: AdminConfigurationAddRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Adds a new configuration
      * @param {ConfigurationAddItemRequest} [configurationAddItemRequest] 
@@ -192,6 +224,14 @@ export interface AdminApiInterface {
      * Adds a new configuration
      */
     adminConfigurationAdd(configurationAddItemRequest?: ConfigurationAddItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * Creates request options for adminConfigurationDelete without sending the request
+     * @param {string} name 
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminConfigurationDeleteRequestOpts(requestParameters: AdminConfigurationDeleteRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -209,6 +249,13 @@ export interface AdminApiInterface {
     adminConfigurationDelete(name: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
+     * Creates request options for adminConfigurationList without sending the request
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminConfigurationListRequestOpts(): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Gets all configuration items
      * @param {*} [options] Override http request option.
@@ -221,6 +268,14 @@ export interface AdminApiInterface {
      * Gets all configuration items
      */
     adminConfigurationList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ConfigurationItemDto>>;
+
+    /**
+     * Creates request options for adminConfigurationUpdate without sending the request
+     * @param {ConfigurationUpdateItemRequest} [configurationUpdateItemRequest] 
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminConfigurationUpdateRequestOpts(requestParameters: AdminConfigurationUpdateRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -236,6 +291,15 @@ export interface AdminApiInterface {
      * Updates an existing configuration
      */
     adminConfigurationUpdate(configurationUpdateItemRequest?: ConfigurationUpdateItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * Creates request options for adminDeactivateUser without sending the request
+     * @param {string} userId 
+     * @param {boolean} [deleteLater] 
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminDeactivateUserRequestOpts(requestParameters: AdminDeactivateUserRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -254,6 +318,14 @@ export interface AdminApiInterface {
     adminDeactivateUser(userId: string, deleteLater?: boolean, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
+     * Creates request options for adminDeleteUser without sending the request
+     * @param {string} userId 
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminDeleteUserRequestOpts(requestParameters: AdminDeleteUserRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Deletes a user
      * @param {string} userId 
@@ -269,6 +341,13 @@ export interface AdminApiInterface {
     adminDeleteUser(userId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
+     * Creates request options for adminGetOnlineDevices without sending the request
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminGetOnlineDevicesRequestOpts(): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Gets all online devices
      * @param {*} [options] Override http request option.
@@ -281,6 +360,17 @@ export interface AdminApiInterface {
      * Gets all online devices
      */
     adminGetOnlineDevices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminOnlineDeviceResponseArrayLegacyDataResponse>;
+
+    /**
+     * Creates request options for adminGetUsers without sending the request
+     * @param {string} [$filter] 
+     * @param {string} [$orderby] 
+     * @param {number} [$offset] 
+     * @param {number} [$limit] 
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminGetUsersRequestOpts(requestParameters: AdminGetUsersRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -301,6 +391,14 @@ export interface AdminApiInterface {
     adminGetUsers($filter?: string, $orderby?: string, $offset?: number, $limit?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminUsersViewPaginated>;
 
     /**
+     * Creates request options for adminListEmailProviderBlacklist without sending the request
+     * @param {string} [match] 
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminListEmailProviderBlacklistRequestOpts(requestParameters: AdminListEmailProviderBlacklistRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @param {string} [match] 
      * @param {*} [options] Override http request option.
@@ -312,6 +410,14 @@ export interface AdminApiInterface {
     /**
      */
     adminListEmailProviderBlacklist(match?: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<EmailProviderBlacklistDto>>;
+
+    /**
+     * Creates request options for adminListUsernameBlacklist without sending the request
+     * @param {string} [match] 
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminListUsernameBlacklistRequestOpts(requestParameters: AdminListUsernameBlacklistRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -327,6 +433,13 @@ export interface AdminApiInterface {
     adminListUsernameBlacklist(match?: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<UserNameBlacklistDto>>;
 
     /**
+     * Creates request options for adminListWebhooks without sending the request
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminListWebhooksRequestOpts(): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary List webhooks
      * @param {*} [options] Override http request option.
@@ -339,6 +452,15 @@ export interface AdminApiInterface {
      * List webhooks
      */
     adminListWebhooks(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<WebhookDto>>;
+
+    /**
+     * Creates request options for adminModifyUser without sending the request
+     * @param {string} userId 
+     * @param {UserPatchDto} [userPatchDto] 
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminModifyUserRequestOpts(requestParameters: AdminModifyUserRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -357,6 +479,14 @@ export interface AdminApiInterface {
     adminModifyUser(userId: string, userPatchDto?: UserPatchDto, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
+     * Creates request options for adminReactivateUser without sending the request
+     * @param {string} userId 
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminReactivateUserRequestOpts(requestParameters: AdminReactivateUserRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Reactivates a user
      * @param {string} userId 
@@ -372,6 +502,14 @@ export interface AdminApiInterface {
     adminReactivateUser(userId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
+     * Creates request options for adminRemoveEmailProviderBlacklist without sending the request
+     * @param {string} id 
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminRemoveEmailProviderBlacklistRequestOpts(requestParameters: AdminRemoveEmailProviderBlacklistRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @param {string} id 
      * @param {*} [options] Override http request option.
@@ -385,6 +523,14 @@ export interface AdminApiInterface {
     adminRemoveEmailProviderBlacklist(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
+     * Creates request options for adminRemoveUsernameBlacklist without sending the request
+     * @param {string} id 
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminRemoveUsernameBlacklistRequestOpts(requestParameters: AdminRemoveUsernameBlacklistRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @param {string} id 
      * @param {*} [options] Override http request option.
@@ -396,6 +542,14 @@ export interface AdminApiInterface {
     /**
      */
     adminRemoveUsernameBlacklist(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * Creates request options for adminRemoveWebhook without sending the request
+     * @param {string} id 
+     * @throws {RequiredError}
+     * @memberof AdminApiInterface
+     */
+    adminRemoveWebhookRequestOpts(requestParameters: AdminRemoveWebhookRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -420,8 +574,9 @@ export interface AdminApiInterface {
 export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
     /**
+     * Creates request options for adminAddEmailProviderBlacklist without sending the request
      */
-    async adminAddEmailProviderBlacklistRaw(requestParameters: AdminAddEmailProviderBlacklistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async adminAddEmailProviderBlacklistRequestOpts(requestParameters: AdminAddEmailProviderBlacklistRequest): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -431,13 +586,20 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
         let urlPath = `/1/admin/blacklist/emailProviders`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: AddEmailProviderBlacklistDtoToJSON(requestParameters['addEmailProviderBlacklistDto']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     */
+    async adminAddEmailProviderBlacklistRaw(requestParameters: AdminAddEmailProviderBlacklistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.adminAddEmailProviderBlacklistRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
@@ -449,8 +611,9 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     }
 
     /**
+     * Creates request options for adminAddUsernameBlacklist without sending the request
      */
-    async adminAddUsernameBlacklistRaw(requestParameters: AdminAddUsernameBlacklistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async adminAddUsernameBlacklistRequestOpts(requestParameters: AdminAddUsernameBlacklistRequest): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -460,13 +623,20 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
         let urlPath = `/1/admin/blacklist/usernames`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: AddUsernameBlacklistDtoToJSON(requestParameters['addUsernameBlacklistDto']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     */
+    async adminAddUsernameBlacklistRaw(requestParameters: AdminAddUsernameBlacklistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.adminAddUsernameBlacklistRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
@@ -478,9 +648,9 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     }
 
     /**
-     * Creates a webhook
+     * Creates request options for adminAddWebhook without sending the request
      */
-    async adminAddWebhookRaw(requestParameters: AdminAddWebhookRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async adminAddWebhookRequestOpts(requestParameters: AdminAddWebhookRequest): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -490,13 +660,21 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
         let urlPath = `/1/admin/webhooks`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: AddWebhookDtoToJSON(requestParameters['addWebhookDto']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Creates a webhook
+     */
+    async adminAddWebhookRaw(requestParameters: AdminAddWebhookRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.adminAddWebhookRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
@@ -509,9 +687,9 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     }
 
     /**
-     * Adds a new configuration
+     * Creates request options for adminConfigurationAdd without sending the request
      */
-    async adminConfigurationAddRaw(requestParameters: AdminConfigurationAddRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async adminConfigurationAddRequestOpts(requestParameters: AdminConfigurationAddRequest): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -521,13 +699,21 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
         let urlPath = `/1/admin/config`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: ConfigurationAddItemRequestToJSON(requestParameters['configurationAddItemRequest']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Adds a new configuration
+     */
+    async adminConfigurationAddRaw(requestParameters: AdminConfigurationAddRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.adminConfigurationAddRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
@@ -540,9 +726,9 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     }
 
     /**
-     * Deletes a configuration
+     * Creates request options for adminConfigurationDelete without sending the request
      */
-    async adminConfigurationDeleteRaw(requestParameters: AdminConfigurationDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async adminConfigurationDeleteRequestOpts(requestParameters: AdminConfigurationDeleteRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['name'] == null) {
             throw new runtime.RequiredError(
                 'name',
@@ -558,12 +744,20 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
         let urlPath = `/1/admin/config/{name}`;
         urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Deletes a configuration
+     */
+    async adminConfigurationDeleteRaw(requestParameters: AdminConfigurationDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.adminConfigurationDeleteRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
@@ -576,9 +770,9 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     }
 
     /**
-     * Gets all configuration items
+     * Creates request options for adminConfigurationList without sending the request
      */
-    async adminConfigurationListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ConfigurationItemDto>>> {
+    async adminConfigurationListRequestOpts(): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -586,12 +780,20 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
         let urlPath = `/1/admin/config`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Gets all configuration items
+     */
+    async adminConfigurationListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ConfigurationItemDto>>> {
+        const requestOptions = await this.adminConfigurationListRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ConfigurationItemDtoFromJSON));
     }
@@ -605,9 +807,9 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     }
 
     /**
-     * Updates an existing configuration
+     * Creates request options for adminConfigurationUpdate without sending the request
      */
-    async adminConfigurationUpdateRaw(requestParameters: AdminConfigurationUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async adminConfigurationUpdateRequestOpts(requestParameters: AdminConfigurationUpdateRequest): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -617,13 +819,21 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
         let urlPath = `/1/admin/config`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
             body: ConfigurationUpdateItemRequestToJSON(requestParameters['configurationUpdateItemRequest']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Updates an existing configuration
+     */
+    async adminConfigurationUpdateRaw(requestParameters: AdminConfigurationUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.adminConfigurationUpdateRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
@@ -636,9 +846,9 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     }
 
     /**
-     * Deactivates a user
+     * Creates request options for adminDeactivateUser without sending the request
      */
-    async adminDeactivateUserRaw(requestParameters: AdminDeactivateUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async adminDeactivateUserRequestOpts(requestParameters: AdminDeactivateUserRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['userId'] == null) {
             throw new runtime.RequiredError(
                 'userId',
@@ -658,12 +868,20 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
         let urlPath = `/1/admin/users/{userId}/deactivate`;
         urlPath = urlPath.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Deactivates a user
+     */
+    async adminDeactivateUserRaw(requestParameters: AdminDeactivateUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.adminDeactivateUserRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
@@ -676,9 +894,9 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     }
 
     /**
-     * Deletes a user
+     * Creates request options for adminDeleteUser without sending the request
      */
-    async adminDeleteUserRaw(requestParameters: AdminDeleteUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async adminDeleteUserRequestOpts(requestParameters: AdminDeleteUserRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['userId'] == null) {
             throw new runtime.RequiredError(
                 'userId',
@@ -694,12 +912,20 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
         let urlPath = `/1/admin/users/{userId}`;
         urlPath = urlPath.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Deletes a user
+     */
+    async adminDeleteUserRaw(requestParameters: AdminDeleteUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.adminDeleteUserRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
@@ -712,9 +938,9 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     }
 
     /**
-     * Gets all online devices
+     * Creates request options for adminGetOnlineDevices without sending the request
      */
-    async adminGetOnlineDevicesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AdminOnlineDeviceResponseArrayLegacyDataResponse>> {
+    async adminGetOnlineDevicesRequestOpts(): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -722,12 +948,20 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
         let urlPath = `/1/admin/monitoring/onlineDevices`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Gets all online devices
+     */
+    async adminGetOnlineDevicesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AdminOnlineDeviceResponseArrayLegacyDataResponse>> {
+        const requestOptions = await this.adminGetOnlineDevicesRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => AdminOnlineDeviceResponseArrayLegacyDataResponseFromJSON(jsonValue));
     }
@@ -741,9 +975,9 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     }
 
     /**
-     * Gets all users, paginated
+     * Creates request options for adminGetUsers without sending the request
      */
-    async adminGetUsersRaw(requestParameters: AdminGetUsersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AdminUsersViewPaginated>> {
+    async adminGetUsersRequestOpts(requestParameters: AdminGetUsersRequest): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         if (requestParameters['$filter'] != null) {
@@ -767,12 +1001,20 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
         let urlPath = `/1/admin/users`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Gets all users, paginated
+     */
+    async adminGetUsersRaw(requestParameters: AdminGetUsersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AdminUsersViewPaginated>> {
+        const requestOptions = await this.adminGetUsersRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => AdminUsersViewPaginatedFromJSON(jsonValue));
     }
@@ -786,8 +1028,9 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     }
 
     /**
+     * Creates request options for adminListEmailProviderBlacklist without sending the request
      */
-    async adminListEmailProviderBlacklistRaw(requestParameters: AdminListEmailProviderBlacklistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<EmailProviderBlacklistDto>>> {
+    async adminListEmailProviderBlacklistRequestOpts(requestParameters: AdminListEmailProviderBlacklistRequest): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         if (requestParameters['match'] != null) {
@@ -799,12 +1042,19 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
         let urlPath = `/1/admin/blacklist/emailProviders`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     */
+    async adminListEmailProviderBlacklistRaw(requestParameters: AdminListEmailProviderBlacklistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<EmailProviderBlacklistDto>>> {
+        const requestOptions = await this.adminListEmailProviderBlacklistRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(EmailProviderBlacklistDtoFromJSON));
     }
@@ -817,8 +1067,9 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     }
 
     /**
+     * Creates request options for adminListUsernameBlacklist without sending the request
      */
-    async adminListUsernameBlacklistRaw(requestParameters: AdminListUsernameBlacklistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UserNameBlacklistDto>>> {
+    async adminListUsernameBlacklistRequestOpts(requestParameters: AdminListUsernameBlacklistRequest): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         if (requestParameters['match'] != null) {
@@ -830,12 +1081,19 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
         let urlPath = `/1/admin/blacklist/usernames`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     */
+    async adminListUsernameBlacklistRaw(requestParameters: AdminListUsernameBlacklistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UserNameBlacklistDto>>> {
+        const requestOptions = await this.adminListUsernameBlacklistRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(UserNameBlacklistDtoFromJSON));
     }
@@ -848,9 +1106,9 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     }
 
     /**
-     * List webhooks
+     * Creates request options for adminListWebhooks without sending the request
      */
-    async adminListWebhooksRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<WebhookDto>>> {
+    async adminListWebhooksRequestOpts(): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -858,12 +1116,20 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
         let urlPath = `/1/admin/webhooks`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * List webhooks
+     */
+    async adminListWebhooksRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<WebhookDto>>> {
+        const requestOptions = await this.adminListWebhooksRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(WebhookDtoFromJSON));
     }
@@ -877,9 +1143,9 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     }
 
     /**
-     * Edits a user
+     * Creates request options for adminModifyUser without sending the request
      */
-    async adminModifyUserRaw(requestParameters: AdminModifyUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async adminModifyUserRequestOpts(requestParameters: AdminModifyUserRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['userId'] == null) {
             throw new runtime.RequiredError(
                 'userId',
@@ -897,13 +1163,21 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
         let urlPath = `/1/admin/users/{userId}`;
         urlPath = urlPath.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
             body: UserPatchDtoToJSON(requestParameters['userPatchDto']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Edits a user
+     */
+    async adminModifyUserRaw(requestParameters: AdminModifyUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.adminModifyUserRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
@@ -916,9 +1190,9 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     }
 
     /**
-     * Reactivates a user
+     * Creates request options for adminReactivateUser without sending the request
      */
-    async adminReactivateUserRaw(requestParameters: AdminReactivateUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async adminReactivateUserRequestOpts(requestParameters: AdminReactivateUserRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['userId'] == null) {
             throw new runtime.RequiredError(
                 'userId',
@@ -934,12 +1208,20 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
         let urlPath = `/1/admin/users/{userId}/reactivate`;
         urlPath = urlPath.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Reactivates a user
+     */
+    async adminReactivateUserRaw(requestParameters: AdminReactivateUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.adminReactivateUserRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
@@ -952,8 +1234,9 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     }
 
     /**
+     * Creates request options for adminRemoveEmailProviderBlacklist without sending the request
      */
-    async adminRemoveEmailProviderBlacklistRaw(requestParameters: AdminRemoveEmailProviderBlacklistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async adminRemoveEmailProviderBlacklistRequestOpts(requestParameters: AdminRemoveEmailProviderBlacklistRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -969,12 +1252,19 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
         let urlPath = `/1/admin/blacklist/emailProviders/{id}`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     */
+    async adminRemoveEmailProviderBlacklistRaw(requestParameters: AdminRemoveEmailProviderBlacklistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.adminRemoveEmailProviderBlacklistRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
@@ -986,8 +1276,9 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     }
 
     /**
+     * Creates request options for adminRemoveUsernameBlacklist without sending the request
      */
-    async adminRemoveUsernameBlacklistRaw(requestParameters: AdminRemoveUsernameBlacklistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async adminRemoveUsernameBlacklistRequestOpts(requestParameters: AdminRemoveUsernameBlacklistRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -1003,12 +1294,19 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
         let urlPath = `/1/admin/blacklist/usernames/{id}`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     */
+    async adminRemoveUsernameBlacklistRaw(requestParameters: AdminRemoveUsernameBlacklistRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.adminRemoveUsernameBlacklistRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
@@ -1020,9 +1318,9 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
     }
 
     /**
-     * Removes a webhook
+     * Creates request options for adminRemoveWebhook without sending the request
      */
-    async adminRemoveWebhookRaw(requestParameters: AdminRemoveWebhookRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async adminRemoveWebhookRequestOpts(requestParameters: AdminRemoveWebhookRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -1038,12 +1336,20 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
         let urlPath = `/1/admin/webhooks/{id}`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Removes a webhook
+     */
+    async adminRemoveWebhookRaw(requestParameters: AdminRemoveWebhookRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.adminRemoveWebhookRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }

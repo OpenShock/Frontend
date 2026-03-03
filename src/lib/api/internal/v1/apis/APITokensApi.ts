@@ -69,6 +69,14 @@ export interface TokensReportTokensRequest {
  */
 export interface APITokensApiInterface {
     /**
+     * Creates request options for tokenDeleteDeleteToken without sending the request
+     * @param {string} tokenId 
+     * @throws {RequiredError}
+     * @memberof APITokensApiInterface
+     */
+    tokenDeleteDeleteTokenRequestOpts(requestParameters: TokenDeleteDeleteTokenRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Revoke a token
      * @param {string} tokenId 
@@ -84,6 +92,14 @@ export interface APITokensApiInterface {
     tokenDeleteDeleteToken(tokenId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
+     * Creates request options for tokensCreateToken without sending the request
+     * @param {CreateTokenRequest} [createTokenRequest] 
+     * @throws {RequiredError}
+     * @memberof APITokensApiInterface
+     */
+    tokensCreateTokenRequestOpts(requestParameters: TokensCreateTokenRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Create a new token
      * @param {CreateTokenRequest} [createTokenRequest] 
@@ -97,6 +113,15 @@ export interface APITokensApiInterface {
      * Create a new token
      */
     tokensCreateToken(createTokenRequest?: CreateTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TokenCreatedResponse>;
+
+    /**
+     * Creates request options for tokensEditToken without sending the request
+     * @param {string} tokenId 
+     * @param {EditTokenRequest} [editTokenRequest] 
+     * @throws {RequiredError}
+     * @memberof APITokensApiInterface
+     */
+    tokensEditTokenRequestOpts(requestParameters: TokensEditTokenRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -115,6 +140,14 @@ export interface APITokensApiInterface {
     tokensEditToken(tokenId: string, editTokenRequest?: EditTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
+     * Creates request options for tokensGetTokenById without sending the request
+     * @param {string} tokenId 
+     * @throws {RequiredError}
+     * @memberof APITokensApiInterface
+     */
+    tokensGetTokenByIdRequestOpts(requestParameters: TokensGetTokenByIdRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Get a token by id
      * @param {string} tokenId 
@@ -128,6 +161,13 @@ export interface APITokensApiInterface {
      * Get a token by id
      */
     tokensGetTokenById(tokenId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TokenResponse>;
+
+    /**
+     * Creates request options for tokensListTokens without sending the request
+     * @throws {RequiredError}
+     * @memberof APITokensApiInterface
+     */
+    tokensListTokensRequestOpts(): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -144,6 +184,14 @@ export interface APITokensApiInterface {
     tokensListTokens(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<TokenResponse>>;
 
     /**
+     * Creates request options for tokensReportTokens without sending the request
+     * @param {ReportTokensRequest} [reportTokensRequest] 
+     * @throws {RequiredError}
+     * @memberof APITokensApiInterface
+     */
+    tokensReportTokensRequestOpts(requestParameters: TokensReportTokensRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Endpoint to delete potentially compromised api tokens
      * @param {ReportTokensRequest} [reportTokensRequest] 
@@ -157,6 +205,13 @@ export interface APITokensApiInterface {
      * Endpoint to delete potentially compromised api tokens
      */
     tokensReportTokens(reportTokensRequest?: ReportTokensRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * Creates request options for tokensSelfGetSelfToken without sending the request
+     * @throws {RequiredError}
+     * @memberof APITokensApiInterface
+     */
+    tokensSelfGetSelfTokenRequestOpts(): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -180,9 +235,9 @@ export interface APITokensApiInterface {
 export class APITokensApi extends runtime.BaseAPI implements APITokensApiInterface {
 
     /**
-     * Revoke a token
+     * Creates request options for tokenDeleteDeleteToken without sending the request
      */
-    async tokenDeleteDeleteTokenRaw(requestParameters: TokenDeleteDeleteTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async tokenDeleteDeleteTokenRequestOpts(requestParameters: TokenDeleteDeleteTokenRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['tokenId'] == null) {
             throw new runtime.RequiredError(
                 'tokenId',
@@ -202,12 +257,20 @@ export class APITokensApi extends runtime.BaseAPI implements APITokensApiInterfa
         let urlPath = `/1/tokens/{tokenId}`;
         urlPath = urlPath.replace(`{${"tokenId"}}`, encodeURIComponent(String(requestParameters['tokenId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Revoke a token
+     */
+    async tokenDeleteDeleteTokenRaw(requestParameters: TokenDeleteDeleteTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.tokenDeleteDeleteTokenRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
@@ -220,9 +283,9 @@ export class APITokensApi extends runtime.BaseAPI implements APITokensApiInterfa
     }
 
     /**
-     * Create a new token
+     * Creates request options for tokensCreateToken without sending the request
      */
-    async tokensCreateTokenRaw(requestParameters: TokensCreateTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TokenCreatedResponse>> {
+    async tokensCreateTokenRequestOpts(requestParameters: TokensCreateTokenRequest): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -232,13 +295,21 @@ export class APITokensApi extends runtime.BaseAPI implements APITokensApiInterfa
 
         let urlPath = `/1/tokens`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: CreateTokenRequestToJSON(requestParameters['createTokenRequest']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Create a new token
+     */
+    async tokensCreateTokenRaw(requestParameters: TokensCreateTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TokenCreatedResponse>> {
+        const requestOptions = await this.tokensCreateTokenRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => TokenCreatedResponseFromJSON(jsonValue));
     }
@@ -252,9 +323,9 @@ export class APITokensApi extends runtime.BaseAPI implements APITokensApiInterfa
     }
 
     /**
-     * Edit a token
+     * Creates request options for tokensEditToken without sending the request
      */
-    async tokensEditTokenRaw(requestParameters: TokensEditTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async tokensEditTokenRequestOpts(requestParameters: TokensEditTokenRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['tokenId'] == null) {
             throw new runtime.RequiredError(
                 'tokenId',
@@ -272,13 +343,21 @@ export class APITokensApi extends runtime.BaseAPI implements APITokensApiInterfa
         let urlPath = `/1/tokens/{tokenId}`;
         urlPath = urlPath.replace(`{${"tokenId"}}`, encodeURIComponent(String(requestParameters['tokenId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
             body: EditTokenRequestToJSON(requestParameters['editTokenRequest']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Edit a token
+     */
+    async tokensEditTokenRaw(requestParameters: TokensEditTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.tokensEditTokenRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
@@ -291,9 +370,9 @@ export class APITokensApi extends runtime.BaseAPI implements APITokensApiInterfa
     }
 
     /**
-     * Get a token by id
+     * Creates request options for tokensGetTokenById without sending the request
      */
-    async tokensGetTokenByIdRaw(requestParameters: TokensGetTokenByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TokenResponse>> {
+    async tokensGetTokenByIdRequestOpts(requestParameters: TokensGetTokenByIdRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['tokenId'] == null) {
             throw new runtime.RequiredError(
                 'tokenId',
@@ -309,12 +388,20 @@ export class APITokensApi extends runtime.BaseAPI implements APITokensApiInterfa
         let urlPath = `/1/tokens/{tokenId}`;
         urlPath = urlPath.replace(`{${"tokenId"}}`, encodeURIComponent(String(requestParameters['tokenId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Get a token by id
+     */
+    async tokensGetTokenByIdRaw(requestParameters: TokensGetTokenByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TokenResponse>> {
+        const requestOptions = await this.tokensGetTokenByIdRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => TokenResponseFromJSON(jsonValue));
     }
@@ -328,9 +415,9 @@ export class APITokensApi extends runtime.BaseAPI implements APITokensApiInterfa
     }
 
     /**
-     * List all tokens for the current user
+     * Creates request options for tokensListTokens without sending the request
      */
-    async tokensListTokensRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<TokenResponse>>> {
+    async tokensListTokensRequestOpts(): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -338,12 +425,20 @@ export class APITokensApi extends runtime.BaseAPI implements APITokensApiInterfa
 
         let urlPath = `/1/tokens`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * List all tokens for the current user
+     */
+    async tokensListTokensRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<TokenResponse>>> {
+        const requestOptions = await this.tokensListTokensRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(TokenResponseFromJSON));
     }
@@ -357,9 +452,9 @@ export class APITokensApi extends runtime.BaseAPI implements APITokensApiInterfa
     }
 
     /**
-     * Endpoint to delete potentially compromised api tokens
+     * Creates request options for tokensReportTokens without sending the request
      */
-    async tokensReportTokensRaw(requestParameters: TokensReportTokensRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async tokensReportTokensRequestOpts(requestParameters: TokensReportTokensRequest): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -369,13 +464,21 @@ export class APITokensApi extends runtime.BaseAPI implements APITokensApiInterfa
 
         let urlPath = `/1/tokens/report`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: ReportTokensRequestToJSON(requestParameters['reportTokensRequest']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Endpoint to delete potentially compromised api tokens
+     */
+    async tokensReportTokensRaw(requestParameters: TokensReportTokensRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.tokensReportTokensRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
@@ -388,9 +491,9 @@ export class APITokensApi extends runtime.BaseAPI implements APITokensApiInterfa
     }
 
     /**
-     * Gets information about the current token used to access this endpoint
+     * Creates request options for tokensSelfGetSelfToken without sending the request
      */
-    async tokensSelfGetSelfTokenRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TokenResponse>> {
+    async tokensSelfGetSelfTokenRequestOpts(): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -402,12 +505,20 @@ export class APITokensApi extends runtime.BaseAPI implements APITokensApiInterfa
 
         let urlPath = `/1/tokens/self`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Gets information about the current token used to access this endpoint
+     */
+    async tokensSelfGetSelfTokenRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TokenResponse>> {
+        const requestOptions = await this.tokensSelfGetSelfTokenRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => TokenResponseFromJSON(jsonValue));
     }

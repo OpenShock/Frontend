@@ -1,18 +1,27 @@
 <script lang="ts">
-  import { resolve } from '$app/paths';
-  import { accountV2Api } from '$lib/api';
-  import { GetOAuthAuthorizeUrl } from '$lib/api/next/oauth';
   import Container from '$lib/components/Container.svelte';
-  import Turnstile from '$lib/components/Turnstile.svelte';
-  import PasswordInput from '$lib/components/input/PasswordInput.svelte';
+  import { asset, resolve } from '$app/paths';
+  import { Button } from '$lib/components/ui/button/index.js';
+  import * as Card from '$lib/components/ui/card/index.js';
+  import {
+    FieldGroup,
+    Field,
+    FieldDescription,
+    FieldSeparator,
+  } from '$lib/components/ui/field/index.js';
   import TextInput from '$lib/components/input/TextInput.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { initializeSignalR } from '$lib/signalr';
-  import { UserStore } from '$lib/stores/UserStore';
   import type { ValidationResult } from '$lib/types/ValidationResult';
+  import PasswordInput from '$lib/components/input/PasswordInput.svelte';
+  import Turnstile from '$lib/components/Turnstile.svelte';
+  import { accountV2Api } from '$lib/api';
+  import { UserStore } from '$lib/stores/UserStore';
+  import { initializeSignalR } from '$lib/signalr';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
+  import OauthButtons from '$lib/components/auth/oauth-buttons.svelte';
   import { gotoQueryRedirectOrFallback } from '$lib/utils/url';
+  import { backendMetadata } from '$lib/state/BackendMetadata.svelte';
+  import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte';
 
   let usernameOrEmail = $state('');
   let password = $state('');
@@ -41,10 +50,9 @@
         email: account.accountEmail,
         roles: account.accountRoles,
       });
+      await initializeSignalR();
 
-      initializeSignalR(); // Fire and forget
-
-      gotoQueryRedirectOrFallback('/home', 'redirect');
+      await gotoQueryRedirectOrFallback('/home');
     } catch (error) {
       await handleApiError(error, (problem) => {
         if (!isValidationError(problem)) return false;
@@ -55,41 +63,89 @@
     }
   }
 
+  let oauthProviders = $derived(backendMetadata.State?.oAuthProviders);
+  let anyOAuthProviders = $derived(oauthProviders !== undefined && oauthProviders.length > 0);
+
   let canSubmit = $derived(
     usernameOrEmail.length > 0 && password.length > 0 && turnstileResponse != null
   );
 </script>
 
-<Container class="items-center">
-  <form class="flex flex-col gap-2" onsubmit={handleSubmission}>
-    <div class="text-3xl font-semibold">Login</div>
-
-    <TextInput
-      label="Username or Email"
-      placeholder="Username or Email"
-      autocomplete="username"
-      bind:value={usernameOrEmail}
-      validationResult={usernameError}
+<Container class="items-center-safe justify-center-safe p-0!">
+  <span class="flex items-center gap-2 self-center font-medium">
+    <img class="ml-[0.667px] h-7.5" src={asset('/IconSpinning.svg')} alt="OpenShock Logo" />
+    <img
+      class="h-7.5 transition-opacity delay-100 duration-200 group-data-[collapsible=icon]:opacity-0 group-data-[collapsible=icon]:delay-0"
+      src={asset('/LogoTextOnly.svg')}
+      alt="OpenShock Logo"
     />
+  </span>
+  <div class="flex max-w-sm flex-col gap-6">
+    <Card.Root>
+      <Card.Header class="text-center">
+        <Card.Title class="text-xl">Welcome back</Card.Title>
+        <Card.Description>
+          {#if backendMetadata.State === null}
+            Loading available login methods
+          {:else if anyOAuthProviders}
+            Login with one of these methods
+          {:else}
+            Login with your OpenShock Account
+          {/if}
+        </Card.Description>
+      </Card.Header>
+      <Card.Content>
+        <FieldGroup>
+          {#if backendMetadata.State === null}
+            <Skeleton class="h-9 w-full"></Skeleton>
+            <Skeleton class="h-1 w-full"></Skeleton>
+            <Skeleton class="h-9 w-full"></Skeleton>
+            <Skeleton class="h-9 w-full"></Skeleton>
+            <Skeleton class="h-16 w-full"></Skeleton>
+            <Skeleton class="h-9 w-full"></Skeleton>
+          {:else}
+            {#if anyOAuthProviders}
+              <OauthButtons />
+              <FieldSeparator class="*:data-[slot=field-separator-content]:bg-card">
+                Or continue with
+              </FieldSeparator>
+            {/if}
+            <form onsubmit={handleSubmission}>
+              <div>
+                <div class="my-1 flex flex-col gap-1">
+                  <TextInput
+                    label="Username or Email"
+                    autocomplete="username"
+                    bind:value={usernameOrEmail}
+                    validationResult={usernameError}
+                  />
 
-    <PasswordInput
-      label="Password"
-      placeholder="Password"
-      autocomplete="current-password"
-      bind:value={password}
-      validate={passwordError}
-    />
+                  <PasswordInput
+                    label="Password"
+                    autocomplete="current-password"
+                    bind:value={password}
+                    validate={passwordError}
+                  />
 
-    <Turnstile action="signin" bind:response={turnstileResponse} />
-
-    <Button type="submit" disabled={!canSubmit}>Log In</Button>
-
-    <a class=" text-sm opacity-75 hover:underline" href={resolve('/forgot-password')}>
-      Forgot your password?
-    </a>
-  </form>
-
-  <form action={GetOAuthAuthorizeUrl('discord', 'LoginOrCreate')} method="POST">
-    <Button type="submit">Log In With Discord</Button>
-  </form>
+                  <Turnstile action="signin" bind:response={turnstileResponse} />
+                </div>
+                <Field class="mt-5">
+                  <Button type="submit" disabled={!canSubmit}>Login</Button>
+                  <FieldDescription class="text-center">
+                    Don't have an account? <a href={resolve('/signup')}>Sign up</a>
+                  </FieldDescription>
+                </Field>
+              </div>
+            </form>
+          {/if}
+        </FieldGroup>
+      </Card.Content>
+    </Card.Root>
+    <FieldDescription class="px-6 text-center">
+      By clicking Login, you agree to our <a href="https://openshock.org/tos" target="_blank"
+        >Terms of Service</a
+      >
+      and <a href="https://openshock.org/privacy" target="_blank">Privacy Policy</a>.
+    </FieldDescription>
+  </div>
 </Container>

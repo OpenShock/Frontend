@@ -40,6 +40,14 @@ export interface UsersGetByNameRequest {
  */
 export interface UsersApiInterface {
     /**
+     * Creates request options for usersGetByName without sending the request
+     * @param {string} username 
+     * @throws {RequiredError}
+     * @memberof UsersApiInterface
+     */
+    usersGetByNameRequestOpts(requestParameters: UsersGetByNameRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @param {string} username 
      * @param {*} [options] Override http request option.
@@ -51,6 +59,13 @@ export interface UsersApiInterface {
     /**
      */
     usersGetByName(username: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BasicUserInfo>;
+
+    /**
+     * Creates request options for usersGetSelf without sending the request
+     * @throws {RequiredError}
+     * @memberof UsersApiInterface
+     */
+    usersGetSelfRequestOpts(): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -74,8 +89,9 @@ export interface UsersApiInterface {
 export class UsersApi extends runtime.BaseAPI implements UsersApiInterface {
 
     /**
+     * Creates request options for usersGetByName without sending the request
      */
-    async usersGetByNameRaw(requestParameters: UsersGetByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BasicUserInfo>> {
+    async usersGetByNameRequestOpts(requestParameters: UsersGetByNameRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['username'] == null) {
             throw new runtime.RequiredError(
                 'username',
@@ -95,12 +111,19 @@ export class UsersApi extends runtime.BaseAPI implements UsersApiInterface {
         let urlPath = `/1/users/by-name/{username}`;
         urlPath = urlPath.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters['username'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     */
+    async usersGetByNameRaw(requestParameters: UsersGetByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BasicUserInfo>> {
+        const requestOptions = await this.usersGetByNameRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => BasicUserInfoFromJSON(jsonValue));
     }
@@ -113,9 +136,9 @@ export class UsersApi extends runtime.BaseAPI implements UsersApiInterface {
     }
 
     /**
-     * Get the current user\'s information.
+     * Creates request options for usersGetSelf without sending the request
      */
-    async usersGetSelfRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserSelfResponseLegacyDataResponse>> {
+    async usersGetSelfRequestOpts(): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -127,12 +150,20 @@ export class UsersApi extends runtime.BaseAPI implements UsersApiInterface {
 
         let urlPath = `/1/users/self`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Get the current user\'s information.
+     */
+    async usersGetSelfRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserSelfResponseLegacyDataResponse>> {
+        const requestOptions = await this.usersGetSelfRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => UserSelfResponseLegacyDataResponseFromJSON(jsonValue));
     }

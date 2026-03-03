@@ -1,7 +1,9 @@
-import { asset } from '$app/paths';
 import { PUBLIC_SITE_DESCRIPTION, PUBLIC_SITE_NAME } from '$env/static/public';
+import { getSiteAssetURL } from './utils/url';
 
-/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+const LogoSvgAssetURL = getSiteAssetURL('/logo.svg');
+
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars -- kept for future per-page metadata customization */
 function getPageTitleAndDescription(url: URL): { title: string; description: string } {
   const title = PUBLIC_SITE_NAME.trim();
   const details = PUBLIC_SITE_DESCRIPTION.trim();
@@ -23,7 +25,7 @@ export function buildMetaData(url: URL) {
   const { title, description } = getPageTitleAndDescription(url);
 
   const image = {
-    src: new URL(asset('/logo.svg'), url.origin).href,
+    src: LogoSvgAssetURL.href,
     alt: 'OpenShock Logo',
   };
 

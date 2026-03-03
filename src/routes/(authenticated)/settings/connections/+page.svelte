@@ -121,7 +121,7 @@
           {#if loadingProviders}
             <Dropdown.Item disabled>Loading…</Dropdown.Item>
           {:else}
-            {#each backendMetadata.State.oAuthProviders as provider (provider)}
+            {#each backendMetadata.State!.oAuthProviders as provider (provider)}
               {#if !isConnected(provider)}
                 <Dropdown.Item>
                   <Link2 class="mr-2 size-4" />
@@ -159,7 +159,7 @@
       </div>
     {:else}
       <div class="grid gap-3 md:grid-cols-2">
-        {#each backendMetadata.State.oAuthProviders as p (p)}
+        {#each backendMetadata.State!.oAuthProviders as p (p)}
           {#if isConnected(p)}
             <div class="flex items-center justify-between rounded-xl border p-4">
               <div class="min-w-0">

@@ -34,6 +34,14 @@ export interface DevicesCreateDeviceV2Request {
  */
 export interface HubManagementApiInterface {
     /**
+     * Creates request options for devicesCreateDeviceV2 without sending the request
+     * @param {HubCreateRequest} [hubCreateRequest] 
+     * @throws {RequiredError}
+     * @memberof HubManagementApiInterface
+     */
+    devicesCreateDeviceV2RequestOpts(requestParameters: DevicesCreateDeviceV2Request): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Create a new device for the current user
      * @param {HubCreateRequest} [hubCreateRequest] 
@@ -56,9 +64,9 @@ export interface HubManagementApiInterface {
 export class HubManagementApi extends runtime.BaseAPI implements HubManagementApiInterface {
 
     /**
-     * Create a new device for the current user
+     * Creates request options for devicesCreateDeviceV2 without sending the request
      */
-    async devicesCreateDeviceV2Raw(requestParameters: DevicesCreateDeviceV2Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
+    async devicesCreateDeviceV2RequestOpts(requestParameters: DevicesCreateDeviceV2Request): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -72,13 +80,21 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
 
         let urlPath = `/2/devices`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: HubCreateRequestToJSON(requestParameters['hubCreateRequest']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Create a new device for the current user
+     */
+    async devicesCreateDeviceV2Raw(requestParameters: DevicesCreateDeviceV2Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
+        const requestOptions = await this.devicesCreateDeviceV2RequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         if (this.isJsonMime(response.headers.get('content-type'))) {
             return new runtime.JSONApiResponse<string>(response);

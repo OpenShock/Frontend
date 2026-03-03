@@ -1,5 +1,5 @@
-/* eslint-disable no-control-regex  */
-/* eslint-disable no-misleading-character-class */
+/* eslint-disable no-control-regex -- regex intentionally matches control characters for Unicode username validation */
+/* eslint-disable no-misleading-character-class -- regex intentionally uses multi-codepoint Unicode classes */
 
 import { type UsernameCheckResponse } from '$lib/api/internal/v1';
 import { UsernameAvailability } from '$lib/api/internal/v2';

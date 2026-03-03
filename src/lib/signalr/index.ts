@@ -1,5 +1,5 @@
 import { dev } from '$app/environment';
-import { PUBLIC_BACKEND_API_URL } from '$env/static/public';
+import { getBackendURL } from '$lib/utils/url';
 import {
   HttpTransportType,
   type HubConnection,
@@ -20,6 +20,8 @@ import {
   handleSignalrOtaRollback,
 } from './handlers';
 
+const BackendHubUserUrl = getBackendURL('1/hubs/user').href;
+
 const signalr_connection = writable<HubConnection | null>(null);
 const signalr_state = writable<HubConnectionState>(HubConnectionState.Disconnected);
 
@@ -31,7 +33,7 @@ export async function initializeSignalR() {
 
   connection = new HubConnectionBuilder()
     .configureLogging(dev ? LogLevel.Debug : LogLevel.Warning)
-    .withUrl(new URL(`1/hubs/user`, PUBLIC_BACKEND_API_URL).toString(), {
+    .withUrl(BackendHubUserUrl, {
       transport: HttpTransportType.WebSockets,
       skipNegotiation: true,
     })

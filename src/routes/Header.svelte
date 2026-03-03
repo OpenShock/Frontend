@@ -1,12 +1,12 @@
 <script lang="ts">
-  /* eslint-disable svelte/no-navigation-without-resolve */
+  /* eslint-disable svelte/no-navigation-without-resolve -- uses prefixBase for dynamic navigation and external URLs */
 
   import PanelLeft from '@lucide/svelte/icons/panel-left';
   import { goto } from '$app/navigation';
   import type { Pathname } from '$app/types';
   import { PUBLIC_DISCORD_INVITE_URL, PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
   import LightSwitch from '$lib/components/LightSwitch.svelte';
-  import DiscordIcon from '$lib/components/svg/DiscordIcon.svelte';
+  import DiscordLogo from '$lib/components/svg/DiscordLogo.svelte';
   import GithubIcon from '$lib/components/svg/GithubIcon.svelte';
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
@@ -14,20 +14,18 @@
   import { UserStore } from '$lib/stores/UserStore';
   import { cn } from '$lib/utils';
   import Breadcrumb from './Breadcrumb.svelte';
-  import { base } from '$app/paths';
-  import { unsafeResolve } from '$lib/utils/url';
+  import { prefixBase } from '$lib/utils/url';
+  import { resolve } from '$app/paths';
+  import { LogIn, UserPlus } from '@lucide/svelte';
 
   let sidebar = useSidebar();
 </script>
 
 {#snippet dropdownItem(name: string, url: Pathname)}
-  <!-- I know this is deprecated buy resolve() is too strict to be used here... -->
-  <DropdownMenu.Item class="cursor-pointer" onclick={() => goto(unsafeResolve(url))}>
+  <!-- prefixBase is used here because resolve() requires a route ID, not a plain pathname -->
+  <DropdownMenu.Item class="cursor-pointer" onclick={() => goto(prefixBase(url))}>
     {name}
   </DropdownMenu.Item>
-{/snippet}
-{#snippet headerItem(text: string, href: Pathname)}
-  <Button href={unsafeResolve(href)}>{text}</Button>
 {/snippet}
 
 <header
@@ -68,14 +66,14 @@
         </DropdownMenu.Content>
       </DropdownMenu.Root>
     {:else}
-      {@render headerItem('Login', '/login')}
-      {@render headerItem('Sign Up', '/signup')}
+      <Button variant="outline" href={resolve('/login')}>Login <LogIn /></Button>
+      <Button variant="outline" href={resolve('/signup')}>Sign Up <UserPlus /></Button>
       <div class="hidden sm:flex sm:flex-row">
         <a href={PUBLIC_GITHUB_PROJECT_URL} class="p-2" title="Project GitHub">
           <GithubIcon class="size-6 fill-black dark:fill-white" />
         </a>
         <a href={PUBLIC_DISCORD_INVITE_URL} class="p-2" title="Community Discord">
-          <DiscordIcon class="size-6 fill-black dark:fill-white" />
+          <DiscordLogo class="size-6 fill-black dark:fill-white" />
         </a>
       </div>
     {/if}

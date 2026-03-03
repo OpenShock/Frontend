@@ -139,6 +139,15 @@ export interface ShockerShockerShareRemoveRequest {
  */
 export interface ShockersApiInterface {
     /**
+     * Creates request options for shockerEditShocker without sending the request
+     * @param {string} shockerId 
+     * @param {NewShocker} [newShocker] 
+     * @throws {RequiredError}
+     * @memberof ShockersApiInterface
+     */
+    shockerEditShockerRequestOpts(requestParameters: ShockerEditShockerRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Edit a shocker
      * @param {string} shockerId 
@@ -153,6 +162,15 @@ export interface ShockersApiInterface {
      * Edit a shocker
      */
     shockerEditShocker(shockerId: string, newShocker?: NewShocker, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
+
+    /**
+     * Creates request options for shockerGetAllShockerLogs without sending the request
+     * @param {number} [offset] 
+     * @param {number} [limit] 
+     * @throws {RequiredError}
+     * @memberof ShockersApiInterface
+     */
+    shockerGetAllShockerLogsRequestOpts(requestParameters: ShockerGetAllShockerLogsRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -171,6 +189,14 @@ export interface ShockersApiInterface {
     shockerGetAllShockerLogs(offset?: number, limit?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShockerLogsResponse>;
 
     /**
+     * Creates request options for shockerGetShockerById without sending the request
+     * @param {string} shockerId 
+     * @throws {RequiredError}
+     * @memberof ShockersApiInterface
+     */
+    shockerGetShockerByIdRequestOpts(requestParameters: ShockerGetShockerByIdRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Get information about a shocker.
      * @param {string} shockerId 
@@ -184,6 +210,16 @@ export interface ShockersApiInterface {
      * Get information about a shocker.
      */
     shockerGetShockerById(shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShockerWithDeviceLegacyDataResponse>;
+
+    /**
+     * Creates request options for shockerGetShockerLogs without sending the request
+     * @param {string} shockerId 
+     * @param {number} [offset] 
+     * @param {number} [limit] 
+     * @throws {RequiredError}
+     * @memberof ShockersApiInterface
+     */
+    shockerGetShockerLogsRequestOpts(requestParameters: ShockerGetShockerLogsRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -203,6 +239,14 @@ export interface ShockersApiInterface {
     shockerGetShockerLogs(shockerId: string, offset?: number, limit?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LogEntryArrayLegacyDataResponse>;
 
     /**
+     * Creates request options for shockerGetUserShares without sending the request
+     * @param {string} shockerId Id of the shocker
+     * @throws {RequiredError}
+     * @memberof ShockersApiInterface
+     */
+    shockerGetUserSharesRequestOpts(requestParameters: ShockerGetUserSharesRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Get all user shares for a shocker
      * @param {string} shockerId Id of the shocker
@@ -216,6 +260,13 @@ export interface ShockersApiInterface {
      * Get all user shares for a shocker
      */
     shockerGetUserShares(shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareInfoArrayLegacyDataResponse>;
+
+    /**
+     * Creates request options for shockerListSharedShockers without sending the request
+     * @throws {RequiredError}
+     * @memberof ShockersApiInterface
+     */
+    shockerListSharedShockersRequestOpts(): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -232,6 +283,13 @@ export interface ShockersApiInterface {
     shockerListSharedShockers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OwnerShockerResponseArrayLegacyDataResponse>;
 
     /**
+     * Creates request options for shockerListShockers without sending the request
+     * @throws {RequiredError}
+     * @memberof ShockersApiInterface
+     */
+    shockerListShockersRequestOpts(): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary List all shockers belonging to the authenticated user.
      * @param {*} [options] Override http request option.
@@ -244,6 +302,15 @@ export interface ShockersApiInterface {
      * List all shockers belonging to the authenticated user.
      */
     shockerListShockers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DeviceWithShockersResponseArrayLegacyDataResponse>;
+
+    /**
+     * Creates request options for shockerPauseShocker without sending the request
+     * @param {string} shockerId 
+     * @param {PauseRequest} [pauseRequest] 
+     * @throws {RequiredError}
+     * @memberof ShockersApiInterface
+     */
+    shockerPauseShockerRequestOpts(requestParameters: ShockerPauseShockerRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -262,6 +329,14 @@ export interface ShockersApiInterface {
     shockerPauseShocker(shockerId: string, pauseRequest?: PauseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BooleanLegacyDataResponse>;
 
     /**
+     * Creates request options for shockerRegisterShocker without sending the request
+     * @param {NewShocker} [newShocker] 
+     * @throws {RequiredError}
+     * @memberof ShockersApiInterface
+     */
+    shockerRegisterShockerRequestOpts(requestParameters: ShockerRegisterShockerRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Register a shocker
      * @param {NewShocker} [newShocker] 
@@ -275,6 +350,14 @@ export interface ShockersApiInterface {
      * Register a shocker
      */
     shockerRegisterShocker(newShocker?: NewShocker, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GuidLegacyDataResponse>;
+
+    /**
+     * Creates request options for shockerRemoveShocker without sending the request
+     * @param {string} shockerId 
+     * @throws {RequiredError}
+     * @memberof ShockersApiInterface
+     */
+    shockerRemoveShockerRequestOpts(requestParameters: ShockerRemoveShockerRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -292,6 +375,14 @@ export interface ShockersApiInterface {
     shockerRemoveShocker(shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
 
     /**
+     * Creates request options for shockerSendControlDEPRECATED without sending the request
+     * @param {Array<Control>} [control] 
+     * @throws {RequiredError}
+     * @memberof ShockersApiInterface
+     */
+    shockerSendControlDEPRECATEDRequestOpts(requestParameters: ShockerSendControlDEPRECATEDRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Send a control message to shockers (Deprecated in favor of the /2/shockers/control endpoint)
      * @param {Array<Control>} [control] 
@@ -305,6 +396,15 @@ export interface ShockersApiInterface {
      * Send a control message to shockers (Deprecated in favor of the /2/shockers/control endpoint)
      */
     shockerSendControlDEPRECATED(control?: Array<Control>, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
+
+    /**
+     * Creates request options for shockerShockerShareCodeCreate without sending the request
+     * @param {string} shockerId 
+     * @param {ShockerPermLimitPair} [shockerPermLimitPair] 
+     * @throws {RequiredError}
+     * @memberof ShockersApiInterface
+     */
+    shockerShockerShareCodeCreateRequestOpts(requestParameters: ShockerShockerShareCodeCreateRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -323,6 +423,14 @@ export interface ShockersApiInterface {
     shockerShockerShareCodeCreate(shockerId: string, shockerPermLimitPair?: ShockerPermLimitPair, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GuidLegacyDataResponse>;
 
     /**
+     * Creates request options for shockerShockerShareCodeList without sending the request
+     * @param {string} shockerId 
+     * @throws {RequiredError}
+     * @memberof ShockersApiInterface
+     */
+    shockerShockerShareCodeListRequestOpts(requestParameters: ShockerShockerShareCodeListRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary List all share codes for a shocker
      * @param {string} shockerId 
@@ -336,6 +444,16 @@ export interface ShockersApiInterface {
      * List all share codes for a shocker
      */
     shockerShockerShareCodeList(shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareCodeInfoArrayLegacyDataResponse>;
+
+    /**
+     * Creates request options for shockerShockerShareCodePause without sending the request
+     * @param {string} shockerId 
+     * @param {string} sharedWithUserId 
+     * @param {PauseRequest} [pauseRequest] 
+     * @throws {RequiredError}
+     * @memberof ShockersApiInterface
+     */
+    shockerShockerShareCodePauseRequestOpts(requestParameters: ShockerShockerShareCodePauseRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -355,6 +473,16 @@ export interface ShockersApiInterface {
     shockerShockerShareCodePause(shockerId: string, sharedWithUserId: string, pauseRequest?: PauseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BooleanLegacyDataResponse>;
 
     /**
+     * Creates request options for shockerShockerShareCodeUpdate without sending the request
+     * @param {string} shockerId 
+     * @param {string} sharedWithUserId 
+     * @param {ShockerPermLimitPair} [shockerPermLimitPair] 
+     * @throws {RequiredError}
+     * @memberof ShockersApiInterface
+     */
+    shockerShockerShareCodeUpdateRequestOpts(requestParameters: ShockerShockerShareCodeUpdateRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Update a share for a shocker
      * @param {string} shockerId 
@@ -370,6 +498,15 @@ export interface ShockersApiInterface {
      * Update a share for a shocker
      */
     shockerShockerShareCodeUpdate(shockerId: string, sharedWithUserId: string, shockerPermLimitPair?: ShockerPermLimitPair, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * Creates request options for shockerShockerShareRemove without sending the request
+     * @param {string} shockerId 
+     * @param {string} sharedWithUserId 
+     * @throws {RequiredError}
+     * @memberof ShockersApiInterface
+     */
+    shockerShockerShareRemoveRequestOpts(requestParameters: ShockerShockerShareRemoveRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -395,9 +532,9 @@ export interface ShockersApiInterface {
 export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface {
 
     /**
-     * Edit a shocker
+     * Creates request options for shockerEditShocker without sending the request
      */
-    async shockerEditShockerRaw(requestParameters: ShockerEditShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>> {
+    async shockerEditShockerRequestOpts(requestParameters: ShockerEditShockerRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['shockerId'] == null) {
             throw new runtime.RequiredError(
                 'shockerId',
@@ -419,13 +556,21 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
         let urlPath = `/1/shockers/{shockerId}`;
         urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
             body: NewShockerToJSON(requestParameters['newShocker']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Edit a shocker
+     */
+    async shockerEditShockerRaw(requestParameters: ShockerEditShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>> {
+        const requestOptions = await this.shockerEditShockerRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => LegacyEmptyResponseFromJSON(jsonValue));
     }
@@ -439,9 +584,9 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
     }
 
     /**
-     * Get the logs for all shockers
+     * Creates request options for shockerGetAllShockerLogs without sending the request
      */
-    async shockerGetAllShockerLogsRaw(requestParameters: ShockerGetAllShockerLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShockerLogsResponse>> {
+    async shockerGetAllShockerLogsRequestOpts(requestParameters: ShockerGetAllShockerLogsRequest): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         if (requestParameters['offset'] != null) {
@@ -461,12 +606,20 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
 
         let urlPath = `/1/shockers/logs`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Get the logs for all shockers
+     */
+    async shockerGetAllShockerLogsRaw(requestParameters: ShockerGetAllShockerLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShockerLogsResponse>> {
+        const requestOptions = await this.shockerGetAllShockerLogsRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ShockerLogsResponseFromJSON(jsonValue));
     }
@@ -480,9 +633,9 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
     }
 
     /**
-     * Get information about a shocker.
+     * Creates request options for shockerGetShockerById without sending the request
      */
-    async shockerGetShockerByIdRaw(requestParameters: ShockerGetShockerByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShockerWithDeviceLegacyDataResponse>> {
+    async shockerGetShockerByIdRequestOpts(requestParameters: ShockerGetShockerByIdRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['shockerId'] == null) {
             throw new runtime.RequiredError(
                 'shockerId',
@@ -502,12 +655,20 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
         let urlPath = `/1/shockers/{shockerId}`;
         urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Get information about a shocker.
+     */
+    async shockerGetShockerByIdRaw(requestParameters: ShockerGetShockerByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShockerWithDeviceLegacyDataResponse>> {
+        const requestOptions = await this.shockerGetShockerByIdRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ShockerWithDeviceLegacyDataResponseFromJSON(jsonValue));
     }
@@ -521,9 +682,9 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
     }
 
     /**
-     * Get the logs for a shocker
+     * Creates request options for shockerGetShockerLogs without sending the request
      */
-    async shockerGetShockerLogsRaw(requestParameters: ShockerGetShockerLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LogEntryArrayLegacyDataResponse>> {
+    async shockerGetShockerLogsRequestOpts(requestParameters: ShockerGetShockerLogsRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['shockerId'] == null) {
             throw new runtime.RequiredError(
                 'shockerId',
@@ -551,12 +712,20 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
         let urlPath = `/1/shockers/{shockerId}/logs`;
         urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Get the logs for a shocker
+     */
+    async shockerGetShockerLogsRaw(requestParameters: ShockerGetShockerLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LogEntryArrayLegacyDataResponse>> {
+        const requestOptions = await this.shockerGetShockerLogsRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => LogEntryArrayLegacyDataResponseFromJSON(jsonValue));
     }
@@ -570,9 +739,9 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
     }
 
     /**
-     * Get all user shares for a shocker
+     * Creates request options for shockerGetUserShares without sending the request
      */
-    async shockerGetUserSharesRaw(requestParameters: ShockerGetUserSharesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareInfoArrayLegacyDataResponse>> {
+    async shockerGetUserSharesRequestOpts(requestParameters: ShockerGetUserSharesRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['shockerId'] == null) {
             throw new runtime.RequiredError(
                 'shockerId',
@@ -592,12 +761,20 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
         let urlPath = `/1/shockers/{shockerId}/shares`;
         urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Get all user shares for a shocker
+     */
+    async shockerGetUserSharesRaw(requestParameters: ShockerGetUserSharesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareInfoArrayLegacyDataResponse>> {
+        const requestOptions = await this.shockerGetUserSharesRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ShareInfoArrayLegacyDataResponseFromJSON(jsonValue));
     }
@@ -611,9 +788,9 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
     }
 
     /**
-     * List all shockers shared with the authenticated user.
+     * Creates request options for shockerListSharedShockers without sending the request
      */
-    async shockerListSharedShockersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OwnerShockerResponseArrayLegacyDataResponse>> {
+    async shockerListSharedShockersRequestOpts(): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -625,12 +802,20 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
 
         let urlPath = `/1/shockers/shared`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * List all shockers shared with the authenticated user.
+     */
+    async shockerListSharedShockersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OwnerShockerResponseArrayLegacyDataResponse>> {
+        const requestOptions = await this.shockerListSharedShockersRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => OwnerShockerResponseArrayLegacyDataResponseFromJSON(jsonValue));
     }
@@ -644,9 +829,9 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
     }
 
     /**
-     * List all shockers belonging to the authenticated user.
+     * Creates request options for shockerListShockers without sending the request
      */
-    async shockerListShockersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DeviceWithShockersResponseArrayLegacyDataResponse>> {
+    async shockerListShockersRequestOpts(): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -658,12 +843,20 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
 
         let urlPath = `/1/shockers/own`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * List all shockers belonging to the authenticated user.
+     */
+    async shockerListShockersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DeviceWithShockersResponseArrayLegacyDataResponse>> {
+        const requestOptions = await this.shockerListShockersRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => DeviceWithShockersResponseArrayLegacyDataResponseFromJSON(jsonValue));
     }
@@ -677,9 +870,9 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
     }
 
     /**
-     * Pause or unpause a shocker
+     * Creates request options for shockerPauseShocker without sending the request
      */
-    async shockerPauseShockerRaw(requestParameters: ShockerPauseShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BooleanLegacyDataResponse>> {
+    async shockerPauseShockerRequestOpts(requestParameters: ShockerPauseShockerRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['shockerId'] == null) {
             throw new runtime.RequiredError(
                 'shockerId',
@@ -701,13 +894,21 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
         let urlPath = `/1/shockers/{shockerId}/pause`;
         urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: PauseRequestToJSON(requestParameters['pauseRequest']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Pause or unpause a shocker
+     */
+    async shockerPauseShockerRaw(requestParameters: ShockerPauseShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BooleanLegacyDataResponse>> {
+        const requestOptions = await this.shockerPauseShockerRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => BooleanLegacyDataResponseFromJSON(jsonValue));
     }
@@ -721,9 +922,9 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
     }
 
     /**
-     * Register a shocker
+     * Creates request options for shockerRegisterShocker without sending the request
      */
-    async shockerRegisterShockerRaw(requestParameters: ShockerRegisterShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GuidLegacyDataResponse>> {
+    async shockerRegisterShockerRequestOpts(requestParameters: ShockerRegisterShockerRequest): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -737,13 +938,21 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
 
         let urlPath = `/1/shockers`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: NewShockerToJSON(requestParameters['newShocker']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Register a shocker
+     */
+    async shockerRegisterShockerRaw(requestParameters: ShockerRegisterShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GuidLegacyDataResponse>> {
+        const requestOptions = await this.shockerRegisterShockerRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => GuidLegacyDataResponseFromJSON(jsonValue));
     }
@@ -757,9 +966,9 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
     }
 
     /**
-     * Remove a shocker
+     * Creates request options for shockerRemoveShocker without sending the request
      */
-    async shockerRemoveShockerRaw(requestParameters: ShockerRemoveShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>> {
+    async shockerRemoveShockerRequestOpts(requestParameters: ShockerRemoveShockerRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['shockerId'] == null) {
             throw new runtime.RequiredError(
                 'shockerId',
@@ -779,12 +988,20 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
         let urlPath = `/1/shockers/{shockerId}`;
         urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Remove a shocker
+     */
+    async shockerRemoveShockerRaw(requestParameters: ShockerRemoveShockerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>> {
+        const requestOptions = await this.shockerRemoveShockerRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => LegacyEmptyResponseFromJSON(jsonValue));
     }
@@ -798,9 +1015,9 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
     }
 
     /**
-     * Send a control message to shockers (Deprecated in favor of the /2/shockers/control endpoint)
+     * Creates request options for shockerSendControlDEPRECATED without sending the request
      */
-    async shockerSendControlDEPRECATEDRaw(requestParameters: ShockerSendControlDEPRECATEDRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>> {
+    async shockerSendControlDEPRECATEDRequestOpts(requestParameters: ShockerSendControlDEPRECATEDRequest): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -814,13 +1031,21 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
 
         let urlPath = `/1/shockers/control`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: requestParameters['control']!.map(ControlToJSON),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Send a control message to shockers (Deprecated in favor of the /2/shockers/control endpoint)
+     */
+    async shockerSendControlDEPRECATEDRaw(requestParameters: ShockerSendControlDEPRECATEDRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>> {
+        const requestOptions = await this.shockerSendControlDEPRECATEDRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => LegacyEmptyResponseFromJSON(jsonValue));
     }
@@ -834,9 +1059,9 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
     }
 
     /**
-     * Create a share code for a shocker
+     * Creates request options for shockerShockerShareCodeCreate without sending the request
      */
-    async shockerShockerShareCodeCreateRaw(requestParameters: ShockerShockerShareCodeCreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GuidLegacyDataResponse>> {
+    async shockerShockerShareCodeCreateRequestOpts(requestParameters: ShockerShockerShareCodeCreateRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['shockerId'] == null) {
             throw new runtime.RequiredError(
                 'shockerId',
@@ -858,13 +1083,21 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
         let urlPath = `/1/shockers/{shockerId}/shares`;
         urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: ShockerPermLimitPairToJSON(requestParameters['shockerPermLimitPair']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Create a share code for a shocker
+     */
+    async shockerShockerShareCodeCreateRaw(requestParameters: ShockerShockerShareCodeCreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GuidLegacyDataResponse>> {
+        const requestOptions = await this.shockerShockerShareCodeCreateRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => GuidLegacyDataResponseFromJSON(jsonValue));
     }
@@ -878,9 +1111,9 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
     }
 
     /**
-     * List all share codes for a shocker
+     * Creates request options for shockerShockerShareCodeList without sending the request
      */
-    async shockerShockerShareCodeListRaw(requestParameters: ShockerShockerShareCodeListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareCodeInfoArrayLegacyDataResponse>> {
+    async shockerShockerShareCodeListRequestOpts(requestParameters: ShockerShockerShareCodeListRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['shockerId'] == null) {
             throw new runtime.RequiredError(
                 'shockerId',
@@ -900,12 +1133,20 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
         let urlPath = `/1/shockers/{shockerId}/shareCodes`;
         urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * List all share codes for a shocker
+     */
+    async shockerShockerShareCodeListRaw(requestParameters: ShockerShockerShareCodeListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ShareCodeInfoArrayLegacyDataResponse>> {
+        const requestOptions = await this.shockerShockerShareCodeListRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ShareCodeInfoArrayLegacyDataResponseFromJSON(jsonValue));
     }
@@ -919,9 +1160,9 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
     }
 
     /**
-     * Pause/Unpause a share code for a shocker
+     * Creates request options for shockerShockerShareCodePause without sending the request
      */
-    async shockerShockerShareCodePauseRaw(requestParameters: ShockerShockerShareCodePauseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BooleanLegacyDataResponse>> {
+    async shockerShockerShareCodePauseRequestOpts(requestParameters: ShockerShockerShareCodePauseRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['shockerId'] == null) {
             throw new runtime.RequiredError(
                 'shockerId',
@@ -951,13 +1192,21 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
         urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
         urlPath = urlPath.replace(`{${"sharedWithUserId"}}`, encodeURIComponent(String(requestParameters['sharedWithUserId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: PauseRequestToJSON(requestParameters['pauseRequest']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Pause/Unpause a share code for a shocker
+     */
+    async shockerShockerShareCodePauseRaw(requestParameters: ShockerShockerShareCodePauseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BooleanLegacyDataResponse>> {
+        const requestOptions = await this.shockerShockerShareCodePauseRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => BooleanLegacyDataResponseFromJSON(jsonValue));
     }
@@ -971,9 +1220,9 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
     }
 
     /**
-     * Update a share for a shocker
+     * Creates request options for shockerShockerShareCodeUpdate without sending the request
      */
-    async shockerShockerShareCodeUpdateRaw(requestParameters: ShockerShockerShareCodeUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async shockerShockerShareCodeUpdateRequestOpts(requestParameters: ShockerShockerShareCodeUpdateRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['shockerId'] == null) {
             throw new runtime.RequiredError(
                 'shockerId',
@@ -1003,13 +1252,21 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
         urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
         urlPath = urlPath.replace(`{${"sharedWithUserId"}}`, encodeURIComponent(String(requestParameters['sharedWithUserId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
             body: ShockerPermLimitPairToJSON(requestParameters['shockerPermLimitPair']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Update a share for a shocker
+     */
+    async shockerShockerShareCodeUpdateRaw(requestParameters: ShockerShockerShareCodeUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.shockerShockerShareCodeUpdateRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
@@ -1022,9 +1279,9 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
     }
 
     /**
-     * Remove a share for a shocker
+     * Creates request options for shockerShockerShareRemove without sending the request
      */
-    async shockerShockerShareRemoveRaw(requestParameters: ShockerShockerShareRemoveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async shockerShockerShareRemoveRequestOpts(requestParameters: ShockerShockerShareRemoveRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['shockerId'] == null) {
             throw new runtime.RequiredError(
                 'shockerId',
@@ -1052,12 +1309,20 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
         urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
         urlPath = urlPath.replace(`{${"sharedWithUserId"}}`, encodeURIComponent(String(requestParameters['sharedWithUserId'])));
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Remove a share for a shocker
+     */
+    async shockerShockerShareRemoveRaw(requestParameters: ShockerShockerShareRemoveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.shockerShockerShareRemoveRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }

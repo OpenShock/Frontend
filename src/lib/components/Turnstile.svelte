@@ -32,7 +32,7 @@
     const theme = colorScheme.Value === ColorScheme.System ? 'auto' : colorScheme.Value;
 
     widgetId = window.turnstile!.render(element, {
-      sitekey: backendMetadata.State.turnstileSiteKey!,
+      sitekey: backendMetadata.State!.turnstileSiteKey!,
       action,
       cData,
       theme,
@@ -48,7 +48,7 @@
       response = PUBLIC_TURNSTILE_DEV_BYPASS_VALUE;
       return;
     }
-    if (!backendMetadata.State.turnstileSiteKey) {
+    if (!backendMetadata.State?.turnstileSiteKey) {
       console.error('Backend did not provide a Turnstile site key!');
       return;
     }

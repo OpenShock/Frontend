@@ -16,7 +16,7 @@
     Wrench,
     Zap,
   } from '@lucide/svelte';
-  import { asset, base, resolve } from '$app/paths';
+  import { asset, resolve } from '$app/paths';
   import { page } from '$app/state';
   import type { Pathname } from '$app/types';
   import { RoleType } from '$lib/api/internal/v1';
@@ -39,7 +39,7 @@
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import { isMobile, isSerialSupported } from '$lib/utils/compatibility';
   import { Collapsible } from 'bits-ui';
-  import { unsafeResolve } from '$lib/utils/url';
+  import { prefixBase } from '$lib/utils/url';
 
   let currentUser = $derived($UserStore.self);
 
@@ -228,9 +228,9 @@
   <MenuItem>
     <MenuButton class={menu.class} isActive={isPathMatch(path, menu.href)}>
       {#snippet child({ props })}
-        <!-- I know this is deprecated buy resolve() is too strict to be used here... -->
+        <!-- prefixBase is used here because resolve() requires a route ID, not a plain pathname -->
         <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-        <a href={menu.href ? unsafeResolve(menu.href) : undefined} {...props}>
+        <a href={menu.href ? prefixBase(menu.href) : undefined} {...props}>
           <menu.Icon />
           <span>{menu.title}</span>
         </a>
@@ -304,7 +304,7 @@
         <span class="ml-1.5 grow">
           <img
             class="h-7.5 transition-opacity delay-100 duration-200 group-data-[collapsible=icon]:opacity-0 group-data-[collapsible=icon]:delay-0"
-            src="/LogoTextOnly.svg"
+            src={asset('/LogoTextOnly.svg')}
             alt="OpenShock Logo"
           />
         </span>

@@ -24,7 +24,7 @@ function getGitHash() {
   return child_process.execSync('git rev-parse HEAD').toString().trim();
 }
 
-/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars -- kept for future build-time branch detection */
 function getGitBranch() {
   if (isGithubActions) return process.env.GITHUB_REF_NAME;
   if (isCloudflare) return process.env.CF_BRANCH;
@@ -73,19 +73,13 @@ const config = {
       base: getSvelteBasePath(),
     },
     csp: {
-      mode: 'hash',
+      mode: 'nonce',
       directives: {
         'default-src': ['self'],
         'child-src': ['https://challenges.cloudflare.com'],
         'frame-src': ['https://challenges.cloudflare.com'], // Deprecated
         'style-src': ['self', 'unsafe-inline'],
-        'img-src': [
-          'self',
-          'https://www.gravatar.com',
-          'https://i0.wp.com/openshock.app/static/images/',
-          'https://i1.wp.com/openshock.app/static/images/',
-          'https://i2.wp.com/openshock.app/static/images/',
-        ],
+        'img-src': ['self', 'https://*.wp.com', 'https://www.gravatar.com'],
         'connect-src': [
           'self',
           dotenv.PUBLIC_BACKEND_API_URL,

@@ -1,16 +1,7 @@
 import { metaApi } from '$lib/api';
 import type { BackendInfoResponse } from '$lib/api/internal/v1';
 
-let state = $state<BackendInfoResponse>({
-  version: 'UNKNOWN',
-  commit: 'UNKNOWN',
-  currentTime: new Date(),
-  frontendUrl: 'UNKNOWN',
-  shortLinkUrl: 'UNKNOWN',
-  turnstileSiteKey: 'UNKNOWN',
-  oAuthProviders: [],
-  isUserAuthenticated: false,
-});
+let state = $state<BackendInfoResponse | null>(null);
 
 export const backendMetadata = {
   get State() {
@@ -20,7 +11,8 @@ export const backendMetadata = {
     const response = await metaApi.versionGetBackendInfo();
     if (!response.data) throw new Error(`Failed to get backend info: ${response.message}`);
 
-    state = response.data;
-    return response.data;
+    const responseData = response.data;
+    state = responseData;
+    return responseData;
   },
 };

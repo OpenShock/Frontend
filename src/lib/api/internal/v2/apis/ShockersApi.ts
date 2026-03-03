@@ -40,6 +40,14 @@ export interface ShockerSendControlRequest {
  */
 export interface ShockersApiInterface {
     /**
+     * Creates request options for shockerSendControl without sending the request
+     * @param {ControlRequest} [controlRequest] 
+     * @throws {RequiredError}
+     * @memberof ShockersApiInterface
+     */
+    shockerSendControlRequestOpts(requestParameters: ShockerSendControlRequest): Promise<runtime.RequestOpts>;
+
+    /**
      * 
      * @summary Send a control message to shockers
      * @param {ControlRequest} [controlRequest] 
@@ -62,9 +70,9 @@ export interface ShockersApiInterface {
 export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface {
 
     /**
-     * Send a control message to shockers
+     * Creates request options for shockerSendControl without sending the request
      */
-    async shockerSendControlRaw(requestParameters: ShockerSendControlRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>> {
+    async shockerSendControlRequestOpts(requestParameters: ShockerSendControlRequest): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -78,13 +86,21 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
 
         let urlPath = `/2/shockers/control`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: ControlRequestToJSON(requestParameters['controlRequest']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Send a control message to shockers
+     */
+    async shockerSendControlRaw(requestParameters: ShockerSendControlRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LegacyEmptyResponse>> {
+        const requestOptions = await this.shockerSendControlRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => LegacyEmptyResponseFromJSON(jsonValue));
     }

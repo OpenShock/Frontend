@@ -11,6 +11,7 @@
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { UserStore } from '$lib/stores/UserStore';
   import { onMount } from 'svelte';
+  import * as Field from '$lib/components/ui/field/index.js';
 
   let username = $state<string>('');
   let usernameValid = $state<boolean>(false);
@@ -37,7 +38,7 @@
       });
 
       if (!account.isVerified) {
-        /* eslint-disable-next-line svelte/no-navigation-without-resolve */
+        /* eslint-disable-next-line svelte/no-navigation-without-resolve -- URL is already built with resolve() */
         goto(resolve('/login') + '?message=signup-success');
         return;
       }
@@ -98,5 +99,10 @@
     <EmailInput label="Email" placeholder="Email" bind:value={email} bind:valid={emailValid} />
 
     <Button type="submit" disabled={!canSubmit}>Sign Up</Button>
+
+    <Field.Description class="px-6 text-center">
+      By clicking Sign Up, you agree to our <a href="https://openshock.org/tos">Terms of Service</a>
+      and <a href="https://openshock.org/privacy">Privacy Policy</a>.
+    </Field.Description>
   </form>
 </Container>

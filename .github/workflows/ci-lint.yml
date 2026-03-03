@@ -3,18 +3,18 @@ name: ci-lint
 on:
   push:
     branches:
-      - master
-      - develop
+      - '**'
   pull_request:
     branches:
-      - master
-      - develop
+      - '**'
+    types: [opened, reopened, synchronize]
 
 permissions:
   contents: read
 
 jobs:
   build-and-test:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
     runs-on: ubuntu-latest
 
     steps:
