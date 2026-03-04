@@ -10,9 +10,9 @@
   import { Progress } from '$lib/components/ui/progress';
   import * as Table from '$lib/components/ui/table';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { SignalR_Connection } from '$lib/signalr';
+  import { getConnection } from '$lib/signalr/index.svelte';
   import { serializeOtaInstallMessage } from '$lib/signalr/serializers/OtaInstall';
-  import { type HubOnlineState, OnlineHubsStore } from '$lib/stores/HubsStore';
+  import { type HubOnlineState, onlineHubs } from '$lib/stores/HubsStore.svelte';
   import { cn } from '$lib/utils';
   import { NumberToHexPadded } from '$lib/utils/convert';
 
@@ -21,8 +21,9 @@
   let version = $state<string | null>(null);
 
   function startUpdate() {
-    if ($SignalR_Connection === null || hub === null || version === null) return;
-    serializeOtaInstallMessage($SignalR_Connection, hub.hubId, version);
+    const conn = getConnection();
+    if (conn === null || hub === null || version === null) return;
+    serializeOtaInstallMessage(conn, hub.hubId, version);
   }
 
   let isLoading = $state<boolean>(false);
@@ -41,7 +42,7 @@
           return;
         }
 
-        hub = $OnlineHubsStore.get(hubId) ?? {
+        hub = onlineHubs.get(hubId) ?? {
           hubId,
           isOnline: false,
           firmwareVersion: null,
@@ -76,7 +77,7 @@
       <Button
         class="cursor-pointer text-xl"
         onclick={startUpdate}
-        disabled={$SignalR_Connection === null || hub === null || version === null || !hub.isOnline}
+        disabled={getConnection() === null || hub === null || version === null || !hub.isOnline}
       >
         <DownloadCloud />
         <span> Update to {version} </span>

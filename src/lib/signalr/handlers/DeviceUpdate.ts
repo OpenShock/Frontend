@@ -1,5 +1,5 @@
 import { HubUpdateType, isHubUpdateType } from '$lib/signalr/models/HubUpdateType';
-import { refreshOwnHubs } from '$lib/stores/HubsStore';
+import { refreshOwnHubs } from '$lib/stores/HubsStore.svelte';
 import { isString } from '$lib/typeguards';
 import { toast } from 'svelte-sonner';
 

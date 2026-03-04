@@ -11,11 +11,11 @@
   import * as Dialog from '$lib/components/ui/dialog';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { SignalR_Connection } from '$lib/signalr';
+  import { getConnection } from '$lib/signalr/index.svelte';
   import { serializeCaptivePortalMessage } from '$lib/signalr/serializers/CaptivePortal';
   import { serializeEmergencyStopMessage } from '$lib/signalr/serializers/EmergencyStop';
   import { serializeRebootMessage } from '$lib/signalr/serializers/Reboot';
-  import { refreshOwnHubs } from '$lib/stores/HubsStore';
+  import { refreshOwnHubs } from '$lib/stores/HubsStore.svelte';
   import { toast } from 'svelte-sonner';
   import type { Hub } from './columns';
   import { resolve } from '$app/paths';
@@ -200,22 +200,22 @@
     <DropdownMenu.Item onclick={() => goto(resolve(`/hubs/${hub.id}/update`))}
       >Update</DropdownMenu.Item
     >
-    <DropdownMenu.Item onclick={() => serializeRebootMessage($SignalR_Connection, hub.id)}>
+    <DropdownMenu.Item onclick={() => serializeRebootMessage(getConnection(), hub.id)}>
       Reboot
     </DropdownMenu.Item>
     <DropdownMenu.Item
       class="text-red-500"
-      onclick={() => serializeEmergencyStopMessage($SignalR_Connection, hub.id)}
+      onclick={() => serializeEmergencyStopMessage(getConnection(), hub.id)}
     >
       Emergency Stop
     </DropdownMenu.Item>
     <DropdownMenu.Item
-      onclick={() => serializeCaptivePortalMessage($SignalR_Connection, hub.id, true)}
+      onclick={() => serializeCaptivePortalMessage(getConnection(), hub.id, true)}
     >
       Enable Wi-Fi hotspot
     </DropdownMenu.Item>
     <DropdownMenu.Item
-      onclick={() => serializeCaptivePortalMessage($SignalR_Connection, hub.id, false)}
+      onclick={() => serializeCaptivePortalMessage(getConnection(), hub.id, false)}
     >
       Disable Wi-Fi hotspot
     </DropdownMenu.Item>

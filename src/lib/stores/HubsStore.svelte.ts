@@ -1,8 +1,8 @@
+import { SvelteMap } from 'svelte/reactivity';
 import { shockersV1Api } from '$lib/api';
 import type { DeviceWithShockersResponse } from '$lib/api/internal/v1';
 import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 import type { OtaUpdateProgressTask } from '$lib/signalr/models/OtaUpdateProgressTask';
-import { writable } from 'svelte/store';
 
 export type OwnHub = DeviceWithShockersResponse;
 export type HubOnlineState = {
@@ -17,8 +17,8 @@ export type HubOnlineState = {
   } | null;
 };
 
-export const OwnHubsStore = writable<Map<string, OwnHub>>(new Map());
-export const OnlineHubsStore = writable<Map<string, HubOnlineState>>(new Map());
+export const ownHubs = new SvelteMap<string, OwnHub>();
+export const onlineHubs = new SvelteMap<string, HubOnlineState>();
 
 export async function refreshOwnHubs() {
   try {
@@ -27,7 +27,10 @@ export async function refreshOwnHubs() {
       throw new Error(`Failed to fetch devices: ${response.message}`);
     }
 
-    OwnHubsStore.set(new Map(response.data.map((d) => [d.id, d])));
+    ownHubs.clear();
+    for (const d of response.data) {
+      ownHubs.set(d.id, d);
+    }
   } catch (error) {
     handleApiError(error);
   }

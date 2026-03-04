@@ -1,5 +1,5 @@
 import { isOtaUpdateProgressTask } from '$lib/signalr/models/OtaUpdateProgressTask';
-import { OnlineHubsStore } from '$lib/stores/HubsStore';
+import { onlineHubs } from '$lib/stores/HubsStore.svelte';
 import { isNumber, isString } from '$lib/typeguards';
 import { toast } from 'svelte-sonner';
 
@@ -23,12 +23,9 @@ export function handleSignalrOtaInstallProgress(
     return;
   }
 
-  OnlineHubsStore.update((hubs) => {
-    const hub = hubs.get(hubId);
-    if (hub && hub.otaInstall?.id === updateId) {
-      hub.otaInstall.task = task;
-      hub.otaInstall.progress = progress;
-    }
-    return hubs;
-  });
+  const hub = onlineHubs.get(hubId);
+  if (hub && hub.otaInstall?.id === updateId) {
+    hub.otaInstall.task = task;
+    hub.otaInstall.progress = progress;
+  }
 }

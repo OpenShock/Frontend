@@ -1,4 +1,4 @@
-import { OnlineHubsStore } from '$lib/stores/HubsStore';
+import { onlineHubs } from '$lib/stores/HubsStore.svelte';
 import { isBoolean, isNumber, isString } from '$lib/typeguards';
 import { toast } from 'svelte-sonner';
 
@@ -17,12 +17,9 @@ export function handleSignalrOtaInstallFailed(
     return;
   }
 
-  OnlineHubsStore.update((hubs) => {
-    const hub = hubs.get(hubId);
-    if (hub && hub.otaInstall?.id === updateId) {
-      hub.otaInstall = null;
-      //hub.otaError = { fatal, message };
-    }
-    return hubs;
-  });
+  const hub = onlineHubs.get(hubId);
+  if (hub && hub.otaInstall?.id === updateId) {
+    hub.otaInstall = null;
+    //hub.otaError = { fatal, message };
+  }
 }

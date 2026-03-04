@@ -1,5 +1,5 @@
 import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-import { initializeSignalR } from '$lib/signalr';
+import { initializeSignalR } from '$lib/signalr/index.svelte';
 import { backendMetadata } from '$lib/state/BackendMetadata.svelte';
 import { initializeDarkModeStore } from '$lib/stores/ColorSchemeStore.svelte';
 import { initializeSerialPortsStore } from '$lib/stores/SerialPortsStore';

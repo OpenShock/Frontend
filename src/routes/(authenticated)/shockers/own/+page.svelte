@@ -11,10 +11,10 @@
   import { Button } from '$lib/components/ui/button';
   import * as Popover from '$lib/components/ui/popover';
   import { ControlDurationDefault, ControlIntensityDefault } from '$lib/constants/ControlConstants';
-  import { OwnHubsStore, refreshOwnHubs } from '$lib/stores/HubsStore';
+  import { ownHubs, refreshOwnHubs } from '$lib/stores/HubsStore.svelte';
   import { onMount } from 'svelte';
 
-  let shockers = $derived(Array.from($OwnHubsStore).flatMap(([, hub]) => hub.shockers));
+  let shockers = $derived(Array.from(ownHubs).flatMap(([, hub]) => hub.shockers));
 
   let moduleType = $state<ModuleType>(ModuleType.ClassicControlModule);
 
@@ -25,7 +25,7 @@
   onMount(refreshOwnHubs);
 </script>
 
-{#if $OwnHubsStore == null}
+{#if ownHubs.size === 0}
   <p>Loading...</p>
 {:else}
   <Container>

@@ -15,7 +15,7 @@
   import Turnstile from '$lib/components/Turnstile.svelte';
   import { accountV2Api } from '$lib/api';
   import { UserStore } from '$lib/stores/UserStore';
-  import { initializeSignalR } from '$lib/signalr';
+  import { initializeSignalR } from '$lib/signalr/index.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
   import OauthButtons from '$lib/components/auth/oauth-buttons.svelte';

@@ -7,7 +7,7 @@
     ControlIntensityDefault,
     ControlIntensityProps,
   } from '$lib/constants/ControlConstants';
-  import { SignalR_Connection } from '$lib/signalr';
+  import { getConnection } from '$lib/signalr/index.svelte';
   import { ControlType } from '$lib/signalr/models/ControlType';
   import { serializeControlMessages } from '$lib/signalr/serializers/Control';
   import ControlListener from './ControlListener.svelte';
@@ -42,8 +42,9 @@
   const clampedDuration = $derived(Math.min(duration, maxDurationSeconds));
 
   function ctrl(type: ControlType) {
-    if (!$SignalR_Connection) return;
-    serializeControlMessages($SignalR_Connection, [
+    const conn = getConnection();
+    if (!conn) return;
+    serializeControlMessages(conn, [
       {
         id: shocker.id,
         type,

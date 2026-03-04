@@ -8,7 +8,7 @@
   import { Button } from '$lib/components/ui/button';
   import * as Card from '$lib/components/ui/card';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { refreshOwnHubs } from '$lib/stores/HubsStore';
+  import { refreshOwnHubs } from '$lib/stores/HubsStore.svelte';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
   import SharedDevice from './SharedDevice.svelte';
