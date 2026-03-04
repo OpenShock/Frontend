@@ -25,6 +25,7 @@
   import { cn } from '$lib/utils';
   import { NumberToHexPadded } from '$lib/utils/convert';
   import { onMount } from 'svelte';
+  import type { FirmwareChannel } from '$lib/api/firmwareCDN';
 
   // Task weights for weighted total progress (7 tasks, sums to 100)
   const TASK_WEIGHTS = [4, 2, 22, 2, 49, 1, 20];
@@ -75,40 +76,106 @@
     return 'just now';
   }
 
-  let hub = $state<HubOnlineState | null>(null);
+  let hubLoaded = $state(false);
   let otaLogs = $state<OtaItem[]>([]);
   let version = $state<string | null>(null);
   let confirmOpen = $state(false);
+  let channel = $state<FirmwareChannel>('stable');
+
+  let hub = $derived.by<HubOnlineState | null>(() => {
+    if (!hubLoaded) return null;
+    const hubId = page.params.hubId ?? '';
+    const h = $OnlineHubsStore.get(hubId);
+    if (!h) {
+      return {
+        hubId,
+        isOnline: false,
+        firmwareVersion: null,
+        otaInstall: null,
+        otaResult: null,
+      };
+    }
+    // Spread to create a new reference so downstream deriveds re-evaluate on store updates
+    return { ...h };
+  });
 
   let hubName = $derived($OwnHubsStore.get(page.params.hubId ?? '')?.name ?? 'Unknown Hub');
 
   let isUpdating = $derived(hub?.otaInstall !== null && hub?.otaInstall !== undefined);
 
-  let totalProgress = $derived(
-    hub?.otaInstall ? calcTotalProgress(hub.otaInstall.task, hub.otaInstall.progress) : 0
-  );
+  // Simulated reboot progress (last 20%) — hub goes offline so no more events
+  const REBOOT_DURATION_MS = 10_000;
+  const REBOOT_INTERVAL_MS = 100;
+  let rebootProgress = $state(0);
+  let rebootInterval: ReturnType<typeof setInterval> | null = null;
 
-  let taskProgress = $derived((hub?.otaInstall?.progress ?? 0) * 100);
+  function stopRebootTimer() {
+    if (rebootInterval !== null) {
+      clearInterval(rebootInterval);
+      rebootInterval = null;
+    }
+    rebootProgress = 0;
+  }
+
+  $effect(() => {
+    const isRebooting = hub?.otaInstall?.task === OtaUpdateProgressTask.Rebooting;
+    if (isRebooting && rebootInterval === null) {
+      rebootProgress = 0;
+      const step = REBOOT_INTERVAL_MS / REBOOT_DURATION_MS;
+      rebootInterval = setInterval(() => {
+        rebootProgress = Math.min(rebootProgress + step, 1);
+        if (rebootProgress >= 1 && rebootInterval !== null) {
+          clearInterval(rebootInterval);
+          rebootInterval = null;
+        }
+      }, REBOOT_INTERVAL_MS);
+    } else if (!isRebooting) {
+      stopRebootTimer();
+    }
+
+    return stopRebootTimer;
+  });
+
+  let totalProgress = $derived.by(() => {
+    if (!hub?.otaInstall) return 0;
+    if (hub.otaInstall.task === OtaUpdateProgressTask.Rebooting) {
+      return (
+        TASK_OFFSETS[OtaUpdateProgressTask.Rebooting] +
+        rebootProgress * TASK_WEIGHTS[OtaUpdateProgressTask.Rebooting]
+      );
+    }
+    return calcTotalProgress(hub.otaInstall.task, hub.otaInstall.progress);
+  });
+
+  let taskProgress = $derived.by(() => {
+    if (hub?.otaInstall?.task === OtaUpdateProgressTask.Rebooting) {
+      return rebootProgress * 100;
+    }
+    return (hub?.otaInstall?.progress ?? 0) * 100;
+  });
 
   let currentTaskLabel = $derived(
     hub?.otaInstall ? (TASK_LABELS[hub.otaInstall.task] ?? 'Unknown Task') : ''
   );
 
   function startUpdate() {
-    if ($SignalR_Connection === null || hub === null || version === null) return;
+    const hubId = page.params.hubId;
+    if ($SignalR_Connection === null || !hubId || hub === null || version === null) return;
     // Clear any previous result
     OnlineHubsStore.update((hubs) => {
-      const h = hubs.get(hub!.hubId);
+      const h = hubs.get(hubId);
       if (h) h.otaResult = null;
       return hubs;
     });
-    serializeOtaInstallMessage($SignalR_Connection, hub.hubId, version);
+    serializeOtaInstallMessage($SignalR_Connection, hubId, version);
     confirmOpen = false;
   }
 
   function resetResult() {
+    const hubId = page.params.hubId;
+    if (!hubId) return;
     OnlineHubsStore.update((hubs) => {
-      const h = hubs.get(hub!.hubId);
+      const h = hubs.get(hubId);
       if (h) h.otaResult = null;
       return hubs;
     });
@@ -117,7 +184,7 @@
   let isLoading = $state<boolean>(false);
   function fetchOtaLogs(hubId: string | undefined) {
     if (hubId === undefined) {
-      hub = null;
+      hubLoaded = false;
       return;
     }
 
@@ -126,33 +193,16 @@
       .devicesOtaGetOtaUpdateHistory(hubId)
       .then((resp) => {
         if (resp.data === null) {
-          hub = null;
+          hubLoaded = false;
           return;
         }
 
-        hub = $OnlineHubsStore.get(hubId) ?? {
-          hubId,
-          isOnline: false,
-          firmwareVersion: null,
-          otaInstall: null,
-          otaResult: null,
-        };
+        hubLoaded = true;
         otaLogs = resp.data;
       })
       .catch(handleApiError)
       .finally(() => (isLoading = false));
   }
-
-  // Keep hub state in sync with the store
-  $effect(() => {
-    const hubId = page.params.hubId;
-    if (hubId && hub) {
-      const storeHub = $OnlineHubsStore.get(hubId);
-      if (storeHub) {
-        hub = storeHub;
-      }
-    }
-  });
 
   $effect(() => fetchOtaLogs(page.params.hubId));
 
@@ -168,7 +218,7 @@
       <Dialog.Title>Confirm Firmware Update</Dialog.Title>
       <Dialog.Description>
         Update <strong>{hubName}</strong> to version <strong>{version}</strong>?
-        {#if version && !version.includes('stable')}
+        {#if channel !== 'stable'}
           <p class="mt-2 text-yellow-500">
             This version may not be from the stable channel and could contain bugs.
           </p>
@@ -221,7 +271,10 @@
             <CheckCircle2 class="mt-0.5 size-5 shrink-0 text-green-500" />
             <div class="flex flex-col gap-2">
               <p class="font-medium text-green-500">{hub.otaResult.message}</p>
-              <Button variant="outline" size="sm" href="/hubs">Back to Hubs</Button>
+              <div class="flex gap-2">
+                <Button variant="outline" size="sm" href="/hubs">Back to Hubs</Button>
+                <Button variant="outline" size="sm" onclick={resetResult}>Flash Again</Button>
+              </div>
             </div>
           {:else if hub.otaResult.message.includes('rolled back')}
             <AlertTriangle class="mt-0.5 size-5 shrink-0 text-yellow-500" />
@@ -244,7 +297,7 @@
         <div class="flex flex-col gap-4">
           <div>
             <h3 class="mb-2 text-lg font-semibold">Firmware Channel</h3>
-            <FirmwareChannelSelector bind:version disabled={!hub.isOnline} />
+            <FirmwareChannelSelector bind:channel bind:version disabled={!hub.isOnline} />
           </div>
 
           <Button
