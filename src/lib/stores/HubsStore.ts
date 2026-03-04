@@ -20,15 +20,15 @@ export type HubOnlineState = {
 export const OwnHubsStore = writable<Map<string, OwnHub>>(new Map());
 export const OnlineHubsStore = writable<Map<string, HubOnlineState>>(new Map());
 
-export function refreshOwnHubs() {
-  shockersV1Api
-    .shockerListShockers()
-    .then((response) => {
-      if (!response.data) {
-        throw new Error(`Failed to fetch devices: ${response.message}`);
-      }
+export async function refreshOwnHubs() {
+  try {
+    const response = await shockersV1Api.shockerListShockers();
+    if (!response.data) {
+      throw new Error(`Failed to fetch devices: ${response.message}`);
+    }
 
-      OwnHubsStore.set(new Map(response.data.map((d) => [d.id, d])));
-    })
-    .catch(handleApiError);
+    OwnHubsStore.set(new Map(response.data.map((d) => [d.id, d])));
+  } catch (error) {
+    handleApiError(error);
+  }
 }

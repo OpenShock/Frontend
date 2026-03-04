@@ -13,7 +13,12 @@
   import { onMount } from 'svelte';
   import { type Hub, columns } from './columns';
   import DataTableActions from './data-table-actions.svelte';
-  import HubCreateDialog from './dialog-hub-create.svelte';
+  import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
+  import type { DialogRenderProps } from '$lib/components/dialog-manager/types';
+  import { hubManagementV2Api } from '$lib/api';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import * as Dialog from '$lib/components/ui/dialog';
+  import TextInput from '$lib/components/input/TextInput.svelte';
 
   const isMobile = new IsMobile();
 
@@ -45,20 +50,40 @@
   });
   let sorting = $state<SortingState>([]);
 
-  let showAddHubModal = $state<boolean>(false);
+  async function openCreateHubDialog() {
+    const result = await dialog.open<{ name: string }, { name: string } | undefined>({
+      data: { name: '' },
+      contentSnippet: createHubSnippet,
+    });
+    if (!result) return;
+    try {
+      await hubManagementV2Api.devicesCreateDeviceV2({ name: result.name });
+      await refreshOwnHubs();
+    } catch (error) {
+      handleApiError(error);
+    }
+  }
 
   breadcrumbs.push('Hubs', '/hubs');
   onMount(refreshOwnHubs);
 </script>
 
-<HubCreateDialog bind:open={showAddHubModal} />
+{#snippet createHubSnippet(props: DialogRenderProps<{ name: string }, { name: string } | undefined>)}
+  <Dialog.Header>
+    <Dialog.Title>Create Hub</Dialog.Title>
+  </Dialog.Header>
+  <TextInput label="Hub Name" placeholder="My Hub" bind:value={props.data.name} />
+  <Button disabled={!props.data.name.trim()} onclick={() => props.resolve({ name: props.data.name.trim() })}>
+    Create
+  </Button>
+{/snippet}
 
 <Container>
   <Card.Header class="w-full">
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
       Hubs
       <div>
-        <Button onclick={() => (showAddHubModal = true)}>
+        <Button onclick={openCreateHubDialog}>
           <Plus />
           Add Hub
         </Button>

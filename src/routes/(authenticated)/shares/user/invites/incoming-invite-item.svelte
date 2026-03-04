@@ -9,7 +9,7 @@
   import * as Table from '$lib/components/ui/table';
   import * as Tooltip from '$lib/components/ui/tooltip';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { openConfirmDialog } from '$lib/stores/ConfirmDialogStore';
+  import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
   import { refreshIncomingInvites } from '$lib/stores/UserSharesStore';
   import { cn } from '$lib/utils';
   import { toast } from 'svelte-sonner';
@@ -42,14 +42,14 @@
     }
   }
 
-  function denyInvite() {
-    openConfirmDialog({
+  async function denyInvite() {
+    const result = await dialog.confirm({
       title: 'Deny Invite',
       confirmButtonText: 'Deny',
       data: shareInvite,
-      onConfirm: denyInviteCall,
       descSnippet: confirmDesc,
     });
+    if (result.confirmed) await denyInviteCall(result.data);
   }
 </script>
 

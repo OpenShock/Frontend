@@ -7,7 +7,7 @@
   import * as Drawer from '$lib/components/ui/drawer';
   import * as Table from '$lib/components/ui/table/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { openConfirmDialog } from '$lib/stores/ConfirmDialogStore';
+  import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
   import { UserShares, refreshUserShares } from '$lib/stores/UserSharesStore';
   import { UserStore } from '$lib/stores/UserStore';
   import { toast } from 'svelte-sonner';
@@ -36,14 +36,14 @@
     }
   }
 
-  function handleDeleteClick(shocker: UserShareInfo) {
-    openConfirmDialog({
+  async function handleDeleteClick(shocker: UserShareInfo) {
+    const result = await dialog.confirm({
       title: 'Confirm removal of Incoming Shocker Share',
       descSnippet: deleteConfirmDesc,
       data: shocker,
-      onConfirm: deleteShockerShare,
       confirmButtonText: 'Remove Share',
     });
+    if (result.confirmed) await deleteShockerShare(result.data);
   }
 </script>
 
