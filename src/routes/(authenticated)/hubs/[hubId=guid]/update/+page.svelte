@@ -185,6 +185,8 @@
   function fetchOtaLogs(hubId: string | undefined) {
     if (hubId === undefined) {
       hubLoaded = false;
+      isLoading = false;
+      otaLogs = [];
       return;
     }
 
