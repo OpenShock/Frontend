@@ -15,6 +15,7 @@ export type HubOnlineState = {
     task: OtaUpdateProgressTask;
     progress: number;
   } | null;
+  otaResult: { success: boolean; message: string } | null;
 };
 
 export const ownHubs = new SvelteMap<string, OwnHub>();

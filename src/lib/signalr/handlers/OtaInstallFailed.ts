@@ -20,6 +20,8 @@ export function handleSignalrOtaInstallFailed(
   const hub = onlineHubs.get(hubId);
   if (hub && hub.otaInstall?.id === updateId) {
     hub.otaInstall = null;
-    //hub.otaError = { fatal, message };
+    hub.otaResult = { success: false, message };
   }
+
+  toast.error(`Hub firmware update failed: ${message}`);
 }

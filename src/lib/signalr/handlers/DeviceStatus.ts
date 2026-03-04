@@ -10,11 +10,13 @@ export function handleSignalrDeviceStatus(array: unknown) {
   }
 
   for (const entry of array) {
+    const existing = onlineHubs.get(entry.device);
     onlineHubs.set(entry.device, {
       hubId: entry.device,
       isOnline: entry.online,
       firmwareVersion: entry.firmwareVersion,
-      otaInstall: null,
+      otaInstall: existing?.otaInstall ?? null,
+      otaResult: existing?.otaResult ?? null,
     });
   }
 }
