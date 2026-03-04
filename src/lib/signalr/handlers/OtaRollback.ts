@@ -16,8 +16,10 @@ export function handleSignalrOtaRollback(hubId: unknown, updateId: unknown): voi
     const hub = hubs.get(hubId);
     if (hub && hub.otaInstall?.id === updateId) {
       hub.otaInstall = null;
-      //hub.otaError = { fatal: false, message: 'Rollback performed' };
+      hub.otaResult = { success: false, message: 'Device rolled back to previous version' };
     }
     return hubs;
   });
+
+  toast.warning('Hub firmware rolled back to previous version');
 }

@@ -16,7 +16,10 @@ export function handleSignalrOtaInstallSucceeded(hubId: unknown, updateId: unkno
     const hub = hubs.get(hubId);
     if (hub && hub.otaInstall?.id === updateId) {
       hub.otaInstall = null;
+      hub.otaResult = { success: true, message: 'Update completed successfully' };
     }
     return hubs;
   });
+
+  toast.success('Hub firmware update completed successfully!');
 }

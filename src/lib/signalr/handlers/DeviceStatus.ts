@@ -11,11 +11,13 @@ export function handleSignalrDeviceStatus(array: unknown) {
 
   OnlineHubsStore.update((state) => {
     array.forEach((entry) => {
+      const existing = state.get(entry.device);
       state.set(entry.device, {
         hubId: entry.device,
         isOnline: entry.online,
         firmwareVersion: entry.firmwareVersion,
-        otaInstall: null,
+        otaInstall: existing?.otaInstall ?? null,
+        otaResult: existing?.otaResult ?? null,
       });
     });
 
