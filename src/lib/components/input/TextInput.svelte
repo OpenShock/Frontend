@@ -2,18 +2,13 @@
   /* eslint-disable svelte/no-navigation-without-resolve -- href comes from validation result, already a full URL */
 
   import { Input } from '$lib/components/ui/input';
+  import * as InputGroup from '$lib/components/ui/input-group';
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import { GetValResColor, type ValidationResult } from '$lib/types/ValidationResult';
   import { cn } from '$lib/utils/shadcn.js';
   import type { Snippet } from 'svelte';
   import type { ClipboardEventHandler, FocusEventHandler, FullAutoFill } from 'svelte/elements';
-  import {
-    FieldGroup,
-    Field,
-    FieldLabel,
-    FieldDescription,
-    FieldSeparator,
-  } from '$lib/components/ui/field/index.js';
+  import { Field, FieldLabel } from '$lib/components/ui/field/index.js';
 
   interface Props {
     type?: 'text' | 'email' | 'password' | 'search' | 'url';
@@ -61,21 +56,29 @@
     {#if Icon}
       <Icon />
     {/if}
-    <div
-      class={cn(
-        'flex w-full items-center',
-        after &&
-          'border-input bg-background dark:bg-input/30 has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-ring/50 has-[input[aria-invalid=true]]:ring-destructive/20 dark:has-[input[aria-invalid=true]]:ring-destructive/40 has-[input[aria-invalid=true]]:border-destructive h-9 rounded-md border pr-1 shadow-xs transition-[color,box-shadow] has-[input:focus-visible]:ring-[3px]'
-      )}
-    >
+    {#if after}
+      <InputGroup.Root class="grow">
+        <InputGroup.Input
+          {id}
+          {type}
+          title={label}
+          {placeholder}
+          {autocomplete}
+          bind:value
+          {onblur}
+          {onpaste}
+          aria-invalid={validationResult ? !validationResult.valid : undefined}
+          aria-describedby={validationResult?.message ? validationId : undefined}
+        />
+        <InputGroup.Addon align="inline-end">
+          {@render after()}
+        </InputGroup.Addon>
+      </InputGroup.Root>
+    {:else}
       <Input
         {id}
         {type}
-        class={cn(
-          after
-            ? 'flex-1 border-0 bg-transparent shadow-none focus-visible:ring-0 dark:bg-transparent'
-            : 'grow'
-        )}
+        class="grow"
         title={label}
         {placeholder}
         {autocomplete}
@@ -85,10 +88,7 @@
         aria-invalid={validationResult ? !validationResult.valid : undefined}
         aria-describedby={validationResult?.message ? validationId : undefined}
       />
-      {#if after}
-        {@render after()}
-      {/if}
-    </div>
+    {/if}
     {#if popup}
       <div
         class="absolute top-full left-0 z-10 mt-1 w-full rounded-md border border-gray-200 bg-white p-2 shadow-lg dark:border-gray-700 dark:bg-gray-800"
