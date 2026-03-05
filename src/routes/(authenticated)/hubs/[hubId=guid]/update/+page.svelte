@@ -163,7 +163,7 @@
     if (conn === null || !hubId || hub === null || version === null) return;
     // Clear any previous result
     const h = onlineHubs.get(hubId);
-    if (h) h.otaResult = null;
+    if (h) onlineHubs.set(hubId, { ...h, otaResult: null });
     serializeOtaInstallMessage(conn, hubId, version);
     confirmOpen = false;
   }
@@ -172,7 +172,7 @@
     const hubId = page.params.hubId;
     if (!hubId) return;
     const h = onlineHubs.get(hubId);
-    if (h) h.otaResult = null;
+    if (h) onlineHubs.set(hubId, { ...h, otaResult: null });
   }
 
   let isLoading = $state<boolean>(false);
