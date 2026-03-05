@@ -78,9 +78,7 @@
     });
   }
 
-  async function generatePairCode(
-    data: { loading: boolean; code: string | null },
-  ) {
+  async function generatePairCode(data: { loading: boolean; code: string | null }) {
     data.loading = true;
     try {
       const resp = await hubManagementV1Api.devicesGetPairCode(hub.id);
@@ -92,9 +90,7 @@
     }
   }
 
-  async function regenerateToken(
-    data: { loading: boolean; token: string | null },
-  ) {
+  async function regenerateToken(data: { loading: boolean; token: string | null }) {
     data.loading = true;
     try {
       data.token = await hubManagementV1Api.devicesRegenerateDeviceToken(hub.id);
@@ -127,7 +123,11 @@
 {#snippet pairSnippet(props: DialogRenderProps<{ loading: boolean; code: string | null }>)}
   <Dialog.Header>
     <Dialog.Title>
-      {props.data.loading ? 'Generating...' : props.data.code ? 'Pair code generated' : 'Generate pair code?'}
+      {props.data.loading
+        ? 'Generating...'
+        : props.data.code
+          ? 'Pair code generated'
+          : 'Generate pair code?'}
     </Dialog.Title>
     {#if !props.data.loading}
       <Dialog.Description>
@@ -137,7 +137,8 @@
         {:else}
           You are about to generate a pair code for <strong>{hub.name}</strong><br />
           It will be valid for 15 minutes after its creation.<br />
-          There is only one active pair code per hub, newly generated ones will override the older active ones.
+          There is only one active pair code per hub, newly generated ones will override the older active
+          ones.
         {/if}
       </Dialog.Description>
     {/if}
@@ -155,10 +156,16 @@
   {/if}
 {/snippet}
 
-{#snippet regenerateTokenSnippet(props: DialogRenderProps<{ loading: boolean; token: string | null }>)}
+{#snippet regenerateTokenSnippet(
+  props: DialogRenderProps<{ loading: boolean; token: string | null }>
+)}
   <Dialog.Header>
     <Dialog.Title>
-      {props.data.loading ? 'Generating...' : props.data.token ? 'Token generated' : 'Are you sure?'}
+      {props.data.loading
+        ? 'Generating...'
+        : props.data.token
+          ? 'Token generated'
+          : 'Are you sure?'}
     </Dialog.Title>
     {#if !props.data.loading}
       <Dialog.Description>
@@ -209,9 +216,7 @@
     >
       Emergency Stop
     </DropdownMenu.Item>
-    <DropdownMenu.Item
-      onclick={() => serializeCaptivePortalMessage(getConnection(), hub.id, true)}
-    >
+    <DropdownMenu.Item onclick={() => serializeCaptivePortalMessage(getConnection(), hub.id, true)}>
       Enable Wi-Fi hotspot
     </DropdownMenu.Item>
     <DropdownMenu.Item
@@ -220,9 +225,7 @@
       Disable Wi-Fi hotspot
     </DropdownMenu.Item>
     <DropdownMenu.Item onclick={openPairDialog}>Pair</DropdownMenu.Item>
-    <DropdownMenu.Item onclick={openRegenerateTokenDialog}>
-      Regenerate Token
-    </DropdownMenu.Item>
+    <DropdownMenu.Item onclick={openRegenerateTokenDialog}>Regenerate Token</DropdownMenu.Item>
     <DropdownMenu.Item onclick={openEditDialog}>Edit</DropdownMenu.Item>
     <DropdownMenu.Item onclick={openDeleteDialog}>Delete</DropdownMenu.Item>
   </DropdownMenu.Content>

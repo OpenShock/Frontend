@@ -289,10 +289,7 @@
           <Button
             class="w-fit cursor-pointer text-lg"
             onclick={() => (confirmOpen = true)}
-            disabled={getConnection() === null ||
-              hub === null ||
-              version === null ||
-              !hub.isOnline}
+            disabled={getConnection() === null || hub === null || version === null || !hub.isOnline}
           >
             <DownloadCloud class="size-5" />
             Update to {version ?? '...'}

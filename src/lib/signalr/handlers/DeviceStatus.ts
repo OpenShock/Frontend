@@ -15,7 +15,10 @@ export function handleSignalrDeviceStatus(array: unknown) {
       existing.isOnline = entry.online;
       existing.firmwareVersion = entry.firmwareVersion;
     } else {
-      onlineHubs.set(entry.device, new HubOnlineState(entry.device, entry.online, entry.firmwareVersion));
+      onlineHubs.set(
+        entry.device,
+        new HubOnlineState(entry.device, entry.online, entry.firmwareVersion)
+      );
     }
   }
 }
