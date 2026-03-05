@@ -25,9 +25,6 @@ export function handleSignalrOtaInstallProgress(
 
   const hub = onlineHubs.get(hubId);
   if (hub && hub.otaInstall?.id === updateId) {
-    onlineHubs.set(hubId, {
-      ...hub,
-      otaInstall: { ...hub.otaInstall, task, progress },
-    });
+    hub.otaInstall = { ...hub.otaInstall, task, progress };
   }
 }

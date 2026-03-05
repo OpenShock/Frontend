@@ -17,7 +17,7 @@
   import { serializeOtaInstallMessage } from '$lib/signalr/serializers/OtaInstall';
   import { breadcrumbs } from '$lib/state/Breadcrumbs.svelte';
   import {
-    type HubOnlineState,
+    HubOnlineState,
     onlineHubs,
     ownHubs,
     refreshOwnHubs,
@@ -85,17 +85,7 @@
   let hub = $derived.by<HubOnlineState | null>(() => {
     if (!hubLoaded) return null;
     const hubId = page.params.hubId ?? '';
-    const h = onlineHubs.get(hubId);
-    if (!h) {
-      return {
-        hubId,
-        isOnline: false,
-        firmwareVersion: null,
-        otaInstall: null,
-        otaResult: null,
-      };
-    }
-    return { ...h };
+    return onlineHubs.get(hubId) ?? new HubOnlineState(hubId, false, null);
   });
 
   let hubName = $derived(ownHubs.get(page.params.hubId ?? '')?.name ?? 'Unknown Hub');
@@ -163,7 +153,7 @@
     if (conn === null || !hubId || hub === null || version === null) return;
     // Clear any previous result
     const h = onlineHubs.get(hubId);
-    if (h) onlineHubs.set(hubId, { ...h, otaResult: null });
+    if (h) h.otaResult = null;
     serializeOtaInstallMessage(conn, hubId, version);
     confirmOpen = false;
   }
@@ -172,7 +162,7 @@
     const hubId = page.params.hubId;
     if (!hubId) return;
     const h = onlineHubs.get(hubId);
-    if (h) onlineHubs.set(hubId, { ...h, otaResult: null });
+    if (h) h.otaResult = null;
   }
 
   let isLoading = $state<boolean>(false);

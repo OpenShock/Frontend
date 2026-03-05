@@ -18,9 +18,6 @@ export function handleSignalrOtaInstallStarted(
 
   const hub = onlineHubs.get(hubId);
   if (hub) {
-    onlineHubs.set(hubId, {
-      ...hub,
-      otaInstall: { id: updateId, version: targetVersion, task: 0, progress: 0 },
-    });
+    hub.otaInstall = { id: updateId, version: targetVersion, task: 0, progress: 0 };
   }
 }

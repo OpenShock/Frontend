@@ -1,5 +1,5 @@
 import { isDeviceOnlineState } from '$lib/signalr/models/DeviceOnlineState';
-import { onlineHubs } from '$lib/stores/HubsStore.svelte';
+import { HubOnlineState, onlineHubs } from '$lib/stores/HubsStore.svelte';
 import { toast } from 'svelte-sonner';
 
 export function handleSignalrDeviceStatus(array: unknown) {
@@ -11,12 +11,11 @@ export function handleSignalrDeviceStatus(array: unknown) {
 
   for (const entry of array) {
     const existing = onlineHubs.get(entry.device);
-    onlineHubs.set(entry.device, {
-      hubId: entry.device,
-      isOnline: entry.online,
-      firmwareVersion: entry.firmwareVersion,
-      otaInstall: existing?.otaInstall ?? null,
-      otaResult: existing?.otaResult ?? null,
-    });
+    if (existing) {
+      existing.isOnline = entry.online;
+      existing.firmwareVersion = entry.firmwareVersion;
+    } else {
+      onlineHubs.set(entry.device, new HubOnlineState(entry.device, entry.online, entry.firmwareVersion));
+    }
   }
 }
