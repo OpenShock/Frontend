@@ -1,4 +1,4 @@
-import { OnlineHubsStore } from '$lib/stores/HubsStore';
+import { onlineHubs } from '$lib/stores/HubsStore.svelte';
 import { isNumber, isString } from '$lib/typeguards';
 import { toast } from 'svelte-sonner';
 
@@ -12,14 +12,11 @@ export function handleSignalrOtaRollback(hubId: unknown, updateId: unknown): voi
     return;
   }
 
-  OnlineHubsStore.update((hubs) => {
-    const hub = hubs.get(hubId);
-    if (hub && hub.otaInstall?.id === updateId) {
-      hub.otaInstall = null;
-      hub.otaResult = { success: false, message: 'Device rolled back to previous version' };
-    }
-    return hubs;
-  });
+  const hub = onlineHubs.get(hubId);
+  if (hub && hub.otaInstall?.id === updateId) {
+    hub.otaInstall = null;
+    hub.otaResult = { success: false, message: 'Device rolled back to previous version' };
+  }
 
   toast.warning('Hub firmware rolled back to previous version');
 }

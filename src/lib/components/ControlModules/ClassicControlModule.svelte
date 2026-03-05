@@ -6,7 +6,7 @@
     ControlIntensityDefault,
     ControlIntensityProps,
   } from '$lib/constants/ControlConstants';
-  import { SignalR_Connection } from '$lib/signalr';
+  import { getConnection } from '$lib/signalr/index.svelte';
   import { ControlType } from '$lib/signalr/models/ControlType';
   import { serializeControlMessages } from '$lib/signalr/serializers/Control';
   import ControlListener from './ControlListener.svelte';
@@ -26,8 +26,9 @@
   let active = $state<ControlType | null>(null);
 
   function ctrl(type: ControlType) {
-    if (!$SignalR_Connection) return;
-    serializeControlMessages($SignalR_Connection, [{ id: shocker.id, type, intensity, duration }]);
+    const conn = getConnection();
+    if (!conn) return;
+    serializeControlMessages(conn, [{ id: shocker.id, type, intensity, duration }]);
   }
 </script>
 

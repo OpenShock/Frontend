@@ -1,4 +1,4 @@
-import { OnlineHubsStore } from '$lib/stores/HubsStore';
+import { onlineHubs } from '$lib/stores/HubsStore.svelte';
 import { isNumber, isString } from '$lib/typeguards';
 import { toast } from 'svelte-sonner';
 
@@ -12,14 +12,11 @@ export function handleSignalrOtaInstallSucceeded(hubId: unknown, updateId: unkno
     return;
   }
 
-  OnlineHubsStore.update((hubs) => {
-    const hub = hubs.get(hubId);
-    if (hub && hub.otaInstall?.id === updateId) {
-      hub.otaInstall = null;
-      hub.otaResult = { success: true, message: 'Update completed successfully' };
-    }
-    return hubs;
-  });
+  const hub = onlineHubs.get(hubId);
+  if (hub && hub.otaInstall?.id === updateId) {
+    hub.otaInstall = null;
+    hub.otaResult = { success: true, message: 'Update completed successfully' };
+  }
 
   toast.success('Hub firmware update completed successfully!');
 }

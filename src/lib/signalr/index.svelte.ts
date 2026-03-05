@@ -8,7 +8,6 @@ import {
   LogLevel,
 } from '@microsoft/signalr';
 import { toast } from 'svelte-sonner';
-import { type Readable, get, writable } from 'svelte/store';
 import {
   handleSignalrDeviceStatus,
   handleSignalrDeviceUpdate,
@@ -22,11 +21,18 @@ import {
 
 const BackendHubUserUrl = getBackendURL('1/hubs/user').href;
 
-const signalr_connection = writable<HubConnection | null>(null);
-const signalr_state = writable<HubConnectionState>(HubConnectionState.Disconnected);
+let connection = $state<HubConnection | null>(null);
+let connectionState = $state<HubConnectionState>(HubConnectionState.Disconnected);
+
+export function getConnection(): HubConnection | null {
+  return connection;
+}
+
+export function getConnectionState(): HubConnectionState {
+  return connectionState;
+}
 
 export async function initializeSignalR() {
-  let connection = get(signalr_connection);
   if (connection) {
     return;
   }
@@ -41,21 +47,21 @@ export async function initializeSignalR() {
     .build();
 
   connection.onclose(() => {
-    signalr_state.set(HubConnectionState.Disconnected);
+    connectionState = HubConnectionState.Disconnected;
   });
 
   connection.onreconnecting(() => {
-    signalr_state.set(HubConnectionState.Reconnecting);
+    connectionState = HubConnectionState.Reconnecting;
   });
 
   connection.onreconnected(() => {
-    signalr_state.set(HubConnectionState.Connected);
+    connectionState = HubConnectionState.Connected;
   });
 
   // Look up in OpenShock API repository: Common/Hubs/IUserHub.cs
   connection.on('Welcome', () => {
     // Arg is the SignalR connectionId
-    signalr_state.set(HubConnectionState.Connected);
+    connectionState = HubConnectionState.Connected;
   });
 
   connection.on('Log', handleSignalrLog);
@@ -69,39 +75,26 @@ export async function initializeSignalR() {
   connection.on('OtaInstallFailed', handleSignalrOtaInstallFailed);
   connection.on('OtaRollback', handleSignalrOtaRollback);
 
-  signalr_connection.set(connection);
-
   try {
     await connection.start();
-    signalr_state.set(HubConnectionState.Connected);
+    connectionState = HubConnectionState.Connected;
   } catch (error) {
     console.error(error);
     toast.error('Failed to connect to server!');
-    signalr_state.set(HubConnectionState.Disconnected);
+    connectionState = HubConnectionState.Disconnected;
   }
 }
 
 export async function destroySignalR() {
-  if (!signalr_connection) return;
+  if (!connection) return;
 
   try {
-    const connection = get(signalr_connection);
-    if (connection) {
-      await connection.stop();
-    }
+    await connection.stop();
   } catch (error) {
     console.error(error);
     toast.error('Encountered error while disconnecting from server!');
   } finally {
-    signalr_connection.set(null);
-    signalr_state.set(HubConnectionState.Disconnected);
+    connection = null;
+    connectionState = HubConnectionState.Disconnected;
   }
 }
-
-export const SignalR_State = {
-  subscribe: signalr_state.subscribe,
-} as Readable<HubConnectionState>;
-
-export const SignalR_Connection = {
-  subscribe: signalr_connection.subscribe,
-} as Readable<HubConnection | null>;

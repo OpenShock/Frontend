@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { ShockerResponse } from '$lib/api/internal/v1';
-  import { SignalR_Connection } from '$lib/signalr';
+  import { getConnection } from '$lib/signalr/index.svelte';
   import { ControlType } from '$lib/signalr/models/ControlType';
   import { serializeControlMessages } from '$lib/signalr/serializers/Control';
   import ControlListener from './ControlListener.svelte';
@@ -37,8 +37,9 @@
         return;
     }
 
-    if (!$SignalR_Connection) return;
-    serializeControlMessages($SignalR_Connection, [{ id: shocker.id, type, intensity, duration }]);
+    const conn = getConnection();
+    if (!conn) return;
+    serializeControlMessages(conn, [{ id: shocker.id, type, intensity, duration }]);
   }
 </script>
 

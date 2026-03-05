@@ -3,7 +3,7 @@
 
   import { HubConnectionState } from '@microsoft/signalr';
   import { PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
-  import { SignalR_State } from '$lib/signalr';
+  import { getConnectionState } from '$lib/signalr/index.svelte';
   import { Wifi, WifiOff } from '@lucide/svelte';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
   import { Button } from '$lib/components/ui/button';
@@ -26,7 +26,7 @@
       <DropdownMenu.Trigger>
         {#snippet child({ props })}
           <Button {...props} variant="ghost" size="icon" class="h-4 w-4">
-            {#if $SignalR_State === HubConnectionState.Connected}
+            {#if getConnectionState() === HubConnectionState.Connected}
               <Wifi class="h-4 w-4 text-green-800" />
             {:else}
               <WifiOff class="h-4 w-4 text-red-800" />
@@ -41,12 +41,12 @@
               <td>SignalR State</td>
               <td>
                 <p class="flex items-center justify-end gap-2">
-                  {#if $SignalR_State === HubConnectionState.Connected}
+                  {#if getConnectionState() === HubConnectionState.Connected}
                     <Wifi class="h-4 w-4 text-green-800" />
-                    {$SignalR_State}
+                    {getConnectionState()}
                   {:else}
                     <WifiOff class="h-4 w-4 text-red-800" />
-                    {$SignalR_State}
+                    {getConnectionState()}
                   {/if}
                 </p></td
               >

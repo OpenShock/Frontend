@@ -12,7 +12,7 @@
   import MultiPauseToggle from '$lib/components/utils/MultiPauseToggle.svelte';
   import PauseToggle from '$lib/components/utils/PauseToggle.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { openConfirmDialog } from '$lib/stores/ConfirmDialogStore';
+  import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
   import { UserShares, refreshUserShares } from '$lib/stores/UserSharesStore';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
@@ -166,14 +166,14 @@
     }
   }
 
-  function handleDeleteClick(shocker: EditableShare) {
-    openConfirmDialog({
+  async function handleDeleteClick(shocker: EditableShare) {
+    const result = await dialog.confirm({
       title: 'Confirm Deletion',
       descSnippet: deleteConfirmDesc,
       data: shocker,
-      onConfirm: deleteShockerShare,
       confirmButtonText: 'Remove',
     });
+    if (result.confirmed) await deleteShockerShare(result.data);
   }
 
   function onTabChanged(value: string) {

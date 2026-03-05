@@ -8,7 +8,7 @@
   import * as Table from '$lib/components/ui/table';
   import * as Tooltip from '$lib/components/ui/tooltip';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { openConfirmDialog } from '$lib/stores/ConfirmDialogStore';
+  import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
   import { refreshOutgoingInvites } from '$lib/stores/UserSharesStore';
   import { toast } from 'svelte-sonner';
 
@@ -29,14 +29,14 @@
     }
   }
 
-  function removeShare() {
-    openConfirmDialog({
+  async function removeShare() {
+    const result = await dialog.confirm({
       title: 'Remove Share',
       confirmButtonText: 'Remove',
       data: share,
-      onConfirm: removeShareCall,
       descSnippet: confirmDesc,
     });
+    if (result.confirmed) await removeShareCall(result.data);
   }
 </script>
 

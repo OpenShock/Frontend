@@ -1,5 +1,5 @@
 import { isDeviceOnlineState } from '$lib/signalr/models/DeviceOnlineState';
-import { OnlineHubsStore } from '$lib/stores/HubsStore';
+import { HubOnlineState, onlineHubs } from '$lib/stores/HubsStore.svelte';
 import { toast } from 'svelte-sonner';
 
 export function handleSignalrDeviceStatus(array: unknown) {
@@ -9,18 +9,16 @@ export function handleSignalrDeviceStatus(array: unknown) {
     return;
   }
 
-  OnlineHubsStore.update((state) => {
-    array.forEach((entry) => {
-      const existing = state.get(entry.device);
-      state.set(entry.device, {
-        hubId: entry.device,
-        isOnline: entry.online,
-        firmwareVersion: entry.firmwareVersion,
-        otaInstall: existing?.otaInstall ?? null,
-        otaResult: existing?.otaResult ?? null,
-      });
-    });
-
-    return state;
-  });
+  for (const entry of array) {
+    const existing = onlineHubs.get(entry.device);
+    if (existing) {
+      existing.isOnline = entry.online;
+      existing.firmwareVersion = entry.firmwareVersion;
+    } else {
+      onlineHubs.set(
+        entry.device,
+        new HubOnlineState(entry.device, entry.online, entry.firmwareVersion)
+      );
+    }
+  }
 }

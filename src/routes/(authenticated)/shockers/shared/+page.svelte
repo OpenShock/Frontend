@@ -3,7 +3,7 @@
   import Container from '$lib/components/Container.svelte';
   import SharedShockerControlModule from '$lib/components/ControlModules/SharedShockerControlModule.svelte';
   import * as Avatar from '$lib/components/ui/avatar';
-  import { OnlineHubsStore } from '$lib/stores/HubsStore';
+  import { onlineHubs } from '$lib/stores/HubsStore.svelte';
   import { SharedHubsStore, refreshSharedHubs } from '$lib/stores/SharedHubsStore';
   import { onMount } from 'svelte';
 
@@ -57,7 +57,7 @@
                   <div class="mb-3 flex items-center gap-2">
                     <Router size={18} />
                     <span class="font-medium">{device.name}</span>
-                    {#if $OnlineHubsStore.get(device.id)?.isOnline}
+                    {#if onlineHubs.get(device.id)?.isOnline}
                       <span class="flex items-center gap-1 text-xs text-green-500">
                         <Wifi size={14} />
                         Online

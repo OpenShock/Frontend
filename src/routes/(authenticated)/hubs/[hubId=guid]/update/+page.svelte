@@ -12,16 +12,16 @@
   import { Progress } from '$lib/components/ui/progress';
   import * as Table from '$lib/components/ui/table';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { SignalR_Connection } from '$lib/signalr';
+  import { getConnection } from '$lib/signalr/index.svelte';
   import { OtaUpdateProgressTask } from '$lib/signalr/models/OtaUpdateProgressTask';
   import { serializeOtaInstallMessage } from '$lib/signalr/serializers/OtaInstall';
   import { breadcrumbs } from '$lib/state/Breadcrumbs.svelte';
   import {
-    type HubOnlineState,
-    OnlineHubsStore,
-    OwnHubsStore,
+    HubOnlineState,
+    onlineHubs,
+    ownHubs,
     refreshOwnHubs,
-  } from '$lib/stores/HubsStore';
+  } from '$lib/stores/HubsStore.svelte';
   import { cn } from '$lib/utils';
   import { NumberToHexPadded } from '$lib/utils/convert';
   import { onMount } from 'svelte';
@@ -85,21 +85,10 @@
   let hub = $derived.by<HubOnlineState | null>(() => {
     if (!hubLoaded) return null;
     const hubId = page.params.hubId ?? '';
-    const h = $OnlineHubsStore.get(hubId);
-    if (!h) {
-      return {
-        hubId,
-        isOnline: false,
-        firmwareVersion: null,
-        otaInstall: null,
-        otaResult: null,
-      };
-    }
-    // Spread to create a new reference so downstream deriveds re-evaluate on store updates
-    return { ...h };
+    return onlineHubs.get(hubId) ?? new HubOnlineState(hubId, false, null);
   });
 
-  let hubName = $derived($OwnHubsStore.get(page.params.hubId ?? '')?.name ?? 'Unknown Hub');
+  let hubName = $derived(ownHubs.get(page.params.hubId ?? '')?.name ?? 'Unknown Hub');
 
   let isUpdating = $derived(hub?.otaInstall !== null && hub?.otaInstall !== undefined);
 
@@ -160,25 +149,20 @@
 
   function startUpdate() {
     const hubId = page.params.hubId;
-    if ($SignalR_Connection === null || !hubId || hub === null || version === null) return;
+    const conn = getConnection();
+    if (conn === null || !hubId || hub === null || version === null) return;
     // Clear any previous result
-    OnlineHubsStore.update((hubs) => {
-      const h = hubs.get(hubId);
-      if (h) h.otaResult = null;
-      return hubs;
-    });
-    serializeOtaInstallMessage($SignalR_Connection, hubId, version);
+    const h = onlineHubs.get(hubId);
+    if (h) h.otaResult = null;
+    serializeOtaInstallMessage(conn, hubId, version);
     confirmOpen = false;
   }
 
   function resetResult() {
     const hubId = page.params.hubId;
     if (!hubId) return;
-    OnlineHubsStore.update((hubs) => {
-      const h = hubs.get(hubId);
-      if (h) h.otaResult = null;
-      return hubs;
-    });
+    const h = onlineHubs.get(hubId);
+    if (h) h.otaResult = null;
   }
 
   let isLoading = $state<boolean>(false);
@@ -305,10 +289,7 @@
           <Button
             class="w-fit cursor-pointer text-lg"
             onclick={() => (confirmOpen = true)}
-            disabled={$SignalR_Connection === null ||
-              hub === null ||
-              version === null ||
-              !hub.isOnline}
+            disabled={getConnection() === null || hub === null || version === null || !hub.isOnline}
           >
             <DownloadCloud class="size-5" />
             Update to {version ?? '...'}

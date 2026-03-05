@@ -9,7 +9,7 @@
   import * as Table from '$lib/components/ui/table';
   import * as Tooltip from '$lib/components/ui/tooltip';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { openConfirmDialog } from '$lib/stores/ConfirmDialogStore';
+  import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
   import { refreshOutgoingInvites } from '$lib/stores/UserSharesStore';
   import { cn } from '$lib/utils';
   import { toast } from 'svelte-sonner';
@@ -40,14 +40,14 @@
     }
   }
 
-  function removeInvite() {
-    openConfirmDialog({
+  async function removeInvite() {
+    const result = await dialog.confirm({
       title: 'Cancel Invite',
       confirmButtonText: 'Cancel',
       data: shareInvite,
-      onConfirm: removeInviteCall,
       descSnippet: confirmDesc,
     });
+    if (result.confirmed) await removeInviteCall(result.data);
   }
 </script>
 

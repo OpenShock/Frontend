@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { ShockerResponse } from '$lib/api/internal/v1';
   import { ControlDurationDefault, ControlIntensityDefault } from '$lib/constants/ControlConstants';
-  import { SignalR_Connection } from '$lib/signalr';
+  import { getConnection } from '$lib/signalr/index.svelte';
   import type { ControlType } from '$lib/signalr/models/ControlType';
   import { serializeControlMessages } from '$lib/signalr/serializers/Control';
   import { onMount } from 'svelte';
@@ -16,8 +16,9 @@
   let duration: number = ControlDurationDefault;
 
   function ctrl(type: ControlType) {
-    if (!$SignalR_Connection) return;
-    serializeControlMessages($SignalR_Connection, [{ id: '', type, intensity, duration }]);
+    const conn = getConnection();
+    if (!conn) return;
+    serializeControlMessages(conn, [{ id: '', type, intensity, duration }]);
   }
 
   let canvas: HTMLCanvasElement;
