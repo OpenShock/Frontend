@@ -2,7 +2,7 @@ import { browser } from '$app/environment';
 import { goto } from '$app/navigation';
 import { resolve } from '$app/paths';
 import { accountV1Api } from '$lib/api';
-import { destroySignalR } from '$lib/signalr/index.svelte';
+import { destroySignalR } from '$lib/signalr/user.svelte';
 import { UserStore } from '$lib/stores/UserStore';
 
 export const prerender = false;

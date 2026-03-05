@@ -4,7 +4,7 @@
   import PublicShareClassicControlModule from '$lib/components/ControlModules/PublicShareClassicControlModule.svelte';
   import * as Avatar from '$lib/components/ui/avatar';
   import * as Tooltip from '$lib/components/ui/tooltip/index.js';
-  import { ShareLinkSignalr } from '$lib/sharelink-signalr/index.svelte';
+  import { ShareLinkSignalr } from '$lib/signalr/sharelink.svelte';
   import type { Control } from '$lib/signalr/models/Control';
   import { onMount, untrack } from 'svelte';
 

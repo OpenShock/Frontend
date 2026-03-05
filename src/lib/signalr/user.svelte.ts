@@ -1,12 +1,5 @@
-import { dev } from '$app/environment';
 import { getBackendURL } from '$lib/utils/url';
-import {
-  HttpTransportType,
-  type HubConnection,
-  HubConnectionBuilder,
-  HubConnectionState,
-  LogLevel,
-} from '@microsoft/signalr';
+import { type HubConnection, HubConnectionState } from '@microsoft/signalr';
 import { toast } from 'svelte-sonner';
 import {
   handleSignalrDeviceStatus,
@@ -18,6 +11,7 @@ import {
   handleSignalrOtaInstallSucceeded,
   handleSignalrOtaRollback,
 } from './handlers';
+import { BuildSignalrConnection } from './utils/connection-builder';
 
 const BackendHubUserUrl = getBackendURL('1/hubs/user').href;
 
@@ -37,14 +31,7 @@ export async function initializeSignalR() {
     return;
   }
 
-  connection = new HubConnectionBuilder()
-    .configureLogging(dev ? LogLevel.Debug : LogLevel.Warning)
-    .withUrl(BackendHubUserUrl, {
-      transport: HttpTransportType.WebSockets,
-      skipNegotiation: true,
-    })
-    .withAutomaticReconnect([0, 1000, 2000, 5000, 10000, 10000, 15000, 30000, 60000])
-    .build();
+  connection = BuildSignalrConnection(BackendHubUserUrl);
 
   connection.onclose(() => {
     connectionState = HubConnectionState.Disconnected;

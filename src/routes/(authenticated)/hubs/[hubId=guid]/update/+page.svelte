@@ -12,7 +12,7 @@
   import { Progress } from '$lib/components/ui/progress';
   import * as Table from '$lib/components/ui/table';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { getConnection } from '$lib/signalr/index.svelte';
+  import { getConnection } from '$lib/signalr/user.svelte';
   import { OtaUpdateProgressTask } from '$lib/signalr/models/OtaUpdateProgressTask';
   import { serializeOtaInstallMessage } from '$lib/signalr/serializers/OtaInstall';
   import { breadcrumbs } from '$lib/state/Breadcrumbs.svelte';

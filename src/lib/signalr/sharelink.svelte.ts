@@ -1,14 +1,8 @@
-import { dev } from '$app/environment';
 import type { Control } from '$lib/signalr/models/Control';
 import { getBackendURL } from '$lib/utils/url';
-import {
-  HttpTransportType,
-  type HubConnection,
-  HubConnectionBuilder,
-  HubConnectionState,
-  LogLevel,
-} from '@microsoft/signalr';
+import { type HubConnection, HubConnectionState } from '@microsoft/signalr';
 import { toast } from 'svelte-sonner';
+import { BuildSignalrConnection } from './utils/connection-builder';
 
 function GetShareLinkURL(shareLinkId: string, customName: string | null) {
   const url = getBackendURL(`1/hubs/share/link/${encodeURIComponent(shareLinkId)}`);
@@ -38,14 +32,7 @@ export class ShareLinkSignalr {
 
     console.debug('Initializing Public Share SignalR connection...');
 
-    const connection = new HubConnectionBuilder()
-      .configureLogging(dev ? LogLevel.Debug : LogLevel.Warning)
-      .withUrl(GetShareLinkURL(this.shareLinkId, this.customName), {
-        transport: HttpTransportType.WebSockets,
-        skipNegotiation: true,
-      })
-      .withAutomaticReconnect([0, 1000, 2000, 5000, 10000, 10000, 15000, 30000, 60000])
-      .build();
+    const connection = BuildSignalrConnection(GetShareLinkURL(this.shareLinkId, this.customName));
 
     connection.onclose(() => {
       this.signalr_state = HubConnectionState.Disconnected;
