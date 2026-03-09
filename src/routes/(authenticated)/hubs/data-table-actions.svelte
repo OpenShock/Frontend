@@ -15,7 +15,7 @@
   import { serializeCaptivePortalMessage } from '$lib/signalr/serializers/CaptivePortal';
   import { serializeEmergencyStopMessage } from '$lib/signalr/serializers/EmergencyStop';
   import { serializeRebootMessage } from '$lib/signalr/serializers/Reboot';
-  import { refreshOwnHubs } from '$lib/stores/HubsStore.svelte';
+  import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
   import { toast } from 'svelte-sonner';
   import type { Hub } from './columns';
   import { resolve } from '$app/paths';

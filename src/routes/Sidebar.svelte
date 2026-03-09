@@ -35,13 +35,13 @@
     Root,
     useSidebar,
   } from '$lib/components/ui/sidebar';
-  import { UserStore } from '$lib/stores/UserStore';
+  import { userState } from '$lib/state/user-state.svelte';
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import { isMobile, isSerialSupported } from '$lib/utils/compatibility';
   import { Collapsible } from 'bits-ui';
   import { prefixBase } from '$lib/utils/url';
 
-  let currentUser = $derived($UserStore.self);
+  let currentUser = $derived(userState.self);
 
   let sidebarContext = useSidebar();
   let path = $derived(page.url.pathname);

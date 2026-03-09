@@ -3,7 +3,7 @@
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
   import MultiSelectCombobox from '$lib/components/ui/multi-select-combobox/multi-select-combobox.svelte';
-  import { ownHubs } from '$lib/stores/HubsStore.svelte';
+  import { ownHubs } from '$lib/state/hubs-state.svelte';
 
   let availableShockers = $derived(
     Array.from(ownHubs)

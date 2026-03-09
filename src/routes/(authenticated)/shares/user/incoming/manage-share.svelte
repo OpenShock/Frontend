@@ -8,10 +8,9 @@
   import * as Table from '$lib/components/ui/table/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
-  import { UserShares, refreshUserShares } from '$lib/stores/UserSharesStore';
-  import { UserStore } from '$lib/stores/UserStore';
+  import { userSharesState, refreshUserShares } from '$lib/state/user-shares-state.svelte';
+  import { userState } from '$lib/state/user-state.svelte';
   import { toast } from 'svelte-sonner';
-  import { derived } from 'svelte/store';
 
   interface Props {
     storeIndex: number;
@@ -20,13 +19,13 @@
 
   let { storeIndex, editDrawer = $bindable() }: Props = $props();
 
-  let userShare = derived(UserShares, ($a) => $a.incoming[storeIndex]);
+  let userShare = $derived(userSharesState.shares.incoming[storeIndex]);
 
   async function deleteShockerShare(shocker: UserShareInfo) {
     try {
-      await shockersV1Api.shockerShockerShareRemove(shocker.id, $UserStore.self!.id);
+      await shockersV1Api.shockerShockerShareRemove(shocker.id, userState.self!.id);
       toast.success(
-        `Successfully removed incoming Shocker Share ${shocker.name} by ${$userShare.name}`
+        `Successfully removed incoming Shocker Share ${shocker.name} by ${userShare.name}`
       );
     } catch (error) {
       handleApiError(error);
@@ -50,7 +49,7 @@
 {#snippet deleteConfirmDesc(shocker: UserShareInfo)}
   <p>
     Are you sure you want to remove the shocker share <strong>{shocker.name}</strong> by
-    <strong>{$userShare.name}</strong>?
+    <strong>{userShare.name}</strong>?
   </p>
 {/snippet}
 
@@ -61,18 +60,18 @@
         <Drawer.Description>Manage Shares from</Drawer.Description>
         <Drawer.Title class="mt-1 flex items-center gap-2">
           <Avatar.Root class="size-10">
-            <Avatar.Image src={$userShare.image} alt="User Avatar" />
+            <Avatar.Image src={userShare.image} alt="User Avatar" />
             <Avatar.Fallback>
-              {$userShare.name.charAt(0)}
+              {userShare.name.charAt(0)}
             </Avatar.Fallback>
           </Avatar.Root>
-          <b>{$userShare.name}</b></Drawer.Title
+          <b>{userShare.name}</b></Drawer.Title
         >
       </Drawer.Header>
       <div class="m-4 overflow-y-auto rounded-md border">
         <Table.Root>
           <Table.Body>
-            {#each $userShare.shares as shocker (shocker.id)}
+            {#each userShare.shares as shocker (shocker.id)}
               <Table.Row>
                 <Table.Cell>
                   {shocker.name}

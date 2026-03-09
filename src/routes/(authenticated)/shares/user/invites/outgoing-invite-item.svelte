@@ -10,7 +10,7 @@
   import * as Tooltip from '$lib/components/ui/tooltip';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
-  import { refreshOutgoingInvites } from '$lib/stores/UserSharesStore';
+  import { refreshOutgoingInvites } from '$lib/state/user-shares-state.svelte';
   import { cn } from '$lib/utils';
   import { toast } from 'svelte-sonner';
 

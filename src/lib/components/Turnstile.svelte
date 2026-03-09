@@ -4,10 +4,10 @@
   import { PUBLIC_TURNSTILE_DEV_BYPASS_VALUE } from '$env/static/public';
   import CloudflareLogo from '$lib/components/svg/CloudflareLogo.svelte';
   import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
-  import { ColorScheme, colorScheme } from '$lib/stores/ColorSchemeStore.svelte';
+  import { ColorScheme, colorScheme } from '$lib/state/color-scheme-state.svelte';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
-  import { backendMetadata } from '$lib/state/BackendMetadata.svelte';
+  import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
 
   interface Props {
     action: string;
@@ -29,10 +29,10 @@
   function renderTurnstile() {
     mounted = true;
 
-    const theme = colorScheme.Value === ColorScheme.System ? 'auto' : colorScheme.Value;
+    const theme = colorScheme.value === ColorScheme.System ? 'auto' : colorScheme.value;
 
     widgetId = window.turnstile!.render(element, {
-      sitekey: backendMetadata.State!.turnstileSiteKey!,
+      sitekey: backendMetadata.state!.turnstileSiteKey!,
       action,
       cData,
       theme,
@@ -48,7 +48,7 @@
       response = PUBLIC_TURNSTILE_DEV_BYPASS_VALUE;
       return;
     }
-    if (!backendMetadata.State?.turnstileSiteKey) {
+    if (!backendMetadata.state?.turnstileSiteKey) {
       console.error('Backend did not provide a Turnstile site key!');
       return;
     }

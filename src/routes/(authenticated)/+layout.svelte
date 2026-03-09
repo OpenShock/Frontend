@@ -3,17 +3,17 @@
   import { resolve } from '$app/paths';
   import Container from '$lib/components/Container.svelte';
   import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
-  import { UserStore } from '$lib/stores/UserStore';
+  import { userState } from '$lib/state/user-state.svelte';
   import type { Snippet } from 'svelte';
 
   let { children }: { children?: Snippet } = $props();
 
   $effect(() => {
-    if (!$UserStore.loading && !$UserStore.self) goto(resolve('/login'));
+    if (!userState.loading && !userState.self) goto(resolve('/login'));
   });
 </script>
 
-{#if !$UserStore.self}
+{#if !userState.self}
   <Container>
     <LoadingCircle class="size-20" />
   </Container>

@@ -9,7 +9,7 @@
   import { Button } from '$lib/components/ui/button';
   import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { UserStore } from '$lib/stores/UserStore';
+  import { userState } from '$lib/state/user-state.svelte';
   import { onMount } from 'svelte';
   import * as Field from '$lib/components/ui/field/index.js';
 
@@ -43,7 +43,7 @@
         return;
       }
 
-      UserStore.setSelf({
+      userState.setSelf({
         id: account.accountId,
         name: account.accountName,
         avatar: account.profileImage,

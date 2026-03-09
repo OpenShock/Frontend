@@ -15,13 +15,13 @@
   import { getConnection } from '$lib/signalr/user.svelte';
   import { OtaUpdateProgressTask } from '$lib/signalr/models/OtaUpdateProgressTask';
   import { serializeOtaInstallMessage } from '$lib/signalr/serializers/OtaInstall';
-  import { breadcrumbs } from '$lib/state/Breadcrumbs.svelte';
+  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import {
     HubOnlineState,
     onlineHubs,
     ownHubs,
     refreshOwnHubs,
-  } from '$lib/stores/HubsStore.svelte';
+  } from '$lib/state/hubs-state.svelte';
   import { cn } from '$lib/utils';
   import { NumberToHexPadded } from '$lib/utils/convert';
   import { onMount } from 'svelte';

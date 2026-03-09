@@ -6,20 +6,20 @@ export interface BreadCrumbEntry {
   href: Pathname | null;
 }
 
-let state = $state<BreadCrumbEntry[]>([]);
+let _state = $state<BreadCrumbEntry[]>([]);
 
 export const breadcrumbs = {
-  get State() {
-    return state;
+  get state() {
+    return _state;
   },
   push: (text: string, href: Pathname | null = null) => {
     onMount(() => {
       const entry = { text, href };
-      state = [...state, entry];
+      _state = [..._state, entry];
       return () => {
-        state = state.filter((e) => e.text !== entry.text || e.href !== entry.href);
+        _state = _state.filter((e) => e.text !== entry.text || e.href !== entry.href);
       };
     });
   },
-  clear: () => (state = []),
+  clear: () => (_state = []),
 };

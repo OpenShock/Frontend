@@ -6,7 +6,7 @@
   import DiscordLogo from '../svg/DiscordLogo.svelte';
   import GoogleLogo from '../svg/GoogleLogo.svelte';
   import { LogIn } from '@lucide/svelte';
-  import { backendMetadata } from '$lib/state/BackendMetadata.svelte';
+  import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
 
   const providerDetails: Record<string, { icon: typeof XLogo; label: string }> = {
     discord: { icon: DiscordLogo, label: 'Discord' },
@@ -16,7 +16,7 @@
 
   let { verb = 'Login' }: { verb?: string } = $props();
 
-  let oauthProviders = $derived(backendMetadata.State?.oAuthProviders);
+  let oauthProviders = $derived(backendMetadata.state?.oAuthProviders);
 </script>
 
 <Field>

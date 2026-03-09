@@ -6,8 +6,8 @@
   import * as Card from '$lib/components/ui/card';
   import * as Table from '$lib/components/ui/table';
   import { IsMobile } from '$lib/hooks/is-mobile.svelte';
-  import { breadcrumbs } from '$lib/state/Breadcrumbs.svelte';
-  import { onlineHubs, ownHubs, refreshOwnHubs } from '$lib/stores/HubsStore.svelte';
+  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { onlineHubs, ownHubs, refreshOwnHubs } from '$lib/state/hubs-state.svelte';
   import { onMount } from 'svelte';
   import type { Hub } from './columns';
   import DataTableActions from './data-table-actions.svelte';

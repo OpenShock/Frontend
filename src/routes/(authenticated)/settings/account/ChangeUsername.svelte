@@ -4,7 +4,7 @@
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
   import { Button } from '$lib/components/ui/button';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { UserStore } from '$lib/stores/UserStore';
+  import { userState } from '$lib/state/user-state.svelte';
   import type { ApiUserSelf } from '$lib/types/ApiUser';
   import { toast } from 'svelte-sonner';
 
@@ -29,7 +29,7 @@
 
       toast.success('Username changed successfully');
 
-      UserStore.setSelfName(username);
+      userState.setSelfName(username);
 
       username = '';
     } catch (e) {

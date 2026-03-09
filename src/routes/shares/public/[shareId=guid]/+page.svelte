@@ -8,7 +8,7 @@
   import * as Card from '$lib/components/ui/card/index.js';
   import Input from '$lib/components/ui/input/input.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { UserStore } from '$lib/stores/UserStore';
+  import { userState } from '$lib/state/user-state.svelte';
   import { onMount } from 'svelte';
   import ControlView from './ControlView.svelte';
 
@@ -42,7 +42,7 @@
   onMount(async () => {
     await details;
 
-    if ($UserStore.self) {
+    if (userState.self) {
       entered = true;
     }
   });

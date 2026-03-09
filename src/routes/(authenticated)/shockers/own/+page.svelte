@@ -11,7 +11,7 @@
   import { Button } from '$lib/components/ui/button';
   import * as Popover from '$lib/components/ui/popover';
   import { ControlDurationDefault, ControlIntensityDefault } from '$lib/constants/ControlConstants';
-  import { ownHubs, refreshOwnHubs } from '$lib/stores/HubsStore.svelte';
+  import { ownHubs, refreshOwnHubs } from '$lib/state/hubs-state.svelte';
   import { onMount } from 'svelte';
 
   let shockers = $derived(Array.from(ownHubs).flatMap(([, hub]) => hub.shockers));

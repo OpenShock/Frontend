@@ -70,9 +70,9 @@ sed -i 's/duration-200 ease-linear/duration-300 ease-in-out/g' "$UI_DIR/sidebar/
 # Sidebar submenu: ml-* instead of mx-*
 sed -i 's/mx-3\.5\(.*\)px-2\.5/ml-3.5\1pl-2.5/g' "$UI_DIR/sidebar/sidebar-menu-sub.svelte"
 
-# Sonner: use ColorSchemeStore instead of mode-watcher
-sed -i "s|import { mode } from \"mode-watcher\";|import { colorScheme } from '\$lib/stores/ColorSchemeStore.svelte';|" "$UI_DIR/sonner/sonner.svelte"
-sed -i 's|theme={mode\.current}|theme={colorScheme.Value}|' "$UI_DIR/sonner/sonner.svelte"
+# Sonner: use color-scheme-state instead of mode-watcher
+sed -i "s|import { mode } from \"mode-watcher\";|import { colorScheme } from '\$lib/state/color-scheme-state.svelte';|" "$UI_DIR/sonner/sonner.svelte"
+sed -i 's|theme={mode\.current}|theme={colorScheme.value}|' "$UI_DIR/sonner/sonner.svelte"
 
 # Slider: add cursor-w-resize to thumb
 sed -i 's/focus-visible:outline-hidden disabled:pointer/focus-visible:outline-hidden cursor-w-resize disabled:pointer/' "$UI_DIR/slider/slider.svelte"

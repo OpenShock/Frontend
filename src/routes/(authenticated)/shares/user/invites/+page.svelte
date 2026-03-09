@@ -2,11 +2,10 @@
   import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
   import * as Table from '$lib/components/ui/table';
   import {
-    IncomingInvites,
-    OutgoingInvites,
+    userSharesState,
     refreshIncomingInvites,
     refreshOutgoingInvites,
-  } from '$lib/stores/UserSharesStore';
+  } from '$lib/state/user-shares-state.svelte';
   import IncomingInviteItem from './incoming-invite-item.svelte';
   import OutgoingInviteItem from './outgoing-invite-item.svelte';
 
@@ -24,7 +23,7 @@
   <div class="mb-6 overflow-y-auto rounded-md border">
     <Table.Root>
       <Table.Body>
-        {#each $OutgoingInvites as invite (invite.id)}
+        {#each userSharesState.outgoingInvites as invite (invite.id)}
           <OutgoingInviteItem shareInvite={invite} />
         {/each}
       </Table.Body>
@@ -44,7 +43,7 @@
   <div class="mb-6 overflow-y-auto rounded-md border">
     <Table.Root>
       <Table.Body>
-        {#each $IncomingInvites as invite (invite.id)}
+        {#each userSharesState.incomingInvites as invite (invite.id)}
           <IncomingInviteItem shareInvite={invite} />
         {/each}
       </Table.Body>

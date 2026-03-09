@@ -36,7 +36,7 @@ These are automatically applied by the script, but documented here for reference
 
 ### Sonner (`sonner.svelte`)
 
-- Uses our own `ColorSchemeStore` instead of `mode-watcher`
+- Uses our own `color-scheme-state` instead of `mode-watcher`
 
 ### Slider (`slider.svelte`)
 

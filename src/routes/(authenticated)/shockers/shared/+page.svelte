@@ -3,16 +3,16 @@
   import Container from '$lib/components/Container.svelte';
   import SharedShockerControlModule from '$lib/components/ControlModules/SharedShockerControlModule.svelte';
   import * as Avatar from '$lib/components/ui/avatar';
-  import { onlineHubs } from '$lib/stores/HubsStore.svelte';
-  import { SharedHubsStore, refreshSharedHubs } from '$lib/stores/SharedHubsStore';
+  import { onlineHubs } from '$lib/state/hubs-state.svelte';
+  import { sharedHubsState, refreshSharedHubs } from '$lib/state/shared-hubs-state.svelte';
   import { onMount } from 'svelte';
 
   onMount(refreshSharedHubs);
 
-  const hasSharedShockers = $derived($SharedHubsStore.length > 0);
+  const hasSharedShockers = $derived(sharedHubsState.value.length > 0);
 </script>
 
-{#if $SharedHubsStore == null}
+{#if sharedHubsState.value == null}
   <p>Loading...</p>
 {:else}
   <Container>
@@ -29,7 +29,7 @@
       </div>
     {:else}
       <div class="mt-4 flex flex-col gap-6">
-        {#each $SharedHubsStore as owner (owner.id)}
+        {#each sharedHubsState.value as owner (owner.id)}
           {@const totalShockers = owner.devices.reduce((acc, d) => acc + d.shockers.length, 0)}
           <!-- Owner Section -->
           <div class="rounded-lg border p-4">

@@ -11,7 +11,7 @@
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { useSidebar } from '$lib/components/ui/sidebar';
-  import { UserStore } from '$lib/stores/UserStore';
+  import { userState } from '$lib/state/user-state.svelte';
   import { cn } from '$lib/utils';
   import Breadcrumb from './Breadcrumb.svelte';
   import { prefixBase } from '$lib/utils/url';
@@ -38,24 +38,24 @@
   <div
     class={cn(
       'flex flex-1 flex-row items-center justify-between space-x-2 py-2',
-      $UserStore.self !== null ? 'pr-2' : 'px-2'
+      userState.self !== null ? 'pr-2' : 'px-2'
     )}
   >
     <div class="flex-1"></div>
 
     <LightSwitch />
 
-    {#if $UserStore.self}
+    {#if userState.self}
       <DropdownMenu.Root>
         <DropdownMenu.Trigger
           class="cursor-pointer text-gray-600 select-none hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-200"
         >
           <img
             class="inline-block h-8 rounded-full"
-            src={$UserStore.self.avatar}
+            src={userState.self.avatar}
             alt="User Avatar"
           />
-          <p class="hidden lg:inline-block">{$UserStore.self.name}</p>
+          <p class="hidden lg:inline-block">{userState.self.name}</p>
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
           <DropdownMenu.Group>

@@ -14,13 +14,13 @@
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
   import { accountV2Api } from '$lib/api';
-  import { UserStore } from '$lib/stores/UserStore';
+  import { userState } from '$lib/state/user-state.svelte';
   import { initializeSignalR } from '$lib/signalr/user.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
   import OauthButtons from '$lib/components/auth/oauth-buttons.svelte';
   import { gotoQueryRedirectOrFallback } from '$lib/utils/url';
-  import { backendMetadata } from '$lib/state/BackendMetadata.svelte';
+  import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
   import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte';
 
   let usernameOrEmail = $state('');
@@ -43,7 +43,7 @@
         password,
         turnstileResponse,
       });
-      UserStore.setSelf({
+      userState.setSelf({
         id: account.accountId,
         name: account.accountName,
         avatar: account.profileImage,
@@ -63,7 +63,7 @@
     }
   }
 
-  let oauthProviders = $derived(backendMetadata.State?.oAuthProviders);
+  let oauthProviders = $derived(backendMetadata.state?.oAuthProviders);
   let anyOAuthProviders = $derived(oauthProviders !== undefined && oauthProviders.length > 0);
 
   let canSubmit = $derived(
@@ -85,7 +85,7 @@
       <Card.Header class="text-center">
         <Card.Title class="text-xl">Welcome back</Card.Title>
         <Card.Description>
-          {#if backendMetadata.State === null}
+          {#if backendMetadata.state === null}
             Loading available login methods
           {:else if anyOAuthProviders}
             Login with one of these methods
@@ -96,7 +96,7 @@
       </Card.Header>
       <Card.Content>
         <FieldGroup>
-          {#if backendMetadata.State === null}
+          {#if backendMetadata.state === null}
             <Skeleton class="h-9 w-full"></Skeleton>
             <Skeleton class="h-1 w-full"></Skeleton>
             <Skeleton class="h-9 w-full"></Skeleton>

@@ -8,8 +8,8 @@
   import * as Dialog from '$lib/components/ui/dialog';
   import MultiSelectCombobox from '$lib/components/ui/multi-select-combobox/multi-select-combobox.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { ownHubs } from '$lib/stores/HubsStore.svelte';
-  import { refreshOutgoingInvites } from '$lib/stores/UserSharesStore';
+  import { ownHubs } from '$lib/state/hubs-state.svelte';
+  import { refreshOutgoingInvites } from '$lib/state/user-shares-state.svelte';
 
   let availableShockers = $derived(
     Array.from(ownHubs)

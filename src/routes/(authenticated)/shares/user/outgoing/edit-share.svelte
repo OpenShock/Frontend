@@ -13,10 +13,9 @@
   import PauseToggle from '$lib/components/utils/PauseToggle.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
-  import { UserShares, refreshUserShares } from '$lib/stores/UserSharesStore';
+  import { userSharesState, refreshUserShares } from '$lib/state/user-shares-state.svelte';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
-  import { derived } from 'svelte/store';
 
   interface Props {
     storeIndex: number;
@@ -27,7 +26,7 @@
 
   let { storeIndex, editDrawer = $bindable() }: Props = $props();
 
-  let userShare = derived(UserShares, ($a) => $a.outgoing[storeIndex]);
+  let userShare = $derived(userSharesState.shares.outgoing[storeIndex]);
   let isUniformRestrictions = $state(false);
 
   let uniformPermissions = $state({
@@ -62,7 +61,7 @@
   });
 
   onMount(() => {
-    shares = $userShare.shares.map((share) => ({
+    shares = userShare.shares.map((share) => ({
       ...share,
       paused: share.paused !== 0,
       limits: {
@@ -82,8 +81,8 @@
       return;
     }
 
-    isUniformRestrictions = $userShare.shares.every((share) =>
-      ComparePermissionsAndLimits(share, $userShare.shares[0])
+    isUniformRestrictions = userShare.shares.every((share) =>
+      ComparePermissionsAndLimits(share, userShare.shares[0])
     );
 
     const limit = shares[0].limits;
@@ -119,7 +118,7 @@
     shares.forEach((share) => {
       promises.push(
         shockersV1Api
-          .shockerShockerShareCodeUpdate(share.id, $userShare.id, {
+          .shockerShockerShareCodeUpdate(share.id, userShare.id, {
             limits: {
               intensity: share.limits.intensity === 100 ? null : share.limits.intensity,
               duration: share.limits.duration === 30_000 ? null : share.limits.duration,
@@ -128,18 +127,14 @@
           })
           .then(() => {
             // Update the list copy of the share
-            const index = $userShare.shares.findIndex((s) => s.id === share.id);
+            const index = userShare.shares.findIndex((s) => s.id === share.id);
             if (index !== -1) {
-              UserShares.update((u) => {
-                const item = u.outgoing[storeIndex].shares[index];
-
-                u.outgoing[storeIndex].shares[index] = {
-                  ...item,
-                  ...share,
-                  paused: share.paused ? item.paused | 2 : item.paused & ~2,
-                };
-                return u;
-              });
+              const item = userSharesState.shares.outgoing[storeIndex].shares[index];
+              userSharesState.shares.outgoing[storeIndex].shares[index] = {
+                ...item,
+                ...share,
+                paused: share.paused ? item.paused | 2 : item.paused & ~2,
+              };
             }
           })
           .catch((error) => {
@@ -156,7 +151,7 @@
 
   async function deleteShockerShare(shocker: EditableShare) {
     try {
-      await shockersV1Api.shockerShockerShareRemove(shocker.id, $userShare.id);
+      await shockersV1Api.shockerShockerShareRemove(shocker.id, userShare.id);
       toast.success(`Successfully removed shocker share ${shocker.name}`);
     } catch (error) {
       handleApiError(error);
@@ -194,7 +189,7 @@
 {#snippet deleteConfirmDesc(shocker: EditableShare)}
   <p>
     Are you sure you want to remove the shocker share <strong>{shocker.name}</strong> for
-    <strong>{$userShare.name}</strong>?
+    <strong>{userShare.name}</strong>?
   </p>
 {/snippet}
 
@@ -205,12 +200,12 @@
         <Drawer.Description>Edit shares for</Drawer.Description>
         <Drawer.Title class="mt-1 flex items-center gap-2">
           <Avatar.Root class="size-10">
-            <Avatar.Image src={$userShare.image} alt="User Avatar" />
+            <Avatar.Image src={userShare.image} alt="User Avatar" />
             <Avatar.Fallback>
-              {$userShare.name.charAt(0)}
+              {userShare.name.charAt(0)}
             </Avatar.Fallback>
           </Avatar.Root>
-          <b>{$userShare.name}</b></Drawer.Title
+          <b>{userShare.name}</b></Drawer.Title
         >
       </Drawer.Header>
       <div class="mb-5 min-h-0 p-4 pb-0">
@@ -246,19 +241,15 @@
                       shockers={shares.map((share) => ({
                         shockerId: share.id,
                         paused: share.paused,
-                        userShareUserId: $userShare.id,
+                        userShareUserId: userShare.id,
                       }))}
                       onPausedChange={(paused) => {
                         shares.forEach((share) => (share.paused = paused)); // Update the local copy of the shares
 
                         // Update the actual store shares
-                        UserShares.update((current) => {
-                          current.outgoing[storeIndex].shares.forEach(
-                            (share) =>
-                              (share.paused = paused ? share.paused | 2 : share.paused & ~2)
-                          );
-                          return current;
-                        });
+                        userSharesState.shares.outgoing[storeIndex].shares.forEach(
+                          (share) => (share.paused = paused ? share.paused | 2 : share.paused & ~2)
+                        );
                       }}
                     />
                   </span>
@@ -282,15 +273,12 @@
                         <PauseToggle
                           shockerId={shares[i].id}
                           bind:paused={shares[i].paused}
-                          userShareUserId={$userShare.id}
+                          userShareUserId={userShare.id}
                           onPausedChange={(paused) => {
-                            UserShares.update((current) => {
-                              current.outgoing[storeIndex].shares.forEach((s) => {
-                                if (s.id === share.id) {
-                                  s.paused = paused ? s.paused | 2 : s.paused & ~2; // Update the store shares list
-                                }
-                              });
-                              return current;
+                            userSharesState.shares.outgoing[storeIndex].shares.forEach((s) => {
+                              if (s.id === share.id) {
+                                s.paused = paused ? s.paused | 2 : s.paused & ~2; // Update the store shares list
+                              }
                             });
                           }}
                         />

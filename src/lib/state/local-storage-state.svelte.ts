@@ -1,6 +1,6 @@
 import { browser } from '$app/environment';
 
-export class LocaleStorageState<T> {
+export class LocalStorageState<T> {
   #key: string;
   #default: T;
   #value: T;
@@ -15,15 +15,15 @@ export class LocaleStorageState<T> {
     );
   }
 
-  get Value() {
+  get value() {
     return this.#value;
   }
-  set Value(value: T) {
+  set value(value: T) {
     this.#value = value;
     localStorage.setItem(this.#key, JSON.stringify(value));
   }
 
-  Reset() {
+  reset() {
     this.#value = this.#default;
     localStorage.removeItem(this.#key);
   }

@@ -19,7 +19,7 @@
   import FieldSeparator from '$lib/components/ui/field/field-separator.svelte';
   import OauthButtons from '$lib/components/auth/oauth-buttons.svelte';
   import { ChevronLeft, Mail } from '@lucide/svelte';
-  import { backendMetadata } from '$lib/state/BackendMetadata.svelte';
+  import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
   import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte';
 
   let username = $state<string>('');
@@ -44,7 +44,7 @@
   let useEmail = $state(false);
 
   $effect(() => {
-    const providers = backendMetadata?.State?.oAuthProviders;
+    const providers = backendMetadata?.state?.oAuthProviders;
     useEmail = providers === undefined || providers.length === 0;
   });
 
@@ -87,7 +87,7 @@
     }
   }
 
-  let oauthProviders = $derived(backendMetadata.State?.oAuthProviders);
+  let oauthProviders = $derived(backendMetadata.state?.oAuthProviders);
   let anyOAuthProviders = $derived(oauthProviders !== undefined && oauthProviders.length > 0);
 </script>
 
@@ -123,7 +123,7 @@
       <Card.Header class="text-center">
         <Card.Title class="text-xl">Create your account</Card.Title>
         <Card.Description>
-          {#if backendMetadata.State === null}
+          {#if backendMetadata.state === null}
             Loading available sign-up methods
           {:else if useEmail}
             Signing up using email
@@ -134,7 +134,7 @@
       </Card.Header>
       <Card.Content>
         <Field.Group>
-          {#if backendMetadata.State === null}
+          {#if backendMetadata.state === null}
             <Skeleton class="h-9 w-full"></Skeleton>
             <Skeleton class="h-1 w-full"></Skeleton>
             <Skeleton class="h-9 w-full"></Skeleton>

@@ -7,7 +7,7 @@
     ColorScheme,
     colorScheme,
     getDarkReaderState,
-  } from '$lib/stores/ColorSchemeStore.svelte';
+  } from '$lib/state/color-scheme-state.svelte';
   import { cn } from '$lib/utils';
   import { toast } from 'svelte-sonner';
 
@@ -18,7 +18,7 @@
   }
   function confirm() {
     if (!pendingScheme) return;
-    colorScheme.Value = pendingScheme;
+    colorScheme.value = pendingScheme;
     pendingScheme = null;
   }
 
@@ -47,7 +47,7 @@
     return pendingLight;
   }
   function evaluateLightSwitch(scheme: ColorScheme) {
-    if (isGoingNuclear(colorScheme.Value, scheme)) {
+    if (isGoingNuclear(colorScheme.value, scheme)) {
       const darkreader = getDarkReaderState();
       if (darkreader.isActive) {
         toast.warning('DarkReader is enabled, activating light mode will have no effect!');
@@ -56,7 +56,7 @@
       pendingScheme = scheme;
       return;
     }
-    colorScheme.Value = scheme;
+    colorScheme.value = scheme;
   }
 </script>
 

@@ -6,13 +6,13 @@
 	import TriangleAlertIcon from "@lucide/svelte/icons/triangle-alert";
 
 	import { Toaster as Sonner, type ToasterProps as SonnerProps } from "svelte-sonner";
-	import { colorScheme } from '$lib/stores/ColorSchemeStore.svelte';
+	import { colorScheme } from '$lib/state/color-scheme-state.svelte';
 
 	let { ...restProps }: SonnerProps = $props();
 </script>
 
 <Sonner
-	theme={colorScheme.Value}
+	theme={colorScheme.value}
 	class="toaster group"
 	style="--normal-bg: var(--color-popover); --normal-text: var(--color-popover-foreground); --normal-border: var(--color-border);"
 	{...restProps}

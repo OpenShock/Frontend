@@ -1,7 +1,7 @@
 import { dev } from '$app/environment';
 import { isControlLog } from '$lib/signalr/models/ControlLog';
 import { isControlLogSender } from '$lib/signalr/models/ControlLogSender';
-import { TriggerEvent } from '$lib/stores/ShockEventListenerStore';
+import { triggerEvent } from '$lib/state/shock-events-state.svelte';
 import { toast } from 'svelte-sonner';
 import { ControlType } from '../models/ControlType';
 
@@ -41,6 +41,6 @@ export function handleSignalrLog(sender: unknown, logs: unknown) {
   }
 
   logs.forEach((log) => {
-    TriggerEvent(log.shocker.id, log.type, log.duration, log.intensity);
+    triggerEvent(log.shocker.id, log.type, log.duration, log.intensity);
   });
 }

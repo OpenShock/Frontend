@@ -2,7 +2,7 @@
   import { resolve } from '$app/paths';
   import { RoleType } from '$lib/api/internal/v1';
   import { Button } from '$lib/components/ui/button';
-  import { UserStore } from '$lib/stores/UserStore';
+  import { userState } from '$lib/state/user-state.svelte';
   import type { Snippet } from 'svelte';
 
   interface Props {
@@ -13,7 +13,7 @@
 
   const allowedRoles = [RoleType.Admin, RoleType.System];
   let isAdmin = $derived(
-    $UserStore.self ? $UserStore.self.roles.some((role) => allowedRoles.includes(role)) : false
+    userState.self ? userState.self.roles.some((role) => allowedRoles.includes(role)) : false
   );
 </script>
 

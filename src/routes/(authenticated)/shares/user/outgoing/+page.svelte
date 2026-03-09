@@ -1,7 +1,7 @@
 <script lang="ts">
   import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
   import * as Table from '$lib/components/ui/table';
-  import { UserShares, refreshUserShares } from '$lib/stores/UserSharesStore';
+  import { userSharesState, refreshUserShares } from '$lib/state/user-shares-state.svelte';
   import EditShare from './edit-share.svelte';
   import UserShareItem from './user-share-item.svelte';
 
@@ -18,7 +18,7 @@
 </script>
 
 {#key editShareDrawerOpenCount}
-  {#if $UserShares.outgoing[editIndex] !== undefined}
+  {#if userSharesState.shares.outgoing[editIndex] !== undefined}
     <EditShare storeIndex={editIndex} bind:editDrawer={editShareDrawerOpen} />
   {/if}
 {/key}
@@ -31,7 +31,7 @@
   <div class="mb-6 overflow-y-auto rounded-md border">
     <Table.Root>
       <Table.Body>
-        {#each $UserShares.outgoing as userShare, i (userShare.id)}
+        {#each userSharesState.shares.outgoing as userShare, i (userShare.id)}
           <UserShareItem storeIndex={i} onOpenEdit={() => openEditDrawer(i)} />
         {/each}
       </Table.Body>

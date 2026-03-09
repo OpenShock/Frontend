@@ -1,12 +1,12 @@
 <script lang="ts">
   import Container from '$lib/components/Container.svelte';
-  import { UserStore } from '$lib/stores/UserStore';
+  import { userState } from '$lib/state/user-state.svelte';
   import ChangeEmail from './ChangeEmail.svelte';
   import ChangePassword from './ChangePassword.svelte';
   import ChangeUsername from './ChangeUsername.svelte';
   import DangerZone from './DangerZone.svelte';
 
-  let account = $derived($UserStore.self);
+  let account = $derived(userState.self);
 </script>
 
 {#if account}

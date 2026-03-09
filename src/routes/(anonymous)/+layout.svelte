@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { UserStore } from '$lib/stores/UserStore';
+  import { userState } from '$lib/state/user-state.svelte';
   import { gotoQueryRedirectOrFallback, sanitizeRedirectSearchParam } from '$lib/utils/url';
   import { onMount, type Snippet } from 'svelte';
   import { toast } from 'svelte-sonner';
@@ -13,7 +13,7 @@
   });
 
   $effect(() => {
-    if (!$UserStore.loading && $UserStore.self) {
+    if (!userState.loading && userState.self) {
       void gotoQueryRedirectOrFallback('/home');
     }
   });

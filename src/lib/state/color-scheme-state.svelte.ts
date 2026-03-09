@@ -12,7 +12,7 @@ function isColorSchemeEnum(value: unknown): value is ColorScheme {
   return Object.values(ColorScheme).includes(value as ColorScheme);
 }
 
-function getLocalStoreState(): ColorScheme {
+function getStoredScheme(): ColorScheme {
   // If we are not in a browser environment, return default
   if (!browser) {
     return ColorScheme.System;
@@ -66,29 +66,23 @@ function setDarkMode(preference: ColorScheme) {
   document.documentElement.classList.toggle('dark', resolveDarkMode(preference));
 }
 
-class ColorSchemeState {
-  #value;
+let _value = $state<ColorScheme>(getStoredScheme());
 
-  constructor() {
-    this.#value = $state<ColorScheme>(getLocalStoreState());
-  }
-
-  get Value() {
-    return this.#value;
-  }
-  set Value(value: ColorScheme) {
-    this.#value = value;
-    localStorage.setItem('theme', value);
-    setDarkMode(value);
-  }
-}
-
-export const colorScheme = new ColorSchemeState();
+export const colorScheme = {
+  get value() {
+    return _value;
+  },
+  set value(v: ColorScheme) {
+    _value = v;
+    localStorage.setItem('theme', v);
+    setDarkMode(v);
+  },
+};
 
 function handleMediaQueryChange() {
-  setDarkMode(getLocalStoreState());
+  setDarkMode(getStoredScheme());
 }
-export function initializeDarkModeStore() {
+export function initializeColorScheme() {
   handleMediaQueryChange();
 
   window

@@ -9,7 +9,7 @@
   import { Input } from '$lib/components/ui/input';
   import * as Tooltip from '$lib/components/ui/tooltip';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { refreshOutgoingInvites, refreshUserShares } from '$lib/stores/UserSharesStore';
+  import { refreshOutgoingInvites, refreshUserShares } from '$lib/state/user-shares-state.svelte';
 
   interface Props {
     open: boolean;
