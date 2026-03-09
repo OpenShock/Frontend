@@ -77,6 +77,7 @@ class ColorSchemeState {
     return this.#value;
   }
   set Value(value: ColorScheme) {
+    this.#value = value;
     localStorage.setItem('theme', value);
     setDarkMode(value);
   }
