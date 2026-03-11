@@ -1,6 +1,5 @@
 <script lang="ts">
-  import Container from '$lib/components/Container.svelte';
-  import { asset, resolve } from '$app/paths';
+  import { resolve } from '$app/paths';
   import { Button } from '$lib/components/ui/button/index.js';
   import * as Card from '$lib/components/ui/card/index.js';
   import {
@@ -71,81 +70,69 @@
   );
 </script>
 
-<Container class="items-center-safe justify-center-safe p-0!">
-  <span class="flex items-center gap-2 self-center font-medium">
-    <img class="ml-[0.667px] h-7.5" src={asset('/IconSpinning.svg')} alt="OpenShock Logo" />
-    <img
-      class="h-7.5 transition-opacity delay-100 duration-200 group-data-[collapsible=icon]:opacity-0 group-data-[collapsible=icon]:delay-0"
-      src={asset('/LogoTextOnly.svg')}
-      alt="OpenShock Logo"
-    />
-  </span>
-  <div class="flex max-w-sm flex-col gap-6">
-    <Card.Root>
-      <Card.Header class="text-center">
-        <Card.Title class="text-xl">Welcome back</Card.Title>
-        <Card.Description>
-          {#if backendMetadata.state === null}
-            Loading available login methods
-          {:else if anyOAuthProviders}
-            Login with one of these methods
-          {:else}
-            Login with your OpenShock Account
-          {/if}
-        </Card.Description>
-      </Card.Header>
-      <Card.Content>
-        <FieldGroup>
-          {#if backendMetadata.state === null}
-            <Skeleton class="h-9 w-full"></Skeleton>
-            <Skeleton class="h-1 w-full"></Skeleton>
-            <Skeleton class="h-9 w-full"></Skeleton>
-            <Skeleton class="h-9 w-full"></Skeleton>
-            <Skeleton class="h-16 w-full"></Skeleton>
-            <Skeleton class="h-9 w-full"></Skeleton>
-          {:else}
-            {#if anyOAuthProviders}
-              <OauthButtons />
-              <FieldSeparator class="*:data-[slot=field-separator-content]:bg-card">
-                Or continue with
-              </FieldSeparator>
-            {/if}
-            <form onsubmit={handleSubmission}>
-              <div>
-                <div class="my-1 flex flex-col gap-1">
-                  <TextInput
-                    label="Username or Email"
-                    autocomplete="username"
-                    bind:value={usernameOrEmail}
-                    validationResult={usernameError}
-                  />
+<Card.Root>
+  <Card.Header class="text-center">
+    <Card.Title class="text-xl">Welcome back</Card.Title>
+    <Card.Description>
+      {#if backendMetadata.state === null}
+        Loading available login methods
+      {:else if anyOAuthProviders}
+        Login with one of these methods
+      {:else}
+        Login with your OpenShock Account
+      {/if}
+    </Card.Description>
+  </Card.Header>
+  <Card.Content>
+    <FieldGroup>
+      {#if backendMetadata.state === null}
+        <Skeleton class="h-9 w-full"></Skeleton>
+        <Skeleton class="h-1 w-full"></Skeleton>
+        <Skeleton class="h-9 w-full"></Skeleton>
+        <Skeleton class="h-9 w-full"></Skeleton>
+        <Skeleton class="h-16 w-full"></Skeleton>
+        <Skeleton class="h-9 w-full"></Skeleton>
+      {:else}
+        {#if anyOAuthProviders}
+          <OauthButtons />
+          <FieldSeparator class="*:data-[slot=field-separator-content]:bg-card">
+            Or continue with
+          </FieldSeparator>
+        {/if}
+        <form onsubmit={handleSubmission}>
+          <div>
+            <div class="my-1 flex flex-col gap-1">
+              <TextInput
+                label="Username or Email"
+                autocomplete="username"
+                bind:value={usernameOrEmail}
+                validationResult={usernameError}
+              />
 
-                  <PasswordInput
-                    label="Password"
-                    autocomplete="current-password"
-                    bind:value={password}
-                    validate={passwordError}
-                  />
+              <PasswordInput
+                label="Password"
+                autocomplete="current-password"
+                bind:value={password}
+                validate={passwordError}
+              />
 
-                  <Turnstile action="signin" bind:response={turnstileResponse} />
-                </div>
-                <Field class="mt-5">
-                  <Button type="submit" disabled={!canSubmit}>Login</Button>
-                  <FieldDescription class="text-center">
-                    Don't have an account? <a href={resolve('/signup')}>Sign up</a>
-                  </FieldDescription>
-                </Field>
-              </div>
-            </form>
-          {/if}
-        </FieldGroup>
-      </Card.Content>
-    </Card.Root>
-    <FieldDescription class="px-6 text-center">
-      By clicking Login, you agree to our <a href="https://openshock.org/tos" target="_blank"
-        >Terms of Service</a
-      >
-      and <a href="https://openshock.org/privacy" target="_blank">Privacy Policy</a>.
-    </FieldDescription>
-  </div>
-</Container>
+              <Turnstile action="signin" bind:response={turnstileResponse} />
+            </div>
+            <Field class="mt-5">
+              <Button type="submit" disabled={!canSubmit}>Login</Button>
+              <FieldDescription class="text-center">
+                Don't have an account? <a href={resolve('/signup')}>Sign up</a>
+              </FieldDescription>
+            </Field>
+          </div>
+        </form>
+      {/if}
+    </FieldGroup>
+  </Card.Content>
+</Card.Root>
+<FieldDescription class="px-6 text-center">
+  By clicking Login, you agree to our <a href="https://openshock.org/tos" target="_blank"
+    >Terms of Service</a
+  >
+  and <a href="https://openshock.org/privacy" target="_blank">Privacy Policy</a>.
+</FieldDescription>

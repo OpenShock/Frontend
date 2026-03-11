@@ -3,15 +3,15 @@
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import { OAuthSignupFinalize, OAuthSignupGetData } from '$lib/api/next/oauth';
-  import Container from '$lib/components/Container.svelte';
   import EmailInput from '$lib/components/input/EmailInput.svelte';
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
   import { Button } from '$lib/components/ui/button';
+  import * as Card from '$lib/components/ui/card/index.js';
+  import { FieldDescription } from '$lib/components/ui/field/index.js';
   import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { userState } from '$lib/state/user-state.svelte';
   import { onMount } from 'svelte';
-  import * as Field from '$lib/components/ui/field/index.js';
 
   let username = $state<string>('');
   let usernameValid = $state<boolean>(false);
@@ -85,24 +85,28 @@
   });
 </script>
 
-<Container class="items-center">
-  <form class="flex flex-col gap-2" onsubmit={handleSubmission}>
-    <div class="text-3xl font-semibold text-nowrap">
+<Card.Root>
+  <Card.Header class="text-center">
+    <Card.Title class="text-xl">
       Sign Up With <span class="capitalize">{page.params.provider}</span>
-    </div>
-    <UsernameInput
-      label="Username"
-      placeholder="Username"
-      bind:value={username}
-      bind:valid={usernameValid}
-    />
-    <EmailInput label="Email" placeholder="Email" bind:value={email} bind:valid={emailValid} />
+    </Card.Title>
+    <Card.Description>Complete your account details</Card.Description>
+  </Card.Header>
+  <Card.Content>
+    <form class="flex flex-col gap-2" onsubmit={handleSubmission}>
+      <UsernameInput
+        label="Username"
+        placeholder="Username"
+        bind:value={username}
+        bind:valid={usernameValid}
+      />
+      <EmailInput label="Email" placeholder="Email" bind:value={email} bind:valid={emailValid} />
 
-    <Button type="submit" disabled={!canSubmit}>Sign Up</Button>
-
-    <Field.Description class="px-6 text-center">
-      By clicking Sign Up, you agree to our <a href="https://openshock.org/tos">Terms of Service</a>
-      and <a href="https://openshock.org/privacy">Privacy Policy</a>.
-    </Field.Description>
-  </form>
-</Container>
+      <Button type="submit" class="mt-3" disabled={!canSubmit}>Sign Up</Button>
+    </form>
+  </Card.Content>
+</Card.Root>
+<FieldDescription class="px-6 text-center">
+  By clicking Sign Up, you agree to our <a href="https://openshock.org/tos">Terms of Service</a>
+  and <a href="https://openshock.org/privacy">Privacy Policy</a>.
+</FieldDescription>

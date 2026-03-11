@@ -2,10 +2,11 @@
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { accountV1Api } from '$lib/api';
-  import Container from '$lib/components/Container.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
   import EmailInput from '$lib/components/input/EmailInput.svelte';
   import { Button } from '$lib/components/ui/button';
+  import * as Card from '$lib/components/ui/card/index.js';
+  import { Field, FieldDescription } from '$lib/components/ui/field/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { toast } from 'svelte-sonner';
 
@@ -33,20 +34,29 @@
   let canSubmit = $derived(emailValid && turnstileResponse != null);
 </script>
 
-<Container class="items-center">
-  <form class="flex flex-col space-y-4" onsubmit={handleSubmission}>
-    <h1 class="text-3xl font-semibold">Forgot Password</h1>
+<Card.Root>
+  <Card.Header class="text-center">
+    <Card.Title class="text-xl">Forgot Password</Card.Title>
+    <Card.Description>Enter your email to reset your password</Card.Description>
+  </Card.Header>
+  <Card.Content>
+    <form class="flex flex-col gap-4" onsubmit={handleSubmission}>
+      <EmailInput
+        label="Email"
+        placeholder="Email"
+        autocomplete="off"
+        bind:value={email}
+        bind:valid={emailValid}
+      />
 
-    <EmailInput
-      label="Email"
-      placeholder="Email"
-      autocomplete="off"
-      bind:value={email}
-      bind:valid={emailValid}
-    />
+      <Turnstile action="forgot-password" bind:response={turnstileResponse} />
 
-    <Turnstile action="forgot-password" bind:response={turnstileResponse} />
-
-    <Button type="submit" disabled={!canSubmit}>I forgot my password</Button>
-  </form>
-</Container>
+      <Field class="mt-1">
+        <Button type="submit" disabled={!canSubmit}>Reset Password</Button>
+        <FieldDescription class="text-center">
+          Remember your password? <a href={resolve('/login')}>Sign in</a>
+        </FieldDescription>
+      </Field>
+    </form>
+  </Card.Content>
+</Card.Root>

@@ -1,12 +1,17 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
   import { page } from '$app/state';
-  import Container from '$lib/components/Container.svelte';
+  import * as Card from '$lib/components/ui/card/index.js';
 
-  let secret = page.url.searchParams.get('token');
+  let secret = browser && page.url.searchParams.get('token');
 </script>
 
-<Container class="items-center">
-  <h1 class="text-3xl font-semibold">Verify Email</h1>
-
-  {secret}
-</Container>
+<Card.Root>
+  <Card.Header class="text-center">
+    <Card.Title class="text-xl">Verify Email</Card.Title>
+    <Card.Description>Verifying your email address</Card.Description>
+  </Card.Header>
+  <Card.Content>
+    {secret}
+  </Card.Content>
+</Card.Root>

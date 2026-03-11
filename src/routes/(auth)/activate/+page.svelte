@@ -1,13 +1,14 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import { accountV1Api } from '$lib/api';
-  import Container from '$lib/components/Container.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
+  import * as Card from '$lib/components/ui/card/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 
-  let secret = page.url.searchParams.get('token');
+  let secret = browser && page.url.searchParams.get('token');
 
   function activateAccount() {
     if (!secret) return;
@@ -18,10 +19,12 @@
   }
 </script>
 
-<Container class="items-center">
-  <h1 class="text-3xl font-semibold">Activate Account</h1>
-
-  {secret}
-
-  <Button class="mt-4" onclick={activateAccount}>Activate Account</Button>
-</Container>
+<Card.Root>
+  <Card.Header class="text-center">
+    <Card.Title class="text-xl">Activate Account</Card.Title>
+    <Card.Description>Click the button below to activate your account</Card.Description>
+  </Card.Header>
+  <Card.Content>
+    <Button class="w-full" onclick={activateAccount}>Activate Account</Button>
+  </Card.Content>
+</Card.Root>
