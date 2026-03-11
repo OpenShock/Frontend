@@ -169,8 +169,8 @@ describe('getSiteURL', () => {
 
   it('respects the base path', () => {
     mocks.base = '/app';
-    const url = getSiteURL('/dashboard' as never);
-    expect(url.pathname).toBe('/app/dashboard');
+    const url = getSiteURL('/home' as never);
+    expect(url.pathname).toBe('/app/home');
   });
 
   it('works without search params', () => {
@@ -237,7 +237,7 @@ describe('isValidRedirectURL', () => {
   });
 
   it('accepts a same-origin HTTPS URL', () => {
-    expect(isValidRedirectURL(new URL('https://openshock.app/dashboard'))).toBe(true);
+    expect(isValidRedirectURL(new URL('https://openshock.app/home'))).toBe(true);
   });
 
   it('rejects a cross-origin URL', () => {
@@ -267,7 +267,7 @@ describe('isValidRedirectParam', () => {
   });
 
   it('accepts a same-origin absolute URL', () => {
-    expect(isValidRedirectParam('https://openshock.app/dashboard')).toBe(true);
+    expect(isValidRedirectParam('https://openshock.app/home')).toBe(true);
   });
 
   it('rejects a cross-origin URL', () => {
@@ -316,7 +316,7 @@ describe('sanitizeRedirectSearchParam', () => {
 
   it('preserves a valid redirect param and returns false', () => {
     mocks.page = {
-      url: new URL('https://openshock.app/login?redirect=/dashboard'),
+      url: new URL('https://openshock.app/login?redirect=/home'),
     };
 
     const result = sanitizeRedirectSearchParam();
@@ -364,8 +364,8 @@ describe('gotoQueryRedirectOrFallback', () => {
   });
 
   it('navigates to the fallback when no redirect param exists', async () => {
-    await gotoQueryRedirectOrFallback('/dashboard' as never);
-    expect(mocks.goto).toHaveBeenCalledWith('/dashboard');
+    await gotoQueryRedirectOrFallback('/home' as never);
+    expect(mocks.goto).toHaveBeenCalledWith('/home');
   });
 
   it('navigates to the redirect param when it matches a route', async () => {
@@ -374,7 +374,7 @@ describe('gotoQueryRedirectOrFallback', () => {
     };
     mocks.match.mockResolvedValue('/settings/account');
 
-    await gotoQueryRedirectOrFallback('/dashboard' as never);
+    await gotoQueryRedirectOrFallback('/home' as never);
     expect(mocks.goto).toHaveBeenCalledWith('/settings/account');
   });
 
@@ -384,7 +384,7 @@ describe('gotoQueryRedirectOrFallback', () => {
     };
     mocks.match.mockResolvedValue('/settings');
 
-    await gotoQueryRedirectOrFallback('/dashboard' as never);
+    await gotoQueryRedirectOrFallback('/home' as never);
     expect(mocks.goto).toHaveBeenCalledWith('/settings?tab=security');
   });
 
@@ -394,7 +394,7 @@ describe('gotoQueryRedirectOrFallback', () => {
     };
     mocks.match.mockResolvedValue('/docs');
 
-    await gotoQueryRedirectOrFallback('/dashboard' as never);
+    await gotoQueryRedirectOrFallback('/home' as never);
     expect(mocks.goto).toHaveBeenCalledWith('/docs#section-2');
   });
 
@@ -404,7 +404,7 @@ describe('gotoQueryRedirectOrFallback', () => {
     };
     mocks.match.mockResolvedValue('/settings');
 
-    await gotoQueryRedirectOrFallback('/dashboard' as never);
+    await gotoQueryRedirectOrFallback('/home' as never);
     expect(mocks.goto).toHaveBeenCalledWith('/settings?tab=security#advanced');
   });
 
@@ -414,8 +414,8 @@ describe('gotoQueryRedirectOrFallback', () => {
     };
     mocks.match.mockResolvedValue(null);
 
-    await gotoQueryRedirectOrFallback('/dashboard' as never);
-    expect(mocks.goto).toHaveBeenCalledWith('/dashboard');
+    await gotoQueryRedirectOrFallback('/home' as never);
+    expect(mocks.goto).toHaveBeenCalledWith('/home');
   });
 
   it('rejects cross-origin redirect targets', async () => {
@@ -424,8 +424,8 @@ describe('gotoQueryRedirectOrFallback', () => {
     };
     mocks.match.mockResolvedValue('/steal');
 
-    await gotoQueryRedirectOrFallback('/dashboard' as never);
-    expect(mocks.goto).toHaveBeenCalledWith('/dashboard');
+    await gotoQueryRedirectOrFallback('/home' as never);
+    expect(mocks.goto).toHaveBeenCalledWith('/home');
     expect(mocks.match).not.toHaveBeenCalled();
   });
 
@@ -435,8 +435,8 @@ describe('gotoQueryRedirectOrFallback', () => {
     };
     mocks.match.mockResolvedValue('/admin');
 
-    await gotoQueryRedirectOrFallback('/dashboard' as never);
-    expect(mocks.goto).toHaveBeenCalledWith('/dashboard');
+    await gotoQueryRedirectOrFallback('/home' as never);
+    expect(mocks.goto).toHaveBeenCalledWith('/home');
     expect(mocks.match).not.toHaveBeenCalled();
   });
 
@@ -445,8 +445,8 @@ describe('gotoQueryRedirectOrFallback', () => {
       url: new URL('https://openshock.app/login?redirect=javascript:alert(1)'),
     };
 
-    await gotoQueryRedirectOrFallback('/dashboard' as never);
-    expect(mocks.goto).toHaveBeenCalledWith('/dashboard');
+    await gotoQueryRedirectOrFallback('/home' as never);
+    expect(mocks.goto).toHaveBeenCalledWith('/home');
   });
 
   it('falls back on malformed redirect values', async () => {
@@ -454,8 +454,8 @@ describe('gotoQueryRedirectOrFallback', () => {
       url: new URL('https://openshock.app/login?redirect=:///invalid'),
     };
 
-    await gotoQueryRedirectOrFallback('/dashboard' as never);
-    expect(mocks.goto).toHaveBeenCalledWith('/dashboard');
+    await gotoQueryRedirectOrFallback('/home' as never);
+    expect(mocks.goto).toHaveBeenCalledWith('/home');
   });
 
   it('uses a custom query parameter name', async () => {
@@ -464,7 +464,7 @@ describe('gotoQueryRedirectOrFallback', () => {
     };
     mocks.match.mockResolvedValue('/profile');
 
-    await gotoQueryRedirectOrFallback('/dashboard' as never, 'return');
+    await gotoQueryRedirectOrFallback('/home' as never, 'return');
     expect(mocks.goto).toHaveBeenCalledWith('/profile');
   });
 
@@ -475,7 +475,7 @@ describe('gotoQueryRedirectOrFallback', () => {
     };
     mocks.match.mockResolvedValue('/settings');
 
-    await gotoQueryRedirectOrFallback('/dashboard' as never);
+    await gotoQueryRedirectOrFallback('/home' as never);
     expect(mocks.goto).toHaveBeenCalledWith('/app/settings');
   });
 });

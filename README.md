@@ -128,7 +128,7 @@ src/           # Application source code
 │   └── utils/             # General utilities
 ├── params/                # SvelteKit route parameter matchers
 ├── routes/                # Application routes (file-based routing)
-│   ├── (authenticated)/   # Protected routes (everything under this folder requires authentication)
+│   ├── (app)/             # Protected routes (everything under this folder requires authentication)
 │   │   └── +layout.svelte # Authentication boundary and layout
 │   ├── +error.svelte      # Global error fallback
 │   └── +layout.svelte     # Root layout and entrypoint
