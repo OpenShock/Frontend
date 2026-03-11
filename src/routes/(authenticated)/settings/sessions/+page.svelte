@@ -22,7 +22,6 @@
   import { toast } from 'svelte-sonner';
   import DataTableActions from './data-table-actions.svelte';
 
-  let loading = $state<boolean>(false);
   let data = $state<LoginSessionResponse[]>([]);
   let sorting = $state<SortingState>([]);
 
@@ -48,18 +47,11 @@
     },
   ];
 
-  function handleProblem(problem: ProblemDetails): boolean {
-    return false;
-  }
-
   async function fetchSessions() {
-    loading = true;
     try {
       data = await sessionsApi.sessionsListSessions();
     } catch (error) {
-      await handleApiError(error, handleProblem);
-    } finally {
-      loading = false;
+      await handleApiError(error);
     }
   }
 

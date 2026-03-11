@@ -1,18 +1,28 @@
 <script lang="ts">
-  import { Layers, LogsIcon, OctagonAlert, Settings } from '@lucide/svelte';
+  import { Layers, LogsIcon, OctagonAlert, Plus, Settings } from '@lucide/svelte';
   import { resolve } from '$app/paths';
+  import { shockersV1Api } from '$lib/api';
+  import type { NewShocker } from '$lib/api/internal/v1';
   import Container from '$lib/components/Container.svelte';
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
+  import DialogShockerAdd, {
+    type AddShockerData,
+    defaultAddShockerData,
+  } from '$lib/components/ControlModules/dialogs/dialog-shocker-add.svelte';
   import MapControlModule from '$lib/components/ControlModules/MapControlModule.svelte';
   import { ModuleType } from '$lib/components/ControlModules/ModuleType';
   import RichControlModule from '$lib/components/ControlModules/RichControlModule.svelte';
   import SimpleControlHeader from '$lib/components/ControlModules/SimpleControlHeader.svelte';
   import SimpleControlModule from '$lib/components/ControlModules/SimpleControlModule.svelte';
+  import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
+  import type { DialogRenderProps } from '$lib/components/dialog-manager/types';
   import { Button } from '$lib/components/ui/button';
   import * as Popover from '$lib/components/ui/popover';
   import { ControlDurationDefault, ControlIntensityDefault } from '$lib/constants/ControlConstants';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { ownHubs, refreshOwnHubs } from '$lib/stores/HubsStore.svelte';
   import { onMount } from 'svelte';
+  import { toast } from 'svelte-sonner';
 
   let shockers = $derived(Array.from(ownHubs).flatMap(([, hub]) => hub.shockers));
 
@@ -22,8 +32,28 @@
   let vibrationIntensity = $state(ControlIntensityDefault);
   let duration = $state(ControlDurationDefault);
 
+  async function openAddShockerDialog() {
+    const hubs = Array.from(ownHubs);
+    const result = await dialog.open<AddShockerData, NewShocker | undefined>({
+      data: { ...defaultAddShockerData, device: hubs[0]?.[0] ?? '' },
+      contentSnippet: addShockerSnippet,
+    });
+    if (!result) return;
+    try {
+      await shockersV1Api.shockerRegisterShocker(result);
+      toast.success('Shocker added');
+      await refreshOwnHubs();
+    } catch (error) {
+      handleApiError(error);
+    }
+  }
+
   onMount(refreshOwnHubs);
 </script>
+
+{#snippet addShockerSnippet(props: DialogRenderProps<AddShockerData, NewShocker | undefined>)}
+  <DialogShockerAdd renderProps={props} hubs={Array.from(ownHubs)} />
+{/snippet}
 
 {#if ownHubs.size === 0}
   <p>Loading...</p>
@@ -32,6 +62,9 @@
     <div class="flex w-full content-center justify-between">
       <h1 class="text-2xl font-bold">Shockers</h1>
       <div>
+        <Button variant="secondary" onclick={openAddShockerDialog}>
+          <Plus /> Add Shocker
+        </Button>
         <!-- Emergency Stop Button -->
         <Button variant="secondary" class="border-2 text-red-500">
           <OctagonAlert size="64" /> STOP
@@ -54,10 +87,22 @@
             </Button>
           </Popover.Content>
         </Popover.Root>
-        <!-- Options button -->
-        <Button variant="ghost" class="p-0!" aria-label="Options">
-          <Settings />
-        </Button>
+        <!-- Settings button -->
+        <Popover.Root>
+          <Popover.Trigger>
+            {#snippet child({ props })}
+              <Button {...props} variant="ghost" class="p-0!" aria-label="Settings">
+                <Settings />
+              </Button>
+            {/snippet}
+          </Popover.Trigger>
+          <Popover.Content class="flex flex-col gap-2">
+            <Button variant="ghost" disabled>
+              Global Limits
+              <span class="text-muted-foreground ml-2 text-xs">(Coming soon)</span>
+            </Button>
+          </Popover.Content>
+        </Popover.Root>
         <Button variant="ghost" aria-label="Logs" href={resolve('/shockers/logs')}>
           <LogsIcon />
         </Button>
