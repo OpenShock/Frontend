@@ -3,10 +3,21 @@
     class?: string;
   }
 
-  let props: Props = $props();
+  let { class: className }: Props = $props();
 </script>
 
-<svg class={props.class} viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+<!--
+  The following SVG graphic is the property of Microsoft, Inc. and is just used here for illustrative purposes. We do not claim ownership of it.
+-->
+
+<svg
+  role="img"
+  class={className}
+  viewBox="0 0 256 256"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <title>Microsoft Edge</title>
   <defs>
     <radialGradient
       id="b"
