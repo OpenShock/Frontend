@@ -16,6 +16,7 @@
     labelSnippet?: Snippet<[string]>;
     placeholder?: string;
     autocomplete?: FullAutoFill;
+    inputmode?: 'none' | 'text' | 'decimal' | 'numeric' | 'tel' | 'search' | 'email' | 'url';
     value: string;
     validationResult?: ValidationResult | null;
     Icon?: AnyComponent;
@@ -33,6 +34,7 @@
     labelSnippet,
     placeholder,
     autocomplete,
+    inputmode,
     value = $bindable(),
     validationResult,
     Icon,
@@ -64,6 +66,7 @@
           title={label}
           {placeholder}
           {autocomplete}
+          {inputmode}
           bind:value
           {onblur}
           {onpaste}
@@ -82,6 +85,7 @@
         title={label}
         {placeholder}
         {autocomplete}
+        {inputmode}
         bind:value
         {onblur}
         {onpaste}

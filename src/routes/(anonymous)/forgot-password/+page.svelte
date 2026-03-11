@@ -35,18 +35,18 @@
 
 <Container class="items-center">
   <form class="flex flex-col space-y-4" onsubmit={handleSubmission}>
-    <div class="text-3xl font-semibold">Forgot Password</div>
+    <h1 class="text-3xl font-semibold">Forgot Password</h1>
 
     <EmailInput
       label="Email"
       placeholder="Email"
-      autocomplete="on"
+      autocomplete="off"
       bind:value={email}
       bind:valid={emailValid}
     />
 
     <Turnstile action="forgot-password" bind:response={turnstileResponse} />
 
-    <Button type="submit" disabled={!canSubmit}>I forgot my passord</Button>
+    <Button type="submit" disabled={!canSubmit}>I forgot my password</Button>
   </form>
 </Container>

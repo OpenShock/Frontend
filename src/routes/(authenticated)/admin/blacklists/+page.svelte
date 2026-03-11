@@ -198,6 +198,7 @@
                 size="sm"
                 onclick={() => removeUsername(item.id)}
                 disabled={isLoadingUsernames}
+                title="Remove {item.value}"
               >
                 <Trash2 size="16" class="text-red-500" />
               </Button>
@@ -239,6 +240,7 @@
                 size="sm"
                 onclick={() => removeEmail(item.id)}
                 disabled={isLoadingEmails}
+                title="Remove {item.domain}"
               >
                 <Trash2 size="16" class="text-red-500" />
               </Button>

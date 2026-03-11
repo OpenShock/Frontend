@@ -29,9 +29,7 @@
 <Container>
   <Card.Header class="w-full">
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
-      <div class="flex items-center space-x-2">
-        <span>Shocker Logs</span>
-      </div>
+      <h1>Shocker Logs</h1>
     </Card.Title>
     <Card.Description>These are the logs for all shockers.</Card.Description>
   </Card.Header>

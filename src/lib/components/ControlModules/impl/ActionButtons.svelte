@@ -51,6 +51,8 @@
         active: type === active || type === selfActive,
       })}
       title={ControlType[type]}
+      aria-label={ControlType[type]}
+      aria-pressed={type === active || type === selfActive}
       onclick={() => trigger(type)}
       disabled={isDisabled}
     >

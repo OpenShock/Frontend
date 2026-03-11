@@ -6,7 +6,7 @@
 </script>
 
 <Container class="items-center">
-  <div class="text-3xl font-semibold">Verify Email</div>
+  <h1 class="text-3xl font-semibold">Verify Email</h1>
 
   {secret}
 </Container>

@@ -19,7 +19,7 @@
 </script>
 
 <Container class="items-center">
-  <div class="text-3xl font-semibold">Activate Account</div>
+  <h1 class="text-3xl font-semibold">Activate Account</h1>
 
   {secret}
 

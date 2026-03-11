@@ -13,7 +13,7 @@
   let incomingInvitesPromise = $state(refreshIncomingInvites());
 </script>
 
-<h1 class="text-3xl font-semibold">Outgoing</h1>
+<h2 class="text-3xl font-semibold">Outgoing</h2>
 
 {#await outgoingInvitesPromise}
   <div class="flex h-full w-full items-center justify-center">
@@ -33,7 +33,7 @@
   <div class="text-red-500">Failed to load outgoing invites: {error.message}</div>
 {/await}
 
-<h1 class="text-3xl font-semibold">Incoming</h1>
+<h2 class="text-3xl font-semibold">Incoming</h2>
 
 {#await incomingInvitesPromise}
   <div class="flex h-full w-full items-center justify-center">

@@ -49,7 +49,7 @@
   <PasswordInput
     label="Current Password"
     placeholder="Current Password"
-    autocomplete="off"
+    autocomplete="current-password"
     bind:value={currentPassword}
     Icon={KeyRound}
   />

@@ -39,6 +39,7 @@
 
 <TextInput
   type="email"
+  inputmode="email"
   {label}
   {placeholder}
   {autocomplete}

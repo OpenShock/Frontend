@@ -20,7 +20,7 @@
   let createdCode = $state<string | null>(null);
   let redeemUserInput = $state<string>('');
 
-  let tab = $derived(() => {
+  let tab = $derived.by(() => {
     switch (page.url.pathname) {
       case '/shares/user/outgoing':
         return 'shares';
@@ -70,7 +70,7 @@
     </Card.Title>
     <Card.Description>Direct permanent shares with users</Card.Description>
     <div class="flex w-full flex-none">
-      <Tabs.Root value={tab()} class="w-[400px]">
+      <Tabs.Root value={tab} class="w-[400px]">
         <Tabs.List>
           <Tabs.Trigger value="shares" onclick={() => navigateTo('outgoing')}>Shares</Tabs.Trigger>
           <Tabs.Trigger value="incoming" onclick={() => navigateTo('incoming')}

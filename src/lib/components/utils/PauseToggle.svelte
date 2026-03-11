@@ -48,6 +48,8 @@
   disabled={requestInProgress}
   class="size-9"
   variant={paused ? 'destructive' : 'default'}
+  title={paused ? 'Resume shocker' : 'Pause shocker'}
+  aria-busy={requestInProgress}
 >
   {#if requestInProgress}
     <LoaderCircle class="animate-spin" />

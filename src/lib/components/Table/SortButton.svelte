@@ -15,6 +15,11 @@
 <button
   class="flex items-center text-xs sm:text-sm"
   onclick={() => column.toggleSorting(direction === 'asc')}
+  title="Sort by {name}, {direction === 'asc'
+    ? 'ascending'
+    : direction === 'desc'
+      ? 'descending'
+      : 'unsorted'}"
 >
   {name}
   {#if direction === 'asc'}

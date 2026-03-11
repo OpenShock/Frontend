@@ -19,7 +19,7 @@
   let { shockers, onPausedChange }: Props = $props();
   let requestInProgress = $state(false);
 
-  let pausedBooleans = $derived(() => {
+  let pausedBooleans = $derived.by(() => {
     if (shockers.every((item) => item.paused)) {
       return 'allTrue';
     }
@@ -34,7 +34,7 @@
     if (requestInProgress) return;
     requestInProgress = true;
 
-    const pause = pausedBooleans() !== 'allTrue';
+    const pause = pausedBooleans !== 'allTrue';
 
     let pauseRequests: Promise<void>[] = [];
 
@@ -85,15 +85,17 @@
   disabled={requestInProgress}
   onclick={handleClick}
   class="size-9"
-  variant={pausedBooleans() === 'allTrue' ? 'destructive' : 'default'}
+  variant={pausedBooleans === 'allTrue' ? 'destructive' : 'default'}
+  title={pausedBooleans === 'allTrue' ? 'Resume all shockers' : 'Pause all shockers'}
+  aria-busy={requestInProgress}
 >
   {#if requestInProgress}
     <LoaderCircle class="animate-spin" />
-  {:else if pausedBooleans() === 'allTrue'}
+  {:else if pausedBooleans === 'allTrue'}
     <Play />
-  {:else if pausedBooleans() === 'allFalse'}
+  {:else if pausedBooleans === 'allFalse'}
     <Pause />
-  {:else if pausedBooleans() === 'mixed'}
+  {:else if pausedBooleans === 'mixed'}
     <Asterisk />
   {/if}
 </Button>
