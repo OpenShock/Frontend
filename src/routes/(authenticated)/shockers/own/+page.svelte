@@ -36,7 +36,7 @@
     const result = await dialog.createDialog<NewShocker | undefined>((resolve) => ({
       content: DialogShockerAdd,
       props: {
-        data: { ...defaultAddShockerData, device: hubs[0]?.[0] ?? '' },
+        data: { ...defaultAddShockerData(), device: hubs[0]?.[0] ?? '' },
         hubs,
         resolve,
         close: () => resolve(undefined),

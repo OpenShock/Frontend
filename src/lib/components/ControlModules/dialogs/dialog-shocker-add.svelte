@@ -8,12 +8,14 @@
     model: ShockerModelType;
   }
 
-  export const defaultAddShockerData: AddShockerData = {
-    name: '',
-    rfId: 0,
-    device: '',
-    model: ShockerModelType.CaiXianlin,
-  };
+  export function defaultAddShockerData(): AddShockerData {
+    return {
+      name: '',
+      rfId: Math.floor(Math.random() * 65535) + 1,
+      device: '',
+      model: ShockerModelType.CaiXianlin,
+    };
+  }
 </script>
 
 <script lang="ts">
