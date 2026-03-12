@@ -15,7 +15,6 @@
   import SimpleControlHeader from '$lib/components/ControlModules/SimpleControlHeader.svelte';
   import SimpleControlModule from '$lib/components/ControlModules/SimpleControlModule.svelte';
   import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
-  import type { DialogRenderProps } from '$lib/components/dialog-manager/types';
   import { Button } from '$lib/components/ui/button';
   import * as Popover from '$lib/components/ui/popover';
   import { ControlDurationDefault, ControlIntensityDefault } from '$lib/constants/ControlConstants';
@@ -34,10 +33,16 @@
 
   async function openAddShockerDialog() {
     const hubs = Array.from(ownHubs);
-    const result = await dialog.open<AddShockerData, NewShocker | undefined>({
-      data: { ...defaultAddShockerData, device: hubs[0]?.[0] ?? '' },
-      contentSnippet: addShockerSnippet,
-    });
+    const result = await dialog.createDialog<NewShocker | undefined>((resolve) => ({
+      content: DialogShockerAdd,
+      props: {
+        data: { ...defaultAddShockerData, device: hubs[0]?.[0] ?? '' },
+        hubs,
+        resolve,
+        close: () => resolve(undefined),
+      },
+      resolve,
+    }));
     if (!result) return;
     try {
       await shockersV1Api.shockerRegisterShocker(result);
@@ -50,10 +55,6 @@
 
   onMount(refreshOwnHubs);
 </script>
-
-{#snippet addShockerSnippet(props: DialogRenderProps<AddShockerData, NewShocker | undefined>)}
-  <DialogShockerAdd renderProps={props} hubs={Array.from(ownHubs)} />
-{/snippet}
 
 {#if ownHubs.size === 0}
   <p>Loading...</p>
