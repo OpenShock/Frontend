@@ -171,7 +171,7 @@
               validate={validatePasswordMatch(passwordConfirm, password)}
               showForget={false}
             />
-            <Turnstile action="signup" bind:response={turnstileResponse} />
+            <Turnstile action="signup" onResponse={(response) => (turnstileResponse = response)} />
           </div>
           <Field.Field class="mt-5">
             <Button type="submit" disabled={!canSubmit}>Create Account</Button>

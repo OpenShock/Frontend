@@ -116,7 +116,10 @@
                 validate={passwordError}
               />
 
-              <Turnstile action="signin" bind:response={turnstileResponse} />
+              <Turnstile
+                action="signin"
+                onResponse={(response) => (turnstileResponse = response)}
+              />
             </div>
             <Field class="mt-5">
               <Button type="submit" disabled={!canSubmit}>Login</Button>

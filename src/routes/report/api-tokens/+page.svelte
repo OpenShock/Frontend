@@ -88,7 +88,7 @@
 
     <!-- Turnstile + Acknowledgement -->
     <div class="space-y-3">
-      <Turnstile action="report-token" bind:response={turnstileResponse} />
+      <Turnstile action="report-token" onResponse={(response) => (turnstileResponse = response)} />
       <div class="flex items-center space-x-2">
         <Checkbox
           id="acknowledgement"

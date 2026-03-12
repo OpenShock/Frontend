@@ -49,7 +49,10 @@
         bind:valid={emailValid}
       />
 
-      <Turnstile action="forgot-password" bind:response={turnstileResponse} />
+      <Turnstile
+        action="forgot-password"
+        onResponse={(response) => (turnstileResponse = response)}
+      />
 
       <Field class="mt-1">
         <Button type="submit" disabled={!canSubmit}>Reset Password</Button>
