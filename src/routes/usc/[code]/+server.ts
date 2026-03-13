@@ -11,5 +11,5 @@ export const GET: RequestHandler = ({ url, params }) => {
     return redirect(303, getSiteURL(target, searchParams));
   }
 
-  return redirect(303, resolve(target) + '?' + searchParams.toString());
+  return redirect(303, resolve(`${target}?${searchParams}`));
 };

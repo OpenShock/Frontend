@@ -13,11 +13,9 @@
   import ControlView from './ControlView.svelte';
 
   // Page is reactive and query parameters can change
-  let loginUrl = $derived.by(() => {
-    const loginPath = resolve('/login');
-    const callbackPath = page.url.pathname + page.url.search;
-    return `${loginPath}?redirect=${encodeURIComponent(callbackPath)}`;
-  });
+  let loginUrl = $derived(
+    resolve(`/login?redirect=${encodeURIComponent(page.url.pathname + page.url.search)}`)
+  );
 
   let details = $state<Promise<PublicShareResponse>>(getShareDetails());
   let enterAsGuestClicked = $state(false);
