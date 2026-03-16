@@ -1,20 +1,18 @@
-import DataTableSortButton from '$lib/components/Table/SortButton.svelte';
-import { renderComponent, renderSnippet } from '$lib/components/ui/data-table';
+import { renderComponent } from '$lib/components/ui/data-table';
 import { isDate } from '$lib/typeguards';
-import {
-  durationToString,
-  elapsedToString,
-  escapeHtml,
-  getReadableUserAgentName,
-} from '$lib/utils';
+import { durationToString, elapsedToString, getReadableUserAgentName } from '$lib/utils';
 import type {
   BuiltInSortingFn,
   ColumnDef,
   SortingFnOption,
   StringOrTemplateHeader,
 } from '@tanstack/table-core';
-import { type SemVer } from 'semver';
-import { createRawSnippet } from 'svelte';
+import type { SemVer } from 'semver';
+import type { ComponentProps } from 'svelte';
+import CellContent from './CellContent.svelte';
+import DataTableSortButton from './SortButton.svelte';
+
+type CellContentProps = ComponentProps<typeof CellContent>;
 
 function CreateSortHeader<TData>(name: string): StringOrTemplateHeader<TData, unknown> {
   return ({ column }) =>
@@ -24,40 +22,25 @@ function CreateSortHeader<TData>(name: string): StringOrTemplateHeader<TData, un
     });
 }
 
-function CreateSimpleCellSnippet<TData extends object, K extends keyof TData & string>(
-  key: K,
-  renderer: (value: TData[K]) => string
-): ColumnDef<TData, unknown>['cell'] {
-  const snippet = createRawSnippet<[{ value: TData[K] }]>((getValue) => ({
-    render: () => renderer(getValue().value),
-  }));
-
-  return ({ row }) => renderSnippet(snippet, { value: row.original[key] });
-}
-
-type AcceptableTextColor = 'blue' | 'green' | 'orange' | 'red';
-type AcceptableTextShade = 500;
-export type TableCell =
-  `<div class="text-xs sm:text-sm${'' | ' font-medium'}${'' | ` text-${AcceptableTextColor}-${AcceptableTextShade}`}"${'' | ` title="${string}"`}>${string}</div>`;
-
 export function CreateColumnDef<TData extends object, TKey extends Extract<keyof TData, string>>(
   accessorKey: TKey,
   headerName: string,
-  renderer: (content: TData[TKey]) => TableCell
+  renderer: (content: TData[TKey]) => CellContentProps
 ): ColumnDef<TData> {
   return {
     accessorKey,
     header: headerName,
-    cell: CreateSimpleCellSnippet(accessorKey, renderer),
+    cell: ({ row }) => renderComponent(CellContent, renderer(row.original[accessorKey])),
   };
 }
+
 export function CreateSortableColumnDef<
   TData extends object,
   TKey extends Extract<keyof TData, string>,
 >(
   accessorKey: TKey,
   headerName: string,
-  renderer: (content: TData[TKey]) => TableCell,
+  renderer: (content: TData[TKey]) => CellContentProps,
   sortFunct?: 'auto' | ((a: TData[TKey], b: TData[TKey]) => number) | BuiltInSortingFn
 ): ColumnDef<TData> {
   let sortingFn: SortingFnOption<TData>;
@@ -75,67 +58,91 @@ export function CreateSortableColumnDef<
   return {
     accessorKey,
     header: CreateSortHeader(headerName),
-    cell: CreateSimpleCellSnippet(accessorKey, renderer),
+    cell: ({ row }) => renderComponent(CellContent, renderer(row.original[accessorKey])),
     sortingFn,
   };
 }
 
-const UnsafeRenderCellWithTooltip: (content: string, tooltip: string) => TableCell = (
-  content,
-  tooltip
-) => `<div class="text-xs sm:text-sm font-medium" title="${tooltip}">${content}</div>`;
-const UnsafeRenderColoredCell: (content: string, color: AcceptableTextColor) => TableCell = (
-  content,
-  color
-) => `<div class="text-xs sm:text-sm font-medium text-${color}-500">${content}</div>`;
+// Pre-defined cell values
+export const CellNotApplicable: CellContentProps = {
+  text: 'N/A',
+  bold: true,
+  title: 'Not applicable',
+};
+export const CellOrangeNever: CellContentProps = { text: 'Never', bold: true, color: 'orange' };
+export const CellRedUnknown: CellContentProps = { text: 'Unknown', bold: true, color: 'red' };
+export const CellRedInvalid: CellContentProps = { text: 'Invalid', bold: true, color: 'red' };
+export const CellRedUnavailable: CellContentProps = {
+  text: 'Unavailable',
+  bold: true,
+  color: 'red',
+};
+export const CellRedNone: CellContentProps = { text: 'None', bold: true, color: 'red' };
+export const CellGreenTrue: CellContentProps = { text: 'true', bold: true, color: 'green' };
+export const CellRedFalse: CellContentProps = { text: 'false', bold: true, color: 'red' };
+export const CellGreenOnline: CellContentProps = { text: 'online', bold: true, color: 'green' };
+export const CellRedOffline: CellContentProps = { text: 'offline', bold: true, color: 'red' };
 
-export const CellNotApplicable = UnsafeRenderCellWithTooltip('N/A', 'Not applicable');
-export const CellOrangeNever = UnsafeRenderColoredCell('Never', 'orange');
-export const CellRedUnknown = UnsafeRenderColoredCell('Unknown', 'red');
-export const CellRedInvalid = UnsafeRenderColoredCell('Invalid', 'red');
-export const CellRedUnavailable = UnsafeRenderColoredCell('Unavailable', 'red');
-export const CellRedNone = UnsafeRenderColoredCell('None', 'red');
-export const CellGreenTrue = UnsafeRenderColoredCell('true', 'green');
-export const CellRedFalse = UnsafeRenderColoredCell('false', 'red');
-export const CellGreenOnline = UnsafeRenderColoredCell('online', 'green');
-export const CellRedOffline = UnsafeRenderColoredCell('offline', 'red');
+// Cell renderers
+export const RenderCell = (content: string): CellContentProps => ({ text: content });
 
-export const RenderCell = (content: string): TableCell =>
-  `<div class="text-xs sm:text-sm">${escapeHtml(content)}</div>`;
-export const RenderBoldCell = (content: string): TableCell =>
-  `<div class="text-xs sm:text-sm font-medium">${escapeHtml(content)}</div>`;
-export const RenderRedCell = (content: string): TableCell =>
-  UnsafeRenderColoredCell(escapeHtml(content), 'red');
-export const RenderGreenCell = (content: string): TableCell =>
-  UnsafeRenderColoredCell(escapeHtml(content), 'green');
-export const RenderOrangeCell = (content: string): TableCell =>
-  UnsafeRenderColoredCell(escapeHtml(content), 'orange');
-export const RenderBlueCell = (content: string): TableCell =>
-  UnsafeRenderColoredCell(escapeHtml(content), 'blue');
-export const RenderCellWithTooltip = (content: string, tooltip: string): TableCell =>
-  UnsafeRenderCellWithTooltip(escapeHtml(content), escapeHtml(tooltip));
+export const RenderBoldCell = (content: string): CellContentProps => ({
+  text: content,
+  bold: true,
+});
 
-export const LocaleDateRenderer = (date: Date): TableCell =>
+export const RenderRedCell = (content: string): CellContentProps => ({
+  text: content,
+  bold: true,
+  color: 'red',
+});
+
+export const RenderGreenCell = (content: string): CellContentProps => ({
+  text: content,
+  bold: true,
+  color: 'green',
+});
+
+export const RenderOrangeCell = (content: string): CellContentProps => ({
+  text: content,
+  bold: true,
+  color: 'orange',
+});
+
+export const RenderBlueCell = (content: string): CellContentProps => ({
+  text: content,
+  bold: true,
+  color: 'blue',
+});
+
+export const RenderCellWithTooltip = (content: string, tooltip: string): CellContentProps => ({
+  text: content,
+  bold: true,
+  title: tooltip,
+});
+
+export const LocaleDateRenderer = (date: Date): CellContentProps =>
   RenderCellWithTooltip(date.toLocaleDateString(), date.toString());
 
-export const LocaleDateTimeRenderer = (date: Date | null): TableCell =>
+export const LocaleDateTimeRenderer = (date: Date | null): CellContentProps =>
   date ? RenderCellWithTooltip(date.toLocaleString(), date.toString()) : RenderCell('Never');
 
-export const TimeSinceDurationRenderer = (date: Date): TableCell =>
+export const TimeSinceDurationRenderer = (date: Date): CellContentProps =>
   RenderCellWithTooltip(durationToString(Date.now() - date.getTime()), date.toString());
 
-export const TimeSinceRelativeRenderer = (date: Date): TableCell =>
+export const TimeSinceRelativeRenderer = (date: Date): CellContentProps =>
   date.getTime() > 0
     ? RenderCellWithTooltip(elapsedToString(date.getTime() - Date.now()), date.toString())
     : CellOrangeNever;
 
-export const TimeSinceRelativeOrNeverRenderer = (date: Date | null | undefined): TableCell =>
-  isDate(date) ? TimeSinceRelativeRenderer(date) : CellOrangeNever; // The isDate check is a workaround, for some reason if the input data is undefined, it will be transformed to a empty object and throws an error when trying to access getTime().
+export const TimeSinceRelativeOrNeverRenderer = (
+  date: Date | null | undefined
+): CellContentProps => (isDate(date) ? TimeSinceRelativeRenderer(date) : CellOrangeNever); // The isDate check is a workaround, for some reason if the input data is undefined, it will be transformed to a empty object and throws an error when trying to access getTime().
 
-export const NumberRenderer = (number: number | null): TableCell =>
+export const NumberRenderer = (number: number | null): CellContentProps =>
   number ? RenderBoldCell(number.toString()) : CellNotApplicable;
 
-export const UserAgentRenderer = (userAgent: string | null): TableCell => {
+export const UserAgentRenderer = (userAgent: string | null): CellContentProps => {
   if (!userAgent) return CellRedUnknown;
 
   const readableName = getReadableUserAgentName(userAgent);
@@ -144,7 +151,9 @@ export const UserAgentRenderer = (userAgent: string | null): TableCell => {
   return RenderCellWithTooltip(readableName, userAgent);
 };
 
-export const FirmwareVersionRenderer = (firmwareVersion: SemVer | string | null): TableCell => {
+export const FirmwareVersionRenderer = (
+  firmwareVersion: SemVer | string | null
+): CellContentProps => {
   if (!firmwareVersion) return CellRedUnavailable;
 
   if (typeof firmwareVersion !== 'string') {

@@ -9,6 +9,7 @@
   import type { Snippet } from 'svelte';
   import type { ClipboardEventHandler, FocusEventHandler, FullAutoFill } from 'svelte/elements';
   import { Field, FieldLabel } from '$lib/components/ui/field/index.js';
+  import { twTextColor } from '$lib/types/Tailwind';
 
   interface Props {
     type?: 'text' | 'email' | 'password' | 'search' | 'url';
@@ -105,7 +106,7 @@
   {#if validationResult?.message}
     <p
       id={validationId}
-      class={cn('-mt-2! mb-2 h-4 truncate text-xs', `text-${GetValResColor(validationResult)}`)}
+      class={cn('-mt-2! mb-2 h-4 truncate text-xs', twTextColor[GetValResColor(validationResult)])}
       role="status"
       aria-atomic="true"
       aria-live="polite"

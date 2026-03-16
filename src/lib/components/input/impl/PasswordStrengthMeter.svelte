@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getPasswordStrength } from '$lib/inputvalidation/passwordValidator';
+  import { twTextColor } from '$lib/types/Tailwind';
 
   interface Props {
     password: string;
@@ -13,7 +14,7 @@
 <div aria-hidden="true">
   <div class="flex flex-row items-center space-x-1 text-xs">
     <p class="text-gray-400">Password strength:</p>
-    <p class={`text-${color}`}>{text}</p>
+    <p class={twTextColor[color]}>{text}</p>
   </div>
 
   <!-- SVG Meter -->
