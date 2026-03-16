@@ -1,0 +1,4 @@
+pnpm check
+pnpm test:unit -- --run
+pnpm format
+pnpm exec eslint .
