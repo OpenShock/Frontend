@@ -1,4 +1,1 @@
-pnpm check
-pnpm test:unit -- --run
-pnpm format
-pnpm exec eslint .
+pnpm run check & pnpm exec prettier --check . & pnpm exec eslint . & wait
