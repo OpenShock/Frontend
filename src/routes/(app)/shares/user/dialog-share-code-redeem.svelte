@@ -18,6 +18,7 @@
 
   let { open = $bindable(), userInput = $bindable() }: Props = $props();
   let redeemPromise = $state<Promise<V2UserSharesListItem> | null>(null);
+  let redeemed = $state<boolean>(false);
 
   function onOpenChange(o: boolean) {
     if (!o) {
