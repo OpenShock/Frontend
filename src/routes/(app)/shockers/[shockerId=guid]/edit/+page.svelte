@@ -13,7 +13,7 @@
   import * as Select from '$lib/components/ui/select';
   import PauseToggle from '$lib/components/utils/PauseToggle.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { refreshOwnHubs } from '$lib/stores/HubsStore.svelte';
+  import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
   import { LoaderCircle } from '@lucide/svelte';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';

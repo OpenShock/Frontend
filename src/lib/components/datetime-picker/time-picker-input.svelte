@@ -7,6 +7,7 @@
     type?: string;
     value?: string;
     name?: string;
+    files?: FileList | undefined;
     picker: TimePickerType;
     time: TimeType | undefined;
     setTime?: (time: TimeType) => void;
@@ -32,6 +33,8 @@
     class: className,
     type = 'tel',
     value,
+    files = $bindable(),
+
     id,
     name,
     time = $bindable(new Time(0, 0)),

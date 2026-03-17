@@ -27,7 +27,7 @@
   import { Field, FieldLabel } from '$lib/components/ui/field/index.js';
   import { Input } from '$lib/components/ui/input';
   import type { DialogContentProps } from '$lib/components/dialog-manager/types';
-  import type { OwnHub } from '$lib/stores/HubsStore.svelte';
+  import type { OwnHub } from '$lib/state/hubs-state.svelte';
 
   interface Props extends DialogContentProps<NewShocker | undefined> {
     data: AddShockerData;
@@ -45,11 +45,7 @@
     { value: ShockerModelType.Petrainer998Dr, label: 'Petrainer998DR' },
   ];
 
-  let canSubmit = $derived(
-    data.name.trim().length > 0 &&
-      data.rfId > 0 &&
-      data.device.length > 0
-  );
+  let canSubmit = $derived(data.name.trim().length > 0 && data.rfId > 0 && data.device.length > 0);
 
   function submit() {
     if (!canSubmit) return;

@@ -11,9 +11,10 @@
   interface Props {
     version: string | null;
     selectedBoard?: string | null;
+    disabled?: boolean;
   }
 
-  let { version, selectedBoard = $bindable(null) }: Props = $props();
+  let { version, selectedBoard = $bindable(null), disabled = false }: Props = $props();
 
   let boardsCache = $state<{ [key: string]: string[] }>({});
   $effect(() => {

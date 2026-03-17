@@ -7,7 +7,7 @@
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { refreshOwnHubs } from '$lib/stores/HubsStore.svelte';
+  import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
   import { resolve } from '$app/paths';
   import { toast } from 'svelte-sonner';
 
