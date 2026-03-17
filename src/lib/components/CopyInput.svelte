@@ -34,7 +34,12 @@
   {/if}
   <input class="mx-3 grow outline-none!" type="text" bind:value readonly disabled />
   <span>
-    <button onclick={copyToken} class="transition-in-place">
+    <button
+      onclick={copyToken}
+      class="transition-in-place"
+      title={copied ? 'Copied' : 'Copy to clipboard'}
+      type="button"
+    >
       {#if copied}
         <span transition:scale>
           <CircleCheckBig size="20" />

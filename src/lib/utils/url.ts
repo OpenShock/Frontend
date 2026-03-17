@@ -241,9 +241,9 @@ function stripBase(path: string): string {
  * @example
  * ```ts
  * // URL: /login?redirect=/settings/account%3Ftab%3Dsecurity
- * await gotoQueryRedirectOrFallback('/dashboard', 'redirect');
+ * await gotoQueryRedirectOrFallback('/home', 'redirect');
  * // → navigates to /settings/account?tab=security (if it matches a route)
- * // → otherwise navigates to /dashboard
+ * // → otherwise navigates to /home
  * ```
  */
 export async function gotoQueryRedirectOrFallback(

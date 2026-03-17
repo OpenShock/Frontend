@@ -68,7 +68,9 @@
     -->
     {:else}
       <TriangleAlert color="#ef4444" />
-      <p class="font-bold text-red-500">DO NOT USE THIS UNLESS YOU KNOW WHAT YOU ARE DOING</p>
+      <p class="font-bold text-red-500" role="alert">
+        DO NOT USE THIS UNLESS YOU KNOW WHAT YOU ARE DOING
+      </p>
     {/if}
   </div>
 </div>

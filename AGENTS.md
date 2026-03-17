@@ -28,8 +28,7 @@ src/
 │   ├── api/next/                # API helper utilities
 │   ├── components/ui/           # shadcn-svelte components — regenerate, don't hand-edit
 │   ├── components/              # Custom domain components
-│   ├── stores/                  # Svelte writable stores (global state)
-│   ├── state/                   # Svelte 5 reactive state (.svelte.ts)
+│   ├── state/                   # Svelte 5 reactive state (.svelte.ts) — all global state
 │   ├── signalr/                 # SignalR WebSocket hub handlers
 │   ├── types/                   # Manual TypeScript types
 │   ├── typeguards/              # Runtime type predicates
@@ -39,8 +38,8 @@ src/
 │   ├── hooks/                   # Custom Svelte hooks
 │   └── constants/               # Global constants
 ├── routes/
-│   ├── (anonymous)/             # Public routes (login, signup, etc.)
-│   ├── (authenticated)/         # Auth-protected routes (home, settings, admin, etc.)
+│   ├── (auth)/                  # Public routes (login, signup, etc.)
+│   ├── (app)/                   # Auth-protected routes (home, settings, admin, etc.)
 │   ├── shares/                  # Public share views
 │   └── flashtool/               # ESP32 firmware flashing tool
 ├── params/                      # SvelteKit route param matchers (guid, integer)
@@ -59,17 +58,16 @@ Both directories are excluded from ESLint.
 
 SvelteKit file-based routing with route groups:
 
-- `(anonymous)` — No auth required (login, signup, activate, forgot-password, oauth)
-- `(authenticated)` — Auth required (home, profile, settings, hubs, shockers, shares, admin)
+- `(auth)` — No auth required (login, signup, activate, forgot-password, oauth)
+- `(app)` — Auth required (home, profile, settings, hubs, shockers, shares, admin)
 - Route param matchers in `src/params/`: `[id=guid]`, `[n=integer]`
 
 ### State Management
 
-Three tiers:
+Two tiers:
 
-1. **Stores** (`lib/stores/`) — Svelte `writable()` stores for global shared state (user, hubs, shares, theme, etc.)
-2. **Reactive state** (`lib/state/`) — Svelte 5 `$state` objects (`.svelte.ts` files) for backend metadata, breadcrumbs
-3. **SignalR** — Real-time WebSocket updates for device status, control logs, OTA progress
+1. **Reactive state** (`lib/state/`) — Svelte 5 `$state` runes in `.svelte.ts` files for all global shared state (user, hubs, shares, theme, serial ports, etc.). Patterns include class-based state (e.g. `ColorSchemeState`), module-level collections (`SvelteMap`), and module-level variables with object facade exports.
+2. **SignalR** — Real-time WebSocket updates for device status, control logs, OTA progress
 
 ### API Integration
 

@@ -9,6 +9,7 @@
   import type { Snippet } from 'svelte';
   import type { ClipboardEventHandler, FocusEventHandler, FullAutoFill } from 'svelte/elements';
   import { Field, FieldLabel } from '$lib/components/ui/field/index.js';
+  import { twTextColor } from '$lib/types/Tailwind';
 
   interface Props {
     type?: 'text' | 'email' | 'password' | 'search' | 'url';
@@ -16,6 +17,7 @@
     labelSnippet?: Snippet<[string]>;
     placeholder?: string;
     autocomplete?: FullAutoFill;
+    inputmode?: 'none' | 'text' | 'decimal' | 'numeric' | 'tel' | 'search' | 'email' | 'url';
     value: string;
     validationResult?: ValidationResult | null;
     Icon?: AnyComponent;
@@ -33,6 +35,7 @@
     labelSnippet,
     placeholder,
     autocomplete,
+    inputmode,
     value = $bindable(),
     validationResult,
     Icon,
@@ -64,6 +67,7 @@
           title={label}
           {placeholder}
           {autocomplete}
+          {inputmode}
           bind:value
           {onblur}
           {onpaste}
@@ -82,6 +86,7 @@
         title={label}
         {placeholder}
         {autocomplete}
+        {inputmode}
         bind:value
         {onblur}
         {onpaste}
@@ -101,7 +106,7 @@
   {#if validationResult?.message}
     <p
       id={validationId}
-      class={cn('-mt-2! mb-2 h-4 truncate text-xs', `text-${GetValResColor(validationResult)}`)}
+      class={cn('-mt-2! mb-2 h-4 truncate text-xs', twTextColor[GetValResColor(validationResult)])}
       role="status"
       aria-atomic="true"
       aria-live="polite"

@@ -26,22 +26,25 @@
       });
   }
 
-  let inputModified = $derived(() => {
-    if (fetchedUser) {
-      return userInput !== fetchedUser.name;
-    }
-    return true;
-  });
+  let inputModified = $derived(fetchedUser?.name !== userInput);
 </script>
 
 <form class="flex items-center gap-2" onsubmit={check}>
   <Avatar.Root class={(fetchedUser ? 'border-3 border-green-500' : '') + ' h-15 w-15'}>
-    <Avatar.Image src={fetchedUser?.image} alt="User Avatar" />
+    <Avatar.Image
+      src={fetchedUser?.image}
+      alt={fetchedUser ? `${fetchedUser.name}'s avatar` : 'User avatar'}
+    />
     <Avatar.Fallback>?</Avatar.Fallback>
   </Avatar.Root>
-  <Input bind:value={userInput} placeholder="Enter user name" />
-  <Button onclick={check} disabled={!inputModified()} type="submit">
-    {#if inputModified()}
+  <Input bind:value={userInput} placeholder="Enter user name" aria-label="Username to search" />
+  <Button
+    onclick={check}
+    disabled={!inputModified}
+    type="submit"
+    title={inputModified ? 'Search user' : 'User found'}
+  >
+    {#if inputModified}
       <Search />
     {:else}
       <Check />

@@ -1,14 +1,14 @@
 <script lang="ts">
   import * as Breadcrumb from '$lib/components/ui/breadcrumb';
-  import { breadcrumbs } from '$lib/state/Breadcrumbs.svelte';
+  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
 </script>
 
-{#if breadcrumbs.State.length > 0}
+{#if breadcrumbs.state.length > 0}
   <Breadcrumb.Root>
     <Breadcrumb.List>
-      {#each breadcrumbs.State as crumb, index (crumb.href)}
+      {#each breadcrumbs.state as crumb, index (crumb.href)}
         <Breadcrumb.Item>
-          {#if index < breadcrumbs.State.length - 1}
+          {#if index < breadcrumbs.state.length - 1}
             <Breadcrumb.Link href={crumb.href} class="text-gray-600 dark:text-gray-300">
               {crumb.text}
             </Breadcrumb.Link>

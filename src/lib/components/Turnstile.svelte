@@ -4,18 +4,18 @@
   import { PUBLIC_TURNSTILE_DEV_BYPASS_VALUE } from '$env/static/public';
   import CloudflareLogo from '$lib/components/svg/CloudflareLogo.svelte';
   import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
-  import { ColorScheme, colorScheme } from '$lib/stores/ColorSchemeStore.svelte';
+  import { ColorScheme, colorScheme } from '$lib/state/color-scheme-state.svelte';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
-  import { backendMetadata } from '$lib/state/BackendMetadata.svelte';
+  import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
 
   interface Props {
     action: string;
     cData?: string;
-    response: string | null;
+    onResponse: (response: string | null) => void;
   }
 
-  let { action, cData, response = $bindable() }: Props = $props();
+  let { action, cData, onResponse }: Props = $props();
 
   let element: HTMLDivElement;
 
@@ -23,20 +23,20 @@
   let widgetId = $state<string | undefined>();
 
   function invalidateResponse() {
-    response = null;
+    onResponse(null);
   }
 
   function renderTurnstile() {
     mounted = true;
 
-    const theme = colorScheme.Value === ColorScheme.System ? 'auto' : colorScheme.Value;
+    const theme = colorScheme.value === ColorScheme.System ? 'auto' : colorScheme.value;
 
     widgetId = window.turnstile!.render(element, {
-      sitekey: backendMetadata.State!.turnstileSiteKey!,
+      sitekey: backendMetadata.state!.turnstileSiteKey!,
       action,
       cData,
       theme,
-      callback: (token) => (response = token),
+      callback: onResponse,
       'expired-callback': invalidateResponse,
       'timeout-callback': invalidateResponse,
       'error-callback': invalidateResponse,
@@ -45,10 +45,10 @@
 
   onMount(() => {
     if (dev) {
-      response = PUBLIC_TURNSTILE_DEV_BYPASS_VALUE;
+      onResponse(PUBLIC_TURNSTILE_DEV_BYPASS_VALUE);
       return;
     }
-    if (!backendMetadata.State?.turnstileSiteKey) {
+    if (!backendMetadata.state?.turnstileSiteKey) {
       console.error('Backend did not provide a Turnstile site key!');
       return;
     }
@@ -71,7 +71,10 @@
 </script>
 
 <!-- see: https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/#widget-size -->
-<div class="mx-auto h-[65px] w-full max-w-screen min-w-[300px] overflow-hidden" bind:this={element}>
+<div
+  class="mx-auto flex h-[65px] max-w-screen min-w-[300px] justify-center overflow-hidden"
+  bind:this={element}
+>
   {#if !mounted}
     <!-- Turnstile placeholder -->
     <div

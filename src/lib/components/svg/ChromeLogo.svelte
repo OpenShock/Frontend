@@ -3,14 +3,21 @@
     class?: string;
   }
 
-  let props: Props = $props();
+  let { class: className }: Props = $props();
 </script>
 
 <!--
-  The following SVG graphic is the property of Cloudflare, Inc. And is just used here for illustrative purposes, we do not claim ownership of it.
+  The following SVG graphic is the property of Google, Inc. and is just used here for illustrative purposes. We do not claim ownership of it.
 -->
 
-<svg class={props.class} viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<svg
+  role="img"
+  class={className}
+  viewBox="0 0 48 48"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <title>Google Chrome</title>
   <defs>
     <linearGradient id="a" x1="3.2173" y1="15" x2="44.7812" y2="15" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#d93025" />
@@ -38,16 +45,16 @@
       <stop offset="0" stop-color="#1e8e3e" /><stop offset="1" stop-color="#34a853" />
     </linearGradient>
   </defs>
-  <circle cx="24" cy="24" r="12" style="fill:#fff" />
+  <circle cx="24" cy="24" r="12" fill="#fff" />
   <path
     d="M3.2154,36A24,24,0,1,0,12,3.2154,24,24,0,0,0,3.2154,36ZM34.3923,18A12,12,0,1,1,18,13.6077,12,12,0,0,1,34.3923,18Z"
-    style="fill:none"
+    fill="none"
   />
   <path
     d="M24,12H44.7812a23.9939,23.9939,0,0,0-41.5639.0029L13.6079,30l.0093-.0024A11.9852,11.9852,0,0,1,24,12Z"
     style="fill:url(#a)"
   />
-  <circle cx="24" cy="24" r="9.5" style="fill:#1a73e8" />
+  <circle cx="24" cy="24" r="9.5" fill="#1a73e8" />
   <path
     d="M34.3913,30.0029,24,48A24,24,0,0,0,44.78,12.0031H23.9989l-.0025.0093A11.985,11.985,0,0,1,34.3913,30.0029Z"
     style="fill:url(#b)"

@@ -7,7 +7,7 @@
   import { Wifi, WifiOff } from '@lucide/svelte';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
   import { Button } from '$lib/components/ui/button';
-  import { backendMetadata } from '$lib/state/BackendMetadata.svelte';
+  import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
 </script>
 
 <footer
@@ -51,11 +51,11 @@
                 </p></td
               >
             </tr>
-            {#if backendMetadata.State}
+            {#if backendMetadata.state}
               <tr>
                 <td>Backend Version</td>
-                <td title={`Commit ${backendMetadata.State.commit}`}
-                  >{backendMetadata.State.version}</td
+                <td title={`Commit ${backendMetadata.state.commit}`}
+                  >{backendMetadata.state.version}</td
                 >
               </tr>
             {/if}

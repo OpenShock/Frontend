@@ -1,10 +1,10 @@
 <script lang="ts">
   import { ControlType } from '$lib/signalr/models/ControlType';
   import {
-    AddListener,
+    addListener,
     type ListenerSignature,
-    RemoveListener,
-  } from '$lib/stores/ShockEventListenerStore';
+    removeListener,
+  } from '$lib/state/shock-events-state.svelte';
   import type { TimeoutHandle } from '$lib/types/WAPI';
   import { onMount } from 'svelte';
 
@@ -27,10 +27,10 @@
   };
 
   onMount(() => {
-    AddListener(id, shockerId, onEvent);
+    addListener(id, shockerId, onEvent);
 
     return () => {
-      RemoveListener(id);
+      removeListener(id);
       clearTimeout(timeoutHandle);
     };
   });

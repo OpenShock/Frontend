@@ -159,6 +159,8 @@
       onclick={() => (valueShown = !valueShown)}
       variant="ghost"
       size="icon"
+      title={valueShown ? 'Hide password' : 'Show password'}
+      aria-pressed={valueShown}
     >
       {#if valueShown}
         <EyeOff />

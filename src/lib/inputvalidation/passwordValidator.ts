@@ -1,4 +1,4 @@
-import type { TwColor } from '$lib/types/Tailwind';
+import type { TwTextColor } from '$lib/types/Tailwind';
 import type { ValidationResult } from '$lib/types/ValidationResult';
 import { calculateStringEntropy } from '$lib/utils/entropy';
 
@@ -57,34 +57,34 @@ export function validatePasswordMatch(
 export function getPasswordStrength(value: string): {
   percent: number;
   text: string;
-  color: TwColor;
+  color: TwTextColor;
 } {
   let percent: number;
   let text: string;
-  let color: TwColor;
+  let color: TwTextColor;
 
   if (value.length === 0) {
     percent = 0;
     text = 'None';
-    color = 'gray-500';
+    color = 'gray';
   } else {
     percent = Math.min((calculateStringEntropy(value) / 120) * 100, 100);
 
     if (percent < 30) {
       text = 'Very weak';
-      color = 'red-500';
+      color = 'red';
     } else if (percent < 50) {
       text = 'Weak';
-      color = 'orange-500';
+      color = 'orange';
     } else if (percent < 60) {
       text = 'Fair';
-      color = 'yellow-500';
+      color = 'yellow';
     } else if (percent < 99) {
       text = 'Strong';
-      color = 'green-500';
+      color = 'green';
     } else {
       text = 'Very strong';
-      color = 'cyan-500';
+      color = 'cyan';
     }
   }
 

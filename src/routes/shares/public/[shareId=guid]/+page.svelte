@@ -8,16 +8,14 @@
   import * as Card from '$lib/components/ui/card/index.js';
   import Input from '$lib/components/ui/input/input.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { UserStore } from '$lib/stores/UserStore';
+  import { userState } from '$lib/state/user-state.svelte';
   import { onMount } from 'svelte';
   import ControlView from './ControlView.svelte';
 
   // Page is reactive and query parameters can change
-  let loginUrl = $derived.by(() => {
-    const loginPath = resolve('/login');
-    const callbackPath = page.url.pathname + page.url.search;
-    return `${loginPath}?redirect=${encodeURIComponent(callbackPath)}`;
-  });
+  let loginUrl = $derived(
+    resolve(`/login?redirect=${encodeURIComponent(page.url.pathname + page.url.search)}`)
+  );
 
   let details = $state<Promise<PublicShareResponse>>(getShareDetails());
   let enterAsGuestClicked = $state(false);
@@ -42,7 +40,7 @@
   onMount(async () => {
     await details;
 
-    if ($UserStore.self) {
+    if (userState.self) {
       entered = true;
     }
   });
