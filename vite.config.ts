@@ -7,9 +7,23 @@ import dns from 'node:dns/promises';
 import os from 'node:os';
 import { env } from 'node:process';
 import license from 'rollup-plugin-license';
-import { type PluginOption, defineConfig, loadEnv } from 'vite';
+import { type Plugin, type PluginOption, defineConfig, loadEnv } from 'vite';
 import devtoolsJson from 'vite-plugin-devtools-json';
 import mkcert from 'vite-plugin-mkcert';
+
+function jsBannerPlugin(banner: string): Plugin {
+  return {
+    name: 'js-banner',
+    enforce: 'post',
+    generateBundle(_, bundle) {
+      for (const chunk of Object.values(bundle)) {
+        if (chunk.type === 'chunk') {
+          chunk.code = banner + '\n' + chunk.code;
+        }
+      }
+    },
+  };
+}
 
 const printError = (msg: string) => console.log(chalk.red.bold(msg));
 const printInfo = (msg: string) => console.log(chalk.blue.bold(msg));
@@ -90,6 +104,7 @@ function getPlugins(useLocalRedirect: boolean): PluginOption[] {
     plugins.push(mkcert());
   }
 
+  plugins.push(jsBannerPlugin('/*! For licenses information, see LICENSES.txt */'));
   plugins.push(tailwindcss());
   plugins.push(sveltekit());
   plugins.push(devtoolsJson());
@@ -153,7 +168,6 @@ export default defineConfig(async ({ command, mode, isPreview }) => {
     test: { include: ['src/**/*.{test,spec}.{js,ts}'] },
     esbuild: {
       legalComments: 'none',
-      banner: '/*! For licenses information, see LICENSES.txt */',
       drop: mode === 'production' ? ['debugger'] : [],
       pure: mode === 'production' ? ['console.log', 'console.debug', 'console.trace'] : [],
     },
