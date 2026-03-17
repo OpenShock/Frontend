@@ -34,6 +34,7 @@
     hubs: [string, OwnHub][];
   }
 
+  // eslint-disable-next-line svelte/no-unused-props -- properties are used via the local $state copy
   let { data: initialData, hubs, resolve, close }: Props = $props();
 
   // svelte-ignore state_referenced_locally -- intentionally captures initial value as own reactive copy
