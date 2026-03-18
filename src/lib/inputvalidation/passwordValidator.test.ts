@@ -73,51 +73,51 @@ describe('validatePasswordMatch', () => {
 });
 
 describe('getPasswordStrength', () => {
-  it('returns None/gray-500/0% for empty string', () => {
+  it('returns None/gray/0% for empty string', () => {
     const { percent, text, color } = getPasswordStrength('');
     expect(percent).toBe(0);
     expect(text).toBe('None');
-    expect(color).toBe('gray-500');
+    expect(color).toBe('gray');
   });
 
-  it('rates a repeated single-character password as Very weak (red-500)', () => {
+  it('rates a repeated single-character password as Very weak (red)', () => {
     // "aaaaaaaaaaaa" (12×'a'): uniqueLength=1 ⇒ entropy=0 ⇒ percent=0 ⇒ <30
     const pwd = 'a'.repeat(12);
     const { percent, text, color } = getPasswordStrength(pwd);
     expect(percent).toBe(0);
     expect(text).toBe('Very weak');
-    expect(color).toBe('red-500');
+    expect(color).toBe('red');
   });
 
-  it('rates a moderately varied 12-character password as Weak (orange-500)', () => {
+  it('rates a moderately varied 12-character password as Weak (orange)', () => {
     // "abcABC123!@#": length=12, uniqueLength=12 ⇒ entropy≈43 ⇒ percent≈35.8 ⇒ <50
     const pwd = 'abcABC123!@#';
     const { percent, text, color } = getPasswordStrength(pwd);
     expect(percent).toBeGreaterThanOrEqual(30);
     expect(percent).toBeLessThan(50);
     expect(text).toBe('Weak');
-    expect(color).toBe('orange-500');
+    expect(color).toBe('orange');
   });
 
-  it('rates a 60-character password with two unique chars as Fair (yellow-500)', () => {
+  it('rates a 60-character password with two unique chars as Fair (yellow)', () => {
     // 60×(two-character alphabet) ⇒ entropy=60*1=60 ⇒ percent=50 ⇒ <60
     const pwd = 'ab'.repeat(30);
     const { percent, text, color } = getPasswordStrength(pwd);
     expect(percent).toBeCloseTo(50, 1);
     expect(text).toBe('Fair');
-    expect(color).toBe('yellow-500');
+    expect(color).toBe('yellow');
   });
 
-  it('rates a 72-character password with two unique chars as Strong (green-500)', () => {
+  it('rates a 72-character password with two unique chars as Strong (green)', () => {
     // 72×(two-character alphabet) ⇒ entropy=72 ⇒ percent=60 ⇒ <99
     const pwd = 'ab'.repeat(36);
     const { percent, text, color } = getPasswordStrength(pwd);
     expect(percent).toBeCloseTo(60, 1);
     expect(text).toBe('Strong');
-    expect(color).toBe('green-500');
+    expect(color).toBe('green');
   });
 
-  it('caps strength at 100% and rates as Very strong (cyan-500) for high entropy', () => {
+  it('caps strength at 100% and rates as Very strong (cyan) for high entropy', () => {
     // 100 random characters
     const randomBytes = new Uint8Array(100);
     crypto.getRandomValues(randomBytes);
@@ -126,6 +126,6 @@ describe('getPasswordStrength', () => {
     const { percent, text, color } = getPasswordStrength(pwd);
     expect(percent).toBe(100);
     expect(text).toBe('Very strong');
-    expect(color).toBe('cyan-500');
+    expect(color).toBe('cyan');
   });
 });
