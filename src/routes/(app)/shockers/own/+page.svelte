@@ -116,7 +116,7 @@
     {#if moduleType === ModuleType.MapControlModule}
       <MapControlModule {shockers} />
     {:else}
-      <div class="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div class="flex flex-wrap">
         {#each shockers ?? [] as shocker (shocker.id)}
           {#if moduleType === ModuleType.ClassicControlModule}
             <ClassicControlModule {shocker} />

@@ -13,6 +13,7 @@
   import * as Select from '$lib/components/ui/select';
   import PauseToggle from '$lib/components/utils/PauseToggle.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
   import { LoaderCircle } from '@lucide/svelte';
   import { onMount } from 'svelte';
@@ -30,6 +31,8 @@
   let model = $state<ShockerModelType>(ShockerModelType.CaiXianlin);
   let saving = $state(false);
 
+  breadcrumbs.push('Edit Shocker', null);
+  
   onMount(async () => {
     try {
       const shockerId = page.params.shockerId!;

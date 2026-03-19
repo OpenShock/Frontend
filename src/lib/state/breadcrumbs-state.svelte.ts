@@ -2,7 +2,7 @@ import type { Pathname } from '$app/types';
 import { onMount } from 'svelte';
 
 export interface BreadCrumbEntry {
-  text: string;
+  label: string;
   href: Pathname | null;
 }
 
@@ -12,12 +12,12 @@ export const breadcrumbs = {
   get state() {
     return _state;
   },
-  push: (text: string, href: Pathname | null = null) => {
+  push: (label: string, href: Pathname | null = null) => {
     onMount(() => {
-      const entry = { text, href };
+      const entry = { label, href };
       _state = [..._state, entry];
       return () => {
-        _state = _state.filter((e) => e.text !== entry.text || e.href !== entry.href);
+        _state = _state.filter((e) => e.label !== entry.label);
       };
     });
   },
