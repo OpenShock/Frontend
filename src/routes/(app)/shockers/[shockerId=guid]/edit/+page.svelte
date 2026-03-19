@@ -32,7 +32,7 @@
   let saving = $state(false);
 
   breadcrumbs.push('Edit Shocker', null);
-  
+
   onMount(async () => {
     try {
       const shockerId = page.params.shockerId!;
