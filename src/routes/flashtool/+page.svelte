@@ -1,52 +1,60 @@
 <script lang="ts">
-  import { MessageCircleQuestion, SquareTerminal } from '@lucide/svelte';
+  import { Check, MessageCircleQuestion } from '@lucide/svelte';
   import { browser } from '$app/environment';
   import { PUBLIC_DISCORD_INVITE_URL } from '$env/static/public';
   import type { FirmwareChannel } from '$lib/api/firmwareCDN';
-  import Container from '$lib/components/Container.svelte';
   import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
-  import TextInput from '$lib/components/input/TextInput.svelte';
   import ChromeLogo from '$lib/components/svg/ChromeLogo.svelte';
   import EdgeLogo from '$lib/components/svg/EdgeLogo.svelte';
   import OperaLogo from '$lib/components/svg/OperaLogo.svelte';
   import { Button } from '$lib/components/ui/button';
-  import * as Card from '$lib/components/ui/card';
   import { Checkbox } from '$lib/components/ui/checkbox';
   import { Label } from '$lib/components/ui/label';
   import { Progress } from '$lib/components/ui/progress';
-  import { Sheet, SheetContent, SheetHeader, SheetTitle } from '$lib/components/ui/sheet';
   import { getBrowserName, isSerialSupported } from '$lib/utils/compatibility';
+  import { parseAnsi } from './ansi';
   import FirmwareBoardSelector from './FirmwareBoardSelector.svelte';
   import FirmwareFlasher from './FirmwareFlasher.svelte';
   import FlashManager from './FlashManager';
   import HelpDialog from './HelpDialog.svelte';
   import SerialPortSelector from './SerialPortSelector.svelte';
+  import SerialTerminal, { type TerminalLine } from './SerialTerminal.svelte';
 
   let port = $state<SerialPort | null>(null);
   let manager = $state<FlashManager | null>(null);
   let connectFailed = $state<boolean>(false);
   let isFlashing = $state<boolean>(false);
 
-  let terminalOpen = $state<boolean>(false);
-  let terminalText = $state<string>('');
-  let terminalCommand = $state<string>('');
+  let terminalLines = $state<TerminalLine[]>([]);
 
   const terminal = {
     clean: () => {
-      terminalText = '';
+      terminalLines = [];
     },
     writeLine: (data: string) => {
-      terminalText += data + '\n';
+      terminalLines = [
+        ...terminalLines,
+        { text: data, timestamp: new Date(), segments: parseAnsi(data) },
+      ];
     },
     write: (data: string) => {
-      terminalText += data;
+      if (terminalLines.length > 0) {
+        const last = terminalLines[terminalLines.length - 1];
+        const newText = last.text + data;
+        terminalLines = [
+          ...terminalLines.slice(0, -1),
+          { text: newText, timestamp: last.timestamp, segments: parseAnsi(newText) },
+        ];
+      } else {
+        terminalLines = [{ text: data, timestamp: new Date(), segments: parseAnsi(data) }];
+      }
     },
   };
 
   $effect(() => {
     if (port && !manager) {
       connectFailed = false;
-      FlashManager.Connect(port, terminal).then((m) => {
+      FlashManager.ConnectApplication(port, terminal).then((m) => {
         manager = m;
         connectFailed = !manager;
       });
@@ -60,19 +68,44 @@
 
   let channel = $state<FirmwareChannel>('stable');
   let version = $state<string | null>(null);
+  // Tracks which channel the user explicitly confirmed. Changing channel invalidates it.
+  let confirmedChannel = $state<FirmwareChannel | null>(null);
   let board = $state<string | null>(null);
   let eraseBeforeFlash = $state<boolean>(false);
 
-  async function AppModeDevice() {
+  // Stepper: derive which step we're on based on state
+  // Channel step requires explicit confirmation (confirmedChannel must match current channel)
+  let currentStep = $derived(
+    !manager ? 0 : !(version && confirmedChannel === channel) ? 1 : !board ? 2 : 3,
+  );
+
+  // Allow users to view earlier steps
+  let viewStep = $state<number | null>(null);
+  let activeStep = $derived(viewStep !== null && viewStep <= currentStep ? viewStep : currentStep);
+
+  function goToStep(step: number) {
+    if (step <= currentStep) viewStep = step;
+  }
+  // Auto-clear viewStep override when currentStep advances past it
+  $effect(() => {
+    if (viewStep !== null && currentStep > viewStep) viewStep = null;
+  });
+
+  const STEPS = [
+    { title: 'Connect Device' },
+    { title: 'Select Channel' },
+    { title: 'Select Board' },
+    { title: 'Flash Firmware' },
+  ];
+
+  async function handleReset() {
     if (isFlashing) return;
     try {
       isFlashing = true;
-
       if (!manager) {
-        terminal.writeLine(`Host-side error during reset: no device!`);
+        terminal.writeLine('Host-side error during reset: no device!');
         return;
       }
-
       await manager.ensureApplication(true);
     } catch (e) {
       terminal.writeLine(`Host-side error during reset: ${e}`);
@@ -81,18 +114,16 @@
     }
   }
 
-  async function RunCommand() {
+  async function handleSendCommand(command: string) {
     if (isFlashing) return;
     try {
       isFlashing = true;
-
       if (!manager) {
-        terminal.writeLine(`Couldn't send: no device!`);
+        terminal.writeLine("Couldn't send: no device!");
         return;
       }
-
       await manager.ensureApplication();
-      await manager.sendApplicationCommand(terminalCommand);
+      await manager.sendApplicationCommand(command);
     } catch (e) {
       terminal.writeLine(`Couldn't send: ${e}`);
     } finally {
@@ -101,69 +132,201 @@
   }
 </script>
 
-{#snippet mainContent()}
-  <SerialPortSelector bind:port disabled={isFlashing} />
+<HelpDialog open={showHelpDialog} onClose={() => (showHelpDialog = false)} />
 
-  {#if manager}
-    <h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">Select Channel</h3>
-    <FirmwareChannelSelector bind:channel bind:version disabled={isFlashing} />
-
-    <h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">Select Board</h3>
-    <FirmwareBoardSelector {version} bind:selectedBoard={board} disabled={isFlashing} />
-
-    <div class="items-top flex space-x-2">
-      <Checkbox id="erase-before-flash" bind:checked={eraseBeforeFlash} />
-      <div class="grid gap-1.5 leading-none">
-        <Label
-          for="erase-before-flash"
-          class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-        >
-          Erase before flashing
-        </Label>
-        <p class="text-muted-foreground text-sm">
-          Flash tool will erase all data on the device before flashing, in the process clearing any
-          existing configs
-        </p>
-      </div>
-    </div>
-
-    {#if version && board}
-      <FirmwareFlasher
-        {version}
-        {board}
-        {manager}
-        {eraseBeforeFlash}
-        showNonStableWarning={channel !== 'stable'}
-        bind:isFlashing
-      />
+<div class="flex h-full flex-col">
+  <!-- Header -->
+  <div class="flex items-center justify-between border-b px-6 py-3">
+    <h1 class="text-3xl font-bold tracking-tight">Flash Tool</h1>
+    {#if isSerialSupported}
+      <Button variant="outline" onclick={() => (showHelpDialog = true)}>
+        <MessageCircleQuestion />
+        I'm having trouble, help?
+      </Button>
     {/if}
-  {:else if port && !connectFailed}
-    <div class="flex flex-col items-center gap-2">
-      <span class="text-center text-2xl"> Connecting... </span>
-      <Progress />
-      <!-- TODO: Make this a loading animation -->
-    </div>
-  {/if}
+  </div>
 
-  {#if port && connectFailed}
-    <div class="flex flex-col items-start gap-2">
-      <span class="bold text-center text-2xl text-red-500"> Device connection failed </span>
-      <span class="text-center">
-        There was an issue connecting to your device, please try the following:
-      </span>
-      <ol class="list-decimal pl-6 text-left">
-        <li>Install the drivers for your device if you haven't already, using the button above</li>
-        <li>Unplug and replug your device</li>
-        <li>Use a different USB port</li>
-        <li>Use a different USB cable</li>
-        <li>
-          Contact support if the issue persists:
-          <Button href={PUBLIC_DISCORD_INVITE_URL} target="_blank">OpenShock Discord</Button>
-        </li>
-      </ol>
-    </div>
+  <!-- Main content area (scrollable) -->
+  <div class="min-h-0 flex-1 overflow-y-auto px-6 py-4">
+    {#if isSerialSupported}
+      <div class="max-w-3xl">
+        {#each STEPS as step, i (i)}
+          {@const isCompleted = i < currentStep}
+          {@const isCurrent = i === activeStep}
+          {@const isAccessible = i <= currentStep}
+          {@const isLast = i === STEPS.length - 1}
+
+          <div class="flex gap-4">
+            <!-- Step indicator column -->
+            <div class="flex flex-col items-center">
+              <!-- Circle -->
+              <button
+                class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold transition-colors
+                  {isCompleted
+                  ? 'bg-green-500 text-white'
+                  : isCurrent
+                    ? 'bg-primary text-primary-foreground'
+                    : 'border-2 border-muted-foreground/30 text-muted-foreground/50'}"
+                disabled={!isAccessible || isFlashing}
+                onclick={() => goToStep(i)}
+              >
+                {#if isCompleted}
+                  <Check class="h-4 w-4" />
+                {:else}
+                  {i + 1}
+                {/if}
+              </button>
+              <!-- Connector line -->
+              {#if !isLast}
+                <div
+                  class="w-0.5 flex-1 {isCompleted ? 'bg-green-500/40' : 'bg-muted-foreground/20'}"
+                  style="min-height: 1.5rem;"
+                ></div>
+              {/if}
+            </div>
+
+            <!-- Step content column -->
+            <div class="flex-1 pb-6 {!isAccessible ? 'opacity-40' : ''}">
+              <!-- Title -->
+              <button
+                class="mb-2 text-lg font-semibold {isCurrent ? '' : 'text-muted-foreground'}"
+                disabled={!isAccessible || isFlashing}
+                onclick={() => goToStep(i)}
+              >
+                {step.title}
+              </button>
+
+              <!-- Step 1: Connect Device -->
+              {#if i === 0}
+                {#if isCurrent}
+                  <div class="flex flex-col gap-2">
+                    <SerialPortSelector bind:port disabled={isFlashing} />
+
+                    {#if port && !manager && !connectFailed}
+                      <div class="flex flex-col items-center gap-2">
+                        <span class="text-center text-lg">Connecting...</span>
+                        <Progress />
+                      </div>
+                    {/if}
+
+                    {#if port && connectFailed}
+                      <div class="flex flex-col items-start gap-2">
+                        <span class="bold text-lg text-red-500">Device connection failed</span>
+                        <span>
+                          There was an issue connecting to your device, please try the following:
+                        </span>
+                        <ol class="list-decimal pl-6 text-left text-sm">
+                          <li>Install the drivers for your device</li>
+                          <li>Unplug and replug your device</li>
+                          <li>Use a different USB port or cable</li>
+                          <li>
+                            Contact support:
+                            <Button
+                              href={PUBLIC_DISCORD_INVITE_URL}
+                              target="_blank"
+                              variant="link"
+                              class="h-auto p-0">OpenShock Discord</Button
+                            >
+                          </li>
+                        </ol>
+                      </div>
+                    {/if}
+                  </div>
+                {:else if isCompleted}
+                  <p class="text-muted-foreground text-sm">Device connected</p>
+                {/if}
+              {/if}
+
+              <!-- Step 2: Select Channel -->
+              {#if i === 1}
+                {#if isCurrent}
+                  <div class="flex flex-col gap-3">
+                    <FirmwareChannelSelector bind:channel bind:version disabled={isFlashing} />
+                    {#if version}
+                      <Button
+                        onclick={() => (confirmedChannel = channel)}
+                        disabled={isFlashing}
+                        class="w-fit"
+                      >
+                        Continue
+                      </Button>
+                    {/if}
+                  </div>
+                {:else if isCompleted}
+                  <p class="text-muted-foreground text-sm">
+                    <span class="capitalize">{channel}</span> &middot; {version}
+                  </p>
+                {/if}
+              {/if}
+
+              <!-- Step 3: Select Board -->
+              {#if i === 2}
+                {#if isCurrent}
+                  <div class="flex flex-col gap-4">
+                    <FirmwareBoardSelector
+                      {version}
+                      bind:selectedBoard={board}
+                      disabled={isFlashing}
+                    />
+
+                    <div class="items-top flex space-x-2">
+                      <Checkbox id="erase-before-flash" bind:checked={eraseBeforeFlash} />
+                      <div class="grid gap-1.5 leading-none">
+                        <Label
+                          for="erase-before-flash"
+                          class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Erase before flashing
+                        </Label>
+                        <p class="text-muted-foreground text-sm">
+                          Clears all data on the device including existing configs
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                {:else if isCompleted}
+                  <p class="text-muted-foreground text-sm">
+                    {board}{eraseBeforeFlash ? ' (erase all)' : ''}
+                  </p>
+                {/if}
+              {/if}
+
+              <!-- Step 4: Flash -->
+              {#if i === 3}
+                {#if isCurrent && version && board && manager}
+                  <FirmwareFlasher
+                    {version}
+                    {board}
+                    {manager}
+                    {eraseBeforeFlash}
+                    showNonStableWarning={channel !== 'stable'}
+                    bind:isFlashing
+                  />
+                {/if}
+              {/if}
+            </div>
+          </div>
+        {/each}
+      </div>
+    {:else if browser}
+      {@render unsupportedBrowser()}
+    {:else}
+      <p>Loading...</p>
+    {/if}
+  </div>
+
+  <!-- Terminal - persistent bottom panel -->
+  {#if port && isSerialSupported}
+    <SerialTerminal
+      lines={terminalLines}
+      {manager}
+      disabled={isFlashing}
+      onClear={() => (terminalLines = [])}
+      onReset={handleReset}
+      onSendCommand={handleSendCommand}
+    />
   {/if}
-{/snippet}
+</div>
 
 {#snippet unsupportedBrowser()}
   <h3>Your browser does not support this feature.</h3>
@@ -189,57 +352,3 @@
     </div>
   {/if}
 {/snippet}
-
-<HelpDialog open={showHelpDialog} onClose={() => (showHelpDialog = false)} />
-
-<Container>
-  <Card.Header class="flex w-full flex-row justify-between">
-    <Card.Title class="text-3xl">Flash Tool</Card.Title>
-    {#if isSerialSupported}
-      <div>
-        <Button variant="outline" onclick={() => (terminalOpen = !terminalOpen)}>
-          <SquareTerminal />
-          Toggle Terminal
-        </Button>
-        <Button variant="outline" onclick={() => (showHelpDialog = true)}>
-          <MessageCircleQuestion />
-          I'm having trouble, help?
-        </Button>
-      </div>
-    {/if}
-  </Card.Header>
-  <Card.Content class="flex w-full flex-col gap-4">
-    {#if isSerialSupported}
-      {@render mainContent()}
-    {:else if browser}
-      {@render unsupportedBrowser()}
-    {:else}
-      Loading...
-    {/if}
-  </Card.Content>
-</Container>
-
-<Sheet bind:open={() => terminalOpen, (o) => (terminalOpen = o)}>
-  <SheetContent class="flex flex-col">
-    <SheetHeader>
-      <SheetTitle class="flex items-center">
-        Console
-        <div class="flex-1"></div>
-        <Button class="m-2" onclick={() => (terminalText = '')}>Clear</Button>
-        <!-- Reset & start application -->
-        <Button onclick={AppModeDevice} disabled={!manager || isFlashing}>Reset</Button>
-      </SheetTitle>
-    </SheetHeader>
-    <div
-      class="border-surface-500 flex h-max shrink grow flex-col-reverse rounded-md border p-4"
-      style="overflow: scroll;"
-    >
-      <pre id="terminal" class="text-left text-xs">{terminalText}</pre>
-    </div>
-    <TextInput label="Command" placeholder="Command" bind:value={terminalCommand}>
-      {#snippet after()}
-        <Button type="button" onclick={RunCommand} variant="ghost">Run</Button>
-      {/snippet}
-    </TextInput>
-  </SheetContent>
-</Sheet>
