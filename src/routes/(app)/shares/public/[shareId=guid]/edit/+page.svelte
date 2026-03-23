@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { Plus, Save } from '@lucide/svelte';
+  import { ExternalLink, Plus, Save } from '@lucide/svelte';
+  import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import { publicShockerSharesApi } from '$lib/api';
   import type { PublicShareResponse } from '$lib/api/internal/v1';
@@ -12,7 +13,11 @@
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
   import SharedDevice from './SharedDevice.svelte';
+  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import DialogAddShocker from './dialog-add-shocker.svelte';
+
+  breadcrumbs.push('Public Shares', '/shares/public');
+  const shareCrumb = breadcrumbs.push('Edit');
 
   let publicShareRequest = $state<Promise<PublicShareResponse>>(getPublicShare());
   let publicShareData = $state<PublicShareResponse | null>(null);
@@ -21,6 +26,11 @@
   let isAddingShockers = $state(false);
 
   const shareId = $derived(page.params.shareId);
+  const publicUrl = $derived(resolve(`/shares/public/${shareId}`));
+
+  $effect(() => {
+    if (publicShareData) shareCrumb.label = publicShareData.name;
+  });
 
   onMount(() => {
     refreshOwnHubs();
@@ -105,6 +115,10 @@
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
       Edit Public Share: {publicShareData?.name ?? 'Loading...'}
       <div class="flex gap-2">
+        <Button variant="outline" href={publicUrl}>
+          <ExternalLink />
+          View
+        </Button>
         <Button onclick={() => (showAddShockerModal = true)} disabled={isAddingShockers}>
           <Plus />
           Add Shocker

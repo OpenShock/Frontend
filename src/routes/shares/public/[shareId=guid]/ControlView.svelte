@@ -7,6 +7,11 @@
   import { ShareLinkSignalr } from '$lib/signalr/sharelink.svelte';
   import type { Control } from '$lib/signalr/models/Control';
   import { onMount, untrack } from 'svelte';
+  import { page } from '$app/state';
+  import { resolve } from '$app/paths';
+  import { userState } from '$lib/state/user-state.svelte';
+  import { Button } from '$lib/components/ui/button';
+  import { Pencil } from '@lucide/svelte';
 
   interface Props {
     shareLinkRoot: PublicShareResponse;
@@ -28,6 +33,9 @@
   function control(control: Control) {
     shareLinkSignalr.control([control]);
   }
+
+  const shareId = $derived(page.params.shareId);
+  let editUrl = $derived(resolve(`/shares/public/${shareId}/edit`));
 </script>
 
 <div class="m-5 flex h-full w-full flex-col gap-15">
@@ -43,26 +51,34 @@
       </p>
     </div>
 
-    <Tooltip.Provider>
-      <Tooltip.Root delayDuration={250}>
-        <Tooltip.Trigger>
-          <span
-            class="mr-10 flex flex-row items-center rounded-md px-4 py-2 outline-1 outline-gray-500"
-          >
-            <Avatar.Root class="h-10 w-10">
-              <Avatar.Image src={shareLinkRoot.author.image} alt="User Avatar" />
-              <Avatar.Fallback>
-                {shareLinkRoot.author.name.charAt(0)}
-              </Avatar.Fallback>
-            </Avatar.Root>
-            <p class="ml-4">{shareLinkRoot.author.name}</p>
-          </span>
-        </Tooltip.Trigger>
-        <Tooltip.Content>
-          <p>Shared by</p>
-        </Tooltip.Content>
-      </Tooltip.Root>
-    </Tooltip.Provider>
+    <div class="flex">
+      {#if userState.self}
+        <div class="flex justify-end p-2">
+          <Button variant="outline" href={editUrl}><Pencil /> Edit</Button>
+        </div>
+      {/if}
+
+      <Tooltip.Provider>
+        <Tooltip.Root delayDuration={250}>
+          <Tooltip.Trigger>
+            <span
+              class="mr-10 flex flex-row items-center rounded-md px-4 py-2 outline-1 outline-gray-500"
+            >
+              <Avatar.Root class="h-10 w-10">
+                <Avatar.Image src={shareLinkRoot.author.image} alt="User Avatar" />
+                <Avatar.Fallback>
+                  {shareLinkRoot.author.name.charAt(0)}
+                </Avatar.Fallback>
+              </Avatar.Root>
+              <p class="ml-4">{shareLinkRoot.author.name}</p>
+            </span>
+          </Tooltip.Trigger>
+          <Tooltip.Content>
+            <p>Shared by</p>
+          </Tooltip.Content>
+        </Tooltip.Root>
+      </Tooltip.Provider>
+    </div>
   </div>
 
   <div class="flex flex-row justify-center gap-5">

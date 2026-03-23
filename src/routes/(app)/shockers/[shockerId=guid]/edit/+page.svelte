@@ -31,7 +31,12 @@
   let model = $state<ShockerModelType>(ShockerModelType.CaiXianlin);
   let saving = $state(false);
 
-  breadcrumbs.push('Edit Shocker', null);
+  breadcrumbs.push('Shockers', '/shockers/own');
+  const shockerCrumb = breadcrumbs.push('Edit Shocker');
+
+  $effect(() => {
+    if (shocker) shockerCrumb.label = shocker.name;
+  });
 
   onMount(async () => {
     try {

@@ -3,6 +3,10 @@
   import { adminApi } from '$lib/api';
   import type { AdminUsersView, AdminUsersViewPaginated } from '$lib/api/internal/v1';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+
+  breadcrumbs.push('Users', '/admin/users');
+  const userCrumb = breadcrumbs.push('Loading...');
 
   let user = $state<AdminUsersView | null>(null);
 
@@ -20,6 +24,10 @@
       .adminGetUsers('id eq ' + page.params.userId)
       .then(handleResponse)
       .catch(handleApiError);
+  });
+
+  $effect(() => {
+    if (user) userCrumb.label = user.name;
   });
 </script>
 

@@ -21,7 +21,10 @@
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
   import DataTableActions from './data-table-actions.svelte';
+  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import CreatePublicShareDialog from './dialog-publicshare-create.svelte';
+
+  breadcrumbs.push('Public Shares');
 
   const columns: ColumnDef<OwnPublicShareResponse>[] = [
     CreateSortableColumnDef('name', 'Name', RenderCell),

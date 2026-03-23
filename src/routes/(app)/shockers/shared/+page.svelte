@@ -4,8 +4,11 @@
   import SharedShockerControlModule from '$lib/components/ControlModules/SharedShockerControlModule.svelte';
   import * as Avatar from '$lib/components/ui/avatar';
   import { onlineHubs } from '$lib/state/hubs-state.svelte';
+  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { sharedHubsState, refreshSharedHubs } from '$lib/state/shared-hubs-state.svelte';
   import { onMount } from 'svelte';
+
+  breadcrumbs.push('Shared Shockers');
 
   onMount(refreshSharedHubs);
 

@@ -193,7 +193,11 @@
   $effect(() => fetchOtaLogs(page.params.hubId));
 
   breadcrumbs.push('Hubs', '/hubs');
-  breadcrumbs.push('Update');
+  const hubCrumb = breadcrumbs.push('Update');
+
+  $effect(() => {
+    hubCrumb.label = hubName;
+  });
 
   onMount(refreshOwnHubs);
 </script>

@@ -22,7 +22,11 @@
   import { toast } from 'svelte-sonner';
   import DataTableActions from './data-table-actions.svelte';
   import TokenCreateDialog from './dialog-token-create.svelte';
+  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import TokenCreatedDialog from './dialog-token-created.svelte';
+
+  breadcrumbs.push('Settings', '/settings/account');
+  breadcrumbs.push('API Tokens');
 
   let loading = $state<boolean>(false);
   let data = $state<TokenResponse[]>([]);

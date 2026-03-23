@@ -17,7 +17,10 @@
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
   import DataTableActions from './data-table-actions.svelte';
+  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import WebhookAddDialog from './dialog-webhook-add.svelte';
+
+  breadcrumbs.push('Webhooks');
 
   const columns: ColumnDef<WebhookDto>[] = [
     CreateSortableColumnDef('name', 'Name', RenderCell),

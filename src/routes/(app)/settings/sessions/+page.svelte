@@ -20,7 +20,11 @@
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
+  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import DataTableActions from './data-table-actions.svelte';
+
+  breadcrumbs.push('Settings', '/settings/account');
+  breadcrumbs.push('Sessions');
 
   let data = $state<LoginSessionResponse[]>([]);
   let sorting = $state<SortingState>([]);

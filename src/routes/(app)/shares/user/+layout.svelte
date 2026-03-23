@@ -14,6 +14,9 @@
   import DialogShareCodeCreated from './dialog-share-code-created.svelte';
   import DialogShareCodeRedeem from './dialog-share-code-redeem.svelte';
   import { resolve } from '$app/paths';
+  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+
+  breadcrumbs.push('User Shares', '/shares/user/outgoing');
 
   let createDialogOpen = $state(false);
   let redeemDialogOpen = $state(false);
