@@ -1,31 +1,6 @@
-<script lang="ts">
-  import { AlertTriangle, CheckCircle2, CircleX, DownloadCloud, RotateCcw } from '@lucide/svelte';
-  import { page } from '$app/state';
-  import { hubManagementV1Api } from '$lib/api';
-  import { type OtaItem, OtaUpdateStatus } from '$lib/api/internal/v1';
-  import Container from '$lib/components/Container.svelte';
-  import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
-  import { Badge } from '$lib/components/ui/badge';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import * as Card from '$lib/components/ui/card';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import { Progress } from '$lib/components/ui/progress';
-  import * as Table from '$lib/components/ui/table';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { getConnection } from '$lib/signalr/user.svelte';
+<script lang="ts" module>
+  import { OtaUpdateStatus } from '$lib/api/internal/v1';
   import { OtaUpdateProgressTask } from '$lib/signalr/models/OtaUpdateProgressTask';
-  import { serializeOtaInstallMessage } from '$lib/signalr/serializers/OtaInstall';
-  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import {
-    HubOnlineState,
-    onlineHubs,
-    ownHubs,
-    refreshOwnHubs,
-  } from '$lib/state/hubs-state.svelte';
-  import { cn } from '$lib/utils';
-  import { NumberToHexPadded } from '$lib/utils/convert';
-  import { onMount } from 'svelte';
-  import type { FirmwareChannel } from '$lib/api/firmwareCDN';
 
   // Task weights for weighted total progress (7 tasks, sums to 100)
   const TASK_WEIGHTS = [4, 2, 22, 2, 49, 1, 20];
@@ -76,6 +51,39 @@
     return 'just now';
   }
 
+  // Simulated reboot progress (last 20%) — hub goes offline so no more events
+  const REBOOT_DURATION_MS = 10_000;
+  const REBOOT_INTERVAL_MS = 100;
+</script>
+
+<script lang="ts">
+  import { AlertTriangle, CheckCircle2, CircleX, DownloadCloud, RotateCcw } from '@lucide/svelte';
+  import { page } from '$app/state';
+  import { hubManagementV1Api } from '$lib/api';
+  import type { OtaItem } from '$lib/api/internal/v1';
+  import Container from '$lib/components/Container.svelte';
+  import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
+  import { Badge } from '$lib/components/ui/badge';
+  import Button from '$lib/components/ui/button/button.svelte';
+  import * as Card from '$lib/components/ui/card';
+  import * as Dialog from '$lib/components/ui/dialog';
+  import { Progress } from '$lib/components/ui/progress';
+  import * as Table from '$lib/components/ui/table';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { getConnection } from '$lib/signalr/user.svelte';
+  import { serializeOtaInstallMessage } from '$lib/signalr/serializers/OtaInstall';
+  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import {
+    HubOnlineState,
+    onlineHubs,
+    ownHubs,
+    refreshOwnHubs,
+  } from '$lib/state/hubs-state.svelte';
+  import { cn } from '$lib/utils';
+  import { NumberToHexPadded } from '$lib/utils/convert';
+  import { onMount } from 'svelte';
+  import type { FirmwareChannel } from '$lib/api/firmwareCDN';
+
   let hubLoaded = $state(false);
   let otaLogs = $state<OtaItem[]>([]);
   let version = $state<string | null>(null);
@@ -92,9 +100,6 @@
 
   let isUpdating = $derived(hub?.otaInstall !== null && hub?.otaInstall !== undefined);
 
-  // Simulated reboot progress (last 20%) — hub goes offline so no more events
-  const REBOOT_DURATION_MS = 10_000;
-  const REBOOT_INTERVAL_MS = 100;
   let rebootProgress = $state(0);
   let rebootInterval: ReturnType<typeof setInterval> | null = null;
 
