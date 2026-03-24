@@ -6,7 +6,6 @@
   import Container from '$lib/components/Container.svelte';
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import DialogShockerAdd, {
-    type AddShockerData,
     defaultAddShockerData,
   } from '$lib/components/ControlModules/dialogs/dialog-shocker-add.svelte';
   import MapControlModule from '$lib/components/ControlModules/MapControlModule.svelte';

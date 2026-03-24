@@ -16,7 +16,6 @@
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card';
   import { renderComponent } from '$lib/components/ui/data-table';
-  import type { ProblemDetails } from '$lib/errorhandling/ProblemDetails';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
