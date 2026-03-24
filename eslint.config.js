@@ -25,14 +25,16 @@ export default defineConfig(
       'no-undef': 'off',
       'no-useless-assignment': 'warn',
       'svelte/no-unused-svelte-ignore': 'off',
-      '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
+      ],
     },
   },
   {
     files: ['**/*.svelte', '**/*.svelte.ts', '**/*.svelte.js'],
     languageOptions: {
       parserOptions: {
-        projectService: true,
         extraFileExtensions: ['.svelte'],
         parser: ts.parser,
         svelteConfig,
