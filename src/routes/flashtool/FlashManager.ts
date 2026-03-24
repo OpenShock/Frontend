@@ -12,8 +12,7 @@ async function setupESPLoader(
 ): Promise<ESPLoader | null> {
   try {
     await serialPort.close(); // TODO: Find some way to detect if the port is already open
-    /* eslint-disable-next-line @typescript-eslint/no-unused-vars -- catch binding required by syntax, close failure is intentionally ignored */
-  } catch (e) {
+  } catch (_e) {
     /* empty */
   }
 
@@ -60,8 +59,7 @@ function appendBuffer(buffer: Uint8Array | null, data: Uint8Array): Uint8Array {
 async function setupApplication(serialPort: SerialPort): Promise<SerialPort | null> {
   try {
     await serialPort.close(); // TODO: Find some way to detect if the port is already open
-    /* eslint-disable-next-line @typescript-eslint/no-unused-vars -- catch binding required by syntax, close failure is intentionally ignored */
-  } catch (e) {
+  } catch (_e) {
     /* empty */
   }
 
@@ -321,8 +319,8 @@ export default class FlashManager {
 
     function arrayBufferToString(array: Uint8Array) {
       let str = '';
-      for (let i = 0; i < array.length; ++i) {
-        str += String.fromCharCode(array[i]);
+      for (const byte of array) {
+        str += String.fromCharCode(byte);
       }
       return str;
     }

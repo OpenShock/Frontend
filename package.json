@@ -43,6 +43,7 @@
 		"crypto-js": "^4.2.0",
 		"eslint": "^10.1.0",
 		"eslint-config-prettier": "^10.1.8",
+		"eslint-plugin-compat": "^7.0.1",
 		"eslint-plugin-svelte": "^3.16.0",
 		"formsnap": "^2.0.1",
 		"globals": "^17.4.0",
@@ -80,6 +81,9 @@
 	"volta": {
 		"node": "24.14.0"
 	},
+	"browserslist": [
+		"defaults and fully supports es6-module"
+	],
 	"packageManager": "pnpm@10.32.1",
 	"pnpm": {
 		"onlyBuiltDependencies": [

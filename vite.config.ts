@@ -217,7 +217,7 @@ export default defineConfig(async ({ command, mode, isPreview }) => {
 
   return defineConfig({
     build: {
-      target: 'es2022',
+      target: 'es2024',
     },
     plugins: getPlugins(useLocalRedirect),
     server: await getServerConfig(mode, useLocalRedirect),

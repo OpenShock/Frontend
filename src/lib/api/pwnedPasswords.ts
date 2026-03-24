@@ -13,8 +13,8 @@ export async function checkPwnedCount(password: string): Promise<number> {
     const response = await fetch(`https://api.pwnedpasswords.com/range/${hashPrefix}`);
 
     raw = await response.text();
-  } catch {
-    throw new Error('Error while fetching pwned passwords range');
+  } catch (error) {
+    throw new Error('Error while fetching pwned passwords range', { cause: error });
   }
 
   const hashSuffix = hash.substring(5).toUpperCase();
@@ -23,7 +23,7 @@ export async function checkPwnedCount(password: string): Promise<number> {
   if (match) {
     const [, count] = match.split(':');
 
-    return parseInt(count);
+    return Number.parseInt(count, 10);
   }
 
   return 0;
