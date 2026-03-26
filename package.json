@@ -32,7 +32,6 @@
 		"@sveltejs/vite-plugin-svelte": "^7.0.0",
 		"@tailwindcss/vite": "^4.2.2",
 		"@tanstack/table-core": "^8.21.3",
-		"@types/crypto-js": "^4.2.2",
 		"@types/node": "^25.5.0",
 		"@types/semver": "^7.7.1",
 		"@types/w3c-web-serial": "^1.0.8",
@@ -40,11 +39,11 @@
 		"boxen": "^8.0.1",
 		"chalk": "^5.6.2",
 		"clsx": "^2.1.1",
-		"crypto-js": "^4.2.0",
 		"eslint": "^10.1.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-compat": "^7.0.1",
 		"eslint-plugin-svelte": "^3.16.0",
+		"esptool-js": "0.6.0",
 		"formsnap": "^2.0.1",
 		"globals": "^17.4.0",
 		"husky": "^9.1.7",
@@ -71,7 +70,6 @@
 		"vitest": "^4.1.1"
 	},
 	"dependencies": {
-		"esptool-js": "^0.5.7",
 		"vite": "^8.0.2"
 	},
 	"engines": {
@@ -93,8 +91,7 @@
 			"workerd"
 		],
 		"patchedDependencies": {
-			"@microsoft/signalr@10.0.0": "patches/signalr.patch",
-			"esptool-js@0.5.7": "patches/esptool.patch"
+			"@microsoft/signalr@10.0.0": "patches/signalr.patch"
 		},
 		"overrides": {
 			"cookie@<0.7.0": ">=0.7.0",
