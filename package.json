@@ -18,8 +18,6 @@
 		"regen-api": "node scripts/regenerate-api.js"
 	},
 	"devDependencies": {
-		"@changesets/changelog-github": "^0.6.0",
-		"@changesets/cli": "^2.30.0",
 		"@eslint/compat": "^2.0.3",
 		"@eslint/js": "^10.0.1",
 		"@internationalized/date": "^3.12.0",
