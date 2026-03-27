@@ -27,7 +27,7 @@ export function getValidNumber(
   value: string,
   { max, min = 0, loop = false }: GetValidNumberConfig
 ) {
-  let numericValue = parseInt(value, 10);
+  let numericValue = Number.parseInt(value, 10);
 
   if (!isNaN(numericValue)) {
     if (!loop) {
@@ -65,7 +65,7 @@ type GetValidArrowNumberConfig = {
 };
 
 export function getValidArrowNumber(value: string, { min, max, step }: GetValidArrowNumberConfig) {
-  let numericValue = parseInt(value, 10);
+  let numericValue = Number.parseInt(value, 10);
   if (!isNaN(numericValue)) {
     numericValue += step;
     return getValidNumber(String(numericValue), { min, max, loop: true });
@@ -87,21 +87,21 @@ export function getValidArrowMinuteOrSecond(value: string, step: number) {
 
 export function setMinutes(time: Time, value: string) {
   const minutes = getValidMinuteOrSecond(value);
-  return time.set({ minute: parseInt(minutes, 10) });
+  return time.set({ minute: Number.parseInt(minutes, 10) });
 }
 
 export function setSeconds(time: Time, value: string) {
   const seconds = getValidMinuteOrSecond(value);
-  return time.set({ second: parseInt(seconds, 10) });
+  return time.set({ second: Number.parseInt(seconds, 10) });
 }
 
 export function setHours(time: Time, value: string) {
   const hours = getValidHour(value);
-  return time.set({ hour: parseInt(hours, 10) });
+  return time.set({ hour: Number.parseInt(hours, 10) });
 }
 
 export function set12Hours(time: Time, value: string, period: Period) {
-  const hours = parseInt(getValid12Hour(value), 10);
+  const hours = Number.parseInt(getValid12Hour(value), 10);
   const convertedHours = convert12HourTo24Hour(hours, period);
   return time.set({ hour: convertedHours });
 }

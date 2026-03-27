@@ -114,6 +114,7 @@
                 autocomplete="current-password"
                 bind:value={password}
                 validate={passwordError}
+                showForget
               />
 
               <Turnstile

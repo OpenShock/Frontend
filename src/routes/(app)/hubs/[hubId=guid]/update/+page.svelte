@@ -1,31 +1,6 @@
-<script lang="ts">
-  import { AlertTriangle, CheckCircle2, CircleX, DownloadCloud, RotateCcw } from '@lucide/svelte';
-  import { page } from '$app/state';
-  import { hubManagementV1Api } from '$lib/api';
-  import { type OtaItem, OtaUpdateStatus } from '$lib/api/internal/v1';
-  import Container from '$lib/components/Container.svelte';
-  import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
-  import { Badge } from '$lib/components/ui/badge';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import * as Card from '$lib/components/ui/card';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import { Progress } from '$lib/components/ui/progress';
-  import * as Table from '$lib/components/ui/table';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { getConnection } from '$lib/signalr/user.svelte';
+<script lang="ts" module>
+  import { OtaUpdateStatus } from '$lib/api/internal/v1';
   import { OtaUpdateProgressTask } from '$lib/signalr/models/OtaUpdateProgressTask';
-  import { serializeOtaInstallMessage } from '$lib/signalr/serializers/OtaInstall';
-  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import {
-    HubOnlineState,
-    onlineHubs,
-    ownHubs,
-    refreshOwnHubs,
-  } from '$lib/state/hubs-state.svelte';
-  import { cn } from '$lib/utils';
-  import { NumberToHexPadded } from '$lib/utils/convert';
-  import { onMount } from 'svelte';
-  import type { FirmwareChannel } from '$lib/api/firmwareCDN';
 
   // Task weights for weighted total progress (7 tasks, sums to 100)
   const TASK_WEIGHTS = [4, 2, 22, 2, 49, 1, 20];
@@ -76,6 +51,39 @@
     return 'just now';
   }
 
+  // Simulated reboot progress (last 20%) — hub goes offline so no more events
+  const REBOOT_DURATION_MS = 10_000;
+  const REBOOT_INTERVAL_MS = 100;
+</script>
+
+<script lang="ts">
+  import { CircleCheck, CircleX, CloudDownload, RotateCcw, TriangleAlert } from '@lucide/svelte';
+  import { page } from '$app/state';
+  import { hubManagementV1Api } from '$lib/api';
+  import type { OtaItem } from '$lib/api/internal/v1';
+  import Container from '$lib/components/Container.svelte';
+  import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
+  import { Badge } from '$lib/components/ui/badge';
+  import Button from '$lib/components/ui/button/button.svelte';
+  import * as Card from '$lib/components/ui/card';
+  import * as Dialog from '$lib/components/ui/dialog';
+  import { Progress } from '$lib/components/ui/progress';
+  import * as Table from '$lib/components/ui/table';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { getConnection } from '$lib/signalr/user.svelte';
+  import { serializeOtaInstallMessage } from '$lib/signalr/serializers/OtaInstall';
+  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import {
+    HubOnlineState,
+    onlineHubs,
+    ownHubs,
+    refreshOwnHubs,
+  } from '$lib/state/hubs-state.svelte';
+  import { cn } from '$lib/utils';
+  import { NumberToHexPadded } from '$lib/utils/convert';
+  import { onMount } from 'svelte';
+  import type { FirmwareChannel } from '$lib/api/firmwareCDN';
+
   let hubLoaded = $state(false);
   let otaLogs = $state<OtaItem[]>([]);
   let version = $state<string | null>(null);
@@ -92,9 +100,6 @@
 
   let isUpdating = $derived(hub?.otaInstall !== null && hub?.otaInstall !== undefined);
 
-  // Simulated reboot progress (last 20%) — hub goes offline so no more events
-  const REBOOT_DURATION_MS = 10_000;
-  const REBOOT_INTERVAL_MS = 100;
   let rebootProgress = $state(0);
   let rebootInterval: ReturnType<typeof setInterval> | null = null;
 
@@ -214,14 +219,14 @@
     <Dialog.Footer>
       <Button variant="outline" onclick={() => (confirmOpen = false)}>Cancel</Button>
       <Button onclick={startUpdate}>
-        <DownloadCloud class="size-4" />
+        <CloudDownload class="size-4" />
         Update
       </Button>
     </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>
 
-<Container class="w-full max-w-4xl">
+<Container>
   <Card.Header class="w-full">
     <Card.Title class="text-3xl">Update {hubName}</Card.Title>
     <Card.Description>Manage firmware updates for this hub.</Card.Description>
@@ -229,19 +234,25 @@
   <Card.Content class="flex w-full flex-col gap-6">
     {#if hub}
       <!-- Status -->
-      <div class="flex items-center gap-3">
-        <span class="text-muted-foreground text-sm font-medium">Status:</span>
-        {#if hub.isOnline}
-          <Badge variant="default" class="bg-green-600">Online</Badge>
-        {:else}
-          <Badge variant="destructive">Offline</Badge>
-        {/if}
-        {#if hub.firmwareVersion}
-          <span class="text-muted-foreground text-sm">
-            Firmware: <span class="font-mono">{hub.firmwareVersion}</span>
-          </span>
-        {/if}
-      </div>
+      <Card.Root>
+        <Card.Header>
+          <Card.Title class="text-base">Hub Status</Card.Title>
+        </Card.Header>
+        <Card.Content>
+          <div class="flex flex-wrap items-center gap-3">
+            {#if hub.isOnline}
+              <Badge variant="default" class="bg-green-600">Online</Badge>
+            {:else}
+              <Badge variant="destructive">Offline</Badge>
+            {/if}
+            {#if hub.firmwareVersion}
+              <span class="text-muted-foreground text-sm">
+                Firmware: <span class="font-mono">{hub.firmwareVersion}</span>
+              </span>
+            {/if}
+          </div>
+        </Card.Content>
+      </Card.Root>
 
       <!-- OTA Result -->
       {#if hub.otaResult}
@@ -254,7 +265,7 @@
           )}
         >
           {#if hub.otaResult.success}
-            <CheckCircle2 class="mt-0.5 size-5 shrink-0 text-green-500" />
+            <CircleCheck class="mt-0.5 size-5 shrink-0 text-green-500" />
             <div class="flex flex-col gap-2">
               <p class="font-medium text-green-500">{hub.otaResult.message}</p>
               <div class="flex gap-2">
@@ -263,7 +274,7 @@
               </div>
             </div>
           {:else if hub.otaResult.message.includes('rolled back')}
-            <AlertTriangle class="mt-0.5 size-5 shrink-0 text-yellow-500" />
+            <TriangleAlert class="mt-0.5 size-5 shrink-0 text-yellow-500" />
             <div class="flex flex-col gap-2">
               <p class="font-medium text-yellow-500">{hub.otaResult.message}</p>
               <Button variant="outline" size="sm" onclick={resetResult}>Try Again</Button>
@@ -280,101 +291,114 @@
 
       <!-- Firmware Selector + Update Button -->
       {#if !isUpdating && !hub.otaResult}
-        <div class="flex flex-col gap-4">
-          <div>
-            <h3 class="mb-2 text-lg font-semibold">Firmware Channel</h3>
+        <Card.Root>
+          <Card.Header>
+            <Card.Title class="text-base">Firmware Update</Card.Title>
+            <Card.Description>Select a firmware channel and version to install.</Card.Description>
+          </Card.Header>
+          <Card.Content class="flex flex-col gap-4">
             <FirmwareChannelSelector bind:channel bind:version disabled={!hub.isOnline} />
-          </div>
 
-          <Button
-            class="w-fit cursor-pointer text-lg"
-            onclick={() => (confirmOpen = true)}
-            disabled={getConnection() === null || hub === null || version === null || !hub.isOnline}
-          >
-            <DownloadCloud class="size-5" />
-            Update to {version ?? '...'}
-          </Button>
+            <Button
+              class="w-fit cursor-pointer"
+              onclick={() => (confirmOpen = true)}
+              disabled={getConnection() === null ||
+                hub === null ||
+                version === null ||
+                !hub.isOnline}
+            >
+              <CloudDownload class="size-4" />
+              Update to {version ?? '...'}
+            </Button>
 
-          {#if !hub.isOnline}
-            <p class="text-muted-foreground text-sm">Hub must be online to start an update.</p>
-          {/if}
-        </div>
+            {#if !hub.isOnline}
+              <p class="text-muted-foreground text-sm">Hub must be online to start an update.</p>
+            {/if}
+          </Card.Content>
+        </Card.Root>
       {/if}
 
       <!-- Progress -->
       {#if isUpdating}
-        <div class="flex flex-col gap-4">
-          <h3 class="text-lg font-semibold">
-            Updating to {hub.otaInstall?.version}...
-          </h3>
-          <div class="flex flex-col gap-3">
-            <div class="grid grid-cols-[5rem_1fr] items-center gap-2">
-              <span class="text-muted-foreground text-sm font-medium">Total</span>
-              <Progress value={totalProgress} />
+        <Card.Root>
+          <Card.Header>
+            <Card.Title class="text-base">
+              Updating to {hub.otaInstall?.version}...
+            </Card.Title>
+          </Card.Header>
+          <Card.Content class="flex flex-col gap-4">
+            <div class="flex flex-col gap-3">
+              <div class="grid grid-cols-[5rem_1fr] items-center gap-2">
+                <span class="text-muted-foreground text-sm font-medium">Total</span>
+                <Progress value={totalProgress} />
+              </div>
+              <div class="grid grid-cols-[5rem_1fr] items-center gap-2">
+                <span class="text-muted-foreground text-sm font-medium">Task</span>
+                <Progress value={taskProgress} />
+              </div>
             </div>
-            <div class="grid grid-cols-[5rem_1fr] items-center gap-2">
-              <span class="text-muted-foreground text-sm font-medium">Task</span>
-              <Progress value={taskProgress} />
-            </div>
-          </div>
-          <p class="text-muted-foreground text-sm">{currentTaskLabel}</p>
-        </div>
+            <p class="text-muted-foreground text-sm">{currentTaskLabel}</p>
+          </Card.Content>
+        </Card.Root>
       {/if}
 
       <!-- Logs -->
-      <div class="flex flex-col gap-3">
-        <div class="flex items-center justify-between">
-          <h3 class="text-lg font-semibold">Update History</h3>
-          <Button
-            variant="outline"
-            size="sm"
-            onclick={() => fetchOtaLogs(page.params.hubId)}
-            disabled={isLoading}
-          >
-            <RotateCcw class={cn('size-4', isLoading && 'animate-spin')} />
-            Refresh
-          </Button>
-        </div>
-
-        {#if otaLogs.length === 0}
-          <p class="text-muted-foreground py-4 text-center text-sm">
-            No update history found for this hub.
-          </p>
-        {:else}
-          <Table.Root class="w-full">
-            <Table.Header>
-              <Table.Row>
-                <Table.Head>ID</Table.Head>
-                <Table.Head>Started</Table.Head>
-                <Table.Head>Status</Table.Head>
-                <Table.Head>Version</Table.Head>
-                <Table.Head>Message</Table.Head>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {#each otaLogs as otaLog (otaLog.id)}
+      <Card.Root>
+        <Card.Header>
+          <Card.Title class="flex items-center justify-between text-base">
+            Update History
+            <Button
+              variant="outline"
+              size="sm"
+              onclick={() => fetchOtaLogs(page.params.hubId)}
+              disabled={isLoading}
+            >
+              <RotateCcw class={cn('size-4', isLoading && 'animate-spin')} />
+              Refresh
+            </Button>
+          </Card.Title>
+        </Card.Header>
+        <Card.Content>
+          {#if otaLogs.length === 0}
+            <p class="text-muted-foreground py-4 text-center text-sm">
+              No update history found for this hub.
+            </p>
+          {:else}
+            <Table.Root class="w-full">
+              <Table.Header>
                 <Table.Row>
-                  <Table.Cell class="text-muted-foreground font-mono text-xs">
-                    {NumberToHexPadded(otaLog.id, 8)}
-                  </Table.Cell>
-                  <Table.Cell class="text-sm" title={otaLog.startedAt.toLocaleString()}>
-                    {formatRelativeTime(otaLog.startedAt)}
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Badge variant={getStatusBadgeVariant(otaLog.status)}>
-                      {otaLog.status}
-                    </Badge>
-                  </Table.Cell>
-                  <Table.Cell class="font-mono text-sm">{otaLog.version}</Table.Cell>
-                  <Table.Cell class="text-muted-foreground max-w-xs truncate text-sm">
-                    {otaLog.message ?? '-'}
-                  </Table.Cell>
+                  <Table.Head>ID</Table.Head>
+                  <Table.Head>Started</Table.Head>
+                  <Table.Head>Status</Table.Head>
+                  <Table.Head>Version</Table.Head>
+                  <Table.Head>Message</Table.Head>
                 </Table.Row>
-              {/each}
-            </Table.Body>
-          </Table.Root>
-        {/if}
-      </div>
+              </Table.Header>
+              <Table.Body>
+                {#each otaLogs as otaLog (otaLog.id)}
+                  <Table.Row>
+                    <Table.Cell class="text-muted-foreground font-mono text-xs">
+                      {NumberToHexPadded(otaLog.id, 8)}
+                    </Table.Cell>
+                    <Table.Cell class="text-sm" title={otaLog.startedAt.toLocaleString()}>
+                      {formatRelativeTime(otaLog.startedAt)}
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Badge variant={getStatusBadgeVariant(otaLog.status)}>
+                        {otaLog.status}
+                      </Badge>
+                    </Table.Cell>
+                    <Table.Cell class="font-mono text-sm">{otaLog.version}</Table.Cell>
+                    <Table.Cell class="text-muted-foreground max-w-xs truncate text-sm">
+                      {otaLog.message ?? '-'}
+                    </Table.Cell>
+                  </Table.Row>
+                {/each}
+              </Table.Body>
+            </Table.Root>
+          {/if}
+        </Card.Content>
+      </Card.Root>
     {:else if isLoading}
       <p class="text-muted-foreground">Loading hub information...</p>
     {:else}

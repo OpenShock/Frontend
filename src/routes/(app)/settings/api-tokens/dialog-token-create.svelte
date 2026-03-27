@@ -1,38 +1,7 @@
-<script lang="ts">
+<script lang="ts" module>
   import type { ZonedDateTime } from '@internationalized/date';
-  import { apiTokensApi } from '$lib/api';
-  import { PermissionType, type TokenCreatedResponse } from '$lib/api/internal/v1';
-  import DateTimePicker from '$lib/components/datetime-picker/date-time-picker.svelte';
-  import TextInput from '$lib/components/input/TextInput.svelte';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import * as Select from '$lib/components/ui/select';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { GetValResColor, type ValidationResult } from '$lib/types/ValidationResult';
-  import { elapsedToString } from '$lib/utils';
-
-  interface Props {
-    open: boolean;
-    onCreated: (token: TokenCreatedResponse) => void;
-  }
-
-  let { open = $bindable(), onCreated }: Props = $props();
-
-  let name = $state<string>('');
-  let expire = $state<'never' | `${number}days` | 'custom'>('never');
-  let expireCustom = $state<ZonedDateTime | undefined>(undefined);
-  let permissions = $state<PermissionType[]>([PermissionType.ShockersUse]);
-
-  function onOpenChange(o: boolean) {
-    // Stupid hack because when this dialog closes its state is never cleared... ._.
-    if (!o) {
-      name = '';
-      expire = 'never';
-      expireCustom = undefined;
-      permissions = [PermissionType.ShockersUse];
-    }
-    open = o;
-  }
+  import { PermissionType } from '$lib/api/internal/v1';
+  import type { ValidationResult } from '$lib/types/ValidationResult';
 
   type PermissionCategory = {
     name: string;
@@ -77,6 +46,42 @@
 
   function capitalizeFirstLetter(string: string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+</script>
+
+<script lang="ts">
+  import { apiTokensApi } from '$lib/api';
+  import type { TokenCreatedResponse } from '$lib/api/internal/v1';
+  import DateTimePicker from '$lib/components/datetime-picker/date-time-picker.svelte';
+  import TextInput from '$lib/components/input/TextInput.svelte';
+  import Button from '$lib/components/ui/button/button.svelte';
+  import * as Dialog from '$lib/components/ui/dialog';
+  import * as Select from '$lib/components/ui/select';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { GetValResColor } from '$lib/types/ValidationResult';
+  import { elapsedToString } from '$lib/utils';
+
+  interface Props {
+    open: boolean;
+    onCreated: (token: TokenCreatedResponse) => void;
+  }
+
+  let { open = $bindable(), onCreated }: Props = $props();
+
+  let name = $state<string>('');
+  let expire = $state<'never' | `${number}days` | 'custom'>('never');
+  let expireCustom = $state<ZonedDateTime | undefined>(undefined);
+  let permissions = $state<PermissionType[]>([PermissionType.ShockersUse]);
+
+  function onOpenChange(o: boolean) {
+    // Stupid hack because when this dialog closes its state is never cleared... ._.
+    if (!o) {
+      name = '';
+      expire = 'never';
+      expireCustom = undefined;
+      permissions = [PermissionType.ShockersUse];
+    }
+    open = o;
   }
 
   let nameValidationResult = $derived(nameValidation(name));

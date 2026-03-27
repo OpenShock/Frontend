@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Check, MessageCircleQuestion } from '@lucide/svelte';
+  import { Check, MessageCircleQuestionMark } from '@lucide/svelte';
   import { browser } from '$app/environment';
   import { PUBLIC_DISCORD_INVITE_URL } from '$env/static/public';
   import type { FirmwareChannel } from '$lib/api/firmwareCDN';
@@ -76,7 +76,7 @@
   // Stepper: derive which step we're on based on state
   // Channel step requires explicit confirmation (confirmedChannel must match current channel)
   let currentStep = $derived(
-    !manager ? 0 : !(version && confirmedChannel === channel) ? 1 : !board ? 2 : 3,
+    !manager ? 0 : !(version && confirmedChannel === channel) ? 1 : !board ? 2 : 3
   );
 
   // Allow users to view earlier steps
@@ -140,7 +140,7 @@
     <h1 class="text-3xl font-bold tracking-tight">Flash Tool</h1>
     {#if isSerialSupported}
       <Button variant="outline" onclick={() => (showHelpDialog = true)}>
-        <MessageCircleQuestion />
+        <MessageCircleQuestionMark />
         I'm having trouble, help?
       </Button>
     {/if}
@@ -166,7 +166,7 @@
                   ? 'bg-green-500 text-white'
                   : isCurrent
                     ? 'bg-primary text-primary-foreground'
-                    : 'border-2 border-muted-foreground/30 text-muted-foreground/50'}"
+                    : 'border-muted-foreground/30 text-muted-foreground/50 border-2'}"
                 disabled={!isAccessible || isFlashing}
                 onclick={() => goToStep(i)}
               >

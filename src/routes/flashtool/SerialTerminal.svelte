@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Send, Trash2, RotateCcw } from '@lucide/svelte';
   import { Button } from '$lib/components/ui/button';
-  import { parseAnsi, type AnsiSegment } from './ansi';
+  import type { AnsiSegment } from './ansi';
   import type FlashManager from './FlashManager';
   import { tick } from 'svelte';
 
@@ -38,7 +38,7 @@
 
   $effect(() => {
     // Depend on lines length to trigger scroll on new content
-    lines.length;
+    const _len = lines.length;
     if (autoScroll && scrollContainer) {
       tick().then(() => {
         if (scrollContainer) {
@@ -117,14 +117,17 @@
   >
     {#each visibleLines as line, i (i)}
       <div class="flex leading-5">
-        <span class="text-muted-foreground mr-2 select-none opacity-60">{formatTime(line.timestamp)}</span>
-        <span class="whitespace-pre-wrap break-all">
-          {#each line.segments as seg}
+        <span class="text-muted-foreground mr-2 opacity-60 select-none"
+          >{formatTime(line.timestamp)}</span
+        >
+        <span class="break-all whitespace-pre-wrap">
+          {#each line.segments as seg, j (j)}
             {#if Object.keys(seg.style).length > 0}
               <span
                 style={Object.entries(seg.style)
                   .map(([k, v]) => `${k}:${v}`)
-                  .join(';')}>{seg.text}</span>
+                  .join(';')}>{seg.text}</span
+              >
             {:else}
               {seg.text}
             {/if}

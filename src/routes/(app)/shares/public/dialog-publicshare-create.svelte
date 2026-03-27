@@ -1,12 +1,26 @@
+<script lang="ts" module>
+  import type { ZonedDateTime } from '@internationalized/date';
+  import type { ValidationResult } from '$lib/types/ValidationResult';
+
+  function expireValidation(
+    expire: string,
+    expireCustom: ZonedDateTime | undefined
+  ): ValidationResult {
+    if (expire === 'custom' && !expireCustom) {
+      return { valid: false, message: 'Expire date is required' };
+    }
+    return { valid: true };
+  }
+</script>
+
 <script lang="ts">
-  import { ZonedDateTime } from '@internationalized/date';
   import { publicShockerSharesApi } from '$lib/api';
   import DateTimePicker from '$lib/components/datetime-picker/date-time-picker.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
   import * as Select from '$lib/components/ui/select';
-  import { GetValResColor, type ValidationResult } from '$lib/types/ValidationResult';
+  import { GetValResColor } from '$lib/types/ValidationResult';
   import { elapsedToString } from '$lib/utils';
   import { toast } from 'svelte-sonner';
 
@@ -55,16 +69,6 @@
       getDate: () => new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
     },
   ];
-
-  function expireValidation(
-    expire: string,
-    expireCustom: ZonedDateTime | undefined
-  ): ValidationResult {
-    if (expire === 'custom' && !expireCustom) {
-      return { valid: false, message: 'Expire date is required' };
-    }
-    return { valid: true };
-  }
 
   let name = $state('');
   let expireOption = $state('never');

@@ -8,15 +8,20 @@
   import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
+  import * as Card from '$lib/components/ui/card';
   import { Field, FieldLabel } from '$lib/components/ui/field/index.js';
   import { Input } from '$lib/components/ui/input';
   import * as Select from '$lib/components/ui/select';
   import PauseToggle from '$lib/components/utils/PauseToggle.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
-  import { LoaderCircle } from '@lucide/svelte';
+  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { ArrowLeft, LoaderCircle, Trash2 } from '@lucide/svelte';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
+
+  breadcrumbs.push('Shockers', '/shockers/own');
+  breadcrumbs.push('Edit', null);
 
   const modelOptions = [
     { value: ShockerModelType.CaiXianlin, label: 'CaiXianlin' },
@@ -25,10 +30,16 @@
   ];
 
   let shocker = $state<ShockerWithDevice | null>(null);
+  let loadError = $state(false);
   let name = $state('');
   let rfId = $state(0);
   let model = $state<ShockerModelType>(ShockerModelType.CaiXianlin);
   let saving = $state(false);
+
+  let hasChanges = $derived(
+    shocker !== null &&
+      (name.trim() !== shocker.name || rfId !== shocker.rfId || model !== shocker.model)
+  );
 
   onMount(async () => {
     try {
@@ -39,8 +50,8 @@
       rfId = shocker.rfId;
       model = shocker.model;
     } catch (error) {
+      loadError = true;
       handleApiError(error);
-      goto(resolve('/shockers/own'));
     }
   });
 
@@ -54,6 +65,9 @@
         model,
         device: shocker.device,
       });
+      shocker.name = name.trim();
+      shocker.rfId = rfId;
+      shocker.model = model;
       toast.success('Shocker updated');
       await refreshOwnHubs();
     } catch (error) {
@@ -83,67 +97,96 @@
 </script>
 
 <Container>
-  {#if !shocker}
-    <div class="flex items-center gap-2 p-8">
-      <LoaderCircle class="animate-spin" />
-      <span>Loading shocker...</span>
+  {#if loadError}
+    <div class="flex flex-col items-center gap-4 py-12">
+      <p class="text-muted-foreground">Failed to load shocker.</p>
+      <Button variant="outline" href={resolve('/shockers/own')}>
+        <ArrowLeft class="size-4" />
+        Back to Shockers
+      </Button>
+    </div>
+  {:else if !shocker}
+    <div class="flex items-center gap-3 p-12">
+      <LoaderCircle class="size-5 animate-spin" />
+      <span class="text-muted-foreground">Loading shocker...</span>
     </div>
   {:else}
     <div class="mx-auto flex w-full max-w-lg flex-col gap-6 py-4">
-      <h1 class="text-2xl font-bold">Edit Shocker</h1>
-
-      <TextInput label="Name" placeholder="Shocker name" bind:value={name} />
-
-      <Field class="gap-2">
-        <FieldLabel>RF ID</FieldLabel>
-        <Input type="number" bind:value={rfId} min={1} />
-      </Field>
-
-      <Field class="gap-2">
-        <FieldLabel>Model</FieldLabel>
-        <Select.Root type="single" name="model" bind:value={model}>
-          <Select.Trigger>
-            {modelOptions.find((o) => o.value === model)?.label ?? 'Select model'}
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Group>
-              {#each modelOptions as option (option.value)}
-                <Select.Item value={option.value} label={option.label}>{option.label}</Select.Item>
-              {/each}
-            </Select.Group>
-          </Select.Content>
-        </Select.Root>
-      </Field>
-
-      <Field class="gap-2">
-        <FieldLabel>Pause State</FieldLabel>
-        <div class="flex items-center gap-2">
-          <PauseToggle
-            shockerId={shocker.id}
-            bind:paused={shocker.isPaused}
-            userShareUserId={undefined}
-            onPausedChange={() => {}}
-          />
-          <span class="text-muted-foreground text-sm">
-            {shocker.isPaused ? 'Shocker is paused' : 'Shocker is active'}
-          </span>
-        </div>
-      </Field>
-
-      <Button disabled={saving || !name.trim()} onclick={save}>
-        {#if saving}<LoaderCircle class="animate-spin" />{/if}
-        Save Changes
-      </Button>
-
-      <hr class="border-destructive/30" />
-
-      <div class="flex flex-col gap-2">
-        <h2 class="text-destructive text-lg font-semibold">Danger Zone</h2>
-        <p class="text-muted-foreground text-sm">
-          Permanently delete this shocker. This action cannot be undone.
-        </p>
-        <Button variant="destructive" onclick={deleteShocker}>Delete Shocker</Button>
+      <div class="flex items-center gap-3">
+        <Button variant="ghost" size="icon" href={resolve('/shockers/own')} aria-label="Back">
+          <ArrowLeft class="size-4" />
+        </Button>
+        <h1 class="text-2xl font-bold">Edit Shocker</h1>
       </div>
+
+      <Card.Root>
+        <Card.Header>
+          <Card.Title>Shocker Details</Card.Title>
+          <Card.Description>Update the name, RF ID, and model for this shocker.</Card.Description>
+        </Card.Header>
+        <Card.Content class="flex flex-col gap-4">
+          <TextInput label="Name" placeholder="Shocker name" bind:value={name} />
+
+          <Field class="gap-2">
+            <FieldLabel>RF ID</FieldLabel>
+            <Input type="number" bind:value={rfId} min={1} />
+          </Field>
+
+          <Field class="gap-2">
+            <FieldLabel>Model</FieldLabel>
+            <Select.Root type="single" name="model" bind:value={model}>
+              <Select.Trigger>
+                {modelOptions.find((o) => o.value === model)?.label ?? 'Select model'}
+              </Select.Trigger>
+              <Select.Content>
+                <Select.Group>
+                  {#each modelOptions as option (option.value)}
+                    <Select.Item value={option.value} label={option.label}>
+                      {option.label}
+                    </Select.Item>
+                  {/each}
+                </Select.Group>
+              </Select.Content>
+            </Select.Root>
+          </Field>
+
+          <Field class="gap-2">
+            <FieldLabel>Pause State</FieldLabel>
+            <div class="flex items-center gap-2">
+              <PauseToggle
+                shockerId={shocker.id}
+                bind:paused={shocker.isPaused}
+                userShareUserId={undefined}
+                onPausedChange={() => {}}
+              />
+              <span class="text-muted-foreground text-sm">
+                {shocker.isPaused ? 'Shocker is paused' : 'Shocker is active'}
+              </span>
+            </div>
+          </Field>
+        </Card.Content>
+        <Card.Footer>
+          <Button disabled={saving || !name.trim() || !hasChanges} onclick={save}>
+            {#if saving}<LoaderCircle class="size-4 animate-spin" />{/if}
+            Save Changes
+          </Button>
+        </Card.Footer>
+      </Card.Root>
+
+      <Card.Root class="border-destructive/30">
+        <Card.Header>
+          <Card.Title class="text-destructive">Danger Zone</Card.Title>
+          <Card.Description>
+            Permanently delete this shocker. This action cannot be undone.
+          </Card.Description>
+        </Card.Header>
+        <Card.Footer>
+          <Button variant="destructive" onclick={deleteShocker}>
+            <Trash2 class="size-4" />
+            Delete Shocker
+          </Button>
+        </Card.Footer>
+      </Card.Root>
     </div>
   {/if}
 </Container>

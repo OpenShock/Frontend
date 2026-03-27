@@ -1,6 +1,5 @@
 import { DecodeString, EncodeString } from '$lib/utils';
-import Latin1 from 'crypto-js/enc-latin1';
-import HashMD5 from 'crypto-js/md5';
+import { md5 } from '$lib/utils/md5';
 import { ESPLoader, type IEspLoaderTerminal, type LoaderOptions, Transport } from 'esptool-js';
 
 /**
@@ -12,8 +11,7 @@ async function setupESPLoader(
 ): Promise<ESPLoader | null> {
   try {
     await serialPort.close(); // TODO: Find some way to detect if the port is already open
-    /* eslint-disable-next-line @typescript-eslint/no-unused-vars -- catch binding required by syntax, close failure is intentionally ignored */
-  } catch (e) {
+  } catch (_e) {
     /* empty */
   }
 
@@ -60,8 +58,7 @@ function appendBuffer(buffer: Uint8Array | null, data: Uint8Array): Uint8Array {
 async function setupApplication(serialPort: SerialPort): Promise<SerialPort | null> {
   try {
     await serialPort.close(); // TODO: Find some way to detect if the port is already open
-    /* eslint-disable-next-line @typescript-eslint/no-unused-vars -- catch binding required by syntax, close failure is intentionally ignored */
-  } catch (e) {
+  } catch (_e) {
     /* empty */
   }
 
@@ -344,32 +341,20 @@ export default class FlashManager {
   async flash(data: Uint8Array, eraseAll: boolean, onProgress: (progress: number) => void) {
     if (!this.loader) return false;
 
-    function arrayBufferToString(array: Uint8Array) {
-      let str = '';
-      for (let i = 0; i < array.length; ++i) {
-        str += String.fromCharCode(array[i]);
-      }
-      return str;
-    }
     function reportProgress(fileIndex: number, written: number, total: number) {
       onProgress(written / total);
     }
 
     try {
       await this.loader.writeFlash({
-        fileArray: [
-          {
-            data: arrayBufferToString(data),
-            address: 0,
-          },
-        ],
+        fileArray: [{ data, address: 0 }],
         flashSize: 'keep',
         flashMode: 'keep',
         flashFreq: 'keep',
         eraseAll,
         compress: true,
         reportProgress,
-        calculateMD5Hash: (image) => HashMD5(Latin1.parse(image)).toString(),
+        calculateMD5Hash: md5,
       });
       this.terminal.writeLine('Flash complete');
       return true;

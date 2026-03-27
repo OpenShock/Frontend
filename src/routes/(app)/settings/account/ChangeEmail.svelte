@@ -40,21 +40,23 @@
   }
 </script>
 
-<EmailInput
-  label="Email"
-  placeholder={account.email}
-  autocomplete="off"
-  bind:value={email}
-  bind:valid={emailValid}
-  Icon={Mail}
->
-  {#snippet after()}
-    <Button
-      type="button"
-      onclick={submitEmail}
-      disabled={!emailValid || email === account.email || loading}
-    >
-      Change
-    </Button>
-  {/snippet}
-</EmailInput>
+<div class="flex w-full items-start gap-2">
+  <div class="grow">
+    <EmailInput
+      label="Email"
+      placeholder={account.email}
+      autocomplete="off"
+      bind:value={email}
+      bind:valid={emailValid}
+      Icon={Mail}
+    />
+  </div>
+  <Button
+    type="button"
+    class="mt-7"
+    onclick={submitEmail}
+    disabled={!emailValid || email === account.email || loading}
+  >
+    Change
+  </Button>
+</div>
