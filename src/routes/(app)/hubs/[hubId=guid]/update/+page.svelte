@@ -57,7 +57,7 @@
 </script>
 
 <script lang="ts">
-  import { AlertTriangle, CheckCircle2, CircleX, DownloadCloud, RotateCcw } from '@lucide/svelte';
+  import { CircleCheck, CircleX, CloudDownload, RotateCcw, TriangleAlert } from '@lucide/svelte';
   import { page } from '$app/state';
   import { hubManagementV1Api } from '$lib/api';
   import type { OtaItem } from '$lib/api/internal/v1';
@@ -219,7 +219,7 @@
     <Dialog.Footer>
       <Button variant="outline" onclick={() => (confirmOpen = false)}>Cancel</Button>
       <Button onclick={startUpdate}>
-        <DownloadCloud class="size-4" />
+        <CloudDownload class="size-4" />
         Update
       </Button>
     </Dialog.Footer>
@@ -265,7 +265,7 @@
           )}
         >
           {#if hub.otaResult.success}
-            <CheckCircle2 class="mt-0.5 size-5 shrink-0 text-green-500" />
+            <CircleCheck class="mt-0.5 size-5 shrink-0 text-green-500" />
             <div class="flex flex-col gap-2">
               <p class="font-medium text-green-500">{hub.otaResult.message}</p>
               <div class="flex gap-2">
@@ -274,7 +274,7 @@
               </div>
             </div>
           {:else if hub.otaResult.message.includes('rolled back')}
-            <AlertTriangle class="mt-0.5 size-5 shrink-0 text-yellow-500" />
+            <TriangleAlert class="mt-0.5 size-5 shrink-0 text-yellow-500" />
             <div class="flex flex-col gap-2">
               <p class="font-medium text-yellow-500">{hub.otaResult.message}</p>
               <Button variant="outline" size="sm" onclick={resetResult}>Try Again</Button>
@@ -307,7 +307,7 @@
                 version === null ||
                 !hub.isOnline}
             >
-              <DownloadCloud class="size-4" />
+              <CloudDownload class="size-4" />
               Update to {version ?? '...'}
             </Button>
 
