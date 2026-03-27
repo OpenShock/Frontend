@@ -37,7 +37,7 @@
     validate = false,
     showStrengthMeter = false,
     Icon,
-    showForget = true,
+    showForget = false,
   }: Props = $props();
 
   let validationResult = $state<ValidationResult | null>(null);

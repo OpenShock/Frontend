@@ -18,13 +18,11 @@
 
   let { open = $bindable(), userInput = $bindable() }: Props = $props();
   let redeemPromise = $state<Promise<V2UserSharesListItem> | null>(null);
-  let redeemed = $state<boolean>(false);
 
   function onOpenChange(o: boolean) {
     if (!o) {
       userInput = '';
       redeemPromise = null;
-      redeemed = false;
     }
     open = o;
   }
@@ -33,7 +31,6 @@
     try {
       redeemPromise = shockerSharesV2Api.userSharesRedeemInvite(userInput);
       await redeemPromise;
-      redeemed = true;
       await refreshUserShares();
     } catch (error) {
       await handleApiError(error);

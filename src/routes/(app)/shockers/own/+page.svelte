@@ -1,12 +1,11 @@
 <script lang="ts">
-  import { Layers, LogsIcon, OctagonAlert, Plus, Settings } from '@lucide/svelte';
+  import { Layers, LoaderCircle, LogsIcon, Plus, RotateCcw, Settings, Zap } from '@lucide/svelte';
   import { resolve } from '$app/paths';
   import { shockersV1Api } from '$lib/api';
   import type { NewShocker } from '$lib/api/internal/v1';
   import Container from '$lib/components/Container.svelte';
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import DialogShockerAdd, {
-    type AddShockerData,
     defaultAddShockerData,
   } from '$lib/components/ControlModules/dialogs/dialog-shocker-add.svelte';
   import MapControlModule from '$lib/components/ControlModules/MapControlModule.svelte';
@@ -29,13 +28,32 @@
   let shockers = $derived(Array.from(ownHubs).flatMap(([, hub]) => hub.shockers));
 
   let moduleType = $state<ModuleType>(ModuleType.ClassicControlModule);
+  let loading = $state(true);
+  let refreshing = $state(false);
 
   let shockIntensity = $state(ControlIntensityDefault);
   let vibrationIntensity = $state(ControlIntensityDefault);
   let duration = $state(ControlDurationDefault);
 
+  async function loadShockers() {
+    loading = true;
+    await refreshOwnHubs();
+    loading = false;
+  }
+
+  async function refresh() {
+    refreshing = true;
+    await refreshOwnHubs();
+    refreshing = false;
+    toast.success('Shockers refreshed');
+  }
+
   async function openAddShockerDialog() {
     const hubs = Array.from(ownHubs);
+    if (hubs.length === 0) {
+      toast.error('You need to create a hub before adding shockers.');
+      return;
+    }
     const result = await dialog.createDialog<NewShocker | undefined>((resolve) => ({
       content: DialogShockerAdd,
       props: {
@@ -56,37 +74,69 @@
     }
   }
 
-  onMount(refreshOwnHubs);
+  onMount(loadShockers);
 </script>
 
-{#if ownHubs.size === 0}
-  <p>Loading...</p>
+{#if loading}
+  <Container class="items-center justify-center">
+    <div class="flex items-center gap-3 p-12">
+      <LoaderCircle class="size-6 animate-spin" />
+      <span class="text-muted-foreground">Loading shockers...</span>
+    </div>
+  </Container>
 {:else}
   <Container>
-    <div class="flex w-full content-center justify-between">
+    <div class="flex w-full flex-wrap items-center justify-between gap-2">
       <h1 class="text-2xl font-bold">Shockers</h1>
-      <div>
-        <Button variant="secondary" onclick={openAddShockerDialog}>
-          <Plus /> Add Shocker
+      <div class="flex flex-wrap items-center gap-1">
+        <Button variant="secondary" size="sm" onclick={openAddShockerDialog}>
+          <Plus class="size-4" /> Add Shocker
         </Button>
-        <!-- Emergency Stop Button -->
-        <Button variant="secondary" class="border-2 text-red-500">
-          <OctagonAlert size="64" /> STOP
+        <Button
+          variant="ghost"
+          size="sm"
+          onclick={refresh}
+          disabled={refreshing}
+          aria-label="Refresh"
+        >
+          <RotateCcw class={refreshing ? 'size-4 animate-spin' : 'size-4'} />
         </Button>
         <!-- Mode button -->
         <Popover.Root>
-          <Popover.Trigger><Layers /></Popover.Trigger>
-          <Popover.Content class="flex">
-            <Button variant="ghost" onclick={() => (moduleType = ModuleType.ClassicControlModule)}>
+          <Popover.Trigger>
+            {#snippet child({ props })}
+              <Button {...props} variant="ghost" size="sm" aria-label="View mode">
+                <Layers class="size-4" />
+              </Button>
+            {/snippet}
+          </Popover.Trigger>
+          <Popover.Content class="flex flex-col gap-1" align="end">
+            <Button
+              variant={moduleType === ModuleType.ClassicControlModule ? 'secondary' : 'ghost'}
+              size="sm"
+              onclick={() => (moduleType = ModuleType.ClassicControlModule)}
+            >
               Classic
             </Button>
-            <Button variant="ghost" onclick={() => (moduleType = ModuleType.RichControlModule)}>
+            <Button
+              variant={moduleType === ModuleType.RichControlModule ? 'secondary' : 'ghost'}
+              size="sm"
+              onclick={() => (moduleType = ModuleType.RichControlModule)}
+            >
               Rich
             </Button>
-            <Button variant="ghost" onclick={() => (moduleType = ModuleType.SimpleControlModule)}>
+            <Button
+              variant={moduleType === ModuleType.SimpleControlModule ? 'secondary' : 'ghost'}
+              size="sm"
+              onclick={() => (moduleType = ModuleType.SimpleControlModule)}
+            >
               Simple
             </Button>
-            <Button variant="ghost" onclick={() => (moduleType = ModuleType.MapControlModule)}>
+            <Button
+              variant={moduleType === ModuleType.MapControlModule ? 'secondary' : 'ghost'}
+              size="sm"
+              onclick={() => (moduleType = ModuleType.MapControlModule)}
+            >
               Map
             </Button>
           </Popover.Content>
@@ -95,43 +145,64 @@
         <Popover.Root>
           <Popover.Trigger>
             {#snippet child({ props })}
-              <Button {...props} variant="ghost" class="p-0!" aria-label="Settings">
-                <Settings />
+              <Button {...props} variant="ghost" size="sm" aria-label="Settings">
+                <Settings class="size-4" />
               </Button>
             {/snippet}
           </Popover.Trigger>
-          <Popover.Content class="flex flex-col gap-2">
-            <Button variant="ghost" disabled>
+          <Popover.Content class="flex flex-col gap-2" align="end">
+            <Button variant="ghost" size="sm" disabled>
               Global Limits
               <span class="text-muted-foreground ml-2 text-xs">(Coming soon)</span>
             </Button>
           </Popover.Content>
         </Popover.Root>
-        <Button variant="ghost" aria-label="Logs" href={resolve('/shockers/logs')}>
-          <LogsIcon />
+        <Button variant="ghost" size="sm" aria-label="Logs" href={resolve('/shockers/logs')}>
+          <LogsIcon class="size-4" />
         </Button>
       </div>
     </div>
-    <hr class="border-2" />
-    {#if moduleType === ModuleType.SimpleControlModule}
-      <SimpleControlHeader bind:shockIntensity bind:vibrationIntensity bind:duration />
-    {/if}
-    {#if moduleType === ModuleType.MapControlModule}
-      <MapControlModule {shockers} />
-    {:else}
-      <div class="flex flex-wrap">
-        {#each shockers ?? [] as shocker (shocker.id)}
-          {#if moduleType === ModuleType.ClassicControlModule}
-            <ClassicControlModule {shocker} />
-          {:else if moduleType === ModuleType.RichControlModule}
-            <RichControlModule {shocker} />
-          {:else if moduleType === ModuleType.SimpleControlModule}
-            <SimpleControlModule {shocker} {shockIntensity} {vibrationIntensity} {duration} />
-          {:else}
-            <p>Unknown module type</p>
-          {/if}
-        {/each}
+
+    <hr class="border-border" />
+
+    {#if shockers.length === 0}
+      <div class="flex flex-col items-center justify-center gap-4 py-16">
+        <Zap class="text-muted-foreground size-12" />
+        <div class="text-center">
+          <h2 class="text-lg font-semibold">No shockers yet</h2>
+          <p class="text-muted-foreground text-sm">
+            {#if ownHubs.size === 0}
+              Create a hub first, then add shockers to it.
+            {:else}
+              Add a shocker to one of your hubs to get started.
+            {/if}
+          </p>
+        </div>
+        <Button onclick={openAddShockerDialog} disabled={ownHubs.size === 0}>
+          <Plus class="size-4" /> Add Shocker
+        </Button>
       </div>
+    {:else}
+      {#if moduleType === ModuleType.SimpleControlModule}
+        <SimpleControlHeader bind:shockIntensity bind:vibrationIntensity bind:duration />
+      {/if}
+      {#if moduleType === ModuleType.MapControlModule}
+        <MapControlModule {shockers} />
+      {:else}
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {#each shockers as shocker (shocker.id)}
+            {#if moduleType === ModuleType.ClassicControlModule}
+              <ClassicControlModule {shocker} />
+            {:else if moduleType === ModuleType.RichControlModule}
+              <RichControlModule {shocker} />
+            {:else if moduleType === ModuleType.SimpleControlModule}
+              <SimpleControlModule {shocker} {shockIntensity} {vibrationIntensity} {duration} />
+            {:else}
+              <p>Unknown module type</p>
+            {/if}
+          {/each}
+        </div>
+      {/if}
     {/if}
   </Container>
 {/if}

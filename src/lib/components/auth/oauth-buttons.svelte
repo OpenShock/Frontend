@@ -1,18 +1,21 @@
-<script lang="ts">
-  import { Button } from '$lib/components/ui/button/index.js';
-  import { Field } from '$lib/components/ui/field/index.js';
-  import { GetOAuthAuthorizeUrl } from '$lib/api/next/oauth';
+<script lang="ts" module>
   import XLogo from '../svg/XLogo.svelte';
   import DiscordLogo from '../svg/DiscordLogo.svelte';
   import GoogleLogo from '../svg/GoogleLogo.svelte';
-  import { LogIn } from '@lucide/svelte';
-  import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
 
   const providerDetails: Record<string, { icon: typeof XLogo; label: string }> = {
     discord: { icon: DiscordLogo, label: 'Discord' },
     twitter: { icon: XLogo, label: 'X (Twitter)' },
     google: { icon: GoogleLogo, label: 'Google' },
   };
+</script>
+
+<script lang="ts">
+  import { Button } from '$lib/components/ui/button/index.js';
+  import { Field } from '$lib/components/ui/field/index.js';
+  import { GetOAuthAuthorizeUrl } from '$lib/api/next/oauth';
+  import { LogIn } from '@lucide/svelte';
+  import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
 
   let { verb = 'Login' }: { verb?: string } = $props();
 

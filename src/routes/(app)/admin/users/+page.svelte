@@ -1,10 +1,7 @@
-<script lang="ts">
-  import type { SortingState } from '@tanstack/table-core';
+<script lang="ts" module>
   import type { ColumnDef } from '@tanstack/table-core';
-  import { adminApi } from '$lib/api';
-  import type { AdminUsersView, AdminUsersViewPaginated } from '$lib/api/internal/v1';
+  import type { AdminUsersView } from '$lib/api/internal/v1';
   import { PasswordHashingAlgorithm, RoleType } from '$lib/api/internal/v1';
-  import Container from '$lib/components/Container.svelte';
   import {
     CreateSortableColumnDef,
     LocaleDateTimeRenderer,
@@ -14,13 +11,7 @@
     RenderOrangeCell,
     RenderRedCell,
   } from '$lib/components/Table/ColumnUtils';
-  import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
-  import PaginationFooter from '$lib/components/Table/PaginationFooter.svelte';
-  import { CardHeader, CardTitle } from '$lib/components/ui/card';
   import { renderComponent } from '$lib/components/ui/data-table';
-  import { Input } from '$lib/components/ui/input';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import type { TimeoutHandle } from '$lib/types/WAPI';
   import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import DataTableActions from './data-table-actions.svelte';
 
@@ -57,26 +48,6 @@
     },
   ];
 
-  let isFetching = $state(false);
-
-  let requestedPage = $state(1);
-  let requestedPageSize = $state(100);
-
-  let page = $state(0);
-  let perPage = $state(0);
-  let total = $state(0);
-  let data = $state<AdminUsersView[]>([]);
-
-  let nameSearch = $state('');
-  let emailSearch = $state('');
-
-  let sorting = $state<SortingState>([]);
-
-  let filterQuery = $state<string>();
-  let orderByQuery = $derived(
-    sorting.length > 0 ? sorting[0].id + ' ' + (sorting[0].desc ? 'desc' : 'asc') : undefined
-  );
-
   function escapeQuotes(str: string) {
     if (/[ '"\\]/.test(str)) {
       const escaped = str.replace(/(['"\\])/g, '\\$1');
@@ -102,6 +73,39 @@
     const operator = hasWildcard ? 'ilike' : 'eq';
     return `${key} ${operator} ${escaped}`;
   }
+</script>
+
+<script lang="ts">
+  import type { SortingState } from '@tanstack/table-core';
+  import { adminApi } from '$lib/api';
+  import type { AdminUsersViewPaginated } from '$lib/api/internal/v1';
+  import Container from '$lib/components/Container.svelte';
+  import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
+  import PaginationFooter from '$lib/components/Table/PaginationFooter.svelte';
+  import { CardHeader, CardTitle } from '$lib/components/ui/card';
+  import { Input } from '$lib/components/ui/input';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import type { TimeoutHandle } from '$lib/types/WAPI';
+
+  let isFetching = $state(false);
+
+  let requestedPage = $state(1);
+  let requestedPageSize = $state(100);
+
+  let page = $state(0);
+  let perPage = $state(0);
+  let total = $state(0);
+  let data = $state<AdminUsersView[]>([]);
+
+  let nameSearch = $state('');
+  let emailSearch = $state('');
+
+  let sorting = $state<SortingState>([]);
+
+  let filterQuery = $state<string>();
+  let orderByQuery = $derived(
+    sorting.length > 0 ? sorting[0].id + ' ' + (sorting[0].desc ? 'desc' : 'asc') : undefined
+  );
 
   function handleResponse(response: AdminUsersViewPaginated) {
     total = response.total;

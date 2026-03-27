@@ -46,21 +46,23 @@
   }
 </script>
 
-<UsernameInput
-  label="Username"
-  placeholder={account.name}
-  autocomplete="off"
-  bind:value={username}
-  bind:valid={usernameValid}
-  Icon={User}
->
-  {#snippet after()}
-    <Button
-      type="button"
-      onclick={submitUsername}
-      disabled={!usernameValid || username === account.email || loading}
-    >
-      Change
-    </Button>
-  {/snippet}
-</UsernameInput>
+<div class="flex w-full items-start gap-2">
+  <div class="grow">
+    <UsernameInput
+      label="Username"
+      placeholder={account.name}
+      autocomplete="off"
+      bind:value={username}
+      bind:valid={usernameValid}
+      Icon={User}
+    />
+  </div>
+  <Button
+    type="button"
+    class="mt-7"
+    onclick={submitUsername}
+    disabled={!usernameValid || username === account.email || loading}
+  >
+    Change
+  </Button>
+</div>

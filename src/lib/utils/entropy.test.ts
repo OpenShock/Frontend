@@ -49,7 +49,7 @@ describe('calculateStringEntropy', () => {
     // uniqueLength = number of distinct chars in mixed
     const uniqueLength = new Set(mixed).size;
     const length = mixed.length;
-    const total = Math.pow(uniqueLength, length);
+    const total = uniqueLength ** length;
     const expectedMixed = Math.log2(total);
     expect(calculateStringEntropy(mixed)).toBeCloseTo(expectedMixed);
   });

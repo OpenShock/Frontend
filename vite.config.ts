@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 import boxen from 'boxen';
 import chalk from 'chalk';
 import dns from 'node:dns/promises';
+import net from 'node:net';
 import os from 'node:os';
 import { env } from 'node:process';
 import license from 'rollup-plugin-license';
@@ -149,7 +150,62 @@ async function getServerConfig(mode: string, useLocalRedirect: boolean) {
   // Ensure we have the host entry redirecting to localhost
   await ensureFqdnRedirect('127.0.0.1', host);
 
+  // Check if we can bind to port 443 before Vite tries and fails with an unhelpful error
+  await ensurePortBindable(host, 443);
+
   return { host, port: 443, proxy: {} };
+}
+
+async function ensurePortBindable(host: string, port: number): Promise<void> {
+  return new Promise((resolve) => {
+    const server = net.createServer();
+    server.once('error', (err: NodeJS.ErrnoException) => {
+      if (err.code === 'EACCES') {
+        const platform = os.platform();
+        let fix: string;
+
+        if (platform === 'linux') {
+          fix = [
+            `Node.js needs permission to serve HTTPS on port ${port}.\n`,
+            'Option 1 (Recommended): Set up a reverse proxy',
+            '  Use Nginx or Caddy to proxy traffic to your Node server.',
+            '  This is more secure and follows best practices.\n',
+            'Option 2 (Quick fix): Grant Node.js permission to bind to privileged ports',
+            chalk.blue.bold(`  sudo setcap 'cap_net_bind_service=+ep' $(which node)\n`),
+            chalk.yellow.bold(
+              '  ⚠️  Security note: This allows Node to bind to ANY port below 1024.'
+            ),
+            chalk.yellow.bold('  Only use this in trusted development environments.'),
+          ].join('\n');
+        } else if (platform === 'darwin') {
+          fix = [
+            `Node.js needs permission to serve HTTPS on port ${port}.\n`,
+            'Fix: Run the dev server with sudo, or set up a reverse proxy.',
+          ].join('\n');
+        } else {
+          fix = `Node.js does not have permission to bind to port ${port}.\nTry running with elevated privileges or use a reverse proxy.`;
+        }
+
+        console.log(
+          boxen(fix, {
+            padding: 1,
+            margin: 1,
+            borderStyle: 'round',
+            borderColor: 'yellow',
+            title: `Port ${port} Permission Denied`,
+            titleAlignment: 'center',
+          })
+        );
+        process.exit(1);
+      }
+      // For other errors (e.g. EADDRINUSE), let Vite handle them
+      resolve();
+    });
+    server.once('listening', () => {
+      server.close(() => resolve());
+    });
+    server.listen(port, host);
+  });
 }
 
 export default defineConfig(async ({ command, mode, isPreview }) => {
@@ -161,7 +217,7 @@ export default defineConfig(async ({ command, mode, isPreview }) => {
 
   return defineConfig({
     build: {
-      target: 'es2022',
+      target: 'es2024',
     },
     plugins: getPlugins(useLocalRedirect),
     server: await getServerConfig(mode, useLocalRedirect),

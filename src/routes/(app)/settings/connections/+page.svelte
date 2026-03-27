@@ -109,7 +109,7 @@
     </Card.Description>
   </Card.Header>
 
-  <Card.Content class="space-y-6">
+  <Card.Content class="w-full space-y-6">
     <!-- Quick actions -->
     <div class="flex flex-wrap gap-2">
       <Dropdown.Root>

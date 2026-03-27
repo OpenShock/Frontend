@@ -18,7 +18,7 @@
 
   let timeoutHandle: TimeoutHandle | undefined;
 
-  const onEvent: ListenerSignature = (sid, controlType, duration, intensity) => {
+  const onEvent: ListenerSignature = (sid, controlType, duration, _intensity) => {
     clearTimeout(timeoutHandle);
 
     active = controlType;

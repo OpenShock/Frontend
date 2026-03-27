@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { MessageCircleQuestion, SquareTerminal } from '@lucide/svelte';
+  import { MessageCircleQuestionMark, SquareTerminal } from '@lucide/svelte';
   import { browser } from '$app/environment';
   import { PUBLIC_DISCORD_INVITE_URL } from '$env/static/public';
   import type { FirmwareChannel } from '$lib/api/firmwareCDN';
@@ -202,7 +202,7 @@
           Toggle Terminal
         </Button>
         <Button variant="outline" onclick={() => (showHelpDialog = true)}>
-          <MessageCircleQuestion />
+          <MessageCircleQuestionMark />
           I'm having trouble, help?
         </Button>
       </div>

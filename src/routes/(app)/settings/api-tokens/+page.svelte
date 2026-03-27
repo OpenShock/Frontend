@@ -27,8 +27,6 @@
 
   breadcrumbs.push('Settings', '/settings/account');
   breadcrumbs.push('API Tokens');
-
-  let loading = $state<boolean>(false);
   let data = $state<TokenResponse[]>([]);
   let sorting = $state<SortingState>([]);
 
@@ -73,12 +71,11 @@
   let showGenerateTokenModal = $state<boolean>(false);
   let createdTokenSecret = $state<string | null>(null);
 
-  function handleProblem(problem: ProblemDetails): boolean {
+  function handleProblem(_problem: ProblemDetails): boolean {
     return false;
   }
 
   async function loadTokens(successMessage?: string) {
-    loading = true;
     try {
       data = await apiTokensApi.tokensListTokens();
       if (successMessage) {
@@ -86,8 +83,6 @@
       }
     } catch (error) {
       await handleApiError(error, handleProblem);
-    } finally {
-      loading = false;
     }
   }
 

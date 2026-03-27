@@ -38,7 +38,6 @@
       });
 
       if (!account.isVerified) {
-        /* eslint-disable-next-line svelte/no-navigation-without-resolve -- URL is already built with resolve() */
         goto(resolve('/login?message=signup-success'));
         return;
       }

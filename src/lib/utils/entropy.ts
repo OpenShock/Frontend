@@ -3,5 +3,5 @@ export function calculateStringEntropy(value: string): number {
   const length = value.length;
   const uniqueLength = uniqueChars.size;
 
-  return Math.log2(Math.pow(uniqueLength, length));
+  return Math.log2(uniqueLength ** length);
 }
