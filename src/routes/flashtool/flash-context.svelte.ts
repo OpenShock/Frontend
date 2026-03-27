@@ -1,5 +1,5 @@
-import { onMount } from 'svelte';
 import type { IEspLoaderTerminal } from 'esptool-js';
+import { onMount } from 'svelte';
 import FlashManager from './FlashManager';
 
 export class FlashContext {
