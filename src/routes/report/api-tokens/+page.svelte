@@ -1,3 +1,9 @@
+<script lang="ts" module>
+  function isValid(str: string): boolean {
+    return /^[0-9a-zA-Z]{32,64}$/i.test(str);
+  }
+</script>
+
 <script lang="ts">
   import OctagonAlert from '@lucide/svelte/icons/octagon-alert';
   import { goto } from '$app/navigation';
@@ -11,10 +17,6 @@
   import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { toast } from 'svelte-sonner';
-
-  function isValid(str: string): boolean {
-    return /^[0-9a-zA-Z]{32,64}$/i.test(str);
-  }
 
   let secrets = $state<string[]>([]);
   let turnstileResponse = $state<string | null>(null);
@@ -88,7 +90,7 @@
 
     <!-- Turnstile + Acknowledgement -->
     <div class="space-y-3">
-      <Turnstile action="report-token" bind:response={turnstileResponse} />
+      <Turnstile action="report-token" onResponse={(response) => (turnstileResponse = response)} />
       <div class="flex items-center space-x-2">
         <Checkbox
           id="acknowledgement"

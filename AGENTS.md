@@ -38,8 +38,8 @@ src/
 │   ├── hooks/                   # Custom Svelte hooks
 │   └── constants/               # Global constants
 ├── routes/
-│   ├── (anonymous)/             # Public routes (login, signup, etc.)
-│   ├── (authenticated)/         # Auth-protected routes (home, settings, admin, etc.)
+│   ├── (auth)/                  # Public routes (login, signup, etc.)
+│   ├── (app)/                   # Auth-protected routes (home, settings, admin, etc.)
 │   ├── shares/                  # Public share views
 │   └── flashtool/               # ESP32 firmware flashing tool
 ├── params/                      # SvelteKit route param matchers (guid, integer)
@@ -58,8 +58,8 @@ Both directories are excluded from ESLint.
 
 SvelteKit file-based routing with route groups:
 
-- `(anonymous)` — No auth required (login, signup, activate, forgot-password, oauth)
-- `(authenticated)` — Auth required (home, profile, settings, hubs, shockers, shares, admin)
+- `(auth)` — No auth required (login, signup, activate, forgot-password, oauth)
+- `(app)` — Auth required (home, profile, settings, hubs, shockers, shares, admin)
 - Route param matchers in `src/params/`: `[id=guid]`, `[n=integer]`
 
 ### State Management

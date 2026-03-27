@@ -1,7 +1,19 @@
-<script lang="ts">
-  import { Loader, Volume2, Waves, Zap } from '@lucide/svelte';
+<script lang="ts" module>
+  import { Volume2, Waves, Zap } from '@lucide/svelte';
   import { buttonVariants } from '$lib/components/ui/button/button.svelte';
   import { ControlType } from '$lib/signalr/models/ControlType';
+
+  const Buttons = [
+    { type: ControlType.Sound, Icon: Volume2 },
+    { type: ControlType.Vibrate, Icon: Waves },
+    { type: ControlType.Shock, Icon: Zap },
+  ];
+
+  const buttonClasses = buttonVariants({ variant: 'secondary', size: 'default' });
+</script>
+
+<script lang="ts">
+  import { Loader } from '@lucide/svelte';
   import type { TimeoutHandle } from '$lib/types/WAPI';
   import { cn } from '$lib/utils';
   import { onDestroy } from 'svelte';
@@ -32,14 +44,6 @@
     ctrl(type);
   }
 
-  const Buttons = [
-    { type: ControlType.Sound, Icon: Volume2 },
-    { type: ControlType.Vibrate, Icon: Waves },
-    { type: ControlType.Shock, Icon: Zap },
-  ];
-
-  const buttonClasses = buttonVariants({ variant: 'secondary', size: 'default' });
-
   onDestroy(() => clearTimeout(timeoutHandle));
 </script>
 
@@ -51,6 +55,8 @@
         active: type === active || type === selfActive,
       })}
       title={ControlType[type]}
+      aria-label={ControlType[type]}
+      aria-pressed={type === active || type === selfActive}
       onclick={() => trigger(type)}
       disabled={isDisabled}
     >

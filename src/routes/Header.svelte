@@ -31,7 +31,7 @@
 <header
   class="border-border/40 bg-background/95 supports-backdrop-filter:bg-background/60 sticky top-0 z-50 flex h-12 w-full flex-none flex-row items-center border-b px-2 backdrop-blur-sm"
 >
-  <Button variant="ghost" class="size-8" title="Open Sidebar" onclick={() => sidebar.toggle()}>
+  <Button variant="ghost" class="size-8" title="Toggle Sidebar" onclick={() => sidebar.toggle()}>
     <PanelLeft size={24} class="m-0 text-gray-600 dark:text-gray-300" />
   </Button>
   <Breadcrumb />
@@ -53,7 +53,7 @@
           <img
             class="inline-block h-8 rounded-full"
             src={userState.self.avatar}
-            alt="User Avatar"
+            alt="{userState.self.name}'s avatar"
           />
           <p class="hidden lg:inline-block">{userState.self.name}</p>
         </DropdownMenu.Trigger>

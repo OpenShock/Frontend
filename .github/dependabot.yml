@@ -5,7 +5,6 @@
 
 version: 2
 updates:
-
   # Check for Nuget package updates
   - package-ecosystem: npm
     directory: /
@@ -17,7 +16,7 @@ updates:
       npm-dependencies:
         patterns:
           - '*' # Group all updates together
-  
+
   # Check for Github Actions version updates (for CI/CD)
   - package-ecosystem: github-actions
     directory: /

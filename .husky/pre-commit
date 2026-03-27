@@ -1,0 +1,14 @@
+pnpm exec svelte-kit sync
+
+pnpm exec svelte-check --tsconfig ./tsconfig.json &
+pid1=$!
+pnpm exec prettier --check . &
+pid2=$!
+pnpm exec eslint . &
+pid3=$!
+
+fail=0
+wait $pid1 || fail=1
+wait $pid2 || fail=1
+wait $pid3 || fail=1
+exit $fail

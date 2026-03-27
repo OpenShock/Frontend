@@ -26,17 +26,29 @@
       <Badge variant="destructive" class="w-max">Paused at {pausedReason} Level</Badge>
     {/if}
   </div>
-  <div class="flex gap-2">
-    <span class={permClass(shockerShare.permissions.shock)}>
+  <div class="flex gap-2" role="group" aria-label="Permissions">
+    <span
+      class={permClass(shockerShare.permissions.shock)}
+      title={shockerShare.permissions.shock ? 'Shock enabled' : 'Shock disabled'}
+    >
       <Zap color="white" />
     </span>
-    <span class={permClass(shockerShare.permissions.vibrate)}>
+    <span
+      class={permClass(shockerShare.permissions.vibrate)}
+      title={shockerShare.permissions.vibrate ? 'Vibrate enabled' : 'Vibrate disabled'}
+    >
       <Waves color="white" />
     </span>
-    <span class={permClass(shockerShare.permissions.sound)}>
+    <span
+      class={permClass(shockerShare.permissions.sound)}
+      title={shockerShare.permissions.sound ? 'Sound enabled' : 'Sound disabled'}
+    >
       <Volume2 color="white" />
     </span>
-    <span class={permClass(shockerShare.permissions.live!)}>
+    <span
+      class={permClass(shockerShare.permissions.live!)}
+      title={shockerShare.permissions.live ? 'Live enabled' : 'Live disabled'}
+    >
       <ChartNoAxesGantt color="white" />
     </span>
   </div>

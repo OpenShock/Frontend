@@ -1,8 +1,5 @@
-<script lang="ts">
-  import { RadToDeg, clamp, getCircleX, getCircleY, invLerp, lerp } from '$lib/utils/math';
-  import { onDestroy } from 'svelte';
-  import { cubicOut } from 'svelte/easing';
-  import { Tween } from 'svelte/motion';
+<script lang="ts" module>
+  import { getCircleX, getCircleY } from '$lib/utils/math';
 
   // Gauge constants
   const viewHeight = 100;
@@ -15,6 +12,21 @@
   const angleRange = angleEnd - angleStart;
   const arcStartX = centerX + getCircleX(radius, angleStart);
   const arcStartY = centerY + getCircleY(radius, angleStart);
+
+  function calcSvgPathData(angleEnd: number) {
+    const arcEndX = centerX + getCircleX(radius, angleEnd);
+    const arcEndY = centerY + getCircleY(radius, angleEnd);
+    const largeArcFlag = angleEnd - angleStart < 180 ? 0 : 1;
+
+    return `M ${arcStartX} ${arcStartY} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${arcEndX} ${arcEndY}`;
+  }
+</script>
+
+<script lang="ts">
+  import { RadToDeg, clamp, invLerp, lerp } from '$lib/utils/math';
+  import { onDestroy } from 'svelte';
+  import { cubicOut } from 'svelte/easing';
+  import { Tween } from 'svelte/motion';
 
   // Unique gauge IDs
   const id = $props.id();
@@ -119,14 +131,6 @@
 
   // Update visual progress
   let degrees = $derived(angleStart + invLerp(min, max, tween.current) * angleRange);
-
-  function calcSvgPathData(angleEnd: number) {
-    const arcEndX = centerX + getCircleX(radius, angleEnd);
-    const arcEndY = centerY + getCircleY(radius, angleEnd);
-    const largeArcFlag = angleEnd - angleStart < 180 ? 0 : 1;
-
-    return `M ${arcStartX} ${arcStartY} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${arcEndX} ${arcEndY}`;
-  }
 </script>
 
 <div class="relative size-[150px] select-none">

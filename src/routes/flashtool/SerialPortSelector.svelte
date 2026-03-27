@@ -1,3 +1,7 @@
+<script lang="ts" module>
+  const filters = [{ usbVendorId: 0x1a86 }, { usbVendorId: 0x10c4 }, { usbVendorId: 0x303a }];
+</script>
+
 <script lang="ts">
   import { Cpu, TriangleAlert, Unplug } from '@lucide/svelte';
   import { Button } from '$lib/components/ui/button';
@@ -11,8 +15,6 @@
   }
 
   let { serial, port = $bindable(null), disabled = false }: Props = $props();
-
-  const filters = [{ usbVendorId: 0x1a86 }, { usbVendorId: 0x10c4 }, { usbVendorId: 0x303a }];
 
   let loading = $state(false);
   let errorMessage = $state<Error | null>(null);

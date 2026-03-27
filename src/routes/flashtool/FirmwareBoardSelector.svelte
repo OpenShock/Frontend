@@ -37,7 +37,7 @@
 <div class="flex flex-row items-center justify-start gap-2">
   <Popover>
     <PopoverTrigger>
-      <Button variant="outline" role="combobox" class="w-[240px] justify-between">
+      <Button variant="outline" role="combobox" class="w-[240px] justify-between" {disabled}>
         {selectedBoard ?? 'Select a board...'}
         <ChevronsUpDown class="ml-2 size-4 shrink-0 opacity-50" />
       </Button>

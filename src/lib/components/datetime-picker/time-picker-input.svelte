@@ -33,7 +33,7 @@
     class: className,
     type = 'tel',
     value,
-    files = $bindable(),
+    files: _files,
 
     id,
     name,

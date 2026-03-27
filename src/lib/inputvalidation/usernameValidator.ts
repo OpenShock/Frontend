@@ -50,7 +50,7 @@ export const UsernameResemblesEmailValRes: ValidationResult = {
 export const UsernameCheckingAvailabilityValRes: ValidationResult = {
   valid: false,
   message: 'Checking username availability...',
-  color: 'gray-500',
+  color: 'gray',
 };
 
 export const UsernameAvailableValRes: ValidationResult = {

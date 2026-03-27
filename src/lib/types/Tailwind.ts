@@ -1,36 +1,11 @@
-type color =
-  | 'slate'
-  | 'gray'
-  | 'zinc'
-  | 'neutral'
-  | 'stone'
-  | 'red'
-  | 'orange'
-  | 'amber'
-  | 'yellow'
-  | 'lime'
-  | 'green'
-  | 'emerald'
-  | 'teal'
-  | 'cyan'
-  | 'sky'
-  | 'blue'
-  | 'indigo'
-  | 'violet'
-  | 'purple'
-  | 'fuchsia'
-  | 'pink'
-  | 'rose';
+export const twTextColor = {
+  gray: 'text-gray-500',
+  red: 'text-red-500',
+  orange: 'text-orange-500',
+  yellow: 'text-yellow-500',
+  green: 'text-green-500',
+  cyan: 'text-cyan-500',
+  blue: 'text-blue-500',
+} as const;
 
-type shade = 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
-
-export type TwColor =
-  | 'transparent'
-  | 'current'
-  | 'black'
-  | 'white'
-  | 'inherit'
-  | `${color}-${shade}`;
-export type TwBgColor = `bg-${TwColor}`;
-export type TwTextColor = `text-${TwColor}`;
-export type TwBorderColor = `border-${TwColor}`;
+export type TwTextColor = keyof typeof twTextColor;

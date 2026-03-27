@@ -1,12 +1,12 @@
 <script lang="ts">
   import { afterNavigate } from '$app/navigation';
-  import { asset } from '$app/paths';
+  import { asset, resolve } from '$app/paths';
   import { page } from '$app/state';
   import { PUBLIC_SITE_NAME } from '$env/static/public';
   import { BasicTags, OpenGraphTags, TwitterSummaryTags } from '$lib/components/metadata';
-  import { isValidRedirectURL, prefixBase } from '$lib/utils/url';
+  import { isValidRedirectURL } from '$lib/utils/url';
 
-  let previousPath = $state<string>(prefixBase('/'));
+  let previousPath = $state<string>(resolve('/'));
 
   afterNavigate(({ from }) => {
     if (from !== null && isValidRedirectURL(from.url)) {
@@ -40,7 +40,6 @@
   <div class="big">
     {page.error?.message ?? 'Something went wrong.'}
     <br />
-    <!-- prefixBase is used here because resolve() requires a route ID, not a plain pathname -->
     <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
     <a href={previousPath}>Go back</a>
   </div>

@@ -1,13 +1,13 @@
-import type { TwColor } from '$lib/types/Tailwind';
+import type { TwTextColor } from '$lib/types/Tailwind';
 
 export type ValidationResult = {
   valid: boolean;
   message?: string;
-  color?: TwColor;
+  color?: TwTextColor;
   link?: { text: string; href: string };
 };
 
-export function GetValResColor(valRes: ValidationResult): TwColor {
+export function GetValResColor(valRes: ValidationResult): TwTextColor {
   if (valRes.color !== undefined) return valRes.color;
-  return valRes.valid ? 'green-500' : 'red-500';
+  return valRes.valid ? 'green' : 'red';
 }
