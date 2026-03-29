@@ -1,0 +1,57 @@
+<script lang="ts">
+  import type { ShockerResponse } from '$lib/api/internal/v1';
+  import { Volume2, Waves, Zap } from '@lucide/svelte';
+  import { buttonVariants } from '$lib/components/ui/button/button.svelte';
+  import { ControlType } from '$lib/signalr/models/ControlType';
+  import type { LiveShockerState } from '$lib/state/live-control-state.svelte';
+  import { cn } from '$lib/utils';
+  import LiveSlider from './impl/LiveSlider.svelte';
+  import ShockerMenu from './impl/ShockerMenu.svelte';
+
+  interface Props {
+    shocker: ShockerResponse;
+    liveState: LiveShockerState;
+  }
+
+  let { shocker, liveState }: Props = $props();
+
+  const types = [
+    { type: ControlType.Sound, Icon: Volume2, label: 'Sound' },
+    { type: ControlType.Vibrate, Icon: Waves, label: 'Vibrate' },
+    { type: ControlType.Shock, Icon: Zap, label: 'Shock' },
+  ] as const;
+
+  const buttonClasses = buttonVariants({ variant: 'secondary', size: 'default' });
+</script>
+
+<div
+  class="border-surface-400-500-token flex flex-col items-center justify-center gap-2 overflow-hidden rounded-md border p-2"
+>
+  <!-- Title -->
+  <h2 class="flex w-full justify-between px-4 text-center text-lg font-bold">
+    <span>{shocker.name}</span>
+    <ShockerMenu {shocker} />
+  </h2>
+
+  <!-- Type Selector -->
+  <div class="flex w-full gap-2">
+    {#each types as { type, Icon, label } (type)}
+      <button
+        class={cn(buttonClasses, 'flex-1', {
+          'border-primary bg-primary/20': liveState.type === type,
+        })}
+        title={label}
+        aria-label={label}
+        aria-pressed={liveState.type === type}
+        onclick={() => (liveState.type = type)}
+      >
+        <Icon />
+      </button>
+    {/each}
+  </div>
+
+  <!-- Live Slider -->
+  <div class="h-[200px] w-full">
+    <LiveSlider {liveState} />
+  </div>
+</div>
