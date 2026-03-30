@@ -1,5 +1,5 @@
-import { browser } from '$app/environment';
 import { isString } from '$lib/typeguards';
+import { LocalStorageState } from './classes/local-storage-state.svelte';
 
 export enum ColorScheme {
   Dark = 'dark',
@@ -10,22 +10,6 @@ export enum ColorScheme {
 function isColorSchemeEnum(value: unknown): value is ColorScheme {
   if (!isString(value)) return false;
   return Object.values(ColorScheme).includes(value as ColorScheme);
-}
-
-function getStoredScheme(): ColorScheme {
-  // If we are not in a browser environment, return default
-  if (!browser) {
-    return ColorScheme.System;
-  }
-
-  // If the stored value is invalid, reset it and return default
-  const scheme = localStorage.getItem('theme');
-  if (!isColorSchemeEnum(scheme)) {
-    localStorage.setItem('theme', ColorScheme.System);
-    return ColorScheme.System;
-  }
-
-  return scheme;
 }
 
 export function getDarkReaderState() {
@@ -66,22 +50,35 @@ function setDarkMode(preference: ColorScheme) {
   document.documentElement.classList.toggle('dark', resolveDarkMode(preference));
 }
 
-let _value = $state<ColorScheme>(getStoredScheme());
+class ColorSchemeState extends LocalStorageState<ColorScheme> {
+  constructor() {
+    super('theme', ColorScheme.System);
+  }
 
-export const colorScheme = {
-  get value() {
-    return _value;
-  },
-  set value(v: ColorScheme) {
-    _value = v;
-    localStorage.setItem('theme', v);
+  override set value(v: ColorScheme) {
+    super.value = v;
     setDarkMode(v);
-  },
-};
+  }
+
+  override get value() {
+    return super.value;
+  }
+
+  protected override deserialize(raw: string): ColorScheme {
+    return isColorSchemeEnum(raw) ? raw : this.defaultValue;
+  }
+
+  protected override serialize(value: ColorScheme): string {
+    return value;
+  }
+}
+
+export const colorScheme = new ColorSchemeState();
 
 function handleMediaQueryChange() {
-  setDarkMode(getStoredScheme());
+  setDarkMode(colorScheme.value);
 }
+
 export function initializeColorScheme() {
   handleMediaQueryChange();
 
