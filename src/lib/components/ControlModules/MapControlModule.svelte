@@ -6,8 +6,7 @@
     shockers: ShockerResponse[];
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  let { shockers }: Props = $props();
+  let { shockers: _shockers }: Props = $props();
 
   let canvas: HTMLCanvasElement;
 
