@@ -1,27 +1,28 @@
 <script lang="ts">
   import { CircleCheckBig, TriangleAlert } from '@lucide/svelte';
   import {
-    FetchChannelVersion,
+    FetchLatest,
     type FirmwareChannel,
     FirmwareChannels,
-  } from '$lib/api/firmwareCDN';
+    type FirmwareLatestResponse,
+  } from '$lib/api/firmwareRepo';
   import * as ToggleGroup from '$lib/components/ui/toggle-group';
 
-  /** Optional chip to constrain the list of boards to */
-  //export let chip: string | null = null;
   interface Props {
     channel?: FirmwareChannel;
     version?: string | null;
+    latestResponse?: FirmwareLatestResponse | null;
     disabled?: boolean;
   }
 
   let {
     channel = $bindable<FirmwareChannel>('stable'),
     version = $bindable(null),
+    latestResponse = $bindable(null),
     disabled = false,
   }: Props = $props();
 
-  let versions = $state<{ [key in FirmwareChannel]?: string | null }>({});
+  let cache = $state<{ [key in FirmwareChannel]?: FirmwareLatestResponse | null }>({});
 
   // Reactive effect to update the version based on the selected channel.
   $effect(() => {
@@ -31,20 +32,28 @@
     }
 
     // Use a cached value if available.
-    const cachedVersion = versions[channel];
-    if (cachedVersion !== undefined) {
-      version = cachedVersion;
+    const cached = cache[channel];
+    if (cached !== undefined) {
+      latestResponse = cached;
+      version = cached?.version ?? null;
       return;
     }
 
     // Capture the current channel to avoid race conditions if channel changes.
     const currentChannel = channel;
 
-    // Fetch the channel version from the API.
-    FetchChannelVersion(currentChannel).then((ver) => {
-      version = ver ?? null;
-      versions[currentChannel] = version;
-    });
+    // Fetch the latest firmware info from the repository server.
+    FetchLatest(currentChannel)
+      .then((resp) => {
+        latestResponse = resp;
+        version = resp.version;
+        cache[currentChannel] = resp;
+      })
+      .catch(() => {
+        latestResponse = null;
+        version = null;
+        cache[currentChannel] = null;
+      });
   });
 </script>
 

@@ -82,7 +82,7 @@
   import { cn } from '$lib/utils';
   import { NumberToHexPadded } from '$lib/utils/convert';
   import { onMount } from 'svelte';
-  import type { FirmwareChannel } from '$lib/api/firmwareCDN';
+  import type { FirmwareChannel } from '$lib/api/firmwareRepo';
 
   let hubLoaded = $state(false);
   let otaLogs = $state<OtaItem[]>([]);

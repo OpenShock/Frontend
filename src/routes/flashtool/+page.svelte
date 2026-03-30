@@ -2,7 +2,7 @@
   import { MessageCircleQuestionMark, SquareTerminal } from '@lucide/svelte';
   import { browser } from '$app/environment';
   import { PUBLIC_DISCORD_INVITE_URL } from '$env/static/public';
-  import type { FirmwareChannel } from '$lib/api/firmwareCDN';
+  import type { FirmwareChannel, FirmwareLatestResponse } from '$lib/api/firmwareRepo';
   import Container from '$lib/components/Container.svelte';
   import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
@@ -60,6 +60,7 @@
 
   let channel = $state<FirmwareChannel>('stable');
   let version = $state<string | null>(null);
+  let latestResponse = $state<FirmwareLatestResponse | null>(null);
   let board = $state<string | null>(null);
   let eraseBeforeFlash = $state<boolean>(false);
 
@@ -106,10 +107,10 @@
 
   {#if manager}
     <h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">Select Channel</h3>
-    <FirmwareChannelSelector bind:channel bind:version disabled={isFlashing} />
+    <FirmwareChannelSelector bind:channel bind:version bind:latestResponse disabled={isFlashing} />
 
     <h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">Select Board</h3>
-    <FirmwareBoardSelector {version} bind:selectedBoard={board} disabled={isFlashing} />
+    <FirmwareBoardSelector {latestResponse} bind:selectedBoard={board} disabled={isFlashing} />
 
     <div class="items-top flex space-x-2">
       <Checkbox id="erase-before-flash" bind:checked={eraseBeforeFlash} />
@@ -127,9 +128,9 @@
       </div>
     </div>
 
-    {#if version && board}
+    {#if latestResponse && board}
       <FirmwareFlasher
-        {version}
+        {latestResponse}
         {board}
         {manager}
         {eraseBeforeFlash}

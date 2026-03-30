@@ -86,7 +86,7 @@ const config = {
           getWsUrlFromHttpUrl(dotenv.PUBLIC_BACKEND_API_URL),
           dotenv.PUBLIC_GATEWAY_CSP_WILDCARD,
           getWsUrlFromHttpUrl(dotenv.PUBLIC_GATEWAY_CSP_WILDCARD),
-          'https://firmware.openshock.org',
+          dotenv.PUBLIC_FIRMWARE_REPO_URL,
           'https://api.pwnedpasswords.com/range/',
           'https://cloudflareinsights.com',
         ],

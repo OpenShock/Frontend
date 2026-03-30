@@ -1,32 +1,20 @@
 <script lang="ts">
   import { Check, ChevronsUpDown } from '@lucide/svelte';
-  import { FetchVersionBoards } from '$lib/api/firmwareCDN';
+  import { ExtractBoards, type FirmwareLatestResponse } from '$lib/api/firmwareRepo';
   import { Button } from '$lib/components/ui/button';
   import * as Command from '$lib/components/ui/command';
   import { Popover, PopoverContent, PopoverTrigger } from '$lib/components/ui/popover';
   import { cn } from '$lib/utils';
 
-  /** Optional chip to constrain the list of boards to */
-  //export let chip: string | null = null;
   interface Props {
-    version: string | null;
+    latestResponse: FirmwareLatestResponse | null;
     selectedBoard?: string | null;
     disabled?: boolean;
   }
 
-  let { version, selectedBoard = $bindable(null), disabled = false }: Props = $props();
+  let { latestResponse, selectedBoard = $bindable(null), disabled = false }: Props = $props();
 
-  let boardsCache = $state<{ [key: string]: string[] }>({});
-  $effect(() => {
-    if (version && !(version in boardsCache)) {
-      let requestedVersion = version;
-      FetchVersionBoards(version).then((b) => {
-        boardsCache = { ...boardsCache, [requestedVersion]: b ?? [] };
-      });
-    }
-  });
-
-  let boards = $derived(version ? (boardsCache[version] ?? []) : []);
+  let boards = $derived(latestResponse ? ExtractBoards(latestResponse) : []);
   $effect(() => {
     if (boards.length === 0) {
       selectedBoard = null;
