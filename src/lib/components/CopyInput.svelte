@@ -9,9 +9,10 @@
     value: string;
     class?: string;
     icon?: Snippet;
+    displayValue?: string;
   }
 
-  let { value, class: className, icon }: Props = $props();
+  let { value, class: className, icon, displayValue }: Props = $props();
 
   let copied = $state(false);
 
@@ -32,7 +33,13 @@
   {#if icon}
     {@render icon()}
   {/if}
-  <input class="mx-3 grow outline-none!" type="text" bind:value readonly disabled />
+  <input
+    class="mx-3 grow outline-none!"
+    type="text"
+    value={displayValue ?? value}
+    readonly
+    disabled
+  />
   <span>
     <button
       onclick={copyToken}

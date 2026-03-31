@@ -12,6 +12,8 @@
   import { userState } from '$lib/state/user-state.svelte';
   import { Button } from '$lib/components/ui/button';
   import { Pencil } from '@lucide/svelte';
+  import CopyInput from '$lib/components/CopyInput.svelte';
+  import { getSiteShortURL } from '$lib/utils/url';
 
   interface Props {
     shareLinkRoot: PublicShareResponse;
@@ -36,10 +38,12 @@
 
   const shareId = $derived(page.params.shareId);
   let editUrl = $derived(resolve(`/shares/public/${shareId}/edit`));
+
+  const shareUrl = $derived(getSiteShortURL(`/s/${shareId}`));
 </script>
 
 <div class="m-5 flex h-full w-full flex-col gap-15">
-  <div class="flex w-full flex-row content-between">
+  <div class="grid grid-cols-3 grid-rows-1">
     <div class="flex w-full flex-col">
       <h1 class="text-2xl font-bold">Public Share: {shareLinkRoot.name}</h1>
       <p
@@ -51,11 +55,13 @@
       </p>
     </div>
 
-    <div class="flex">
+    <div class="items-center1 flex">
+      <CopyInput value={shareUrl.href} displayValue={shareUrl.host + shareUrl.pathname} />
+    </div>
+
+    <div class="flex items-center justify-end gap-4">
       {#if userState.self}
-        <div class="flex justify-end p-2">
-          <Button variant="outline" href={editUrl}><Pencil /> Edit</Button>
-        </div>
+        <Button variant="outline" href={editUrl}><Pencil /> Edit</Button>
       {/if}
 
       <Tooltip.Provider>
