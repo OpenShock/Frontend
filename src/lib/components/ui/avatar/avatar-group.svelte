@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { cn, type WithElementRef } from "$lib/utils/shadcn.js";
 	import type { HTMLAttributes } from "svelte/elements";
+	import { cn, type WithElementRef } from "$lib/utils/shadcn.js";
 
 	let {
 		ref = $bindable(null),
@@ -12,8 +12,11 @@
 
 <div
 	bind:this={ref}
-	data-slot="card-footer"
-	class={cn("bg-muted/50 rounded-b-xl border-t p-4 group-data-[size=sm]/card:p-3 flex items-center", className)}
+	data-slot="avatar-group"
+	class={cn(
+		"cn-avatar-group *:data-[slot=avatar]:ring-background group/avatar-group flex -space-x-2 *:data-[slot=avatar]:ring-2",
+		className
+	)}
 	{...restProps}
 >
 	{@render children?.()}
