@@ -10,8 +10,8 @@
   import Header from './Header.svelte';
   import Sidebar from './Sidebar.svelte';
   import '../app.css';
-  import { browser } from '$app/environment';
-  import { isMobile } from '$lib/utils/compatibility';
+  import { IsMobile } from '$lib/hooks/is-mobile.svelte';
+  import { LocalStorageState } from '$lib/state/classes/local-storage-state.svelte';
   import DialogManager from '$lib/components/dialog-manager/dialog-manager.svelte';
 
   interface Props {
@@ -22,10 +22,9 @@
 
   let meta = $derived(buildMetaData(page.url));
 
-  let isOpen = $state(browser && !isMobile && localStorage.getItem('sidebarOpen') === 'true');
-  $effect(() => {
-    if (!isMobile) localStorage.setItem('sidebarOpen', isOpen ? 'true' : 'false');
-  });
+  const mobile = new IsMobile();
+  const sidebarOpen = new LocalStorageState('sidebarOpen', false);
+  const isOpen = $derived(mobile.current ? false : sidebarOpen.value);
 </script>
 
 <BasicTags {...meta} />
@@ -36,7 +35,7 @@
 
 <DialogManager />
 
-<SidebarProvider bind:open={isOpen}>
+<SidebarProvider open={isOpen} onOpenChange={(v) => (sidebarOpen.value = v)}>
   <Sidebar />
   <div class="flex h-screen w-screen flex-1 flex-col overflow-hidden">
     {#if PUBLIC_DEVELOPMENT_BANNER === 'true'}

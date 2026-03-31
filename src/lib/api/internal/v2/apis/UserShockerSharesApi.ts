@@ -85,15 +85,6 @@ export interface UserSharesRedeemInviteRequest {
  */
 export interface UserShockerSharesApiInterface {
     /**
-     * Creates request options for userSharesBulkPauseUserShareShockers without sending the request
-     * @param {string} userId 
-     * @param {PauseUserShareShockersRequest} [pauseUserShareShockersRequest] 
-     * @throws {RequiredError}
-     * @memberof UserShockerSharesApiInterface
-     */
-    userSharesBulkPauseUserShareShockersRequestOpts(requestParameters: UserSharesBulkPauseUserShareShockersRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @param {string} userId 
      * @param {PauseUserShareShockersRequest} [pauseUserShareShockersRequest] 
@@ -108,15 +99,6 @@ export interface UserShockerSharesApiInterface {
     userSharesBulkPauseUserShareShockers(userId: string, pauseUserShareShockersRequest?: PauseUserShareShockersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PauseUserShareShockersResponse>;
 
     /**
-     * Creates request options for userSharesBulkRemoveUserShareShockers without sending the request
-     * @param {string} userId 
-     * @param {Array<string>} [requestBody] 
-     * @throws {RequiredError}
-     * @memberof UserShockerSharesApiInterface
-     */
-    userSharesBulkRemoveUserShareShockersRequestOpts(requestParameters: UserSharesBulkRemoveUserShareShockersRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @param {string} userId 
      * @param {Array<string>} [requestBody] 
@@ -129,15 +111,6 @@ export interface UserShockerSharesApiInterface {
     /**
      */
     userSharesBulkRemoveUserShareShockers(userId: string, requestBody?: Array<string>, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RemoveUserSharesResponse>;
-
-    /**
-     * Creates request options for userSharesBulkUserShareShockersUpdate without sending the request
-     * @param {string} userId 
-     * @param {BulkUserShareShockersUpdateRequest} [bulkUserShareShockersUpdateRequest] 
-     * @throws {RequiredError}
-     * @memberof UserShockerSharesApiInterface
-     */
-    userSharesBulkUserShareShockersUpdateRequestOpts(requestParameters: UserSharesBulkUserShareShockersUpdateRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -156,14 +129,6 @@ export interface UserShockerSharesApiInterface {
     userSharesBulkUserShareShockersUpdate(userId: string, bulkUserShareShockersUpdateRequest?: BulkUserShareShockersUpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
-     * Creates request options for userSharesCreateShareInvite without sending the request
-     * @param {CreateShareRequest} [createShareRequest] 
-     * @throws {RequiredError}
-     * @memberof UserShockerSharesApiInterface
-     */
-    userSharesCreateShareInviteRequestOpts(requestParameters: UserSharesCreateShareInviteRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @param {CreateShareRequest} [createShareRequest] 
      * @param {*} [options] Override http request option.
@@ -175,14 +140,6 @@ export interface UserShockerSharesApiInterface {
     /**
      */
     userSharesCreateShareInvite(createShareRequest?: CreateShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
-
-    /**
-     * Creates request options for userSharesDeleteOutgoingInvite without sending the request
-     * @param {string} inviteId 
-     * @throws {RequiredError}
-     * @memberof UserShockerSharesApiInterface
-     */
-    userSharesDeleteOutgoingInviteRequestOpts(requestParameters: UserSharesDeleteOutgoingInviteRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -198,14 +155,6 @@ export interface UserShockerSharesApiInterface {
     userSharesDeleteOutgoingInvite(inviteId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
-     * Creates request options for userSharesDenyIncomingInvite without sending the request
-     * @param {string} inviteId 
-     * @throws {RequiredError}
-     * @memberof UserShockerSharesApiInterface
-     */
-    userSharesDenyIncomingInviteRequestOpts(requestParameters: UserSharesDenyIncomingInviteRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @param {string} inviteId 
      * @param {*} [options] Override http request option.
@@ -217,13 +166,6 @@ export interface UserShockerSharesApiInterface {
     /**
      */
     userSharesDenyIncomingInvite(inviteId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
-
-    /**
-     * Creates request options for userSharesGetIncomingInvitesList without sending the request
-     * @throws {RequiredError}
-     * @memberof UserShockerSharesApiInterface
-     */
-    userSharesGetIncomingInvitesListRequestOpts(): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -238,13 +180,6 @@ export interface UserShockerSharesApiInterface {
     userSharesGetIncomingInvitesList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ShareInviteBaseDetails>>;
 
     /**
-     * Creates request options for userSharesGetOutgoingInvitesList without sending the request
-     * @throws {RequiredError}
-     * @memberof UserShockerSharesApiInterface
-     */
-    userSharesGetOutgoingInvitesListRequestOpts(): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -257,13 +192,6 @@ export interface UserShockerSharesApiInterface {
     userSharesGetOutgoingInvitesList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ShareInviteBaseDetails>>;
 
     /**
-     * Creates request options for userSharesGetSharesByUsers without sending the request
-     * @throws {RequiredError}
-     * @memberof UserShockerSharesApiInterface
-     */
-    userSharesGetSharesByUsersRequestOpts(): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -274,14 +202,6 @@ export interface UserShockerSharesApiInterface {
     /**
      */
     userSharesGetSharesByUsers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<V2UserShares>;
-
-    /**
-     * Creates request options for userSharesRedeemInvite without sending the request
-     * @param {string} inviteId 
-     * @throws {RequiredError}
-     * @memberof UserShockerSharesApiInterface
-     */
-    userSharesRedeemInviteRequestOpts(requestParameters: UserSharesRedeemInviteRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 

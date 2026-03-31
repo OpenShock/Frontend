@@ -88,14 +88,6 @@ export interface ShareLinksRemoveShockerRequest {
  */
 export interface PublicShockerSharesApiInterface {
     /**
-     * Creates request options for publicGetPublicShare without sending the request
-     * @param {string} publicShareId 
-     * @throws {RequiredError}
-     * @memberof PublicShockerSharesApiInterface
-     */
-    publicGetPublicShareRequestOpts(requestParameters: PublicGetPublicShareRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Gets information about a public share.
      * @param {string} publicShareId 
@@ -109,15 +101,6 @@ export interface PublicShockerSharesApiInterface {
      * Gets information about a public share.
      */
     publicGetPublicShare(publicShareId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PublicShareResponseLegacyDataResponse>;
-
-    /**
-     * Creates request options for shareLinksAddShocker without sending the request
-     * @param {string} publicShareId 
-     * @param {string} shockerId 
-     * @throws {RequiredError}
-     * @memberof PublicShockerSharesApiInterface
-     */
-    shareLinksAddShockerRequestOpts(requestParameters: ShareLinksAddShockerRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -136,14 +119,6 @@ export interface PublicShockerSharesApiInterface {
     shareLinksAddShocker(publicShareId: string, shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
 
     /**
-     * Creates request options for shareLinksCreatePublicShare without sending the request
-     * @param {PublicShareCreate} [publicShareCreate] 
-     * @throws {RequiredError}
-     * @memberof PublicShockerSharesApiInterface
-     */
-    shareLinksCreatePublicShareRequestOpts(requestParameters: ShareLinksCreatePublicShareRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Create a new public share
      * @param {PublicShareCreate} [publicShareCreate] 
@@ -159,14 +134,6 @@ export interface PublicShockerSharesApiInterface {
     shareLinksCreatePublicShare(publicShareCreate?: PublicShareCreate, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GuidLegacyDataResponse>;
 
     /**
-     * Creates request options for shareLinksDeletePublicShare without sending the request
-     * @param {string} publicShareId 
-     * @throws {RequiredError}
-     * @memberof PublicShockerSharesApiInterface
-     */
-    shareLinksDeletePublicShareRequestOpts(requestParameters: ShareLinksDeletePublicShareRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Deletes a public share
      * @param {string} publicShareId 
@@ -180,16 +147,6 @@ export interface PublicShockerSharesApiInterface {
      * Deletes a public share
      */
     shareLinksDeletePublicShare(publicShareId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
-
-    /**
-     * Creates request options for shareLinksEditShocker without sending the request
-     * @param {string} publicShareId 
-     * @param {string} shockerId 
-     * @param {PublicShareEditShocker} [publicShareEditShocker] 
-     * @throws {RequiredError}
-     * @memberof PublicShockerSharesApiInterface
-     */
-    shareLinksEditShockerRequestOpts(requestParameters: ShareLinksEditShockerRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -209,13 +166,6 @@ export interface PublicShockerSharesApiInterface {
     shareLinksEditShocker(publicShareId: string, shockerId: string, publicShareEditShocker?: PublicShareEditShocker, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
 
     /**
-     * Creates request options for shareLinksList without sending the request
-     * @throws {RequiredError}
-     * @memberof PublicShockerSharesApiInterface
-     */
-    shareLinksListRequestOpts(): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Get all public shares for the current user
      * @param {*} [options] Override http request option.
@@ -228,16 +178,6 @@ export interface PublicShockerSharesApiInterface {
      * Get all public shares for the current user
      */
     shareLinksList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OwnPublicShareResponseArrayLegacyDataResponse>;
-
-    /**
-     * Creates request options for shareLinksPauseShocker without sending the request
-     * @param {string} publicShareId 
-     * @param {string} shockerId 
-     * @param {PauseRequest} [pauseRequest] 
-     * @throws {RequiredError}
-     * @memberof PublicShockerSharesApiInterface
-     */
-    shareLinksPauseShockerRequestOpts(requestParameters: ShareLinksPauseShockerRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -255,15 +195,6 @@ export interface PublicShockerSharesApiInterface {
      * Pause a shocker in a public share
      */
     shareLinksPauseShocker(publicShareId: string, shockerId: string, pauseRequest?: PauseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PauseReasonLegacyDataResponse>;
-
-    /**
-     * Creates request options for shareLinksRemoveShocker without sending the request
-     * @param {string} publicShareId 
-     * @param {string} shockerId 
-     * @throws {RequiredError}
-     * @memberof PublicShockerSharesApiInterface
-     */
-    shareLinksRemoveShockerRequestOpts(requestParameters: ShareLinksRemoveShockerRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 

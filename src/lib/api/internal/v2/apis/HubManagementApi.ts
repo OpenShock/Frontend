@@ -34,14 +34,6 @@ export interface DevicesCreateDeviceV2Request {
  */
 export interface HubManagementApiInterface {
     /**
-     * Creates request options for devicesCreateDeviceV2 without sending the request
-     * @param {HubCreateRequest} [hubCreateRequest] 
-     * @throws {RequiredError}
-     * @memberof HubManagementApiInterface
-     */
-    devicesCreateDeviceV2RequestOpts(requestParameters: DevicesCreateDeviceV2Request): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Create a new device for the current user
      * @param {HubCreateRequest} [hubCreateRequest] 

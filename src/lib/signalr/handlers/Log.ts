@@ -1,9 +1,47 @@
 import { dev } from '$app/environment';
 import { isControlLog } from '$lib/signalr/models/ControlLog';
 import { isControlLogSender } from '$lib/signalr/models/ControlLogSender';
-import { triggerEvent } from '$lib/state/shock-events-state.svelte';
 import { toast } from 'svelte-sonner';
 import { ControlType } from '../models/ControlType';
+
+export type ShockEventListener = (
+  shockerId: string,
+  controlType: ControlType,
+  duration: number,
+  intensity: number
+) => void;
+
+type RegisteredListener = {
+  id: string;
+  shockerId: string;
+  callback: ShockEventListener;
+};
+
+const listeners: RegisteredListener[] = [];
+
+export function addShockEventListener(id: string, shockerId: string, callback: ShockEventListener) {
+  listeners.push({ id, shockerId, callback });
+}
+
+export function removeShockEventListener(id: string) {
+  const idx = listeners.findIndex((l) => l.id === id);
+  if (idx !== -1) {
+    listeners.splice(idx, 1);
+  }
+}
+
+function emitShockEvent(
+  shockerId: string,
+  controlType: ControlType,
+  duration: number,
+  intensity: number
+) {
+  for (const listener of listeners) {
+    if (listener.shockerId === shockerId) {
+      listener.callback(shockerId, controlType, duration, intensity);
+    }
+  }
+}
 
 export function handleSignalrLog(sender: unknown, logs: unknown) {
   if (!isControlLogSender(sender) || !Array.isArray(logs) || !logs.every(isControlLog)) {
@@ -41,6 +79,6 @@ export function handleSignalrLog(sender: unknown, logs: unknown) {
   }
 
   logs.forEach((log) => {
-    triggerEvent(log.shocker.id, log.type, log.duration, log.intensity);
+    emitShockEvent(log.shocker.id, log.type, log.duration, log.intensity);
   });
 }

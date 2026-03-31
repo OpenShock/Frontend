@@ -11,7 +11,7 @@ async function setupESPLoader(
 ): Promise<ESPLoader | null> {
   try {
     await serialPort.close(); // TODO: Find some way to detect if the port is already open
-  } catch (_e) {
+  } catch {
     /* empty */
   }
 
@@ -58,7 +58,7 @@ function appendBuffer(buffer: Uint8Array | null, data: Uint8Array): Uint8Array {
 async function setupApplication(serialPort: SerialPort): Promise<SerialPort | null> {
   try {
     await serialPort.close(); // TODO: Find some way to detect if the port is already open
-  } catch (_e) {
+  } catch {
     /* empty */
   }
 

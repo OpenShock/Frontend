@@ -37,14 +37,6 @@ export interface DeviceGetLiveControlGatewayV2Request {
  */
 export interface HubEndpointsApiInterface {
     /**
-     * Creates request options for deviceGetLiveControlGatewayV2 without sending the request
-     * @param {number} [version] 
-     * @throws {RequiredError}
-     * @memberof HubEndpointsApiInterface
-     */
-    deviceGetLiveControlGatewayV2RequestOpts(requestParameters: DeviceGetLiveControlGatewayV2Request): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Gets the best suited LCG node for the client
      * @param {number} [version] 

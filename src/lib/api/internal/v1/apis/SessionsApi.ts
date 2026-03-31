@@ -37,14 +37,6 @@ export interface SessionsDeleteSessionRequest {
  */
 export interface SessionsApiInterface {
     /**
-     * Creates request options for sessionsDeleteSession without sending the request
-     * @param {string} sessionId 
-     * @throws {RequiredError}
-     * @memberof SessionsApiInterface
-     */
-    sessionsDeleteSessionRequestOpts(requestParameters: SessionsDeleteSessionRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @param {string} sessionId 
      * @param {*} [options] Override http request option.
@@ -56,13 +48,6 @@ export interface SessionsApiInterface {
     /**
      */
     sessionsDeleteSession(sessionId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
-
-    /**
-     * Creates request options for sessionsGetSelfSession without sending the request
-     * @throws {RequiredError}
-     * @memberof SessionsApiInterface
-     */
-    sessionsGetSelfSessionRequestOpts(): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -77,13 +62,6 @@ export interface SessionsApiInterface {
      * Gets information about the current token used to access this endpoint
      */
     sessionsGetSelfSession(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LoginSessionResponse>;
-
-    /**
-     * Creates request options for sessionsListSessions without sending the request
-     * @throws {RequiredError}
-     * @memberof SessionsApiInterface
-     */
-    sessionsListSessionsRequestOpts(): Promise<runtime.RequestOpts>;
 
     /**
      * 
