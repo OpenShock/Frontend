@@ -114,14 +114,6 @@ export interface AuthenticatedAccountRemoveOAuthConnectionRequest {
  */
 export interface AccountApiInterface {
     /**
-     * Creates request options for accountActivate without sending the request
-     * @param {string} [token] 
-     * @throws {RequiredError}
-     * @memberof AccountApiInterface
-     */
-    accountActivateRequestOpts(requestParameters: AccountActivateRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Activate account
      * @param {string} [token] 
@@ -135,14 +127,6 @@ export interface AccountApiInterface {
      * Activate account
      */
     accountActivate(token?: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
-
-    /**
-     * Creates request options for accountCheckUsername without sending the request
-     * @param {ChangeUsernameRequest} [changeUsernameRequest] 
-     * @throws {RequiredError}
-     * @memberof AccountApiInterface
-     */
-    accountCheckUsernameRequestOpts(requestParameters: AccountCheckUsernameRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -160,14 +144,6 @@ export interface AccountApiInterface {
     accountCheckUsername(changeUsernameRequest?: ChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UsernameCheckResponse>;
 
     /**
-     * Creates request options for accountEmailVerify without sending the request
-     * @param {string} [token] 
-     * @throws {RequiredError}
-     * @memberof AccountApiInterface
-     */
-    accountEmailVerifyRequestOpts(requestParameters: AccountEmailVerifyRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Verify account email
      * @param {string} [token] 
@@ -181,14 +157,6 @@ export interface AccountApiInterface {
      * Verify account email
      */
     accountEmailVerify(token?: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
-
-    /**
-     * Creates request options for accountLogin without sending the request
-     * @param {Login} [login] 
-     * @throws {RequiredError}
-     * @memberof AccountApiInterface
-     */
-    accountLoginRequestOpts(requestParameters: AccountLoginRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -206,13 +174,6 @@ export interface AccountApiInterface {
     accountLogin(login?: Login, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
 
     /**
-     * Creates request options for accountLogout without sending the request
-     * @throws {RequiredError}
-     * @memberof AccountApiInterface
-     */
-    accountLogoutRequestOpts(): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -223,15 +184,6 @@ export interface AccountApiInterface {
     /**
      */
     accountLogout(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
-
-    /**
-     * Creates request options for accountPasswordResetCheckValid without sending the request
-     * @param {string} passwordResetId The id of the password reset
-     * @param {string} secret The secret of the password reset
-     * @throws {RequiredError}
-     * @memberof AccountApiInterface
-     */
-    accountPasswordResetCheckValidRequestOpts(requestParameters: AccountPasswordResetCheckValidRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -248,16 +200,6 @@ export interface AccountApiInterface {
      * Check if a password reset is in progress
      */
     accountPasswordResetCheckValid(passwordResetId: string, secret: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
-
-    /**
-     * Creates request options for accountPasswordResetComplete without sending the request
-     * @param {string} passwordResetId The id of the password reset
-     * @param {string} secret The secret of the password reset
-     * @param {PasswordResetProcessData} [passwordResetProcessData] 
-     * @throws {RequiredError}
-     * @memberof AccountApiInterface
-     */
-    accountPasswordResetCompleteRequestOpts(requestParameters: AccountPasswordResetCompleteRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -277,14 +219,6 @@ export interface AccountApiInterface {
     accountPasswordResetComplete(passwordResetId: string, secret: string, passwordResetProcessData?: PasswordResetProcessData, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
 
     /**
-     * Creates request options for accountPasswordResetInitiate without sending the request
-     * @param {ResetRequest} [resetRequest] 
-     * @throws {RequiredError}
-     * @memberof AccountApiInterface
-     */
-    accountPasswordResetInitiateRequestOpts(requestParameters: AccountPasswordResetInitiateRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Initiate a password reset
      * @param {ResetRequest} [resetRequest] 
@@ -298,14 +232,6 @@ export interface AccountApiInterface {
      * Initiate a password reset
      */
     accountPasswordResetInitiate(resetRequest?: ResetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
-
-    /**
-     * Creates request options for accountSignUp without sending the request
-     * @param {SignUp} [signUp] 
-     * @throws {RequiredError}
-     * @memberof AccountApiInterface
-     */
-    accountSignUpRequestOpts(requestParameters: AccountSignUpRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -323,14 +249,6 @@ export interface AccountApiInterface {
     accountSignUp(signUp?: SignUp, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
 
     /**
-     * Creates request options for authenticatedAccountChangeEmail without sending the request
-     * @param {ChangeEmailRequest} [changeEmailRequest] 
-     * @throws {RequiredError}
-     * @memberof AccountApiInterface
-     */
-    authenticatedAccountChangeEmailRequestOpts(requestParameters: AuthenticatedAccountChangeEmailRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Change the password of the current user
      * @param {ChangeEmailRequest} [changeEmailRequest] 
@@ -344,14 +262,6 @@ export interface AccountApiInterface {
      * Change the password of the current user
      */
     authenticatedAccountChangeEmail(changeEmailRequest?: ChangeEmailRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
-
-    /**
-     * Creates request options for authenticatedAccountChangePassword without sending the request
-     * @param {ChangePasswordRequest} [changePasswordRequest] 
-     * @throws {RequiredError}
-     * @memberof AccountApiInterface
-     */
-    authenticatedAccountChangePasswordRequestOpts(requestParameters: AuthenticatedAccountChangePasswordRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -369,14 +279,6 @@ export interface AccountApiInterface {
     authenticatedAccountChangePassword(changePasswordRequest?: ChangePasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
-     * Creates request options for authenticatedAccountChangeUsername without sending the request
-     * @param {ChangeUsernameRequest} [changeUsernameRequest] 
-     * @throws {RequiredError}
-     * @memberof AccountApiInterface
-     */
-    authenticatedAccountChangeUsernameRequestOpts(requestParameters: AuthenticatedAccountChangeUsernameRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Change the username of the current user
      * @param {ChangeUsernameRequest} [changeUsernameRequest] 
@@ -390,13 +292,6 @@ export interface AccountApiInterface {
      * Change the username of the current user
      */
     authenticatedAccountChangeUsername(changeUsernameRequest?: ChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
-
-    /**
-     * Creates request options for authenticatedAccountDeactivate without sending the request
-     * @throws {RequiredError}
-     * @memberof AccountApiInterface
-     */
-    authenticatedAccountDeactivateRequestOpts(): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -413,13 +308,6 @@ export interface AccountApiInterface {
     authenticatedAccountDeactivate(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
-     * Creates request options for authenticatedAccountListOAuthConnections without sending the request
-     * @throws {RequiredError}
-     * @memberof AccountApiInterface
-     */
-    authenticatedAccountListOAuthConnectionsRequestOpts(): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary List OAuth connections linked to the current user.
      * @param {*} [options] Override http request option.
@@ -432,14 +320,6 @@ export interface AccountApiInterface {
      * List OAuth connections linked to the current user.
      */
     authenticatedAccountListOAuthConnections(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<OAuthConnectionResponse>>;
-
-    /**
-     * Creates request options for authenticatedAccountRemoveOAuthConnection without sending the request
-     * @param {string} provider Provider key (e.g. &#x60;discord&#x60;).
-     * @throws {RequiredError}
-     * @memberof AccountApiInterface
-     */
-    authenticatedAccountRemoveOAuthConnectionRequestOpts(requestParameters: AuthenticatedAccountRemoveOAuthConnectionRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
