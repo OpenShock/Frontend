@@ -13,7 +13,7 @@
   import { Progress } from '$lib/components/ui/progress';
   import { useSerial } from '$lib/utils/serial-context.svelte';
   import { getBrowserName, isSerialSupported } from '$lib/utils/compatibility';
-  import { parseAnsi } from './ansi';
+  import { parseAnsi, parseLogLine } from './ansi';
   import FirmwareBoardSelector from './FirmwareBoardSelector.svelte';
   import FirmwareFlasher from './FirmwareFlasher.svelte';
   import { useFlashManager } from './flash-context.svelte';
@@ -25,28 +25,49 @@
 
   let port = $state<SerialPort | null>(null);
 
+  const MAX_LINES = 5000;
+  let lineIdCounter = 0;
   let terminalLines = $state<TerminalLine[]>([]);
+
+  function makeTerminalLine(text: string, timestamp?: Date): TerminalLine {
+    const parsed = parseLogLine(text);
+    return {
+      id: lineIdCounter++,
+      text,
+      timestamp: timestamp ?? new Date(),
+      segments: parseAnsi(text),
+      logLevel: parsed?.logLevel ?? null,
+      deviceUptime: parsed?.deviceUptime ?? null,
+      logTag: parsed?.tag ?? null,
+    };
+  }
 
   const terminal = {
     clean: () => {
       terminalLines = [];
     },
     writeLine: (data: string) => {
-      terminalLines = [
-        ...terminalLines,
-        { text: data, timestamp: new Date(), segments: parseAnsi(data) },
-      ];
+      const newLines = [...terminalLines, makeTerminalLine(data)];
+      terminalLines = newLines.length > MAX_LINES ? newLines.slice(-MAX_LINES) : newLines;
     },
     write: (data: string) => {
       if (terminalLines.length > 0) {
         const last = terminalLines[terminalLines.length - 1];
         const newText = last.text + data;
+        const parsed = parseLogLine(newText);
         terminalLines = [
           ...terminalLines.slice(0, -1),
-          { text: newText, timestamp: last.timestamp, segments: parseAnsi(newText) },
+          {
+            ...last,
+            text: newText,
+            segments: parseAnsi(newText),
+            logLevel: parsed?.logLevel ?? null,
+            deviceUptime: parsed?.deviceUptime ?? null,
+            logTag: parsed?.tag ?? null,
+          },
         ];
       } else {
-        terminalLines = [{ text: data, timestamp: new Date(), segments: parseAnsi(data) }];
+        terminalLines = [makeTerminalLine(data)];
       }
     },
   };
@@ -65,15 +86,22 @@
 
   let channel = $state<FirmwareChannel>('stable');
   let version = $state<string | null>(null);
-  // Tracks which channel the user explicitly confirmed. Changing channel invalidates it.
+  // Tracks which channel+version the user explicitly confirmed. Changing either invalidates it.
   let confirmedChannel = $state<FirmwareChannel | null>(null);
+  let confirmedVersion = $state<string | null>(null);
   let board = $state<string | null>(null);
   let eraseBeforeFlash = $state<boolean>(false);
 
   // Stepper: derive which step we're on based on state
-  // Channel step requires explicit confirmation (confirmedChannel must match current channel)
+  // Channel step requires explicit confirmation (both channel and version must match confirmed values)
   let currentStep = $derived(
-    !flash.manager ? 0 : !(version && confirmedChannel === channel) ? 1 : !board ? 2 : 3
+    !flash.manager
+      ? 0
+      : !(version && confirmedChannel === channel && confirmedVersion === version)
+        ? 1
+        : !board
+          ? 2
+          : 3
   );
 
   // Allow users to view earlier steps
@@ -166,6 +194,7 @@
                     : 'border-muted-foreground/30 text-muted-foreground/50 border-2'}"
                 disabled={!isAccessible || flash.isFlashing}
                 onclick={() => goToStep(i)}
+                aria-label="Go to step {i + 1}: {step.title}"
               >
                 {#if isCompleted}
                   <Check class="h-4 w-4" />
@@ -245,7 +274,10 @@
                     />
                     {#if version}
                       <Button
-                        onclick={() => (confirmedChannel = channel)}
+                        onclick={() => {
+                          confirmedChannel = channel;
+                          confirmedVersion = version;
+                        }}
                         disabled={flash.isFlashing}
                         class="w-fit"
                       >

@@ -288,11 +288,24 @@ export default class FlashManager {
       } catch (e) {
         console.log(e);
         this.terminal.writeLine(`firmware disconnected: ${e}`);
+      } finally {
+        try {
+          serialPortReader.releaseLock();
+        } catch {
+          /* ignore */
+        }
+        try {
+          serialPortWriter.releaseLock();
+        } catch {
+          /* ignore */
+        }
+        if (this.serialPortReader === serialPortReader) this.serialPortReader = null;
+        if (this.serialPortWriter === serialPortWriter) this.serialPortWriter = null;
       }
     })();
   }
 
-  async ensureApplication(forceReset?: boolean) {
+  async ensureApplication(forceReset?: boolean): Promise<boolean> {
     if (!this.serialPort) return false;
     if (!this.loader && !forceReset) return true;
 
@@ -301,7 +314,9 @@ export default class FlashManager {
 
     if (serialPort) {
       this._startApplicationReadLoop();
+      return true;
     }
+    return false;
   }
 
   async disconnect() {

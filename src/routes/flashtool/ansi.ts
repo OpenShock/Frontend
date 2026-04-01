@@ -1,11 +1,58 @@
 /**
  * Lightweight ANSI escape sequence parser for ESP-IDF serial output.
  * Converts ANSI SGR codes to inline CSS styles for rendering in the terminal.
+ * Also parses ESP-IDF log format for structured log level, uptime, and tag extraction.
  */
 
 export interface AnsiSegment {
   text: string;
   style: Record<string, string>;
+}
+
+export type LogLevel = 'E' | 'W' | 'I' | 'D' | 'V';
+
+export interface ParsedLogLine {
+  logLevel: LogLevel;
+  deviceUptime: number;
+  tag: string;
+}
+
+export const LOG_LEVEL_COLORS: Record<LogLevel, string> = {
+  E: '#ff4444',
+  W: '#ffaa00',
+  I: '#51cf66',
+  D: '#74c0fc',
+  V: '#808080',
+};
+
+/**
+ * Parse log formats. Supports:
+ * - OpenShock: "[uptimeMs][LEVEL][file:line] message"
+ * - ESP-IDF:   "LEVEL (uptimeMs) TAG: message"
+ * May be preceded by ANSI escape sequences.
+ */
+const ANSI_PREFIX = /^(?:\x1b\[[0-9;]*[a-zA-Z])*/;
+const LOG_OPENSHOCK_REGEX = new RegExp(ANSI_PREFIX.source + /\[(\d+)\]\[([EWDIV])\]\[([^\]]+)\]/.source);
+const LOG_ESPIDF_REGEX = new RegExp(ANSI_PREFIX.source + /([EWDIV]) \((\d+)\) ([^:]+):/.source);
+
+export function parseLogLine(text: string): ParsedLogLine | null {
+  let match = LOG_OPENSHOCK_REGEX.exec(text);
+  if (match) {
+    return {
+      logLevel: match[2] as LogLevel,
+      deviceUptime: parseInt(match[1], 10),
+      tag: match[3].trim(),
+    };
+  }
+  match = LOG_ESPIDF_REGEX.exec(text);
+  if (match) {
+    return {
+      logLevel: match[1] as LogLevel,
+      deviceUptime: parseInt(match[2], 10),
+      tag: match[3].trim(),
+    };
+  }
+  return null;
 }
 
 const ANSI_COLORS: Record<number, string> = {

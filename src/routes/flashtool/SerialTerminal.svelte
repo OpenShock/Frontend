@@ -1,16 +1,20 @@
 <script lang="ts">
-  import { Send, Trash2, RotateCcw } from '@lucide/svelte';
+  import { Send, Trash2, RotateCcw, Copy, Check } from '@lucide/svelte';
   import { Button } from '$lib/components/ui/button';
-  import type { AnsiSegment } from './ansi';
+  import { type AnsiSegment, type LogLevel, LOG_LEVEL_COLORS, stripAnsi } from './ansi';
   import type FlashManager from './FlashManager';
   import { tick } from 'svelte';
 
   const MAX_LINES = 5000;
 
   export interface TerminalLine {
+    id: number;
     text: string;
     timestamp: Date;
     segments: AnsiSegment[];
+    logLevel: LogLevel | null;
+    deviceUptime: number | null;
+    logTag: string | null;
   }
 
   interface Props {
@@ -87,8 +91,27 @@
     return date.toTimeString().substring(0, 8);
   }
 
+  function formatUptime(ms: number): string {
+    const totalSeconds = Math.floor(ms / 1000);
+    const s = totalSeconds % 60;
+    const m = Math.floor(totalSeconds / 60) % 60;
+    const h = Math.floor(totalSeconds / 3600);
+    return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  }
+
   // Visible lines (capped to MAX_LINES from the end)
   let visibleLines = $derived(lines.length > MAX_LINES ? lines.slice(-MAX_LINES) : lines);
+
+  let copied = $state(false);
+  let copyTimeout: ReturnType<typeof setTimeout> | undefined;
+
+  async function copyOutput() {
+    const text = lines.map((l) => stripAnsi(l.text)).join('\n');
+    await navigator.clipboard.writeText(text);
+    copied = true;
+    clearTimeout(copyTimeout);
+    copyTimeout = setTimeout(() => (copied = false), 2000);
+  }
 </script>
 
 <div class="flex h-64 flex-col border-t">
@@ -96,6 +119,15 @@
   <div class="flex items-center justify-between border-b px-4 py-1.5">
     <span class="text-sm font-semibold">Console</span>
     <div class="flex gap-1">
+      <Button size="sm" variant="ghost" onclick={copyOutput} disabled={lines.length === 0}>
+        {#if copied}
+          <Check class="mr-1 h-3.5 w-3.5" />
+          Copied
+        {:else}
+          <Copy class="mr-1 h-3.5 w-3.5" />
+          Copy
+        {/if}
+      </Button>
       <Button size="sm" variant="ghost" onclick={onClear}>
         <Trash2 class="mr-1 h-3.5 w-3.5" />
         Clear
@@ -115,12 +147,17 @@
     role="log"
     aria-live="polite"
   >
-    {#each visibleLines as line, i (i)}
+    {#each visibleLines as line (line.id)}
       <div class="flex leading-5">
         <span class="text-muted-foreground mr-2 opacity-60 select-none"
-          >{formatTime(line.timestamp)}</span
+          >{line.deviceUptime != null
+            ? formatUptime(line.deviceUptime)
+            : formatTime(line.timestamp)}</span
         >
-        <span class="break-all whitespace-pre-wrap">
+        <span
+          class="break-all whitespace-pre-wrap"
+          style={line.logLevel ? `color:${LOG_LEVEL_COLORS[line.logLevel]}` : ''}
+        >
           {#each line.segments as seg, j (j)}
             {#if Object.keys(seg.style).length > 0}
               <span
