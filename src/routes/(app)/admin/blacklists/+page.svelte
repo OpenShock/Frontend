@@ -9,8 +9,6 @@
   import TextInput from '$lib/components/input/TextInput.svelte';
   import { Button } from '$lib/components/ui/button';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-
-  registerBreadcrumbs(() => [{ label: 'Blacklists' }]);
   import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
   import { ScrollArea } from '$lib/components/ui/scroll-area';
   import * as Select from '$lib/components/ui/select';
@@ -18,6 +16,8 @@
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import type { ValidationResult } from '$lib/types/ValidationResult';
   import type { TimeoutHandle } from '$lib/types/WAPI';
+  
+  registerBreadcrumbs(() => [{ label: 'Blacklists' }]);
 
   // --- state ---
   let usernameEntry = $state<string>('');
