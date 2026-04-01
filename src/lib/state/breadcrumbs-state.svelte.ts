@@ -11,7 +11,7 @@ interface BreadcrumbSlot {
   entries: BreadcrumbEntry[];
 }
 
-let _slots = $state<BreadcrumbSlot[]>([]);
+const _slots = $state<BreadcrumbSlot[]>([]);
 
 export const breadcrumbs = {
   get state(): BreadcrumbEntry[] {
