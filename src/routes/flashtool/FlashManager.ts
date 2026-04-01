@@ -322,7 +322,7 @@ export default class FlashManager {
 
     try {
       await this.loader.writeFlash({
-        fileArray: [{ data: data, address: 0 }],
+        fileArray: [{ data, address: 0 }],
         flashSize: 'keep',
         flashMode: 'keep',
         flashFreq: 'keep',
