@@ -14,14 +14,11 @@
   import * as Select from '$lib/components/ui/select';
   import PauseToggle from '$lib/components/utils/PauseToggle.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
-  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { ArrowLeft, LoaderCircle, Trash2 } from '@lucide/svelte';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
-
-  breadcrumbs.push('Shockers', '/shockers/own');
-  breadcrumbs.push('Edit', null);
 
   const modelOptions = [
     { value: ShockerModelType.CaiXianlin, label: 'CaiXianlin' },
@@ -35,6 +32,11 @@
   let rfId = $state(0);
   let model = $state<ShockerModelType>(ShockerModelType.CaiXianlin);
   let saving = $state(false);
+
+  registerBreadcrumbs(() => [
+    { label: 'Shockers', href: '/shockers/own' },
+    { label: shocker?.name ?? 'Edit Shocker' },
+  ]);
 
   let hasChanges = $derived(
     shocker !== null &&

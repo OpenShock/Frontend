@@ -8,6 +8,7 @@
   import * as Card from '$lib/components/ui/card/index.js';
   import Input from '$lib/components/ui/input/input.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { userState } from '$lib/state/user-state.svelte';
   import { onMount } from 'svelte';
   import ControlView from './ControlView.svelte';
@@ -18,9 +19,15 @@
   );
 
   let details = $state<Promise<PublicShareResponse>>(getShareDetails());
+  let shareData = $state<PublicShareResponse | null>(null);
   let enterAsGuestClicked = $state(false);
   let guestName = $state<string | null>(null);
   let entered = $state(false);
+
+  registerBreadcrumbs(() => [
+    { label: 'Public Shares', href: '/shares/public' },
+    { label: shareData?.name ?? 'Public Share' },
+  ]);
 
   // Fetch share details
   async function getShareDetails(): Promise<PublicShareResponse> {
@@ -30,7 +37,9 @@
     }
 
     try {
-      return (await publicShockerSharesApi.publicGetPublicShare(shareId)).data;
+      const response = (await publicShockerSharesApi.publicGetPublicShare(shareId)).data;
+      shareData = response;
+      return response;
     } catch (error) {
       handleApiError(error);
       throw error;

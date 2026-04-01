@@ -12,7 +12,10 @@
     RenderRedCell,
   } from '$lib/components/Table/ColumnUtils';
   import { renderComponent } from '$lib/components/ui/data-table';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import DataTableActions from './data-table-actions.svelte';
+
+  registerBreadcrumbs(() => [{ label: 'Users' }]);
 
   const PasswordHashTypeRenderer = (passwordHashType: PasswordHashingAlgorithm) => {
     if (passwordHashType !== PasswordHashingAlgorithm.BCrypt)
