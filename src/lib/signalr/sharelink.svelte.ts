@@ -16,7 +16,7 @@ export class ShareLinkSignalr {
   readonly shareLinkId: string;
   readonly customName: string | null;
 
-  private _signalrConnection: HubConnection | null = null;
+  #connection: HubConnection | null = null;
 
   private signalr_state = $state<HubConnectionState>(HubConnectionState.Disconnected);
 
@@ -26,7 +26,7 @@ export class ShareLinkSignalr {
   }
 
   public async initializeSignalR() {
-    if (this._signalrConnection) {
+    if (this.#connection) {
       return;
     }
 
@@ -55,7 +55,7 @@ export class ShareLinkSignalr {
       // Refetch share link data
     });
 
-    this._signalrConnection = connection;
+    this.#connection = connection;
 
     try {
       await connection.start();
@@ -68,25 +68,25 @@ export class ShareLinkSignalr {
   }
 
   public async control(controls: Control[]) {
-    if (!this._signalrConnection) return;
+    if (!this.#connection) return;
 
-    await this._signalrConnection.send('Control', controls);
+    await this.#connection.send('Control', controls);
   }
 
   public async destroySignalR() {
-    if (!this._signalrConnection) return;
+    if (!this.#connection) return;
 
     console.debug('Stopping Public Share SignalR connection...');
 
     try {
-      if (this._signalrConnection) {
-        await this._signalrConnection.stop();
+      if (this.#connection) {
+        await this.#connection.stop();
       }
     } catch (error) {
       console.error(error);
       toast.error('Encountered error while disconnecting from server!');
     } finally {
-      this._signalrConnection = null;
+      this.#connection = null;
       this.signalr_state = HubConnectionState.Disconnected;
     }
   }

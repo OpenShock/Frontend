@@ -8,7 +8,7 @@ import type {
   StringOrTemplateHeader,
 } from '@tanstack/table-core';
 import type { SemVer } from 'semver';
-import type { ComponentProps } from 'svelte';
+import type { Component, ComponentProps } from 'svelte';
 import CellContent from './CellContent.svelte';
 import DataTableSortButton from './SortButton.svelte';
 
@@ -16,7 +16,8 @@ type CellContentProps = ComponentProps<typeof CellContent>;
 
 function CreateSortHeader<TData>(name: string): StringOrTemplateHeader<TData, unknown> {
   return ({ column }) =>
-    renderComponent(DataTableSortButton<TData>, {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic Svelte components can't be parameterized in .ts files
+    renderComponent(DataTableSortButton as Component<any>, {
       name,
       column,
     });

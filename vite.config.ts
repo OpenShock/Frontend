@@ -172,7 +172,9 @@ async function ensurePortBindable(host: string, port: number): Promise<void> {
             '  This is more secure and follows best practices.\n',
             'Option 2 (Quick fix): Grant Node.js permission to bind to privileged ports',
             chalk.blue.bold(`  sudo setcap 'cap_net_bind_service=+ep' $(which node)\n`),
-            chalk.yellow.bold('  ⚠️  Security note: This allows Node to bind to ANY port below 1024.'),
+            chalk.yellow.bold(
+              '  ⚠️  Security note: This allows Node to bind to ANY port below 1024.'
+            ),
             chalk.yellow.bold('  Only use this in trusted development environments.'),
           ].join('\n');
         } else if (platform === 'darwin') {
@@ -215,7 +217,7 @@ export default defineConfig(async ({ command, mode, isPreview }) => {
 
   return defineConfig({
     build: {
-      target: 'es2022',
+      target: 'es2024',
     },
     plugins: getPlugins(useLocalRedirect),
     server: await getServerConfig(mode, useLocalRedirect),

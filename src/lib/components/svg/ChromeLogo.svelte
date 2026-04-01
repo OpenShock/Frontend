@@ -19,12 +19,19 @@
 >
   <title>Google Chrome</title>
   <defs>
-    <linearGradient id="a" x1="3.2173" y1="15" x2="44.7812" y2="15" gradientUnits="userSpaceOnUse">
+    <linearGradient
+      id="chrome-a"
+      x1="3.2173"
+      y1="15"
+      x2="44.7812"
+      y2="15"
+      gradientUnits="userSpaceOnUse"
+    >
       <stop offset="0" stop-color="#d93025" />
       <stop offset="1" stop-color="#ea4335" />
     </linearGradient>
     <linearGradient
-      id="b"
+      id="chrome-b"
       x1="20.7219"
       y1="47.6791"
       x2="41.5039"
@@ -35,7 +42,7 @@
       <stop offset="1" stop-color="#fbbc04" />
     </linearGradient>
     <linearGradient
-      id="c"
+      id="chrome-c"
       x1="26.5981"
       y1="46.5015"
       x2="5.8161"
@@ -52,15 +59,15 @@
   />
   <path
     d="M24,12H44.7812a23.9939,23.9939,0,0,0-41.5639.0029L13.6079,30l.0093-.0024A11.9852,11.9852,0,0,1,24,12Z"
-    style="fill:url(#a)"
+    style="fill:url(#chrome-a)"
   />
   <circle cx="24" cy="24" r="9.5" fill="#1a73e8" />
   <path
     d="M34.3913,30.0029,24,48A24,24,0,0,0,44.78,12.0031H23.9989l-.0025.0093A11.985,11.985,0,0,1,34.3913,30.0029Z"
-    style="fill:url(#b)"
+    style="fill:url(#chrome-b)"
   />
   <path
     d="M13.6086,30.0031,3.218,12.006A24,24,0,0,0,24.0025,48L34.3931,30.0029l-.0067-.0068a11.9852,11.9852,0,0,1-20.7778.007Z"
-    style="fill:url(#c)"
+    style="fill:url(#chrome-c)"
   />
 </svg>

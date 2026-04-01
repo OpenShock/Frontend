@@ -43,13 +43,6 @@ export interface DevicePairRequest {
  */
 export interface HubEndpointsApiInterface {
     /**
-     * Creates request options for deviceGetLiveControlGateway without sending the request
-     * @throws {RequiredError}
-     * @memberof HubEndpointsApiInterface
-     */
-    deviceGetLiveControlGatewayRequestOpts(): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Gets the best suited LCG node for the client
      * @param {*} [options] Override http request option.
@@ -64,13 +57,6 @@ export interface HubEndpointsApiInterface {
     deviceGetLiveControlGateway(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LcgNodeResponseLegacyDataResponse>;
 
     /**
-     * Creates request options for deviceGetSelf without sending the request
-     * @throws {RequiredError}
-     * @memberof HubEndpointsApiInterface
-     */
-    deviceGetSelfRequestOpts(): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Gets information about the authenticated device.
      * @param {*} [options] Override http request option.
@@ -83,14 +69,6 @@ export interface HubEndpointsApiInterface {
      * Gets information about the authenticated device.
      */
     deviceGetSelf(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DeviceSelfResponseLegacyDataResponse>;
-
-    /**
-     * Creates request options for devicePair without sending the request
-     * @param {string} pairCode The pair code to pair with.
-     * @throws {RequiredError}
-     * @memberof HubEndpointsApiInterface
-     */
-    devicePairRequestOpts(requestParameters: DevicePairRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 

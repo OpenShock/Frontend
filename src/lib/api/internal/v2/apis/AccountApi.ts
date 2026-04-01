@@ -64,14 +64,6 @@ export interface AccountSignUpV2Request {
  */
 export interface AccountApiInterface {
     /**
-     * Creates request options for accountCheckUsername without sending the request
-     * @param {ChangeUsernameRequest} [changeUsernameRequest] 
-     * @throws {RequiredError}
-     * @memberof AccountApiInterface
-     */
-    accountCheckUsernameRequestOpts(requestParameters: AccountCheckUsernameRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Check if a username is available
      * @param {ChangeUsernameRequest} [changeUsernameRequest] 
@@ -85,14 +77,6 @@ export interface AccountApiInterface {
      * Check if a username is available
      */
     accountCheckUsername(changeUsernameRequest?: ChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UsernameCheckResponse>;
-
-    /**
-     * Creates request options for accountLoginV2 without sending the request
-     * @param {LoginV2} [loginV2] 
-     * @throws {RequiredError}
-     * @memberof AccountApiInterface
-     */
-    accountLoginV2RequestOpts(requestParameters: AccountLoginV2Request): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -110,14 +94,6 @@ export interface AccountApiInterface {
     accountLoginV2(loginV2?: LoginV2, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LoginV2OkResponse>;
 
     /**
-     * Creates request options for accountPasswordResetInitiateV2 without sending the request
-     * @param {PasswordResetRequestV2} [passwordResetRequestV2] 
-     * @throws {RequiredError}
-     * @memberof AccountApiInterface
-     */
-    accountPasswordResetInitiateV2RequestOpts(requestParameters: AccountPasswordResetInitiateV2Request): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Initiate a password reset
      * @param {PasswordResetRequestV2} [passwordResetRequestV2] 
@@ -131,14 +107,6 @@ export interface AccountApiInterface {
      * Initiate a password reset
      */
     accountPasswordResetInitiateV2(passwordResetRequestV2?: PasswordResetRequestV2, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
-
-    /**
-     * Creates request options for accountSignUpV2 without sending the request
-     * @param {SignUpV2} [signUpV2] 
-     * @throws {RequiredError}
-     * @memberof AccountApiInterface
-     */
-    accountSignUpV2RequestOpts(requestParameters: AccountSignUpV2Request): Promise<runtime.RequestOpts>;
 
     /**
      * 

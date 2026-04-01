@@ -1,7 +1,7 @@
 import { hubManagementV1Api } from '$lib/api';
 import { ControlType } from '$lib/signalr/models/ControlType';
-import { SvelteMap } from 'svelte/reactivity';
 import { toast } from 'svelte-sonner';
+import { SvelteMap } from 'svelte/reactivity';
 
 const TICK_INTERVAL_MS = 100;
 
@@ -28,6 +28,7 @@ export class LiveDeviceConnection {
 
   private ws: WebSocket | null = null;
   private tickTimer: ReturnType<typeof setTimeout> | null = null;
+  private connectAttempt = 0;
 
   constructor(deviceId: string) {
     this.deviceId = deviceId;
@@ -52,9 +53,11 @@ export class LiveDeviceConnection {
   async connect() {
     this.disconnect();
     this.state = LiveConnectionState.Connecting;
+    const attempt = ++this.connectAttempt;
 
     try {
       const res = await hubManagementV1Api.devicesGetLiveControlGatewayInfo(this.deviceId);
+      if (attempt !== this.connectAttempt) return; // Stale attempt
       if (!res.data) {
         throw new Error('No LCG data returned');
       }
@@ -66,11 +69,13 @@ export class LiveDeviceConnection {
       this.ws = ws;
 
       ws.onopen = () => {
+        if (attempt !== this.connectAttempt) return;
         this.state = LiveConnectionState.Connected;
         this.startTickLoop();
       };
 
       ws.onmessage = (event) => {
+        if (attempt !== this.connectAttempt) return;
         try {
           const msg = JSON.parse(event.data);
           switch (msg.ResponseType) {
@@ -79,7 +84,7 @@ export class LiveDeviceConnection {
                 JSON.stringify({
                   RequestType: 'Pong',
                   Data: { Timestamp: msg.Data.Timestamp },
-                }),
+                })
               );
               break;
             case 'LatencyAnnounce':
@@ -92,13 +97,16 @@ export class LiveDeviceConnection {
       };
 
       ws.onclose = () => {
+        if (attempt !== this.connectAttempt) return;
         this.handleDisconnect();
       };
 
       ws.onerror = () => {
+        if (attempt !== this.connectAttempt) return;
         this.handleDisconnect();
       };
     } catch (error) {
+      if (attempt !== this.connectAttempt) return;
       console.error('Failed to connect to LCG:', error);
       toast.error('Failed to connect to live control gateway');
       this.handleDisconnect();
@@ -106,22 +114,46 @@ export class LiveDeviceConnection {
   }
 
   disconnect() {
+    this.connectAttempt++;
     this.stopTickLoop();
+    this.cleanupWebSocket();
+    this.state = LiveConnectionState.Disconnected;
+    this.latency = 0;
+  }
+
+  private cleanupWebSocket() {
     if (this.ws) {
+      this.ws.onopen = null;
+      this.ws.onmessage = null;
       this.ws.onclose = null;
       this.ws.onerror = null;
       this.ws.close();
       this.ws = null;
     }
-    this.state = LiveConnectionState.Disconnected;
-    this.latency = 0;
   }
 
   private handleDisconnect() {
     this.stopTickLoop();
-    this.ws = null;
+    this.cleanupWebSocket();
     this.state = LiveConnectionState.Disconnected;
     this.latency = 0;
+  }
+
+  /**
+   * Send a single control frame immediately (used for the final zero-intensity on release).
+   */
+  sendFrame(shockerId: string, intensity: number, type: ControlType) {
+    if (this.state !== LiveConnectionState.Connected || !this.ws) return;
+    this.ws.send(
+      JSON.stringify({
+        RequestType: 'Frame',
+        Data: {
+          Shocker: shockerId,
+          Intensity: Math.round(intensity),
+          Type: ControlType[type].toLowerCase(),
+        },
+      })
+    );
   }
 
   private startTickLoop() {
@@ -140,7 +172,7 @@ export class LiveDeviceConnection {
               Intensity: Math.round(shocker.intensity),
               Type: ControlType[shocker.type].toLowerCase(),
             },
-          }),
+          })
         );
       }
 

@@ -41,14 +41,6 @@ export interface SharesLinkShareCodeRequest {
  */
 export interface ShockerSharesApiInterface {
     /**
-     * Creates request options for sharesDeleteShareCode without sending the request
-     * @param {string} shareCodeId 
-     * @throws {RequiredError}
-     * @memberof ShockerSharesApiInterface
-     */
-    sharesDeleteShareCodeRequestOpts(requestParameters: SharesDeleteShareCodeRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Delete a share code
      * @param {string} shareCodeId 
@@ -62,14 +54,6 @@ export interface ShockerSharesApiInterface {
      * Delete a share code
      */
     sharesDeleteShareCode(shareCodeId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
-
-    /**
-     * Creates request options for sharesLinkShareCode without sending the request
-     * @param {string} shareCodeId 
-     * @throws {RequiredError}
-     * @memberof ShockerSharesApiInterface
-     */
-    sharesLinkShareCodeRequestOpts(requestParameters: SharesLinkShareCodeRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 

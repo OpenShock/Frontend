@@ -1,25 +1,12 @@
 <script lang="ts">
   import type { ShockerResponse } from '$lib/api/internal/v1';
-  import { ControlDurationDefault, ControlIntensityDefault } from '$lib/constants/ControlConstants';
-  import { getConnection } from '$lib/signalr/user.svelte';
-  import type { ControlType } from '$lib/signalr/models/ControlType';
-  import { serializeControlMessages } from '$lib/signalr/serializers/Control';
   import { onMount } from 'svelte';
 
   interface Props {
     shockers: ShockerResponse[];
   }
 
-  let { shockers }: Props = $props();
-
-  let intensity: number = ControlIntensityDefault;
-  let duration: number = ControlDurationDefault;
-
-  function ctrl(type: ControlType) {
-    const conn = getConnection();
-    if (!conn) return;
-    serializeControlMessages(conn, [{ id: '', type, intensity, duration }]);
-  }
+  let { shockers: _shockers }: Props = $props();
 
   let canvas: HTMLCanvasElement;
 

@@ -40,14 +40,6 @@ export interface UsersGetByNameRequest {
  */
 export interface UsersApiInterface {
     /**
-     * Creates request options for usersGetByName without sending the request
-     * @param {string} username 
-     * @throws {RequiredError}
-     * @memberof UsersApiInterface
-     */
-    usersGetByNameRequestOpts(requestParameters: UsersGetByNameRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @param {string} username 
      * @param {*} [options] Override http request option.
@@ -59,13 +51,6 @@ export interface UsersApiInterface {
     /**
      */
     usersGetByName(username: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BasicUserInfo>;
-
-    /**
-     * Creates request options for usersGetSelf without sending the request
-     * @throws {RequiredError}
-     * @memberof UsersApiInterface
-     */
-    usersGetSelfRequestOpts(): Promise<runtime.RequestOpts>;
 
     /**
      * 

@@ -1,6 +1,7 @@
 import { includeIgnoreFile } from '@eslint/compat';
 import js from '@eslint/js';
 import prettier from 'eslint-config-prettier';
+import compat from 'eslint-plugin-compat';
 import svelte from 'eslint-plugin-svelte';
 import { defineConfig } from 'eslint/config';
 import globals from 'globals';
@@ -17,22 +18,33 @@ export default defineConfig(
   ...svelte.configs.recommended,
   prettier,
   ...svelte.configs.prettier,
+  compat.configs['flat/recommended'],
   {
     languageOptions: { globals: { ...globals.browser, ...globals.node } },
+    settings: {
+      polyfills: [
+        // Web Serial API is feature-detected at runtime (see src/lib/utils/compatibility.ts)
+        'navigator.serial',
+      ],
+    },
     rules: {
       // typescript-eslint strongly recommend that you do not use the no-undef lint rule on TypeScript projects.
       // see: https://typescript-eslint.io/troubleshooting/faqs/eslint/#i-get-errors-from-the-no-undef-rule-about-global-variables-not-being-defined-even-though-there-are-no-typescript-errors
       'no-undef': 'off',
+      'no-control-regex': 'off',
+      'no-misleading-character-class': 'off',
       'no-useless-assignment': 'warn',
       'svelte/no-unused-svelte-ignore': 'off',
-      '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
+      ],
     },
   },
   {
     files: ['**/*.svelte', '**/*.svelte.ts', '**/*.svelte.js'],
     languageOptions: {
       parserOptions: {
-        projectService: true,
         extraFileExtensions: ['.svelte'],
         parser: ts.parser,
         svelteConfig,

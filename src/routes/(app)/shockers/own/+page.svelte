@@ -1,12 +1,20 @@
 <script lang="ts">
-  import { Layers, Loader, LogsIcon, OctagonAlert, Plus, Settings } from '@lucide/svelte';
+  import {
+    Layers,
+    Loader,
+    LoaderCircle,
+    LogsIcon,
+    Plus,
+    RotateCcw,
+    Settings,
+    Zap,
+  } from '@lucide/svelte';
   import { resolve } from '$app/paths';
   import { shockersV1Api } from '$lib/api';
   import type { NewShocker } from '$lib/api/internal/v1';
   import Container from '$lib/components/Container.svelte';
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import DialogShockerAdd, {
-    type AddShockerData,
     defaultAddShockerData,
   } from '$lib/components/ControlModules/dialogs/dialog-shocker-add.svelte';
   import LiveControlModule from '$lib/components/ControlModules/LiveControlModule.svelte';
@@ -21,21 +29,27 @@
   import { ControlDurationDefault, ControlIntensityDefault } from '$lib/constants/ControlConstants';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { ownHubs, onlineHubs, refreshOwnHubs } from '$lib/state/hubs-state.svelte';
+  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import {
     ensureLiveConnection,
     getLiveConnection,
+    liveConnections,
     LiveConnectionState,
     toggleLiveControl,
   } from '$lib/state/live-control-state.svelte';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
 
+  breadcrumbs.push('Shockers', '/shockers/own');
+
   let shockers = $derived(Array.from(ownHubs).flatMap(([, hub]) => hub.shockers));
 
   // Eagerly create LiveDeviceConnection and LiveShockerState entries
   // so template reads never mutate state (Svelte 5 forbids mutation in $derived/templates).
   $effect(() => {
+    const currentHubIds: string[] = [];
     for (const [hubId, hub] of ownHubs) {
+      currentHubIds.push(hubId);
       ensureLiveConnection(hubId);
       const conn = getLiveConnection(hubId);
       if (conn) {
@@ -44,16 +58,42 @@
         }
       }
     }
+    // Clean up connections for hubs that no longer exist
+    for (const [hubId, conn] of liveConnections) {
+      if (!currentHubIds.includes(hubId)) {
+        conn.disconnect();
+        liveConnections.delete(hubId);
+      }
+    }
   });
 
   let moduleType = $state<ModuleType>(ModuleType.ClassicControlModule);
+  let loading = $state(true);
+  let refreshing = $state(false);
 
   let shockIntensity = $state(ControlIntensityDefault);
   let vibrationIntensity = $state(ControlIntensityDefault);
   let duration = $state(ControlDurationDefault);
 
+  async function loadShockers() {
+    loading = true;
+    await refreshOwnHubs();
+    loading = false;
+  }
+
+  async function refresh() {
+    refreshing = true;
+    await refreshOwnHubs();
+    refreshing = false;
+    toast.success('Shockers refreshed');
+  }
+
   async function openAddShockerDialog() {
     const hubs = Array.from(ownHubs);
+    if (hubs.length === 0) {
+      toast.error('You need to create a hub before adding shockers.');
+      return;
+    }
     const result = await dialog.createDialog<NewShocker | undefined>((resolve) => ({
       content: DialogShockerAdd,
       props: {
@@ -74,37 +114,69 @@
     }
   }
 
-  onMount(refreshOwnHubs);
+  onMount(loadShockers);
 </script>
 
-{#if ownHubs.size === 0}
-  <p>Loading...</p>
+{#if loading}
+  <Container class="items-center justify-center">
+    <div class="flex items-center gap-3 p-12">
+      <LoaderCircle class="size-6 animate-spin" />
+      <span class="text-muted-foreground">Loading shockers...</span>
+    </div>
+  </Container>
 {:else}
   <Container>
-    <div class="flex w-full content-center justify-between">
+    <div class="flex w-full flex-wrap items-center justify-between gap-2">
       <h1 class="text-2xl font-bold">Shockers</h1>
-      <div>
-        <Button variant="secondary" onclick={openAddShockerDialog}>
-          <Plus /> Add Shocker
+      <div class="flex flex-wrap items-center gap-1">
+        <Button variant="secondary" size="sm" onclick={openAddShockerDialog}>
+          <Plus class="size-4" /> Add Shocker
         </Button>
-        <!-- Emergency Stop Button -->
-        <Button variant="secondary" class="border-2 text-red-500">
-          <OctagonAlert size="64" /> STOP
+        <Button
+          variant="ghost"
+          size="sm"
+          onclick={refresh}
+          disabled={refreshing}
+          aria-label="Refresh"
+        >
+          <RotateCcw class={refreshing ? 'size-4 animate-spin' : 'size-4'} />
         </Button>
         <!-- Mode button -->
         <Popover.Root>
-          <Popover.Trigger><Layers /></Popover.Trigger>
-          <Popover.Content class="flex">
-            <Button variant="ghost" onclick={() => (moduleType = ModuleType.ClassicControlModule)}>
+          <Popover.Trigger>
+            {#snippet child({ props })}
+              <Button {...props} variant="ghost" size="sm" aria-label="View mode">
+                <Layers class="size-4" />
+              </Button>
+            {/snippet}
+          </Popover.Trigger>
+          <Popover.Content class="flex flex-col gap-1" align="end">
+            <Button
+              variant={moduleType === ModuleType.ClassicControlModule ? 'secondary' : 'ghost'}
+              size="sm"
+              onclick={() => (moduleType = ModuleType.ClassicControlModule)}
+            >
               Classic
             </Button>
-            <Button variant="ghost" onclick={() => (moduleType = ModuleType.RichControlModule)}>
+            <Button
+              variant={moduleType === ModuleType.RichControlModule ? 'secondary' : 'ghost'}
+              size="sm"
+              onclick={() => (moduleType = ModuleType.RichControlModule)}
+            >
               Rich
             </Button>
-            <Button variant="ghost" onclick={() => (moduleType = ModuleType.SimpleControlModule)}>
+            <Button
+              variant={moduleType === ModuleType.SimpleControlModule ? 'secondary' : 'ghost'}
+              size="sm"
+              onclick={() => (moduleType = ModuleType.SimpleControlModule)}
+            >
               Simple
             </Button>
-            <Button variant="ghost" onclick={() => (moduleType = ModuleType.MapControlModule)}>
+            <Button
+              variant={moduleType === ModuleType.MapControlModule ? 'secondary' : 'ghost'}
+              size="sm"
+              onclick={() => (moduleType = ModuleType.MapControlModule)}
+            >
               Map
             </Button>
           </Popover.Content>
@@ -113,88 +185,117 @@
         <Popover.Root>
           <Popover.Trigger>
             {#snippet child({ props })}
-              <Button {...props} variant="ghost" class="p-0!" aria-label="Settings">
-                <Settings />
+              <Button {...props} variant="ghost" size="sm" aria-label="Settings">
+                <Settings class="size-4" />
               </Button>
             {/snippet}
           </Popover.Trigger>
-          <Popover.Content class="flex flex-col gap-2">
-            <Button variant="ghost" disabled>
+          <Popover.Content class="flex flex-col gap-2" align="end">
+            <Button variant="ghost" size="sm" disabled>
               Global Limits
               <span class="text-muted-foreground ml-2 text-xs">(Coming soon)</span>
             </Button>
           </Popover.Content>
         </Popover.Root>
-        <Button variant="ghost" aria-label="Logs" href={resolve('/shockers/logs')}>
-          <LogsIcon />
+        <Button variant="ghost" size="sm" aria-label="Logs" href={resolve('/shockers/logs')}>
+          <LogsIcon class="size-4" />
         </Button>
       </div>
     </div>
-    <hr class="border-2" />
-    {#if moduleType === ModuleType.SimpleControlModule}
-      <SimpleControlHeader bind:shockIntensity bind:vibrationIntensity bind:duration />
-    {/if}
-    {#if moduleType === ModuleType.MapControlModule}
-      <MapControlModule {shockers} />
-    {:else}
-      <div class="flex flex-col gap-6">
-        {#each Array.from(ownHubs) as [hubId, hub] (hubId)}
-          {@const liveConn = getLiveConnection(hubId)}
-          {@const isLive = liveConn?.state === LiveConnectionState.Connected}
-          {@const isConnecting = liveConn?.state === LiveConnectionState.Connecting}
-          {@const online = onlineHubs.get(hubId)?.isOnline ?? false}
-          <div class="flex flex-col gap-3">
-            <!-- Device header -->
-            <div class="flex items-center gap-3">
-              <span class="text-lg font-semibold">{hub.name}</span>
-              <span class="size-2.5 rounded-full {online ? 'bg-green-400' : 'bg-red-500'}"
-                title={online ? 'Online' : 'Offline'}
-              ></span>
-              <button
-                class="cursor-pointer rounded border border-border bg-transparent px-1.5 py-px text-[10px] font-bold tracking-wider text-muted-foreground transition-all duration-200 hover:border-foreground hover:text-foreground
-                  {isLive ? 'bg-gradient-to-r from-[rgb(185,123,255)] to-[#e100ff] bg-clip-text text-transparent [border-image:linear-gradient(to_right,rgb(167,89,255),#e100ff)_1]' : ''}
-                  {isConnecting ? 'border-muted-foreground text-muted-foreground' : ''}"
-                onclick={() => toggleLiveControl(hubId)}
-                title={isLive
-                  ? `Live — ${liveConn?.gateway} (${liveConn?.country}) — ${liveConn?.latency}ms`
-                  : isConnecting
-                    ? 'Connecting...'
-                    : 'Connect to Live Control'}
-              >
-                LIVE
-                {#if isConnecting}
-                  <Loader class="inline size-3 animate-spin" />
-                {/if}
-              </button>
-              {#if isLive && liveConn}
-                <span class="text-muted-foreground text-xs">
-                  {liveConn.gateway} ({liveConn.country}) — {liveConn.latency}ms
-                </span>
-              {/if}
-            </div>
 
-            <!-- Shockers grid -->
-            <div class="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {#each hub.shockers as shocker (shocker.id)}
-                {#if isLive && liveConn}
-                  {@const liveState = liveConn.getShockerState(shocker.id)}
-                  {#if liveState}
-                    <LiveControlModule {shocker} {liveState} />
-                  {/if}
-                {:else if moduleType === ModuleType.ClassicControlModule}
-                  <ClassicControlModule {shocker} />
-                {:else if moduleType === ModuleType.RichControlModule}
-                  <RichControlModule {shocker} />
-                {:else if moduleType === ModuleType.SimpleControlModule}
-                  <SimpleControlModule {shocker} {shockIntensity} {vibrationIntensity} {duration} />
-                {:else}
-                  <p>Unknown module type</p>
-                {/if}
-              {/each}
-            </div>
-          </div>
-        {/each}
+    <hr class="border-border" />
+
+    {#if shockers.length === 0}
+      <div class="flex flex-col items-center justify-center gap-4 py-16">
+        <Zap class="text-muted-foreground size-12" />
+        <div class="text-center">
+          <h2 class="text-lg font-semibold">No shockers yet</h2>
+          <p class="text-muted-foreground text-sm">
+            {#if ownHubs.size === 0}
+              Create a hub first, then add shockers to it.
+            {:else}
+              Add a shocker to one of your hubs to get started.
+            {/if}
+          </p>
+        </div>
+        <Button onclick={openAddShockerDialog} disabled={ownHubs.size === 0}>
+          <Plus class="size-4" /> Add Shocker
+        </Button>
       </div>
+    {:else}
+      {#if moduleType === ModuleType.SimpleControlModule}
+        <SimpleControlHeader bind:shockIntensity bind:vibrationIntensity bind:duration />
+      {/if}
+      {#if moduleType === ModuleType.MapControlModule}
+        <MapControlModule {shockers} />
+      {:else}
+        <div class="flex flex-col gap-6">
+          {#each Array.from(ownHubs) as [hubId, hub] (hubId)}
+            {@const liveConn = getLiveConnection(hubId)}
+            {@const isLive = liveConn?.state === LiveConnectionState.Connected}
+            {@const isConnecting = liveConn?.state === LiveConnectionState.Connecting}
+            {@const online = onlineHubs.get(hubId)?.isOnline ?? false}
+            <div class="flex flex-col gap-3">
+              <!-- Device header -->
+              <div class="flex items-center gap-3">
+                <span class="text-lg font-semibold">{hub.name}</span>
+                <span
+                  class="size-2.5 rounded-full {online ? 'bg-green-400' : 'bg-red-500'}"
+                  title={online ? 'Online' : 'Offline'}
+                ></span>
+                <button
+                  class="border-border text-muted-foreground hover:border-foreground hover:text-foreground cursor-pointer rounded border bg-transparent px-1.5 py-px text-[10px] font-bold tracking-wider transition-all duration-200
+                    {isLive
+                    ? 'bg-gradient-to-r from-[rgb(185,123,255)] to-[#e100ff] bg-clip-text text-transparent [border-image:linear-gradient(to_right,rgb(167,89,255),#e100ff)_1]'
+                    : ''}
+                    {isConnecting ? 'border-muted-foreground text-muted-foreground' : ''}"
+                  onclick={() => toggleLiveControl(hubId)}
+                  title={isLive
+                    ? `Live — ${liveConn?.gateway} (${liveConn?.country}) — ${liveConn?.latency}ms`
+                    : isConnecting
+                      ? 'Connecting...'
+                      : 'Connect to Live Control'}
+                >
+                  LIVE
+                  {#if isConnecting}
+                    <Loader class="inline size-3 animate-spin" />
+                  {/if}
+                </button>
+                {#if isLive && liveConn}
+                  <span class="text-muted-foreground text-xs">
+                    {liveConn.gateway} ({liveConn.country}) — {liveConn.latency}ms
+                  </span>
+                {/if}
+              </div>
+
+              <!-- Shockers grid -->
+              <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {#each hub.shockers as shocker (shocker.id)}
+                  {#if isLive && liveConn}
+                    {@const liveState = liveConn.getShockerState(shocker.id)}
+                    {#if liveState}
+                      <LiveControlModule {shocker} {liveState} connection={liveConn} />
+                    {/if}
+                  {:else if moduleType === ModuleType.ClassicControlModule}
+                    <ClassicControlModule {shocker} />
+                  {:else if moduleType === ModuleType.RichControlModule}
+                    <RichControlModule {shocker} />
+                  {:else if moduleType === ModuleType.SimpleControlModule}
+                    <SimpleControlModule
+                      {shocker}
+                      {shockIntensity}
+                      {vibrationIntensity}
+                      {duration}
+                    />
+                  {:else}
+                    <p>Unknown module type</p>
+                  {/if}
+                {/each}
+              </div>
+            </div>
+          {/each}
+        </div>
+      {/if}
     {/if}
   </Container>
 {/if}

@@ -3,7 +3,10 @@
   import { Volume2, Waves, Zap } from '@lucide/svelte';
   import { buttonVariants } from '$lib/components/ui/button/button.svelte';
   import { ControlType } from '$lib/signalr/models/ControlType';
-  import type { LiveShockerState } from '$lib/state/live-control-state.svelte';
+  import {
+    type LiveShockerState,
+    type LiveDeviceConnection,
+  } from '$lib/state/live-control-state.svelte';
   import { cn } from '$lib/utils';
   import LiveSlider from './impl/LiveSlider.svelte';
   import ShockerMenu from './impl/ShockerMenu.svelte';
@@ -11,9 +14,10 @@
   interface Props {
     shocker: ShockerResponse;
     liveState: LiveShockerState;
+    connection: LiveDeviceConnection;
   }
 
-  let { shocker, liveState }: Props = $props();
+  let { shocker, liveState, connection }: Props = $props();
 
   const types = [
     { type: ControlType.Sound, Icon: Volume2, label: 'Sound' },
@@ -52,6 +56,6 @@
 
   <!-- Live Slider -->
   <div class="h-[200px] w-full">
-    <LiveSlider {liveState} />
+    <LiveSlider {liveState} onRelease={() => connection.sendFrame(shocker.id, 0, liveState.type)} />
   </div>
 </div>

@@ -40,14 +40,6 @@ export interface ShockerSendControlRequest {
  */
 export interface ShockersApiInterface {
     /**
-     * Creates request options for shockerSendControl without sending the request
-     * @param {ControlRequest} [controlRequest] 
-     * @throws {RequiredError}
-     * @memberof ShockersApiInterface
-     */
-    shockerSendControlRequestOpts(requestParameters: ShockerSendControlRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Send a control message to shockers
      * @param {ControlRequest} [controlRequest] 

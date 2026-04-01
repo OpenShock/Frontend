@@ -1,6 +1,11 @@
+<script lang="ts" module>
+  import { RoleType } from '$lib/api/internal/v1';
+
+  const allowedRoles = [RoleType.Admin, RoleType.System];
+</script>
+
 <script lang="ts">
   import { resolve } from '$app/paths';
-  import { RoleType } from '$lib/api/internal/v1';
   import { Button } from '$lib/components/ui/button';
   import { userState } from '$lib/state/user-state.svelte';
   import type { Snippet } from 'svelte';
@@ -11,7 +16,6 @@
 
   let { children }: Props = $props();
 
-  const allowedRoles = [RoleType.Admin, RoleType.System];
   let isAdmin = $derived(
     userState.self ? userState.self.roles.some((role) => allowedRoles.includes(role)) : false
   );
