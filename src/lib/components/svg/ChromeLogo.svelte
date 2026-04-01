@@ -19,7 +19,14 @@
 >
   <title>Google Chrome</title>
   <defs>
-    <linearGradient id="chrome-a" x1="3.2173" y1="15" x2="44.7812" y2="15" gradientUnits="userSpaceOnUse">
+    <linearGradient
+      id="chrome-a"
+      x1="3.2173"
+      y1="15"
+      x2="44.7812"
+      y2="15"
+      gradientUnits="userSpaceOnUse"
+    >
       <stop offset="0" stop-color="#d93025" />
       <stop offset="1" stop-color="#ea4335" />
     </linearGradient>
