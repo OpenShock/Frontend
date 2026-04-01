@@ -10,7 +10,8 @@
   import GithubIcon from '$lib/components/svg/GithubIcon.svelte';
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-  import { Separator, useSidebar } from '$lib/components/ui/sidebar';
+  import { Separator } from '$lib/components/ui/separator';
+  import { useSidebar } from '$lib/components/ui/sidebar';
   import { userState } from '$lib/state/user-state.svelte';
   import { cn } from '$lib/utils';
   import Breadcrumb from './Breadcrumb.svelte';

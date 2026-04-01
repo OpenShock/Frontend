@@ -1,5 +1,5 @@
 import type { Pathname } from '$app/types';
-import { onMount } from 'svelte';
+import { onDestroy } from 'svelte';
 
 export interface BreadcrumbEntry {
   label: string;
@@ -32,7 +32,7 @@ export function registerBreadcrumbs(
     }
   });
 
-  onMount(() => () => {
+  onDestroy(() => {
     const idx = _slots.findIndex((s) => s.id === id);
     if (idx !== -1) _slots.splice(idx, 1);
   });
