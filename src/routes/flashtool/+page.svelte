@@ -15,17 +15,17 @@
   import { Label } from '$lib/components/ui/label';
   import { Progress } from '$lib/components/ui/progress';
   import { Sheet, SheetContent, SheetHeader, SheetTitle } from '$lib/components/ui/sheet';
+  import { useSerial } from '$lib/utils/serial-context.svelte';
   import { getBrowserName, isSerialSupported } from '$lib/utils/compatibility';
   import FirmwareBoardSelector from './FirmwareBoardSelector.svelte';
   import FirmwareFlasher from './FirmwareFlasher.svelte';
-  import FlashManager from './FlashManager';
+  import { useFlashManager } from './flash-context.svelte';
   import HelpDialog from './HelpDialog.svelte';
   import SerialPortSelector from './SerialPortSelector.svelte';
 
+  const serial = useSerial();
+
   let port = $state<SerialPort | null>(null);
-  let manager = $state<FlashManager | null>(null);
-  let connectFailed = $state<boolean>(false);
-  let isFlashing = $state<boolean>(false);
 
   let terminalOpen = $state<boolean>(false);
   let terminalText = $state<string>('');
@@ -43,16 +43,13 @@
     },
   };
 
+  const flash = useFlashManager(terminal);
+
   $effect(() => {
-    if (port && !manager) {
-      connectFailed = false;
-      FlashManager.Connect(port, terminal).then((m) => {
-        manager = m;
-        connectFailed = !manager;
-      });
-    } else if (!port && manager) {
-      manager.disconnect();
-      manager = null;
+    if (port && !flash.manager) {
+      flash.connect(port);
+    } else if (!port && flash.manager) {
+      flash.disconnect();
     }
   });
 
@@ -64,52 +61,52 @@
   let eraseBeforeFlash = $state<boolean>(false);
 
   async function AppModeDevice() {
-    if (isFlashing) return;
+    if (flash.isFlashing) return;
     try {
-      isFlashing = true;
+      flash.isFlashing = true;
 
-      if (!manager) {
+      if (!flash.manager) {
         terminal.writeLine(`Host-side error during reset: no device!`);
         return;
       }
 
-      await manager.ensureApplication(true);
+      await flash.manager.ensureApplication(true);
     } catch (e) {
       terminal.writeLine(`Host-side error during reset: ${e}`);
     } finally {
-      isFlashing = false;
+      flash.isFlashing = false;
     }
   }
 
   async function RunCommand() {
-    if (isFlashing) return;
+    if (flash.isFlashing) return;
     try {
-      isFlashing = true;
+      flash.isFlashing = true;
 
-      if (!manager) {
+      if (!flash.manager) {
         terminal.writeLine(`Couldn't send: no device!`);
         return;
       }
 
-      await manager.ensureApplication();
-      await manager.sendApplicationCommand(terminalCommand);
+      await flash.manager.ensureApplication();
+      await flash.manager.sendApplicationCommand(terminalCommand);
     } catch (e) {
       terminal.writeLine(`Couldn't send: ${e}`);
     } finally {
-      isFlashing = false;
+      flash.isFlashing = false;
     }
   }
 </script>
 
 {#snippet mainContent()}
-  <SerialPortSelector bind:port disabled={isFlashing} />
+  <SerialPortSelector {serial} bind:port disabled={flash.isFlashing} />
 
-  {#if manager}
+  {#if flash.manager}
     <h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">Select Channel</h3>
-    <FirmwareChannelSelector bind:channel bind:version disabled={isFlashing} />
+    <FirmwareChannelSelector bind:channel bind:version disabled={flash.isFlashing} />
 
     <h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">Select Board</h3>
-    <FirmwareBoardSelector {version} bind:selectedBoard={board} disabled={isFlashing} />
+    <FirmwareBoardSelector {version} bind:selectedBoard={board} disabled={flash.isFlashing} />
 
     <div class="items-top flex space-x-2">
       <Checkbox id="erase-before-flash" bind:checked={eraseBeforeFlash} />
@@ -131,13 +128,12 @@
       <FirmwareFlasher
         {version}
         {board}
-        {manager}
+        {flash}
         {eraseBeforeFlash}
         showNonStableWarning={channel !== 'stable'}
-        bind:isFlashing
       />
     {/if}
-  {:else if port && !connectFailed}
+  {:else if port && !flash.connectFailed}
     <div class="flex flex-col items-center gap-2">
       <span class="text-center text-2xl"> Connecting... </span>
       <Progress />
@@ -145,7 +141,7 @@
     </div>
   {/if}
 
-  {#if port && connectFailed}
+  {#if port && flash.connectFailed}
     <div class="flex flex-col items-start gap-2">
       <span class="bold text-center text-2xl text-red-500"> Device connection failed </span>
       <span class="text-center">
@@ -227,7 +223,7 @@
         <div class="flex-1"></div>
         <Button class="m-2" onclick={() => (terminalText = '')}>Clear</Button>
         <!-- Reset & start application -->
-        <Button onclick={AppModeDevice} disabled={!manager || isFlashing}>Reset</Button>
+        <Button onclick={AppModeDevice} disabled={!flash.manager || flash.isFlashing}>Reset</Button>
       </SheetTitle>
     </SheetHeader>
     <div
