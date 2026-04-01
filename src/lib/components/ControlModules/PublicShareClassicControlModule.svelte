@@ -10,7 +10,7 @@
   import type { Control } from '$lib/signalr/models/Control';
   import { ControlType } from '$lib/signalr/models/ControlType';
   import { getPauseReason } from '$lib/utils';
-  import ControlListener from './ControlListener.svelte';
+  import { useShockerEvents } from '$lib/hooks/shocker-events.svelte';
   import ActionButtons from './impl/ActionButtons.svelte';
   import CircleSlider from './impl/CircleSlider.svelte';
 
@@ -37,7 +37,7 @@
 
   let intensity = $state(ControlIntensityDefault);
   let duration = $state(ControlDurationDefault);
-  let active = $state<ControlType | null>(null);
+  const { active } = useShockerEvents(() => shocker.id);
 
   // Clamp values to limits
   const clampedIntensity = $derived(Math.min(intensity, maxIntensity));
@@ -59,8 +59,6 @@
     [ControlType.Shock]: !permissions.shock,
   });
 </script>
-
-<ControlListener shockerId={shocker.id} bind:active />
 
 <div
   class="border-surface-400-500-token flex flex-col items-center justify-center gap-2 overflow-hidden rounded-md border p-2"

@@ -55,7 +55,6 @@ for dep in "${UNWANTED_DEPS[@]}"; do
 		pnpm remove "$dep"
 	fi
 done
-pnpm up --latest
 
 # Format to reduce diff noise
 echo "Formatting..."
@@ -67,7 +66,7 @@ echo "Applying custom modifications..."
 # Sidebar: ease-in-out and duration-300
 sed -i 's/duration-200 ease-linear/duration-300 ease-in-out/g' "$UI_DIR/sidebar/sidebar.svelte"
 
-# Sidebar submenu: ml-* instead of mx-*
+# Sidebar submenu: ml-* instead of mx-*, pl-* instead of px-*
 sed -i 's/mx-3\.5\(.*\)px-2\.5/ml-3.5\1pl-2.5/g' "$UI_DIR/sidebar/sidebar-menu-sub.svelte"
 
 # Sonner: use color-scheme-state instead of mode-watcher
@@ -75,7 +74,7 @@ sed -i "s|import { mode } from \"mode-watcher\";|import { colorScheme } from '\$
 sed -i 's|theme={mode\.current}|theme={colorScheme.value}|' "$UI_DIR/sonner/sonner.svelte"
 
 # Slider: add cursor-w-resize to thumb
-sed -i 's/focus-visible:outline-hidden disabled:pointer/focus-visible:outline-hidden cursor-w-resize disabled:pointer/' "$UI_DIR/slider/slider.svelte"
+sed -i 's/select-none disabled:pointer/cursor-w-resize select-none disabled:pointer/' "$UI_DIR/slider/slider.svelte"
 
 # Toggle group: suppress state_referenced_locally warnings
 sed -i 's/\tsetToggleGroupCtx/\t\/\/ svelte-ignore state_referenced_locally\n\tsetToggleGroupCtx/' "$UI_DIR/toggle-group/toggle-group.svelte"

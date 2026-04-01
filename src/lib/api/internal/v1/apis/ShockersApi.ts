@@ -139,15 +139,6 @@ export interface ShockerShockerShareRemoveRequest {
  */
 export interface ShockersApiInterface {
     /**
-     * Creates request options for shockerEditShocker without sending the request
-     * @param {string} shockerId 
-     * @param {NewShocker} [newShocker] 
-     * @throws {RequiredError}
-     * @memberof ShockersApiInterface
-     */
-    shockerEditShockerRequestOpts(requestParameters: ShockerEditShockerRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Edit a shocker
      * @param {string} shockerId 
@@ -162,15 +153,6 @@ export interface ShockersApiInterface {
      * Edit a shocker
      */
     shockerEditShocker(shockerId: string, newShocker?: NewShocker, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
-
-    /**
-     * Creates request options for shockerGetAllShockerLogs without sending the request
-     * @param {number} [offset] 
-     * @param {number} [limit] 
-     * @throws {RequiredError}
-     * @memberof ShockersApiInterface
-     */
-    shockerGetAllShockerLogsRequestOpts(requestParameters: ShockerGetAllShockerLogsRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -189,14 +171,6 @@ export interface ShockersApiInterface {
     shockerGetAllShockerLogs(offset?: number, limit?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShockerLogsResponse>;
 
     /**
-     * Creates request options for shockerGetShockerById without sending the request
-     * @param {string} shockerId 
-     * @throws {RequiredError}
-     * @memberof ShockersApiInterface
-     */
-    shockerGetShockerByIdRequestOpts(requestParameters: ShockerGetShockerByIdRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Get information about a shocker.
      * @param {string} shockerId 
@@ -210,16 +184,6 @@ export interface ShockersApiInterface {
      * Get information about a shocker.
      */
     shockerGetShockerById(shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShockerWithDeviceLegacyDataResponse>;
-
-    /**
-     * Creates request options for shockerGetShockerLogs without sending the request
-     * @param {string} shockerId 
-     * @param {number} [offset] 
-     * @param {number} [limit] 
-     * @throws {RequiredError}
-     * @memberof ShockersApiInterface
-     */
-    shockerGetShockerLogsRequestOpts(requestParameters: ShockerGetShockerLogsRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -239,14 +203,6 @@ export interface ShockersApiInterface {
     shockerGetShockerLogs(shockerId: string, offset?: number, limit?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LogEntryArrayLegacyDataResponse>;
 
     /**
-     * Creates request options for shockerGetUserShares without sending the request
-     * @param {string} shockerId Id of the shocker
-     * @throws {RequiredError}
-     * @memberof ShockersApiInterface
-     */
-    shockerGetUserSharesRequestOpts(requestParameters: ShockerGetUserSharesRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Get all user shares for a shocker
      * @param {string} shockerId Id of the shocker
@@ -260,13 +216,6 @@ export interface ShockersApiInterface {
      * Get all user shares for a shocker
      */
     shockerGetUserShares(shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareInfoArrayLegacyDataResponse>;
-
-    /**
-     * Creates request options for shockerListSharedShockers without sending the request
-     * @throws {RequiredError}
-     * @memberof ShockersApiInterface
-     */
-    shockerListSharedShockersRequestOpts(): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -283,13 +232,6 @@ export interface ShockersApiInterface {
     shockerListSharedShockers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OwnerShockerResponseArrayLegacyDataResponse>;
 
     /**
-     * Creates request options for shockerListShockers without sending the request
-     * @throws {RequiredError}
-     * @memberof ShockersApiInterface
-     */
-    shockerListShockersRequestOpts(): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary List all shockers belonging to the authenticated user.
      * @param {*} [options] Override http request option.
@@ -302,15 +244,6 @@ export interface ShockersApiInterface {
      * List all shockers belonging to the authenticated user.
      */
     shockerListShockers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DeviceWithShockersResponseArrayLegacyDataResponse>;
-
-    /**
-     * Creates request options for shockerPauseShocker without sending the request
-     * @param {string} shockerId 
-     * @param {PauseRequest} [pauseRequest] 
-     * @throws {RequiredError}
-     * @memberof ShockersApiInterface
-     */
-    shockerPauseShockerRequestOpts(requestParameters: ShockerPauseShockerRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -329,14 +262,6 @@ export interface ShockersApiInterface {
     shockerPauseShocker(shockerId: string, pauseRequest?: PauseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BooleanLegacyDataResponse>;
 
     /**
-     * Creates request options for shockerRegisterShocker without sending the request
-     * @param {NewShocker} [newShocker] 
-     * @throws {RequiredError}
-     * @memberof ShockersApiInterface
-     */
-    shockerRegisterShockerRequestOpts(requestParameters: ShockerRegisterShockerRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Register a shocker
      * @param {NewShocker} [newShocker] 
@@ -350,14 +275,6 @@ export interface ShockersApiInterface {
      * Register a shocker
      */
     shockerRegisterShocker(newShocker?: NewShocker, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GuidLegacyDataResponse>;
-
-    /**
-     * Creates request options for shockerRemoveShocker without sending the request
-     * @param {string} shockerId 
-     * @throws {RequiredError}
-     * @memberof ShockersApiInterface
-     */
-    shockerRemoveShockerRequestOpts(requestParameters: ShockerRemoveShockerRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -375,14 +292,6 @@ export interface ShockersApiInterface {
     shockerRemoveShocker(shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
 
     /**
-     * Creates request options for shockerSendControlDEPRECATED without sending the request
-     * @param {Array<Control>} [control] 
-     * @throws {RequiredError}
-     * @memberof ShockersApiInterface
-     */
-    shockerSendControlDEPRECATEDRequestOpts(requestParameters: ShockerSendControlDEPRECATEDRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Send a control message to shockers (Deprecated in favor of the /2/shockers/control endpoint)
      * @param {Array<Control>} [control] 
@@ -396,15 +305,6 @@ export interface ShockersApiInterface {
      * Send a control message to shockers (Deprecated in favor of the /2/shockers/control endpoint)
      */
     shockerSendControlDEPRECATED(control?: Array<Control>, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LegacyEmptyResponse>;
-
-    /**
-     * Creates request options for shockerShockerShareCodeCreate without sending the request
-     * @param {string} shockerId 
-     * @param {ShockerPermLimitPair} [shockerPermLimitPair] 
-     * @throws {RequiredError}
-     * @memberof ShockersApiInterface
-     */
-    shockerShockerShareCodeCreateRequestOpts(requestParameters: ShockerShockerShareCodeCreateRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -423,14 +323,6 @@ export interface ShockersApiInterface {
     shockerShockerShareCodeCreate(shockerId: string, shockerPermLimitPair?: ShockerPermLimitPair, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GuidLegacyDataResponse>;
 
     /**
-     * Creates request options for shockerShockerShareCodeList without sending the request
-     * @param {string} shockerId 
-     * @throws {RequiredError}
-     * @memberof ShockersApiInterface
-     */
-    shockerShockerShareCodeListRequestOpts(requestParameters: ShockerShockerShareCodeListRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary List all share codes for a shocker
      * @param {string} shockerId 
@@ -444,16 +336,6 @@ export interface ShockersApiInterface {
      * List all share codes for a shocker
      */
     shockerShockerShareCodeList(shockerId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShareCodeInfoArrayLegacyDataResponse>;
-
-    /**
-     * Creates request options for shockerShockerShareCodePause without sending the request
-     * @param {string} shockerId 
-     * @param {string} sharedWithUserId 
-     * @param {PauseRequest} [pauseRequest] 
-     * @throws {RequiredError}
-     * @memberof ShockersApiInterface
-     */
-    shockerShockerShareCodePauseRequestOpts(requestParameters: ShockerShockerShareCodePauseRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -473,16 +355,6 @@ export interface ShockersApiInterface {
     shockerShockerShareCodePause(shockerId: string, sharedWithUserId: string, pauseRequest?: PauseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BooleanLegacyDataResponse>;
 
     /**
-     * Creates request options for shockerShockerShareCodeUpdate without sending the request
-     * @param {string} shockerId 
-     * @param {string} sharedWithUserId 
-     * @param {ShockerPermLimitPair} [shockerPermLimitPair] 
-     * @throws {RequiredError}
-     * @memberof ShockersApiInterface
-     */
-    shockerShockerShareCodeUpdateRequestOpts(requestParameters: ShockerShockerShareCodeUpdateRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Update a share for a shocker
      * @param {string} shockerId 
@@ -498,15 +370,6 @@ export interface ShockersApiInterface {
      * Update a share for a shocker
      */
     shockerShockerShareCodeUpdate(shockerId: string, sharedWithUserId: string, shockerPermLimitPair?: ShockerPermLimitPair, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
-
-    /**
-     * Creates request options for shockerShockerShareRemove without sending the request
-     * @param {string} shockerId 
-     * @param {string} sharedWithUserId 
-     * @throws {RequiredError}
-     * @memberof ShockersApiInterface
-     */
-    shockerShockerShareRemoveRequestOpts(requestParameters: ShockerShockerShareRemoveRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 

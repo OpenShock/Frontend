@@ -20,7 +20,8 @@
 export enum ShockerModelType {
     CaiXianlin = 'CaiXianlin',
     PetTrainer = 'PetTrainer',
-    Petrainer998Dr = 'Petrainer998DR'
+    Petrainer998Dr = 'Petrainer998DR',
+    WellturnT330 = 'WellturnT330'
 }
 
 

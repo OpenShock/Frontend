@@ -12,7 +12,7 @@
   import { getConnection } from '$lib/signalr/user.svelte';
   import { ControlType } from '$lib/signalr/models/ControlType';
   import { serializeControlMessages } from '$lib/signalr/serializers/Control';
-  import ControlListener from './ControlListener.svelte';
+  import { useShockerEvents } from '$lib/hooks/shocker-events.svelte';
   import ActionButtons from './impl/ActionButtons.svelte';
 
   interface Props {
@@ -24,7 +24,7 @@
 
   let intensity = $state(ControlIntensityDefault);
   let duration = $state(ControlDurationDefault);
-  let active = $state<ControlType | null>(null);
+  const { active } = useShockerEvents(() => shocker.id);
 
   let resuming = $state(false);
 
@@ -46,8 +46,6 @@
     serializeControlMessages(conn, [{ id: shocker.id, type, intensity, duration }]);
   }
 </script>
-
-<ControlListener shockerId={shocker.id} bind:active />
 
 <div
   class="border-surface-400-500-token relative flex flex-col items-center justify-center gap-2 overflow-hidden rounded-md border p-2"

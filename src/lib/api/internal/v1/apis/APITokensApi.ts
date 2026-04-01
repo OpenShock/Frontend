@@ -69,14 +69,6 @@ export interface TokensReportTokensRequest {
  */
 export interface APITokensApiInterface {
     /**
-     * Creates request options for tokenDeleteDeleteToken without sending the request
-     * @param {string} tokenId 
-     * @throws {RequiredError}
-     * @memberof APITokensApiInterface
-     */
-    tokenDeleteDeleteTokenRequestOpts(requestParameters: TokenDeleteDeleteTokenRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Revoke a token
      * @param {string} tokenId 
@@ -92,14 +84,6 @@ export interface APITokensApiInterface {
     tokenDeleteDeleteToken(tokenId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
-     * Creates request options for tokensCreateToken without sending the request
-     * @param {CreateTokenRequest} [createTokenRequest] 
-     * @throws {RequiredError}
-     * @memberof APITokensApiInterface
-     */
-    tokensCreateTokenRequestOpts(requestParameters: TokensCreateTokenRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Create a new token
      * @param {CreateTokenRequest} [createTokenRequest] 
@@ -113,15 +97,6 @@ export interface APITokensApiInterface {
      * Create a new token
      */
     tokensCreateToken(createTokenRequest?: CreateTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TokenCreatedResponse>;
-
-    /**
-     * Creates request options for tokensEditToken without sending the request
-     * @param {string} tokenId 
-     * @param {EditTokenRequest} [editTokenRequest] 
-     * @throws {RequiredError}
-     * @memberof APITokensApiInterface
-     */
-    tokensEditTokenRequestOpts(requestParameters: TokensEditTokenRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -140,14 +115,6 @@ export interface APITokensApiInterface {
     tokensEditToken(tokenId: string, editTokenRequest?: EditTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
-     * Creates request options for tokensGetTokenById without sending the request
-     * @param {string} tokenId 
-     * @throws {RequiredError}
-     * @memberof APITokensApiInterface
-     */
-    tokensGetTokenByIdRequestOpts(requestParameters: TokensGetTokenByIdRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Get a token by id
      * @param {string} tokenId 
@@ -161,13 +128,6 @@ export interface APITokensApiInterface {
      * Get a token by id
      */
     tokensGetTokenById(tokenId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TokenResponse>;
-
-    /**
-     * Creates request options for tokensListTokens without sending the request
-     * @throws {RequiredError}
-     * @memberof APITokensApiInterface
-     */
-    tokensListTokensRequestOpts(): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -184,14 +144,6 @@ export interface APITokensApiInterface {
     tokensListTokens(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<TokenResponse>>;
 
     /**
-     * Creates request options for tokensReportTokens without sending the request
-     * @param {ReportTokensRequest} [reportTokensRequest] 
-     * @throws {RequiredError}
-     * @memberof APITokensApiInterface
-     */
-    tokensReportTokensRequestOpts(requestParameters: TokensReportTokensRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Endpoint to delete potentially compromised api tokens
      * @param {ReportTokensRequest} [reportTokensRequest] 
@@ -205,13 +157,6 @@ export interface APITokensApiInterface {
      * Endpoint to delete potentially compromised api tokens
      */
     tokensReportTokens(reportTokensRequest?: ReportTokensRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
-
-    /**
-     * Creates request options for tokensSelfGetSelfToken without sending the request
-     * @throws {RequiredError}
-     * @memberof APITokensApiInterface
-     */
-    tokensSelfGetSelfTokenRequestOpts(): Promise<runtime.RequestOpts>;
 
     /**
      * 
