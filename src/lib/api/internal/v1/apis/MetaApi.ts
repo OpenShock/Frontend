@@ -33,13 +33,6 @@ import {
  */
 export interface MetaApiInterface {
     /**
-     * Creates request options for publicGetOnlineDevicesStatistics without sending the request
-     * @throws {RequiredError}
-     * @memberof MetaApiInterface
-     */
-    publicGetOnlineDevicesStatisticsRequestOpts(): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Gets online devices statistics
      * @param {*} [options] Override http request option.
@@ -52,13 +45,6 @@ export interface MetaApiInterface {
      * Gets online devices statistics
      */
     publicGetOnlineDevicesStatistics(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StatsResponseLegacyDataResponse>;
-
-    /**
-     * Creates request options for versionGetBackendInfo without sending the request
-     * @throws {RequiredError}
-     * @memberof MetaApiInterface
-     */
-    versionGetBackendInfoRequestOpts(): Promise<runtime.RequestOpts>;
 
     /**
      * 

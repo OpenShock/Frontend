@@ -1,4 +1,5 @@
-import type { Component, Snippet } from 'svelte';
+import type { AnyComponent } from '$lib/types/AnyComponent';
+import type { Snippet } from 'svelte';
 
 // Props passed to dialog content components
 export interface DialogContentProps<R = void> {
@@ -13,8 +14,7 @@ export interface DialogRenderProps<T = void, R = void> extends DialogContentProp
 
 // Generic dialog context - stores a component to render
 export interface DialogContext<R = unknown> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  content: Component<any>;
+  content: AnyComponent;
   props: Record<string, unknown>;
   resolve: (result: R) => void;
 }

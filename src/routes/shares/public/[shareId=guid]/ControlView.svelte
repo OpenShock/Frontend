@@ -37,8 +37,8 @@
   }
 
   const shareId = $derived(page.params.shareId);
-  let editUrl = $derived(resolve(`/shares/public/${shareId}/edit`));
 
+  let editUrl = $derived(resolve(`/shares/public/${shareId}/edit`));
   const shareUrl = $derived(getSiteShortURL(`/s/${shareId}`));
 </script>
 

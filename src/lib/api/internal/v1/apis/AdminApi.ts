@@ -138,14 +138,6 @@ export interface AdminRemoveWebhookRequest {
  */
 export interface AdminApiInterface {
     /**
-     * Creates request options for adminAddEmailProviderBlacklist without sending the request
-     * @param {AddEmailProviderBlacklistDto} [addEmailProviderBlacklistDto] 
-     * @throws {RequiredError}
-     * @memberof AdminApiInterface
-     */
-    adminAddEmailProviderBlacklistRequestOpts(requestParameters: AdminAddEmailProviderBlacklistRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @param {AddEmailProviderBlacklistDto} [addEmailProviderBlacklistDto] 
      * @param {*} [options] Override http request option.
@@ -159,14 +151,6 @@ export interface AdminApiInterface {
     adminAddEmailProviderBlacklist(addEmailProviderBlacklistDto?: AddEmailProviderBlacklistDto, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
-     * Creates request options for adminAddUsernameBlacklist without sending the request
-     * @param {AddUsernameBlacklistDto} [addUsernameBlacklistDto] 
-     * @throws {RequiredError}
-     * @memberof AdminApiInterface
-     */
-    adminAddUsernameBlacklistRequestOpts(requestParameters: AdminAddUsernameBlacklistRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @param {AddUsernameBlacklistDto} [addUsernameBlacklistDto] 
      * @param {*} [options] Override http request option.
@@ -178,14 +162,6 @@ export interface AdminApiInterface {
     /**
      */
     adminAddUsernameBlacklist(addUsernameBlacklistDto?: AddUsernameBlacklistDto, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
-
-    /**
-     * Creates request options for adminAddWebhook without sending the request
-     * @param {AddWebhookDto} [addWebhookDto] 
-     * @throws {RequiredError}
-     * @memberof AdminApiInterface
-     */
-    adminAddWebhookRequestOpts(requestParameters: AdminAddWebhookRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -203,14 +179,6 @@ export interface AdminApiInterface {
     adminAddWebhook(addWebhookDto?: AddWebhookDto, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
-     * Creates request options for adminConfigurationAdd without sending the request
-     * @param {ConfigurationAddItemRequest} [configurationAddItemRequest] 
-     * @throws {RequiredError}
-     * @memberof AdminApiInterface
-     */
-    adminConfigurationAddRequestOpts(requestParameters: AdminConfigurationAddRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Adds a new configuration
      * @param {ConfigurationAddItemRequest} [configurationAddItemRequest] 
@@ -224,14 +192,6 @@ export interface AdminApiInterface {
      * Adds a new configuration
      */
     adminConfigurationAdd(configurationAddItemRequest?: ConfigurationAddItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
-
-    /**
-     * Creates request options for adminConfigurationDelete without sending the request
-     * @param {string} name 
-     * @throws {RequiredError}
-     * @memberof AdminApiInterface
-     */
-    adminConfigurationDeleteRequestOpts(requestParameters: AdminConfigurationDeleteRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -249,13 +209,6 @@ export interface AdminApiInterface {
     adminConfigurationDelete(name: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
-     * Creates request options for adminConfigurationList without sending the request
-     * @throws {RequiredError}
-     * @memberof AdminApiInterface
-     */
-    adminConfigurationListRequestOpts(): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Gets all configuration items
      * @param {*} [options] Override http request option.
@@ -268,14 +221,6 @@ export interface AdminApiInterface {
      * Gets all configuration items
      */
     adminConfigurationList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ConfigurationItemDto>>;
-
-    /**
-     * Creates request options for adminConfigurationUpdate without sending the request
-     * @param {ConfigurationUpdateItemRequest} [configurationUpdateItemRequest] 
-     * @throws {RequiredError}
-     * @memberof AdminApiInterface
-     */
-    adminConfigurationUpdateRequestOpts(requestParameters: AdminConfigurationUpdateRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -291,15 +236,6 @@ export interface AdminApiInterface {
      * Updates an existing configuration
      */
     adminConfigurationUpdate(configurationUpdateItemRequest?: ConfigurationUpdateItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
-
-    /**
-     * Creates request options for adminDeactivateUser without sending the request
-     * @param {string} userId 
-     * @param {boolean} [deleteLater] 
-     * @throws {RequiredError}
-     * @memberof AdminApiInterface
-     */
-    adminDeactivateUserRequestOpts(requestParameters: AdminDeactivateUserRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -318,14 +254,6 @@ export interface AdminApiInterface {
     adminDeactivateUser(userId: string, deleteLater?: boolean, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
-     * Creates request options for adminDeleteUser without sending the request
-     * @param {string} userId 
-     * @throws {RequiredError}
-     * @memberof AdminApiInterface
-     */
-    adminDeleteUserRequestOpts(requestParameters: AdminDeleteUserRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Deletes a user
      * @param {string} userId 
@@ -341,13 +269,6 @@ export interface AdminApiInterface {
     adminDeleteUser(userId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
-     * Creates request options for adminGetOnlineDevices without sending the request
-     * @throws {RequiredError}
-     * @memberof AdminApiInterface
-     */
-    adminGetOnlineDevicesRequestOpts(): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Gets all online devices
      * @param {*} [options] Override http request option.
@@ -360,17 +281,6 @@ export interface AdminApiInterface {
      * Gets all online devices
      */
     adminGetOnlineDevices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminOnlineDeviceResponseArrayLegacyDataResponse>;
-
-    /**
-     * Creates request options for adminGetUsers without sending the request
-     * @param {string} [$filter] 
-     * @param {string} [$orderby] 
-     * @param {number} [$offset] 
-     * @param {number} [$limit] 
-     * @throws {RequiredError}
-     * @memberof AdminApiInterface
-     */
-    adminGetUsersRequestOpts(requestParameters: AdminGetUsersRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -391,14 +301,6 @@ export interface AdminApiInterface {
     adminGetUsers($filter?: string, $orderby?: string, $offset?: number, $limit?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminUsersViewPaginated>;
 
     /**
-     * Creates request options for adminListEmailProviderBlacklist without sending the request
-     * @param {string} [match] 
-     * @throws {RequiredError}
-     * @memberof AdminApiInterface
-     */
-    adminListEmailProviderBlacklistRequestOpts(requestParameters: AdminListEmailProviderBlacklistRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @param {string} [match] 
      * @param {*} [options] Override http request option.
@@ -410,14 +312,6 @@ export interface AdminApiInterface {
     /**
      */
     adminListEmailProviderBlacklist(match?: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<EmailProviderBlacklistDto>>;
-
-    /**
-     * Creates request options for adminListUsernameBlacklist without sending the request
-     * @param {string} [match] 
-     * @throws {RequiredError}
-     * @memberof AdminApiInterface
-     */
-    adminListUsernameBlacklistRequestOpts(requestParameters: AdminListUsernameBlacklistRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -433,13 +327,6 @@ export interface AdminApiInterface {
     adminListUsernameBlacklist(match?: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<UserNameBlacklistDto>>;
 
     /**
-     * Creates request options for adminListWebhooks without sending the request
-     * @throws {RequiredError}
-     * @memberof AdminApiInterface
-     */
-    adminListWebhooksRequestOpts(): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary List webhooks
      * @param {*} [options] Override http request option.
@@ -452,15 +339,6 @@ export interface AdminApiInterface {
      * List webhooks
      */
     adminListWebhooks(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<WebhookDto>>;
-
-    /**
-     * Creates request options for adminModifyUser without sending the request
-     * @param {string} userId 
-     * @param {UserPatchDto} [userPatchDto] 
-     * @throws {RequiredError}
-     * @memberof AdminApiInterface
-     */
-    adminModifyUserRequestOpts(requestParameters: AdminModifyUserRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -479,14 +357,6 @@ export interface AdminApiInterface {
     adminModifyUser(userId: string, userPatchDto?: UserPatchDto, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
-     * Creates request options for adminReactivateUser without sending the request
-     * @param {string} userId 
-     * @throws {RequiredError}
-     * @memberof AdminApiInterface
-     */
-    adminReactivateUserRequestOpts(requestParameters: AdminReactivateUserRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Reactivates a user
      * @param {string} userId 
@@ -502,14 +372,6 @@ export interface AdminApiInterface {
     adminReactivateUser(userId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
-     * Creates request options for adminRemoveEmailProviderBlacklist without sending the request
-     * @param {string} id 
-     * @throws {RequiredError}
-     * @memberof AdminApiInterface
-     */
-    adminRemoveEmailProviderBlacklistRequestOpts(requestParameters: AdminRemoveEmailProviderBlacklistRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @param {string} id 
      * @param {*} [options] Override http request option.
@@ -523,14 +385,6 @@ export interface AdminApiInterface {
     adminRemoveEmailProviderBlacklist(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
-     * Creates request options for adminRemoveUsernameBlacklist without sending the request
-     * @param {string} id 
-     * @throws {RequiredError}
-     * @memberof AdminApiInterface
-     */
-    adminRemoveUsernameBlacklistRequestOpts(requestParameters: AdminRemoveUsernameBlacklistRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @param {string} id 
      * @param {*} [options] Override http request option.
@@ -542,14 +396,6 @@ export interface AdminApiInterface {
     /**
      */
     adminRemoveUsernameBlacklist(id: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
-
-    /**
-     * Creates request options for adminRemoveWebhook without sending the request
-     * @param {string} id 
-     * @throws {RequiredError}
-     * @memberof AdminApiInterface
-     */
-    adminRemoveWebhookRequestOpts(requestParameters: AdminRemoveWebhookRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
