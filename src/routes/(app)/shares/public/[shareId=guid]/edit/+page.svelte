@@ -13,11 +13,8 @@
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
   import SharedDevice from './SharedDevice.svelte';
-  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import DialogAddShocker from './dialog-add-shocker.svelte';
-
-  breadcrumbs.push('Public Shares', '/shares/public');
-  const shareCrumb = breadcrumbs.push('Edit');
 
   let publicShareRequest = $state<Promise<PublicShareResponse>>(getPublicShare());
   let publicShareData = $state<PublicShareResponse | null>(null);
@@ -28,9 +25,10 @@
   const shareId = $derived(page.params.shareId);
   const publicUrl = $derived(resolve(`/shares/public/${shareId}`));
 
-  $effect(() => {
-    if (publicShareData) shareCrumb.label = publicShareData.name;
-  });
+  registerBreadcrumbs(() => [
+    { label: 'Public Shares', href: '/shares/public' },
+    { label: publicShareData?.name ?? 'Edit' },
+  ]);
 
   onMount(() => {
     refreshOwnHubs();

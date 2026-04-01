@@ -8,10 +8,10 @@
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { SemVer } from 'semver';
   import { onMount } from 'svelte';
-  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { type OnlineHub, columns } from './columns';
 
-  breadcrumbs.push('Online Hubs');
+  registerBreadcrumbs(() => [{ label: 'Online Hubs' }]);
 
   let data = $state<OnlineHub[]>([]);
   let sorting = $state<SortingState>([]);

@@ -4,11 +4,13 @@
   import ChangeEmail from './ChangeEmail.svelte';
   import ChangePassword from './ChangePassword.svelte';
   import ChangeUsername from './ChangeUsername.svelte';
-  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import DangerZone from './DangerZone.svelte';
 
-  breadcrumbs.push('Settings', '/settings/account');
-  breadcrumbs.push('Account');
+  registerBreadcrumbs(() => [
+    { label: 'Settings', href: '/settings/account' },
+    { label: 'Account' },
+  ]);
 
   let account = $derived(userState.self);
 </script>

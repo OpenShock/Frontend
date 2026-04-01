@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
 
-  breadcrumbs.push('Profile');
+  registerBreadcrumbs(() => [{ label: 'Profile' }]);
 </script>

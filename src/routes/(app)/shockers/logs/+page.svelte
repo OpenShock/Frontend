@@ -10,9 +10,9 @@
   } from '$lib/components/Table/ColumnUtils';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import * as Card from '$lib/components/ui/card';
-  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
 
-  breadcrumbs.push('Shocker Logs');
+  registerBreadcrumbs(() => [{ label: 'Shocker Logs' }]);
 
   let { data } = $props();
 

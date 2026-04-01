@@ -8,13 +8,10 @@
   import * as Card from '$lib/components/ui/card/index.js';
   import Input from '$lib/components/ui/input/input.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { userState } from '$lib/state/user-state.svelte';
   import { onMount } from 'svelte';
   import ControlView from './ControlView.svelte';
-
-  breadcrumbs.push('Public Shares', '/shares/public');
-  const shareCrumb = breadcrumbs.push('Public Share');
 
   // Page is reactive and query parameters can change
   let loginUrl = $derived(
@@ -26,6 +23,11 @@
   let enterAsGuestClicked = $state(false);
   let guestName = $state<string | null>(null);
   let entered = $state(false);
+
+  registerBreadcrumbs(() => [
+    { label: 'Public Shares', href: '/shares/public' },
+    { label: shareData?.name ?? 'Public Share' },
+  ]);
 
   // Fetch share details
   async function getShareDetails(): Promise<PublicShareResponse> {
@@ -43,10 +45,6 @@
       throw error;
     }
   }
-
-  $effect(() => {
-    if (shareData) shareCrumb.label = shareData.name;
-  });
 
   onMount(async () => {
     await details;

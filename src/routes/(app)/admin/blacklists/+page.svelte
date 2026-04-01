@@ -8,9 +8,9 @@
   } from '$lib/api/internal/v1';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import { Button } from '$lib/components/ui/button';
-  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
 
-  breadcrumbs.push('Blacklists');
+  registerBreadcrumbs(() => [{ label: 'Blacklists' }]);
   import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
   import { ScrollArea } from '$lib/components/ui/scroll-area';
   import * as Select from '$lib/components/ui/select';

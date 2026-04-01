@@ -72,7 +72,7 @@
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { getConnection } from '$lib/signalr/user.svelte';
   import { serializeOtaInstallMessage } from '$lib/signalr/serializers/OtaInstall';
-  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import {
     HubOnlineState,
     onlineHubs,
@@ -197,12 +197,10 @@
 
   $effect(() => fetchOtaLogs(page.params.hubId));
 
-  breadcrumbs.push('Hubs', '/hubs');
-  const hubCrumb = breadcrumbs.push('Update');
-
-  $effect(() => {
-    hubCrumb.label = hubName;
-  });
+  registerBreadcrumbs(() => [
+    { label: 'Hubs', href: '/hubs' },
+    { label: hubName ?? 'Update' },
+  ]);
 
   onMount(refreshOwnHubs);
 </script>

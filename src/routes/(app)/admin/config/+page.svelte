@@ -9,7 +9,7 @@
     LocaleDateTimeRenderer,
     RenderCell,
   } from '$lib/components/Table/ColumnUtils';
-  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import { Button } from '$lib/components/ui/button';
   import { CardHeader, CardTitle } from '$lib/components/ui/card';
@@ -19,7 +19,7 @@
   import DataTableActions from './data-table-actions.svelte';
   import WebhookAddDialog from './dialog-item-add.svelte';
 
-  breadcrumbs.push('Config');
+  registerBreadcrumbs(() => [{ label: 'Config' }]);
 
   const columns: ColumnDef<ConfigurationItemDto>[] = [
     CreateSortableColumnDef('name', 'Name', RenderCell),

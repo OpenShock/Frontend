@@ -10,11 +10,13 @@
   import type { QueryParamsType } from './queryParamsType';
   import { page } from '$app/state';
   import { browser } from '$app/environment';
-  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
 
-  breadcrumbs.push('Settings', '/settings/account');
-  breadcrumbs.push('API Tokens', '/settings/api-tokens');
-  breadcrumbs.push('New');
+  registerBreadcrumbs(() => [
+    { label: 'Settings', href: '/settings/account' },
+    { label: 'API Tokens', href: '/settings/api-tokens' },
+    { label: 'New' },
+  ]);
 
   let windowQueryParams = $state<
     | QueryParamsType

@@ -16,11 +16,13 @@
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
   import DisconnectDialog from './dialog-oauth-disconnect.svelte';
-  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
 
-  breadcrumbs.push('Settings', '/settings/account');
-  breadcrumbs.push('Connections');
+  registerBreadcrumbs(() => [
+    { label: 'Settings', href: '/settings/account' },
+    { label: 'Connections' },
+  ]);
 
   // ---------- state
   let loading = $state(false); // overall refresh button state
