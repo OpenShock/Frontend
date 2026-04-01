@@ -4,12 +4,12 @@
   import Container from '$lib/components/Container.svelte';
   import * as Card from '$lib/components/ui/card';
   import { Button } from '$lib/components/ui/button';
-  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { userState } from '$lib/state/user-state.svelte';
   import { onlineHubs, ownHubs, refreshOwnHubs } from '$lib/state/hubs-state.svelte';
   import { onMount } from 'svelte';
 
-  breadcrumbs.push('Home', '/home');
+  registerBreadcrumbs(() => [{ label: 'Home', href: '/home' }]);
 
   let shockerCount = $derived(
     Array.from(ownHubs).reduce((sum, [, hub]) => sum + hub.shockers.length, 0)

@@ -7,8 +7,11 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
   import { Button } from '$lib/components/ui/button';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { userState } from '$lib/state/user-state.svelte';
   import type { Snippet } from 'svelte';
+
+  registerBreadcrumbs(() => [{ label: 'Admin', href: '/admin/users' }]);
 
   interface Props {
     children?: Snippet;

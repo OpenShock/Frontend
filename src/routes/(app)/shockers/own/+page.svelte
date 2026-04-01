@@ -18,12 +18,12 @@
   import * as Popover from '$lib/components/ui/popover';
   import { ControlDurationDefault, ControlIntensityDefault } from '$lib/constants/ControlConstants';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { ownHubs, refreshOwnHubs } from '$lib/state/hubs-state.svelte';
-  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
 
-  breadcrumbs.push('Shockers', '/shockers/own');
+  registerBreadcrumbs(() => [{ label: 'Shockers' }]);
 
   let shockers = $derived(Array.from(ownHubs).flatMap(([, hub]) => hub.shockers));
 

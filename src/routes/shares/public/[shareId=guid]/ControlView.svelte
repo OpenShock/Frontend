@@ -60,7 +60,7 @@
     </div>
 
     <div class="flex items-center justify-end gap-4">
-      {#if userState.self}
+      {#if userState.self?.id === shareLinkRoot.author.id}
         <Button variant="outline" href={editUrl}><Pencil /> Edit</Button>
       {/if}
 
