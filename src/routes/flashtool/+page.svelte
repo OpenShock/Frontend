@@ -11,19 +11,19 @@
   import { Checkbox } from '$lib/components/ui/checkbox';
   import { Label } from '$lib/components/ui/label';
   import { Progress } from '$lib/components/ui/progress';
+  import { useSerial } from '$lib/utils/serial-context.svelte';
   import { getBrowserName, isSerialSupported } from '$lib/utils/compatibility';
   import { parseAnsi } from './ansi';
   import FirmwareBoardSelector from './FirmwareBoardSelector.svelte';
   import FirmwareFlasher from './FirmwareFlasher.svelte';
-  import FlashManager from './FlashManager';
+  import { useFlashManager } from './flash-context.svelte';
   import HelpDialog from './HelpDialog.svelte';
   import SerialPortSelector from './SerialPortSelector.svelte';
   import SerialTerminal, { type TerminalLine } from './SerialTerminal.svelte';
 
+  const serial = useSerial();
+
   let port = $state<SerialPort | null>(null);
-  let manager = $state<FlashManager | null>(null);
-  let connectFailed = $state<boolean>(false);
-  let isFlashing = $state<boolean>(false);
 
   let terminalLines = $state<TerminalLine[]>([]);
 
@@ -51,16 +51,13 @@
     },
   };
 
+  const flash = useFlashManager(terminal);
+
   $effect(() => {
-    if (port && !manager) {
-      connectFailed = false;
-      FlashManager.ConnectApplication(port, terminal).then((m) => {
-        manager = m;
-        connectFailed = !manager;
-      });
-    } else if (!port && manager) {
-      manager.disconnect();
-      manager = null;
+    if (port && !flash.manager) {
+      flash.connect(port);
+    } else if (!port && flash.manager) {
+      flash.disconnect();
     }
   });
 
@@ -76,7 +73,7 @@
   // Stepper: derive which step we're on based on state
   // Channel step requires explicit confirmation (confirmedChannel must match current channel)
   let currentStep = $derived(
-    !manager ? 0 : !(version && confirmedChannel === channel) ? 1 : !board ? 2 : 3
+    !flash.manager ? 0 : !(version && confirmedChannel === channel) ? 1 : !board ? 2 : 3
   );
 
   // Allow users to view earlier steps
@@ -99,35 +96,35 @@
   ];
 
   async function handleReset() {
-    if (isFlashing) return;
+    if (flash.isFlashing) return;
     try {
-      isFlashing = true;
-      if (!manager) {
+      flash.isFlashing = true;
+      if (!flash.manager) {
         terminal.writeLine('Host-side error during reset: no device!');
         return;
       }
-      await manager.ensureApplication(true);
+      await flash.manager.ensureApplication(true);
     } catch (e) {
       terminal.writeLine(`Host-side error during reset: ${e}`);
     } finally {
-      isFlashing = false;
+      flash.isFlashing = false;
     }
   }
 
   async function handleSendCommand(command: string) {
-    if (isFlashing) return;
+    if (flash.isFlashing) return;
     try {
-      isFlashing = true;
-      if (!manager) {
+      flash.isFlashing = true;
+      if (!flash.manager) {
         terminal.writeLine("Couldn't send: no device!");
         return;
       }
-      await manager.ensureApplication();
-      await manager.sendApplicationCommand(command);
+      await flash.manager.ensureApplication();
+      await flash.manager.sendApplicationCommand(command);
     } catch (e) {
       terminal.writeLine(`Couldn't send: ${e}`);
     } finally {
-      isFlashing = false;
+      flash.isFlashing = false;
     }
   }
 </script>
@@ -167,7 +164,7 @@
                   : isCurrent
                     ? 'bg-primary text-primary-foreground'
                     : 'border-muted-foreground/30 text-muted-foreground/50 border-2'}"
-                disabled={!isAccessible || isFlashing}
+                disabled={!isAccessible || flash.isFlashing}
                 onclick={() => goToStep(i)}
               >
                 {#if isCompleted}
@@ -190,7 +187,7 @@
               <!-- Title -->
               <button
                 class="mb-2 text-lg font-semibold {isCurrent ? '' : 'text-muted-foreground'}"
-                disabled={!isAccessible || isFlashing}
+                disabled={!isAccessible || flash.isFlashing}
                 onclick={() => goToStep(i)}
               >
                 {step.title}
@@ -200,16 +197,16 @@
               {#if i === 0}
                 {#if isCurrent}
                   <div class="flex flex-col gap-2">
-                    <SerialPortSelector bind:port disabled={isFlashing} />
+                    <SerialPortSelector {serial} bind:port disabled={flash.isFlashing} />
 
-                    {#if port && !manager && !connectFailed}
+                    {#if port && !flash.manager && !flash.connectFailed}
                       <div class="flex flex-col items-center gap-2">
                         <span class="text-center text-lg">Connecting...</span>
                         <Progress />
                       </div>
                     {/if}
 
-                    {#if port && connectFailed}
+                    {#if port && flash.connectFailed}
                       <div class="flex flex-col items-start gap-2">
                         <span class="bold text-lg text-red-500">Device connection failed</span>
                         <span>
@@ -241,11 +238,15 @@
               {#if i === 1}
                 {#if isCurrent}
                   <div class="flex flex-col gap-3">
-                    <FirmwareChannelSelector bind:channel bind:version disabled={isFlashing} />
+                    <FirmwareChannelSelector
+                      bind:channel
+                      bind:version
+                      disabled={flash.isFlashing}
+                    />
                     {#if version}
                       <Button
                         onclick={() => (confirmedChannel = channel)}
-                        disabled={isFlashing}
+                        disabled={flash.isFlashing}
                         class="w-fit"
                       >
                         Continue
@@ -266,7 +267,7 @@
                     <FirmwareBoardSelector
                       {version}
                       bind:selectedBoard={board}
-                      disabled={isFlashing}
+                      disabled={flash.isFlashing}
                     />
 
                     <div class="items-top flex space-x-2">
@@ -293,14 +294,13 @@
 
               <!-- Step 4: Flash -->
               {#if i === 3}
-                {#if isCurrent && version && board && manager}
+                {#if isCurrent && version && board && flash.manager}
                   <FirmwareFlasher
                     {version}
                     {board}
-                    {manager}
+                    {flash}
                     {eraseBeforeFlash}
                     showNonStableWarning={channel !== 'stable'}
-                    bind:isFlashing
                   />
                 {/if}
               {/if}
@@ -319,8 +319,8 @@
   {#if port && isSerialSupported}
     <SerialTerminal
       lines={terminalLines}
-      {manager}
-      disabled={isFlashing}
+      manager={flash.manager}
+      disabled={flash.isFlashing}
       onClear={() => (terminalLines = [])}
       onReset={handleReset}
       onSendCommand={handleSendCommand}

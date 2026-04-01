@@ -84,13 +84,6 @@ export interface DevicesRemoveDeviceRequest {
  */
 export interface HubManagementApiInterface {
     /**
-     * Creates request options for devicesCreateDevice without sending the request
-     * @throws {RequiredError}
-     * @memberof HubManagementApiInterface
-     */
-    devicesCreateDeviceRequestOpts(): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Create a new device for the current user
      * @param {*} [options] Override http request option.
@@ -103,15 +96,6 @@ export interface HubManagementApiInterface {
      * Create a new device for the current user
      */
     devicesCreateDevice(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
-
-    /**
-     * Creates request options for devicesEditDevice without sending the request
-     * @param {string} deviceId 
-     * @param {HubEditRequest} [hubEditRequest] 
-     * @throws {RequiredError}
-     * @memberof HubManagementApiInterface
-     */
-    devicesEditDeviceRequestOpts(requestParameters: DevicesEditDeviceRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -130,14 +114,6 @@ export interface HubManagementApiInterface {
     devicesEditDevice(deviceId: string, hubEditRequest?: HubEditRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
-     * Creates request options for devicesGetDeviceById without sending the request
-     * @param {string} deviceId 
-     * @throws {RequiredError}
-     * @memberof HubManagementApiInterface
-     */
-    devicesGetDeviceByIdRequestOpts(requestParameters: DevicesGetDeviceByIdRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Get a device by its id
      * @param {string} deviceId 
@@ -151,14 +127,6 @@ export interface HubManagementApiInterface {
      * Get a device by its id
      */
     devicesGetDeviceById(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DeviceWithTokenResponseLegacyDataResponse>;
-
-    /**
-     * Creates request options for devicesGetLiveControlGatewayInfo without sending the request
-     * @param {string} deviceId 
-     * @throws {RequiredError}
-     * @memberof HubManagementApiInterface
-     */
-    devicesGetLiveControlGatewayInfoRequestOpts(requestParameters: DevicesGetLiveControlGatewayInfoRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -176,14 +144,6 @@ export interface HubManagementApiInterface {
     devicesGetLiveControlGatewayInfo(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LcgResponseLegacyDataResponse>;
 
     /**
-     * Creates request options for devicesGetPairCode without sending the request
-     * @param {string} deviceId 
-     * @throws {RequiredError}
-     * @memberof HubManagementApiInterface
-     */
-    devicesGetPairCodeRequestOpts(requestParameters: DevicesGetPairCodeRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Get a pair code for a device
      * @param {string} deviceId 
@@ -197,14 +157,6 @@ export interface HubManagementApiInterface {
      * Get a pair code for a device
      */
     devicesGetPairCode(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StringLegacyDataResponse>;
-
-    /**
-     * Creates request options for devicesGetShockers without sending the request
-     * @param {string} deviceId The device id
-     * @throws {RequiredError}
-     * @memberof HubManagementApiInterface
-     */
-    devicesGetShockersRequestOpts(requestParameters: DevicesGetShockersRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -222,13 +174,6 @@ export interface HubManagementApiInterface {
     devicesGetShockers(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ShockerResponseArrayLegacyDataResponse>;
 
     /**
-     * Creates request options for devicesListDevices without sending the request
-     * @throws {RequiredError}
-     * @memberof HubManagementApiInterface
-     */
-    devicesListDevicesRequestOpts(): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Get all devices for the current user
      * @param {*} [options] Override http request option.
@@ -241,14 +186,6 @@ export interface HubManagementApiInterface {
      * Get all devices for the current user
      */
     devicesListDevices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DeviceResponseArrayLegacyDataResponse>;
-
-    /**
-     * Creates request options for devicesOtaGetOtaUpdateHistory without sending the request
-     * @param {string} deviceId Id of the device
-     * @throws {RequiredError}
-     * @memberof HubManagementApiInterface
-     */
-    devicesOtaGetOtaUpdateHistoryRequestOpts(requestParameters: DevicesOtaGetOtaUpdateHistoryRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
@@ -266,14 +203,6 @@ export interface HubManagementApiInterface {
     devicesOtaGetOtaUpdateHistory(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OtaItemIReadOnlyCollectionLegacyDataResponse>;
 
     /**
-     * Creates request options for devicesRegenerateDeviceToken without sending the request
-     * @param {string} deviceId The id of the device to regenerate the token for
-     * @throws {RequiredError}
-     * @memberof HubManagementApiInterface
-     */
-    devicesRegenerateDeviceTokenRequestOpts(requestParameters: DevicesRegenerateDeviceTokenRequest): Promise<runtime.RequestOpts>;
-
-    /**
      * 
      * @summary Regenerate a device token
      * @param {string} deviceId The id of the device to regenerate the token for
@@ -287,14 +216,6 @@ export interface HubManagementApiInterface {
      * Regenerate a device token
      */
     devicesRegenerateDeviceToken(deviceId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
-
-    /**
-     * Creates request options for devicesRemoveDevice without sending the request
-     * @param {string} deviceId The id of the device to delete
-     * @throws {RequiredError}
-     * @memberof HubManagementApiInterface
-     */
-    devicesRemoveDeviceRequestOpts(requestParameters: DevicesRemoveDeviceRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 

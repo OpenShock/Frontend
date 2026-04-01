@@ -5,15 +5,16 @@
 <script lang="ts">
   import { Cpu, TriangleAlert, Unplug } from '@lucide/svelte';
   import { Button } from '$lib/components/ui/button';
-  import { serialPortsState } from '$lib/state/serial-ports-state.svelte';
+  import type { SerialContext } from '$lib/utils/serial-context.svelte';
   import { NumberToHexPadded } from '$lib/utils/convert';
 
   interface Props {
+    serial: SerialContext;
     port?: SerialPort | null;
     disabled?: boolean;
   }
 
-  let { port = $bindable(null), disabled = false }: Props = $props();
+  let { serial, port = $bindable(null), disabled = false }: Props = $props();
 
   let loading = $state(false);
   let errorMessage = $state<Error | null>(null);
@@ -25,7 +26,7 @@
     }
 
     loading = true;
-    serialPortsState
+    serial
       .requestPort({ filters })
       .then((p) => {
         port = p;
@@ -57,7 +58,7 @@
 
   // Remove port if disconnected
   $effect(() => {
-    if (port && !serialPortsState.ports.includes(port)) {
+    if (port && !serial.ports.includes(port)) {
       port = null;
     }
   });
