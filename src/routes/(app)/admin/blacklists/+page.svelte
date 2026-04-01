@@ -16,7 +16,7 @@
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import type { ValidationResult } from '$lib/types/ValidationResult';
   import type { TimeoutHandle } from '$lib/types/WAPI';
-  
+
   registerBreadcrumbs(() => [{ label: 'Blacklists' }]);
 
   // --- state ---

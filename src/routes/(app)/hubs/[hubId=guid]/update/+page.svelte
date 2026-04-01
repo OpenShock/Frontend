@@ -197,10 +197,7 @@
 
   $effect(() => fetchOtaLogs(page.params.hubId));
 
-  registerBreadcrumbs(() => [
-    { label: 'Hubs', href: '/hubs' },
-    { label: hubName ?? 'Update' },
-  ]);
+  registerBreadcrumbs(() => [{ label: 'Hubs', href: '/hubs' }, { label: hubName ?? 'Update' }]);
 
   onMount(refreshOwnHubs);
 </script>
