@@ -8,12 +8,12 @@
   import type { Control } from '$lib/signalr/models/Control';
   import { onMount, untrack } from 'svelte';
   import { page } from '$app/state';
-  import { resolve } from '$app/paths';
-  import { userState } from '$lib/state/user-state.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import { Pencil } from '@lucide/svelte';
   import CopyInput from '$lib/components/CopyInput.svelte';
   import { getSiteShortURL } from '$lib/utils/url';
+  import { Button } from '$lib/components/ui/button';
+  import { Pencil } from '@lucide/svelte';
+  import { userState } from '$lib/state/user-state.svelte';
+  import { resolve } from '$app/paths';
 
   interface Props {
     shareLinkRoot: PublicShareResponse;
