@@ -6,7 +6,7 @@
 {#if breadcrumbs.state.length > 0}
   <Breadcrumb.Root class="shrink-0">
     <Breadcrumb.List>
-      {#each breadcrumbs.state as crumb, i (i)}
+      {#each breadcrumbs.state as crumb, i (crumb.href || crumb.label)}
         {#if i > 0}
           <Breadcrumb.Separator />
         {/if}
