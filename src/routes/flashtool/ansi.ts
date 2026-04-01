@@ -32,7 +32,9 @@ export const LOG_LEVEL_COLORS: Record<LogLevel, string> = {
  * May be preceded by ANSI escape sequences.
  */
 const ANSI_PREFIX = /^(?:\x1b\[[0-9;]*[a-zA-Z])*/;
-const LOG_OPENSHOCK_REGEX = new RegExp(ANSI_PREFIX.source + /\[(\d+)\]\[([EWDIV])\]\[([^\]]+)\]/.source);
+const LOG_OPENSHOCK_REGEX = new RegExp(
+  ANSI_PREFIX.source + /\[(\d+)\]\[([EWDIV])\]\[([^\]]+)\]/.source
+);
 const LOG_ESPIDF_REGEX = new RegExp(ANSI_PREFIX.source + /([EWDIV]) \((\d+)\) ([^:]+):/.source);
 
 export function parseLogLine(text: string): ParsedLogLine | null {

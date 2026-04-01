@@ -204,7 +204,7 @@ describe('stripAnsi', () => {
 
   it('strips from OpenShock log line', () => {
     expect(stripAnsi('\x1b[0;31m[56984][E][Config.cpp:185] SaveFromJSON():\x1b[0m')).toBe(
-      '[56984][E][Config.cpp:185] SaveFromJSON():',
+      '[56984][E][Config.cpp:185] SaveFromJSON():'
     );
   });
 
