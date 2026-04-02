@@ -15,6 +15,7 @@ export class LiveShockerState {
   isDragging = $state(false);
   intensity = $state(0);
   type = $state<ControlType>(ControlType.Vibrate);
+  isLive = $state(false);
 }
 
 export class LiveDeviceConnection {
@@ -137,6 +138,11 @@ export class LiveDeviceConnection {
     this.cleanupWebSocket();
     this.state = LiveConnectionState.Disconnected;
     this.latency = 0;
+    for (const shocker of this.shockers.values()) {
+      shocker.isLive = false;
+      shocker.isDragging = false;
+      shocker.intensity = 0;
+    }
   }
 
   /**
@@ -162,7 +168,7 @@ export class LiveDeviceConnection {
       if (this.state !== LiveConnectionState.Connected || !this.ws) return;
 
       for (const [shockerId, shocker] of this.shockers) {
-        if (!shocker.isDragging) continue;
+        if (!shocker.isLive || !shocker.isDragging) continue;
 
         this.ws.send(
           JSON.stringify({
@@ -210,12 +216,22 @@ export function getLiveConnection(deviceId: string): LiveDeviceConnection | unde
   return liveConnections.get(deviceId);
 }
 
-export async function toggleLiveControl(deviceId: string) {
+export async function toggleShockerLiveControl(deviceId: string, shockerId: string) {
   ensureLiveConnection(deviceId);
   const conn = liveConnections.get(deviceId)!;
-  if (conn.state !== LiveConnectionState.Disconnected) {
-    conn.disconnect();
+  conn.ensureShockerState(shockerId);
+  const shockerState = conn.shockers.get(shockerId)!;
+
+  if (shockerState.isLive) {
+    shockerState.isLive = false;
+    const anyLive = [...conn.shockers.values()].some((s) => s.isLive);
+    if (!anyLive && conn.state !== LiveConnectionState.Disconnected) {
+      conn.disconnect();
+    }
   } else {
-    await conn.connect();
+    shockerState.isLive = true;
+    if (conn.state === LiveConnectionState.Disconnected) {
+      await conn.connect();
+    }
   }
 }
