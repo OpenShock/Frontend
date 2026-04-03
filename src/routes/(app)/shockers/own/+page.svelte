@@ -25,7 +25,12 @@
 
   registerBreadcrumbs(() => [{ label: 'Shockers' }]);
 
-  let shockers = $derived(Array.from(ownHubs).flatMap(([, hub]) => hub.shockers));
+  let shockers = $derived(
+    ownHubs
+      .values()
+      .flatMap((hub) => hub.shockers)
+      .toArray()
+  );
 
   let moduleType = $state<ModuleType>(ModuleType.ClassicControlModule);
   let loading = $state(true);
@@ -49,7 +54,7 @@
   }
 
   async function openAddShockerDialog() {
-    const hubs = Array.from(ownHubs);
+    const hubs = ownHubs.entries().toArray();
     if (hubs.length === 0) {
       toast.error('You need to create a hub before adding shockers.');
       return;

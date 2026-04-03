@@ -12,12 +12,14 @@
   import { refreshOutgoingInvites } from '$lib/state/user-shares-state.svelte';
 
   let availableShockers = $derived(
-    Array.from(ownHubs)
-      .flatMap(([, hub]) => hub.shockers)
+    ownHubs
+      .values()
+      .flatMap((hub) => hub.shockers)
       .map((shocker) => ({
         value: shocker.id,
         label: shocker.name,
       }))
+      .toArray()
   );
 
   interface Props {

@@ -27,19 +27,19 @@ export function removeDialog(id: number): void {
 export function createDialog<R>(
   contextFactory: (resolve: (result: R) => void) => DialogContext<R>
 ): Promise<R> {
-  return new Promise((resolve) => {
-    const id = ++dialogCount;
-    let resolved = false;
+  const { promise, resolve } = Promise.withResolvers<R>();
+  const id = ++dialogCount;
+  let resolved = false;
 
-    const wrappedResolve = (result: R) => {
-      if (resolved) return;
-      resolved = true;
-      setTimeout(() => removeDialog(id), 150);
-      resolve(result);
-    };
+  const wrappedResolve = (result: R) => {
+    if (resolved) return;
+    resolved = true;
+    setTimeout(() => removeDialog(id), 150);
+    resolve(result);
+  };
 
-    dialogs.set(id, contextFactory(wrappedResolve) as DialogContext);
-  });
+  dialogs.set(id, contextFactory(wrappedResolve) as DialogContext);
+  return promise;
 }
 
 /**

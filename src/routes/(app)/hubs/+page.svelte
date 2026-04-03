@@ -21,26 +21,29 @@
   const isMobile = new IsMobile();
 
   let data = $derived.by<Hub[]>(() => {
-    return Array.from(ownHubs).map(([, hub]) => {
-      const onlineState = onlineHubs.get(hub.id);
-      return {
-        id: hub.id,
-        name: hub.name,
-        is_online: onlineState?.isOnline ?? false,
-        firmware_version: onlineState?.firmwareVersion ?? null,
-        shockers: hub.shockers.map((shocker) => {
-          return {
-            id: shocker.id,
-            rf_id: shocker.rfId,
-            model: shocker.model,
-            name: shocker.name,
-            is_paused: shocker.isPaused,
-            created_at: shocker.createdOn,
-          };
-        }),
-        created_at: hub.createdOn,
-      };
-    });
+    return ownHubs
+      .values()
+      .map((hub) => {
+        const onlineState = onlineHubs.get(hub.id);
+        return {
+          id: hub.id,
+          name: hub.name,
+          is_online: onlineState?.isOnline ?? false,
+          firmware_version: onlineState?.firmwareVersion ?? null,
+          shockers: hub.shockers.map((shocker) => {
+            return {
+              id: shocker.id,
+              rf_id: shocker.rfId,
+              model: shocker.model,
+              name: shocker.name,
+              is_paused: shocker.isPaused,
+              created_at: shocker.createdOn,
+            };
+          }),
+          created_at: hub.createdOn,
+        };
+      })
+      .toArray();
   });
 
   async function openCreateHubDialog() {
