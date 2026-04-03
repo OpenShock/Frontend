@@ -37,7 +37,9 @@ async function setupESPLoader(
 }
 
 function sleep(ms: number): Promise<void> {
-  return new Promise((f) => setTimeout(f, ms));
+  const { promise, resolve } = Promise.withResolvers<void>();
+  setTimeout(resolve, ms);
+  return promise;
 }
 
 function appendBuffer(buffer: Uint8Array | null, data: Uint8Array): Uint8Array {

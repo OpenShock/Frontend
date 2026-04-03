@@ -1,22 +1,21 @@
 <script lang="ts">
   import * as Breadcrumb from '$lib/components/ui/breadcrumb';
   import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { prefixBase } from '$lib/utils/url';
 </script>
 
 {#if breadcrumbs.state.length > 0}
-  <Breadcrumb.Root>
+  <Breadcrumb.Root class="shrink-0">
     <Breadcrumb.List>
-      {#each breadcrumbs.state as crumb, index (crumb.href)}
+      {#each breadcrumbs.state as crumb, i (crumb.href || crumb.label)}
+        {#if i > 0}
+          <Breadcrumb.Separator />
+        {/if}
         <Breadcrumb.Item>
-          {#if index < breadcrumbs.state.length - 1}
-            <Breadcrumb.Link href={crumb.href} class="text-gray-600 dark:text-gray-300">
-              {crumb.text}
-            </Breadcrumb.Link>
-            <Breadcrumb.Separator class="text-gray-600 dark:text-gray-300" />
+          {#if crumb.href && i < breadcrumbs.state.length - 1}
+            <Breadcrumb.Link href={prefixBase(crumb.href)}>{crumb.label}</Breadcrumb.Link>
           {:else}
-            <Breadcrumb.Page class="text-gray-900 dark:text-gray-100">
-              {crumb.text}
-            </Breadcrumb.Page>
+            <Breadcrumb.Page>{crumb.label}</Breadcrumb.Page>
           {/if}
         </Breadcrumb.Item>
       {/each}

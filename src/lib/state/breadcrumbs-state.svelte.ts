@@ -1,25 +1,39 @@
 import type { Pathname } from '$app/types';
-import { onMount } from 'svelte';
+import { onDestroy } from 'svelte';
 
-export interface BreadCrumbEntry {
-  text: string;
+export interface BreadcrumbEntry {
+  label: string;
   href: Pathname | null;
 }
 
-let _state = $state<BreadCrumbEntry[]>([]);
+interface BreadcrumbSlot {
+  id: symbol;
+  entries: BreadcrumbEntry[];
+}
+
+const _slots = $state<BreadcrumbSlot[]>([]);
 
 export const breadcrumbs = {
-  get state() {
-    return _state;
+  get state(): BreadcrumbEntry[] {
+    return _slots.flatMap((s) => s.entries);
   },
-  push: (text: string, href: Pathname | null = null) => {
-    onMount(() => {
-      const entry = { text, href };
-      _state = [..._state, entry];
-      return () => {
-        _state = _state.filter((e) => e.text !== entry.text || e.href !== entry.href);
-      };
-    });
-  },
-  clear: () => (_state = []),
 };
+
+export function registerBreadcrumbs(
+  entriesFn: () => Array<{ label: string; href?: Pathname | null }>
+): void {
+  const id = Symbol();
+  _slots.push({ id, entries: [] });
+
+  $effect(() => {
+    const slot = _slots.find((s) => s.id === id);
+    if (slot) {
+      slot.entries = entriesFn().map((e) => ({ label: e.label, href: e.href ?? null }));
+    }
+  });
+
+  onDestroy(() => {
+    const idx = _slots.findIndex((s) => s.id === id);
+    if (idx !== -1) _slots.splice(idx, 1);
+  });
+}

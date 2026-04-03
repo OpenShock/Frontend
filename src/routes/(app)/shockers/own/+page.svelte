@@ -18,14 +18,19 @@
   import * as Popover from '$lib/components/ui/popover';
   import { ControlDurationDefault, ControlIntensityDefault } from '$lib/constants/ControlConstants';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { ownHubs, refreshOwnHubs } from '$lib/state/hubs-state.svelte';
-  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
 
-  breadcrumbs.push('Shockers', '/shockers/own');
+  registerBreadcrumbs(() => [{ label: 'Shockers' }]);
 
-  let shockers = $derived(Array.from(ownHubs).flatMap(([, hub]) => hub.shockers));
+  let shockers = $derived(
+    ownHubs
+      .values()
+      .flatMap((hub) => hub.shockers)
+      .toArray()
+  );
 
   let moduleType = $state<ModuleType>(ModuleType.ClassicControlModule);
   let loading = $state(true);
@@ -49,7 +54,7 @@
   }
 
   async function openAddShockerDialog() {
-    const hubs = Array.from(ownHubs);
+    const hubs = ownHubs.entries().toArray();
     if (hubs.length === 0) {
       toast.error('You need to create a hub before adding shockers.');
       return;

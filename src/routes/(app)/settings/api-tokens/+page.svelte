@@ -22,8 +22,13 @@
   import { toast } from 'svelte-sonner';
   import DataTableActions from './data-table-actions.svelte';
   import TokenCreateDialog from './dialog-token-create.svelte';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import TokenCreatedDialog from './dialog-token-created.svelte';
 
+  registerBreadcrumbs(() => [
+    { label: 'Settings', href: '/settings/account' },
+    { label: 'API Tokens' },
+  ]);
   let data = $state<TokenResponse[]>([]);
   let sorting = $state<SortingState>([]);
 
