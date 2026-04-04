@@ -5,54 +5,104 @@ describe('parseLogLine', () => {
   describe('OpenShock format: [uptimeMs][LEVEL][tag]', () => {
     it('parses error line', () => {
       const result = parseLogLine('[56984][E][Config.cpp:185] SaveFromJSON():');
-      expect(result).toEqual({ logLevel: 'E', deviceUptime: 56984, tag: 'Config.cpp:185', messageOffset: 27 });
+      expect(result).toEqual({
+        logLevel: 'E',
+        deviceUptime: 56984,
+        tag: 'Config.cpp:185',
+        messageOffset: 27,
+      });
     });
 
     it('parses warning line', () => {
       const result = parseLogLine('[1234][W][WiFi.cpp:42] connect(): timeout');
-      expect(result).toEqual({ logLevel: 'W', deviceUptime: 1234, tag: 'WiFi.cpp:42', messageOffset: 23 });
+      expect(result).toEqual({
+        logLevel: 'W',
+        deviceUptime: 1234,
+        tag: 'WiFi.cpp:42',
+        messageOffset: 23,
+      });
     });
 
     it('parses info line', () => {
       const result = parseLogLine('[500][I][Main.cpp:10] setup(): ready');
-      expect(result).toEqual({ logLevel: 'I', deviceUptime: 500, tag: 'Main.cpp:10', messageOffset: 22 });
+      expect(result).toEqual({
+        logLevel: 'I',
+        deviceUptime: 500,
+        tag: 'Main.cpp:10',
+        messageOffset: 22,
+      });
     });
 
     it('parses debug line', () => {
       const result = parseLogLine('[99999][D][Serial.cpp:77] read(): got 12 bytes');
-      expect(result).toEqual({ logLevel: 'D', deviceUptime: 99999, tag: 'Serial.cpp:77', messageOffset: 26 });
+      expect(result).toEqual({
+        logLevel: 'D',
+        deviceUptime: 99999,
+        tag: 'Serial.cpp:77',
+        messageOffset: 26,
+      });
     });
 
     it('parses verbose line', () => {
       const result = parseLogLine('[0][V][Boot.cpp:1] init():');
-      expect(result).toEqual({ logLevel: 'V', deviceUptime: 0, tag: 'Boot.cpp:1', messageOffset: 19 });
+      expect(result).toEqual({
+        logLevel: 'V',
+        deviceUptime: 0,
+        tag: 'Boot.cpp:1',
+        messageOffset: 19,
+      });
     });
 
     it('parses with leading ANSI escape', () => {
       const result = parseLogLine('\x1b[0;31m[56984][E][Config.cpp:185] SaveFromJSON():');
-      expect(result).toEqual({ logLevel: 'E', deviceUptime: 56984, tag: 'Config.cpp:185', messageOffset: 34 });
+      expect(result).toEqual({
+        logLevel: 'E',
+        deviceUptime: 56984,
+        tag: 'Config.cpp:185',
+        messageOffset: 34,
+      });
     });
 
     it('parses with multiple leading ANSI escapes', () => {
       const result = parseLogLine('\x1b[0m\x1b[1;33m[200][W][Net.cpp:5] warn():');
-      expect(result).toEqual({ logLevel: 'W', deviceUptime: 200, tag: 'Net.cpp:5', messageOffset: 31 });
+      expect(result).toEqual({
+        logLevel: 'W',
+        deviceUptime: 200,
+        tag: 'Net.cpp:5',
+        messageOffset: 31,
+      });
     });
 
     it('parses space-padded uptime', () => {
       const result = parseLogLine('[ 56464][V][ssl_client.cpp:369] some message');
-      expect(result).toEqual({ logLevel: 'V', deviceUptime: 56464, tag: 'ssl_client.cpp:369', messageOffset: 32 });
+      expect(result).toEqual({
+        logLevel: 'V',
+        deviceUptime: 56464,
+        tag: 'ssl_client.cpp:369',
+        messageOffset: 32,
+      });
     });
   });
 
   describe('ESP-IDF format: LEVEL (uptimeMs) TAG:', () => {
     it('parses error line', () => {
       const result = parseLogLine('E (12345) wifi: connection failed');
-      expect(result).toEqual({ logLevel: 'E', deviceUptime: 12345, tag: 'wifi', messageOffset: 16 });
+      expect(result).toEqual({
+        logLevel: 'E',
+        deviceUptime: 12345,
+        tag: 'wifi',
+        messageOffset: 16,
+      });
     });
 
     it('parses warning line', () => {
       const result = parseLogLine('W (500) httpd_parse: some warning');
-      expect(result).toEqual({ logLevel: 'W', deviceUptime: 500, tag: 'httpd_parse', messageOffset: 21 });
+      expect(result).toEqual({
+        logLevel: 'W',
+        deviceUptime: 500,
+        tag: 'httpd_parse',
+        messageOffset: 21,
+      });
     });
 
     it('parses info line', () => {
@@ -62,7 +112,12 @@ describe('parseLogLine', () => {
 
     it('parses debug line', () => {
       const result = parseLogLine('D (100) spi_flash: read 4096 bytes');
-      expect(result).toEqual({ logLevel: 'D', deviceUptime: 100, tag: 'spi_flash', messageOffset: 19 });
+      expect(result).toEqual({
+        logLevel: 'D',
+        deviceUptime: 100,
+        tag: 'spi_flash',
+        messageOffset: 19,
+      });
     });
 
     it('parses verbose line', () => {
@@ -72,7 +127,12 @@ describe('parseLogLine', () => {
 
     it('parses with leading ANSI escape', () => {
       const result = parseLogLine('\x1b[0;32mI (12345) wifi: connected');
-      expect(result).toEqual({ logLevel: 'I', deviceUptime: 12345, tag: 'wifi', messageOffset: 23 });
+      expect(result).toEqual({
+        logLevel: 'I',
+        deviceUptime: 12345,
+        tag: 'wifi',
+        messageOffset: 23,
+      });
     });
   });
 

@@ -37,9 +37,7 @@ const ANSI_PREFIX = /^(?:\x1b\[[0-9;]*[a-zA-Z])*/;
 const LOG_OPENSHOCK_REGEX = new RegExp(
   ANSI_PREFIX.source + /\[\s*(\d+)\]\[([EWDIV])\]\[([^\]]+)\] ?/.source
 );
-const LOG_ESPIDF_REGEX = new RegExp(
-  ANSI_PREFIX.source + /([EWDIV]) \((\d+)\) ([^:]+): ?/.source
-);
+const LOG_ESPIDF_REGEX = new RegExp(ANSI_PREFIX.source + /([EWDIV]) \((\d+)\) ([^:]+): ?/.source);
 
 export function parseLogLine(text: string): ParsedLogLine | null {
   let match = LOG_OPENSHOCK_REGEX.exec(text);

@@ -1,5 +1,14 @@
 <script lang="ts">
-  import { Send, Trash2, RotateCcw, Copy, Check, GripHorizontal, Clock, Code } from '@lucide/svelte';
+  import {
+    Send,
+    Trash2,
+    RotateCcw,
+    Copy,
+    Check,
+    GripHorizontal,
+    Clock,
+    Code,
+  } from '@lucide/svelte';
   import { Button } from '$lib/components/ui/button';
   import { type AnsiSegment, type LogLevel, LOG_LEVEL_COLORS, stripAnsi } from './ansi';
   import type FlashManager from './FlashManager';
@@ -115,7 +124,10 @@
   let visibleLines = $derived(lines.length > MAX_LINES ? lines.slice(-MAX_LINES) : lines);
 
   let maxMsWidth = $derived(
-    visibleLines.reduce((max, l) => (l.deviceUptime != null ? Math.max(max, String(l.deviceUptime).length) : max), 0)
+    visibleLines.reduce(
+      (max, l) => (l.deviceUptime != null ? Math.max(max, String(l.deviceUptime).length) : max),
+      0
+    )
   );
 
   let timestampMode = $state<TimestampMode>('uptime');
@@ -133,7 +145,9 @@
       case 'local':
         return formatTime(line.timestamp);
       case 'ms':
-        return line.deviceUptime != null ? String(line.deviceUptime).padEnd(maxMsWidth, '\u00a0') : '';
+        return line.deviceUptime != null
+          ? String(line.deviceUptime).padEnd(maxMsWidth, '\u00a0')
+          : '';
       case 'off':
         return '';
     }
@@ -196,11 +210,21 @@
   <div class="flex items-center justify-between border-b px-4 py-1.5">
     <span class="text-sm font-semibold">Console</span>
     <div class="flex gap-1">
-      <Button size="sm" variant={rawMode ? 'secondary' : 'ghost'} onclick={() => (rawMode = !rawMode)} title="Toggle raw log output">
+      <Button
+        size="sm"
+        variant={rawMode ? 'secondary' : 'ghost'}
+        onclick={() => (rawMode = !rawMode)}
+        title="Toggle raw log output"
+      >
         <Code class="mr-1 h-3.5 w-3.5" />
         Raw
       </Button>
-      <Button size="sm" variant={timestampMode !== 'off' ? 'secondary' : 'ghost'} onclick={cycleTimestampMode} title="Cycle timestamp mode: {TIMESTAMP_LABELS[timestampMode]}">
+      <Button
+        size="sm"
+        variant={timestampMode !== 'off' ? 'secondary' : 'ghost'}
+        onclick={cycleTimestampMode}
+        title="Cycle timestamp mode: {TIMESTAMP_LABELS[timestampMode]}"
+      >
         <Clock class="mr-1 h-3.5 w-3.5" />
         {TIMESTAMP_LABELS[timestampMode]}
       </Button>
@@ -239,7 +263,7 @@
         <div class="flex leading-5">
           {#if timestampMode !== 'off'}
             {@const ts = formatTimestamp(line)}
-            <span class="text-muted-foreground border-r pr-2 mr-2 opacity-60 select-none"
+            <span class="text-muted-foreground mr-2 border-r pr-2 opacity-60 select-none"
               >{ts || filler[timestampMode]}</span
             >
           {/if}
