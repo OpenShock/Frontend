@@ -15,6 +15,8 @@ export interface ParsedLogLine {
   logLevel: LogLevel;
   deviceUptime: number;
   tag: string;
+  /** Index in the original string where the message content begins (after the metadata prefix). */
+  messageOffset: number;
 }
 
 export const LOG_LEVEL_COLORS: Record<LogLevel, string> = {
@@ -33,9 +35,11 @@ export const LOG_LEVEL_COLORS: Record<LogLevel, string> = {
  */
 const ANSI_PREFIX = /^(?:\x1b\[[0-9;]*[a-zA-Z])*/;
 const LOG_OPENSHOCK_REGEX = new RegExp(
-  ANSI_PREFIX.source + /\[(\d+)\]\[([EWDIV])\]\[([^\]]+)\]/.source
+  ANSI_PREFIX.source + /\[\s*(\d+)\]\[([EWDIV])\]\[([^\]]+)\] ?/.source
 );
-const LOG_ESPIDF_REGEX = new RegExp(ANSI_PREFIX.source + /([EWDIV]) \((\d+)\) ([^:]+):/.source);
+const LOG_ESPIDF_REGEX = new RegExp(
+  ANSI_PREFIX.source + /([EWDIV]) \((\d+)\) ([^:]+): ?/.source
+);
 
 export function parseLogLine(text: string): ParsedLogLine | null {
   let match = LOG_OPENSHOCK_REGEX.exec(text);
@@ -44,6 +48,7 @@ export function parseLogLine(text: string): ParsedLogLine | null {
       logLevel: match[2] as LogLevel,
       deviceUptime: parseInt(match[1], 10),
       tag: match[3].trim(),
+      messageOffset: match.index + match[0].length,
     };
   }
   match = LOG_ESPIDF_REGEX.exec(text);
@@ -52,6 +57,7 @@ export function parseLogLine(text: string): ParsedLogLine | null {
       logLevel: match[1] as LogLevel,
       deviceUptime: parseInt(match[2], 10),
       tag: match[3].trim(),
+      messageOffset: match.index + match[0].length,
     };
   }
   return null;

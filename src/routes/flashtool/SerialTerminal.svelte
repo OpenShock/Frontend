@@ -1,11 +1,23 @@
 <script lang="ts">
-  import { Send, Trash2, RotateCcw, Copy, Check } from '@lucide/svelte';
+  import { Send, Trash2, RotateCcw, Copy, Check, GripHorizontal, Clock, Code } from '@lucide/svelte';
   import { Button } from '$lib/components/ui/button';
   import { type AnsiSegment, type LogLevel, LOG_LEVEL_COLORS, stripAnsi } from './ansi';
   import type FlashManager from './FlashManager';
   import { tick } from 'svelte';
 
+  type TimestampMode = 'uptime' | 'local' | 'ms' | 'off';
+  const TIMESTAMP_MODES: TimestampMode[] = ['uptime', 'local', 'ms', 'off'];
+  const TIMESTAMP_LABELS: Record<TimestampMode, string> = {
+    uptime: 'Uptime',
+    local: 'Local',
+    ms: 'Ms',
+    off: 'Off',
+  };
+
   const MAX_LINES = 5000;
+  const MIN_HEIGHT = 128;
+  const MAX_HEIGHT = 800;
+  const DEFAULT_HEIGHT = 256;
 
   export interface TerminalLine {
     id: number;
@@ -102,6 +114,63 @@
   // Visible lines (capped to MAX_LINES from the end)
   let visibleLines = $derived(lines.length > MAX_LINES ? lines.slice(-MAX_LINES) : lines);
 
+  let maxMsWidth = $derived(
+    visibleLines.reduce((max, l) => (l.deviceUptime != null ? Math.max(max, String(l.deviceUptime).length) : max), 0)
+  );
+
+  let timestampMode = $state<TimestampMode>('uptime');
+  let rawMode = $state(false);
+
+  function cycleTimestampMode() {
+    const i = TIMESTAMP_MODES.indexOf(timestampMode);
+    timestampMode = TIMESTAMP_MODES[(i + 1) % TIMESTAMP_MODES.length];
+  }
+
+  function formatTimestamp(line: TerminalLine): string {
+    switch (timestampMode) {
+      case 'uptime':
+        return line.deviceUptime != null ? formatUptime(line.deviceUptime) : '';
+      case 'local':
+        return formatTime(line.timestamp);
+      case 'ms':
+        return line.deviceUptime != null ? String(line.deviceUptime).padEnd(maxMsWidth, '\u00a0') : '';
+      case 'off':
+        return '';
+    }
+  }
+
+  let filler = $derived<Record<TimestampMode, string>>({
+    uptime: '\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0',
+    local: '\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0',
+    ms: '\u00a0'.repeat(maxMsWidth),
+    off: '',
+  });
+
+  let height = $state(DEFAULT_HEIGHT);
+
+  function onResizeStart(e: PointerEvent) {
+    e.preventDefault();
+    const startY = e.clientY;
+    const startHeight = height;
+    const target = e.currentTarget as HTMLElement;
+    target.setPointerCapture(e.pointerId);
+
+    document.body.style.userSelect = 'none';
+
+    function onMove(e: PointerEvent) {
+      height = Math.min(MAX_HEIGHT, Math.max(MIN_HEIGHT, startHeight - (e.clientY - startY)));
+    }
+
+    function onUp() {
+      document.body.style.userSelect = '';
+      target.removeEventListener('pointermove', onMove);
+      target.removeEventListener('pointerup', onUp);
+    }
+
+    target.addEventListener('pointermove', onMove);
+    target.addEventListener('pointerup', onUp);
+  }
+
   let copied = $state(false);
   let copyTimeout: ReturnType<typeof setTimeout> | undefined;
 
@@ -114,11 +183,27 @@
   }
 </script>
 
-<div class="flex h-64 flex-col border-t">
+<div class="flex flex-col border-t" style="height: {height}px">
+  <!-- Resize handle -->
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
+  <div
+    class="group flex cursor-row-resize items-center justify-center py-0.5 select-none"
+    onpointerdown={onResizeStart}
+  >
+    <GripHorizontal class="text-muted-foreground h-4 w-4 opacity-40 group-hover:opacity-100" />
+  </div>
   <!-- Header -->
   <div class="flex items-center justify-between border-b px-4 py-1.5">
     <span class="text-sm font-semibold">Console</span>
     <div class="flex gap-1">
+      <Button size="sm" variant={rawMode ? 'secondary' : 'ghost'} onclick={() => (rawMode = !rawMode)} title="Toggle raw log output">
+        <Code class="mr-1 h-3.5 w-3.5" />
+        Raw
+      </Button>
+      <Button size="sm" variant={timestampMode !== 'off' ? 'secondary' : 'ghost'} onclick={cycleTimestampMode} title="Cycle timestamp mode: {TIMESTAMP_LABELS[timestampMode]}">
+        <Clock class="mr-1 h-3.5 w-3.5" />
+        {TIMESTAMP_LABELS[timestampMode]}
+      </Button>
       <Button size="sm" variant="ghost" onclick={copyOutput} disabled={lines.length === 0}>
         {#if copied}
           <Check class="mr-1 h-3.5 w-3.5" />
@@ -148,29 +233,34 @@
     aria-live="polite"
   >
     {#each visibleLines as line (line.id)}
-      <div class="flex leading-5">
-        <span class="text-muted-foreground mr-2 opacity-60 select-none"
-          >{line.deviceUptime != null
-            ? formatUptime(line.deviceUptime)
-            : formatTime(line.timestamp)}</span
-        >
-        <span
-          class="break-all whitespace-pre-wrap"
-          style={line.logLevel ? `color:${LOG_LEVEL_COLORS[line.logLevel]}` : ''}
-        >
-          {#each line.segments as seg, j (j)}
-            {#if Object.keys(seg.style).length > 0}
-              <span
-                style={Object.entries(seg.style)
-                  .map(([k, v]) => `${k}:${v}`)
-                  .join(';')}>{seg.text}</span
-              >
-            {:else}
-              {seg.text}
-            {/if}
-          {/each}
-        </span>
-      </div>
+      {#if rawMode}
+        <div class="leading-5 break-all whitespace-pre-wrap">{line.text}</div>
+      {:else}
+        <div class="flex leading-5">
+          {#if timestampMode !== 'off'}
+            {@const ts = formatTimestamp(line)}
+            <span class="text-muted-foreground border-r pr-2 mr-2 opacity-60 select-none"
+              >{ts || filler[timestampMode]}</span
+            >
+          {/if}
+          <span
+            class="break-all whitespace-pre-wrap"
+            style={line.logLevel ? `color:${LOG_LEVEL_COLORS[line.logLevel]}` : ''}
+          >
+            {#each line.segments as seg, j (j)}
+              {#if Object.keys(seg.style).length > 0}
+                <span
+                  style={Object.entries(seg.style)
+                    .map(([k, v]) => `${k}:${v}`)
+                    .join(';')}>{seg.text}</span
+                >
+              {:else}
+                {seg.text}
+              {/if}
+            {/each}
+          </span>
+        </div>
+      {/if}
     {/each}
   </div>
 

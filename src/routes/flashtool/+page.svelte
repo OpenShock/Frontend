@@ -31,11 +31,12 @@
 
   function makeTerminalLine(text: string, timestamp?: Date): TerminalLine {
     const parsed = parseLogLine(text);
+    const message = parsed ? text.substring(parsed.messageOffset) : text;
     return {
       id: lineIdCounter++,
       text,
       timestamp: timestamp ?? new Date(),
-      segments: parseAnsi(text),
+      segments: parseAnsi(message),
       logLevel: parsed?.logLevel ?? null,
       deviceUptime: parsed?.deviceUptime ?? null,
       logTag: parsed?.tag ?? null,
@@ -55,12 +56,13 @@
         const last = terminalLines[terminalLines.length - 1];
         const newText = last.text + data;
         const parsed = parseLogLine(newText);
+        const message = parsed ? newText.substring(parsed.messageOffset) : newText;
         terminalLines = [
           ...terminalLines.slice(0, -1),
           {
             ...last,
             text: newText,
-            segments: parseAnsi(newText),
+            segments: parseAnsi(message),
             logLevel: parsed?.logLevel ?? null,
             deviceUptime: parsed?.deviceUptime ?? null,
             logTag: parsed?.tag ?? null,
