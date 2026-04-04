@@ -10,8 +10,10 @@
     Code,
   } from '@lucide/svelte';
   import { Button } from '$lib/components/ui/button';
-  import { type AnsiSegment, type LogLevel, LOG_LEVEL_COLORS, stripAnsi } from './ansi';
+  import { stripAnsi } from './ansi';
+  import { LOG_LEVEL_COLORS } from './constants';
   import type FlashManager from './FlashManager';
+  import type { TerminalLine } from './types';
   import { tick } from 'svelte';
 
   type TimestampMode = 'uptime' | 'local' | 'ms' | 'off';
@@ -23,20 +25,9 @@
     off: 'Off',
   };
 
-  const MAX_LINES = 5000;
   const MIN_HEIGHT = 128;
   const MAX_HEIGHT = 800;
   const DEFAULT_HEIGHT = 256;
-
-  export interface TerminalLine {
-    id: number;
-    text: string;
-    timestamp: Date;
-    segments: AnsiSegment[];
-    logLevel: LogLevel | null;
-    deviceUptime: number | null;
-    logTag: string | null;
-  }
 
   interface Props {
     lines: TerminalLine[];
@@ -120,11 +111,8 @@
     return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
   }
 
-  // Visible lines (capped to MAX_LINES from the end)
-  let visibleLines = $derived(lines.length > MAX_LINES ? lines.slice(-MAX_LINES) : lines);
-
   let maxMsWidth = $derived(
-    visibleLines.reduce(
+    lines.reduce(
       (max, l) => (l.deviceUptime != null ? Math.max(max, String(l.deviceUptime).length) : max),
       0
     )
@@ -189,11 +177,15 @@
   let copyTimeout: ReturnType<typeof setTimeout> | undefined;
 
   async function copyOutput() {
-    const text = lines.map((l) => stripAnsi(l.text)).join('\n');
-    await navigator.clipboard.writeText(text);
-    copied = true;
-    clearTimeout(copyTimeout);
-    copyTimeout = setTimeout(() => (copied = false), 2000);
+    try {
+      const text = lines.map((l) => stripAnsi(l.text)).join('\n');
+      await navigator.clipboard.writeText(text);
+      copied = true;
+      clearTimeout(copyTimeout);
+      copyTimeout = setTimeout(() => (copied = false), 2000);
+    } catch {
+      // Clipboard write can fail (permissions, insecure context)
+    }
   }
 </script>
 
@@ -256,7 +248,7 @@
     role="log"
     aria-live="polite"
   >
-    {#each visibleLines as line (line.id)}
+    {#each lines as line (line.id)}
       {#if rawMode}
         <div class="leading-5 break-all whitespace-pre-wrap">{line.text}</div>
       {:else}

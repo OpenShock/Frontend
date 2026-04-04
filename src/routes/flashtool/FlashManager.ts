@@ -238,6 +238,7 @@ export default class FlashManager {
       this.loader = loader;
       this.chip = loader.chip.CHIP_NAME;
     }
+    return !!this.loader;
   }
 
   /**

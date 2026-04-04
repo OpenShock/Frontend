@@ -19,13 +19,13 @@
   import { useFlashManager } from './flash-context.svelte';
   import HelpDialog from './HelpDialog.svelte';
   import SerialPortSelector from './SerialPortSelector.svelte';
-  import SerialTerminal, { type TerminalLine } from './SerialTerminal.svelte';
+  import { MAX_LINES } from './constants';
+  import SerialTerminal from './SerialTerminal.svelte';
+  import type { TerminalLine } from './types';
 
   const serial = useSerial();
 
   let port = $state<SerialPort | null>(null);
-
-  const MAX_LINES = 5000;
   let lineIdCounter = 0;
   let terminalLines = $state<TerminalLine[]>([]);
 
@@ -48,8 +48,10 @@
       terminalLines = [];
     },
     writeLine: (data: string) => {
-      const newLines = [...terminalLines, makeTerminalLine(data)];
-      terminalLines = newLines.length > MAX_LINES ? newLines.slice(-MAX_LINES) : newLines;
+      terminalLines.push(makeTerminalLine(data));
+      if (terminalLines.length > MAX_LINES) {
+        terminalLines.splice(0, terminalLines.length - MAX_LINES);
+      }
     },
     write: (data: string) => {
       if (terminalLines.length > 0) {
@@ -57,19 +59,16 @@
         const newText = last.text + data;
         const parsed = parseLogLine(newText);
         const message = parsed ? newText.substring(parsed.messageOffset) : newText;
-        terminalLines = [
-          ...terminalLines.slice(0, -1),
-          {
-            ...last,
-            text: newText,
-            segments: parseAnsi(message),
-            logLevel: parsed?.logLevel ?? null,
-            deviceUptime: parsed?.deviceUptime ?? null,
-            logTag: parsed?.tag ?? null,
-          },
-        ];
+        terminalLines[terminalLines.length - 1] = {
+          ...last,
+          text: newText,
+          segments: parseAnsi(message),
+          logLevel: parsed?.logLevel ?? null,
+          deviceUptime: parsed?.deviceUptime ?? null,
+          logTag: parsed?.tag ?? null,
+        };
       } else {
-        terminalLines = [makeTerminalLine(data)];
+        terminalLines.push(makeTerminalLine(data));
       }
     },
   };

@@ -9,7 +9,7 @@ export interface AnsiSegment {
   style: Record<string, string>;
 }
 
-export type LogLevel = 'E' | 'W' | 'I' | 'D' | 'V';
+import type { LogLevel } from './types';
 
 export interface ParsedLogLine {
   logLevel: LogLevel;
@@ -18,14 +18,6 @@ export interface ParsedLogLine {
   /** Index in the original string where the message content begins (after the metadata prefix). */
   messageOffset: number;
 }
-
-export const LOG_LEVEL_COLORS: Record<LogLevel, string> = {
-  E: '#ff4444',
-  W: '#ffaa00',
-  I: '#51cf66',
-  D: '#74c0fc',
-  V: '#808080',
-};
 
 /**
  * Parse log formats. Supports:
