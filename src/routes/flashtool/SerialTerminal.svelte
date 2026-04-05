@@ -162,7 +162,7 @@
     }
 
     function cleanup() {
-      target.removeEventListener('pointermove', onMove);
+      target.removeEventListener('pointermove', onMove, { capture: true });
       target.removeEventListener('pointerup', cleanup);
       target.removeEventListener('pointercancel', cleanup);
       target.removeEventListener('lostpointercapture', cleanup);
