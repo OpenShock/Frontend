@@ -14,7 +14,7 @@
   import { LOG_LEVEL_COLORS } from './constants';
   import type FlashManager from './FlashManager';
   import type { TerminalLine } from './types';
-  import { tick } from 'svelte';
+  import { tick, onDestroy } from 'svelte';
 
   type TimestampMode = 'uptime' | 'local' | 'ms' | 'off';
   const TIMESTAMP_MODES: TimestampMode[] = ['uptime', 'local', 'ms', 'off'];
@@ -157,24 +157,27 @@
     const target = e.currentTarget as HTMLElement;
     target.setPointerCapture(e.pointerId);
 
-    document.body.style.userSelect = 'none';
-
     function onMove(e: PointerEvent) {
       height = Math.min(MAX_HEIGHT, Math.max(MIN_HEIGHT, startHeight - (e.clientY - startY)));
     }
 
-    function onUp() {
-      document.body.style.userSelect = '';
+    function cleanup() {
       target.removeEventListener('pointermove', onMove);
-      target.removeEventListener('pointerup', onUp);
+      target.removeEventListener('pointerup', cleanup);
+      target.removeEventListener('pointercancel', cleanup);
+      target.removeEventListener('lostpointercapture', cleanup);
     }
 
-    target.addEventListener('pointermove', onMove);
-    target.addEventListener('pointerup', onUp);
+    target.addEventListener('pointermove', onMove, { capture: true });
+    target.addEventListener('pointerup', cleanup);
+    target.addEventListener('pointercancel', cleanup);
+    target.addEventListener('lostpointercapture', cleanup);
   }
 
   let copied = $state(false);
   let copyTimeout: ReturnType<typeof setTimeout> | undefined;
+
+  onDestroy(() => clearTimeout(copyTimeout));
 
   async function copyOutput() {
     try {
@@ -191,8 +194,12 @@
 
 <div class="flex flex-col border-t" style="height: {height}px">
   <!-- Resize handle -->
-  <!-- svelte-ignore a11y_no_static_element_interactions -->
+  <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
   <div
+    role="separator"
+    aria-orientation="horizontal"
+    aria-label="Resize terminal panel"
+    tabindex="0"
     class="group flex cursor-row-resize items-center justify-center py-0.5 select-none"
     onpointerdown={onResizeStart}
   >
@@ -287,6 +294,7 @@
       class="flex-1 bg-transparent font-mono text-xs outline-none"
       bind:value={commandInput}
       onkeydown={handleKeydown}
+      aria-label="Serial command"
       placeholder="Type a command..."
       disabled={!manager || disabled}
     />
