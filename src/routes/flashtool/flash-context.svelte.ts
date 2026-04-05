@@ -30,7 +30,7 @@ export class FlashContext {
 
   async connect(port: SerialPort): Promise<void> {
     this.#connectFailed = false;
-    const m = await FlashManager.Connect(port, this.#terminal);
+    const m = await FlashManager.ConnectApplication(port, this.#terminal);
     this.#manager = m;
     this.#connectFailed = !m;
   }
