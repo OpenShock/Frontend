@@ -28,11 +28,10 @@
   import { cubicOut } from 'svelte/easing';
   import { Tween } from 'svelte/motion';
 
-  // Unique gauge IDs
+  // Unique IDs
   const id = $props.id();
   const inputId = id + '-input';
   const labelId = id + '-label';
-  const gaugeId = id + '-gauge';
 
   interface Props {
     name: string;
@@ -51,6 +50,10 @@
   let lastFraction: number | null = null;
 
   // --- helpers ---
+  function snapValue(raw: number): number {
+    return clamp(Math.round((raw - min) / step) * step + min, min, max);
+  }
+
   function fractionFromEvent(event: PointerEvent) {
     const rect = element.getBoundingClientRect();
     const cx = rect.left + rect.width / 2;
@@ -95,6 +98,7 @@
     isTracking = false;
     window.removeEventListener('pointermove', handlePointerMoveDrag);
     window.removeEventListener('pointerup', stopTracking);
+    window.removeEventListener('pointercancel', stopTracking);
     lastFraction = null; // reset for next interaction
   }
 
@@ -104,12 +108,11 @@
     // Always jump to exact pointer position on start (wrap protection OFF)
     updateValueFromFraction(fractionFromEvent(event));
 
-    element.setPointerCapture(event.pointerId);
-
     if (!isTracking) {
       isTracking = true;
       window.addEventListener('pointermove', handlePointerMoveDrag);
       window.addEventListener('pointerup', stopTracking);
+      window.addEventListener('pointercancel', stopTracking);
     }
   }
 
@@ -121,12 +124,13 @@
     easing: cubicOut,
   });
 
-  // Update animated value based on value, step, min, and max
+  // Snap value to step grid and animate
   $effect(() => {
-    const stepped = Math.round((value - min) / step) * step + min;
-    const rounded = Math.round((stepped + Number.EPSILON) * 100) / 100;
-    value = clamp(rounded, min, max);
-    tween.set(value);
+    const snapped = snapValue(value);
+    if (snapped !== value) {
+      value = snapped;
+    }
+    tween.set(snapped);
   });
 
   // Update visual progress
@@ -146,7 +150,6 @@
 
     <!-- foreground arc -->
     <path
-      id={gaugeId}
       d={calcSvgPathData(degrees)}
       class="cursor-pointer fill-none stroke-blue-500 stroke-[10] dark:stroke-blue-400"
       stroke-linecap="round"
@@ -166,7 +169,6 @@
       aria-valuenow={value}
       aria-valuemax={max}
       aria-labelledby={labelId}
-      aria-controls={gaugeId}
       class="cursor-move fill-white stroke-neutral-400 drop-shadow-md outline-none focus:ring-2 focus:ring-blue-500/60 dark:fill-neutral-900 dark:stroke-neutral-700"
     />
   </svg>
@@ -188,7 +190,6 @@
   <label
     id={labelId}
     for={inputId}
-    aria-label="Name"
     class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/10 text-center text-neutral-600 dark:text-neutral-300"
   >
     {name}
