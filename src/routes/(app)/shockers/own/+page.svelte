@@ -43,7 +43,12 @@
 
   registerBreadcrumbs(() => [{ label: 'Shockers' }]);
 
-  let shockers = $derived(Array.from(ownHubs).flatMap(([, hub]) => hub.shockers));
+  let shockers = $derived(
+    ownHubs
+      .values()
+      .flatMap((hub) => hub.shockers)
+      .toArray()
+  );
   let flatShockers = $derived(
     Array.from(ownHubs).flatMap(([hubId, hub]) =>
       hub.shockers.map((shocker) => ({ shocker, hubId }))
@@ -96,7 +101,7 @@
   }
 
   async function openAddShockerDialog() {
-    const hubs = Array.from(ownHubs);
+    const hubs = ownHubs.entries().toArray();
     if (hubs.length === 0) {
       toast.error('You need to create a hub before adding shockers.');
       return;
@@ -243,11 +248,16 @@
       {#if moduleType === ModuleType.MapControlModule}
         <MapControlModule {shockers} />
       {:else}
-        {#snippet shockerCard(shocker: import('$lib/api/internal/v1').ShockerResponse, hubId: string)}
+        {#snippet shockerCard(
+          shocker: import('$lib/api/internal/v1').ShockerResponse,
+          hubId: string
+        )}
           {@const liveConn = getLiveConnection(hubId)}
           {@const liveState = liveConn?.getShockerState(shocker.id)}
-          {@const isShockerLiveActive = (liveState?.isLive ?? false) && liveConn?.state === LiveConnectionState.Connected}
-          {@const isShockerConnecting = (liveState?.isLive ?? false) && liveConn?.state === LiveConnectionState.Connecting}
+          {@const isShockerLiveActive =
+            (liveState?.isLive ?? false) && liveConn?.state === LiveConnectionState.Connected}
+          {@const isShockerConnecting =
+            (liveState?.isLive ?? false) && liveConn?.state === LiveConnectionState.Connecting}
           <div>
             <div class="mb-1 flex items-center gap-1.5">
               <button
@@ -256,7 +266,9 @@
                   ? 'bg-gradient-to-r from-[rgb(185,123,255)] to-[#e100ff] bg-clip-text text-transparent [border-image:linear-gradient(to_right,rgb(167,89,255),#e100ff)_1]'
                   : ''}
                   {isShockerConnecting ? 'border-muted-foreground text-muted-foreground' : ''}
-                  {shocker.isPaused && !(liveState?.isLive ?? false) ? 'pointer-events-none opacity-40' : ''}"
+                  {shocker.isPaused && !(liveState?.isLive ?? false)
+                  ? 'pointer-events-none opacity-40'
+                  : ''}"
                 onclick={() => toggleShockerLiveControl(hubId, shocker.id)}
                 disabled={shocker.isPaused && !(liveState?.isLive ?? false)}
                 title={isShockerLiveActive
@@ -283,12 +295,7 @@
             {:else if moduleType === ModuleType.RichControlModule}
               <RichControlModule {shocker} />
             {:else if moduleType === ModuleType.SimpleControlModule}
-              <SimpleControlModule
-                {shocker}
-                {shockIntensity}
-                {vibrationIntensity}
-                {duration}
-              />
+              <SimpleControlModule {shocker} {shockIntensity} {vibrationIntensity} {duration} />
             {:else}
               <p>Unknown module type</p>
             {/if}

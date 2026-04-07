@@ -37,7 +37,9 @@ async function setupESPLoader(
 }
 
 function sleep(ms: number): Promise<void> {
-  return new Promise((f) => setTimeout(f, ms));
+  const { promise, resolve } = Promise.withResolvers<void>();
+  setTimeout(resolve, ms);
+  return promise;
 }
 
 function appendBuffer(buffer: Uint8Array | null, data: Uint8Array): Uint8Array {
@@ -128,26 +130,42 @@ export default class FlashManager {
    */
   private terminal: IEspLoaderTerminal;
   /**
-   * Chip: During connect, the chip is read from the ESPLoader.
+   * Chip: Detected during bootloader setup. null until first ensureBootloader() call.
    */
-  private chip: string;
+  private chip: string | null;
 
-  private constructor(loader: ESPLoader, terminal: IEspLoaderTerminal) {
-    this.serialPort = loader.transport.device;
+  private constructor(serialPort: SerialPort, terminal: IEspLoaderTerminal, loader?: ESPLoader) {
+    this.serialPort = serialPort;
     this.serialPortReader = null;
     this.serialPortWriter = null;
-    this.loader = loader;
+    this.loader = loader ?? null;
     this.terminal = terminal;
-    this.chip = loader.chip.CHIP_NAME;
+    this.chip = loader?.chip.CHIP_NAME ?? null;
   }
 
-  static async Connect(serialPort: SerialPort, terminal: IEspLoaderTerminal) {
+  /**
+   * Connect in bootloader mode (legacy). Enters ESPLoader immediately.
+   */
+  static async ConnectBootloader(serialPort: SerialPort, terminal: IEspLoaderTerminal) {
     const espLoader = await setupESPLoader(serialPort, terminal);
     if (espLoader != null) {
-      return new FlashManager(espLoader, terminal);
+      return new FlashManager(espLoader.transport.device, terminal, espLoader);
     } else {
       return null;
     }
+  }
+
+  /**
+   * Connect in application mode. Opens the port, resets the device into app mode,
+   * and starts reading serial output immediately. Bootloader is entered lazily when flash is triggered.
+   */
+  static async ConnectApplication(serialPort: SerialPort, terminal: IEspLoaderTerminal) {
+    const port = await setupApplication(serialPort);
+    if (!port) return null;
+
+    const manager = new FlashManager(port, terminal);
+    manager._startApplicationReadLoop();
+    return manager;
   }
 
   get SerialPort() {
@@ -156,6 +174,12 @@ export default class FlashManager {
 
   get Chip() {
     return this.chip;
+  }
+
+  get mode(): 'application' | 'bootloader' | 'disconnected' {
+    if (!this.serialPort) return 'disconnected';
+    if (this.loader) return 'bootloader';
+    return 'application';
   }
 
   /**
@@ -214,9 +238,77 @@ export default class FlashManager {
       this.loader = loader;
       this.chip = loader.chip.CHIP_NAME;
     }
+    return !!this.loader;
   }
 
-  async ensureApplication(forceReset?: boolean) {
+  /**
+   * Starts an async read loop that reads from the serial port and writes to the terminal.
+   * Assumes the port is already open with reader/writer available.
+   */
+  private _startApplicationReadLoop() {
+    if (!this.serialPort) return;
+
+    const serialPortReader = this.serialPort.readable!.getReader();
+    const serialPortWriter = this.serialPort.writable!.getWriter();
+    this.serialPortReader = serialPortReader;
+    this.serialPortWriter = serialPortWriter;
+
+    (async () => {
+      try {
+        let lineBuffer: Uint8Array | null = null;
+
+        while (true) {
+          const { done, value } = await serialPortReader.read();
+          if (done) break;
+          if (!value) {
+            await sleep(1);
+            continue;
+          }
+
+          let start = 0;
+
+          for (let i = 0; i < value.length; i++) {
+            const byte = value[i];
+
+            if (byte !== 10 && byte !== 13) continue;
+
+            if (i > start) {
+              lineBuffer = appendBuffer(lineBuffer, value.subarray(start, i));
+            }
+
+            if (byte === 10) {
+              this.terminal.writeLine(lineBuffer?.length ? DecodeString(lineBuffer) : '');
+              lineBuffer = null;
+            }
+
+            start = i + 1;
+          }
+
+          if (start < value.length) {
+            lineBuffer = appendBuffer(lineBuffer, value.subarray(start));
+          }
+        }
+      } catch (e) {
+        console.log(e);
+        this.terminal.writeLine(`firmware disconnected: ${e}`);
+      } finally {
+        try {
+          serialPortReader.releaseLock();
+        } catch {
+          /* ignore */
+        }
+        try {
+          serialPortWriter.releaseLock();
+        } catch {
+          /* ignore */
+        }
+        if (this.serialPortReader === serialPortReader) this.serialPortReader = null;
+        if (this.serialPortWriter === serialPortWriter) this.serialPortWriter = null;
+      }
+    })();
+  }
+
+  async ensureApplication(forceReset?: boolean): Promise<boolean> {
     if (!this.serialPort) return false;
     if (!this.loader && !forceReset) return true;
 
@@ -224,59 +316,10 @@ export default class FlashManager {
     this.serialPort = serialPort;
 
     if (serialPort) {
-      const serialPortReader = serialPort!.readable!.getReader();
-      const serialPortWriter = serialPort!.writable!.getWriter();
-      this.serialPortReader = serialPortReader;
-      this.serialPortWriter = serialPortWriter;
-      // connect application to terminal
-      (async () => {
-        try {
-          let lineBuffer: Uint8Array | null = null; // Buffer to hold data between chunks
-
-          while (true) {
-            // since we're using Transport APIs, and since they have no "no timeout" option, get as close as possible
-            const { done, value } = await serialPortReader.read();
-            if (done) break; // Stream ended - exit the loop
-            if (!value) {
-              await sleep(1); // No data received, wait a bit
-              continue; // Skip to the next iteration
-            }
-
-            let start = 0; // Where to start reading from the value
-
-            // Process each byte in the received chunk
-            for (let i = 0; i < value.length; i++) {
-              const byte = value[i];
-
-              // Skip until we encounter a line terminator (LF or CR)
-              if (byte !== 10 && byte !== 13) continue;
-
-              // Copy all data from rstart to current index (i) into the buffer
-              if (i > start) {
-                lineBuffer = appendBuffer(lineBuffer, value.subarray(start, i));
-              }
-
-              // Line Feed (\n): flush buffer as a complete line
-              if (byte === 10) {
-                this.terminal.writeLine(lineBuffer?.length ? DecodeString(lineBuffer) : '');
-                lineBuffer = null; // Reset buffer after flushing
-              }
-
-              // Set start to the next byte after the line terminator
-              start = i + 1;
-            }
-
-            // Push any remaining data in the buffer
-            if (start < value.length) {
-              lineBuffer = appendBuffer(lineBuffer, value.subarray(start));
-            }
-          }
-        } catch (e) {
-          console.log(e);
-          this.terminal.writeLine(`firmware disconnected: ${e}`);
-        }
-      })();
+      this._startApplicationReadLoop();
+      return true;
     }
+    return false;
   }
 
   async disconnect() {

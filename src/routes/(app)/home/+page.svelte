@@ -11,12 +11,13 @@
 
   registerBreadcrumbs(() => [{ label: 'Home', href: '/home' }]);
 
-  let shockerCount = $derived(
-    Array.from(ownHubs).reduce((sum, [, hub]) => sum + hub.shockers.length, 0)
-  );
+  let shockerCount = $derived(ownHubs.values().reduce((sum, hub) => sum + hub.shockers.length, 0));
   let hubCount = $derived(ownHubs.size);
   let onlineHubCount = $derived(
-    Array.from(onlineHubs).filter(([, state]) => state.isOnline).length
+    onlineHubs
+      .values()
+      .filter((state) => state.isOnline)
+      .toArray().length
   );
 
   onMount(refreshOwnHubs);
