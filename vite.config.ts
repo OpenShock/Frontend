@@ -219,7 +219,7 @@ export default defineConfig(async ({ command, mode, isPreview }) => {
     build: {
       rolldownOptions: {
         output: {
-          legalComments: 'none',
+          comments: { legal: false },
         },
         treeshake:
           mode === 'production'
