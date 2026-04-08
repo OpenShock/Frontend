@@ -105,12 +105,12 @@ async function setupApplication(serialPort: SerialPort): Promise<SerialPort | nu
 }
 
 /**
- * FlashManager ; manages flashing the device.
- * Beware that operations on FlashManager are not atomic (they never were, I've just noted this down now)
+ * ESP serial connection wrapper: manages connecting to an ESP32 in both application and bootloader modes.
+ * Beware that operations are not atomic (they never were, I've just noted this down now)
  */
-export default class FlashManager {
+export default class EspSerialConnection {
   /**
-   * Underlying serial port wrapper. null if the FlashManager has been disconnect()ed.
+   * Underlying serial port. null if disconnected.
    */
   private serialPort: SerialPort | null;
   /**
@@ -149,7 +149,7 @@ export default class FlashManager {
   static async ConnectBootloader(serialPort: SerialPort, terminal: IEspLoaderTerminal) {
     const espLoader = await setupESPLoader(serialPort, terminal);
     if (espLoader != null) {
-      return new FlashManager(espLoader.transport.device, terminal, espLoader);
+      return new EspSerialConnection(espLoader.transport.device, terminal, espLoader);
     } else {
       return null;
     }
@@ -163,7 +163,7 @@ export default class FlashManager {
     const port = await setupApplication(serialPort);
     if (!port) return null;
 
-    const manager = new FlashManager(port, terminal);
+    const manager = new EspSerialConnection(port, terminal);
     manager._startApplicationReadLoop();
     return manager;
   }
@@ -183,9 +183,9 @@ export default class FlashManager {
   }
 
   /**
-   * Assumes the FlashManager is connected.
+   * Assumes the connection is active.
    * To work around esptool.js issues (namely, any timeout whatsoever corrupts newRead and probably everything else too), some operations have to 'reboot' the transport.
-   * In addition, to reduce any weirdness, the FlashManager becomes 'disconnected' while it is switching states.
+   * In addition, to reduce any weirdness, the connection becomes 'disconnected' while it is switching states.
    */
   private async _cycleTransport(): Promise<SerialPort> {
     const loader = this.loader;

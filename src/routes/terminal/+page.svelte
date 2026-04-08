@@ -12,22 +12,38 @@
   import { Label } from '$lib/components/ui/label';
   import { Progress } from '$lib/components/ui/progress';
   import { useSerial } from '$lib/utils/serial-context.svelte';
-  import { getBrowserName, isSerialSupported } from '$lib/utils/compatibility';
+  import { getBrowserName } from '$lib/utils/compatibility';
   import { parseAnsi, parseLogLine } from './ansi';
   import FirmwareBoardSelector from './FirmwareBoardSelector.svelte';
   import FirmwareFlasher from './FirmwareFlasher.svelte';
-  import { useFlashManager } from './flash-context.svelte';
   import HelpDialog from './HelpDialog.svelte';
   import SerialPortSelector from './SerialPortSelector.svelte';
   import { MAX_LINES } from './constants';
   import SerialTerminal from './SerialTerminal.svelte';
   import type { TerminalLine } from './types';
+  import EspSerialConnection from './EspSerialConnection';
 
   const serial = useSerial();
 
   let port = $state<SerialPort | null>(null);
   let lineIdCounter = 0;
   let terminalLines = $state<TerminalLine[]>([]);
+
+  let connection = $state<EspSerialConnection | null>(null);
+  let isFlashing = $state<boolean>(false);
+  let connectFailed = $state<boolean>(false);
+
+  let showHelpDialog = $state(false);
+
+  let channel = $state<FirmwareChannel>('stable');
+  let version = $state<string | null>(null);
+  // Tracks which channel+version the user explicitly confirmed. Changing either invalidates it.
+  let confirmedChannel = $state<FirmwareChannel | null>(null);
+  let confirmedVersion = $state<string | null>(null);
+  let board = $state<string | null>(null);
+  let eraseBeforeFlash = $state<boolean>(false);
+
+  let viewStep = $state<number | null>(null);
 
   function makeTerminalLine(text: string, timestamp?: Date): TerminalLine {
     const parsed = parseLogLine(text);
@@ -43,60 +59,51 @@
     };
   }
 
-  const terminal = {
-    clean: () => {
-      terminalLines = [];
-    },
-    writeLine: (data: string) => {
-      terminalLines.push(makeTerminalLine(data));
-      if (terminalLines.length > MAX_LINES) {
-        terminalLines.splice(0, terminalLines.length - MAX_LINES);
-      }
-    },
-    write: (data: string) => {
-      if (terminalLines.length > 0) {
-        const last = terminalLines[terminalLines.length - 1];
-        const newText = last.text + data;
-        const parsed = parseLogLine(newText);
-        const message = parsed ? newText.substring(parsed.messageOffset) : newText;
-        terminalLines[terminalLines.length - 1] = {
-          ...last,
-          text: newText,
-          segments: parseAnsi(message),
-          logLevel: parsed?.logLevel ?? null,
-          deviceUptime: parsed?.deviceUptime ?? null,
-          logTag: parsed?.tag ?? null,
-        };
-      } else {
-        terminalLines.push(makeTerminalLine(data));
-      }
-    },
-  };
+  function clean() {
+    terminalLines = [];
+  }
 
-  const flash = useFlashManager(terminal);
+  function writeLine(data: string) {
+    terminalLines.push(makeTerminalLine(data));
+    if (terminalLines.length > MAX_LINES) {
+      terminalLines.splice(0, terminalLines.length - MAX_LINES);
+    }
+  }
+
+  function write(data: string) {
+    if (terminalLines.length > 0) {
+      const last = terminalLines[terminalLines.length - 1];
+      const newText = last.text + data;
+      const parsed = parseLogLine(newText);
+      const message = parsed ? newText.substring(parsed.messageOffset) : newText;
+      terminalLines[terminalLines.length - 1] = {
+        ...last,
+        text: newText,
+        segments: parseAnsi(message),
+        logLevel: parsed?.logLevel ?? null,
+        deviceUptime: parsed?.deviceUptime ?? null,
+        logTag: parsed?.tag ?? null,
+      };
+    } else {
+      terminalLines.push(makeTerminalLine(data));
+    }
+  }
 
   $effect(() => {
-    if (port && !flash.manager) {
-      flash.connect(port);
-    } else if (!port && flash.manager) {
-      flash.disconnect();
+    if (port && !connection) {
+      EspSerialConnection.ConnectApplication(port, { clean, writeLine, write })
+        .then((conn) => (connection = conn))
+        .catch(() => (connectFailed = true));
+    } else if (!port && connection) {
+      connection.disconnect();
+      connection = null;
     }
   });
-
-  let showHelpDialog = $state(false);
-
-  let channel = $state<FirmwareChannel>('stable');
-  let version = $state<string | null>(null);
-  // Tracks which channel+version the user explicitly confirmed. Changing either invalidates it.
-  let confirmedChannel = $state<FirmwareChannel | null>(null);
-  let confirmedVersion = $state<string | null>(null);
-  let board = $state<string | null>(null);
-  let eraseBeforeFlash = $state<boolean>(false);
 
   // Stepper: derive which step we're on based on state
   // Channel step requires explicit confirmation (both channel and version must match confirmed values)
   let currentStep = $derived(
-    !flash.manager
+    !connection
       ? 0
       : !(version && confirmedChannel === channel && confirmedVersion === version)
         ? 1
@@ -106,15 +113,14 @@
   );
 
   // Allow users to view earlier steps
-  let viewStep = $state<number | null>(null);
-  let activeStep = $derived(viewStep !== null && viewStep <= currentStep ? viewStep : currentStep);
+  let activeStep = $derived(viewStep && viewStep <= currentStep ? viewStep : currentStep);
 
   function goToStep(step: number) {
     if (step <= currentStep) viewStep = step;
   }
   // Auto-clear viewStep override when currentStep advances past it
   $effect(() => {
-    if (viewStep !== null && currentStep > viewStep) viewStep = null;
+    if (viewStep && currentStep > viewStep) viewStep = null;
   });
 
   const STEPS = [
@@ -125,35 +131,35 @@
   ];
 
   async function handleReset() {
-    if (flash.isFlashing) return;
+    if (isFlashing) return;
     try {
-      flash.isFlashing = true;
-      if (!flash.manager) {
-        terminal.writeLine('Host-side error during reset: no device!');
+      isFlashing = true;
+      if (!connection) {
+        writeLine('Host-side error during reset: no device!');
         return;
       }
-      await flash.manager.ensureApplication(true);
+      await connection.ensureApplication(true);
     } catch (e) {
-      terminal.writeLine(`Host-side error during reset: ${e}`);
+      writeLine(`Host-side error during reset: ${e}`);
     } finally {
-      flash.isFlashing = false;
+      isFlashing = false;
     }
   }
 
   async function handleSendCommand(command: string) {
-    if (flash.isFlashing) return;
+    if (isFlashing) return;
     try {
-      flash.isFlashing = true;
-      if (!flash.manager) {
-        terminal.writeLine("Couldn't send: no device!");
+      isFlashing = true;
+      if (!connection) {
+        writeLine("Couldn't send: no device!");
         return;
       }
-      await flash.manager.ensureApplication();
-      await flash.manager.sendApplicationCommand(command);
+      await connection.ensureApplication();
+      await connection.sendApplicationCommand(command);
     } catch (e) {
-      terminal.writeLine(`Couldn't send: ${e}`);
+      writeLine(`Couldn't send: ${e}`);
     } finally {
-      flash.isFlashing = false;
+      isFlashing = false;
     }
   }
 </script>
@@ -164,7 +170,7 @@
   <!-- Header -->
   <div class="flex items-center justify-between border-b px-6 py-3">
     <h1 class="text-3xl font-bold tracking-tight">Flash Tool</h1>
-    {#if isSerialSupported}
+    {#if serial}
       <Button variant="outline" onclick={() => (showHelpDialog = true)}>
         <MessageCircleQuestionMark />
         I'm having trouble, help?
@@ -174,7 +180,7 @@
 
   <!-- Main content area (scrollable) -->
   <div class="min-h-0 flex-1 overflow-y-auto px-6 py-4">
-    {#if isSerialSupported}
+    {#if serial}
       <div class="max-w-3xl">
         {#each STEPS as step, i (i)}
           {@const isCompleted = i < currentStep}
@@ -193,7 +199,7 @@
                   : isCurrent
                     ? 'bg-primary text-primary-foreground'
                     : 'border-muted-foreground/30 text-muted-foreground/50 border-2'}"
-                disabled={!isAccessible || flash.isFlashing}
+                disabled={!isAccessible || isFlashing}
                 onclick={() => goToStep(i)}
                 aria-label="Go to step {i + 1}: {step.title}"
               >
@@ -217,7 +223,7 @@
               <!-- Title -->
               <button
                 class="mb-2 text-lg font-semibold {isCurrent ? '' : 'text-muted-foreground'}"
-                disabled={!isAccessible || flash.isFlashing}
+                disabled={!isAccessible || isFlashing}
                 onclick={() => goToStep(i)}
               >
                 {step.title}
@@ -227,16 +233,16 @@
               {#if i === 0}
                 {#if isCurrent}
                   <div class="flex flex-col gap-2">
-                    <SerialPortSelector {serial} bind:port disabled={flash.isFlashing} />
+                    <SerialPortSelector {serial} bind:port disabled={isFlashing} />
 
-                    {#if port && !flash.manager && !flash.connectFailed}
+                    {#if port && !connection && !connectFailed}
                       <div class="flex flex-col items-center gap-2">
                         <span class="text-center text-lg">Connecting...</span>
                         <Progress />
                       </div>
                     {/if}
 
-                    {#if port && flash.connectFailed}
+                    {#if port && connectFailed}
                       <div class="flex flex-col items-start gap-2">
                         <span class="bold text-lg text-red-500">Device connection failed</span>
                         <span>
@@ -268,18 +274,14 @@
               {#if i === 1}
                 {#if isCurrent}
                   <div class="flex flex-col gap-3">
-                    <FirmwareChannelSelector
-                      bind:channel
-                      bind:version
-                      disabled={flash.isFlashing}
-                    />
+                    <FirmwareChannelSelector bind:channel bind:version disabled={isFlashing} />
                     {#if version}
                       <Button
                         onclick={() => {
                           confirmedChannel = channel;
                           confirmedVersion = version;
                         }}
-                        disabled={flash.isFlashing}
+                        disabled={isFlashing}
                         class="w-fit"
                       >
                         Continue
@@ -300,7 +302,7 @@
                     <FirmwareBoardSelector
                       {version}
                       bind:selectedBoard={board}
-                      disabled={flash.isFlashing}
+                      disabled={isFlashing}
                     />
 
                     <div class="items-top flex space-x-2">
@@ -327,13 +329,14 @@
 
               <!-- Step 4: Flash -->
               {#if i === 3}
-                {#if isCurrent && version && board && flash.manager}
+                {#if isCurrent && version && board && connection}
                   <FirmwareFlasher
                     {version}
                     {board}
-                    {flash}
+                    {connection}
                     {eraseBeforeFlash}
                     showNonStableWarning={channel !== 'stable'}
+                    bind:isFlashing
                   />
                 {/if}
               {/if}
@@ -349,11 +352,10 @@
   </div>
 
   <!-- Terminal - persistent bottom panel -->
-  {#if port && isSerialSupported}
+  {#if port}
     <SerialTerminal
       lines={terminalLines}
-      manager={flash.manager}
-      disabled={flash.isFlashing}
+      disabled={!connection || isFlashing}
       onClear={() => (terminalLines = [])}
       onReset={handleReset}
       onSendCommand={handleSendCommand}
