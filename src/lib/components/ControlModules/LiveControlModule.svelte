@@ -14,12 +14,13 @@
   import ShockerMenu from './impl/ShockerMenu.svelte';
 
   interface Props {
-    shocker: ShockerResponse;
+    shocker: { id: string; name: string; isPaused?: boolean };
     liveState: LiveShockerState;
     connection: LiveDeviceConnection;
+    owned?: boolean;
   }
 
-  let { shocker, liveState, connection }: Props = $props();
+  let { shocker, liveState, connection, owned = false }: Props = $props();
 
   let resuming = $state(false);
 
@@ -47,7 +48,7 @@
 <div
   class="border-surface-400-500-token relative flex flex-col items-center justify-center gap-2 overflow-hidden rounded-md border p-2"
 >
-  {#if shocker.isPaused}
+  {#if shocker.isPaused && owned}
     <button
       class="group absolute inset-0 z-10 flex cursor-pointer flex-col items-center justify-center gap-2 rounded-md bg-black/60 backdrop-blur-sm transition-colors hover:bg-black/50"
       onclick={resume}
@@ -65,11 +66,20 @@
           >{/if}
       </span>
     </button>
+  {:else if shocker.isPaused}
+    <div
+      class="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 rounded-md bg-black/60 backdrop-blur-sm"
+    >
+      <Pause class="size-8 text-white/60" />
+      <span class="text-sm font-semibold text-white">Paused</span>
+    </div>
   {/if}
   <!-- Title -->
   <h2 class="flex w-full justify-between px-4 text-center text-lg font-bold">
     <span>{shocker.name}</span>
-    <ShockerMenu {shocker} />
+    {#if owned}
+      <ShockerMenu shocker={shocker as ShockerResponse} />
+    {/if}
   </h2>
 
   <!-- Type Selector -->

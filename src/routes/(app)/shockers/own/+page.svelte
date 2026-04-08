@@ -1,7 +1,6 @@
 <script lang="ts">
   import {
     Layers,
-    Loader,
     LoaderCircle,
     LogsIcon,
     Plus,
@@ -17,6 +16,7 @@
   import DialogShockerAdd, {
     defaultAddShockerData,
   } from '$lib/components/ControlModules/dialogs/dialog-shocker-add.svelte';
+  import LiveButton from '$lib/components/ControlModules/LiveButton.svelte';
   import LiveControlModule from '$lib/components/ControlModules/LiveControlModule.svelte';
   import MapControlModule from '$lib/components/ControlModules/MapControlModule.svelte';
   import { ModuleType } from '$lib/components/ControlModules/ModuleType';
@@ -35,7 +35,6 @@
     getLiveConnection,
     liveConnections,
     LiveConnectionState,
-    toggleShockerLiveControl,
   } from '$lib/state/live-control-state.svelte';
   import { LocalStorageState } from '$lib/state/classes/local-storage-state.svelte';
   import { onMount } from 'svelte';
@@ -256,40 +255,10 @@
           {@const liveState = liveConn?.getShockerState(shocker.id)}
           {@const isShockerLiveActive =
             (liveState?.isLive ?? false) && liveConn?.state === LiveConnectionState.Connected}
-          {@const isShockerConnecting =
-            (liveState?.isLive ?? false) && liveConn?.state === LiveConnectionState.Connecting}
           <div>
-            <div class="mb-1 flex items-center gap-1.5">
-              <button
-                class="border-border text-muted-foreground hover:border-foreground hover:text-foreground cursor-pointer rounded border bg-transparent px-1.5 py-px text-[10px] font-bold tracking-wider transition-all duration-200
-                  {isShockerLiveActive
-                  ? 'bg-gradient-to-r from-[rgb(185,123,255)] to-[#e100ff] bg-clip-text text-transparent [border-image:linear-gradient(to_right,rgb(167,89,255),#e100ff)_1]'
-                  : ''}
-                  {isShockerConnecting ? 'border-muted-foreground text-muted-foreground' : ''}
-                  {shocker.isPaused && !(liveState?.isLive ?? false)
-                  ? 'pointer-events-none opacity-40'
-                  : ''}"
-                onclick={() => toggleShockerLiveControl(hubId, shocker.id)}
-                disabled={shocker.isPaused && !(liveState?.isLive ?? false)}
-                title={isShockerLiveActive
-                  ? `Live — ${liveConn?.gateway} (${liveConn?.country}) — ${liveConn?.latency}ms`
-                  : isShockerConnecting
-                    ? 'Connecting...'
-                    : 'Connect to Live Control'}
-              >
-                LIVE
-                {#if isShockerConnecting}
-                  <Loader class="inline size-3 animate-spin" />
-                {/if}
-              </button>
-              {#if isShockerLiveActive && liveConn}
-                <span class="text-muted-foreground text-[10px]">
-                  {liveConn.gateway} ({liveConn.country}) — {liveConn.latency}ms
-                </span>
-              {/if}
-            </div>
+            <LiveButton {hubId} shockerId={shocker.id} isPaused={shocker.isPaused} connection={liveConn} {liveState} />
             {#if isShockerLiveActive && liveState && liveConn}
-              <LiveControlModule {shocker} {liveState} connection={liveConn} />
+              <LiveControlModule {shocker} {liveState} connection={liveConn} owned />
             {:else if moduleType === ModuleType.ClassicControlModule}
               <ClassicControlModule {shocker} />
             {:else if moduleType === ModuleType.RichControlModule}

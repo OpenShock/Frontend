@@ -1,11 +1,19 @@
 <script lang="ts">
   import { HubConnectionState } from '@microsoft/signalr';
   import type { PublicShareResponse } from '$lib/api/internal/v1';
+  import LiveButton from '$lib/components/ControlModules/LiveButton.svelte';
+  import LiveControlModule from '$lib/components/ControlModules/LiveControlModule.svelte';
   import PublicShareClassicControlModule from '$lib/components/ControlModules/PublicShareClassicControlModule.svelte';
   import * as Avatar from '$lib/components/ui/avatar';
   import * as Tooltip from '$lib/components/ui/tooltip/index.js';
   import { ShareLinkSignalr } from '$lib/signalr/sharelink.svelte';
   import type { Control } from '$lib/signalr/models/Control';
+  import {
+    ensureLiveConnection,
+    getLiveConnection,
+    liveConnections,
+    LiveConnectionState,
+  } from '$lib/state/live-control-state.svelte';
   import { onMount, untrack } from 'svelte';
   import { page } from '$app/state';
   import CopyInput from '$lib/components/CopyInput.svelte';
@@ -40,6 +48,34 @@
 
   let editUrl = $derived(resolve(`/shares/public/${shareId}/edit`));
   const shareUrl = $derived(getSiteShortURL(`/s/${shareId}`));
+
+  // Flatten devices+shockers while keeping the deviceId
+  const flatShockers = $derived(
+    (shareLinkRoot.devices ?? []).flatMap((device) =>
+      device.shockers.map((shocker) => ({ shocker, deviceId: device.id }))
+    )
+  );
+
+  // Eagerly create LiveDeviceConnection and LiveShockerState entries
+  $effect(() => {
+    const currentDeviceIds: string[] = [];
+    for (const device of shareLinkRoot.devices ?? []) {
+      currentDeviceIds.push(device.id);
+      ensureLiveConnection(device.id);
+      const conn = getLiveConnection(device.id);
+      if (conn) {
+        for (const shocker of device.shockers) {
+          conn.ensureShockerState(shocker.id);
+        }
+      }
+    }
+    for (const [deviceId, conn] of liveConnections) {
+      if (!currentDeviceIds.includes(deviceId)) {
+        conn.disconnect();
+        liveConnections.delete(deviceId);
+      }
+    }
+  });
 </script>
 
 <div class="m-5 flex h-full w-full flex-col gap-15">
@@ -88,8 +124,31 @@
   </div>
 
   <div class="flex flex-row justify-center gap-5">
-    {#each shareLinkRoot.devices!.flatMap((device) => device.shockers) as shocker (shocker.id)}
-      <PublicShareClassicControlModule {shocker} {control} />
+    {#each flatShockers as { shocker, deviceId } (shocker.id)}
+      {@const liveConn = getLiveConnection(deviceId)}
+      {@const liveState = liveConn?.getShockerState(shocker.id)}
+      {@const isShockerLiveActive =
+        (liveState?.isLive ?? false) && liveConn?.state === LiveConnectionState.Connected}
+      <div>
+        {#if shocker.permissions.live}
+          <LiveButton
+            hubId={deviceId}
+            shockerId={shocker.id}
+            isPaused={shocker.paused !== 0}
+            connection={liveConn}
+            {liveState}
+          />
+        {/if}
+        {#if isShockerLiveActive && liveState && liveConn}
+          <LiveControlModule
+            shocker={{ id: shocker.id, name: shocker.name, isPaused: shocker.paused !== 0 }}
+            {liveState}
+            connection={liveConn}
+          />
+        {:else}
+          <PublicShareClassicControlModule {shocker} {control} />
+        {/if}
+      </div>
     {/each}
   </div>
 </div>

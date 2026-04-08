@@ -1,10 +1,18 @@
 <script lang="ts">
   import { Router, User, Wifi, WifiOff } from '@lucide/svelte';
   import Container from '$lib/components/Container.svelte';
+  import LiveButton from '$lib/components/ControlModules/LiveButton.svelte';
+  import LiveControlModule from '$lib/components/ControlModules/LiveControlModule.svelte';
   import SharedShockerControlModule from '$lib/components/ControlModules/SharedShockerControlModule.svelte';
   import * as Avatar from '$lib/components/ui/avatar';
   import { onlineHubs } from '$lib/state/hubs-state.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import {
+    ensureLiveConnection,
+    getLiveConnection,
+    liveConnections,
+    LiveConnectionState,
+  } from '$lib/state/live-control-state.svelte';
   import { sharedHubsState, refreshSharedHubs } from '$lib/state/shared-hubs-state.svelte';
   import { onMount } from 'svelte';
 
@@ -13,6 +21,29 @@
   onMount(refreshSharedHubs);
 
   const hasSharedShockers = $derived(sharedHubsState.value.length > 0);
+
+  // Eagerly create LiveDeviceConnection and LiveShockerState entries
+  $effect(() => {
+    const currentDeviceIds: string[] = [];
+    for (const owner of sharedHubsState.value) {
+      for (const device of owner.devices) {
+        currentDeviceIds.push(device.id);
+        ensureLiveConnection(device.id);
+        const conn = getLiveConnection(device.id);
+        if (conn) {
+          for (const shocker of device.shockers) {
+            conn.ensureShockerState(shocker.id);
+          }
+        }
+      }
+    }
+    for (const [deviceId, conn] of liveConnections) {
+      if (!currentDeviceIds.includes(deviceId)) {
+        conn.disconnect();
+        liveConnections.delete(deviceId);
+      }
+    }
+  });
 </script>
 
 {#if sharedHubsState.value == null}
@@ -76,7 +107,27 @@
                   <!-- Shockers Grid -->
                   <div class="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     {#each device.shockers as shocker (shocker.id)}
-                      <SharedShockerControlModule {shocker} />
+                      {@const liveConn = getLiveConnection(device.id)}
+                      {@const liveState = liveConn?.getShockerState(shocker.id)}
+                      {@const isShockerLiveActive =
+                        (liveState?.isLive ?? false) &&
+                        liveConn?.state === LiveConnectionState.Connected}
+                      <div>
+                        {#if shocker.permissions.live}
+                          <LiveButton
+                            hubId={device.id}
+                            shockerId={shocker.id}
+                            isPaused={shocker.isPaused}
+                            connection={liveConn}
+                            {liveState}
+                          />
+                        {/if}
+                        {#if isShockerLiveActive && liveState && liveConn}
+                          <LiveControlModule {shocker} {liveState} connection={liveConn} />
+                        {:else}
+                          <SharedShockerControlModule {shocker} />
+                        {/if}
+                      </div>
                     {/each}
                   </div>
                 </div>
