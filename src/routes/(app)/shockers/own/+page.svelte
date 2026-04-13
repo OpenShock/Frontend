@@ -28,6 +28,9 @@
   import * as Popover from '$lib/components/ui/popover';
   import { ControlDurationDefault, ControlIntensityDefault } from '$lib/constants/ControlConstants';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { ControlType } from '$lib/signalr/models/ControlType';
+  import { getConnection } from '$lib/signalr/user.svelte';
+  import { serializeControlMessages } from '$lib/signalr/serializers/Control';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { ownHubs, onlineHubs, refreshOwnHubs } from '$lib/state/hubs-state.svelte';
   import {
@@ -126,6 +129,23 @@
   }
 
   onMount(loadShockers);
+
+  function ownCtrl(id: string, type: ControlType, intensity: number, duration: number) {
+    const conn = getConnection();
+    if (conn) serializeControlMessages(conn, [{ id, type, intensity, duration }]);
+  }
+
+  async function ownResume(id: string) {
+    const result = await shockersV1Api.shockerPauseShocker(id, { pause: false });
+    // Update the shocker's isPaused state
+    for (const hub of ownHubs.values()) {
+      const shocker = hub.shockers.find((s) => s.id === id);
+      if (shocker) {
+        shocker.isPaused = result.data;
+        break;
+      }
+    }
+  }
 </script>
 
 {#if loading}
@@ -260,7 +280,14 @@
             {#if isShockerLiveActive && liveState && liveConn}
               <LiveControlModule {shocker} {liveState} connection={liveConn} owned />
             {:else if moduleType === ModuleType.ClassicControlModule}
-              <ClassicControlModule {shocker} />
+              <ClassicControlModule
+                id={shocker.id}
+                name={shocker.name}
+                isPaused={shocker.isPaused}
+                ctrl={ownCtrl}
+                resume={ownResume}
+                rawShocker={shocker}
+              />
             {:else if moduleType === ModuleType.RichControlModule}
               <RichControlModule {shocker} />
             {:else if moduleType === ModuleType.SimpleControlModule}

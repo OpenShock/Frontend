@@ -1,13 +1,15 @@
 <script lang="ts">
   import { HubConnectionState } from '@microsoft/signalr';
   import type { PublicShareResponse } from '$lib/api/internal/v1';
+  import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import LiveButton from '$lib/components/ControlModules/LiveButton.svelte';
   import LiveControlModule from '$lib/components/ControlModules/LiveControlModule.svelte';
-  import PublicShareClassicControlModule from '$lib/components/ControlModules/PublicShareClassicControlModule.svelte';
+  import { getPauseReason } from '$lib/utils';
   import * as Avatar from '$lib/components/ui/avatar';
   import * as Tooltip from '$lib/components/ui/tooltip/index.js';
   import { ShareLinkSignalr } from '$lib/signalr/sharelink.svelte';
   import type { Control } from '$lib/signalr/models/Control';
+  import { ControlType } from '$lib/signalr/models/ControlType';
   import {
     ensureLiveConnection,
     getLiveConnection,
@@ -42,6 +44,10 @@
 
   function control(control: Control) {
     shareLinkSignalr.control([control]);
+  }
+
+  function publicCtrl(id: string, type: ControlType, intensity: number, duration: number) {
+    control({ id, type, intensity, duration: duration * 1000 });
   }
 
   const shareId = $derived(page.params.shareId);
@@ -146,7 +152,15 @@
             connection={liveConn}
           />
         {:else}
-          <PublicShareClassicControlModule {shocker} {control} />
+          <ClassicControlModule
+            id={shocker.id}
+            name={shocker.name}
+            isPaused={shocker.paused !== 0}
+            pauseReason={getPauseReason(shocker.paused)}
+            limits={shocker.limits}
+            permissions={shocker.permissions}
+            ctrl={publicCtrl}
+          />
         {/if}
       </div>
     {/each}

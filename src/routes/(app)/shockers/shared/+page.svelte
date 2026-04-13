@@ -1,12 +1,15 @@
 <script lang="ts">
   import { Router, User, Wifi, WifiOff } from '@lucide/svelte';
   import Container from '$lib/components/Container.svelte';
+  import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import LiveButton from '$lib/components/ControlModules/LiveButton.svelte';
   import LiveControlModule from '$lib/components/ControlModules/LiveControlModule.svelte';
-  import SharedShockerControlModule from '$lib/components/ControlModules/SharedShockerControlModule.svelte';
   import * as Avatar from '$lib/components/ui/avatar';
   import { onlineHubs } from '$lib/state/hubs-state.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { ControlType } from '$lib/signalr/models/ControlType';
+  import { getConnection } from '$lib/signalr/user.svelte';
+  import { serializeControlMessages } from '$lib/signalr/serializers/Control';
   import {
     ensureLiveConnection,
     getLiveConnection,
@@ -21,6 +24,11 @@
   onMount(refreshSharedHubs);
 
   const hasSharedShockers = $derived(sharedHubsState.value.length > 0);
+
+  function sharedCtrl(id: string, type: ControlType, intensity: number, duration: number) {
+    const conn = getConnection();
+    if (conn) serializeControlMessages(conn, [{ id, type, intensity, duration }]);
+  }
 
   // Eagerly create LiveDeviceConnection and LiveShockerState entries
   $effect(() => {
@@ -125,7 +133,14 @@
                         {#if isShockerLiveActive && liveState && liveConn}
                           <LiveControlModule {shocker} {liveState} connection={liveConn} />
                         {:else}
-                          <SharedShockerControlModule {shocker} />
+                          <ClassicControlModule
+                            id={shocker.id}
+                            name={shocker.name}
+                            isPaused={shocker.isPaused}
+                            limits={shocker.limits}
+                            permissions={shocker.permissions}
+                            ctrl={sharedCtrl}
+                          />
                         {/if}
                       </div>
                     {/each}
