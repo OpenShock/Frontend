@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Pagination as PaginationPrimitive } from "bits-ui";
-	import ChevronLeftIcon from "@lucide/svelte/icons/chevron-left";
+	import ChevronLeftIcon from '@lucide/svelte/icons/chevron-left';
 	import { cn } from "$lib/utils/shadcn.js";
 	import { buttonVariants } from "../button/index.js";
 
@@ -13,7 +13,7 @@
 </script>
 
 {#snippet Fallback()}
-	<ChevronLeftIcon class="size-4" />
+	<ChevronLeftIcon class={cn("size-4", className)} />
 	<span>Previous</span>
 {/snippet}
 
