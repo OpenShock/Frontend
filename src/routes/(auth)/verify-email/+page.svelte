@@ -2,6 +2,9 @@
   import { browser } from '$app/environment';
   import { page } from '$app/state';
   import * as Card from '$lib/components/ui/card/index.js';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+
+  registerBreadcrumbs(() => [{ label: 'Verify Email' }]);
 
   let secret = browser && page.url.searchParams.get('token');
 </script>

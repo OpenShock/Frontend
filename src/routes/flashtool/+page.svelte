@@ -11,6 +11,7 @@
   import { Checkbox } from '$lib/components/ui/checkbox';
   import { Label } from '$lib/components/ui/label';
   import { Progress } from '$lib/components/ui/progress';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { useSerial } from '$lib/utils/serial-context.svelte';
   import { getBrowserName, isSerialSupported } from '$lib/utils/compatibility';
   import { parseAnsi, parseLogLine } from './ansi';
@@ -22,6 +23,8 @@
   import { MAX_LINES } from './constants';
   import SerialTerminal from './SerialTerminal.svelte';
   import type { TerminalLine } from './types';
+
+  registerBreadcrumbs(() => [{ label: 'Flash Tool', href: '/flashtool' }]);
 
   const serial = useSerial();
 

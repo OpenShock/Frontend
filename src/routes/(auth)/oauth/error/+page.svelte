@@ -3,6 +3,9 @@
   import { page } from '$app/state';
   import * as Card from '$lib/components/ui/card/index.js';
   import { FieldDescription } from '$lib/components/ui/field/index.js';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+
+  registerBreadcrumbs(() => [{ label: 'Authentication Error' }]);
 
   let error = $derived(page.url.searchParams.get('error'));
 </script>
