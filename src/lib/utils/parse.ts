@@ -2,7 +2,7 @@
  * Coerces an env-var / URL-param style value into a boolean.
  *
  * Truthy: `true`, the number `1`, or a case-insensitive `'1'`, `'true'`, `'yes'`, `'y'`, or `'on'`.
- * 
+ *
  * Everything else - including `null`, `undefined`, other numbers, and unrecognized strings - is falsy.
  *
  * @param value - The value to coerce (typically an environment variable or query parameter)

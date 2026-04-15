@@ -1,7 +1,7 @@
 import { env } from '$env/dynamic/public';
 import { isTruthy } from '$lib/utils/parse';
 import { publicRoutes } from '$lib/utils/public-routes';
-import { getSiteURL, prefixBase } from '$lib/utils/url';
+import { prefixBase } from '$lib/utils/url';
 import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
