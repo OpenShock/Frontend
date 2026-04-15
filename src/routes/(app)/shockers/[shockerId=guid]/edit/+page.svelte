@@ -132,13 +132,14 @@
             <FieldLabel>Model</FieldLabel>
             <Select.Root type="single" name="model" bind:value={model}>
               <Select.Trigger>
-                {model ?? 'Select model'}
+                {Object.entries(ShockerModelType).find(([, v]) => v === model)?.[0] ??
+                  'Select model'}
               </Select.Trigger>
               <Select.Content>
                 <Select.Group>
-                  {#each Object.values(ShockerModelType) as option (option)}
-                    <Select.Item value={option} label={option}>
-                      {option}
+                  {#each Object.entries(ShockerModelType) as [name, value] (value)}
+                    <Select.Item {value} label={name}>
+                      {name}
                     </Select.Item>
                   {/each}
                 </Select.Group>
