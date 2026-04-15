@@ -1,10 +1,7 @@
 import { env } from '$env/dynamic/public';
+import { isTruthy } from '$lib/utils/parse';
 import { getSiteURL } from '$lib/utils/url';
 import type { RequestHandler } from './$types';
-
-export const prerender = false;
-
-const isTruthy = (v?: string) => v === '1' || v?.toLowerCase() === 'true';
 
 export const GET: RequestHandler = ({ setHeaders }) => {
   setHeaders({
@@ -16,7 +13,7 @@ export const GET: RequestHandler = ({ setHeaders }) => {
     return new Response('User-agent: *\nDisallow: /\n');
   }
 
-  const lines = ['User-agent: *', 'Allow: /'];
+  const lines = ['User-agent: *', 'Allow: /\n'];
   if (!isTruthy(env.PUBLIC_DISABLE_SITEMAP)) {
     lines.push(`Sitemap: ${getSiteURL('/sitemap.xml').href}`);
   }

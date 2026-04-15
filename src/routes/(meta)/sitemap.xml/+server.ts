@@ -1,12 +1,9 @@
 import { env } from '$env/dynamic/public';
-import { error } from '@sveltejs/kit';
+import { isTruthy } from '$lib/utils/parse';
 import { publicRoutes } from '$lib/utils/public-routes';
-import { getSiteURL } from '$lib/utils/url';
+import { getSiteURL, prefixBase } from '$lib/utils/url';
+import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-
-export const prerender = false;
-
-const isTruthy = (v?: string) => v === '1' || v?.toLowerCase() === 'true';
 
 export const GET: RequestHandler = ({ setHeaders }) => {
   if (isTruthy(env.PUBLIC_DISABLE_SITEMAP)) error(404);
@@ -18,7 +15,7 @@ export const GET: RequestHandler = ({ setHeaders }) => {
 
   const lastmod = new Date().toISOString().slice(0, 10);
   const urls = publicRoutes
-    .map((path) => `  <url><loc>${getSiteURL(path).href}</loc><lastmod>${lastmod}</lastmod></url>`)
+    .map((path) => `  <url><loc>${prefixBase(path)}</loc><lastmod>${lastmod}</lastmod></url>`)
     .join('\n');
 
   return new Response(

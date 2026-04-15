@@ -1,72 +1,57 @@
 import type { Pathname } from '$app/types';
 
-// `import.meta.glob` is resolved by Vite at build time, so this becomes a static
-// list baked into the bundle — no filesystem access at runtime.
-const pageFiles = import.meta.glob('/src/routes/**/+page.svelte');
+export type RouteParam = { name: string; type: string };
 
-const APP_GROUP_PREFIX = '/src/routes/(app)/';
+export type RouteInfo = {
+  categories: readonly string[];
+  parameters: readonly RouteParam[];
+  path: Pathname;
+  original: string;
+};
 
-function stripGroups(path: string): string {
-  return path.replace(/\/\([^)]+\)/g, '');
-}
+function fileToPath(file: string): RouteInfo {
+  const original = file.replace(/^\/src\/routes/, '').replace(/\/\+page\.svelte$/, '') || '/';
 
-function fileToRoutePath(file: string): string {
-  return stripGroups(file.replace(/^\/src\/routes/, '').replace(/\/\+page\.svelte$/, ''));
-}
+  const categories: string[] = [];
+  const parameters: RouteParam[] = [];
+  const segments: string[] = [];
 
-function isParameterized(path: string): boolean {
-  return /\[[^\]]+\]/.test(path);
-}
+  for (const part of original.split('/')) {
+    if (!part) continue;
 
-const allRoutePaths = Object.keys(pageFiles).map(fileToRoutePath);
-const nonAppRoutePaths = Object.keys(pageFiles)
-  .filter((f) => !f.startsWith(APP_GROUP_PREFIX))
-  .map(fileToRoutePath);
+    // (group)
+    if (part[0] === '(' && part.at(-1) === ')') {
+      categories.push(part.slice(1, -1));
+      continue;
+    }
 
-/**
- * Statically-renderable, unauthenticated route paths discovered at build time.
- * Excludes `(app)/*` (auth-gated) and any route with `[param]` segments.
- */
-export const publicRoutes: readonly Pathname[] = nonAppRoutePaths
-  .filter((p) => !isParameterized(p))
-  .map((p) => (p === '' ? '/' : p) as Pathname)
-  .sort();
+    // [param] or [param=type]
+    if (part[0] === '[' && part.at(-1) === ']') {
+      const [name, type = 'unknown'] = part.slice(1, -1).split('=');
+      parameters.push({ name, type });
+      segments.push(`[${name}]`);
+      continue;
+    }
 
-/**
- * For an authenticated route path, returns the shortest prefix (`/segment`,
- * `/segment/sub`, …) that does not overlap with any public route. Returns
- * `null` when no non-overlapping prefix exists (the route shares its path
- * space with public content — e.g. an `(app)` page that mirrors a public one).
- */
-function shortestUniquePrefix(authPath: string): string | null {
-  const parts = authPath.split('/').filter(Boolean);
-  for (let depth = 1; depth <= parts.length; depth++) {
-    const prefix = '/' + parts.slice(0, depth).join('/');
-    const overlaps = nonAppRoutePaths.some(
-      (p) => p === prefix || p.startsWith(prefix + '/') || prefix.startsWith(p + '/')
-    );
-    if (!overlaps) return prefix;
+    segments.push(part);
   }
-  return null;
+
+  const path = (segments.length ? '/' + segments.join('/') : '/') as Pathname;
+  return { categories, parameters, path, original };
 }
 
-/**
- * Top-level path roots under `(app)/` that require authentication, collapsed
- * to the shortest prefix that does not overlap with any public route. Used to
- * communicate "do not index" coverage in `llms.txt`.
- */
-export const authenticatedRoots: readonly string[] = [
-  ...new Set(
-    Object.keys(pageFiles)
-      .filter((f) => f.startsWith(APP_GROUP_PREFIX))
-      .map(fileToRoutePath)
-      .map(shortestUniquePrefix)
-      .filter((p): p is string => p !== null)
-  ),
-].sort();
+export const paths: readonly RouteInfo[] = Object.keys(
+  import.meta.glob('/src/routes/**/+page.svelte')
+).map(fileToPath);
 
-// Tiny invariant check at module load — if app routes exist, we should
-// have produced at least one root, otherwise the heuristic regressed.
-if (allRoutePaths.some((p) => p.startsWith('/')) && authenticatedRoots.length === 0) {
-  // intentionally not throwing in production — just silence the dead branch
-}
+const byPath = (a: RouteInfo, b: RouteInfo) => a.path.localeCompare(b.path);
+
+export const publicRoutes: readonly Pathname[] = paths
+  .filter((p) => !p.categories.includes('app') && p.parameters.length === 0)
+  .toSorted(byPath)
+  .map((p) => p.path);
+
+export const authenticatedRoutes: readonly Pathname[] = paths
+  .filter((p) => p.categories.includes('app'))
+  .toSorted(byPath)
+  .map((p) => p.path);

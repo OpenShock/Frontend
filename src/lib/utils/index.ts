@@ -2,6 +2,7 @@ export * from './debounce';
 export * from './encoding';
 export * from './entropy';
 export * from './math';
+export * from './parse';
 export * from './rand';
 export * from './shadcn';
 export * from './shockerPause';
