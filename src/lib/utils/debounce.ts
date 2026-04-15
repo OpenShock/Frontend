@@ -1,3 +1,5 @@
+import { onDestroy } from 'svelte';
+
 export interface Debounced<Args extends unknown[]> {
   (...args: Args): void;
   cancel(): void;
@@ -38,4 +40,14 @@ export function debounce<Args extends unknown[]>(
   };
 
   return debounced;
+}
+
+/** Component-aware `debounce` that cancels any pending invocation on unmount. */
+export function useDebounce<Args extends unknown[]>(
+  fn: (...args: Args) => void,
+  delay: number
+): Debounced<Args> {
+  const d = debounce(fn, delay);
+  onDestroy(d.cancel);
+  return d;
 }

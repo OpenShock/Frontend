@@ -85,7 +85,7 @@
   import { CardHeader, CardTitle } from '$lib/components/ui/card';
   import { Input } from '$lib/components/ui/input';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { debounce } from '$lib/utils/debounce';
+  import { useDebounce } from '$lib/utils/debounce';
 
   let isFetching = $state(false);
 
@@ -117,7 +117,7 @@
     page = Math.floor(response.offset / response.limit) + 1;
   }
 
-  const applyFilterQuery = debounce((query: string | undefined) => (filterQuery = query), 800);
+  const applyFilterQuery = useDebounce((query: string | undefined) => (filterQuery = query), 800);
   $effect(() => {
     const queries: string[] = [];
 

@@ -1,4 +1,5 @@
 import { browser } from '$app/environment';
+import { onDestroy } from 'svelte';
 
 export type StorageType = 'local' | 'session';
 
@@ -39,6 +40,13 @@ export class PersistedState<T> {
     }
   }
 
+  /** Detach the cross-tab `storage` listener. No-op if none was attached. */
+  dispose() {
+    if (this.#storage === localStorage) {
+      if (browser) window.removeEventListener('storage', this.#onStorage);
+    }
+  }
+
   #onStorage = (event: StorageEvent) => {
     if (event.storageArea !== this.#storage) return;
     if (event.key !== this.#key) return;
@@ -74,4 +82,15 @@ export class PersistedState<T> {
     if (raw === null) return this.defaultValue;
     return JSON.parse(raw) as T;
   }
+}
+
+/** Component-aware `PersistedState` that detaches the storage listener on unmount. */
+export function usePersistedState<T>(
+  key: string,
+  defaultValue: T,
+  options?: LocalStorageStateOptions
+): PersistedState<T> {
+  const state = new PersistedState(key, defaultValue, options);
+  onDestroy(() => state.dispose());
+  return state;
 }

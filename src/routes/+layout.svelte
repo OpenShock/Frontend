@@ -11,7 +11,7 @@
   import Sidebar from './Sidebar.svelte';
   import '../app.css';
   import { IsMobile } from '$lib/hooks/is-mobile.svelte';
-  import { PersistedState } from '$lib/state/classes/persisted-state.svelte';
+  import { usePersistedState } from '$lib/state/classes/persisted-state.svelte';
   import DialogManager from '$lib/components/dialog-manager/dialog-manager.svelte';
 
   interface Props {
@@ -23,7 +23,7 @@
   let meta = $derived(buildMetaData(page.url));
 
   const mobile = new IsMobile();
-  const sidebarOpen = new PersistedState('sidebarOpen', false);
+  const sidebarOpen = usePersistedState('sidebarOpen', false);
   const isOpen = $derived(mobile.current ? false : sidebarOpen.value);
 </script>
 

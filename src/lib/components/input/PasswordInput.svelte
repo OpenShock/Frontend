@@ -7,7 +7,7 @@
   import { validatePassword } from '$lib/inputvalidation/passwordValidator';
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import type { ValidationResult } from '$lib/types/ValidationResult';
-  import { debounce } from '$lib/utils/debounce';
+  import { useDebounce } from '$lib/utils/debounce';
   import type { Snippet } from 'svelte';
   import type { FullAutoFill } from 'svelte/elements';
   import PasswordStrengthMeter from './impl/PasswordStrengthMeter.svelte';
@@ -42,7 +42,7 @@
 
   let validationResult = $state<ValidationResult | null>(null);
 
-  const requestHIBP = debounce(async (str: string) => {
+  const requestHIBP = useDebounce(async (str: string) => {
     try {
       const pwnedCount = await checkPwnedCount(str);
       if (pwnedCount > 0) {

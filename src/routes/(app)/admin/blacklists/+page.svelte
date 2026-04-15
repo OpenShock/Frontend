@@ -15,7 +15,7 @@
   import { Separator } from '$lib/components/ui/separator';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import type { ValidationResult } from '$lib/types/ValidationResult';
-  import { debounce } from '$lib/utils/debounce';
+  import { useDebounce } from '$lib/utils/debounce';
 
   registerBreadcrumbs(() => [{ label: 'Blacklists' }]);
 
@@ -139,7 +139,7 @@
     }
   }
 
-  const debouncedLoadUsernames = debounce(loadUsernames, 400);
+  const debouncedLoadUsernames = useDebounce(loadUsernames, 400);
   $effect(() => {
     if (usernameEntry.length == 0) {
       debouncedLoadUsernames.cancel();
@@ -150,7 +150,7 @@
     debouncedLoadUsernames();
   });
 
-  const debouncedLoadEmails = debounce(loadEmails, 400);
+  const debouncedLoadEmails = useDebounce(loadEmails, 400);
   $effect(() => {
     if (emailEntry.length == 0) {
       debouncedLoadEmails.cancel();

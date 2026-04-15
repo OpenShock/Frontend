@@ -11,7 +11,7 @@
   } from '$lib/inputvalidation/usernameValidator';
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import type { ValidationResult } from '$lib/types/ValidationResult';
-  import { debounce } from '$lib/utils/debounce';
+  import { useDebounce } from '$lib/utils/debounce';
   import type { Snippet } from 'svelte';
   import type { FullAutoFill } from 'svelte/elements';
 
@@ -40,7 +40,7 @@
   let checkResponses = $state<Map<string, ValidationResult>>(new Map());
   let validationResult = $state<ValidationResult | null>(null);
 
-  const requestAvailability = debounce(async (username: string) => {
+  const requestAvailability = useDebounce(async (username: string) => {
     try {
       const response = await accountV2Api.accountCheckUsername({ username });
       validationResult = mapUsernameCheckResponse(response);
