@@ -13,12 +13,29 @@ import devtoolsJson from 'vite-plugin-devtools-json';
 import mkcert from 'vite-plugin-mkcert';
 
 function jsBannerPlugin(banner: string): Plugin {
+  // Matches preserved/legal comment markers that OXC's minifier strips when
+  // `output.comments.legal === false`: `/*!` starts, plus `@license`,
+  // `@preserve`, and `@cc_on` JSDoc annotations.
+  const LEGAL_COMMENT_RE = /\/\*!|@(?:license|preserve|cc_on)\b/;
+  const modulesWithLegal = new Set<string>();
+
   return {
     name: 'js-banner',
     enforce: 'post',
+    buildStart() {
+      modulesWithLegal.clear();
+    },
+    transform(code, id) {
+      if (LEGAL_COMMENT_RE.test(code)) {
+        modulesWithLegal.add(id);
+      }
+      return null;
+    },
     generateBundle(_, bundle) {
       for (const chunk of Object.values(bundle)) {
-        if (chunk.type === 'chunk') {
+        if (chunk.type !== 'chunk') continue;
+        const hasLegal = Object.keys(chunk.modules).some((id) => modulesWithLegal.has(id));
+        if (hasLegal) {
           chunk.code = banner + '\n' + chunk.code;
         }
       }
