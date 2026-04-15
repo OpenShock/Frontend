@@ -20,12 +20,6 @@
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
 
-  const modelOptions = [
-    { value: ShockerModelType.CaiXianlin, label: 'CaiXianlin' },
-    { value: ShockerModelType.PetTrainer, label: 'PetTrainer' },
-    { value: ShockerModelType.Petrainer998Dr, label: 'Petrainer998DR' },
-  ];
-
   let shocker = $state<ShockerWithDevice | null>(null);
   let loadError = $state(false);
   let name = $state('');
@@ -138,13 +132,13 @@
             <FieldLabel>Model</FieldLabel>
             <Select.Root type="single" name="model" bind:value={model}>
               <Select.Trigger>
-                {modelOptions.find((o) => o.value === model)?.label ?? 'Select model'}
+                {model ?? 'Select model'}
               </Select.Trigger>
               <Select.Content>
                 <Select.Group>
-                  {#each modelOptions as option (option.value)}
-                    <Select.Item value={option.value} label={option.label}>
-                      {option.label}
+                  {#each Object.values(ShockerModelType) as option (option)}
+                    <Select.Item value={option} label={option}>
+                      {option}
                     </Select.Item>
                   {/each}
                 </Select.Group>
