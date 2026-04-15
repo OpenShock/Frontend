@@ -85,7 +85,7 @@
   import { CardHeader, CardTitle } from '$lib/components/ui/card';
   import { Input } from '$lib/components/ui/input';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import type { TimeoutHandle } from '$lib/types/WAPI';
+  import { debounce } from '$lib/utils/debounce';
 
   let isFetching = $state(false);
 
@@ -117,10 +117,8 @@
     page = Math.floor(response.offset / response.limit) + 1;
   }
 
-  let searchDebounce: TimeoutHandle | undefined;
+  const applyFilterQuery = debounce((query: string | undefined) => (filterQuery = query), 800);
   $effect(() => {
-    clearTimeout(searchDebounce);
-
     const queries: string[] = [];
 
     const nameQ = createSearchQuery('name', nameSearch);
@@ -132,7 +130,7 @@
     const query = queries.length > 0 ? queries.join(' and ') : undefined;
     if (query === filterQuery) return;
 
-    searchDebounce = setTimeout(() => (filterQuery = query), 800);
+    applyFilterQuery(query);
   });
 
   $effect(() => {

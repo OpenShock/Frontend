@@ -1,3 +1,4 @@
+export * from './debounce';
 export * from './encoding';
 export * from './entropy';
 export * from './math';

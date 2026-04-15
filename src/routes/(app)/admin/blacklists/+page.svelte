@@ -15,7 +15,7 @@
   import { Separator } from '$lib/components/ui/separator';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import type { ValidationResult } from '$lib/types/ValidationResult';
-  import type { TimeoutHandle } from '$lib/types/WAPI';
+  import { debounce } from '$lib/utils/debounce';
 
   registerBreadcrumbs(() => [{ label: 'Blacklists' }]);
 
@@ -139,28 +139,28 @@
     }
   }
 
-  let usernameDebounce: TimeoutHandle | undefined;
+  const debouncedLoadUsernames = debounce(loadUsernames, 400);
   $effect(() => {
-    clearTimeout(usernameDebounce);
     if (usernameEntry.length == 0) {
+      debouncedLoadUsernames.cancel();
       loadUsernames();
       return;
     }
 
-    usernameDebounce = setTimeout(() => loadUsernames(), 400);
+    debouncedLoadUsernames();
   });
 
-  let emailDebounce: TimeoutHandle | undefined;
+  const debouncedLoadEmails = debounce(loadEmails, 400);
   $effect(() => {
-    clearTimeout(emailDebounce);
     if (emailEntry.length == 0) {
+      debouncedLoadEmails.cancel();
       loadEmails();
       return;
     }
 
     if (!emailEntryValid) return;
 
-    emailDebounce = setTimeout(() => loadEmails(), 400);
+    debouncedLoadEmails();
   });
 </script>
 
