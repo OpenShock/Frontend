@@ -39,12 +39,6 @@
   // svelte-ignore state_referenced_locally -- intentionally captures initial value as own reactive copy
   let data: AddShockerData = $state(initialData);
 
-  const modelOptions = [
-    { value: ShockerModelType.CaiXianlin, label: 'CaiXianlin' },
-    { value: ShockerModelType.PetTrainer, label: 'PetTrainer' },
-    { value: ShockerModelType.Petrainer998Dr, label: 'Petrainer998DR' },
-  ];
-
   let canSubmit = $derived(data.name.trim().length > 0 && data.rfId > 0 && data.device.length > 0);
 
   function submit() {
@@ -74,12 +68,12 @@
     <FieldLabel>Model</FieldLabel>
     <Select.Root type="single" name="model" bind:value={data.model}>
       <Select.Trigger>
-        {modelOptions.find((o) => o.value === data.model)?.label ?? 'Select model'}
+        {data.model ?? 'Select model'}
       </Select.Trigger>
       <Select.Content>
         <Select.Group>
-          {#each modelOptions as option (option.value)}
-            <Select.Item value={option.value} label={option.label}>{option.label}</Select.Item>
+          {#each Object.values(ShockerModelType) as option (option)}
+            <Select.Item value={option} label={option}>{option}</Select.Item>
           {/each}
         </Select.Group>
       </Select.Content>
