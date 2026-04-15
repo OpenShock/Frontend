@@ -1,5 +1,6 @@
 import type { AdminOnlineDeviceResponse } from '$lib/api/internal/v1';
 import {
+  CreateActionsColumnDef,
   CreateColumnDef,
   CreateSortableColumnDef,
   FirmwareVersionRenderer,
@@ -9,7 +10,6 @@ import {
   TimeSinceDurationRenderer,
   UserAgentRenderer,
 } from '$lib/components/Table/ColumnUtils';
-import { renderComponent } from '$lib/components/ui/data-table';
 import type { ColumnDef } from '@tanstack/table-core';
 import { SemVer } from 'semver';
 import DataTableActions from './data-table-actions.svelte';
@@ -44,11 +44,5 @@ export const columns: ColumnDef<OnlineHub>[] = [
   CreateSortableColumnDef('bootedAt', 'Uptime', TimeSinceDurationRenderer),
   CreateSortableColumnDef('latencyMs', 'Latency', NumberRenderer),
   CreateSortableColumnDef('rssi', 'RSSI', NumberRenderer),
-  {
-    id: 'actions',
-    cell: ({ row }) => {
-      // You can pass whatever you need from `row.original` to the component
-      return renderComponent(DataTableActions, { hub: row.original });
-    },
-  },
+  CreateActionsColumnDef(DataTableActions, (hub) => ({ hub })),
 ];

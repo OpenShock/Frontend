@@ -5,6 +5,7 @@
   import type { LoginSessionResponse } from '$lib/api/internal/v1';
   import Container from '$lib/components/Container.svelte';
   import {
+    CreateActionsColumnDef,
     CreateColumnDef,
     CreateSortableColumnDef,
     RenderCell,
@@ -15,7 +16,6 @@
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card';
-  import { renderComponent } from '$lib/components/ui/data-table';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
@@ -43,13 +43,7 @@
     CreateSortableColumnDef('created', 'Created', TimeSinceRelativeRenderer),
     CreateSortableColumnDef('expires', 'Expires', TimeSinceRelativeRenderer),
     CreateSortableColumnDef('lastUsed', 'Last seen', TimeSinceRelativeOrNeverRenderer),
-    {
-      id: 'actions',
-      cell: ({ row }) => {
-        // You can pass whatever you need from `row.original` to the component
-        return renderComponent(DataTableActions, { session: row.original, onRevoked });
-      },
-    },
+    CreateActionsColumnDef(DataTableActions, (session) => ({ session, onRevoked })),
   ];
 
   async function fetchSessions() {

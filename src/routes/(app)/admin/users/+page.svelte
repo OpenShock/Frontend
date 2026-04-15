@@ -3,6 +3,7 @@
   import type { AdminUsersView } from '$lib/api/internal/v1';
   import { PasswordHashingAlgorithm, RoleType } from '$lib/api/internal/v1';
   import {
+    CreateActionsColumnDef,
     CreateSortableColumnDef,
     LocaleDateTimeRenderer,
     RenderBlueCell,
@@ -11,7 +12,6 @@
     RenderOrangeCell,
     RenderRedCell,
   } from '$lib/components/Table/ColumnUtils';
-  import { renderComponent } from '$lib/components/ui/data-table';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import DataTableActions from './data-table-actions.svelte';
 
@@ -39,13 +39,7 @@
     CreateSortableColumnDef('deactivatedByUserId', 'Deactivated by', (a) =>
       a ? RenderCell(a) : RenderRedCell('None')
     ),
-    {
-      id: 'actions',
-      cell: ({ row }) => {
-        // You can pass whatever you need from `row.original` to the component
-        return renderComponent(DataTableActions, { user: row.original });
-      },
-    },
+    CreateActionsColumnDef(DataTableActions, (user) => ({ user })),
   ];
 
   function escapeQuotes(str: string) {
