@@ -1,7 +1,6 @@
 <script lang="ts">
-  import Ellipsis from '@lucide/svelte/icons/ellipsis';
   import type { LoginSessionResponse } from '$lib/api/internal/v1';
-  import { Button } from '$lib/components/ui/button';
+  import TableActionMenu from '$lib/components/TableActionMenu.svelte';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { copyToClipboard } from '$lib/utils/clipboard.svelte';
   import SessionRevokeDialog from './dialog-session-revoke.svelte';
@@ -20,19 +19,9 @@
 
 <SessionRevokeDialog bind:open={revokeDialogOpen} {session} {onRevoked} />
 
-<DropdownMenu.Root>
-  <DropdownMenu.Trigger>
-    {#snippet child({ props })}
-      <Button {...props} variant="ghost" size="icon" class="relative size-8 p-0">
-        <span class="sr-only">Open menu</span>
-        <Ellipsis class="size-4" />
-      </Button>
-    {/snippet}
-  </DropdownMenu.Trigger>
-  <DropdownMenu.Content>
-    <DropdownMenu.Item onclick={copyId}>Copy ID</DropdownMenu.Item>
-    <DropdownMenu.Item onclick={() => (revokeDialogOpen = true)} class="text-red-500">
-      Revoke
-    </DropdownMenu.Item>
-  </DropdownMenu.Content>
-</DropdownMenu.Root>
+<TableActionMenu>
+  <DropdownMenu.Item onclick={copyId}>Copy ID</DropdownMenu.Item>
+  <DropdownMenu.Item onclick={() => (revokeDialogOpen = true)} class="text-red-500">
+    Revoke
+  </DropdownMenu.Item>
+</TableActionMenu>

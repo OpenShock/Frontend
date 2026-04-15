@@ -1,8 +1,7 @@
 <script lang="ts">
   import { publicShockerSharesApi } from '$lib/api';
   import type { OwnPublicShareResponse } from '$lib/api/internal/v1';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import * as Dialog from '$lib/components/ui/dialog';
+  import ConfirmDeleteDialog from '$lib/components/ConfirmDeleteDialog.svelte';
   import { toast } from 'svelte-sonner';
 
   interface Props {
@@ -26,14 +25,8 @@
   }
 </script>
 
-<Dialog.Root bind:open={() => open, (o) => (open = o)}>
-  <Dialog.Content>
-    <Dialog.Header>
-      <Dialog.Title>Delete public share</Dialog.Title>
-      <Dialog.Description>
-        Are you sure you want to delete public share <strong>{publicShare.name}</strong>?
-      </Dialog.Description>
-    </Dialog.Header>
-    <Button variant="destructive" onclick={deleteShareLink}>Delete</Button>
-  </Dialog.Content>
-</Dialog.Root>
+<ConfirmDeleteDialog bind:open title="Delete public share" onConfirm={deleteShareLink}>
+  {#snippet description()}
+    Are you sure you want to delete public share <strong>{publicShare.name}</strong>?
+  {/snippet}
+</ConfirmDeleteDialog>

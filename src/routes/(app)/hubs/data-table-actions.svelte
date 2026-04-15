@@ -1,11 +1,11 @@
 <script lang="ts">
-  import Ellipsis from '@lucide/svelte/icons/ellipsis';
   import { goto } from '$app/navigation';
   import { hubManagementV1Api } from '$lib/api';
   import CopyInput from '$lib/components/CopyInput.svelte';
   import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
   import type { DialogRenderProps } from '$lib/components/dialog-manager/types';
   import TextInput from '$lib/components/input/TextInput.svelte';
+  import TableActionMenu from '$lib/components/TableActionMenu.svelte';
   import { Badge } from '$lib/components/ui/badge';
   import { Button } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
@@ -190,40 +190,28 @@
   {/if}
 {/snippet}
 
-<DropdownMenu.Root>
-  <DropdownMenu.Trigger>
-    {#snippet child({ props })}
-      <Button {...props} variant="ghost" size="icon" class="relative size-8 p-0">
-        <span class="sr-only">Open menu</span>
-        <Ellipsis class="size-4" />
-      </Button>
-    {/snippet}
-  </DropdownMenu.Trigger>
-  <DropdownMenu.Content>
-    <DropdownMenu.Item onclick={copyId}>Copy ID</DropdownMenu.Item>
-    <DropdownMenu.Item onclick={() => goto(resolve(`/hubs/${hub.id}/update`))}
-      >Update</DropdownMenu.Item
-    >
-    <DropdownMenu.Item onclick={() => serializeRebootMessage(getConnection(), hub.id)}>
-      Reboot
-    </DropdownMenu.Item>
-    <DropdownMenu.Item
-      class="text-red-500"
-      onclick={() => serializeEmergencyStopMessage(getConnection(), hub.id)}
-    >
-      Emergency Stop
-    </DropdownMenu.Item>
-    <DropdownMenu.Item onclick={() => serializeCaptivePortalMessage(getConnection(), hub.id, true)}>
-      Enable Wi-Fi hotspot
-    </DropdownMenu.Item>
-    <DropdownMenu.Item
-      onclick={() => serializeCaptivePortalMessage(getConnection(), hub.id, false)}
-    >
-      Disable Wi-Fi hotspot
-    </DropdownMenu.Item>
-    <DropdownMenu.Item onclick={openPairDialog}>Pair</DropdownMenu.Item>
-    <DropdownMenu.Item onclick={openRegenerateTokenDialog}>Regenerate Token</DropdownMenu.Item>
-    <DropdownMenu.Item onclick={openEditDialog}>Edit</DropdownMenu.Item>
-    <DropdownMenu.Item onclick={openDeleteDialog}>Delete</DropdownMenu.Item>
-  </DropdownMenu.Content>
-</DropdownMenu.Root>
+<TableActionMenu>
+  <DropdownMenu.Item onclick={copyId}>Copy ID</DropdownMenu.Item>
+  <DropdownMenu.Item onclick={() => goto(resolve(`/hubs/${hub.id}/update`))}>
+    Update
+  </DropdownMenu.Item>
+  <DropdownMenu.Item onclick={() => serializeRebootMessage(getConnection(), hub.id)}>
+    Reboot
+  </DropdownMenu.Item>
+  <DropdownMenu.Item
+    class="text-red-500"
+    onclick={() => serializeEmergencyStopMessage(getConnection(), hub.id)}
+  >
+    Emergency Stop
+  </DropdownMenu.Item>
+  <DropdownMenu.Item onclick={() => serializeCaptivePortalMessage(getConnection(), hub.id, true)}>
+    Enable Wi-Fi hotspot
+  </DropdownMenu.Item>
+  <DropdownMenu.Item onclick={() => serializeCaptivePortalMessage(getConnection(), hub.id, false)}>
+    Disable Wi-Fi hotspot
+  </DropdownMenu.Item>
+  <DropdownMenu.Item onclick={openPairDialog}>Pair</DropdownMenu.Item>
+  <DropdownMenu.Item onclick={openRegenerateTokenDialog}>Regenerate Token</DropdownMenu.Item>
+  <DropdownMenu.Item onclick={openEditDialog}>Edit</DropdownMenu.Item>
+  <DropdownMenu.Item onclick={openDeleteDialog}>Delete</DropdownMenu.Item>
+</TableActionMenu>

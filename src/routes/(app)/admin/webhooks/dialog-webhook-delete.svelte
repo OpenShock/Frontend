@@ -1,8 +1,7 @@
 <script lang="ts">
   import { adminApi } from '$lib/api';
   import type { WebhookDto } from '$lib/api/internal/v1';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import * as Dialog from '$lib/components/ui/dialog';
+  import ConfirmDeleteDialog from '$lib/components/ConfirmDeleteDialog.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { toast } from 'svelte-sonner';
 
@@ -18,22 +17,15 @@
       .adminRemoveWebhook(webhook.id)
       .then(() => {
         toast.success('Removed webhook');
-        open = false;
       })
       .catch(handleApiError)
       .finally(() => (open = false));
   }
 </script>
 
-<Dialog.Root bind:open={() => open, (o) => (open = o)}>
-  <Dialog.Content>
-    <Dialog.Header>
-      <Dialog.Title>Delete webhook</Dialog.Title>
-      <Dialog.Description>
-        Are you sure you want to delete <strong>{webhook.name}</strong>?<br />
-        <strong>This action is irreversible.</strong>
-      </Dialog.Description>
-    </Dialog.Header>
-    <Button variant="destructive" onclick={onDeleteClicked}>Delete</Button>
-  </Dialog.Content>
-</Dialog.Root>
+<ConfirmDeleteDialog bind:open title="Delete webhook" onConfirm={onDeleteClicked}>
+  {#snippet description()}
+    Are you sure you want to delete <strong>{webhook.name}</strong>?<br />
+    <strong>This action is irreversible.</strong>
+  {/snippet}
+</ConfirmDeleteDialog>
