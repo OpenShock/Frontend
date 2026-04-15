@@ -1,5 +1,5 @@
 import { isString } from '$lib/typeguards';
-import { LocalStorageState } from './classes/local-storage-state.svelte';
+import { PersistedState } from './classes/persisted-state.svelte';
 
 export enum ColorScheme {
   Dark = 'dark',
@@ -50,21 +50,16 @@ function setDarkMode(preference: ColorScheme) {
   document.documentElement.classList.toggle('dark', resolveDarkMode(preference));
 }
 
-class ColorSchemeState extends LocalStorageState<ColorScheme> {
+class ColorSchemeState extends PersistedState<ColorScheme> {
   constructor() {
     super('theme', ColorScheme.System);
   }
 
-  override set value(v: ColorScheme) {
-    super.value = v;
-    setDarkMode(v);
+  protected override onChange(v: ColorScheme) {
+    setDarkMode(isColorSchemeEnum(v) ? v : this.defaultValue);
   }
 
-  override get value() {
-    return super.value;
-  }
-
-  protected override deserialize(raw: string): ColorScheme {
+  protected override deserialize(raw: string | null): ColorScheme {
     return isColorSchemeEnum(raw) ? raw : this.defaultValue;
   }
 
@@ -88,10 +83,4 @@ export function initializeColorScheme() {
   window
     .matchMedia('(prefers-color-scheme: dark)')
     .addEventListener('change', handleMediaQueryChange);
-
-  window.addEventListener('storage', (event) => {
-    if (event.key !== 'theme') return;
-
-    setDarkMode(isColorSchemeEnum(event.newValue) ? event.newValue : ColorScheme.System);
-  });
 }
