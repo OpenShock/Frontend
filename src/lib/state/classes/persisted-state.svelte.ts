@@ -42,8 +42,8 @@ export class PersistedState<T> {
 
   /** Detach the cross-tab `storage` listener. No-op if none was attached. */
   dispose() {
-    if (this.#storage === localStorage) {
-      if (browser) window.removeEventListener('storage', this.#onStorage);
+    if (browser && this.#storage === localStorage) {
+      window.removeEventListener('storage', this.#onStorage);
     }
   }
 
