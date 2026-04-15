@@ -3,7 +3,7 @@
   import type { LoginSessionResponse } from '$lib/api/internal/v1';
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-  import { toast } from 'svelte-sonner';
+  import { copyToClipboard } from '$lib/utils/clipboard.svelte';
   import SessionRevokeDialog from './dialog-session-revoke.svelte';
 
   interface Props {
@@ -15,10 +15,7 @@
 
   let revokeDialogOpen = $state<boolean>(false);
 
-  function copyId() {
-    navigator.clipboard.writeText(session.id);
-    toast.success('ID copied to clipboard');
-  }
+  const copyId = () => copyToClipboard(session.id, 'ID copied to clipboard');
 </script>
 
 <SessionRevokeDialog bind:open={revokeDialogOpen} {session} {onRevoked} />

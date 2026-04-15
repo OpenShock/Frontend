@@ -12,6 +12,7 @@
   import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
   import { refreshOutgoingInvites } from '$lib/state/user-shares-state.svelte';
   import { cn } from '$lib/utils';
+  import { copyToClipboard } from '$lib/utils/clipboard.svelte';
   import { toast } from 'svelte-sonner';
 
   interface Props {
@@ -20,10 +21,7 @@
 
   let { shareInvite = $bindable() }: Props = $props();
 
-  function copyCode() {
-    navigator.clipboard.writeText(shareInvite.id);
-    toast.success('Code copied to clipboard');
-  }
+  const copyCode = () => copyToClipboard(shareInvite.id, 'Code copied to clipboard');
 
   async function removeInviteCall(invite: ShareInviteBaseDetails) {
     try {

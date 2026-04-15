@@ -3,7 +3,7 @@
   import { goto } from '$app/navigation';
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-  import { toast } from 'svelte-sonner';
+  import { copyToClipboard } from '$lib/utils/clipboard.svelte';
   import type { OnlineHub } from './columns';
   import { resolve } from '$app/paths';
 
@@ -13,14 +13,8 @@
 
   let { hub }: Props = $props();
 
-  function copyId() {
-    navigator.clipboard.writeText(hub.id);
-    toast.success('ID copied to clipboard');
-  }
-  function copyUserId() {
-    navigator.clipboard.writeText(hub.owner.id);
-    toast.success('User ID copied to clipboard');
-  }
+  const copyId = () => copyToClipboard(hub.id, 'ID copied to clipboard');
+  const copyUserId = () => copyToClipboard(hub.owner.id, 'User ID copied to clipboard');
 </script>
 
 <DropdownMenu.Root>

@@ -16,7 +16,7 @@
   import { serializeEmergencyStopMessage } from '$lib/signalr/serializers/EmergencyStop';
   import { serializeRebootMessage } from '$lib/signalr/serializers/Reboot';
   import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
-  import { toast } from 'svelte-sonner';
+  import { copyToClipboard } from '$lib/utils/clipboard.svelte';
   import type { Hub } from './columns';
   import { resolve } from '$app/paths';
 
@@ -26,10 +26,7 @@
 
   let { hub }: Props = $props();
 
-  function copyId() {
-    navigator.clipboard.writeText(hub.id);
-    toast.success('ID copied to clipboard');
-  }
+  const copyId = () => copyToClipboard(hub.id, 'ID copied to clipboard');
 
   async function editHub(name: string, close: () => void) {
     try {

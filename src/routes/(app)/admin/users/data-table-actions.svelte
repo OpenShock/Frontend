@@ -3,7 +3,7 @@
   import { type AdminUsersView, RoleType } from '$lib/api/internal/v1';
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-  import { toast } from 'svelte-sonner';
+  import { copyToClipboard } from '$lib/utils/clipboard.svelte';
   import UserDeleteDialog from './dialog-user-delete.svelte';
   import UserEditDialog from './dialog-user-edit.svelte';
 
@@ -19,10 +19,7 @@
     [RoleType.Admin, RoleType.System].some((role) => user.roles.includes(role))
   );
 
-  function copyId() {
-    navigator.clipboard.writeText(user.id);
-    toast.success('ID copied to clipboard');
-  }
+  const copyId = () => copyToClipboard(user.id, 'ID copied to clipboard');
 </script>
 
 <UserEditDialog bind:open={editDialogOpen} {user} />

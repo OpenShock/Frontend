@@ -3,7 +3,7 @@
   import type { TokenResponse } from '$lib/api/internal/v1';
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-  import { toast } from 'svelte-sonner';
+  import { copyToClipboard } from '$lib/utils/clipboard.svelte';
   import TokenDeleteDialog from './dialog-token-delete.svelte';
   import TokenEditDialog from './dialog-token-edit.svelte';
 
@@ -18,10 +18,7 @@
   let editDialogOpen = $state<boolean>(false);
   let deleteDialogOpen = $state<boolean>(false);
 
-  function copyId() {
-    navigator.clipboard.writeText(token.id);
-    toast.success('ID copied to clipboard');
-  }
+  const copyId = () => copyToClipboard(token.id, 'ID copied to clipboard');
 
   function openDeleteDialog() {
     deleteDialogOpen = true;

@@ -3,7 +3,7 @@
   import { type WebhookDto } from '$lib/api/internal/v1';
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-  import { toast } from 'svelte-sonner';
+  import { copyToClipboard } from '$lib/utils/clipboard.svelte';
   import WebhookDeleteDialog from './dialog-webhook-delete.svelte';
 
   interface Props {
@@ -14,10 +14,7 @@
 
   let deleteDialogOpen = $state<boolean>(false);
 
-  function copyId() {
-    navigator.clipboard.writeText(webhook.id);
-    toast.success('ID copied to clipboard');
-  }
+  const copyId = () => copyToClipboard(webhook.id, 'ID copied to clipboard');
 </script>
 
 <WebhookDeleteDialog bind:open={deleteDialogOpen} {webhook} />
