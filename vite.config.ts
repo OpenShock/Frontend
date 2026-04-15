@@ -221,6 +221,9 @@ export default defineConfig(async ({ command, mode, isPreview }) => {
         output: {
           comments: { legal: false },
         },
+        optimization: {
+          inlineConst: { mode: 'smart', pass: 2 },
+        },
         treeshake:
           mode === 'production'
             ? { manualPureFunctions: ['console.log', 'console.debug', 'console.trace'] }
