@@ -13,6 +13,7 @@
   import { stripAnsi } from './ansi';
   import { LOG_LEVEL_COLORS } from './constants';
   import type { TerminalLine } from './types';
+  import type { TerminalContext } from './TerminalContext.svelte';
   import { tick, onDestroy } from 'svelte';
 
   type TimestampMode = 'uptime' | 'local' | 'ms' | 'off';
@@ -29,14 +30,15 @@
   const DEFAULT_HEIGHT = 256;
 
   interface Props {
-    lines: TerminalLine[];
+    context: TerminalContext;
+    mode: 'terminal' | 'flash';
     disabled?: boolean;
-    onClear: () => void;
     onReset: () => void;
     onSendCommand: (command: string) => void;
   }
 
-  let { lines, disabled = false, onClear, onReset, onSendCommand }: Props = $props();
+  let { context, mode, disabled = false, onReset, onSendCommand }: Props = $props();
+  let lines = $derived(context.lines);
 
   let commandInput = $state('');
   let commandHistory = $state<string[]>([]);
@@ -237,14 +239,16 @@
           Copy
         {/if}
       </Button>
-      <Button size="sm" variant="ghost" onclick={onClear}>
+      <Button size="sm" variant="ghost" onclick={context.clean}>
         <Trash2 class="mr-1 h-3.5 w-3.5" />
         Clear
       </Button>
-      <Button size="sm" variant="ghost" onclick={onReset} {disabled}>
-        <RotateCcw class="mr-1 h-3.5 w-3.5" />
-        Reset
-      </Button>
+      {#if mode === 'terminal'}
+        <Button size="sm" variant="ghost" onclick={onReset} {disabled}>
+          <RotateCcw class="mr-1 h-3.5 w-3.5" />
+          Reset
+        </Button>
+      {/if}
     </div>
   </div>
 
@@ -288,20 +292,22 @@
     {/each}
   </div>
 
-  <!-- Command input -->
-  <div class="flex items-center gap-2 border-t px-3 py-1.5">
-    <span class="text-muted-foreground font-mono text-xs">$</span>
-    <input
-      class="flex-1 bg-transparent font-mono text-xs outline-none"
-      bind:this={commandInputEl}
-      bind:value={commandInput}
-      onkeydown={handleKeydown}
-      aria-label="Serial command"
-      placeholder="Type a command..."
-      {disabled}
-    />
-    <Button size="sm" variant="ghost" onclick={sendCommand} {disabled}>
-      <Send class="h-3.5 w-3.5" />
-    </Button>
-  </div>
+  <!-- Command input (terminal mode only) -->
+  {#if mode === 'terminal'}
+    <div class="flex items-center gap-2 border-t px-3 py-1.5">
+      <span class="text-muted-foreground font-mono text-xs">$</span>
+      <input
+        class="flex-1 bg-transparent font-mono text-xs outline-none"
+        bind:this={commandInputEl}
+        bind:value={commandInput}
+        onkeydown={handleKeydown}
+        aria-label="Serial command"
+        placeholder="Type a command..."
+        {disabled}
+      />
+      <Button size="sm" variant="ghost" onclick={sendCommand} {disabled}>
+        <Send class="h-3.5 w-3.5" />
+      </Button>
+    </div>
+  {/if}
 </div>

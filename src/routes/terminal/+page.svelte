@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Check, MessageCircleQuestionMark } from '@lucide/svelte';
+  import { ArrowLeft, Check, MessageCircleQuestionMark, Terminal, Zap } from '@lucide/svelte';
   import { browser } from '$app/environment';
   import { PUBLIC_DISCORD_INVITE_URL } from '$env/static/public';
   import type { FirmwareChannel } from '$lib/api/firmwareCDN';
@@ -13,21 +13,20 @@
   import { Progress } from '$lib/components/ui/progress';
   import { useSerial } from '$lib/utils/serial-context.svelte';
   import { getBrowserName } from '$lib/utils/compatibility';
-  import { parseAnsi, parseLogLine } from './ansi';
   import FirmwareBoardSelector from './FirmwareBoardSelector.svelte';
   import FirmwareFlasher from './FirmwareFlasher.svelte';
   import HelpDialog from './HelpDialog.svelte';
+  import ModePicker, { type Mode } from './ModePicker.svelte';
   import SerialPortSelector from './SerialPortSelector.svelte';
-  import { MAX_LINES } from './constants';
   import SerialTerminal from './SerialTerminal.svelte';
-  import type { TerminalLine } from './types';
   import EspSerialConnection from './EspSerialConnection';
+  import { TerminalContext } from './TerminalContext.svelte';
 
   const serial = useSerial();
 
+  let mode = $state<Mode | null>(null);
   let port = $state<SerialPort | null>(null);
-  let lineIdCounter = 0;
-  let terminalLines = $state<TerminalLine[]>([]);
+  const terminal = new TerminalContext();
 
   let connection = $state<EspSerialConnection | null>(null);
   let isFlashing = $state<boolean>(false);
@@ -45,53 +44,13 @@
 
   let viewStep = $state<number | null>(null);
 
-  function makeTerminalLine(text: string, timestamp?: Date): TerminalLine {
-    const parsed = parseLogLine(text);
-    const message = parsed ? text.substring(parsed.messageOffset) : text;
-    return {
-      id: lineIdCounter++,
-      text,
-      timestamp: timestamp ?? new Date(),
-      segments: parseAnsi(message),
-      logLevel: parsed?.logLevel ?? null,
-      deviceUptime: parsed?.deviceUptime ?? null,
-      logTag: parsed?.tag ?? null,
-    };
-  }
-
-  function clean() {
-    terminalLines = [];
-  }
-
-  function writeLine(data: string) {
-    terminalLines.push(makeTerminalLine(data));
-    if (terminalLines.length > MAX_LINES) {
-      terminalLines.splice(0, terminalLines.length - MAX_LINES);
-    }
-  }
-
-  function write(data: string) {
-    if (terminalLines.length > 0) {
-      const last = terminalLines[terminalLines.length - 1];
-      const newText = last.text + data;
-      const parsed = parseLogLine(newText);
-      const message = parsed ? newText.substring(parsed.messageOffset) : newText;
-      terminalLines[terminalLines.length - 1] = {
-        ...last,
-        text: newText,
-        segments: parseAnsi(message),
-        logLevel: parsed?.logLevel ?? null,
-        deviceUptime: parsed?.deviceUptime ?? null,
-        logTag: parsed?.tag ?? null,
-      };
-    } else {
-      terminalLines.push(makeTerminalLine(data));
-    }
-  }
-
   $effect(() => {
-    if (port && !connection) {
-      EspSerialConnection.ConnectApplication(port, { clean, writeLine, write })
+    if (port && !connection && mode) {
+      const connect =
+        mode === 'flash'
+          ? EspSerialConnection.ConnectBootloader
+          : EspSerialConnection.ConnectApplication;
+      connect(port, terminal)
         .then((conn) => (connection = conn))
         .catch(() => (connectFailed = true));
     } else if (!port && connection) {
@@ -99,6 +58,16 @@
       connection = null;
     }
   });
+
+  function changeMode() {
+    port = null;
+    connectFailed = false;
+    confirmedChannel = null;
+    confirmedVersion = null;
+    board = null;
+    viewStep = null;
+    mode = null;
+  }
 
   // Stepper: derive which step we're on based on state
   // Channel step requires explicit confirmation (both channel and version must match confirmed values)
@@ -135,12 +104,12 @@
     try {
       isFlashing = true;
       if (!connection) {
-        writeLine('Host-side error during reset: no device!');
+        terminal.writeLine('Host-side error during reset: no device!');
         return;
       }
       await connection.ensureApplication(true);
     } catch (e) {
-      writeLine(`Host-side error during reset: ${e}`);
+      terminal.writeLine(`Host-side error during reset: ${e}`);
     } finally {
       isFlashing = false;
     }
@@ -151,13 +120,13 @@
     try {
       isFlashing = true;
       if (!connection) {
-        writeLine("Couldn't send: no device!");
+        terminal.writeLine("Couldn't send: no device!");
         return;
       }
       await connection.ensureApplication();
       await connection.sendApplicationCommand(command);
     } catch (e) {
-      writeLine(`Couldn't send: ${e}`);
+      terminal.writeLine(`Couldn't send: ${e}`);
     } finally {
       isFlashing = false;
     }
@@ -169,7 +138,7 @@
 <div class="flex h-full flex-col">
   <!-- Header -->
   <div class="flex items-center justify-between border-b px-6 py-3">
-    <h1 class="text-3xl font-bold tracking-tight">Flash Tool</h1>
+    <h1 class="text-3xl font-bold tracking-tight">Serial Terminal</h1>
     {#if serial}
       <Button variant="outline" onclick={() => (showHelpDialog = true)}>
         <MessageCircleQuestionMark />
@@ -181,96 +150,132 @@
   <!-- Main content area (scrollable) -->
   <div class="min-h-0 flex-1 overflow-y-auto px-6 py-4">
     {#if serial}
-      <div class="max-w-3xl">
-        {#each STEPS as step, i (i)}
-          {@const isCompleted = i < currentStep}
-          {@const isCurrent = i === activeStep}
-          {@const isAccessible = i <= currentStep}
-          {@const isLast = i === STEPS.length - 1}
+      {#snippet portConnectionBlock()}
+        <div class="flex flex-col gap-2">
+          <SerialPortSelector {serial} bind:port disabled={isFlashing} />
 
-          <div class="flex gap-4">
-            <!-- Step indicator column -->
-            <div class="flex flex-col items-center">
-              <!-- Circle -->
-              <button
-                class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold transition-colors
-                  {isCompleted
-                  ? 'bg-green-500 text-white'
-                  : isCurrent
-                    ? 'bg-primary text-primary-foreground'
-                    : 'border-muted-foreground/30 text-muted-foreground/50 border-2'}"
-                disabled={!isAccessible || isFlashing}
-                onclick={() => goToStep(i)}
-                aria-label="Go to step {i + 1}: {step.title}"
-              >
-                {#if isCompleted}
-                  <Check class="h-4 w-4" />
-                {:else}
-                  {i + 1}
-                {/if}
-              </button>
-              <!-- Connector line -->
-              {#if !isLast}
-                <div
-                  class="w-0.5 flex-1 {isCompleted ? 'bg-green-500/40' : 'bg-muted-foreground/20'}"
-                  style="min-height: 1.5rem;"
-                ></div>
-              {/if}
+          {#if port && !connection && !connectFailed}
+            <div class="flex flex-col items-center gap-2">
+              <span class="text-center text-lg">Connecting...</span>
+              <Progress />
             </div>
+          {/if}
 
-            <!-- Step content column -->
-            <div class="flex-1 pb-6 {!isAccessible ? 'opacity-40' : ''}">
-              <!-- Title -->
-              <button
-                class="mb-2 text-lg font-semibold {isCurrent ? '' : 'text-muted-foreground'}"
-                disabled={!isAccessible || isFlashing}
-                onclick={() => goToStep(i)}
-              >
-                {step.title}
-              </button>
+          {#if port && connectFailed}
+            <div class="flex flex-col items-start gap-2">
+              <span class="bold text-lg text-red-500">
+                {mode === 'flash' ? 'Could not enter bootloader mode' : 'Device connection failed'}
+              </span>
+              <span>There was an issue connecting to your device, please try the following:</span>
+              <ol class="list-decimal pl-6 text-left text-sm">
+                <li>Install the drivers for your device</li>
+                <li>Unplug and replug your device</li>
+                <li>Use a different USB port or cable</li>
+                <li>
+                  Contact support:
+                  <Button
+                    href={PUBLIC_DISCORD_INVITE_URL}
+                    target="_blank"
+                    variant="link"
+                    class="h-auto p-0">OpenShock Discord</Button
+                  >
+                </li>
+              </ol>
+            </div>
+          {/if}
+        </div>
+      {/snippet}
 
-              <!-- Step 1: Connect Device -->
-              {#if i === 0}
-                {#if isCurrent}
-                  <div class="flex flex-col gap-2">
-                    <SerialPortSelector {serial} bind:port disabled={isFlashing} />
+      {#if !mode}
+        <ModePicker onSelect={(m) => (mode = m)} />
+      {:else}
+        <!-- Mode indicator + back button -->
+        <div class="text-muted-foreground mb-4 flex items-center gap-2 text-sm">
+          <Button
+            variant="ghost"
+            size="sm"
+            onclick={changeMode}
+            disabled={isFlashing}
+            class="h-auto gap-1 p-1"
+          >
+            <ArrowLeft class="h-3.5 w-3.5" />
+            Change mode
+          </Button>
+          <span>&middot;</span>
+          {#if mode === 'terminal'}
+            <Terminal class="h-3.5 w-3.5" />
+            <span>Terminal</span>
+          {:else}
+            <Zap class="h-3.5 w-3.5" />
+            <span>Flash Firmware</span>
+          {/if}
+        </div>
 
-                    {#if port && !connection && !connectFailed}
-                      <div class="flex flex-col items-center gap-2">
-                        <span class="text-center text-lg">Connecting...</span>
-                        <Progress />
-                      </div>
+        {#if mode === 'terminal'}
+          <div class="max-w-3xl">
+            {@render portConnectionBlock()}
+          </div>
+        {:else}
+          <div class="max-w-3xl">
+            {#each STEPS as step, i (i)}
+              {@const isCompleted = i < currentStep}
+              {@const isCurrent = i === activeStep}
+              {@const isAccessible = i <= currentStep}
+              {@const isLast = i === STEPS.length - 1}
+
+              <div class="flex gap-4">
+                <!-- Step indicator column -->
+                <div class="flex flex-col items-center">
+                  <!-- Circle -->
+                  <button
+                    class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold transition-colors
+                      {isCompleted
+                      ? 'bg-green-500 text-white'
+                      : isCurrent
+                        ? 'bg-primary text-primary-foreground'
+                        : 'border-muted-foreground/30 text-muted-foreground/50 border-2'}"
+                    disabled={!isAccessible || isFlashing}
+                    onclick={() => goToStep(i)}
+                    aria-label="Go to step {i + 1}: {step.title}"
+                  >
+                    {#if isCompleted}
+                      <Check class="h-4 w-4" />
+                    {:else}
+                      {i + 1}
                     {/if}
+                  </button>
+                  <!-- Connector line -->
+                  {#if !isLast}
+                    <div
+                      class="w-0.5 flex-1 {isCompleted
+                        ? 'bg-green-500/40'
+                        : 'bg-muted-foreground/20'}"
+                      style="min-height: 1.5rem;"
+                    ></div>
+                  {/if}
+                </div>
 
-                    {#if port && connectFailed}
-                      <div class="flex flex-col items-start gap-2">
-                        <span class="bold text-lg text-red-500">Device connection failed</span>
-                        <span>
-                          There was an issue connecting to your device, please try the following:
-                        </span>
-                        <ol class="list-decimal pl-6 text-left text-sm">
-                          <li>Install the drivers for your device</li>
-                          <li>Unplug and replug your device</li>
-                          <li>Use a different USB port or cable</li>
-                          <li>
-                            Contact support:
-                            <Button
-                              href={PUBLIC_DISCORD_INVITE_URL}
-                              target="_blank"
-                              variant="link"
-                              class="h-auto p-0">OpenShock Discord</Button
-                            >
-                          </li>
-                        </ol>
-                      </div>
+                <!-- Step content column -->
+                <div class="flex-1 pb-6 {!isAccessible ? 'opacity-40' : ''}">
+                  <!-- Title -->
+                  <button
+                    class="mb-2 text-lg font-semibold {isCurrent ? '' : 'text-muted-foreground'}"
+                    disabled={!isAccessible || isFlashing}
+                    onclick={() => goToStep(i)}
+                  >
+                    {step.title}
+                  </button>
+
+                  <!-- Step 1: Connect Device -->
+                  {#if i === 0}
+                    {#if isCurrent}
+                      {@render portConnectionBlock()}
+                    {:else if isCompleted}
+                      <p class="text-muted-foreground text-sm">Device connected</p>
                     {/if}
-                  </div>
-                {:else if isCompleted}
-                  <p class="text-muted-foreground text-sm">Device connected</p>
-                {/if}
-              {/if}
+                  {/if}
 
-              <!-- Step 2: Select Channel -->
+                  <!-- Step 2: Select Channel -->
               {#if i === 1}
                 {#if isCurrent}
                   <div class="flex flex-col gap-3">
@@ -327,23 +332,25 @@
                 {/if}
               {/if}
 
-              <!-- Step 4: Flash -->
-              {#if i === 3}
-                {#if isCurrent && version && board && connection}
-                  <FirmwareFlasher
-                    {version}
-                    {board}
-                    {connection}
-                    {eraseBeforeFlash}
-                    showNonStableWarning={channel !== 'stable'}
-                    bind:isFlashing
-                  />
-                {/if}
-              {/if}
-            </div>
+                  <!-- Step 4: Flash -->
+                  {#if i === 3}
+                    {#if isCurrent && version && board && connection}
+                      <FirmwareFlasher
+                        {version}
+                        {board}
+                        {connection}
+                        {eraseBeforeFlash}
+                        showNonStableWarning={channel !== 'stable'}
+                        bind:isFlashing
+                      />
+                    {/if}
+                  {/if}
+                </div>
+              </div>
+            {/each}
           </div>
-        {/each}
-      </div>
+        {/if}
+      {/if}
     {:else if browser}
       {@render unsupportedBrowser()}
     {:else}
@@ -352,11 +359,11 @@
   </div>
 
   <!-- Terminal - persistent bottom panel -->
-  {#if port}
+  {#if port && mode}
     <SerialTerminal
-      lines={terminalLines}
+      context={terminal}
+      {mode}
       disabled={!connection || isFlashing}
-      onClear={() => (terminalLines = [])}
       onReset={handleReset}
       onSendCommand={handleSendCommand}
     />
