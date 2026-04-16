@@ -9,7 +9,7 @@ export type RouteInfo = {
   original: string;
 };
 
-function fileToPath(file: string): RouteInfo {
+export function fileToPath(file: string): RouteInfo {
   const original = file.replace(/^\/src\/routes/, '').replace(/\/\+page\.svelte$/, '') || '/';
 
   const categories: string[] = [];

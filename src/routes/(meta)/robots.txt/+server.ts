@@ -13,7 +13,7 @@ export const GET: RequestHandler = ({ setHeaders }) => {
     return new Response('User-agent: *\nDisallow: /\n');
   }
 
-  const lines = ['User-agent: *', 'Allow: /\n'];
+  const lines = ['User-agent: *', 'Allow: /'];
   if (!isTruthy(env.PUBLIC_DISABLE_SITEMAP)) {
     lines.push(`Sitemap: ${getSiteURL('/sitemap.xml').href}`);
   }
