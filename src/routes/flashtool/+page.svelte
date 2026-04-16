@@ -2,7 +2,7 @@
   import { MessageCircleQuestionMark, SquareTerminal } from '@lucide/svelte';
   import { browser } from '$app/environment';
   import { PUBLIC_DISCORD_INVITE_URL } from '$env/static/public';
-  import type { FirmwareChannel, FirmwareLatestResponse } from '$lib/api/firmwareRepo';
+  import type { FirmwareChannel, FirmwareRelease } from '$lib/api/firmwareRepo';
   import Container from '$lib/components/Container.svelte';
   import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
@@ -60,7 +60,7 @@
 
   let channel = $state<FirmwareChannel>('stable');
   let version = $state<string | null>(null);
-  let latestResponse = $state<FirmwareLatestResponse | null>(null);
+  let latestResponse = $state<FirmwareRelease | null>(null);
   let board = $state<string | null>(null);
   let eraseBeforeFlash = $state<boolean>(false);
 

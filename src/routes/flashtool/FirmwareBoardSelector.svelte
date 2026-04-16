@@ -1,13 +1,13 @@
 <script lang="ts">
   import { Check, ChevronsUpDown } from '@lucide/svelte';
-  import { ExtractBoards, type FirmwareLatestResponse } from '$lib/api/firmwareRepo';
+  import { ExtractBoards, type FirmwareRelease } from '$lib/api/firmwareRepo';
   import { Button } from '$lib/components/ui/button';
   import * as Command from '$lib/components/ui/command';
   import { Popover, PopoverContent, PopoverTrigger } from '$lib/components/ui/popover';
   import { cn } from '$lib/utils';
 
   interface Props {
-    latestResponse: FirmwareLatestResponse | null;
+    latestResponse: FirmwareRelease | null;
     chip?: string | null;
     selectedBoard?: string | null;
     disabled?: boolean;

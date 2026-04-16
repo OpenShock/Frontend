@@ -4,14 +4,14 @@
     FetchLatest,
     type FirmwareChannel,
     FirmwareChannels,
-    type FirmwareLatestResponse,
+    type FirmwareRelease,
   } from '$lib/api/firmwareRepo';
   import * as ToggleGroup from '$lib/components/ui/toggle-group';
 
   interface Props {
     channel?: FirmwareChannel;
     version?: string | null;
-    latestResponse?: FirmwareLatestResponse | null;
+    latestResponse?: FirmwareRelease | null;
     disabled?: boolean;
   }
 
@@ -22,7 +22,7 @@
     disabled = false,
   }: Props = $props();
 
-  let cache = $state<{ [key in FirmwareChannel]?: FirmwareLatestResponse | null }>({});
+  let cache = $state<{ [key in FirmwareChannel]?: FirmwareRelease | null }>({});
 
   // Reactive effect to update the version based on the selected channel.
   $effect(() => {

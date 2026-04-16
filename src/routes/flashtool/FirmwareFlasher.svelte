@@ -3,7 +3,7 @@
   import {
     DownloadAndVerifyArtifact,
     FindArtifact,
-    type FirmwareLatestResponse,
+    type FirmwareRelease,
   } from '$lib/api/firmwareRepo';
   import { Button } from '$lib/components/ui/button';
   import { Progress } from '$lib/components/ui/progress';
@@ -11,7 +11,7 @@
   import RiskAcknowledgementModal from './RiskAcknowledgementModal.svelte';
 
   interface Props {
-    latestResponse: FirmwareLatestResponse;
+    latestResponse: FirmwareRelease;
     board: string;
     manager: FlashManager;
     eraseBeforeFlash: boolean;
