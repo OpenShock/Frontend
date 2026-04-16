@@ -8,15 +8,21 @@
 
   interface Props {
     latestResponse: FirmwareLatestResponse | null;
+    chip?: string | null;
     selectedBoard?: string | null;
     disabled?: boolean;
   }
 
-  let { latestResponse, selectedBoard = $bindable(null), disabled = false }: Props = $props();
+  let {
+    latestResponse,
+    chip = null,
+    selectedBoard = $bindable(null),
+    disabled = false,
+  }: Props = $props();
 
-  let boards = $derived(latestResponse ? ExtractBoards(latestResponse) : []);
+  let boards = $derived(latestResponse ? ExtractBoards(latestResponse, chip) : []);
   $effect(() => {
-    if (boards.length === 0) {
+    if (selectedBoard && !boards.includes(selectedBoard)) {
       selectedBoard = null;
     }
   });

@@ -11,11 +11,16 @@ export interface FirmwareArtifact {
   fileSize: number;
 }
 
+export interface FirmwareBoard {
+  chip: string;
+  artifacts: FirmwareArtifact[];
+}
+
 export interface FirmwareLatestResponse {
   version: string;
   channel: string;
   releaseDate: string;
-  artifacts: Record<string, FirmwareArtifact[]>;
+  boards: Record<string, FirmwareBoard>;
 }
 
 const BASE_URL = PUBLIC_FIRMWARE_REPO_URL.replace(/\/+$/, '');
@@ -34,8 +39,10 @@ export async function FetchLatest(
   return await response.json();
 }
 
-export function ExtractBoards(latest: FirmwareLatestResponse): string[] {
-  return Object.keys(latest.artifacts).sort();
+export function ExtractBoards(latest: FirmwareLatestResponse, chip?: string | null): string[] {
+  const entries = Object.entries(latest.boards);
+  const filtered = chip ? entries.filter(([, board]) => board.chip === chip) : entries;
+  return filtered.map(([name]) => name).sort();
 }
 
 export function FindArtifact(
@@ -43,9 +50,9 @@ export function FindArtifact(
   board: string,
   type: string
 ): FirmwareArtifact | null {
-  const boardArtifacts = latest.artifacts[board];
-  if (!boardArtifacts) return null;
-  return boardArtifacts.find((a) => a.type === type) ?? null;
+  const boardInfo = latest.boards[board];
+  if (!boardInfo) return null;
+  return boardInfo.artifacts.find((a) => a.type === type) ?? null;
 }
 
 async function DownloadBinary(url: string): Promise<Uint8Array> {

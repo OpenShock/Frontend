@@ -110,7 +110,13 @@
     <FirmwareChannelSelector bind:channel bind:version bind:latestResponse disabled={isFlashing} />
 
     <h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">Select Board</h3>
-    <FirmwareBoardSelector {latestResponse} bind:selectedBoard={board} disabled={isFlashing} />
+    <p class="text-muted-foreground text-sm">Detected chip: {manager.Chip}</p>
+    <FirmwareBoardSelector
+      {latestResponse}
+      chip={manager.Chip}
+      bind:selectedBoard={board}
+      disabled={isFlashing}
+    />
 
     <div class="items-top flex space-x-2">
       <Checkbox id="erase-before-flash" bind:checked={eraseBeforeFlash} />
