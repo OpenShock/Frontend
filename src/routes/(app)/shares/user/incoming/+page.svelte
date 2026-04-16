@@ -1,9 +1,12 @@
 <script lang="ts">
   import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
   import * as Table from '$lib/components/ui/table';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { userSharesState, refreshUserShares } from '$lib/state/user-shares-state.svelte';
   import IncomingShareItem from './incoming-share-item.svelte';
   import ManageShare from './manage-share.svelte';
+
+  registerBreadcrumbs(() => [{ label: 'Shared with Me' }]);
 
   let refreshPromise = $state(refreshUserShares());
 

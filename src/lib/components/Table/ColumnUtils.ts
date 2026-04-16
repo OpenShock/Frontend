@@ -64,6 +64,17 @@ export function CreateSortableColumnDef<
   };
 }
 
+export function CreateActionsColumnDef<
+  TData,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- matches renderComponent's own constraint
+  T extends Component<any>,
+>(component: T, getProps: (row: TData) => ComponentProps<T>): ColumnDef<TData> {
+  return {
+    id: 'actions',
+    cell: ({ row }) => renderComponent(component, getProps(row.original)),
+  };
+}
+
 // Pre-defined cell values
 export const CellNotApplicable: CellContentProps = {
   text: 'N/A',

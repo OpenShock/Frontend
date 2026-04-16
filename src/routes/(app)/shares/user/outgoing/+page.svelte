@@ -1,9 +1,12 @@
 <script lang="ts">
   import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
   import * as Table from '$lib/components/ui/table';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { userSharesState, refreshUserShares } from '$lib/state/user-shares-state.svelte';
   import EditShare from './edit-share.svelte';
   import UserShareItem from './user-share-item.svelte';
+
+  registerBreadcrumbs(() => [{ label: 'Shares' }]);
 
   let editShareDrawerOpen = $state(false);
   let editShareDrawerOpenCount = $state(0);
