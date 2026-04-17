@@ -1,0 +1,18 @@
+blockExoticSubdeps: true
+minimumReleaseAge: 4320 # 3 days
+
+onlyBuiltDependencies:
+  - '@tailwindcss/oxide'
+  - esbuild
+  - sharp
+  - workerd
+overrides:
+  cookie@<0.7.0: '>=0.7.0'
+  js-yaml@<4.1.1: '>=4.1.1'
+  undici@>=7.0.0 <7.24.0: '>=7.24.0'
+  brace-expansion@<5.0.5: '>=5.0.5'
+
+patchedDependencies:
+  '@microsoft/signalr@10.0.0': patches/signalr.patch
+
+#trustPolicy: no-downgrade
