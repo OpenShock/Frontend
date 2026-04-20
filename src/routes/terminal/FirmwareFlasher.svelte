@@ -13,6 +13,7 @@
     eraseBeforeFlash: boolean;
     showNonStableWarning: boolean;
     isFlashing: boolean;
+    onComplete?: () => void;
   }
 
   let {
@@ -22,6 +23,7 @@
     eraseBeforeFlash,
     showNonStableWarning,
     isFlashing = $bindable(),
+    onComplete,
   }: Props = $props();
 
   let riskAcknowledgeStatus = $state<'none' | 'shown' | 'accepted'>('none');
@@ -66,6 +68,7 @@
 
     progressName = 'Rebooted device! Flashing complete.';
     progressPercent = 100;
+    return true;
   }
   async function FlashDevice() {
     if (isFlashing) return;
@@ -73,14 +76,16 @@
       riskAcknowledgeStatus = 'shown';
       return;
     }
+    let success = false;
     try {
       isFlashing = true;
-      await FlashDeviceImpl();
+      success = (await FlashDeviceImpl()) ?? false;
     } catch (e) {
       error = (e as Error).message;
     } finally {
       isFlashing = false;
     }
+    if (success) onComplete?.();
   }
 </script>
 

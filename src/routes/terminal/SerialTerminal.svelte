@@ -31,7 +31,7 @@
 
   interface Props {
     context: TerminalContext;
-    mode: 'terminal' | 'flash';
+    mode: 'terminal' | 'flash' | 'configure';
     disabled?: boolean;
     onReset: () => void;
     onSendCommand: (command: string) => void;
@@ -195,7 +195,10 @@
   }
 </script>
 
-<div class="flex flex-col border-t" style="height: {height}px">
+<div
+  class="bg-background sticky bottom-0 z-10 flex w-full flex-col border-t"
+  style="height: {height}px"
+>
   <!-- Resize handle -->
   <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
   <div
@@ -243,7 +246,7 @@
         <Trash2 class="mr-1 h-3.5 w-3.5" />
         Clear
       </Button>
-      {#if mode === 'terminal'}
+      {#if mode === 'terminal' || mode === 'configure'}
         <Button size="sm" variant="ghost" onclick={onReset} {disabled}>
           <RotateCcw class="mr-1 h-3.5 w-3.5" />
           Reset
@@ -292,8 +295,8 @@
     {/each}
   </div>
 
-  <!-- Command input (terminal mode only) -->
-  {#if mode === 'terminal'}
+  <!-- Command input (terminal and configure modes) -->
+  {#if mode === 'terminal' || mode === 'configure'}
     <div class="flex items-center gap-2 border-t px-3 py-1.5">
       <span class="text-muted-foreground font-mono text-xs">$</span>
       <input
