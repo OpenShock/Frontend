@@ -10,8 +10,11 @@
   import { FieldDescription } from '$lib/components/ui/field/index.js';
   import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { userState } from '$lib/state/user-state.svelte';
   import { onMount } from 'svelte';
+
+  registerBreadcrumbs(() => [{ label: `Sign Up With ${page.params.provider ?? 'OAuth'}` }]);
 
   let username = $state<string>('');
   let usernameValid = $state<boolean>(false);

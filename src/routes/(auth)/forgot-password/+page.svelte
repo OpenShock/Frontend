@@ -8,7 +8,10 @@
   import * as Card from '$lib/components/ui/card/index.js';
   import { Field, FieldDescription } from '$lib/components/ui/field/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { toast } from 'svelte-sonner';
+
+  registerBreadcrumbs(() => [{ label: 'Forgot Password' }]);
 
   let email = $state<string>('');
   let emailValid = $state(false);

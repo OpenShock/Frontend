@@ -276,61 +276,61 @@
                   {/if}
 
                   <!-- Step 2: Select Channel -->
-              {#if i === 1}
-                {#if isCurrent}
-                  <div class="flex flex-col gap-3">
-                    <FirmwareChannelSelector bind:channel bind:version disabled={isFlashing} />
-                    {#if version}
-                      <Button
-                        onclick={() => {
-                          confirmedChannel = channel;
-                          confirmedVersion = version;
-                        }}
-                        disabled={isFlashing}
-                        class="w-fit"
-                      >
-                        Continue
-                      </Button>
-                    {/if}
-                  </div>
-                {:else if isCompleted}
-                  <p class="text-muted-foreground text-sm">
-                    <span class="capitalize">{channel}</span> &middot; {version}
-                  </p>
-                {/if}
-              {/if}
-
-              <!-- Step 3: Select Board -->
-              {#if i === 2}
-                {#if isCurrent}
-                  <div class="flex flex-col gap-4">
-                    <FirmwareBoardSelector
-                      {version}
-                      bind:selectedBoard={board}
-                      disabled={isFlashing}
-                    />
-
-                    <div class="items-top flex space-x-2">
-                      <Checkbox id="erase-before-flash" bind:checked={eraseBeforeFlash} />
-                      <div class="grid gap-1.5 leading-none">
-                        <Label
-                          for="erase-before-flash"
-                          class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                          Erase before flashing
-                        </Label>
-                        <p class="text-muted-foreground text-sm">
-                          Clears all data on the device including existing configs
-                        </p>
+                  {#if i === 1}
+                    {#if isCurrent}
+                      <div class="flex flex-col gap-3">
+                        <FirmwareChannelSelector bind:channel bind:version disabled={isFlashing} />
+                        {#if version}
+                          <Button
+                            onclick={() => {
+                              confirmedChannel = channel;
+                              confirmedVersion = version;
+                            }}
+                            disabled={isFlashing}
+                            class="w-fit"
+                          >
+                            Continue
+                          </Button>
+                        {/if}
                       </div>
-                    </div>
-                  </div>
-                {:else if isCompleted}
-                  <p class="text-muted-foreground text-sm">
-                    {board}{eraseBeforeFlash ? ' (erase all)' : ''}
-                  </p>
-                {/if}
-              {/if}
+                    {:else if isCompleted}
+                      <p class="text-muted-foreground text-sm">
+                        <span class="capitalize">{channel}</span> &middot; {version}
+                      </p>
+                    {/if}
+                  {/if}
+
+                  <!-- Step 3: Select Board -->
+                  {#if i === 2}
+                    {#if isCurrent}
+                      <div class="flex flex-col gap-4">
+                        <FirmwareBoardSelector
+                          {version}
+                          bind:selectedBoard={board}
+                          disabled={isFlashing}
+                        />
+
+                        <div class="items-top flex space-x-2">
+                          <Checkbox id="erase-before-flash" bind:checked={eraseBeforeFlash} />
+                          <div class="grid gap-1.5 leading-none">
+                            <Label
+                              for="erase-before-flash"
+                              class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            >
+                              Erase before flashing
+                            </Label>
+                            <p class="text-muted-foreground text-sm">
+                              Clears all data on the device including existing configs
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    {:else if isCompleted}
+                      <p class="text-muted-foreground text-sm">
+                        {board}{eraseBeforeFlash ? ' (erase all)' : ''}
+                      </p>
+                    {/if}
+                  {/if}
 
                   <!-- Step 4: Flash -->
                   {#if i === 3}

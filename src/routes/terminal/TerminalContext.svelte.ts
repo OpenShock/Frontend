@@ -1,4 +1,5 @@
 import type { IEspLoaderTerminal } from 'esptool-js';
+import { SvelteDate } from 'svelte/reactivity';
 import { parseAnsi, parseLogLine } from './ansi';
 import { MAX_LINES } from './constants';
 import type { TerminalLine } from './types';
@@ -17,7 +18,7 @@ export class TerminalContext implements IEspLoaderTerminal {
     return {
       id: this.#lineIdCounter++,
       text,
-      timestamp: timestamp ?? new Date(),
+      timestamp: timestamp ?? new SvelteDate(),
       segments: parseAnsi(message),
       logLevel: parsed?.logLevel ?? null,
       deviceUptime: parsed?.deviceUptime ?? null,

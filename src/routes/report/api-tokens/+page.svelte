@@ -16,7 +16,10 @@
   import { Label } from '$lib/components/ui/label';
   import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { toast } from 'svelte-sonner';
+
+  registerBreadcrumbs(() => [{ label: 'Report API Tokens', href: '/report/api-tokens' }]);
 
   let secrets = $state<string[]>([]);
   let turnstileResponse = $state<string | null>(null);

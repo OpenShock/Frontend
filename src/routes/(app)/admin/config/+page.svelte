@@ -5,6 +5,7 @@
   import type { ConfigurationItemDto } from '$lib/api/internal/v1';
   import Container from '$lib/components/Container.svelte';
   import {
+    CreateActionsColumnDef,
     CreateSortableColumnDef,
     LocaleDateTimeRenderer,
     RenderCell,
@@ -13,7 +14,6 @@
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import { Button } from '$lib/components/ui/button';
   import { CardHeader, CardTitle } from '$lib/components/ui/card';
-  import { renderComponent } from '$lib/components/ui/data-table';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
   import DataTableActions from './data-table-actions.svelte';
@@ -28,13 +28,7 @@
     CreateSortableColumnDef('value', 'Value', RenderCell),
     CreateSortableColumnDef('updatedAt', 'Updated at', LocaleDateTimeRenderer),
     CreateSortableColumnDef('createdAt', 'Created at', LocaleDateTimeRenderer),
-    {
-      id: 'actions',
-      cell: ({ row }) => {
-        // You can pass whatever you need from `row.original` to the component
-        return renderComponent(DataTableActions, { item: row.original, onChange: fetchWebhooks });
-      },
-    },
+    CreateActionsColumnDef(DataTableActions, (item) => ({ item, onChange: fetchWebhooks })),
   ];
 
   let data = $state<ConfigurationItemDto[]>([]);

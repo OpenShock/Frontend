@@ -20,7 +20,10 @@
   import OauthButtons from '$lib/components/auth/oauth-buttons.svelte';
   import { gotoQueryRedirectOrFallback } from '$lib/utils/url';
   import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte';
+
+  registerBreadcrumbs(() => [{ label: 'Login' }]);
 
   let usernameOrEmail = $state('');
   let password = $state('');
