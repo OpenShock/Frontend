@@ -1,13 +1,5 @@
 <script lang="ts">
-  import {
-    Layers,
-    LoaderCircle,
-    LogsIcon,
-    Plus,
-    RotateCcw,
-    Settings,
-    Zap,
-  } from '@lucide/svelte';
+  import { Layers, LoaderCircle, LogsIcon, Plus, RotateCcw, Settings, Zap } from '@lucide/svelte';
   import { resolve } from '$app/paths';
   import { shockersV1Api } from '$lib/api';
   import type { NewShocker } from '$lib/api/internal/v1';
@@ -39,7 +31,7 @@
     liveConnections,
     LiveConnectionState,
   } from '$lib/state/live-control-state.svelte';
-  import { LocalStorageState } from '$lib/state/classes/local-storage-state.svelte';
+  import { PersistedState } from '$lib/state/classes/persisted-state.svelte';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
 
@@ -81,7 +73,7 @@
   });
 
   let moduleType = $state<ModuleType>(ModuleType.ClassicControlModule);
-  const groupByHub = new LocalStorageState<boolean>('shockerGroupByHub', false);
+  const groupByHub = new PersistedState<boolean>('shockerGroupByHub', false);
   let loading = $state(true);
   let refreshing = $state(false);
 
@@ -276,7 +268,13 @@
           {@const isShockerLiveActive =
             (liveState?.isLive ?? false) && liveConn?.state === LiveConnectionState.Connected}
           <div>
-            <LiveButton {hubId} shockerId={shocker.id} isPaused={shocker.isPaused} connection={liveConn} {liveState} />
+            <LiveButton
+              {hubId}
+              shockerId={shocker.id}
+              isPaused={shocker.isPaused}
+              connection={liveConn}
+              {liveState}
+            />
             {#if isShockerLiveActive && liveState && liveConn}
               <LiveControlModule {shocker} {liveState} connection={liveConn} owned />
             {:else if moduleType === ModuleType.ClassicControlModule}
