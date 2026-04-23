@@ -34,7 +34,7 @@
           </Button>
         {/snippet}
       </DropdownMenu.Trigger>
-      <DropdownMenu.Content class="p-3" align="start">
+      <DropdownMenu.Content class="w-full p-3" align="start">
         <table class="w-full [&_td]:px-4 [&_td]:last:text-right">
           <tbody>
             <tr>

@@ -23,6 +23,7 @@
   import DataTableActions from './data-table-actions.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import CreatePublicShareDialog from './dialog-publicshare-create.svelte';
+  import PageHeader from '$lib/components/PageHeader.svelte';
 
   registerBreadcrumbs(() => [{ label: 'Public Shares' }]);
 
@@ -61,34 +62,26 @@
 
 <CreatePublicShareDialog bind:open={showAddShareModal} onCreated={refreshPublicShares} />
 
-<Container class="flex h-full flex-col">
-  <Card.Header class="w-full">
-    <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
-      Public Shares
-      <div>
-        <span>
-          <Button onclick={() => (showAddShareModal = true)}>
-            <Plus />
-            Add Share
-          </Button>
-          <Button onclick={refreshPublicShares}>
-            <RotateCcw />
-            Refresh
-          </Button>
-        </span>
-      </div>
-    </Card.Title>
-    <Card.Description
-      >This is a list of all the public shares you own. You can think of them like a link that
-      anyone can access.</Card.Description
-    >
-  </Card.Header>
-  <Card.Content class="flex w-full flex-col space-y-4 overflow-auto">
+<Container>
+  <PageHeader
+    title="Public Shares"
+    subtitle="Think of them like a link that
+  anyone can access"
+  >
+    <Button onclick={() => (showAddShareModal = true)}>
+      <Plus />
+      Add Share
+    </Button>
+    <Button size="icon" variant="outline" onclick={refreshPublicShares}>
+      <RotateCcw />
+    </Button>
+  </PageHeader>
+  <div class="w-full overflow-auto">
     <DataTable
       {data}
       {columns}
       {sorting}
       onRowClick={(clicked) => goto(resolve(`/shares/public/${clicked.id}`))}
     />
-  </Card.Content>
+  </div>
 </Container>
