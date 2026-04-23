@@ -13,6 +13,7 @@
   import { IsMobile } from '$lib/hooks/is-mobile.svelte';
   import { usePersistedState } from '$lib/state/classes/persisted-state.svelte';
   import DialogManager from '$lib/components/dialog-manager/dialog-manager.svelte';
+  import Container from '$lib/components/Container.svelte';
 
   interface Props {
     children?: Snippet;
@@ -48,7 +49,9 @@
     {/if}
     <Header />
     <main class="min-h-0 flex-1 overflow-x-hidden">
-      {@render children?.()}
+      <Container class="p-6">
+        {@render children?.()}
+      </Container>
     </main>
     <Footer />
   </div>

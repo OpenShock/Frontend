@@ -137,8 +137,8 @@
   let degrees = $derived(angleStart + invLerp(min, max, tween.current) * angleRange);
 </script>
 
-<div class="relative size-[150px] select-none">
-  <svg viewBox="0 0 {viewWidth} {viewHeight}" class="absolute size-[150px]" bind:this={element}>
+<div class="relative aspect-square w-full max-w-[150px] min-w-0 select-none">
+  <svg viewBox="0 0 {viewWidth} {viewHeight}" class="absolute inset-0 size-full" bind:this={element}>
     <!-- background arc -->
     <path
       d={calcSvgPathData(angleEnd)}

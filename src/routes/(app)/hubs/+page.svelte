@@ -1,9 +1,7 @@
 <script lang="ts">
   import { Plus, Router } from '@lucide/svelte';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
-  import Container from '$lib/components/Container.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
-  import * as Card from '$lib/components/ui/card';
   import * as Table from '$lib/components/ui/table';
   import { IsMobile } from '$lib/hooks/is-mobile.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
@@ -17,6 +15,7 @@
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import * as Dialog from '$lib/components/ui/dialog';
   import TextInput from '$lib/components/input/TextInput.svelte';
+  import PageHeader from '$lib/components/PageHeader.svelte';
 
   const isMobile = new IsMobile();
 
@@ -79,78 +78,71 @@
   </Button>
 {/snippet}
 
-<Container>
-  <Card.Header class="w-full">
-    <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
-      Hubs
-      <div>
-        <Button onclick={openCreateHubDialog}>
-          <Plus />
-          Add Hub
-        </Button>
-        <Button onclick={refreshOwnHubs}>
-          <RotateCcw />
-          Refresh
-        </Button>
-      </div>
-    </Card.Title>
-    <Card.Description>This is a list of all hubs you own.</Card.Description>
-  </Card.Header>
-  <div class="w-full p-6">
-    {#if isMobile.current}
-      <div class="grid w-full gap-6">
-        {#each data as hub (hub.id)}
-          <div class="flex items-center justify-between gap-4">
-            <div class="flex items-center gap-4">
-              <Router class="size-8" />
-              <div class="flex flex-col">
-                <strong>{hub.name}</strong>
-                {#if hub.is_online && hub.firmware_version}
-                  <span>{hub.firmware_version}</span>
-                {:else}
-                  <span class="text-red-500">Offline</span>
-                {/if}
-              </div>
+<PageHeader title="Hubs" subtitle="This is a list of all hubs you own">
+  <Button onclick={openCreateHubDialog}>
+    <Plus />
+    Add Hub
+  </Button>
+  <Button onclick={refreshOwnHubs}>
+    <RotateCcw />
+    Refresh
+  </Button>
+</PageHeader>
+
+<div class="w-full">
+  {#if isMobile.current}
+    <div class="grid w-full gap-6">
+      {#each data as hub (hub.id)}
+        <div class="flex items-center justify-between gap-4">
+          <div class="flex items-center gap-4">
+            <Router class="size-8" />
+            <div class="flex flex-col">
+              <strong>{hub.name}</strong>
+              {#if hub.is_online && hub.firmware_version}
+                <span>{hub.firmware_version}</span>
+              {:else}
+                <span class="text-red-500">Offline</span>
+              {/if}
             </div>
-            <DataTableActions {hub} />
           </div>
-        {/each}
-      </div>
-    {:else}
-      <Table.Root>
-        <Table.Header>
+          <DataTableActions {hub} />
+        </div>
+      {/each}
+    </div>
+  {:else}
+    <Table.Root>
+      <Table.Header>
+        <Table.Row>
+          <Table.Head>Name</Table.Head>
+          <Table.Head>Status</Table.Head>
+          <Table.Head>Version</Table.Head>
+          <Table.Head>Created</Table.Head>
+          <Table.Head class="w-0"></Table.Head>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
+        {#each data as hub (hub.id)}
           <Table.Row>
-            <Table.Head>Name</Table.Head>
-            <Table.Head>Status</Table.Head>
-            <Table.Head>Version</Table.Head>
-            <Table.Head>Created</Table.Head>
-            <Table.Head class="w-0"></Table.Head>
+            <Table.Cell>{hub.name}</Table.Cell>
+            <Table.Cell>
+              {#if hub.is_online}
+                <span class="text-green-500">Online</span>
+              {:else}
+                <span class="text-red-500">Offline</span>
+              {/if}
+            </Table.Cell>
+            <Table.Cell>{hub.firmware_version ?? '—'}</Table.Cell>
+            <Table.Cell>{hub.created_at.toLocaleDateString()}</Table.Cell>
+            <Table.Cell>
+              <DataTableActions {hub} />
+            </Table.Cell>
           </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {#each data as hub (hub.id)}
-            <Table.Row>
-              <Table.Cell>{hub.name}</Table.Cell>
-              <Table.Cell>
-                {#if hub.is_online}
-                  <span class="text-green-500">Online</span>
-                {:else}
-                  <span class="text-red-500">Offline</span>
-                {/if}
-              </Table.Cell>
-              <Table.Cell>{hub.firmware_version ?? '—'}</Table.Cell>
-              <Table.Cell>{hub.created_at.toLocaleDateString()}</Table.Cell>
-              <Table.Cell>
-                <DataTableActions {hub} />
-              </Table.Cell>
-            </Table.Row>
-          {:else}
-            <Table.Row>
-              <Table.Cell colspan={5} class="h-24 text-center">No hubs found.</Table.Cell>
-            </Table.Row>
-          {/each}
-        </Table.Body>
-      </Table.Root>
-    {/if}
-  </div>
-</Container>
+        {:else}
+          <Table.Row>
+            <Table.Cell colspan={5} class="h-24 text-center">No hubs found.</Table.Cell>
+          </Table.Row>
+        {/each}
+      </Table.Body>
+    </Table.Root>
+  {/if}
+</div>

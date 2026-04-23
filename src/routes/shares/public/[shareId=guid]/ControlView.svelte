@@ -4,6 +4,7 @@
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import LiveButton from '$lib/components/ControlModules/LiveButton.svelte';
   import LiveControlModule from '$lib/components/ControlModules/LiveControlModule.svelte';
+  import ShockerCard from '$lib/components/ControlModules/ShockerCard.svelte';
   import { getPauseReason } from '$lib/utils';
   import * as Avatar from '$lib/components/ui/avatar';
   import * as Tooltip from '$lib/components/ui/tooltip/index.js';
@@ -135,34 +136,35 @@
       {@const liveState = liveConn?.getShockerState(shocker.id)}
       {@const isShockerLiveActive =
         (liveState?.isLive ?? false) && liveConn?.state === LiveConnectionState.Connected}
-      <div>
-        {#if shocker.permissions.live}
-          <LiveButton
-            hubId={deviceId}
-            shockerId={shocker.id}
-            isPaused={shocker.paused !== 0}
-            connection={liveConn}
-            {liveState}
-          />
-        {/if}
+      <ShockerCard
+        name={shocker.name}
+        isPaused={shocker.paused !== 0}
+        pauseReason={getPauseReason(shocker.paused)}
+      >
+        {#snippet live()}
+          {#if shocker.permissions.live}
+            <LiveButton
+              hubId={deviceId}
+              shockerId={shocker.id}
+              isPaused={shocker.paused !== 0}
+              connection={liveConn}
+              {liveState}
+              compact
+            />
+          {/if}
+        {/snippet}
         {#if isShockerLiveActive && liveState && liveConn}
-          <LiveControlModule
-            shocker={{ id: shocker.id, name: shocker.name, isPaused: shocker.paused !== 0 }}
-            {liveState}
-            connection={liveConn}
-          />
+          <LiveControlModule shockerId={shocker.id} {liveState} connection={liveConn} />
         {:else}
           <ClassicControlModule
             id={shocker.id}
-            name={shocker.name}
             isPaused={shocker.paused !== 0}
-            pauseReason={getPauseReason(shocker.paused)}
             limits={shocker.limits}
             permissions={shocker.permissions}
             ctrl={publicCtrl}
           />
         {/if}
-      </div>
+      </ShockerCard>
     {/each}
   </div>
 </div>

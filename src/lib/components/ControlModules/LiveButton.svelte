@@ -13,9 +13,10 @@
     isPaused: boolean;
     connection?: LiveDeviceConnection;
     liveState?: LiveShockerState;
+    compact?: boolean;
   }
 
-  let { hubId, shockerId, isPaused, connection, liveState }: Props = $props();
+  let { hubId, shockerId, isPaused, connection, liveState, compact = false }: Props = $props();
 
   let isActive = $derived(
     (liveState?.isLive ?? false) && connection?.state === LiveConnectionState.Connected
@@ -26,7 +27,7 @@
   let isDisabled = $derived(isPaused && !(liveState?.isLive ?? false));
 </script>
 
-<div class="mb-1 flex items-center gap-1.5">
+<div class="flex items-center gap-1.5 {compact ? '' : 'mb-1'}">
   <button
     class="border-border text-muted-foreground hover:border-foreground hover:text-foreground cursor-pointer rounded border bg-transparent px-1.5 py-px text-[10px] font-bold tracking-wider transition-all duration-200
       {isActive
@@ -47,7 +48,7 @@
       <Loader class="inline size-3 animate-spin" />
     {/if}
   </button>
-  {#if isActive && connection}
+  {#if isActive && connection && !compact}
     <span class="text-muted-foreground text-[10px]">
       {connection.gateway} ({connection.country}) — {connection.latency}ms
     </span>
