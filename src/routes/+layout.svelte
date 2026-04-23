@@ -13,7 +13,6 @@
   import { IsMobile } from '$lib/hooks/is-mobile.svelte';
   import { usePersistedState } from '$lib/state/classes/persisted-state.svelte';
   import DialogManager from '$lib/components/dialog-manager/dialog-manager.svelte';
-  import Container from '$lib/components/Container.svelte';
 
   interface Props {
     children?: Snippet;
