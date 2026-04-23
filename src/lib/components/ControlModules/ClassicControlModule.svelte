@@ -27,7 +27,9 @@
   const { active } = useShockerEvents(() => id);
 
   const maxIntensity = $derived(limits?.intensity ?? ControlIntensityProps.max);
-  const maxDuration = $derived(limits?.duration != null ? limits.duration / 1000 : ControlDurationProps.max);
+  const maxDuration = $derived(
+    limits?.duration != null ? limits.duration / 1000 : ControlDurationProps.max
+  );
   const hasLimits = $derived(limits?.intensity != null || limits?.duration != null);
 
   const clampedIntensity = $derived(Math.min(intensity, maxIntensity));
@@ -60,12 +62,7 @@
     {...ControlIntensityProps}
     max={maxIntensity}
   />
-  <CircleSlider
-    name="Duration"
-    bind:value={duration}
-    {...ControlDurationProps}
-    max={maxDuration}
-  />
+  <CircleSlider name="Duration" bind:value={duration} {...ControlDurationProps} max={maxDuration} />
 </div>
 
 <!-- Buttons -->

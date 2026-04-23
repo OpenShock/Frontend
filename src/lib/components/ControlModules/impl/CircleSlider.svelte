@@ -138,7 +138,11 @@
 </script>
 
 <div class="relative aspect-square w-full max-w-[150px] min-w-0 select-none">
-  <svg viewBox="0 0 {viewWidth} {viewHeight}" class="absolute inset-0 size-full" bind:this={element}>
+  <svg
+    viewBox="0 0 {viewWidth} {viewHeight}"
+    class="absolute inset-0 size-full"
+    bind:this={element}
+  >
     <!-- background arc -->
     <path
       d={calcSvgPathData(angleEnd)}
