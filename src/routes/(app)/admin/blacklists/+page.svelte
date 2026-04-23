@@ -6,6 +6,7 @@
     MatchTypeEnum,
     type UserNameBlacklistDto,
   } from '$lib/api/internal/v1';
+  import Container from '$lib/components/Container.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import { Button } from '$lib/components/ui/button';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
@@ -164,7 +165,7 @@
   });
 </script>
 
-<div class="grid grid-cols-1 gap-6 p-8 md:grid-cols-2">
+<Container class="grid grid-cols-1 gap-6 md:grid-cols-2">
   <!-- Username Blacklist -->
   <Card>
     <CardHeader>
@@ -254,4 +255,4 @@
       </ScrollArea>
     </CardContent>
   </Card>
-</div>
+</Container>
