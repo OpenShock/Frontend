@@ -67,7 +67,7 @@
 <DialogShareCodeCreated bind:code={createdCode} />
 <DialogShareCodeRedeem bind:open={redeemDialogOpen} bind:userInput={redeemUserInput} />
 
-<div class="flex h-full w-full flex-col">
+<Container class="flex flex-col">
   <PageHeader title="User Shares" subtitle="Direct permanent shares with users">
     <Button onclick={() => (redeemDialogOpen = true)} class="self-end">
       <Barcode />
@@ -94,4 +94,4 @@
   <div class="flex w-full flex-col space-y-4 overflow-auto">
     {@render children?.()}
   </div>
-</div>
+</Container>

@@ -188,152 +188,152 @@
   </ShockerCard>
 {/snippet}
 
-{#if loading}
-  <div class="flex size-full items-center justify-center">
+<Container>
+  {#if loading}
     <div class="flex items-center gap-3 p-12">
       <LoaderCircle class="size-6 animate-spin" />
       <span class="text-muted-foreground">Loading shockers...</span>
     </div>
-  </div>
-{:else}
-  <div class="flex w-full flex-wrap items-center justify-between gap-2">
-    <h1 class="text-2xl font-bold">Shockers</h1>
-    <div class="flex flex-wrap items-center gap-1">
-      <Button variant="secondary" size="sm" onclick={openAddShockerDialog}>
-        <Plus class="size-4" /> Add Shocker
-      </Button>
-      <Button
-        variant="ghost"
-        size="sm"
-        onclick={refresh}
-        disabled={refreshing}
-        aria-label="Refresh"
-      >
-        <RotateCcw class={refreshing ? 'size-4 animate-spin' : 'size-4'} />
-      </Button>
-      <!-- Mode button -->
-      <Popover.Root>
-        <Popover.Trigger>
-          {#snippet child({ props })}
-            <Button {...props} variant="ghost" size="sm" aria-label="View mode">
-              <Layers class="size-4" />
-            </Button>
-          {/snippet}
-        </Popover.Trigger>
-        <Popover.Content class="flex flex-col gap-1" align="end">
-          <Button
-            variant={moduleType === ModuleType.ClassicControlModule ? 'secondary' : 'ghost'}
-            size="sm"
-            onclick={() => (moduleType = ModuleType.ClassicControlModule)}
-          >
-            Classic
-          </Button>
-          <Button
-            variant={moduleType === ModuleType.RichControlModule ? 'secondary' : 'ghost'}
-            size="sm"
-            onclick={() => (moduleType = ModuleType.RichControlModule)}
-          >
-            Rich
-          </Button>
-          <Button
-            variant={moduleType === ModuleType.SimpleControlModule ? 'secondary' : 'ghost'}
-            size="sm"
-            onclick={() => (moduleType = ModuleType.SimpleControlModule)}
-          >
-            Simple
-          </Button>
-          <Button
-            variant={moduleType === ModuleType.MapControlModule ? 'secondary' : 'ghost'}
-            size="sm"
-            onclick={() => (moduleType = ModuleType.MapControlModule)}
-          >
-            Map
-          </Button>
-        </Popover.Content>
-      </Popover.Root>
-      <!-- Settings button -->
-      <Popover.Root>
-        <Popover.Trigger>
-          {#snippet child({ props })}
-            <Button {...props} variant="ghost" size="sm" aria-label="Settings">
-              <Settings class="size-4" />
-            </Button>
-          {/snippet}
-        </Popover.Trigger>
-        <Popover.Content class="flex flex-col gap-2" align="end">
-          <Button
-            variant={groupByHub.value ? 'secondary' : 'ghost'}
-            size="sm"
-            onclick={() => (groupByHub.value = !groupByHub.value)}
-          >
-            Group by Hub
-          </Button>
-          <Button variant="ghost" size="sm" disabled>
-            Global Limits
-            <span class="text-muted-foreground ml-2 text-xs">(Coming soon)</span>
-          </Button>
-        </Popover.Content>
-      </Popover.Root>
-      <Button variant="ghost" size="sm" aria-label="Logs" href={resolve('/shockers/logs')}>
-        <LogsIcon class="size-4" />
-      </Button>
-    </div>
-  </div>
-
-  <hr class="border-border" />
-
-  {#if shockers.length === 0}
-    <div class="flex flex-col items-center justify-center gap-4 py-16">
-      <Zap class="text-muted-foreground size-12" />
-      <div class="text-center">
-        <h2 class="text-lg font-semibold">No shockers yet</h2>
-        <p class="text-muted-foreground text-sm">
-          {#if ownHubs.size === 0}
-            Create a hub first, then add shockers to it.
-          {:else}
-            Add a shocker to one of your hubs to get started.
-          {/if}
-        </p>
-      </div>
-      <Button onclick={openAddShockerDialog} disabled={ownHubs.size === 0}>
-        <Plus class="size-4" /> Add Shocker
-      </Button>
-    </div>
   {:else}
-    {#if moduleType === ModuleType.SimpleControlModule}
-      <SimpleControlHeader bind:shockIntensity bind:vibrationIntensity bind:duration />
-    {/if}
-    {#if moduleType === ModuleType.MapControlModule}
-      <MapControlModule {shockers} />
-    {:else if groupByHub.value}
-      <div class="flex flex-col gap-6">
-        {#each Array.from(ownHubs) as [hubId, hub] (hubId)}
-          {@const online = onlineHubs.get(hubId)?.isOnline ?? false}
-          <div class="flex flex-col gap-3">
-            <div class="flex items-center gap-2">
-              <span
-                class="size-2.5 rounded-full {online ? 'bg-green-400' : 'bg-red-500'}"
-                title={online ? 'Online' : 'Offline'}
-              ></span>
-              <span class="text-lg font-semibold">{hub.name}</span>
-              <span class="text-muted-foreground text-xs">
-                {hub.shockers.length} shocker{hub.shockers.length !== 1 ? 's' : ''}
-              </span>
-            </div>
-            <div class="flex flex-wrap justify-center gap-4">
-              {#each hub.shockers as shocker (shocker.id)}
-                {@render shockerCard(shocker, hubId, false)}
-              {/each}
-            </div>
-          </div>
-        {/each}
+    <div class="flex w-full flex-wrap items-center justify-between gap-2">
+      <h1 class="text-2xl font-bold">Shockers</h1>
+      <div class="flex flex-wrap items-center gap-1">
+        <Button variant="secondary" size="sm" onclick={openAddShockerDialog}>
+          <Plus class="size-4" /> Add Shocker
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onclick={refresh}
+          disabled={refreshing}
+          aria-label="Refresh"
+        >
+          <RotateCcw class={refreshing ? 'size-4 animate-spin' : 'size-4'} />
+        </Button>
+        <!-- Mode button -->
+        <Popover.Root>
+          <Popover.Trigger>
+            {#snippet child({ props })}
+              <Button {...props} variant="ghost" size="sm" aria-label="View mode">
+                <Layers class="size-4" />
+              </Button>
+            {/snippet}
+          </Popover.Trigger>
+          <Popover.Content class="flex flex-col gap-1" align="end">
+            <Button
+              variant={moduleType === ModuleType.ClassicControlModule ? 'secondary' : 'ghost'}
+              size="sm"
+              onclick={() => (moduleType = ModuleType.ClassicControlModule)}
+            >
+              Classic
+            </Button>
+            <Button
+              variant={moduleType === ModuleType.RichControlModule ? 'secondary' : 'ghost'}
+              size="sm"
+              onclick={() => (moduleType = ModuleType.RichControlModule)}
+            >
+              Rich
+            </Button>
+            <Button
+              variant={moduleType === ModuleType.SimpleControlModule ? 'secondary' : 'ghost'}
+              size="sm"
+              onclick={() => (moduleType = ModuleType.SimpleControlModule)}
+            >
+              Simple
+            </Button>
+            <Button
+              variant={moduleType === ModuleType.MapControlModule ? 'secondary' : 'ghost'}
+              size="sm"
+              onclick={() => (moduleType = ModuleType.MapControlModule)}
+            >
+              Map
+            </Button>
+          </Popover.Content>
+        </Popover.Root>
+        <!-- Settings button -->
+        <Popover.Root>
+          <Popover.Trigger>
+            {#snippet child({ props })}
+              <Button {...props} variant="ghost" size="sm" aria-label="Settings">
+                <Settings class="size-4" />
+              </Button>
+            {/snippet}
+          </Popover.Trigger>
+          <Popover.Content class="flex flex-col gap-2" align="end">
+            <Button
+              variant={groupByHub.value ? 'secondary' : 'ghost'}
+              size="sm"
+              onclick={() => (groupByHub.value = !groupByHub.value)}
+            >
+              Group by Hub
+            </Button>
+            <Button variant="ghost" size="sm" disabled>
+              Global Limits
+              <span class="text-muted-foreground ml-2 text-xs">(Coming soon)</span>
+            </Button>
+          </Popover.Content>
+        </Popover.Root>
+        <Button variant="ghost" size="sm" aria-label="Logs" href={resolve('/shockers/logs')}>
+          <LogsIcon class="size-4" />
+        </Button>
+      </div>
+    </div>
+
+    <hr class="border-border" />
+
+    {#if shockers.length === 0}
+      <div class="flex flex-col items-center justify-center gap-4 py-16">
+        <Zap class="text-muted-foreground size-12" />
+        <div class="text-center">
+          <h2 class="text-lg font-semibold">No shockers yet</h2>
+          <p class="text-muted-foreground text-sm">
+            {#if ownHubs.size === 0}
+              Create a hub first, then add shockers to it.
+            {:else}
+              Add a shocker to one of your hubs to get started.
+            {/if}
+          </p>
+        </div>
+        <Button onclick={openAddShockerDialog} disabled={ownHubs.size === 0}>
+          <Plus class="size-4" /> Add Shocker
+        </Button>
       </div>
     {:else}
-      <div class="flex flex-wrap justify-center gap-4">
-        {#each flatShockers as { shocker, hubId } (shocker.id)}
-          {@render shockerCard(shocker, hubId, true)}
-        {/each}
-      </div>
+      {#if moduleType === ModuleType.SimpleControlModule}
+        <SimpleControlHeader bind:shockIntensity bind:vibrationIntensity bind:duration />
+      {/if}
+      {#if moduleType === ModuleType.MapControlModule}
+        <MapControlModule {shockers} />
+      {:else if groupByHub.value}
+        <div class="flex flex-col gap-6">
+          {#each Array.from(ownHubs) as [hubId, hub] (hubId)}
+            {@const online = onlineHubs.get(hubId)?.isOnline ?? false}
+            <div class="flex flex-col gap-3">
+              <div class="flex items-center gap-2">
+                <span
+                  class="size-2.5 rounded-full {online ? 'bg-green-400' : 'bg-red-500'}"
+                  title={online ? 'Online' : 'Offline'}
+                ></span>
+                <span class="text-lg font-semibold">{hub.name}</span>
+                <span class="text-muted-foreground text-xs">
+                  {hub.shockers.length} shocker{hub.shockers.length !== 1 ? 's' : ''}
+                </span>
+              </div>
+              <div class="flex flex-wrap justify-center gap-4">
+                {#each hub.shockers as shocker (shocker.id)}
+                  {@render shockerCard(shocker, hubId, false)}
+                {/each}
+              </div>
+            </div>
+          {/each}
+        </div>
+      {:else}
+        <div class="flex flex-wrap justify-center gap-4">
+          {#each flatShockers as { shocker, hubId } (shocker.id)}
+            {@render shockerCard(shocker, hubId, true)}
+          {/each}
+        </div>
+      {/if}
     {/if}
   {/if}
-{/if}
+</Container>

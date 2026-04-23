@@ -62,24 +62,26 @@
 
 <CreatePublicShareDialog bind:open={showAddShareModal} onCreated={refreshPublicShares} />
 
-<PageHeader
-  title="Public Shares"
-  subtitle="Think of them like a link that
+<Container>
+  <PageHeader
+    title="Public Shares"
+    subtitle="Think of them like a link that
   anyone can access"
->
-  <Button onclick={() => (showAddShareModal = true)}>
-    <Plus />
-    Add Share
-  </Button>
-  <Button size="icon" variant="outline" onclick={refreshPublicShares}>
-    <RotateCcw />
-  </Button>
-</PageHeader>
-<div class="w-full overflow-auto">
-  <DataTable 
-    {data}
-    {columns}
-    {sorting}
-    onRowClick={(clicked) => goto(resolve(`/shares/public/${clicked.id}`))}
-  />
-</div>
+  >
+    <Button onclick={() => (showAddShareModal = true)}>
+      <Plus />
+      Add Share
+    </Button>
+    <Button size="icon" variant="outline" onclick={refreshPublicShares}>
+      <RotateCcw />
+    </Button>
+  </PageHeader>
+  <div class="w-full overflow-auto">
+    <DataTable
+      {data}
+      {columns}
+      {sorting}
+      onRowClick={(clicked) => goto(resolve(`/shares/public/${clicked.id}`))}
+    />
+  </div>
+</Container>

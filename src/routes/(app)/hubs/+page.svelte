@@ -16,6 +16,7 @@
   import * as Dialog from '$lib/components/ui/dialog';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import PageHeader from '$lib/components/PageHeader.svelte';
+  import Container from '$lib/components/Container.svelte';
 
   const isMobile = new IsMobile();
 
@@ -78,18 +79,18 @@
   </Button>
 {/snippet}
 
-<PageHeader title="Hubs" subtitle="This is a list of all hubs you own">
-  <Button onclick={openCreateHubDialog}>
-    <Plus />
-    Add Hub
-  </Button>
-  <Button onclick={refreshOwnHubs}>
-    <RotateCcw />
-    Refresh
-  </Button>
-</PageHeader>
+<Container class="w-full">
+  <PageHeader title="Hubs" subtitle="This is a list of all hubs you own">
+    <Button onclick={openCreateHubDialog}>
+      <Plus />
+      Add Hub
+    </Button>
+    <Button onclick={refreshOwnHubs}>
+      <RotateCcw />
+      Refresh
+    </Button>
+  </PageHeader>
 
-<div class="w-full">
   {#if isMobile.current}
     <div class="grid w-full gap-6">
       {#each data as hub (hub.id)}
@@ -145,4 +146,4 @@
       </Table.Body>
     </Table.Root>
   {/if}
-</div>
+</Container>

@@ -49,9 +49,7 @@
     {/if}
     <Header />
     <main class="min-h-0 flex-1 overflow-x-hidden">
-      <Container class="p-6">
-        {@render children?.()}
-      </Container>
+      {@render children?.()}
     </main>
     <Footer />
   </div>

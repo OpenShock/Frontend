@@ -56,93 +56,94 @@
   });
 </script>
 
-{#if sharedHubsState.value == null}
-  <p>Loading...</p>
-{:else}
-  <PageHeader title="Shared Shockers" subtitle="Manage shared shockers with other users"></PageHeader>
-  <div class="flex w-full content-center justify-between">
-    <h1 class="text-2xl font-bold">Shared Shockers</h1>
-  </div>
-  <hr class="border-border w-full" />
-
-  {#if !hasSharedShockers}
-    <div class="text-muted-foreground flex flex-col items-center justify-center py-12">
-      <User size={48} class="mb-4 opacity-50" />
-      <p class="text-lg">No shockers have been shared with you yet.</p>
-      <p class="text-sm">When someone shares their shockers with you, they'll appear here.</p>
-    </div>
+<Container>
+  {#if sharedHubsState.value == null}
+    <p>Loading...</p>
   {:else}
-    <div class="flex w-full flex-col gap-5">
-      {#each sharedHubsState.value as owner (owner.id)}
-        {@const totalShockers = owner.devices.reduce((acc, d) => acc + d.shockers.length, 0)}
-        <!-- Owner Section -->
-        <section class="bg-muted/40 flex flex-col gap-3 rounded-lg p-2 sm:p-3">
-          <!-- Owner Header -->
-          <div class="flex items-center gap-3 px-1">
-            <Avatar.Root class="h-9 w-9">
-              <Avatar.Image src={owner.image} alt={owner.name} />
-              <Avatar.Fallback>
-                <User size={18} />
-              </Avatar.Fallback>
-            </Avatar.Root>
-            <div class="min-w-0">
-              <h2 class="truncate text-lg font-semibold">{owner.name}</h2>
-              <p class="text-muted-foreground text-xs">
-                {totalShockers} shocker{totalShockers !== 1 ? 's' : ''}
-              </p>
-            </div>
-          </div>
+    <PageHeader title="Shared Shockers" subtitle="Manage shared shockers with other users"
+    ></PageHeader>
+    <div class="flex w-full content-center justify-between">
+      <h1 class="text-2xl font-bold">Shared Shockers</h1>
+    </div>
+    <hr class="border-border w-full" />
 
-          <!-- Shockers across all of this owner's hubs -->
-          <div class="bg-background/60 flex flex-wrap justify-center gap-3 rounded-md p-2 sm:justify-start">
-            {#each owner.devices as device (device.id)}
-              {@const hubOnline = onlineHubs.get(device.id)?.isOnline ?? false}
-              {#each device.shockers as shocker (shocker.id)}
-                {@const liveConn = getLiveConnection(device.id)}
-                {@const liveState = liveConn?.getShockerState(shocker.id)}
-                {@const isShockerLiveActive =
-                  (liveState?.isLive ?? false) &&
-                  liveConn?.state === LiveConnectionState.Connected}
-                <ShockerCard
-                  name={shocker.name}
-                  hubName={device.name}
-                  {hubOnline}
-                  showHubBadge
-                  isPaused={shocker.isPaused}
-                >
-                  {#snippet live()}
-                    {#if shocker.permissions.live}
-                      <LiveButton
-                        hubId={device.id}
-                        shockerId={shocker.id}
+    {#if !hasSharedShockers}
+      <div class="text-muted-foreground flex flex-col items-center justify-center py-12">
+        <User size={48} class="mb-4 opacity-50" />
+        <p class="text-lg">No shockers have been shared with you yet.</p>
+        <p class="text-sm">When someone shares their shockers with you, they'll appear here.</p>
+      </div>
+    {:else}
+      <div class="flex w-full flex-col gap-5">
+        {#each sharedHubsState.value as owner (owner.id)}
+          {@const totalShockers = owner.devices.reduce((acc, d) => acc + d.shockers.length, 0)}
+          <!-- Owner Section -->
+          <section class="bg-muted/40 flex flex-col gap-3 rounded-lg p-2 sm:p-3">
+            <!-- Owner Header -->
+            <div class="flex items-center gap-3 px-1">
+              <Avatar.Root class="h-9 w-9">
+                <Avatar.Image src={owner.image} alt={owner.name} />
+                <Avatar.Fallback>
+                  <User size={18} />
+                </Avatar.Fallback>
+              </Avatar.Root>
+              <div class="min-w-0">
+                <h2 class="truncate text-lg font-semibold">{owner.name}</h2>
+                <p class="text-muted-foreground text-xs">
+                  {totalShockers} shocker{totalShockers !== 1 ? 's' : ''}
+                </p>
+              </div>
+            </div>
+
+            <!-- Shockers across all of this owner's hubs -->
+            <div
+              class="bg-background/60 flex flex-wrap justify-center gap-3 rounded-md p-2 sm:justify-start"
+            >
+              {#each owner.devices as device (device.id)}
+                {@const hubOnline = onlineHubs.get(device.id)?.isOnline ?? false}
+                {#each device.shockers as shocker (shocker.id)}
+                  {@const liveConn = getLiveConnection(device.id)}
+                  {@const liveState = liveConn?.getShockerState(shocker.id)}
+                  {@const isShockerLiveActive =
+                    (liveState?.isLive ?? false) &&
+                    liveConn?.state === LiveConnectionState.Connected}
+                  <ShockerCard
+                    name={shocker.name}
+                    hubName={device.name}
+                    {hubOnline}
+                    showHubBadge
+                    isPaused={shocker.isPaused}
+                  >
+                    {#snippet live()}
+                      {#if shocker.permissions.live}
+                        <LiveButton
+                          hubId={device.id}
+                          shockerId={shocker.id}
+                          isPaused={shocker.isPaused}
+                          connection={liveConn}
+                          {liveState}
+                          compact
+                        />
+                      {/if}
+                    {/snippet}
+                    {#if isShockerLiveActive && liveState && liveConn}
+                      <LiveControlModule shockerId={shocker.id} {liveState} connection={liveConn} />
+                    {:else}
+                      <ClassicControlModule
+                        id={shocker.id}
                         isPaused={shocker.isPaused}
-                        connection={liveConn}
-                        {liveState}
-                        compact
+                        limits={shocker.limits}
+                        permissions={shocker.permissions}
+                        ctrl={sharedCtrl}
                       />
                     {/if}
-                  {/snippet}
-                  {#if isShockerLiveActive && liveState && liveConn}
-                    <LiveControlModule
-                      shockerId={shocker.id}
-                      {liveState}
-                      connection={liveConn}
-                    />
-                  {:else}
-                    <ClassicControlModule
-                      id={shocker.id}
-                      isPaused={shocker.isPaused}
-                      limits={shocker.limits}
-                      permissions={shocker.permissions}
-                      ctrl={sharedCtrl}
-                    />
-                  {/if}
-                </ShockerCard>
+                  </ShockerCard>
+                {/each}
               {/each}
-            {/each}
-          </div>
-        </section>
-      {/each}
-    </div>
+            </div>
+          </section>
+        {/each}
+      </div>
+    {/if}
   {/if}
-{/if}
+</Container>
