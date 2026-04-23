@@ -33,6 +33,7 @@
     autocomplete = 'current-password',
     value = $bindable(),
     valueShown = $bindable(false),
+    // eslint-disable-next-line no-useless-assignment -- $bindable fallback, not a dead assignment
     valid = $bindable(false),
     validate = false,
     showStrengthMeter = false,

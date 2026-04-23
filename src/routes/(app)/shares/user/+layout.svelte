@@ -5,7 +5,6 @@
   import type { BasicUserInfo } from '$lib/api/internal/v1';
   import Container from '$lib/components/Container.svelte';
   import { Button } from '$lib/components/ui/button';
-  import * as Card from '$lib/components/ui/card';
   import * as Tabs from '$lib/components/ui/tabs/index.js';
   import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
   import { type Snippet, onMount } from 'svelte';

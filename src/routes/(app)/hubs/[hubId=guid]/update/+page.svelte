@@ -61,7 +61,6 @@
   import { page } from '$app/state';
   import { hubManagementV1Api } from '$lib/api';
   import type { OtaItem } from '$lib/api/internal/v1';
-  import Container from '$lib/components/Container.svelte';
   import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
   import { Badge } from '$lib/components/ui/badge';
   import Button from '$lib/components/ui/button/button.svelte';
