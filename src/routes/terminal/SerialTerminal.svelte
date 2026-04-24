@@ -195,10 +195,7 @@
   }
 </script>
 
-<div
-  class="bg-background sticky bottom-0 z-10 flex w-full flex-col border-t"
-  style="height: {height}px"
->
+<div class="bg-background flex w-full flex-col border-t" style="height: {height}px">
   <!-- Resize handle -->
   <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
   <div
