@@ -22,6 +22,7 @@ RUN wget -qO /bin/pnpm "${PNPM_URL}" && chmod +x /bin/pnpm
 # Copy dependency manifests first (for caching)
 COPY package.json .
 COPY pnpm-lock.yaml .
+COPY pnpm-workspace.yaml .
 COPY patches/ patches/
 
 # Install deps
@@ -56,6 +57,7 @@ EXPOSE 3000
 # Copy only required runtime files and build output
 COPY --from=build /app/package.json .
 COPY --from=build /app/pnpm-lock.yaml .
+COPY --from=build /app/pnpm-workspace.yaml .
 COPY --from=build /app/patches/ patches/
 COPY --from=build /app/build build/
 
