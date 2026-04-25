@@ -450,8 +450,8 @@
         </div>
         <p class="text-muted-foreground text-xs">
           AP settings (<code>ap_ssid</code>, <code>ap_password</code>, <code>ap_disabled</code>,
-          <code>sta_disabled</code>, <code>offline_mode</code>) have no dedicated commands;
-          use the JSON config.
+          <code>sta_disabled</code>, <code>offline_mode</code>) have no dedicated commands; use the
+          JSON config.
         </p>
       </div>
     </Card.Content>
@@ -675,8 +675,8 @@
   onConfirm={handleFactoryReset}
 >
   {#snippet description()}
-    This will erase all configuration on the device; WiFi networks, backend credentials,
-    pins, and all other settings. The device will be reset to defaults.
+    This will erase all configuration on the device; WiFi networks, backend credentials, pins, and
+    all other settings. The device will be reset to defaults.
   {/snippet}
 </ConfirmDeleteDialog>
 

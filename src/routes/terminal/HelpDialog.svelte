@@ -62,8 +62,8 @@
 {#snippet portBody()}
   <p class="text-sm">
     Plug the device directly into a USB port on your computer. Avoid USB hubs, docking stations, and
-    front-panel ports if possible; these are common sources of power and signal issues. If
-    you're on a desktop, try a port on the back of the machine.
+    front-panel ports if possible; these are common sources of power and signal issues. If you're on
+    a desktop, try a port on the back of the machine.
   </p>
 {/snippet}
 
@@ -101,8 +101,7 @@
         <li><Code>Silicon Labs CP210x USB to UART Bridge</Code></li>
         <li><Code>Silicon Labs CP210x USB to UART Bridge (COM...)</Code></li>
       </ul>
-      If it's missing, the device isn't being detected by Windows at all; revisit the cable and
-      port steps.
+      If it's missing, the device isn't being detected by Windows at all; revisit the cable and port steps.
     </li>
     <li>
       Right-click the device and pick <Code>Update Driver</Code>.
