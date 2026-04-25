@@ -12,8 +12,8 @@
   import { Button } from '$lib/components/ui/button';
   import { stripAnsi } from './ansi';
   import { LOG_LEVEL_COLORS } from './constants';
-  import type FlashManager from './FlashManager';
   import type { TerminalLine } from './types';
+  import type { TerminalContext } from './TerminalContext.svelte';
   import { tick, onDestroy } from 'svelte';
 
   type TimestampMode = 'uptime' | 'local' | 'ms' | 'off';
@@ -30,21 +30,22 @@
   const DEFAULT_HEIGHT = 256;
 
   interface Props {
-    lines: TerminalLine[];
-    manager: FlashManager | null;
+    context: TerminalContext;
+    mode: 'flash' | 'configure';
     disabled?: boolean;
-    onClear: () => void;
     onReset: () => void;
     onSendCommand: (command: string) => void;
   }
 
-  let { lines, manager, disabled = false, onClear, onReset, onSendCommand }: Props = $props();
+  let { context, mode, disabled = false, onReset, onSendCommand }: Props = $props();
+  let lines = $derived(context.lines);
 
   let commandInput = $state('');
   let commandHistory = $state<string[]>([]);
   let historyIndex = $state(-1);
   let autoScroll = $state(true);
   let scrollContainer = $state<HTMLDivElement | null>(null);
+  let commandInputEl = $state<HTMLInputElement | null>(null);
 
   function handleScroll() {
     if (!scrollContainer) return;
@@ -71,6 +72,8 @@
     historyIndex = -1;
     onSendCommand(cmd);
     commandInput = '';
+    // Refocus after tick so disabled round-trip doesn't steal focus
+    tick().then(() => commandInputEl?.focus());
   }
 
   function handleKeydown(e: KeyboardEvent) {
@@ -142,8 +145,8 @@
   }
 
   let filler = $derived<Record<TimestampMode, string>>({
-    uptime: '\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0',
-    local: '\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0',
+    uptime: '\u00a0'.repeat(8),
+    local: '\u00a0'.repeat(8),
     ms: '\u00a0'.repeat(maxMsWidth),
     off: '',
   });
@@ -192,7 +195,7 @@
   }
 </script>
 
-<div class="flex flex-col border-t" style="height: {height}px">
+<div class="bg-background flex w-full flex-col border-t" style="height: {height}px">
   <!-- Resize handle -->
   <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
   <div
@@ -236,14 +239,16 @@
           Copy
         {/if}
       </Button>
-      <Button size="sm" variant="ghost" onclick={onClear}>
+      <Button size="sm" variant="ghost" onclick={context.clean}>
         <Trash2 class="mr-1 h-3.5 w-3.5" />
         Clear
       </Button>
-      <Button size="sm" variant="ghost" onclick={onReset} disabled={!manager || disabled}>
-        <RotateCcw class="mr-1 h-3.5 w-3.5" />
-        Reset
-      </Button>
+      {#if mode === 'configure'}
+        <Button size="sm" variant="ghost" onclick={onReset} {disabled}>
+          <RotateCcw class="mr-1 h-3.5 w-3.5" />
+          Reset
+        </Button>
+      {/if}
     </div>
   </div>
 
@@ -287,19 +292,22 @@
     {/each}
   </div>
 
-  <!-- Command input -->
-  <div class="flex items-center gap-2 border-t px-3 py-1.5">
-    <span class="text-muted-foreground font-mono text-xs">$</span>
-    <input
-      class="flex-1 bg-transparent font-mono text-xs outline-none"
-      bind:value={commandInput}
-      onkeydown={handleKeydown}
-      aria-label="Serial command"
-      placeholder="Type a command..."
-      disabled={!manager || disabled}
-    />
-    <Button size="sm" variant="ghost" onclick={sendCommand} disabled={!manager || disabled}>
-      <Send class="h-3.5 w-3.5" />
-    </Button>
-  </div>
+  <!-- Command input (configure mode only; flash mode is read-only) -->
+  {#if mode === 'configure'}
+    <div class="flex items-center gap-2 border-t px-3 py-1.5">
+      <span class="text-muted-foreground font-mono text-xs">$</span>
+      <input
+        class="flex-1 bg-transparent font-mono text-xs outline-none"
+        bind:this={commandInputEl}
+        bind:value={commandInput}
+        onkeydown={handleKeydown}
+        aria-label="Serial command"
+        placeholder="Type a command..."
+        {disabled}
+      />
+      <Button size="sm" variant="ghost" onclick={sendCommand} {disabled}>
+        <Send class="h-3.5 w-3.5" />
+      </Button>
+    </div>
+  {/if}
 </div>

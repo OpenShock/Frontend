@@ -3,18 +3,28 @@
   import { DownloadAndVerifyBoardBinary } from '$lib/api/firmwareCDN';
   import { Button } from '$lib/components/ui/button';
   import { Progress } from '$lib/components/ui/progress';
-  import type { FlashContext } from './flash-context.svelte';
   import RiskAcknowledgementModal from './RiskAcknowledgementModal.svelte';
+  import type EspSerialConnection from './EspSerialConnection';
 
   interface Props {
     version: string;
     board: string;
-    flash: FlashContext;
+    connection: EspSerialConnection;
     eraseBeforeFlash: boolean;
     showNonStableWarning: boolean;
+    isFlashing: boolean;
+    onComplete?: () => void;
   }
 
-  let { version, board, flash, eraseBeforeFlash, showNonStableWarning }: Props = $props();
+  let {
+    version,
+    board,
+    connection,
+    eraseBeforeFlash,
+    showNonStableWarning,
+    isFlashing = $bindable(),
+    onComplete,
+  }: Props = $props();
 
   let riskAcknowledgeStatus = $state<'none' | 'shown' | 'accepted'>('none');
   let progressName = $state<string | null>(null);
@@ -22,7 +32,7 @@
   let error = $state<string | null>(null);
 
   async function FlashDeviceImpl() {
-    if (!version || !board || !flash.manager) {
+    if (!version || !board || !connection) {
       progressName = null;
       error = 'No device selected.';
       return;
@@ -37,7 +47,7 @@
 
     progressName = 'Resetting...';
     progressPercent = null;
-    await flash.manager.ensureBootloader();
+    await connection.ensureBootloader();
 
     progressName = 'Downloading firmware...';
     progressPercent = null;
@@ -50,29 +60,32 @@
 
     progressName = 'Flashing firmware...';
     progressPercent = null;
-    await flash.manager.flash(firmware, eraseBeforeFlash, progressCallback);
+    await connection.flash(firmware, eraseBeforeFlash, progressCallback);
 
     progressName = 'Rebooting device... (Reconnect to power manually if stuck)';
     progressPercent = null;
-    await flash.manager.ensureApplication();
+    await connection.ensureApplication();
 
     progressName = 'Rebooted device! Flashing complete.';
     progressPercent = 100;
+    return true;
   }
   async function FlashDevice() {
-    if (flash.isFlashing) return;
+    if (isFlashing) return;
     if (showNonStableWarning && riskAcknowledgeStatus !== 'accepted') {
       riskAcknowledgeStatus = 'shown';
       return;
     }
+    let success = false;
     try {
-      flash.isFlashing = true;
-      await FlashDeviceImpl();
+      isFlashing = true;
+      success = (await FlashDeviceImpl()) ?? false;
     } catch (e) {
       error = (e as Error).message;
     } finally {
-      flash.isFlashing = false;
+      isFlashing = false;
     }
+    if (success) onComplete?.();
   }
 </script>
 
@@ -84,7 +97,7 @@
 
 <div class="flex flex-col items-stretch justify-start gap-4">
   <!-- Flash button -->
-  <Button onclick={FlashDevice} disabled={!flash.manager || flash.isFlashing}>
+  <Button onclick={FlashDevice} disabled={!connection || isFlashing}>
     <Microchip />
     Flash
   </Button>

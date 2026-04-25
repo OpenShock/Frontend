@@ -69,7 +69,11 @@ export class SerialContext {
  * Must be called during component initialization (top-level script).
  * Automatically cleans up event listeners on unmount.
  */
-export function useSerial(): SerialContext {
+export function useSerial(): SerialContext | null {
+  if (!isSerialSupported) {
+    return null;
+  }
+
   const ctx = new SerialContext();
   onMount(() => () => ctx.destroy());
   return ctx;
