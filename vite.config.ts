@@ -152,10 +152,14 @@ async function getServerConfig(mode: string, useLocalRedirect: boolean) {
 
   if (!useLocalRedirect) return undefined;
 
+  // Vite 8: pipe browser console.* into the dev terminal so client errors land
+  // alongside server logs without context-switching to browser devtools.
+  const baseDevConfig = { forwardConsole: true };
+
   const domain = new URL(vars.PUBLIC_SITE_URL).hostname;
 
   if (domain === 'localhost') {
-    return { host: 'localhost', port: 8080, proxy: {} };
+    return { ...baseDevConfig, host: 'localhost', port: 8080, proxy: {} };
   }
 
   let host = domain;
@@ -170,7 +174,7 @@ async function getServerConfig(mode: string, useLocalRedirect: boolean) {
   // Check if we can bind to port 443 before Vite tries and fails with an unhelpful error
   await ensurePortBindable(host, 443);
 
-  return { host, port: 443, proxy: {} };
+  return { ...baseDevConfig, host, port: 443, proxy: {} };
 }
 
 async function ensurePortBindable(host: string, port: number): Promise<void> {
