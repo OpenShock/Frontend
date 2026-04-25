@@ -93,14 +93,14 @@
   );
 
   // Allow users to view earlier steps
-  let activeStep = $derived(viewStep && viewStep <= currentStep ? viewStep : currentStep);
+  let activeStep = $derived(viewStep !== null && viewStep <= currentStep ? viewStep : currentStep);
 
   function goToStep(step: number) {
     if (step <= currentStep) viewStep = step;
   }
   // Auto-clear viewStep override when currentStep advances past it
   $effect(() => {
-    if (viewStep && currentStep > viewStep) viewStep = null;
+    if (viewStep !== null && currentStep > viewStep) viewStep = null;
   });
 
   const STEPS = [
