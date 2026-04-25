@@ -1,6 +1,6 @@
 # Define versions as build arguments for easy updates
 ARG NODE_VERSION=24.14.0
-ARG PNPM_VERSION=10.33.0
+ARG PNPM_VERSION=10.33.2
 ARG ALPINE_VERSION=3.23
 ARG PNPM_URL="https://github.com/pnpm/pnpm/releases/download/v${PNPM_VERSION}/pnpm-linuxstatic-x64"
 

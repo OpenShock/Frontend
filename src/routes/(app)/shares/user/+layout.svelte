@@ -5,7 +5,6 @@
   import type { BasicUserInfo } from '$lib/api/internal/v1';
   import Container from '$lib/components/Container.svelte';
   import { Button } from '$lib/components/ui/button';
-  import * as Card from '$lib/components/ui/card';
   import * as Tabs from '$lib/components/ui/tabs/index.js';
   import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
   import { type Snippet, onMount } from 'svelte';
@@ -15,6 +14,7 @@
   import DialogShareCodeRedeem from './dialog-share-code-redeem.svelte';
   import { resolve } from '$app/paths';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import PageHeader from '$lib/components/PageHeader.svelte';
 
   registerBreadcrumbs(() => [{ label: 'User Shares', href: '/shares/user/outgoing' }]);
 
@@ -66,38 +66,31 @@
 <DialogShareCodeCreated bind:code={createdCode} />
 <DialogShareCodeRedeem bind:open={redeemDialogOpen} bind:userInput={redeemUserInput} />
 
-<Container class="flex h-full flex-col">
-  <Card.Header class="w-full">
-    <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
-      User Shares
-    </Card.Title>
-    <Card.Description>Direct permanent shares with users</Card.Description>
-    <div class="flex w-full flex-none">
-      <Tabs.Root value={tab} class="w-[400px]">
-        <Tabs.List>
-          <Tabs.Trigger value="shares" onclick={() => navigateTo('outgoing')}>Shares</Tabs.Trigger>
-          <Tabs.Trigger value="incoming" onclick={() => navigateTo('incoming')}
-            >Shared with Me</Tabs.Trigger
-          >
-          <Tabs.Trigger value="invites" onclick={() => navigateTo('invites')}>Invites</Tabs.Trigger>
-        </Tabs.List>
-      </Tabs.Root>
+<Container class="flex flex-col">
+  <PageHeader title="User Shares" subtitle="Direct permanent shares with users">
+    <Button onclick={() => (redeemDialogOpen = true)} class="self-end">
+      <Barcode />
+      Redeem Code
+    </Button>
+    <Button onclick={() => (createDialogOpen = true)} class="self-end">
+      <Plus />
+      New Share
+    </Button>
+  </PageHeader>
 
-      <div class="flex-grow"></div>
+  <div class="flex w-full flex-none">
+    <Tabs.Root value={tab} class="w-100">
+      <Tabs.List>
+        <Tabs.Trigger value="shares" onclick={() => navigateTo('outgoing')}>Shares</Tabs.Trigger>
+        <Tabs.Trigger value="incoming" onclick={() => navigateTo('incoming')}
+          >Shared with Me</Tabs.Trigger
+        >
+        <Tabs.Trigger value="invites" onclick={() => navigateTo('invites')}>Invites</Tabs.Trigger>
+      </Tabs.List>
+    </Tabs.Root>
+  </div>
 
-      <span>
-        <Button onclick={() => (redeemDialogOpen = true)} class="self-end">
-          <Barcode />
-          Redeem Code
-        </Button>
-        <Button onclick={() => (createDialogOpen = true)} class="self-end">
-          <Plus />
-          New Share
-        </Button>
-      </span>
-    </div>
-  </Card.Header>
-  <Card.Content class="flex w-full flex-col space-y-4 overflow-auto">
+  <div class="flex w-full flex-col space-y-4 overflow-auto">
     {@render children?.()}
-  </Card.Content>
+  </div>
 </Container>

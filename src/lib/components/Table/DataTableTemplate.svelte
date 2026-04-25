@@ -78,7 +78,7 @@
   });
 </script>
 
-<div class="max-h-[60vh] overflow-y-auto rounded-none border sm:rounded-md">
+<div class="overflow-y-auto rounded-md border">
   <Table.Root>
     <Table.Header>
       {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}

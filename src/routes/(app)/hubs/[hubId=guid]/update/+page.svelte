@@ -61,7 +61,6 @@
   import { page } from '$app/state';
   import { hubManagementV1Api } from '$lib/api';
   import type { OtaItem } from '$lib/api/internal/v1';
-  import Container from '$lib/components/Container.svelte';
   import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
   import { Badge } from '$lib/components/ui/badge';
   import Button from '$lib/components/ui/button/button.svelte';
@@ -83,6 +82,7 @@
   import { NumberToHexPadded } from '$lib/utils/convert';
   import { onMount } from 'svelte';
   import type { FirmwareChannel } from '$lib/api/firmwareCDN';
+  import PageHeader from '$lib/components/PageHeader.svelte';
 
   let hubLoaded = $state(false);
   let otaLogs = $state<OtaItem[]>([]);
@@ -197,7 +197,11 @@
 
   $effect(() => fetchOtaLogs(page.params.hubId));
 
-  registerBreadcrumbs(() => [{ label: 'Hubs', href: '/hubs' }, { label: hubName ?? 'Update' }]);
+  registerBreadcrumbs(() => [
+    { label: 'Hubs', href: '/hubs' },
+    { label: hubName, href: '/hubs' },
+    { label: 'Update' },
+  ]);
 
   onMount(refreshOwnHubs);
 </script>
@@ -225,183 +229,175 @@
   </Dialog.Content>
 </Dialog.Root>
 
-<Container>
-  <Card.Header class="w-full">
-    <Card.Title class="text-3xl">Update {hubName}</Card.Title>
-    <Card.Description>Manage firmware updates for this hub.</Card.Description>
-  </Card.Header>
-  <Card.Content class="flex w-full flex-col gap-6">
-    {#if hub}
-      <!-- Status -->
-      <Card.Root>
-        <Card.Header>
-          <Card.Title class="text-base">Hub Status</Card.Title>
-        </Card.Header>
-        <Card.Content>
-          <div class="flex flex-wrap items-center gap-3">
-            {#if hub.isOnline}
-              <Badge variant="default" class="bg-green-600">Online</Badge>
-            {:else}
-              <Badge variant="destructive">Offline</Badge>
-            {/if}
-            {#if hub.firmwareVersion}
-              <span class="text-muted-foreground text-sm">
-                Firmware: <span class="font-mono">{hub.firmwareVersion}</span>
-              </span>
-            {/if}
-          </div>
-        </Card.Content>
-      </Card.Root>
-
-      <!-- OTA Result -->
-      {#if hub.otaResult}
-        <div
-          class={cn(
-            'flex items-start gap-3 rounded-lg border p-4',
-            hub.otaResult.success
-              ? 'border-green-500/50 bg-green-500/10'
-              : 'border-red-500/50 bg-red-500/10'
-          )}
-        >
-          {#if hub.otaResult.success}
-            <CircleCheck class="mt-0.5 size-5 shrink-0 text-green-500" />
-            <div class="flex flex-col gap-2">
-              <p class="font-medium text-green-500">{hub.otaResult.message}</p>
-              <div class="flex gap-2">
-                <Button variant="outline" size="sm" href="/hubs">Back to Hubs</Button>
-                <Button variant="outline" size="sm" onclick={resetResult}>Flash Again</Button>
-              </div>
-            </div>
-          {:else if hub.otaResult.message.includes('rolled back')}
-            <TriangleAlert class="mt-0.5 size-5 shrink-0 text-yellow-500" />
-            <div class="flex flex-col gap-2">
-              <p class="font-medium text-yellow-500">{hub.otaResult.message}</p>
-              <Button variant="outline" size="sm" onclick={resetResult}>Try Again</Button>
-            </div>
+<PageHeader title="Update {hubName}" subtitle="Manage firmware updates for this hub" />
+<div class="flex w-full flex-col gap-6">
+  {#if hub}
+    <!-- Status -->
+    <Card.Root>
+      <Card.Header>
+        <Card.Title class="text-base">Hub Status</Card.Title>
+      </Card.Header>
+      <Card.Content>
+        <div class="flex flex-wrap items-center gap-3">
+          {#if hub.isOnline}
+            <Badge variant="default" class="bg-green-600">Online</Badge>
           {:else}
-            <CircleX class="mt-0.5 size-5 shrink-0 text-red-500" />
-            <div class="flex flex-col gap-2">
-              <p class="font-medium text-red-500">{hub.otaResult.message}</p>
-              <Button variant="outline" size="sm" onclick={resetResult}>Try Again</Button>
-            </div>
+            <Badge variant="destructive">Offline</Badge>
+          {/if}
+          {#if hub.firmwareVersion}
+            <span class="text-muted-foreground text-sm">
+              Firmware: <span class="font-mono">{hub.firmwareVersion}</span>
+            </span>
           {/if}
         </div>
-      {/if}
+      </Card.Content>
+    </Card.Root>
 
-      <!-- Firmware Selector + Update Button -->
-      {#if !isUpdating && !hub.otaResult}
-        <Card.Root>
-          <Card.Header>
-            <Card.Title class="text-base">Firmware Update</Card.Title>
-            <Card.Description>Select a firmware channel and version to install.</Card.Description>
-          </Card.Header>
-          <Card.Content class="flex flex-col gap-4">
-            <FirmwareChannelSelector bind:channel bind:version disabled={!hub.isOnline} />
-
-            <Button
-              class="w-fit cursor-pointer"
-              onclick={() => (confirmOpen = true)}
-              disabled={getConnection() === null ||
-                hub === null ||
-                version === null ||
-                !hub.isOnline}
-            >
-              <CloudDownload class="size-4" />
-              Update to {version ?? '...'}
-            </Button>
-
-            {#if !hub.isOnline}
-              <p class="text-muted-foreground text-sm">Hub must be online to start an update.</p>
-            {/if}
-          </Card.Content>
-        </Card.Root>
-      {/if}
-
-      <!-- Progress -->
-      {#if isUpdating}
-        <Card.Root>
-          <Card.Header>
-            <Card.Title class="text-base">
-              Updating to {hub.otaInstall?.version}...
-            </Card.Title>
-          </Card.Header>
-          <Card.Content class="flex flex-col gap-4">
-            <div class="flex flex-col gap-3">
-              <div class="grid grid-cols-[5rem_1fr] items-center gap-2">
-                <span class="text-muted-foreground text-sm font-medium">Total</span>
-                <Progress value={totalProgress} />
-              </div>
-              <div class="grid grid-cols-[5rem_1fr] items-center gap-2">
-                <span class="text-muted-foreground text-sm font-medium">Task</span>
-                <Progress value={taskProgress} />
-              </div>
+    <!-- OTA Result -->
+    {#if hub.otaResult}
+      <div
+        class={cn(
+          'flex items-start gap-3 rounded-lg border p-4',
+          hub.otaResult.success
+            ? 'border-green-500/50 bg-green-500/10'
+            : 'border-red-500/50 bg-red-500/10'
+        )}
+      >
+        {#if hub.otaResult.success}
+          <CircleCheck class="mt-0.5 size-5 shrink-0 text-green-500" />
+          <div class="flex flex-col gap-2">
+            <p class="font-medium text-green-500">{hub.otaResult.message}</p>
+            <div class="flex gap-2">
+              <Button variant="outline" size="sm" href="/hubs">Back to Hubs</Button>
+              <Button variant="outline" size="sm" onclick={resetResult}>Flash Again</Button>
             </div>
-            <p class="text-muted-foreground text-sm">{currentTaskLabel}</p>
-          </Card.Content>
-        </Card.Root>
-      {/if}
+          </div>
+        {:else if hub.otaResult.message.includes('rolled back')}
+          <TriangleAlert class="mt-0.5 size-5 shrink-0 text-yellow-500" />
+          <div class="flex flex-col gap-2">
+            <p class="font-medium text-yellow-500">{hub.otaResult.message}</p>
+            <Button variant="outline" size="sm" onclick={resetResult}>Try Again</Button>
+          </div>
+        {:else}
+          <CircleX class="mt-0.5 size-5 shrink-0 text-red-500" />
+          <div class="flex flex-col gap-2">
+            <p class="font-medium text-red-500">{hub.otaResult.message}</p>
+            <Button variant="outline" size="sm" onclick={resetResult}>Try Again</Button>
+          </div>
+        {/if}
+      </div>
+    {/if}
 
-      <!-- Logs -->
+    <!-- Firmware Selector + Update Button -->
+    {#if !isUpdating && !hub.otaResult}
       <Card.Root>
         <Card.Header>
-          <Card.Title class="flex items-center justify-between text-base">
-            Update History
-            <Button
-              variant="outline"
-              size="sm"
-              onclick={() => fetchOtaLogs(page.params.hubId)}
-              disabled={isLoading}
-            >
-              <RotateCcw class={cn('size-4', isLoading && 'animate-spin')} />
-              Refresh
-            </Button>
-          </Card.Title>
+          <Card.Title class="text-base">Firmware Update</Card.Title>
+          <Card.Description>Select a firmware channel and version to install.</Card.Description>
         </Card.Header>
-        <Card.Content>
-          {#if otaLogs.length === 0}
-            <p class="text-muted-foreground py-4 text-center text-sm">
-              No update history found for this hub.
-            </p>
-          {:else}
-            <Table.Root class="w-full">
-              <Table.Header>
-                <Table.Row>
-                  <Table.Head>ID</Table.Head>
-                  <Table.Head>Started</Table.Head>
-                  <Table.Head>Status</Table.Head>
-                  <Table.Head>Version</Table.Head>
-                  <Table.Head>Message</Table.Head>
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
-                {#each otaLogs as otaLog (otaLog.id)}
-                  <Table.Row>
-                    <Table.Cell class="text-muted-foreground font-mono text-xs">
-                      {NumberToHexPadded(otaLog.id, 8)}
-                    </Table.Cell>
-                    <Table.Cell class="text-sm" title={otaLog.startedAt.toLocaleString()}>
-                      {formatRelativeTime(otaLog.startedAt)}
-                    </Table.Cell>
-                    <Table.Cell>
-                      <Badge variant={getStatusBadgeVariant(otaLog.status)}>
-                        {otaLog.status}
-                      </Badge>
-                    </Table.Cell>
-                    <Table.Cell class="font-mono text-sm">{otaLog.version}</Table.Cell>
-                    <Table.Cell class="text-muted-foreground max-w-xs truncate text-sm">
-                      {otaLog.message ?? '-'}
-                    </Table.Cell>
-                  </Table.Row>
-                {/each}
-              </Table.Body>
-            </Table.Root>
+        <Card.Content class="flex flex-col gap-4">
+          <FirmwareChannelSelector bind:channel bind:version disabled={!hub.isOnline} />
+
+          <Button
+            class="w-fit cursor-pointer"
+            onclick={() => (confirmOpen = true)}
+            disabled={getConnection() === null || hub === null || version === null || !hub.isOnline}
+          >
+            <CloudDownload class="size-4" />
+            Update to {version ?? '...'}
+          </Button>
+
+          {#if !hub.isOnline}
+            <p class="text-muted-foreground text-sm">Hub must be online to start an update.</p>
           {/if}
         </Card.Content>
       </Card.Root>
-    {:else if isLoading}
-      <p class="text-muted-foreground">Loading hub information...</p>
-    {:else}
-      <p class="text-muted-foreground">Hub not found.</p>
     {/if}
-  </Card.Content>
-</Container>
+
+    <!-- Progress -->
+    {#if isUpdating}
+      <Card.Root>
+        <Card.Header>
+          <Card.Title class="text-base">
+            Updating to {hub.otaInstall?.version}...
+          </Card.Title>
+        </Card.Header>
+        <Card.Content class="flex flex-col gap-4">
+          <div class="flex flex-col gap-3">
+            <div class="grid grid-cols-[5rem_1fr] items-center gap-2">
+              <span class="text-muted-foreground text-sm font-medium">Total</span>
+              <Progress value={totalProgress} />
+            </div>
+            <div class="grid grid-cols-[5rem_1fr] items-center gap-2">
+              <span class="text-muted-foreground text-sm font-medium">Task</span>
+              <Progress value={taskProgress} />
+            </div>
+          </div>
+          <p class="text-muted-foreground text-sm">{currentTaskLabel}</p>
+        </Card.Content>
+      </Card.Root>
+    {/if}
+
+    <!-- Logs -->
+    <Card.Root>
+      <Card.Header>
+        <Card.Title class="flex items-center justify-between text-base">
+          Update History
+          <Button
+            variant="outline"
+            size="sm"
+            onclick={() => fetchOtaLogs(page.params.hubId)}
+            disabled={isLoading}
+          >
+            <RotateCcw class={cn('size-4', isLoading && 'animate-spin')} />
+            Refresh
+          </Button>
+        </Card.Title>
+      </Card.Header>
+      <Card.Content>
+        {#if otaLogs.length === 0}
+          <p class="text-muted-foreground py-4 text-center text-sm">
+            No update history found for this hub.
+          </p>
+        {:else}
+          <Table.Root class="w-full">
+            <Table.Header>
+              <Table.Row>
+                <Table.Head>ID</Table.Head>
+                <Table.Head>Started</Table.Head>
+                <Table.Head>Status</Table.Head>
+                <Table.Head>Version</Table.Head>
+                <Table.Head>Message</Table.Head>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {#each otaLogs as otaLog (otaLog.id)}
+                <Table.Row>
+                  <Table.Cell class="text-muted-foreground font-mono text-xs">
+                    {NumberToHexPadded(otaLog.id, 8)}
+                  </Table.Cell>
+                  <Table.Cell class="text-sm" title={otaLog.startedAt.toLocaleString()}>
+                    {formatRelativeTime(otaLog.startedAt)}
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Badge variant={getStatusBadgeVariant(otaLog.status)}>
+                      {otaLog.status}
+                    </Badge>
+                  </Table.Cell>
+                  <Table.Cell class="font-mono text-sm">{otaLog.version}</Table.Cell>
+                  <Table.Cell class="text-muted-foreground max-w-xs truncate text-sm">
+                    {otaLog.message ?? '-'}
+                  </Table.Cell>
+                </Table.Row>
+              {/each}
+            </Table.Body>
+          </Table.Root>
+        {/if}
+      </Card.Content>
+    </Card.Root>
+  {:else if isLoading}
+    <p class="text-muted-foreground">Loading hub information...</p>
+  {:else}
+    <p class="text-muted-foreground">Hub not found.</p>
+  {/if}
+</div>
