@@ -142,8 +142,25 @@
   }
 
   $effect(() => {
-    for (const line of terminal.lines) {
-      if (line.id <= lastSeenLineId) continue;
+    const lines = terminal.lines;
+    const len = lines.length;
+
+    // Defensive: if the terminal was cleared (or its id counter rolled), restart tracking
+    // so we don't get stuck silently skipping every entry.
+    if (len === 0 || lines[len - 1].id < lastSeenLineId) {
+      lastSeenLineId = -1;
+    }
+    if (len === 0) return;
+
+    // Lines are appended in monotonic id order. Walk back from the end to find the first
+    // unseen entry so we only process the newly-appended slice (O(k) instead of O(n)).
+    let startIdx = len;
+    while (startIdx > 0 && lines[startIdx - 1].id > lastSeenLineId) {
+      startIdx--;
+    }
+
+    for (let i = startIdx; i < len; i++) {
+      const line = lines[i];
       lastSeenLineId = line.id;
       handleResponseLine(line.text);
       notifyPending(line.text);
