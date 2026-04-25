@@ -31,7 +31,7 @@
 
   interface Props {
     context: TerminalContext;
-    mode: 'terminal' | 'flash' | 'configure';
+    mode: 'flash' | 'configure';
     disabled?: boolean;
     onReset: () => void;
     onSendCommand: (command: string) => void;
@@ -145,8 +145,8 @@
   }
 
   let filler = $derived<Record<TimestampMode, string>>({
-    uptime: '\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0',
-    local: '\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0',
+    uptime: '\u00a0'.repeat(8),
+    local: '\u00a0'.repeat(8),
     ms: '\u00a0'.repeat(maxMsWidth),
     off: '',
   });
@@ -243,7 +243,7 @@
         <Trash2 class="mr-1 h-3.5 w-3.5" />
         Clear
       </Button>
-      {#if mode === 'terminal' || mode === 'configure'}
+      {#if mode === 'configure'}
         <Button size="sm" variant="ghost" onclick={onReset} {disabled}>
           <RotateCcw class="mr-1 h-3.5 w-3.5" />
           Reset
@@ -292,8 +292,8 @@
     {/each}
   </div>
 
-  <!-- Command input (terminal and configure modes) -->
-  {#if mode === 'terminal' || mode === 'configure'}
+  <!-- Command input (configure mode only; flash mode is read-only) -->
+  {#if mode === 'configure'}
     <div class="flex items-center gap-2 border-t px-3 py-1.5">
       <span class="text-muted-foreground font-mono text-xs">$</span>
       <input

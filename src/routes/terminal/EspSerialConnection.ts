@@ -1,38 +1,49 @@
 import { DecodeString, EncodeString } from '$lib/utils';
 import { md5 } from '$lib/utils/md5';
 import { ESPLoader, type IEspLoaderTerminal, type LoaderOptions, Transport } from 'esptool-js';
+import { toast } from 'svelte-sonner';
 
 /**
- * Reboots the chip in ESPLoader mode.
+ * Reboots the chip in ESPLoader mode. Throws on failure; the port is left closed
+ * so callers can retry on the same SerialPort handle.
  */
 async function setupESPLoader(
   serialPort: SerialPort,
   terminal: IEspLoaderTerminal
-): Promise<ESPLoader | null> {
+): Promise<ESPLoader> {
   try {
     await serialPort.close(); // TODO: Find some way to detect if the port is already open
   } catch {
     /* empty */
   }
 
+  console.log('setupESPLoader: ', serialPort);
+  const transport = new Transport(serialPort);
+
+  const flashOptions = {
+    transport,
+    baudrate: 115200,
+    terminal,
+  } as LoaderOptions;
+
+  const loader = new ESPLoader(flashOptions);
+
   try {
-    console.log('setupESPLoader: ', serialPort);
-    const transport = new Transport(serialPort);
-
-    const flashOptions = {
-      transport,
-      baudrate: 115200,
-      terminal,
-    } as LoaderOptions;
-
-    const loader = new ESPLoader(flashOptions);
-
     await loader.main();
-
     return loader;
   } catch (e) {
-    console.error(e);
-    return null;
+    // Best-effort cleanup so the port isn't left half-open for a retry.
+    try {
+      await transport.disconnect();
+    } catch {
+      /* ignore */
+    }
+    try {
+      await serialPort.close();
+    } catch {
+      /* ignore */
+    }
+    throw e;
   }
 }
 
@@ -55,18 +66,19 @@ function appendBuffer(buffer: Uint8Array | null, data: Uint8Array): Uint8Array {
 }
 
 /**
- * Reboots the chip in application mode.
+ * Reboots the chip in application mode. Throws on failure; the port is left closed
+ * so callers can retry on the same SerialPort handle.
  */
-async function setupApplication(serialPort: SerialPort): Promise<SerialPort | null> {
+async function setupApplication(serialPort: SerialPort): Promise<SerialPort> {
   try {
     await serialPort.close(); // TODO: Find some way to detect if the port is already open
   } catch {
     /* empty */
   }
 
-  try {
-    console.log('setupApplication: ', serialPort);
+  console.log('setupApplication: ', serialPort);
 
+  try {
     // Need to connect to the ESP32 using the right settings.
     // Hardware flow control would be a disaster, as these pins are used to control the device's bootloader.
     // https://docs.espressif.com/projects/esptool/en/latest/esp32/advanced-topics/boot-mode-selection.html
@@ -99,8 +111,12 @@ async function setupApplication(serialPort: SerialPort): Promise<SerialPort | nu
 
     return serialPort;
   } catch (e) {
-    console.error(e);
-    return null;
+    try {
+      await serialPort.close();
+    } catch {
+      /* ignore */
+    }
+    throw e;
   }
 }
 
@@ -144,25 +160,26 @@ export default class EspSerialConnection {
   }
 
   /**
-   * Connect in bootloader mode (legacy). Enters ESPLoader immediately.
+   * Connect in bootloader mode (legacy). Enters ESPLoader immediately. Rejects on failure.
    */
-  static async ConnectBootloader(serialPort: SerialPort, terminal: IEspLoaderTerminal) {
+  static async ConnectBootloader(
+    serialPort: SerialPort,
+    terminal: IEspLoaderTerminal
+  ): Promise<EspSerialConnection> {
     const espLoader = await setupESPLoader(serialPort, terminal);
-    if (espLoader != null) {
-      return new EspSerialConnection(espLoader.transport.device, terminal, espLoader);
-    } else {
-      return null;
-    }
+    return new EspSerialConnection(espLoader.transport.device, terminal, espLoader);
   }
 
   /**
    * Connect in application mode. Opens the port, resets the device into app mode,
    * and starts reading serial output immediately. Bootloader is entered lazily when flash is triggered.
+   * Rejects on failure.
    */
-  static async ConnectApplication(serialPort: SerialPort, terminal: IEspLoaderTerminal) {
+  static async ConnectApplication(
+    serialPort: SerialPort,
+    terminal: IEspLoaderTerminal
+  ): Promise<EspSerialConnection> {
     const port = await setupApplication(serialPort);
-    if (!port) return null;
-
     const manager = new EspSerialConnection(port, terminal);
     manager._startApplicationReadLoop();
     return manager;
@@ -231,14 +248,18 @@ export default class EspSerialConnection {
 
     const serialPort = await this._cycleTransport();
 
-    const loader = await setupESPLoader(serialPort, this.terminal);
-    if (loader) {
+    try {
+      const loader = await setupESPLoader(serialPort, this.terminal);
       // success (if a failure occurs we're left disconnected)
       this.serialPort = serialPort;
       this.loader = loader;
       this.chip = loader.chip.CHIP_NAME;
+      return true;
+    } catch (e) {
+      console.error(e);
+      toast.error(`Failed to enter bootloader: ${e}`);
+      return false;
     }
-    return !!this.loader;
   }
 
   /**
@@ -312,14 +333,17 @@ export default class EspSerialConnection {
     if (!this.serialPort) return false;
     if (!this.loader && !forceReset) return true;
 
-    const serialPort = await setupApplication(await this._cycleTransport());
-    this.serialPort = serialPort;
-
-    if (serialPort) {
+    const cycledPort = await this._cycleTransport();
+    try {
+      this.serialPort = await setupApplication(cycledPort);
       this._startApplicationReadLoop();
       return true;
+    } catch (e) {
+      console.error(e);
+      toast.error(`Failed to enter application mode: ${e}`);
+      this.serialPort = null;
+      return false;
     }
-    return false;
   }
 
   async disconnect() {
