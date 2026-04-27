@@ -6,15 +6,19 @@
     MatchTypeEnum,
     type UserNameBlacklistDto,
   } from '$lib/api/internal/v1';
+  import Container from '$lib/components/Container.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import { Button } from '$lib/components/ui/button';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
   import { ScrollArea } from '$lib/components/ui/scroll-area';
   import * as Select from '$lib/components/ui/select';
   import { Separator } from '$lib/components/ui/separator';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import type { ValidationResult } from '$lib/types/ValidationResult';
-  import type { TimeoutHandle } from '$lib/types/WAPI';
+  import { useDebounce } from '$lib/utils/debounce';
+
+  registerBreadcrumbs(() => [{ label: 'Blacklists' }]);
 
   // --- state ---
   let usernameEntry = $state<string>('');
@@ -136,32 +140,32 @@
     }
   }
 
-  let usernameDebounce: TimeoutHandle | undefined;
+  const debouncedLoadUsernames = useDebounce(loadUsernames, 400);
   $effect(() => {
-    clearTimeout(usernameDebounce);
     if (usernameEntry.length == 0) {
+      debouncedLoadUsernames.cancel();
       loadUsernames();
       return;
     }
 
-    usernameDebounce = setTimeout(() => loadUsernames(), 400);
+    debouncedLoadUsernames();
   });
 
-  let emailDebounce: TimeoutHandle | undefined;
+  const debouncedLoadEmails = useDebounce(loadEmails, 400);
   $effect(() => {
-    clearTimeout(emailDebounce);
     if (emailEntry.length == 0) {
+      debouncedLoadEmails.cancel();
       loadEmails();
       return;
     }
 
     if (!emailEntryValid) return;
 
-    emailDebounce = setTimeout(() => loadEmails(), 400);
+    debouncedLoadEmails();
   });
 </script>
 
-<div class="grid grid-cols-1 gap-6 p-8 md:grid-cols-2">
+<Container class="grid grid-cols-1 gap-6 md:grid-cols-2">
   <!-- Username Blacklist -->
   <Card>
     <CardHeader>
@@ -251,4 +255,4 @@
       </ScrollArea>
     </CardContent>
   </Card>
-</div>
+</Container>

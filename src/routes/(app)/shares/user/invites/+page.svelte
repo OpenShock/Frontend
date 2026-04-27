@@ -1,6 +1,7 @@
 <script lang="ts">
   import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
   import * as Table from '$lib/components/ui/table';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import {
     userSharesState,
     refreshIncomingInvites,
@@ -8,6 +9,8 @@
   } from '$lib/state/user-shares-state.svelte';
   import IncomingInviteItem from './incoming-invite-item.svelte';
   import OutgoingInviteItem from './outgoing-invite-item.svelte';
+
+  registerBreadcrumbs(() => [{ label: 'Invites' }]);
 
   let outgoingInvitesPromise = $state(refreshOutgoingInvites());
   let incomingInvitesPromise = $state(refreshIncomingInvites());

@@ -1,26 +1,20 @@
 <script lang="ts">
   import { CircleCheckBig, Copy } from '@lucide/svelte';
   import { cn } from '$lib/utils';
+  import { useClipboard } from '$lib/utils/clipboard.svelte';
   import type { Snippet } from 'svelte';
-  import { toast } from 'svelte-sonner';
   import { scale } from 'svelte/transition';
 
   interface Props {
     value: string;
     class?: string;
     icon?: Snippet;
+    displayValue?: string;
   }
 
-  let { value, class: className, icon }: Props = $props();
+  let { value, class: className, icon, displayValue }: Props = $props();
 
-  let copied = $state(false);
-
-  function copyToken() {
-    if (value == null) return;
-    navigator.clipboard.writeText(value);
-    copied = true;
-    toast.success('Copied to clipboard');
-  }
+  const clip = useClipboard();
 </script>
 
 <form
@@ -32,15 +26,21 @@
   {#if icon}
     {@render icon()}
   {/if}
-  <input class="mx-3 grow outline-none!" type="text" bind:value readonly disabled />
+  <input
+    class="mx-3 grow outline-none!"
+    type="text"
+    value={displayValue ?? value}
+    readonly
+    disabled
+  />
   <span>
     <button
-      onclick={copyToken}
+      onclick={() => clip.copy(value)}
       class="transition-in-place"
-      title={copied ? 'Copied' : 'Copy to clipboard'}
+      title={clip.copied ? 'Copied' : 'Copy to clipboard'}
       type="button"
     >
-      {#if copied}
+      {#if clip.copied}
         <span transition:scale>
           <CircleCheckBig size="20" />
         </span>

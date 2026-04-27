@@ -18,7 +18,10 @@
   import OauthButtons from '$lib/components/auth/oauth-buttons.svelte';
   import { ChevronLeft, Mail } from '@lucide/svelte';
   import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte';
+
+  registerBreadcrumbs(() => [{ label: 'Sign Up' }]);
 
   let username = $state<string>('');
   let usernameValid = $state<boolean>(false);

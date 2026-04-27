@@ -11,7 +11,7 @@
   } from '$lib/inputvalidation/usernameValidator';
   import type { AnyComponent } from '$lib/types/AnyComponent';
   import type { ValidationResult } from '$lib/types/ValidationResult';
-  import type { TimeoutHandle } from '$lib/types/WAPI';
+  import { useDebounce } from '$lib/utils/debounce';
   import type { Snippet } from 'svelte';
   import type { FullAutoFill } from 'svelte/elements';
 
@@ -31,6 +31,7 @@
     placeholder,
     autocomplete = 'username',
     value = $bindable(),
+    // eslint-disable-next-line no-useless-assignment -- $bindable fallback, not a dead assignment
     valid = $bindable(false),
     validate = true,
     Icon,
@@ -39,51 +40,40 @@
 
   let checkResponses = $state<Map<string, ValidationResult>>(new Map());
   let validationResult = $state<ValidationResult | null>(null);
-  let usernameDebounce: TimeoutHandle | undefined;
-  function checkUsernameAvailability(username: string) {
-    // Stop the previous debounce timer if it exists
-    clearTimeout(usernameDebounce);
 
+  const requestAvailability = useDebounce(async (username: string) => {
+    try {
+      const response = await accountV2Api.accountCheckUsername({ username });
+      validationResult = mapUsernameCheckResponse(response);
+      checkResponses.set(username, validationResult);
+    } catch (error) {
+      await handleApiError(error, (err) => {
+        if (!isValidationError(err)) {
+          validationResult = UsernameInternalServerErrorValRes;
+          return false;
+        }
+
+        const apiValRes = mapToValRes(err, 'Username');
+        if (apiValRes !== null) {
+          validationResult = apiValRes;
+          return true;
+        }
+
+        return false;
+      });
+    }
+  }, 250);
+
+  function checkUsernameAvailability(username: string) {
     const entry = checkResponses.get(username);
     if (entry !== undefined) {
+      requestAvailability.cancel();
       validationResult = entry;
-      usernameDebounce = undefined;
       return;
     }
 
-    // Set the validation result to the checking availability state
     validationResult = UsernameCheckingAvailabilityValRes;
-
-    // Start a new username request in 250ms
-    usernameDebounce = setTimeout(async () => {
-      // 250ms has passed, check if the username is available
-      try {
-        // Make the API request
-        const response = await accountV2Api.accountCheckUsername({ username });
-
-        // Map the response to a validation result
-        validationResult = mapUsernameCheckResponse(response);
-
-        checkResponses.set(username, validationResult);
-      } catch (error) {
-        // Show an error toast
-        await handleApiError(error, (err) => {
-          if (!isValidationError(err)) {
-            // Set the validation result to the internal server error state
-            validationResult = UsernameInternalServerErrorValRes;
-            return false;
-          }
-
-          const apiValRes = mapToValRes(err, 'Username');
-          if (apiValRes !== null) {
-            validationResult = apiValRes;
-            return true;
-          }
-
-          return false;
-        });
-      }
-    }, 250);
+    requestAvailability(username);
   }
 
   $effect(() => {

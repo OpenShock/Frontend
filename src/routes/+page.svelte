@@ -1,7 +1,10 @@
 <script lang="ts">
   import { asset } from '$app/paths';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
 
   let { data } = $props();
+
+  registerBreadcrumbs(() => [{ label: 'OpenShock', href: '/' }]);
 </script>
 
 <section class="flex h-full flex-col items-center justify-center space-y-6 text-center text-white">

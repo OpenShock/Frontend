@@ -3,6 +3,7 @@
   import type { AdminUsersView } from '$lib/api/internal/v1';
   import { PasswordHashingAlgorithm, RoleType } from '$lib/api/internal/v1';
   import {
+    CreateActionsColumnDef,
     CreateSortableColumnDef,
     LocaleDateTimeRenderer,
     RenderBlueCell,
@@ -11,8 +12,10 @@
     RenderOrangeCell,
     RenderRedCell,
   } from '$lib/components/Table/ColumnUtils';
-  import { renderComponent } from '$lib/components/ui/data-table';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import DataTableActions from './data-table-actions.svelte';
+
+  registerBreadcrumbs(() => [{ label: 'Users' }]);
 
   const PasswordHashTypeRenderer = (passwordHashType: PasswordHashingAlgorithm) => {
     if (passwordHashType !== PasswordHashingAlgorithm.BCrypt)
@@ -36,13 +39,7 @@
     CreateSortableColumnDef('deactivatedByUserId', 'Deactivated by', (a) =>
       a ? RenderCell(a) : RenderRedCell('None')
     ),
-    {
-      id: 'actions',
-      cell: ({ row }) => {
-        // You can pass whatever you need from `row.original` to the component
-        return renderComponent(DataTableActions, { user: row.original });
-      },
-    },
+    CreateActionsColumnDef(DataTableActions, (user) => ({ user })),
   ];
 
   function escapeQuotes(str: string) {
@@ -82,7 +79,7 @@
   import { CardHeader, CardTitle } from '$lib/components/ui/card';
   import { Input } from '$lib/components/ui/input';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import type { TimeoutHandle } from '$lib/types/WAPI';
+  import { useDebounce } from '$lib/utils/debounce';
 
   let isFetching = $state(false);
 
@@ -114,10 +111,8 @@
     page = Math.floor(response.offset / response.limit) + 1;
   }
 
-  let searchDebounce: TimeoutHandle | undefined;
+  const applyFilterQuery = useDebounce((query: string | undefined) => (filterQuery = query), 800);
   $effect(() => {
-    clearTimeout(searchDebounce);
-
     const queries: string[] = [];
 
     const nameQ = createSearchQuery('name', nameSearch);
@@ -129,7 +124,7 @@
     const query = queries.length > 0 ? queries.join(' and ') : undefined;
     if (query === filterQuery) return;
 
-    searchDebounce = setTimeout(() => (filterQuery = query), 800);
+    applyFilterQuery(query);
   });
 
   $effect(() => {

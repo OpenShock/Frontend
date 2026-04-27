@@ -1,6 +1,6 @@
 # Define versions as build arguments for easy updates
 ARG NODE_VERSION=24.14.0
-ARG PNPM_VERSION=10.32.1
+ARG PNPM_VERSION=10.33.2
 ARG ALPINE_VERSION=3.23
 ARG PNPM_URL="https://github.com/pnpm/pnpm/releases/download/v${PNPM_VERSION}/pnpm-linuxstatic-x64"
 
@@ -22,6 +22,7 @@ RUN wget -qO /bin/pnpm "${PNPM_URL}" && chmod +x /bin/pnpm
 # Copy dependency manifests first (for caching)
 COPY package.json .
 COPY pnpm-lock.yaml .
+COPY pnpm-workspace.yaml .
 COPY patches/ patches/
 
 # Install deps
@@ -56,6 +57,7 @@ EXPOSE 3000
 # Copy only required runtime files and build output
 COPY --from=build /app/package.json .
 COPY --from=build /app/pnpm-lock.yaml .
+COPY --from=build /app/pnpm-workspace.yaml .
 COPY --from=build /app/patches/ patches/
 COPY --from=build /app/build build/
 

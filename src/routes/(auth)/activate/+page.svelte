@@ -7,6 +7,9 @@
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+
+  registerBreadcrumbs(() => [{ label: 'Activate Account' }]);
 
   let secret = browser && page.url.searchParams.get('token');
 

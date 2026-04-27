@@ -1,7 +1,6 @@
 <script lang="ts">
   import {
     ChevronDown,
-    Cpu,
     House,
     IdCard,
     KeyRound,
@@ -11,6 +10,7 @@
     Settings,
     Share2,
     SquareActivity,
+    SquareTerminalIcon,
     Timer,
     Users,
     Wrench,
@@ -111,9 +111,9 @@
     // Only time we dont show the menu is if its on a mobile device without serial support
     if (!(!isSerialSupported && isMobile)) {
       menus.push({
-        title: 'Flashtool',
-        Icon: Cpu,
-        href: '/flashtool',
+        title: 'Serial Terminal',
+        Icon: SquareTerminalIcon,
+        href: '/terminal',
       });
     }
 

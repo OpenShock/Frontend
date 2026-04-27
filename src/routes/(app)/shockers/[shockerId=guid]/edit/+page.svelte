@@ -14,20 +14,11 @@
   import * as Select from '$lib/components/ui/select';
   import PauseToggle from '$lib/components/utils/PauseToggle.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
-  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { ArrowLeft, LoaderCircle, Trash2 } from '@lucide/svelte';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
-
-  breadcrumbs.push('Shockers', '/shockers/own');
-  breadcrumbs.push('Edit', null);
-
-  const modelOptions = [
-    { value: ShockerModelType.CaiXianlin, label: 'CaiXianlin' },
-    { value: ShockerModelType.PetTrainer, label: 'PetTrainer' },
-    { value: ShockerModelType.Petrainer998Dr, label: 'Petrainer998DR' },
-  ];
 
   let shocker = $state<ShockerWithDevice | null>(null);
   let loadError = $state(false);
@@ -35,6 +26,11 @@
   let rfId = $state(0);
   let model = $state<ShockerModelType>(ShockerModelType.CaiXianlin);
   let saving = $state(false);
+
+  registerBreadcrumbs(() => [
+    { label: 'Shockers', href: '/shockers/own' },
+    { label: shocker?.name ?? 'Edit Shocker' },
+  ]);
 
   let hasChanges = $derived(
     shocker !== null &&
@@ -136,13 +132,13 @@
             <FieldLabel>Model</FieldLabel>
             <Select.Root type="single" name="model" bind:value={model}>
               <Select.Trigger>
-                {modelOptions.find((o) => o.value === model)?.label ?? 'Select model'}
+                {model ?? 'Select model'}
               </Select.Trigger>
               <Select.Content>
                 <Select.Group>
-                  {#each modelOptions as option (option.value)}
-                    <Select.Item value={option.value} label={option.label}>
-                      {option.label}
+                  {#each Object.values(ShockerModelType) as option (option)}
+                    <Select.Item value={option} label={option}>
+                      {option}
                     </Select.Item>
                   {/each}
                 </Select.Group>

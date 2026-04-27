@@ -2,13 +2,17 @@
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
   import type { ColumnFiltersState, SortingState } from '@tanstack/table-core';
   import { adminApi } from '$lib/api';
+  import Container from '$lib/components/Container.svelte';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import { Button } from '$lib/components/ui/button';
   import * as Card from '$lib/components/ui/card';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { SemVer } from 'semver';
   import { onMount } from 'svelte';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { type OnlineHub, columns } from './columns';
+
+  registerBreadcrumbs(() => [{ label: 'Online Hubs' }]);
 
   let data = $state<OnlineHub[]>([]);
   let sorting = $state<SortingState>([]);
@@ -27,7 +31,7 @@
   onMount(fetchOnlineHubs);
 </script>
 
-<div class="my-8">
+<Container>
   <Card.Header>
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
       Online Hubs: {data.length}
@@ -40,4 +44,4 @@
   <Card.Content>
     <DataTable {data} {columns} {sorting} {filters} />
   </Card.Content>
-</div>
+</Container>

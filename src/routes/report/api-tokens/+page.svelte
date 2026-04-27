@@ -9,6 +9,7 @@
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { apiTokensApi } from '$lib/api';
+  import Container from '$lib/components/Container.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
   import { Button } from '$lib/components/ui/button';
   import * as Card from '$lib/components/ui/card';
@@ -16,7 +17,10 @@
   import { Label } from '$lib/components/ui/label';
   import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { toast } from 'svelte-sonner';
+
+  registerBreadcrumbs(() => [{ label: 'Report API Tokens', href: '/report/api-tokens' }]);
 
   let secrets = $state<string[]>([]);
   let turnstileResponse = $state<string | null>(null);
@@ -50,7 +54,7 @@
   }
 </script>
 
-<div class="mx-auto my-10 max-w-3xl space-y-6 px-4">
+<Container class="max-w-3xl space-y-6">
   <Card.Header>
     <Card.Title class="flex items-center justify-between text-3xl font-semibold">
       Report Leaked API Tokens
@@ -110,4 +114,4 @@
     <!-- Submit -->
     <Button onclick={handleSubmit} disabled={!canSubmit} class="w-full">Submit Report</Button>
   </Card.Content>
-</div>
+</Container>

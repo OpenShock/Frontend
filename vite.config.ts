@@ -8,17 +8,34 @@ import net from 'node:net';
 import os from 'node:os';
 import { env } from 'node:process';
 import license from 'rollup-plugin-license';
-import { type Plugin, type PluginOption, defineConfig, loadEnv } from 'vite';
+import { type Plugin, type PluginOption, type UserConfig, defineConfig, loadEnv } from 'vite';
 import devtoolsJson from 'vite-plugin-devtools-json';
 import mkcert from 'vite-plugin-mkcert';
 
 function jsBannerPlugin(banner: string): Plugin {
+  // Matches preserved/legal comment markers that OXC's minifier strips when
+  // `output.comments.legal === false`: `/*!` starts, plus `@license`,
+  // `@preserve`, and `@cc_on` JSDoc annotations.
+  const LEGAL_COMMENT_RE = /\/\*!|@(?:license|preserve|cc_on)\b/;
+  const modulesWithLegal = new Set<string>();
+
   return {
     name: 'js-banner',
     enforce: 'post',
+    buildStart() {
+      modulesWithLegal.clear();
+    },
+    transform(code, id) {
+      if (LEGAL_COMMENT_RE.test(code)) {
+        modulesWithLegal.add(id);
+      }
+      return null;
+    },
     generateBundle(_, bundle) {
       for (const chunk of Object.values(bundle)) {
-        if (chunk.type === 'chunk') {
+        if (chunk.type !== 'chunk') continue;
+        const hasLegal = Object.keys(chunk.modules).some((id) => modulesWithLegal.has(id));
+        if (hasLegal) {
           chunk.code = banner + '\n' + chunk.code;
         }
       }
@@ -135,10 +152,14 @@ async function getServerConfig(mode: string, useLocalRedirect: boolean) {
 
   if (!useLocalRedirect) return undefined;
 
+  // Vite 8: pipe browser console.* into the dev terminal so client errors land
+  // alongside server logs without context-switching to browser devtools.
+  const baseDevConfig = { forwardConsole: true, proxy: {} };
+
   const domain = new URL(vars.PUBLIC_SITE_URL).hostname;
 
   if (domain === 'localhost') {
-    return { host: 'localhost', port: 8080, proxy: {} };
+    return { ...baseDevConfig, host: 'localhost', port: 8080 };
   }
 
   let host = domain;
@@ -153,59 +174,59 @@ async function getServerConfig(mode: string, useLocalRedirect: boolean) {
   // Check if we can bind to port 443 before Vite tries and fails with an unhelpful error
   await ensurePortBindable(host, 443);
 
-  return { host, port: 443, proxy: {} };
+  return { ...baseDevConfig, host, port: 443 };
 }
 
 async function ensurePortBindable(host: string, port: number): Promise<void> {
-  return new Promise((resolve) => {
-    const server = net.createServer();
-    server.once('error', (err: NodeJS.ErrnoException) => {
-      if (err.code === 'EACCES') {
-        const platform = os.platform();
-        let fix: string;
+  const { promise, resolve } = Promise.withResolvers<void>();
+  const server = net.createServer();
+  server.once('error', (err: NodeJS.ErrnoException) => {
+    if (err.code === 'EACCES') {
+      const platform = os.platform();
+      let fix: string;
 
-        if (platform === 'linux') {
-          fix = [
-            `Node.js needs permission to serve HTTPS on port ${port}.\n`,
-            'Option 1 (Recommended): Set up a reverse proxy',
-            '  Use Nginx or Caddy to proxy traffic to your Node server.',
-            '  This is more secure and follows best practices.\n',
-            'Option 2 (Quick fix): Grant Node.js permission to bind to privileged ports',
-            chalk.blue.bold(`  sudo setcap 'cap_net_bind_service=+ep' $(which node)\n`),
-            chalk.yellow.bold(
-              '  ⚠️  Security note: This allows Node to bind to ANY port below 1024.'
-            ),
-            chalk.yellow.bold('  Only use this in trusted development environments.'),
-          ].join('\n');
-        } else if (platform === 'darwin') {
-          fix = [
-            `Node.js needs permission to serve HTTPS on port ${port}.\n`,
-            'Fix: Run the dev server with sudo, or set up a reverse proxy.',
-          ].join('\n');
-        } else {
-          fix = `Node.js does not have permission to bind to port ${port}.\nTry running with elevated privileges or use a reverse proxy.`;
-        }
-
-        console.log(
-          boxen(fix, {
-            padding: 1,
-            margin: 1,
-            borderStyle: 'round',
-            borderColor: 'yellow',
-            title: `Port ${port} Permission Denied`,
-            titleAlignment: 'center',
-          })
-        );
-        process.exit(1);
+      if (platform === 'linux') {
+        fix = [
+          `Node.js needs permission to serve HTTPS on port ${port}.\n`,
+          'Option 1 (Recommended): Set up a reverse proxy',
+          '  Use Nginx or Caddy to proxy traffic to your Node server.',
+          '  This is more secure and follows best practices.\n',
+          'Option 2 (Quick fix): Grant Node.js permission to bind to privileged ports',
+          chalk.blue.bold(`  sudo setcap 'cap_net_bind_service=+ep' $(which node)\n`),
+          chalk.yellow.bold(
+            '  ⚠️  Security note: This allows Node to bind to ANY port below 1024.'
+          ),
+          chalk.yellow.bold('  Only use this in trusted development environments.'),
+        ].join('\n');
+      } else if (platform === 'darwin') {
+        fix = [
+          `Node.js needs permission to serve HTTPS on port ${port}.\n`,
+          'Fix: Run the dev server with sudo, or set up a reverse proxy.',
+        ].join('\n');
+      } else {
+        fix = `Node.js does not have permission to bind to port ${port}.\nTry running with elevated privileges or use a reverse proxy.`;
       }
-      // For other errors (e.g. EADDRINUSE), let Vite handle them
-      resolve();
-    });
-    server.once('listening', () => {
-      server.close(() => resolve());
-    });
-    server.listen(port, host);
+
+      console.log(
+        boxen(fix, {
+          padding: 1,
+          margin: 1,
+          borderStyle: 'round',
+          borderColor: 'yellow',
+          title: `Port ${port} Permission Denied`,
+          titleAlignment: 'center',
+        })
+      );
+      process.exit(1);
+    }
+    // For other errors (e.g. EADDRINUSE), let Vite handle them
+    resolve();
   });
+  server.once('listening', () => {
+    server.close(() => resolve());
+  });
+  server.listen(port, host);
+  return promise;
 }
 
 export default defineConfig(async ({ command, mode, isPreview }) => {
@@ -215,17 +236,23 @@ export default defineConfig(async ({ command, mode, isPreview }) => {
   // If we are running locally, ensure that local.{PUBLIC_SITE_URL} resolves to localhost, and then use mkcert to generate a certificate
   const useLocalRedirect = isLocalServe && !isProduction && !isTruthy(env.CI);
 
-  return defineConfig({
+  return {
     build: {
-      target: 'es2024',
+      rolldownOptions: {
+        output: {
+          comments: { legal: false },
+        },
+        optimization: {
+          inlineConst: { mode: 'smart', pass: 2 },
+        },
+        treeshake:
+          mode === 'production'
+            ? { manualPureFunctions: ['console.log', 'console.debug', 'console.trace'] }
+            : undefined,
+      },
     },
     plugins: getPlugins(useLocalRedirect),
     server: await getServerConfig(mode, useLocalRedirect),
     test: { include: ['src/**/*.{test,spec}.{js,ts}'] },
-    esbuild: {
-      legalComments: 'none',
-      drop: mode === 'production' ? ['debugger'] : [],
-      pure: mode === 'production' ? ['console.log', 'console.debug', 'console.trace'] : [],
-    },
-  });
+  } satisfies UserConfig;
 });

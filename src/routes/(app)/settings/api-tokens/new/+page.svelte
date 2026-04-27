@@ -10,6 +10,14 @@
   import type { QueryParamsType } from './queryParamsType';
   import { page } from '$app/state';
   import { browser } from '$app/environment';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import Container from '$lib/components/Container.svelte';
+
+  registerBreadcrumbs(() => [
+    { label: 'Settings', href: '/settings/account' },
+    { label: 'API Tokens', href: '/settings/api-tokens' },
+    { label: 'New' },
+  ]);
 
   let windowQueryParams = $state<
     | QueryParamsType
@@ -43,15 +51,6 @@
         error:
           'Required get parameters are missing. Make sure name, redirect_uri, and permissions are provided.',
       };
-    }
-
-    try {
-      const parsed = new URL(redirectUri);
-      if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
-        return { error: 'redirect_uri must use an HTTP or HTTPS scheme.' };
-      }
-    } catch {
-      return { error: 'redirect_uri is not a valid URL.' };
     }
 
     const permissionsArray = permissions.split(',');
@@ -130,7 +129,7 @@
   });
 </script>
 
-<div class="flex h-full w-full items-center justify-center">
+<Container class="items-center justify-center">
   <Card.Root class="w-lg max-w-2xl">
     {#if 'error' in windowQueryParams}
       <Card.Header>
@@ -183,4 +182,4 @@
       </Card.Footer>
     {/if}
   </Card.Root>
-</div>
+</Container>
