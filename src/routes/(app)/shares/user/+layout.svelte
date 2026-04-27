@@ -22,6 +22,7 @@
   let redeemDialogOpen = $state(false);
   let createdCode = $state<string | null>(null);
   let redeemUserInput = $state<string>('');
+  let presharedShockerIds = $state<string[]>([]);
 
   let tab = $derived.by(() => {
     switch (page.url.pathname) {
@@ -59,10 +60,22 @@
       redeemDialogOpen = true;
       redeemUserInput = code ?? '';
     }
+
+    // Check for share query param and open the create dialog with shockers preselected
+    if (page.url.searchParams.has('share')) {
+      const ids = page.url.searchParams.getAll('share').flatMap((v) => v.split(','));
+      presharedShockerIds = ids.filter((id) => id.length > 0);
+      createDialogOpen = true;
+    }
   });
 </script>
 
-<DialogShareCodeCreate bind:open={createDialogOpen} {onCreatedCode} {onInvitedUser} />
+<DialogShareCodeCreate
+  bind:open={createDialogOpen}
+  preselectedShockerIds={presharedShockerIds}
+  {onCreatedCode}
+  {onInvitedUser}
+/>
 <DialogShareCodeCreated bind:code={createdCode} />
 <DialogShareCodeRedeem bind:open={redeemDialogOpen} bind:userInput={redeemUserInput} />
 

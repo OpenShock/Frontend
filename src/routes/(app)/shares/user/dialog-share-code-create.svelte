@@ -24,11 +24,17 @@
 
   interface Props {
     open: boolean;
+    preselectedShockerIds?: string[];
     onCreatedCode: (code: string) => void;
     onInvitedUser: (user: BasicUserInfo) => void;
   }
 
-  let { open = $bindable(), onCreatedCode, onInvitedUser }: Props = $props();
+  let {
+    open = $bindable(),
+    preselectedShockerIds = [],
+    onCreatedCode,
+    onInvitedUser,
+  }: Props = $props();
 
   interface ShockerPermLimitPairButNotNull {
     permissions: {
@@ -61,6 +67,15 @@
       },
     };
   }
+
+  // Seed preselection whenever the dialog transitions to open.
+  let wasOpen = false;
+  $effect(() => {
+    if (open && !wasOpen && preselectedShockerIds.length > 0) {
+      shockerIds = [...preselectedShockerIds];
+    }
+    wasOpen = open;
+  });
 
   function onOpenChange(o: boolean) {
     if (!o) {

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Ellipsis, LoaderCircle, Pause, Pencil, Play, Trash2 } from '@lucide/svelte';
+  import { Ellipsis, LoaderCircle, Pause, Pencil, Play, Share2, Trash2 } from '@lucide/svelte';
   import { goto } from '$app/navigation';
   import { shockersV1Api } from '$lib/api';
   import type { ShockerResponse } from '$lib/api/internal/v1';
@@ -25,6 +25,10 @@
 
   function editShocker() {
     goto(resolve(`/shockers/${shocker.id}/edit`));
+  }
+
+  function shareShocker() {
+    goto(`${resolve('/shares/user/outgoing')}?share=${shocker.id}`);
   }
 
   async function togglePause() {
@@ -82,6 +86,10 @@
     <DropdownMenu.Item class="cursor-pointer" onclick={editShocker}>
       <Pencil class="size-4" />
       Edit
+    </DropdownMenu.Item>
+    <DropdownMenu.Item class="cursor-pointer" onclick={shareShocker}>
+      <Share2 class="size-4" />
+      Share
     </DropdownMenu.Item>
     <DropdownMenu.Item class="cursor-pointer" onclick={viewLogs}>View Logs</DropdownMenu.Item>
     <DropdownMenu.Separator />
