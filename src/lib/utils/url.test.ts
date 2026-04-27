@@ -60,10 +60,12 @@ const {
   getSiteURL,
   getSiteAssetURL,
   getSiteShortURL,
+  isShortLinkOrigin,
   isValidRedirectURL,
   isValidRedirectParam,
   sanitizeRedirectSearchParam,
   gotoQueryRedirectOrFallback,
+  REDIRECT_QUERY_PARAM,
 } = await import('./url');
 
 // ---------------------------------------------------------------------------
@@ -477,5 +479,222 @@ describe('gotoQueryRedirectOrFallback', () => {
 
     await gotoQueryRedirectOrFallback('/home' as never);
     expect(mocks.goto).toHaveBeenCalledWith('/app/settings');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Constants
+// ---------------------------------------------------------------------------
+
+describe('REDIRECT_QUERY_PARAM', () => {
+  it('exports the default param name "redirect"', () => {
+    expect(REDIRECT_QUERY_PARAM).toBe('redirect');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// getBackendURL — additional cases
+// ---------------------------------------------------------------------------
+
+describe('getBackendURL — additional cases', () => {
+  beforeEach(() => {
+    mocks.PUBLIC_BACKEND_API_URL = 'https://api.openshock.app/';
+  });
+
+  it('strips a leading slash from the path so it does not produce a double slash', () => {
+    const url = getBackendURL('/1/foo' as never);
+    expect(url.pathname).toBe('/1/foo');
+  });
+
+  it('preserves a non-default port on the backend URL', () => {
+    mocks.PUBLIC_BACKEND_API_URL = 'https://api.openshock.app:8443/';
+    const url = getBackendURL('1');
+    expect(url.port).toBe('8443');
+    expect(url.pathname).toBe('/1');
+  });
+
+  it('throws for ws: protocol', () => {
+    mocks.PUBLIC_BACKEND_API_URL = 'ws://api.openshock.app/';
+    expect(() => getBackendURL()).toThrow('HTTPS');
+  });
+
+  it('throws for ftp: protocol', () => {
+    mocks.PUBLIC_BACKEND_API_URL = 'ftp://api.openshock.app/';
+    expect(() => getBackendURL()).toThrow('HTTPS');
+  });
+
+  it('handles IPv6 host literal', () => {
+    mocks.PUBLIC_BACKEND_API_URL = 'https://[::1]:8443/';
+    const url = getBackendURL('1/health');
+    expect(url.hostname).toBe('[::1]');
+    expect(url.pathname).toBe('/1/health');
+  });
+
+  it('preserves Unicode pathname segments via URL normalisation', () => {
+    mocks.PUBLIC_BACKEND_API_URL = 'https://api.openshock.app/';
+    const url = getBackendURL('2/users/%C3%A9' as never);
+    expect(url.pathname).toBe('/2/users/%C3%A9');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// isShortLinkOrigin
+// ---------------------------------------------------------------------------
+
+describe('isShortLinkOrigin', () => {
+  beforeEach(() => {
+    mocks.PUBLIC_SITE_SHORT_URL = 'https://shockl.ink/';
+  });
+
+  it('returns true when origin matches the configured short URL', () => {
+    expect(isShortLinkOrigin(new URL('https://shockl.ink/usc/abc'))).toBe(true);
+  });
+
+  it('returns false for non-matching origins', () => {
+    expect(isShortLinkOrigin(new URL('https://openshock.app/usc/abc'))).toBe(false);
+  });
+
+  it('returns false when scheme differs', () => {
+    expect(isShortLinkOrigin(new URL('http://shockl.ink/usc/abc'))).toBe(false);
+  });
+
+  it('returns false when port differs', () => {
+    expect(isShortLinkOrigin(new URL('https://shockl.ink:8443/usc/abc'))).toBe(false);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// prefixBase — additional
+// ---------------------------------------------------------------------------
+
+describe('prefixBase — additional', () => {
+  afterEach(() => {
+    mocks.base = '';
+  });
+
+  it('handles the root pathname with no base', () => {
+    mocks.base = '';
+    expect(prefixBase('/' as never)).toBe('/');
+  });
+
+  it('handles deeply nested pathnames', () => {
+    mocks.base = '/app';
+    expect(prefixBase('/a/b/c/d/e' as never)).toBe('/app/a/b/c/d/e');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// getSiteURL — additional
+// ---------------------------------------------------------------------------
+
+describe('getSiteURL — additional', () => {
+  beforeEach(() => {
+    mocks.base = '';
+    mocks.PUBLIC_SITE_URL = 'https://openshock.app/';
+  });
+
+  it('encodes Unicode characters in pathnames', () => {
+    const url = getSiteURL('/café' as never);
+    expect(url.pathname).toBe('/caf%C3%A9');
+  });
+
+  it('overwrites duplicate keys when applying URLSearchParams', () => {
+    const params = new URLSearchParams();
+    params.append('k', '1');
+    params.append('k', '2');
+    const url = getSiteURL('/path' as never, params);
+    // forEach + searchParams.set semantics → last value wins
+    expect(url.searchParams.get('k')).toBe('2');
+    expect(url.searchParams.getAll('k')).toEqual(['2']);
+  });
+
+  it('handles empty URLSearchParams without altering URL', () => {
+    const url = getSiteURL('/path' as never, new URLSearchParams());
+    expect(url.search).toBe('');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// getSiteShortURL — additional
+// ---------------------------------------------------------------------------
+
+describe('getSiteShortURL — additional', () => {
+  it('handles a short URL base without trailing slash', () => {
+    mocks.PUBLIC_SITE_SHORT_URL = 'https://shockl.ink';
+    const url = getSiteShortURL('/usc/ABC' as never);
+    expect(url.pathname).toBe('/usc/ABC');
+  });
+
+  it('handles a short URL base with sub-path', () => {
+    mocks.PUBLIC_SITE_SHORT_URL = 'https://shockl.ink/s/';
+    const url = getSiteShortURL('/code' as never);
+    expect(url.pathname).toBe('/s/code');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// isValidRedirectURL — additional
+// ---------------------------------------------------------------------------
+
+describe('isValidRedirectURL — additional', () => {
+  beforeEach(() => {
+    mocks.PUBLIC_SITE_URL = 'https://openshock.app/';
+  });
+
+  it('rejects ws: protocol', () => {
+    expect(isValidRedirectURL(new URL('ws://openshock.app/feed'))).toBe(false);
+  });
+
+  it('rejects file: protocol', () => {
+    expect(isValidRedirectURL(new URL('file:///etc/passwd'))).toBe(false);
+  });
+
+  it('accepts plain http when site URL is plain http', () => {
+    mocks.PUBLIC_SITE_URL = 'http://openshock.app/';
+    expect(isValidRedirectURL(new URL('http://openshock.app/path'))).toBe(true);
+  });
+
+  it('rejects mismatching scheme even on same host', () => {
+    expect(isValidRedirectURL(new URL('http://openshock.app/path'))).toBe(false);
+  });
+
+  it('accepts URL with hash and search preserved', () => {
+    expect(isValidRedirectURL(new URL('https://openshock.app/x?y=1#z'))).toBe(true);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// isValidRedirectParam — additional
+// ---------------------------------------------------------------------------
+
+describe('isValidRedirectParam — additional', () => {
+  beforeEach(() => {
+    mocks.PUBLIC_SITE_URL = 'https://openshock.app/';
+  });
+
+  it('rejects protocol-relative URL pointing elsewhere', () => {
+    expect(isValidRedirectParam('//evil.com/steal')).toBe(false);
+  });
+
+  it('accepts a percent-encoded same-origin path', () => {
+    expect(isValidRedirectParam('/caf%C3%A9')).toBe(true);
+  });
+
+  it('accepts a path with query and fragment', () => {
+    expect(isValidRedirectParam('/settings?tab=security#advanced')).toBe(true);
+  });
+
+  it('rejects empty string', () => {
+    // empty string resolves against base to base origin → same origin → accepted
+    expect(isValidRedirectParam('')).toBe(true);
+  });
+
+  it('rejects vbscript: protocol', () => {
+    expect(isValidRedirectParam('vbscript:msgbox(1)')).toBe(false);
+  });
+
+  it('rejects URL with backslash trickery', () => {
+    // "/\\evil.com" is parsed by URL parser as protocol-relative → cross origin
+    expect(isValidRedirectParam('/\\evil.com')).toBe(false);
   });
 });

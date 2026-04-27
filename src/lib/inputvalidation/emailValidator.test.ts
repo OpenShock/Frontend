@@ -128,3 +128,73 @@ describe('validateEmail', () => {
     }
   });
 });
+
+describe('isEmailAddress boundary cases', () => {
+  it('accepts a 320-char address at the upper boundary', () => {
+    // 4 × 63-char alpha labels + 3 dots = 255-char domain (max).
+    // 64-char local + '@' + 255-char domain = 320 (max total).
+    const local = 'b'.repeat(64);
+    const label = 'a'.repeat(63);
+    const domain = [label, label, label, label].join('.');
+    const addr = `${local}@${domain}`;
+    expect(domain.length).toBe(255);
+    expect(addr.length).toBe(320);
+    expect(isEmailAddress(addr)).toBe(true);
+  });
+
+  it('returns false for empty local part', () => {
+    expect(isEmailAddress('@example.com')).toBe(false);
+  });
+
+  it('returns false for empty domain part', () => {
+    expect(isEmailAddress('user@')).toBe(false);
+  });
+
+  it('returns false for "@" only', () => {
+    expect(isEmailAddress('@')).toBe(false);
+  });
+
+  it('returns false for trailing whitespace (regex anchors enforce this)', () => {
+    expect(isEmailAddress('user@example.com ')).toBe(false);
+    expect(isEmailAddress(' user@example.com')).toBe(false);
+  });
+
+  it('returns false when domain TLD is numeric', () => {
+    expect(isEmailAddress('user@example.123')).toBe(false);
+  });
+
+  it('returns false for a hyphen at the start of any domain label', () => {
+    expect(isEmailAddress('user@sub.-example.com')).toBe(false);
+  });
+
+  it('returns true at the exact local-part length of 64', () => {
+    const local = 'a'.repeat(64);
+    expect(isEmailAddress(`${local}@example.com`)).toBe(true);
+  });
+});
+
+describe('validateEmail boundary cases', () => {
+  it('rejects "+" at the very start of local part as alias', () => {
+    const result = validateEmail('+plus@example.com');
+    expect(result?.valid).toBe(false);
+    expect(result?.message).toBe('Email cannot contain aliases');
+  });
+
+  it('rejects "+" at the end of local part as alias', () => {
+    const result = validateEmail('plus+@example.com');
+    expect(result?.valid).toBe(false);
+    expect(result?.message).toBe('Email cannot contain aliases');
+  });
+
+  it('rejects multiple "+" signs as alias', () => {
+    const result = validateEmail('a+b+c@example.com');
+    expect(result?.valid).toBe(false);
+    expect(result?.message).toBe('Email cannot contain aliases');
+  });
+
+  it('treats whitespace-only input as empty (returns null)', () => {
+    // value.length is 0 only for ''; non-empty whitespace falls through to invalid
+    expect(validateEmail('')).toBeNull();
+    expect(validateEmail('   ')?.valid).toBe(false);
+  });
+});

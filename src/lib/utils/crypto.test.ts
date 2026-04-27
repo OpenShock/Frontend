@@ -74,4 +74,14 @@ describe('HashString', () => {
     const strHash = await HashString(input, 'SHA-256');
     expect(strHash).toBe(buffHash);
   });
+
+  it('produces SHA-1 of the empty string', async () => {
+    expect(await HashString('', 'SHA-1')).toBe('da39a3ee5e6b4b0d3255bfef95601890afd80709');
+  });
+
+  it('produces SHA-256 of the empty string', async () => {
+    expect(await HashString('', 'SHA-256')).toBe(
+      'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
+    );
+  });
 });

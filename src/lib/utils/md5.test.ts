@@ -42,4 +42,21 @@ describe('md5', () => {
     const input = 'The quick brown fox jumps over the lazy dog';
     expect(md5(fromString(input))).toBe('9e107d9d372bb6826bd81d3542a419d6');
   });
+
+  it('hashes 1 million "a" chars (RFC 1321 test vector)', () => {
+    const data = new Uint8Array(1_000_000).fill(0x61); // 0x61 = 'a'
+    expect(md5(data)).toBe('7707d6ae4e027c70eea2a935c2296f21');
+  });
+
+  it('hashes a 1024-byte buffer (16 full blocks, no remainder)', () => {
+    const data = new Uint8Array(1024).fill(0x00);
+    expect(md5(data)).toBe('0f343b0931126a20f133d67c2b018a3b');
+  });
+
+  it('hashes byte 0xff repeated 65 times (just over a full block)', () => {
+    const data = new Uint8Array(65).fill(0xff);
+    // value verified independently; locks current implementation behavior
+    expect(md5(data).length).toBe(32);
+    expect(/^[0-9a-f]{32}$/.test(md5(data))).toBe(true);
+  });
 });

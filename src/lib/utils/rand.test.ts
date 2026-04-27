@@ -32,4 +32,15 @@ describe('randStr', () => {
     // Negative length will not enter the loop, so it should also be ''
     expect(randStr(-5)).toBe('');
   });
+
+  it('returns empty string for NaN length', () => {
+    expect(randStr(Number.NaN)).toBe('');
+  });
+
+  it('uses every character class across many samples (statistical sanity)', () => {
+    const sample = randStr(2000);
+    expect(sample).toMatch(/[A-Z]/);
+    expect(sample).toMatch(/[a-z]/);
+    expect(sample).toMatch(/[0-9]/);
+  });
 });

@@ -70,6 +70,57 @@ describe('validatePasswordMatch', () => {
     expect(result?.valid).toBe(true);
     expect(result).not.toHaveProperty('message');
   });
+
+  it('rejects empty confirmation against non-empty password', () => {
+    const result = validatePasswordMatch('password123', '');
+    expect(result?.valid).toBe(false);
+    expect(result?.message).toBe('Passwords do not match');
+  });
+
+  it('treats unicode-equivalent strings as a literal mismatch (no NFC normalization)', () => {
+    // Composed "é" vs decomposed "e" + combining acute
+    const composed = 'pässword1234';
+    const decomposed = 'pässword1234'; // combining diaeresis
+    expect(composed).not.toEqual(decomposed);
+    const result = validatePasswordMatch(composed, decomposed);
+    expect(result?.valid).toBe(false);
+  });
+});
+
+describe('validatePassword boundary cases', () => {
+  it('accepts exactly 12 characters (lower boundary)', () => {
+    const pwd = 'a'.repeat(12);
+    const result = validatePassword(pwd);
+    expect(result?.valid).toBe(true);
+  });
+
+  it('rejects exactly 11 characters (just below)', () => {
+    const result = validatePassword('a'.repeat(11));
+    expect(result?.valid).toBe(false);
+    expect(result?.message).toBe('Password is too short');
+  });
+
+  it('accepts exactly 256 characters (upper boundary)', () => {
+    const result = validatePassword('a'.repeat(256));
+    expect(result?.valid).toBe(true);
+  });
+
+  it('rejects exactly 257 characters (just above)', () => {
+    const result = validatePassword('a'.repeat(257));
+    expect(result?.valid).toBe(false);
+    expect(result?.message).toMatch(/Seriously\?/);
+  });
+
+  it('accepts internal whitespace within otherwise valid password', () => {
+    const result = validatePassword('a strong pass!');
+    expect(result?.valid).toBe(true);
+  });
+
+  it('rejects tab-only passwords as whitespace-only', () => {
+    const result = validatePassword('\t'.repeat(12));
+    expect(result?.valid).toBe(false);
+    expect(result?.message).toBe('Password cannot consist of only whitespaces');
+  });
 });
 
 describe('getPasswordStrength', () => {

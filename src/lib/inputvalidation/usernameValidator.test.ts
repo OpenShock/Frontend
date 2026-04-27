@@ -1,5 +1,13 @@
+import { UsernameAvailability } from '$lib/api/internal/v2';
 import { describe, expect, it } from 'vitest';
-import { validateUsername } from './usernameValidator';
+import {
+  UsernameAvailabilityUnknownValRes,
+  UsernameAvailableValRes,
+  UsernameInvalidValRes,
+  UsernameTakenValRes,
+  mapUsernameCheckResponse,
+  validateUsername,
+} from './usernameValidator';
 
 describe('username validator test', () => {
   it('empty username should return null', () => {
@@ -123,5 +131,54 @@ describe('username validator test', () => {
     expect(result).toEqual({
       valid: true,
     });
+  });
+
+  it('accepts exactly 3 characters (lower boundary)', () => {
+    expect(validateUsername('abc')).toEqual({ valid: true });
+  });
+
+  it('accepts exactly 32 characters (upper boundary)', () => {
+    expect(validateUsername('a'.repeat(32))).toEqual({ valid: true });
+  });
+
+  it('rejects exactly 33 characters (just above max)', () => {
+    expect(validateUsername('a'.repeat(33))).toEqual({
+      valid: false,
+      message: 'Username is too long',
+    });
+  });
+});
+
+describe('mapUsernameCheckResponse', () => {
+  it('returns Available for Available availability', () => {
+    expect(mapUsernameCheckResponse({ availability: UsernameAvailability.Available })).toEqual(
+      UsernameAvailableValRes
+    );
+  });
+
+  it('returns Taken for Taken availability', () => {
+    expect(mapUsernameCheckResponse({ availability: UsernameAvailability.Taken })).toEqual(
+      UsernameTakenValRes
+    );
+  });
+
+  it('returns the error message when Invalid + error provided', () => {
+    const res = mapUsernameCheckResponse({
+      availability: UsernameAvailability.Invalid,
+      error: { message: 'Reserved name' },
+    });
+    expect(res).toEqual({ valid: false, message: 'Reserved name' });
+  });
+
+  it('returns generic Invalid when Invalid without error', () => {
+    expect(mapUsernameCheckResponse({ availability: UsernameAvailability.Invalid })).toEqual(
+      UsernameInvalidValRes
+    );
+  });
+
+  it('returns Unknown availability for unrecognised enum values', () => {
+    expect(
+      mapUsernameCheckResponse({ availability: 'totally-bogus' as UsernameAvailability })
+    ).toEqual(UsernameAvailabilityUnknownValRes);
   });
 });

@@ -74,3 +74,81 @@ describe('elapsedToString', () => {
     expect(elapsedToString(-2 * MS_IN_HOUR)).toBe('2 hours ago');
   });
 });
+
+describe('durationToString — boundary and edge cases', () => {
+  it('returns "0 seconds" for sub-second durations regardless of sign', () => {
+    expect(durationToString(0)).toBe('0 seconds');
+    expect(durationToString(1)).toBe('0 seconds');
+    expect(durationToString(-1)).toBe('0 seconds');
+    expect(durationToString(-999)).toBe('0 seconds');
+  });
+
+  it('handles year/month/day/hour/minute/second exact boundaries', () => {
+    expect(durationToString(MS_IN_SECOND)).toBe('1 second');
+    expect(durationToString(MS_IN_MINUTE)).toBe('1 minute');
+    expect(durationToString(MS_IN_HOUR)).toBe('1 hour');
+    expect(durationToString(MS_IN_DAY)).toBe('1 day');
+    expect(durationToString(MS_IN_MONTH)).toBe('1 month');
+    expect(durationToString(MS_IN_YEAR)).toBe('1 year');
+  });
+
+  it('is consistent just below each boundary', () => {
+    // 60_000ms is exactly 1 minute. 59_999ms → seconds branch → 59 seconds
+    expect(durationToString(MS_IN_MINUTE - 1)).toBe('59 seconds');
+    // hour - 1 → minutes branch
+    expect(durationToString(MS_IN_HOUR - 1)).toBe('59 minutes');
+  });
+
+  it('handles very large values (centuries)', () => {
+    const result = durationToString(1000 * MS_IN_YEAR);
+    expect(result).toBe('1000 years');
+  });
+
+  it('handles Number.MAX_SAFE_INTEGER without throwing', () => {
+    const result = durationToString(Number.MAX_SAFE_INTEGER);
+    expect(result).toMatch(/^\d+ years$/);
+  });
+
+  it('handles Infinity by returning a years string', () => {
+    // Math.abs(Infinity) / 1000 = Infinity; Math.floor(Infinity) is Infinity → "Infinity year(s)"
+    const result = durationToString(Infinity);
+    expect(result).toBe('Infinity years');
+  });
+
+  it('handles -Infinity by treating absolute value', () => {
+    const result = durationToString(-Infinity);
+    expect(result).toBe('Infinity years');
+  });
+
+  it('handles NaN gracefully (NaN seconds → "NaN seconds")', () => {
+    // Math.floor(NaN) is NaN; Math.abs(NaN) is NaN; NaN / 1000 → NaN; comparisons all false
+    expect(durationToString(NaN)).toBe('NaN seconds');
+  });
+});
+
+describe('elapsedToString — boundary and edge cases', () => {
+  it('treats 0 as non-negative ("in 0 seconds")', () => {
+    expect(elapsedToString(0)).toBe('in 0 seconds');
+  });
+
+  it('handles -0 as non-negative (since -0 < 0 is false)', () => {
+    expect(elapsedToString(-0)).toBe('in 0 seconds');
+  });
+
+  it('handles a negative sub-second value (still non-zero negative)', () => {
+    // -500ms → isNegative true → "0 seconds ago"
+    expect(elapsedToString(-500)).toBe('0 seconds ago');
+  });
+
+  it('formats large positive year value', () => {
+    expect(elapsedToString(2 * MS_IN_YEAR)).toBe('in 2 years');
+  });
+
+  it('formats large negative year value', () => {
+    expect(elapsedToString(-2 * MS_IN_YEAR)).toBe('2 years ago');
+  });
+
+  it('handles NaN (NaN < 0 is false → "in" prefix)', () => {
+    expect(elapsedToString(NaN)).toBe('in NaN seconds');
+  });
+});
