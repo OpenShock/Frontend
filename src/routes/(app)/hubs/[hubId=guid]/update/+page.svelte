@@ -81,7 +81,7 @@
   import { cn } from '$lib/utils';
   import { NumberToHexPadded } from '$lib/utils/convert';
   import { onMount } from 'svelte';
-  import type { FirmwareChannel } from '$lib/api/firmwareCDN';
+  import type { FirmwareChannel } from '$lib/api/firmwareRepo';
   import PageHeader from '$lib/components/PageHeader.svelte';
 
   let hubLoaded = $state(false);

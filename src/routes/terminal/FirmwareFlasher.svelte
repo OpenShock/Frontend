@@ -36,7 +36,7 @@
   let error = $state<string | null>(null);
 
   async function FlashDeviceImpl() {
-    if (!version || !board || !connection) {
+    if (!latestResponse || !board || !connection) {
       progressName = null;
       error = 'No device selected.';
       return;

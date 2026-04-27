@@ -8,7 +8,7 @@
     Zap,
   } from '@lucide/svelte';
   import { browser } from '$app/environment';
-  import type { FirmwareChannel } from '$lib/api/firmwareCDN';
+  import type { FirmwareChannel, FirmwareRelease } from '$lib/api/firmwareRepo';
   import Container from '$lib/components/Container.svelte';
   import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
   import ChromeLogo from '$lib/components/svg/ChromeLogo.svelte';
@@ -46,6 +46,7 @@
 
   let channel = $state<FirmwareChannel>('stable');
   let version = $state<string | null>(null);
+  let latestResponse = $state<FirmwareRelease | null>(null);
   // Tracks which channel+version the user explicitly confirmed. Changing either invalidates it.
   let confirmedChannel = $state<FirmwareChannel | null>(null);
   let confirmedVersion = $state<string | null>(null);
@@ -325,6 +326,7 @@
                             <FirmwareChannelSelector
                               bind:channel
                               bind:version
+                              bind:latestResponse
                               disabled={isFlashing}
                             />
                             {#if version}
@@ -352,7 +354,7 @@
                         {#if isCurrent}
                           <div class="flex flex-col gap-4">
                             <FirmwareBoardSelector
-                              {version}
+                              {latestResponse}
                               bind:selectedBoard={board}
                               disabled={isFlashing}
                             />
@@ -381,9 +383,9 @@
 
                       <!-- Step 3: Flash -->
                       {#if i === 2}
-                        {#if isCurrent && version && board && connection}
+                        {#if isCurrent && latestResponse && board && connection}
                           <FirmwareFlasher
-                            {version}
+                            {latestResponse}
                             {board}
                             {connection}
                             {eraseBeforeFlash}
