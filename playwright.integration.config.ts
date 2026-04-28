@@ -5,6 +5,7 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 const FRONTEND_URL = process.env.TEST_FRONTEND_URL ?? 'https://localhost:5173';
 const BACKEND_URL = process.env.TEST_BACKEND_URL ?? 'https://localhost:5001';
+const MAILPIT_URL = process.env.TEST_MAILPIT_URL ?? 'http://localhost:8025';
 const TURNSTILE_BYPASS = process.env.TEST_TURNSTILE_BYPASS ?? 'dev-bypass';
 
 export default defineConfig({
@@ -25,6 +26,7 @@ export default defineConfig({
   metadata: {
     frontendUrl: FRONTEND_URL,
     backendUrl: BACKEND_URL,
+    mailpitUrl: MAILPIT_URL,
     turnstileBypass: TURNSTILE_BYPASS,
   },
 });

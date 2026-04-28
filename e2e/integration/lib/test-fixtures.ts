@@ -3,6 +3,7 @@ import { FRONTEND_URL } from './env';
 import {
   type AuthCookies,
   type Credentials,
+  activateAccount,
   deleteSelf,
   login as apiLogin,
   signup as apiSignup,
@@ -73,16 +74,13 @@ export const test = base.extend<{
   user: async ({}, use) => {
     const credentials = makeCredentials();
     await apiSignup(credentials);
+    await activateAccount(credentials.email);
     let cookies: AuthCookies = [];
     try {
       cookies = await apiLogin(credentials.email, credentials.password);
     } catch (err) {
-      // login may fail if the account requires email activation;
-      // in that case the test should rely on a pre-activated user or a backend dev toggle.
       throw new Error(
-        `login after signup failed (email-activation may be required on this backend): ${
-          err instanceof Error ? err.message : String(err)
-        }`
+        `login after signup+activation failed: ${err instanceof Error ? err.message : String(err)}`
       );
     }
 

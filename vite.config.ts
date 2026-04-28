@@ -144,7 +144,7 @@ function getPlugins(useLocalRedirect: boolean): PluginOption[] {
 }
 
 async function getServerConfig(mode: string, useLocalRedirect: boolean) {
-  const vars = { ...env, ...loadEnv(mode, process.cwd(), ['PUBLIC_']) };
+  const vars = { ...env, ...loadEnv(mode, process.cwd(), ['PUBLIC_', 'VITE_']) };
   if (!vars.PUBLIC_SITE_URL) {
     printError('PUBLIC_SITE_URL must be set in your environment');
     process.exit(1);
@@ -152,11 +152,25 @@ async function getServerConfig(mode: string, useLocalRedirect: boolean) {
 
   if (!useLocalRedirect) return undefined;
 
+  const domain = new URL(vars.PUBLIC_SITE_URL).hostname;
+
+  // When an API proxy target is configured (integration mode), proxy /1 and /2
+  // through the Vite dev server so the browser never has to trust the API's
+  // self-signed certificate directly.
+  const apiProxyTarget = vars.VITE_API_PROXY_TARGET;
+  const proxy: Record<string, object> = apiProxyTarget
+    ? {
+        '^/(1|2)(/.*)?$': {
+          target: apiProxyTarget,
+          secure: false,
+          changeOrigin: true,
+        },
+      }
+    : {};
+
   // Vite 8: pipe browser console.* into the dev terminal so client errors land
   // alongside server logs without context-switching to browser devtools.
-  const baseDevConfig = { forwardConsole: true, proxy: {} };
-
-  const domain = new URL(vars.PUBLIC_SITE_URL).hostname;
+  const baseDevConfig = { forwardConsole: true, proxy };
 
   if (domain === 'localhost') {
     return { ...baseDevConfig, host: 'localhost' };

@@ -16,7 +16,10 @@ test.describe('account settings', () => {
   });
 
   test('displays current email', async ({ authedPage, user }) => {
-    await expect(authedPage.getByText(user.credentials.email, { exact: false })).toBeVisible();
+    // Email is shown as a placeholder on the change-email input
+    await expect(
+      authedPage.locator(`input[placeholder*="${user.credentials.email}"]`)
+    ).toBeVisible();
   });
 
   test('update username with a valid new name', async ({ authedPage, user }) => {
@@ -27,7 +30,7 @@ test.describe('account settings', () => {
     await usernameInput.fill(newName);
 
     const saveBtn = authedPage
-      .getByRole('button', { name: /save|update|submit/i })
+      .getByRole('button', { name: /save|update|submit|change/i })
       .first();
     await saveBtn.click();
 
@@ -43,12 +46,10 @@ test.describe('account settings', () => {
     const usernameInput = authedPage.getByLabel(/username/i).first();
     await usernameInput.fill('ab');
 
-    const saveBtn = authedPage.getByRole('button', { name: /save|update|submit/i }).first();
-    await saveBtn.click();
-
-    await expect(
-      authedPage.locator('[data-error], [aria-invalid="true"], .error, [role="alert"]').first()
-    ).toBeVisible({ timeout: 3000 }).catch(() => {});
+    // The input should show aria-invalid and the Change button should be disabled
+    await expect(usernameInput).toHaveAttribute('aria-invalid', 'true', { timeout: 3000 });
+    const saveBtn = authedPage.getByRole('button', { name: /change/i }).first();
+    await expect(saveBtn).toBeDisabled();
   });
 });
 
