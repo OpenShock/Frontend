@@ -1,7 +1,10 @@
 import { defineConfig } from '@playwright/test';
 
-const FRONTEND_URL = process.env.TEST_FRONTEND_URL ?? 'https://local.openshock.dev';
-const BACKEND_URL = process.env.TEST_BACKEND_URL ?? 'https://api.openshock.dev';
+// Allow self-signed certificates from the local API dev container
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
+const FRONTEND_URL = process.env.TEST_FRONTEND_URL ?? 'https://localhost:5173';
+const BACKEND_URL = process.env.TEST_BACKEND_URL ?? 'https://localhost:5001';
 const TURNSTILE_BYPASS = process.env.TEST_TURNSTILE_BYPASS ?? 'dev-bypass';
 
 export default defineConfig({
@@ -13,6 +16,7 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   use: {
     baseURL: FRONTEND_URL,
+    ignoreHTTPSErrors: true,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',

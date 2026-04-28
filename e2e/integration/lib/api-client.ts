@@ -34,7 +34,7 @@ export async function login(email: string, password: string): Promise<AuthCookie
   const res = await fetch(`${BACKEND_URL}/2/account/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password, turnstileResponse: TURNSTILE_BYPASS }),
+    body: JSON.stringify({ usernameOrEmail: email, password, turnstileResponse: TURNSTILE_BYPASS }),
   });
   await expectOk(res, 'login');
   const setCookies = res.headers.getSetCookie?.() ?? [];

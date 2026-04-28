@@ -17,7 +17,8 @@
 		"test:integration": "playwright test --config=playwright.integration.config.ts",
 		"test:e2e:full": "playwright test --config=playwright.e2e.config.ts",
 		"test:unit": "vitest",
-		"regen-api": "node scripts/regenerate-api.js"
+		"regen-api": "node scripts/regenerate-api.js",
+		"dev:integration": "NODE_TLS_REJECT_UNAUTHORIZED=0 vite dev --mode integration"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^2.0.5",

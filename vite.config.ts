@@ -159,7 +159,7 @@ async function getServerConfig(mode: string, useLocalRedirect: boolean) {
   const domain = new URL(vars.PUBLIC_SITE_URL).hostname;
 
   if (domain === 'localhost') {
-    return { ...baseDevConfig, host: 'localhost', port: 8080 };
+    return { ...baseDevConfig, host: 'localhost' };
   }
 
   let host = domain;

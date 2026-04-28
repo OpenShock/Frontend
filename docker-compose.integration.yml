@@ -1,0 +1,60 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: openshock
+      POSTGRES_USER: openshock
+      POSTGRES_PASSWORD: openshock
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U openshock -d openshock']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis/redis-stack-server:latest
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - '8025:8025' # Web UI (optional, for local debugging)
+
+  api:
+    image: ghcr.io/openshock/api:develop
+    ports:
+      - '5001:443'
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      OPENSHOCK_DISABLE_RATE_LIMITING: '1'
+      OPENSHOCK__DB__CONN: Host=postgres;Port=5432;Database=openshock;Username=openshock;Password=openshock
+      OPENSHOCK__REDIS__HOST: redis
+      OPENSHOCK__FRONTEND__SHORTURL: https://localhost:5173
+      OPENSHOCK__FRONTEND__BASEURL: https://localhost:5173
+      OPENSHOCK__FRONTEND__COOKIEDOMAIN: localhost
+      OPENSHOCK__TURNSTILE__ENABLE: 'false'
+      OPENSHOCK__MAIL__TYPE: SMTP
+      OPENSHOCK__MAIL__SENDER__NAME: OpenShock Dev
+      OPENSHOCK__MAIL__SENDER__EMAIL: dev@openshock.dev
+      OPENSHOCK__MAIL__SMTP__HOST: mailpit
+      OPENSHOCK__MAIL__SMTP__PORT: '1025'
+      OPENSHOCK__MAIL__SMTP__USERNAME: dev
+      OPENSHOCK__MAIL__SMTP__PASSWORD: dev
+      OPENSHOCK__MAIL__SMTP__ENABLESSL: 'false'
+      OPENSHOCK__MAIL__SMTP__VERIFYCERTIFICATE: 'false'
+      OPENSHOCK__LCG__COUNTRYCODE: DE
+    healthcheck:
+      test: ['CMD-SHELL', 'timeout 2 bash -c "</dev/tcp/localhost/443" || exit 1']
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 30s
