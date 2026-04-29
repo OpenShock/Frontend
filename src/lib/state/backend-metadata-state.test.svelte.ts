@@ -54,7 +54,7 @@ describe('backendMetadata', () => {
     } as any);
 
     await expect(backendMetadata.init()).rejects.toThrow(
-      'Failed to get backend info: Service unavailable',
+      'Failed to get backend info: Service unavailable'
     );
   });
 
@@ -69,7 +69,10 @@ describe('backendMetadata', () => {
   it('state remains null if init throws', async () => {
     const { backendMetadata } = await import('./backend-metadata-state.svelte');
     const { metaApi } = await import('$lib/api');
-    vi.mocked(metaApi.versionGetBackendInfo).mockResolvedValue({ data: null, message: 'Oops' } as any);
+    vi.mocked(metaApi.versionGetBackendInfo).mockResolvedValue({
+      data: null,
+      message: 'Oops',
+    } as any);
 
     await backendMetadata.init().catch(() => {});
 

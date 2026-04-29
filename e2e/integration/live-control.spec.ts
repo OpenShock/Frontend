@@ -15,19 +15,19 @@ test.describe('own shockers / live control page', () => {
   });
 
   test('shows a heading or title for the shockers section', async ({ authedPage }) => {
-    await expect(
-      authedPage.getByRole('heading', { name: /shocker|device|hub/i }).first()
-    ).toBeVisible({ timeout: 5000 }).catch(async () => {
-      // May not use a heading element — just ensure main content is visible
-      await expect(authedPage.locator('main').first()).toBeVisible();
-    });
+    await expect(authedPage.getByRole('heading', { name: /shocker|device|hub/i }).first())
+      .toBeVisible({ timeout: 5000 })
+      .catch(async () => {
+        // May not use a heading element — just ensure main content is visible
+        await expect(authedPage.locator('main').first()).toBeVisible();
+      });
   });
 
   test('empty state or shocker list is shown', async ({ authedPage }) => {
     const emptyMsg = authedPage.getByText(/no shockers|no devices|no hubs|add a/i);
     const shockerCard = authedPage.locator('[data-shocker], [data-hub], [class*="card"]').first();
-    const hasEmpty = await emptyMsg.count() > 0;
-    const hasCard = await shockerCard.count() > 0;
+    const hasEmpty = (await emptyMsg.count()) > 0;
+    const hasCard = (await shockerCard.count()) > 0;
     expect(hasEmpty || hasCard).toBe(true);
   });
 
@@ -50,8 +50,8 @@ test.describe('add shocker dialog', () => {
     await authedPage.waitForLoadState('networkidle');
     const addBtn = authedPage.getByRole('button', { name: /add|new|pair/i }).first();
     const addLink = authedPage.getByRole('link', { name: /add|new|pair/i }).first();
-    const hasBtn = await addBtn.count() > 0;
-    const hasLink = await addLink.count() > 0;
+    const hasBtn = (await addBtn.count()) > 0;
+    const hasLink = (await addLink.count()) > 0;
     if (hasBtn || hasLink) {
       await expect(hasBtn ? addBtn : addLink).toBeVisible({ timeout: 5000 });
     }
@@ -68,9 +68,7 @@ test.describe('control module UI', () => {
     await authedPage.goto('/shockers/own');
     await authedPage.waitForLoadState('networkidle');
     // Look for module type buttons or tabs
-    const moduleControls = authedPage.locator(
-      '[data-module], [role="tab"], button[aria-selected]'
-    );
+    const moduleControls = authedPage.locator('[data-module], [role="tab"], button[aria-selected]');
     const count = await moduleControls.count();
     // Only meaningful if there are shockers; otherwise the selector may not render
     if (count > 0) {

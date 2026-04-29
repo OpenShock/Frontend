@@ -1,5 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { OtaUpdateProgressTask } from '$lib/signalr/models/OtaUpdateProgressTask';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockOnlineHubs = vi.hoisted(() => new Map<string, any>());
 
@@ -9,8 +9,8 @@ vi.mock('$lib/state/hubs-state.svelte', () => ({
 
 vi.mock('svelte-sonner', () => ({ toast: { error: vi.fn() } }));
 
-import { handleSignalrOtaInstallProgress } from './OtaInstallProgress';
 import { toast } from 'svelte-sonner';
+import { handleSignalrOtaInstallProgress } from './OtaInstallProgress';
 
 beforeEach(() => {
   mockOnlineHubs.clear();
@@ -19,7 +19,9 @@ beforeEach(() => {
 
 describe('handleSignalrOtaInstallProgress', () => {
   it('updates otaInstall when hub and updateId match', () => {
-    const hub = { otaInstall: { id: 7, task: OtaUpdateProgressTask.FetchingMetadata, progress: 0 } };
+    const hub = {
+      otaInstall: { id: 7, task: OtaUpdateProgressTask.FetchingMetadata, progress: 0 },
+    };
     mockOnlineHubs.set('hub-1', hub);
 
     handleSignalrOtaInstallProgress('hub-1', 7, OtaUpdateProgressTask.FlashingApplication, 50);
@@ -37,7 +39,9 @@ describe('handleSignalrOtaInstallProgress', () => {
   });
 
   it('is a no-op when updateId does not match', () => {
-    const hub = { otaInstall: { id: 5, task: OtaUpdateProgressTask.FetchingMetadata, progress: 10 } };
+    const hub = {
+      otaInstall: { id: 5, task: OtaUpdateProgressTask.FetchingMetadata, progress: 10 },
+    };
     mockOnlineHubs.set('hub-1', hub);
 
     handleSignalrOtaInstallProgress('hub-1', 99, OtaUpdateProgressTask.FlashingApplication, 80);
@@ -74,7 +78,12 @@ describe('handleSignalrOtaInstallProgress', () => {
 
   it('preserves other otaInstall fields when updating', () => {
     const hub = {
-      otaInstall: { id: 3, version: '4.0.0', task: OtaUpdateProgressTask.FetchingMetadata, progress: 0 },
+      otaInstall: {
+        id: 3,
+        version: '4.0.0',
+        task: OtaUpdateProgressTask.FetchingMetadata,
+        progress: 0,
+      },
     };
     mockOnlineHubs.set('hub-1', hub);
 

@@ -10,7 +10,7 @@ test.describe('error handling', () => {
     expect(res?.status()).not.toBe(500);
     // Should show a 404 or redirect
     const is404 = res?.status() === 404;
-    const isRedirected = res?.status()! < 400;
+    const isRedirected = (res?.status() ?? 500) < 400;
     expect(is404 || isRedirected).toBe(true);
   });
 
@@ -30,7 +30,9 @@ test.describe('security headers', () => {
     const headers = res?.headers() ?? {};
     const hasFrameOptions = 'x-frame-options' in headers;
     const hasCSP = 'content-security-policy' in headers;
-    const cspHasFrameAncestors = (headers['content-security-policy'] ?? '').includes('frame-ancestors');
+    const cspHasFrameAncestors = (headers['content-security-policy'] ?? '').includes(
+      'frame-ancestors'
+    );
     expect(hasFrameOptions || (hasCSP && cspHasFrameAncestors)).toBe(true);
   });
 
@@ -51,19 +53,17 @@ test.describe('navigation', () => {
     await authedPage.goto('/home');
     await authedPage.waitForLoadState('networkidle');
     // Navigation should have links to major sections
-    await expect(
-      authedPage.getByRole('navigation').first()
-    ).toBeVisible({ timeout: 5000 });
+    await expect(authedPage.getByRole('navigation').first()).toBeVisible({ timeout: 5000 });
   });
 
   test('sidebar/nav links to shockers section', async ({ authedPage }) => {
     await authedPage.goto('/home');
     await authedPage.waitForLoadState('networkidle');
-    await expect(
-      authedPage.getByRole('link', { name: /shocker/i }).first()
-    ).toBeVisible({ timeout: 5000 }).catch(() => {
-      // May be in a collapsed menu
-    });
+    await expect(authedPage.getByRole('link', { name: /shocker/i }).first())
+      .toBeVisible({ timeout: 5000 })
+      .catch(() => {
+        // May be in a collapsed menu
+      });
   });
 });
 
@@ -80,7 +80,9 @@ test.describe('responsive layout', () => {
     await expect(page.getByRole('button', { name: /login/i })).toBeVisible();
   });
 
-  test('home page renders at tablet viewport without horizontal overflow', async ({ authedPage }) => {
+  test('home page renders at tablet viewport without horizontal overflow', async ({
+    authedPage,
+  }) => {
     await authedPage.setViewportSize({ width: 768, height: 1024 });
     await authedPage.goto('/home');
     await authedPage.waitForLoadState('networkidle');

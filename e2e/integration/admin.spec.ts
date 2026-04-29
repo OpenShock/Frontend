@@ -80,9 +80,9 @@ test.describe('admin users page UI (when accessible)', () => {
     const accessDenied = authedPage.getByText(/access denied|forbidden|not authorized|403/i);
     const loginPage = authedPage.getByText(/welcome back/i);
 
-    const hasMain = await mainContent.count() > 0;
-    const hasDenied = await accessDenied.count() > 0;
-    const hasLogin = await loginPage.count() > 0;
+    const hasMain = (await mainContent.count()) > 0;
+    const hasDenied = (await accessDenied.count()) > 0;
+    const hasLogin = (await loginPage.count()) > 0;
 
     expect(hasMain || hasDenied || hasLogin).toBe(true);
   });
@@ -95,8 +95,8 @@ test.describe('admin users page UI (when accessible)', () => {
     const nameFilter = authedPage.getByPlaceholder(/filter name/i);
     const emailFilter = authedPage.getByPlaceholder(/filter email/i);
 
-    const hasNameFilter = await nameFilter.count() > 0;
-    const hasEmailFilter = await emailFilter.count() > 0;
+    const hasNameFilter = (await nameFilter.count()) > 0;
+    const hasEmailFilter = (await emailFilter.count()) > 0;
 
     if (hasNameFilter) {
       await expect(nameFilter.first()).toBeVisible({ timeout: 3000 });
@@ -121,9 +121,9 @@ test.describe('admin online-hubs page UI', () => {
     const mainContent = authedPage.locator('main, [data-content]').first();
     const denied = authedPage.getByText(/access denied|forbidden|403/i);
 
-    const hasHubs = await hubCount.count() > 0;
-    const hasMain = await mainContent.count() > 0;
-    const hasDenied = await denied.count() > 0;
+    const hasHubs = (await hubCount.count()) > 0;
+    const hasMain = (await mainContent.count()) > 0;
+    const hasDenied = (await denied.count()) > 0;
     expect(hasHubs || hasMain || hasDenied).toBe(true);
   });
 });

@@ -1,16 +1,16 @@
 import { test as base, type BrowserContext, type Page } from '@playwright/test';
-import { FRONTEND_URL } from './env';
 import {
-  type AuthCookies,
-  type Credentials,
   activateAccount,
-  deleteSelf,
   login as apiLogin,
   signup as apiSignup,
+  deleteSelf,
+  type AuthCookies,
+  type Credentials,
 } from './api-client';
+import { FRONTEND_URL } from './env';
 
 function uniqueId(): string {
-  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+  return `${Date.now().toString(36)}-${crypto.randomUUID().replace(/-/g, '').slice(0, 8)}`;
 }
 
 export function makeCredentials(prefix = 'pw'): Credentials {
@@ -71,18 +71,16 @@ export const test = base.extend<{
   user: TestUser;
   authedPage: Page;
 }>({
-  user: async ({}, use) => {
+  user: async (_fixtures, use) => {
     const credentials = makeCredentials();
     await apiSignup(credentials);
     await activateAccount(credentials.email);
-    let cookies: AuthCookies = [];
-    try {
-      cookies = await apiLogin(credentials.email, credentials.password);
-    } catch (err) {
+    const cookies = await apiLogin(credentials.email, credentials.password).catch((err) => {
       throw new Error(
-        `login after signup+activation failed: ${err instanceof Error ? err.message : String(err)}`
+        `login after signup+activation failed: ${err instanceof Error ? err.message : String(err)}`,
+        { cause: err }
       );
-    }
+    });
 
     await use({ credentials, cookies });
 

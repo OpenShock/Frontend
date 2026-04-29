@@ -103,18 +103,14 @@ describe('GetBoardBinaryHashes', () => {
   });
 
   it('strips leading "./" from filenames', async () => {
-    vi.mocked(fetch).mockResolvedValue(
-      textResponse('a'.repeat(64) + ' ./firmware.bin'),
-    );
+    vi.mocked(fetch).mockResolvedValue(textResponse('a'.repeat(64) + ' ./firmware.bin'));
     const hashes = await GetBoardBinaryHashes('1.0.0', 'esp32', 'sha256');
     expect('firmware.bin' in hashes).toBe(true);
     expect('./firmware.bin' in hashes).toBe(false);
   });
 
   it('parses md5 hash file (32-char hashes)', async () => {
-    vi.mocked(fetch).mockResolvedValue(
-      textResponse('f'.repeat(32) + ' firmware.bin'),
-    );
+    vi.mocked(fetch).mockResolvedValue(textResponse('f'.repeat(32) + ' firmware.bin'));
     const hashes = await GetBoardBinaryHashes('1.0.0', 'esp32', 'md5');
     expect(hashes['firmware.bin']).toBe('f'.repeat(32));
   });
@@ -122,23 +118,21 @@ describe('GetBoardBinaryHashes', () => {
   it('throws for a line with no filename', async () => {
     vi.mocked(fetch).mockResolvedValue(textResponse('a'.repeat(64)));
     await expect(GetBoardBinaryHashes('1.0.0', 'esp32', 'sha256')).rejects.toThrow(
-      'Invalid hash line',
+      'Invalid hash line'
     );
   });
 
   it('throws for a hash with wrong length', async () => {
     vi.mocked(fetch).mockResolvedValue(textResponse('abc firmware.bin'));
     await expect(GetBoardBinaryHashes('1.0.0', 'esp32', 'sha256')).rejects.toThrow(
-      'Invalid hash length',
+      'Invalid hash length'
     );
   });
 
   it('throws for a hash with invalid characters', async () => {
-    vi.mocked(fetch).mockResolvedValue(
-      textResponse('Z'.repeat(64) + ' firmware.bin'),
-    );
+    vi.mocked(fetch).mockResolvedValue(textResponse('Z'.repeat(64) + ' firmware.bin'));
     await expect(GetBoardBinaryHashes('1.0.0', 'esp32', 'sha256')).rejects.toThrow(
-      'Invalid hash format',
+      'Invalid hash format'
     );
   });
 });
@@ -150,26 +144,20 @@ describe('GetBoardBinaryHashes', () => {
 describe('GetBoardBinaryHash', () => {
   it('returns the hash for a known filename', async () => {
     const expected = 'a'.repeat(64);
-    vi.mocked(fetch).mockResolvedValue(
-      textResponse(`${expected} firmware.bin`),
-    );
+    vi.mocked(fetch).mockResolvedValue(textResponse(`${expected} firmware.bin`));
     const hash = await GetBoardBinaryHash('1.0.0', 'esp32', 'firmware.bin', 'sha256');
     expect(hash).toBe(expected);
   });
 
   it('returns null for unknown filename', async () => {
-    vi.mocked(fetch).mockResolvedValue(
-      textResponse('a'.repeat(64) + ' other.bin'),
-    );
+    vi.mocked(fetch).mockResolvedValue(textResponse('a'.repeat(64) + ' other.bin'));
     const hash = await GetBoardBinaryHash('1.0.0', 'esp32', 'missing.bin', 'sha256');
     expect(hash).toBeNull();
   });
 
   it('strips "./" prefix from filename before lookup', async () => {
     const expected = 'b'.repeat(64);
-    vi.mocked(fetch).mockResolvedValue(
-      textResponse(`${expected} firmware.bin`),
-    );
+    vi.mocked(fetch).mockResolvedValue(textResponse(`${expected} firmware.bin`));
     const hash = await GetBoardBinaryHash('1.0.0', 'esp32', './firmware.bin', 'sha256');
     expect(hash).toBe(expected);
   });
@@ -203,9 +191,9 @@ describe('DownloadAndVerifyBoardBinary', () => {
       .mockResolvedValueOnce(textResponse(`${storedHash} firmware.bin`));
     vi.mocked(HashBuffer).mockResolvedValue(calculatedHash);
 
-    await expect(
-      DownloadAndVerifyBoardBinary('1.0.0', 'esp32', 'firmware.bin'),
-    ).rejects.toThrow('Hash mismatch');
+    await expect(DownloadAndVerifyBoardBinary('1.0.0', 'esp32', 'firmware.bin')).rejects.toThrow(
+      'Hash mismatch'
+    );
   });
 
   it('throws when no hash entry found for the filename', async () => {
@@ -215,8 +203,8 @@ describe('DownloadAndVerifyBoardBinary', () => {
       .mockResolvedValueOnce(binaryResponse(binary))
       .mockResolvedValueOnce(textResponse('a'.repeat(64) + ' other.bin'));
 
-    await expect(
-      DownloadAndVerifyBoardBinary('1.0.0', 'esp32', 'firmware.bin'),
-    ).rejects.toThrow('No hash found');
+    await expect(DownloadAndVerifyBoardBinary('1.0.0', 'esp32', 'firmware.bin')).rejects.toThrow(
+      'No hash found'
+    );
   });
 });

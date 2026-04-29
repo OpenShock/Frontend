@@ -1,13 +1,13 @@
 import { test as base, type BrowserContext, type Page } from '@playwright/test';
-import { BACKEND_URL, FRONTEND_URL, MAILPIT_URL } from './env';
 import { deleteSelf, type AuthCookies } from './api-client';
+import { BACKEND_URL, FRONTEND_URL, MAILPIT_URL } from './env';
 
 // ---------------------------------------------------------------------------
 // Unique ID helpers
 // ---------------------------------------------------------------------------
 
 function uniqueId(): string {
-  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+  return `${Date.now().toString(36)}-${crypto.randomUUID().replace(/-/g, '').slice(0, 8)}`;
 }
 
 export type Credentials = {
@@ -148,11 +148,11 @@ export const test = base.extend<{
     await use(page);
   },
 
-  credentials: async ({}, use) => {
+  credentials: async (_fixtures, use) => {
     await use(makeCredentials());
   },
 
-  mailpitEnabled: async ({}, use) => {
+  mailpitEnabled: async (_fixtures, use) => {
     await use(MAILPIT_URL.length > 0);
   },
 
@@ -215,4 +215,4 @@ export const test = base.extend<{
 });
 
 export { expect } from '@playwright/test';
-export { FRONTEND_URL, BACKEND_URL, MAILPIT_URL };
+export { BACKEND_URL, FRONTEND_URL, MAILPIT_URL };

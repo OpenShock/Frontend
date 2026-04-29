@@ -55,7 +55,7 @@ describe('checkPwnedCount', () => {
   it('throws when fetch rejects (network error)', async () => {
     vi.mocked(fetch).mockRejectedValue(new Error('Network failure'));
     await expect(checkPwnedCount('mypassword')).rejects.toThrow(
-      'Error while fetching pwned passwords range',
+      'Error while fetching pwned passwords range'
     );
   });
 

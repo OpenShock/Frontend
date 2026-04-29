@@ -1,6 +1,4 @@
-import { expect, loginViaBrowser, makeCredentials, test, MAILPIT_URL } from './lib/test-fixtures';
-import { BACKEND_URL, FRONTEND_URL } from './lib/env';
-import { deleteSelf } from './lib/api-client';
+import { expect, makeCredentials, test } from './lib/test-fixtures';
 
 // ---------------------------------------------------------------------------
 // Login via browser UI
@@ -82,8 +80,8 @@ test.describe('logout via browser UI', () => {
     const logoutBtn = authedPage.getByRole('link', { name: /log.?out|sign.?out/i }).first();
     const logoutBtnAlt = authedPage.getByRole('button', { name: /log.?out|sign.?out/i }).first();
 
-    const hasLink = await logoutBtn.count() > 0;
-    const hasBtnAlt = await logoutBtnAlt.count() > 0;
+    const hasLink = (await logoutBtn.count()) > 0;
+    const hasBtnAlt = (await logoutBtnAlt.count()) > 0;
 
     if (hasLink) {
       await logoutBtn.click();

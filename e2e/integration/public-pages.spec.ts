@@ -83,11 +83,11 @@ test.describe('terminal page', () => {
     await page.goto('/terminal');
     await page.waitForLoadState('networkidle');
     // Should have some terminal-related element
-    await expect(
-      page.locator('canvas, [data-terminal], .terminal, textarea, select').first()
-    ).toBeVisible({ timeout: 5000 }).catch(() => {
-      // Terminal may need WebSerial or only renders content elements
-    });
+    await expect(page.locator('canvas, [data-terminal], .terminal, textarea, select').first())
+      .toBeVisible({ timeout: 5000 })
+      .catch(() => {
+        // Terminal may need WebSerial or only renders content elements
+      });
   });
 });
 

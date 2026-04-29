@@ -114,7 +114,14 @@ describe('userState.refreshSelf', () => {
     const { userState } = await import('./user-state.svelte');
     const { usersApi } = await import('$lib/api');
     vi.mocked(usersApi.usersGetSelf).mockResolvedValue({
-      data: { id: 'u1', name: 'Alice', image: 'avatar.png', roles: [], email: 'alice@example.com', rank: '' },
+      data: {
+        id: 'u1',
+        name: 'Alice',
+        image: 'avatar.png',
+        roles: [],
+        email: 'alice@example.com',
+        rank: '',
+      },
     } as any);
 
     await userState.refreshSelf();
@@ -124,7 +131,10 @@ describe('userState.refreshSelf', () => {
   it('returns false and calls reset() when response has no data', async () => {
     const { userState } = await import('./user-state.svelte');
     const { usersApi } = await import('$lib/api');
-    vi.mocked(usersApi.usersGetSelf).mockResolvedValue({ data: null, message: 'Unauthorized' } as any);
+    vi.mocked(usersApi.usersGetSelf).mockResolvedValue({
+      data: null,
+      message: 'Unauthorized',
+    } as any);
 
     const result = await userState.refreshSelf();
 
@@ -151,8 +161,22 @@ describe('userState.refreshSelf', () => {
     const { userState } = await import('./user-state.svelte');
     const { usersApi } = await import('$lib/api');
 
-    const firstCall = { id: 'u1', name: 'OldName', image: '', roles: [], email: 'a@b.com', rank: '' };
-    const secondCall = { id: 'u1', name: 'NewName', image: '', roles: [], email: 'a@b.com', rank: '' };
+    const firstCall = {
+      id: 'u1',
+      name: 'OldName',
+      image: '',
+      roles: [],
+      email: 'a@b.com',
+      rank: '',
+    };
+    const secondCall = {
+      id: 'u1',
+      name: 'NewName',
+      image: '',
+      roles: [],
+      email: 'a@b.com',
+      rank: '',
+    };
 
     vi.mocked(usersApi.usersGetSelf)
       .mockResolvedValueOnce({ data: firstCall } as any)

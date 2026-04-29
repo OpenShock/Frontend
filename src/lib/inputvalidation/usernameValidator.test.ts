@@ -1,5 +1,5 @@
-import { UsernameAvailability } from '$lib/api/internal/v2';
 import { UsernameErrorType } from '$lib/api/internal/v1';
+import { UsernameAvailability } from '$lib/api/internal/v2';
 import { describe, expect, it } from 'vitest';
 import {
   UsernameAvailabilityUnknownValRes,

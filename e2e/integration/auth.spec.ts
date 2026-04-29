@@ -1,6 +1,5 @@
+import { login as apiLogin, logout as apiLogout } from './lib/api-client';
 import { expect, test } from './lib/test-fixtures';
-import { makeCredentials, signup as apiSignup, login as apiLogin, logout as apiLogout } from './lib/api-client';
-import { makeCredentials as makeTestCredentials } from './lib/test-fixtures';
 
 // ---------------------------------------------------------------------------
 // Login page
@@ -84,7 +83,9 @@ test.describe('signup page', () => {
     await page.goto('/signup');
     await page.waitForLoadState('networkidle');
     // Wait for the form to appear
-    await expect(page.getByRole('button', { name: /create account/i })).toBeVisible({ timeout: 5000 });
+    await expect(page.getByRole('button', { name: /create account/i })).toBeVisible({
+      timeout: 5000,
+    });
     // Button is disabled for empty form; force-click to verify no navigation occurs
     await page.getByRole('button', { name: /create account/i }).click({ force: true });
     // Still on signup page
@@ -117,7 +118,8 @@ test.describe('logout', () => {
       }
     }
 
-    const logoutEl = authedPage.getByRole('button', { name: /log out|sign out/i })
+    const logoutEl = authedPage
+      .getByRole('button', { name: /log out|sign out/i })
       .or(authedPage.getByRole('link', { name: /log out|sign out/i }))
       .first();
 

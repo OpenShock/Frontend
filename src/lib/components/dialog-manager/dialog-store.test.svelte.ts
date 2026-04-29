@@ -77,8 +77,6 @@ describe('dialog store', () => {
 
   it('removeDialog immediately deletes a dialog by id', async () => {
     const { createDialog, getOldestDialog, removeDialog } = await import('./dialog-store.svelte');
-    let capturedId: number | null = null;
-
     // Intercept the id by wrapping createDialog with a resolved-immediately dialog
     const promise = createDialog<void>((resolve) => ({
       content: {} as any,
@@ -88,7 +86,7 @@ describe('dialog store', () => {
 
     const entry = getOldestDialog();
     expect(entry).not.toBeNull();
-    capturedId = entry![0];
+    const capturedId = entry![0];
 
     removeDialog(capturedId);
     expect(getOldestDialog()).toBeNull();

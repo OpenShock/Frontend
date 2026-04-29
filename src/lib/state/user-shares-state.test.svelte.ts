@@ -84,7 +84,9 @@ describe('refreshOutgoingInvites', () => {
     const { refreshOutgoingInvites, userSharesState } = await import('./user-shares-state.svelte');
     const { shockerSharesV2Api } = await import('$lib/api');
     const invite = { id: 'inv-1', code: 'ABC' };
-    vi.mocked(shockerSharesV2Api.userSharesGetOutgoingInvitesList).mockResolvedValue([invite] as any);
+    vi.mocked(shockerSharesV2Api.userSharesGetOutgoingInvitesList).mockResolvedValue([
+      invite,
+    ] as any);
 
     await refreshOutgoingInvites();
     expect(userSharesState.outgoingInvites).toEqual([invite]);
@@ -115,7 +117,9 @@ describe('refreshIncomingInvites', () => {
     const { refreshIncomingInvites, userSharesState } = await import('./user-shares-state.svelte');
     const { shockerSharesV2Api } = await import('$lib/api');
     const invite = { id: 'inv-2', code: 'XYZ' };
-    vi.mocked(shockerSharesV2Api.userSharesGetIncomingInvitesList).mockResolvedValue([invite] as any);
+    vi.mocked(shockerSharesV2Api.userSharesGetIncomingInvitesList).mockResolvedValue([
+      invite,
+    ] as any);
 
     await refreshIncomingInvites();
     expect(userSharesState.incomingInvites).toEqual([invite]);

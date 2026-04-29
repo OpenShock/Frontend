@@ -1,15 +1,11 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ControlType } from '$lib/signalr/models/ControlType';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('$app/environment', () => ({ dev: false }));
 vi.mock('svelte-sonner', () => ({ toast: { error: vi.fn() } }));
 
-import {
-  addShockEventListener,
-  handleSignalrLog,
-  removeShockEventListener,
-} from './Log';
 import { toast } from 'svelte-sonner';
+import { addShockEventListener, handleSignalrLog, removeShockEventListener } from './Log';
 
 const validSender = {
   connectionId: 'conn-1',
@@ -48,7 +44,11 @@ afterEach(() => {
   addedIds.length = 0;
 });
 
-function trackListener(id: string, shockerId: string, cb: Parameters<typeof addShockEventListener>[2]) {
+function trackListener(
+  id: string,
+  shockerId: string,
+  cb: Parameters<typeof addShockEventListener>[2]
+) {
   addShockEventListener(id, shockerId, cb);
   addedIds.push(id);
 }

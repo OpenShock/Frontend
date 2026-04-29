@@ -10,10 +10,10 @@
  * If TEST_MAILPIT_URL is not set, the email-verification tests are skipped.
  */
 
-import { deleteMessage, extractAndRewriteLink, waitForEmailTo } from './lib/mailpit';
-import { expect, makeCredentials, MAILPIT_URL, test } from './lib/test-fixtures';
-import { FRONTEND_URL } from './lib/env';
 import { deleteSelf } from './lib/api-client';
+import { FRONTEND_URL } from './lib/env';
+import { deleteMessage, extractAndRewriteLink, waitForEmailTo } from './lib/mailpit';
+import { expect, MAILPIT_URL, makeCredentials, test } from './lib/test-fixtures';
 
 // ---------------------------------------------------------------------------
 // Browser-based signup — no email verification required
@@ -193,9 +193,9 @@ test.describe('email verification via MailPit', () => {
     await page.waitForLoadState('networkidle');
 
     // Step 5: Click "Activate Account" button
-    await expect(
-      page.getByRole('button', { name: /activate account/i })
-    ).toBeVisible({ timeout: 5_000 });
+    await expect(page.getByRole('button', { name: /activate account/i })).toBeVisible({
+      timeout: 5_000,
+    });
     await page.getByRole('button', { name: /activate account/i }).click();
 
     // Should redirect to /login after activation

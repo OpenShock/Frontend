@@ -8,8 +8,8 @@ vi.mock('$lib/state/hubs-state.svelte', () => ({
 
 vi.mock('svelte-sonner', () => ({ toast: { error: vi.fn() } }));
 
-import { handleSignalrDeviceUpdate } from './DeviceUpdate';
 import { toast } from 'svelte-sonner';
+import { handleSignalrDeviceUpdate } from './DeviceUpdate';
 
 beforeEach(() => {
   mockRefreshOwnHubs.mockClear();

@@ -1,8 +1,8 @@
 import { cleanup, render } from '@testing-library/svelte';
 import { flushSync } from 'svelte';
 import { afterEach, describe, expect, it } from 'vitest';
-import { breadcrumbs } from './breadcrumbs-state.svelte';
 import BreadcrumbRegistrar from './__fixtures__/BreadcrumbRegistrar.svelte';
+import { breadcrumbs } from './breadcrumbs-state.svelte';
 
 // Each render call mounts a component whose onDestroy clears its slot in _slots.
 // cleanup() unmounts all rendered components, keeping state clean between tests.
@@ -61,7 +61,9 @@ describe('registerBreadcrumbs', () => {
 
   it('removing one registration leaves the others intact', () => {
     render(BreadcrumbRegistrar, { entries: [{ label: 'Persistent', href: '/p' }] });
-    const { unmount } = render(BreadcrumbRegistrar, { entries: [{ label: 'Transient', href: '/t' }] });
+    const { unmount } = render(BreadcrumbRegistrar, {
+      entries: [{ label: 'Transient', href: '/t' }],
+    });
     flushSync();
     unmount();
     flushSync();

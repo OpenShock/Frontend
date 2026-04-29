@@ -28,8 +28,8 @@ test.describe('outgoing shares', () => {
     await authedPage.waitForLoadState('networkidle');
     const emptyMsg = authedPage.getByText(/no shares|no outgoing|empty/i);
     const shareList = authedPage.locator('[data-share], tr, [role="listitem"]');
-    const hasEmpty = await emptyMsg.count() > 0;
-    const hasList = await shareList.count() > 0;
+    const hasEmpty = (await emptyMsg.count()) > 0;
+    const hasList = (await shareList.count()) > 0;
     expect(hasEmpty || hasList).toBe(true);
   });
 });

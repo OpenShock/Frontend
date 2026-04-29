@@ -1,8 +1,5 @@
 import { defineConfig } from '@playwright/test';
 
-// Allow self-signed certificates from the local API dev container
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-
 const FRONTEND_URL = process.env.TEST_FRONTEND_URL ?? 'https://localhost:5173';
 const BACKEND_URL = process.env.TEST_BACKEND_URL ?? 'https://localhost:5001';
 const MAILPIT_URL = process.env.TEST_MAILPIT_URL ?? 'http://localhost:8025';

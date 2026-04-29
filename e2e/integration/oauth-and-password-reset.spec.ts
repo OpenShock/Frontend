@@ -58,7 +58,9 @@ test.describe('forgot password page', () => {
     await page.waitForLoadState('networkidle');
     await page.getByLabel(/email/i).fill('test.reset@e2e.openshock.test');
     // Wait for button to enable (requires valid email + turnstile dev-bypass)
-    await expect(page.getByRole('button', { name: /reset|send|submit/i })).toBeEnabled({ timeout: 5000 });
+    await expect(page.getByRole('button', { name: /reset|send|submit/i })).toBeEnabled({
+      timeout: 5000,
+    });
     await page.getByRole('button', { name: /reset|send|submit/i }).click();
     // Should show success or error feedback (but not crash)
     await page.waitForTimeout(2000);

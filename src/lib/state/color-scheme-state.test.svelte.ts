@@ -17,6 +17,16 @@ Object.defineProperty(window, 'matchMedia', { value: makeMatchMedia(false), writ
 const { colorScheme, getDarkReaderState, initializeColorScheme, ColorScheme } =
   await import('./color-scheme-state.svelte');
 
+function makeStorageEvent(key: string, newValue: string | null, storageArea: Storage): Event {
+  const event = new Event('storage');
+  Object.defineProperties(event, {
+    key: { value: key },
+    newValue: { value: newValue },
+    storageArea: { value: storageArea },
+  });
+  return event;
+}
+
 const cleanDom = () => {
   document.documentElement.classList.remove('dark');
   document.documentElement.removeAttribute('data-darkreader-proxy-injected');
@@ -120,36 +130,18 @@ describe('colorScheme singleton', () => {
   });
 
   it('picks up ColorScheme.Light via cross-tab storage event', () => {
-    window.dispatchEvent(
-      new StorageEvent('storage', {
-        key: 'theme',
-        newValue: ColorScheme.Light,
-        storageArea: localStorage,
-      }),
-    );
+    window.dispatchEvent(makeStorageEvent('theme', ColorScheme.Light, localStorage));
     expect(colorScheme.value).toBe(ColorScheme.Light);
   });
 
   it('falls back to System for invalid cross-tab storage event values', () => {
-    window.dispatchEvent(
-      new StorageEvent('storage', {
-        key: 'theme',
-        newValue: 'bogus-scheme',
-        storageArea: localStorage,
-      }),
-    );
+    window.dispatchEvent(makeStorageEvent('theme', 'bogus-scheme', localStorage));
     expect(colorScheme.value).toBe(ColorScheme.System);
   });
 
   it('ignores storage events for unrelated keys', () => {
     colorScheme.value = ColorScheme.Dark;
-    window.dispatchEvent(
-      new StorageEvent('storage', {
-        key: 'other-key',
-        newValue: ColorScheme.Light,
-        storageArea: localStorage,
-      }),
-    );
+    window.dispatchEvent(makeStorageEvent('other-key', ColorScheme.Light, localStorage));
     expect(colorScheme.value).toBe(ColorScheme.Dark);
   });
 });

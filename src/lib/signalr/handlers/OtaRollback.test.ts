@@ -8,8 +8,8 @@ vi.mock('$lib/state/hubs-state.svelte', () => ({
 
 vi.mock('svelte-sonner', () => ({ toast: { error: vi.fn(), warning: vi.fn() } }));
 
-import { handleSignalrOtaRollback } from './OtaRollback';
 import { toast } from 'svelte-sonner';
+import { handleSignalrOtaRollback } from './OtaRollback';
 
 beforeEach(() => {
   mockOnlineHubs.clear();

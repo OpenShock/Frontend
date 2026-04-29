@@ -19,9 +19,7 @@ test.describe('SignalR connection lifecycle', () => {
     await authedPage.waitForTimeout(2000);
 
     // Filter out noise unrelated to SignalR
-    const signarErrors = errors.filter((e) =>
-      /signalr|websocket|hub|negotiate/i.test(e)
-    );
+    const signarErrors = errors.filter((e) => /signalr|websocket|hub|negotiate/i.test(e));
     expect(signarErrors).toHaveLength(0);
   });
 

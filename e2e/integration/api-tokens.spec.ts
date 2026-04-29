@@ -29,7 +29,10 @@ test.describe('API tokens', () => {
     await authedPage.getByLabel(/token name/i).fill(tokenName);
 
     // Submit
-    await authedPage.getByRole('button', { name: /generate/i }).last().click();
+    await authedPage
+      .getByRole('button', { name: /generate/i })
+      .last()
+      .click();
 
     // Should show the token value dialog
     await expect(authedPage.getByText(/api token generated/i)).toBeVisible({ timeout: 5000 });
@@ -45,7 +48,10 @@ test.describe('API tokens', () => {
     await authedPage.getByRole('button', { name: /generate token/i }).click();
     await expect(authedPage.getByRole('dialog')).toBeVisible({ timeout: 3000 });
     await authedPage.getByLabel(/token name/i).fill(tokenName);
-    await authedPage.getByRole('button', { name: /generate/i }).last().click();
+    await authedPage
+      .getByRole('button', { name: /generate/i })
+      .last()
+      .click();
 
     // Close the token-value dialog
     await authedPage.keyboard.press('Escape');
@@ -65,7 +71,10 @@ test.describe('API tokens', () => {
     await authedPage.getByRole('button', { name: /generate token/i }).click();
     await expect(authedPage.getByRole('dialog')).toBeVisible({ timeout: 3000 });
     await authedPage.getByLabel(/token name/i).fill(tokenName);
-    await authedPage.getByRole('button', { name: /generate/i }).last().click();
+    await authedPage
+      .getByRole('button', { name: /generate/i })
+      .last()
+      .click();
 
     // Close the token-value dialog
     await authedPage.keyboard.press('Escape');
