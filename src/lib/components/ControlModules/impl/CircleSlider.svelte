@@ -50,8 +50,12 @@
   let lastFraction: number | null = null;
 
   // --- helpers ---
+  const stepDecimals = $derived((step.toString().split('.')[1] ?? '').length);
+
   function snapValue(raw: number): number {
-    return clamp(Math.round((raw - min) / step) * step + min, min, max);
+    const steps = Math.round((raw - min) / step);
+    const snapped = +(steps * step + min).toFixed(stepDecimals);
+    return clamp(snapped, min, max);
   }
 
   function fractionFromEvent(event: PointerEvent) {
