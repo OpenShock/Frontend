@@ -4,89 +4,93 @@ test.describe('API tokens', () => {
   test('API tokens page renders', async ({ authedPage }) => {
     await authedPage.goto('/settings/api-tokens');
     await authedPage.waitForLoadState('networkidle');
-    await expect(authedPage.getByRole('heading', { name: /api token/i })).toBeVisible();
+    await expect(authedPage.getByText(/api token/i).first()).toBeVisible();
   });
 
-  test('new token page renders with a form', async ({ authedPage }) => {
-    await authedPage.goto('/settings/api-tokens/new');
+  test('Generate Token button opens the create dialog', async ({ authedPage }) => {
+    await authedPage.goto('/settings/api-tokens');
     await authedPage.waitForLoadState('networkidle');
-    await expect(authedPage.getByLabel(/name/i)).toBeVisible();
+    await authedPage.getByRole('button', { name: /generate token/i }).click();
+    await expect(authedPage.getByRole('dialog')).toBeVisible({ timeout: 3000 });
+    await expect(authedPage.getByLabel(/token name/i)).toBeVisible();
   });
 
   test('create a new API token end-to-end', async ({ authedPage }) => {
     const tokenName = `e2e-token-${Date.now().toString(36)}`;
 
-    await authedPage.goto('/settings/api-tokens/new');
+    await authedPage.goto('/settings/api-tokens');
     await authedPage.waitForLoadState('networkidle');
 
+    // Open the create dialog
+    await authedPage.getByRole('button', { name: /generate token/i }).click();
+    await expect(authedPage.getByRole('dialog')).toBeVisible({ timeout: 3000 });
+
     // Fill in token name
-    await authedPage.getByLabel(/name/i).fill(tokenName);
+    await authedPage.getByLabel(/token name/i).fill(tokenName);
 
-    // Submit (may also need expiry / permissions selection)
-    const createBtn = authedPage.getByRole('button', { name: /create|generate|submit/i }).first();
-    await createBtn.click();
+    // Submit
+    await authedPage.getByRole('button', { name: /generate/i }).last().click();
 
-    // Expect either a success state showing the token value or redirect back to list
-    await authedPage.waitForTimeout(2000);
-
-    const onNewPage = authedPage.url().includes('/api-tokens/new');
-    const onListPage = authedPage.url().includes('/api-tokens') && !onNewPage;
-
-    // Should either show the created token on the new page or redirect to list
-    if (onNewPage) {
-      // Token value may be shown once on creation
-      await expect(authedPage.locator('code, [data-token-value], input[type="text"]').first()).toBeVisible({ timeout: 3000 }).catch(() => {});
-    } else if (onListPage) {
-      // Redirected to list — token should appear there
-      await expect(authedPage.getByText(tokenName)).toBeVisible({ timeout: 3000 }).catch(() => {});
-    }
+    // Should show the token value dialog
+    await expect(authedPage.getByText(/api token generated/i)).toBeVisible({ timeout: 5000 });
   });
 
   test('newly created token appears in the token list', async ({ authedPage }) => {
     const tokenName = `e2e-list-${Date.now().toString(36)}`;
 
-    // Create via new page
-    await authedPage.goto('/settings/api-tokens/new');
-    await authedPage.waitForLoadState('networkidle');
-    await authedPage.getByLabel(/name/i).fill(tokenName);
-    await authedPage.getByRole('button', { name: /create|generate|submit/i }).first().click();
-    await authedPage.waitForTimeout(1500);
-
-    // Navigate to list
     await authedPage.goto('/settings/api-tokens');
     await authedPage.waitForLoadState('networkidle');
 
+    // Create via dialog
+    await authedPage.getByRole('button', { name: /generate token/i }).click();
+    await expect(authedPage.getByRole('dialog')).toBeVisible({ timeout: 3000 });
+    await authedPage.getByLabel(/token name/i).fill(tokenName);
+    await authedPage.getByRole('button', { name: /generate/i }).last().click();
+
+    // Close the token-value dialog
+    await authedPage.keyboard.press('Escape');
+    await authedPage.waitForTimeout(500);
+
+    // Token should appear in the list
     await expect(authedPage.getByText(tokenName)).toBeVisible({ timeout: 5000 });
   });
 
   test('can delete an existing API token', async ({ authedPage }) => {
     const tokenName = `e2e-del-${Date.now().toString(36)}`;
 
-    // Create token first
-    await authedPage.goto('/settings/api-tokens/new');
-    await authedPage.waitForLoadState('networkidle');
-    await authedPage.getByLabel(/name/i).fill(tokenName);
-    await authedPage.getByRole('button', { name: /create|generate|submit/i }).first().click();
-    await authedPage.waitForTimeout(1500);
-
-    // Go to list
     await authedPage.goto('/settings/api-tokens');
     await authedPage.waitForLoadState('networkidle');
 
-    // Find the delete button in the row containing our token name
-    const tokenRow = authedPage.locator('tr, [data-row], li').filter({ hasText: tokenName }).first();
+    // Create token via dialog
+    await authedPage.getByRole('button', { name: /generate token/i }).click();
+    await expect(authedPage.getByRole('dialog')).toBeVisible({ timeout: 3000 });
+    await authedPage.getByLabel(/token name/i).fill(tokenName);
+    await authedPage.getByRole('button', { name: /generate/i }).last().click();
+
+    // Close the token-value dialog
+    await authedPage.keyboard.press('Escape');
+    await authedPage.waitForTimeout(500);
+
+    // Find the row containing our token, open the actions menu, then delete
+    const tokenRow = authedPage.locator('tr').filter({ hasText: tokenName }).first();
     if (await tokenRow.count()) {
-      const deleteBtn = tokenRow.getByRole('button', { name: /delete|remove/i }).first();
-      if (await deleteBtn.count()) {
-        await deleteBtn.click();
-        // Confirm deletion dialog if present
-        const confirmBtn = authedPage.getByRole('button', { name: /confirm|yes|delete/i }).first();
-        if (await confirmBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
-          await confirmBtn.click();
+      // Click the ellipsis/actions button to open the dropdown
+      const actionsBtn = tokenRow.getByRole('button', { name: /open menu/i }).first();
+      if (await actionsBtn.count()) {
+        await actionsBtn.click();
+        // Click the Delete item in the dropdown
+        const deleteItem = authedPage.getByRole('menuitem', { name: /delete/i }).first();
+        if (await deleteItem.isVisible({ timeout: 1000 }).catch(() => false)) {
+          await deleteItem.click();
+          // Confirm deletion in the dialog
+          const confirmBtn = authedPage.getByRole('button', { name: /delete/i }).first();
+          if (await confirmBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
+            await confirmBtn.click();
+          }
+          await authedPage.waitForTimeout(1500);
+          // Token should no longer appear
+          await expect(authedPage.getByText(tokenName)).not.toBeVisible({ timeout: 3000 });
         }
-        await authedPage.waitForTimeout(1500);
-        // Token should no longer appear
-        await expect(authedPage.getByText(tokenName)).not.toBeVisible({ timeout: 3000 });
       }
     }
   });

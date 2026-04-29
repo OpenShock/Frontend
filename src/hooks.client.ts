@@ -18,6 +18,8 @@ async function initBackendMetadata() {
   if (isUserAuthenticated) {
     // fire both requests in parallel
     await Promise.all([userState.refreshSelf(), initializeSignalR()]);
+  } else {
+    userState.reset();
   }
 }
 

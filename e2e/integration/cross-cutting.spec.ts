@@ -77,7 +77,7 @@ test.describe('responsive layout', () => {
     await page.goto('/login');
     await expect(page.getByLabel(/email/i)).toBeVisible();
     await expect(page.getByLabel(/password/i)).toBeVisible();
-    await expect(page.getByRole('button', { name: /sign in|log in/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /login/i })).toBeVisible();
   });
 
   test('home page renders at tablet viewport without horizontal overflow', async ({ authedPage }) => {

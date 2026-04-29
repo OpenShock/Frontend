@@ -57,6 +57,8 @@ test.describe('forgot password page', () => {
     await page.goto('/forgot-password');
     await page.waitForLoadState('networkidle');
     await page.getByLabel(/email/i).fill('test.reset@e2e.openshock.test');
+    // Wait for button to enable (requires valid email + turnstile dev-bypass)
+    await expect(page.getByRole('button', { name: /reset|send|submit/i })).toBeEnabled({ timeout: 5000 });
     await page.getByRole('button', { name: /reset|send|submit/i }).click();
     // Should show success or error feedback (but not crash)
     await page.waitForTimeout(2000);
@@ -64,12 +66,11 @@ test.describe('forgot password page', () => {
     expect(page.url()).toBeTruthy();
   });
 
-  test('forgot-password shows validation for empty email', async ({ page }) => {
+  test('forgot-password button is disabled for empty email', async ({ page }) => {
     await page.goto('/forgot-password');
     await page.waitForLoadState('networkidle');
-    await page.getByRole('button', { name: /reset|send|submit/i }).click();
-    // Browser native or custom validation
-    await page.waitForTimeout(500);
+    // Button requires valid email — it's disabled when email field is empty
+    await expect(page.getByRole('button', { name: /reset|send|submit/i })).toBeDisabled();
     expect(page.url()).toMatch(/forgot-password/);
   });
 });

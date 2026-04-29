@@ -53,7 +53,7 @@ services:
       OPENSHOCK__MAIL__SMTP__VERIFYCERTIFICATE: 'false'
       OPENSHOCK__LCG__COUNTRYCODE: DE
     healthcheck:
-      test: ['CMD-SHELL', 'timeout 2 bash -c "</dev/tcp/localhost/443" || exit 1']
+      test: ['CMD-SHELL', 'wget -qO /dev/null --no-check-certificate https://localhost/ 2>/dev/null; [ $? -ne 4 ]']
       interval: 10s
       timeout: 5s
       retries: 18

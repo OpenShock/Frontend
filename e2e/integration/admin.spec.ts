@@ -32,6 +32,8 @@ test.describe('admin routes — unauthenticated', () => {
       const res = await page.goto(route);
       // Should redirect to /login or return 401/403 — never 500
       expect(res?.status()).not.toBe(500);
+      // Auth is client-side — wait for the redirect to fire
+      await page.waitForURL(/login|signin/, { timeout: 8000 }).catch(() => {});
       const finalUrl = page.url();
       const isRedirected = /login|signin/.test(finalUrl) || (res?.status() ?? 200) >= 400;
       expect(isRedirected).toBe(true);
@@ -76,7 +78,7 @@ test.describe('admin users page UI (when accessible)', () => {
     // Either a users table or an access-denied / redirect happened
     const mainContent = authedPage.locator('main, [data-content], table, [role="table"]').first();
     const accessDenied = authedPage.getByText(/access denied|forbidden|not authorized|403/i);
-    const loginPage = authedPage.getByRole('heading', { name: /sign in|log in|login/i });
+    const loginPage = authedPage.getByText(/welcome back/i);
 
     const hasMain = await mainContent.count() > 0;
     const hasDenied = await accessDenied.count() > 0;
