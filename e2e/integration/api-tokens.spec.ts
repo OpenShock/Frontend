@@ -4,7 +4,8 @@ test.describe('API tokens', () => {
   test('API tokens page renders', async ({ authedPage }) => {
     await authedPage.goto('/settings/api-tokens');
     await authedPage.waitForLoadState('networkidle');
-    await expect(authedPage.getByText(/api token/i).first()).toBeVisible();
+    await expect(authedPage.getByRole('button', { name: /generate token/i })).toBeVisible();
+    await expect(authedPage.locator('main')).toContainText('API Tokens');
   });
 
   test('Generate Token button opens the create dialog', async ({ authedPage }) => {
@@ -54,11 +55,12 @@ test.describe('API tokens', () => {
       .click();
 
     // Close the token-value dialog
-    await authedPage.keyboard.press('Escape');
-    await authedPage.waitForTimeout(500);
+    await authedPage.getByRole('button', { name: /close/i }).click();
 
     // Token should appear in the list
-    await expect(authedPage.getByText(tokenName)).toBeVisible({ timeout: 5000 });
+    await expect(authedPage.locator('tr').filter({ hasText: tokenName })).toBeVisible({
+      timeout: 5000,
+    });
   });
 
   test('can delete an existing API token', async ({ authedPage }) => {

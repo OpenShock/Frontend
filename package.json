@@ -13,11 +13,11 @@
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
 		"test": "pnpm run test:unit -- --run && pnpm run test:integration",
-		"test:integration": "NODE_TLS_REJECT_UNAUTHORIZED=0 playwright test",
+		"test:integration": "playwright test",
 		"test:e2e": "playwright test --config=playwright.e2e.config.ts",
 		"test:unit": "vitest",
 		"regen-api": "node scripts/regenerate-api.js",
-		"dev:integration": "NODE_TLS_REJECT_UNAUTHORIZED=0 vite dev --mode integration"
+		"dev:integration": "vite dev --mode integration"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^2.0.5",

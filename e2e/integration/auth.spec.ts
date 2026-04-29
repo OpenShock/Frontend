@@ -1,4 +1,5 @@
 import { login as apiLogin, logout as apiLogout } from './lib/api-client';
+import { BACKEND_URL } from './lib/env';
 import { expect, test } from './lib/test-fixtures';
 
 // ---------------------------------------------------------------------------
@@ -136,14 +137,11 @@ test.describe('logout', () => {
     await apiLogout(freshCookies);
 
     // Attempt to access protected endpoint should fail
-    const res = await fetch(
-      `${process.env.TEST_BACKEND_URL ?? 'https://api.openshock.dev'}/1/account`,
-      {
-        headers: {
-          Cookie: freshCookies.map((c) => c.split(';', 1)[0]).join('; '),
-        },
-      }
-    );
+    const res = await fetch(`${BACKEND_URL}/1/users/self`, {
+      headers: {
+        Cookie: freshCookies.map((c) => c.split(';', 1)[0]).join('; '),
+      },
+    });
     // Should be 401 after logout
     expect(res.status).toBe(401);
   });
