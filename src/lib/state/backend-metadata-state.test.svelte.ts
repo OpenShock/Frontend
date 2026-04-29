@@ -27,7 +27,7 @@ describe('backendMetadata', () => {
     const { backendMetadata } = await import('./backend-metadata-state.svelte');
     const { metaApi } = await import('$lib/api');
     const mockData = { version: '1.0.0', currentTime: '2026-04-27T00:00:00Z' };
-    vi.mocked(metaApi.versionGetBackendInfo).mockResolvedValue({ data: mockData });
+    vi.mocked(metaApi.versionGetBackendInfo).mockResolvedValue({ data: mockData } as any);
 
     await backendMetadata.init();
 
@@ -38,7 +38,7 @@ describe('backendMetadata', () => {
     const { backendMetadata } = await import('./backend-metadata-state.svelte');
     const { metaApi } = await import('$lib/api');
     const mockData = { version: '2.0.0', currentTime: '2026-04-27T00:00:00Z' };
-    vi.mocked(metaApi.versionGetBackendInfo).mockResolvedValue({ data: mockData });
+    vi.mocked(metaApi.versionGetBackendInfo).mockResolvedValue({ data: mockData } as any);
 
     const result = await backendMetadata.init();
 
@@ -51,7 +51,7 @@ describe('backendMetadata', () => {
     vi.mocked(metaApi.versionGetBackendInfo).mockResolvedValue({
       data: null,
       message: 'Service unavailable',
-    });
+    } as any);
 
     await expect(backendMetadata.init()).rejects.toThrow(
       'Failed to get backend info: Service unavailable',
@@ -61,7 +61,7 @@ describe('backendMetadata', () => {
   it('init throws when response.data is undefined', async () => {
     const { backendMetadata } = await import('./backend-metadata-state.svelte');
     const { metaApi } = await import('$lib/api');
-    vi.mocked(metaApi.versionGetBackendInfo).mockResolvedValue({ data: undefined });
+    vi.mocked(metaApi.versionGetBackendInfo).mockResolvedValue({ data: undefined } as any);
 
     await expect(backendMetadata.init()).rejects.toThrow('Failed to get backend info');
   });
@@ -69,7 +69,7 @@ describe('backendMetadata', () => {
   it('state remains null if init throws', async () => {
     const { backendMetadata } = await import('./backend-metadata-state.svelte');
     const { metaApi } = await import('$lib/api');
-    vi.mocked(metaApi.versionGetBackendInfo).mockResolvedValue({ data: null, message: 'Oops' });
+    vi.mocked(metaApi.versionGetBackendInfo).mockResolvedValue({ data: null, message: 'Oops' } as any);
 
     await backendMetadata.init().catch(() => {});
 
@@ -82,8 +82,8 @@ describe('backendMetadata', () => {
     const first = { version: '1.0.0', currentTime: '2026-01-01T00:00:00Z' };
     const second = { version: '1.1.0', currentTime: '2026-04-27T00:00:00Z' };
     vi.mocked(metaApi.versionGetBackendInfo)
-      .mockResolvedValueOnce({ data: first })
-      .mockResolvedValueOnce({ data: second });
+      .mockResolvedValueOnce({ data: first } as any)
+      .mockResolvedValueOnce({ data: second } as any);
 
     await backendMetadata.init();
     await backendMetadata.init();

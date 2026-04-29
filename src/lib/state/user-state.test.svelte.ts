@@ -99,8 +99,9 @@ describe('userState.refreshSelf', () => {
         image: 'avatar.png',
         roles: [],
         email: 'alice@example.com',
+        rank: '',
       },
-    });
+    } as any);
 
     const result = await userState.refreshSelf();
 
@@ -113,8 +114,8 @@ describe('userState.refreshSelf', () => {
     const { userState } = await import('./user-state.svelte');
     const { usersApi } = await import('$lib/api');
     vi.mocked(usersApi.usersGetSelf).mockResolvedValue({
-      data: { id: 'u1', name: 'Alice', image: 'avatar.png', roles: [], email: 'alice@example.com' },
-    });
+      data: { id: 'u1', name: 'Alice', image: 'avatar.png', roles: [], email: 'alice@example.com', rank: '' },
+    } as any);
 
     await userState.refreshSelf();
     expect(userState.self?.avatar).toBe('avatar.png');
@@ -123,7 +124,7 @@ describe('userState.refreshSelf', () => {
   it('returns false and calls reset() when response has no data', async () => {
     const { userState } = await import('./user-state.svelte');
     const { usersApi } = await import('$lib/api');
-    vi.mocked(usersApi.usersGetSelf).mockResolvedValue({ data: null, message: 'Unauthorized' });
+    vi.mocked(usersApi.usersGetSelf).mockResolvedValue({ data: null, message: 'Unauthorized' } as any);
 
     const result = await userState.refreshSelf();
 
@@ -150,12 +151,12 @@ describe('userState.refreshSelf', () => {
     const { userState } = await import('./user-state.svelte');
     const { usersApi } = await import('$lib/api');
 
-    const firstCall = { id: 'u1', name: 'OldName', image: '', roles: [], email: 'a@b.com' };
-    const secondCall = { id: 'u1', name: 'NewName', image: '', roles: [], email: 'a@b.com' };
+    const firstCall = { id: 'u1', name: 'OldName', image: '', roles: [], email: 'a@b.com', rank: '' };
+    const secondCall = { id: 'u1', name: 'NewName', image: '', roles: [], email: 'a@b.com', rank: '' };
 
     vi.mocked(usersApi.usersGetSelf)
-      .mockResolvedValueOnce({ data: firstCall })
-      .mockResolvedValueOnce({ data: secondCall });
+      .mockResolvedValueOnce({ data: firstCall } as any)
+      .mockResolvedValueOnce({ data: secondCall } as any);
 
     await userState.refreshSelf();
     await userState.refreshSelf();

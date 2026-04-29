@@ -21,7 +21,7 @@ describe('mergeObjects', () => {
 
   it('resolves thunk (function) sources lazily', () => {
     const thunk = vi.fn(() => ({ value: 42 }));
-    const result = mergeObjects(thunk);
+    const result = mergeObjects(thunk) as unknown as { value: number };
     expect(thunk).not.toHaveBeenCalled();
     expect(result.value).toBe(42);
     expect(thunk).toHaveBeenCalledOnce();
@@ -30,7 +30,7 @@ describe('mergeObjects', () => {
   it('re-evaluates thunk on each property access', () => {
     let counter = 0;
     const thunk = () => ({ count: ++counter });
-    const result = mergeObjects(thunk);
+    const result = mergeObjects(thunk) as unknown as { count: number };
     void result.count;
     void result.count;
     expect(counter).toBe(2);

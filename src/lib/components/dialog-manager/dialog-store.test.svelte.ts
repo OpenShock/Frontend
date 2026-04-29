@@ -132,7 +132,7 @@ describe('dialog.confirm / dialog.alert', () => {
     const { dialog, getOldestDialog } = await import('./dialog-store.svelte');
     const { default: DialogAlertContent } = await import('./dialog-alert-content.svelte');
 
-    dialog.alert({ title: 'Info', description: 'Something happened' });
+    dialog.alert({ title: 'Info', desc: 'Something happened' });
 
     const entry = getOldestDialog();
     expect(entry![1].content).toBe(DialogAlertContent);

@@ -35,8 +35,8 @@ describe('refreshSharedHubs', () => {
   it('populates sharedHubsState.value from API response', async () => {
     const { refreshSharedHubs, sharedHubsState } = await import('./shared-hubs-state.svelte');
     const { shockersV1Api } = await import('$lib/api');
-    const hub = { id: 'shared-1', name: 'Shared Hub', shockers: [] };
-    vi.mocked(shockersV1Api.shockerListSharedShockers).mockResolvedValue({ data: [hub] });
+    const hub = { id: 'shared-1', name: 'Shared Hub', image: '', devices: [] };
+    vi.mocked(shockersV1Api.shockerListSharedShockers).mockResolvedValue({ data: [hub] } as any);
 
     await refreshSharedHubs();
 
@@ -47,8 +47,8 @@ describe('refreshSharedHubs', () => {
     const { refreshSharedHubs, sharedHubsState } = await import('./shared-hubs-state.svelte');
     const { shockersV1Api } = await import('$lib/api');
     vi.mocked(shockersV1Api.shockerListSharedShockers)
-      .mockResolvedValueOnce({ data: [{ id: 'old', name: 'Old', shockers: [] }] })
-      .mockResolvedValueOnce({ data: [{ id: 'new', name: 'New', shockers: [] }] });
+      .mockResolvedValueOnce({ data: [{ id: 'old', name: 'Old', image: '', devices: [] }] } as any)
+      .mockResolvedValueOnce({ data: [{ id: 'new', name: 'New', image: '', devices: [] }] } as any);
 
     await refreshSharedHubs();
     await refreshSharedHubs();
@@ -86,10 +86,10 @@ describe('refreshSharedHubs', () => {
     const { shockersV1Api } = await import('$lib/api');
     vi.mocked(shockersV1Api.shockerListSharedShockers).mockResolvedValue({
       data: [
-        { id: 'sh-1', name: 'Alpha', shockers: [] },
-        { id: 'sh-2', name: 'Beta', shockers: [] },
+        { id: 'sh-1', name: 'Alpha', image: '', devices: [] },
+        { id: 'sh-2', name: 'Beta', image: '', devices: [] },
       ],
-    });
+    } as any);
 
     await refreshSharedHubs();
     expect(sharedHubsState.value).toHaveLength(2);

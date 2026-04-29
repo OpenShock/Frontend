@@ -72,8 +72,8 @@ describe('refreshOwnHubs', () => {
   it('populates ownHubs from API response', async () => {
     const { refreshOwnHubs, ownHubs } = await import('./hubs-state.svelte');
     const { shockersV1Api } = await import('$lib/api');
-    const hub = { id: 'hub-1', name: 'Hub One', shockers: [] };
-    vi.mocked(shockersV1Api.shockerListShockers).mockResolvedValue({ data: [hub] });
+    const hub = { id: 'hub-1', name: 'Hub One', createdOn: new Date(), shockers: [] };
+    vi.mocked(shockersV1Api.shockerListShockers).mockResolvedValue({ data: [hub] } as any);
 
     await refreshOwnHubs();
 
@@ -86,10 +86,10 @@ describe('refreshOwnHubs', () => {
     const { shockersV1Api } = await import('$lib/api');
     vi.mocked(shockersV1Api.shockerListShockers).mockResolvedValue({
       data: [
-        { id: 'hub-1', name: 'First', shockers: [] },
-        { id: 'hub-2', name: 'Second', shockers: [] },
+        { id: 'hub-1', name: 'First', createdOn: new Date(), shockers: [] },
+        { id: 'hub-2', name: 'Second', createdOn: new Date(), shockers: [] },
       ],
-    });
+    } as any);
 
     await refreshOwnHubs();
 
@@ -100,8 +100,8 @@ describe('refreshOwnHubs', () => {
     const { refreshOwnHubs, ownHubs } = await import('./hubs-state.svelte');
     const { shockersV1Api } = await import('$lib/api');
     vi.mocked(shockersV1Api.shockerListShockers)
-      .mockResolvedValueOnce({ data: [{ id: 'hub-1', name: 'Old', shockers: [] }] })
-      .mockResolvedValueOnce({ data: [{ id: 'hub-2', name: 'New', shockers: [] }] });
+      .mockResolvedValueOnce({ data: [{ id: 'hub-1', name: 'Old', createdOn: new Date(), shockers: [] }] } as any)
+      .mockResolvedValueOnce({ data: [{ id: 'hub-2', name: 'New', createdOn: new Date(), shockers: [] }] } as any);
 
     await refreshOwnHubs();
     await refreshOwnHubs();
@@ -114,7 +114,7 @@ describe('refreshOwnHubs', () => {
     const { refreshOwnHubs } = await import('./hubs-state.svelte');
     const { shockersV1Api } = await import('$lib/api');
     const { handleApiError } = await import('$lib/errorhandling/apiErrorHandling');
-    vi.mocked(shockersV1Api.shockerListShockers).mockResolvedValue({ data: null });
+    vi.mocked(shockersV1Api.shockerListShockers).mockResolvedValue({ data: null, message: '' } as any);
 
     await expect(refreshOwnHubs()).resolves.toBeUndefined();
     expect(vi.mocked(handleApiError)).toHaveBeenCalled();
