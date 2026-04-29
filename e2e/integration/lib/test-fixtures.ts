@@ -71,7 +71,7 @@ export const test = base.extend<{
   user: TestUser;
   authedPage: Page;
 }>({
-  user: async (_fixtures, use) => {
+  user: async ({ browserName: _browserName }, use) => {
     const credentials = makeCredentials();
     await apiSignup(credentials);
     await activateAccount(credentials.email);

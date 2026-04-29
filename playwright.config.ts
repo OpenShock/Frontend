@@ -19,7 +19,7 @@ export default defineConfig({
     url: FRONTEND_URL,
     reuseExistingServer: !process.env.CI,
     ignoreHTTPSErrors: true,
-    timeout: 60_000,
+    timeout: 120_000,
   },
   use: {
     baseURL: FRONTEND_URL,

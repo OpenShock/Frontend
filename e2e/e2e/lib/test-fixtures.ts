@@ -148,11 +148,11 @@ export const test = base.extend<{
     await use(page);
   },
 
-  credentials: async (_fixtures, use) => {
+  credentials: async ({ browserName: _browserName }, use) => {
     await use(makeCredentials());
   },
 
-  mailpitEnabled: async (_fixtures, use) => {
+  mailpitEnabled: async ({ browserName: _browserName }, use) => {
     await use(MAILPIT_URL.length > 0);
   },
 
