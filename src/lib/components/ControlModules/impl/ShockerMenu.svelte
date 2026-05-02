@@ -28,7 +28,7 @@
   }
 
   function shareShocker() {
-    goto(`${resolve('/shares/user/outgoing')}?share=${shocker.id}`);
+    goto(resolve(`/shares/user/outgoing?share=${shocker.id}`));
   }
 
   async function togglePause() {
