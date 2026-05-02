@@ -9,7 +9,14 @@ import { loadEnv } from 'vite';
 const isGithubActions = process.env.GITHUB_ACTIONS === 'true';
 const isCloudflare = process.env.CF_PAGES === '1';
 const isDocker = process.env.DOCKER === 'true';
-const mode = process.env.NODE_ENV;
+// Don't trust NODE_ENV — tools like svelte-check load this file mid-process and
+// can have NODE_ENV='production' set by transitively-imported plugins (vite,
+// vite-plugin-svelte) even though no production build is actually happening.
+// `pnpm build`/`pnpm preview` set BUILD_ENV=production explicitly via cross-env;
+// CI/Cloudflare/Docker each have their own flag.
+const isProductionBuild =
+  isGithubActions || isCloudflare || isDocker || process.env.BUILD_ENV === 'production';
+const mode = isProductionBuild ? 'production' : 'development';
 
 const dotenv = { ...process.env, ...loadEnv(mode, process.cwd(), 'PUBLIC_') };
 
