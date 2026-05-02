@@ -41,7 +41,7 @@
       disabled={isDisabled}
       class="border-border text-muted-foreground hover:border-foreground hover:text-foreground cursor-pointer rounded border bg-transparent px-1.5 py-px text-[10px] font-bold tracking-wider transition-all duration-200
         {isActive
-        ? 'bg-gradient-to-r from-[rgb(185,123,255)] to-[#e100ff] bg-clip-text text-transparent [border-image:linear-gradient(to_right,rgb(167,89,255),#e100ff)_1]'
+        ? 'bg-linear-to-r from-[rgb(185,123,255)] to-[#e100ff] bg-clip-text text-transparent [border-image:linear-gradient(to_right,rgb(167,89,255),#e100ff)_1]'
         : ''}
         {isConnecting ? 'border-muted-foreground text-muted-foreground' : ''}
         {isDisabled ? 'pointer-events-none opacity-40' : ''}"
