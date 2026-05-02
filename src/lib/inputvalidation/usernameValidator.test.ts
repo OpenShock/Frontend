@@ -1,4 +1,4 @@
-import { UsernameAvailability } from '$lib/api/internal/v2';
+import { UsernameAvailability, UsernameErrorType } from '$lib/api/internal/v2';
 import { describe, expect, it } from 'vitest';
 import {
   UsernameAvailabilityUnknownValRes,
@@ -165,7 +165,7 @@ describe('mapUsernameCheckResponse', () => {
   it('returns the error message when Invalid + error provided', () => {
     const res = mapUsernameCheckResponse({
       availability: UsernameAvailability.Invalid,
-      error: { message: 'Reserved name' },
+      error: { message: 'Reserved name', type: UsernameErrorType.Blacklisted },
     });
     expect(res).toEqual({ valid: false, message: 'Reserved name' });
   });
