@@ -72,7 +72,7 @@
 <div class="relative h-full w-full p-4 select-none">
   <div
     bind:this={container}
-    class="border-border relative h-full w-full cursor-pointer overflow-hidden rounded-md border"
+    class="relative h-full w-full cursor-pointer"
     onpointerdown={startDrag}
     onpointermove={onPointerMove}
     onpointerup={stopDrag}
@@ -85,13 +85,15 @@
     aria-label="Live intensity"
     tabindex="0"
   >
-    <!-- Fill from bottom -->
-    <div
-      class="bg-muted pointer-events-none absolute bottom-0 left-0 w-full transition-none"
-      style="height: {(1 - y) * 100}%"
-    ></div>
+    <!-- Rectangle with clipped fill -->
+    <div class="border-border absolute inset-0 overflow-hidden rounded-md border">
+      <div
+        class="bg-muted pointer-events-none absolute bottom-0 left-0 w-full transition-none"
+        style="height: {(1 - y) * 100}%"
+      ></div>
+    </div>
 
-    <!-- Handle -->
+    <!-- Handle (outside the clipped rectangle so text can overflow) -->
     <div
       class="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 rounded-full transition-none
         {liveState.isDragging

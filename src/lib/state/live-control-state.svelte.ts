@@ -16,6 +16,7 @@ export class LiveShockerState {
   intensity = $state(0);
   type = $state<ControlType>(ControlType.Vibrate);
   isLive = $state(false);
+  isPaused = $state(false);
 }
 
 export class LiveDeviceConnection {
@@ -41,6 +42,26 @@ export class LiveDeviceConnection {
   ensureShockerState(shockerId: string): void {
     if (!this.shockers.has(shockerId)) {
       this.shockers.set(shockerId, new LiveShockerState());
+    }
+  }
+
+  /**
+   * Register the full set of shockers belonging to this hub. Updates pause state for
+   * existing entries, creates missing ones, and removes entries no longer present.
+   * Call from $effect or event handler.
+   */
+  registerHubShockers(shockers: { id: string; isPaused: boolean }[]): void {
+    const ids = new Set(shockers.map((s) => s.id));
+    for (const s of shockers) {
+      let state = this.shockers.get(s.id);
+      if (!state) {
+        state = new LiveShockerState();
+        this.shockers.set(s.id, state);
+      }
+      state.isPaused = s.isPaused;
+    }
+    for (const id of this.shockers.keys()) {
+      if (!ids.has(id)) this.shockers.delete(id);
     }
   }
 
@@ -214,6 +235,43 @@ export function ensureLiveConnection(deviceId: string): void {
  */
 export function getLiveConnection(deviceId: string): LiveDeviceConnection | undefined {
   return liveConnections.get(deviceId);
+}
+
+/**
+ * Register a hub's shockers with the live-control state store. Idempotent.
+ */
+export function registerHubShockers(
+  deviceId: string,
+  shockers: { id: string; isPaused: boolean }[]
+): void {
+  ensureLiveConnection(deviceId);
+  liveConnections.get(deviceId)!.registerHubShockers(shockers);
+}
+
+/**
+ * Start or stop live control for every registered shocker in the hub at once.
+ * When starting, paused shockers are skipped. When stopping, every shocker is stopped.
+ */
+export async function setHubLiveControl(deviceId: string, isLive: boolean) {
+  const conn = liveConnections.get(deviceId);
+  if (!conn) return;
+
+  if (isLive) {
+    for (const state of conn.shockers.values()) {
+      if (!state.isPaused) state.isLive = true;
+    }
+    const anyLive = [...conn.shockers.values()].some((x) => x.isLive);
+    if (anyLive && conn.state === LiveConnectionState.Disconnected) {
+      await conn.connect();
+    }
+  } else {
+    for (const state of conn.shockers.values()) {
+      state.isLive = false;
+    }
+    if (conn.state !== LiveConnectionState.Disconnected) {
+      conn.disconnect();
+    }
+  }
 }
 
 export async function toggleShockerLiveControl(deviceId: string, shockerId: string) {
