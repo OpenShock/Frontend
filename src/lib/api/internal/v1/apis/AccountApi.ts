@@ -12,48 +12,67 @@
  * Do not edit the class manually.
  */
 
-
 import * as runtime from '../runtime';
-import type {
-  ChangeEmailRequest,
-  ChangePasswordRequest,
-  ChangeUsernameRequest,
-  LegacyEmptyResponse,
-  Login,
-  OAuthConnectionResponse,
-  OpenShockProblem,
-  PasswordResetProcessData,
-  ProblemDetails,
-  ResetRequest,
-  SignUp,
-  UsernameCheckResponse,
-} from '../models/index';
 import {
+    type ChangeEmailRequest,
     ChangeEmailRequestFromJSON,
     ChangeEmailRequestToJSON,
+} from '../models/ChangeEmailRequest';
+import {
+    type ChangePasswordRequest,
     ChangePasswordRequestFromJSON,
     ChangePasswordRequestToJSON,
+} from '../models/ChangePasswordRequest';
+import {
+    type ChangeUsernameRequest,
     ChangeUsernameRequestFromJSON,
     ChangeUsernameRequestToJSON,
+} from '../models/ChangeUsernameRequest';
+import {
+    type LegacyEmptyResponse,
     LegacyEmptyResponseFromJSON,
     LegacyEmptyResponseToJSON,
+} from '../models/LegacyEmptyResponse';
+import {
+    type Login,
     LoginFromJSON,
     LoginToJSON,
+} from '../models/Login';
+import {
+    type OAuthConnectionResponse,
     OAuthConnectionResponseFromJSON,
     OAuthConnectionResponseToJSON,
+} from '../models/OAuthConnectionResponse';
+import {
+    type OpenShockProblem,
     OpenShockProblemFromJSON,
     OpenShockProblemToJSON,
+} from '../models/OpenShockProblem';
+import {
+    type PasswordResetProcessData,
     PasswordResetProcessDataFromJSON,
     PasswordResetProcessDataToJSON,
+} from '../models/PasswordResetProcessData';
+import {
+    type ProblemDetails,
     ProblemDetailsFromJSON,
     ProblemDetailsToJSON,
+} from '../models/ProblemDetails';
+import {
+    type ResetRequest,
     ResetRequestFromJSON,
     ResetRequestToJSON,
+} from '../models/ResetRequest';
+import {
+    type SignUp,
     SignUpFromJSON,
     SignUpToJSON,
+} from '../models/SignUp';
+import {
+    type UsernameCheckResponse,
     UsernameCheckResponseFromJSON,
     UsernameCheckResponseToJSON,
-} from '../models/index';
+} from '../models/UsernameCheckResponse';
 
 export interface AccountActivateRequest {
     token?: string;
@@ -561,8 +580,8 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
 
 
         let urlPath = `/1/account/recover/{passwordResetId}/{secret}`;
-        urlPath = urlPath.replace(`{${"passwordResetId"}}`, encodeURIComponent(String(requestParameters['passwordResetId'])));
-        urlPath = urlPath.replace(`{${"secret"}}`, encodeURIComponent(String(requestParameters['secret'])));
+        urlPath = urlPath.replace('{passwordResetId}', encodeURIComponent(String(requestParameters['passwordResetId'])));
+        urlPath = urlPath.replace('{secret}', encodeURIComponent(String(requestParameters['secret'])));
 
         return {
             path: urlPath,
@@ -616,8 +635,8 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
 
 
         let urlPath = `/1/account/recover/{passwordResetId}/{secret}`;
-        urlPath = urlPath.replace(`{${"passwordResetId"}}`, encodeURIComponent(String(requestParameters['passwordResetId'])));
-        urlPath = urlPath.replace(`{${"secret"}}`, encodeURIComponent(String(requestParameters['secret'])));
+        urlPath = urlPath.replace('{passwordResetId}', encodeURIComponent(String(requestParameters['passwordResetId'])));
+        urlPath = urlPath.replace('{secret}', encodeURIComponent(String(requestParameters['secret'])));
 
         return {
             path: urlPath,
@@ -934,7 +953,7 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
 
 
         let urlPath = `/1/account/connections/{provider}`;
-        urlPath = urlPath.replace(`{${"provider"}}`, encodeURIComponent(String(requestParameters['provider'])));
+        urlPath = urlPath.replace('{provider}', encodeURIComponent(String(requestParameters['provider'])));
 
         return {
             path: urlPath,

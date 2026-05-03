@@ -12,33 +12,42 @@
  * Do not edit the class manually.
  */
 
-
 import * as runtime from '../runtime';
-import type {
-  CreateTokenRequest,
-  EditTokenRequest,
-  OpenShockProblem,
-  ProblemDetails,
-  ReportTokensRequest,
-  TokenCreatedResponse,
-  TokenResponse,
-} from '../models/index';
 import {
+    type CreateTokenRequest,
     CreateTokenRequestFromJSON,
     CreateTokenRequestToJSON,
+} from '../models/CreateTokenRequest';
+import {
+    type EditTokenRequest,
     EditTokenRequestFromJSON,
     EditTokenRequestToJSON,
+} from '../models/EditTokenRequest';
+import {
+    type OpenShockProblem,
     OpenShockProblemFromJSON,
     OpenShockProblemToJSON,
+} from '../models/OpenShockProblem';
+import {
+    type ProblemDetails,
     ProblemDetailsFromJSON,
     ProblemDetailsToJSON,
+} from '../models/ProblemDetails';
+import {
+    type ReportTokensRequest,
     ReportTokensRequestFromJSON,
     ReportTokensRequestToJSON,
+} from '../models/ReportTokensRequest';
+import {
+    type TokenCreatedResponse,
     TokenCreatedResponseFromJSON,
     TokenCreatedResponseToJSON,
+} from '../models/TokenCreatedResponse';
+import {
+    type TokenResponse,
     TokenResponseFromJSON,
     TokenResponseToJSON,
-} from '../models/index';
+} from '../models/TokenResponse';
 
 export interface TokenDeleteDeleteTokenRequest {
     tokenId: string;
@@ -200,7 +209,7 @@ export class APITokensApi extends runtime.BaseAPI implements APITokensApiInterfa
 
 
         let urlPath = `/1/tokens/{tokenId}`;
-        urlPath = urlPath.replace(`{${"tokenId"}}`, encodeURIComponent(String(requestParameters['tokenId'])));
+        urlPath = urlPath.replace('{tokenId}', encodeURIComponent(String(requestParameters['tokenId'])));
 
         return {
             path: urlPath,
@@ -286,7 +295,7 @@ export class APITokensApi extends runtime.BaseAPI implements APITokensApiInterfa
 
 
         let urlPath = `/1/tokens/{tokenId}`;
-        urlPath = urlPath.replace(`{${"tokenId"}}`, encodeURIComponent(String(requestParameters['tokenId'])));
+        urlPath = urlPath.replace('{tokenId}', encodeURIComponent(String(requestParameters['tokenId'])));
 
         return {
             path: urlPath,
@@ -331,7 +340,7 @@ export class APITokensApi extends runtime.BaseAPI implements APITokensApiInterfa
 
 
         let urlPath = `/1/tokens/{tokenId}`;
-        urlPath = urlPath.replace(`{${"tokenId"}}`, encodeURIComponent(String(requestParameters['tokenId'])));
+        urlPath = urlPath.replace('{tokenId}', encodeURIComponent(String(requestParameters['tokenId'])));
 
         return {
             path: urlPath,

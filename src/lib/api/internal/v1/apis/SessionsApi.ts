@@ -12,18 +12,17 @@
  * Do not edit the class manually.
  */
 
-
 import * as runtime from '../runtime';
-import type {
-  LoginSessionResponse,
-  OpenShockProblem,
-} from '../models/index';
 import {
+    type LoginSessionResponse,
     LoginSessionResponseFromJSON,
     LoginSessionResponseToJSON,
+} from '../models/LoginSessionResponse';
+import {
+    type OpenShockProblem,
     OpenShockProblemFromJSON,
     OpenShockProblemToJSON,
-} from '../models/index';
+} from '../models/OpenShockProblem';
 
 export interface SessionsDeleteSessionRequest {
     sessionId: string;
@@ -99,7 +98,7 @@ export class SessionsApi extends runtime.BaseAPI implements SessionsApiInterface
 
 
         let urlPath = `/1/sessions/{sessionId}`;
-        urlPath = urlPath.replace(`{${"sessionId"}}`, encodeURIComponent(String(requestParameters['sessionId'])));
+        urlPath = urlPath.replace('{sessionId}', encodeURIComponent(String(requestParameters['sessionId'])));
 
         return {
             path: urlPath,

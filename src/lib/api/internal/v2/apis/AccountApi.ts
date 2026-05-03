@@ -12,33 +12,42 @@
  * Do not edit the class manually.
  */
 
-
 import * as runtime from '../runtime';
-import type {
-  ChangeUsernameRequest,
-  LoginV2,
-  LoginV2OkResponse,
-  OpenShockProblem,
-  PasswordResetRequestV2,
-  SignUpV2,
-  UsernameCheckResponse,
-} from '../models/index';
 import {
+    type ChangeUsernameRequest,
     ChangeUsernameRequestFromJSON,
     ChangeUsernameRequestToJSON,
+} from '../models/ChangeUsernameRequest';
+import {
+    type LoginV2,
     LoginV2FromJSON,
     LoginV2ToJSON,
+} from '../models/LoginV2';
+import {
+    type LoginV2OkResponse,
     LoginV2OkResponseFromJSON,
     LoginV2OkResponseToJSON,
+} from '../models/LoginV2OkResponse';
+import {
+    type OpenShockProblem,
     OpenShockProblemFromJSON,
     OpenShockProblemToJSON,
+} from '../models/OpenShockProblem';
+import {
+    type PasswordResetRequestV2,
     PasswordResetRequestV2FromJSON,
     PasswordResetRequestV2ToJSON,
+} from '../models/PasswordResetRequestV2';
+import {
+    type SignUpV2,
     SignUpV2FromJSON,
     SignUpV2ToJSON,
+} from '../models/SignUpV2';
+import {
+    type UsernameCheckResponse,
     UsernameCheckResponseFromJSON,
     UsernameCheckResponseToJSON,
-} from '../models/index';
+} from '../models/UsernameCheckResponse';
 
 export interface AccountCheckUsernameRequest {
     changeUsernameRequest?: ChangeUsernameRequest;

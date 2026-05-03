@@ -12,18 +12,17 @@
  * Do not edit the class manually.
  */
 
-
 import * as runtime from '../runtime';
-import type {
-  LegacyEmptyResponse,
-  OpenShockProblem,
-} from '../models/index';
 import {
+    type LegacyEmptyResponse,
     LegacyEmptyResponseFromJSON,
     LegacyEmptyResponseToJSON,
+} from '../models/LegacyEmptyResponse';
+import {
+    type OpenShockProblem,
     OpenShockProblemFromJSON,
     OpenShockProblemToJSON,
-} from '../models/index';
+} from '../models/OpenShockProblem';
 
 export interface SharesDeleteShareCodeRequest {
     shareCodeId: string;
@@ -94,7 +93,7 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
 
 
         let urlPath = `/1/shares/code/{shareCodeId}`;
-        urlPath = urlPath.replace(`{${"shareCodeId"}}`, encodeURIComponent(String(requestParameters['shareCodeId'])));
+        urlPath = urlPath.replace('{shareCodeId}', encodeURIComponent(String(requestParameters['shareCodeId'])));
 
         return {
             path: urlPath,
@@ -139,7 +138,7 @@ export class ShockerSharesApi extends runtime.BaseAPI implements ShockerSharesAp
 
 
         let urlPath = `/1/shares/code/{shareCodeId}`;
-        urlPath = urlPath.replace(`{${"shareCodeId"}}`, encodeURIComponent(String(requestParameters['shareCodeId'])));
+        urlPath = urlPath.replace('{shareCodeId}', encodeURIComponent(String(requestParameters['shareCodeId'])));
 
         return {
             path: urlPath,
