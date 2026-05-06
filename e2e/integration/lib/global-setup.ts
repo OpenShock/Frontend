@@ -1,18 +1,7 @@
-import { execSync } from 'child_process';
-import path from 'path';
-
-const root = path.resolve(import.meta.dirname, '../../..');
-
+// The integration docker stack is brought up by `scripts/dev-integration.mjs`
+// (the webServer command) because Playwright starts the webServer before
+// globalSetup, so Vite's SSR fetches would race the API container coming up.
+// Keep this hook in place for future cross-test setup work.
 export default function globalSetup() {
-  try {
-    execSync('docker compose -f docker-compose.integration.yml up -d --wait', {
-      cwd: root,
-      stdio: 'inherit',
-    });
-  } catch (err) {
-    console.error(
-      '\n[integration] failed to start docker-compose stack - is Docker Desktop running?\n'
-    );
-    throw err;
-  }
+  // intentionally empty
 }

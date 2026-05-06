@@ -24,7 +24,10 @@ export default defineConfig({
     url: FRONTEND_URL,
     reuseExistingServer: !process.env.CI,
     ignoreHTTPSErrors: true,
-    timeout: 120_000,
+    // Cold CI runs pull docker images and wait for healthchecks before Vite
+    // starts (see scripts/dev-integration.mjs). 10 minutes covers worst-case
+    // cold pulls on the GitHub-hosted runner.
+    timeout: 10 * 60 * 1000,
   },
   use: {
     baseURL: FRONTEND_URL,
