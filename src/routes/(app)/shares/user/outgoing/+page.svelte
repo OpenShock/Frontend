@@ -31,15 +31,21 @@
     <LoadingCircle />
   </div>
 {:then}
-  <div class="mb-6 overflow-y-auto rounded-md border">
-    <Table.Root>
-      <Table.Body>
-        {#each userSharesState.shares.outgoing as userShare, i (userShare.id)}
-          <UserShareItem storeIndex={i} onOpenEdit={() => openEditDrawer(i)} />
-        {/each}
-      </Table.Body>
-    </Table.Root>
-  </div>
+  {#if userSharesState.shares.outgoing.length === 0}
+    <div class="text-muted-foreground flex h-32 items-center justify-center text-sm">
+      No outgoing shares
+    </div>
+  {:else}
+    <div class="mb-6 overflow-y-auto rounded-md border">
+      <Table.Root>
+        <Table.Body>
+          {#each userSharesState.shares.outgoing as userShare, i (userShare.id)}
+            <UserShareItem storeIndex={i} onOpenEdit={() => openEditDrawer(i)} />
+          {/each}
+        </Table.Body>
+      </Table.Root>
+    </div>
+  {/if}
 {:catch error}
   <div class="text-red-500">Failed to load shares: {error.message}</div>
 {/await}

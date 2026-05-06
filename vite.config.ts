@@ -144,7 +144,7 @@ function getPlugins(useLocalRedirect: boolean): PluginOption[] {
 }
 
 async function getServerConfig(mode: string, useLocalRedirect: boolean) {
-  const vars = { ...env, ...loadEnv(mode, process.cwd(), ['PUBLIC_']) };
+  const vars = { ...env, ...loadEnv(mode, process.cwd(), ['PUBLIC_', 'VITE_']) };
   if (!vars.PUBLIC_SITE_URL) {
     printError('PUBLIC_SITE_URL must be set in your environment');
     process.exit(1);
@@ -152,14 +152,28 @@ async function getServerConfig(mode: string, useLocalRedirect: boolean) {
 
   if (!useLocalRedirect) return undefined;
 
-  // Vite 8: pipe browser console.* into the dev terminal so client errors land
-  // alongside server logs without context-switching to browser devtools.
-  const baseDevConfig = { forwardConsole: true, proxy: {} };
-
   const domain = new URL(vars.PUBLIC_SITE_URL).hostname;
 
+  // When an API proxy target is configured (integration mode), proxy /1 and /2
+  // through the Vite dev server so the browser never has to trust the API's
+  // self-signed certificate directly.
+  const apiProxyTarget = vars.VITE_API_PROXY_TARGET;
+  const proxy: Record<string, object> = apiProxyTarget
+    ? {
+        '^/(1|2)(/.*)?$': {
+          target: apiProxyTarget,
+          secure: false,
+          changeOrigin: true,
+        },
+      }
+    : {};
+
+  // Vite 8: pipe browser console.* into the dev terminal so client errors land
+  // alongside server logs without context-switching to browser devtools.
+  const baseDevConfig = { forwardConsole: true, proxy };
+
   if (domain === 'localhost') {
-    return { ...baseDevConfig, host: 'localhost', port: 8080 };
+    return { ...baseDevConfig, host: 'localhost' };
   }
 
   let host = domain;
@@ -230,11 +244,19 @@ async function ensurePortBindable(host: string, port: number): Promise<void> {
 }
 
 export default defineConfig(async ({ command, mode, isPreview }) => {
-  const isLocalServe = command === 'serve' || isPreview === true;
+  const isVitest = isTruthy(env.VITEST) || mode === 'test';
+  const isLocalServe = (command === 'serve' || isPreview === true) && !isVitest;
   const isProduction = mode === 'production' && (isTruthy(env.DOCKER) || isTruthy(env.CF_PAGES));
 
   // If we are running locally, ensure that local.{PUBLIC_SITE_URL} resolves to localhost, and then use mkcert to generate a certificate
-  const useLocalRedirect = isLocalServe && !isProduction && !isTruthy(env.CI);
+  const useLocalRedirect =
+    isLocalServe && !isProduction && (!isTruthy(env.CI) || mode === 'integration');
+
+  // Integration mode runs SSR fetches against Vite's mkcert-issued dev cert and a
+  // self-signed API cert; Node's TLS stack doesn't trust either out of the box.
+  if (mode === 'integration') {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED ??= '0';
+  }
 
   return {
     build: {
@@ -253,6 +275,30 @@ export default defineConfig(async ({ command, mode, isPreview }) => {
     },
     plugins: getPlugins(useLocalRedirect),
     server: await getServerConfig(mode, useLocalRedirect),
-    test: { include: ['src/**/*.{test,spec}.{js,ts}'] },
+    test: {
+      projects: [
+        {
+          extends: true,
+          test: {
+            name: 'unit',
+            environment: 'node',
+            include: ['src/**/*.{test,spec}.{js,ts}'],
+            exclude: ['src/**/*.{test,spec}.{component,svelte}.{js,ts}'],
+          },
+        },
+        {
+          extends: true,
+          // Resolve Svelte to its browser (client) build so that `mount` and
+          // other client-only APIs are available in the jsdom test environment.
+          resolve: { conditions: ['browser', 'module', 'svelte', 'development', 'production'] },
+          test: {
+            name: 'components',
+            environment: 'jsdom',
+            include: ['src/**/*.{test,spec}.{component,svelte}.{js,ts}'],
+            setupFiles: ['./vitest.setup.ts'],
+          },
+        },
+      ],
+    },
   } satisfies UserConfig;
 });

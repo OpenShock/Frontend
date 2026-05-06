@@ -33,14 +33,17 @@
   let sorting = $state<SortingState>([]);
 
   function onCreated(token: TokenCreatedResponse) {
-    data.push({
-      id: token.id,
-      name: token.name,
-      createdOn: token.createdAt,
-      validUntil: token.validUntil,
-      lastUsed: token.lastUsed,
-      permissions: token.permissions,
-    });
+    data = [
+      ...data,
+      {
+        id: token.id,
+        name: token.name,
+        createdOn: token.createdAt,
+        validUntil: token.validUntil,
+        lastUsed: token.lastUsed,
+        permissions: token.permissions,
+      },
+    ];
     createdTokenSecret = token.token;
     toast.success('Token created successfully');
   }
