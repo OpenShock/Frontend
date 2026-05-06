@@ -12,24 +12,27 @@
  * Do not edit the class manually.
  */
 
-
 import * as runtime from '../runtime';
-import type {
-  DeviceSelfResponseLegacyDataResponse,
-  LcgNodeResponseLegacyDataResponse,
-  OpenShockProblem,
-  StringLegacyDataResponse,
-} from '../models/index';
 import {
+    type DeviceSelfResponseLegacyDataResponse,
     DeviceSelfResponseLegacyDataResponseFromJSON,
     DeviceSelfResponseLegacyDataResponseToJSON,
+} from '../models/DeviceSelfResponseLegacyDataResponse';
+import {
+    type LcgNodeResponseLegacyDataResponse,
     LcgNodeResponseLegacyDataResponseFromJSON,
     LcgNodeResponseLegacyDataResponseToJSON,
+} from '../models/LcgNodeResponseLegacyDataResponse';
+import {
+    type OpenShockProblem,
     OpenShockProblemFromJSON,
     OpenShockProblemToJSON,
+} from '../models/OpenShockProblem';
+import {
+    type StringLegacyDataResponse,
     StringLegacyDataResponseFromJSON,
     StringLegacyDataResponseToJSON,
-} from '../models/index';
+} from '../models/StringLegacyDataResponse';
 
 export interface DevicePairRequest {
     pairCode: string;
@@ -195,7 +198,7 @@ export class HubEndpointsApi extends runtime.BaseAPI implements HubEndpointsApiI
 
 
         let urlPath = `/1/device/pair/{pairCode}`;
-        urlPath = urlPath.replace(`{${"pairCode"}}`, encodeURIComponent(String(requestParameters['pairCode'])));
+        urlPath = urlPath.replace('{pairCode}', encodeURIComponent(String(requestParameters['pairCode'])));
 
         return {
             path: urlPath,

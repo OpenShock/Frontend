@@ -48,7 +48,12 @@
   }
 
   function publicCtrl(id: string, type: ControlType, intensity: number, duration: number) {
-    control({ id, type, intensity, duration: duration * 1000 });
+    control({
+      id,
+      type,
+      intensity: Math.round(intensity),
+      duration: Math.round(duration * 1000),
+    });
   }
 
   const shareId = $derived(page.params.shareId);

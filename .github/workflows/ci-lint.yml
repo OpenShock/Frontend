@@ -36,5 +36,8 @@ jobs:
         shell: bash
         run: pnpm install --frozen-lockfile --strict-peer-dependencies
 
-      - name: Run Linting and Formatting Check
+      - name: Run Formatting Check
+        run: pnpm run format:check
+
+      - name: Run Linting
         run: pnpm run lint

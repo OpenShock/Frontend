@@ -12,57 +12,82 @@
  * Do not edit the class manually.
  */
 
-
 import * as runtime from '../runtime';
-import type {
-  BooleanLegacyDataResponse,
-  Control,
-  DeviceWithShockersResponseArrayLegacyDataResponse,
-  GuidLegacyDataResponse,
-  LegacyEmptyResponse,
-  LogEntryArrayLegacyDataResponse,
-  NewShocker,
-  OpenShockProblem,
-  OwnerShockerResponseArrayLegacyDataResponse,
-  PauseRequest,
-  ShareCodeInfoArrayLegacyDataResponse,
-  ShareInfoArrayLegacyDataResponse,
-  ShockerLogsResponse,
-  ShockerPermLimitPair,
-  ShockerWithDeviceLegacyDataResponse,
-} from '../models/index';
 import {
+    type BooleanLegacyDataResponse,
     BooleanLegacyDataResponseFromJSON,
     BooleanLegacyDataResponseToJSON,
+} from '../models/BooleanLegacyDataResponse';
+import {
+    type Control,
     ControlFromJSON,
     ControlToJSON,
+} from '../models/Control';
+import {
+    type DeviceWithShockersResponseArrayLegacyDataResponse,
     DeviceWithShockersResponseArrayLegacyDataResponseFromJSON,
     DeviceWithShockersResponseArrayLegacyDataResponseToJSON,
+} from '../models/DeviceWithShockersResponseArrayLegacyDataResponse';
+import {
+    type GuidLegacyDataResponse,
     GuidLegacyDataResponseFromJSON,
     GuidLegacyDataResponseToJSON,
+} from '../models/GuidLegacyDataResponse';
+import {
+    type LegacyEmptyResponse,
     LegacyEmptyResponseFromJSON,
     LegacyEmptyResponseToJSON,
+} from '../models/LegacyEmptyResponse';
+import {
+    type LogEntryArrayLegacyDataResponse,
     LogEntryArrayLegacyDataResponseFromJSON,
     LogEntryArrayLegacyDataResponseToJSON,
+} from '../models/LogEntryArrayLegacyDataResponse';
+import {
+    type NewShocker,
     NewShockerFromJSON,
     NewShockerToJSON,
+} from '../models/NewShocker';
+import {
+    type OpenShockProblem,
     OpenShockProblemFromJSON,
     OpenShockProblemToJSON,
+} from '../models/OpenShockProblem';
+import {
+    type OwnerShockerResponseArrayLegacyDataResponse,
     OwnerShockerResponseArrayLegacyDataResponseFromJSON,
     OwnerShockerResponseArrayLegacyDataResponseToJSON,
+} from '../models/OwnerShockerResponseArrayLegacyDataResponse';
+import {
+    type PauseRequest,
     PauseRequestFromJSON,
     PauseRequestToJSON,
+} from '../models/PauseRequest';
+import {
+    type ShareCodeInfoArrayLegacyDataResponse,
     ShareCodeInfoArrayLegacyDataResponseFromJSON,
     ShareCodeInfoArrayLegacyDataResponseToJSON,
+} from '../models/ShareCodeInfoArrayLegacyDataResponse';
+import {
+    type ShareInfoArrayLegacyDataResponse,
     ShareInfoArrayLegacyDataResponseFromJSON,
     ShareInfoArrayLegacyDataResponseToJSON,
+} from '../models/ShareInfoArrayLegacyDataResponse';
+import {
+    type ShockerLogsResponse,
     ShockerLogsResponseFromJSON,
     ShockerLogsResponseToJSON,
+} from '../models/ShockerLogsResponse';
+import {
+    type ShockerPermLimitPair,
     ShockerPermLimitPairFromJSON,
     ShockerPermLimitPairToJSON,
+} from '../models/ShockerPermLimitPair';
+import {
+    type ShockerWithDeviceLegacyDataResponse,
     ShockerWithDeviceLegacyDataResponseFromJSON,
     ShockerWithDeviceLegacyDataResponseToJSON,
-} from '../models/index';
+} from '../models/ShockerWithDeviceLegacyDataResponse';
 
 export interface ShockerEditShockerRequest {
     shockerId: string;
@@ -417,7 +442,7 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
 
 
         let urlPath = `/1/shockers/{shockerId}`;
-        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
+        urlPath = urlPath.replace('{shockerId}', encodeURIComponent(String(requestParameters['shockerId'])));
 
         return {
             path: urlPath,
@@ -516,7 +541,7 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
 
 
         let urlPath = `/1/shockers/{shockerId}`;
-        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
+        urlPath = urlPath.replace('{shockerId}', encodeURIComponent(String(requestParameters['shockerId'])));
 
         return {
             path: urlPath,
@@ -573,7 +598,7 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
 
 
         let urlPath = `/1/shockers/{shockerId}/logs`;
-        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
+        urlPath = urlPath.replace('{shockerId}', encodeURIComponent(String(requestParameters['shockerId'])));
 
         return {
             path: urlPath,
@@ -622,7 +647,7 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
 
 
         let urlPath = `/1/shockers/{shockerId}/shares`;
-        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
+        urlPath = urlPath.replace('{shockerId}', encodeURIComponent(String(requestParameters['shockerId'])));
 
         return {
             path: urlPath,
@@ -755,7 +780,7 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
 
 
         let urlPath = `/1/shockers/{shockerId}/pause`;
-        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
+        urlPath = urlPath.replace('{shockerId}', encodeURIComponent(String(requestParameters['shockerId'])));
 
         return {
             path: urlPath,
@@ -849,7 +874,7 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
 
 
         let urlPath = `/1/shockers/{shockerId}`;
-        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
+        urlPath = urlPath.replace('{shockerId}', encodeURIComponent(String(requestParameters['shockerId'])));
 
         return {
             path: urlPath,
@@ -944,7 +969,7 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
 
 
         let urlPath = `/1/shockers/{shockerId}/shares`;
-        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
+        urlPath = urlPath.replace('{shockerId}', encodeURIComponent(String(requestParameters['shockerId'])));
 
         return {
             path: urlPath,
@@ -994,7 +1019,7 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
 
 
         let urlPath = `/1/shockers/{shockerId}/shareCodes`;
-        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
+        urlPath = urlPath.replace('{shockerId}', encodeURIComponent(String(requestParameters['shockerId'])));
 
         return {
             path: urlPath,
@@ -1052,8 +1077,8 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
 
 
         let urlPath = `/1/shockers/{shockerId}/shares/{sharedWithUserId}/pause`;
-        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
-        urlPath = urlPath.replace(`{${"sharedWithUserId"}}`, encodeURIComponent(String(requestParameters['sharedWithUserId'])));
+        urlPath = urlPath.replace('{shockerId}', encodeURIComponent(String(requestParameters['shockerId'])));
+        urlPath = urlPath.replace('{sharedWithUserId}', encodeURIComponent(String(requestParameters['sharedWithUserId'])));
 
         return {
             path: urlPath,
@@ -1112,8 +1137,8 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
 
 
         let urlPath = `/1/shockers/{shockerId}/shares/{sharedWithUserId}`;
-        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
-        urlPath = urlPath.replace(`{${"sharedWithUserId"}}`, encodeURIComponent(String(requestParameters['sharedWithUserId'])));
+        urlPath = urlPath.replace('{shockerId}', encodeURIComponent(String(requestParameters['shockerId'])));
+        urlPath = urlPath.replace('{sharedWithUserId}', encodeURIComponent(String(requestParameters['sharedWithUserId'])));
 
         return {
             path: urlPath,
@@ -1169,8 +1194,8 @@ export class ShockersApi extends runtime.BaseAPI implements ShockersApiInterface
 
 
         let urlPath = `/1/shockers/{shockerId}/shares/{sharedWithUserId}`;
-        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
-        urlPath = urlPath.replace(`{${"sharedWithUserId"}}`, encodeURIComponent(String(requestParameters['sharedWithUserId'])));
+        urlPath = urlPath.replace('{shockerId}', encodeURIComponent(String(requestParameters['shockerId'])));
+        urlPath = urlPath.replace('{sharedWithUserId}', encodeURIComponent(String(requestParameters['sharedWithUserId'])));
 
         return {
             path: urlPath,

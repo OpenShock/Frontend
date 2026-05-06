@@ -12,36 +12,47 @@
  * Do not edit the class manually.
  */
 
-
 import * as runtime from '../runtime';
-import type {
-  DeviceResponseArrayLegacyDataResponse,
-  DeviceWithTokenResponseLegacyDataResponse,
-  HubEditRequest,
-  LcgResponseLegacyDataResponse,
-  OpenShockProblem,
-  OtaItemIReadOnlyCollectionLegacyDataResponse,
-  ShockerResponseArrayLegacyDataResponse,
-  StringLegacyDataResponse,
-} from '../models/index';
 import {
+    type DeviceResponseArrayLegacyDataResponse,
     DeviceResponseArrayLegacyDataResponseFromJSON,
     DeviceResponseArrayLegacyDataResponseToJSON,
+} from '../models/DeviceResponseArrayLegacyDataResponse';
+import {
+    type DeviceWithTokenResponseLegacyDataResponse,
     DeviceWithTokenResponseLegacyDataResponseFromJSON,
     DeviceWithTokenResponseLegacyDataResponseToJSON,
+} from '../models/DeviceWithTokenResponseLegacyDataResponse';
+import {
+    type HubEditRequest,
     HubEditRequestFromJSON,
     HubEditRequestToJSON,
+} from '../models/HubEditRequest';
+import {
+    type LcgResponseLegacyDataResponse,
     LcgResponseLegacyDataResponseFromJSON,
     LcgResponseLegacyDataResponseToJSON,
+} from '../models/LcgResponseLegacyDataResponse';
+import {
+    type OpenShockProblem,
     OpenShockProblemFromJSON,
     OpenShockProblemToJSON,
+} from '../models/OpenShockProblem';
+import {
+    type OtaItemIReadOnlyCollectionLegacyDataResponse,
     OtaItemIReadOnlyCollectionLegacyDataResponseFromJSON,
     OtaItemIReadOnlyCollectionLegacyDataResponseToJSON,
+} from '../models/OtaItemIReadOnlyCollectionLegacyDataResponse';
+import {
+    type ShockerResponseArrayLegacyDataResponse,
     ShockerResponseArrayLegacyDataResponseFromJSON,
     ShockerResponseArrayLegacyDataResponseToJSON,
+} from '../models/ShockerResponseArrayLegacyDataResponse';
+import {
+    type StringLegacyDataResponse,
     StringLegacyDataResponseFromJSON,
     StringLegacyDataResponseToJSON,
-} from '../models/index';
+} from '../models/StringLegacyDataResponse';
 
 export interface DevicesEditDeviceRequest {
     deviceId: string;
@@ -307,7 +318,7 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
 
 
         let urlPath = `/1/devices/{deviceId}`;
-        urlPath = urlPath.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId'])));
+        urlPath = urlPath.replace('{deviceId}', encodeURIComponent(String(requestParameters['deviceId'])));
 
         return {
             path: urlPath,
@@ -356,7 +367,7 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
 
 
         let urlPath = `/1/devices/{deviceId}`;
-        urlPath = urlPath.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId'])));
+        urlPath = urlPath.replace('{deviceId}', encodeURIComponent(String(requestParameters['deviceId'])));
 
         return {
             path: urlPath,
@@ -405,7 +416,7 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
 
 
         let urlPath = `/1/devices/{deviceId}/lcg`;
-        urlPath = urlPath.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId'])));
+        urlPath = urlPath.replace('{deviceId}', encodeURIComponent(String(requestParameters['deviceId'])));
 
         return {
             path: urlPath,
@@ -454,7 +465,7 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
 
 
         let urlPath = `/1/devices/{deviceId}/pair`;
-        urlPath = urlPath.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId'])));
+        urlPath = urlPath.replace('{deviceId}', encodeURIComponent(String(requestParameters['deviceId'])));
 
         return {
             path: urlPath,
@@ -503,7 +514,7 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
 
 
         let urlPath = `/1/devices/{deviceId}/shockers`;
-        urlPath = urlPath.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId'])));
+        urlPath = urlPath.replace('{deviceId}', encodeURIComponent(String(requestParameters['deviceId'])));
 
         return {
             path: urlPath,
@@ -589,7 +600,7 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
 
 
         let urlPath = `/1/devices/{deviceId}/ota`;
-        urlPath = urlPath.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId'])));
+        urlPath = urlPath.replace('{deviceId}', encodeURIComponent(String(requestParameters['deviceId'])));
 
         return {
             path: urlPath,
@@ -638,7 +649,7 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
 
 
         let urlPath = `/1/devices/{deviceId}`;
-        urlPath = urlPath.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId'])));
+        urlPath = urlPath.replace('{deviceId}', encodeURIComponent(String(requestParameters['deviceId'])));
 
         return {
             path: urlPath,
@@ -691,7 +702,7 @@ export class HubManagementApi extends runtime.BaseAPI implements HubManagementAp
 
 
         let urlPath = `/1/devices/{deviceId}`;
-        urlPath = urlPath.replace(`{${"deviceId"}}`, encodeURIComponent(String(requestParameters['deviceId'])));
+        urlPath = urlPath.replace('{deviceId}', encodeURIComponent(String(requestParameters['deviceId'])));
 
         return {
             path: urlPath,

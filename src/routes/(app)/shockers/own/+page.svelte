@@ -308,6 +308,7 @@
         <div class="flex flex-col gap-6">
           {#each Array.from(ownHubs) as [hubId, hub] (hubId)}
             {@const online = onlineHubs.get(hubId)?.isOnline ?? false}
+            {@const shockerCount = hub.shockers.length}
             <div class="flex flex-col gap-3">
               <div class="flex items-center gap-2">
                 <span
@@ -316,7 +317,7 @@
                 ></span>
                 <span class="text-lg font-semibold">{hub.name}</span>
                 <span class="text-muted-foreground text-xs">
-                  {hub.shockers.length} shocker{hub.shockers.length !== 1 ? 's' : ''}
+                  {shockerCount} shocker{shockerCount !== 1 ? 's' : ''}
                 </span>
               </div>
               <div class="flex flex-wrap justify-center gap-4">

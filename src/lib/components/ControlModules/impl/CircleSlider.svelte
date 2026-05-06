@@ -50,8 +50,12 @@
   let lastFraction: number | null = null;
 
   // --- helpers ---
+  const stepDecimals = $derived((step.toString().split('.')[1] ?? '').length);
+
   function snapValue(raw: number): number {
-    return clamp(Math.round((raw - min) / step) * step + min, min, max);
+    const steps = Math.round((raw - min) / step);
+    const snapped = +(steps * step + min).toFixed(stepDecimals);
+    return clamp(snapped, min, max);
   }
 
   function fractionFromEvent(event: PointerEvent) {
@@ -137,7 +141,7 @@
   let degrees = $derived(angleStart + invLerp(min, max, tween.current) * angleRange);
 </script>
 
-<div class="relative aspect-square w-full max-w-[150px] min-w-0 select-none">
+<div class="relative aspect-square w-full max-w-37.5 min-w-0 select-none">
   <svg
     viewBox="0 0 {viewWidth} {viewHeight}"
     class="absolute inset-0 size-full"
@@ -146,7 +150,7 @@
     <!-- background arc -->
     <path
       d={calcSvgPathData(angleEnd)}
-      class="cursor-pointer fill-none stroke-neutral-200 stroke-[20] dark:stroke-neutral-800"
+      class="cursor-pointer fill-none stroke-neutral-200 stroke-20 dark:stroke-neutral-800"
       stroke-linecap="round"
       aria-hidden="true"
       onpointerdown={startTracking}
@@ -155,7 +159,7 @@
     <!-- foreground arc -->
     <path
       d={calcSvgPathData(degrees)}
-      class="cursor-pointer fill-none stroke-blue-500 stroke-[10] dark:stroke-blue-400"
+      class="cursor-pointer fill-none stroke-blue-500 stroke-10 dark:stroke-blue-400"
       stroke-linecap="round"
       aria-hidden="true"
       onpointerdown={startTracking}

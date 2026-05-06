@@ -49,13 +49,14 @@
 
 <div>
   {#each Buttons as { type, Icon } (type)}
+    {@const title = ControlType[type]}
     {@const isDisabled = disabled || disabledControls[type]}
     <button
       class={cn(buttonClasses, {
         active: type === active || type === selfActive,
       })}
-      title={ControlType[type]}
-      aria-label={ControlType[type]}
+      {title}
+      aria-label={title}
       aria-pressed={type === active || type === selfActive}
       onclick={() => trigger(type)}
       disabled={isDisabled}

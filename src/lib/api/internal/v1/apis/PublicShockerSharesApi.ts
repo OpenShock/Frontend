@@ -12,39 +12,52 @@
  * Do not edit the class manually.
  */
 
-
 import * as runtime from '../runtime';
-import type {
-  GuidLegacyDataResponse,
-  LegacyEmptyResponse,
-  OpenShockProblem,
-  OwnPublicShareResponseArrayLegacyDataResponse,
-  PauseReasonLegacyDataResponse,
-  PauseRequest,
-  PublicShareCreate,
-  PublicShareEditShocker,
-  PublicShareResponseLegacyDataResponse,
-} from '../models/index';
 import {
+    type GuidLegacyDataResponse,
     GuidLegacyDataResponseFromJSON,
     GuidLegacyDataResponseToJSON,
+} from '../models/GuidLegacyDataResponse';
+import {
+    type LegacyEmptyResponse,
     LegacyEmptyResponseFromJSON,
     LegacyEmptyResponseToJSON,
+} from '../models/LegacyEmptyResponse';
+import {
+    type OpenShockProblem,
     OpenShockProblemFromJSON,
     OpenShockProblemToJSON,
+} from '../models/OpenShockProblem';
+import {
+    type OwnPublicShareResponseArrayLegacyDataResponse,
     OwnPublicShareResponseArrayLegacyDataResponseFromJSON,
     OwnPublicShareResponseArrayLegacyDataResponseToJSON,
+} from '../models/OwnPublicShareResponseArrayLegacyDataResponse';
+import {
+    type PauseReasonLegacyDataResponse,
     PauseReasonLegacyDataResponseFromJSON,
     PauseReasonLegacyDataResponseToJSON,
+} from '../models/PauseReasonLegacyDataResponse';
+import {
+    type PauseRequest,
     PauseRequestFromJSON,
     PauseRequestToJSON,
+} from '../models/PauseRequest';
+import {
+    type PublicShareCreate,
     PublicShareCreateFromJSON,
     PublicShareCreateToJSON,
+} from '../models/PublicShareCreate';
+import {
+    type PublicShareEditShocker,
     PublicShareEditShockerFromJSON,
     PublicShareEditShockerToJSON,
+} from '../models/PublicShareEditShocker';
+import {
+    type PublicShareResponseLegacyDataResponse,
     PublicShareResponseLegacyDataResponseFromJSON,
     PublicShareResponseLegacyDataResponseToJSON,
-} from '../models/index';
+} from '../models/PublicShareResponseLegacyDataResponse';
 
 export interface PublicGetPublicShareRequest {
     publicShareId: string;
@@ -236,7 +249,7 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
 
 
         let urlPath = `/1/public/shares/links/{publicShareId}`;
-        urlPath = urlPath.replace(`{${"publicShareId"}}`, encodeURIComponent(String(requestParameters['publicShareId'])));
+        urlPath = urlPath.replace('{publicShareId}', encodeURIComponent(String(requestParameters['publicShareId'])));
 
         return {
             path: urlPath,
@@ -288,8 +301,8 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
 
 
         let urlPath = `/1/shares/links/{publicShareId}/{shockerId}`;
-        urlPath = urlPath.replace(`{${"publicShareId"}}`, encodeURIComponent(String(requestParameters['publicShareId'])));
-        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
+        urlPath = urlPath.replace('{publicShareId}', encodeURIComponent(String(requestParameters['publicShareId'])));
+        urlPath = urlPath.replace('{shockerId}', encodeURIComponent(String(requestParameters['shockerId'])));
 
         return {
             path: urlPath,
@@ -374,7 +387,7 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
 
 
         let urlPath = `/1/shares/links/{publicShareId}`;
-        urlPath = urlPath.replace(`{${"publicShareId"}}`, encodeURIComponent(String(requestParameters['publicShareId'])));
+        urlPath = urlPath.replace('{publicShareId}', encodeURIComponent(String(requestParameters['publicShareId'])));
 
         return {
             path: urlPath,
@@ -428,8 +441,8 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
 
 
         let urlPath = `/1/shares/links/{publicShareId}/{shockerId}`;
-        urlPath = urlPath.replace(`{${"publicShareId"}}`, encodeURIComponent(String(requestParameters['publicShareId'])));
-        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
+        urlPath = urlPath.replace('{publicShareId}', encodeURIComponent(String(requestParameters['publicShareId'])));
+        urlPath = urlPath.replace('{shockerId}', encodeURIComponent(String(requestParameters['shockerId'])));
 
         return {
             path: urlPath,
@@ -525,8 +538,8 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
 
 
         let urlPath = `/1/shares/links/{publicShareId}/{shockerId}/pause`;
-        urlPath = urlPath.replace(`{${"publicShareId"}}`, encodeURIComponent(String(requestParameters['publicShareId'])));
-        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
+        urlPath = urlPath.replace('{publicShareId}', encodeURIComponent(String(requestParameters['publicShareId'])));
+        urlPath = urlPath.replace('{shockerId}', encodeURIComponent(String(requestParameters['shockerId'])));
 
         return {
             path: urlPath,
@@ -579,8 +592,8 @@ export class PublicShockerSharesApi extends runtime.BaseAPI implements PublicSho
 
 
         let urlPath = `/1/shares/links/{publicShareId}/{shockerId}`;
-        urlPath = urlPath.replace(`{${"publicShareId"}}`, encodeURIComponent(String(requestParameters['publicShareId'])));
-        urlPath = urlPath.replace(`{${"shockerId"}}`, encodeURIComponent(String(requestParameters['shockerId'])));
+        urlPath = urlPath.replace('{publicShareId}', encodeURIComponent(String(requestParameters['publicShareId'])));
+        urlPath = urlPath.replace('{shockerId}', encodeURIComponent(String(requestParameters['shockerId'])));
 
         return {
             path: urlPath,
