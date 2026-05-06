@@ -6,10 +6,10 @@
 // the API container coming up and Playwright times out the webServer probe.
 
 import { spawn, spawnSync } from 'node:child_process';
-import { fileURLToPath } from 'node:url';
-import path from 'node:path';
-import { request as httpsRequest } from 'node:https';
 import { request as httpRequest } from 'node:http';
+import { request as httpsRequest } from 'node:https';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const API_URL = process.env.VITE_API_PROXY_TARGET ?? 'https://localhost:5001';
