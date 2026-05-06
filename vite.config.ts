@@ -244,12 +244,19 @@ async function ensurePortBindable(host: string, port: number): Promise<void> {
 }
 
 export default defineConfig(async ({ command, mode, isPreview }) => {
-  const isLocalServe = command === 'serve' || isPreview === true;
+  const isVitest = isTruthy(env.VITEST) || mode === 'test';
+  const isLocalServe = (command === 'serve' || isPreview === true) && !isVitest;
   const isProduction = mode === 'production' && (isTruthy(env.DOCKER) || isTruthy(env.CF_PAGES));
 
   // If we are running locally, ensure that local.{PUBLIC_SITE_URL} resolves to localhost, and then use mkcert to generate a certificate
   const useLocalRedirect =
     isLocalServe && !isProduction && (!isTruthy(env.CI) || mode === 'integration');
+
+  // Integration mode runs SSR fetches against Vite's mkcert-issued dev cert and a
+  // self-signed API cert; Node's TLS stack doesn't trust either out of the box.
+  if (mode === 'integration') {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED ??= '0';
+  }
 
   return {
     build: {

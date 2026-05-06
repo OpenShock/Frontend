@@ -78,9 +78,9 @@ test.describe('API tokens', () => {
       .last()
       .click();
 
-    // Close the token-value dialog
-    await authedPage.keyboard.press('Escape');
-    await authedPage.waitForTimeout(500);
+    // Close the token-value dialog (Escape is unreliable with the overlay; use the close button)
+    await authedPage.getByRole('button', { name: /close/i }).click();
+    await expect(authedPage.getByRole('dialog')).toHaveCount(0, { timeout: 3000 });
 
     // Find the row containing our token, open the actions menu, then delete
     const tokenRow = authedPage.locator('tr').filter({ hasText: tokenName }).first();
