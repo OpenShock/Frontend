@@ -24,10 +24,7 @@ export function makeCredentials(prefix = 'pw'): Credentials {
 
 async function applyCookiesToContext(context: BrowserContext, cookies: AuthCookies): Promise<void> {
   const url = new URL(FRONTEND_URL);
-  const apiHost = (process.env.TEST_BACKEND_URL ?? 'https://api.openshock.dev').replace(
-    /^https?:\/\//,
-    ''
-  );
+  const apiHost = new URL(process.env.TEST_BACKEND_URL ?? 'https://api.openshock.dev').hostname;
   const parsed = cookies.flatMap((raw) => {
     const [pair, ...attrs] = raw.split(';').map((s) => s.trim());
     const [name, ...rest] = pair.split('=');

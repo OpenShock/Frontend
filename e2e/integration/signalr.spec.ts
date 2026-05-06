@@ -49,12 +49,9 @@ test.describe('SignalR connection lifecycle', () => {
     await authedPage.waitForLoadState('networkidle');
     await authedPage.waitForTimeout(3000);
 
-    // On an authenticated session the frontend should attempt to establish a
-    // SignalR connection (negotiate HTTP + WebSocket upgrade).
-    // If the backend is not running this will fail gracefully — we just check
-    // that the attempt was made.
-    expect(wsRequests.length).toBeGreaterThanOrEqual(0); // always passes
-    // The real assertion: no crash occurred (covered by pageerror listener above)
+    // On an authenticated session the frontend must attempt to establish a
+    // SignalR connection — assert at least one negotiate/WebSocket request fired.
+    expect(wsRequests.length).toBeGreaterThan(0);
   });
 });
 

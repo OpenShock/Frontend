@@ -21,12 +21,18 @@ test.describe('sessions page', () => {
   test('session list shows an IP address or device info', async ({ authedPage }) => {
     await authedPage.goto('/settings/sessions');
     await authedPage.waitForLoadState('networkidle');
-    // IP addresses or user-agent info should be visible in the session list
-    await expect(authedPage.locator('td, [data-ip], [data-agent]').first())
-      .toBeVisible({ timeout: 5000 })
-      .catch(() => {
-        // May use a different layout
+    // The current session must be identifiable — assert either layout-cell info
+    // or a recognizable IPv4 pattern is present somewhere on the page.
+    const cellVisible = await authedPage
+      .locator('td, [data-ip], [data-agent]')
+      .first()
+      .isVisible({ timeout: 5000 })
+      .catch(() => false);
+    if (!cellVisible) {
+      await expect(authedPage.getByText(/\b\d{1,3}(\.\d{1,3}){3}\b/).first()).toBeVisible({
+        timeout: 5000,
       });
+    }
   });
 });
 
@@ -37,14 +43,20 @@ test.describe('connections / OAuth page', () => {
     await expect(authedPage.locator('main').first()).toBeVisible();
   });
 
-  test('shows available OAuth providers', async ({ authedPage }) => {
+  test('shows available OAuth providers or an empty state', async ({ authedPage }) => {
     await authedPage.goto('/settings/connections');
     await authedPage.waitForLoadState('networkidle');
-    // Should list at least one OAuth provider (e.g. Discord, GitHub, Google)
-    await expect(authedPage.getByText(/discord|github|google|oauth|provider/i).first())
-      .toBeVisible({ timeout: 5000 })
-      .catch(() => {
-        // Page might not have any OAuth providers configured on dev backend
-      });
+    // Either provider UI is present, or an empty/none-configured state is shown.
+    // Both are acceptable — what's not acceptable is rendering nothing at all.
+    const providerVisible = await authedPage
+      .getByText(/discord|github|google|oauth|provider/i)
+      .first()
+      .isVisible({ timeout: 5000 })
+      .catch(() => false);
+    if (!providerVisible) {
+      await expect(
+        authedPage.getByText(/no.*(provider|connection|configured)|none\s*(available|configured)/i).first()
+      ).toBeVisible({ timeout: 5000 });
+    }
   });
 });

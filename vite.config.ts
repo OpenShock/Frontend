@@ -290,7 +290,7 @@ export default defineConfig(async ({ command, mode, isPreview }) => {
           extends: true,
           // Resolve Svelte to its browser (client) build so that `mount` and
           // other client-only APIs are available in the jsdom test environment.
-          resolve: { conditions: ['browser', 'module', 'svelte', 'development|production'] },
+          resolve: { conditions: ['browser', 'module', 'svelte', 'development', 'production'] },
           test: {
             name: 'components',
             environment: 'jsdom',
