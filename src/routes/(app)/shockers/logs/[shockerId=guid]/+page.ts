@@ -1,7 +1,8 @@
 import { shockersV1Api } from '$lib/api';
 import { handleApiError } from '$lib/errorhandling/apiErrorHandling.js';
 
-export async function load({ params }) {
+export async function load({ params, parent }) {
+  await parent();
   try {
     const shockerId = params.shockerId;
     const logsPromise = shockersV1Api.shockerGetShockerLogs(shockerId);
