@@ -16,7 +16,6 @@
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card';
-  import type { ProblemDetails } from '$lib/errorhandling/ProblemDetails';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
@@ -29,11 +28,22 @@
     { label: 'Settings', href: '/settings/account' },
     { label: 'API Tokens' },
   ]);
-  let data = $state<TokenResponse[]>([]);
+
+  let tokens = $state<TokenResponse[]>([]);
   let sorting = $state<SortingState>([]);
 
+  async function loadTokens() {
+    try {
+      tokens = await apiTokensApi.tokensListTokens();
+    } catch (error) {
+      await handleApiError(error);
+    }
+  }
+
+  onMount(loadTokens);
+
   function onCreated(token: TokenCreatedResponse) {
-    data.push({
+    tokens.push({
       id: token.id,
       name: token.name,
       createdOn: token.createdAt,
@@ -46,14 +56,12 @@
   }
 
   function onEdit(id: string, updater: (token: TokenResponse) => TokenResponse) {
-    const idx = data.findIndex((token) => token.id === id);
-    if (idx === -1) return;
-
-    data[idx] = updater(data[idx]);
+    const idx = tokens.findIndex((t) => t.id === id);
+    if (idx !== -1) tokens[idx] = updater(tokens[idx]);
   }
 
-  async function onDeleted(id: string) {
-    data = data.filter((t) => t.id !== id);
+  function onDeleted(id: string) {
+    tokens = tokens.filter((t) => t.id !== id);
   }
 
   const columns: ColumnDef<TokenResponse>[] = [
@@ -67,22 +75,10 @@
   let showGenerateTokenModal = $state<boolean>(false);
   let createdTokenSecret = $state<string | null>(null);
 
-  function handleProblem(_problem: ProblemDetails): boolean {
-    return false;
+  async function refresh() {
+    await loadTokens();
+    toast.success('Tokens refreshed successfully');
   }
-
-  async function loadTokens(successMessage?: string) {
-    try {
-      data = await apiTokensApi.tokensListTokens();
-      if (successMessage) {
-        toast.success(successMessage);
-      }
-    } catch (error) {
-      await handleApiError(error, handleProblem);
-    }
-  }
-
-  onMount(loadTokens);
 </script>
 
 <TokenCreateDialog bind:open={showGenerateTokenModal} {onCreated} />
@@ -97,7 +93,7 @@
           <Plus />
           Generate Token
         </Button>
-        <Button onclick={() => loadTokens('Tokens refreshed successfully')}>
+        <Button onclick={refresh}>
           <RotateCcw />
           Refresh
         </Button>
@@ -106,6 +102,6 @@
     <Card.Description>API Tokens are used to authenticate with the OpenShock API</Card.Description>
   </Card.Header>
   <Card.Content class="flex w-full flex-col space-y-4">
-    <DataTable {data} {columns} {sorting} />
+    <DataTable data={tokens} {columns} {sorting} />
   </Card.Content>
 </Container>

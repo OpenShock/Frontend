@@ -1,7 +1,10 @@
 <script lang="ts">
   import type { ColumnDef, SortingState } from '@tanstack/table-core';
+  import { shockersV1Api } from '$lib/api';
   import type { LogEntryWithHub } from '$lib/api/internal/v1/index.js';
   import Container from '$lib/components/Container.svelte';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { onMount } from 'svelte';
   import {
     CreateSortableColumnDef,
     LocaleDateTimeRenderer,
@@ -14,9 +17,17 @@
 
   registerBreadcrumbs(() => [{ label: 'Shocker Logs' }]);
 
-  let { data } = $props();
-
+  let logs = $state<LogEntryWithHub[]>([]);
   let sorting = $state<SortingState>([{ id: 'createdOn', desc: true }]);
+
+  onMount(async () => {
+    try {
+      const res = await shockersV1Api.shockerGetAllShockerLogs();
+      logs = res.logs ?? [];
+    } catch (error) {
+      await handleApiError(error);
+    }
+  });
 
   const columns: ColumnDef<LogEntryWithHub>[] = [
     CreateSortableColumnDef('hubName', 'Hub', (h) => RenderCell(h)),
@@ -37,6 +48,6 @@
     <Card.Description>These are the logs for all shockers.</Card.Description>
   </Card.Header>
   <div class="grid w-full gap-6 p-6">
-    <DataTable data={data.logs} {columns} bind:sorting />
+    <DataTable data={logs} {columns} bind:sorting />
   </div>
 </Container>
