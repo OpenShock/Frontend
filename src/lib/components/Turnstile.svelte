@@ -47,7 +47,7 @@
       toast.error('Internal Error');
       return;
     }
-    
+
     window.turnstile.ready(() => {
       if (cancelled) return;
       mounted = true;
