@@ -16,8 +16,8 @@ let _onUnauthorized: (() => void) | null = null;
 
 /**
  * Register a callback that fires when any API response returns a 401.
- * Used by the bootstrap layer to clear auth state when the session expires
- * mid-flight (which also tears down SignalR via the reactive lifecycle).
+ * Used to clear auth state when the session expires mid-flight (which
+ * then tears down SignalR via the reactive lifecycle in auth-state).
  */
 export function registerOnUnauthorized(callback: () => void) {
   _onUnauthorized = callback;
