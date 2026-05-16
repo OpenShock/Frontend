@@ -119,7 +119,10 @@
                 showForget
               />
 
-              <Turnstile action="signin" onResponse={(response) => (turnstileResponse = response)} />
+              <Turnstile
+                action="signin"
+                onResponse={(response) => (turnstileResponse = response)}
+              />
             </div>
             <Field class="mt-5">
               <Button type="submit" disabled={!canSubmit}>Login</Button>
