@@ -2,13 +2,14 @@
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
+  import Container from '$lib/components/Container.svelte';
+  import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
   import { AuthStatus, authState } from '$lib/state/auth-state.svelte';
   import type { Snippet } from 'svelte';
 
-  let { children }: { children?: Snippet } = $props();
+  let { children }: { children: Snippet } = $props();
 
-  // Safety net: redirect if the user is logged out while inside an (app) page
-  // (e.g. session expires mid-session and 401 clears userState).
+  // Safety net: redirect if the user is logged out while inside an (app) page (e.g. session expires mid-session and 401 clears userState).
   // The initial auth gate happens in +layout.ts (load).
   $effect(() => {
     if (authState.status !== AuthStatus.Unauthenticated) return;
@@ -17,4 +18,10 @@
   });
 </script>
 
-{@render children?.()}
+{#if authState.status === AuthStatus.Authenticated}
+  {@render children()}
+{:else}
+  <Container>
+    <LoadingCircle class="size-20" />
+  </Container>
+{/if}

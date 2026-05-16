@@ -33,17 +33,21 @@
     }
 
     let cancelled = false;
-    const info = backendMetadata.state;
-    if (!info?.turnstileSiteKey) {
+    const siteKey = backendMetadata.state?.turnstileSiteKey;
+    if (!siteKey) {
       console.error('Backend did not provide a Turnstile site key!');
       return;
     }
+
+    // Check that Cloudflare Turnstile has been loaded.
+    // If `window.turnstile` is undefined, it usually means the <script> tag wasn't injected.
+    // See: https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/#explicitly-render-the-turnstile-widget
     if (!window.turnstile) {
       console.error('Failed to load Cloudflare Turnstile');
       toast.error('Internal Error');
       return;
     }
-    const siteKey = info.turnstileSiteKey;
+    
     window.turnstile.ready(() => {
       if (cancelled) return;
       mounted = true;
