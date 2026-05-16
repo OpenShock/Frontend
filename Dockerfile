@@ -1,8 +1,8 @@
 # Define versions as build arguments for easy updates
 ARG NODE_VERSION=24.14.0
-ARG PNPM_VERSION=11.1.1
+ARG PNPM_VERSION=11.1.2
 ARG ALPINE_VERSION=3.23
-ARG PNPM_URL="https://github.com/pnpm/pnpm/releases/download/v${PNPM_VERSION}/pnpm-linuxstatic-x64"
+ARG PNPM_URL="https://github.com/pnpm/pnpm/releases/download/v${PNPM_VERSION}/pnpm-linux-x64.tar.gz"
 
 FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION}
 
@@ -16,8 +16,8 @@ ENV NODE_ENV=production
 ENV GIT_BRANCH=${GIT_BRANCH}
 ENV GIT_COMMIT_SHA=${GIT_COMMIT_SHA}
 
-# Install pnpm (static binary)
-RUN wget -qO /bin/pnpm "${PNPM_URL}" && chmod +x /bin/pnpm
+# Install pnpm (static binary from tar.gz)
+RUN wget -qO- "${PNPM_URL}" | tar -xzf - -C /usr/local/bin && chmod +x /usr/local/bin/pnpm
 
 # Copy dependency manifests first (for caching)
 COPY package.json .
