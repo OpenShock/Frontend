@@ -19,9 +19,10 @@
   import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
   import OauthButtons from '$lib/components/auth/oauth-buttons.svelte';
   import { gotoQueryRedirectOrFallback } from '$lib/utils/url';
-  import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
+  import { bootstrap, bootstrapLogin, resetBootstrap } from '$lib/bootstrap.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte';
+  import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
 
   registerBreadcrumbs(() => [{ label: 'Login' }]);
 
@@ -45,14 +46,13 @@
         password,
         turnstileResponse,
       });
-      userState.setSelf({
+      await bootstrapLogin({
         id: account.accountId,
         name: account.accountName,
         avatar: account.profileImage,
         email: account.accountEmail,
         roles: account.accountRoles,
-      });
-      await initializeSignalR();
+      })
 
       await gotoQueryRedirectOrFallback('/home');
     } catch (error) {
@@ -65,39 +65,46 @@
     }
   }
 
-  let oauthProviders = $derived(backendMetadata.state?.oAuthProviders);
-  let anyOAuthProviders = $derived(oauthProviders !== undefined && oauthProviders.length > 0);
-
   let canSubmit = $derived(
     usernameOrEmail.length > 0 && password.length > 0 && turnstileResponse != null
   );
 </script>
 
-<Card.Root>
-  <Card.Header class="text-center">
-    <Card.Title class="text-xl">Welcome back</Card.Title>
-    <Card.Description>
-      {#if backendMetadata.state === null}
-        Loading available login methods
-      {:else if anyOAuthProviders}
-        Login with one of these methods
-      {:else}
-        Login with your OpenShock Account
-      {/if}
-    </Card.Description>
-  </Card.Header>
-  <Card.Content>
-    <FieldGroup>
-      {#if backendMetadata.state === null}
+{#await bootstrap()}
+  <Card.Root>
+    <Card.Header class="text-center">
+      <Card.Title class="text-xl">Welcome back</Card.Title>
+      <Card.Description>Loading available login methods</Card.Description>
+    </Card.Header>
+    <Card.Content>
+      <FieldGroup>
         <Skeleton class="h-9 w-full"></Skeleton>
         <Skeleton class="h-1 w-full"></Skeleton>
         <Skeleton class="h-9 w-full"></Skeleton>
         <Skeleton class="h-9 w-full"></Skeleton>
         <Skeleton class="h-16 w-full"></Skeleton>
         <Skeleton class="h-9 w-full"></Skeleton>
-      {:else}
+      </FieldGroup>
+    </Card.Content>
+  </Card.Root>
+{:then info}
+  {@const providers = info.oAuthProviders}
+  {@const anyOAuthProviders = providers.length > 0}
+  <Card.Root>
+    <Card.Header class="text-center">
+      <Card.Title class="text-xl">Welcome back</Card.Title>
+      <Card.Description>
         {#if anyOAuthProviders}
-          <OauthButtons />
+          Login with one of these methods
+        {:else}
+          Login with your OpenShock Account
+        {/if}
+      </Card.Description>
+    </Card.Header>
+    <Card.Content>
+      <FieldGroup>
+        {#if anyOAuthProviders}
+          <OauthButtons {providers} />
           <FieldSeparator class="*:data-[slot=field-separator-content]:bg-card">
             Or continue with
           </FieldSeparator>
@@ -133,10 +140,10 @@
             </Field>
           </div>
         </form>
-      {/if}
-    </FieldGroup>
-  </Card.Content>
-</Card.Root>
+      </FieldGroup>
+    </Card.Content>
+  </Card.Root>
+{/await}
 <FieldDescription class="px-6 text-center">
   By clicking Login, you agree to our <a href="https://openshock.org/tos" target="_blank"
     >Terms of Service</a

@@ -20,27 +20,10 @@
   let element: HTMLDivElement;
 
   let mounted = $state<boolean>(false);
-  let widgetId = $state<string | undefined>();
+  let widgetId: string | undefined;
 
   function invalidateResponse() {
     onResponse(null);
-  }
-
-  function renderTurnstile() {
-    mounted = true;
-
-    const theme = colorScheme.value === ColorScheme.System ? 'auto' : colorScheme.value;
-
-    widgetId = window.turnstile!.render(element, {
-      sitekey: backendMetadata.state!.turnstileSiteKey!,
-      action,
-      cData,
-      theme,
-      callback: onResponse,
-      'expired-callback': invalidateResponse,
-      'timeout-callback': invalidateResponse,
-      'error-callback': invalidateResponse,
-    });
   }
 
   onMount(() => {
@@ -48,23 +31,38 @@
       onResponse(PUBLIC_TURNSTILE_DEV_BYPASS_VALUE);
       return;
     }
-    if (!backendMetadata.state?.turnstileSiteKey) {
-      console.error('Backend did not provide a Turnstile site key!');
-      return;
-    }
 
-    // Check that Cloudflare Turnstile has been loaded.
-    // If `window.turnstile` is undefined, it usually means the <script> tag wasn't injected.
-    // See: https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/#explicitly-render-the-turnstile-widget
-    if (!window.turnstile) {
-      console.error('Failed to load Cloudflare Turnstile');
-      toast.error('Internal Error');
-      return;
-    }
-
-    window.turnstile.ready(renderTurnstile);
+    let cancelled = false;
+    backendMetadata.fetch().then((info) => {
+      if (cancelled) return;
+      if (!info.turnstileSiteKey) {
+        console.error('Backend did not provide a Turnstile site key!');
+        return;
+      }
+      if (!window.turnstile) {
+        console.error('Failed to load Cloudflare Turnstile');
+        toast.error('Internal Error');
+        return;
+      }
+      window.turnstile.ready(() => {
+        if (cancelled) return;
+        mounted = true;
+        const theme = colorScheme.value === ColorScheme.System ? 'auto' : colorScheme.value;
+        widgetId = window.turnstile!.render(element, {
+          sitekey: info.turnstileSiteKey!,
+          action,
+          cData,
+          theme,
+          callback: onResponse,
+          'expired-callback': invalidateResponse,
+          'timeout-callback': invalidateResponse,
+          'error-callback': invalidateResponse,
+        });
+      });
+    });
 
     return () => {
+      cancelled = true;
       if (widgetId) window.turnstile?.remove(widgetId);
     };
   });
