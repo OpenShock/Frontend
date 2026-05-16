@@ -32,15 +32,19 @@
   let tokens = $state<TokenResponse[]>([]);
   let sorting = $state<SortingState>([]);
 
-  async function loadTokens() {
+  async function loadTokens(): Promise<boolean> {
     try {
       tokens = await apiTokensApi.tokensListTokens();
+      return true;
     } catch (error) {
       await handleApiError(error);
+      return false;
     }
   }
 
-  onMount(loadTokens);
+  onMount(() => {
+    void loadTokens();
+  });
 
   function onCreated(token: TokenCreatedResponse) {
     tokens.push({
@@ -76,8 +80,9 @@
   let createdTokenSecret = $state<string | null>(null);
 
   async function refresh() {
-    await loadTokens();
-    toast.success('Tokens refreshed successfully');
+    if (await loadTokens()) {
+      toast.success('Tokens refreshed successfully');
+    }
   }
 </script>
 

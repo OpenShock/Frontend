@@ -1,6 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
+  import { page } from '$app/state';
   import { AuthStatus, authState } from '$lib/state/auth-state.svelte';
   import type { Snippet } from 'svelte';
 
@@ -10,7 +11,9 @@
   // (e.g. session expires mid-session and 401 clears userState).
   // The initial auth gate happens in +layout.ts (load).
   $effect(() => {
-    if (authState.status === AuthStatus.Unauthenticated) goto(resolve('/login'));
+    if (authState.status !== AuthStatus.Unauthenticated) return;
+    const next = encodeURIComponent(page.url.pathname + page.url.search);
+    void goto(resolve(`/login?next=${next}`));
   });
 </script>
 

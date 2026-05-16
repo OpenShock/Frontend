@@ -5,7 +5,6 @@
   import Container from '$lib/components/Container.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { page } from '$app/state';
-  import { onMount } from 'svelte';
   import {
     CreateSortableColumnDef,
     LocaleDateTimeRenderer,
@@ -25,18 +24,32 @@
   let shocker = $state<ShockerResponse | undefined>(undefined);
   let sorting = $state<SortingState>([{ id: 'createdOn', desc: true }]);
 
-  onMount(async () => {
-    const shockerId = page.params.shockerId!;
-    try {
-      const [logsRes, shockerRes] = await Promise.all([
-        shockersV1Api.shockerGetShockerLogs(shockerId),
-        shockersV1Api.shockerGetShockerById(shockerId),
-      ]);
-      logs = logsRes.data ?? [];
-      shocker = shockerRes.data;
-    } catch (error) {
-      await handleApiError(error);
-    }
+  $effect(() => {
+    const shockerId = page.params.shockerId;
+    if (!shockerId) return;
+
+    let cancelled = false;
+    logs = [];
+    shocker = undefined;
+
+    (async () => {
+      try {
+        const [logsRes, shockerRes] = await Promise.all([
+          shockersV1Api.shockerGetShockerLogs(shockerId),
+          shockersV1Api.shockerGetShockerById(shockerId),
+        ]);
+        if (cancelled) return;
+        logs = logsRes.data ?? [];
+        shocker = shockerRes.data;
+      } catch (error) {
+        if (cancelled) return;
+        await handleApiError(error);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
   });
 
   const columns: ColumnDef<LogEntry>[] = [
