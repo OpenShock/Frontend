@@ -20,6 +20,7 @@
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
   import { userState } from '$lib/state/user-state.svelte';
+  import { Skeleton } from '$lib/components/ui/skeleton';
 
   registerBreadcrumbs(() => [{ label: 'Login' }]);
 
@@ -84,40 +85,49 @@
   </Card.Header>
   <Card.Content>
     <FieldGroup>
-      {#if anyOAuthProviders}
-        <OauthButtons {providers} />
-        <FieldSeparator class="*:data-[slot=field-separator-content]:bg-card">
-          Or continue with
-        </FieldSeparator>
-      {/if}
-      <form onsubmit={handleSubmission}>
-        <div>
-          <div class="my-1 flex flex-col gap-1">
-            <TextInput
-              label="Username or Email"
-              autocomplete="username"
-              bind:value={usernameOrEmail}
-              validationResult={usernameError}
-            />
+      {#if backendMetadata.state === null}
+        <Skeleton class="h-9 w-full"></Skeleton>
+        <Skeleton class="h-1 w-full"></Skeleton>
+        <Skeleton class="h-9 w-full"></Skeleton>
+        <Skeleton class="h-9 w-full"></Skeleton>
+        <Skeleton class="h-16 w-full"></Skeleton>
+        <Skeleton class="h-9 w-full"></Skeleton>
+      {:else}
+        {#if anyOAuthProviders}
+          <OauthButtons {providers} />
+          <FieldSeparator class="*:data-[slot=field-separator-content]:bg-card">
+            Or continue with
+          </FieldSeparator>
+        {/if}
+        <form onsubmit={handleSubmission}>
+          <div>
+            <div class="my-1 flex flex-col gap-1">
+              <TextInput
+                label="Username or Email"
+                autocomplete="username"
+                bind:value={usernameOrEmail}
+                validationResult={usernameError}
+              />
 
-            <PasswordInput
-              label="Password"
-              autocomplete="current-password"
-              bind:value={password}
-              validate={passwordError}
-              showForget
-            />
+              <PasswordInput
+                label="Password"
+                autocomplete="current-password"
+                bind:value={password}
+                validate={passwordError}
+                showForget
+              />
 
-            <Turnstile action="signin" onResponse={(response) => (turnstileResponse = response)} />
+              <Turnstile action="signin" onResponse={(response) => (turnstileResponse = response)} />
+            </div>
+            <Field class="mt-5">
+              <Button type="submit" disabled={!canSubmit}>Login</Button>
+              <FieldDescription class="text-center">
+                Don't have an account? <a href={resolve('/signup')}>Sign up</a>
+              </FieldDescription>
+            </Field>
           </div>
-          <Field class="mt-5">
-            <Button type="submit" disabled={!canSubmit}>Login</Button>
-            <FieldDescription class="text-center">
-              Don't have an account? <a href={resolve('/signup')}>Sign up</a>
-            </FieldDescription>
-          </Field>
-        </div>
-      </form>
+        </form>
+      {/if}
     </FieldGroup>
   </Card.Content>
 </Card.Root>

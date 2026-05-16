@@ -109,7 +109,9 @@
   <Card.Header class="text-center">
     <Card.Title class="text-xl">Create your account</Card.Title>
     <Card.Description>
-      {#if useEmail}
+      {#if backendMetadata.state === null}
+        Loading available sign-up methods
+      {:else if useEmail}
         Signing up using email
       {:else}
         Choose your preferred sign-up method
