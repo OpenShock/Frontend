@@ -76,7 +76,9 @@
   <Card.Header class="text-center">
     <Card.Title class="text-xl">Welcome back</Card.Title>
     <Card.Description>
-      {#if anyOAuthProviders}
+      {#if backendMetadata.state === null}
+        Loading available login methods
+      {:else if anyOAuthProviders}
         Login with one of these methods
       {:else}
         Login with your OpenShock Account

@@ -42,10 +42,6 @@
     }
   }
 
-  onMount(() => {
-    void loadTokens();
-  });
-
   function onCreated(token: TokenCreatedResponse) {
     tokens.push({
       id: token.id,
@@ -84,6 +80,8 @@
       toast.success('Tokens refreshed successfully');
     }
   }
+
+  onMount(loadTokens);
 </script>
 
 <TokenCreateDialog bind:open={showGenerateTokenModal} {onCreated} />
