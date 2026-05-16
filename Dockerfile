@@ -2,11 +2,10 @@
 ARG NODE_VERSION=24.14.0
 ARG PNPM_VERSION=11.1.2
 ARG ALPINE_VERSION=3.23
-ARG PNPM_URL="https://github.com/pnpm/pnpm/releases/download/v${PNPM_VERSION}/pnpm-linux-x64.tar.gz"
 
 FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION}
 
-ARG PNPM_URL
+ARG PNPM_VERSION
 ARG GIT_BRANCH
 ARG GIT_COMMIT_SHA
 
@@ -16,14 +15,14 @@ ENV NODE_ENV=production
 ENV GIT_BRANCH=${GIT_BRANCH}
 ENV GIT_COMMIT_SHA=${GIT_COMMIT_SHA}
 
-# Install pnpm (static binary from tar.gz)
-RUN wget -qO- "${PNPM_URL}" | tar -xzf - -C /usr/local/bin && chmod +x /usr/local/bin/pnpm
-
 # Copy dependency manifests first (for caching)
 COPY package.json .
 COPY pnpm-lock.yaml .
 COPY pnpm-workspace.yaml .
 COPY patches/ patches/
+
+# Install pnpm via npm (works on any platform/libc, no tarball extraction needed)
+RUN npm install -g pnpm@${PNPM_VERSION}
 
 # Install all deps (incl. dev) — needed because the build runs at container start.
 # --prod=false forces dev deps even though NODE_ENV=production is set above.
