@@ -13,16 +13,15 @@
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
   import { accountV2Api } from '$lib/api';
-  import { userState } from '$lib/state/user-state.svelte';
-  import { initializeSignalR } from '$lib/signalr/user.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
   import OauthButtons from '$lib/components/auth/oauth-buttons.svelte';
   import { gotoQueryRedirectOrFallback } from '$lib/utils/url';
-  import { bootstrap, bootstrapLogin, resetBootstrap } from '$lib/bootstrap.svelte';
+  import { bootstrapInit } from '$lib/bootstrap.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte';
   import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
+  import { userState } from '$lib/state/user-state.svelte';
 
   registerBreadcrumbs(() => [{ label: 'Login' }]);
 
@@ -46,13 +45,14 @@
         password,
         turnstileResponse,
       });
-      await bootstrapLogin({
+
+      userState.setSelf({
         id: account.accountId,
         name: account.accountName,
         avatar: account.profileImage,
         email: account.accountEmail,
         roles: account.accountRoles,
-      })
+      });
 
       await gotoQueryRedirectOrFallback('/home');
     } catch (error) {
@@ -70,7 +70,7 @@
   );
 </script>
 
-{#await bootstrap()}
+{#await bootstrapInit()}
   <Card.Root>
     <Card.Header class="text-center">
       <Card.Title class="text-xl">Welcome back</Card.Title>
@@ -87,8 +87,8 @@
       </FieldGroup>
     </Card.Content>
   </Card.Root>
-{:then info}
-  {@const providers = info.oAuthProviders}
+{:then}
+  {@const providers = backendMetadata.state?.oAuthProviders ?? []}
   {@const anyOAuthProviders = providers.length > 0}
   <Card.Root>
     <Card.Header class="text-center">

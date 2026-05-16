@@ -1,46 +1,40 @@
-import type { BackendInfoResponse } from '$lib/api/internal/v1';
+import { metaApi } from '$lib/api';
+import { registerOnUnauthorized } from '$lib/errorhandling/apiErrorHandling';
 import { destroySignalR, initializeSignalR } from '$lib/signalr/user.svelte';
 import { backendMetadata } from './state/backend-metadata-state.svelte';
 import { userState } from './state/user-state.svelte';
-import type { ApiUserSelf } from './types/ApiUser';
 
-let _promise: Promise<BackendInfoResponse> | null;
+let _initPromise: Promise<void> | null = null;
+let _stopSignalRLifecycle: (() => void) | null = null;
 
-async function exec(): Promise<BackendInfoResponse> {
-  const response = await backendMetadata.fetch();
+function startSignalRLifecycle() {
+  if (_stopSignalRLifecycle) return;
+  _stopSignalRLifecycle = $effect.root(() => {
+    $effect(() => {
+      if (userState.self) {
+        void initializeSignalR();
+      } else {
+        void destroySignalR();
+      }
+    });
+  });
+}
 
-  if (response.isUserAuthenticated) {
-    await Promise.all([userState.refreshSelf(), initializeSignalR()]);
+async function exec(): Promise<void> {
+  registerOnUnauthorized(() => userState.reset());
+
+  const { data } = await metaApi.versionGetBackendInfo();
+  backendMetadata.set(data);
+
+  if (data.isUserAuthenticated) {
+    await userState.refreshSelf();
+  } else {
+    userState.reset();
   }
 
-  return response;
+  startSignalRLifecycle();
 }
 
-export function bootstrapInit(): Promise<BackendInfoResponse> {
-  return (_promise ??= exec());
-}
-
-export async function bootstrapLogin(user: ApiUserSelf) {
-  const response = await backendMetadata.fetch();
-
-  userState.setSelf(user);
-  backendMetadata.setAuthenticated(true);
-
-  // Re-Create SignalR connection
-  await destroySignalR();
-  await initializeSignalR();
-
-  _promise = Promise.resolve(backendMetadata.state!);
-
-  return response;
-}
-
-export async function bootstrapLogout() {
-
-  backendMetadata.setAuthenticated(false);
-  userState.reset();
-
-  await destroySignalR();
-
-  _promise = null;
+export function bootstrapInit(): Promise<void> {
+  return (_initPromise ??= exec());
 }

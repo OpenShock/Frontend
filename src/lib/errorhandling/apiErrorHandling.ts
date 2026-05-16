@@ -12,10 +12,25 @@ import { isValidationError as isValidationProblem } from './ValidationProblemDet
 
 export type HandleProblemCallback = (problem: ProblemDetails) => boolean;
 
+let _onUnauthorized: (() => void) | null = null;
+
+/**
+ * Register a callback that fires when any API response returns a 401.
+ * Used by the bootstrap layer to clear auth state when the session expires
+ * mid-flight (which also tears down SignalR via the reactive lifecycle).
+ */
+export function registerOnUnauthorized(callback: () => void) {
+  _onUnauthorized = callback;
+}
+
 async function handleResponseError(
   response: Response,
   handleProblemCallback: HandleProblemCallback | null
 ) {
+  if (response.status === 401) {
+    _onUnauthorized?.();
+  }
+
   const contentTypeHeader = response.headers.get('Content-Type');
   if (!contentTypeHeader) {
     console.error('No content type header found in response');

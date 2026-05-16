@@ -33,31 +33,30 @@
     }
 
     let cancelled = false;
-    backendMetadata.fetch().then((info) => {
+    const info = backendMetadata.state;
+    if (!info?.turnstileSiteKey) {
+      console.error('Backend did not provide a Turnstile site key!');
+      return;
+    }
+    if (!window.turnstile) {
+      console.error('Failed to load Cloudflare Turnstile');
+      toast.error('Internal Error');
+      return;
+    }
+    const siteKey = info.turnstileSiteKey;
+    window.turnstile.ready(() => {
       if (cancelled) return;
-      if (!info.turnstileSiteKey) {
-        console.error('Backend did not provide a Turnstile site key!');
-        return;
-      }
-      if (!window.turnstile) {
-        console.error('Failed to load Cloudflare Turnstile');
-        toast.error('Internal Error');
-        return;
-      }
-      window.turnstile.ready(() => {
-        if (cancelled) return;
-        mounted = true;
-        const theme = colorScheme.value === ColorScheme.System ? 'auto' : colorScheme.value;
-        widgetId = window.turnstile!.render(element, {
-          sitekey: info.turnstileSiteKey!,
-          action,
-          cData,
-          theme,
-          callback: onResponse,
-          'expired-callback': invalidateResponse,
-          'timeout-callback': invalidateResponse,
-          'error-callback': invalidateResponse,
-        });
+      mounted = true;
+      const theme = colorScheme.value === ColorScheme.System ? 'auto' : colorScheme.value;
+      widgetId = window.turnstile!.render(element, {
+        sitekey: siteKey,
+        action,
+        cData,
+        theme,
+        callback: onResponse,
+        'expired-callback': invalidateResponse,
+        'timeout-callback': invalidateResponse,
+        'error-callback': invalidateResponse,
       });
     });
 

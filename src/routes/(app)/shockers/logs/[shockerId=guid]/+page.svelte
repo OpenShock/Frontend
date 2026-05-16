@@ -26,7 +26,7 @@
   let sorting = $state<SortingState>([{ id: 'createdOn', desc: true }]);
 
   onMount(async () => {
-    const shockerId = page.params.shockerId;
+    const shockerId = page.params.shockerId!;
     try {
       const [logsRes, shockerRes] = await Promise.all([
         shockersV1Api.shockerGetShockerLogs(shockerId),
