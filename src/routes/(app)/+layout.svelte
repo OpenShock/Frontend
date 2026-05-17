@@ -18,10 +18,10 @@
   });
 </script>
 
-{#if authState.status === AuthStatus.Authenticated}
-  {@render children()}
-{:else}
+{#if authState.status !== AuthStatus.Authenticated}
   <Container>
     <LoadingCircle class="size-20" />
   </Container>
+{:else}
+  {@render children()}
 {/if}
