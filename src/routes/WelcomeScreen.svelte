@@ -20,7 +20,9 @@
   import DiscordLogo from '$lib/components/svg/DiscordLogo.svelte';
   import GithubIcon from '$lib/components/svg/GithubIcon.svelte';
   import { Button } from '$lib/components/ui/button';
-  import { ChevronLeft, ChevronRight } from '@lucide/svelte';
+  import { startWelcomeTour } from '$lib/tour/welcome-tour';
+  import { userState } from '$lib/state/user-state.svelte';
+  import { ChevronLeft, ChevronRight, Sparkles } from '@lucide/svelte';
   import { onMount, type Snippet } from 'svelte';
   import { fade, fly } from 'svelte/transition';
   import { cubicOut } from 'svelte/easing';
@@ -77,6 +79,18 @@
     markWelcomed();
     open = false;
   }
+
+  async function dismissAndStartTour() {
+    markWelcomed();
+    open = false;
+    // Give the dialog a frame to unmount so the tour can highlight the
+    // real sidebar underneath, not the now-fading welcome screen.
+    await new Promise((r) => requestAnimationFrame(r));
+    await startWelcomeTour();
+  }
+
+  // Tour relies on sidebar anchors, which only exist for logged-in users.
+  let canStartTour = $derived(userState.self !== null);
 
   function handleKeydown(e: KeyboardEvent) {
     if (!open) return;
@@ -191,14 +205,25 @@
               <ChevronLeft />
               Back
             </Button>
-            <Button
-              size="lg"
-              class="w-44 bg-white text-black shadow-lg shadow-white/10 hover:bg-white/90"
-              onclick={goNext}
-            >
-              {isLast ? 'Get started' : 'Next'}
-              {#if !isLast}<ChevronRight />{/if}
-            </Button>
+            {#if isLast && canStartTour}
+              <Button
+                size="lg"
+                class="w-44 bg-white text-black shadow-lg shadow-white/10 hover:bg-white/90"
+                onclick={dismissAndStartTour}
+              >
+                <Sparkles />
+                Show me around
+              </Button>
+            {:else}
+              <Button
+                size="lg"
+                class="w-44 bg-white text-black shadow-lg shadow-white/10 hover:bg-white/90"
+                onclick={goNext}
+              >
+                {isLast ? 'Get started' : 'Next'}
+                {#if !isLast}<ChevronRight />{/if}
+              </Button>
+            {/if}
           </div>
         </div>
       </div>
