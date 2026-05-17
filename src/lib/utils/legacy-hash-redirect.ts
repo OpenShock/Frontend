@@ -78,6 +78,7 @@ export function redirectLegacyHashRoute(): void {
 
   // Defense-in-depth: only allow same-origin, root-relative redirects.
   // Reject protocol-relative (`//...`) and scheme-prefixed (`http:...`, `javascript:...`) values.
-  const isSafeInternalPath = target.startsWith('/') && !target.startsWith('//') && !/^[a-zA-Z][a-zA-Z\d+\-.]*:/.test(target);
+  const isSafeInternalPath =
+    target.startsWith('/') && !target.startsWith('//') && !/^[a-zA-Z][a-zA-Z\d+\-.]*:/.test(target);
   location.replace(isSafeInternalPath ? target : '/home');
 }

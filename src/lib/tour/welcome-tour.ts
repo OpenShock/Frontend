@@ -1,9 +1,7 @@
 import { driver, type Driver, type DriveStep } from 'driver.js';
 import 'driver.js/dist/driver.css';
-import { expiringFlags } from '$lib/state/expiring-flags';
 
-const TOUR_DONE_KEY = 'tourCompleted';
-const TOUR_EXPIRES_AT = new Date('2027-01-01T00:00:00Z');
+const TOUR_DONE_KEY = 'os.tourCompleted';
 
 const SIDEBAR_TOGGLE_SEL = 'button[title="Toggle Sidebar"]';
 const SIDEBAR_ROOT_SEL = '[data-slot="sidebar"]';
@@ -22,11 +20,7 @@ interface TourStep {
   element?: string;
   title: string;
   description: string;
-  side?: DriveStep['popover'] extends infer P
-    ? P extends { side?: infer S }
-      ? S
-      : never
-    : never;
+  side?: DriveStep['popover'] extends infer P ? (P extends { side?: infer S } ? S : never) : never;
 }
 
 function isMobileViewport(): boolean {
@@ -46,15 +40,14 @@ function desktopSteps(): TourStep[] {
       kind: 'info',
       element: SIDEBAR_ROOT_SEL,
       title: 'Your navigation',
-      description:
-        'Everything you can reach in the app lives here, grouped by what it does.',
+      description: 'Everything you can reach in the app lives here, grouped by what it does.',
       side: 'right',
     },
     {
       kind: 'action',
       element: SIDEBAR_TOGGLE_SEL,
       title: 'Collapse it again',
-      description: "Click the toggle once more so we can show you a trick.",
+      description: 'Click the toggle once more so we can show you a trick.',
       side: 'bottom',
     },
     {
@@ -62,7 +55,7 @@ function desktopSteps(): TourStep[] {
       element: SIDEBAR_ROOT_SEL,
       title: 'Still fully navigable',
       description:
-        "Collapsed, the sidebar becomes an icon rail — same destinations, less space taken.",
+        'Collapsed, the sidebar becomes an icon rail — same destinations, less space taken.',
       side: 'right',
     },
     {
@@ -119,20 +112,25 @@ function toDriverStep(step: TourStep): DriveStep {
       title: step.title,
       description: step.description,
       side: step.side ?? 'bottom',
-      showButtons:
-        step.kind === 'action'
-          ? ['previous', 'close']
-          : ['next', 'previous', 'close'],
+      showButtons: step.kind === 'action' ? ['previous', 'close'] : ['next', 'previous', 'close'],
     },
   };
 }
 
 export function hasCompletedTour(): boolean {
-  return expiringFlags.get<boolean>(TOUR_DONE_KEY) === true;
+  try {
+    return localStorage.getItem(TOUR_DONE_KEY) === '1';
+  } catch {
+    return false;
+  }
 }
 
 function markTourCompleted(): void {
-  expiringFlags.set(TOUR_DONE_KEY, true, TOUR_EXPIRES_AT);
+  try {
+    localStorage.setItem(TOUR_DONE_KEY, '1');
+  } catch {
+    // ignore
+  }
 }
 
 /**

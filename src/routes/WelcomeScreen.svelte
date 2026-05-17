@@ -1,16 +1,20 @@
 <script lang="ts" module>
-  import { expiringFlags } from '$lib/state/expiring-flags';
-
-  const FLAG_KEY = 'welcomed';
-  // Hard cutoff: stop showing the welcome screen and stop refreshing the flag after this date.
-  const EXPIRES_AT = new Date('2027-01-01T00:00:00Z');
+  const FLAG_KEY = 'os.welcomed';
 
   function markWelcomed(): void {
-    expiringFlags.set(FLAG_KEY, true, EXPIRES_AT);
+    try {
+      localStorage.setItem(FLAG_KEY, '1');
+    } catch {
+      // ignore (private mode, quota, etc.)
+    }
   }
 
   function shouldShow(): boolean {
-    return Date.now() < EXPIRES_AT.getTime() && expiringFlags.get<boolean>(FLAG_KEY) !== true;
+    try {
+      return localStorage.getItem(FLAG_KEY) !== '1';
+    } catch {
+      return false;
+    }
   }
 </script>
 
@@ -120,7 +124,7 @@
 
 {#if open}
   <div
-    class="fixed inset-0 z-50 flex select-none items-center justify-center overflow-hidden bg-[#08080c]"
+    class="fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-[#08080c] select-none"
     role="dialog"
     aria-modal="true"
     aria-labelledby="welcome-title"
@@ -257,7 +261,10 @@
       frontend
     </p>
 
-    <p class="mt-10 max-w-md text-base text-white/60 sm:text-lg" in:fade={{ duration: 600, delay: 500 }}>
+    <p
+      class="mt-10 max-w-md text-base text-white/60 sm:text-lg"
+      in:fade={{ duration: 600, delay: 500 }}
+    >
       Take the quick tour, or skip ahead and dive in.
     </p>
   </div>
@@ -265,8 +272,8 @@
 
 {#snippet stepFeatures()}
   <p class="mb-6 text-white/70">
-    Over <span class="font-semibold text-white">2 years</span> of work. Faster, fully
-    mobile-friendly, and a much better base for everything we want to build next.
+    Over <span class="font-semibold text-white">2 years</span> of work. Faster, fully mobile-friendly,
+    and a much better base for everything we want to build next.
   </p>
   <ul class="grid gap-3 sm:grid-cols-2">
     {#each [{ t: 'Reworked shocker dashboard', d: 'Groundwork for customizable layouts.' }, { t: 'Web Terminal', d: 'Configure your hub and flash firmware straight from the browser. No installs.' }, { t: 'OAuth sign-in', d: 'Log in with accounts you already have.' }, { t: 'Better sharing', d: 'Public links, user shares, invite tracking, and per-shocker shortcuts.' }] as item, i (item.t)}
@@ -296,9 +303,7 @@
 {/snippet}
 
 {#snippet stepFeedback()}
-  <p>
-    Something broken or missing? The faster you report it, the faster we can fix it.
-  </p>
+  <p>Something broken or missing? The faster you report it, the faster we can fix it.</p>
 
   <div class="mt-8 grid gap-3 sm:grid-cols-2">
     <a
@@ -336,9 +341,7 @@
     </a>
   </div>
 
-  <p class="mt-6 text-sm text-white/50">
-    Lots more is landing soon. Thanks for sticking with us.
-  </p>
+  <p class="mt-6 text-sm text-white/50">Lots more is landing soon. Thanks for sticking with us.</p>
 {/snippet}
 
 <style>
@@ -352,8 +355,7 @@
   /* Brighter "spotlight" copy of the same grid, masked to a circle around
      the cursor. Small mask radius keeps any alpha banding imperceptible. */
   .bg-grid-spotlight {
-    background-image:
-      radial-gradient(circle, rgba(225, 74, 109, 0.9) 1px, transparent 1px);
+    background-image: radial-gradient(circle, rgba(225, 74, 109, 0.9) 1px, transparent 1px);
     background-size: 28px 28px;
     background-position: center center;
     mask-image: radial-gradient(
@@ -367,5 +369,4 @@
       transparent 75%
     );
   }
-
 </style>
