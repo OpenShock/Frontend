@@ -15,15 +15,12 @@
   import { Field } from '$lib/components/ui/field/index.js';
   import { GetOAuthAuthorizeUrl } from '$lib/api/next/oauth';
   import { LogIn } from '@lucide/svelte';
-  import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
 
-  let { verb = 'Login' }: { verb?: string } = $props();
-
-  let oauthProviders = $derived(backendMetadata.state?.oAuthProviders);
+  let { verb = 'Login', providers }: { verb?: string; providers: string[] } = $props();
 </script>
 
 <Field>
-  {#each oauthProviders as provider (provider)}
+  {#each providers as provider (provider)}
     {@const detail = providerDetails[provider]}
     <form action={GetOAuthAuthorizeUrl(provider, 'LoginOrCreate')} method="POST">
       <Button variant="outline" type="submit" class="w-full">

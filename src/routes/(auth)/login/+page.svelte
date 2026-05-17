@@ -13,15 +13,14 @@
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
   import { accountV2Api } from '$lib/api';
-  import { userState } from '$lib/state/user-state.svelte';
-  import { initializeSignalR } from '$lib/signalr/user.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
   import OauthButtons from '$lib/components/auth/oauth-buttons.svelte';
   import { gotoQueryRedirectOrFallback } from '$lib/utils/url';
-  import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte';
+  import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
+  import { userState } from '$lib/state/user-state.svelte';
+  import { Skeleton } from '$lib/components/ui/skeleton';
 
   registerBreadcrumbs(() => [{ label: 'Login' }]);
 
@@ -45,6 +44,7 @@
         password,
         turnstileResponse,
       });
+
       userState.setSelf({
         id: account.accountId,
         name: account.accountName,
@@ -52,7 +52,6 @@
         email: account.accountEmail,
         roles: account.accountRoles,
       });
-      await initializeSignalR();
 
       await gotoQueryRedirectOrFallback('/home');
     } catch (error) {
@@ -65,8 +64,8 @@
     }
   }
 
-  let oauthProviders = $derived(backendMetadata.state?.oAuthProviders);
-  let anyOAuthProviders = $derived(oauthProviders !== undefined && oauthProviders.length > 0);
+  let providers = $derived(backendMetadata.state?.oAuthProviders ?? []);
+  let anyOAuthProviders = $derived(providers.length > 0);
 
   let canSubmit = $derived(
     usernameOrEmail.length > 0 && password.length > 0 && turnstileResponse != null
@@ -97,7 +96,7 @@
         <Skeleton class="h-9 w-full"></Skeleton>
       {:else}
         {#if anyOAuthProviders}
-          <OauthButtons />
+          <OauthButtons {providers} />
           <FieldSeparator class="*:data-[slot=field-separator-content]:bg-card">
             Or continue with
           </FieldSeparator>

@@ -17,8 +17,8 @@
   import FieldSeparator from '$lib/components/ui/field/field-separator.svelte';
   import OauthButtons from '$lib/components/auth/oauth-buttons.svelte';
   import { ChevronLeft, Mail } from '@lucide/svelte';
-  import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
   import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte';
 
   registerBreadcrumbs(() => [{ label: 'Sign Up' }]);
@@ -43,11 +43,6 @@
   let accountCreated = $state(false);
 
   let useEmail = $state(false);
-
-  $effect(() => {
-    const providers = backendMetadata?.state?.oAuthProviders;
-    useEmail = providers === undefined || providers.length === 0;
-  });
 
   function onOpenChange(open: boolean) {
     if (!open) {
@@ -88,8 +83,8 @@
     }
   }
 
-  let oauthProviders = $derived(backendMetadata.state?.oAuthProviders);
-  let anyOAuthProviders = $derived(oauthProviders !== undefined && oauthProviders.length > 0);
+  let oauthProviders = $derived(backendMetadata.state?.oAuthProviders ?? []);
+  let anyOAuthProviders = $derived(oauthProviders.length > 0);
 </script>
 
 <Dialog.Root bind:open={() => accountCreated, onOpenChange}>
@@ -129,7 +124,7 @@
         <Skeleton class="h-9 w-full"></Skeleton>
         <Skeleton class="h-1 w-full"></Skeleton>
         <Skeleton class="h-9 w-full"></Skeleton>
-      {:else if useEmail}
+      {:else if useEmail || !anyOAuthProviders}
         <form onsubmit={handleSubmission}>
           <div class="my-1 flex flex-col gap-1">
             {#if anyOAuthProviders}
@@ -185,7 +180,7 @@
         </form>
       {:else}
         {#if anyOAuthProviders}
-          <OauthButtons verb="Signup" />
+          <OauthButtons verb="Signup" providers={oauthProviders} />
           <FieldSeparator class="*:data-[slot=field-separator-content]:bg-card">Or</FieldSeparator>
         {/if}
         <Button variant="outline" class="w-full" onclick={() => (useEmail = true)}>
