@@ -25,7 +25,7 @@
 
   const mobile = new IsMobile();
   const sidebarOpen = usePersistedState('sidebarOpen', false);
-  const isOpen = $derived(browser ? mobile.current ? false : sidebarOpen.value : false);
+  const isOpen = $derived(browser ? (mobile.current ? false : sidebarOpen.value) : false);
 </script>
 
 <BasicTags {...meta} />
