@@ -74,5 +74,10 @@ export function redirectLegacyHashRoute(): void {
   if (!hash || hash.charAt(1) !== '/') return;
 
   const target = mapLegacyHashRoute(hash.slice(1));
-  if (target) location.replace(target);
+  if (!target) return;
+
+  // Defense-in-depth: only allow same-origin, root-relative redirects.
+  // Reject protocol-relative (`//...`) and scheme-prefixed (`http:...`, `javascript:...`) values.
+  const isSafeInternalPath = target.startsWith('/') && !target.startsWith('//') && !/^[a-zA-Z][a-zA-Z\d+\-.]*:/.test(target);
+  location.replace(isSafeInternalPath ? target : '/home');
 }
