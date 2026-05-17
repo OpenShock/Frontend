@@ -37,7 +37,7 @@
   } from '$lib/components/ui/sidebar';
   import { userState } from '$lib/state/user-state.svelte';
   import type { AnyComponent } from '$lib/types/AnyComponent';
-  import { isMobile, isSerialSupported } from '$lib/utils/compatibility';
+  import { isSerialSupported } from '$lib/utils/compatibility';
   import { Collapsible } from 'bits-ui';
   import { prefixBase } from '$lib/utils/url';
 
@@ -109,7 +109,7 @@
     }
 
     // Only time we dont show the menu is if its on a mobile device without serial support
-    if (!(!isSerialSupported && isMobile)) {
+    if (!(!isSerialSupported && sidebarContext.isMobile)) {
       menus.push({
         title: 'Serial Terminal',
         Icon: SquareTerminalIcon,
