@@ -4,6 +4,7 @@ import { authState, startAuthLifecycle } from '$lib/state/auth-state.svelte';
 import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
 import { initializeColorScheme } from '$lib/state/color-scheme-state.svelte';
 import { userState } from '$lib/state/user-state.svelte';
+import { redirectLegacyHashRoute } from '$lib/utils/legacy-hash-redirect';
 
 async function clientInit(): Promise<void> {
   const { data } = await metaApi.versionGetBackendInfo();
@@ -20,6 +21,7 @@ async function clientInit(): Promise<void> {
 }
 
 export async function init() {
+  redirectLegacyHashRoute();
   await clientInit().catch(handleApiError);
   initializeColorScheme();
 }
