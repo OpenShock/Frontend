@@ -64,12 +64,12 @@
     }
   }
 
+  let providers = $derived(backendMetadata.state?.oAuthProviders ?? []);
+  let anyOAuthProviders = $derived(providers.length > 0);
+
   let canSubmit = $derived(
     usernameOrEmail.length > 0 && password.length > 0 && turnstileResponse != null
   );
-
-  let providers = $derived(backendMetadata.state?.oAuthProviders ?? []);
-  let anyOAuthProviders = $derived(providers.length > 0);
 </script>
 
 <Card.Root>
