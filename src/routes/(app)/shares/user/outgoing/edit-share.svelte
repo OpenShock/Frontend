@@ -1,6 +1,6 @@
 <script lang="ts">
+  import { shockerShockerShareCodeUpdate, shockerShockerShareRemove } from '$lib/api';
   import { Trash } from '@lucide/svelte';
-  import { shockersV1Api } from '$lib/api';
   import { ComparePermissionsAndLimits } from '$lib/comparers/UserShareComparer';
   import RestrictionsSelector from '$lib/components/shares/restrictions-selector.svelte';
   import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
@@ -49,7 +49,7 @@
     };
     id: string;
     name: string;
-    createdOn: Date;
+    createdOn: Temporal.Instant;
     paused: boolean;
   }
 
@@ -117,14 +117,16 @@
 
     shares.forEach((share) => {
       promises.push(
-        shockersV1Api
-          .shockerShockerShareCodeUpdate(share.id, userShare.id, {
+        shockerShockerShareCodeUpdate({
+          path: { shockerId: share.id, sharedWithUserId: userShare.id },
+          body: {
             limits: {
               intensity: share.limits.intensity === 100 ? null : share.limits.intensity,
               duration: share.limits.duration === 30_000 ? null : share.limits.duration,
             },
             permissions: share.permissions,
-          })
+          },
+        })
           .then(() => {
             // Update the list copy of the share
             const index = userShare.shares.findIndex((s) => s.id === share.id);
@@ -151,7 +153,9 @@
 
   async function deleteShockerShare(shocker: EditableShare) {
     try {
-      await shockersV1Api.shockerShockerShareRemove(shocker.id, userShare.id);
+      await shockerShockerShareRemove({
+        path: { shockerId: shocker.id, sharedWithUserId: userShare.id },
+      });
       toast.success(`Successfully removed shocker share ${shocker.name}`);
     } catch (error) {
       handleApiError(error);

@@ -14,14 +14,14 @@
 </script>
 
 <script lang="ts">
-  import { publicShockerSharesApi } from '$lib/api';
+  import { shareLinksCreatePublicShare } from '$lib/api';
   import DateTimePicker from '$lib/components/datetime-picker/date-time-picker.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
   import * as Select from '$lib/components/ui/select';
   import { GetValResColor } from '$lib/types/ValidationResult';
-  import { durationBetween, formatElapsed, instantFromDate, instantToDate } from '$lib/utils';
+  import { durationBetween, formatElapsed, instantFromDate } from '$lib/utils';
   import { toast } from 'svelte-sonner';
 
   interface Props {
@@ -64,11 +64,9 @@
   let expireInstant = $derived(selectedExpiration?.getInstant() ?? null);
 
   function createShareLink() {
-    publicShockerSharesApi
-      .shareLinksCreatePublicShare({
-        name,
-        expiresOn: expireInstant ? instantToDate(expireInstant) : undefined,
-      })
+    shareLinksCreatePublicShare({
+      body: { name, expiresOn: expireInstant ?? undefined },
+    })
       .then(() => {
         onCreated();
         toast.success('Created new publicshare');

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { type WebhookDto } from '$lib/api/internal/v1';
+  import type { WebhookDto } from '$lib/api';
   import TableActionMenu from '$lib/components/TableActionMenu.svelte';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { copyToClipboard } from '$lib/utils/clipboard.svelte';

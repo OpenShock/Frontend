@@ -21,6 +21,7 @@
 	"devDependencies": {
 		"@eslint/compat": "^2.1.0",
 		"@eslint/js": "latest",
+		"@hey-api/openapi-ts": "^0.97.1",
 		"@internationalized/date": "^3.12.1",
 		"@lucide/svelte": "^1.14.0",
 		"@microsoft/signalr": "^10.0.0",

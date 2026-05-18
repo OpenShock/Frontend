@@ -5,8 +5,8 @@
   import type { ColumnDef } from '@tanstack/table-core';
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import { publicShockerSharesApi } from '$lib/api';
-  import type { OwnPublicShareResponse } from '$lib/api/internal/v1';
+  import { shareLinksList } from '$lib/api';
+  import type { OwnPublicShareResponse } from '$lib/api';
   import Container from '$lib/components/Container.svelte';
   import {
     CreateActionsColumnDef,
@@ -42,8 +42,7 @@
   let showAddShareModal = $state<boolean>(false);
 
   function refreshPublicShares() {
-    publicShockerSharesApi
-      .shareLinksList()
+    shareLinksList()
       .then((publicShares) => {
         if (publicShares.data === null) {
           console.warn('Failed to get share links, but response was success!');

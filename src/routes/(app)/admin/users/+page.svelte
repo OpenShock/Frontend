@@ -1,7 +1,7 @@
 <script lang="ts" module>
   import type { ColumnDef } from '@tanstack/table-core';
-  import type { AdminUsersView } from '$lib/api/internal/v1';
-  import { PasswordHashingAlgorithm, RoleType } from '$lib/api/internal/v1';
+  import { PasswordHashingAlgorithm, RoleType, adminGetUsers } from '$lib/api';
+  import type { AdminUsersView, AdminUsersViewPaginated } from '$lib/api';
   import {
     CreateActionsColumnDef,
     CreateSortableColumnDef,
@@ -68,8 +68,6 @@
 
 <script lang="ts">
   import type { SortingState } from '@tanstack/table-core';
-  import { adminApi } from '$lib/api';
-  import type { AdminUsersViewPaginated } from '$lib/api/internal/v1';
   import Container from '$lib/components/Container.svelte';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import PaginationFooter from '$lib/components/Table/PaginationFooter.svelte';
@@ -102,7 +100,7 @@
   );
 
   function handleResponse(response: AdminUsersViewPaginated) {
-    total = response.total;
+    total = Number(response.total);
     data = response.data;
     perPage = response.limit;
     if (page !== requestedPage) {
@@ -131,8 +129,14 @@
     const offset = (requestedPage - 1) * requestedPageSize;
 
     isFetching = true;
-    adminApi
-      .adminGetUsers(filterQuery, orderByQuery, offset, requestedPageSize)
+    adminGetUsers({
+      query: {
+        $filter: filterQuery,
+        $orderby: orderByQuery,
+        $offset: offset,
+        $limit: requestedPageSize,
+      },
+    })
       .then(handleResponse)
       .catch(handleApiError)
       .finally(() => (isFetching = false));

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { ClockFading, Gauge, Pause } from '@lucide/svelte';
-  import type { PublicShareShocker } from '$lib/api/internal/v1';
+  import type { PublicShareShocker } from '$lib/api';
   import {
     ControlDurationDefault,
     ControlDurationProps,

@@ -1,5 +1,5 @@
-import { shockersV1Api } from '$lib/api';
-import type { DeviceWithShockersResponse } from '$lib/api/internal/v1';
+import type { DeviceWithShockersResponse } from '$lib/api';
+import { shockerListShockers } from '$lib/api';
 import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 import type { OtaUpdateProgressTask } from '$lib/signalr/models/OtaUpdateProgressTask';
 import { SvelteMap } from 'svelte/reactivity';
@@ -37,13 +37,13 @@ export const onlineHubs = new SvelteMap<string, HubOnlineState>();
 
 export async function refreshOwnHubs() {
   try {
-    const response = await shockersV1Api.shockerListShockers();
-    if (!response.data) {
-      throw new Error(`Failed to fetch devices: ${response.message}`);
+    const { data, message } = await shockerListShockers();
+    if (!data) {
+      throw new Error(`Failed to fetch devices: ${message}`);
     }
 
     ownHubs.clear();
-    for (const d of response.data) {
+    for (const d of data) {
       ownHubs.set(d.id, d);
     }
   } catch (error) {

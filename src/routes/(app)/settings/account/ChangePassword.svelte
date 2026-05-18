@@ -1,6 +1,6 @@
 <script lang="ts">
+  import { authenticatedAccountChangePassword } from '$lib/api';
   import KeyRound from '@lucide/svelte/icons/key-round';
-  import { accountV1Api } from '$lib/api';
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
   import { Button } from '$lib/components/ui/button';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
@@ -23,9 +23,8 @@
     loading = true;
 
     try {
-      await accountV1Api.authenticatedAccountChangePassword({
-        currentPassword,
-        newPassword: password,
+      await authenticatedAccountChangePassword({
+        body: { currentPassword, newPassword: password },
       });
 
       toast.success('Password has been changed');

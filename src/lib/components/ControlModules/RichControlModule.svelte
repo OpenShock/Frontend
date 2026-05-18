@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Signal, Timer } from '@lucide/svelte';
-  import type { ShockerResponse } from '$lib/api/internal/v1';
+  import type { ShockerResponse } from '$lib/api';
   import {
     ControlDurationDefault,
     ControlDurationProps,

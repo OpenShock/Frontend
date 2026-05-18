@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { type ConfigurationItemDto } from '$lib/api/internal/v1';
+  import type { ConfigurationItemDto } from '$lib/api';
   import TableActionMenu from '$lib/components/TableActionMenu.svelte';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import ItemDeleteDialog from './dialog-item-delete.svelte';

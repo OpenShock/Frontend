@@ -2,7 +2,7 @@
   import { Barcode, Plus } from '@lucide/svelte';
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
-  import type { BasicUserInfo } from '$lib/api/internal/v1';
+  import type { BasicUserInfo } from '$lib/api';
   import Container from '$lib/components/Container.svelte';
   import { Button } from '$lib/components/ui/button';
   import * as Tabs from '$lib/components/ui/tabs/index.js';

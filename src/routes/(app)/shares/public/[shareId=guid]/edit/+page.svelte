@@ -1,9 +1,9 @@
 <script lang="ts">
+  import { publicGetPublicShare, shareLinksAddShocker, shareLinksEditShocker } from '$lib/api';
+  import type { PublicShareResponse } from '$lib/api';
   import { ExternalLink, Plus, Save } from '@lucide/svelte';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
-  import { publicShockerSharesApi } from '$lib/api';
-  import type { PublicShareResponse } from '$lib/api/internal/v1';
   import Container from '$lib/components/Container.svelte';
   import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
   import { Button } from '$lib/components/ui/button';
@@ -38,7 +38,7 @@
     const id = page.params.shareId;
     if (!id) throw new Error('No share ID provided');
 
-    const response = await publicShockerSharesApi.publicGetPublicShare(id);
+    const response = await publicGetPublicShare({ path: { publicShareId: id } });
     if (!response.data) throw new Error('No data received');
     publicShareData = response.data;
     return response.data;
@@ -52,9 +52,9 @@
       const allShockers = publicShareData.devices?.flatMap((d) => d.shockers) ?? [];
 
       const updatePromises = allShockers.map((shocker) =>
-        publicShockerSharesApi.shareLinksEditShocker(shareId, shocker.id, {
-          permissions: shocker.permissions,
-          limits: shocker.limits,
+        shareLinksEditShocker({
+          path: { publicShareId: shareId, shockerId: shocker.id },
+          body: { permissions: shocker.permissions, limits: shocker.limits },
         })
       );
 
@@ -74,7 +74,7 @@
 
     try {
       const addPromises = shockers.map((s) =>
-        publicShockerSharesApi.shareLinksAddShocker(shareId, s.id)
+        shareLinksAddShocker({ path: { publicShareId: shareId, shockerId: s.id } })
       );
 
       await Promise.all(addPromises);

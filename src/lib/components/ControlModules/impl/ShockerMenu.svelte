@@ -1,8 +1,8 @@
 <script lang="ts">
+  import { shockerPauseShocker, shockerRemoveShocker } from '$lib/api';
+  import type { ShockerResponse } from '$lib/api';
   import { Ellipsis, LoaderCircle, Pause, Pencil, Play, Share2, Trash2 } from '@lucide/svelte';
   import { goto } from '$app/navigation';
-  import { shockersV1Api } from '$lib/api';
-  import type { ShockerResponse } from '$lib/api/internal/v1';
   import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
@@ -34,10 +34,11 @@
   async function togglePause() {
     pauseLoading = true;
     try {
-      const result = await shockersV1Api.shockerPauseShocker(shocker.id, {
-        pause: !shocker.isPaused,
+      const result = await shockerPauseShocker({
+        path: { shockerId: shocker.id },
+        body: { pause: !shocker.isPaused },
       });
-      shocker.isPaused = result.data;
+      shocker.isPaused = result.data ?? shocker.isPaused;
       toast.success(shocker.isPaused ? 'Shocker paused' : 'Shocker resumed');
     } catch (error) {
       handleApiError(error);
@@ -54,7 +55,7 @@
     });
     if (!result.confirmed) return;
     try {
-      await shockersV1Api.shockerRemoveShocker(shocker.id);
+      await shockerRemoveShocker({ path: { shockerId: shocker.id } });
       toast.success(`Shocker "${shocker.name}" deleted`);
       await refreshOwnHubs();
     } catch (error) {

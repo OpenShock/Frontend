@@ -1,5 +1,5 @@
-import { type UsernameCheckResponse } from '$lib/api/internal/v1';
-import { UsernameAvailability } from '$lib/api/internal/v2';
+import type { UsernameCheckResponse } from '$lib/api';
+import { UsernameAvailability } from '$lib/api';
 import { isEmailAddress } from '$lib/inputvalidation/emailValidator';
 import type { ValidationResult } from '$lib/types/ValidationResult';
 

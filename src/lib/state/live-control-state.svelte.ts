@@ -1,4 +1,4 @@
-import { hubManagementV1Api } from '$lib/api';
+import { devicesGetLiveControlGatewayInfo } from '$lib/api';
 import { ControlType } from '$lib/signalr/models/ControlType';
 import { toast } from 'svelte-sonner';
 import { SvelteMap } from 'svelte/reactivity';
@@ -57,7 +57,7 @@ export class LiveDeviceConnection {
     const attempt = ++this.connectAttempt;
 
     try {
-      const res = await hubManagementV1Api.devicesGetLiveControlGatewayInfo(this.deviceId);
+      const res = await devicesGetLiveControlGatewayInfo({ path: { deviceId: this.deviceId } });
       if (attempt !== this.connectAttempt) return; // Stale attempt
       if (!res.data) {
         throw new Error('No LCG data returned');

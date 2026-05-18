@@ -3,7 +3,7 @@
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
-  import { accountV1Api } from '$lib/api';
+  import { accountActivate } from '$lib/api';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
@@ -15,8 +15,7 @@
 
   function activateAccount() {
     if (!secret) return;
-    accountV1Api
-      .accountActivate(secret)
+    accountActivate({ query: { token: secret } })
       .then(() => goto(resolve('/login')))
       .catch(handleApiError);
   }

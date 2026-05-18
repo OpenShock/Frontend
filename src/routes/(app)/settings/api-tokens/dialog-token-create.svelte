@@ -1,6 +1,7 @@
 <script lang="ts" module>
+  import { PermissionType, tokensCreateToken } from '$lib/api';
+  import type { TokenCreatedResponse } from '$lib/api';
   import type { ZonedDateTime } from '@internationalized/date';
-  import { PermissionType } from '$lib/api/internal/v1';
   import type { ValidationResult } from '$lib/types/ValidationResult';
 
   type PermissionCategory = {
@@ -50,8 +51,6 @@
 </script>
 
 <script lang="ts">
-  import { apiTokensApi } from '$lib/api';
-  import type { TokenCreatedResponse } from '$lib/api/internal/v1';
   import DateTimePicker from '$lib/components/datetime-picker/date-time-picker.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
@@ -59,7 +58,7 @@
   import * as Select from '$lib/components/ui/select';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { GetValResColor } from '$lib/types/ValidationResult';
-  import { durationBetween, formatElapsed, instantFromDate, instantToDate } from '$lib/utils';
+  import { durationBetween, formatElapsed, instantFromDate } from '$lib/utils';
 
   interface Props {
     open: boolean;
@@ -113,10 +112,10 @@
   let expireInstant = $derived(selectedExpiration?.getInstant() ?? null);
 
   async function onFormSubmit() {
-    const validUntil = expireInstant ? instantToDate(expireInstant) : null;
-
     try {
-      const createdToken = await apiTokensApi.tokensCreateToken({ name, validUntil, permissions });
+      const createdToken = await tokensCreateToken({
+        body: { name, validUntil: expireInstant, permissions },
+      });
       onCreated(createdToken);
       open = false;
       onOpenChange(false);

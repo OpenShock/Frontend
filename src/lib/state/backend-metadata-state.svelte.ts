@@ -1,5 +1,4 @@
-import type { BackendInfoResponse } from '$lib/api/internal/v1';
-
+import type { BackendInfoResponse } from '$lib/api';
 export type BackendMetadata = Omit<BackendInfoResponse, 'isUserAuthenticated'>;
 
 let _data = $state<BackendMetadata | null>(null);

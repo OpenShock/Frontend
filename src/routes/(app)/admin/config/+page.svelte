@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { SortingState } from '@tanstack/table-core';
   import type { ColumnDef } from '@tanstack/table-core';
-  import { adminApi } from '$lib/api';
-  import type { ConfigurationItemDto } from '$lib/api/internal/v1';
+  import { adminConfigurationList } from '$lib/api';
+  import type { ConfigurationItemDto } from '$lib/api';
   import Container from '$lib/components/Container.svelte';
   import {
     CreateActionsColumnDef,
@@ -37,8 +37,7 @@
   let addDialogOpen = $state<boolean>(false);
 
   function fetchWebhooks() {
-    adminApi
-      .adminConfigurationList()
+    adminConfigurationList()
       .then((res) => {
         data = res;
       })

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Check, Search } from '@lucide/svelte';
-  import { usersApi } from '$lib/api';
-  import type { BasicUserInfo } from '$lib/api/internal/v1';
+  import { usersGetByName } from '$lib/api';
+  import type { BasicUserInfo } from '$lib/api';
   import * as Avatar from '$lib/components/ui/avatar';
   import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input/index.js';
@@ -15,8 +15,7 @@
 
   function check(event: Event) {
     event.preventDefault();
-    usersApi
-      .usersGetByName(userInput)
+    usersGetByName({ path: { username: userInput } })
       .then((user) => {
         fetchedUser = user;
         userInput = user.name;

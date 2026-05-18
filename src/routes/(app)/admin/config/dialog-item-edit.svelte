@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { adminApi } from '$lib/api';
-  import type { ConfigurationItemDto } from '$lib/api/internal/v1';
+  import { adminConfigurationUpdate } from '$lib/api';
+  import type { ConfigurationItemDto } from '$lib/api';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import { Button } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
@@ -23,8 +23,7 @@
   let valid = $derived(value.length > 0);
 
   function onSubmit() {
-    adminApi
-      .adminConfigurationUpdate({ name: item.name, description, value })
+    adminConfigurationUpdate({ body: { name: item.name, description, value } })
       .then(() => {
         onEdited();
         toast.success('Created configuration item');

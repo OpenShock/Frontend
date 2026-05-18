@@ -1,7 +1,7 @@
 <script lang="ts">
+  import { shockerShockerShareRemove } from '$lib/api';
+  import type { UserShareInfo } from '$lib/api';
   import { Trash } from '@lucide/svelte';
-  import { shockersV1Api } from '$lib/api';
-  import type { UserShareInfo } from '$lib/api/internal/v2';
   import * as Avatar from '$lib/components/ui/avatar';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Drawer from '$lib/components/ui/drawer';
@@ -23,7 +23,9 @@
 
   async function deleteShockerShare(shocker: UserShareInfo) {
     try {
-      await shockersV1Api.shockerShockerShareRemove(shocker.id, userState.self!.id);
+      await shockerShockerShareRemove({
+        path: { shockerId: shocker.id, sharedWithUserId: userState.self!.id },
+      });
       toast.success(
         `Successfully removed incoming Shocker Share ${shocker.name} by ${userShare.name}`
       );

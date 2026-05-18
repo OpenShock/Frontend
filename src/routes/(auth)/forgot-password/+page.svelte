@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import { accountV1Api } from '$lib/api';
+  import { accountPasswordResetInitiate } from '$lib/api';
   import Turnstile from '$lib/components/Turnstile.svelte';
   import EmailInput from '$lib/components/input/EmailInput.svelte';
   import { Button } from '$lib/components/ui/button';
@@ -25,8 +25,7 @@
       return;
     }
 
-    accountV1Api
-      .accountPasswordResetInitiate({ email })
+    accountPasswordResetInitiate({ body: { email } })
       .then(() => {
         toast.success('Reset password request has been sent to the given email');
         goto(resolve('/login'));
