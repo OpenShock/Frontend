@@ -3,7 +3,7 @@
 
   function markWelcomed(): void {
     try {
-      localStorage.setItem(FLAG_KEY, '1');
+      localStorage.setItem(FLAG_KEY, 'true');
     } catch {
       // ignore (private mode, quota, etc.)
     }
@@ -11,7 +11,7 @@
 
   function shouldShow(): boolean {
     try {
-      return localStorage.getItem(FLAG_KEY) !== '1';
+      return localStorage.getItem(FLAG_KEY) !== 'true';
     } catch {
       return false;
     }

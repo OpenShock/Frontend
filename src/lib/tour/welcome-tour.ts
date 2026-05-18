@@ -119,7 +119,7 @@ function toDriverStep(step: TourStep): DriveStep {
 
 export function hasCompletedTour(): boolean {
   try {
-    return localStorage.getItem(TOUR_DONE_KEY) === '1';
+    return localStorage.getItem(TOUR_DONE_KEY) === 'true';
   } catch {
     return false;
   }
@@ -127,7 +127,7 @@ export function hasCompletedTour(): boolean {
 
 function markTourCompleted(): void {
   try {
-    localStorage.setItem(TOUR_DONE_KEY, '1');
+    localStorage.setItem(TOUR_DONE_KEY, 'true');
   } catch {
     // ignore
   }
