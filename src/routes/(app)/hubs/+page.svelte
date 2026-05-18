@@ -13,6 +13,7 @@
   import type { DialogRenderProps } from '$lib/components/dialog-manager/types';
   import { hubManagementV2Api } from '$lib/api';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { instantFromDate } from '$lib/utils';
   import * as Dialog from '$lib/components/ui/dialog';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import PageHeader from '$lib/components/PageHeader.svelte';
@@ -37,10 +38,10 @@
               model: shocker.model,
               name: shocker.name,
               is_paused: shocker.isPaused,
-              created_at: shocker.createdOn,
+              created_at: instantFromDate(shocker.createdOn),
             };
           }),
-          created_at: hub.createdOn,
+          created_at: instantFromDate(hub.createdOn),
         };
       })
       .toArray();
@@ -133,7 +134,9 @@
               {/if}
             </Table.Cell>
             <Table.Cell>{hub.firmware_version ?? '—'}</Table.Cell>
-            <Table.Cell>{hub.created_at.toLocaleDateString()}</Table.Cell>
+            <Table.Cell>
+              {hub.created_at.toLocaleString(undefined, { dateStyle: 'short' })}
+            </Table.Cell>
             <Table.Cell>
               <DataTableActions {hub} />
             </Table.Cell>

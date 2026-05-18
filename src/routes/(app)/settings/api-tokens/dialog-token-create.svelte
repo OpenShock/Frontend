@@ -59,7 +59,7 @@
   import * as Select from '$lib/components/ui/select';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { GetValResColor } from '$lib/types/ValidationResult';
-  import { elapsedToString } from '$lib/utils';
+  import { durationBetween, formatElapsed, instantFromDate, instantToDate } from '$lib/utils';
 
   interface Props {
     open: boolean;
@@ -87,50 +87,33 @@
   let nameValidationResult = $derived(nameValidation(name));
   let expireValidationResult = $derived(expireValidation(expire, expireCustom));
 
-  const expirationOptions = [
-    { value: 'never', label: 'Never', getDate: () => null },
+  const inDays = (days: number) => () => Temporal.Now.instant().add({ hours: days * 24 });
+
+  const expirationOptions: {
+    value: string;
+    label: string;
+    getInstant: () => Temporal.Instant | null;
+  }[] = [
+    { value: 'never', label: 'Never', getInstant: () => null },
     {
       value: 'custom',
       label: 'Custom',
-      getDate: () => (expireCustom !== undefined ? expireCustom.toDate() : null),
-    }, // see GetExpireDate
-    {
-      value: '1days',
-      label: '1 Day',
-      getDate: () => new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
+      getInstant: () =>
+        expireCustom !== undefined ? instantFromDate(expireCustom.toDate()) : null,
     },
-    {
-      value: '7days',
-      label: '7 Days',
-      getDate: () => new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-    },
-    {
-      value: '30days',
-      label: '30 Days',
-      getDate: () => new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-    },
-    {
-      value: '90days',
-      label: '90 Days',
-      getDate: () => new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-    },
-    {
-      value: '180days',
-      label: '180 Days',
-      getDate: () => new Date(Date.now() + 180 * 24 * 60 * 60 * 1000),
-    },
-    {
-      value: '365days',
-      label: '365 Days',
-      getDate: () => new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
-    },
+    { value: '1days', label: '1 Day', getInstant: inDays(1) },
+    { value: '7days', label: '7 Days', getInstant: inDays(7) },
+    { value: '30days', label: '30 Days', getInstant: inDays(30) },
+    { value: '90days', label: '90 Days', getInstant: inDays(90) },
+    { value: '180days', label: '180 Days', getInstant: inDays(180) },
+    { value: '365days', label: '365 Days', getInstant: inDays(365) },
   ];
 
   let selectedExpiration = $derived(expirationOptions.find((option) => option.value === expire));
-  let expireDate = $derived(selectedExpiration?.getDate());
+  let expireInstant = $derived(selectedExpiration?.getInstant() ?? null);
 
   async function onFormSubmit() {
-    const validUntil = expireDate == undefined ? null : expireDate;
+    const validUntil = expireInstant ? instantToDate(expireInstant) : null;
 
     try {
       const createdToken = await apiTokensApi.tokensCreateToken({ name, validUntil, permissions });
@@ -185,9 +168,12 @@
           </p>
         {:else if expire === 'never'}
           <p class="text-xs">The token will never expire</p>
-        {:else if expireDate}
-          <p class="text-xs" aria-label={expireDate.toLocaleString()}>
-            The token will expire {elapsedToString(expireDate.getTime() - Date.now())} ({expireDate.toLocaleString()})
+        {:else if expireInstant}
+          <p class="text-xs" aria-label={expireInstant.toLocaleString()}>
+            The token will expire {formatElapsed(
+              durationBetween(Temporal.Now.instant(), expireInstant)
+            )}
+            ({expireInstant.toLocaleString()})
           </p>
         {/if}
       </label>

@@ -38,16 +38,14 @@
   }
 
   function formatRelativeTime(date: Date): string {
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffSeconds = Math.floor(diffMs / 1000);
-    const diffMinutes = Math.floor(diffSeconds / 60);
-    const diffHours = Math.floor(diffMinutes / 60);
-    const diffDays = Math.floor(diffHours / 24);
+    const tz = Temporal.Now.timeZoneId();
+    const elapsed = Temporal.Instant.fromEpochMilliseconds(date.getTime())
+      .toZonedDateTimeISO(tz)
+      .until(Temporal.Now.zonedDateTimeISO(tz), { largestUnit: 'day' });
 
-    if (diffDays > 0) return `${diffDays}d ago`;
-    if (diffHours > 0) return `${diffHours}h ago`;
-    if (diffMinutes > 0) return `${diffMinutes}m ago`;
+    if (elapsed.days > 0) return `${elapsed.days}d ago`;
+    if (elapsed.hours > 0) return `${elapsed.hours}h ago`;
+    if (elapsed.minutes > 0) return `${elapsed.minutes}m ago`;
     return 'just now';
   }
 

@@ -102,8 +102,8 @@
     }
   }
 
-  function formatTime(date: Date): string {
-    return date.toTimeString().substring(0, 8);
+  function formatTime(instant: Temporal.Instant): string {
+    return instant.toLocaleString(undefined, { hour12: false, timeStyle: 'medium' });
   }
 
   function formatUptime(ms: number): string {
