@@ -12,39 +12,52 @@
  * Do not edit the class manually.
  */
 
-
 import * as runtime from '../runtime';
-import type {
-  BulkUserShareShockersUpdateRequest,
-  CreateShareRequest,
-  OpenShockProblem,
-  PauseUserShareShockersRequest,
-  PauseUserShareShockersResponse,
-  RemoveUserSharesResponse,
-  ShareInviteBaseDetails,
-  V2UserShares,
-  V2UserSharesListItem,
-} from '../models/index';
 import {
+    type BulkUserShareShockersUpdateRequest,
     BulkUserShareShockersUpdateRequestFromJSON,
     BulkUserShareShockersUpdateRequestToJSON,
+} from '../models/BulkUserShareShockersUpdateRequest';
+import {
+    type CreateShareRequest,
     CreateShareRequestFromJSON,
     CreateShareRequestToJSON,
+} from '../models/CreateShareRequest';
+import {
+    type OpenShockProblem,
     OpenShockProblemFromJSON,
     OpenShockProblemToJSON,
+} from '../models/OpenShockProblem';
+import {
+    type PauseUserShareShockersRequest,
     PauseUserShareShockersRequestFromJSON,
     PauseUserShareShockersRequestToJSON,
+} from '../models/PauseUserShareShockersRequest';
+import {
+    type PauseUserShareShockersResponse,
     PauseUserShareShockersResponseFromJSON,
     PauseUserShareShockersResponseToJSON,
+} from '../models/PauseUserShareShockersResponse';
+import {
+    type RemoveUserSharesResponse,
     RemoveUserSharesResponseFromJSON,
     RemoveUserSharesResponseToJSON,
+} from '../models/RemoveUserSharesResponse';
+import {
+    type ShareInviteBaseDetails,
     ShareInviteBaseDetailsFromJSON,
     ShareInviteBaseDetailsToJSON,
+} from '../models/ShareInviteBaseDetails';
+import {
+    type V2UserShares,
     V2UserSharesFromJSON,
     V2UserSharesToJSON,
+} from '../models/V2UserShares';
+import {
+    type V2UserSharesListItem,
     V2UserSharesListItemFromJSON,
     V2UserSharesListItemToJSON,
-} from '../models/index';
+} from '../models/V2UserSharesListItem';
 
 export interface UserSharesBulkPauseUserShareShockersRequest {
     userId: string;
@@ -244,7 +257,7 @@ export class UserShockerSharesApi extends runtime.BaseAPI implements UserShocker
 
 
         let urlPath = `/2/shares/user/{userId}/shockers/pause`;
-        urlPath = urlPath.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId'])));
+        urlPath = urlPath.replace('{userId}', encodeURIComponent(String(requestParameters['userId'])));
 
         return {
             path: urlPath,
@@ -290,7 +303,7 @@ export class UserShockerSharesApi extends runtime.BaseAPI implements UserShocker
 
 
         let urlPath = `/2/shares/user/{userId}/shockers`;
-        urlPath = urlPath.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId'])));
+        urlPath = urlPath.replace('{userId}', encodeURIComponent(String(requestParameters['userId'])));
 
         return {
             path: urlPath,
@@ -336,7 +349,7 @@ export class UserShockerSharesApi extends runtime.BaseAPI implements UserShocker
 
 
         let urlPath = `/2/shares/user/{userId}/shockers`;
-        urlPath = urlPath.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId'])));
+        urlPath = urlPath.replace('{userId}', encodeURIComponent(String(requestParameters['userId'])));
 
         return {
             path: urlPath,
@@ -423,7 +436,7 @@ export class UserShockerSharesApi extends runtime.BaseAPI implements UserShocker
 
 
         let urlPath = `/2/shares/user/invites/outgoing/{inviteId}`;
-        urlPath = urlPath.replace(`{${"inviteId"}}`, encodeURIComponent(String(requestParameters['inviteId'])));
+        urlPath = urlPath.replace('{inviteId}', encodeURIComponent(String(requestParameters['inviteId'])));
 
         return {
             path: urlPath,
@@ -465,7 +478,7 @@ export class UserShockerSharesApi extends runtime.BaseAPI implements UserShocker
 
 
         let urlPath = `/2/shares/user/invites/incoming/{inviteId}`;
-        urlPath = urlPath.replace(`{${"inviteId"}}`, encodeURIComponent(String(requestParameters['inviteId'])));
+        urlPath = urlPath.replace('{inviteId}', encodeURIComponent(String(requestParameters['inviteId'])));
 
         return {
             path: urlPath,
@@ -612,7 +625,7 @@ export class UserShockerSharesApi extends runtime.BaseAPI implements UserShocker
 
 
         let urlPath = `/2/shares/user/invites/incoming/{inviteId}`;
-        urlPath = urlPath.replace(`{${"inviteId"}}`, encodeURIComponent(String(requestParameters['inviteId'])));
+        urlPath = urlPath.replace('{inviteId}', encodeURIComponent(String(requestParameters['inviteId'])));
 
         return {
             path: urlPath,

@@ -14,6 +14,7 @@
   import { IsMobile } from '$lib/hooks/is-mobile.svelte';
   import { usePersistedState } from '$lib/state/classes/persisted-state.svelte';
   import DialogManager from '$lib/components/dialog-manager/dialog-manager.svelte';
+  import { browser } from '$app/environment';
 
   interface Props {
     children?: Snippet;
@@ -25,7 +26,7 @@
 
   const mobile = new IsMobile();
   const sidebarOpen = usePersistedState('sidebarOpen', false);
-  const isOpen = $derived(mobile.current ? false : sidebarOpen.value);
+  const isOpen = $derived(browser ? (mobile.current ? false : sidebarOpen.value) : false);
 </script>
 
 <BasicTags {...meta} />

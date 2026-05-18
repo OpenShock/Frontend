@@ -12,18 +12,17 @@
  * Do not edit the class manually.
  */
 
-
 import * as runtime from '../runtime';
-import type {
-  BackendInfoResponseLegacyDataResponse,
-  StatsResponseLegacyDataResponse,
-} from '../models/index';
 import {
+    type BackendInfoResponseLegacyDataResponse,
     BackendInfoResponseLegacyDataResponseFromJSON,
     BackendInfoResponseLegacyDataResponseToJSON,
+} from '../models/BackendInfoResponseLegacyDataResponse';
+import {
+    type StatsResponseLegacyDataResponse,
     StatsResponseLegacyDataResponseFromJSON,
     StatsResponseLegacyDataResponseToJSON,
-} from '../models/index';
+} from '../models/StatsResponseLegacyDataResponse';
 
 /**
  * MetaApi - interface

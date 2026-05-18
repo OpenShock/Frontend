@@ -12,15 +12,12 @@
  * Do not edit the class manually.
  */
 
-
 import * as runtime from '../runtime';
-import type {
-  HubCreateRequest,
-} from '../models/index';
 import {
+    type HubCreateRequest,
     HubCreateRequestFromJSON,
     HubCreateRequestToJSON,
-} from '../models/index';
+} from '../models/HubCreateRequest';
 
 export interface DevicesCreateDeviceV2Request {
     hubCreateRequest?: HubCreateRequest;

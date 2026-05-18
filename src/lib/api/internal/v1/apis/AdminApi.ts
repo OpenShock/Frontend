@@ -12,54 +12,77 @@
  * Do not edit the class manually.
  */
 
-
 import * as runtime from '../runtime';
-import type {
-  AddEmailProviderBlacklistDto,
-  AddUsernameBlacklistDto,
-  AddWebhookDto,
-  AdminOnlineDeviceResponseArrayLegacyDataResponse,
-  AdminUsersViewPaginated,
-  ConfigurationAddItemRequest,
-  ConfigurationItemDto,
-  ConfigurationUpdateItemRequest,
-  EmailProviderBlacklistDto,
-  OpenShockProblem,
-  ProblemDetails,
-  UserNameBlacklistDto,
-  UserPatchDto,
-  WebhookDto,
-} from '../models/index';
 import {
+    type AddEmailProviderBlacklistDto,
     AddEmailProviderBlacklistDtoFromJSON,
     AddEmailProviderBlacklistDtoToJSON,
+} from '../models/AddEmailProviderBlacklistDto';
+import {
+    type AddUsernameBlacklistDto,
     AddUsernameBlacklistDtoFromJSON,
     AddUsernameBlacklistDtoToJSON,
+} from '../models/AddUsernameBlacklistDto';
+import {
+    type AddWebhookDto,
     AddWebhookDtoFromJSON,
     AddWebhookDtoToJSON,
+} from '../models/AddWebhookDto';
+import {
+    type AdminOnlineDeviceResponseArrayLegacyDataResponse,
     AdminOnlineDeviceResponseArrayLegacyDataResponseFromJSON,
     AdminOnlineDeviceResponseArrayLegacyDataResponseToJSON,
+} from '../models/AdminOnlineDeviceResponseArrayLegacyDataResponse';
+import {
+    type AdminUsersViewPaginated,
     AdminUsersViewPaginatedFromJSON,
     AdminUsersViewPaginatedToJSON,
+} from '../models/AdminUsersViewPaginated';
+import {
+    type ConfigurationAddItemRequest,
     ConfigurationAddItemRequestFromJSON,
     ConfigurationAddItemRequestToJSON,
+} from '../models/ConfigurationAddItemRequest';
+import {
+    type ConfigurationItemDto,
     ConfigurationItemDtoFromJSON,
     ConfigurationItemDtoToJSON,
+} from '../models/ConfigurationItemDto';
+import {
+    type ConfigurationUpdateItemRequest,
     ConfigurationUpdateItemRequestFromJSON,
     ConfigurationUpdateItemRequestToJSON,
+} from '../models/ConfigurationUpdateItemRequest';
+import {
+    type EmailProviderBlacklistDto,
     EmailProviderBlacklistDtoFromJSON,
     EmailProviderBlacklistDtoToJSON,
+} from '../models/EmailProviderBlacklistDto';
+import {
+    type OpenShockProblem,
     OpenShockProblemFromJSON,
     OpenShockProblemToJSON,
+} from '../models/OpenShockProblem';
+import {
+    type ProblemDetails,
     ProblemDetailsFromJSON,
     ProblemDetailsToJSON,
+} from '../models/ProblemDetails';
+import {
+    type UserNameBlacklistDto,
     UserNameBlacklistDtoFromJSON,
     UserNameBlacklistDtoToJSON,
+} from '../models/UserNameBlacklistDto';
+import {
+    type UserPatchDto,
     UserPatchDtoFromJSON,
     UserPatchDtoToJSON,
+} from '../models/UserPatchDto';
+import {
+    type WebhookDto,
     WebhookDtoFromJSON,
     WebhookDtoToJSON,
-} from '../models/index';
+} from '../models/WebhookDto';
 
 export interface AdminAddEmailProviderBlacklistRequest {
     addEmailProviderBlacklistDto?: AddEmailProviderBlacklistDto;
@@ -588,7 +611,7 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
 
         let urlPath = `/1/admin/config/{name}`;
-        urlPath = urlPath.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name'])));
+        urlPath = urlPath.replace('{name}', encodeURIComponent(String(requestParameters['name'])));
 
         return {
             path: urlPath,
@@ -712,7 +735,7 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
 
         let urlPath = `/1/admin/users/{userId}/deactivate`;
-        urlPath = urlPath.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId'])));
+        urlPath = urlPath.replace('{userId}', encodeURIComponent(String(requestParameters['userId'])));
 
         return {
             path: urlPath,
@@ -756,7 +779,7 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
 
         let urlPath = `/1/admin/users/{userId}`;
-        urlPath = urlPath.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId'])));
+        urlPath = urlPath.replace('{userId}', encodeURIComponent(String(requestParameters['userId'])));
 
         return {
             path: urlPath,
@@ -1007,7 +1030,7 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
 
         let urlPath = `/1/admin/users/{userId}`;
-        urlPath = urlPath.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId'])));
+        urlPath = urlPath.replace('{userId}', encodeURIComponent(String(requestParameters['userId'])));
 
         return {
             path: urlPath,
@@ -1052,7 +1075,7 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
 
         let urlPath = `/1/admin/users/{userId}/reactivate`;
-        urlPath = urlPath.replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId'])));
+        urlPath = urlPath.replace('{userId}', encodeURIComponent(String(requestParameters['userId'])));
 
         return {
             path: urlPath,
@@ -1096,7 +1119,7 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
 
         let urlPath = `/1/admin/blacklist/emailProviders/{id}`;
-        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+        urlPath = urlPath.replace('{id}', encodeURIComponent(String(requestParameters['id'])));
 
         return {
             path: urlPath,
@@ -1138,7 +1161,7 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
 
         let urlPath = `/1/admin/blacklist/usernames/{id}`;
-        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+        urlPath = urlPath.replace('{id}', encodeURIComponent(String(requestParameters['id'])));
 
         return {
             path: urlPath,
@@ -1180,7 +1203,7 @@ export class AdminApi extends runtime.BaseAPI implements AdminApiInterface {
 
 
         let urlPath = `/1/admin/webhooks/{id}`;
-        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+        urlPath = urlPath.replace('{id}', encodeURIComponent(String(requestParameters['id'])));
 
         return {
             path: urlPath,

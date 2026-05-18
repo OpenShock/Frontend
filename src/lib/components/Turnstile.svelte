@@ -20,27 +20,10 @@
   let element: HTMLDivElement;
 
   let mounted = $state<boolean>(false);
-  let widgetId = $state<string | undefined>();
+  let widgetId: string | undefined;
 
   function invalidateResponse() {
     onResponse(null);
-  }
-
-  function renderTurnstile() {
-    mounted = true;
-
-    const theme = colorScheme.value === ColorScheme.System ? 'auto' : colorScheme.value;
-
-    widgetId = window.turnstile!.render(element, {
-      sitekey: backendMetadata.state!.turnstileSiteKey!,
-      action,
-      cData,
-      theme,
-      callback: onResponse,
-      'expired-callback': invalidateResponse,
-      'timeout-callback': invalidateResponse,
-      'error-callback': invalidateResponse,
-    });
   }
 
   onMount(() => {
@@ -48,7 +31,10 @@
       onResponse(PUBLIC_TURNSTILE_DEV_BYPASS_VALUE);
       return;
     }
-    if (!backendMetadata.state?.turnstileSiteKey) {
+
+    let cancelled = false;
+    const siteKey = backendMetadata.state?.turnstileSiteKey;
+    if (!siteKey) {
       console.error('Backend did not provide a Turnstile site key!');
       return;
     }
@@ -62,9 +48,24 @@
       return;
     }
 
-    window.turnstile.ready(renderTurnstile);
+    window.turnstile.ready(() => {
+      if (cancelled) return;
+      mounted = true;
+      const theme = colorScheme.value === ColorScheme.System ? 'auto' : colorScheme.value;
+      widgetId = window.turnstile!.render(element, {
+        sitekey: siteKey,
+        action,
+        cData,
+        theme,
+        callback: onResponse,
+        'expired-callback': invalidateResponse,
+        'timeout-callback': invalidateResponse,
+        'error-callback': invalidateResponse,
+      });
+    });
 
     return () => {
+      cancelled = true;
       if (widgetId) window.turnstile?.remove(widgetId);
     };
   });

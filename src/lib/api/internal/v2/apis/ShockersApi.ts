@@ -12,21 +12,22 @@
  * Do not edit the class manually.
  */
 
-
 import * as runtime from '../runtime';
-import type {
-  ControlRequest,
-  LegacyEmptyResponse,
-  OpenShockProblem,
-} from '../models/index';
 import {
+    type ControlRequest,
     ControlRequestFromJSON,
     ControlRequestToJSON,
+} from '../models/ControlRequest';
+import {
+    type LegacyEmptyResponse,
     LegacyEmptyResponseFromJSON,
     LegacyEmptyResponseToJSON,
+} from '../models/LegacyEmptyResponse';
+import {
+    type OpenShockProblem,
     OpenShockProblemFromJSON,
     OpenShockProblemToJSON,
-} from '../models/index';
+} from '../models/OpenShockProblem';
 
 export interface ShockerSendControlRequest {
     controlRequest?: ControlRequest;

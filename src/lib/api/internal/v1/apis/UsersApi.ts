@@ -12,21 +12,22 @@
  * Do not edit the class manually.
  */
 
-
 import * as runtime from '../runtime';
-import type {
-  BasicUserInfo,
-  OpenShockProblem,
-  UserSelfResponseLegacyDataResponse,
-} from '../models/index';
 import {
+    type BasicUserInfo,
     BasicUserInfoFromJSON,
     BasicUserInfoToJSON,
+} from '../models/BasicUserInfo';
+import {
+    type OpenShockProblem,
     OpenShockProblemFromJSON,
     OpenShockProblemToJSON,
+} from '../models/OpenShockProblem';
+import {
+    type UserSelfResponseLegacyDataResponse,
     UserSelfResponseLegacyDataResponseFromJSON,
     UserSelfResponseLegacyDataResponseToJSON,
-} from '../models/index';
+} from '../models/UserSelfResponseLegacyDataResponse';
 
 export interface UsersGetByNameRequest {
     username: string;
@@ -94,7 +95,7 @@ export class UsersApi extends runtime.BaseAPI implements UsersApiInterface {
 
 
         let urlPath = `/1/users/by-name/{username}`;
-        urlPath = urlPath.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters['username'])));
+        urlPath = urlPath.replace('{username}', encodeURIComponent(String(requestParameters['username'])));
 
         return {
             path: urlPath,

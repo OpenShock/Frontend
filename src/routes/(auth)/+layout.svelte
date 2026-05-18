@@ -1,7 +1,7 @@
 <script lang="ts">
   import { asset } from '$app/paths';
   import Container from '$lib/components/Container.svelte';
-  import { userState } from '$lib/state/user-state.svelte';
+  import { AuthStatus, authState } from '$lib/state/auth-state.svelte';
   import { gotoQueryRedirectOrFallback, sanitizeRedirectSearchParam } from '$lib/utils/url';
   import { onMount, type Snippet } from 'svelte';
   import { toast } from 'svelte-sonner';
@@ -15,7 +15,7 @@
   });
 
   $effect(() => {
-    if (!userState.loading && userState.self) {
+    if (authState.status === AuthStatus.Authenticated) {
       void gotoQueryRedirectOrFallback('/home');
     }
   });

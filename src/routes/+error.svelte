@@ -9,7 +9,7 @@
   let previousPath = $state<string>(resolve('/'));
 
   afterNavigate(({ from }) => {
-    if (from !== null && isValidRedirectURL(from.url)) {
+    if (from?.url != null && isValidRedirectURL(from.url)) {
       previousPath = from.url.pathname;
     }
   });

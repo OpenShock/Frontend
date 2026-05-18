@@ -1,7 +1,10 @@
 <script lang="ts">
   import type { ColumnDef, SortingState } from '@tanstack/table-core';
-  import type { LogEntry } from '$lib/api/internal/v1';
+  import { shockersV1Api } from '$lib/api';
+  import type { LogEntry, ShockerResponse } from '$lib/api/internal/v1';
   import Container from '$lib/components/Container.svelte';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { page } from '$app/state';
   import {
     CreateSortableColumnDef,
     LocaleDateTimeRenderer,
@@ -17,9 +20,37 @@
     { label: 'Details' },
   ]);
 
-  let { data } = $props();
-
+  let logs = $state<LogEntry[]>([]);
+  let shocker = $state<ShockerResponse | undefined>(undefined);
   let sorting = $state<SortingState>([{ id: 'createdOn', desc: true }]);
+
+  $effect(() => {
+    const shockerId = page.params.shockerId;
+    if (!shockerId) return;
+
+    let cancelled = false;
+    logs = [];
+    shocker = undefined;
+
+    (async () => {
+      try {
+        const [logsRes, shockerRes] = await Promise.all([
+          shockersV1Api.shockerGetShockerLogs(shockerId),
+          shockersV1Api.shockerGetShockerById(shockerId),
+        ]);
+        if (cancelled) return;
+        logs = logsRes.data ?? [];
+        shocker = shockerRes.data;
+      } catch (error) {
+        if (cancelled) return;
+        await handleApiError(error);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  });
 
   const columns: ColumnDef<LogEntry>[] = [
     CreateSortableColumnDef('createdOn', 'Time', LocaleDateTimeRenderer),
@@ -38,10 +69,10 @@
       </div>
     </Card.Title>
     <Card.Description>
-      These are the logs for {data.shocker?.name}.
+      These are the logs for {shocker?.name}.
     </Card.Description>
   </Card.Header>
   <div class="grid w-full gap-6 p-6">
-    <DataTable data={data.logs} {columns} bind:sorting />
+    <DataTable data={logs} {columns} bind:sorting />
   </div>
 </Container>

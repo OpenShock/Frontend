@@ -12,18 +12,17 @@
  * Do not edit the class manually.
  */
 
-
 import * as runtime from '../runtime';
-import type {
-  LcgNodeResponseV2,
-  OpenShockProblem,
-} from '../models/index';
 import {
+    type LcgNodeResponseV2,
     LcgNodeResponseV2FromJSON,
     LcgNodeResponseV2ToJSON,
+} from '../models/LcgNodeResponseV2';
+import {
+    type OpenShockProblem,
     OpenShockProblemFromJSON,
     OpenShockProblemToJSON,
-} from '../models/index';
+} from '../models/OpenShockProblem';
 
 export interface DeviceGetLiveControlGatewayV2Request {
     version?: number;
