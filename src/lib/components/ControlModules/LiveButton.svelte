@@ -62,7 +62,9 @@
             Connect to Live Control
           {/if}
         </span>
-        <span class="text-muted-foreground">Ctrl+click for whole hub</span>
+        <span class="text-muted-foreground">
+          Ctrl+click to {isLive ? 'stop' : 'start'} the whole hub
+        </span>
       </div>
     </Tooltip.Content>
   </Tooltip.Root>

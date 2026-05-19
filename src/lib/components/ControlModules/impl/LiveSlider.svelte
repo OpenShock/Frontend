@@ -61,7 +61,8 @@
     ctx.clearRect(0, 0, w, h);
     if (samples.length < 2) return;
 
-    const SUBSTEPS = 1;
+    strokeColor = getComputedStyle(canvas).color || strokeColor;
+
     const toX = (t: number) => w - ((now - t) / WINDOW_MS) * w;
     const toY = (v: number) => h - (Math.min(v, maxIntensity) / maxIntensity) * h;
 
@@ -69,17 +70,8 @@
     const first = samples[0];
     ctx.moveTo(toX(first.t), toY(first.v));
     for (let i = 1; i < samples.length; i++) {
-      const a = samples[i - 1];
-      const b = samples[i];
-      const ax = toX(a.t);
-      const bx = toX(b.t);
-      const ay = toY(a.v);
-      const by = toY(b.v);
-      for (let s = 1; s <= SUBSTEPS; s++) {
-        const t = s / SUBSTEPS;
-        const e = t * t * (3 - 2 * t);
-        ctx.lineTo(ax + (bx - ax) * t, ay + (by - ay) * e);
-      }
+      const s = samples[i];
+      ctx.lineTo(toX(s.t), toY(s.v));
     }
 
     const gradient = ctx.createLinearGradient(0, 0, w, 0);
@@ -106,8 +98,8 @@
   }
 
   onMount(() => {
-    const styles = getComputedStyle(canvas!);
-    strokeColor = styles.color || strokeColor;
+    strokeColor = getComputedStyle(canvas!).color || strokeColor;
+    smoothed = liveState.intensity;
     pushSample(performance.now());
     rafId = requestAnimationFrame(draw);
   });
