@@ -21,13 +21,16 @@
 
   let isLive = $derived(liveState?.isLive ?? false);
   let isPaused = $derived(liveState?.isPaused ?? false);
+  let hubIsLive = $derived(
+    connection ? [...connection.shockers.values()].some((s) => s.isLive) : false
+  );
   let isActive = $derived(isLive && connection?.state === LiveConnectionState.Connected);
   let isConnecting = $derived(isLive && connection?.state === LiveConnectionState.Connecting);
   let isDisabled = $derived(isPaused && !isLive);
 
   function onClick(event: MouseEvent) {
     if (event.ctrlKey || event.metaKey) {
-      setHubLiveControl(hubId, !isLive);
+      setHubLiveControl(hubId, !hubIsLive);
     } else {
       toggleShockerLiveControl(hubId, shockerId);
     }
@@ -63,7 +66,7 @@
           {/if}
         </span>
         <span class="text-muted-foreground">
-          Ctrl+click to {isLive ? 'stop' : 'start'} the whole hub
+          Ctrl+click to {hubIsLive ? 'stop' : 'start'} the whole hub
         </span>
       </div>
     </Tooltip.Content>
