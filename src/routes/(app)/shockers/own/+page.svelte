@@ -1,8 +1,8 @@
 <script lang="ts">
+  import { shockerPauseShocker, shockerRegisterShocker } from '$lib/api';
+  import type { NewShocker } from '$lib/api';
   import { Layers, LoaderCircle, LogsIcon, Plus, RotateCcw, Settings, Zap } from '@lucide/svelte';
   import { resolve } from '$app/paths';
-  import { shockersV1Api } from '$lib/api';
-  import type { NewShocker } from '$lib/api/internal/v1';
   import Container from '$lib/components/Container.svelte';
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import DialogShockerAdd, {
@@ -114,7 +114,7 @@
     }));
     if (!result) return;
     try {
-      await shockersV1Api.shockerRegisterShocker(result);
+      await shockerRegisterShocker({ body: result });
       toast.success('Shocker added');
       await refreshOwnHubs();
     } catch (error) {
@@ -129,11 +129,11 @@
     if (conn) serializeControlMessages(conn, [{ id, type, intensity, duration }]);
   }
 
-  async function ownResume(id: string) {
-    const result = await shockersV1Api.shockerPauseShocker(id, { pause: false });
+  async function ownResume(shockerId: string) {
+    const result = await shockerPauseShocker({ path: { shockerId }, body: { pause: false } });
     // Update the shocker's isPaused state
     for (const hub of ownHubs.values()) {
-      const shocker = hub.shockers.find((s) => s.id === id);
+      const shocker = hub.shockers.find((s) => s.id === shockerId);
       if (shocker) {
         shocker.isPaused = result.data;
         break;
@@ -143,7 +143,7 @@
 </script>
 
 {#snippet shockerCard(
-  shocker: import('$lib/api/internal/v1').ShockerResponse,
+  shocker: import('$lib/api').ShockerResponse,
   hubId: string,
   showHubBadge: boolean
 )}

@@ -1,7 +1,7 @@
 <script lang="ts">
+  import { shareLinksPauseShocker, shareLinksRemoveShocker } from '$lib/api';
+  import type { PublicShareShocker, ShockerPermissions } from '$lib/api';
   import { Pause, Play, Trash2 } from '@lucide/svelte';
-  import { publicShockerSharesApi } from '$lib/api';
-  import type { PublicShareShocker, ShockerPermissions } from '$lib/api/internal/v1';
   import { Button } from '$lib/components/ui/button';
   import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '$lib/components/ui/card';
   import { Label } from '$lib/components/ui/label';
@@ -31,8 +31,9 @@
 
     try {
       const newPauseState = !isPausedByPublicShare;
-      const response = await publicShockerSharesApi.shareLinksPauseShocker(shareId, shocker.id, {
-        pause: newPauseState,
+      const response = await shareLinksPauseShocker({
+        path: { publicShareId: shareId, shockerId: shocker.id },
+        body: { pause: newPauseState },
       });
 
       if (response.data !== undefined) {
@@ -74,7 +75,7 @@
     isRemoving = true;
 
     try {
-      await publicShockerSharesApi.shareLinksRemoveShocker(shareId, shocker.id);
+      await shareLinksRemoveShocker({ path: { publicShareId: shareId, shockerId: shocker.id } });
       toast.success('Shocker removed from share');
       onRemoved?.(shocker.id);
     } catch (error) {

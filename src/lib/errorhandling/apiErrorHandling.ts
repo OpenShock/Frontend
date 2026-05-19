@@ -1,12 +1,6 @@
 import { dev } from '$app/environment';
 import { type ProblemDetails, isProblemDetails } from '$lib/errorhandling/ProblemDetails';
-import {
-  isError,
-  isFetchError,
-  isRequiredError,
-  isResponseError,
-  isTypeError,
-} from '$lib/typeguards/errorGuards';
+import { isError, isFetchError, isResponseError, isTypeError } from '$lib/typeguards/errorGuards';
 import { toast } from 'svelte-sonner';
 import { isValidationError as isValidationProblem } from './ValidationProblemDetails';
 
@@ -106,19 +100,7 @@ export async function handleApiError(
     return;
   }
 
-  if (isRequiredError(error)) {
-    // group it so you can collapse/expand in the dev console
-    console.groupCollapsed(
-      '%cRequiredError ⚠️ Missing parameter',
-      'color: orange; font-weight: bold;'
-    );
-    console.log('%cParameter:', 'font-weight: bold;', error.field);
-    console.log('%cMessage:  ', 'font-style: italic;', error.message);
-    console.trace(); // show stack trace so you know exactly where it bubbled up
-    console.groupEnd();
-  } else {
-    console.error(`Got ${error.name}`, error);
-  }
+  console.error(`Got ${error.name}`, error);
 
   toast.error('Internal error occured');
 }

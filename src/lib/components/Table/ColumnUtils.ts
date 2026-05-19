@@ -1,11 +1,9 @@
 import { renderComponent } from '$lib/components/ui/data-table';
-import { isDate } from '$lib/typeguards';
 import {
   durationBetween,
   formatDuration,
   formatElapsed,
   getReadableUserAgentName,
-  instantFromDate,
 } from '$lib/utils';
 import type {
   BuiltInSortingFn,
@@ -139,31 +137,27 @@ export const RenderCellWithTooltip = (content: string, tooltip: string): CellCon
   title: tooltip,
 });
 
-export function LocaleDateRenderer(date: Date): CellContentProps {
-  const instant = instantFromDate(date);
+export function LocaleDateRenderer(instant: Temporal.Instant): CellContentProps {
   return RenderCellWithTooltip(
     instant.toLocaleString(undefined, { dateStyle: 'short' }),
     instant.toString()
   );
 }
 
-export function LocaleDateTimeRenderer(date: Date | null): CellContentProps {
-  if (!date) return RenderCell('Never');
-  const instant = instantFromDate(date);
+export function LocaleDateTimeRenderer(instant: Temporal.Instant | null): CellContentProps {
+  if (!instant) return RenderCell('Never');
   return RenderCellWithTooltip(instant.toLocaleString(), instant.toString());
 }
 
-export function TimeSinceDurationRenderer(date: Date): CellContentProps {
-  const instant = instantFromDate(date);
+export function TimeSinceDurationRenderer(instant: Temporal.Instant): CellContentProps {
   return RenderCellWithTooltip(
     formatDuration(durationBetween(instant, Temporal.Now.instant())),
     instant.toString()
   );
 }
 
-export function TimeSinceRelativeRenderer(date: Date): CellContentProps {
-  if (date.getTime() <= 0) return CellOrangeNever;
-  const instant = instantFromDate(date);
+export function TimeSinceRelativeRenderer(instant: Temporal.Instant): CellContentProps {
+  if (instant.epochMilliseconds <= 0) return CellOrangeNever;
   return RenderCellWithTooltip(
     formatElapsed(durationBetween(Temporal.Now.instant(), instant)),
     instant.toString()
@@ -171,8 +165,9 @@ export function TimeSinceRelativeRenderer(date: Date): CellContentProps {
 }
 
 export const TimeSinceRelativeOrNeverRenderer = (
-  date: Date | null | undefined
-): CellContentProps => (isDate(date) ? TimeSinceRelativeRenderer(date) : CellOrangeNever); // The isDate check is a workaround, for some reason if the input data is undefined, it will be transformed to a empty object and throws an error when trying to access getTime().
+  instant: Temporal.Instant | null | undefined
+): CellContentProps =>
+  instant instanceof Temporal.Instant ? TimeSinceRelativeRenderer(instant) : CellOrangeNever;
 
 export const NumberRenderer = (number: number | null): CellContentProps =>
   number ? RenderBoldCell(number.toString()) : CellNotApplicable;

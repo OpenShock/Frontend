@@ -1,9 +1,14 @@
 <script lang="ts">
+  import {
+    ShockerModelType,
+    shockerEditShocker,
+    shockerGetShockerById,
+    shockerRemoveShocker,
+  } from '$lib/api';
+  import type { ShockerWithDevice } from '$lib/api';
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
-  import { shockersV1Api } from '$lib/api';
-  import { ShockerModelType, type ShockerWithDevice } from '$lib/api/internal/v1';
   import Container from '$lib/components/Container.svelte';
   import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
@@ -40,7 +45,7 @@
   onMount(async () => {
     try {
       const shockerId = page.params.shockerId!;
-      const response = await shockersV1Api.shockerGetShockerById(shockerId);
+      const response = await shockerGetShockerById({ path: { shockerId } });
       shocker = response.data;
       name = shocker.name;
       rfId = shocker.rfId;
@@ -55,11 +60,14 @@
     if (!shocker || !name.trim()) return;
     saving = true;
     try {
-      await shockersV1Api.shockerEditShocker(shocker.id, {
-        name: name.trim(),
-        rfId,
-        model,
-        device: shocker.device,
+      await shockerEditShocker({
+        path: { shockerId: shocker.id },
+        body: {
+          name: name.trim(),
+          rfId,
+          model,
+          device: shocker.device,
+        },
       });
       shocker.name = name.trim();
       shocker.rfId = rfId;
@@ -82,7 +90,7 @@
     });
     if (!result.confirmed) return;
     try {
-      await shockersV1Api.shockerRemoveShocker(shocker.id);
+      await shockerRemoveShocker({ path: { shockerId: shocker.id } });
       toast.success(`Shocker "${shocker.name}" deleted`);
       await refreshOwnHubs();
       goto(resolve('/shockers/own'));

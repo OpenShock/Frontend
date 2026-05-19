@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { apiTokensApi } from '$lib/api';
-  import { PermissionType, type TokenResponse } from '$lib/api/internal/v1';
+  import { PermissionType, tokensEditToken } from '$lib/api';
+  import type { TokenResponse } from '$lib/api';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
@@ -23,7 +23,7 @@
 
   async function saveChanges() {
     try {
-      await apiTokensApi.tokensEditToken(token.id, { name, permissions });
+      await tokensEditToken({ path: { tokenId: token.id }, body: { name, permissions } });
       onEdit(token.id, (token) => {
         return {
           ...token,

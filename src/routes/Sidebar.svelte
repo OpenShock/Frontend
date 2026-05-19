@@ -19,7 +19,7 @@
   import { asset, resolve } from '$app/paths';
   import { page } from '$app/state';
   import type { Pathname } from '$app/types';
-  import { RoleType } from '$lib/api/internal/v1';
+  import { RoleType } from '$lib/api';
   import {
     Content,
     Footer,

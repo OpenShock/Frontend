@@ -1,7 +1,7 @@
 <script lang="ts">
+  import { shockerGetAllShockerLogs } from '$lib/api';
   import type { ColumnDef, SortingState } from '@tanstack/table-core';
-  import { shockersV1Api } from '$lib/api';
-  import type { LogEntryWithHub } from '$lib/api/internal/v1/index.js';
+  import type { LogEntryWithHub } from '$lib/api';
   import Container from '$lib/components/Container.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
@@ -22,7 +22,7 @@
 
   onMount(async () => {
     try {
-      const res = await shockersV1Api.shockerGetAllShockerLogs();
+      const res = await shockerGetAllShockerLogs();
       logs = res.logs ?? [];
     } catch (error) {
       await handleApiError(error);

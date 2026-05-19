@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { adminApi } from '$lib/api';
+  import { adminAddWebhook } from '$lib/api';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import { Button } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
@@ -48,8 +48,7 @@
   let valid = $derived(name.length > 0 && url.length > 0 && urlValidationResult.valid);
 
   function createWebhook() {
-    adminApi
-      .adminAddWebhook({ name, url })
+    adminAddWebhook({ body: { name, url } })
       .then(() => {
         onAdded();
         toast.success('Created webhook');

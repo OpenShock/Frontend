@@ -1,11 +1,11 @@
 <script lang="ts">
+  import { accountSignUpV2 } from '$lib/api';
   import { Button } from '$lib/components/ui/button/index.js';
   import * as Card from '$lib/components/ui/card/index.js';
   import * as Field from '$lib/components/ui/field/index.js';
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import { accountV2Api } from '$lib/api';
   import Turnstile from '$lib/components/Turnstile.svelte';
   import EmailInput from '$lib/components/input/EmailInput.svelte';
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
@@ -62,11 +62,8 @@
     }
 
     try {
-      await accountV2Api.accountSignUpV2({
-        username,
-        password,
-        email,
-        turnstileResponse,
+      await accountSignUpV2({
+        body: { username, password, email, turnstileResponse },
       });
       accountCreated = true;
     } catch (error) {

@@ -1,7 +1,7 @@
 <script lang="ts">
+  import { userSharesDeleteOutgoingInvite } from '$lib/api';
+  import type { ShareInviteBaseDetails } from '$lib/api';
   import { Key, X, Zap } from '@lucide/svelte';
-  import { shockerSharesV2Api } from '$lib/api';
-  import type { ShareInviteBaseDetails } from '$lib/api/internal/v2';
   import PermissionTooltip from '$lib/components/shares/permission-tooltip.svelte';
   import * as Avatar from '$lib/components/ui/avatar';
   import { Badge } from '$lib/components/ui/badge';
@@ -25,7 +25,7 @@
 
   async function removeInviteCall(invite: ShareInviteBaseDetails) {
     try {
-      await shockerSharesV2Api.userSharesDeleteOutgoingInvite(shareInvite.id);
+      await userSharesDeleteOutgoingInvite({ path: { inviteId: shareInvite.id } });
       if (invite.sharedWith) {
         toast.success(`Cancelled invite for ${invite.sharedWith.name} (${invite.id})`);
       } else {

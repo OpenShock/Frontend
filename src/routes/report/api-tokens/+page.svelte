@@ -1,4 +1,5 @@
 <script lang="ts" module>
+  import { tokensReportTokens } from '$lib/api';
   function isValid(str: string): boolean {
     return /^[0-9a-zA-Z]{32,64}$/i.test(str);
   }
@@ -8,7 +9,6 @@
   import OctagonAlert from '@lucide/svelte/icons/octagon-alert';
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import { apiTokensApi } from '$lib/api';
   import Container from '$lib/components/Container.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
   import { Button } from '$lib/components/ui/button';
@@ -34,7 +34,7 @@
     if (!canSubmit || !turnstileResponse) return;
 
     try {
-      await apiTokensApi.tokensReportTokens({ turnstileResponse, secrets });
+      await tokensReportTokens({ body: { turnstileResponse, secrets } });
       goto(resolve('/login'));
     } catch (err) {
       await handleApiError(err);

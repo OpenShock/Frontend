@@ -1,7 +1,7 @@
 <script lang="ts">
+  import { shockerGetShockerById, shockerGetShockerLogs } from '$lib/api';
+  import type { LogEntry, ShockerResponse } from '$lib/api';
   import type { ColumnDef, SortingState } from '@tanstack/table-core';
-  import { shockersV1Api } from '$lib/api';
-  import type { LogEntry, ShockerResponse } from '$lib/api/internal/v1';
   import Container from '$lib/components/Container.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { page } from '$app/state';
@@ -35,8 +35,8 @@
     (async () => {
       try {
         const [logsRes, shockerRes] = await Promise.all([
-          shockersV1Api.shockerGetShockerLogs(shockerId),
-          shockersV1Api.shockerGetShockerById(shockerId),
+          shockerGetShockerLogs({ path: { shockerId } }),
+          shockerGetShockerById({ path: { shockerId } }),
         ]);
         if (cancelled) return;
         logs = logsRes.data ?? [];

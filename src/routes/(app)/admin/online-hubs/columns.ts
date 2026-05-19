@@ -1,4 +1,4 @@
-import type { AdminOnlineDeviceResponse } from '$lib/api/internal/v1';
+import type { AdminOnlineDeviceResponse } from '$lib/api';
 import {
   CreateActionsColumnDef,
   CreateColumnDef,

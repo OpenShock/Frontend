@@ -1,5 +1,6 @@
 <script lang="ts" module>
-  import { OtaUpdateStatus } from '$lib/api/internal/v1';
+  import { OtaUpdateStatus, devicesOtaGetOtaUpdateHistory } from '$lib/api';
+  import type { OtaItem } from '$lib/api';
   import { OtaUpdateProgressTask } from '$lib/signalr/models/OtaUpdateProgressTask';
 
   // Task weights for weighted total progress (7 tasks, sums to 100)
@@ -37,9 +38,9 @@
     }
   }
 
-  function formatRelativeTime(date: Date): string {
+  function formatRelativeTime(instant: Temporal.Instant): string {
     const tz = Temporal.Now.timeZoneId();
-    const elapsed = Temporal.Instant.fromEpochMilliseconds(date.getTime())
+    const elapsed = instant
       .toZonedDateTimeISO(tz)
       .until(Temporal.Now.zonedDateTimeISO(tz), { largestUnit: 'day' });
 
@@ -57,8 +58,6 @@
 <script lang="ts">
   import { CircleCheck, CircleX, CloudDownload, RotateCcw, TriangleAlert } from '@lucide/svelte';
   import { page } from '$app/state';
-  import { hubManagementV1Api } from '$lib/api';
-  import type { OtaItem } from '$lib/api/internal/v1';
   import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
   import { Badge } from '$lib/components/ui/badge';
   import Button from '$lib/components/ui/button/button.svelte';
@@ -178,8 +177,7 @@
     }
 
     isLoading = true;
-    hubManagementV1Api
-      .devicesOtaGetOtaUpdateHistory(hubId)
+    devicesOtaGetOtaUpdateHistory({ path: { deviceId: hubId } })
       .then((resp) => {
         if (resp.data === null) {
           hubLoaded = false;

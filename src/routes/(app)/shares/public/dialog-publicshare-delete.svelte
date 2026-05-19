@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { publicShockerSharesApi } from '$lib/api';
-  import type { OwnPublicShareResponse } from '$lib/api/internal/v1';
+  import { shareLinksDeletePublicShare } from '$lib/api';
+  import type { OwnPublicShareResponse } from '$lib/api';
   import ConfirmDeleteDialog from '$lib/components/ConfirmDeleteDialog.svelte';
   import { toast } from 'svelte-sonner';
 
@@ -13,8 +13,7 @@
   let { open = $bindable<boolean>(), publicShare, onDeleted }: Props = $props();
 
   function deleteShareLink() {
-    publicShockerSharesApi
-      .shareLinksDeletePublicShare(publicShare.id)
+    shareLinksDeletePublicShare({ path: { publicShareId: publicShare.id } })
       .then(() => {
         onDeleted();
         toast.success('Deleted publicShare successfully');

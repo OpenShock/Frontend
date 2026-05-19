@@ -3,21 +3,24 @@
   import DateTimePicker from '$lib/components/datetime-picker/date-time-picker.svelte';
   import * as Select from '$lib/components/ui/select';
   import { GetValResColor } from '$lib/types/ValidationResult';
-  import { durationBetween, formatElapsed, instantFromDate } from '$lib/utils';
+  import { durationBetween, formatElapsed } from '$lib/utils';
 
   interface Props {
     option?: string;
-    customDate?: ZonedDateTime | undefined;
     instant?: Temporal.Instant | null;
   }
 
-  let {
-    option = $bindable('never'),
-    customDate = $bindable<ZonedDateTime | undefined>(undefined),
-    instant = $bindable<Temporal.Instant | null>(null),
-  }: Props = $props();
+  let { option = $bindable('never'), instant = $bindable<Temporal.Instant | null>(null) }: Props =
+    $props();
 
   const inDays = (days: number) => () => Temporal.Now.instant().add({ hours: days * 24 });
+
+  let customDate = $state<ZonedDateTime | undefined>(undefined);
+  let customInstant = $derived<Temporal.Instant | null>(
+    customDate !== undefined
+      ? Temporal.Instant.fromEpochMilliseconds(customDate.toDate().getTime())
+      : null
+  );
 
   const expirationOptions: {
     value: string;
@@ -25,11 +28,7 @@
     getInstant: () => Temporal.Instant | null;
   }[] = [
     { value: 'never', label: 'Never', getInstant: () => null },
-    {
-      value: 'custom',
-      label: 'Custom',
-      getInstant: () => (customDate !== undefined ? instantFromDate(customDate.toDate()) : null),
-    },
+    { value: 'custom', label: 'Custom', getInstant: () => customInstant },
     { value: '1days', label: '1 Day', getInstant: inDays(1) },
     { value: '7days', label: '7 Days', getInstant: inDays(7) },
     { value: '30days', label: '30 Days', getInstant: inDays(30) },
@@ -39,13 +38,12 @@
   ];
 
   let selectedExpiration = $derived(expirationOptions.find((o) => o.value === option));
-  let _instant = $derived(selectedExpiration?.getInstant() ?? null);
   $effect(() => {
-    instant = _instant;
+    instant = selectedExpiration?.getInstant() ?? null;
   });
 
   let validationResult = $derived(
-    option === 'custom' && !customDate
+    option === 'custom' && !customInstant
       ? { valid: false, message: 'Expire date is required' }
       : { valid: true }
   );

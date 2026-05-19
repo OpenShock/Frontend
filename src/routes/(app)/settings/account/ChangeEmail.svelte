@@ -1,6 +1,6 @@
 <script lang="ts">
+  import { authenticatedAccountChangeEmail } from '$lib/api';
   import Mail from '@lucide/svelte/icons/mail';
-  import { accountV1Api } from '$lib/api';
   import EmailInput from '$lib/components/input/EmailInput.svelte';
   import { Button } from '$lib/components/ui/button';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
@@ -25,7 +25,7 @@
     loading = true;
 
     try {
-      await accountV1Api.authenticatedAccountChangeEmail({ email });
+      await authenticatedAccountChangeEmail({ body: { email } });
 
       toast.success('Email changed successfully');
 

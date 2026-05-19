@@ -1,4 +1,4 @@
-import { metaApi } from '$lib/api';
+import { versionGetBackendInfo } from '$lib/api';
 import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 import { authState, startAuthLifecycle } from '$lib/state/auth-state.svelte';
 import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
@@ -12,7 +12,7 @@ async function ensureTemporal(): Promise<void> {
 }
 
 async function clientInit(): Promise<void> {
-  const { data } = await metaApi.versionGetBackendInfo();
+  const { data } = await versionGetBackendInfo();
   backendMetadata.set(data);
 
   if (data.isUserAuthenticated) {

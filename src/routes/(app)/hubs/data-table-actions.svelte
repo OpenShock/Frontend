@@ -1,6 +1,11 @@
 <script lang="ts">
+  import {
+    devicesEditDevice,
+    devicesGetPairCode,
+    devicesRegenerateDeviceToken,
+    devicesRemoveDevice,
+  } from '$lib/api';
   import { goto } from '$app/navigation';
-  import { hubManagementV1Api } from '$lib/api';
   import CopyInput from '$lib/components/CopyInput.svelte';
   import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
   import type { DialogRenderProps } from '$lib/components/dialog-manager/types';
@@ -30,7 +35,7 @@
 
   async function editHub(name: string, close: () => void) {
     try {
-      await hubManagementV1Api.devicesEditDevice(hub.id, { name });
+      await devicesEditDevice({ path: { deviceId: hub.id }, body: { name } });
       await refreshOwnHubs();
       close();
     } catch (error) {
@@ -54,7 +59,7 @@
     });
     if (!result.confirmed) return;
     try {
-      await hubManagementV1Api.devicesRemoveDevice(hub.id);
+      await devicesRemoveDevice({ path: { deviceId: hub.id } });
       await refreshOwnHubs();
     } catch (error) {
       handleApiError(error);
@@ -78,7 +83,7 @@
   async function generatePairCode(data: { loading: boolean; code: string | null }) {
     data.loading = true;
     try {
-      const resp = await hubManagementV1Api.devicesGetPairCode(hub.id);
+      const resp = await devicesGetPairCode({ path: { deviceId: hub.id } });
       data.code = resp.data;
     } catch (error) {
       handleApiError(error);
@@ -90,7 +95,7 @@
   async function regenerateToken(data: { loading: boolean; token: string | null }) {
     data.loading = true;
     try {
-      data.token = await hubManagementV1Api.devicesRegenerateDeviceToken(hub.id);
+      data.token = await devicesRegenerateDeviceToken({ path: { deviceId: hub.id } });
     } catch (error) {
       handleApiError(error);
     } finally {

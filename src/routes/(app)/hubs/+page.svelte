@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { devicesCreateDeviceV2 } from '$lib/api';
   import { Plus, Router } from '@lucide/svelte';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
   import Button from '$lib/components/ui/button/button.svelte';
@@ -11,9 +12,8 @@
   import DataTableActions from './data-table-actions.svelte';
   import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
   import type { DialogRenderProps } from '$lib/components/dialog-manager/types';
-  import { hubManagementV2Api } from '$lib/api';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { instantFromDate } from '$lib/utils';
+
   import * as Dialog from '$lib/components/ui/dialog';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import PageHeader from '$lib/components/PageHeader.svelte';
@@ -38,10 +38,10 @@
               model: shocker.model,
               name: shocker.name,
               is_paused: shocker.isPaused,
-              created_at: instantFromDate(shocker.createdOn),
+              created_at: shocker.createdOn,
             };
           }),
-          created_at: instantFromDate(hub.createdOn),
+          created_at: hub.createdOn,
         };
       })
       .toArray();
@@ -54,7 +54,7 @@
     });
     if (!result) return;
     try {
-      await hubManagementV2Api.devicesCreateDeviceV2({ name: result.name });
+      await devicesCreateDeviceV2({ body: { name: result.name } });
       await refreshOwnHubs();
     } catch (error) {
       handleApiError(error);

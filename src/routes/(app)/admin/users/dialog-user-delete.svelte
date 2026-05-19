@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { AdminUsersView } from '$lib/api/internal/v1';
+  import type { AdminUsersView } from '$lib/api';
   import ConfirmDeleteDialog from '$lib/components/ConfirmDeleteDialog.svelte';
 
   interface Props {

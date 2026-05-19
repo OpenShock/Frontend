@@ -1,6 +1,6 @@
 <script lang="ts">
+  import { authenticatedAccountChangeUsername } from '$lib/api';
   import User from '@lucide/svelte/icons/user';
-  import { accountV1Api } from '$lib/api';
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
   import { Button } from '$lib/components/ui/button';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
@@ -25,7 +25,7 @@
     loading = true;
 
     try {
-      await accountV1Api.authenticatedAccountChangeUsername({ username });
+      await authenticatedAccountChangeUsername({ body: { username } });
 
       toast.success('Username changed successfully');
 

@@ -1,7 +1,7 @@
 import { browser } from '$app/environment';
 import { goto } from '$app/navigation';
 import { resolve } from '$app/paths';
-import { accountV1Api } from '$lib/api';
+import { accountLogout } from '$lib/api';
 import { userState } from '$lib/state/user-state.svelte';
 
 export const prerender = false;
@@ -11,7 +11,7 @@ export async function load() {
 
   // Clear cookie and server state
   try {
-    await accountV1Api.accountLogout();
+    await accountLogout();
   } catch (error) {
     console.error(error);
   }

@@ -1,6 +1,6 @@
 <script lang="ts" module>
-  import type { ZonedDateTime } from '@internationalized/date';
-  import { PermissionType } from '$lib/api/internal/v1';
+  import { PermissionType, tokensCreateToken } from '$lib/api';
+  import type { TokenCreatedResponse } from '$lib/api';
   import type { ValidationResult } from '$lib/types/ValidationResult';
 
   type PermissionCategory = {
@@ -40,14 +40,11 @@
 </script>
 
 <script lang="ts">
-  import { apiTokensApi } from '$lib/api';
-  import type { TokenCreatedResponse } from '$lib/api/internal/v1';
   import ExpirationPicker from '$lib/components/ExpirationPicker.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { instantToDate } from '$lib/utils';
 
   interface Props {
     open: boolean;
@@ -58,7 +55,6 @@
 
   let name = $state<string>('');
   let expire = $state('never');
-  let expireCustom = $state<ZonedDateTime | undefined>(undefined);
   let expireInstant = $state<Temporal.Instant | null>(null);
   let permissions = $state<PermissionType[]>([PermissionType.ShockersUse]);
 
@@ -67,7 +63,7 @@
     if (!o) {
       name = '';
       expire = 'never';
-      expireCustom = undefined;
+
       permissions = [PermissionType.ShockersUse];
     }
     open = o;
@@ -76,10 +72,10 @@
   let nameValidationResult = $derived(nameValidation(name));
 
   async function onFormSubmit() {
-    const validUntil = expireInstant ? instantToDate(expireInstant) : null;
-
     try {
-      const createdToken = await apiTokensApi.tokensCreateToken({ name, validUntil, permissions });
+      const createdToken = await tokensCreateToken({
+        body: { name, validUntil: expireInstant, permissions },
+      });
       onCreated(createdToken);
       open = false;
       onOpenChange(false);
@@ -105,11 +101,7 @@
         validationResult={nameValidationResult}
       />
 
-      <ExpirationPicker
-        bind:option={expire}
-        bind:customDate={expireCustom}
-        bind:instant={expireInstant}
-      />
+      <ExpirationPicker bind:option={expire} bind:instant={expireInstant} />
 
       <div class="mt-4">
         <h2>Permissions</h2>

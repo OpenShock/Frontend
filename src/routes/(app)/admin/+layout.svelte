@@ -1,7 +1,6 @@
 <script lang="ts" module>
-  import { RoleType } from '$lib/api/internal/v1';
-
-  const allowedRoles = [RoleType.Admin, RoleType.System];
+  import { RoleType } from '$lib/api';
+  const allowedRoles: RoleType[] = [RoleType.Admin, RoleType.System];
 </script>
 
 <script lang="ts">

@@ -1,5 +1,4 @@
-import type { ShockerModelType } from '$lib/api/internal/v1';
-
+import type { ShockerModelType } from '$lib/api';
 export type Shocker = {
   id: string;
   rf_id: number;
