@@ -8,6 +8,42 @@ import 'driver.js/dist/driver.css';
 const CURRENT_TOUR_VERSION = 1;
 const TOUR_VERSION_KEY = 'os.tourCompletedVersion';
 
+export function isOnboardingDisabled(): boolean {
+  return isTruthy(PUBLIC_DISABLE_ONBOARDING);
+}
+
+const CURRENT_WELCOME_VERSION = 1;
+const WELCOME_VERSION_KEY = 'os.welcomeVersion';
+
+export function hasSeenWelcome(): boolean {
+  try {
+    const raw = localStorage.getItem(WELCOME_VERSION_KEY);
+    const seen = raw ? parseInt(raw, 10) : 0;
+    return Number.isFinite(seen) && seen >= CURRENT_WELCOME_VERSION;
+  } catch {
+    return false;
+  }
+}
+
+export function markWelcomed(): void {
+  try {
+    localStorage.setItem(WELCOME_VERSION_KEY, String(CURRENT_WELCOME_VERSION));
+  } catch {
+    // ignore (private mode, quota, etc.)
+  }
+}
+
+export function shouldShowWelcome(): boolean {
+  if (isOnboardingDisabled()) return false;
+  try {
+    const raw = localStorage.getItem(WELCOME_VERSION_KEY);
+    const seen = raw ? parseInt(raw, 10) : 0;
+    return !Number.isFinite(seen) || seen < CURRENT_WELCOME_VERSION;
+  } catch {
+    return false;
+  }
+}
+
 const SIDEBAR_TOGGLE_SEL = 'button[title="Toggle Sidebar"]';
 const SIDEBAR_ROOT_SEL = '[data-slot="sidebar"]';
 const SIDEBAR_LINK = (href: string) => `[data-slot="sidebar"] a[href$="${href}"]`;
@@ -315,10 +351,6 @@ function toDriverStep(step: TourStep): DriveStep {
       showButtons: step.kind === 'action' ? ['previous', 'close'] : ['next', 'previous', 'close'],
     },
   };
-}
-
-export function isOnboardingDisabled(): boolean {
-  return isTruthy(PUBLIC_DISABLE_ONBOARDING);
 }
 
 export function hasCompletedTour(): boolean {
