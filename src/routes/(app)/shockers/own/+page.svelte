@@ -198,7 +198,12 @@
     <div class="flex w-full flex-wrap items-center justify-between gap-2">
       <h1 class="text-2xl font-bold">Shockers</h1>
       <div class="flex flex-wrap items-center gap-1">
-        <Button variant="secondary" size="sm" onclick={openAddShockerDialog}>
+        <Button
+          variant="secondary"
+          size="sm"
+          onclick={openAddShockerDialog}
+          data-tour="shockers-add"
+        >
           <Plus class="size-4" /> Add Shocker
         </Button>
         <Button
@@ -214,7 +219,13 @@
         <Popover.Root>
           <Popover.Trigger>
             {#snippet child({ props })}
-              <Button {...props} variant="ghost" size="sm" aria-label="View mode">
+              <Button
+                {...props}
+                variant="ghost"
+                size="sm"
+                aria-label="View mode"
+                data-tour="shockers-viewmode"
+              >
                 <Layers class="size-4" />
               </Button>
             {/snippet}
@@ -254,7 +265,13 @@
         <Popover.Root>
           <Popover.Trigger>
             {#snippet child({ props })}
-              <Button {...props} variant="ghost" size="sm" aria-label="Settings">
+              <Button
+                {...props}
+                variant="ghost"
+                size="sm"
+                aria-label="Settings"
+                data-tour="shockers-layout"
+              >
                 <Settings class="size-4" />
               </Button>
             {/snippet}

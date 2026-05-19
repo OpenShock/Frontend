@@ -1,17 +1,25 @@
 <script lang="ts" module>
-  const FLAG_KEY = 'os.welcomed';
+  // Bump when the welcome screen gains content worth re-showing to returning
+  // users (e.g. a major feature drop). Users who saw an older version will
+  // see the screen again on their next visit.
+  const CURRENT_WELCOME_VERSION = 1;
+  const VERSION_KEY = 'os.welcomeVersion';
 
   function markWelcomed(): void {
     try {
-      localStorage.setItem(FLAG_KEY, 'true');
+      localStorage.setItem(VERSION_KEY, String(CURRENT_WELCOME_VERSION));
     } catch {
       // ignore (private mode, quota, etc.)
     }
   }
 
   function shouldShow(): boolean {
+    // Operators can hard-disable onboarding (welcome + tour) per-deployment.
+    if (isTruthy(PUBLIC_DISABLE_ONBOARDING)) return false;
     try {
-      return localStorage.getItem(FLAG_KEY) !== 'true';
+      const raw = localStorage.getItem(VERSION_KEY);
+      const seen = raw ? parseInt(raw, 10) : 0;
+      return !Number.isFinite(seen) || seen < CURRENT_WELCOME_VERSION;
     } catch {
       return false;
     }
@@ -21,10 +29,15 @@
 <script lang="ts">
   /* eslint-disable svelte/no-navigation-without-resolve -- only contains external URLs */
   import { asset } from '$app/paths';
-  import { PUBLIC_DISCORD_INVITE_URL, PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
+  import {
+    PUBLIC_DISABLE_ONBOARDING,
+    PUBLIC_DISCORD_INVITE_URL,
+    PUBLIC_GITHUB_PROJECT_URL,
+  } from '$env/static/public';
   import DiscordLogo from '$lib/components/svg/DiscordLogo.svelte';
   import GithubIcon from '$lib/components/svg/GithubIcon.svelte';
   import { Button } from '$lib/components/ui/button';
+  import { isTruthy } from '$lib/utils/parse';
   import { startWelcomeTour } from '$lib/tour/welcome-tour';
   import { userState } from '$lib/state/user-state.svelte';
   import { ChevronLeft, ChevronRight, Sparkles } from '@lucide/svelte';
