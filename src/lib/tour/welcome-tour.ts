@@ -111,7 +111,7 @@ function shockersDeepDive(): TourStep[] {
       element: TOUR('shockers-viewmode'),
       title: 'Pick a control layout',
       description:
-        'Classic, Rich, Simple, or Map. Switch between layouts depending on how you like to trigger shockers.',
+        'Classic, Rich, or Simple. Switch between layouts depending on how you like to trigger shockers.',
       side: 'bottom',
     },
     {
@@ -137,7 +137,32 @@ function userSharesDeepDive(): TourStep[] {
       kind: 'info',
       element: TOUR('user-shares-tabs'),
       title: 'Three tabs',
-      description: 'Shares you give out, shares you receive, and pending invites.',
+      description:
+        'The tabs let you navigate between shares you give out, shares you receive, and pending invites.',
+      side: 'bottom',
+    },
+    {
+      kind: 'info',
+      element: TOUR('user-shares-tab-outgoing'),
+      title: 'Shares — outgoing',
+      description:
+        'Everything you have shared with others. Each entry shows which shockers you granted and the permissions you set.',
+      side: 'bottom',
+    },
+    {
+      kind: 'info',
+      element: TOUR('user-shares-tab-incoming'),
+      title: 'Shared with Me',
+      description:
+        'Shockers other users have granted you access to. They appear here once the owner accepts your request or sends you a share link.',
+      side: 'bottom',
+    },
+    {
+      kind: 'info',
+      element: TOUR('user-shares-tab-invites'),
+      title: 'Invites',
+      description:
+        'Pending share requests waiting for the other party to accept. Once accepted they move to the Shares or Shared with Me tab.',
       side: 'bottom',
     },
     {
