@@ -36,6 +36,7 @@
   } from '$env/static/public';
   import DiscordLogo from '$lib/components/svg/DiscordLogo.svelte';
   import GithubIcon from '$lib/components/svg/GithubIcon.svelte';
+  import DotGrid from '$lib/components/DotGrid.svelte';
   import { Button } from '$lib/components/ui/button';
   import { isTruthy } from '$lib/utils/parse';
   import { startWelcomeTour } from '$lib/tour/welcome-tour';
@@ -61,8 +62,6 @@
   let step = $state(0);
   let reducedMotion = $state(false);
   let stepDirection = $state(1);
-  let mouseX = $state(-9999);
-  let mouseY = $state(-9999);
 
   onMount(() => {
     if (!shouldShow()) return;
@@ -120,22 +119,10 @@
     } else if (e.key === 'ArrowLeft') goPrev();
   }
 
-  let rafPending = false;
-  function handlePointerMove(e: PointerEvent) {
-    if (reducedMotion || !open) return;
-    const { clientX, clientY } = e;
-    if (rafPending) return;
-    rafPending = true;
-    requestAnimationFrame(() => {
-      mouseX = clientX;
-      mouseY = clientY;
-      rafPending = false;
-    });
-  }
-
   let isFirst = $derived(step === 0);
   let isLast = $derived(step === steps.length - 1);
 
+  let grid: DotGrid | undefined = $state();
   let dialogEl: HTMLDivElement | undefined = $state();
   let focusOrigin: HTMLElement | null = null;
 
@@ -144,10 +131,8 @@
       focusOrigin = document.activeElement as HTMLElement | null;
       queueMicrotask(() => dialogEl?.focus());
       window.addEventListener('keydown', handleKeydown);
-      window.addEventListener('pointermove', handlePointerMove, { passive: true });
       return () => {
         window.removeEventListener('keydown', handleKeydown);
-        window.removeEventListener('pointermove', handlePointerMove);
       };
     } else if (focusOrigin) {
       focusOrigin.focus();
@@ -164,15 +149,10 @@
     aria-modal="true"
     aria-labelledby="welcome-title"
     tabindex="-1"
+    onpointermove={(e) => !reducedMotion && grid?.handlePointerMove(e)}
   >
     <!-- Background: base dot grid + brighter spotlight grid masked around the cursor -->
-    <div class="bg-grid pointer-events-none absolute inset-0" aria-hidden="true"></div>
-    <div
-      class="bg-grid-spotlight pointer-events-none absolute inset-0"
-      style:--mouse-x="{mouseX}px"
-      style:--mouse-y="{mouseY}px"
-      aria-hidden="true"
-    ></div>
+    <DotGrid bind:this={grid} />
 
     <!-- Stories-style segmented progress along the top edge. Pure indicator, no auto-advance. -->
     <div class="absolute top-4 right-6 left-6 flex gap-1.5" aria-label="Progress">
@@ -378,30 +358,3 @@
 
   <p class="mt-6 text-sm text-white/50">Lots more is landing soon. Thanks for sticking with us.</p>
 {/snippet}
-
-<style>
-  /* Base dot grid (subtle, full-bleed) */
-  .bg-grid {
-    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
-    background-size: 28px 28px;
-    background-position: center center;
-  }
-
-  /* Brighter "spotlight" copy of the same grid, masked to a circle around
-     the cursor. Small mask radius keeps any alpha banding imperceptible. */
-  .bg-grid-spotlight {
-    background-image: radial-gradient(circle, rgba(225, 74, 109, 0.9) 1px, transparent 1px);
-    background-size: 28px 28px;
-    background-position: center center;
-    mask-image: radial-gradient(
-      circle 220px at var(--mouse-x, -9999px) var(--mouse-y, -9999px),
-      black 0%,
-      transparent 75%
-    );
-    -webkit-mask-image: radial-gradient(
-      circle 220px at var(--mouse-x, -9999px) var(--mouse-y, -9999px),
-      black 0%,
-      transparent 75%
-    );
-  }
-</style>
