@@ -89,11 +89,7 @@
       <Barcode />
       Redeem Code
     </Button>
-    <Button
-      onclick={() => (createDialogOpen = true)}
-      class="self-end"
-      data-tour="user-shares-new"
-    >
+    <Button onclick={() => (createDialogOpen = true)} class="self-end" data-tour="user-shares-new">
       <Plus />
       New Share
     </Button>

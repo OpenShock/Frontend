@@ -1,7 +1,7 @@
-import { driver, type Driver, type DriveStep } from 'driver.js';
-import 'driver.js/dist/driver.css';
 import { PUBLIC_DISABLE_ONBOARDING } from '$env/static/public';
 import { isTruthy } from '$lib/utils/parse';
+import { driver, type Driver, type DriveStep } from 'driver.js';
+import 'driver.js/dist/driver.css';
 
 // Bump when the tour gains a meaningful new stop so users who already
 // completed an older version see it again.
@@ -130,8 +130,7 @@ function userSharesDeepDive(): TourStep[] {
       kind: 'action',
       element: SIDEBAR_LINK('/shares/user'),
       title: 'User shares',
-      description:
-        'Permanent shares between you and another OpenShock user. Click to take a look.',
+      description: 'Permanent shares between you and another OpenShock user. Click to take a look.',
       side: 'right',
     },
     {
