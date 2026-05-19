@@ -1,3 +1,4 @@
+import { browser } from '$app/environment';
 import { driver, type Driver, type DriveStep } from 'driver.js';
 import 'driver.js/dist/driver.css';
 import { isOnboardingDisabled, markTourCompleted } from './onboarding-state';
@@ -325,7 +326,7 @@ function toDriverStep(step: TourStep): DriveStep {
  * each next highlight target to render before advancing.
  */
 export function startWelcomeTour(): Promise<void> {
-  if (isOnboardingDisabled()) return Promise.resolve();
+  if (!browser || isOnboardingDisabled()) return Promise.resolve();
   const initial = readSidebarState();
   const allSteps = isMobileViewport() ? mobileSteps(initial) : desktopSteps(initial);
   const tourSteps = allSteps.filter((s) => !s.skipIf?.());
