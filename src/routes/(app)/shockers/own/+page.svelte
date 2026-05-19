@@ -30,10 +30,10 @@
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { ownHubs, onlineHubs, refreshOwnHubs } from '$lib/state/hubs-state.svelte';
   import {
-    ensureLiveConnection,
     getLiveConnection,
     liveConnections,
     LiveConnectionState,
+    registerHubShockers,
   } from '$lib/state/live-control-state.svelte';
   import { PersistedState } from '$lib/state/classes/persisted-state.svelte';
   import { onMount } from 'svelte';
@@ -53,21 +53,16 @@
     )
   );
 
-  // Eagerly create LiveDeviceConnection and LiveShockerState entries
-  // so template reads never mutate state (Svelte 5 forbids mutation in $derived/templates).
+  // Register each hub's shockers with the live-control state store
   $effect(() => {
     const currentHubIds: string[] = [];
     for (const [hubId, hub] of ownHubs) {
       currentHubIds.push(hubId);
-      ensureLiveConnection(hubId);
-      const conn = getLiveConnection(hubId);
-      if (conn) {
-        for (const shocker of hub.shockers) {
-          conn.ensureShockerState(shocker.id);
-        }
-      }
+      registerHubShockers(
+        hubId,
+        hub.shockers.map((s) => ({ id: s.id, isPaused: s.isPaused }))
+      );
     }
-    // Clean up connections for hubs that no longer exist
     for (const [hubId, conn] of liveConnections) {
       if (!currentHubIds.includes(hubId)) {
         conn.disconnect();
@@ -164,14 +159,7 @@
     resume={() => ownResume(shocker.id)}
   >
     {#snippet live()}
-      <LiveButton
-        {hubId}
-        shockerId={shocker.id}
-        isPaused={shocker.isPaused}
-        connection={liveConn}
-        {liveState}
-        compact
-      />
+      <LiveButton {hubId} shockerId={shocker.id} compact />
     {/snippet}
     {#snippet menu()}
       <ShockerMenu {shocker} />
