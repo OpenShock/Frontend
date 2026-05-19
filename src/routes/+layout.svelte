@@ -4,7 +4,6 @@
   import { BasicTags, OpenGraphTags, TwitterSummaryTags } from '$lib/components/metadata';
   import { SidebarProvider } from '$lib/components/ui/sidebar';
   import { Toaster } from '$lib/components/ui/sonner';
-  import { TooltipProvider } from '$lib/components/ui/tooltip';
   import { buildMetaData } from '$lib/metadata';
   import { type Snippet } from 'svelte';
   import Footer from './Footer.svelte';
@@ -37,23 +36,21 @@
 
 <DialogManager />
 
-<TooltipProvider delayDuration={250}>
-  <SidebarProvider open={isOpen} onOpenChange={(v) => (sidebarOpen.value = v)}>
-    <Sidebar />
-    <div class="flex h-screen w-screen flex-1 flex-col overflow-hidden">
-      {#if PUBLIC_DEVELOPMENT_BANNER === 'true'}
-        <div class="top-0 left-0 z-1 flex-none bg-[orangered] text-center text-white">
-          <p>
-            This is the OpenShock <b>DEVELOPMENT</b> environment. <u>No data is saved</u>, and
-            regularly overwritten by production data
-          </p>
-        </div>
-      {/if}
-      <Header />
-      <main class="min-h-0 flex-1 overflow-x-hidden">
-        {@render children?.()}
-      </main>
-      <Footer />
-    </div>
-  </SidebarProvider>
-</TooltipProvider>
+<SidebarProvider open={isOpen} onOpenChange={(v) => (sidebarOpen.value = v)}>
+  <Sidebar />
+  <div class="flex h-screen w-screen flex-1 flex-col overflow-hidden">
+    {#if PUBLIC_DEVELOPMENT_BANNER === 'true'}
+      <div class="top-0 left-0 z-1 flex-none bg-[orangered] text-center text-white">
+        <p>
+          This is the OpenShock <b>DEVELOPMENT</b> environment. <u>No data is saved</u>, and
+          regularly overwritten by production data
+        </p>
+      </div>
+    {/if}
+    <Header />
+    <main class="min-h-0 flex-1 overflow-x-hidden">
+      {@render children?.()}
+    </main>
+    <Footer />
+  </div>
+</SidebarProvider>
