@@ -5,6 +5,7 @@
   import TextInput from '$lib/components/input/TextInput.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
+  import { instantToDate } from '$lib/utils';
   import { toast } from 'svelte-sonner';
 
   interface Props {
@@ -17,13 +18,13 @@
   let name = $state('');
   let expireOption = $state('never');
   let customExpire = $state<ZonedDateTime | undefined>();
-  let expireDate = $state<Date | null>(null);
+  let expireInstant = $state<Temporal.Instant | null>(null);
 
   function createShareLink() {
     publicShockerSharesApi
       .shareLinksCreatePublicShare({
         name,
-        expiresOn: expireDate,
+        expiresOn: expireInstant ? instantToDate(expireInstant) : null,
       })
       .then(() => {
         onCreated();
@@ -44,7 +45,7 @@
     <ExpirationPicker
       bind:option={expireOption}
       bind:customDate={customExpire}
-      bind:date={expireDate}
+      bind:instant={expireInstant}
     />
 
     <Button onclick={createShareLink}>Create</Button>

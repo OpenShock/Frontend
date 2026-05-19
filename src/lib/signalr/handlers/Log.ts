@@ -65,7 +65,9 @@ export function handleSignalrLog(sender: unknown, logs: unknown) {
 
     // Iterate through each control log
     logs.forEach((log, index) => {
-      console.group(`Log #${index + 1} - ${new Date(log.executedAt).toLocaleString()}`);
+      console.group(
+        `Log #${index + 1} - ${Temporal.Instant.from(log.executedAt).toLocaleString()}`
+      );
       console.log('Shocker:', `${log.shocker.name} (${log.shocker.id})`);
       console.log('Type:', ControlType[log.type]);
       if (log.type !== ControlType.Stop) {

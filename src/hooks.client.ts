@@ -5,6 +5,12 @@ import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
 import { initializeColorScheme } from '$lib/state/color-scheme-state.svelte';
 import { userState } from '$lib/state/user-state.svelte';
 
+async function ensureTemporal(): Promise<void> {
+  if (typeof (globalThis as { Temporal?: unknown }).Temporal === 'undefined') {
+    await import('temporal-polyfill/global');
+  }
+}
+
 async function clientInit(): Promise<void> {
   const { data } = await metaApi.versionGetBackendInfo();
   backendMetadata.set(data);
@@ -20,6 +26,7 @@ async function clientInit(): Promise<void> {
 }
 
 export async function init() {
+  await ensureTemporal();
   await clientInit().catch(handleApiError);
   initializeColorScheme();
 }

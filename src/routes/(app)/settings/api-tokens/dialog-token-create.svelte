@@ -47,6 +47,7 @@
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { instantToDate } from '$lib/utils';
 
   interface Props {
     open: boolean;
@@ -58,7 +59,7 @@
   let name = $state<string>('');
   let expire = $state('never');
   let expireCustom = $state<ZonedDateTime | undefined>(undefined);
-  let expireDate = $state<Date | null>(null);
+  let expireInstant = $state<Temporal.Instant | null>(null);
   let permissions = $state<PermissionType[]>([PermissionType.ShockersUse]);
 
   function onOpenChange(o: boolean) {
@@ -75,7 +76,7 @@
   let nameValidationResult = $derived(nameValidation(name));
 
   async function onFormSubmit() {
-    const validUntil = expireDate ?? null;
+    const validUntil = expireInstant ? instantToDate(expireInstant) : null;
 
     try {
       const createdToken = await apiTokensApi.tokensCreateToken({ name, validUntil, permissions });
@@ -107,7 +108,7 @@
       <ExpirationPicker
         bind:option={expire}
         bind:customDate={expireCustom}
-        bind:date={expireDate}
+        bind:instant={expireInstant}
       />
 
       <div class="mt-4">

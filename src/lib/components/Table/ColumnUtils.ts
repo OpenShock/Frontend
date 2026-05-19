@@ -1,6 +1,12 @@
 import { renderComponent } from '$lib/components/ui/data-table';
 import { isDate } from '$lib/typeguards';
-import { durationToString, elapsedToString, getReadableUserAgentName } from '$lib/utils';
+import {
+  durationBetween,
+  formatDuration,
+  formatElapsed,
+  getReadableUserAgentName,
+  instantFromDate,
+} from '$lib/utils';
 import type {
   BuiltInSortingFn,
   ColumnDef,
@@ -133,19 +139,36 @@ export const RenderCellWithTooltip = (content: string, tooltip: string): CellCon
   title: tooltip,
 });
 
-export const LocaleDateRenderer = (date: Date): CellContentProps =>
-  RenderCellWithTooltip(date.toLocaleDateString(), date.toString());
+export function LocaleDateRenderer(date: Date): CellContentProps {
+  const instant = instantFromDate(date);
+  return RenderCellWithTooltip(
+    instant.toLocaleString(undefined, { dateStyle: 'short' }),
+    instant.toString()
+  );
+}
 
-export const LocaleDateTimeRenderer = (date: Date | null): CellContentProps =>
-  date ? RenderCellWithTooltip(date.toLocaleString(), date.toString()) : RenderCell('Never');
+export function LocaleDateTimeRenderer(date: Date | null): CellContentProps {
+  if (!date) return RenderCell('Never');
+  const instant = instantFromDate(date);
+  return RenderCellWithTooltip(instant.toLocaleString(), instant.toString());
+}
 
-export const TimeSinceDurationRenderer = (date: Date): CellContentProps =>
-  RenderCellWithTooltip(durationToString(Date.now() - date.getTime()), date.toString());
+export function TimeSinceDurationRenderer(date: Date): CellContentProps {
+  const instant = instantFromDate(date);
+  return RenderCellWithTooltip(
+    formatDuration(durationBetween(instant, Temporal.Now.instant())),
+    instant.toString()
+  );
+}
 
-export const TimeSinceRelativeRenderer = (date: Date): CellContentProps =>
-  date.getTime() > 0
-    ? RenderCellWithTooltip(elapsedToString(date.getTime() - Date.now()), date.toString())
-    : CellOrangeNever;
+export function TimeSinceRelativeRenderer(date: Date): CellContentProps {
+  if (date.getTime() <= 0) return CellOrangeNever;
+  const instant = instantFromDate(date);
+  return RenderCellWithTooltip(
+    formatElapsed(durationBetween(Temporal.Now.instant(), instant)),
+    instant.toString()
+  );
+}
 
 export const TimeSinceRelativeOrNeverRenderer = (
   date: Date | null | undefined

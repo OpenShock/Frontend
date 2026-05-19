@@ -70,6 +70,7 @@
 		"vitest": "^4.1.6"
 	},
 	"dependencies": {
+		"temporal-polyfill": "^0.3.2",
 		"vite": "^8.0.13"
 	},
 	"engines": {

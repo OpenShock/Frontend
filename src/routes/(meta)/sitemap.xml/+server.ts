@@ -13,7 +13,7 @@ export const GET: RequestHandler = ({ setHeaders }) => {
     'cache-control': 'public, max-age=3600',
   });
 
-  const lastmod = new Date().toISOString().slice(0, 10);
+  const lastmod = Temporal.Now.plainDateISO('UTC').toString();
   const urls = publicRoutes
     .map((path) => `  <url><loc>${getSiteURL(path).href}</loc><lastmod>${lastmod}</lastmod></url>`)
     .join('\n');
