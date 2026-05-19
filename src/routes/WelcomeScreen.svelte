@@ -135,12 +135,30 @@
 
   let isFirst = $derived(step === 0);
   let isLast = $derived(step === steps.length - 1);
-</script>
 
-<svelte:window onkeydown={handleKeydown} onpointermove={handlePointerMove} />
+  let dialogEl: HTMLDivElement | undefined = $state();
+  let focusOrigin: HTMLElement | null = null;
+
+  $effect(() => {
+    if (open) {
+      focusOrigin = document.activeElement as HTMLElement | null;
+      queueMicrotask(() => dialogEl?.focus());
+      window.addEventListener('keydown', handleKeydown);
+      window.addEventListener('pointermove', handlePointerMove, { passive: true });
+      return () => {
+        window.removeEventListener('keydown', handleKeydown);
+        window.removeEventListener('pointermove', handlePointerMove);
+      };
+    } else if (focusOrigin) {
+      focusOrigin.focus();
+      focusOrigin = null;
+    }
+  });
+</script>
 
 {#if open}
   <div
+    bind:this={dialogEl}
     class="fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-[#08080c] select-none"
     role="dialog"
     aria-modal="true"
