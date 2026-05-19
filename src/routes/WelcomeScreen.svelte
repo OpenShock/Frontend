@@ -19,6 +19,7 @@
 </script>
 
 <script lang="ts">
+  /* eslint-disable svelte/no-navigation-without-resolve -- only contains external URLs */
   import { asset } from '$app/paths';
   import { PUBLIC_DISCORD_INVITE_URL, PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
   import DiscordLogo from '$lib/components/svg/DiscordLogo.svelte';
@@ -99,8 +100,11 @@
   function handleKeydown(e: KeyboardEvent) {
     if (!open) return;
     if (e.key === 'Escape') dismiss();
-    else if (e.key === 'ArrowRight' || e.key === 'Enter') goNext();
-    else if (e.key === 'ArrowLeft') goPrev();
+    else if (e.key === 'ArrowRight') goNext();
+    else if (e.key === 'Enter') {
+      // Don't steal Enter from buttons/links — they have their own onclick handlers.
+      if (!(e.target as HTMLElement).closest('button, a, input, select, textarea')) goNext();
+    } else if (e.key === 'ArrowLeft') goPrev();
   }
 
   let rafPending = false;

@@ -150,14 +150,15 @@ export function startWelcomeTour(): Promise<void> {
   const driverSteps = tourSteps.map(toDriverStep);
 
   return new Promise((resolve) => {
-    let d: Driver;
-    let cleanupClickListener: (() => void) | null = null;
+    // `ctx` is a single mutable container so all closures can share the
+    // driver instance and cleanup ref without forward-declaration issues.
+    const ctx: { d: Driver | null; cleanup: (() => void) | null } = { d: null, cleanup: null };
 
     const wireUpActionAdvance = () => {
-      cleanupClickListener?.();
-      cleanupClickListener = null;
+      ctx.cleanup?.();
+      ctx.cleanup = null;
 
-      const idx = d.getActiveIndex();
+      const idx = ctx.d!.getActiveIndex();
       if (idx === undefined) return;
       const step = tourSteps[idx];
       if (step?.kind !== 'action' || !step.element) return;
@@ -168,35 +169,35 @@ export function startWelcomeTour(): Promise<void> {
       // Real click — lets SvelteKit's link handler / sidebar toggle do their
       // normal work, while we use the same event to advance the tour.
       const handler = () => {
-        cleanupClickListener?.();
-        cleanupClickListener = null;
+        ctx.cleanup?.();
+        ctx.cleanup = null;
         // Defer slightly so any state mutation (sidebar opening, route change)
         // is committed before driver re-measures the next highlight target.
-        setTimeout(() => d.moveNext(), 50);
+        setTimeout(() => ctx.d!.moveNext(), 50);
       };
       target.addEventListener('click', handler, { once: true });
-      cleanupClickListener = () => target.removeEventListener('click', handler);
+      ctx.cleanup = () => target.removeEventListener('click', handler);
     };
 
-    d = driver({
+    ctx.d = driver({
       showProgress: true,
       allowClose: true,
       progressText: '{{current}} of {{total}}',
-      nextBtnText: 'Skip',
+      nextBtnText: 'Next',
       prevBtnText: 'Back',
       doneBtnText: 'Done',
       steps: driverSteps,
       onHighlighted: wireUpActionAdvance,
       onDeselected: () => {
-        cleanupClickListener?.();
-        cleanupClickListener = null;
+        ctx.cleanup?.();
+        ctx.cleanup = null;
       },
       onDestroyed: () => {
-        cleanupClickListener?.();
+        ctx.cleanup?.();
         markTourCompleted();
         resolve();
       },
     });
-    d.drive();
+    ctx.d.drive();
   });
 }
