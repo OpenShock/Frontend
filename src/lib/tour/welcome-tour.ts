@@ -333,8 +333,7 @@ function toDriverStep(step: TourStep): DriveStep {
       title: step.title,
       description: step.description,
       side: step.side ?? 'bottom',
-      showButtons:
-        step.kind === 'action' ? ['previous', 'close'] : ['next', 'previous', 'close'],
+      showButtons: step.kind === 'action' ? ['previous', 'close'] : ['next', 'previous', 'close'],
     },
   };
 }
