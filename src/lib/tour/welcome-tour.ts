@@ -16,7 +16,7 @@ export {
 
 const SIDEBAR_TOGGLE_SEL = 'button[title="Toggle Sidebar"]';
 const SIDEBAR_ROOT_SEL = '[data-slot="sidebar"]';
-const SIDEBAR_LINK = (href: string) => `[data-slot="sidebar"] a[href$="${href}"]`;
+const SIDEBAR_LINK = (href: string) => `[data-slot="sidebar-content"] a[href$="${href}"]`;
 const USER_MENU_SEL = 'header button:has(> img.rounded-full)';
 const TOUR = (tag: string) => `[data-tour="${tag}"]`;
 
