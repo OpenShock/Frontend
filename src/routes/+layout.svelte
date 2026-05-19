@@ -9,6 +9,7 @@
   import Footer from './Footer.svelte';
   import Header from './Header.svelte';
   import Sidebar from './Sidebar.svelte';
+  import WelcomeScreen from './WelcomeScreen.svelte';
   import '../app.css';
   import { IsMobile } from '$lib/hooks/is-mobile.svelte';
   import { usePersistedState } from '$lib/state/classes/persisted-state.svelte';
@@ -35,6 +36,8 @@
 <Toaster position="top-center" />
 
 <DialogManager />
+
+<WelcomeScreen />
 
 <SidebarProvider open={isOpen} onOpenChange={(v) => (sidebarOpen.value = v)}>
   <Sidebar />

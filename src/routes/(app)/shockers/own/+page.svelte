@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { PUBLIC_DISABLE_SHOCKER_MAP } from '$env/static/public';
+  import { isTruthy } from '$lib/utils/parse';
   import { shockerPauseShocker, shockerRegisterShocker } from '$lib/api';
   import type { NewShocker } from '$lib/api';
   import { Layers, LoaderCircle, LogsIcon, Plus, RotateCcw, Settings, Zap } from '@lucide/svelte';
@@ -186,7 +188,12 @@
     <div class="flex w-full flex-wrap items-center justify-between gap-2">
       <h1 class="text-2xl font-bold">Shockers</h1>
       <div class="flex flex-wrap items-center gap-1">
-        <Button variant="secondary" size="sm" onclick={openAddShockerDialog}>
+        <Button
+          variant="secondary"
+          size="sm"
+          onclick={openAddShockerDialog}
+          data-tour="shockers-add"
+        >
           <Plus class="size-4" /> Add Shocker
         </Button>
         <Button
@@ -202,7 +209,13 @@
         <Popover.Root>
           <Popover.Trigger>
             {#snippet child({ props })}
-              <Button {...props} variant="ghost" size="sm" aria-label="View mode">
+              <Button
+                {...props}
+                variant="ghost"
+                size="sm"
+                aria-label="View mode"
+                data-tour="shockers-viewmode"
+              >
                 <Layers class="size-4" />
               </Button>
             {/snippet}
@@ -229,20 +242,28 @@
             >
               Simple
             </Button>
-            <Button
-              variant={moduleType === ModuleType.MapControlModule ? 'secondary' : 'ghost'}
-              size="sm"
-              onclick={() => (moduleType = ModuleType.MapControlModule)}
-            >
-              Map
-            </Button>
+            {#if !isTruthy(PUBLIC_DISABLE_SHOCKER_MAP)}
+              <Button
+                variant={moduleType === ModuleType.MapControlModule ? 'secondary' : 'ghost'}
+                size="sm"
+                onclick={() => (moduleType = ModuleType.MapControlModule)}
+              >
+                Map
+              </Button>
+            {/if}
           </Popover.Content>
         </Popover.Root>
         <!-- Settings button -->
         <Popover.Root>
           <Popover.Trigger>
             {#snippet child({ props })}
-              <Button {...props} variant="ghost" size="sm" aria-label="Settings">
+              <Button
+                {...props}
+                variant="ghost"
+                size="sm"
+                aria-label="Settings"
+                data-tour="shockers-layout"
+              >
                 <Settings class="size-4" />
               </Button>
             {/snippet}
@@ -290,7 +311,7 @@
       {#if moduleType === ModuleType.SimpleControlModule}
         <SimpleControlHeader bind:shockIntensity bind:vibrationIntensity bind:duration />
       {/if}
-      {#if moduleType === ModuleType.MapControlModule}
+      {#if !isTruthy(PUBLIC_DISABLE_SHOCKER_MAP) && moduleType === ModuleType.MapControlModule}
         <MapControlModule {shockers} />
       {:else if groupByHub.value}
         <div class="flex flex-col gap-6">

@@ -18,6 +18,9 @@ importers:
 
   .:
     dependencies:
+      driver.js:
+        specifier: ^1.4.0
+        version: 1.4.0
       temporal-polyfill:
         specifier: ^0.3.2
         version: 0.3.2
@@ -1575,6 +1578,9 @@ packages:
   dotenv@17.4.2:
     resolution: {integrity: sha512-nI4U3TottKAcAD9LLud4Cb7b2QztQMUEfHbvhTH09bqXTxnSie8WnjPALV/WMCrJZ6UV/qHJ6L03OqO3LcdYZw==}
     engines: {node: '>=12'}
+
+  driver.js@1.4.0:
+    resolution: {integrity: sha512-Gm64jm6PmcU+si21sQhBrTAM1JvUrR0QhNmjkprNLxohOBzul9+pNHXgQaT9lW84gwg9GMLB3NZGuGolsz5uew==}
 
   effect@3.21.2:
     resolution: {integrity: sha512-rXd2FGDM8KdjSIrc+mqEELo7ScW7xTVxEf1iInmPSpIde9/nyGuFM710cjTo7/EreGXiUX2MOonPpprbz2XHCg==}
@@ -4030,6 +4036,8 @@ snapshots:
     optional: true
 
   dotenv@17.4.2: {}
+
+  driver.js@1.4.0: {}
 
   effect@3.21.2:
     dependencies:
