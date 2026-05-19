@@ -59,9 +59,6 @@ export class LiveDeviceConnection {
     try {
       const res = await devicesGetLiveControlGatewayInfo({ path: { deviceId: this.deviceId } });
       if (attempt !== this.connectAttempt) return; // Stale attempt
-      if (!res.data) {
-        throw new Error('No LCG data returned');
-      }
 
       this.gateway = res.data.gateway;
       this.country = res.data.country;

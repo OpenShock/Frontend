@@ -37,10 +37,8 @@ export const onlineHubs = new SvelteMap<string, HubOnlineState>();
 
 export async function refreshOwnHubs() {
   try {
-    const { data, message } = await shockerListShockers();
-    if (!data) {
-      throw new Error(`Failed to fetch devices: ${message}`);
-    }
+    const { data } = await shockerListShockers();
+    if (!data) throw new Error('Failed to fetch devices');
 
     ownHubs.clear();
     for (const d of data) {

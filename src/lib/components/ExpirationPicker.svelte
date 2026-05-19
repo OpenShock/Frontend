@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { ZonedDateTime } from '@internationalized/date';
+  import DateTimePicker from '$lib/components/datetime-picker/date-time-picker.svelte';
   import * as Select from '$lib/components/ui/select';
   import { GetValResColor } from '$lib/types/ValidationResult';
   import { durationBetween, formatElapsed } from '$lib/utils';
@@ -12,6 +14,13 @@
     $props();
 
   const inDays = (days: number) => () => Temporal.Now.instant().add({ hours: days * 24 });
+
+  let customDate = $state<ZonedDateTime | undefined>(undefined);
+  let customInstant = $derived<Temporal.Instant | null>(
+    customDate !== undefined
+      ? Temporal.Instant.fromEpochMilliseconds(customDate.toDate().getTime())
+      : null
+  );
 
   const expirationOptions: {
     value: string;
@@ -27,18 +36,6 @@
     { value: '180days', label: '180 Days', getInstant: inDays(180) },
     { value: '365days', label: '365 Days', getInstant: inDays(365) },
   ];
-
-  let customValue = $state('');
-  let customInstant = $derived.by<Temporal.Instant | null>(() => {
-    if (!customValue) return null;
-    try {
-      return Temporal.PlainDateTime.from(customValue)
-        .toZonedDateTime(Temporal.Now.timeZoneId())
-        .toInstant();
-    } catch {
-      return null;
-    }
-  });
 
   let selectedExpiration = $derived(expirationOptions.find((o) => o.value === option));
   $effect(() => {
@@ -68,12 +65,8 @@
   </Select.Root>
 
   {#if option === 'custom'}
-    <div class="my-2">
-      <input
-        type="datetime-local"
-        bind:value={customValue}
-        class="rounded border px-2 py-1 text-sm"
-      />
+    <div class="my-2 w-1/2">
+      <DateTimePicker bind:date={customDate} />
     </div>
   {/if}
   {#if 'message' in validationResult}

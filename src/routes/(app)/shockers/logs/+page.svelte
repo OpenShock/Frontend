@@ -1,7 +1,7 @@
 <script lang="ts">
   import { shockerGetAllShockerLogs } from '$lib/api';
   import type { ColumnDef, SortingState } from '@tanstack/table-core';
-  import type { LogEntryWithHub } from '$lib/api/index.js';
+  import type { LogEntryWithHub } from '$lib/api';
   import Container from '$lib/components/Container.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';

@@ -1,5 +1,5 @@
 export class ResponseError extends Error {
-  override name = 'ResponseError' as const;
+  override name = 'ResponseError';
   constructor(
     public response: Response,
     msg?: string
@@ -9,7 +9,7 @@ export class ResponseError extends Error {
 }
 
 export class RateLimitError extends ResponseError {
-  override name = 'ResponseError' as const;
+  override name = 'RateLimitError' as const;
   constructor(
     response: Response,
     /** Suggested wait in milliseconds parsed from Retry-After / X-RateLimit-Reset headers. */

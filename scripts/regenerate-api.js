@@ -47,8 +47,8 @@ for (const dir of OUTPUT_DIRS) {
     let source = fs.readFileSync(filePath, 'utf-8');
     const before = source;
 
-    // Types: `: Date` and `Date | null` → Temporal.Instant
-    source = source.replaceAll(/\bDate\b(?=\s*[|;,)\]}])/g, 'Temporal.Instant');
+    // Types: `Date`, `Date | null`, `Date[]`, `Array<Date>` → Temporal.Instant
+    source = source.replaceAll(/\bDate\b(?=\s*[|;,)\]}[>])/g, 'Temporal.Instant');
     // Transformers/runtime: `new Date(value)` → `Temporal.Instant.from(value)`
     source = source.replaceAll(/new Date\(([^)]+)\)/g, 'Temporal.Instant.from($1)');
 
