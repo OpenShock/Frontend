@@ -333,8 +333,8 @@ function toDriverStep(step: TourStep): DriveStep {
       title: step.title,
       description: step.description,
       side: step.side ?? 'bottom',
-      // Close button is hidden because it sits behind the title element and is not clickable.
-      showButtons: step.kind === 'action' ? ['previous'] : ['next', 'previous'],
+      showButtons:
+        step.kind === 'action' ? ['previous', 'close'] : ['next', 'previous', 'close'],
     },
   };
 }
@@ -441,7 +441,7 @@ export async function startWelcomeTour(): Promise<void> {
 
     ctx.d = driver({
       showProgress: true,
-      allowClose: false, // close button is hidden (see showButtons above)
+      allowClose: true,
       overlayClickBehavior: () => {},
       progressText: '{{current}} of {{total}}',
       nextBtnText: 'Next',
