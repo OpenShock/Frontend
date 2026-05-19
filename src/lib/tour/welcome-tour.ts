@@ -1,7 +1,9 @@
 import { browser } from '$app/environment';
+import { goto } from '$app/navigation';
+import { resolve as resolvePath } from '$app/paths';
 import { driver, type Driver, type DriveStep } from 'driver.js';
 import 'driver.js/dist/driver.css';
-import { isOnboardingDisabled, markTourCompleted } from './onboarding-state';
+import { isOnboardingDisabled } from './onboarding-state';
 
 export {
   hasCompletedTour,
@@ -54,10 +56,18 @@ function waitForElement(selector: string, timeoutMs = 5000): Promise<Element | n
   });
 }
 
+function waitForMobileSidebar(): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, 250));
+}
+
 interface TourStep {
   // `action` advances on a real click of `element` (no Next button shown).
   // `info` advances on the Next button.
   kind: 'info' | 'action';
+  // `sidebar` = element lives inside the sidebar drawer (must be open on mobile).
+  // `page` = element lives in the page content (sidebar should be closed on mobile).
+  // `any` = no sidebar management needed (default).
+  mobileContext?: 'sidebar' | 'page' | 'any';
   element?: string;
   title: string;
   description: string;
@@ -70,6 +80,7 @@ function sidebarOverviewSteps(): TourStep[] {
   return [
     {
       kind: 'info',
+      mobileContext: 'sidebar',
       element: SIDEBAR_LINK('/home'),
       title: 'Home',
       description: 'Your dashboard, with quick access to the shockers you control most often.',
@@ -77,6 +88,7 @@ function sidebarOverviewSteps(): TourStep[] {
     },
     {
       kind: 'info',
+      mobileContext: 'sidebar',
       element: SIDEBAR_LINK('/hubs'),
       title: 'Hubs',
       description: 'Your hubs live here. Pair new ones and check their status from this page.',
@@ -84,6 +96,7 @@ function sidebarOverviewSteps(): TourStep[] {
     },
     {
       kind: 'info',
+      mobileContext: 'sidebar',
       element: SIDEBAR_LINK('/shares/public'),
       title: 'Public shares',
       description: 'Generate links anyone can use, with limits and expiry you set.',
@@ -96,6 +109,7 @@ function shockersDeepDive(): TourStep[] {
   return [
     {
       kind: 'action',
+      mobileContext: 'sidebar',
       element: SIDEBAR_LINK('/shockers/own'),
       title: 'Your shockers',
       description: 'This is where your own shockers live. Click to open the page.',
@@ -103,6 +117,7 @@ function shockersDeepDive(): TourStep[] {
     },
     {
       kind: 'info',
+      mobileContext: 'page',
       element: TOUR('shockers-add'),
       title: 'Add a shocker',
       description:
@@ -111,6 +126,7 @@ function shockersDeepDive(): TourStep[] {
     },
     {
       kind: 'info',
+      mobileContext: 'page',
       element: TOUR('shockers-viewmode'),
       title: 'Pick a control layout',
       description:
@@ -119,6 +135,7 @@ function shockersDeepDive(): TourStep[] {
     },
     {
       kind: 'info',
+      mobileContext: 'page',
       element: TOUR('shockers-layout'),
       title: 'Group & layout options',
       description: 'Group cards by hub and tweak how the grid is organised.',
@@ -131,6 +148,7 @@ function userSharesDeepDive(): TourStep[] {
   return [
     {
       kind: 'action',
+      mobileContext: 'sidebar',
       element: SIDEBAR_LINK('/shares/user'),
       title: 'User shares',
       description: 'Permanent shares between you and another OpenShock user. Click to take a look.',
@@ -138,6 +156,7 @@ function userSharesDeepDive(): TourStep[] {
     },
     {
       kind: 'info',
+      mobileContext: 'page',
       element: TOUR('user-shares-tabs'),
       title: 'Three tabs',
       description:
@@ -146,6 +165,7 @@ function userSharesDeepDive(): TourStep[] {
     },
     {
       kind: 'info',
+      mobileContext: 'page',
       element: TOUR('user-shares-tab-outgoing'),
       title: 'Shares — outgoing',
       description:
@@ -154,6 +174,7 @@ function userSharesDeepDive(): TourStep[] {
     },
     {
       kind: 'info',
+      mobileContext: 'page',
       element: TOUR('user-shares-tab-incoming'),
       title: 'Shared with Me',
       description:
@@ -162,6 +183,7 @@ function userSharesDeepDive(): TourStep[] {
     },
     {
       kind: 'info',
+      mobileContext: 'page',
       element: TOUR('user-shares-tab-invites'),
       title: 'Invites',
       description:
@@ -170,6 +192,7 @@ function userSharesDeepDive(): TourStep[] {
     },
     {
       kind: 'info',
+      mobileContext: 'page',
       element: TOUR('user-shares-new'),
       title: 'Create a share',
       description:
@@ -178,6 +201,7 @@ function userSharesDeepDive(): TourStep[] {
     },
     {
       kind: 'info',
+      mobileContext: 'page',
       element: TOUR('user-shares-redeem'),
       title: 'Redeem a code',
       description:
@@ -191,6 +215,7 @@ function connectionsDeepDive(): TourStep[] {
   return [
     {
       kind: 'action',
+      mobileContext: 'sidebar',
       element: SIDEBAR_LINK('/settings/connections'),
       title: 'Connections',
       description:
@@ -199,6 +224,7 @@ function connectionsDeepDive(): TourStep[] {
     },
     {
       kind: 'info',
+      mobileContext: 'page',
       element: TOUR('connections-link'),
       title: 'OAuth connections',
       description:
@@ -270,21 +296,12 @@ function desktopSteps(initial: SidebarState): TourStep[] {
   return steps;
 }
 
-function mobileSteps(initial: SidebarState): TourStep[] {
+function mobileSteps(): TourStep[] {
   const steps: TourStep[] = [];
-
-  if (initial !== 'mobile-open') {
-    steps.push({
-      kind: 'action',
-      element: SIDEBAR_TOGGLE_SEL,
-      title: 'Open the menu',
-      description: 'Tap the menu button to slide the navigation in.',
-      side: 'bottom',
-    });
-  }
 
   steps.push({
     kind: 'info',
+    mobileContext: 'sidebar',
     element: SIDEBAR_ROOT_SEL,
     title: 'Your navigation',
     description: 'Everything you can reach in the app lives here.',
@@ -298,7 +315,7 @@ function mobileSteps(initial: SidebarState): TourStep[] {
   steps.push({
     kind: 'info',
     title: "You're all set",
-    description: 'Tap any item in the menu to navigate. It closes itself once you pick something.',
+    description: 'Tap any icon in the menu to navigate.',
   });
 
   return steps;
@@ -325,23 +342,36 @@ function toDriverStep(step: TourStep): DriveStep {
  * state and require the user to click into pages themselves; we wait for
  * each next highlight target to render before advancing.
  */
-export function startWelcomeTour(): Promise<void> {
-  if (!browser || isOnboardingDisabled()) return Promise.resolve();
+export async function startWelcomeTour(): Promise<void> {
+  if (!browser || isOnboardingDisabled()) return;
   const initial = readSidebarState();
-  const allSteps = isMobileViewport() ? mobileSteps(initial) : desktopSteps(initial);
+  const allSteps = isMobileViewport() ? mobileSteps() : desktopSteps(initial);
   const tourSteps = allSteps.filter((s) => !s.skipIf?.());
   const driverSteps = tourSteps.map(toDriverStep);
 
-  return new Promise((resolve) => {
-    const ctx: { d: Driver | null; cleanup: (() => void) | null } = { d: null, cleanup: null };
+  // On mobile, ensure the sidebar is open before the first step.
+  if (isMobileViewport() && tourSteps[0]?.mobileContext === 'sidebar') {
+    if (readSidebarState() === 'mobile-closed') {
+      (document.querySelector(SIDEBAR_TOGGLE_SEL) as HTMLElement)?.click();
+      await waitForMobileSidebar();
+    }
+  }
 
-    const wireUpActionAdvance = () => {
+  return new Promise((resolve) => {
+    const ctx: { d: Driver | null; cleanup: (() => void) | null; completed: boolean } = {
+      d: null,
+      cleanup: null,
+      completed: false,
+    };
+
+    const wireUpActionAdvance = async () => {
       ctx.cleanup?.();
       ctx.cleanup = null;
 
       const idx = ctx.d!.getActiveIndex();
       if (idx === undefined) return;
       const step = tourSteps[idx];
+
       if (step?.kind !== 'action' || !step.element) return;
 
       const target = document.querySelector(step.element);
@@ -350,10 +380,14 @@ export function startWelcomeTour(): Promise<void> {
       const handler = async () => {
         ctx.cleanup?.();
         ctx.cleanup = null;
-        // Wait for the next step's element to render before advancing. For
-        // sidebar-toggle clicks the next target already exists and resolves
-        // instantly; for sidebar-link clicks it lets the new page mount.
         const next = tourSteps[idx + 1];
+        // On mobile, close sidebar before showing page content steps.
+        if (isMobileViewport() && next?.mobileContext === 'page') {
+          if (readSidebarState() === 'mobile-open') {
+            (document.querySelector(SIDEBAR_TOGGLE_SEL) as HTMLElement)?.click();
+            await waitForMobileSidebar();
+          }
+        }
         if (next?.element) {
           await waitForElement(next.element);
         } else {
@@ -365,11 +399,25 @@ export function startWelcomeTour(): Promise<void> {
       ctx.cleanup = () => target.removeEventListener('click', handler);
     };
 
+    const handleNextClick = async () => {
+      const idx = ctx.d!.getActiveIndex();
+      if (idx === undefined) return ctx.d!.moveNext();
+      const next = tourSteps[idx + 1];
+      if (!next) ctx.completed = true; // last step — Done button
+      // On mobile, open sidebar before showing sidebar steps reached via Next.
+      if (isMobileViewport() && next?.mobileContext === 'sidebar') {
+        if (readSidebarState() === 'mobile-closed') {
+          (document.querySelector(SIDEBAR_TOGGLE_SEL) as HTMLElement)?.click();
+          await waitForMobileSidebar();
+          if (next.element) await waitForElement(next.element);
+        }
+      }
+      ctx.d!.moveNext();
+    };
+
     ctx.d = driver({
       showProgress: true,
       allowClose: true,
-      // Clicks on the dimmed overlay shouldn't end the tour or advance it.
-      // Users can still close via the X button or Esc.
       overlayClickBehavior: () => {},
       progressText: '{{current}} of {{total}}',
       nextBtnText: 'Next',
@@ -377,13 +425,14 @@ export function startWelcomeTour(): Promise<void> {
       doneBtnText: 'Done',
       steps: driverSteps,
       onHighlighted: wireUpActionAdvance,
+      onNextClick: handleNextClick,
       onDeselected: () => {
         ctx.cleanup?.();
         ctx.cleanup = null;
       },
       onDestroyed: () => {
         ctx.cleanup?.();
-        markTourCompleted();
+        if (ctx.completed) goto(resolvePath('/home'));
         resolve();
       },
     });
