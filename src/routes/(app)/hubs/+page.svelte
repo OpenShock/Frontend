@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { devicesCreateDeviceV2 } from '$lib/api';
   import { Plus, Router } from '@lucide/svelte';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
   import Button from '$lib/components/ui/button/button.svelte';
@@ -11,8 +12,8 @@
   import DataTableActions from './data-table-actions.svelte';
   import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
   import type { DialogRenderProps } from '$lib/components/dialog-manager/types';
-  import { hubManagementV2Api } from '$lib/api';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+
   import * as Dialog from '$lib/components/ui/dialog';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import PageHeader from '$lib/components/PageHeader.svelte';
@@ -53,7 +54,7 @@
     });
     if (!result) return;
     try {
-      await hubManagementV2Api.devicesCreateDeviceV2({ name: result.name });
+      await devicesCreateDeviceV2({ body: { name: result.name } });
       await refreshOwnHubs();
     } catch (error) {
       handleApiError(error);
@@ -133,7 +134,9 @@
               {/if}
             </Table.Cell>
             <Table.Cell>{hub.firmware_version ?? '—'}</Table.Cell>
-            <Table.Cell>{hub.created_at.toLocaleDateString()}</Table.Cell>
+            <Table.Cell>
+              {hub.created_at.toLocaleString(undefined, { dateStyle: 'short' })}
+            </Table.Cell>
             <Table.Cell>
               <DataTableActions {hub} />
             </Table.Cell>

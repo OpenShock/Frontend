@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { ShockerResponse } from '$lib/api/internal/v1';
+  import type { ShockerResponse } from '$lib/api';
   import { onMount } from 'svelte';
 
   interface Props {

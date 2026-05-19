@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { adminApi } from '$lib/api';
-  import { type AdminUsersView, RoleType } from '$lib/api/internal/v1';
+  import { RoleType, adminModifyUser } from '$lib/api';
+  import type { AdminUsersView } from '$lib/api';
   import EmailInput from '$lib/components/input/EmailInput.svelte';
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
   import { Button } from '$lib/components/ui/button';
@@ -23,11 +23,13 @@
   let emailSet = $derived(email.length > 0 && email != user.email);
 
   function sendit() {
-    adminApi
-      .adminModifyUser(user.id, {
+    adminModifyUser({
+      path: { userId: user.id },
+      body: {
         name: usernameSet ? username : null,
         email: emailSet ? email : null,
-      })
+      },
+    })
       .then(() => (open = false))
       .catch(handleApiError);
   }

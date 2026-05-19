@@ -1,7 +1,7 @@
 <script lang="ts">
+  import { shockerPauseShocker, shockerShockerShareCodePause } from '$lib/api';
+  import type { BooleanLegacyDataResponse } from '$lib/api';
   import { LoaderCircle, Pause, Play } from '@lucide/svelte';
-  import { shockersV1Api } from '$lib/api';
-  import type { BooleanLegacyDataResponse } from '$lib/api/internal/v1';
   import { Button } from '$lib/components/ui/button';
   import { toast } from 'svelte-sonner';
 
@@ -21,11 +21,15 @@
     let pauseRequest: Promise<BooleanLegacyDataResponse>;
 
     if (userShareUserId) {
-      pauseRequest = shockersV1Api.shockerShockerShareCodePause(shockerId, userShareUserId, {
-        pause: !paused,
+      pauseRequest = shockerShockerShareCodePause({
+        path: { shockerId, sharedWithUserId: userShareUserId },
+        body: { pause: !paused },
       });
     } else {
-      pauseRequest = shockersV1Api.shockerPauseShocker(shockerId, { pause: !paused });
+      pauseRequest = shockerPauseShocker({
+        path: { shockerId },
+        body: { pause: !paused },
+      });
     }
 
     pauseRequest

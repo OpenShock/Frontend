@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { adminApi } from '$lib/api';
-  import { ConfigurationValueType } from '$lib/api/internal/v1';
+  import { ConfigurationValueType, adminConfigurationAdd } from '$lib/api';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import { Button } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
@@ -54,8 +53,7 @@
   let valid = $derived(name.length > 0 && value.length > 0 && nameValidationResult.valid);
 
   function onSubmit() {
-    adminApi
-      .adminConfigurationAdd({ name, description, type: valueType, value })
+    adminConfigurationAdd({ body: { name, description, type: valueType, value } })
       .then(() => {
         onAdded();
         toast.success('Created configuration item');

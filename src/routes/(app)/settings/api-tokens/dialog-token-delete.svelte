@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { apiTokensApi } from '$lib/api';
-  import type { TokenResponse } from '$lib/api/internal/v1';
+  import { tokenDeleteDeleteToken } from '$lib/api';
+  import type { TokenResponse } from '$lib/api';
   import ConfirmDeleteDialog from '$lib/components/ConfirmDeleteDialog.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { toast } from 'svelte-sonner';
@@ -15,7 +15,7 @@
 
   async function deleteToken() {
     try {
-      await apiTokensApi.tokenDeleteDeleteToken(token.id);
+      await tokenDeleteDeleteToken({ path: { tokenId: token.id } });
       onDeleted(token.id);
       toast.success('Token deleted successfully');
       open = false;

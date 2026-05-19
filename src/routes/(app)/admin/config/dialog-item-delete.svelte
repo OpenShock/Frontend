@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { adminApi } from '$lib/api';
-  import type { ConfigurationItemDto } from '$lib/api/internal/v1';
+  import { adminConfigurationDelete } from '$lib/api';
+  import type { ConfigurationItemDto } from '$lib/api';
   import ConfirmDeleteDialog from '$lib/components/ConfirmDeleteDialog.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { toast } from 'svelte-sonner';
@@ -14,8 +14,7 @@
   let { open = $bindable<boolean>(), item, onDeleted }: Props = $props();
 
   function onSubmit() {
-    adminApi
-      .adminConfigurationDelete(item.name)
+    adminConfigurationDelete({ path: { name: item.name } })
       .then(() => {
         onDeleted();
         toast.success('Removed item');

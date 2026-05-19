@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { adminApi } from '$lib/api';
-  import type { WebhookDto } from '$lib/api/internal/v1';
+  import { adminRemoveWebhook } from '$lib/api';
+  import type { WebhookDto } from '$lib/api';
   import ConfirmDeleteDialog from '$lib/components/ConfirmDeleteDialog.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { toast } from 'svelte-sonner';
@@ -13,8 +13,7 @@
   let { open = $bindable<boolean>(), webhook }: Props = $props();
 
   function onDeleteClicked() {
-    adminApi
-      .adminRemoveWebhook(webhook.id)
+    adminRemoveWebhook({ path: { id: webhook.id } })
       .then(() => {
         toast.success('Removed webhook');
       })

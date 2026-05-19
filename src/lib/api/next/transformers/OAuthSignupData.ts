@@ -21,8 +21,10 @@ export function TransformOAuthSignupData(data: unknown): OAuthSignupData {
     throw new TransformError('Expected string: expiresAt');
   }
 
-  const expiresAt = new Date(data.expiresAt);
-  if (Number.isNaN(expiresAt.getTime())) {
+  let expiresAt: Temporal.Instant;
+  try {
+    expiresAt = Temporal.Instant.from(data.expiresAt);
+  } catch {
     throw new TransformError('Invalid date: expiresAt');
   }
 

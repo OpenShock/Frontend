@@ -1,6 +1,6 @@
 <script lang="ts">
   import { HubConnectionState } from '@microsoft/signalr';
-  import type { PublicShareResponse } from '$lib/api/internal/v1';
+  import type { PublicShareResponse } from '$lib/api';
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import LiveButton from '$lib/components/ControlModules/LiveButton.svelte';
   import LiveControlModule from '$lib/components/ControlModules/LiveControlModule.svelte';

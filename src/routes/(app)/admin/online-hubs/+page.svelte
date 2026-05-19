@@ -1,7 +1,7 @@
 <script lang="ts">
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
   import type { ColumnFiltersState, SortingState } from '@tanstack/table-core';
-  import { adminApi } from '$lib/api';
+  import { adminGetOnlineDevices } from '$lib/api';
   import Container from '$lib/components/Container.svelte';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import { Button } from '$lib/components/ui/button';
@@ -19,8 +19,7 @@
   let filters = $state<ColumnFiltersState>([]);
 
   function fetchOnlineHubs() {
-    adminApi
-      .adminGetOnlineDevices()
+    adminGetOnlineDevices()
       .then((res) => {
         if (res.data) {
           data = res.data.map((x) => ({ ...x, firmwareVersion: new SemVer(x.firmwareVersion) }));

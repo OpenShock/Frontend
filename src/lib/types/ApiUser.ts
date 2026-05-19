@@ -1,5 +1,4 @@
-import type { RoleType } from '$lib/api/internal/v1';
-
+import type { RoleType } from '$lib/api';
 export interface ApiUser {
   id: string;
   name: string;

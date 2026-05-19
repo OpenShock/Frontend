@@ -1,7 +1,6 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
-  import { apiTokensApi } from '$lib/api';
-  import { PermissionType, instanceOfPermissionType } from '$lib/api/internal/v1';
+  import { PermissionType, tokensCreateToken } from '$lib/api';
   import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card/index.js';
@@ -63,7 +62,7 @@
     let invalidPermissions: string[] = [];
 
     permissionsArray.forEach((p) => {
-      if (!instanceOfPermissionType(p)) {
+      if (!Object.values(PermissionType).includes(p as PermissionType)) {
         invalidPermissions.push(p);
       }
     });
@@ -86,11 +85,9 @@
 
     creatingToken = true;
 
-    apiTokensApi
-      .tokensCreateToken({
-        name: params.name,
-        permissions: params.permissions as PermissionType[],
-      })
+    tokensCreateToken({
+      body: { name: params.name, permissions: params.permissions as PermissionType[] },
+    })
       .then((response) => {
         tokenSecret = response.token;
         openUrl();

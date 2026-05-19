@@ -1,6 +1,6 @@
 <script lang="ts">
   import { X, Zap } from '@lucide/svelte';
-  import type { V2UserSharesListItem } from '$lib/api/internal/v2';
+  import type { V2UserSharesListItem } from '$lib/api';
   import PermissionTooltip from '$lib/components/shares/permission-tooltip.svelte';
   import * as Avatar from '$lib/components/ui/avatar';
   import { Badge } from '$lib/components/ui/badge';

@@ -102,8 +102,11 @@
     }
   }
 
-  function formatTime(date: Date): string {
-    return date.toTimeString().substring(0, 8);
+  function formatTime(instant: Temporal.Instant): string {
+    return instant
+      .toZonedDateTimeISO(Temporal.Now.timeZoneId())
+      .toPlainTime()
+      .toString({ smallestUnit: 'second' });
   }
 
   function formatUptime(ms: number): string {

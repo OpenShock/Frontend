@@ -1,5 +1,6 @@
 <script lang="ts" module>
-  import { OtaUpdateStatus } from '$lib/api/internal/v1';
+  import { OtaUpdateStatus, devicesOtaGetOtaUpdateHistory } from '$lib/api';
+  import type { OtaItem } from '$lib/api';
   import { OtaUpdateProgressTask } from '$lib/signalr/models/OtaUpdateProgressTask';
 
   // Task weights for weighted total progress (7 tasks, sums to 100)
@@ -37,17 +38,15 @@
     }
   }
 
-  function formatRelativeTime(date: Date): string {
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffSeconds = Math.floor(diffMs / 1000);
-    const diffMinutes = Math.floor(diffSeconds / 60);
-    const diffHours = Math.floor(diffMinutes / 60);
-    const diffDays = Math.floor(diffHours / 24);
+  function formatRelativeTime(instant: Temporal.Instant): string {
+    const tz = Temporal.Now.timeZoneId();
+    const elapsed = instant
+      .toZonedDateTimeISO(tz)
+      .until(Temporal.Now.zonedDateTimeISO(tz), { largestUnit: 'day' });
 
-    if (diffDays > 0) return `${diffDays}d ago`;
-    if (diffHours > 0) return `${diffHours}h ago`;
-    if (diffMinutes > 0) return `${diffMinutes}m ago`;
+    if (elapsed.days > 0) return `${elapsed.days}d ago`;
+    if (elapsed.hours > 0) return `${elapsed.hours}h ago`;
+    if (elapsed.minutes > 0) return `${elapsed.minutes}m ago`;
     return 'just now';
   }
 
@@ -59,8 +58,6 @@
 <script lang="ts">
   import { CircleCheck, CircleX, CloudDownload, RotateCcw, TriangleAlert } from '@lucide/svelte';
   import { page } from '$app/state';
-  import { hubManagementV1Api } from '$lib/api';
-  import type { OtaItem } from '$lib/api/internal/v1';
   import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
   import { Badge } from '$lib/components/ui/badge';
   import Button from '$lib/components/ui/button/button.svelte';
@@ -180,8 +177,7 @@
     }
 
     isLoading = true;
-    hubManagementV1Api
-      .devicesOtaGetOtaUpdateHistory(hubId)
+    devicesOtaGetOtaUpdateHistory({ path: { deviceId: hubId } })
       .then((resp) => {
         if (resp.data === null) {
           hubLoaded = false;

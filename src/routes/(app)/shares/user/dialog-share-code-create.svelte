@@ -1,7 +1,7 @@
 <script lang="ts">
+  import { userSharesCreateShareInvite } from '$lib/api';
+  import type { BasicUserInfo } from '$lib/api';
   import { Barcode, User } from '@lucide/svelte';
-  import { shockerSharesV2Api } from '$lib/api';
-  import { type BasicUserInfo } from '$lib/api/internal/v1';
   import RestrictionsSelector from '$lib/components/shares/restrictions-selector.svelte';
   import UserSelector from '$lib/components/shares/user-selector.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
@@ -88,13 +88,15 @@
 
   async function onFormSubmit() {
     try {
-      const createdCode = await shockerSharesV2Api.userSharesCreateShareInvite({
-        user: fetchedUser?.id,
-        shockers: shockerIds.map((id) => ({
-          id: id,
-          permissions: { ...restrictions.permissions },
-          limits: { ...restrictions.limits },
-        })),
+      const createdCode = await userSharesCreateShareInvite({
+        body: {
+          user: fetchedUser?.id,
+          shockers: shockerIds.map((id) => ({
+            id: id,
+            permissions: { ...restrictions.permissions },
+            limits: { ...restrictions.limits },
+          })),
+        },
       });
 
       if (fetchedUser) {

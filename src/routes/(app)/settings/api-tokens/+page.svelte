@@ -1,10 +1,10 @@
 <script lang="ts">
+  import { tokensListTokens } from '$lib/api';
+  import type { TokenCreatedResponse, TokenResponse } from '$lib/api';
   import Plus from '@lucide/svelte/icons/plus';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
   import type { SortingState } from '@tanstack/table-core';
   import type { ColumnDef } from '@tanstack/table-core';
-  import { apiTokensApi } from '$lib/api';
-  import type { TokenCreatedResponse, TokenResponse } from '$lib/api/internal/v1';
   import Container from '$lib/components/Container.svelte';
   import {
     CreateActionsColumnDef,
@@ -34,7 +34,7 @@
 
   async function loadTokens(): Promise<boolean> {
     try {
-      tokens = await apiTokensApi.tokensListTokens();
+      tokens = await tokensListTokens();
       return true;
     } catch (error) {
       await handleApiError(error);

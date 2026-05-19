@@ -1,6 +1,6 @@
 <script lang="ts" module>
-  import { ShockerModelType } from '$lib/api/internal/v1';
-
+  import { ShockerModelType } from '$lib/api';
+  import type { NewShocker } from '$lib/api';
   export interface AddShockerData {
     name: string;
     rfId: number;
@@ -19,7 +19,6 @@
 </script>
 
 <script lang="ts">
-  import type { NewShocker } from '$lib/api/internal/v1';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog';

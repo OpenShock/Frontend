@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import { accountV1Api } from '$lib/api';
+  import { authenticatedAccountDeactivate } from '$lib/api';
   import { Button } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
@@ -10,8 +10,7 @@
   let deactivateDialogOpen = $state(false);
 
   function deactivateAccount() {
-    accountV1Api
-      .authenticatedAccountDeactivate()
+    authenticatedAccountDeactivate()
       .then(() => {
         toast.success('Account deactivated successfully');
         goto(resolve('/'));

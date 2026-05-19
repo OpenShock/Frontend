@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { type AdminUsersView, RoleType } from '$lib/api/internal/v1';
+  import { RoleType } from '$lib/api';
+  import type { AdminUsersView } from '$lib/api';
   import TableActionMenu from '$lib/components/TableActionMenu.svelte';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { copyToClipboard } from '$lib/utils/clipboard.svelte';
