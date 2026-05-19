@@ -1,11 +1,3 @@
-export function instantFromDate(date: Date): Temporal.Instant {
-  return Temporal.Instant.fromEpochMilliseconds(date.getTime());
-}
-
-export function instantToDate(instant: Temporal.Instant): Date {
-  return new Date(instant.epochMilliseconds);
-}
-
 export function durationBetween(from: Temporal.Instant, to: Temporal.Instant): Temporal.Duration {
   const tz = Temporal.Now.timeZoneId();
   return from.toZonedDateTimeISO(tz).until(to.toZonedDateTimeISO(tz), { largestUnit: 'year' });
