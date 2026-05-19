@@ -103,7 +103,10 @@
   }
 
   function formatTime(instant: Temporal.Instant): string {
-    return instant.toLocaleString(undefined, { hour12: false, timeStyle: 'medium' });
+    return instant
+      .toZonedDateTimeISO(Temporal.Now.timeZoneId())
+      .toPlainTime()
+      .toString({ smallestUnit: 'second' });
   }
 
   function formatUptime(ms: number): string {
