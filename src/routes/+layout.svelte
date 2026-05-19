@@ -4,7 +4,7 @@
   import { BasicTags, OpenGraphTags, TwitterSummaryTags } from '$lib/components/metadata';
   import { SidebarProvider } from '$lib/components/ui/sidebar';
   import { Toaster } from '$lib/components/ui/sonner';
-  import * as Tooltip from '$lib/components/ui/tooltip';
+  import { TooltipProvider } from '$lib/components/ui/tooltip';
   import { buildMetaData } from '$lib/metadata';
   import { type Snippet } from 'svelte';
   import Footer from './Footer.svelte';
@@ -37,7 +37,7 @@
 
 <DialogManager />
 
-<Tooltip.Provider delayDuration={250}>
+<TooltipProvider delayDuration={250}>
   <SidebarProvider open={isOpen} onOpenChange={(v) => (sidebarOpen.value = v)}>
     <Sidebar />
     <div class="flex h-screen w-screen flex-1 flex-col overflow-hidden">
@@ -56,4 +56,4 @@
       <Footer />
     </div>
   </SidebarProvider>
-</Tooltip.Provider>
+</TooltipProvider>
