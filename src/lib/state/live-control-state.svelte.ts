@@ -1,7 +1,7 @@
 import { hubManagementV1Api } from '$lib/api';
 import { ControlType } from '$lib/signalr/models/ControlType';
 import { toast } from 'svelte-sonner';
-import { SvelteMap } from 'svelte/reactivity';
+import { SvelteMap, SvelteSet } from 'svelte/reactivity';
 
 const TICK_INTERVAL_MS = 100;
 
@@ -51,7 +51,7 @@ export class LiveDeviceConnection {
    * Call from $effect or event handler.
    */
   registerHubShockers(shockers: { id: string; isPaused: boolean }[]): void {
-    const ids = new Set(shockers.map((s) => s.id));
+    const ids = new SvelteSet(shockers.map((s) => s.id));
     for (const s of shockers) {
       let state = this.shockers.get(s.id);
       if (!state) {
