@@ -1,48 +1,14 @@
-import { PUBLIC_DISABLE_ONBOARDING } from '$env/static/public';
-import { isTruthy } from '$lib/utils/parse';
 import { driver, type Driver, type DriveStep } from 'driver.js';
 import 'driver.js/dist/driver.css';
+import { isOnboardingDisabled, markTourCompleted } from './onboarding-state';
 
-// Bump when the tour gains a meaningful new stop so users who already
-// completed an older version see it again.
-const CURRENT_TOUR_VERSION = 1;
-const TOUR_VERSION_KEY = 'os.tourCompletedVersion';
-
-export function isOnboardingDisabled(): boolean {
-  return isTruthy(PUBLIC_DISABLE_ONBOARDING);
-}
-
-const CURRENT_WELCOME_VERSION = 1;
-const WELCOME_VERSION_KEY = 'os.welcomeVersion';
-
-export function hasSeenWelcome(): boolean {
-  try {
-    const raw = localStorage.getItem(WELCOME_VERSION_KEY);
-    const seen = raw ? parseInt(raw, 10) : 0;
-    return Number.isFinite(seen) && seen >= CURRENT_WELCOME_VERSION;
-  } catch {
-    return false;
-  }
-}
-
-export function markWelcomed(): void {
-  try {
-    localStorage.setItem(WELCOME_VERSION_KEY, String(CURRENT_WELCOME_VERSION));
-  } catch {
-    // ignore (private mode, quota, etc.)
-  }
-}
-
-export function shouldShowWelcome(): boolean {
-  if (isOnboardingDisabled()) return false;
-  try {
-    const raw = localStorage.getItem(WELCOME_VERSION_KEY);
-    const seen = raw ? parseInt(raw, 10) : 0;
-    return !Number.isFinite(seen) || seen < CURRENT_WELCOME_VERSION;
-  } catch {
-    return false;
-  }
-}
+export {
+  hasCompletedTour,
+  hasSeenWelcome,
+  isOnboardingDisabled,
+  markWelcomed,
+  shouldShowWelcome,
+} from './onboarding-state';
 
 const SIDEBAR_TOGGLE_SEL = 'button[title="Toggle Sidebar"]';
 const SIDEBAR_ROOT_SEL = '[data-slot="sidebar"]';
@@ -351,25 +317,6 @@ function toDriverStep(step: TourStep): DriveStep {
       showButtons: step.kind === 'action' ? ['previous', 'close'] : ['next', 'previous', 'close'],
     },
   };
-}
-
-export function hasCompletedTour(): boolean {
-  if (isOnboardingDisabled()) return true;
-  try {
-    const raw = localStorage.getItem(TOUR_VERSION_KEY);
-    const n = raw ? parseInt(raw, 10) : 0;
-    return Number.isFinite(n) && n >= CURRENT_TOUR_VERSION;
-  } catch {
-    return false;
-  }
-}
-
-function markTourCompleted(): void {
-  try {
-    localStorage.setItem(TOUR_VERSION_KEY, String(CURRENT_TOUR_VERSION));
-  } catch {
-    // ignore
-  }
 }
 
 /**
