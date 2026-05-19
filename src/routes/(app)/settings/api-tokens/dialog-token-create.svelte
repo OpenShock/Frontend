@@ -34,16 +34,6 @@
     return { valid: true };
   }
 
-  function expireValidation(
-    expire: string,
-    expireCustom: ZonedDateTime | undefined
-  ): ValidationResult {
-    if (expire === 'custom' && !expireCustom) {
-      return { valid: false, message: 'Expire date is required' };
-    }
-    return { valid: true };
-  }
-
   function capitalizeFirstLetter(string: string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
@@ -52,14 +42,12 @@
 <script lang="ts">
   import { apiTokensApi } from '$lib/api';
   import type { TokenCreatedResponse } from '$lib/api/internal/v1';
-  import DateTimePicker from '$lib/components/datetime-picker/date-time-picker.svelte';
+  import ExpirationPicker from '$lib/components/ExpirationPicker.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
-  import * as Select from '$lib/components/ui/select';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { GetValResColor } from '$lib/types/ValidationResult';
-  import { durationBetween, formatElapsed, instantFromDate, instantToDate } from '$lib/utils';
+  import { instantToDate } from '$lib/utils';
 
   interface Props {
     open: boolean;
@@ -69,8 +57,9 @@
   let { open = $bindable(), onCreated }: Props = $props();
 
   let name = $state<string>('');
-  let expire = $state<'never' | `${number}days` | 'custom'>('never');
+  let expire = $state('never');
   let expireCustom = $state<ZonedDateTime | undefined>(undefined);
+  let expireInstant = $state<Temporal.Instant | null>(null);
   let permissions = $state<PermissionType[]>([PermissionType.ShockersUse]);
 
   function onOpenChange(o: boolean) {
@@ -85,32 +74,6 @@
   }
 
   let nameValidationResult = $derived(nameValidation(name));
-  let expireValidationResult = $derived(expireValidation(expire, expireCustom));
-
-  const inDays = (days: number) => () => Temporal.Now.instant().add({ hours: days * 24 });
-
-  const expirationOptions: {
-    value: string;
-    label: string;
-    getInstant: () => Temporal.Instant | null;
-  }[] = [
-    { value: 'never', label: 'Never', getInstant: () => null },
-    {
-      value: 'custom',
-      label: 'Custom',
-      getInstant: () =>
-        expireCustom !== undefined ? instantFromDate(expireCustom.toDate()) : null,
-    },
-    { value: '1days', label: '1 Day', getInstant: inDays(1) },
-    { value: '7days', label: '7 Days', getInstant: inDays(7) },
-    { value: '30days', label: '30 Days', getInstant: inDays(30) },
-    { value: '90days', label: '90 Days', getInstant: inDays(90) },
-    { value: '180days', label: '180 Days', getInstant: inDays(180) },
-    { value: '365days', label: '365 Days', getInstant: inDays(365) },
-  ];
-
-  let selectedExpiration = $derived(expirationOptions.find((option) => option.value === expire));
-  let expireInstant = $derived(selectedExpiration?.getInstant() ?? null);
 
   async function onFormSubmit() {
     const validUntil = expireInstant ? instantToDate(expireInstant) : null;
@@ -142,41 +105,11 @@
         validationResult={nameValidationResult}
       />
 
-      <label>
-        <span>Expiration</span>
-        <Select.Root type="single" name="expiration" bind:value={expire}>
-          <Select.Trigger class="w-[180px]">
-            {selectedExpiration?.label}
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Group>
-              {#each expirationOptions as option (option.label)}
-                <Select.Item value={option.value} label={option.label}>{option.label}</Select.Item>
-              {/each}
-            </Select.Group>
-          </Select.Content>
-        </Select.Root>
-
-        {#if expire === 'custom'}
-          <div class="my-2 w-1/2">
-            <DateTimePicker bind:date={expireCustom} />
-          </div>
-        {/if}
-        {#if 'message' in expireValidationResult}
-          <p class="text-xs text-{GetValResColor(expireValidationResult)}">
-            {expireValidationResult.message}
-          </p>
-        {:else if expire === 'never'}
-          <p class="text-xs">The token will never expire</p>
-        {:else if expireInstant}
-          <p class="text-xs" aria-label={expireInstant.toLocaleString()}>
-            The token will expire {formatElapsed(
-              durationBetween(Temporal.Now.instant(), expireInstant)
-            )}
-            ({expireInstant.toLocaleString()})
-          </p>
-        {/if}
-      </label>
+      <ExpirationPicker
+        bind:option={expire}
+        bind:customDate={expireCustom}
+        bind:instant={expireInstant}
+      />
 
       <div class="mt-4">
         <h2>Permissions</h2>
