@@ -12,10 +12,10 @@
   import { getConnection } from '$lib/signalr/user.svelte';
   import { serializeControlMessages } from '$lib/signalr/serializers/Control';
   import {
-    ensureLiveConnection,
     getLiveConnection,
     liveConnections,
     LiveConnectionState,
+    registerHubShockers,
   } from '$lib/state/live-control-state.svelte';
   import { sharedHubsState, refreshSharedHubs } from '$lib/state/shared-hubs-state.svelte';
   import { onMount } from 'svelte';
@@ -32,19 +32,18 @@
     if (conn) serializeControlMessages(conn, [{ id, type, intensity, duration }]);
   }
 
-  // Eagerly create LiveDeviceConnection and LiveShockerState entries
+  // Register each hub's shockers with the live-control state store
   $effect(() => {
     const currentDeviceIds: string[] = [];
     for (const owner of sharedHubsState.value) {
       for (const device of owner.devices) {
         currentDeviceIds.push(device.id);
-        ensureLiveConnection(device.id);
-        const conn = getLiveConnection(device.id);
-        if (conn) {
-          for (const shocker of device.shockers) {
-            conn.ensureShockerState(shocker.id);
-          }
-        }
+        registerHubShockers(
+          device.id,
+          device.shockers
+            .filter((s) => s.permissions.live)
+            .map((s) => ({ id: s.id, isPaused: s.isPaused }))
+        );
       }
     }
     for (const [deviceId, conn] of liveConnections) {
@@ -116,14 +115,7 @@
                   >
                     {#snippet live()}
                       {#if shocker.permissions.live}
-                        <LiveButton
-                          hubId={device.id}
-                          shockerId={shocker.id}
-                          isPaused={shocker.isPaused}
-                          connection={liveConn}
-                          {liveState}
-                          compact
-                        />
+                        <LiveButton hubId={device.id} shockerId={shocker.id} compact />
                       {/if}
                     {/snippet}
                     {#if isShockerLiveActive && liveState && liveConn}
