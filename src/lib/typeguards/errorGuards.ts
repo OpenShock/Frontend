@@ -1,4 +1,4 @@
-import { FetchError, ResponseError } from '$lib/api/internal/errors';
+import { FetchError, ResponseError } from '$lib/api';
 
 // TODO: Use Error.isError() when compatibility reaches Baseline (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/isError)
 export function isError(error: unknown): error is Error {

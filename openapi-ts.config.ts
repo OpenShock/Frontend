@@ -11,6 +11,7 @@ const sharedPlugins = [
     auth: false,
     operations: { strategy: 'flat' },
     responseStyle: 'data',
+    transformer: true,
   },
   {
     name: '@hey-api/typescript',
