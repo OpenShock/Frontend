@@ -60,8 +60,20 @@ export class LiveDeviceConnection {
       }
       state.isPaused = s.isPaused;
     }
-    for (const id of this.shockers.keys()) {
-      if (!ids.has(id)) this.shockers.delete(id);
+    let removedLive = false;
+    for (const [id, state] of this.shockers) {
+      if (ids.has(id)) continue;
+      if (state.isLive) removedLive = true;
+      state.isLive = false;
+      state.isDragging = false;
+      state.intensity = 0;
+      this.shockers.delete(id);
+    }
+    if (removedLive) {
+      const anyLive = [...this.shockers.values()].some((s) => s.isLive);
+      if (!anyLive && this.state !== LiveConnectionState.Disconnected) {
+        this.disconnect();
+      }
     }
   }
 
