@@ -1,7 +1,6 @@
 <script lang="ts" module>
   import { PermissionType, tokensCreateToken } from '$lib/api';
   import type { TokenCreatedResponse } from '$lib/api';
-  import type { ZonedDateTime } from '@internationalized/date';
   import type { ValidationResult } from '$lib/types/ValidationResult';
 
   type PermissionCategory = {
@@ -56,7 +55,6 @@
 
   let name = $state<string>('');
   let expire = $state('never');
-  let expireCustom = $state<ZonedDateTime | undefined>(undefined);
   let expireInstant = $state<Temporal.Instant | null>(null);
   let permissions = $state<PermissionType[]>([PermissionType.ShockersUse]);
 
@@ -65,7 +63,7 @@
     if (!o) {
       name = '';
       expire = 'never';
-      expireCustom = undefined;
+
       permissions = [PermissionType.ShockersUse];
     }
     open = o;
@@ -103,11 +101,7 @@
         validationResult={nameValidationResult}
       />
 
-      <ExpirationPicker
-        bind:option={expire}
-        bind:customDate={expireCustom}
-        bind:instant={expireInstant}
-      />
+      <ExpirationPicker bind:option={expire} bind:instant={expireInstant} />
 
       <div class="mt-4">
         <h2>Permissions</h2>

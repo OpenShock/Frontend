@@ -1,21 +1,15 @@
 <script lang="ts">
-  import type { ZonedDateTime } from '@internationalized/date';
-  import DateTimePicker from '$lib/components/datetime-picker/date-time-picker.svelte';
   import * as Select from '$lib/components/ui/select';
   import { GetValResColor } from '$lib/types/ValidationResult';
-  import { durationBetween, formatElapsed, instantFromDate } from '$lib/utils';
+  import { durationBetween, formatElapsed } from '$lib/utils';
 
   interface Props {
     option?: string;
-    customDate?: ZonedDateTime | undefined;
     instant?: Temporal.Instant | null;
   }
 
-  let {
-    option = $bindable('never'),
-    customDate = $bindable<ZonedDateTime | undefined>(undefined),
-    instant = $bindable<Temporal.Instant | null>(null),
-  }: Props = $props();
+  let { option = $bindable('never'), instant = $bindable<Temporal.Instant | null>(null) }: Props =
+    $props();
 
   const inDays = (days: number) => () => Temporal.Now.instant().add({ hours: days * 24 });
 
@@ -25,11 +19,7 @@
     getInstant: () => Temporal.Instant | null;
   }[] = [
     { value: 'never', label: 'Never', getInstant: () => null },
-    {
-      value: 'custom',
-      label: 'Custom',
-      getInstant: () => (customDate !== undefined ? instantFromDate(customDate.toDate()) : null),
-    },
+    { value: 'custom', label: 'Custom', getInstant: () => customInstant },
     { value: '1days', label: '1 Day', getInstant: inDays(1) },
     { value: '7days', label: '7 Days', getInstant: inDays(7) },
     { value: '30days', label: '30 Days', getInstant: inDays(30) },
@@ -38,14 +28,25 @@
     { value: '365days', label: '365 Days', getInstant: inDays(365) },
   ];
 
+  let customValue = $state('');
+  let customInstant = $derived.by<Temporal.Instant | null>(() => {
+    if (!customValue) return null;
+    try {
+      return Temporal.PlainDateTime.from(customValue)
+        .toZonedDateTime(Temporal.Now.timeZoneId())
+        .toInstant();
+    } catch {
+      return null;
+    }
+  });
+
   let selectedExpiration = $derived(expirationOptions.find((o) => o.value === option));
-  let _instant = $derived(selectedExpiration?.getInstant() ?? null);
   $effect(() => {
-    instant = _instant;
+    instant = selectedExpiration?.getInstant() ?? null;
   });
 
   let validationResult = $derived(
-    option === 'custom' && !customDate
+    option === 'custom' && !customInstant
       ? { valid: false, message: 'Expire date is required' }
       : { valid: true }
   );
@@ -67,8 +68,12 @@
   </Select.Root>
 
   {#if option === 'custom'}
-    <div class="my-2 w-1/2">
-      <DateTimePicker bind:date={customDate} />
+    <div class="my-2">
+      <input
+        type="datetime-local"
+        bind:value={customValue}
+        class="rounded border px-2 py-1 text-sm"
+      />
     </div>
   {/if}
   {#if 'message' in validationResult}
