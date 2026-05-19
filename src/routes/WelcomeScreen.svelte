@@ -59,7 +59,7 @@
   }
 
   function goNext() {
-    if (step === steps.length - 1) return dismiss();
+    if (step === steps.length - 1) return finish();
     goTo(step + 1);
   }
 
@@ -71,6 +71,11 @@
   function dismiss() {
     markWelcomed();
     markTourCompleted();
+    open = false;
+  }
+
+  function finish() {
+    markWelcomed();
     open = false;
   }
 
