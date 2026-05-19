@@ -1,3 +1,4 @@
+import { base } from '$app/paths';
 import { versionGetBackendInfo } from '$lib/api';
 import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 import { authState, startAuthLifecycle } from '$lib/state/auth-state.svelte';
@@ -27,7 +28,7 @@ async function clientInit(): Promise<void> {
 }
 
 export async function init() {
-  redirectLegacyHashRoute();
+  redirectLegacyHashRoute(base);
   await ensureTemporal();
   await clientInit().catch(handleApiError);
   initializeColorScheme();

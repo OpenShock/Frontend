@@ -68,17 +68,21 @@ export function mapLegacyHashRoute(legacyPath: string): string | null {
 /**
  * If the current URL has a legacy `#/...` hash route, replace it with the
  * mapped new path. Call before the SvelteKit router boots.
+ *
+ * @param pathBase - The SvelteKit `base` path (from `$app/paths`). Prepended
+ *   to every redirect so deployments under a sub-path work correctly.
+ * @param mapper - Override for `mapLegacyHashRoute`; exposed for testing.
  */
-export function redirectLegacyHashRoute(): void {
+export function redirectLegacyHashRoute(pathBase = '', mapper = mapLegacyHashRoute): void {
   const hash = location.hash;
   if (!hash || hash.charAt(1) !== '/') return;
 
-  const target = mapLegacyHashRoute(hash.slice(1));
+  const target = mapper(hash.slice(1));
   if (!target) return;
 
   // Defense-in-depth: only allow same-origin, root-relative redirects.
   // Reject protocol-relative (`//...`) and scheme-prefixed (`http:...`, `javascript:...`) values.
   const isSafeInternalPath =
     target.startsWith('/') && !target.startsWith('//') && !/^[a-zA-Z][a-zA-Z\d+\-.]*:/.test(target);
-  location.replace(isSafeInternalPath ? target : '/home');
+  location.replace(pathBase + (isSafeInternalPath ? target : '/home'));
 }

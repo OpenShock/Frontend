@@ -168,11 +168,16 @@ describe('redirectLegacyHashRoute', () => {
   });
 
   it('does not follow a protocol-relative path — redirects to /home instead', () => {
-    // mapLegacyHashRoute always returns a safe /... path or /home, but
-    // redirectLegacyHashRoute has a defence-in-depth guard against // and scheme
-    // prefixes. Verify safe known routes are still redirected normally.
     setHash('#/dashboard');
-    redirectLegacyHashRoute();
+    // Pass an unsafe mapper to exercise the defence-in-depth guard directly,
+    // since mapLegacyHashRoute itself always returns safe paths.
+    redirectLegacyHashRoute('', () => '//evil.com/steal');
+    expect(replaceMock).toHaveBeenCalledWith('/home');
+  });
+
+  it('does not follow a scheme-prefixed path — redirects to /home instead', () => {
+    setHash('#/dashboard');
+    redirectLegacyHashRoute('', () => 'javascript:alert(1)');
     expect(replaceMock).toHaveBeenCalledWith('/home');
   });
 
@@ -180,5 +185,11 @@ describe('redirectLegacyHashRoute', () => {
     setHash('#/dashboard?tab=overview');
     redirectLegacyHashRoute();
     expect(replaceMock).toHaveBeenCalledWith('/home?tab=overview');
+  });
+
+  it('prepends pathBase to the redirect target', () => {
+    setHash('#/dashboard/shockers');
+    redirectLegacyHashRoute('/app');
+    expect(replaceMock).toHaveBeenCalledWith('/app/shockers/own');
   });
 });
