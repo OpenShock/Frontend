@@ -77,7 +77,14 @@
     <p class="text-xs">This will never expire</p>
   {:else if instant}
     {@const elapsed = formatElapsed(durationBetween(Temporal.Now.instant(), instant))}
-    {@const label = new Date(instant.epochMilliseconds).toLocaleString()}
+    {@const label = instant.toLocaleString(undefined, {
+      timeZone: Temporal.Now.timeZoneId(),
+      day: '2-digit',
+      month: '2-digit',
+      year: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    })}
     <p class="text-xs" aria-label={label}>Expires {elapsed} ({label})</p>
   {/if}
 </label>
