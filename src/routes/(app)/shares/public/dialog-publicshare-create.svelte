@@ -67,7 +67,7 @@
     publicShockerSharesApi
       .shareLinksCreatePublicShare({
         name,
-        expiresOn: expireInstant ? instantToDate(expireInstant) : undefined,
+        expiresOn: expireInstant ? instantToDate(expireInstant) : null,
       })
       .then(() => {
         onCreated();
