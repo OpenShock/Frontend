@@ -61,8 +61,6 @@
     ctx.clearRect(0, 0, w, h);
     if (samples.length < 2) return;
 
-    strokeColor = getComputedStyle(canvas).color || strokeColor;
-
     const toX = (t: number) => w - ((now - t) / WINDOW_MS) * w;
     const toY = (v: number) => h - (Math.min(v, maxIntensity) / maxIntensity) * h;
 
