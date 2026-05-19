@@ -8,6 +8,7 @@ const sharedPlugins = [
   },
   {
     name: '@hey-api/sdk',
+    auth: false,
     operations: { strategy: 'flat' },
     responseStyle: 'data',
   },

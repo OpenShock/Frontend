@@ -23,11 +23,6 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
  */
 export const tokenDeleteDeleteToken = <ThrowOnError extends boolean = true>(options: Options<TokenDeleteDeleteTokenData, ThrowOnError>) => (options.client ?? client).delete<TokenDeleteDeleteTokenResponses, TokenDeleteDeleteTokenErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/tokens/{tokenId}',
     ...options
 });
@@ -37,11 +32,6 @@ export const tokenDeleteDeleteToken = <ThrowOnError extends boolean = true>(opti
  */
 export const tokensGetTokenById = <ThrowOnError extends boolean = true>(options: Options<TokensGetTokenByIdData, ThrowOnError>) => (options.client ?? client).get<TokensGetTokenByIdResponses, TokensGetTokenByIdErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/tokens/{tokenId}',
     ...options
 });
@@ -51,11 +41,6 @@ export const tokensGetTokenById = <ThrowOnError extends boolean = true>(options:
  */
 export const tokensEditToken = <ThrowOnError extends boolean = true>(options: Options<TokensEditTokenData, ThrowOnError>) => (options.client ?? client).patch<TokensEditTokenResponses, TokensEditTokenErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/tokens/{tokenId}',
     ...options,
     headers: {
@@ -69,7 +54,6 @@ export const tokensEditToken = <ThrowOnError extends boolean = true>(options: Op
  */
 export const tokensSelfGetSelfToken = <ThrowOnError extends boolean = true>(options?: Options<TokensSelfGetSelfTokenData, ThrowOnError>) => (options?.client ?? client).get<TokensSelfGetSelfTokenResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{ name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/tokens/self',
     ...options
 });
@@ -79,11 +63,6 @@ export const tokensSelfGetSelfToken = <ThrowOnError extends boolean = true>(opti
  */
 export const tokensReportTokens = <ThrowOnError extends boolean = true>(options?: Options<TokensReportTokensData, ThrowOnError>) => (options?.client ?? client).post<TokensReportTokensResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/tokens/report',
     ...options,
     headers: {
@@ -97,11 +76,6 @@ export const tokensReportTokens = <ThrowOnError extends boolean = true>(options?
  */
 export const tokensListTokens = <ThrowOnError extends boolean = true>(options?: Options<TokensListTokensData, ThrowOnError>) => (options?.client ?? client).get<TokensListTokensResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/tokens',
     ...options
 });
@@ -111,11 +85,6 @@ export const tokensListTokens = <ThrowOnError extends boolean = true>(options?: 
  */
 export const tokensCreateToken = <ThrowOnError extends boolean = true>(options?: Options<TokensCreateTokenData, ThrowOnError>) => (options?.client ?? client).post<TokensCreateTokenResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/tokens',
     ...options,
     headers: {
@@ -227,11 +196,6 @@ export const accountEmailVerify = <ThrowOnError extends boolean = true>(options?
  */
 export const authenticatedAccountChangeEmail = <ThrowOnError extends boolean = true>(options?: Options<AuthenticatedAccountChangeEmailData, ThrowOnError>) => (options?.client ?? client).post<AuthenticatedAccountChangeEmailResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/account/email',
     ...options,
     headers: {
@@ -245,11 +209,6 @@ export const authenticatedAccountChangeEmail = <ThrowOnError extends boolean = t
  */
 export const authenticatedAccountChangePassword = <ThrowOnError extends boolean = true>(options?: Options<AuthenticatedAccountChangePasswordData, ThrowOnError>) => (options?.client ?? client).post<AuthenticatedAccountChangePasswordResponses, AuthenticatedAccountChangePasswordErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/account/password',
     ...options,
     headers: {
@@ -263,11 +222,6 @@ export const authenticatedAccountChangePassword = <ThrowOnError extends boolean 
  */
 export const authenticatedAccountChangeUsername = <ThrowOnError extends boolean = true>(options?: Options<AuthenticatedAccountChangeUsernameData, ThrowOnError>) => (options?.client ?? client).post<AuthenticatedAccountChangeUsernameResponses, AuthenticatedAccountChangeUsernameErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/account/username',
     ...options,
     headers: {
@@ -281,11 +235,6 @@ export const authenticatedAccountChangeUsername = <ThrowOnError extends boolean 
  */
 export const authenticatedAccountDeactivate = <ThrowOnError extends boolean = true>(options?: Options<AuthenticatedAccountDeactivateData, ThrowOnError>) => (options?.client ?? client).delete<AuthenticatedAccountDeactivateResponses, AuthenticatedAccountDeactivateErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/account',
     ...options
 });
@@ -295,11 +244,6 @@ export const authenticatedAccountDeactivate = <ThrowOnError extends boolean = tr
  */
 export const authenticatedAccountRemoveOAuthConnection = <ThrowOnError extends boolean = true>(options: Options<AuthenticatedAccountRemoveOAuthConnectionData, ThrowOnError>) => (options.client ?? client).delete<AuthenticatedAccountRemoveOAuthConnectionResponses, AuthenticatedAccountRemoveOAuthConnectionErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/account/connections/{provider}',
     ...options
 });
@@ -309,11 +253,6 @@ export const authenticatedAccountRemoveOAuthConnection = <ThrowOnError extends b
  */
 export const authenticatedAccountListOAuthConnections = <ThrowOnError extends boolean = true>(options?: Options<AuthenticatedAccountListOAuthConnectionsData, ThrowOnError>) => (options?.client ?? client).get<AuthenticatedAccountListOAuthConnectionsResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/account/connections',
     ...options
 });
@@ -323,11 +262,6 @@ export const authenticatedAccountListOAuthConnections = <ThrowOnError extends bo
  */
 export const adminConfigurationList = <ThrowOnError extends boolean = true>(options?: Options<AdminConfigurationListData, ThrowOnError>) => (options?.client ?? client).get<AdminConfigurationListResponses, AdminConfigurationListErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/admin/config',
     ...options
 });
@@ -337,11 +271,6 @@ export const adminConfigurationList = <ThrowOnError extends boolean = true>(opti
  */
 export const adminConfigurationAdd = <ThrowOnError extends boolean = true>(options?: Options<AdminConfigurationAddData, ThrowOnError>) => (options?.client ?? client).post<AdminConfigurationAddResponses, AdminConfigurationAddErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/admin/config',
     ...options,
     headers: {
@@ -355,11 +284,6 @@ export const adminConfigurationAdd = <ThrowOnError extends boolean = true>(optio
  */
 export const adminConfigurationUpdate = <ThrowOnError extends boolean = true>(options?: Options<AdminConfigurationUpdateData, ThrowOnError>) => (options?.client ?? client).put<AdminConfigurationUpdateResponses, AdminConfigurationUpdateErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/admin/config',
     ...options,
     headers: {
@@ -373,11 +297,6 @@ export const adminConfigurationUpdate = <ThrowOnError extends boolean = true>(op
  */
 export const adminConfigurationDelete = <ThrowOnError extends boolean = true>(options: Options<AdminConfigurationDeleteData, ThrowOnError>) => (options.client ?? client).delete<AdminConfigurationDeleteResponses, AdminConfigurationDeleteErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/admin/config/{name}',
     ...options
 });
@@ -387,11 +306,6 @@ export const adminConfigurationDelete = <ThrowOnError extends boolean = true>(op
  */
 export const adminDeactivateUser = <ThrowOnError extends boolean = true>(options: Options<AdminDeactivateUserData, ThrowOnError>) => (options.client ?? client).put<AdminDeactivateUserResponses, AdminDeactivateUserErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/admin/users/{userId}/deactivate',
     ...options
 });
@@ -401,11 +315,6 @@ export const adminDeactivateUser = <ThrowOnError extends boolean = true>(options
  */
 export const adminDeleteUser = <ThrowOnError extends boolean = true>(options: Options<AdminDeleteUserData, ThrowOnError>) => (options.client ?? client).delete<AdminDeleteUserResponses, AdminDeleteUserErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/admin/users/{userId}',
     ...options
 });
@@ -415,11 +324,6 @@ export const adminDeleteUser = <ThrowOnError extends boolean = true>(options: Op
  */
 export const adminModifyUser = <ThrowOnError extends boolean = true>(options: Options<AdminModifyUserData, ThrowOnError>) => (options.client ?? client).patch<AdminModifyUserResponses, AdminModifyUserErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/admin/users/{userId}',
     ...options,
     headers: {
@@ -430,22 +334,12 @@ export const adminModifyUser = <ThrowOnError extends boolean = true>(options: Op
 
 export const adminListEmailProviderBlacklist = <ThrowOnError extends boolean = true>(options?: Options<AdminListEmailProviderBlacklistData, ThrowOnError>) => (options?.client ?? client).get<AdminListEmailProviderBlacklistResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/admin/blacklist/emailProviders',
     ...options
 });
 
 export const adminAddEmailProviderBlacklist = <ThrowOnError extends boolean = true>(options?: Options<AdminAddEmailProviderBlacklistData, ThrowOnError>) => (options?.client ?? client).post<AdminAddEmailProviderBlacklistResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/admin/blacklist/emailProviders',
     ...options,
     headers: {
@@ -456,11 +350,6 @@ export const adminAddEmailProviderBlacklist = <ThrowOnError extends boolean = tr
 
 export const adminRemoveEmailProviderBlacklist = <ThrowOnError extends boolean = true>(options: Options<AdminRemoveEmailProviderBlacklistData, ThrowOnError>) => (options.client ?? client).delete<AdminRemoveEmailProviderBlacklistResponses, AdminRemoveEmailProviderBlacklistErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/admin/blacklist/emailProviders/{id}',
     ...options
 });
@@ -470,11 +359,6 @@ export const adminRemoveEmailProviderBlacklist = <ThrowOnError extends boolean =
  */
 export const adminGetOnlineDevices = <ThrowOnError extends boolean = true>(options?: Options<AdminGetOnlineDevicesData, ThrowOnError>) => (options?.client ?? client).get<AdminGetOnlineDevicesResponses, AdminGetOnlineDevicesErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/admin/monitoring/onlineDevices',
     ...options
 });
@@ -484,11 +368,6 @@ export const adminGetOnlineDevices = <ThrowOnError extends boolean = true>(optio
  */
 export const adminGetUsers = <ThrowOnError extends boolean = true>(options?: Options<AdminGetUsersData, ThrowOnError>) => (options?.client ?? client).get<AdminGetUsersResponses, AdminGetUsersErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/admin/users',
     ...options
 });
@@ -498,33 +377,18 @@ export const adminGetUsers = <ThrowOnError extends boolean = true>(options?: Opt
  */
 export const adminReactivateUser = <ThrowOnError extends boolean = true>(options: Options<AdminReactivateUserData, ThrowOnError>) => (options.client ?? client).put<AdminReactivateUserResponses, AdminReactivateUserErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/admin/users/{userId}/reactivate',
     ...options
 });
 
 export const adminListUsernameBlacklist = <ThrowOnError extends boolean = true>(options?: Options<AdminListUsernameBlacklistData, ThrowOnError>) => (options?.client ?? client).get<AdminListUsernameBlacklistResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/admin/blacklist/usernames',
     ...options
 });
 
 export const adminAddUsernameBlacklist = <ThrowOnError extends boolean = true>(options?: Options<AdminAddUsernameBlacklistData, ThrowOnError>) => (options?.client ?? client).post<AdminAddUsernameBlacklistResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/admin/blacklist/usernames',
     ...options,
     headers: {
@@ -535,11 +399,6 @@ export const adminAddUsernameBlacklist = <ThrowOnError extends boolean = true>(o
 
 export const adminRemoveUsernameBlacklist = <ThrowOnError extends boolean = true>(options: Options<AdminRemoveUsernameBlacklistData, ThrowOnError>) => (options.client ?? client).delete<AdminRemoveUsernameBlacklistResponses, AdminRemoveUsernameBlacklistErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/admin/blacklist/usernames/{id}',
     ...options
 });
@@ -549,11 +408,6 @@ export const adminRemoveUsernameBlacklist = <ThrowOnError extends boolean = true
  */
 export const adminListWebhooks = <ThrowOnError extends boolean = true>(options?: Options<AdminListWebhooksData, ThrowOnError>) => (options?.client ?? client).get<AdminListWebhooksResponses, AdminListWebhooksErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/admin/webhooks',
     ...options
 });
@@ -563,11 +417,6 @@ export const adminListWebhooks = <ThrowOnError extends boolean = true>(options?:
  */
 export const adminAddWebhook = <ThrowOnError extends boolean = true>(options?: Options<AdminAddWebhookData, ThrowOnError>) => (options?.client ?? client).post<AdminAddWebhookResponses, AdminAddWebhookErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/admin/webhooks',
     ...options,
     headers: {
@@ -581,11 +430,6 @@ export const adminAddWebhook = <ThrowOnError extends boolean = true>(options?: O
  */
 export const adminRemoveWebhook = <ThrowOnError extends boolean = true>(options: Options<AdminRemoveWebhookData, ThrowOnError>) => (options.client ?? client).delete<AdminRemoveWebhookResponses, AdminRemoveWebhookErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/admin/webhooks/{id}',
     ...options
 });
@@ -595,7 +439,6 @@ export const adminRemoveWebhook = <ThrowOnError extends boolean = true>(options:
  */
 export const deviceGetLiveControlGateway = <ThrowOnError extends boolean = true>(options?: Options<DeviceGetLiveControlGatewayData, ThrowOnError>) => (options?.client ?? client).get<DeviceGetLiveControlGatewayResponses, DeviceGetLiveControlGatewayErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{ name: 'DeviceToken', type: 'apiKey' }],
     url: '/1/device/assignLCG',
     ...options
 });
@@ -605,7 +448,6 @@ export const deviceGetLiveControlGateway = <ThrowOnError extends boolean = true>
  */
 export const deviceGetSelf = <ThrowOnError extends boolean = true>(options?: Options<DeviceGetSelfData, ThrowOnError>) => (options?.client ?? client).get<DeviceGetSelfResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{ name: 'DeviceToken', type: 'apiKey' }],
     url: '/1/device/self',
     ...options
 });
@@ -615,7 +457,6 @@ export const deviceGetSelf = <ThrowOnError extends boolean = true>(options?: Opt
  */
 export const devicePair = <ThrowOnError extends boolean = true>(options: Options<DevicePairData, ThrowOnError>) => (options.client ?? client).get<DevicePairResponses, DevicePairErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{ name: 'DeviceToken', type: 'apiKey' }],
     url: '/1/device/pair/{pairCode}',
     ...options
 });
@@ -625,11 +466,6 @@ export const devicePair = <ThrowOnError extends boolean = true>(options: Options
  */
 export const devicesOtaGetOtaUpdateHistory = <ThrowOnError extends boolean = true>(options: Options<DevicesOtaGetOtaUpdateHistoryData, ThrowOnError>) => (options.client ?? client).get<DevicesOtaGetOtaUpdateHistoryResponses, DevicesOtaGetOtaUpdateHistoryErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/devices/{deviceId}/ota',
     ...options
 });
@@ -639,11 +475,6 @@ export const devicesOtaGetOtaUpdateHistory = <ThrowOnError extends boolean = tru
  */
 export const devicesListDevices = <ThrowOnError extends boolean = true>(options?: Options<DevicesListDevicesData, ThrowOnError>) => (options?.client ?? client).get<DevicesListDevicesResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/devices',
     ...options
 });
@@ -653,11 +484,6 @@ export const devicesListDevices = <ThrowOnError extends boolean = true>(options?
  */
 export const devicesCreateDevice = <ThrowOnError extends boolean = true>(options?: Options<DevicesCreateDeviceData, ThrowOnError>) => (options?.client ?? client).post<DevicesCreateDeviceResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/devices',
     ...options
 });
@@ -667,11 +493,6 @@ export const devicesCreateDevice = <ThrowOnError extends boolean = true>(options
  */
 export const devicesRemoveDevice = <ThrowOnError extends boolean = true>(options: Options<DevicesRemoveDeviceData, ThrowOnError>) => (options.client ?? client).delete<DevicesRemoveDeviceResponses, DevicesRemoveDeviceErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/devices/{deviceId}',
     ...options
 });
@@ -681,11 +502,6 @@ export const devicesRemoveDevice = <ThrowOnError extends boolean = true>(options
  */
 export const devicesGetDeviceById = <ThrowOnError extends boolean = true>(options: Options<DevicesGetDeviceByIdData, ThrowOnError>) => (options.client ?? client).get<DevicesGetDeviceByIdResponses, DevicesGetDeviceByIdErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/devices/{deviceId}',
     ...options
 });
@@ -695,11 +511,6 @@ export const devicesGetDeviceById = <ThrowOnError extends boolean = true>(option
  */
 export const devicesEditDevice = <ThrowOnError extends boolean = true>(options: Options<DevicesEditDeviceData, ThrowOnError>) => (options.client ?? client).patch<DevicesEditDeviceResponses, DevicesEditDeviceErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/devices/{deviceId}',
     ...options,
     headers: {
@@ -713,11 +524,6 @@ export const devicesEditDevice = <ThrowOnError extends boolean = true>(options: 
  */
 export const devicesRegenerateDeviceToken = <ThrowOnError extends boolean = true>(options: Options<DevicesRegenerateDeviceTokenData, ThrowOnError>) => (options.client ?? client).put<DevicesRegenerateDeviceTokenResponses, DevicesRegenerateDeviceTokenErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/devices/{deviceId}',
     ...options
 });
@@ -727,11 +533,6 @@ export const devicesRegenerateDeviceToken = <ThrowOnError extends boolean = true
  */
 export const devicesGetPairCode = <ThrowOnError extends boolean = true>(options: Options<DevicesGetPairCodeData, ThrowOnError>) => (options.client ?? client).get<DevicesGetPairCodeResponses, DevicesGetPairCodeErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/devices/{deviceId}/pair',
     ...options
 });
@@ -741,11 +542,6 @@ export const devicesGetPairCode = <ThrowOnError extends boolean = true>(options:
  */
 export const devicesGetLiveControlGatewayInfo = <ThrowOnError extends boolean = true>(options: Options<DevicesGetLiveControlGatewayInfoData, ThrowOnError>) => (options.client ?? client).get<DevicesGetLiveControlGatewayInfoResponses, DevicesGetLiveControlGatewayInfoErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/devices/{deviceId}/lcg',
     ...options
 });
@@ -755,11 +551,6 @@ export const devicesGetLiveControlGatewayInfo = <ThrowOnError extends boolean = 
  */
 export const devicesGetShockers = <ThrowOnError extends boolean = true>(options: Options<DevicesGetShockersData, ThrowOnError>) => (options.client ?? client).get<DevicesGetShockersResponses, DevicesGetShockersErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/devices/{deviceId}/shockers',
     ...options
 });
@@ -787,11 +578,6 @@ export const publicGetOnlineDevicesStatistics = <ThrowOnError extends boolean = 
  */
 export const shareLinksRemoveShocker = <ThrowOnError extends boolean = true>(options: Options<ShareLinksRemoveShockerData, ThrowOnError>) => (options.client ?? client).delete<ShareLinksRemoveShockerResponses, ShareLinksRemoveShockerErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/shares/links/{publicShareId}/{shockerId}',
     ...options
 });
@@ -801,11 +587,6 @@ export const shareLinksRemoveShocker = <ThrowOnError extends boolean = true>(opt
  */
 export const shareLinksEditShocker = <ThrowOnError extends boolean = true>(options: Options<ShareLinksEditShockerData, ThrowOnError>) => (options.client ?? client).patch<ShareLinksEditShockerResponses, ShareLinksEditShockerErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/shares/links/{publicShareId}/{shockerId}',
     ...options,
     headers: {
@@ -819,11 +600,6 @@ export const shareLinksEditShocker = <ThrowOnError extends boolean = true>(optio
  */
 export const shareLinksAddShocker = <ThrowOnError extends boolean = true>(options: Options<ShareLinksAddShockerData, ThrowOnError>) => (options.client ?? client).post<ShareLinksAddShockerResponses, ShareLinksAddShockerErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/shares/links/{publicShareId}/{shockerId}',
     ...options
 });
@@ -833,11 +609,6 @@ export const shareLinksAddShocker = <ThrowOnError extends boolean = true>(option
  */
 export const shareLinksList = <ThrowOnError extends boolean = true>(options?: Options<ShareLinksListData, ThrowOnError>) => (options?.client ?? client).get<ShareLinksListResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/shares/links',
     ...options
 });
@@ -847,11 +618,6 @@ export const shareLinksList = <ThrowOnError extends boolean = true>(options?: Op
  */
 export const shareLinksCreatePublicShare = <ThrowOnError extends boolean = true>(options?: Options<ShareLinksCreatePublicShareData, ThrowOnError>) => (options?.client ?? client).post<ShareLinksCreatePublicShareResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/shares/links',
     ...options,
     headers: {
@@ -865,11 +631,6 @@ export const shareLinksCreatePublicShare = <ThrowOnError extends boolean = true>
  */
 export const shareLinksDeletePublicShare = <ThrowOnError extends boolean = true>(options: Options<ShareLinksDeletePublicShareData, ThrowOnError>) => (options.client ?? client).delete<ShareLinksDeletePublicShareResponses, ShareLinksDeletePublicShareErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/shares/links/{publicShareId}',
     ...options
 });
@@ -879,11 +640,6 @@ export const shareLinksDeletePublicShare = <ThrowOnError extends boolean = true>
  */
 export const shareLinksPauseShocker = <ThrowOnError extends boolean = true>(options: Options<ShareLinksPauseShockerData, ThrowOnError>) => (options.client ?? client).post<ShareLinksPauseShockerResponses, ShareLinksPauseShockerErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/shares/links/{publicShareId}/{shockerId}/pause',
     ...options,
     headers: {
@@ -903,22 +659,12 @@ export const publicGetPublicShare = <ThrowOnError extends boolean = true>(option
 
 export const sessionsDeleteSession = <ThrowOnError extends boolean = true>(options: Options<SessionsDeleteSessionData, ThrowOnError>) => (options.client ?? client).delete<SessionsDeleteSessionResponses, SessionsDeleteSessionErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/sessions/{sessionId}',
     ...options
 });
 
 export const sessionsListSessions = <ThrowOnError extends boolean = true>(options?: Options<SessionsListSessionsData, ThrowOnError>) => (options?.client ?? client).get<SessionsListSessionsResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/sessions',
     ...options
 });
@@ -928,11 +674,6 @@ export const sessionsListSessions = <ThrowOnError extends boolean = true>(option
  */
 export const sessionsGetSelfSession = <ThrowOnError extends boolean = true>(options?: Options<SessionsGetSelfSessionData, ThrowOnError>) => (options?.client ?? client).get<SessionsGetSelfSessionResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/sessions/self',
     ...options
 });
@@ -942,11 +683,6 @@ export const sessionsGetSelfSession = <ThrowOnError extends boolean = true>(opti
  */
 export const sharesDeleteShareCode = <ThrowOnError extends boolean = true>(options: Options<SharesDeleteShareCodeData, ThrowOnError>) => (options.client ?? client).delete<SharesDeleteShareCodeResponses, SharesDeleteShareCodeErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/shares/code/{shareCodeId}',
     ...options
 });
@@ -956,11 +692,6 @@ export const sharesDeleteShareCode = <ThrowOnError extends boolean = true>(optio
  */
 export const sharesLinkShareCode = <ThrowOnError extends boolean = true>(options: Options<SharesLinkShareCodeData, ThrowOnError>) => (options.client ?? client).post<SharesLinkShareCodeResponses, SharesLinkShareCodeErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/1/shares/code/{shareCodeId}',
     ...options
 });
@@ -970,11 +701,6 @@ export const sharesLinkShareCode = <ThrowOnError extends boolean = true>(options
  */
 export const shockerRemoveShocker = <ThrowOnError extends boolean = true>(options: Options<ShockerRemoveShockerData, ThrowOnError>) => (options.client ?? client).delete<ShockerRemoveShockerResponses, ShockerRemoveShockerErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/{shockerId}',
     ...options
 });
@@ -984,11 +710,6 @@ export const shockerRemoveShocker = <ThrowOnError extends boolean = true>(option
  */
 export const shockerGetShockerById = <ThrowOnError extends boolean = true>(options: Options<ShockerGetShockerByIdData, ThrowOnError>) => (options.client ?? client).get<ShockerGetShockerByIdResponses, ShockerGetShockerByIdErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/{shockerId}',
     ...options
 });
@@ -998,11 +719,6 @@ export const shockerGetShockerById = <ThrowOnError extends boolean = true>(optio
  */
 export const shockerEditShocker = <ThrowOnError extends boolean = true>(options: Options<ShockerEditShockerData, ThrowOnError>) => (options.client ?? client).patch<ShockerEditShockerResponses, ShockerEditShockerErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/{shockerId}',
     ...options,
     headers: {
@@ -1016,11 +732,6 @@ export const shockerEditShocker = <ThrowOnError extends boolean = true>(options:
  */
 export const shockerGetShockerLogs = <ThrowOnError extends boolean = true>(options: Options<ShockerGetShockerLogsData, ThrowOnError>) => (options.client ?? client).get<ShockerGetShockerLogsResponses, ShockerGetShockerLogsErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/{shockerId}/logs',
     ...options
 });
@@ -1030,11 +741,6 @@ export const shockerGetShockerLogs = <ThrowOnError extends boolean = true>(optio
  */
 export const shockerGetAllShockerLogs = <ThrowOnError extends boolean = true>(options?: Options<ShockerGetAllShockerLogsData, ThrowOnError>) => (options?.client ?? client).get<ShockerGetAllShockerLogsResponses, ShockerGetAllShockerLogsErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/logs',
     ...options
 });
@@ -1044,11 +750,6 @@ export const shockerGetAllShockerLogs = <ThrowOnError extends boolean = true>(op
  */
 export const shockerListSharedShockers = <ThrowOnError extends boolean = true>(options?: Options<ShockerListSharedShockersData, ThrowOnError>) => (options?.client ?? client).get<ShockerListSharedShockersResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/shared',
     ...options
 });
@@ -1058,11 +759,6 @@ export const shockerListSharedShockers = <ThrowOnError extends boolean = true>(o
  */
 export const shockerListShockers = <ThrowOnError extends boolean = true>(options?: Options<ShockerListShockersData, ThrowOnError>) => (options?.client ?? client).get<ShockerListShockersResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/own',
     ...options
 });
@@ -1072,11 +768,6 @@ export const shockerListShockers = <ThrowOnError extends boolean = true>(options
  */
 export const shockerPauseShocker = <ThrowOnError extends boolean = true>(options: Options<ShockerPauseShockerData, ThrowOnError>) => (options.client ?? client).post<ShockerPauseShockerResponses, ShockerPauseShockerErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/{shockerId}/pause',
     ...options,
     headers: {
@@ -1090,11 +781,6 @@ export const shockerPauseShocker = <ThrowOnError extends boolean = true>(options
  */
 export const shockerRegisterShocker = <ThrowOnError extends boolean = true>(options?: Options<ShockerRegisterShockerData, ThrowOnError>) => (options?.client ?? client).post<ShockerRegisterShockerResponses, ShockerRegisterShockerErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers',
     ...options,
     headers: {
@@ -1108,11 +794,6 @@ export const shockerRegisterShocker = <ThrowOnError extends boolean = true>(opti
  */
 export const shockerSendControlDeprecated = <ThrowOnError extends boolean = true>(options?: Options<ShockerSendControlDeprecatedData, ThrowOnError>) => (options?.client ?? client).post<ShockerSendControlDeprecatedResponses, ShockerSendControlDeprecatedErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/control',
     ...options,
     headers: {
@@ -1126,11 +807,6 @@ export const shockerSendControlDeprecated = <ThrowOnError extends boolean = true
  */
 export const shockerGetUserShares = <ThrowOnError extends boolean = true>(options: Options<ShockerGetUserSharesData, ThrowOnError>) => (options.client ?? client).get<ShockerGetUserSharesResponses, ShockerGetUserSharesErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/{shockerId}/shares',
     ...options
 });
@@ -1140,11 +816,6 @@ export const shockerGetUserShares = <ThrowOnError extends boolean = true>(option
  */
 export const shockerShockerShareCodeCreate = <ThrowOnError extends boolean = true>(options: Options<ShockerShockerShareCodeCreateData, ThrowOnError>) => (options.client ?? client).post<ShockerShockerShareCodeCreateResponses, ShockerShockerShareCodeCreateErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/{shockerId}/shares',
     ...options,
     headers: {
@@ -1158,11 +829,6 @@ export const shockerShockerShareCodeCreate = <ThrowOnError extends boolean = tru
  */
 export const shockerShockerShareCodeList = <ThrowOnError extends boolean = true>(options: Options<ShockerShockerShareCodeListData, ThrowOnError>) => (options.client ?? client).get<ShockerShockerShareCodeListResponses, ShockerShockerShareCodeListErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/{shockerId}/shareCodes',
     ...options
 });
@@ -1172,11 +838,6 @@ export const shockerShockerShareCodeList = <ThrowOnError extends boolean = true>
  */
 export const shockerShockerShareRemove = <ThrowOnError extends boolean = true>(options: Options<ShockerShockerShareRemoveData, ThrowOnError>) => (options.client ?? client).delete<ShockerShockerShareRemoveResponses, ShockerShockerShareRemoveErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/{shockerId}/shares/{sharedWithUserId}',
     ...options
 });
@@ -1186,11 +847,6 @@ export const shockerShockerShareRemove = <ThrowOnError extends boolean = true>(o
  */
 export const shockerShockerShareCodeUpdate = <ThrowOnError extends boolean = true>(options: Options<ShockerShockerShareCodeUpdateData, ThrowOnError>) => (options.client ?? client).patch<ShockerShockerShareCodeUpdateResponses, ShockerShockerShareCodeUpdateErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/{shockerId}/shares/{sharedWithUserId}',
     ...options,
     headers: {
@@ -1204,11 +860,6 @@ export const shockerShockerShareCodeUpdate = <ThrowOnError extends boolean = tru
  */
 export const shockerShockerShareCodePause = <ThrowOnError extends boolean = true>(options: Options<ShockerShockerShareCodePauseData, ThrowOnError>) => (options.client ?? client).post<ShockerShockerShareCodePauseResponses, ShockerShockerShareCodePauseErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/{shockerId}/shares/{sharedWithUserId}/pause',
     ...options,
     headers: {
@@ -1222,22 +873,12 @@ export const shockerShockerShareCodePause = <ThrowOnError extends boolean = true
  */
 export const usersGetSelf = <ThrowOnError extends boolean = true>(options?: Options<UsersGetSelfData, ThrowOnError>) => (options?.client ?? client).get<UsersGetSelfResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/users/self',
     ...options
 });
 
 export const usersGetByName = <ThrowOnError extends boolean = true>(options: Options<UsersGetByNameData, ThrowOnError>) => (options.client ?? client).get<UsersGetByNameResponses, UsersGetByNameErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/users/by-name/{username}',
     ...options
 });

@@ -75,7 +75,6 @@ export const accountSignUpV2 = <ThrowOnError extends boolean = true>(options?: O
  */
 export const deviceGetLiveControlGatewayV2 = <ThrowOnError extends boolean = true>(options?: Options<DeviceGetLiveControlGatewayV2Data, ThrowOnError>) => (options?.client ?? client).get<DeviceGetLiveControlGatewayV2Responses, DeviceGetLiveControlGatewayV2Errors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{ name: 'DeviceToken', type: 'apiKey' }],
     url: '/2/device/assignLCG',
     ...options
 });
@@ -85,11 +84,6 @@ export const deviceGetLiveControlGatewayV2 = <ThrowOnError extends boolean = tru
  */
 export const devicesCreateDeviceV2 = <ThrowOnError extends boolean = true>(options?: Options<DevicesCreateDeviceV2Data, ThrowOnError>) => (options?.client ?? client).post<DevicesCreateDeviceV2Responses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/2/devices',
     ...options,
     headers: {
@@ -103,11 +97,6 @@ export const devicesCreateDeviceV2 = <ThrowOnError extends boolean = true>(optio
  */
 export const shockerSendControl = <ThrowOnError extends boolean = true>(options?: Options<ShockerSendControlData, ThrowOnError>) => (options?.client ?? client).post<ShockerSendControlResponses, ShockerSendControlErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/2/shockers/control',
     ...options,
     headers: {
@@ -118,11 +107,6 @@ export const shockerSendControl = <ThrowOnError extends boolean = true>(options?
 
 export const userSharesCreateShareInvite = <ThrowOnError extends boolean = true>(options?: Options<UserSharesCreateShareInviteData, ThrowOnError>) => (options?.client ?? client).post<UserSharesCreateShareInviteResponses, UserSharesCreateShareInviteErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/2/shares/user/invites',
     ...options,
     headers: {
@@ -133,55 +117,30 @@ export const userSharesCreateShareInvite = <ThrowOnError extends boolean = true>
 
 export const userSharesGetSharesByUsers = <ThrowOnError extends boolean = true>(options?: Options<UserSharesGetSharesByUsersData, ThrowOnError>) => (options?.client ?? client).get<UserSharesGetSharesByUsersResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/2/shares/user',
     ...options
 });
 
 export const userSharesGetOutgoingInvitesList = <ThrowOnError extends boolean = true>(options?: Options<UserSharesGetOutgoingInvitesListData, ThrowOnError>) => (options?.client ?? client).get<UserSharesGetOutgoingInvitesListResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/2/shares/user/invites/outgoing',
     ...options
 });
 
 export const userSharesGetIncomingInvitesList = <ThrowOnError extends boolean = true>(options?: Options<UserSharesGetIncomingInvitesListData, ThrowOnError>) => (options?.client ?? client).get<UserSharesGetIncomingInvitesListResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/2/shares/user/invites/incoming',
     ...options
 });
 
 export const userSharesDeleteOutgoingInvite = <ThrowOnError extends boolean = true>(options: Options<UserSharesDeleteOutgoingInviteData, ThrowOnError>) => (options.client ?? client).delete<UserSharesDeleteOutgoingInviteResponses, UserSharesDeleteOutgoingInviteErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/2/shares/user/invites/outgoing/{inviteId}',
     ...options
 });
 
 export const userSharesDenyIncomingInvite = <ThrowOnError extends boolean = true>(options: Options<UserSharesDenyIncomingInviteData, ThrowOnError>) => (options.client ?? client).delete<UserSharesDenyIncomingInviteResponses, UserSharesDenyIncomingInviteErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/2/shares/user/invites/incoming/{inviteId}',
     ...options
 });
@@ -191,22 +150,12 @@ export const userSharesDenyIncomingInvite = <ThrowOnError extends boolean = true
  */
 export const userSharesRedeemInvite = <ThrowOnError extends boolean = true>(options: Options<UserSharesRedeemInviteData, ThrowOnError>) => (options.client ?? client).post<UserSharesRedeemInviteResponses, UserSharesRedeemInviteErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/2/shares/user/invites/incoming/{inviteId}',
     ...options
 });
 
 export const userSharesBulkPauseUserShareShockers = <ThrowOnError extends boolean = true>(options: Options<UserSharesBulkPauseUserShareShockersData, ThrowOnError>) => (options.client ?? client).post<UserSharesBulkPauseUserShareShockersResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/2/shares/user/{userId}/shockers/pause',
     ...options,
     headers: {
@@ -217,11 +166,6 @@ export const userSharesBulkPauseUserShareShockers = <ThrowOnError extends boolea
 
 export const userSharesBulkRemoveUserShareShockers = <ThrowOnError extends boolean = true>(options: Options<UserSharesBulkRemoveUserShareShockersData, ThrowOnError>) => (options.client ?? client).delete<UserSharesBulkRemoveUserShareShockersResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/2/shares/user/{userId}/shockers',
     ...options,
     headers: {
@@ -235,11 +179,6 @@ export const userSharesBulkRemoveUserShareShockers = <ThrowOnError extends boole
  */
 export const userSharesBulkUserShareShockersUpdate = <ThrowOnError extends boolean = true>(options: Options<UserSharesBulkUserShareShockersUpdateData, ThrowOnError>) => (options.client ?? client).patch<UserSharesBulkUserShareShockersUpdateResponses, UserSharesBulkUserShareShockersUpdateErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [{
-            in: 'cookie',
-            name: 'openShockSession',
-            type: 'apiKey'
-        }],
     url: '/2/shares/user/{userId}/shockers',
     ...options,
     headers: {
