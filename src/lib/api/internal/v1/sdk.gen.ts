@@ -2,2266 +2,1242 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type {
-  AccountActivateData,
-  AccountActivateErrors,
-  AccountActivateResponses,
-  AccountCheckUsernameData,
-  AccountCheckUsernameResponses,
-  AccountEmailVerifyData,
-  AccountEmailVerifyErrors,
-  AccountEmailVerifyResponses,
-  AccountLoginData,
-  AccountLoginErrors,
-  AccountLoginResponses,
-  AccountLogoutData,
-  AccountLogoutResponses,
-  AccountPasswordResetCheckValidData,
-  AccountPasswordResetCheckValidErrors,
-  AccountPasswordResetCheckValidResponses,
-  AccountPasswordResetCompleteData,
-  AccountPasswordResetCompleteErrors,
-  AccountPasswordResetCompleteResponses,
-  AccountPasswordResetInitiateData,
-  AccountPasswordResetInitiateResponses,
-  AccountSignUpData,
-  AccountSignUpErrors,
-  AccountSignUpResponses,
-  AdminAddEmailProviderBlacklistData,
-  AdminAddEmailProviderBlacklistResponses,
-  AdminAddUsernameBlacklistData,
-  AdminAddUsernameBlacklistResponses,
-  AdminAddWebhookData,
-  AdminAddWebhookErrors,
-  AdminAddWebhookResponses,
-  AdminConfigurationAddData,
-  AdminConfigurationAddErrors,
-  AdminConfigurationAddResponses,
-  AdminConfigurationDeleteData,
-  AdminConfigurationDeleteErrors,
-  AdminConfigurationDeleteResponses,
-  AdminConfigurationListData,
-  AdminConfigurationListErrors,
-  AdminConfigurationListResponses,
-  AdminConfigurationUpdateData,
-  AdminConfigurationUpdateErrors,
-  AdminConfigurationUpdateResponses,
-  AdminDeactivateUserData,
-  AdminDeactivateUserErrors,
-  AdminDeactivateUserResponses,
-  AdminDeleteUserData,
-  AdminDeleteUserErrors,
-  AdminDeleteUserResponses,
-  AdminGetOnlineDevicesData,
-  AdminGetOnlineDevicesErrors,
-  AdminGetOnlineDevicesResponses,
-  AdminGetUsersData,
-  AdminGetUsersErrors,
-  AdminGetUsersResponses,
-  AdminListEmailProviderBlacklistData,
-  AdminListEmailProviderBlacklistResponses,
-  AdminListUsernameBlacklistData,
-  AdminListUsernameBlacklistResponses,
-  AdminListWebhooksData,
-  AdminListWebhooksErrors,
-  AdminListWebhooksResponses,
-  AdminModifyUserData,
-  AdminModifyUserErrors,
-  AdminModifyUserResponses,
-  AdminReactivateUserData,
-  AdminReactivateUserErrors,
-  AdminReactivateUserResponses,
-  AdminRemoveEmailProviderBlacklistData,
-  AdminRemoveEmailProviderBlacklistErrors,
-  AdminRemoveEmailProviderBlacklistResponses,
-  AdminRemoveUsernameBlacklistData,
-  AdminRemoveUsernameBlacklistErrors,
-  AdminRemoveUsernameBlacklistResponses,
-  AdminRemoveWebhookData,
-  AdminRemoveWebhookErrors,
-  AdminRemoveWebhookResponses,
-  AuthenticatedAccountChangeEmailData,
-  AuthenticatedAccountChangeEmailResponses,
-  AuthenticatedAccountChangePasswordData,
-  AuthenticatedAccountChangePasswordErrors,
-  AuthenticatedAccountChangePasswordResponses,
-  AuthenticatedAccountChangeUsernameData,
-  AuthenticatedAccountChangeUsernameErrors,
-  AuthenticatedAccountChangeUsernameResponses,
-  AuthenticatedAccountDeactivateData,
-  AuthenticatedAccountDeactivateErrors,
-  AuthenticatedAccountDeactivateResponses,
-  AuthenticatedAccountListOAuthConnectionsData,
-  AuthenticatedAccountListOAuthConnectionsResponses,
-  AuthenticatedAccountRemoveOAuthConnectionData,
-  AuthenticatedAccountRemoveOAuthConnectionErrors,
-  AuthenticatedAccountRemoveOAuthConnectionResponses,
-  DeviceGetLiveControlGatewayData,
-  DeviceGetLiveControlGatewayErrors,
-  DeviceGetLiveControlGatewayResponses,
-  DeviceGetSelfData,
-  DeviceGetSelfResponses,
-  DevicePairData,
-  DevicePairErrors,
-  DevicePairResponses,
-  DevicesCreateDeviceData,
-  DevicesCreateDeviceResponses,
-  DevicesEditDeviceData,
-  DevicesEditDeviceErrors,
-  DevicesEditDeviceResponses,
-  DevicesGetDeviceByIdData,
-  DevicesGetDeviceByIdErrors,
-  DevicesGetDeviceByIdResponses,
-  DevicesGetLiveControlGatewayInfoData,
-  DevicesGetLiveControlGatewayInfoErrors,
-  DevicesGetLiveControlGatewayInfoResponses,
-  DevicesGetPairCodeData,
-  DevicesGetPairCodeErrors,
-  DevicesGetPairCodeResponses,
-  DevicesGetShockersData,
-  DevicesGetShockersErrors,
-  DevicesGetShockersResponses,
-  DevicesListDevicesData,
-  DevicesListDevicesResponses,
-  DevicesOtaGetOtaUpdateHistoryData,
-  DevicesOtaGetOtaUpdateHistoryErrors,
-  DevicesOtaGetOtaUpdateHistoryResponses,
-  DevicesRegenerateDeviceTokenData,
-  DevicesRegenerateDeviceTokenErrors,
-  DevicesRegenerateDeviceTokenResponses,
-  DevicesRemoveDeviceData,
-  DevicesRemoveDeviceErrors,
-  DevicesRemoveDeviceResponses,
-  PublicGetOnlineDevicesStatisticsData,
-  PublicGetOnlineDevicesStatisticsResponses,
-  PublicGetPublicShareData,
-  PublicGetPublicShareErrors,
-  PublicGetPublicShareResponses,
-  SessionsDeleteSessionData,
-  SessionsDeleteSessionErrors,
-  SessionsDeleteSessionResponses,
-  SessionsGetSelfSessionData,
-  SessionsGetSelfSessionResponses,
-  SessionsListSessionsData,
-  SessionsListSessionsResponses,
-  ShareLinksAddShockerData,
-  ShareLinksAddShockerErrors,
-  ShareLinksAddShockerResponses,
-  ShareLinksCreatePublicShareData,
-  ShareLinksCreatePublicShareResponses,
-  ShareLinksDeletePublicShareData,
-  ShareLinksDeletePublicShareErrors,
-  ShareLinksDeletePublicShareResponses,
-  ShareLinksEditShockerData,
-  ShareLinksEditShockerErrors,
-  ShareLinksEditShockerResponses,
-  ShareLinksListData,
-  ShareLinksListResponses,
-  ShareLinksPauseShockerData,
-  ShareLinksPauseShockerErrors,
-  ShareLinksPauseShockerResponses,
-  ShareLinksRemoveShockerData,
-  ShareLinksRemoveShockerErrors,
-  ShareLinksRemoveShockerResponses,
-  SharesDeleteShareCodeData,
-  SharesDeleteShareCodeErrors,
-  SharesDeleteShareCodeResponses,
-  SharesLinkShareCodeData,
-  SharesLinkShareCodeErrors,
-  SharesLinkShareCodeResponses,
-  ShockerEditShockerData,
-  ShockerEditShockerErrors,
-  ShockerEditShockerResponses,
-  ShockerGetAllShockerLogsData,
-  ShockerGetAllShockerLogsErrors,
-  ShockerGetAllShockerLogsResponses,
-  ShockerGetShockerByIdData,
-  ShockerGetShockerByIdErrors,
-  ShockerGetShockerByIdResponses,
-  ShockerGetShockerLogsData,
-  ShockerGetShockerLogsErrors,
-  ShockerGetShockerLogsResponses,
-  ShockerGetUserSharesData,
-  ShockerGetUserSharesErrors,
-  ShockerGetUserSharesResponses,
-  ShockerListSharedShockersData,
-  ShockerListSharedShockersResponses,
-  ShockerListShockersData,
-  ShockerListShockersResponses,
-  ShockerPauseShockerData,
-  ShockerPauseShockerErrors,
-  ShockerPauseShockerResponses,
-  ShockerRegisterShockerData,
-  ShockerRegisterShockerErrors,
-  ShockerRegisterShockerResponses,
-  ShockerRemoveShockerData,
-  ShockerRemoveShockerErrors,
-  ShockerRemoveShockerResponses,
-  ShockerSendControlDeprecatedData,
-  ShockerSendControlDeprecatedErrors,
-  ShockerSendControlDeprecatedResponses,
-  ShockerShockerShareCodeCreateData,
-  ShockerShockerShareCodeCreateErrors,
-  ShockerShockerShareCodeCreateResponses,
-  ShockerShockerShareCodeListData,
-  ShockerShockerShareCodeListErrors,
-  ShockerShockerShareCodeListResponses,
-  ShockerShockerShareCodePauseData,
-  ShockerShockerShareCodePauseErrors,
-  ShockerShockerShareCodePauseResponses,
-  ShockerShockerShareCodeUpdateData,
-  ShockerShockerShareCodeUpdateErrors,
-  ShockerShockerShareCodeUpdateResponses,
-  ShockerShockerShareRemoveData,
-  ShockerShockerShareRemoveErrors,
-  ShockerShockerShareRemoveResponses,
-  TokenDeleteDeleteTokenData,
-  TokenDeleteDeleteTokenErrors,
-  TokenDeleteDeleteTokenResponses,
-  TokensCreateTokenData,
-  TokensCreateTokenResponses,
-  TokensEditTokenData,
-  TokensEditTokenErrors,
-  TokensEditTokenResponses,
-  TokensGetTokenByIdData,
-  TokensGetTokenByIdErrors,
-  TokensGetTokenByIdResponses,
-  TokensListTokensData,
-  TokensListTokensResponses,
-  TokensReportTokensData,
-  TokensReportTokensResponses,
-  TokensSelfGetSelfTokenData,
-  TokensSelfGetSelfTokenResponses,
-  UsersGetByNameData,
-  UsersGetByNameErrors,
-  UsersGetByNameResponses,
-  UsersGetSelfData,
-  UsersGetSelfResponses,
-  VersionGetBackendInfoData,
-  VersionGetBackendInfoResponses,
-} from './types.gen';
+import type { AccountActivateData, AccountActivateErrors, AccountActivateResponses, AccountCheckUsernameData, AccountCheckUsernameResponses, AccountEmailVerifyData, AccountEmailVerifyErrors, AccountEmailVerifyResponses, AccountLoginData, AccountLoginErrors, AccountLoginResponses, AccountLogoutData, AccountLogoutResponses, AccountPasswordResetCheckValidData, AccountPasswordResetCheckValidErrors, AccountPasswordResetCheckValidResponses, AccountPasswordResetCompleteData, AccountPasswordResetCompleteErrors, AccountPasswordResetCompleteResponses, AccountPasswordResetInitiateData, AccountPasswordResetInitiateResponses, AccountSignUpData, AccountSignUpErrors, AccountSignUpResponses, AdminAddEmailProviderBlacklistData, AdminAddEmailProviderBlacklistResponses, AdminAddUsernameBlacklistData, AdminAddUsernameBlacklistResponses, AdminAddWebhookData, AdminAddWebhookErrors, AdminAddWebhookResponses, AdminConfigurationAddData, AdminConfigurationAddErrors, AdminConfigurationAddResponses, AdminConfigurationDeleteData, AdminConfigurationDeleteErrors, AdminConfigurationDeleteResponses, AdminConfigurationListData, AdminConfigurationListErrors, AdminConfigurationListResponses, AdminConfigurationUpdateData, AdminConfigurationUpdateErrors, AdminConfigurationUpdateResponses, AdminDeactivateUserData, AdminDeactivateUserErrors, AdminDeactivateUserResponses, AdminDeleteUserData, AdminDeleteUserErrors, AdminDeleteUserResponses, AdminGetOnlineDevicesData, AdminGetOnlineDevicesErrors, AdminGetOnlineDevicesResponses, AdminGetUsersData, AdminGetUsersErrors, AdminGetUsersResponses, AdminListEmailProviderBlacklistData, AdminListEmailProviderBlacklistResponses, AdminListUsernameBlacklistData, AdminListUsernameBlacklistResponses, AdminListWebhooksData, AdminListWebhooksErrors, AdminListWebhooksResponses, AdminModifyUserData, AdminModifyUserErrors, AdminModifyUserResponses, AdminReactivateUserData, AdminReactivateUserErrors, AdminReactivateUserResponses, AdminRemoveEmailProviderBlacklistData, AdminRemoveEmailProviderBlacklistErrors, AdminRemoveEmailProviderBlacklistResponses, AdminRemoveUsernameBlacklistData, AdminRemoveUsernameBlacklistErrors, AdminRemoveUsernameBlacklistResponses, AdminRemoveWebhookData, AdminRemoveWebhookErrors, AdminRemoveWebhookResponses, AuthenticatedAccountChangeEmailData, AuthenticatedAccountChangeEmailResponses, AuthenticatedAccountChangePasswordData, AuthenticatedAccountChangePasswordErrors, AuthenticatedAccountChangePasswordResponses, AuthenticatedAccountChangeUsernameData, AuthenticatedAccountChangeUsernameErrors, AuthenticatedAccountChangeUsernameResponses, AuthenticatedAccountDeactivateData, AuthenticatedAccountDeactivateErrors, AuthenticatedAccountDeactivateResponses, AuthenticatedAccountListOAuthConnectionsData, AuthenticatedAccountListOAuthConnectionsResponses, AuthenticatedAccountRemoveOAuthConnectionData, AuthenticatedAccountRemoveOAuthConnectionErrors, AuthenticatedAccountRemoveOAuthConnectionResponses, DeviceGetLiveControlGatewayData, DeviceGetLiveControlGatewayErrors, DeviceGetLiveControlGatewayResponses, DeviceGetSelfData, DeviceGetSelfResponses, DevicePairData, DevicePairErrors, DevicePairResponses, DevicesCreateDeviceData, DevicesCreateDeviceResponses, DevicesEditDeviceData, DevicesEditDeviceErrors, DevicesEditDeviceResponses, DevicesGetDeviceByIdData, DevicesGetDeviceByIdErrors, DevicesGetDeviceByIdResponses, DevicesGetLiveControlGatewayInfoData, DevicesGetLiveControlGatewayInfoErrors, DevicesGetLiveControlGatewayInfoResponses, DevicesGetPairCodeData, DevicesGetPairCodeErrors, DevicesGetPairCodeResponses, DevicesGetShockersData, DevicesGetShockersErrors, DevicesGetShockersResponses, DevicesListDevicesData, DevicesListDevicesResponses, DevicesOtaGetOtaUpdateHistoryData, DevicesOtaGetOtaUpdateHistoryErrors, DevicesOtaGetOtaUpdateHistoryResponses, DevicesRegenerateDeviceTokenData, DevicesRegenerateDeviceTokenErrors, DevicesRegenerateDeviceTokenResponses, DevicesRemoveDeviceData, DevicesRemoveDeviceErrors, DevicesRemoveDeviceResponses, PublicGetOnlineDevicesStatisticsData, PublicGetOnlineDevicesStatisticsResponses, PublicGetPublicShareData, PublicGetPublicShareErrors, PublicGetPublicShareResponses, SessionsDeleteSessionData, SessionsDeleteSessionErrors, SessionsDeleteSessionResponses, SessionsGetSelfSessionData, SessionsGetSelfSessionResponses, SessionsListSessionsData, SessionsListSessionsResponses, ShareLinksAddShockerData, ShareLinksAddShockerErrors, ShareLinksAddShockerResponses, ShareLinksCreatePublicShareData, ShareLinksCreatePublicShareResponses, ShareLinksDeletePublicShareData, ShareLinksDeletePublicShareErrors, ShareLinksDeletePublicShareResponses, ShareLinksEditShockerData, ShareLinksEditShockerErrors, ShareLinksEditShockerResponses, ShareLinksListData, ShareLinksListResponses, ShareLinksPauseShockerData, ShareLinksPauseShockerErrors, ShareLinksPauseShockerResponses, ShareLinksRemoveShockerData, ShareLinksRemoveShockerErrors, ShareLinksRemoveShockerResponses, SharesDeleteShareCodeData, SharesDeleteShareCodeErrors, SharesDeleteShareCodeResponses, SharesLinkShareCodeData, SharesLinkShareCodeErrors, SharesLinkShareCodeResponses, ShockerEditShockerData, ShockerEditShockerErrors, ShockerEditShockerResponses, ShockerGetAllShockerLogsData, ShockerGetAllShockerLogsErrors, ShockerGetAllShockerLogsResponses, ShockerGetShockerByIdData, ShockerGetShockerByIdErrors, ShockerGetShockerByIdResponses, ShockerGetShockerLogsData, ShockerGetShockerLogsErrors, ShockerGetShockerLogsResponses, ShockerGetUserSharesData, ShockerGetUserSharesErrors, ShockerGetUserSharesResponses, ShockerListSharedShockersData, ShockerListSharedShockersResponses, ShockerListShockersData, ShockerListShockersResponses, ShockerPauseShockerData, ShockerPauseShockerErrors, ShockerPauseShockerResponses, ShockerRegisterShockerData, ShockerRegisterShockerErrors, ShockerRegisterShockerResponses, ShockerRemoveShockerData, ShockerRemoveShockerErrors, ShockerRemoveShockerResponses, ShockerSendControlDeprecatedData, ShockerSendControlDeprecatedErrors, ShockerSendControlDeprecatedResponses, ShockerShockerShareCodeCreateData, ShockerShockerShareCodeCreateErrors, ShockerShockerShareCodeCreateResponses, ShockerShockerShareCodeListData, ShockerShockerShareCodeListErrors, ShockerShockerShareCodeListResponses, ShockerShockerShareCodePauseData, ShockerShockerShareCodePauseErrors, ShockerShockerShareCodePauseResponses, ShockerShockerShareCodeUpdateData, ShockerShockerShareCodeUpdateErrors, ShockerShockerShareCodeUpdateResponses, ShockerShockerShareRemoveData, ShockerShockerShareRemoveErrors, ShockerShockerShareRemoveResponses, TokenDeleteDeleteTokenData, TokenDeleteDeleteTokenErrors, TokenDeleteDeleteTokenResponses, TokensCreateTokenData, TokensCreateTokenResponses, TokensEditTokenData, TokensEditTokenErrors, TokensEditTokenResponses, TokensGetTokenByIdData, TokensGetTokenByIdErrors, TokensGetTokenByIdResponses, TokensListTokensData, TokensListTokensResponses, TokensReportTokensData, TokensReportTokensResponses, TokensSelfGetSelfTokenData, TokensSelfGetSelfTokenResponses, UsersGetByNameData, UsersGetByNameErrors, UsersGetByNameResponses, UsersGetSelfData, UsersGetSelfResponses, VersionGetBackendInfoData, VersionGetBackendInfoResponses } from './types.gen';
 
-export type Options<
-  TData extends TDataShape = TDataShape,
-  ThrowOnError extends boolean = boolean,
-  TResponse = unknown,
-> = Options2<TData, ThrowOnError, TResponse> & {
-  /**
-   * You can provide a client instance returned by `createClient()` instead of
-   * individual options. This might be also useful if you want to implement a
-   * custom client.
-   */
-  client?: Client;
-  /**
-   * You can pass arbitrary values through the `meta` object. This can be
-   * used to access values that aren't defined as part of the SDK function.
-   */
-  meta?: Record<string, unknown>;
+export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
+    /**
+     * You can provide a client instance returned by `createClient()` instead of
+     * individual options. This might be also useful if you want to implement a
+     * custom client.
+     */
+    client?: Client;
+    /**
+     * You can pass arbitrary values through the `meta` object. This can be
+     * used to access values that aren't defined as part of the SDK function.
+     */
+    meta?: Record<string, unknown>;
 };
 
 /**
  * Revoke a token
  */
-export const tokenDeleteDeleteToken = <ThrowOnError extends boolean = true>(
-  options: Options<TokenDeleteDeleteTokenData, ThrowOnError>
-) =>
-  (options.client ?? client).delete<
-    TokenDeleteDeleteTokenResponses,
-    TokenDeleteDeleteTokenErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const tokenDeleteDeleteToken = <ThrowOnError extends boolean = true>(options: Options<TokenDeleteDeleteTokenData, ThrowOnError>) => (options.client ?? client).delete<TokenDeleteDeleteTokenResponses, TokenDeleteDeleteTokenErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-      { name: 'OpenShockToken', type: 'apiKey' },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/tokens/{tokenId}',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Get a token by id
  */
-export const tokensGetTokenById = <ThrowOnError extends boolean = true>(
-  options: Options<TokensGetTokenByIdData, ThrowOnError>
-) =>
-  (options.client ?? client).get<
-    TokensGetTokenByIdResponses,
-    TokensGetTokenByIdErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const tokensGetTokenById = <ThrowOnError extends boolean = true>(options: Options<TokensGetTokenByIdData, ThrowOnError>) => (options.client ?? client).get<TokensGetTokenByIdResponses, TokensGetTokenByIdErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/tokens/{tokenId}',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Edit a token
  */
-export const tokensEditToken = <ThrowOnError extends boolean = true>(
-  options: Options<TokensEditTokenData, ThrowOnError>
-) =>
-  (options.client ?? client).patch<
-    TokensEditTokenResponses,
-    TokensEditTokenErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const tokensEditToken = <ThrowOnError extends boolean = true>(options: Options<TokensEditTokenData, ThrowOnError>) => (options.client ?? client).patch<TokensEditTokenResponses, TokensEditTokenErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/tokens/{tokenId}',
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-  });
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
 /**
  * Gets information about the current token used to access this endpoint
  */
-export const tokensSelfGetSelfToken = <ThrowOnError extends boolean = true>(
-  options?: Options<TokensSelfGetSelfTokenData, ThrowOnError>
-) =>
-  (options?.client ?? client).get<TokensSelfGetSelfTokenResponses, unknown, ThrowOnError, 'data'>({
+export const tokensSelfGetSelfToken = <ThrowOnError extends boolean = true>(options?: Options<TokensSelfGetSelfTokenData, ThrowOnError>) => (options?.client ?? client).get<TokensSelfGetSelfTokenResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
     security: [{ name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/tokens/self',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Endpoint to delete potentially compromised api tokens
  */
-export const tokensReportTokens = <ThrowOnError extends boolean = true>(
-  options?: Options<TokensReportTokensData, ThrowOnError>
-) =>
-  (options?.client ?? client).post<TokensReportTokensResponses, unknown, ThrowOnError, 'data'>({
+export const tokensReportTokens = <ThrowOnError extends boolean = true>(options?: Options<TokensReportTokensData, ThrowOnError>) => (options?.client ?? client).post<TokensReportTokensResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/tokens/report',
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
+        'Content-Type': 'application/json',
+        ...options?.headers
+    }
+});
 
 /**
  * List all tokens for the current user
  */
-export const tokensListTokens = <ThrowOnError extends boolean = true>(
-  options?: Options<TokensListTokensData, ThrowOnError>
-) =>
-  (options?.client ?? client).get<TokensListTokensResponses, unknown, ThrowOnError, 'data'>({
+export const tokensListTokens = <ThrowOnError extends boolean = true>(options?: Options<TokensListTokensData, ThrowOnError>) => (options?.client ?? client).get<TokensListTokensResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/tokens',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Create a new token
  */
-export const tokensCreateToken = <ThrowOnError extends boolean = true>(
-  options?: Options<TokensCreateTokenData, ThrowOnError>
-) =>
-  (options?.client ?? client).post<TokensCreateTokenResponses, unknown, ThrowOnError, 'data'>({
+export const tokensCreateToken = <ThrowOnError extends boolean = true>(options?: Options<TokensCreateTokenData, ThrowOnError>) => (options?.client ?? client).post<TokensCreateTokenResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/tokens',
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
+        'Content-Type': 'application/json',
+        ...options?.headers
+    }
+});
 
 /**
  * Activate account
  */
-export const accountActivate = <ThrowOnError extends boolean = true>(
-  options?: Options<AccountActivateData, ThrowOnError>
-) =>
-  (options?.client ?? client).post<
-    AccountActivateResponses,
-    AccountActivateErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const accountActivate = <ThrowOnError extends boolean = true>(options?: Options<AccountActivateData, ThrowOnError>) => (options?.client ?? client).post<AccountActivateResponses, AccountActivateErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
     url: '/1/account/activate',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Check if a username is available
  */
-export const accountCheckUsername = <ThrowOnError extends boolean = true>(
-  options?: Options<AccountCheckUsernameData, ThrowOnError>
-) =>
-  (options?.client ?? client).post<AccountCheckUsernameResponses, unknown, ThrowOnError, 'data'>({
+export const accountCheckUsername = <ThrowOnError extends boolean = true>(options?: Options<AccountCheckUsernameData, ThrowOnError>) => (options?.client ?? client).post<AccountCheckUsernameResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
     url: '/1/account/username/check',
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
+        'Content-Type': 'application/json',
+        ...options?.headers
+    }
+});
 
 /**
  * Authenticate a user
  */
-export const accountLogin = <ThrowOnError extends boolean = true>(
-  options?: Options<AccountLoginData, ThrowOnError>
-) =>
-  (options?.client ?? client).post<AccountLoginResponses, AccountLoginErrors, ThrowOnError, 'data'>(
-    {
-      responseStyle: 'data',
-      url: '/1/account/login',
-      ...options,
-      headers: {
+export const accountLogin = <ThrowOnError extends boolean = true>(options?: Options<AccountLoginData, ThrowOnError>) => (options?.client ?? client).post<AccountLoginResponses, AccountLoginErrors, ThrowOnError, 'data'>({
+    responseStyle: 'data',
+    url: '/1/account/login',
+    ...options,
+    headers: {
         'Content-Type': 'application/json',
-        ...options?.headers,
-      },
+        ...options?.headers
     }
-  );
+});
 
-export const accountLogout = <ThrowOnError extends boolean = true>(
-  options?: Options<AccountLogoutData, ThrowOnError>
-) =>
-  (options?.client ?? client).post<AccountLogoutResponses, unknown, ThrowOnError, 'data'>({
+export const accountLogout = <ThrowOnError extends boolean = true>(options?: Options<AccountLogoutData, ThrowOnError>) => (options?.client ?? client).post<AccountLogoutResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
     url: '/1/account/logout',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Check if a password reset is in progress
  */
-export const accountPasswordResetCheckValid = <ThrowOnError extends boolean = true>(
-  options: Options<AccountPasswordResetCheckValidData, ThrowOnError>
-) =>
-  (options.client ?? client).head<
-    AccountPasswordResetCheckValidResponses,
-    AccountPasswordResetCheckValidErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const accountPasswordResetCheckValid = <ThrowOnError extends boolean = true>(options: Options<AccountPasswordResetCheckValidData, ThrowOnError>) => (options.client ?? client).head<AccountPasswordResetCheckValidResponses, AccountPasswordResetCheckValidErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
     url: '/1/account/recover/{passwordResetId}/{secret}',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Complete a password reset process
  */
-export const accountPasswordResetComplete = <ThrowOnError extends boolean = true>(
-  options: Options<AccountPasswordResetCompleteData, ThrowOnError>
-) =>
-  (options.client ?? client).post<
-    AccountPasswordResetCompleteResponses,
-    AccountPasswordResetCompleteErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const accountPasswordResetComplete = <ThrowOnError extends boolean = true>(options: Options<AccountPasswordResetCompleteData, ThrowOnError>) => (options.client ?? client).post<AccountPasswordResetCompleteResponses, AccountPasswordResetCompleteErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
     url: '/1/account/recover/{passwordResetId}/{secret}',
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-  });
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
 /**
  * Initiate a password reset
  */
-export const accountPasswordResetInitiate = <ThrowOnError extends boolean = true>(
-  options?: Options<AccountPasswordResetInitiateData, ThrowOnError>
-) =>
-  (options?.client ?? client).post<
-    AccountPasswordResetInitiateResponses,
-    unknown,
-    ThrowOnError,
-    'data'
-  >({
+export const accountPasswordResetInitiate = <ThrowOnError extends boolean = true>(options?: Options<AccountPasswordResetInitiateData, ThrowOnError>) => (options?.client ?? client).post<AccountPasswordResetInitiateResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
     url: '/1/account/reset',
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
+        'Content-Type': 'application/json',
+        ...options?.headers
+    }
+});
 
 /**
  * Signs up a new user
  */
-export const accountSignUp = <ThrowOnError extends boolean = true>(
-  options?: Options<AccountSignUpData, ThrowOnError>
-) =>
-  (options?.client ?? client).post<
-    AccountSignUpResponses,
-    AccountSignUpErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const accountSignUp = <ThrowOnError extends boolean = true>(options?: Options<AccountSignUpData, ThrowOnError>) => (options?.client ?? client).post<AccountSignUpResponses, AccountSignUpErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
     url: '/1/account/signup',
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
+        'Content-Type': 'application/json',
+        ...options?.headers
+    }
+});
 
 /**
  * Verify account email
  */
-export const accountEmailVerify = <ThrowOnError extends boolean = true>(
-  options?: Options<AccountEmailVerifyData, ThrowOnError>
-) =>
-  (options?.client ?? client).post<
-    AccountEmailVerifyResponses,
-    AccountEmailVerifyErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const accountEmailVerify = <ThrowOnError extends boolean = true>(options?: Options<AccountEmailVerifyData, ThrowOnError>) => (options?.client ?? client).post<AccountEmailVerifyResponses, AccountEmailVerifyErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
     url: '/1/account/verify-email',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Change the password of the current user
  */
-export const authenticatedAccountChangeEmail = <ThrowOnError extends boolean = true>(
-  options?: Options<AuthenticatedAccountChangeEmailData, ThrowOnError>
-) =>
-  (options?.client ?? client).post<
-    AuthenticatedAccountChangeEmailResponses,
-    unknown,
-    ThrowOnError,
-    'data'
-  >({
+export const authenticatedAccountChangeEmail = <ThrowOnError extends boolean = true>(options?: Options<AuthenticatedAccountChangeEmailData, ThrowOnError>) => (options?.client ?? client).post<AuthenticatedAccountChangeEmailResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/account/email',
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
+        'Content-Type': 'application/json',
+        ...options?.headers
+    }
+});
 
 /**
  * Change the password of the current user
  */
-export const authenticatedAccountChangePassword = <ThrowOnError extends boolean = true>(
-  options?: Options<AuthenticatedAccountChangePasswordData, ThrowOnError>
-) =>
-  (options?.client ?? client).post<
-    AuthenticatedAccountChangePasswordResponses,
-    AuthenticatedAccountChangePasswordErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const authenticatedAccountChangePassword = <ThrowOnError extends boolean = true>(options?: Options<AuthenticatedAccountChangePasswordData, ThrowOnError>) => (options?.client ?? client).post<AuthenticatedAccountChangePasswordResponses, AuthenticatedAccountChangePasswordErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/account/password',
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
+        'Content-Type': 'application/json',
+        ...options?.headers
+    }
+});
 
 /**
  * Change the username of the current user
  */
-export const authenticatedAccountChangeUsername = <ThrowOnError extends boolean = true>(
-  options?: Options<AuthenticatedAccountChangeUsernameData, ThrowOnError>
-) =>
-  (options?.client ?? client).post<
-    AuthenticatedAccountChangeUsernameResponses,
-    AuthenticatedAccountChangeUsernameErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const authenticatedAccountChangeUsername = <ThrowOnError extends boolean = true>(options?: Options<AuthenticatedAccountChangeUsernameData, ThrowOnError>) => (options?.client ?? client).post<AuthenticatedAccountChangeUsernameResponses, AuthenticatedAccountChangeUsernameErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/account/username',
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
+        'Content-Type': 'application/json',
+        ...options?.headers
+    }
+});
 
 /**
  * Deactivate currently logged in account
  */
-export const authenticatedAccountDeactivate = <ThrowOnError extends boolean = true>(
-  options?: Options<AuthenticatedAccountDeactivateData, ThrowOnError>
-) =>
-  (options?.client ?? client).delete<
-    AuthenticatedAccountDeactivateResponses,
-    AuthenticatedAccountDeactivateErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const authenticatedAccountDeactivate = <ThrowOnError extends boolean = true>(options?: Options<AuthenticatedAccountDeactivateData, ThrowOnError>) => (options?.client ?? client).delete<AuthenticatedAccountDeactivateResponses, AuthenticatedAccountDeactivateErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/account',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Remove an existing OAuth connection for the current user.
  */
-export const authenticatedAccountRemoveOAuthConnection = <ThrowOnError extends boolean = true>(
-  options: Options<AuthenticatedAccountRemoveOAuthConnectionData, ThrowOnError>
-) =>
-  (options.client ?? client).delete<
-    AuthenticatedAccountRemoveOAuthConnectionResponses,
-    AuthenticatedAccountRemoveOAuthConnectionErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const authenticatedAccountRemoveOAuthConnection = <ThrowOnError extends boolean = true>(options: Options<AuthenticatedAccountRemoveOAuthConnectionData, ThrowOnError>) => (options.client ?? client).delete<AuthenticatedAccountRemoveOAuthConnectionResponses, AuthenticatedAccountRemoveOAuthConnectionErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/account/connections/{provider}',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * List OAuth connections linked to the current user.
  */
-export const authenticatedAccountListOAuthConnections = <ThrowOnError extends boolean = true>(
-  options?: Options<AuthenticatedAccountListOAuthConnectionsData, ThrowOnError>
-) =>
-  (options?.client ?? client).get<
-    AuthenticatedAccountListOAuthConnectionsResponses,
-    unknown,
-    ThrowOnError,
-    'data'
-  >({
+export const authenticatedAccountListOAuthConnections = <ThrowOnError extends boolean = true>(options?: Options<AuthenticatedAccountListOAuthConnectionsData, ThrowOnError>) => (options?.client ?? client).get<AuthenticatedAccountListOAuthConnectionsResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/account/connections',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Gets all configuration items
  */
-export const adminConfigurationList = <ThrowOnError extends boolean = true>(
-  options?: Options<AdminConfigurationListData, ThrowOnError>
-) =>
-  (options?.client ?? client).get<
-    AdminConfigurationListResponses,
-    AdminConfigurationListErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const adminConfigurationList = <ThrowOnError extends boolean = true>(options?: Options<AdminConfigurationListData, ThrowOnError>) => (options?.client ?? client).get<AdminConfigurationListResponses, AdminConfigurationListErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/admin/config',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Adds a new configuration
  */
-export const adminConfigurationAdd = <ThrowOnError extends boolean = true>(
-  options?: Options<AdminConfigurationAddData, ThrowOnError>
-) =>
-  (options?.client ?? client).post<
-    AdminConfigurationAddResponses,
-    AdminConfigurationAddErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const adminConfigurationAdd = <ThrowOnError extends boolean = true>(options?: Options<AdminConfigurationAddData, ThrowOnError>) => (options?.client ?? client).post<AdminConfigurationAddResponses, AdminConfigurationAddErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/admin/config',
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
+        'Content-Type': 'application/json',
+        ...options?.headers
+    }
+});
 
 /**
  * Updates an existing configuration
  */
-export const adminConfigurationUpdate = <ThrowOnError extends boolean = true>(
-  options?: Options<AdminConfigurationUpdateData, ThrowOnError>
-) =>
-  (options?.client ?? client).put<
-    AdminConfigurationUpdateResponses,
-    AdminConfigurationUpdateErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const adminConfigurationUpdate = <ThrowOnError extends boolean = true>(options?: Options<AdminConfigurationUpdateData, ThrowOnError>) => (options?.client ?? client).put<AdminConfigurationUpdateResponses, AdminConfigurationUpdateErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/admin/config',
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
+        'Content-Type': 'application/json',
+        ...options?.headers
+    }
+});
 
 /**
  * Deletes a configuration
  */
-export const adminConfigurationDelete = <ThrowOnError extends boolean = true>(
-  options: Options<AdminConfigurationDeleteData, ThrowOnError>
-) =>
-  (options.client ?? client).delete<
-    AdminConfigurationDeleteResponses,
-    AdminConfigurationDeleteErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const adminConfigurationDelete = <ThrowOnError extends boolean = true>(options: Options<AdminConfigurationDeleteData, ThrowOnError>) => (options.client ?? client).delete<AdminConfigurationDeleteResponses, AdminConfigurationDeleteErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/admin/config/{name}',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Deactivates a user
  */
-export const adminDeactivateUser = <ThrowOnError extends boolean = true>(
-  options: Options<AdminDeactivateUserData, ThrowOnError>
-) =>
-  (options.client ?? client).put<
-    AdminDeactivateUserResponses,
-    AdminDeactivateUserErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const adminDeactivateUser = <ThrowOnError extends boolean = true>(options: Options<AdminDeactivateUserData, ThrowOnError>) => (options.client ?? client).put<AdminDeactivateUserResponses, AdminDeactivateUserErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/admin/users/{userId}/deactivate',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Deletes a user
  */
-export const adminDeleteUser = <ThrowOnError extends boolean = true>(
-  options: Options<AdminDeleteUserData, ThrowOnError>
-) =>
-  (options.client ?? client).delete<
-    AdminDeleteUserResponses,
-    AdminDeleteUserErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const adminDeleteUser = <ThrowOnError extends boolean = true>(options: Options<AdminDeleteUserData, ThrowOnError>) => (options.client ?? client).delete<AdminDeleteUserResponses, AdminDeleteUserErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/admin/users/{userId}',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Edits a user
  */
-export const adminModifyUser = <ThrowOnError extends boolean = true>(
-  options: Options<AdminModifyUserData, ThrowOnError>
-) =>
-  (options.client ?? client).patch<
-    AdminModifyUserResponses,
-    AdminModifyUserErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const adminModifyUser = <ThrowOnError extends boolean = true>(options: Options<AdminModifyUserData, ThrowOnError>) => (options.client ?? client).patch<AdminModifyUserResponses, AdminModifyUserErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/admin/users/{userId}',
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-  });
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
-export const adminListEmailProviderBlacklist = <ThrowOnError extends boolean = true>(
-  options?: Options<AdminListEmailProviderBlacklistData, ThrowOnError>
-) =>
-  (options?.client ?? client).get<
-    AdminListEmailProviderBlacklistResponses,
-    unknown,
-    ThrowOnError,
-    'data'
-  >({
+export const adminListEmailProviderBlacklist = <ThrowOnError extends boolean = true>(options?: Options<AdminListEmailProviderBlacklistData, ThrowOnError>) => (options?.client ?? client).get<AdminListEmailProviderBlacklistResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/admin/blacklist/emailProviders',
-    ...options,
-  });
+    ...options
+});
 
-export const adminAddEmailProviderBlacklist = <ThrowOnError extends boolean = true>(
-  options?: Options<AdminAddEmailProviderBlacklistData, ThrowOnError>
-) =>
-  (options?.client ?? client).post<
-    AdminAddEmailProviderBlacklistResponses,
-    unknown,
-    ThrowOnError,
-    'data'
-  >({
+export const adminAddEmailProviderBlacklist = <ThrowOnError extends boolean = true>(options?: Options<AdminAddEmailProviderBlacklistData, ThrowOnError>) => (options?.client ?? client).post<AdminAddEmailProviderBlacklistResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/admin/blacklist/emailProviders',
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
+        'Content-Type': 'application/json',
+        ...options?.headers
+    }
+});
 
-export const adminRemoveEmailProviderBlacklist = <ThrowOnError extends boolean = true>(
-  options: Options<AdminRemoveEmailProviderBlacklistData, ThrowOnError>
-) =>
-  (options.client ?? client).delete<
-    AdminRemoveEmailProviderBlacklistResponses,
-    AdminRemoveEmailProviderBlacklistErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const adminRemoveEmailProviderBlacklist = <ThrowOnError extends boolean = true>(options: Options<AdminRemoveEmailProviderBlacklistData, ThrowOnError>) => (options.client ?? client).delete<AdminRemoveEmailProviderBlacklistResponses, AdminRemoveEmailProviderBlacklistErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/admin/blacklist/emailProviders/{id}',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Gets all online devices
  */
-export const adminGetOnlineDevices = <ThrowOnError extends boolean = true>(
-  options?: Options<AdminGetOnlineDevicesData, ThrowOnError>
-) =>
-  (options?.client ?? client).get<
-    AdminGetOnlineDevicesResponses,
-    AdminGetOnlineDevicesErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const adminGetOnlineDevices = <ThrowOnError extends boolean = true>(options?: Options<AdminGetOnlineDevicesData, ThrowOnError>) => (options?.client ?? client).get<AdminGetOnlineDevicesResponses, AdminGetOnlineDevicesErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/admin/monitoring/onlineDevices',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Gets all users, paginated
  */
-export const adminGetUsers = <ThrowOnError extends boolean = true>(
-  options?: Options<AdminGetUsersData, ThrowOnError>
-) =>
-  (options?.client ?? client).get<
-    AdminGetUsersResponses,
-    AdminGetUsersErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const adminGetUsers = <ThrowOnError extends boolean = true>(options?: Options<AdminGetUsersData, ThrowOnError>) => (options?.client ?? client).get<AdminGetUsersResponses, AdminGetUsersErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/admin/users',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Reactivates a user
  */
-export const adminReactivateUser = <ThrowOnError extends boolean = true>(
-  options: Options<AdminReactivateUserData, ThrowOnError>
-) =>
-  (options.client ?? client).put<
-    AdminReactivateUserResponses,
-    AdminReactivateUserErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const adminReactivateUser = <ThrowOnError extends boolean = true>(options: Options<AdminReactivateUserData, ThrowOnError>) => (options.client ?? client).put<AdminReactivateUserResponses, AdminReactivateUserErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/admin/users/{userId}/reactivate',
-    ...options,
-  });
+    ...options
+});
 
-export const adminListUsernameBlacklist = <ThrowOnError extends boolean = true>(
-  options?: Options<AdminListUsernameBlacklistData, ThrowOnError>
-) =>
-  (options?.client ?? client).get<
-    AdminListUsernameBlacklistResponses,
-    unknown,
-    ThrowOnError,
-    'data'
-  >({
+export const adminListUsernameBlacklist = <ThrowOnError extends boolean = true>(options?: Options<AdminListUsernameBlacklistData, ThrowOnError>) => (options?.client ?? client).get<AdminListUsernameBlacklistResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/admin/blacklist/usernames',
-    ...options,
-  });
+    ...options
+});
 
-export const adminAddUsernameBlacklist = <ThrowOnError extends boolean = true>(
-  options?: Options<AdminAddUsernameBlacklistData, ThrowOnError>
-) =>
-  (options?.client ?? client).post<
-    AdminAddUsernameBlacklistResponses,
-    unknown,
-    ThrowOnError,
-    'data'
-  >({
+export const adminAddUsernameBlacklist = <ThrowOnError extends boolean = true>(options?: Options<AdminAddUsernameBlacklistData, ThrowOnError>) => (options?.client ?? client).post<AdminAddUsernameBlacklistResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/admin/blacklist/usernames',
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
+        'Content-Type': 'application/json',
+        ...options?.headers
+    }
+});
 
-export const adminRemoveUsernameBlacklist = <ThrowOnError extends boolean = true>(
-  options: Options<AdminRemoveUsernameBlacklistData, ThrowOnError>
-) =>
-  (options.client ?? client).delete<
-    AdminRemoveUsernameBlacklistResponses,
-    AdminRemoveUsernameBlacklistErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const adminRemoveUsernameBlacklist = <ThrowOnError extends boolean = true>(options: Options<AdminRemoveUsernameBlacklistData, ThrowOnError>) => (options.client ?? client).delete<AdminRemoveUsernameBlacklistResponses, AdminRemoveUsernameBlacklistErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/admin/blacklist/usernames/{id}',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * List webhooks
  */
-export const adminListWebhooks = <ThrowOnError extends boolean = true>(
-  options?: Options<AdminListWebhooksData, ThrowOnError>
-) =>
-  (options?.client ?? client).get<
-    AdminListWebhooksResponses,
-    AdminListWebhooksErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const adminListWebhooks = <ThrowOnError extends boolean = true>(options?: Options<AdminListWebhooksData, ThrowOnError>) => (options?.client ?? client).get<AdminListWebhooksResponses, AdminListWebhooksErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/admin/webhooks',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Creates a webhook
  */
-export const adminAddWebhook = <ThrowOnError extends boolean = true>(
-  options?: Options<AdminAddWebhookData, ThrowOnError>
-) =>
-  (options?.client ?? client).post<
-    AdminAddWebhookResponses,
-    AdminAddWebhookErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const adminAddWebhook = <ThrowOnError extends boolean = true>(options?: Options<AdminAddWebhookData, ThrowOnError>) => (options?.client ?? client).post<AdminAddWebhookResponses, AdminAddWebhookErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/admin/webhooks',
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
+        'Content-Type': 'application/json',
+        ...options?.headers
+    }
+});
 
 /**
  * Removes a webhook
  */
-export const adminRemoveWebhook = <ThrowOnError extends boolean = true>(
-  options: Options<AdminRemoveWebhookData, ThrowOnError>
-) =>
-  (options.client ?? client).delete<
-    AdminRemoveWebhookResponses,
-    AdminRemoveWebhookErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const adminRemoveWebhook = <ThrowOnError extends boolean = true>(options: Options<AdminRemoveWebhookData, ThrowOnError>) => (options.client ?? client).delete<AdminRemoveWebhookResponses, AdminRemoveWebhookErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/admin/webhooks/{id}',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Gets the best suited LCG node for the client
  */
-export const deviceGetLiveControlGateway = <ThrowOnError extends boolean = true>(
-  options?: Options<DeviceGetLiveControlGatewayData, ThrowOnError>
-) =>
-  (options?.client ?? client).get<
-    DeviceGetLiveControlGatewayResponses,
-    DeviceGetLiveControlGatewayErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const deviceGetLiveControlGateway = <ThrowOnError extends boolean = true>(options?: Options<DeviceGetLiveControlGatewayData, ThrowOnError>) => (options?.client ?? client).get<DeviceGetLiveControlGatewayResponses, DeviceGetLiveControlGatewayErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
     security: [{ name: 'DeviceToken', type: 'apiKey' }],
     url: '/1/device/assignLCG',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Gets information about the authenticated device.
  */
-export const deviceGetSelf = <ThrowOnError extends boolean = true>(
-  options?: Options<DeviceGetSelfData, ThrowOnError>
-) =>
-  (options?.client ?? client).get<DeviceGetSelfResponses, unknown, ThrowOnError, 'data'>({
+export const deviceGetSelf = <ThrowOnError extends boolean = true>(options?: Options<DeviceGetSelfData, ThrowOnError>) => (options?.client ?? client).get<DeviceGetSelfResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
     security: [{ name: 'DeviceToken', type: 'apiKey' }],
     url: '/1/device/self',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Pair a device with a pair code.
  */
-export const devicePair = <ThrowOnError extends boolean = true>(
-  options: Options<DevicePairData, ThrowOnError>
-) =>
-  (options.client ?? client).get<DevicePairResponses, DevicePairErrors, ThrowOnError, 'data'>({
+export const devicePair = <ThrowOnError extends boolean = true>(options: Options<DevicePairData, ThrowOnError>) => (options.client ?? client).get<DevicePairResponses, DevicePairErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
     security: [{ name: 'DeviceToken', type: 'apiKey' }],
     url: '/1/device/pair/{pairCode}',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Gets the OTA update history for a device
  */
-export const devicesOtaGetOtaUpdateHistory = <ThrowOnError extends boolean = true>(
-  options: Options<DevicesOtaGetOtaUpdateHistoryData, ThrowOnError>
-) =>
-  (options.client ?? client).get<
-    DevicesOtaGetOtaUpdateHistoryResponses,
-    DevicesOtaGetOtaUpdateHistoryErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const devicesOtaGetOtaUpdateHistory = <ThrowOnError extends boolean = true>(options: Options<DevicesOtaGetOtaUpdateHistoryData, ThrowOnError>) => (options.client ?? client).get<DevicesOtaGetOtaUpdateHistoryResponses, DevicesOtaGetOtaUpdateHistoryErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/devices/{deviceId}/ota',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Get all devices for the current user
  */
-export const devicesListDevices = <ThrowOnError extends boolean = true>(
-  options?: Options<DevicesListDevicesData, ThrowOnError>
-) =>
-  (options?.client ?? client).get<DevicesListDevicesResponses, unknown, ThrowOnError, 'data'>({
+export const devicesListDevices = <ThrowOnError extends boolean = true>(options?: Options<DevicesListDevicesData, ThrowOnError>) => (options?.client ?? client).get<DevicesListDevicesResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-      { name: 'OpenShockToken', type: 'apiKey' },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/devices',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Create a new device for the current user
  */
-export const devicesCreateDevice = <ThrowOnError extends boolean = true>(
-  options?: Options<DevicesCreateDeviceData, ThrowOnError>
-) =>
-  (options?.client ?? client).post<DevicesCreateDeviceResponses, unknown, ThrowOnError, 'data'>({
+export const devicesCreateDevice = <ThrowOnError extends boolean = true>(options?: Options<DevicesCreateDeviceData, ThrowOnError>) => (options?.client ?? client).post<DevicesCreateDeviceResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-      { name: 'OpenShockToken', type: 'apiKey' },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/devices',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Remove a device from current user's account
  */
-export const devicesRemoveDevice = <ThrowOnError extends boolean = true>(
-  options: Options<DevicesRemoveDeviceData, ThrowOnError>
-) =>
-  (options.client ?? client).delete<
-    DevicesRemoveDeviceResponses,
-    DevicesRemoveDeviceErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const devicesRemoveDevice = <ThrowOnError extends boolean = true>(options: Options<DevicesRemoveDeviceData, ThrowOnError>) => (options.client ?? client).delete<DevicesRemoveDeviceResponses, DevicesRemoveDeviceErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-      { name: 'OpenShockToken', type: 'apiKey' },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/devices/{deviceId}',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Get a device by its id
  */
-export const devicesGetDeviceById = <ThrowOnError extends boolean = true>(
-  options: Options<DevicesGetDeviceByIdData, ThrowOnError>
-) =>
-  (options.client ?? client).get<
-    DevicesGetDeviceByIdResponses,
-    DevicesGetDeviceByIdErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const devicesGetDeviceById = <ThrowOnError extends boolean = true>(options: Options<DevicesGetDeviceByIdData, ThrowOnError>) => (options.client ?? client).get<DevicesGetDeviceByIdResponses, DevicesGetDeviceByIdErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-      { name: 'OpenShockToken', type: 'apiKey' },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/devices/{deviceId}',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Edit a device
  */
-export const devicesEditDevice = <ThrowOnError extends boolean = true>(
-  options: Options<DevicesEditDeviceData, ThrowOnError>
-) =>
-  (options.client ?? client).patch<
-    DevicesEditDeviceResponses,
-    DevicesEditDeviceErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const devicesEditDevice = <ThrowOnError extends boolean = true>(options: Options<DevicesEditDeviceData, ThrowOnError>) => (options.client ?? client).patch<DevicesEditDeviceResponses, DevicesEditDeviceErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-      { name: 'OpenShockToken', type: 'apiKey' },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/devices/{deviceId}',
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-  });
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
 /**
  * Regenerate a device token
  */
-export const devicesRegenerateDeviceToken = <ThrowOnError extends boolean = true>(
-  options: Options<DevicesRegenerateDeviceTokenData, ThrowOnError>
-) =>
-  (options.client ?? client).put<
-    DevicesRegenerateDeviceTokenResponses,
-    DevicesRegenerateDeviceTokenErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const devicesRegenerateDeviceToken = <ThrowOnError extends boolean = true>(options: Options<DevicesRegenerateDeviceTokenData, ThrowOnError>) => (options.client ?? client).put<DevicesRegenerateDeviceTokenResponses, DevicesRegenerateDeviceTokenErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-      { name: 'OpenShockToken', type: 'apiKey' },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/devices/{deviceId}',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Get a pair code for a device
  */
-export const devicesGetPairCode = <ThrowOnError extends boolean = true>(
-  options: Options<DevicesGetPairCodeData, ThrowOnError>
-) =>
-  (options.client ?? client).get<
-    DevicesGetPairCodeResponses,
-    DevicesGetPairCodeErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const devicesGetPairCode = <ThrowOnError extends boolean = true>(options: Options<DevicesGetPairCodeData, ThrowOnError>) => (options.client ?? client).get<DevicesGetPairCodeResponses, DevicesGetPairCodeErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-      { name: 'OpenShockToken', type: 'apiKey' },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/devices/{deviceId}/pair',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Get LCG info for a device if it is online and connected to a LCG node
  */
-export const devicesGetLiveControlGatewayInfo = <ThrowOnError extends boolean = true>(
-  options: Options<DevicesGetLiveControlGatewayInfoData, ThrowOnError>
-) =>
-  (options.client ?? client).get<
-    DevicesGetLiveControlGatewayInfoResponses,
-    DevicesGetLiveControlGatewayInfoErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const devicesGetLiveControlGatewayInfo = <ThrowOnError extends boolean = true>(options: Options<DevicesGetLiveControlGatewayInfoData, ThrowOnError>) => (options.client ?? client).get<DevicesGetLiveControlGatewayInfoResponses, DevicesGetLiveControlGatewayInfoErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-      { name: 'OpenShockToken', type: 'apiKey' },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/devices/{deviceId}/lcg',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Get all shockers for a device
  */
-export const devicesGetShockers = <ThrowOnError extends boolean = true>(
-  options: Options<DevicesGetShockersData, ThrowOnError>
-) =>
-  (options.client ?? client).get<
-    DevicesGetShockersResponses,
-    DevicesGetShockersErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const devicesGetShockers = <ThrowOnError extends boolean = true>(options: Options<DevicesGetShockersData, ThrowOnError>) => (options.client ?? client).get<DevicesGetShockersResponses, DevicesGetShockersErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-      { name: 'OpenShockToken', type: 'apiKey' },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/devices/{deviceId}/shockers',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Gets the version of the OpenShock backend.
  */
-export const versionGetBackendInfo = <ThrowOnError extends boolean = true>(
-  options?: Options<VersionGetBackendInfoData, ThrowOnError>
-) =>
-  (options?.client ?? client).get<VersionGetBackendInfoResponses, unknown, ThrowOnError, 'data'>({
+export const versionGetBackendInfo = <ThrowOnError extends boolean = true>(options?: Options<VersionGetBackendInfoData, ThrowOnError>) => (options?.client ?? client).get<VersionGetBackendInfoResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
     url: '/1',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Gets online devices statistics
  */
-export const publicGetOnlineDevicesStatistics = <ThrowOnError extends boolean = true>(
-  options?: Options<PublicGetOnlineDevicesStatisticsData, ThrowOnError>
-) =>
-  (options?.client ?? client).get<
-    PublicGetOnlineDevicesStatisticsResponses,
-    unknown,
-    ThrowOnError,
-    'data'
-  >({
+export const publicGetOnlineDevicesStatistics = <ThrowOnError extends boolean = true>(options?: Options<PublicGetOnlineDevicesStatisticsData, ThrowOnError>) => (options?.client ?? client).get<PublicGetOnlineDevicesStatisticsResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
     url: '/1/public/stats',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Remove a shocker from a public share
  */
-export const shareLinksRemoveShocker = <ThrowOnError extends boolean = true>(
-  options: Options<ShareLinksRemoveShockerData, ThrowOnError>
-) =>
-  (options.client ?? client).delete<
-    ShareLinksRemoveShockerResponses,
-    ShareLinksRemoveShockerErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const shareLinksRemoveShocker = <ThrowOnError extends boolean = true>(options: Options<ShareLinksRemoveShockerData, ThrowOnError>) => (options.client ?? client).delete<ShareLinksRemoveShockerResponses, ShareLinksRemoveShockerErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/shares/links/{publicShareId}/{shockerId}',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Edit a shocker in a public share
  */
-export const shareLinksEditShocker = <ThrowOnError extends boolean = true>(
-  options: Options<ShareLinksEditShockerData, ThrowOnError>
-) =>
-  (options.client ?? client).patch<
-    ShareLinksEditShockerResponses,
-    ShareLinksEditShockerErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const shareLinksEditShocker = <ThrowOnError extends boolean = true>(options: Options<ShareLinksEditShockerData, ThrowOnError>) => (options.client ?? client).patch<ShareLinksEditShockerResponses, ShareLinksEditShockerErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/shares/links/{publicShareId}/{shockerId}',
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-  });
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
 /**
  * Add a shocker to a public share
  */
-export const shareLinksAddShocker = <ThrowOnError extends boolean = true>(
-  options: Options<ShareLinksAddShockerData, ThrowOnError>
-) =>
-  (options.client ?? client).post<
-    ShareLinksAddShockerResponses,
-    ShareLinksAddShockerErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const shareLinksAddShocker = <ThrowOnError extends boolean = true>(options: Options<ShareLinksAddShockerData, ThrowOnError>) => (options.client ?? client).post<ShareLinksAddShockerResponses, ShareLinksAddShockerErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/shares/links/{publicShareId}/{shockerId}',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Get all public shares for the current user
  */
-export const shareLinksList = <ThrowOnError extends boolean = true>(
-  options?: Options<ShareLinksListData, ThrowOnError>
-) =>
-  (options?.client ?? client).get<ShareLinksListResponses, unknown, ThrowOnError, 'data'>({
+export const shareLinksList = <ThrowOnError extends boolean = true>(options?: Options<ShareLinksListData, ThrowOnError>) => (options?.client ?? client).get<ShareLinksListResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/shares/links',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Create a new public share
  */
-export const shareLinksCreatePublicShare = <ThrowOnError extends boolean = true>(
-  options?: Options<ShareLinksCreatePublicShareData, ThrowOnError>
-) =>
-  (options?.client ?? client).post<
-    ShareLinksCreatePublicShareResponses,
-    unknown,
-    ThrowOnError,
-    'data'
-  >({
+export const shareLinksCreatePublicShare = <ThrowOnError extends boolean = true>(options?: Options<ShareLinksCreatePublicShareData, ThrowOnError>) => (options?.client ?? client).post<ShareLinksCreatePublicShareResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/shares/links',
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
+        'Content-Type': 'application/json',
+        ...options?.headers
+    }
+});
 
 /**
  * Deletes a public share
  */
-export const shareLinksDeletePublicShare = <ThrowOnError extends boolean = true>(
-  options: Options<ShareLinksDeletePublicShareData, ThrowOnError>
-) =>
-  (options.client ?? client).delete<
-    ShareLinksDeletePublicShareResponses,
-    ShareLinksDeletePublicShareErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const shareLinksDeletePublicShare = <ThrowOnError extends boolean = true>(options: Options<ShareLinksDeletePublicShareData, ThrowOnError>) => (options.client ?? client).delete<ShareLinksDeletePublicShareResponses, ShareLinksDeletePublicShareErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/shares/links/{publicShareId}',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Pause a shocker in a public share
  */
-export const shareLinksPauseShocker = <ThrowOnError extends boolean = true>(
-  options: Options<ShareLinksPauseShockerData, ThrowOnError>
-) =>
-  (options.client ?? client).post<
-    ShareLinksPauseShockerResponses,
-    ShareLinksPauseShockerErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const shareLinksPauseShocker = <ThrowOnError extends boolean = true>(options: Options<ShareLinksPauseShockerData, ThrowOnError>) => (options.client ?? client).post<ShareLinksPauseShockerResponses, ShareLinksPauseShockerErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/shares/links/{publicShareId}/{shockerId}/pause',
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-  });
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
 /**
  * Gets information about a public share.
  */
-export const publicGetPublicShare = <ThrowOnError extends boolean = true>(
-  options: Options<PublicGetPublicShareData, ThrowOnError>
-) =>
-  (options.client ?? client).get<
-    PublicGetPublicShareResponses,
-    PublicGetPublicShareErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const publicGetPublicShare = <ThrowOnError extends boolean = true>(options: Options<PublicGetPublicShareData, ThrowOnError>) => (options.client ?? client).get<PublicGetPublicShareResponses, PublicGetPublicShareErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
     url: '/1/public/shares/links/{publicShareId}',
-    ...options,
-  });
+    ...options
+});
 
-export const sessionsDeleteSession = <ThrowOnError extends boolean = true>(
-  options: Options<SessionsDeleteSessionData, ThrowOnError>
-) =>
-  (options.client ?? client).delete<
-    SessionsDeleteSessionResponses,
-    SessionsDeleteSessionErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const sessionsDeleteSession = <ThrowOnError extends boolean = true>(options: Options<SessionsDeleteSessionData, ThrowOnError>) => (options.client ?? client).delete<SessionsDeleteSessionResponses, SessionsDeleteSessionErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/sessions/{sessionId}',
-    ...options,
-  });
+    ...options
+});
 
-export const sessionsListSessions = <ThrowOnError extends boolean = true>(
-  options?: Options<SessionsListSessionsData, ThrowOnError>
-) =>
-  (options?.client ?? client).get<SessionsListSessionsResponses, unknown, ThrowOnError, 'data'>({
+export const sessionsListSessions = <ThrowOnError extends boolean = true>(options?: Options<SessionsListSessionsData, ThrowOnError>) => (options?.client ?? client).get<SessionsListSessionsResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/sessions',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Gets information about the current token used to access this endpoint
  */
-export const sessionsGetSelfSession = <ThrowOnError extends boolean = true>(
-  options?: Options<SessionsGetSelfSessionData, ThrowOnError>
-) =>
-  (options?.client ?? client).get<SessionsGetSelfSessionResponses, unknown, ThrowOnError, 'data'>({
+export const sessionsGetSelfSession = <ThrowOnError extends boolean = true>(options?: Options<SessionsGetSelfSessionData, ThrowOnError>) => (options?.client ?? client).get<SessionsGetSelfSessionResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/sessions/self',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Delete a share code
  */
-export const sharesDeleteShareCode = <ThrowOnError extends boolean = true>(
-  options: Options<SharesDeleteShareCodeData, ThrowOnError>
-) =>
-  (options.client ?? client).delete<
-    SharesDeleteShareCodeResponses,
-    SharesDeleteShareCodeErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const sharesDeleteShareCode = <ThrowOnError extends boolean = true>(options: Options<SharesDeleteShareCodeData, ThrowOnError>) => (options.client ?? client).delete<SharesDeleteShareCodeResponses, SharesDeleteShareCodeErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/shares/code/{shareCodeId}',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Link a share code to your account
  */
-export const sharesLinkShareCode = <ThrowOnError extends boolean = true>(
-  options: Options<SharesLinkShareCodeData, ThrowOnError>
-) =>
-  (options.client ?? client).post<
-    SharesLinkShareCodeResponses,
-    SharesLinkShareCodeErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const sharesLinkShareCode = <ThrowOnError extends boolean = true>(options: Options<SharesLinkShareCodeData, ThrowOnError>) => (options.client ?? client).post<SharesLinkShareCodeResponses, SharesLinkShareCodeErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }],
     url: '/1/shares/code/{shareCodeId}',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Remove a shocker
  */
-export const shockerRemoveShocker = <ThrowOnError extends boolean = true>(
-  options: Options<ShockerRemoveShockerData, ThrowOnError>
-) =>
-  (options.client ?? client).delete<
-    ShockerRemoveShockerResponses,
-    ShockerRemoveShockerErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const shockerRemoveShocker = <ThrowOnError extends boolean = true>(options: Options<ShockerRemoveShockerData, ThrowOnError>) => (options.client ?? client).delete<ShockerRemoveShockerResponses, ShockerRemoveShockerErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-      { name: 'OpenShockToken', type: 'apiKey' },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/{shockerId}',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Get information about a shocker.
  */
-export const shockerGetShockerById = <ThrowOnError extends boolean = true>(
-  options: Options<ShockerGetShockerByIdData, ThrowOnError>
-) =>
-  (options.client ?? client).get<
-    ShockerGetShockerByIdResponses,
-    ShockerGetShockerByIdErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const shockerGetShockerById = <ThrowOnError extends boolean = true>(options: Options<ShockerGetShockerByIdData, ThrowOnError>) => (options.client ?? client).get<ShockerGetShockerByIdResponses, ShockerGetShockerByIdErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-      { name: 'OpenShockToken', type: 'apiKey' },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/{shockerId}',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Edit a shocker
  */
-export const shockerEditShocker = <ThrowOnError extends boolean = true>(
-  options: Options<ShockerEditShockerData, ThrowOnError>
-) =>
-  (options.client ?? client).patch<
-    ShockerEditShockerResponses,
-    ShockerEditShockerErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const shockerEditShocker = <ThrowOnError extends boolean = true>(options: Options<ShockerEditShockerData, ThrowOnError>) => (options.client ?? client).patch<ShockerEditShockerResponses, ShockerEditShockerErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-      { name: 'OpenShockToken', type: 'apiKey' },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/{shockerId}',
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-  });
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
 /**
  * Get the logs for a shocker
  */
-export const shockerGetShockerLogs = <ThrowOnError extends boolean = true>(
-  options: Options<ShockerGetShockerLogsData, ThrowOnError>
-) =>
-  (options.client ?? client).get<
-    ShockerGetShockerLogsResponses,
-    ShockerGetShockerLogsErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const shockerGetShockerLogs = <ThrowOnError extends boolean = true>(options: Options<ShockerGetShockerLogsData, ThrowOnError>) => (options.client ?? client).get<ShockerGetShockerLogsResponses, ShockerGetShockerLogsErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-      { name: 'OpenShockToken', type: 'apiKey' },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/{shockerId}/logs',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Get the logs for all shockers
  */
-export const shockerGetAllShockerLogs = <ThrowOnError extends boolean = true>(
-  options?: Options<ShockerGetAllShockerLogsData, ThrowOnError>
-) =>
-  (options?.client ?? client).get<
-    ShockerGetAllShockerLogsResponses,
-    ShockerGetAllShockerLogsErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const shockerGetAllShockerLogs = <ThrowOnError extends boolean = true>(options?: Options<ShockerGetAllShockerLogsData, ThrowOnError>) => (options?.client ?? client).get<ShockerGetAllShockerLogsResponses, ShockerGetAllShockerLogsErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-      { name: 'OpenShockToken', type: 'apiKey' },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/logs',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * List all shockers shared with the authenticated user.
  */
-export const shockerListSharedShockers = <ThrowOnError extends boolean = true>(
-  options?: Options<ShockerListSharedShockersData, ThrowOnError>
-) =>
-  (options?.client ?? client).get<
-    ShockerListSharedShockersResponses,
-    unknown,
-    ThrowOnError,
-    'data'
-  >({
+export const shockerListSharedShockers = <ThrowOnError extends boolean = true>(options?: Options<ShockerListSharedShockersData, ThrowOnError>) => (options?.client ?? client).get<ShockerListSharedShockersResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-      { name: 'OpenShockToken', type: 'apiKey' },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/shared',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * List all shockers belonging to the authenticated user.
  */
-export const shockerListShockers = <ThrowOnError extends boolean = true>(
-  options?: Options<ShockerListShockersData, ThrowOnError>
-) =>
-  (options?.client ?? client).get<ShockerListShockersResponses, unknown, ThrowOnError, 'data'>({
+export const shockerListShockers = <ThrowOnError extends boolean = true>(options?: Options<ShockerListShockersData, ThrowOnError>) => (options?.client ?? client).get<ShockerListShockersResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-      { name: 'OpenShockToken', type: 'apiKey' },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/own',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Pause or unpause a shocker
  */
-export const shockerPauseShocker = <ThrowOnError extends boolean = true>(
-  options: Options<ShockerPauseShockerData, ThrowOnError>
-) =>
-  (options.client ?? client).post<
-    ShockerPauseShockerResponses,
-    ShockerPauseShockerErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const shockerPauseShocker = <ThrowOnError extends boolean = true>(options: Options<ShockerPauseShockerData, ThrowOnError>) => (options.client ?? client).post<ShockerPauseShockerResponses, ShockerPauseShockerErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-      { name: 'OpenShockToken', type: 'apiKey' },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/{shockerId}/pause',
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-  });
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
 /**
  * Register a shocker
  */
-export const shockerRegisterShocker = <ThrowOnError extends boolean = true>(
-  options?: Options<ShockerRegisterShockerData, ThrowOnError>
-) =>
-  (options?.client ?? client).post<
-    ShockerRegisterShockerResponses,
-    ShockerRegisterShockerErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const shockerRegisterShocker = <ThrowOnError extends boolean = true>(options?: Options<ShockerRegisterShockerData, ThrowOnError>) => (options?.client ?? client).post<ShockerRegisterShockerResponses, ShockerRegisterShockerErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-      { name: 'OpenShockToken', type: 'apiKey' },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers',
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
+        'Content-Type': 'application/json',
+        ...options?.headers
+    }
+});
 
 /**
  * Send a control message to shockers (Deprecated in favor of the /2/shockers/control endpoint)
  */
-export const shockerSendControlDeprecated = <ThrowOnError extends boolean = true>(
-  options?: Options<ShockerSendControlDeprecatedData, ThrowOnError>
-) =>
-  (options?.client ?? client).post<
-    ShockerSendControlDeprecatedResponses,
-    ShockerSendControlDeprecatedErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const shockerSendControlDeprecated = <ThrowOnError extends boolean = true>(options?: Options<ShockerSendControlDeprecatedData, ThrowOnError>) => (options?.client ?? client).post<ShockerSendControlDeprecatedResponses, ShockerSendControlDeprecatedErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-      { name: 'OpenShockToken', type: 'apiKey' },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/control',
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
+        'Content-Type': 'application/json',
+        ...options?.headers
+    }
+});
 
 /**
  * Get all user shares for a shocker
  */
-export const shockerGetUserShares = <ThrowOnError extends boolean = true>(
-  options: Options<ShockerGetUserSharesData, ThrowOnError>
-) =>
-  (options.client ?? client).get<
-    ShockerGetUserSharesResponses,
-    ShockerGetUserSharesErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const shockerGetUserShares = <ThrowOnError extends boolean = true>(options: Options<ShockerGetUserSharesData, ThrowOnError>) => (options.client ?? client).get<ShockerGetUserSharesResponses, ShockerGetUserSharesErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-      { name: 'OpenShockToken', type: 'apiKey' },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/{shockerId}/shares',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Create a share code for a shocker
  */
-export const shockerShockerShareCodeCreate = <ThrowOnError extends boolean = true>(
-  options: Options<ShockerShockerShareCodeCreateData, ThrowOnError>
-) =>
-  (options.client ?? client).post<
-    ShockerShockerShareCodeCreateResponses,
-    ShockerShockerShareCodeCreateErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const shockerShockerShareCodeCreate = <ThrowOnError extends boolean = true>(options: Options<ShockerShockerShareCodeCreateData, ThrowOnError>) => (options.client ?? client).post<ShockerShockerShareCodeCreateResponses, ShockerShockerShareCodeCreateErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-      { name: 'OpenShockToken', type: 'apiKey' },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/{shockerId}/shares',
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-  });
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
 /**
  * List all share codes for a shocker
  */
-export const shockerShockerShareCodeList = <ThrowOnError extends boolean = true>(
-  options: Options<ShockerShockerShareCodeListData, ThrowOnError>
-) =>
-  (options.client ?? client).get<
-    ShockerShockerShareCodeListResponses,
-    ShockerShockerShareCodeListErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const shockerShockerShareCodeList = <ThrowOnError extends boolean = true>(options: Options<ShockerShockerShareCodeListData, ThrowOnError>) => (options.client ?? client).get<ShockerShockerShareCodeListResponses, ShockerShockerShareCodeListErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-      { name: 'OpenShockToken', type: 'apiKey' },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/{shockerId}/shareCodes',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Remove a share for a shocker
  */
-export const shockerShockerShareRemove = <ThrowOnError extends boolean = true>(
-  options: Options<ShockerShockerShareRemoveData, ThrowOnError>
-) =>
-  (options.client ?? client).delete<
-    ShockerShockerShareRemoveResponses,
-    ShockerShockerShareRemoveErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const shockerShockerShareRemove = <ThrowOnError extends boolean = true>(options: Options<ShockerShockerShareRemoveData, ThrowOnError>) => (options.client ?? client).delete<ShockerShockerShareRemoveResponses, ShockerShockerShareRemoveErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-      { name: 'OpenShockToken', type: 'apiKey' },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/{shockerId}/shares/{sharedWithUserId}',
-    ...options,
-  });
+    ...options
+});
 
 /**
  * Update a share for a shocker
  */
-export const shockerShockerShareCodeUpdate = <ThrowOnError extends boolean = true>(
-  options: Options<ShockerShockerShareCodeUpdateData, ThrowOnError>
-) =>
-  (options.client ?? client).patch<
-    ShockerShockerShareCodeUpdateResponses,
-    ShockerShockerShareCodeUpdateErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const shockerShockerShareCodeUpdate = <ThrowOnError extends boolean = true>(options: Options<ShockerShockerShareCodeUpdateData, ThrowOnError>) => (options.client ?? client).patch<ShockerShockerShareCodeUpdateResponses, ShockerShockerShareCodeUpdateErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-      { name: 'OpenShockToken', type: 'apiKey' },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/{shockerId}/shares/{sharedWithUserId}',
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-  });
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
 /**
  * Pause/Unpause a share code for a shocker
  */
-export const shockerShockerShareCodePause = <ThrowOnError extends boolean = true>(
-  options: Options<ShockerShockerShareCodePauseData, ThrowOnError>
-) =>
-  (options.client ?? client).post<
-    ShockerShockerShareCodePauseResponses,
-    ShockerShockerShareCodePauseErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const shockerShockerShareCodePause = <ThrowOnError extends boolean = true>(options: Options<ShockerShockerShareCodePauseData, ThrowOnError>) => (options.client ?? client).post<ShockerShockerShareCodePauseResponses, ShockerShockerShareCodePauseErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-      { name: 'OpenShockToken', type: 'apiKey' },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/shockers/{shockerId}/shares/{sharedWithUserId}/pause',
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-  });
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
 /**
  * Get the current user's information.
  */
-export const usersGetSelf = <ThrowOnError extends boolean = true>(
-  options?: Options<UsersGetSelfData, ThrowOnError>
-) =>
-  (options?.client ?? client).get<UsersGetSelfResponses, unknown, ThrowOnError, 'data'>({
+export const usersGetSelf = <ThrowOnError extends boolean = true>(options?: Options<UsersGetSelfData, ThrowOnError>) => (options?.client ?? client).get<UsersGetSelfResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-      { name: 'OpenShockToken', type: 'apiKey' },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/users/self',
-    ...options,
-  });
+    ...options
+});
 
-export const usersGetByName = <ThrowOnError extends boolean = true>(
-  options: Options<UsersGetByNameData, ThrowOnError>
-) =>
-  (options.client ?? client).get<
-    UsersGetByNameResponses,
-    UsersGetByNameErrors,
-    ThrowOnError,
-    'data'
-  >({
+export const usersGetByName = <ThrowOnError extends boolean = true>(options: Options<UsersGetByNameData, ThrowOnError>) => (options.client ?? client).get<UsersGetByNameResponses, UsersGetByNameErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
-    security: [
-      {
-        in: 'cookie',
-        name: 'openShockSession',
-        type: 'apiKey',
-      },
-      { name: 'OpenShockToken', type: 'apiKey' },
-    ],
+    security: [{
+            in: 'cookie',
+            name: 'openShockSession',
+            type: 'apiKey'
+        }, { name: 'OpenShockToken', type: 'apiKey' }],
     url: '/1/users/by-name/{username}',
-    ...options,
-  });
+    ...options
+});

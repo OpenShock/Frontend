@@ -37,7 +37,7 @@ export const createClient = (config: Config = {}): Client => {
     ThrowOnError extends boolean = boolean,
     Url extends string = string,
   >(
-    options: RequestOptions<TData, TResponseStyle, ThrowOnError, Url>
+    options: RequestOptions<TData, TResponseStyle, ThrowOnError, Url>,
   ) => {
     const opts = {
       ..._config,
@@ -48,7 +48,10 @@ export const createClient = (config: Config = {}): Client => {
     };
 
     if (opts.security) {
-      await setAuthParams(opts);
+      await setAuthParams({
+        ...opts,
+        security: opts.security,
+      });
     }
 
     if (opts.requestValidator) {
