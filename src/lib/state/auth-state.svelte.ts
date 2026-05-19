@@ -5,6 +5,7 @@ import {
   hasCompletedTour,
   hasSeenWelcome,
   isOnboardingDisabled,
+  markTourCompleted,
   startWelcomeTour,
 } from '$lib/tour/welcome-tour';
 import { userState } from './user-state.svelte';
@@ -41,6 +42,7 @@ async function maybeTourPrompt() {
     cancelButtonText: 'No thanks',
   });
   if (result.confirmed) await startWelcomeTour();
+  else markTourCompleted();
 }
 
 /**

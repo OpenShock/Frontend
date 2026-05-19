@@ -10,7 +10,12 @@
   import GithubIcon from '$lib/components/svg/GithubIcon.svelte';
   import DotGrid from '$lib/components/DotGrid.svelte';
   import { Button } from '$lib/components/ui/button';
-  import { markWelcomed, shouldShowWelcome, startWelcomeTour } from '$lib/tour/welcome-tour';
+  import {
+    markWelcomed,
+    markTourCompleted,
+    shouldShowWelcome,
+    startWelcomeTour,
+  } from '$lib/tour/welcome-tour';
   import { userState } from '$lib/state/user-state.svelte';
   import { ChevronLeft, ChevronRight, Sparkles } from '@lucide/svelte';
   import { onMount, type Snippet } from 'svelte';
@@ -65,6 +70,7 @@
 
   function dismiss() {
     markWelcomed();
+    markTourCompleted();
     open = false;
   }
 

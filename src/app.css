@@ -150,13 +150,6 @@
   grid-area: 1/1/2/2;
 }
 
-/* driver.js overrides */
-.driver-popover-close-btn {
-  width: 24px !important;
-  height: 24px !important;
-  font-size: 20px !important;
-}
-
 @keyframes accordion-down {
   from {
     height: 0;

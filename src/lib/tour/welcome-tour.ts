@@ -3,12 +3,13 @@ import { goto } from '$app/navigation';
 import { resolve as resolvePath } from '$app/paths';
 import { driver, type Driver, type DriveStep } from 'driver.js';
 import 'driver.js/dist/driver.css';
-import { isOnboardingDisabled } from './onboarding-state';
+import { isOnboardingDisabled, markTourCompleted } from './onboarding-state';
 
 export {
   hasCompletedTour,
   hasSeenWelcome,
   isOnboardingDisabled,
+  markTourCompleted,
   markWelcomed,
   shouldShowWelcome,
 } from './onboarding-state';
@@ -415,6 +416,28 @@ export async function startWelcomeTour(): Promise<void> {
       ctx.d!.moveNext();
     };
 
+    const handlePrevClick = async () => {
+      const idx = ctx.d!.getActiveIndex();
+      if (idx === undefined) return ctx.d!.movePrevious();
+      const prev = tourSteps[idx - 1];
+      // On mobile, open sidebar when going back to a sidebar step.
+      if (isMobileViewport() && prev?.mobileContext === 'sidebar') {
+        if (readSidebarState() === 'mobile-closed') {
+          (document.querySelector(SIDEBAR_TOGGLE_SEL) as HTMLElement)?.click();
+          await waitForMobileSidebar();
+          if (prev.element) await waitForElement(prev.element);
+        }
+      }
+      // On mobile, close sidebar when going back to a page step.
+      if (isMobileViewport() && prev?.mobileContext === 'page') {
+        if (readSidebarState() === 'mobile-open') {
+          (document.querySelector(SIDEBAR_TOGGLE_SEL) as HTMLElement)?.click();
+          await waitForMobileSidebar();
+        }
+      }
+      ctx.d!.movePrevious();
+    };
+
     ctx.d = driver({
       showProgress: true,
       allowClose: true,
@@ -426,6 +449,13 @@ export async function startWelcomeTour(): Promise<void> {
       steps: driverSteps,
       onHighlighted: wireUpActionAdvance,
       onNextClick: handleNextClick,
+      onPrevClick: handlePrevClick,
+      onCloseClick: (_el, _step, { driver: d }) => {
+        ctx.cleanup?.();
+        markTourCompleted();
+        d.destroy();
+        resolve();
+      },
       onDeselected: () => {
         ctx.cleanup?.();
         ctx.cleanup = null;
