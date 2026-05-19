@@ -2,6 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
+import { adminConfigurationListResponseTransformer, adminGetOnlineDevicesResponseTransformer, adminGetUsersResponseTransformer, adminListEmailProviderBlacklistResponseTransformer, adminListUsernameBlacklistResponseTransformer, adminListWebhooksResponseTransformer, authenticatedAccountListOAuthConnectionsResponseTransformer, devicesGetDeviceByIdResponseTransformer, devicesGetShockersResponseTransformer, devicesListDevicesResponseTransformer, devicesOtaGetOtaUpdateHistoryResponseTransformer, publicGetOnlineDevicesStatisticsResponseTransformer, publicGetPublicShareResponseTransformer, sessionsGetSelfSessionResponseTransformer, sessionsListSessionsResponseTransformer, shareLinksListResponseTransformer, shockerGetAllShockerLogsResponseTransformer, shockerGetShockerByIdResponseTransformer, shockerGetShockerLogsResponseTransformer, shockerGetUserSharesResponseTransformer, shockerListShockersResponseTransformer, shockerShockerShareCodeListResponseTransformer, tokensCreateTokenResponseTransformer, tokensGetTokenByIdResponseTransformer, tokensListTokensResponseTransformer, tokensSelfGetSelfTokenResponseTransformer, versionGetBackendInfoResponseTransformer } from './transformers.gen';
 import type { AccountActivateData, AccountActivateErrors, AccountActivateResponses, AccountCheckUsernameData, AccountCheckUsernameResponses, AccountEmailVerifyData, AccountEmailVerifyErrors, AccountEmailVerifyResponses, AccountLoginData, AccountLoginErrors, AccountLoginResponses, AccountLogoutData, AccountLogoutResponses, AccountPasswordResetCheckValidData, AccountPasswordResetCheckValidErrors, AccountPasswordResetCheckValidResponses, AccountPasswordResetCompleteData, AccountPasswordResetCompleteErrors, AccountPasswordResetCompleteResponses, AccountPasswordResetInitiateData, AccountPasswordResetInitiateResponses, AccountSignUpData, AccountSignUpErrors, AccountSignUpResponses, AdminAddEmailProviderBlacklistData, AdminAddEmailProviderBlacklistResponses, AdminAddUsernameBlacklistData, AdminAddUsernameBlacklistResponses, AdminAddWebhookData, AdminAddWebhookErrors, AdminAddWebhookResponses, AdminConfigurationAddData, AdminConfigurationAddErrors, AdminConfigurationAddResponses, AdminConfigurationDeleteData, AdminConfigurationDeleteErrors, AdminConfigurationDeleteResponses, AdminConfigurationListData, AdminConfigurationListErrors, AdminConfigurationListResponses, AdminConfigurationUpdateData, AdminConfigurationUpdateErrors, AdminConfigurationUpdateResponses, AdminDeactivateUserData, AdminDeactivateUserErrors, AdminDeactivateUserResponses, AdminDeleteUserData, AdminDeleteUserErrors, AdminDeleteUserResponses, AdminGetOnlineDevicesData, AdminGetOnlineDevicesErrors, AdminGetOnlineDevicesResponses, AdminGetUsersData, AdminGetUsersErrors, AdminGetUsersResponses, AdminListEmailProviderBlacklistData, AdminListEmailProviderBlacklistResponses, AdminListUsernameBlacklistData, AdminListUsernameBlacklistResponses, AdminListWebhooksData, AdminListWebhooksErrors, AdminListWebhooksResponses, AdminModifyUserData, AdminModifyUserErrors, AdminModifyUserResponses, AdminReactivateUserData, AdminReactivateUserErrors, AdminReactivateUserResponses, AdminRemoveEmailProviderBlacklistData, AdminRemoveEmailProviderBlacklistErrors, AdminRemoveEmailProviderBlacklistResponses, AdminRemoveUsernameBlacklistData, AdminRemoveUsernameBlacklistErrors, AdminRemoveUsernameBlacklistResponses, AdminRemoveWebhookData, AdminRemoveWebhookErrors, AdminRemoveWebhookResponses, AuthenticatedAccountChangeEmailData, AuthenticatedAccountChangeEmailResponses, AuthenticatedAccountChangePasswordData, AuthenticatedAccountChangePasswordErrors, AuthenticatedAccountChangePasswordResponses, AuthenticatedAccountChangeUsernameData, AuthenticatedAccountChangeUsernameErrors, AuthenticatedAccountChangeUsernameResponses, AuthenticatedAccountDeactivateData, AuthenticatedAccountDeactivateErrors, AuthenticatedAccountDeactivateResponses, AuthenticatedAccountListOAuthConnectionsData, AuthenticatedAccountListOAuthConnectionsResponses, AuthenticatedAccountRemoveOAuthConnectionData, AuthenticatedAccountRemoveOAuthConnectionErrors, AuthenticatedAccountRemoveOAuthConnectionResponses, DeviceGetLiveControlGatewayData, DeviceGetLiveControlGatewayErrors, DeviceGetLiveControlGatewayResponses, DeviceGetSelfData, DeviceGetSelfResponses, DevicePairData, DevicePairErrors, DevicePairResponses, DevicesCreateDeviceData, DevicesCreateDeviceResponses, DevicesEditDeviceData, DevicesEditDeviceErrors, DevicesEditDeviceResponses, DevicesGetDeviceByIdData, DevicesGetDeviceByIdErrors, DevicesGetDeviceByIdResponses, DevicesGetLiveControlGatewayInfoData, DevicesGetLiveControlGatewayInfoErrors, DevicesGetLiveControlGatewayInfoResponses, DevicesGetPairCodeData, DevicesGetPairCodeErrors, DevicesGetPairCodeResponses, DevicesGetShockersData, DevicesGetShockersErrors, DevicesGetShockersResponses, DevicesListDevicesData, DevicesListDevicesResponses, DevicesOtaGetOtaUpdateHistoryData, DevicesOtaGetOtaUpdateHistoryErrors, DevicesOtaGetOtaUpdateHistoryResponses, DevicesRegenerateDeviceTokenData, DevicesRegenerateDeviceTokenErrors, DevicesRegenerateDeviceTokenResponses, DevicesRemoveDeviceData, DevicesRemoveDeviceErrors, DevicesRemoveDeviceResponses, PublicGetOnlineDevicesStatisticsData, PublicGetOnlineDevicesStatisticsResponses, PublicGetPublicShareData, PublicGetPublicShareErrors, PublicGetPublicShareResponses, SessionsDeleteSessionData, SessionsDeleteSessionErrors, SessionsDeleteSessionResponses, SessionsGetSelfSessionData, SessionsGetSelfSessionResponses, SessionsListSessionsData, SessionsListSessionsResponses, ShareLinksAddShockerData, ShareLinksAddShockerErrors, ShareLinksAddShockerResponses, ShareLinksCreatePublicShareData, ShareLinksCreatePublicShareResponses, ShareLinksDeletePublicShareData, ShareLinksDeletePublicShareErrors, ShareLinksDeletePublicShareResponses, ShareLinksEditShockerData, ShareLinksEditShockerErrors, ShareLinksEditShockerResponses, ShareLinksListData, ShareLinksListResponses, ShareLinksPauseShockerData, ShareLinksPauseShockerErrors, ShareLinksPauseShockerResponses, ShareLinksRemoveShockerData, ShareLinksRemoveShockerErrors, ShareLinksRemoveShockerResponses, SharesDeleteShareCodeData, SharesDeleteShareCodeErrors, SharesDeleteShareCodeResponses, SharesLinkShareCodeData, SharesLinkShareCodeErrors, SharesLinkShareCodeResponses, ShockerEditShockerData, ShockerEditShockerErrors, ShockerEditShockerResponses, ShockerGetAllShockerLogsData, ShockerGetAllShockerLogsErrors, ShockerGetAllShockerLogsResponses, ShockerGetShockerByIdData, ShockerGetShockerByIdErrors, ShockerGetShockerByIdResponses, ShockerGetShockerLogsData, ShockerGetShockerLogsErrors, ShockerGetShockerLogsResponses, ShockerGetUserSharesData, ShockerGetUserSharesErrors, ShockerGetUserSharesResponses, ShockerListSharedShockersData, ShockerListSharedShockersResponses, ShockerListShockersData, ShockerListShockersResponses, ShockerPauseShockerData, ShockerPauseShockerErrors, ShockerPauseShockerResponses, ShockerRegisterShockerData, ShockerRegisterShockerErrors, ShockerRegisterShockerResponses, ShockerRemoveShockerData, ShockerRemoveShockerErrors, ShockerRemoveShockerResponses, ShockerSendControlDeprecatedData, ShockerSendControlDeprecatedErrors, ShockerSendControlDeprecatedResponses, ShockerShockerShareCodeCreateData, ShockerShockerShareCodeCreateErrors, ShockerShockerShareCodeCreateResponses, ShockerShockerShareCodeListData, ShockerShockerShareCodeListErrors, ShockerShockerShareCodeListResponses, ShockerShockerShareCodePauseData, ShockerShockerShareCodePauseErrors, ShockerShockerShareCodePauseResponses, ShockerShockerShareCodeUpdateData, ShockerShockerShareCodeUpdateErrors, ShockerShockerShareCodeUpdateResponses, ShockerShockerShareRemoveData, ShockerShockerShareRemoveErrors, ShockerShockerShareRemoveResponses, TokenDeleteDeleteTokenData, TokenDeleteDeleteTokenErrors, TokenDeleteDeleteTokenResponses, TokensCreateTokenData, TokensCreateTokenResponses, TokensEditTokenData, TokensEditTokenErrors, TokensEditTokenResponses, TokensGetTokenByIdData, TokensGetTokenByIdErrors, TokensGetTokenByIdResponses, TokensListTokensData, TokensListTokensResponses, TokensReportTokensData, TokensReportTokensResponses, TokensSelfGetSelfTokenData, TokensSelfGetSelfTokenResponses, UsersGetByNameData, UsersGetByNameErrors, UsersGetByNameResponses, UsersGetSelfData, UsersGetSelfResponses, VersionGetBackendInfoData, VersionGetBackendInfoResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
@@ -31,6 +32,7 @@ export const tokenDeleteDeleteToken = <ThrowOnError extends boolean = true>(opti
  * Get a token by id
  */
 export const tokensGetTokenById = <ThrowOnError extends boolean = true>(options: Options<TokensGetTokenByIdData, ThrowOnError>) => (options.client ?? client).get<TokensGetTokenByIdResponses, TokensGetTokenByIdErrors, ThrowOnError, 'data'>({
+    responseTransformer: tokensGetTokenByIdResponseTransformer,
     responseStyle: 'data',
     url: '/1/tokens/{tokenId}',
     ...options
@@ -53,6 +55,7 @@ export const tokensEditToken = <ThrowOnError extends boolean = true>(options: Op
  * Gets information about the current token used to access this endpoint
  */
 export const tokensSelfGetSelfToken = <ThrowOnError extends boolean = true>(options?: Options<TokensSelfGetSelfTokenData, ThrowOnError>) => (options?.client ?? client).get<TokensSelfGetSelfTokenResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: tokensSelfGetSelfTokenResponseTransformer,
     responseStyle: 'data',
     url: '/1/tokens/self',
     ...options
@@ -75,6 +78,7 @@ export const tokensReportTokens = <ThrowOnError extends boolean = true>(options?
  * List all tokens for the current user
  */
 export const tokensListTokens = <ThrowOnError extends boolean = true>(options?: Options<TokensListTokensData, ThrowOnError>) => (options?.client ?? client).get<TokensListTokensResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: tokensListTokensResponseTransformer,
     responseStyle: 'data',
     url: '/1/tokens',
     ...options
@@ -84,6 +88,7 @@ export const tokensListTokens = <ThrowOnError extends boolean = true>(options?: 
  * Create a new token
  */
 export const tokensCreateToken = <ThrowOnError extends boolean = true>(options?: Options<TokensCreateTokenData, ThrowOnError>) => (options?.client ?? client).post<TokensCreateTokenResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: tokensCreateTokenResponseTransformer,
     responseStyle: 'data',
     url: '/1/tokens',
     ...options,
@@ -252,6 +257,7 @@ export const authenticatedAccountRemoveOAuthConnection = <ThrowOnError extends b
  * List OAuth connections linked to the current user.
  */
 export const authenticatedAccountListOAuthConnections = <ThrowOnError extends boolean = true>(options?: Options<AuthenticatedAccountListOAuthConnectionsData, ThrowOnError>) => (options?.client ?? client).get<AuthenticatedAccountListOAuthConnectionsResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: authenticatedAccountListOAuthConnectionsResponseTransformer,
     responseStyle: 'data',
     url: '/1/account/connections',
     ...options
@@ -261,6 +267,7 @@ export const authenticatedAccountListOAuthConnections = <ThrowOnError extends bo
  * Gets all configuration items
  */
 export const adminConfigurationList = <ThrowOnError extends boolean = true>(options?: Options<AdminConfigurationListData, ThrowOnError>) => (options?.client ?? client).get<AdminConfigurationListResponses, AdminConfigurationListErrors, ThrowOnError, 'data'>({
+    responseTransformer: adminConfigurationListResponseTransformer,
     responseStyle: 'data',
     url: '/1/admin/config',
     ...options
@@ -333,6 +340,7 @@ export const adminModifyUser = <ThrowOnError extends boolean = true>(options: Op
 });
 
 export const adminListEmailProviderBlacklist = <ThrowOnError extends boolean = true>(options?: Options<AdminListEmailProviderBlacklistData, ThrowOnError>) => (options?.client ?? client).get<AdminListEmailProviderBlacklistResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: adminListEmailProviderBlacklistResponseTransformer,
     responseStyle: 'data',
     url: '/1/admin/blacklist/emailProviders',
     ...options
@@ -358,6 +366,7 @@ export const adminRemoveEmailProviderBlacklist = <ThrowOnError extends boolean =
  * Gets all online devices
  */
 export const adminGetOnlineDevices = <ThrowOnError extends boolean = true>(options?: Options<AdminGetOnlineDevicesData, ThrowOnError>) => (options?.client ?? client).get<AdminGetOnlineDevicesResponses, AdminGetOnlineDevicesErrors, ThrowOnError, 'data'>({
+    responseTransformer: adminGetOnlineDevicesResponseTransformer,
     responseStyle: 'data',
     url: '/1/admin/monitoring/onlineDevices',
     ...options
@@ -367,6 +376,7 @@ export const adminGetOnlineDevices = <ThrowOnError extends boolean = true>(optio
  * Gets all users, paginated
  */
 export const adminGetUsers = <ThrowOnError extends boolean = true>(options?: Options<AdminGetUsersData, ThrowOnError>) => (options?.client ?? client).get<AdminGetUsersResponses, AdminGetUsersErrors, ThrowOnError, 'data'>({
+    responseTransformer: adminGetUsersResponseTransformer,
     responseStyle: 'data',
     url: '/1/admin/users',
     ...options
@@ -382,6 +392,7 @@ export const adminReactivateUser = <ThrowOnError extends boolean = true>(options
 });
 
 export const adminListUsernameBlacklist = <ThrowOnError extends boolean = true>(options?: Options<AdminListUsernameBlacklistData, ThrowOnError>) => (options?.client ?? client).get<AdminListUsernameBlacklistResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: adminListUsernameBlacklistResponseTransformer,
     responseStyle: 'data',
     url: '/1/admin/blacklist/usernames',
     ...options
@@ -407,6 +418,7 @@ export const adminRemoveUsernameBlacklist = <ThrowOnError extends boolean = true
  * List webhooks
  */
 export const adminListWebhooks = <ThrowOnError extends boolean = true>(options?: Options<AdminListWebhooksData, ThrowOnError>) => (options?.client ?? client).get<AdminListWebhooksResponses, AdminListWebhooksErrors, ThrowOnError, 'data'>({
+    responseTransformer: adminListWebhooksResponseTransformer,
     responseStyle: 'data',
     url: '/1/admin/webhooks',
     ...options
@@ -465,6 +477,7 @@ export const devicePair = <ThrowOnError extends boolean = true>(options: Options
  * Gets the OTA update history for a device
  */
 export const devicesOtaGetOtaUpdateHistory = <ThrowOnError extends boolean = true>(options: Options<DevicesOtaGetOtaUpdateHistoryData, ThrowOnError>) => (options.client ?? client).get<DevicesOtaGetOtaUpdateHistoryResponses, DevicesOtaGetOtaUpdateHistoryErrors, ThrowOnError, 'data'>({
+    responseTransformer: devicesOtaGetOtaUpdateHistoryResponseTransformer,
     responseStyle: 'data',
     url: '/1/devices/{deviceId}/ota',
     ...options
@@ -474,6 +487,7 @@ export const devicesOtaGetOtaUpdateHistory = <ThrowOnError extends boolean = tru
  * Get all devices for the current user
  */
 export const devicesListDevices = <ThrowOnError extends boolean = true>(options?: Options<DevicesListDevicesData, ThrowOnError>) => (options?.client ?? client).get<DevicesListDevicesResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: devicesListDevicesResponseTransformer,
     responseStyle: 'data',
     url: '/1/devices',
     ...options
@@ -501,6 +515,7 @@ export const devicesRemoveDevice = <ThrowOnError extends boolean = true>(options
  * Get a device by its id
  */
 export const devicesGetDeviceById = <ThrowOnError extends boolean = true>(options: Options<DevicesGetDeviceByIdData, ThrowOnError>) => (options.client ?? client).get<DevicesGetDeviceByIdResponses, DevicesGetDeviceByIdErrors, ThrowOnError, 'data'>({
+    responseTransformer: devicesGetDeviceByIdResponseTransformer,
     responseStyle: 'data',
     url: '/1/devices/{deviceId}',
     ...options
@@ -550,6 +565,7 @@ export const devicesGetLiveControlGatewayInfo = <ThrowOnError extends boolean = 
  * Get all shockers for a device
  */
 export const devicesGetShockers = <ThrowOnError extends boolean = true>(options: Options<DevicesGetShockersData, ThrowOnError>) => (options.client ?? client).get<DevicesGetShockersResponses, DevicesGetShockersErrors, ThrowOnError, 'data'>({
+    responseTransformer: devicesGetShockersResponseTransformer,
     responseStyle: 'data',
     url: '/1/devices/{deviceId}/shockers',
     ...options
@@ -559,6 +575,7 @@ export const devicesGetShockers = <ThrowOnError extends boolean = true>(options:
  * Gets the version of the OpenShock backend.
  */
 export const versionGetBackendInfo = <ThrowOnError extends boolean = true>(options?: Options<VersionGetBackendInfoData, ThrowOnError>) => (options?.client ?? client).get<VersionGetBackendInfoResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: versionGetBackendInfoResponseTransformer,
     responseStyle: 'data',
     url: '/1',
     ...options
@@ -568,6 +585,7 @@ export const versionGetBackendInfo = <ThrowOnError extends boolean = true>(optio
  * Gets online devices statistics
  */
 export const publicGetOnlineDevicesStatistics = <ThrowOnError extends boolean = true>(options?: Options<PublicGetOnlineDevicesStatisticsData, ThrowOnError>) => (options?.client ?? client).get<PublicGetOnlineDevicesStatisticsResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: publicGetOnlineDevicesStatisticsResponseTransformer,
     responseStyle: 'data',
     url: '/1/public/stats',
     ...options
@@ -608,6 +626,7 @@ export const shareLinksAddShocker = <ThrowOnError extends boolean = true>(option
  * Get all public shares for the current user
  */
 export const shareLinksList = <ThrowOnError extends boolean = true>(options?: Options<ShareLinksListData, ThrowOnError>) => (options?.client ?? client).get<ShareLinksListResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: shareLinksListResponseTransformer,
     responseStyle: 'data',
     url: '/1/shares/links',
     ...options
@@ -652,6 +671,7 @@ export const shareLinksPauseShocker = <ThrowOnError extends boolean = true>(opti
  * Gets information about a public share.
  */
 export const publicGetPublicShare = <ThrowOnError extends boolean = true>(options: Options<PublicGetPublicShareData, ThrowOnError>) => (options.client ?? client).get<PublicGetPublicShareResponses, PublicGetPublicShareErrors, ThrowOnError, 'data'>({
+    responseTransformer: publicGetPublicShareResponseTransformer,
     responseStyle: 'data',
     url: '/1/public/shares/links/{publicShareId}',
     ...options
@@ -664,6 +684,7 @@ export const sessionsDeleteSession = <ThrowOnError extends boolean = true>(optio
 });
 
 export const sessionsListSessions = <ThrowOnError extends boolean = true>(options?: Options<SessionsListSessionsData, ThrowOnError>) => (options?.client ?? client).get<SessionsListSessionsResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: sessionsListSessionsResponseTransformer,
     responseStyle: 'data',
     url: '/1/sessions',
     ...options
@@ -673,6 +694,7 @@ export const sessionsListSessions = <ThrowOnError extends boolean = true>(option
  * Gets information about the current token used to access this endpoint
  */
 export const sessionsGetSelfSession = <ThrowOnError extends boolean = true>(options?: Options<SessionsGetSelfSessionData, ThrowOnError>) => (options?.client ?? client).get<SessionsGetSelfSessionResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: sessionsGetSelfSessionResponseTransformer,
     responseStyle: 'data',
     url: '/1/sessions/self',
     ...options
@@ -709,6 +731,7 @@ export const shockerRemoveShocker = <ThrowOnError extends boolean = true>(option
  * Get information about a shocker.
  */
 export const shockerGetShockerById = <ThrowOnError extends boolean = true>(options: Options<ShockerGetShockerByIdData, ThrowOnError>) => (options.client ?? client).get<ShockerGetShockerByIdResponses, ShockerGetShockerByIdErrors, ThrowOnError, 'data'>({
+    responseTransformer: shockerGetShockerByIdResponseTransformer,
     responseStyle: 'data',
     url: '/1/shockers/{shockerId}',
     ...options
@@ -731,6 +754,7 @@ export const shockerEditShocker = <ThrowOnError extends boolean = true>(options:
  * Get the logs for a shocker
  */
 export const shockerGetShockerLogs = <ThrowOnError extends boolean = true>(options: Options<ShockerGetShockerLogsData, ThrowOnError>) => (options.client ?? client).get<ShockerGetShockerLogsResponses, ShockerGetShockerLogsErrors, ThrowOnError, 'data'>({
+    responseTransformer: shockerGetShockerLogsResponseTransformer,
     responseStyle: 'data',
     url: '/1/shockers/{shockerId}/logs',
     ...options
@@ -740,6 +764,7 @@ export const shockerGetShockerLogs = <ThrowOnError extends boolean = true>(optio
  * Get the logs for all shockers
  */
 export const shockerGetAllShockerLogs = <ThrowOnError extends boolean = true>(options?: Options<ShockerGetAllShockerLogsData, ThrowOnError>) => (options?.client ?? client).get<ShockerGetAllShockerLogsResponses, ShockerGetAllShockerLogsErrors, ThrowOnError, 'data'>({
+    responseTransformer: shockerGetAllShockerLogsResponseTransformer,
     responseStyle: 'data',
     url: '/1/shockers/logs',
     ...options
@@ -758,6 +783,7 @@ export const shockerListSharedShockers = <ThrowOnError extends boolean = true>(o
  * List all shockers belonging to the authenticated user.
  */
 export const shockerListShockers = <ThrowOnError extends boolean = true>(options?: Options<ShockerListShockersData, ThrowOnError>) => (options?.client ?? client).get<ShockerListShockersResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: shockerListShockersResponseTransformer,
     responseStyle: 'data',
     url: '/1/shockers/own',
     ...options
@@ -806,6 +832,7 @@ export const shockerSendControlDeprecated = <ThrowOnError extends boolean = true
  * Get all user shares for a shocker
  */
 export const shockerGetUserShares = <ThrowOnError extends boolean = true>(options: Options<ShockerGetUserSharesData, ThrowOnError>) => (options.client ?? client).get<ShockerGetUserSharesResponses, ShockerGetUserSharesErrors, ThrowOnError, 'data'>({
+    responseTransformer: shockerGetUserSharesResponseTransformer,
     responseStyle: 'data',
     url: '/1/shockers/{shockerId}/shares',
     ...options
@@ -828,6 +855,7 @@ export const shockerShockerShareCodeCreate = <ThrowOnError extends boolean = tru
  * List all share codes for a shocker
  */
 export const shockerShockerShareCodeList = <ThrowOnError extends boolean = true>(options: Options<ShockerShockerShareCodeListData, ThrowOnError>) => (options.client ?? client).get<ShockerShockerShareCodeListResponses, ShockerShockerShareCodeListErrors, ThrowOnError, 'data'>({
+    responseTransformer: shockerShockerShareCodeListResponseTransformer,
     responseStyle: 'data',
     url: '/1/shockers/{shockerId}/shareCodes',
     ...options

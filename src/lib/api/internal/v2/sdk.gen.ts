@@ -2,6 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
+import { userSharesGetIncomingInvitesListResponseTransformer, userSharesGetOutgoingInvitesListResponseTransformer, userSharesGetSharesByUsersResponseTransformer, userSharesRedeemInviteResponseTransformer } from './transformers.gen';
 import type { AccountCheckUsernameData, AccountCheckUsernameResponses, AccountLoginV2Data, AccountLoginV2Errors, AccountLoginV2Responses, AccountPasswordResetInitiateV2Data, AccountPasswordResetInitiateV2Errors, AccountPasswordResetInitiateV2Responses, AccountSignUpV2Data, AccountSignUpV2Errors, AccountSignUpV2Responses, DeviceGetLiveControlGatewayV2Data, DeviceGetLiveControlGatewayV2Errors, DeviceGetLiveControlGatewayV2Responses, DevicesCreateDeviceV2Data, DevicesCreateDeviceV2Responses, ShockerSendControlData, ShockerSendControlErrors, ShockerSendControlResponses, UserSharesBulkPauseUserShareShockersData, UserSharesBulkPauseUserShareShockersResponses, UserSharesBulkRemoveUserShareShockersData, UserSharesBulkRemoveUserShareShockersResponses, UserSharesBulkUserShareShockersUpdateData, UserSharesBulkUserShareShockersUpdateErrors, UserSharesBulkUserShareShockersUpdateResponses, UserSharesCreateShareInviteData, UserSharesCreateShareInviteErrors, UserSharesCreateShareInviteResponses, UserSharesDeleteOutgoingInviteData, UserSharesDeleteOutgoingInviteErrors, UserSharesDeleteOutgoingInviteResponses, UserSharesDenyIncomingInviteData, UserSharesDenyIncomingInviteErrors, UserSharesDenyIncomingInviteResponses, UserSharesGetIncomingInvitesListData, UserSharesGetIncomingInvitesListResponses, UserSharesGetOutgoingInvitesListData, UserSharesGetOutgoingInvitesListResponses, UserSharesGetSharesByUsersData, UserSharesGetSharesByUsersResponses, UserSharesRedeemInviteData, UserSharesRedeemInviteErrors, UserSharesRedeemInviteResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
@@ -116,18 +117,21 @@ export const userSharesCreateShareInvite = <ThrowOnError extends boolean = true>
 });
 
 export const userSharesGetSharesByUsers = <ThrowOnError extends boolean = true>(options?: Options<UserSharesGetSharesByUsersData, ThrowOnError>) => (options?.client ?? client).get<UserSharesGetSharesByUsersResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: userSharesGetSharesByUsersResponseTransformer,
     responseStyle: 'data',
     url: '/2/shares/user',
     ...options
 });
 
 export const userSharesGetOutgoingInvitesList = <ThrowOnError extends boolean = true>(options?: Options<UserSharesGetOutgoingInvitesListData, ThrowOnError>) => (options?.client ?? client).get<UserSharesGetOutgoingInvitesListResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: userSharesGetOutgoingInvitesListResponseTransformer,
     responseStyle: 'data',
     url: '/2/shares/user/invites/outgoing',
     ...options
 });
 
 export const userSharesGetIncomingInvitesList = <ThrowOnError extends boolean = true>(options?: Options<UserSharesGetIncomingInvitesListData, ThrowOnError>) => (options?.client ?? client).get<UserSharesGetIncomingInvitesListResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: userSharesGetIncomingInvitesListResponseTransformer,
     responseStyle: 'data',
     url: '/2/shares/user/invites/incoming',
     ...options
@@ -149,6 +153,7 @@ export const userSharesDenyIncomingInvite = <ThrowOnError extends boolean = true
  * Accept a share request and share the shockers with the current user.
  */
 export const userSharesRedeemInvite = <ThrowOnError extends boolean = true>(options: Options<UserSharesRedeemInviteData, ThrowOnError>) => (options.client ?? client).post<UserSharesRedeemInviteResponses, UserSharesRedeemInviteErrors, ThrowOnError, 'data'>({
+    responseTransformer: userSharesRedeemInviteResponseTransformer,
     responseStyle: 'data',
     url: '/2/shares/user/invites/incoming/{inviteId}',
     ...options
