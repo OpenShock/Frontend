@@ -20,7 +20,8 @@
   <div class="bg-grid absolute inset-0" aria-hidden="true"></div>
   <div
     class="bg-grid-spotlight absolute inset-0"
-    style="--mouse-x={mouseX}px --mouse-y={mouseY}px"
+    style:--mouse-x="{mouseX}px"
+    style:--mouse-y="{mouseY}px"
     aria-hidden="true"
   ></div>
 </div>
