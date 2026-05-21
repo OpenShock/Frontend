@@ -27,7 +27,7 @@
     {@render icon()}
   {/if}
   <input
-    class="mx-3 grow outline-none!"
+    class="mx-3 w-0 min-w-0 grow outline-none!"
     type="text"
     value={displayValue ?? value}
     readonly

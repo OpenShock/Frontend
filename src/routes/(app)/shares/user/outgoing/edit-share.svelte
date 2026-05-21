@@ -1,11 +1,10 @@
 <script lang="ts">
   import { shockerShockerShareCodeUpdate, shockerShockerShareRemove } from '$lib/api';
-  import { Trash } from '@lucide/svelte';
+  import { Trash2 } from '@lucide/svelte';
   import { ComparePermissionsAndLimits } from '$lib/comparers/UserShareComparer';
   import RestrictionsSelector from '$lib/components/shares/restrictions-selector.svelte';
   import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
   import * as Avatar from '$lib/components/ui/avatar';
-  import { Badge } from '$lib/components/ui/badge';
   import { Button } from '$lib/components/ui/button';
   import * as Drawer from '$lib/components/ui/drawer';
   import * as Tabs from '$lib/components/ui/tabs';
@@ -105,8 +104,6 @@
     saving = true;
 
     if (isUniformRestrictions) {
-      // Update the shares once more before saving to make sure we apply the uniform restrictions to all shockers
-      // This can happen when the user doesnt change any value but switched to uniform mode.
       shares.forEach((share) => {
         share.permissions = uniformPermissions;
         share.limits = uniformLimits;
@@ -128,7 +125,6 @@
           },
         })
           .then(() => {
-            // Update the list copy of the share
             const index = userShare.shares.findIndex((s) => s.id === share.id);
             if (index !== -1) {
               const item = userSharesState.shares.outgoing[storeIndex].shares[index];
@@ -180,7 +176,6 @@
   }
 
   $effect(() => {
-    // Nice instant state update to indicate what is happening to the share limits
     if (editDrawer && isUniformRestrictions) {
       shares.forEach((share) => {
         share.permissions = { ...uniformPermissions };
@@ -199,119 +194,123 @@
 
 <Drawer.Root bind:open={editDrawer} direction="right">
   <Drawer.Content>
-    <div class="mx-auto flex max-h-[100vh] w-full flex-col">
-      <Drawer.Header class="shrink-0">
-        <Drawer.Description>Edit shares for</Drawer.Description>
-        <Drawer.Title class="mt-1 flex items-center gap-2">
+    <div class="mx-auto flex h-full max-h-[100vh] w-full flex-col">
+      <Drawer.Header class="shrink-0 border-b">
+        <Drawer.Description class="text-muted-foreground text-xs">
+          Editing shares for
+        </Drawer.Description>
+        <Drawer.Title class="flex items-center gap-3">
           <Avatar.Root class="size-10">
             <Avatar.Image src={userShare.image} alt="User Avatar" />
             <Avatar.Fallback>
               {userShare.name.charAt(0)}
             </Avatar.Fallback>
           </Avatar.Root>
-          <b>{userShare.name}</b></Drawer.Title
-        >
+          <span class="text-lg">{userShare.name}</span>
+        </Drawer.Title>
       </Drawer.Header>
-      <div class="mb-5 min-h-0 p-4 pb-0">
-        <Tabs.Root
-          value={isUniformRestrictions ? 'uniform' : 'individual'}
-          onValueChange={onTabChanged}
-          class="flex h-full flex-col"
-        >
-          <div>
-            <div class="flex shrink-0 items-center justify-between">
-              <p class="mr-[-15px] grow self-end border-b border-b-neutral-800 text-lg font-bold">
-                Limits and Permissions
-              </p>
 
-              <Tabs.List>
-                <Tabs.Trigger value="uniform">User</Tabs.Trigger>
-                <Tabs.Trigger value="individual">Shockers</Tabs.Trigger>
-              </Tabs.List>
-            </div>
-            <p class="mb-6 text-right text-[10pt] text-neutral-400">
+      <Tabs.Root
+        value={isUniformRestrictions ? 'uniform' : 'individual'}
+        onValueChange={onTabChanged}
+        class="flex min-h-0 flex-1 flex-col"
+      >
+        <div class="flex shrink-0 items-center justify-between gap-3 px-4 pt-4 pb-3">
+          <div class="flex min-w-0 flex-col">
+            <h3 class="text-sm font-semibold">Limits &amp; Permissions</h3>
+            <p class="text-muted-foreground text-xs">
               {isUniformRestrictions
-                ? 'Apply same restrictions to all shockers'
-                : 'Change restrictions for individual shockers'}
+                ? 'Same restrictions on every shocker'
+                : 'Tune restrictions per shocker'}
             </p>
           </div>
+          <Tabs.List>
+            <Tabs.Trigger value="uniform">All</Tabs.Trigger>
+            <Tabs.Trigger value="individual">Per shocker</Tabs.Trigger>
+          </Tabs.List>
+        </div>
 
-          <div class="overflow-y-auto">
-            <Tabs.Content value="uniform">
-              <div class="flex h-75 flex-col gap-2 rounded-md border-1 border-neutral-800 p-4">
-                <span class="flex">
-                  <span class="ml-auto">
-                    <MultiPauseToggle
-                      shockers={shares.map((share) => ({
-                        shockerId: share.id,
-                        paused: share.paused,
-                        userShareUserId: userShare.id,
-                      }))}
-                      onPausedChange={(paused) => {
-                        shares.forEach((share) => (share.paused = paused)); // Update the local copy of the shares
-
-                        // Update the actual store shares
-                        userSharesState.shares.outgoing[storeIndex].shares.forEach(
-                          (share) => (share.paused = paused ? share.paused | 2 : share.paused & ~2)
-                        );
-                      }}
-                    />
-                  </span>
+        <div class="min-h-0 flex-1 overflow-y-auto px-4 pb-4">
+          <Tabs.Content value="uniform" class="mt-0">
+            <div class="border-border/60 bg-card flex flex-col gap-4 rounded-md border p-4">
+              <div class="flex items-center justify-between">
+                <span class="text-muted-foreground text-xs">
+                  Applies to {shares.length} shocker{shares.length === 1 ? '' : 's'}
                 </span>
-
-                <RestrictionsSelector
-                  bind:permissions={uniformPermissions}
-                  bind:limits={uniformLimits}
+                <MultiPauseToggle
+                  shockers={shares.map((share) => ({
+                    shockerId: share.id,
+                    paused: share.paused,
+                    userShareUserId: userShare.id,
+                  }))}
+                  onPausedChange={(paused) => {
+                    shares.forEach((share) => (share.paused = paused));
+                    userSharesState.shares.outgoing[storeIndex].shares.forEach(
+                      (share) => (share.paused = paused ? share.paused | 2 : share.paused & ~2)
+                    );
+                  }}
                 />
               </div>
-            </Tabs.Content>
-            <Tabs.Content value="individual">
-              <div class="flex flex-col gap-8">
-                {#each shares as share, i (share.id)}
-                  <div class="flex flex-col gap-2 rounded-md border-1 border-neutral-800 p-4">
-                    <div class="flex justify-between">
-                      <span>
-                        <Badge>{shares[i].name}</Badge>
-                      </span>
-                      <span>
-                        <PauseToggle
-                          shockerId={shares[i].id}
-                          bind:paused={shares[i].paused}
-                          userShareUserId={userShare.id}
-                          onPausedChange={(paused) => {
-                            userSharesState.shares.outgoing[storeIndex].shares.forEach((s) => {
-                              if (s.id === share.id) {
-                                s.paused = paused ? s.paused | 2 : s.paused & ~2; // Update the store shares list
-                              }
-                            });
-                          }}
-                        />
-                        <Button
-                          variant="destructive"
-                          onclick={() => handleDeleteClick(shares[i])}
-                          class="ml-4"
-                        >
-                          <Trash />
-                        </Button>
-                      </span>
-                    </div>
-                    <RestrictionsSelector
-                      bind:permissions={shares[i].permissions}
-                      bind:limits={shares[i].limits}
-                    />
-                  </div>
-                {/each}
-              </div>
-            </Tabs.Content>
-          </div>
-        </Tabs.Root>
-      </div>
 
-      <Drawer.Footer class="mx-20 flex shrink-0 flex-row justify-between">
-        <Drawer.Close>Cancel</Drawer.Close>
-        <Button onclick={handleSave}
-          >Save {#if saving}<LoadingCircle />{/if}</Button
-        >
+              <RestrictionsSelector
+                bind:permissions={uniformPermissions}
+                bind:limits={uniformLimits}
+              />
+            </div>
+          </Tabs.Content>
+
+          <Tabs.Content value="individual" class="mt-0">
+            <div class="flex flex-col gap-3">
+              {#each shares as share, i (share.id)}
+                <div class="border-border/60 bg-card flex flex-col gap-4 rounded-md border p-4">
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="truncate text-sm font-semibold" title={shares[i].name}>
+                      {shares[i].name}
+                    </span>
+                    <div class="flex shrink-0 items-center gap-1">
+                      <PauseToggle
+                        shockerId={shares[i].id}
+                        bind:paused={shares[i].paused}
+                        userShareUserId={userShare.id}
+                        onPausedChange={(paused) => {
+                          userSharesState.shares.outgoing[storeIndex].shares.forEach((s) => {
+                            if (s.id === share.id) {
+                              s.paused = paused ? s.paused | 2 : s.paused & ~2;
+                            }
+                          });
+                        }}
+                      />
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        class="text-destructive hover:text-destructive h-8 w-8"
+                        onclick={() => handleDeleteClick(shares[i])}
+                        title="Remove share"
+                      >
+                        <Trash2 size={14} />
+                      </Button>
+                    </div>
+                  </div>
+
+                  <RestrictionsSelector
+                    bind:permissions={shares[i].permissions}
+                    bind:limits={shares[i].limits}
+                  />
+                </div>
+              {/each}
+            </div>
+          </Tabs.Content>
+        </div>
+      </Tabs.Root>
+
+      <Drawer.Footer class="border-t px-4 py-3">
+        <div class="flex w-full items-center justify-between gap-2">
+          <Drawer.Close class="text-sm">Cancel</Drawer.Close>
+          <Button onclick={handleSave} disabled={saving}>
+            {#if saving}<LoadingCircle />{/if}
+            Save
+          </Button>
+        </div>
       </Drawer.Footer>
     </div>
   </Drawer.Content>
@@ -321,7 +320,7 @@
   :global(.data-\[vaul-drawer-direction\=right\]\:sm\:max-w-sm) {
     &[data-vaul-drawer-direction='right'] {
       @media (width >= 40rem) {
-        max-width: 33rem;
+        max-width: 30rem;
       }
     }
   }
