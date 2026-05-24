@@ -20,7 +20,10 @@ export { FetchError, RateLimitError, ResponseError } from './internal/errors';
 // One canonical version per method. v2 wins where both exist.
 export {
   accountActivate,
+  accountEmailVerify,
   accountLogout,
+  accountPasswordResetCheckValid,
+  accountPasswordResetComplete,
   accountPasswordResetInitiate,
   adminAddEmailProviderBlacklist,
   adminAddUsernameBlacklist,

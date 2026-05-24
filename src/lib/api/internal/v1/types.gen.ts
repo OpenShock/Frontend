@@ -95,6 +95,7 @@ export type BooleanLegacyDataResponse = {
 };
 
 export type ChangeEmailRequest = {
+    currentPassword: string;
     email: string;
 };
 
@@ -716,6 +717,7 @@ export type UserSelfResponse = {
     image: string;
     roles: Array<RoleType>;
     rank: string;
+    hasPassword: boolean;
 };
 
 export type UserSelfResponseLegacyDataResponse = {
@@ -1005,7 +1007,7 @@ export type AccountPasswordResetCheckValidData = {
         secret: string;
     };
     query?: never;
-    url: '/1/account/recover/{passwordResetId}/{secret}';
+    url: '/1/account/password-reset/{passwordResetId}/{secret}';
 };
 
 export type AccountPasswordResetCheckValidErrors = {
@@ -1026,7 +1028,41 @@ export type AccountPasswordResetCheckValidResponses = {
 
 export type AccountPasswordResetCheckValidResponse = AccountPasswordResetCheckValidResponses[keyof AccountPasswordResetCheckValidResponses];
 
-export type AccountPasswordResetCompleteData = {
+export type AccountPasswordResetCheckValidLegacyData = {
+    body?: never;
+    path: {
+        /**
+         * The id of the password reset
+         */
+        passwordResetId: string;
+        /**
+         * The secret of the password reset
+         */
+        secret: string;
+    };
+    query?: never;
+    url: '/1/account/recover/{passwordResetId}/{secret}';
+};
+
+export type AccountPasswordResetCheckValidLegacyErrors = {
+    /**
+     * Password reset process not found
+     */
+    404: OpenShockProblem;
+};
+
+export type AccountPasswordResetCheckValidLegacyError = AccountPasswordResetCheckValidLegacyErrors[keyof AccountPasswordResetCheckValidLegacyErrors];
+
+export type AccountPasswordResetCheckValidLegacyResponses = {
+    /**
+     * Valid password reset process
+     */
+    200: LegacyEmptyResponse;
+};
+
+export type AccountPasswordResetCheckValidLegacyResponse = AccountPasswordResetCheckValidLegacyResponses[keyof AccountPasswordResetCheckValidLegacyResponses];
+
+export type AccountPasswordResetCompleteLegacyData = {
     body?: PasswordResetProcessData;
     path: {
         /**
@@ -1040,6 +1076,40 @@ export type AccountPasswordResetCompleteData = {
     };
     query?: never;
     url: '/1/account/recover/{passwordResetId}/{secret}';
+};
+
+export type AccountPasswordResetCompleteLegacyErrors = {
+    /**
+     * Password reset process not found
+     */
+    404: OpenShockProblem;
+};
+
+export type AccountPasswordResetCompleteLegacyError = AccountPasswordResetCompleteLegacyErrors[keyof AccountPasswordResetCompleteLegacyErrors];
+
+export type AccountPasswordResetCompleteLegacyResponses = {
+    /**
+     * Password successfully changed
+     */
+    200: LegacyEmptyResponse;
+};
+
+export type AccountPasswordResetCompleteLegacyResponse = AccountPasswordResetCompleteLegacyResponses[keyof AccountPasswordResetCompleteLegacyResponses];
+
+export type AccountPasswordResetCompleteData = {
+    body?: PasswordResetProcessData;
+    path: {
+        /**
+         * The id of the password reset
+         */
+        passwordResetId: string;
+        /**
+         * The secret of the password reset
+         */
+        secret: string;
+    };
+    query?: never;
+    url: '/1/account/password-reset/{passwordResetId}/{secret}/complete';
 };
 
 export type AccountPasswordResetCompleteErrors = {
@@ -1107,19 +1177,55 @@ export type AccountEmailVerifyData = {
     query?: {
         token?: string;
     };
-    url: '/1/account/verify-email';
+    url: '/1/account/email-change/verify';
 };
 
 export type AccountEmailVerifyErrors = {
     /**
-     * Forbidden
+     * Token is invalid, already used, or the request has expired
      */
-    403: OpenShockProblem;
+    400: OpenShockProblem;
+    /**
+     * The new email address was claimed by another account before verification completed
+     */
+    409: OpenShockProblem;
 };
 
 export type AccountEmailVerifyError = AccountEmailVerifyErrors[keyof AccountEmailVerifyErrors];
 
 export type AccountEmailVerifyResponses = {
+    /**
+     * Email change verified and applied
+     */
+    200: unknown;
+};
+
+export type AccountEmailVerifyLegacyData = {
+    body?: never;
+    path?: never;
+    query?: {
+        token?: string;
+    };
+    url: '/1/account/verify-email';
+};
+
+export type AccountEmailVerifyLegacyErrors = {
+    /**
+     * Token is invalid, already used, or the request has expired
+     */
+    400: OpenShockProblem;
+    /**
+     * The new email address was claimed by another account before verification completed
+     */
+    409: OpenShockProblem;
+};
+
+export type AccountEmailVerifyLegacyError = AccountEmailVerifyLegacyErrors[keyof AccountEmailVerifyLegacyErrors];
+
+export type AccountEmailVerifyLegacyResponses = {
+    /**
+     * Email change verified and applied
+     */
     200: unknown;
 };
 
@@ -1127,17 +1233,40 @@ export type AuthenticatedAccountChangeEmailData = {
     body?: ChangeEmailRequest;
     path?: never;
     query?: never;
-    url: '/1/account/email';
+    url: '/1/account/email-change';
 };
+
+export type AuthenticatedAccountChangeEmailErrors = {
+    /**
+     * Bad Request
+     */
+    400: OpenShockProblem;
+    /**
+     * Unauthorized
+     */
+    401: OpenShockProblem;
+    /**
+     * Forbidden
+     */
+    403: OpenShockProblem;
+    /**
+     * Conflict
+     */
+    409: OpenShockProblem;
+    /**
+     * Too Many Requests
+     */
+    429: OpenShockProblem;
+};
+
+export type AuthenticatedAccountChangeEmailError = AuthenticatedAccountChangeEmailErrors[keyof AuthenticatedAccountChangeEmailErrors];
 
 export type AuthenticatedAccountChangeEmailResponses = {
     /**
      * OK
      */
-    200: LegacyEmptyResponse;
+    200: unknown;
 };
-
-export type AuthenticatedAccountChangeEmailResponse = AuthenticatedAccountChangeEmailResponses[keyof AuthenticatedAccountChangeEmailResponses];
 
 export type AuthenticatedAccountChangePasswordData = {
     body?: ChangePasswordRequest;
@@ -1148,13 +1277,13 @@ export type AuthenticatedAccountChangePasswordData = {
 
 export type AuthenticatedAccountChangePasswordErrors = {
     /**
-     * Unauthorized
-     */
-    401: OpenShockProblem;
-    /**
      * Forbidden
      */
     403: OpenShockProblem;
+    /**
+     * Conflict
+     */
+    409: OpenShockProblem;
 };
 
 export type AuthenticatedAccountChangePasswordError = AuthenticatedAccountChangePasswordErrors[keyof AuthenticatedAccountChangePasswordErrors];

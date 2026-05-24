@@ -286,7 +286,7 @@ export type AccountPasswordResetInitiateV2Data = {
     body?: PasswordResetRequestV2;
     path?: never;
     query?: never;
-    url: '/2/account/reset-password';
+    url: '/2/account/password-reset';
 };
 
 export type AccountPasswordResetInitiateV2Errors = {
@@ -299,6 +299,29 @@ export type AccountPasswordResetInitiateV2Errors = {
 export type AccountPasswordResetInitiateV2Error = AccountPasswordResetInitiateV2Errors[keyof AccountPasswordResetInitiateV2Errors];
 
 export type AccountPasswordResetInitiateV2Responses = {
+    /**
+     * Password reset email sent if the email is associated to an registered account
+     */
+    200: unknown;
+};
+
+export type AccountPasswordResetInitiateV2LegacyData = {
+    body?: PasswordResetRequestV2;
+    path?: never;
+    query?: never;
+    url: '/2/account/reset-password';
+};
+
+export type AccountPasswordResetInitiateV2LegacyErrors = {
+    /**
+     * Forbidden
+     */
+    403: OpenShockProblem;
+};
+
+export type AccountPasswordResetInitiateV2LegacyError = AccountPasswordResetInitiateV2LegacyErrors[keyof AccountPasswordResetInitiateV2LegacyErrors];
+
+export type AccountPasswordResetInitiateV2LegacyResponses = {
     /**
      * Password reset email sent if the email is associated to an registered account
      */

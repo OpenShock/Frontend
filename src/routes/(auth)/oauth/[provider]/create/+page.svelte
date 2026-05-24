@@ -51,6 +51,7 @@
         avatar: account.profileImage,
         email: account.accountEmail,
         roles: account.accountRoles,
+        hasPassword: false,
       });
 
       goto(resolve('/home'));

@@ -80,9 +80,9 @@ describe('mapLegacyHashRoute', () => {
       expect(mapLegacyHashRoute(`/dashboard/devices/${guid}/ota`)).toBe(`/hubs/${guid}/update`);
     });
 
-    it('maps /account/password/recover/{token}/{token} → /forgot-password', () => {
+    it('maps /account/password/recover/{token}/{token} → /reset-password/{id}/{secret}', () => {
       expect(mapLegacyHashRoute('/account/password/recover/abc123/xyz456')).toBe(
-        '/forgot-password'
+        '/reset-password/abc123/xyz456'
       );
     });
 

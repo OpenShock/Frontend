@@ -49,6 +49,7 @@
         avatar: account.profileImage,
         email: account.accountEmail,
         roles: account.accountRoles,
+        hasPassword: true,
       });
 
       await gotoQueryRedirectOrFallback('/home');

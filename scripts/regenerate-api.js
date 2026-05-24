@@ -15,7 +15,7 @@ for (const dir of OUTPUT_DIRS) {
 console.log('');
 console.log('Running @hey-api/openapi-ts...');
 try {
-  execSync('pnpx @hey-api/openapi-ts', { stdio: 'inherit' });
+  execSync('pnpm exec openapi-ts', { stdio: 'inherit', shell: true });
 } catch {
   console.error('Codegen failed.');
   process.exit(1);

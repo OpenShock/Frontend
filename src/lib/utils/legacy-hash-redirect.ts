@@ -37,7 +37,7 @@ const PATTERNS: { re: RegExp; to: string }[] = [
   { re: new RegExp(`^/dashboard/shares/links/${GUID}$`), to: '/shares/public/$1/edit' },
   { re: new RegExp(`^/dashboard/devices/${GUID}/setup$`), to: '/hubs' },
   { re: new RegExp(`^/dashboard/devices/${GUID}/ota$`), to: '/hubs/$1/update' },
-  { re: new RegExp(`^/account/password/recover/${TOKEN}/${TOKEN}$`), to: '/forgot-password' },
+  { re: new RegExp(`^/account/password/recover/${TOKEN}/${TOKEN}$`), to: '/reset-password/$1/$2' },
   { re: new RegExp(`^/account/activate/${TOKEN}/${TOKEN}$`), to: '/activate' },
   { re: new RegExp(`^/public/shares/links/${GUID}$`), to: '/shares/public/$1' },
   { re: new RegExp(`^/public/proxy/shares/links/${GUID}$`), to: '/shares/public/$1' },

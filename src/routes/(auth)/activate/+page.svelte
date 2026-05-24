@@ -1,6 +1,5 @@
 <script lang="ts">
   import { browser } from '$app/environment';
-  import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import { accountActivate } from '$lib/api';
@@ -8,25 +7,49 @@
   import * as Card from '$lib/components/ui/card/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { onMount } from 'svelte';
+  import { toast } from 'svelte-sonner';
 
   registerBreadcrumbs(() => [{ label: 'Activate Account' }]);
 
-  let secret = browser && page.url.searchParams.get('token');
+  let token = browser ? page.url.searchParams.get('token') : null;
 
-  function activateAccount() {
-    if (!secret) return;
-    accountActivate({ query: { token: secret } })
-      .then(() => goto(resolve('/login')))
-      .catch(handleApiError);
-  }
+  let status = $state<'activating' | 'success' | 'failed' | 'missing'>(
+    token ? 'activating' : 'missing'
+  );
+
+  onMount(() => {
+    if (!token) return;
+    accountActivate({ query: { token } })
+      .then(() => {
+        status = 'success';
+        toast.success('Account activated');
+      })
+      .catch(async (e: unknown) => {
+        status = 'failed';
+        await handleApiError(e);
+      });
+  });
 </script>
 
 <Card.Root>
   <Card.Header class="text-center">
     <Card.Title class="text-xl">Activate Account</Card.Title>
-    <Card.Description>Click the button below to activate your account</Card.Description>
+    <Card.Description>
+      {#if status === 'activating'}
+        Activating your account...
+      {:else if status === 'success'}
+        Your account has been activated
+      {:else if status === 'failed'}
+        This activation link is invalid or has expired
+      {:else}
+        Missing activation token
+      {/if}
+    </Card.Description>
   </Card.Header>
-  <Card.Content>
-    <Button class="w-full" onclick={activateAccount}>Activate Account</Button>
-  </Card.Content>
+  {#if status === 'success'}
+    <Card.Content>
+      <Button class="w-full" href={resolve('/login')}>Continue to login</Button>
+    </Card.Content>
+  {/if}
 </Card.Root>

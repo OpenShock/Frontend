@@ -68,6 +68,7 @@ export const userState = {
         avatar: data.image,
         roles: data.roles,
         email: data.email,
+        hasPassword: data.hasPassword,
       };
 
       loading = false;

@@ -7,4 +7,5 @@ export interface ApiUser {
 }
 export interface ApiUserSelf extends ApiUser {
   email: string;
+  hasPassword: boolean;
 }
