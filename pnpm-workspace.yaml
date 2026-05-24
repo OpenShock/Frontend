@@ -5,6 +5,9 @@ allowBuilds:
 blockExoticSubdeps: true
 minimumReleaseAge: 4320 # 3 days
 
+minimumReleaseAgeExclude:
+  - ws@8.20.1
+
 onlyBuiltDependencies:
   - '@tailwindcss/oxide'
   - esbuild
@@ -16,6 +19,7 @@ overrides:
   js-yaml@<4.1.1: '>=4.1.1'
   undici@>=7.0.0 <7.24.0: '>=7.24.0'
   uuid@<14.0.0: '>=14.0.0'
+  ws@>=8.0.0 <8.20.1: ^8.20.1
 
 patchedDependencies:
   '@microsoft/signalr@10.0.0': patches/signalr.patch
