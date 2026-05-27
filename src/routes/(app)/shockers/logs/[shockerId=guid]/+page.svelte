@@ -14,6 +14,8 @@
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import * as Card from '$lib/components/ui/card';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { addShockEventListener, removeShockEventListener } from '$lib/signalr/handlers/Log';
+  import { ControlType } from '$lib/signalr/models/ControlType';
 
   registerBreadcrumbs(() => [
     { label: 'Shocker Logs', href: '/shockers/logs' },
@@ -47,13 +49,35 @@
       }
     })();
 
+    const listenerId = crypto.randomUUID();
+    addShockEventListener(listenerId, shockerId, (sender, log) => {
+      if (cancelled) return;
+      const entry: LogEntry = {
+        id: crypto.randomUUID(),
+        createdOn: Temporal.Instant.from(log.executedAt),
+        type: ControlType[log.type] as LogEntry['type'],
+        controlledBy: {
+          id: sender.id,
+          name: sender.name,
+          image: sender.image,
+          customName: sender.customName,
+        },
+        intensity: log.intensity,
+        duration: log.duration,
+      };
+      logs = [entry, ...logs];
+    });
+
     return () => {
       cancelled = true;
+      removeShockEventListener(listenerId);
     };
   });
 
   const columns: ColumnDef<LogEntry>[] = [
-    CreateSortableColumnDef('createdOn', 'Time', LocaleDateTimeRenderer),
+    CreateSortableColumnDef('createdOn', 'Time', LocaleDateTimeRenderer, (a, b) =>
+      Temporal.Instant.compare(a, b)
+    ),
     CreateSortableColumnDef('type', 'Type', (t) => RenderCell(String(t))),
     CreateSortableColumnDef('controlledBy', 'By', (c) => RenderCell(c.customName ?? c.name)),
     CreateSortableColumnDef('intensity', 'Intensity', NumberRenderer),

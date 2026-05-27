@@ -13,10 +13,10 @@ export function useShockerEvents(shockerId: () => string) {
 
   onMount(() => {
     const id = crypto.randomUUID();
-    addShockEventListener(id, shockerId(), (_sid, controlType, duration) => {
+    addShockEventListener(id, shockerId(), (_sender, log) => {
       clearTimeout(timeoutHandle);
-      active = controlType;
-      timeoutHandle = setTimeout(() => (active = null), duration);
+      active = log.type;
+      timeoutHandle = setTimeout(() => (active = null), log.duration);
     });
 
     return () => {
