@@ -336,6 +336,14 @@ export type LogEntryWithHub = {
     duration: number;
 };
 
+export type LogEntryWithHubPagedResult = {
+    items: Array<LogEntryWithHub>;
+    page: number;
+    pageSize: number;
+    totalCount: number;
+    readonly totalPages?: number;
+};
+
 export type Login = {
     password: string;
     email: string;
@@ -605,10 +613,6 @@ export type ShockerLimits = {
     duration: number | null;
 };
 
-export type ShockerLogsResponse = {
-    logs: Array<LogEntryWithHub>;
-};
-
 export const ShockerModelType = {
     CaiXianlin: 'CaiXianlin',
     PetTrainer: 'PetTrainer',
@@ -664,6 +668,10 @@ export type SignUp = {
     password: string;
     email: string;
 };
+
+export const SortDirection = { Asc: 'Asc', Desc: 'Desc' } as const;
+
+export type SortDirection = typeof SortDirection[keyof typeof SortDirection];
 
 export type StatsResponse = {
     devicesOnline: bigint;
@@ -761,6 +769,13 @@ export type WebhookDto = {
     createdAt: Temporal.Instant;
 };
 
+export type LogEntryWithHubPagedResultWritable = {
+    items: Array<LogEntryWithHub>;
+    page: number;
+    pageSize: number;
+    totalCount: number;
+};
+
 export type OpenShockProblemWritable = {
     type?: string | null;
     title?: string | null;
@@ -769,149 +784,6 @@ export type OpenShockProblemWritable = {
     instance?: string | null;
     [key: string]: unknown;
 };
-
-export type TokenDeleteDeleteTokenData = {
-    body?: never;
-    path: {
-        tokenId: string;
-    };
-    query?: never;
-    url: '/1/tokens/{tokenId}';
-};
-
-export type TokenDeleteDeleteTokenErrors = {
-    /**
-     * Api Token is not allowed to delete other Api Tokens
-     */
-    403: ProblemDetails;
-    /**
-     * The token does not exist, or you do not have access to it
-     */
-    404: OpenShockProblem;
-};
-
-export type TokenDeleteDeleteTokenError = TokenDeleteDeleteTokenErrors[keyof TokenDeleteDeleteTokenErrors];
-
-export type TokenDeleteDeleteTokenResponses = {
-    /**
-     * Successfully deleted token
-     */
-    200: unknown;
-};
-
-export type TokensGetTokenByIdData = {
-    body?: never;
-    path: {
-        tokenId: string;
-    };
-    query?: never;
-    url: '/1/tokens/{tokenId}';
-};
-
-export type TokensGetTokenByIdErrors = {
-    /**
-     * The token does not exist or you do not have access to it.
-     */
-    404: OpenShockProblem;
-};
-
-export type TokensGetTokenByIdError = TokensGetTokenByIdErrors[keyof TokensGetTokenByIdErrors];
-
-export type TokensGetTokenByIdResponses = {
-    /**
-     * The token
-     */
-    200: TokenResponse;
-};
-
-export type TokensGetTokenByIdResponse = TokensGetTokenByIdResponses[keyof TokensGetTokenByIdResponses];
-
-export type TokensEditTokenData = {
-    body?: EditTokenRequest;
-    path: {
-        tokenId: string;
-    };
-    query?: never;
-    url: '/1/tokens/{tokenId}';
-};
-
-export type TokensEditTokenErrors = {
-    /**
-     * The token does not exist or you do not have access to it.
-     */
-    404: OpenShockProblem;
-};
-
-export type TokensEditTokenError = TokensEditTokenErrors[keyof TokensEditTokenErrors];
-
-export type TokensEditTokenResponses = {
-    /**
-     * The edited token
-     */
-    200: unknown;
-};
-
-export type TokensSelfGetSelfTokenData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/1/tokens/self';
-};
-
-export type TokensSelfGetSelfTokenResponses = {
-    /**
-     * OK
-     */
-    200: TokenResponse;
-};
-
-export type TokensSelfGetSelfTokenResponse = TokensSelfGetSelfTokenResponses[keyof TokensSelfGetSelfTokenResponses];
-
-export type TokensReportTokensData = {
-    body?: ReportTokensRequest;
-    path?: never;
-    query?: never;
-    url: '/1/tokens/report';
-};
-
-export type TokensReportTokensResponses = {
-    /**
-     * The tokens were deleted if found
-     */
-    200: unknown;
-};
-
-export type TokensListTokensData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/1/tokens';
-};
-
-export type TokensListTokensResponses = {
-    /**
-     * All tokens for the current user
-     */
-    200: Array<TokenResponse>;
-};
-
-export type TokensListTokensResponse = TokensListTokensResponses[keyof TokensListTokensResponses];
-
-export type TokensCreateTokenData = {
-    body?: CreateTokenRequest;
-    path?: never;
-    query?: never;
-    url: '/1/tokens';
-};
-
-export type TokensCreateTokenResponses = {
-    /**
-     * The created token
-     */
-    200: TokenCreatedResponse;
-};
-
-export type TokensCreateTokenResponse = TokensCreateTokenResponses[keyof TokensCreateTokenResponses];
 
 export type AccountActivateData = {
     body?: never;
@@ -1858,6 +1730,149 @@ export type AdminRemoveWebhookResponses = {
     200: unknown;
 };
 
+export type TokenDeleteDeleteTokenData = {
+    body?: never;
+    path: {
+        tokenId: string;
+    };
+    query?: never;
+    url: '/1/tokens/{tokenId}';
+};
+
+export type TokenDeleteDeleteTokenErrors = {
+    /**
+     * Api Token is not allowed to delete other Api Tokens
+     */
+    403: ProblemDetails;
+    /**
+     * The token does not exist, or you do not have access to it
+     */
+    404: OpenShockProblem;
+};
+
+export type TokenDeleteDeleteTokenError = TokenDeleteDeleteTokenErrors[keyof TokenDeleteDeleteTokenErrors];
+
+export type TokenDeleteDeleteTokenResponses = {
+    /**
+     * Successfully deleted token
+     */
+    200: unknown;
+};
+
+export type TokensGetTokenByIdData = {
+    body?: never;
+    path: {
+        tokenId: string;
+    };
+    query?: never;
+    url: '/1/tokens/{tokenId}';
+};
+
+export type TokensGetTokenByIdErrors = {
+    /**
+     * The token does not exist or you do not have access to it.
+     */
+    404: OpenShockProblem;
+};
+
+export type TokensGetTokenByIdError = TokensGetTokenByIdErrors[keyof TokensGetTokenByIdErrors];
+
+export type TokensGetTokenByIdResponses = {
+    /**
+     * The token
+     */
+    200: TokenResponse;
+};
+
+export type TokensGetTokenByIdResponse = TokensGetTokenByIdResponses[keyof TokensGetTokenByIdResponses];
+
+export type TokensEditTokenData = {
+    body?: EditTokenRequest;
+    path: {
+        tokenId: string;
+    };
+    query?: never;
+    url: '/1/tokens/{tokenId}';
+};
+
+export type TokensEditTokenErrors = {
+    /**
+     * The token does not exist or you do not have access to it.
+     */
+    404: OpenShockProblem;
+};
+
+export type TokensEditTokenError = TokensEditTokenErrors[keyof TokensEditTokenErrors];
+
+export type TokensEditTokenResponses = {
+    /**
+     * The edited token
+     */
+    200: unknown;
+};
+
+export type TokensSelfGetSelfTokenData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/1/tokens/self';
+};
+
+export type TokensSelfGetSelfTokenResponses = {
+    /**
+     * OK
+     */
+    200: TokenResponse;
+};
+
+export type TokensSelfGetSelfTokenResponse = TokensSelfGetSelfTokenResponses[keyof TokensSelfGetSelfTokenResponses];
+
+export type TokensReportTokensData = {
+    body?: ReportTokensRequest;
+    path?: never;
+    query?: never;
+    url: '/1/tokens/report';
+};
+
+export type TokensReportTokensResponses = {
+    /**
+     * The tokens were deleted if found
+     */
+    200: unknown;
+};
+
+export type TokensListTokensData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/1/tokens';
+};
+
+export type TokensListTokensResponses = {
+    /**
+     * All tokens for the current user
+     */
+    200: Array<TokenResponse>;
+};
+
+export type TokensListTokensResponse = TokensListTokensResponses[keyof TokensListTokensResponses];
+
+export type TokensCreateTokenData = {
+    body?: CreateTokenRequest;
+    path?: never;
+    query?: never;
+    url: '/1/tokens';
+};
+
+export type TokensCreateTokenResponses = {
+    /**
+     * The created token
+     */
+    200: TokenCreatedResponse;
+};
+
+export type TokensCreateTokenResponse = TokensCreateTokenResponses[keyof TokensCreateTokenResponses];
+
 export type DeviceGetLiveControlGatewayData = {
     body?: never;
     path?: never;
@@ -2677,26 +2692,24 @@ export type ShockerGetAllShockerLogsData = {
     body?: never;
     path?: never;
     query?: {
-        offset?: number;
-        limit?: number;
+        page?: number;
+        pageSize?: number;
+        search?: string;
+        sort?: string;
+        sortDir?: SortDirection;
+        /**
+         * Optional shocker ID filter. When omitted or empty, logs for all of the caller's shockers are returned.
+         */
+        shockerIds?: Array<string>;
     };
     url: '/1/shockers/logs';
 };
 
-export type ShockerGetAllShockerLogsErrors = {
-    /**
-     * Shocker does not exist
-     */
-    404: OpenShockProblem;
-};
-
-export type ShockerGetAllShockerLogsError = ShockerGetAllShockerLogsErrors[keyof ShockerGetAllShockerLogsErrors];
-
 export type ShockerGetAllShockerLogsResponses = {
     /**
-     * The logs
+     * A page of logs.
      */
-    200: ShockerLogsResponse;
+    200: LogEntryWithHubPagedResult;
 };
 
 export type ShockerGetAllShockerLogsResponse = ShockerGetAllShockerLogsResponses[keyof ShockerGetAllShockerLogsResponses];

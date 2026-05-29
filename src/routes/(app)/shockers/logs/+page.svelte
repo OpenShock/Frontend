@@ -12,30 +12,69 @@
     RenderCell,
   } from '$lib/components/Table/ColumnUtils';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
+  import PaginationFooter from '$lib/components/Table/PaginationFooter.svelte';
   import * as Card from '$lib/components/ui/card';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { addShockEventListener, removeShockEventListener } from '$lib/signalr/handlers/Log';
   import { ControlType } from '$lib/signalr/models/ControlType';
   import { ownHubs, refreshOwnHubs } from '$lib/state/hubs-state.svelte';
 
-  registerBreadcrumbs(() => [{ label: 'Shocker Logs' }]);
+
+  registerBreadcrumbs(() => [
+    { label: 'Shockers', href: '/shockers/own' },
+    { label: 'Shocker Logs' },
+  ]);
+  
+  const DEFAULT_SORT_ID = 'createdOn';
 
   let logs = $state<LogEntryWithHub[]>([]);
-  let sorting = $state<SortingState>([{ id: 'createdOn', desc: true }]);
+  let sorting = $state<SortingState>([{ id: DEFAULT_SORT_ID, desc: true }]);
+
+  let isFetching = $state(false);
+  let requestedPage = $state(1);
+  let pageSize = $state(100);
+  let page = $state(1);
+  let total = $state(0);
+
+  const sortQuery = $derived(sorting.length > 0 ? sorting[0] : undefined);
+  // Live updates only make sense on page 1 with the default newest-first sort,
+  // otherwise prepending breaks the user's chosen ordering / page slice.
+  const liveUpdatesActive = $derived(
+    page === 1 && (!sortQuery || (sortQuery.id === DEFAULT_SORT_ID && sortQuery.desc))
+  );
+
+  $effect(() => {
+    const requested = requestedPage;
+    const sort = sortQuery;
+    const size = pageSize;
+
+    isFetching = true;
+    shockerGetAllShockerLogs({
+      query: {
+        page: requested,
+        pageSize: size,
+        sort: sort?.id,
+        sortDir: sort ? (sort.desc ? 'Desc' : 'Asc') : undefined,
+      },
+    })
+      .then((res) => {
+        logs = res.items;
+        page = res.page;
+        pageSize = res.pageSize;
+        total = res.totalCount;
+      })
+      .catch(handleApiError)
+      .finally(() => (isFetching = false));
+  });
 
   onMount(() => {
     const listenerId = crypto.randomUUID();
 
-    (async () => {
-      try {
-        const [res] = await Promise.all([shockerGetAllShockerLogs(), refreshOwnHubs()]);
-        logs = res.logs ?? [];
-      } catch (error) {
-        await handleApiError(error);
-      }
-    })();
+    refreshOwnHubs().catch(handleApiError);
 
     addShockEventListener(listenerId, null, (sender, log) => {
+      if (!liveUpdatesActive) return;
+
       let hubId = '';
       let hubName = '';
       for (const [id, hub] of ownHubs) {
@@ -63,7 +102,8 @@
         intensity: log.intensity,
         duration: log.duration,
       };
-      logs = [entry, ...logs];
+      logs = [entry, ...logs.slice(0, pageSize - 1)];
+      total += 1;
     });
 
     return () => {
@@ -93,5 +133,11 @@
   </Card.Header>
   <div class="grid w-full gap-6 p-6">
     <DataTable data={logs} {columns} bind:sorting />
+    <PaginationFooter
+      count={total}
+      perPage={pageSize}
+      bind:page={() => page, (p) => (requestedPage = p)}
+      disabled={isFetching}
+    />
   </div>
 </Container>

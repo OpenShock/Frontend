@@ -25,7 +25,7 @@ const sharedPlugins = [
 
 export default defineConfig([
   {
-    input: 'https://api.openshock.dev/swagger/1/swagger.json',
+    input: 'http://localhost/swagger/1/swagger.json',
     output: {
       path: 'src/lib/api/internal/v1',
       postProcess: ['prettier'],
@@ -33,7 +33,7 @@ export default defineConfig([
     plugins: sharedPlugins,
   },
   {
-    input: 'https://api.openshock.dev/swagger/2/swagger.json',
+    input: 'http://localhost/swagger/2/swagger.json',
     output: {
       path: 'src/lib/api/internal/v2',
       postProcess: ['prettier'],
