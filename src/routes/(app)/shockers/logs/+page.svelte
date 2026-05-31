@@ -46,17 +46,37 @@
   // stable and we can size pages off them without measuring each row.
   const HEADER_HEIGHT = 40; // Table.Head (h-10)
   const ROW_HEIGHT = 37; // td p-2 (16) + text-sm line (20) + border-b (1)
+  // The pagination footer and the gap above it share the measured area with the
+  // table, so subtract them when working out how many rows actually fit.
+  const FOOTER_ALLOWANCE = 64; // pagination footer (~40) + gap-6 (24)
   const MIN_PAGE_SIZE = 10;
   const DEFAULT_PAGE_SIZE = 25; // used before the viewport has been measured
 
   // Height available to the table, measured from the DOM (see markup binding).
+  // The raw value updates continuously while resizing; we debounce it into
+  // `settledViewportHeight` so pageSize (and the fetch it drives) only reacts
+  // once the resize settles, instead of firing a request per pixel.
   let tableViewportHeight = $state(0);
+  let settledViewportHeight = $state(0);
+
+  $effect(() => {
+    const height = tableViewportHeight;
+    if (settledViewportHeight === 0) {
+      // Apply the first real measurement immediately so we don't sit on the
+      // default page size for a debounce interval on initial load.
+      settledViewportHeight = height;
+      return;
+    }
+    const timeout = setTimeout(() => (settledViewportHeight = height), 150);
+    return () => clearTimeout(timeout);
+  });
 
   // Fit as many rows as the viewport allows (clamped to a sane minimum) so the
   // table fills the screen and we request exactly the page size we can show.
   const pageSize = $derived.by(() => {
-    if (tableViewportHeight <= 0) return DEFAULT_PAGE_SIZE;
-    const rows = Math.floor((tableViewportHeight - HEADER_HEIGHT) / ROW_HEIGHT);
+    if (settledViewportHeight <= 0) return DEFAULT_PAGE_SIZE;
+    const usable = settledViewportHeight - HEADER_HEIGHT - FOOTER_ALLOWANCE;
+    const rows = Math.floor(usable / ROW_HEIGHT);
     return Math.max(MIN_PAGE_SIZE, rows);
   });
 
@@ -235,14 +255,14 @@
         <Button variant="ghost" size="sm" onclick={() => (selectedShockerIds = [])}>Clear</Button>
       {/if}
     </div>
-    <div class="min-h-0 flex-1" bind:clientHeight={tableViewportHeight}>
-      <DataTable data={logs} {columns} bind:sorting class="h-full" />
+    <div class="flex min-h-0 flex-1 flex-col gap-6" bind:clientHeight={tableViewportHeight}>
+      <DataTable data={logs} {columns} bind:sorting class="min-h-0 max-h-full" />
+      <PaginationFooter
+        count={total}
+        perPage={pageSize}
+        bind:page={() => page, (p) => (requestedPage = p)}
+        disabled={isFetching}
+      />
     </div>
-    <PaginationFooter
-      count={total}
-      perPage={pageSize}
-      bind:page={() => page, (p) => (requestedPage = p)}
-      disabled={isFetching}
-    />
   </div>
 </Container>
