@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
+  import { cn } from '$lib/utils';
   import PauseOverlay from './impl/PauseOverlay.svelte';
 
   interface Props {
@@ -13,6 +14,7 @@
     live?: Snippet;
     menu?: Snippet;
     children: Snippet;
+    class?: string;
   }
 
   let {
@@ -26,11 +28,15 @@
     live,
     menu,
     children,
+    class: className,
   }: Props = $props();
 </script>
 
 <div
-  class="border-surface-400-500-token bg-card flex w-80 flex-col overflow-hidden rounded-md border"
+  class={cn(
+    'border-surface-400-500-token bg-card flex w-80 flex-col overflow-hidden rounded-md border',
+    className
+  )}
 >
   <!-- Header -->
   <div class="border-border/60 flex items-center gap-2 border-b px-3 py-2">

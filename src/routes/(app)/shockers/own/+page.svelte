@@ -157,6 +157,7 @@
     {showHubBadge}
     isPaused={shocker.isPaused}
     resume={() => ownResume(shocker.id)}
+    class="w-full"
   >
     {#snippet live()}
       <LiveButton {hubId} shockerId={shocker.id} compact />
@@ -314,11 +315,11 @@
       {#if !isTruthy(PUBLIC_DISABLE_SHOCKER_MAP) && moduleType === ModuleType.MapControlModule}
         <MapControlModule {shockers} />
       {:else if groupByHub.value}
-        <div class="flex flex-col gap-6">
+        <div class="flex w-full flex-col gap-6">
           {#each Array.from(ownHubs) as [hubId, hub] (hubId)}
             {@const online = onlineHubs.get(hubId)?.isOnline ?? false}
             {@const shockerCount = hub.shockers.length}
-            <div class="flex flex-col gap-3">
+            <div class="flex w-full flex-col gap-3">
               <div class="flex items-center gap-2">
                 <span
                   class="size-2.5 rounded-full {online ? 'bg-green-400' : 'bg-red-500'}"
@@ -329,7 +330,7 @@
                   {shockerCount} shocker{shockerCount !== 1 ? 's' : ''}
                 </span>
               </div>
-              <div class="flex flex-wrap justify-center gap-4">
+              <div class="grid w-full grid-cols-[repeat(auto-fill,minmax(20rem,1fr))] gap-4">
                 {#each hub.shockers as shocker (shocker.id)}
                   {@render shockerCard(shocker, hubId, false)}
                 {/each}
@@ -338,7 +339,7 @@
           {/each}
         </div>
       {:else}
-        <div class="flex flex-wrap justify-center gap-4">
+        <div class="grid w-full grid-cols-[repeat(auto-fill,minmax(20rem,1fr))] gap-4">
           {#each flatShockers as { shocker, hubId } (shocker.id)}
             {@render shockerCard(shocker, hubId, true)}
           {/each}

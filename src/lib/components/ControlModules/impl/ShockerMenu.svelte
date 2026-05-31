@@ -20,7 +20,7 @@
   let pauseLoading = $state(false);
 
   function viewLogs() {
-    goto(resolve(`/shockers/logs/${shocker.id}`));
+    goto(resolve(`/shockers/logs?shockerId=${shocker.id}`));
   }
 
   function editShocker() {

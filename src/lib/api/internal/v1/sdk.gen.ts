@@ -3,7 +3,7 @@
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
 import { adminConfigurationListResponseTransformer, adminGetOnlineDevicesResponseTransformer, adminGetUsersResponseTransformer, adminListEmailProviderBlacklistResponseTransformer, adminListUsernameBlacklistResponseTransformer, adminListWebhooksResponseTransformer, authenticatedAccountListOAuthConnectionsResponseTransformer, devicesGetDeviceByIdResponseTransformer, devicesGetShockersResponseTransformer, devicesListDevicesResponseTransformer, devicesOtaGetOtaUpdateHistoryResponseTransformer, publicGetOnlineDevicesStatisticsResponseTransformer, publicGetPublicShareResponseTransformer, sessionsGetSelfSessionResponseTransformer, sessionsListSessionsResponseTransformer, shareLinksListResponseTransformer, shockerGetAllShockerLogsResponseTransformer, shockerGetShockerByIdResponseTransformer, shockerGetShockerLogsResponseTransformer, shockerGetUserSharesResponseTransformer, shockerListShockersResponseTransformer, shockerShockerShareCodeListResponseTransformer, tokensCreateTokenResponseTransformer, tokensGetTokenByIdResponseTransformer, tokensListTokensResponseTransformer, tokensSelfGetSelfTokenResponseTransformer, versionGetBackendInfoResponseTransformer } from './transformers.gen';
-import type { AccountActivateData, AccountActivateErrors, AccountActivateResponses, AccountCheckUsernameData, AccountCheckUsernameResponses, AccountEmailVerifyData, AccountEmailVerifyErrors, AccountEmailVerifyLegacyData, AccountEmailVerifyLegacyErrors, AccountEmailVerifyLegacyResponses, AccountEmailVerifyResponses, AccountLoginData, AccountLoginErrors, AccountLoginResponses, AccountLogoutData, AccountLogoutResponses, AccountPasswordResetCheckValidData, AccountPasswordResetCheckValidErrors, AccountPasswordResetCheckValidLegacyData, AccountPasswordResetCheckValidLegacyErrors, AccountPasswordResetCheckValidLegacyResponses, AccountPasswordResetCheckValidResponses, AccountPasswordResetCompleteData, AccountPasswordResetCompleteErrors, AccountPasswordResetCompleteLegacyData, AccountPasswordResetCompleteLegacyErrors, AccountPasswordResetCompleteLegacyResponses, AccountPasswordResetCompleteResponses, AccountPasswordResetInitiateData, AccountPasswordResetInitiateResponses, AccountSignUpData, AccountSignUpErrors, AccountSignUpResponses, AdminAddEmailProviderBlacklistData, AdminAddEmailProviderBlacklistResponses, AdminAddUsernameBlacklistData, AdminAddUsernameBlacklistResponses, AdminAddWebhookData, AdminAddWebhookErrors, AdminAddWebhookResponses, AdminConfigurationAddData, AdminConfigurationAddErrors, AdminConfigurationAddResponses, AdminConfigurationDeleteData, AdminConfigurationDeleteErrors, AdminConfigurationDeleteResponses, AdminConfigurationListData, AdminConfigurationListErrors, AdminConfigurationListResponses, AdminConfigurationUpdateData, AdminConfigurationUpdateErrors, AdminConfigurationUpdateResponses, AdminDeactivateUserData, AdminDeactivateUserErrors, AdminDeactivateUserResponses, AdminDeleteUserData, AdminDeleteUserErrors, AdminDeleteUserResponses, AdminGetOnlineDevicesData, AdminGetOnlineDevicesErrors, AdminGetOnlineDevicesResponses, AdminGetUsersData, AdminGetUsersErrors, AdminGetUsersResponses, AdminListEmailProviderBlacklistData, AdminListEmailProviderBlacklistResponses, AdminListUsernameBlacklistData, AdminListUsernameBlacklistResponses, AdminListWebhooksData, AdminListWebhooksErrors, AdminListWebhooksResponses, AdminModifyUserData, AdminModifyUserErrors, AdminModifyUserResponses, AdminReactivateUserData, AdminReactivateUserErrors, AdminReactivateUserResponses, AdminRemoveEmailProviderBlacklistData, AdminRemoveEmailProviderBlacklistErrors, AdminRemoveEmailProviderBlacklistResponses, AdminRemoveUsernameBlacklistData, AdminRemoveUsernameBlacklistErrors, AdminRemoveUsernameBlacklistResponses, AdminRemoveWebhookData, AdminRemoveWebhookErrors, AdminRemoveWebhookResponses, AuthenticatedAccountChangeEmailData, AuthenticatedAccountChangeEmailErrors, AuthenticatedAccountChangeEmailResponses, AuthenticatedAccountChangePasswordData, AuthenticatedAccountChangePasswordErrors, AuthenticatedAccountChangePasswordResponses, AuthenticatedAccountChangeUsernameData, AuthenticatedAccountChangeUsernameErrors, AuthenticatedAccountChangeUsernameResponses, AuthenticatedAccountDeactivateData, AuthenticatedAccountDeactivateErrors, AuthenticatedAccountDeactivateResponses, AuthenticatedAccountListOAuthConnectionsData, AuthenticatedAccountListOAuthConnectionsResponses, AuthenticatedAccountRemoveOAuthConnectionData, AuthenticatedAccountRemoveOAuthConnectionErrors, AuthenticatedAccountRemoveOAuthConnectionResponses, DeviceGetLiveControlGatewayData, DeviceGetLiveControlGatewayErrors, DeviceGetLiveControlGatewayResponses, DeviceGetSelfData, DeviceGetSelfResponses, DevicePairData, DevicePairErrors, DevicePairResponses, DevicesCreateDeviceData, DevicesCreateDeviceResponses, DevicesEditDeviceData, DevicesEditDeviceErrors, DevicesEditDeviceResponses, DevicesGetDeviceByIdData, DevicesGetDeviceByIdErrors, DevicesGetDeviceByIdResponses, DevicesGetLiveControlGatewayInfoData, DevicesGetLiveControlGatewayInfoErrors, DevicesGetLiveControlGatewayInfoResponses, DevicesGetPairCodeData, DevicesGetPairCodeErrors, DevicesGetPairCodeResponses, DevicesGetShockersData, DevicesGetShockersErrors, DevicesGetShockersResponses, DevicesListDevicesData, DevicesListDevicesResponses, DevicesOtaGetOtaUpdateHistoryData, DevicesOtaGetOtaUpdateHistoryErrors, DevicesOtaGetOtaUpdateHistoryResponses, DevicesRegenerateDeviceTokenData, DevicesRegenerateDeviceTokenErrors, DevicesRegenerateDeviceTokenResponses, DevicesRemoveDeviceData, DevicesRemoveDeviceErrors, DevicesRemoveDeviceResponses, PublicGetOnlineDevicesStatisticsData, PublicGetOnlineDevicesStatisticsResponses, PublicGetPublicShareData, PublicGetPublicShareErrors, PublicGetPublicShareResponses, SessionsDeleteSessionData, SessionsDeleteSessionErrors, SessionsDeleteSessionResponses, SessionsGetSelfSessionData, SessionsGetSelfSessionResponses, SessionsListSessionsData, SessionsListSessionsResponses, ShareLinksAddShockerData, ShareLinksAddShockerErrors, ShareLinksAddShockerResponses, ShareLinksCreatePublicShareData, ShareLinksCreatePublicShareResponses, ShareLinksDeletePublicShareData, ShareLinksDeletePublicShareErrors, ShareLinksDeletePublicShareResponses, ShareLinksEditShockerData, ShareLinksEditShockerErrors, ShareLinksEditShockerResponses, ShareLinksListData, ShareLinksListResponses, ShareLinksPauseShockerData, ShareLinksPauseShockerErrors, ShareLinksPauseShockerResponses, ShareLinksRemoveShockerData, ShareLinksRemoveShockerErrors, ShareLinksRemoveShockerResponses, SharesDeleteShareCodeData, SharesDeleteShareCodeErrors, SharesDeleteShareCodeResponses, SharesLinkShareCodeData, SharesLinkShareCodeErrors, SharesLinkShareCodeResponses, ShockerEditShockerData, ShockerEditShockerErrors, ShockerEditShockerResponses, ShockerGetAllShockerLogsData, ShockerGetAllShockerLogsErrors, ShockerGetAllShockerLogsResponses, ShockerGetShockerByIdData, ShockerGetShockerByIdErrors, ShockerGetShockerByIdResponses, ShockerGetShockerLogsData, ShockerGetShockerLogsErrors, ShockerGetShockerLogsResponses, ShockerGetUserSharesData, ShockerGetUserSharesErrors, ShockerGetUserSharesResponses, ShockerListSharedShockersData, ShockerListSharedShockersResponses, ShockerListShockersData, ShockerListShockersResponses, ShockerPauseShockerData, ShockerPauseShockerErrors, ShockerPauseShockerResponses, ShockerRegisterShockerData, ShockerRegisterShockerErrors, ShockerRegisterShockerResponses, ShockerRemoveShockerData, ShockerRemoveShockerErrors, ShockerRemoveShockerResponses, ShockerSendControlDeprecatedData, ShockerSendControlDeprecatedErrors, ShockerSendControlDeprecatedResponses, ShockerShockerShareCodeCreateData, ShockerShockerShareCodeCreateErrors, ShockerShockerShareCodeCreateResponses, ShockerShockerShareCodeListData, ShockerShockerShareCodeListErrors, ShockerShockerShareCodeListResponses, ShockerShockerShareCodePauseData, ShockerShockerShareCodePauseErrors, ShockerShockerShareCodePauseResponses, ShockerShockerShareCodeUpdateData, ShockerShockerShareCodeUpdateErrors, ShockerShockerShareCodeUpdateResponses, ShockerShockerShareRemoveData, ShockerShockerShareRemoveErrors, ShockerShockerShareRemoveResponses, TokenDeleteDeleteTokenData, TokenDeleteDeleteTokenErrors, TokenDeleteDeleteTokenResponses, TokensCreateTokenData, TokensCreateTokenResponses, TokensEditTokenData, TokensEditTokenErrors, TokensEditTokenResponses, TokensGetTokenByIdData, TokensGetTokenByIdErrors, TokensGetTokenByIdResponses, TokensListTokensData, TokensListTokensResponses, TokensReportTokensData, TokensReportTokensResponses, TokensSelfGetSelfTokenData, TokensSelfGetSelfTokenResponses, UsersGetByNameData, UsersGetByNameErrors, UsersGetByNameResponses, UsersGetSelfData, UsersGetSelfResponses, VersionGetBackendInfoData, VersionGetBackendInfoResponses } from './types.gen';
+import type { AccountActivateData, AccountActivateErrors, AccountActivateResponses, AccountCheckUsernameData, AccountCheckUsernameResponses, AccountEmailVerifyData, AccountEmailVerifyErrors, AccountEmailVerifyLegacyData, AccountEmailVerifyLegacyErrors, AccountEmailVerifyLegacyResponses, AccountEmailVerifyResponses, AccountLoginData, AccountLoginErrors, AccountLoginResponses, AccountLogoutData, AccountLogoutResponses, AccountPasswordResetCheckValidData, AccountPasswordResetCheckValidErrors, AccountPasswordResetCheckValidLegacyData, AccountPasswordResetCheckValidLegacyErrors, AccountPasswordResetCheckValidLegacyResponses, AccountPasswordResetCheckValidResponses, AccountPasswordResetCompleteData, AccountPasswordResetCompleteErrors, AccountPasswordResetCompleteLegacyData, AccountPasswordResetCompleteLegacyErrors, AccountPasswordResetCompleteLegacyResponses, AccountPasswordResetCompleteResponses, AccountPasswordResetInitiateData, AccountPasswordResetInitiateResponses, AccountSignUpData, AccountSignUpErrors, AccountSignUpResponses, AdminAddEmailProviderBlacklistData, AdminAddEmailProviderBlacklistResponses, AdminAddUsernameBlacklistData, AdminAddUsernameBlacklistResponses, AdminAddWebhookData, AdminAddWebhookErrors, AdminAddWebhookResponses, AdminConfigurationAddData, AdminConfigurationAddErrors, AdminConfigurationAddResponses, AdminConfigurationDeleteData, AdminConfigurationDeleteErrors, AdminConfigurationDeleteResponses, AdminConfigurationListData, AdminConfigurationListErrors, AdminConfigurationListResponses, AdminConfigurationUpdateData, AdminConfigurationUpdateErrors, AdminConfigurationUpdateResponses, AdminDeactivateUserData, AdminDeactivateUserErrors, AdminDeactivateUserResponses, AdminDeleteUserData, AdminDeleteUserErrors, AdminDeleteUserResponses, AdminGetOnlineDevicesData, AdminGetOnlineDevicesErrors, AdminGetOnlineDevicesResponses, AdminGetUsersData, AdminGetUsersErrors, AdminGetUsersResponses, AdminListEmailProviderBlacklistData, AdminListEmailProviderBlacklistResponses, AdminListUsernameBlacklistData, AdminListUsernameBlacklistResponses, AdminListWebhooksData, AdminListWebhooksErrors, AdminListWebhooksResponses, AdminModifyUserData, AdminModifyUserErrors, AdminModifyUserResponses, AdminReactivateUserData, AdminReactivateUserErrors, AdminReactivateUserResponses, AdminRemoveEmailProviderBlacklistData, AdminRemoveEmailProviderBlacklistErrors, AdminRemoveEmailProviderBlacklistResponses, AdminRemoveUsernameBlacklistData, AdminRemoveUsernameBlacklistErrors, AdminRemoveUsernameBlacklistResponses, AdminRemoveWebhookData, AdminRemoveWebhookErrors, AdminRemoveWebhookResponses, AuthenticatedAccountChangeEmailData, AuthenticatedAccountChangeEmailErrors, AuthenticatedAccountChangeEmailResponses, AuthenticatedAccountChangePasswordData, AuthenticatedAccountChangePasswordErrors, AuthenticatedAccountChangePasswordResponses, AuthenticatedAccountChangeUsernameData, AuthenticatedAccountChangeUsernameErrors, AuthenticatedAccountChangeUsernameResponses, AuthenticatedAccountDeactivateData, AuthenticatedAccountDeactivateErrors, AuthenticatedAccountDeactivateResponses, AuthenticatedAccountListOAuthConnectionsData, AuthenticatedAccountListOAuthConnectionsResponses, AuthenticatedAccountRemoveOAuthConnectionData, AuthenticatedAccountRemoveOAuthConnectionErrors, AuthenticatedAccountRemoveOAuthConnectionResponses, DeviceGetLiveControlGatewayData, DeviceGetLiveControlGatewayErrors, DeviceGetLiveControlGatewayResponses, DeviceGetSelfData, DeviceGetSelfResponses, DevicePairData, DevicePairErrors, DevicePairResponses, DevicesCreateDeviceData, DevicesCreateDeviceResponses, DevicesEditDeviceData, DevicesEditDeviceErrors, DevicesEditDeviceResponses, DevicesGetDeviceByIdData, DevicesGetDeviceByIdErrors, DevicesGetDeviceByIdResponses, DevicesGetLiveControlGatewayInfoData, DevicesGetLiveControlGatewayInfoErrors, DevicesGetLiveControlGatewayInfoResponses, DevicesGetPairCodeData, DevicesGetPairCodeErrors, DevicesGetPairCodeResponses, DevicesGetShockersData, DevicesGetShockersErrors, DevicesGetShockersResponses, DevicesListDevicesData, DevicesListDevicesResponses, DevicesOtaGetOtaUpdateHistoryData, DevicesOtaGetOtaUpdateHistoryErrors, DevicesOtaGetOtaUpdateHistoryResponses, DevicesRegenerateDeviceTokenData, DevicesRegenerateDeviceTokenErrors, DevicesRegenerateDeviceTokenResponses, DevicesRemoveDeviceData, DevicesRemoveDeviceErrors, DevicesRemoveDeviceResponses, PublicGetOnlineDevicesStatisticsData, PublicGetOnlineDevicesStatisticsResponses, PublicGetPublicShareData, PublicGetPublicShareErrors, PublicGetPublicShareResponses, SessionsDeleteSessionData, SessionsDeleteSessionErrors, SessionsDeleteSessionResponses, SessionsGetSelfSessionData, SessionsGetSelfSessionResponses, SessionsListSessionsData, SessionsListSessionsResponses, ShareLinksAddShockerData, ShareLinksAddShockerErrors, ShareLinksAddShockerResponses, ShareLinksCreatePublicShareData, ShareLinksCreatePublicShareResponses, ShareLinksDeletePublicShareData, ShareLinksDeletePublicShareErrors, ShareLinksDeletePublicShareResponses, ShareLinksEditShockerData, ShareLinksEditShockerErrors, ShareLinksEditShockerResponses, ShareLinksListData, ShareLinksListResponses, ShareLinksPauseShockerData, ShareLinksPauseShockerErrors, ShareLinksPauseShockerResponses, ShareLinksRemoveShockerData, ShareLinksRemoveShockerErrors, ShareLinksRemoveShockerResponses, SharesDeleteShareCodeData, SharesDeleteShareCodeErrors, SharesDeleteShareCodeResponses, SharesLinkShareCodeData, SharesLinkShareCodeErrors, SharesLinkShareCodeResponses, ShockerEditShockerData, ShockerEditShockerErrors, ShockerEditShockerResponses, ShockerGetAllShockerLogsData, ShockerGetAllShockerLogsResponses, ShockerGetShockerByIdData, ShockerGetShockerByIdErrors, ShockerGetShockerByIdResponses, ShockerGetShockerLogsData, ShockerGetShockerLogsErrors, ShockerGetShockerLogsResponses, ShockerGetUserSharesData, ShockerGetUserSharesErrors, ShockerGetUserSharesResponses, ShockerListSharedShockersData, ShockerListSharedShockersResponses, ShockerListShockersData, ShockerListShockersResponses, ShockerPauseShockerData, ShockerPauseShockerErrors, ShockerPauseShockerResponses, ShockerRegisterShockerData, ShockerRegisterShockerErrors, ShockerRegisterShockerResponses, ShockerRemoveShockerData, ShockerRemoveShockerErrors, ShockerRemoveShockerResponses, ShockerSendControlDeprecatedData, ShockerSendControlDeprecatedErrors, ShockerSendControlDeprecatedResponses, ShockerShockerShareCodeCreateData, ShockerShockerShareCodeCreateErrors, ShockerShockerShareCodeCreateResponses, ShockerShockerShareCodeListData, ShockerShockerShareCodeListErrors, ShockerShockerShareCodeListResponses, ShockerShockerShareCodePauseData, ShockerShockerShareCodePauseErrors, ShockerShockerShareCodePauseResponses, ShockerShockerShareCodeUpdateData, ShockerShockerShareCodeUpdateErrors, ShockerShockerShareCodeUpdateResponses, ShockerShockerShareRemoveData, ShockerShockerShareRemoveErrors, ShockerShockerShareRemoveResponses, TokenDeleteDeleteTokenData, TokenDeleteDeleteTokenErrors, TokenDeleteDeleteTokenResponses, TokensCreateTokenData, TokensCreateTokenResponses, TokensEditTokenData, TokensEditTokenErrors, TokensEditTokenResponses, TokensGetTokenByIdData, TokensGetTokenByIdErrors, TokensGetTokenByIdResponses, TokensListTokensData, TokensListTokensResponses, TokensReportTokensData, TokensReportTokensResponses, TokensSelfGetSelfTokenData, TokensSelfGetSelfTokenResponses, UsersGetByNameData, UsersGetByNameErrors, UsersGetByNameResponses, UsersGetSelfData, UsersGetSelfResponses, VersionGetBackendInfoData, VersionGetBackendInfoResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -18,85 +18,6 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
      */
     meta?: Record<string, unknown>;
 };
-
-/**
- * Revoke a token
- */
-export const tokenDeleteDeleteToken = <ThrowOnError extends boolean = true>(options: Options<TokenDeleteDeleteTokenData, ThrowOnError>) => (options.client ?? client).delete<TokenDeleteDeleteTokenResponses, TokenDeleteDeleteTokenErrors, ThrowOnError, 'data'>({
-    responseStyle: 'data',
-    url: '/1/tokens/{tokenId}',
-    ...options
-});
-
-/**
- * Get a token by id
- */
-export const tokensGetTokenById = <ThrowOnError extends boolean = true>(options: Options<TokensGetTokenByIdData, ThrowOnError>) => (options.client ?? client).get<TokensGetTokenByIdResponses, TokensGetTokenByIdErrors, ThrowOnError, 'data'>({
-    responseTransformer: tokensGetTokenByIdResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/tokens/{tokenId}',
-    ...options
-});
-
-/**
- * Edit a token
- */
-export const tokensEditToken = <ThrowOnError extends boolean = true>(options: Options<TokensEditTokenData, ThrowOnError>) => (options.client ?? client).patch<TokensEditTokenResponses, TokensEditTokenErrors, ThrowOnError, 'data'>({
-    responseStyle: 'data',
-    url: '/1/tokens/{tokenId}',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
- * Gets information about the current token used to access this endpoint
- */
-export const tokensSelfGetSelfToken = <ThrowOnError extends boolean = true>(options?: Options<TokensSelfGetSelfTokenData, ThrowOnError>) => (options?.client ?? client).get<TokensSelfGetSelfTokenResponses, unknown, ThrowOnError, 'data'>({
-    responseTransformer: tokensSelfGetSelfTokenResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/tokens/self',
-    ...options
-});
-
-/**
- * Endpoint to delete potentially compromised api tokens
- */
-export const tokensReportTokens = <ThrowOnError extends boolean = true>(options?: Options<TokensReportTokensData, ThrowOnError>) => (options?.client ?? client).post<TokensReportTokensResponses, unknown, ThrowOnError, 'data'>({
-    responseStyle: 'data',
-    url: '/1/tokens/report',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers
-    }
-});
-
-/**
- * List all tokens for the current user
- */
-export const tokensListTokens = <ThrowOnError extends boolean = true>(options?: Options<TokensListTokensData, ThrowOnError>) => (options?.client ?? client).get<TokensListTokensResponses, unknown, ThrowOnError, 'data'>({
-    responseTransformer: tokensListTokensResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/tokens',
-    ...options
-});
-
-/**
- * Create a new token
- */
-export const tokensCreateToken = <ThrowOnError extends boolean = true>(options?: Options<TokensCreateTokenData, ThrowOnError>) => (options?.client ?? client).post<TokensCreateTokenResponses, unknown, ThrowOnError, 'data'>({
-    responseTransformer: tokensCreateTokenResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/tokens',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers
-    }
-});
 
 /**
  * Activate account
@@ -485,6 +406,85 @@ export const adminRemoveWebhook = <ThrowOnError extends boolean = true>(options:
 });
 
 /**
+ * Revoke a token
+ */
+export const tokenDeleteDeleteToken = <ThrowOnError extends boolean = true>(options: Options<TokenDeleteDeleteTokenData, ThrowOnError>) => (options.client ?? client).delete<TokenDeleteDeleteTokenResponses, TokenDeleteDeleteTokenErrors, ThrowOnError, 'data'>({
+    responseStyle: 'data',
+    url: '/1/tokens/{tokenId}',
+    ...options
+});
+
+/**
+ * Get a token by id
+ */
+export const tokensGetTokenById = <ThrowOnError extends boolean = true>(options: Options<TokensGetTokenByIdData, ThrowOnError>) => (options.client ?? client).get<TokensGetTokenByIdResponses, TokensGetTokenByIdErrors, ThrowOnError, 'data'>({
+    responseTransformer: tokensGetTokenByIdResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/tokens/{tokenId}',
+    ...options
+});
+
+/**
+ * Edit a token
+ */
+export const tokensEditToken = <ThrowOnError extends boolean = true>(options: Options<TokensEditTokenData, ThrowOnError>) => (options.client ?? client).patch<TokensEditTokenResponses, TokensEditTokenErrors, ThrowOnError, 'data'>({
+    responseStyle: 'data',
+    url: '/1/tokens/{tokenId}',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Gets information about the current token used to access this endpoint
+ */
+export const tokensSelfGetSelfToken = <ThrowOnError extends boolean = true>(options?: Options<TokensSelfGetSelfTokenData, ThrowOnError>) => (options?.client ?? client).get<TokensSelfGetSelfTokenResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: tokensSelfGetSelfTokenResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/tokens/self',
+    ...options
+});
+
+/**
+ * Endpoint to delete potentially compromised api tokens
+ */
+export const tokensReportTokens = <ThrowOnError extends boolean = true>(options?: Options<TokensReportTokensData, ThrowOnError>) => (options?.client ?? client).post<TokensReportTokensResponses, unknown, ThrowOnError, 'data'>({
+    responseStyle: 'data',
+    url: '/1/tokens/report',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options?.headers
+    }
+});
+
+/**
+ * List all tokens for the current user
+ */
+export const tokensListTokens = <ThrowOnError extends boolean = true>(options?: Options<TokensListTokensData, ThrowOnError>) => (options?.client ?? client).get<TokensListTokensResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: tokensListTokensResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/tokens',
+    ...options
+});
+
+/**
+ * Create a new token
+ */
+export const tokensCreateToken = <ThrowOnError extends boolean = true>(options?: Options<TokensCreateTokenData, ThrowOnError>) => (options?.client ?? client).post<TokensCreateTokenResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: tokensCreateTokenResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/tokens',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options?.headers
+    }
+});
+
+/**
  * Gets the best suited LCG node for the client
  */
 export const deviceGetLiveControlGateway = <ThrowOnError extends boolean = true>(options?: Options<DeviceGetLiveControlGatewayData, ThrowOnError>) => (options?.client ?? client).get<DeviceGetLiveControlGatewayResponses, DeviceGetLiveControlGatewayErrors, ThrowOnError, 'data'>({
@@ -799,9 +799,9 @@ export const shockerGetShockerLogs = <ThrowOnError extends boolean = true>(optio
 });
 
 /**
- * Get the logs for all shockers
+ * Get a paged set of control logs across the caller's shockers.
  */
-export const shockerGetAllShockerLogs = <ThrowOnError extends boolean = true>(options?: Options<ShockerGetAllShockerLogsData, ThrowOnError>) => (options?.client ?? client).get<ShockerGetAllShockerLogsResponses, ShockerGetAllShockerLogsErrors, ThrowOnError, 'data'>({
+export const shockerGetAllShockerLogs = <ThrowOnError extends boolean = true>(options?: Options<ShockerGetAllShockerLogsData, ThrowOnError>) => (options?.client ?? client).get<ShockerGetAllShockerLogsResponses, unknown, ThrowOnError, 'data'>({
     responseTransformer: shockerGetAllShockerLogsResponseTransformer,
     responseStyle: 'data',
     url: '/1/shockers/logs',
