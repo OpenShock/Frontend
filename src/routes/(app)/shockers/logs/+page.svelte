@@ -256,7 +256,7 @@
       {/if}
     </div>
     <div class="flex min-h-0 flex-1 flex-col gap-6" bind:clientHeight={tableViewportHeight}>
-      <DataTable data={logs} {columns} bind:sorting class="min-h-0 max-h-full" />
+      <DataTable data={logs} {columns} bind:sorting class="min-h-0 flex-1" />
       <PaginationFooter
         count={total}
         perPage={pageSize}
