@@ -71,6 +71,10 @@
 		"vitest": "^4.1.7"
 	},
 	"dependencies": {
+		"@opentelemetry/api-logs": "^0.218.0",
+		"@opentelemetry/exporter-logs-otlp-http": "^0.218.0",
+		"@opentelemetry/resources": "^2.7.1",
+		"@opentelemetry/sdk-logs": "^0.218.0",
 		"driver.js": "^1.4.0",
 		"temporal-polyfill": "^0.3.2",
 		"vite": "^8.0.14"
