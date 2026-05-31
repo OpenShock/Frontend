@@ -38,6 +38,10 @@
   let page = $state(1);
   let total = $state(0);
 
+  // Monotonic token so out-of-order responses are discarded: only the most
+  // recently issued request is allowed to apply its result.
+  let fetchToken = 0;
+
   // Row metrics — rows are single-line (whitespace-nowrap), so heights are
   // stable and we can size pages off them without measuring each row.
   const HEADER_HEIGHT = 40; // Table.Head (h-10)
@@ -101,6 +105,7 @@
     const size = pageSize;
     const shockerIds = selectedShockerIds;
 
+    const token = ++fetchToken;
     isFetching = true;
     shockerGetAllShockerLogs({
       query: {
@@ -112,12 +117,19 @@
       },
     })
       .then((res) => {
+        // Discard responses superseded by a newer request.
+        if (token !== fetchToken) return;
         logs = res.items;
         page = res.page;
         total = res.totalCount;
       })
-      .catch(handleApiError)
-      .finally(() => (isFetching = false));
+      .catch((err) => {
+        if (token !== fetchToken) return;
+        handleApiError(err);
+      })
+      .finally(() => {
+        if (token === fetchToken) isFetching = false;
+      });
   });
 
   onMount(() => {
