@@ -20,6 +20,85 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
 };
 
 /**
+ * Revoke a token
+ */
+export const tokenDeleteDeleteToken = <ThrowOnError extends boolean = true>(options: Options<TokenDeleteDeleteTokenData, ThrowOnError>) => (options.client ?? client).delete<TokenDeleteDeleteTokenResponses, TokenDeleteDeleteTokenErrors, ThrowOnError, 'data'>({
+    responseStyle: 'data',
+    url: '/1/tokens/{tokenId}',
+    ...options
+});
+
+/**
+ * Get a token by id
+ */
+export const tokensGetTokenById = <ThrowOnError extends boolean = true>(options: Options<TokensGetTokenByIdData, ThrowOnError>) => (options.client ?? client).get<TokensGetTokenByIdResponses, TokensGetTokenByIdErrors, ThrowOnError, 'data'>({
+    responseTransformer: tokensGetTokenByIdResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/tokens/{tokenId}',
+    ...options
+});
+
+/**
+ * Edit a token
+ */
+export const tokensEditToken = <ThrowOnError extends boolean = true>(options: Options<TokensEditTokenData, ThrowOnError>) => (options.client ?? client).patch<TokensEditTokenResponses, TokensEditTokenErrors, ThrowOnError, 'data'>({
+    responseStyle: 'data',
+    url: '/1/tokens/{tokenId}',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Gets information about the current token used to access this endpoint
+ */
+export const tokensSelfGetSelfToken = <ThrowOnError extends boolean = true>(options?: Options<TokensSelfGetSelfTokenData, ThrowOnError>) => (options?.client ?? client).get<TokensSelfGetSelfTokenResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: tokensSelfGetSelfTokenResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/tokens/self',
+    ...options
+});
+
+/**
+ * Endpoint to delete potentially compromised api tokens
+ */
+export const tokensReportTokens = <ThrowOnError extends boolean = true>(options?: Options<TokensReportTokensData, ThrowOnError>) => (options?.client ?? client).post<TokensReportTokensResponses, unknown, ThrowOnError, 'data'>({
+    responseStyle: 'data',
+    url: '/1/tokens/report',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options?.headers
+    }
+});
+
+/**
+ * List all tokens for the current user
+ */
+export const tokensListTokens = <ThrowOnError extends boolean = true>(options?: Options<TokensListTokensData, ThrowOnError>) => (options?.client ?? client).get<TokensListTokensResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: tokensListTokensResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/tokens',
+    ...options
+});
+
+/**
+ * Create a new token
+ */
+export const tokensCreateToken = <ThrowOnError extends boolean = true>(options?: Options<TokensCreateTokenData, ThrowOnError>) => (options?.client ?? client).post<TokensCreateTokenResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: tokensCreateTokenResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/tokens',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options?.headers
+    }
+});
+
+/**
  * Activate account
  */
 export const accountActivate = <ThrowOnError extends boolean = true>(options?: Options<AccountActivateData, ThrowOnError>) => (options?.client ?? client).post<AccountActivateResponses, AccountActivateErrors, ThrowOnError, 'data'>({
@@ -403,85 +482,6 @@ export const adminRemoveWebhook = <ThrowOnError extends boolean = true>(options:
     responseStyle: 'data',
     url: '/1/admin/webhooks/{id}',
     ...options
-});
-
-/**
- * Revoke a token
- */
-export const tokenDeleteDeleteToken = <ThrowOnError extends boolean = true>(options: Options<TokenDeleteDeleteTokenData, ThrowOnError>) => (options.client ?? client).delete<TokenDeleteDeleteTokenResponses, TokenDeleteDeleteTokenErrors, ThrowOnError, 'data'>({
-    responseStyle: 'data',
-    url: '/1/tokens/{tokenId}',
-    ...options
-});
-
-/**
- * Get a token by id
- */
-export const tokensGetTokenById = <ThrowOnError extends boolean = true>(options: Options<TokensGetTokenByIdData, ThrowOnError>) => (options.client ?? client).get<TokensGetTokenByIdResponses, TokensGetTokenByIdErrors, ThrowOnError, 'data'>({
-    responseTransformer: tokensGetTokenByIdResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/tokens/{tokenId}',
-    ...options
-});
-
-/**
- * Edit a token
- */
-export const tokensEditToken = <ThrowOnError extends boolean = true>(options: Options<TokensEditTokenData, ThrowOnError>) => (options.client ?? client).patch<TokensEditTokenResponses, TokensEditTokenErrors, ThrowOnError, 'data'>({
-    responseStyle: 'data',
-    url: '/1/tokens/{tokenId}',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
- * Gets information about the current token used to access this endpoint
- */
-export const tokensSelfGetSelfToken = <ThrowOnError extends boolean = true>(options?: Options<TokensSelfGetSelfTokenData, ThrowOnError>) => (options?.client ?? client).get<TokensSelfGetSelfTokenResponses, unknown, ThrowOnError, 'data'>({
-    responseTransformer: tokensSelfGetSelfTokenResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/tokens/self',
-    ...options
-});
-
-/**
- * Endpoint to delete potentially compromised api tokens
- */
-export const tokensReportTokens = <ThrowOnError extends boolean = true>(options?: Options<TokensReportTokensData, ThrowOnError>) => (options?.client ?? client).post<TokensReportTokensResponses, unknown, ThrowOnError, 'data'>({
-    responseStyle: 'data',
-    url: '/1/tokens/report',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers
-    }
-});
-
-/**
- * List all tokens for the current user
- */
-export const tokensListTokens = <ThrowOnError extends boolean = true>(options?: Options<TokensListTokensData, ThrowOnError>) => (options?.client ?? client).get<TokensListTokensResponses, unknown, ThrowOnError, 'data'>({
-    responseTransformer: tokensListTokensResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/tokens',
-    ...options
-});
-
-/**
- * Create a new token
- */
-export const tokensCreateToken = <ThrowOnError extends boolean = true>(options?: Options<TokensCreateTokenData, ThrowOnError>) => (options?.client ?? client).post<TokensCreateTokenResponses, unknown, ThrowOnError, 'data'>({
-    responseTransformer: tokensCreateTokenResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/tokens',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers
-    }
 });
 
 /**

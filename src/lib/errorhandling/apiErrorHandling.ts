@@ -33,7 +33,8 @@ async function handleResponseError(
 
   if (!contentTypeHeader.startsWith('application/problem+json')) {
     console.error(
-      'Content type header is not application/problem+json [' + contentTypeHeader + ']'
+      'Content type header is not application/problem+json [' + contentTypeHeader + ']',
+      response
     );
     return;
   }

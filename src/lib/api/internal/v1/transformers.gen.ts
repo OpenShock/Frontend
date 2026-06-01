@@ -2,6 +2,44 @@
 
 import type { AdminConfigurationListResponse, AdminGetOnlineDevicesResponse, AdminGetUsersResponse, AdminListEmailProviderBlacklistResponse, AdminListUsernameBlacklistResponse, AdminListWebhooksResponse, AuthenticatedAccountListOAuthConnectionsResponse, DevicesGetDeviceByIdResponse, DevicesGetShockersResponse, DevicesListDevicesResponse, DevicesOtaGetOtaUpdateHistoryResponse, PublicGetOnlineDevicesStatisticsResponse, PublicGetPublicShareResponse, SessionsGetSelfSessionResponse, SessionsListSessionsResponse, ShareLinksListResponse, ShockerGetAllShockerLogsResponse, ShockerGetShockerByIdResponse, ShockerGetShockerLogsResponse, ShockerGetUserSharesResponse, ShockerListShockersResponse, ShockerShockerShareCodeListResponse, TokensCreateTokenResponse, TokensGetTokenByIdResponse, TokensListTokensResponse, TokensSelfGetSelfTokenResponse, VersionGetBackendInfoResponse } from './types.gen';
 
+const tokenResponseSchemaResponseTransformer = (data: any) => {
+    data.createdOn = Temporal.Instant.from(data.createdOn);
+    if (data.validUntil) {
+        data.validUntil = Temporal.Instant.from(data.validUntil);
+    }
+    data.lastUsed = Temporal.Instant.from(data.lastUsed);
+    return data;
+};
+
+export const tokensGetTokenByIdResponseTransformer = async (data: any): Promise<TokensGetTokenByIdResponse> => {
+    data = tokenResponseSchemaResponseTransformer(data);
+    return data;
+};
+
+export const tokensSelfGetSelfTokenResponseTransformer = async (data: any): Promise<TokensSelfGetSelfTokenResponse> => {
+    data = tokenResponseSchemaResponseTransformer(data);
+    return data;
+};
+
+export const tokensListTokensResponseTransformer = async (data: any): Promise<TokensListTokensResponse> => {
+    data = data.map((item: any) => tokenResponseSchemaResponseTransformer(item));
+    return data;
+};
+
+const tokenCreatedResponseSchemaResponseTransformer = (data: any) => {
+    data.createdAt = Temporal.Instant.from(data.createdAt);
+    if (data.validUntil) {
+        data.validUntil = Temporal.Instant.from(data.validUntil);
+    }
+    data.lastUsed = Temporal.Instant.from(data.lastUsed);
+    return data;
+};
+
+export const tokensCreateTokenResponseTransformer = async (data: any): Promise<TokensCreateTokenResponse> => {
+    data = tokenCreatedResponseSchemaResponseTransformer(data);
+    return data;
+};
+
 const oAuthConnectionResponseSchemaResponseTransformer = (data: any) => {
     data.linkedAt = Temporal.Instant.from(data.linkedAt);
     return data;
@@ -90,44 +128,6 @@ const webhookDtoSchemaResponseTransformer = (data: any) => {
 
 export const adminListWebhooksResponseTransformer = async (data: any): Promise<AdminListWebhooksResponse> => {
     data = data.map((item: any) => webhookDtoSchemaResponseTransformer(item));
-    return data;
-};
-
-const tokenResponseSchemaResponseTransformer = (data: any) => {
-    data.createdOn = Temporal.Instant.from(data.createdOn);
-    if (data.validUntil) {
-        data.validUntil = Temporal.Instant.from(data.validUntil);
-    }
-    data.lastUsed = Temporal.Instant.from(data.lastUsed);
-    return data;
-};
-
-export const tokensGetTokenByIdResponseTransformer = async (data: any): Promise<TokensGetTokenByIdResponse> => {
-    data = tokenResponseSchemaResponseTransformer(data);
-    return data;
-};
-
-export const tokensSelfGetSelfTokenResponseTransformer = async (data: any): Promise<TokensSelfGetSelfTokenResponse> => {
-    data = tokenResponseSchemaResponseTransformer(data);
-    return data;
-};
-
-export const tokensListTokensResponseTransformer = async (data: any): Promise<TokensListTokensResponse> => {
-    data = data.map((item: any) => tokenResponseSchemaResponseTransformer(item));
-    return data;
-};
-
-const tokenCreatedResponseSchemaResponseTransformer = (data: any) => {
-    data.createdAt = Temporal.Instant.from(data.createdAt);
-    if (data.validUntil) {
-        data.validUntil = Temporal.Instant.from(data.validUntil);
-    }
-    data.lastUsed = Temporal.Instant.from(data.lastUsed);
-    return data;
-};
-
-export const tokensCreateTokenResponseTransformer = async (data: any): Promise<TokensCreateTokenResponse> => {
-    data = tokenCreatedResponseSchemaResponseTransformer(data);
     return data;
 };
 
