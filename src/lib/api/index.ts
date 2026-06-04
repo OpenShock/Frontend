@@ -77,10 +77,6 @@ export {
   shockerShockerShareCodeUpdate,
   shockerShockerShareRemove,
   tokenDeleteDeleteToken,
-  tokensCreateToken,
-  tokensEditToken,
-  tokensListTokens,
-  tokensReportTokens,
   usersGetByName,
   usersGetSelf,
   versionGetBackendInfo,
@@ -121,8 +117,6 @@ export type {
   SharedShocker,
   ShockerResponse,
   ShockerWithDevice,
-  TokenCreatedResponse,
-  TokenResponse,
   UserNameBlacklistDto,
   WebhookDto,
 } from './internal/v1';
@@ -132,6 +126,13 @@ export {
   accountLoginV2,
   accountSignUpV2,
   devicesCreateDeviceV2,
+  tokensCreateTokenV2,
+  tokensEditTokenV2,
+  tokensGetTokenByIdV2,
+  tokensListTokensV2,
+  tokensReportTokens,
+  tokensSelfGetSelfTokenV2,
+  tokensSetTokenPaused,
   userSharesCreateShareInvite,
   userSharesDeleteOutgoingInvite,
   userSharesDenyIncomingInvite,
@@ -141,13 +142,22 @@ export {
   userSharesRedeemInvite,
 } from './internal/v2';
 
-export { UsernameAvailability, UsernameErrorType } from './internal/v2';
+export { ControlLimitMode, UsernameAvailability, UsernameErrorType } from './internal/v2';
 
 export type {
+  CreateTokenRequestV2,
+  DurationLimitSettings,
+  EditTokenRequestV2,
+  IntensityLimitSettings,
+  SetTokenPausedRequest,
   ShareInviteBaseDetails,
+  ShockerControlSettings,
   ShockerLimits,
   ShockerPermLimitPairWithIdAndName,
   ShockerPermissions,
+  TokenCreatedResponseV2,
+  TokenPausedResponse,
+  TokenResponseV2,
   UserShareInfo,
   UsernameCheckResponse,
   V2UserShares,

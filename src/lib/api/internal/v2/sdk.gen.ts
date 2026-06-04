@@ -2,8 +2,8 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import { userSharesGetIncomingInvitesListResponseTransformer, userSharesGetOutgoingInvitesListResponseTransformer, userSharesGetSharesByUsersResponseTransformer, userSharesRedeemInviteResponseTransformer } from './transformers.gen';
-import type { AccountCheckUsernameData, AccountCheckUsernameResponses, AccountLoginV2Data, AccountLoginV2Errors, AccountLoginV2Responses, AccountPasswordResetInitiateV2Data, AccountPasswordResetInitiateV2Errors, AccountPasswordResetInitiateV2LegacyData, AccountPasswordResetInitiateV2LegacyErrors, AccountPasswordResetInitiateV2LegacyResponses, AccountPasswordResetInitiateV2Responses, AccountSignUpV2Data, AccountSignUpV2Errors, AccountSignUpV2Responses, DeviceGetLiveControlGatewayV2Data, DeviceGetLiveControlGatewayV2Errors, DeviceGetLiveControlGatewayV2Responses, DevicesCreateDeviceV2Data, DevicesCreateDeviceV2Responses, ShockerSendControlData, ShockerSendControlErrors, ShockerSendControlResponses, UserSharesBulkPauseUserShareShockersData, UserSharesBulkPauseUserShareShockersResponses, UserSharesBulkRemoveUserShareShockersData, UserSharesBulkRemoveUserShareShockersResponses, UserSharesBulkUserShareShockersUpdateData, UserSharesBulkUserShareShockersUpdateErrors, UserSharesBulkUserShareShockersUpdateResponses, UserSharesCreateShareInviteData, UserSharesCreateShareInviteErrors, UserSharesCreateShareInviteResponses, UserSharesDeleteOutgoingInviteData, UserSharesDeleteOutgoingInviteErrors, UserSharesDeleteOutgoingInviteResponses, UserSharesDenyIncomingInviteData, UserSharesDenyIncomingInviteErrors, UserSharesDenyIncomingInviteResponses, UserSharesGetIncomingInvitesListData, UserSharesGetIncomingInvitesListResponses, UserSharesGetOutgoingInvitesListData, UserSharesGetOutgoingInvitesListResponses, UserSharesGetSharesByUsersData, UserSharesGetSharesByUsersResponses, UserSharesRedeemInviteData, UserSharesRedeemInviteErrors, UserSharesRedeemInviteResponses } from './types.gen';
+import { tokensCreateTokenV2ResponseTransformer, tokensGetTokenByIdV2ResponseTransformer, tokensListTokensV2ResponseTransformer, tokensSelfGetSelfTokenV2ResponseTransformer, userSharesGetIncomingInvitesListResponseTransformer, userSharesGetOutgoingInvitesListResponseTransformer, userSharesGetSharesByUsersResponseTransformer, userSharesRedeemInviteResponseTransformer } from './transformers.gen';
+import type { AccountCheckUsernameData, AccountCheckUsernameResponses, AccountLoginV2Data, AccountLoginV2Errors, AccountLoginV2Responses, AccountPasswordResetInitiateV2Data, AccountPasswordResetInitiateV2Errors, AccountPasswordResetInitiateV2LegacyData, AccountPasswordResetInitiateV2LegacyErrors, AccountPasswordResetInitiateV2LegacyResponses, AccountPasswordResetInitiateV2Responses, AccountSignUpV2Data, AccountSignUpV2Errors, AccountSignUpV2Responses, DeviceGetLiveControlGatewayV2Data, DeviceGetLiveControlGatewayV2Errors, DeviceGetLiveControlGatewayV2Responses, DevicesCreateDeviceV2Data, DevicesCreateDeviceV2Responses, ShockerSendControlData, ShockerSendControlErrors, ShockerSendControlResponses, TokensCreateTokenV2Data, TokensCreateTokenV2Responses, TokensEditTokenV2Data, TokensEditTokenV2Errors, TokensEditTokenV2Responses, TokensGetTokenByIdV2Data, TokensGetTokenByIdV2Errors, TokensGetTokenByIdV2Responses, TokensListTokensV2Data, TokensListTokensV2Responses, TokensReportTokensData, TokensReportTokensResponses, TokensSelfGetSelfTokenV2Data, TokensSelfGetSelfTokenV2Responses, TokensSetTokenPausedData, TokensSetTokenPausedErrors, TokensSetTokenPausedResponses, UserSharesBulkPauseUserShareShockersData, UserSharesBulkPauseUserShareShockersResponses, UserSharesBulkRemoveUserShareShockersData, UserSharesBulkRemoveUserShareShockersResponses, UserSharesBulkUserShareShockersUpdateData, UserSharesBulkUserShareShockersUpdateErrors, UserSharesBulkUserShareShockersUpdateResponses, UserSharesCreateShareInviteData, UserSharesCreateShareInviteErrors, UserSharesCreateShareInviteResponses, UserSharesDeleteOutgoingInviteData, UserSharesDeleteOutgoingInviteErrors, UserSharesDeleteOutgoingInviteResponses, UserSharesDenyIncomingInviteData, UserSharesDenyIncomingInviteErrors, UserSharesDenyIncomingInviteResponses, UserSharesGetIncomingInvitesListData, UserSharesGetIncomingInvitesListResponses, UserSharesGetOutgoingInvitesListData, UserSharesGetOutgoingInvitesListResponses, UserSharesGetSharesByUsersData, UserSharesGetSharesByUsersResponses, UserSharesRedeemInviteData, UserSharesRedeemInviteErrors, UserSharesRedeemInviteResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -18,6 +18,89 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
      */
     meta?: Record<string, unknown>;
 };
+
+/**
+ * Gets information about the current token used to access this endpoint
+ */
+export const tokensSelfGetSelfTokenV2 = <ThrowOnError extends boolean = true>(options?: Options<TokensSelfGetSelfTokenV2Data, ThrowOnError>) => (options?.client ?? client).get<TokensSelfGetSelfTokenV2Responses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: tokensSelfGetSelfTokenV2ResponseTransformer,
+    responseStyle: 'data',
+    url: '/2/tokens/self',
+    ...options
+});
+
+/**
+ * Endpoint to delete potentially compromised api tokens
+ */
+export const tokensReportTokens = <ThrowOnError extends boolean = true>(options?: Options<TokensReportTokensData, ThrowOnError>) => (options?.client ?? client).post<TokensReportTokensResponses, unknown, ThrowOnError, 'data'>({
+    responseStyle: 'data',
+    url: '/2/tokens/report',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options?.headers
+    }
+});
+
+/**
+ * List all tokens for the current user
+ */
+export const tokensListTokensV2 = <ThrowOnError extends boolean = true>(options?: Options<TokensListTokensV2Data, ThrowOnError>) => (options?.client ?? client).get<TokensListTokensV2Responses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: tokensListTokensV2ResponseTransformer,
+    responseStyle: 'data',
+    url: '/2/tokens',
+    ...options
+});
+
+/**
+ * Create a new token
+ */
+export const tokensCreateTokenV2 = <ThrowOnError extends boolean = true>(options?: Options<TokensCreateTokenV2Data, ThrowOnError>) => (options?.client ?? client).post<TokensCreateTokenV2Responses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: tokensCreateTokenV2ResponseTransformer,
+    responseStyle: 'data',
+    url: '/2/tokens',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options?.headers
+    }
+});
+
+/**
+ * Get a token by id
+ */
+export const tokensGetTokenByIdV2 = <ThrowOnError extends boolean = true>(options: Options<TokensGetTokenByIdV2Data, ThrowOnError>) => (options.client ?? client).get<TokensGetTokenByIdV2Responses, TokensGetTokenByIdV2Errors, ThrowOnError, 'data'>({
+    responseTransformer: tokensGetTokenByIdV2ResponseTransformer,
+    responseStyle: 'data',
+    url: '/2/tokens/{tokenId}',
+    ...options
+});
+
+/**
+ * Edit a token
+ */
+export const tokensEditTokenV2 = <ThrowOnError extends boolean = true>(options: Options<TokensEditTokenV2Data, ThrowOnError>) => (options.client ?? client).patch<TokensEditTokenV2Responses, TokensEditTokenV2Errors, ThrowOnError, 'data'>({
+    responseStyle: 'data',
+    url: '/2/tokens/{tokenId}',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Set whether a token is paused. A paused token may not send shocker control messages.
+ */
+export const tokensSetTokenPaused = <ThrowOnError extends boolean = true>(options: Options<TokensSetTokenPausedData, ThrowOnError>) => (options.client ?? client).patch<TokensSetTokenPausedResponses, TokensSetTokenPausedErrors, ThrowOnError, 'data'>({
+    responseStyle: 'data',
+    url: '/2/tokens/{tokenId}/paused',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
 /**
  * Check if a username is available

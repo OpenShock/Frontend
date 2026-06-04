@@ -28,6 +28,10 @@ export type Control = {
     exclusive?: boolean;
 };
 
+export const ControlLimitMode = { Clamp: 'Clamp', Lerp: 'Lerp' } as const;
+
+export type ControlLimitMode = typeof ControlLimitMode[keyof typeof ControlLimitMode];
+
 export type ControlRequest = {
     shocks: Array<Control>;
     customName?: string | null;
@@ -47,8 +51,33 @@ export type CreateShareRequest = {
     user?: string | null;
 };
 
+export type CreateTokenRequestV2 = {
+    name: string;
+    permissions: Array<PermissionType>;
+    shockerControl: ShockerControlSettings;
+    validUntil?: Temporal.Instant | null;
+};
+
+export type DurationLimitSettings = {
+    min: number;
+    max: number;
+    mode?: ControlLimitMode;
+};
+
+export type EditTokenRequestV2 = {
+    name: string;
+    permissions: Array<PermissionType>;
+    shockerControl: ShockerControlSettings;
+};
+
 export type HubCreateRequest = {
     name: string;
+};
+
+export type IntensityLimitSettings = {
+    min: number;
+    max: number;
+    mode: ControlLimitMode;
 };
 
 export type LcgNodeResponseV2 = {
@@ -113,8 +142,23 @@ export type PauseUserShareShockersResponse = {
     };
 };
 
+export const PermissionType = {
+    ShockersUse: 'shockers.use',
+    ShockersEdit: 'shockers.edit',
+    ShockersPause: 'shockers.pause',
+    DevicesEdit: 'devices.edit',
+    DevicesAuth: 'devices.auth'
+} as const;
+
+export type PermissionType = typeof PermissionType[keyof typeof PermissionType];
+
 export type RemoveUserSharesResponse = {
     affectedRecords: number;
+};
+
+export type ReportTokensRequest = {
+    turnstileResponse: string;
+    secrets: Array<string>;
 };
 
 export const RoleType = {
@@ -126,12 +170,31 @@ export const RoleType = {
 
 export type RoleType = typeof RoleType[keyof typeof RoleType];
 
+export type SetTokenPausedRequest = {
+    /**
+     * When true, the token is paused and may not send shocker control messages.
+     */
+    paused: boolean;
+};
+
 export type ShareInviteBaseDetails = {
     id: string;
     createdAt: Temporal.Instant;
     owner: BasicUserInfo;
     sharedWith: BasicUserInfo;
     shockers: Array<ShockerPermLimitPairWithIdAndName>;
+};
+
+/**
+ * Per-token shocker control configuration: a toggle plus min/max limits for intensity and duration.
+ */
+export type ShockerControlSettings = {
+    /**
+     * When true, this token is paused and may not send shocker control messages.
+     */
+    paused: boolean;
+    intensity: IntensityLimitSettings;
+    duration: DurationLimitSettings;
 };
 
 export type ShockerLimits = {
@@ -164,6 +227,34 @@ export type SignUpV2 = {
     password: string;
     email: string;
     turnstileResponse: string;
+};
+
+export type TokenCreatedResponseV2 = {
+    id: string;
+    name: string;
+    token: string;
+    createdAt: Temporal.Instant;
+    validUntil: Temporal.Instant | null;
+    lastUsed: Temporal.Instant | null;
+    permissions: Array<PermissionType>;
+    shockerControl: ShockerControlSettings;
+};
+
+export type TokenPausedResponse = {
+    /**
+     * The now-set paused state of the token.
+     */
+    paused: boolean;
+};
+
+export type TokenResponseV2 = {
+    id: string;
+    name: string;
+    createdOn: Temporal.Instant;
+    validUntil: Temporal.Instant | null;
+    lastUsed: Temporal.Instant | null;
+    permissions: Array<PermissionType>;
+    shockerControl: ShockerControlSettings;
 };
 
 export type UserShareInfo = {
@@ -236,6 +327,147 @@ export type OpenShockProblemWritable = {
     instance?: string | null;
     [key: string]: unknown;
 };
+
+export type TokensSelfGetSelfTokenV2Data = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/2/tokens/self';
+};
+
+export type TokensSelfGetSelfTokenV2Responses = {
+    /**
+     * OK
+     */
+    200: TokenResponseV2;
+};
+
+export type TokensSelfGetSelfTokenV2Response = TokensSelfGetSelfTokenV2Responses[keyof TokensSelfGetSelfTokenV2Responses];
+
+export type TokensReportTokensData = {
+    body?: ReportTokensRequest;
+    path?: never;
+    query?: never;
+    url: '/2/tokens/report';
+};
+
+export type TokensReportTokensResponses = {
+    /**
+     * The tokens were deleted if found
+     */
+    200: unknown;
+};
+
+export type TokensListTokensV2Data = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/2/tokens';
+};
+
+export type TokensListTokensV2Responses = {
+    /**
+     * All tokens for the current user
+     */
+    200: Array<TokenResponseV2>;
+};
+
+export type TokensListTokensV2Response = TokensListTokensV2Responses[keyof TokensListTokensV2Responses];
+
+export type TokensCreateTokenV2Data = {
+    body?: CreateTokenRequestV2;
+    path?: never;
+    query?: never;
+    url: '/2/tokens';
+};
+
+export type TokensCreateTokenV2Responses = {
+    /**
+     * The created token
+     */
+    200: TokenCreatedResponseV2;
+};
+
+export type TokensCreateTokenV2Response = TokensCreateTokenV2Responses[keyof TokensCreateTokenV2Responses];
+
+export type TokensGetTokenByIdV2Data = {
+    body?: never;
+    path: {
+        tokenId: string;
+    };
+    query?: never;
+    url: '/2/tokens/{tokenId}';
+};
+
+export type TokensGetTokenByIdV2Errors = {
+    /**
+     * The token does not exist or you do not have access to it.
+     */
+    404: OpenShockProblem;
+};
+
+export type TokensGetTokenByIdV2Error = TokensGetTokenByIdV2Errors[keyof TokensGetTokenByIdV2Errors];
+
+export type TokensGetTokenByIdV2Responses = {
+    /**
+     * The token
+     */
+    200: TokenResponseV2;
+};
+
+export type TokensGetTokenByIdV2Response = TokensGetTokenByIdV2Responses[keyof TokensGetTokenByIdV2Responses];
+
+export type TokensEditTokenV2Data = {
+    body?: EditTokenRequestV2;
+    path: {
+        tokenId: string;
+    };
+    query?: never;
+    url: '/2/tokens/{tokenId}';
+};
+
+export type TokensEditTokenV2Errors = {
+    /**
+     * The token does not exist or you do not have access to it.
+     */
+    404: OpenShockProblem;
+};
+
+export type TokensEditTokenV2Error = TokensEditTokenV2Errors[keyof TokensEditTokenV2Errors];
+
+export type TokensEditTokenV2Responses = {
+    /**
+     * The edited token
+     */
+    200: unknown;
+};
+
+export type TokensSetTokenPausedData = {
+    body?: SetTokenPausedRequest;
+    path: {
+        tokenId: string;
+    };
+    query?: never;
+    url: '/2/tokens/{tokenId}/paused';
+};
+
+export type TokensSetTokenPausedErrors = {
+    /**
+     * The token does not exist or you do not have access to it.
+     */
+    404: OpenShockProblem;
+};
+
+export type TokensSetTokenPausedError = TokensSetTokenPausedErrors[keyof TokensSetTokenPausedErrors];
+
+export type TokensSetTokenPausedResponses = {
+    /**
+     * The now-set paused state of the token.
+     */
+    200: TokenPausedResponse;
+};
+
+export type TokensSetTokenPausedResponse = TokensSetTokenPausedResponses[keyof TokensSetTokenPausedResponses];
 
 export type AccountCheckUsernameData = {
     body?: ChangeUsernameRequest;

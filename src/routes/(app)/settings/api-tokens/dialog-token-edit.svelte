@@ -1,40 +1,46 @@
 <script lang="ts">
-  import { PermissionType, tokensEditToken } from '$lib/api';
-  import type { TokenResponse } from '$lib/api';
+  import { PermissionType, tokensEditTokenV2 } from '$lib/api';
+  import type { ShockerControlSettings, TokenResponseV2 } from '$lib/api';
+  import type { DialogContentProps } from '$lib/components/dialog-manager/types';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import type { ValidationResult } from '$lib/types/ValidationResult';
   import { toast } from 'svelte-sonner';
+  import ShockerControlSettingsEditor from './shocker-control-settings.svelte';
 
-  interface Props {
-    open: boolean;
-    token: TokenResponse;
-    onEdit: (id: string, updater: (token: TokenResponse) => TokenResponse) => void;
+  export type TokenEditResult = Pick<TokenResponseV2, 'name' | 'permissions' | 'shockerControl'>;
+
+  interface Props extends DialogContentProps<TokenEditResult | undefined> {
+    token: TokenResponseV2;
   }
 
-  let { open = $bindable(), token, onEdit }: Props = $props();
+  let { token, resolve }: Props = $props();
 
   // svelte-ignore state_referenced_locally
   let name = $state(token.name);
   // svelte-ignore state_referenced_locally
   let permissions = $state(token.permissions);
+  let shockerControl = $state<ShockerControlSettings>(
+    // svelte-ignore state_referenced_locally
+    structuredClone($state.snapshot(token.shockerControl))
+  );
+  let submitting = $state(false);
 
   async function saveChanges() {
+    submitting = true;
     try {
-      await tokensEditToken({ path: { tokenId: token.id }, body: { name, permissions } });
-      onEdit(token.id, (token) => {
-        return {
-          ...token,
-          name,
-          permissions,
-        };
+      await tokensEditTokenV2({
+        path: { tokenId: token.id },
+        body: { name, permissions, shockerControl },
       });
       toast.success('Token edited successfully');
-      open = false;
+      resolve({ name, permissions, shockerControl });
     } catch (error) {
       await handleApiError(error);
+    } finally {
+      submitting = false;
     }
   }
 
@@ -72,43 +78,52 @@
   let nameValidationResult = $derived(nameValidation(name));
 </script>
 
-<Dialog.Root bind:open>
-  <Dialog.Content>
-    <Dialog.Header>
-      <Dialog.Title>Edit API Token</Dialog.Title>
-      <Dialog.Description></Dialog.Description>
-    </Dialog.Header>
-    <form class="modal-form border-surface-500 rounded-container-token space-y-4">
-      <TextInput
-        label="Token Name"
-        placeholder="Token name..."
-        bind:value={name}
-        validationResult={nameValidationResult}
-      />
+<div class="max-h-[80vh] space-y-4 overflow-y-auto pr-1">
+  <Dialog.Header>
+    <Dialog.Title>Edit API Token</Dialog.Title>
+    <Dialog.Description></Dialog.Description>
+  </Dialog.Header>
+  <form class="modal-form border-surface-500 rounded-container-token space-y-4">
+    <TextInput
+      label="Token Name"
+      placeholder="Token name..."
+      bind:value={name}
+      validationResult={nameValidationResult}
+    />
 
-      <div class="mt-4">
-        <h2>Permissions</h2>
-        <div class="border-surface-500 mt-3 flex flex-col space-y-4 rounded-md border p-4">
-          {#each permissionCategories as permission (permission.name)}
-            <span class="capitalize">{permission.name}</span>
-            {#each permission.perms as perm (perm.key)}
-              <label class="mt-0! ml-4">
-                <input
-                  type="checkbox"
-                  class="checkbox capitalize"
-                  value={perm.key}
-                  bind:group={permissions}
-                />
-                {perm.name}
-              </label>
-            {/each}
+    <div class="mt-4">
+      <h2>Permissions</h2>
+      <div class="border-surface-500 mt-3 flex flex-col space-y-4 rounded-md border p-4">
+        {#each permissionCategories as permission (permission.name)}
+          <span class="capitalize">{permission.name}</span>
+          {#each permission.perms as perm (perm.key)}
+            <label class="mt-0! ml-4">
+              <input
+                type="checkbox"
+                class="checkbox capitalize"
+                value={perm.key}
+                bind:group={permissions}
+              />
+              {perm.name}
+            </label>
           {/each}
-        </div>
+        {/each}
       </div>
-    </form>
+    </div>
 
-    <Button variant="default" onclick={saveChanges} disabled={!nameValidationResult.valid}>
-      Save Changes
-    </Button>
-  </Dialog.Content>
-</Dialog.Root>
+    <div class="mt-4">
+      <h2>Shocker Control</h2>
+      <div class="mt-3">
+        <ShockerControlSettingsEditor bind:settings={shockerControl} />
+      </div>
+    </div>
+  </form>
+
+  <Button
+    variant="default"
+    onclick={saveChanges}
+    disabled={submitting || !nameValidationResult.valid}
+  >
+    Save Changes
+  </Button>
+</div>
