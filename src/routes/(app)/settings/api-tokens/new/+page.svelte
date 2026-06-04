@@ -207,8 +207,9 @@
           If you are not redirected automatically, use the button below.
         </span>
       </Card.Content>
-      <Card.Footer class="flex justify-end">
-        <Button onclick={redirectBack}>Continue</Button>
+      <Card.Footer class="flex justify-end space-x-2">
+        <Button variant="outline" onclick={redirectBack}>Retry</Button>
+        <Button href={resolve('/settings/api-tokens')}>Finish</Button>
       </Card.Footer>
     {:else if tokenSecret}
       <Card.Header>
