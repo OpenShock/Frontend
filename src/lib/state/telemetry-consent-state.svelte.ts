@@ -67,4 +67,3 @@ class TelemetryPromptedState extends PersistedState<boolean> {
 }
 
 export const telemetryPrompted = new TelemetryPromptedState();
-

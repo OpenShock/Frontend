@@ -7,10 +7,7 @@ import {
   PUBLIC_SIGNOZ_RESOURCE_ATTRIBUTES,
   PUBLIC_SIGNOZ_TRACES_URL,
 } from '$env/static/public';
-import {
-  telemetryConsent,
-  type TelemetryLevel,
-} from '$lib/state/telemetry-consent-state.svelte';
+import { telemetryConsent, type TelemetryLevel } from '$lib/state/telemetry-consent-state.svelte';
 import { resourceFromAttributes } from '@opentelemetry/resources';
 
 export const SERVICE_NAME = 'openshock-frontend';

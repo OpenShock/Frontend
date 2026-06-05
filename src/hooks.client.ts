@@ -5,9 +5,9 @@ import { authState, startAuthLifecycle } from '$lib/state/auth-state.svelte';
 import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
 import { initializeColorScheme } from '$lib/state/color-scheme-state.svelte';
 import { userState } from '$lib/state/user-state.svelte';
-import type { HandleClientError } from '@sveltejs/kit';
 import { initTelemetry, log } from '$lib/telemetry/logger';
 import { redirectLegacyHashRoute } from '$lib/utils/legacy-hash-redirect';
+import type { HandleClientError } from '@sveltejs/kit';
 
 /** Best-effort extraction of a message + stack from an unknown thrown value. */
 function describeError(value: unknown): { message: string; stack?: string } {
@@ -91,5 +91,10 @@ export async function init() {
  */
 export const handleError: HandleClientError = ({ error, event, status, message }) => {
   const { message: errMessage, stack } = describeError(error);
-  log.error(errMessage, { stack, status, route: event.route?.id ?? undefined, kitMessage: message });
+  log.error(errMessage, {
+    stack,
+    status,
+    route: event.route?.id ?? undefined,
+    kitMessage: message,
+  });
 };
