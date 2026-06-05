@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { ZonedDateTime } from '@internationalized/date';
+  import { parseAbsoluteToLocal, type ZonedDateTime } from '@internationalized/date';
   import DateTimePicker from '$lib/components/datetime-picker/date-time-picker.svelte';
   import * as Select from '$lib/components/ui/select';
   import { GetValResColor } from '$lib/types/ValidationResult';
@@ -15,20 +15,13 @@
 
   const inDays = (days: number) => () => Temporal.Now.instant().add({ hours: days * 24 });
 
-  let customDate = $state<ZonedDateTime | undefined>(undefined);
-  let customInstant = $derived<Temporal.Instant | null>(
-    customDate !== undefined
-      ? Temporal.Instant.fromEpochMilliseconds(customDate.toDate().getTime())
-      : null
-  );
-
   const expirationOptions: {
     value: string;
     label: string;
     getInstant: () => Temporal.Instant | null;
   }[] = [
     { value: 'never', label: 'Never', getInstant: () => null },
-    { value: 'custom', label: 'Custom', getInstant: () => customInstant },
+    { value: 'custom', label: 'Custom', getInstant: () => instant },
     { value: '1days', label: '1 Day', getInstant: inDays(1) },
     { value: '7days', label: '7 Days', getInstant: inDays(7) },
     { value: '30days', label: '30 Days', getInstant: inDays(30) },
@@ -38,12 +31,24 @@
   ];
 
   let selectedExpiration = $derived(expirationOptions.find((o) => o.value === option));
+
+  // Presets derive the instant from the chosen option; 'custom' is driven directly by the
+  // date picker via the getter/setter below, so leave it untouched in that mode.
   $effect(() => {
-    instant = selectedExpiration?.getInstant() ?? null;
+    if (option !== 'custom') instant = selectedExpiration?.getInstant() ?? null;
   });
 
+  // The calendar widget speaks @internationalized/date; translate to/from Temporal at this
+  // single boundary so `instant` (Temporal) stays the source of truth.
+  function getCustomDate(): ZonedDateTime | undefined {
+    return instant ? parseAbsoluteToLocal(instant.toString()) : undefined;
+  }
+  function setCustomDate(date: ZonedDateTime | undefined) {
+    instant = date ? Temporal.Instant.fromEpochMilliseconds(date.toDate().getTime()) : null;
+  }
+
   let validationResult = $derived(
-    option === 'custom' && !customInstant
+    option === 'custom' && !instant
       ? { valid: false, message: 'Expire date is required' }
       : { valid: true }
   );
@@ -66,7 +71,7 @@
 
   {#if option === 'custom'}
     <div class="my-2 w-1/2">
-      <DateTimePicker bind:date={customDate} />
+      <DateTimePicker bind:date={getCustomDate, setCustomDate} />
     </div>
   {/if}
   {#if 'message' in validationResult}
