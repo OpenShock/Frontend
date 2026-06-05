@@ -73,8 +73,12 @@
 	"dependencies": {
 		"@opentelemetry/api-logs": "^0.218.0",
 		"@opentelemetry/exporter-logs-otlp-http": "^0.218.0",
+		"@opentelemetry/exporter-trace-otlp-http": "^0.218.0",
+		"@opentelemetry/instrumentation": "^0.218.0",
+		"@opentelemetry/instrumentation-fetch": "^0.218.0",
 		"@opentelemetry/resources": "^2.7.1",
 		"@opentelemetry/sdk-logs": "^0.218.0",
+		"@opentelemetry/sdk-trace-web": "^2.7.1",
 		"driver.js": "^1.4.0",
 		"temporal-polyfill": "^0.3.2",
 		"vite": "^8.0.14"

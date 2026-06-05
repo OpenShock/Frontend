@@ -5,8 +5,22 @@ import { authState, startAuthLifecycle } from '$lib/state/auth-state.svelte';
 import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
 import { initializeColorScheme } from '$lib/state/color-scheme-state.svelte';
 import { userState } from '$lib/state/user-state.svelte';
+import type { HandleClientError } from '@sveltejs/kit';
 import { initTelemetry, log } from '$lib/telemetry/logger';
 import { redirectLegacyHashRoute } from '$lib/utils/legacy-hash-redirect';
+
+/** Best-effort extraction of a message + stack from an unknown thrown value. */
+function describeError(value: unknown): { message: string; stack?: string } {
+  if (value instanceof Error) return { message: value.message, stack: value.stack };
+  if (typeof value === 'object' && value !== null) {
+    const obj = value as { message?: unknown; stack?: unknown };
+    return {
+      message: typeof obj.message === 'string' ? obj.message : String(value),
+      stack: typeof obj.stack === 'string' ? obj.stack : undefined,
+    };
+  }
+  return { message: String(value) };
+}
 
 /**
  * Forward uncaught browser errors and unhandled promise rejections to telemetry.
@@ -28,6 +42,18 @@ function registerGlobalErrorCapture(): void {
     const reason = event.reason as { message?: string; stack?: string } | undefined;
     log.error(reason?.message ?? String(event.reason), { stack: reason?.stack });
   });
+
+  // Also capture explicit `console.error(...)` calls, which neither window.onerror nor
+  // unhandledrejection see. Chain onto the original so the console still works as usual.
+  const previousConsoleError = console.error.bind(console);
+  console.error = (...args: unknown[]) => {
+    const err = args.find((a) => a instanceof Error) as Error | undefined;
+    const message = err
+      ? err.message
+      : args.map((a) => (typeof a === 'string' ? a : String(a))).join(' ');
+    log.error(message, { stack: err?.stack });
+    previousConsoleError(...args);
+  };
 }
 
 async function ensureTemporal(): Promise<void> {
@@ -59,4 +85,11 @@ export async function init() {
   initializeColorScheme();
 }
 
-export function handleError() {}
+/**
+ * SvelteKit routes errors thrown during rendering, load, and navigation here instead of to
+ * window.onerror — so forward them to telemetry too, otherwise they're silently swallowed.
+ */
+export const handleError: HandleClientError = ({ error, event, status, message }) => {
+  const { message: errMessage, stack } = describeError(error);
+  log.error(errMessage, { stack, status, route: event.route?.id ?? undefined, kitMessage: message });
+};

@@ -6,8 +6,12 @@
   import { PUBLIC_SIGNOZ_LOGS_ENABLED } from '$env/static/public';
   import Container from '$lib/components/Container.svelte';
   import { Button } from '$lib/components/ui/button';
-  import { Switch } from '$lib/components/ui/switch';
-  import { telemetryConsent } from '$lib/state/telemetry-consent-state.svelte';
+  import { ToggleGroup, ToggleGroupItem } from '$lib/components/ui/toggle-group';
+  import {
+    telemetryConsent,
+    telemetryPrompted,
+    type TelemetryLevel,
+  } from '$lib/state/telemetry-consent-state.svelte';
   import { initTelemetry } from '$lib/telemetry/logger';
   import { userState } from '$lib/state/user-state.svelte';
   import ChangeEmailDialog from './dialog-email-change.svelte';
@@ -18,11 +22,29 @@
 
   const errorReportingAvailable = PUBLIC_SIGNOZ_LOGS_ENABLED === 'true';
 
-  function onErrorReportingChange(checked: boolean) {
-    telemetryConsent.value = checked;
-    // Start shipping immediately on opt-in; opting out takes effect on next reload.
-    if (checked) initTelemetry();
+  const telemetryOptions: { value: TelemetryLevel; label: string; description: string }[] = [
+    { value: 'off', label: 'Off', description: 'Send nothing.' },
+    { value: 'errors', label: 'Errors', description: 'Send browser error reports only.' },
+    {
+      value: 'full',
+      label: 'Full',
+      description: 'Error reports plus traces of API calls (no page navigations).',
+    },
+  ];
+
+  function onTelemetryLevelChange(value: string | undefined) {
+    // ToggleGroup (single) can emit undefined when the active item is toggled off; keep current.
+    if (value !== 'off' && value !== 'errors' && value !== 'full') return;
+    telemetryConsent.value = value;
+    // Configuring it here counts as being asked — don't also show the first-time prompt.
+    telemetryPrompted.value = true;
+    // Opting up takes effect immediately; downgrading/disabling takes effect on next reload.
+    initTelemetry();
   }
+
+  let telemetryDescription = $derived(
+    telemetryOptions.find((o) => o.value === telemetryConsent.value)?.description ?? ''
+  );
 
   registerBreadcrumbs(() => [
     { label: 'Settings', href: '/settings/account' },
@@ -96,22 +118,32 @@
       </div>
 
       {#if errorReportingAvailable}
-        <div class="flex w-full items-center gap-2">
-          <div class="grow">
-            <div class="flex items-center gap-2 font-medium">
-              <Bug />
-              Error reporting
+        <div class="flex w-full flex-col gap-2">
+          <div class="flex w-full items-center gap-2">
+            <div class="grow">
+              <div class="flex items-center gap-2 font-medium">
+                <Bug />
+                Diagnostics
+              </div>
+              <div class="text-muted-foreground text-sm">
+                Help us fix crashes and slow API calls. Reports include the error message, stack
+                trace and your IP. Off by default. {telemetryDescription}
+              </div>
             </div>
-            <div class="text-muted-foreground text-sm">
-              Send anonymous-where-possible browser error reports to help us fix crashes. Includes
-              the error message, stack trace and your IP. Off by default.
-            </div>
+            <ToggleGroup
+              type="single"
+              variant="outline"
+              value={telemetryConsent.value}
+              onValueChange={onTelemetryLevelChange}
+              aria-label="Diagnostics level"
+            >
+              {#each telemetryOptions as option (option.value)}
+                <ToggleGroupItem value={option.value} aria-label={option.label}>
+                  {option.label}
+                </ToggleGroupItem>
+              {/each}
+            </ToggleGroup>
           </div>
-          <Switch
-            checked={telemetryConsent.value}
-            onCheckedChange={onErrorReportingChange}
-            aria-label="Toggle error reporting"
-          />
         </div>
       {/if}
 

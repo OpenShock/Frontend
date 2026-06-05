@@ -5,7 +5,8 @@
   import { SidebarProvider } from '$lib/components/ui/sidebar';
   import { Toaster } from '$lib/components/ui/sonner';
   import { buildMetaData } from '$lib/metadata';
-  import { type Snippet } from 'svelte';
+  import { onMount, type Snippet } from 'svelte';
+  import { maybePromptTelemetryConsent } from '$lib/telemetry/consent-prompt';
   import Footer from './Footer.svelte';
   import Header from './Header.svelte';
   import Sidebar from './Sidebar.svelte';
@@ -28,6 +29,8 @@
   const mobile = new IsMobile();
   const sidebarOpen = usePersistedState('sidebarOpen', false);
   const isOpen = $derived(browser ? (mobile.current ? false : sidebarOpen.value) : false);
+
+  onMount(() => maybePromptTelemetryConsent());
 </script>
 
 <BasicTags {...meta} />
