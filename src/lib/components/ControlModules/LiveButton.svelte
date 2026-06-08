@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { Loader } from '@lucide/svelte';
   import * as Tooltip from '$lib/components/ui/tooltip';
+  import { Spinner } from '$lib/components/ui/spinner';
   import {
     LiveConnectionState,
     getLiveConnection,
@@ -51,7 +51,7 @@
     >
       LIVE
       {#if isConnecting}
-        <Loader class="inline size-3 animate-spin" />
+        <Spinner class="inline size-3" />
       {/if}
     </Tooltip.Trigger>
     <Tooltip.Content>

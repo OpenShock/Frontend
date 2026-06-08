@@ -13,6 +13,7 @@
   import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
+  import { Spinner } from '$lib/components/ui/spinner';
   import * as Card from '$lib/components/ui/card';
   import { Field, FieldLabel } from '$lib/components/ui/field/index.js';
   import { Input } from '$lib/components/ui/input';
@@ -21,7 +22,7 @@
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
-  import { ArrowLeft, LoaderCircle, Trash2 } from '@lucide/svelte';
+  import { ArrowLeft, Trash2 } from '@lucide/svelte';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
 
@@ -111,7 +112,7 @@
     </div>
   {:else if !shocker}
     <div class="flex items-center gap-3 p-12">
-      <LoaderCircle class="size-5 animate-spin" />
+      <Spinner class="size-5" />
       <span class="text-muted-foreground">Loading shocker...</span>
     </div>
   {:else}
@@ -171,7 +172,7 @@
         </Card.Content>
         <Card.Footer>
           <Button disabled={saving || !name.trim() || !hasChanges} onclick={save}>
-            {#if saving}<LoaderCircle class="size-4 animate-spin" />{/if}
+            {#if saving}<Spinner class="size-4" />{/if}
             Save Changes
           </Button>
         </Card.Footer>

@@ -3,7 +3,7 @@
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import Container from '$lib/components/Container.svelte';
-  import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
+  import { Spinner } from '$lib/components/ui/spinner';
   import { AuthStatus, authState } from '$lib/state/auth-state.svelte';
   import type { Snippet } from 'svelte';
 
@@ -20,7 +20,7 @@
 
 {#if authState.status !== AuthStatus.Authenticated}
   <Container>
-    <LoadingCircle class="size-20" />
+    <Spinner class="size-20 text-gray-600 dark:text-gray-300" />
   </Container>
 {:else}
   {@render children()}

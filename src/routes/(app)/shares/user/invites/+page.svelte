@@ -1,5 +1,5 @@
 <script lang="ts">
-  import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
+  import { Spinner } from '$lib/components/ui/spinner';
   import * as Table from '$lib/components/ui/table';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import {
@@ -20,7 +20,7 @@
 
 {#await outgoingInvitesPromise}
   <div class="flex h-full w-full items-center justify-center">
-    <LoadingCircle />
+    <Spinner class="size-8 text-gray-600 dark:text-gray-300" />
   </div>
 {:then}
   <div class="mb-6 overflow-y-auto rounded-md border">
@@ -40,7 +40,7 @@
 
 {#await incomingInvitesPromise}
   <div class="flex h-full w-full items-center justify-center">
-    <LoadingCircle />
+    <Spinner class="size-8 text-gray-600 dark:text-gray-300" />
   </div>
 {:then}
   <div class="mb-6 overflow-y-auto rounded-md border">

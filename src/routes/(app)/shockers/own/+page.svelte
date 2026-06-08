@@ -3,9 +3,10 @@
   import { isTruthy } from '$lib/utils/parse';
   import { shockerPauseShocker, shockerRegisterShocker } from '$lib/api';
   import type { NewShocker } from '$lib/api';
-  import { Layers, LoaderCircle, LogsIcon, Plus, RotateCcw, Settings, Zap } from '@lucide/svelte';
+  import { Layers, LogsIcon, Plus, RotateCcw, Settings, Zap } from '@lucide/svelte';
   import { resolve } from '$app/paths';
   import Container from '$lib/components/Container.svelte';
+  import { Spinner } from '$lib/components/ui/spinner';
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import DialogShockerAdd, {
     defaultAddShockerData,
@@ -182,7 +183,7 @@
 <Container>
   {#if loading}
     <div class="flex items-center gap-3 p-12">
-      <LoaderCircle class="size-6 animate-spin" />
+      <Spinner class="size-6" />
       <span class="text-muted-foreground">Loading shockers...</span>
     </div>
   {:else}

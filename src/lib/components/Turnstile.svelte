@@ -3,7 +3,7 @@
   import { dev } from '$app/environment';
   import { PUBLIC_TURNSTILE_DEV_BYPASS_VALUE } from '$env/static/public';
   import CloudflareLogo from '$lib/components/svg/CloudflareLogo.svelte';
-  import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
+  import { Spinner } from '$lib/components/ui/spinner';
   import { ColorScheme, colorScheme } from '$lib/state/color-scheme-state.svelte';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
@@ -85,7 +85,7 @@
         <Bug />
         <span> Turnstile disabled </span>
       {:else}
-        <LoadingCircle />
+        <Spinner class="size-8" />
         <span> Loading... </span>
       {/if}
       <a

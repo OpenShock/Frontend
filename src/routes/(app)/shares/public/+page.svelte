@@ -11,7 +11,7 @@
   import type { OwnPublicShareResponse } from '$lib/api';
   import Container from '$lib/components/Container.svelte';
   import CopyInput from '$lib/components/CopyInput.svelte';
-  import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
+  import { Spinner } from '$lib/components/ui/spinner';
   import Button from '$lib/components/ui/button/button.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { durationBetween, formatDuration, formatElapsed } from '$lib/utils';
@@ -89,7 +89,7 @@
 
   {#if loading && data.length === 0}
     <div class="flex h-64 w-full items-center justify-center">
-      <LoadingCircle />
+      <Spinner class="size-8 text-gray-600 dark:text-gray-300" />
     </div>
   {:else if sortedShares.length === 0}
     <div

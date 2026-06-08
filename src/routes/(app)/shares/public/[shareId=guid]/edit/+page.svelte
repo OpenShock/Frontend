@@ -5,7 +5,7 @@
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import CopyInput from '$lib/components/CopyInput.svelte';
-  import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
+  import { Spinner } from '$lib/components/ui/spinner';
   import { Button } from '$lib/components/ui/button';
   import * as Avatar from '$lib/components/ui/avatar';
   import * as Tooltip from '$lib/components/ui/tooltip/index.js';
@@ -164,7 +164,7 @@
 
   {#await publicShareRequest}
     <div class="flex h-full w-full items-center justify-center">
-      <LoadingCircle />
+      <Spinner class="size-8 text-gray-600 dark:text-gray-300" />
     </div>
   {:then}
     {#if publicShareData?.devices?.length && shareId}

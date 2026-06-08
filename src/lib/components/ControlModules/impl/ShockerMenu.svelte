@@ -1,10 +1,11 @@
 <script lang="ts">
   import { shockerPauseShocker, shockerRemoveShocker } from '$lib/api';
   import type { ShockerResponse } from '$lib/api';
-  import { Ellipsis, LoaderCircle, Pause, Pencil, Play, Share2, Trash2 } from '@lucide/svelte';
+  import { Ellipsis, Pause, Pencil, Play, Share2, Trash2 } from '@lucide/svelte';
   import { goto } from '$app/navigation';
   import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
   import { Button } from '$lib/components/ui/button';
+  import { Spinner } from '$lib/components/ui/spinner';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
@@ -76,7 +77,7 @@
   <DropdownMenu.Content>
     <DropdownMenu.Item class="cursor-pointer" onclick={togglePause} disabled={pauseLoading}>
       {#if pauseLoading}
-        <LoaderCircle class="size-4 animate-spin" />
+        <Spinner class="size-4" />
       {:else if shocker.isPaused}
         <Play class="size-4" />
       {:else}

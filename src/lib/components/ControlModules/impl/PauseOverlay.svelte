@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { LoaderCircle, Pause, Play } from '@lucide/svelte';
+  import { Pause, Play } from '@lucide/svelte';
+  import { Spinner } from '$lib/components/ui/spinner';
 
   interface Props {
     isPaused: boolean;
@@ -30,7 +31,7 @@
       disabled={resuming}
     >
       {#if resuming}
-        <LoaderCircle class="size-8 animate-spin text-white" />
+        <Spinner class="size-8 text-white" />
       {:else}
         <Pause class="size-8 text-white/60 group-hover:hidden" />
         <Play class="hidden size-8 text-white group-hover:block" />

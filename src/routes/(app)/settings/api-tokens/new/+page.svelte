@@ -41,7 +41,7 @@
   import CopyInput from '$lib/components/CopyInput.svelte';
   import ExpirationPicker from '$lib/components/ExpirationPicker.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
-  import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
+  import { Spinner } from '$lib/components/ui/spinner';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
@@ -296,7 +296,7 @@
           color="yellow"
         >
           {#if creating}
-            <LoadingCircle />
+            <Spinner />
           {:else if isExternal}
             Allow
           {:else}

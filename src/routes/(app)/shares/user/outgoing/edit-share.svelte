@@ -3,7 +3,7 @@
   import { Trash2 } from '@lucide/svelte';
   import { ComparePermissionsAndLimits } from '$lib/comparers/UserShareComparer';
   import RestrictionsSelector from '$lib/components/shares/restrictions-selector.svelte';
-  import LoadingCircle from '$lib/components/svg/LoadingCircle.svelte';
+  import { Spinner } from '$lib/components/ui/spinner';
   import * as Avatar from '$lib/components/ui/avatar';
   import { Button } from '$lib/components/ui/button';
   import * as Drawer from '$lib/components/ui/drawer';
@@ -307,7 +307,7 @@
         <div class="flex w-full items-center justify-between gap-2">
           <Drawer.Close class="text-sm">Cancel</Drawer.Close>
           <Button onclick={handleSave} disabled={saving}>
-            {#if saving}<LoadingCircle />{/if}
+            {#if saving}<Spinner />{/if}
             Save
           </Button>
         </div>

@@ -1,8 +1,9 @@
 <script lang="ts">
   import { shockerPauseShocker, shockerShockerShareCodePause } from '$lib/api';
   import type { BooleanLegacyDataResponse } from '$lib/api';
-  import { LoaderCircle, Pause, Play } from '@lucide/svelte';
+  import { Pause, Play } from '@lucide/svelte';
   import { Button } from '$lib/components/ui/button';
+  import { Spinner } from '$lib/components/ui/spinner';
   import { toast } from 'svelte-sonner';
 
   interface Props {
@@ -56,7 +57,7 @@
   aria-busy={requestInProgress}
 >
   {#if requestInProgress}
-    <LoaderCircle class="animate-spin" />
+    <Spinner />
   {:else if paused}
     <Play />
   {:else}
