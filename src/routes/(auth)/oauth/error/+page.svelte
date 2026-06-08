@@ -1,26 +1,22 @@
 <script lang="ts">
-  import { afterNavigate, goto, replaceState } from '$app/navigation';
+  import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import { page } from '$app/state';
   import * as Card from '$lib/components/ui/card/index.js';
   import { FieldDescription } from '$lib/components/ui/field/index.js';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { getOAuthErrorMessage } from '$lib/auth/oauth-errors';
-  import { tick } from 'svelte';
+  import { consumeSearchParam } from '$lib/utils/url';
 
   registerBreadcrumbs(() => [{ label: 'Authentication Error' }]);
 
   let errorCode = $state<string>();
 
-  afterNavigate(async () => {
-    const err = page.url.searchParams.get('error');
-    if (err === 'emailAlreadyRegistered') {
-      await goto(resolve(`/login?error=${encodeURIComponent(err)}`), { replaceState: true });
-      return;
+  consumeSearchParam('error', async (code) => {
+    if (code === 'emailAlreadyRegistered') {
+      await goto(resolve(`/login?error=${encodeURIComponent(code)}`), { replaceState: true });
+      return false;
     }
-    errorCode = err ?? 'unknown';
-    await tick();
-    replaceState(resolve('/oauth/error'), {});
+    errorCode = code;
   });
 </script>
 

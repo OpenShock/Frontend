@@ -16,17 +16,20 @@
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
   import OauthButtons from '$lib/components/auth/oauth-buttons.svelte';
-  import { gotoQueryRedirectOrFallback } from '$lib/utils/url';
+  import { gotoQueryRedirectOrFallback, consumeSearchParam } from '$lib/utils/url';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
   import { userState } from '$lib/state/user-state.svelte';
   import { Skeleton } from '$lib/components/ui/skeleton';
-  import { page } from '$app/state';
   import { getOAuthErrorMessage } from '$lib/auth/oauth-errors';
 
   registerBreadcrumbs(() => [{ label: 'Login' }]);
 
-  const oauthError = $derived(page.url.searchParams.get('error'));
+  let oauthError = $state<string>();
+
+  consumeSearchParam('error', (code) => {
+    oauthError = code;
+  });
 
   let usernameOrEmail = $state('');
   let password = $state('');

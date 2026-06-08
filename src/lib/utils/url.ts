@@ -1,8 +1,9 @@
-import { goto, replaceState } from '$app/navigation';
+import { afterNavigate, goto, replaceState } from '$app/navigation';
 import { asset, base, match } from '$app/paths';
 import { page } from '$app/state';
 import type { Asset, Pathname } from '$app/types';
 import { PUBLIC_BACKEND_API_URL, PUBLIC_SITE_SHORT_URL, PUBLIC_SITE_URL } from '$env/static/public';
+import { tick } from 'svelte';
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
@@ -208,6 +209,65 @@ export function sanitizeRedirectSearchParam(queryParam: string = REDIRECT_QUERY_
   }
 
   return false;
+}
+
+/**
+ * Registers an {@link afterNavigate} handler that reads a one-shot query
+ * parameter, hands its value to a callback, then strips it from the URL bar.
+ *
+ * Use this for transient signals carried in the URL — e.g. an OAuth `error`
+ * code passed back via redirect. The callback typically stashes the value in
+ * component state so the UI no longer depends on the query string, after which
+ * the parameter is removed via {@link replaceState}. This keeps the code out
+ * of the address bar and prevents it from reappearing on refresh.
+ *
+ * If the callback navigates away (or otherwise wants the parameter left
+ * intact), it can return `false` to skip the strip. A return of `void`/`true`
+ * strips as normal. The callback may be async and is awaited before stripping.
+ *
+ * Must be called synchronously during component initialisation (same
+ * constraint as {@link afterNavigate}). The handler is automatically torn
+ * down when the component is destroyed.
+ *
+ * @param queryParam - Name of the query parameter to consume
+ * @param onValue    - Called with the parameter value when it is present;
+ *                     return `false` to skip stripping the parameter
+ *
+ * @example
+ * ```ts
+ * // Consume and strip:
+ * consumeSearchParam('error', (code) => {
+ *   oauthError = code;
+ * });
+ *
+ * // Redirect on a specific value, leaving the param for the destination:
+ * consumeSearchParam('error', async (code) => {
+ *   if (code === 'emailAlreadyRegistered') {
+ *     await goto(resolve(`/login?error=${encodeURIComponent(code)}`), { replaceState: true });
+ *     return false;
+ *   }
+ *   errorCode = code;
+ * });
+ * ```
+ */
+export function consumeSearchParam(
+  queryParam: string,
+  onValue: (value: string) => boolean | void | Promise<boolean | void>
+): void {
+  afterNavigate(async () => {
+    const value = page.url.searchParams.get(queryParam);
+    if (value === null) return;
+
+    const result = await onValue(value);
+    if (result === false) return;
+
+    await tick();
+
+    const stripped = new URL(page.url);
+    stripped.searchParams.delete(queryParam);
+    /* eslint-disable-next-line svelte/no-navigation-without-resolve -- stripped is already a full URL */
+    replaceState(stripped, {});
+  });
 }
 
 /**
