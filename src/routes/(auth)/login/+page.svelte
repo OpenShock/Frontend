@@ -21,8 +21,12 @@
   import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
   import { userState } from '$lib/state/user-state.svelte';
   import { Skeleton } from '$lib/components/ui/skeleton';
+  import { page } from '$app/state';
+  import { getOAuthErrorMessage } from '$lib/auth/oauth-errors';
 
   registerBreadcrumbs(() => [{ label: 'Login' }]);
+
+  const oauthError = $derived(page.url.searchParams.get('error'));
 
   let usernameOrEmail = $state('');
   let password = $state('');
@@ -87,6 +91,11 @@
     </Card.Description>
   </Card.Header>
   <Card.Content>
+    {#if oauthError}
+      <p class="text-destructive mb-4 text-center text-sm" role="alert">
+        {getOAuthErrorMessage(oauthError)}
+      </p>
+    {/if}
     <FieldGroup>
       {#if backendMetadata.state === null}
         <Skeleton class="h-9 w-full"></Skeleton>
