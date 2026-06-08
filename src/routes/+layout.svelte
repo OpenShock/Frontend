@@ -5,7 +5,7 @@
   import { SidebarProvider } from '$lib/components/ui/sidebar';
   import { Toaster } from '$lib/components/ui/sonner';
   import { buildMetaData } from '$lib/metadata';
-  import { onMount, type Snippet } from 'svelte';
+  import { onMount, untrack, type Snippet } from 'svelte';
   import { maybePromptTelemetryConsent } from '$lib/telemetry/consent-prompt';
   import Footer from './Footer.svelte';
   import Header from './Header.svelte';
@@ -13,22 +13,24 @@
   import WelcomeScreen from './WelcomeScreen.svelte';
   import '../app.css';
   import { IsMobile } from '$lib/hooks/is-mobile.svelte';
-  import { usePersistedState } from '$lib/state/classes/persisted-state.svelte';
   import DialogManager from '$lib/components/dialog-manager/dialog-manager.svelte';
-  import { browser } from '$app/environment';
   import { TooltipProvider } from '$lib/components/ui/tooltip';
+  import type { LayoutData } from './$types';
 
   interface Props {
     children?: Snippet;
+    data: LayoutData;
   }
 
-  let { children }: Props = $props();
+  let { children, data }: Props = $props();
 
   let meta = $derived(buildMetaData(page.url));
 
   const mobile = new IsMobile();
-  const sidebarOpen = usePersistedState('sidebarOpen', false);
-  const isOpen = $derived(browser ? (mobile.current ? false : sidebarOpen.value) : false);
+  // Seeded from the sidebar:state cookie (read in +layout.server.ts) so SSR
+  // renders the persisted state and there's no flash on hydration.
+  let sidebarOpen = $state(untrack(() => data.sidebarOpen));
+  const isOpen = $derived(mobile.current ? false : sidebarOpen);
 
   onMount(() => maybePromptTelemetryConsent());
 </script>
@@ -44,7 +46,7 @@
 <WelcomeScreen />
 
 <TooltipProvider delayDuration={250}>
-  <SidebarProvider open={isOpen} onOpenChange={(v) => (sidebarOpen.value = v)}>
+  <SidebarProvider open={isOpen} onOpenChange={(v) => (sidebarOpen = v)}>
     <Sidebar />
     <div class="flex h-screen w-screen flex-1 flex-col overflow-hidden">
       {#if PUBLIC_DEVELOPMENT_BANNER === 'true'}

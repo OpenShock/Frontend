@@ -58,7 +58,9 @@
         if (!isValidationError(problem)) return false;
         usernameError = mapToValRes(problem, 'UsernameOrEmail');
         passwordError = mapToValRes(problem, 'Password');
-        return true;
+        // Only mark the problem as handled if we actually surfaced a field
+        // error; otherwise fall through so the generic toast is shown.
+        return usernameError !== null || passwordError !== null;
       });
     }
   }

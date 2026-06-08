@@ -10,7 +10,6 @@
   import EmailInput from '$lib/components/input/EmailInput.svelte';
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
-  import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
   import { toast } from 'svelte-sonner';
@@ -67,16 +66,7 @@
       });
       accountCreated = true;
     } catch (error) {
-      await handleApiError(error, (problem) => {
-        if (!isValidationError(problem)) return false;
-
-        console.log(mapToValRes(problem, 'Username'));
-        console.log(mapToValRes(problem, 'Password'));
-        console.log(mapToValRes(problem, 'Email'));
-        console.log(mapToValRes(problem, 'TurnstileResponse'));
-
-        return true;
-      });
+      await handleApiError(error);
     }
   }
 
