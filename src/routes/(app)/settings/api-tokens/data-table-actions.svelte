@@ -12,6 +12,7 @@
   import { copyToClipboard } from '$lib/utils/clipboard.svelte';
   import Pause from '@lucide/svelte/icons/pause';
   import Play from '@lucide/svelte/icons/play';
+  import { Copy, Pencil, Trash2 } from '@lucide/svelte';
   import { toast } from 'svelte-sonner';
   import TokenEditDialog, { type TokenEditResult } from './dialog-token-edit.svelte';
 
@@ -95,11 +96,30 @@
   </Tooltip.Root>
 
   <TableActionMenu>
-    <DropdownMenu.Item class="cursor-pointer" onclick={copyId}>Copy ID</DropdownMenu.Item>
-    <DropdownMenu.Item class="cursor-pointer" onclick={togglePaused}>
-      {token.shockerControl.paused ? 'Resume' : 'Pause'}
-    </DropdownMenu.Item>
-    <DropdownMenu.Item class="cursor-pointer" onclick={openEditDialog}>Edit</DropdownMenu.Item>
-    <DropdownMenu.Item class="cursor-pointer" onclick={openDeleteDialog}>Delete</DropdownMenu.Item>
+    <DropdownMenu.Label>API Token</DropdownMenu.Label>
+    <DropdownMenu.Group>
+      <DropdownMenu.Item class="cursor-pointer" onclick={togglePaused}>
+        {#if token.shockerControl.paused}
+          <Play class="size-4" />
+        {:else}
+          <Pause class="size-4" />
+        {/if}
+        {token.shockerControl.paused ? 'Resume' : 'Pause'}
+      </DropdownMenu.Item>
+      <DropdownMenu.Item class="cursor-pointer" onclick={openEditDialog}>
+        <Pencil class="size-4" />
+        Edit
+      </DropdownMenu.Item>
+      <DropdownMenu.Separator />
+      <DropdownMenu.Item class="cursor-pointer" onclick={copyId}>
+        <Copy class="size-4" />
+        Copy ID
+      </DropdownMenu.Item>
+      <DropdownMenu.Separator />
+      <DropdownMenu.Item class="cursor-pointer text-red-500" onclick={openDeleteDialog}>
+        <Trash2 class="size-4" />
+        Delete
+      </DropdownMenu.Item>
+    </DropdownMenu.Group>
   </TableActionMenu>
 </div>

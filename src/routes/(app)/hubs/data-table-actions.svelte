@@ -22,6 +22,18 @@
   import { serializeRebootMessage } from '$lib/signalr/serializers/Reboot';
   import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
   import { copyToClipboard } from '$lib/utils/clipboard.svelte';
+  import {
+    Copy,
+    KeyRound,
+    Link,
+    OctagonX,
+    Pencil,
+    RefreshCw,
+    RotateCcw,
+    Trash2,
+    Wifi,
+    WifiOff,
+  } from '@lucide/svelte';
   import type { Hub } from './columns';
   import { resolve } from '$app/paths';
 
@@ -196,27 +208,64 @@
 {/snippet}
 
 <TableActionMenu>
-  <DropdownMenu.Item onclick={copyId}>Copy ID</DropdownMenu.Item>
-  <DropdownMenu.Item onclick={() => goto(resolve(`/hubs/${hub.id}/update`))}>
-    Update
-  </DropdownMenu.Item>
-  <DropdownMenu.Item onclick={() => serializeRebootMessage(getConnection(), hub.id)}>
-    Reboot
-  </DropdownMenu.Item>
-  <DropdownMenu.Item
-    class="text-red-500"
-    onclick={() => serializeEmergencyStopMessage(getConnection(), hub.id)}
-  >
-    Emergency Stop
-  </DropdownMenu.Item>
-  <DropdownMenu.Item onclick={() => serializeCaptivePortalMessage(getConnection(), hub.id, true)}>
-    Enable Wi-Fi hotspot
-  </DropdownMenu.Item>
-  <DropdownMenu.Item onclick={() => serializeCaptivePortalMessage(getConnection(), hub.id, false)}>
-    Disable Wi-Fi hotspot
-  </DropdownMenu.Item>
-  <DropdownMenu.Item onclick={openPairDialog}>Pair</DropdownMenu.Item>
-  <DropdownMenu.Item onclick={openRegenerateTokenDialog}>Regenerate Token</DropdownMenu.Item>
-  <DropdownMenu.Item onclick={openEditDialog}>Edit</DropdownMenu.Item>
-  <DropdownMenu.Item onclick={openDeleteDialog}>Delete</DropdownMenu.Item>
+  <DropdownMenu.Label>Hub</DropdownMenu.Label>
+  <DropdownMenu.Group>
+    <DropdownMenu.Item
+      class="cursor-pointer"
+      onclick={() => goto(resolve(`/hubs/${hub.id}/update`))}
+    >
+      <RefreshCw class="size-4" />
+      Update
+    </DropdownMenu.Item>
+    <DropdownMenu.Item
+      class="cursor-pointer"
+      onclick={() => serializeRebootMessage(getConnection(), hub.id)}
+    >
+      <RotateCcw class="size-4" />
+      Reboot
+    </DropdownMenu.Item>
+    <DropdownMenu.Item
+      class="cursor-pointer"
+      onclick={() => serializeCaptivePortalMessage(getConnection(), hub.id, true)}
+    >
+      <Wifi class="size-4" />
+      Enable Wi-Fi hotspot
+    </DropdownMenu.Item>
+    <DropdownMenu.Item
+      class="cursor-pointer"
+      onclick={() => serializeCaptivePortalMessage(getConnection(), hub.id, false)}
+    >
+      <WifiOff class="size-4" />
+      Disable Wi-Fi hotspot
+    </DropdownMenu.Item>
+    <DropdownMenu.Item class="cursor-pointer" onclick={openPairDialog}>
+      <Link class="size-4" />
+      Pair
+    </DropdownMenu.Item>
+    <DropdownMenu.Item class="cursor-pointer" onclick={openRegenerateTokenDialog}>
+      <KeyRound class="size-4" />
+      Regenerate Token
+    </DropdownMenu.Item>
+    <DropdownMenu.Item class="cursor-pointer" onclick={openEditDialog}>
+      <Pencil class="size-4" />
+      Edit
+    </DropdownMenu.Item>
+    <DropdownMenu.Separator />
+    <DropdownMenu.Item class="cursor-pointer" onclick={copyId}>
+      <Copy class="size-4" />
+      Copy ID
+    </DropdownMenu.Item>
+    <DropdownMenu.Separator />
+    <DropdownMenu.Item
+      class="cursor-pointer text-red-500"
+      onclick={() => serializeEmergencyStopMessage(getConnection(), hub.id)}
+    >
+      <OctagonX class="size-4" />
+      Emergency Stop
+    </DropdownMenu.Item>
+    <DropdownMenu.Item class="cursor-pointer text-red-500" onclick={openDeleteDialog}>
+      <Trash2 class="size-4" />
+      Delete
+    </DropdownMenu.Item>
+  </DropdownMenu.Group>
 </TableActionMenu>

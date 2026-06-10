@@ -4,6 +4,7 @@
   import TableActionMenu from '$lib/components/TableActionMenu.svelte';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { copyToClipboard } from '$lib/utils/clipboard.svelte';
+  import { Copy, KeyRound, Pencil, ShieldPlus, Trash2 } from '@lucide/svelte';
   import UserDeleteDialog from './dialog-user-delete.svelte';
   import UserEditDialog from './dialog-user-edit.svelte';
 
@@ -26,15 +27,33 @@
 <UserDeleteDialog bind:open={deleteDialogOpen} {user} />
 
 <TableActionMenu>
-  <DropdownMenu.Item onclick={copyId}>Copy ID</DropdownMenu.Item>
-  <DropdownMenu.Item onclick={() => (editDialogOpen = true)}>Edit</DropdownMenu.Item>
-  <DropdownMenu.Item>Promote</DropdownMenu.Item>
-  <DropdownMenu.Item>Reset password</DropdownMenu.Item>
-  <DropdownMenu.Item
-    onclick={() => (deleteDialogOpen = true)}
-    disabled={isPrivileged}
-    class={isPrivileged ? undefined : 'text-red-500'}
-  >
-    Delete
-  </DropdownMenu.Item>
+  <DropdownMenu.Label>User</DropdownMenu.Label>
+  <DropdownMenu.Group>
+    <DropdownMenu.Item class="cursor-pointer" onclick={() => (editDialogOpen = true)}>
+      <Pencil class="size-4" />
+      Edit
+    </DropdownMenu.Item>
+    <DropdownMenu.Item class="cursor-pointer">
+      <ShieldPlus class="size-4" />
+      Promote
+    </DropdownMenu.Item>
+    <DropdownMenu.Item class="cursor-pointer">
+      <KeyRound class="size-4" />
+      Reset password
+    </DropdownMenu.Item>
+    <DropdownMenu.Separator />
+    <DropdownMenu.Item class="cursor-pointer" onclick={copyId}>
+      <Copy class="size-4" />
+      Copy ID
+    </DropdownMenu.Item>
+    <DropdownMenu.Separator />
+    <DropdownMenu.Item
+      onclick={() => (deleteDialogOpen = true)}
+      disabled={isPrivileged}
+      class={isPrivileged ? undefined : 'cursor-pointer text-red-500'}
+    >
+      <Trash2 class="size-4" />
+      Delete
+    </DropdownMenu.Item>
+  </DropdownMenu.Group>
 </TableActionMenu>

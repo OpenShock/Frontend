@@ -41,11 +41,11 @@
 
 <Toaster position="top-center" />
 
-<DialogManager />
-
-<WelcomeScreen />
-
 <TooltipProvider delayDuration={250}>
+  <DialogManager />
+
+  <WelcomeScreen />
+
   <SidebarProvider open={isOpen} onOpenChange={(v) => (sidebarOpen = v)}>
     <Sidebar />
     <div class="flex h-screen w-screen flex-1 flex-col overflow-hidden">

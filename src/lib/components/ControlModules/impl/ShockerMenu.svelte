@@ -1,7 +1,7 @@
 <script lang="ts">
   import { shockerPauseShocker, shockerRemoveShocker } from '$lib/api';
   import type { ShockerResponse } from '$lib/api';
-  import { Ellipsis, Pause, Pencil, Play, Share2, Trash2 } from '@lucide/svelte';
+  import { Copy, Ellipsis, Logs, Pause, Pencil, Play, Share2, Trash2 } from '@lucide/svelte';
   import { goto } from '$app/navigation';
   import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
   import { Button } from '$lib/components/ui/button';
@@ -9,6 +9,7 @@
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
+  import { copyToClipboard } from '$lib/utils/clipboard.svelte';
   import { resolve } from '$app/paths';
   import { toast } from 'svelte-sonner';
 
@@ -19,6 +20,10 @@
   let { shocker }: Props = $props();
 
   let pauseLoading = $state(false);
+
+  function copyId() {
+    copyToClipboard(shocker.id, 'ID copied to clipboard');
+  }
 
   function viewLogs() {
     goto(resolve(`/shockers/logs?shockerId=${shocker.id}`));
@@ -75,29 +80,39 @@
     {/snippet}
   </DropdownMenu.Trigger>
   <DropdownMenu.Content>
-    <DropdownMenu.Item class="cursor-pointer" onclick={togglePause} disabled={pauseLoading}>
-      {#if pauseLoading}
-        <Spinner class="size-4" />
-      {:else if shocker.isPaused}
-        <Play class="size-4" />
-      {:else}
-        <Pause class="size-4" />
-      {/if}
-      {shocker.isPaused ? 'Resume' : 'Pause'}
-    </DropdownMenu.Item>
-    <DropdownMenu.Item class="cursor-pointer" onclick={editShocker}>
-      <Pencil class="size-4" />
-      Edit
-    </DropdownMenu.Item>
-    <DropdownMenu.Item class="cursor-pointer" onclick={shareShocker}>
-      <Share2 class="size-4" />
-      Share
-    </DropdownMenu.Item>
-    <DropdownMenu.Item class="cursor-pointer" onclick={viewLogs}>View Logs</DropdownMenu.Item>
-    <DropdownMenu.Separator />
-    <DropdownMenu.Item class="cursor-pointer text-red-500" onclick={deleteShocker}>
-      <Trash2 class="size-4" />
-      Delete
-    </DropdownMenu.Item>
+    <DropdownMenu.Label>Shocker</DropdownMenu.Label>
+    <DropdownMenu.Group>
+      <DropdownMenu.Item class="cursor-pointer" onclick={togglePause} disabled={pauseLoading}>
+        {#if pauseLoading}
+          <Spinner class="size-4" />
+        {:else if shocker.isPaused}
+          <Play class="size-4" />
+        {:else}
+          <Pause class="size-4" />
+        {/if}
+        {shocker.isPaused ? 'Resume' : 'Pause'}
+      </DropdownMenu.Item>
+      <DropdownMenu.Item class="cursor-pointer" onclick={editShocker}>
+        <Pencil class="size-4" />
+        Edit
+      </DropdownMenu.Item>
+      <DropdownMenu.Item class="cursor-pointer" onclick={shareShocker}>
+        <Share2 class="size-4" />
+        Share
+      </DropdownMenu.Item>
+      <DropdownMenu.Item class="cursor-pointer" onclick={viewLogs}>
+        <Logs class="size-4"></Logs> View Logs</DropdownMenu.Item
+      >
+      <DropdownMenu.Separator />
+      <DropdownMenu.Item class="cursor-pointer" onclick={copyId}>
+        <Copy class="size-4" />
+        Copy ID
+      </DropdownMenu.Item>
+      <DropdownMenu.Separator />
+      <DropdownMenu.Item class="cursor-pointer text-red-500" onclick={deleteShocker}>
+        <Trash2 class="size-4" />
+        Delete
+      </DropdownMenu.Item>
+    </DropdownMenu.Group>
   </DropdownMenu.Content>
 </DropdownMenu.Root>
