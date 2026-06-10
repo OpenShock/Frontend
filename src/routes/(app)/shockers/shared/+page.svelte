@@ -1,11 +1,14 @@
 <script lang="ts">
-  import { User } from '@lucide/svelte';
+  import { Copy, Ellipsis, User } from '@lucide/svelte';
   import Container from '$lib/components/Container.svelte';
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import LiveButton from '$lib/components/ControlModules/LiveButton.svelte';
   import LiveControlModule from '$lib/components/ControlModules/LiveControlModule.svelte';
   import ShockerCard from '$lib/components/ControlModules/ShockerCard.svelte';
   import * as Avatar from '$lib/components/ui/avatar';
+  import { Button } from '$lib/components/ui/button';
+  import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+  import { copyToClipboard } from '$lib/utils/clipboard.svelte';
   import { onlineHubs } from '$lib/state/hubs-state.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { ControlType } from '$lib/signalr/models/ControlType';
@@ -117,6 +120,35 @@
                       {#if shocker.permissions.live}
                         <LiveButton hubId={device.id} shockerId={shocker.id} compact />
                       {/if}
+                    {/snippet}
+                    {#snippet menu()}
+                      <DropdownMenu.Root>
+                        <DropdownMenu.Trigger>
+                          {#snippet child({ props })}
+                            <Button
+                              {...props}
+                              variant="ghost"
+                              size="icon"
+                              class="relative size-8 p-0"
+                            >
+                              <span class="sr-only">Open menu</span>
+                              <Ellipsis class="size-4" />
+                            </Button>
+                          {/snippet}
+                        </DropdownMenu.Trigger>
+                        <DropdownMenu.Content>
+                          <DropdownMenu.Label>Shocker</DropdownMenu.Label>
+                          <DropdownMenu.Group>
+                            <DropdownMenu.Item
+                              class="cursor-pointer"
+                              onclick={() => copyToClipboard(shocker.id, 'ID copied to clipboard')}
+                            >
+                              <Copy class="size-4" />
+                              Copy ID
+                            </DropdownMenu.Item>
+                          </DropdownMenu.Group>
+                        </DropdownMenu.Content>
+                      </DropdownMenu.Root>
                     {/snippet}
                     {#if isShockerLiveActive && liveState && liveConn}
                       <LiveControlModule shockerId={shocker.id} {liveState} connection={liveConn} />

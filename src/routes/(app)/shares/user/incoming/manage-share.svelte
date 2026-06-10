@@ -1,12 +1,13 @@
 <script lang="ts">
   import { shockerShockerShareRemove } from '$lib/api';
   import type { UserShareInfo } from '$lib/api';
-  import { Trash } from '@lucide/svelte';
+  import { Copy, Trash } from '@lucide/svelte';
   import * as Avatar from '$lib/components/ui/avatar';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Drawer from '$lib/components/ui/drawer';
   import * as Table from '$lib/components/ui/table/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { copyToClipboard } from '$lib/utils/clipboard.svelte';
   import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
   import { userSharesState, refreshUserShares } from '$lib/state/user-shares-state.svelte';
   import { userState } from '$lib/state/user-state.svelte';
@@ -79,9 +80,19 @@
                   {shocker.name}
                 </Table.Cell>
                 <Table.Cell class="w-0">
-                  <Button variant="destructive" onclick={() => handleDeleteClick(shocker)}>
-                    <Trash />
-                  </Button>
+                  <div class="flex items-center justify-end gap-1">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      title="Copy ID"
+                      onclick={() => copyToClipboard(shocker.id, 'ID copied to clipboard')}
+                    >
+                      <Copy />
+                    </Button>
+                    <Button variant="destructive" onclick={() => handleDeleteClick(shocker)}>
+                      <Trash />
+                    </Button>
+                  </div>
                 </Table.Cell>
               </Table.Row>
             {/each}
