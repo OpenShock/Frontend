@@ -1,5 +1,6 @@
 <script lang="ts">
   import { ClockFading, Gauge } from '@lucide/svelte';
+  import { formatDurationSeconds } from '$lib/utils';
 
   interface Props {
     maxIntensity: number;
@@ -16,6 +17,6 @@
   </span>
   <span class="flex items-center gap-1" title="Max Duration">
     <ClockFading size={14} />
-    {maxDuration}s
+    {formatDurationSeconds(maxDuration)}
   </span>
 </div>

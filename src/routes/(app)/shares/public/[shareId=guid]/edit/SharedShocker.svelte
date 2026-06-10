@@ -7,6 +7,7 @@
   import { Slider } from '$lib/components/ui/slider';
   import { Switch } from '$lib/components/ui/switch';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { formatDurationSeconds } from '$lib/utils';
   import { toast } from 'svelte-sonner';
 
   interface Props {
@@ -154,7 +155,9 @@
       <div class="space-y-1.5">
         <div class="flex items-center justify-between">
           <Label class="text-xs">Max Duration</Label>
-          <span class="text-muted-foreground font-mono text-xs">{durationSeconds.toFixed(1)}s</span>
+          <span class="text-muted-foreground font-mono text-xs"
+            >{formatDurationSeconds(durationSeconds)}</span
+          >
         </div>
         <Slider type="single" bind:value={durationSeconds} min={1} max={30} step={0.1} />
       </div>

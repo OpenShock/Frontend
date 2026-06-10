@@ -7,6 +7,7 @@
   import { onMount } from 'svelte';
   import {
     CreateSortableColumnDef,
+    DurationRenderer,
     LocaleDateTimeRenderer,
     NumberRenderer,
     RenderCell,
@@ -207,7 +208,7 @@
     CreateSortableColumnDef('type', 'Type', (t) => RenderCell(String(t))),
     CreateSortableColumnDef('controlledBy', 'By', (c) => RenderCell(c.customName ?? c.name)),
     CreateSortableColumnDef('intensity', 'Intensity', NumberRenderer),
-    CreateSortableColumnDef('duration', 'Duration', NumberRenderer),
+    CreateSortableColumnDef('duration', 'Duration', DurationRenderer),
   ];
 </script>
 

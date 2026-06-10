@@ -39,10 +39,12 @@
     min: number;
     max: number;
     step: number;
+    /** Optional unit shown in the caption label, e.g. "s" -> "Duration (s)". */
+    unit?: string;
     tabindex?: number | null;
   }
 
-  let { name, value = $bindable(), min, max, step, tabindex }: Props = $props();
+  let { name, value = $bindable(), min, max, step, unit, tabindex }: Props = $props();
 
   // Non-reactive variables for keeping track of slider state
   let isTracking = false;
@@ -200,6 +202,6 @@
     for={inputId}
     class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/10 text-center text-neutral-600 dark:text-neutral-300"
   >
-    {name}
+    {unit ? `${name} (${unit})` : name}
   </label>
 </div>

@@ -30,3 +30,12 @@ export function elapsedToString(elapsedMs: number) {
 
   return isNegative ? duration + ' ago' : 'in ' + duration;
 }
+
+/**
+ * Formats a shocker control/limit duration (given in seconds) for display: always
+ * in seconds with an `s` unit, rounded to one decimal (durations step in 0.1s),
+ * dropping a trailing `.0` for whole numbers. e.g. 15 -> "15s", 1.5 -> "1.5s".
+ */
+export function formatDurationSeconds(seconds: number) {
+  return `${Math.round(seconds * 10) / 10}s`;
+}

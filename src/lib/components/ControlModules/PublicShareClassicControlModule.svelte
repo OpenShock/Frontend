@@ -93,12 +93,14 @@
   <div class="flex items-center gap-2">
     <CircleSlider
       name="Intensity"
+      unit="%"
       bind:value={intensity}
       {...ControlIntensityProps}
       max={maxIntensity}
     />
     <CircleSlider
       name="Duration"
+      unit="s"
       bind:value={duration}
       {...ControlDurationProps}
       max={maxDurationSeconds}

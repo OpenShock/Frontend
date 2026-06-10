@@ -2,6 +2,7 @@ import { renderComponent } from '$lib/components/ui/data-table';
 import {
   durationBetween,
   formatDuration,
+  formatDurationSeconds,
   formatElapsed,
   getReadableUserAgentName,
 } from '$lib/utils';
@@ -171,6 +172,10 @@ export const TimeSinceRelativeOrNeverRenderer = (
 
 export const NumberRenderer = (number: number | null): CellContentProps =>
   number ? RenderBoldCell(number.toString()) : CellNotApplicable;
+
+// Durations are stored/transmitted in milliseconds; display them in seconds with a unit.
+export const DurationRenderer = (durationMs: number | null): CellContentProps =>
+  durationMs ? RenderBoldCell(formatDurationSeconds(durationMs / 1000)) : CellNotApplicable;
 
 export const UserAgentRenderer = (userAgent: string | null): CellContentProps => {
   if (!userAgent) return CellRedUnknown;
