@@ -35,7 +35,15 @@ export function hasSeenWelcome(): boolean {
 
 export function markWelcomed(): void {
   try {
-    document.cookie = `${WELCOME_COOKIE_NAME}=${CURRENT_WELCOME_VERSION}; path=/; expires=${WELCOME_COOKIE_EXPIRES.toUTCString()}; SameSite=Lax`;
+    cookieStore
+      .set({
+        name: WELCOME_COOKIE_NAME,
+        value: String(CURRENT_WELCOME_VERSION),
+        path: '/',
+        expires: WELCOME_COOKIE_EXPIRES.getTime(),
+        sameSite: 'lax',
+      })
+      .catch(() => {});
   } catch {
     // ignore
   }
