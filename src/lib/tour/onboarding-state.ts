@@ -1,9 +1,18 @@
 import { PUBLIC_DISABLE_ONBOARDING } from '$env/static/public';
 import { isTruthy } from '$lib/utils/parse';
 
-const CURRENT_WELCOME_VERSION = 1;
-export const WELCOME_COOKIE_NAME = 'os.welcomeVersion';
+export const WELCOME_COOKIE_NAME = 'os.welcomed';
+// Pre-cookie builds stored "welcome seen" under this localStorage key. Kept only
+// for the migration fallback in hasSeenWelcome().
+const LEGACY_WELCOME_STORAGE_KEY = 'os.welcomeVersion';
 const WELCOME_COOKIE_EXPIRES = new Date('2026-07-10');
+// Retire the welcome screen one day before the cookie expires, so it can't briefly
+// reappear for everyone in the window where the cookie lapses.
+const WELCOME_SUNSET = new Date(WELCOME_COOKIE_EXPIRES.getTime() - 24 * 60 * 60 * 1000);
+
+export function isWelcomeSunset(): boolean {
+  return Date.now() >= WELCOME_SUNSET.getTime();
+}
 
 const CURRENT_TOUR_VERSION = 1;
 const TOUR_VERSION_KEY = 'os.tourCompletedVersion';
@@ -12,22 +21,22 @@ export function isOnboardingDisabled(): boolean {
   return isTruthy(PUBLIC_DISABLE_ONBOARDING);
 }
 
-function readWelcomeCookie(): number {
+function readWelcomeCookie(): boolean {
   try {
-    const match = document.cookie.match(/(?:^|;\s*)os\.welcomeVersion=([^;]*)/);
-    return match ? parseInt(match[1], 10) : 0;
+    const escapedName = WELCOME_COOKIE_NAME.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const match = document.cookie.match(new RegExp(`(?:^|;\\s*)${escapedName}=([^;]*)`));
+    return match ? isTruthy(decodeURIComponent(match[1])) : false;
   } catch {
-    return 0;
+    return false;
   }
 }
 
 export function hasSeenWelcome(): boolean {
-  // Check cookie (new path) then fall back to localStorage (migration).
-  if (readWelcomeCookie() >= CURRENT_WELCOME_VERSION) return true;
+  // Check cookie (new path) then fall back to localStorage (migration). isTruthy
+  // also accepts the legacy version value "1", so pre-existing state still counts.
+  if (readWelcomeCookie()) return true;
   try {
-    const raw = localStorage.getItem(WELCOME_COOKIE_NAME);
-    const seen = raw ? parseInt(raw, 10) : 0;
-    return Number.isFinite(seen) && seen >= CURRENT_WELCOME_VERSION;
+    return isTruthy(localStorage.getItem(LEGACY_WELCOME_STORAGE_KEY));
   } catch {
     return false;
   }
@@ -38,7 +47,7 @@ export function markWelcomed(): void {
     cookieStore
       .set({
         name: WELCOME_COOKIE_NAME,
-        value: String(CURRENT_WELCOME_VERSION),
+        value: 'true',
         path: '/',
         expires: WELCOME_COOKIE_EXPIRES.getTime(),
         sameSite: 'lax',
@@ -50,7 +59,7 @@ export function markWelcomed(): void {
 }
 
 export function shouldShowWelcome(): boolean {
-  if (isOnboardingDisabled()) return false;
+  if (isOnboardingDisabled() || isWelcomeSunset()) return false;
   return !hasSeenWelcome();
 }
 

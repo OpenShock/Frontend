@@ -1,8 +1,7 @@
 import { SIDEBAR_COOKIE_NAME } from '$lib/components/ui/sidebar/constants';
-import { WELCOME_COOKIE_NAME } from '$lib/tour/onboarding-state';
+import { isWelcomeSunset, WELCOME_COOKIE_NAME } from '$lib/tour/onboarding-state';
+import { isTruthy } from '$lib/utils/parse';
 import type { LayoutServerLoad } from './$types';
-
-const CURRENT_WELCOME_VERSION = 1;
 
 export const load: LayoutServerLoad = ({ cookies }) => {
   // The sidebar provider writes this cookie on every toggle, but nothing reads
@@ -10,10 +9,19 @@ export const load: LayoutServerLoad = ({ cookies }) => {
   // state and we avoid a collapse-then-expand flash on hydration.
   const sidebarOpen = cookies.get(SIDEBAR_COOKIE_NAME) === 'true';
 
-  // Determine server-side whether to SSR the welcome screen, so the logo is
-  // in the initial HTML for new visitors rather than loaded after JS runs.
-  const welcomeRaw = cookies.get(WELCOME_COOKIE_NAME);
-  const showWelcome = !welcomeRaw || parseInt(welcomeRaw, 10) < CURRENT_WELCOME_VERSION;
+  // Past the sunset date the welcome screen is retired — never SSR it, and clear
+  // the cookie if a returning visitor still has it set.
+  if (isWelcomeSunset()) {
+    if (cookies.get(WELCOME_COOKIE_NAME) !== undefined) {
+      cookies.delete(WELCOME_COOKIE_NAME, { path: '/' });
+    }
+    return { sidebarOpen, showWelcome: false };
+  }
+
+  // SSR the welcome screen for visitors who haven't seen it, so the logo is in
+  // the initial HTML rather than loaded after JS runs. Any non-truthy/missing
+  // cookie (including malformed) counts as "not seen".
+  const showWelcome = !isTruthy(cookies.get(WELCOME_COOKIE_NAME));
 
   return { sidebarOpen, showWelcome };
 };

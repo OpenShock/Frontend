@@ -45,6 +45,7 @@
 
   onMount(() => {
     // Migration: no cookie yet but localStorage says already seen — backfill cookie and hide.
+    // Bail before wiring up focus/keydown so returning users don't get a brief focus jump.
     if (!shouldShowWelcome()) {
       markWelcomed();
       close();
@@ -55,7 +56,16 @@
     reducedMotion = mq.matches;
     const onChange = (e: MediaQueryListEvent) => (reducedMotion = e.matches);
     mq.addEventListener('change', onChange);
-    return () => mq.removeEventListener('change', onChange);
+
+    const focusOrigin = document.activeElement as HTMLElement | null;
+    queueMicrotask(() => dialogEl?.focus());
+    window.addEventListener('keydown', handleKeydown);
+
+    return () => {
+      mq.removeEventListener('change', onChange);
+      window.removeEventListener('keydown', handleKeydown);
+      focusOrigin?.focus();
+    };
   });
 
   function goTo(i: number) {
@@ -111,16 +121,6 @@
 
   let grid: DotGrid | undefined = $state();
   let dialogEl: HTMLDivElement | undefined = $state();
-
-  onMount(() => {
-    const focusOrigin = document.activeElement as HTMLElement | null;
-    queueMicrotask(() => dialogEl?.focus());
-    window.addEventListener('keydown', handleKeydown);
-    return () => {
-      window.removeEventListener('keydown', handleKeydown);
-      focusOrigin?.focus();
-    };
-  });
 </script>
 
 <svelte:head>
