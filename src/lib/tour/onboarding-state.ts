@@ -2,7 +2,8 @@ import { PUBLIC_DISABLE_ONBOARDING } from '$env/static/public';
 import { isTruthy } from '$lib/utils/parse';
 
 const CURRENT_WELCOME_VERSION = 1;
-const WELCOME_VERSION_KEY = 'os.welcomeVersion';
+export const WELCOME_COOKIE_NAME = 'os.welcomeVersion';
+const WELCOME_COOKIE_EXPIRES = new Date('2026-07-10');
 
 const CURRENT_TOUR_VERSION = 1;
 const TOUR_VERSION_KEY = 'os.tourCompletedVersion';
@@ -11,9 +12,20 @@ export function isOnboardingDisabled(): boolean {
   return isTruthy(PUBLIC_DISABLE_ONBOARDING);
 }
 
-export function hasSeenWelcome(): boolean {
+function readWelcomeCookie(): number {
   try {
-    const raw = localStorage.getItem(WELCOME_VERSION_KEY);
+    const match = document.cookie.match(/(?:^|;\s*)os\.welcomeVersion=([^;]*)/);
+    return match ? parseInt(match[1], 10) : 0;
+  } catch {
+    return 0;
+  }
+}
+
+export function hasSeenWelcome(): boolean {
+  // Check cookie (new path) then fall back to localStorage (migration).
+  if (readWelcomeCookie() >= CURRENT_WELCOME_VERSION) return true;
+  try {
+    const raw = localStorage.getItem(WELCOME_COOKIE_NAME);
     const seen = raw ? parseInt(raw, 10) : 0;
     return Number.isFinite(seen) && seen >= CURRENT_WELCOME_VERSION;
   } catch {
@@ -23,21 +35,15 @@ export function hasSeenWelcome(): boolean {
 
 export function markWelcomed(): void {
   try {
-    localStorage.setItem(WELCOME_VERSION_KEY, String(CURRENT_WELCOME_VERSION));
+    document.cookie = `${WELCOME_COOKIE_NAME}=${CURRENT_WELCOME_VERSION}; path=/; expires=${WELCOME_COOKIE_EXPIRES.toUTCString()}; SameSite=Lax`;
   } catch {
-    // ignore (private mode, quota, etc.)
+    // ignore
   }
 }
 
 export function shouldShowWelcome(): boolean {
   if (isOnboardingDisabled()) return false;
-  try {
-    const raw = localStorage.getItem(WELCOME_VERSION_KEY);
-    const seen = raw ? parseInt(raw, 10) : 0;
-    return !Number.isFinite(seen) || seen < CURRENT_WELCOME_VERSION;
-  } catch {
-    return false;
-  }
+  return !hasSeenWelcome();
 }
 
 export function hasCompletedTour(): boolean {

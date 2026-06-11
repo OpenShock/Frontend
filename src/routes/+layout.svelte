@@ -32,6 +32,8 @@
   let sidebarOpen = $state(untrack(() => data.sidebarOpen));
   const isOpen = $derived(mobile.current ? false : sidebarOpen);
 
+  let welcomeOpen = $state(untrack(() => data.showWelcome));
+
   onMount(() => maybePromptTelemetryConsent());
 </script>
 
@@ -44,7 +46,13 @@
 <TooltipProvider delayDuration={250}>
   <DialogManager />
 
-  <WelcomeScreen />
+  {#if welcomeOpen}
+    <WelcomeScreen
+      close={() => {
+        welcomeOpen = false;
+      }}
+    />
+  {/if}
 
   <SidebarProvider open={isOpen} onOpenChange={(v) => (sidebarOpen = v)}>
     <Sidebar />
