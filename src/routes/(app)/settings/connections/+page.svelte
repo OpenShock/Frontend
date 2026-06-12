@@ -8,8 +8,8 @@
   import type { OAuthConnectionResponse } from '$lib/api';
   import { GetOAuthAuthorizeUrl } from '$lib/api/next/oauth';
   import Container from '$lib/components/Container.svelte';
+  import PageHeader from '$lib/components/PageHeader.svelte';
   import { Button } from '$lib/components/ui/button';
-  import * as Card from '$lib/components/ui/card';
   import * as Dropdown from '$lib/components/ui/dropdown-menu';
   import * as Separator from '$lib/components/ui/separator';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
@@ -96,22 +96,17 @@
 </script>
 
 <Container>
-  <Card.Header class="w-full">
-    <Card.Title class="flex items-center justify-between text-3xl">
-      OAuth Connections
-      <div class="flex items-center gap-2">
-        <Button variant="ghost" onclick={refresh} disabled={loading} aria-busy={loading}>
-          <RotateCcw class="mr-2 size-4" />
-          {loading ? 'Refreshing…' : 'Refresh'}
-        </Button>
-      </div>
-    </Card.Title>
-    <Card.Description>
-      Link or unlink third-party accounts to sign in faster and keep your profile in sync.
-    </Card.Description>
-  </Card.Header>
+  <PageHeader
+    title="OAuth Connections"
+    subtitle="Link or unlink third-party accounts to sign in faster and keep your profile in sync."
+  >
+    <Button variant="outline" onclick={refresh} disabled={loading} aria-busy={loading}>
+      <RotateCcw class="size-4" />
+      {loading ? 'Refreshing…' : 'Refresh'}
+    </Button>
+  </PageHeader>
 
-  <Card.Content class="w-full space-y-6">
+  <div class="w-full space-y-6">
     <!-- Quick actions -->
     <div class="flex flex-wrap gap-2">
       <Dropdown.Root>
@@ -194,7 +189,7 @@
         {/each}
       </div>
     {/if}
-  </Card.Content>
+  </div>
 </Container>
 
 <!-- Confirm dialog lives once at root -->

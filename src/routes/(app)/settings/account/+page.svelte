@@ -62,7 +62,7 @@
 {#if account}
   <Container>
     <div
-      class="bg-surface-100-800-token flex w-full flex-col items-start gap-y-6 rounded-lg border border-gray-500 p-4"
+      class="bg-card border-border flex w-full flex-col items-start gap-y-6 rounded-lg border p-6"
     >
       <h1 class="text-xl font-bold">Account Settings</h1>
 

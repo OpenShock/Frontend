@@ -15,7 +15,7 @@
   } from '$lib/components/Table/ColumnUtils';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
-  import * as Card from '$lib/components/ui/card';
+  import PageHeader from '$lib/components/PageHeader.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
@@ -74,20 +74,14 @@
 </script>
 
 <Container>
-  <Card.Header class="w-full">
-    <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
-      Sessions
-      <Button class="text-xl" onclick={onRefreshClicked}>
-        <RotateCcw />
-        <span> Refresh </span>
-      </Button>
-    </Card.Title>
-    <Card.Description>
-      This is a list of all active sessions of your account. Revoke any sessions you do not
-      recognize.
-    </Card.Description>
-  </Card.Header>
-  <Card.Content class="w-full">
-    <DataTable {data} {columns} {sorting} />
-  </Card.Content>
+  <PageHeader
+    title="Sessions"
+    subtitle="This is a list of all active sessions of your account. Revoke any sessions you do not recognize."
+  >
+    <Button onclick={onRefreshClicked}>
+      <RotateCcw />
+      Refresh
+    </Button>
+  </PageHeader>
+  <DataTable {data} {columns} {sorting} />
 </Container>
