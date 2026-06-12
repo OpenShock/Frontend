@@ -10,6 +10,7 @@
   import { getConnection } from '$lib/signalr/user.svelte';
   import { ControlType } from '$lib/signalr/models/ControlType';
   import { serializeControlMessages } from '$lib/signalr/serializers/Control';
+  import { formatDurationSeconds } from '$lib/utils';
   import { useShockerEvents } from '$lib/hooks/shocker-events.svelte';
   import ActionButtons from './impl/ActionButtons.svelte';
   import CircleSlider from './impl/CircleSlider.svelte';
@@ -86,7 +87,7 @@
       </span>
       <span class="flex items-center gap-1" title="Max Duration">
         <ClockFading size={14} />
-        {maxDurationSeconds}s
+        {formatDurationSeconds(maxDurationSeconds)}
       </span>
     </div>
   </div>

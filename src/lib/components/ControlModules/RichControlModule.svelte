@@ -10,6 +10,7 @@
   import { getConnection } from '$lib/signalr/user.svelte';
   import { ControlType } from '$lib/signalr/models/ControlType';
   import { serializeControlMessages } from '$lib/signalr/serializers/Control';
+  import { formatDurationSeconds } from '$lib/utils';
   import { useShockerEvents } from '$lib/hooks/shocker-events.svelte';
   import ActionButtons from './impl/ActionButtons.svelte';
 
@@ -38,7 +39,7 @@
   <p>{intensity}%</p>
   <Timer />
   <input type="range" bind:value={duration} {...ControlDurationProps} />
-  <p>{duration}s</p>
+  <p>{formatDurationSeconds(duration)}</p>
 </div>
 <!-- Buttons -->
 <ActionButtons {ctrl} {duration} {active} {disabled} />

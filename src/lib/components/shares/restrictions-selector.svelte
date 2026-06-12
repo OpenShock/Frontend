@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Volume2, Waves, Zap } from '@lucide/svelte';
+  import { formatDurationSeconds } from '$lib/utils';
   import { Label } from '$lib/components/ui/label';
   import { Slider } from '$lib/components/ui/slider';
   import { Switch } from '$lib/components/ui/switch';
@@ -62,7 +63,7 @@
       <div class="flex items-center justify-between">
         <Label class="text-xs">Max Duration</Label>
         <span class="text-muted-foreground font-mono text-xs"
-          >{(limits.duration / 1000).toFixed(1)}s</span
+          >{formatDurationSeconds(limits.duration / 1000)}</span
         >
       </div>
       <Slider type="single" bind:value={limits.duration} min={0} max={30_000} step={100} />
