@@ -35,9 +35,9 @@
 </Dialog.Root>
 
 <div
-  class="bg-surface-100-800-token flex w-full flex-col items-start gap-y-4 rounded-lg border border-red-600 p-4"
+  class="flex w-full flex-col items-start gap-y-4 rounded-lg border border-red-600/60 bg-red-950/10 p-4"
 >
-  <h1 class="h1">Danger Zone</h1>
+  <h2 class="text-base font-semibold text-red-500">Danger Zone</h2>
   <Button variant="destructive" class="w-full" onclick={() => (deactivateDialogOpen = true)}>
     Deactivate Account
   </Button>
