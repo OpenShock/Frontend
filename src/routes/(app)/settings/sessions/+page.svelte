@@ -1,72 +1,51 @@
 <script lang="ts">
-  import { sessionsListSessions } from '$lib/api';
+  import { sessionsListSessions, sessionsGetSelfSession } from '$lib/api';
   import type { LoginSessionResponse } from '$lib/api';
-  import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
-  import type { ColumnDef, SortingState } from '@tanstack/table-core';
   import Container from '$lib/components/Container.svelte';
-  import {
-    CreateActionsColumnDef,
-    CreateColumnDef,
-    CreateSortableColumnDef,
-    RenderCell,
-    TimeSinceRelativeOrNeverRenderer,
-    TimeSinceRelativeRenderer,
-    UserAgentRenderer,
-  } from '$lib/components/Table/ColumnUtils';
-  import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
-  import Button from '$lib/components/ui/button/button.svelte';
   import PageHeader from '$lib/components/PageHeader.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
-  import { toast } from 'svelte-sonner';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import DataTableActions from './data-table-actions.svelte';
+  import SessionCard from './session-card.svelte';
 
   registerBreadcrumbs(() => [
     { label: 'Settings', href: '/settings/account' },
     { label: 'Sessions' },
   ]);
 
-  let data = $state<LoginSessionResponse[]>([]);
-  let sorting = $state<SortingState>([]);
+  let sessions = $state<LoginSessionResponse[]>([]);
+  let currentSessionId = $state<string | null>(null);
 
   function onRevoked(sessionId: string) {
-    const idx = data.findIndex((session) => session.id === sessionId);
-    if (idx === -1) return;
-
-    data.splice(idx, 1);
+    const idx = sessions.findIndex((s) => s.id === sessionId);
+    if (idx !== -1) sessions.splice(idx, 1);
   }
 
-  const columns: ColumnDef<LoginSessionResponse>[] = [
-    CreateColumnDef('ip', 'Ip', RenderCell),
-    CreateSortableColumnDef('userAgent', 'User Agent', UserAgentRenderer),
-    CreateSortableColumnDef('created', 'Created', TimeSinceRelativeRenderer),
-    CreateSortableColumnDef('expires', 'Expires', TimeSinceRelativeRenderer),
-    CreateSortableColumnDef('lastUsed', 'Last seen', TimeSinceRelativeOrNeverRenderer),
-    CreateActionsColumnDef(DataTableActions, (session) => ({ session, onRevoked })),
-  ];
+  // Sort so current session is always first
+  const sortedSessions = $derived(
+    [...sessions].sort((a, b) => {
+      if (a.id === currentSessionId) return -1;
+      if (b.id === currentSessionId) return 1;
+      return 0;
+    })
+  );
 
   async function fetchSessions() {
     try {
-      data = await sessionsListSessions();
+      [sessions, { id: currentSessionId }] = await Promise.all([
+        sessionsListSessions(),
+        sessionsGetSelfSession(),
+      ]);
     } catch (error) {
       await handleApiError(error);
     }
   }
 
-  async function onRefreshClicked() {
-    await fetchSessions();
-    toast.success('Sessions refreshed successfully');
-  }
-
   onMount(() => {
     fetchSessions();
 
-    // Update timestamps every 5 seconds
     const interval = setInterval(() => {
-      if (data) {
-        data = Object.assign([], data);
-      }
+      if (sessions.length) sessions = [...sessions];
     }, 5000);
 
     return () => clearInterval(interval);
@@ -77,11 +56,11 @@
   <PageHeader
     title="Sessions"
     subtitle="This is a list of all active sessions of your account. Revoke any sessions you do not recognize."
-  >
-    <Button onclick={onRefreshClicked}>
-      <RotateCcw />
-      Refresh
-    </Button>
-  </PageHeader>
-  <DataTable {data} {columns} {sorting} />
+  />
+
+  <div class="flex w-full flex-col gap-3">
+    {#each sortedSessions as session (session.id)}
+      <SessionCard {session} isCurrent={session.id === currentSessionId} {onRevoked} />
+    {/each}
+  </div>
 </Container>
