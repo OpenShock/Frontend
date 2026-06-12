@@ -44,15 +44,10 @@ export function hasSeenWelcome(): boolean {
 
 export function markWelcomed(): void {
   try {
-    cookieStore
-      .set({
-        name: WELCOME_COOKIE_NAME,
-        value: 'true',
-        path: '/',
-        expires: WELCOME_COOKIE_EXPIRES.getTime(),
-        sameSite: 'lax',
-      })
-      .catch(() => {});
+    // Synchronous document.cookie write. The async cookieStore API would also work
+    // (Chrome 87+, Firefox 140+, Safari 18.4+), but for a one-shot write it buys
+    // nothing and drops older browsers, so the plain string write is preferred.
+    document.cookie = `${WELCOME_COOKIE_NAME}=true; path=/; expires=${WELCOME_COOKIE_EXPIRES.toUTCString()}; SameSite=Lax`;
   } catch {
     // ignore
   }
