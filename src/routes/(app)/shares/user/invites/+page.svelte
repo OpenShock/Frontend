@@ -23,7 +23,7 @@
     <Spinner class="size-8 text-gray-600 dark:text-gray-300" />
   </div>
 {:then}
-  <div class="mb-6 overflow-y-auto rounded-md border">
+  <div class="mb-6 overflow-x-auto rounded-md border">
     <Table.Root>
       <Table.Body>
         {#each userSharesState.outgoingInvites as invite (invite.id)}
@@ -43,7 +43,7 @@
     <Spinner class="size-8 text-gray-600 dark:text-gray-300" />
   </div>
 {:then}
-  <div class="mb-6 overflow-y-auto rounded-md border">
+  <div class="mb-6 overflow-x-auto rounded-md border">
     <Table.Root>
       <Table.Body>
         {#each userSharesState.incomingInvites as invite (invite.id)}
