@@ -1,5 +1,9 @@
 import { SIDEBAR_COOKIE_NAME } from '$lib/components/ui/sidebar/constants';
-import { isOnboardingDisabled, isWelcomeSunset, WELCOME_COOKIE_NAME } from '$lib/tour/onboarding-state';
+import {
+  isOnboardingDisabled,
+  isWelcomeSunset,
+  WELCOME_COOKIE_NAME,
+} from '$lib/tour/onboarding-state';
 import { isTruthy } from '$lib/utils/parse';
 import type { LayoutServerLoad } from './$types';
 
