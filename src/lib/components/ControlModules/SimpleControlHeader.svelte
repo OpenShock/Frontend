@@ -33,13 +33,8 @@
     <p>{formatDurationSeconds(duration)}</p>
   </div>
   <div class="flex flex-1 flex-row justify-between">
-    <CircleSlider name="Shock" unit="%" bind:value={shockIntensity} {...ControlIntensityProps} />
-    <CircleSlider
-      name="Vibration"
-      unit="%"
-      bind:value={vibrationIntensity}
-      {...ControlIntensityProps}
-    />
-    <CircleSlider name="Duration" unit="s" bind:value={duration} {...ControlDurationProps} />
+    <CircleSlider name="Shock" bind:value={shockIntensity} {...ControlIntensityProps} />
+    <CircleSlider name="Vibration" bind:value={vibrationIntensity} {...ControlIntensityProps} />
+    <CircleSlider name="Duration" bind:value={duration} {...ControlDurationProps} />
   </div>
 </div>

@@ -58,18 +58,11 @@
 <div class="grid w-full grid-cols-2 place-items-center gap-2">
   <CircleSlider
     name="Intensity"
-    unit="%"
     bind:value={intensity}
     {...ControlIntensityProps}
     max={maxIntensity}
   />
-  <CircleSlider
-    name="Duration"
-    unit="s"
-    bind:value={duration}
-    {...ControlDurationProps}
-    max={maxDuration}
-  />
+  <CircleSlider name="Duration" bind:value={duration} {...ControlDurationProps} max={maxDuration} />
 </div>
 
 <!-- Buttons -->
