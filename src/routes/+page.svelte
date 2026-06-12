@@ -17,7 +17,7 @@
 
 <section
   aria-label="Home"
-  class="relative flex h-full flex-col items-center justify-center space-y-6 overflow-hidden text-center text-white"
+  class="relative flex h-full flex-col items-center justify-center space-y-6 overflow-hidden bg-zinc-950 text-center text-white"
   onpointermove={(e) => grid?.handlePointerMove(e)}
 >
   <DotGrid bind:this={grid} />
