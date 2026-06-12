@@ -109,19 +109,35 @@
 <DialogAddShocker bind:open={showAddShockerModal} {onAddedShockers} />
 
 <div class="m-5 flex h-full w-full flex-col gap-10">
-  <div class="grid grid-cols-3 grid-rows-1 items-center gap-4">
-    <div class="flex w-full flex-col">
-      <h1 class="text-2xl font-bold">
-        Public Share: {publicShareData?.name ?? 'Loading...'}
-      </h1>
-      <p class="text-muted-foreground text-sm">Editing — changes apply when you save.</p>
+  <div class="flex flex-col gap-3">
+    <div class="flex items-start justify-between gap-2">
+      <div class="flex flex-col">
+        <h1 class="hidden text-2xl font-bold sm:block">
+          Public Share: {publicShareData?.name ?? 'Loading...'}
+        </h1>
+        <p class="text-muted-foreground text-sm">Editing — changes apply when you save.</p>
+      </div>
+      {#if publicShareData}
+        <Tooltip.Root>
+          <Tooltip.Trigger>
+            <span
+              class="flex flex-row items-center gap-2 rounded-md px-2 py-1 outline-1 outline-gray-500"
+            >
+              <Avatar.Root class="h-7 w-7">
+                <Avatar.Image src={publicShareData.author.image} alt="User Avatar" />
+                <Avatar.Fallback>{publicShareData.author.name.charAt(0)}</Avatar.Fallback>
+              </Avatar.Root>
+              <p class="hidden text-sm sm:block">{publicShareData.author.name}</p>
+            </span>
+          </Tooltip.Trigger>
+          <Tooltip.Content><p>Shared by {publicShareData.author.name}</p></Tooltip.Content>
+        </Tooltip.Root>
+      {/if}
     </div>
 
-    <div class="flex items-center">
-      <CopyInput value={shareUrl.href} displayValue={shareUrl.host + shareUrl.pathname} />
-    </div>
+    <CopyInput value={shareUrl.href} displayValue={shareUrl.host + shareUrl.pathname} />
 
-    <div class="flex items-center justify-end gap-2">
+    <div class="flex flex-wrap gap-2">
       <Button variant="outline" href={publicUrl}>
         <ExternalLink />
         View
@@ -138,27 +154,6 @@
         <Save />
         {isSaving ? 'Saving...' : 'Save'}
       </Button>
-
-      {#if publicShareData}
-        <Tooltip.Root>
-          <Tooltip.Trigger>
-            <span
-              class="ml-2 flex flex-row items-center rounded-md px-3 py-1.5 outline-1 outline-gray-500"
-            >
-              <Avatar.Root class="h-8 w-8">
-                <Avatar.Image src={publicShareData.author.image} alt="User Avatar" />
-                <Avatar.Fallback>
-                  {publicShareData.author.name.charAt(0)}
-                </Avatar.Fallback>
-              </Avatar.Root>
-              <p class="ml-3 text-sm">{publicShareData.author.name}</p>
-            </span>
-          </Tooltip.Trigger>
-          <Tooltip.Content>
-            <p>Shared by</p>
-          </Tooltip.Content>
-        </Tooltip.Root>
-      {/if}
     </div>
   </div>
 

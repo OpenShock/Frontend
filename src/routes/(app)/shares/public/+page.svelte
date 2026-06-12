@@ -78,8 +78,9 @@
 
 <Container>
   <PageHeader title="Public Shares" subtitle="A link anyone can use — no account required.">
-    <Button size="icon" variant="outline" onclick={refreshPublicShares} title="Refresh">
+    <Button variant="outline" onclick={refreshPublicShares}>
       <RotateCcw />
+      Refresh
     </Button>
     <Button onclick={() => (showAddShareModal = true)}>
       <Plus />
@@ -93,7 +94,7 @@
     </div>
   {:else if sortedShares.length === 0}
     <div
-      class="border-border/60 text-muted-foreground flex flex-col items-center justify-center gap-3 rounded-lg border border-dashed py-16"
+      class="border-border/60 text-muted-foreground flex w-full flex-col items-center justify-center gap-3 rounded-lg border border-dashed py-16"
     >
       <Link2 class="size-10 opacity-50" />
       <div class="text-center">
