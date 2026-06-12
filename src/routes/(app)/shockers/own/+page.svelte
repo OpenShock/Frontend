@@ -188,7 +188,7 @@
     </div>
   {:else}
     <div class="flex w-full flex-wrap items-center justify-between gap-2">
-      <h1 class="text-2xl font-bold">Shockers</h1>
+      <h1 class="hidden text-2xl font-bold sm:block">Shockers</h1>
       <div class="flex flex-wrap items-center gap-1">
         <Button
           variant="secondary"

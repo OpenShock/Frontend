@@ -56,6 +56,7 @@ export {
   publicGetOnlineDevicesStatistics,
   publicGetPublicShare,
   sessionsDeleteSession,
+  sessionsGetSelfSession,
   sessionsListSessions,
   shareLinksAddShocker,
   shareLinksCreatePublicShare,

@@ -56,7 +56,7 @@
 
   <SidebarProvider open={isOpen} onOpenChange={(v) => (sidebarOpen = v)}>
     <Sidebar />
-    <div class="flex h-screen w-screen flex-1 flex-col overflow-hidden">
+    <div class="flex h-screen w-full flex-1 flex-col overflow-hidden">
       {#if PUBLIC_DEVELOPMENT_BANNER === 'true'}
         <div class="top-0 left-0 z-1 flex-none bg-[orangered] text-center text-white">
           <p>
@@ -66,7 +66,7 @@
         </div>
       {/if}
       <Header />
-      <main class="min-h-0 flex-1 overflow-x-hidden">
+      <main class="min-h-0 flex-1 overflow-x-hidden overflow-y-auto">
         {@render children?.()}
       </main>
       <Footer />

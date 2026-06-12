@@ -16,12 +16,12 @@
 </script>
 
 <div class={cn('mb-4 w-full', className)}>
-  <div class="flex w-full flex-wrap items-center gap-x-2 gap-y-1">
-    <h1 class="text-3xl font-bold">
+  <div class="flex w-full flex-col gap-2 sm:flex-row sm:items-center">
+    <h1 class="hidden text-3xl font-bold sm:block">
       {title}
     </h1>
     {#if children}
-      <div class="ml-auto flex flex-wrap items-center justify-end gap-1">
+      <div class="flex flex-wrap items-center gap-1 sm:ml-auto sm:justify-end">
         {@render children()}
       </div>
     {/if}
