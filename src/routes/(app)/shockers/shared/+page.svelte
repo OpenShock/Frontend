@@ -62,12 +62,7 @@
   {#if sharedHubsState.value == null}
     <p>Loading...</p>
   {:else}
-    <PageHeader title="Shared Shockers" subtitle="Manage shared shockers with other users"
-    ></PageHeader>
-    <div class="flex w-full content-center justify-between">
-      <h1 class="text-2xl font-bold">Shared Shockers</h1>
-    </div>
-    <hr class="border-border w-full" />
+    <PageHeader title="Shared Shockers" subtitle="Manage shared shockers with other users" />
 
     {#if !hasSharedShockers}
       <div class="text-muted-foreground flex flex-col items-center justify-center py-12">

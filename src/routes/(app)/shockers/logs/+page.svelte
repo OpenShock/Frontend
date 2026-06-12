@@ -16,7 +16,7 @@
   import PaginationFooter from '$lib/components/Table/PaginationFooter.svelte';
   import { Badge } from '$lib/components/ui/badge';
   import Button from '$lib/components/ui/button/button.svelte';
-  import * as Card from '$lib/components/ui/card';
+  import PageHeader from '$lib/components/PageHeader.svelte';
   import MultiSelectCombobox from '$lib/components/ui/multi-select-combobox/multi-select-combobox.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { addShockEventListener, removeShockEventListener } from '$lib/signalr/handlers/Log';
@@ -213,34 +213,30 @@
 </script>
 
 <Container>
-  <Card.Header class="w-full">
-    <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
-      <h1>Shocker Logs</h1>
-      <Badge
-        variant={liveUpdatesActive ? 'default' : 'secondary'}
-        class="gap-1.5"
-        title={liveUpdatesActive
-          ? 'New logs appear in real time'
-          : 'Live updates pause when sorting or viewing a page other than the first'}
-      >
-        <span class="relative flex size-2">
-          {#if liveUpdatesActive}
-            <span
-              class="absolute inline-flex size-full animate-ping rounded-full bg-green-400 opacity-75"
-            ></span>
-          {/if}
+  <PageHeader title="Shocker Logs" subtitle="These are the logs for all shockers.">
+    <Badge
+      variant={liveUpdatesActive ? 'default' : 'secondary'}
+      class="gap-1.5"
+      title={liveUpdatesActive
+        ? 'New logs appear in real time'
+        : 'Live updates pause when sorting or viewing a page other than the first'}
+    >
+      <span class="relative flex size-2">
+        {#if liveUpdatesActive}
           <span
-            class="relative inline-flex size-2 rounded-full {liveUpdatesActive
-              ? 'bg-green-500'
-              : 'bg-muted-foreground'}"
+            class="absolute inline-flex size-full animate-ping rounded-full bg-green-400 opacity-75"
           ></span>
-        </span>
-        {liveUpdatesActive ? 'Live' : 'Paused'}
-      </Badge>
-    </Card.Title>
-    <Card.Description>These are the logs for all shockers.</Card.Description>
-  </Card.Header>
-  <div class="flex min-h-0 w-full flex-1 flex-col gap-6 p-6">
+        {/if}
+        <span
+          class="relative inline-flex size-2 rounded-full {liveUpdatesActive
+            ? 'bg-green-500'
+            : 'bg-muted-foreground'}"
+        ></span>
+      </span>
+      {liveUpdatesActive ? 'Live' : 'Paused'}
+    </Badge>
+  </PageHeader>
+  <div class="flex min-h-0 w-full flex-1 flex-col gap-6">
     <div class="flex items-end gap-2">
       <div class="w-64">
         <MultiSelectCombobox
