@@ -2,6 +2,7 @@
   /* eslint-disable svelte/no-navigation-without-resolve -- uses prefixBase for dynamic navigation and external URLs */
 
   import PanelLeft from '@lucide/svelte/icons/panel-left';
+  import ChevronLeft from '@lucide/svelte/icons/chevron-left';
   import { goto } from '$app/navigation';
   import type { Pathname } from '$app/types';
   import { PUBLIC_DISCORD_INVITE_URL, PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
@@ -19,8 +20,20 @@
   import { resolve } from '$app/paths';
   import { LogIn, UserPlus } from '@lucide/svelte';
   import { Spinner } from '$lib/components/ui/spinner';
+  import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { page } from '$app/state';
 
   let sidebar = useSidebar();
+
+  let crumbs = $derived(breadcrumbs.state);
+  let currentLabel = $derived(crumbs[crumbs.length - 1]?.label ?? '');
+  let parentCandidate = $derived(crumbs.length >= 2 ? crumbs[crumbs.length - 2] : null);
+  // Only show back button when parent href differs from current URL (otherwise it's a no-op)
+  let parent = $derived(
+    parentCandidate?.href && prefixBase(parentCandidate.href) !== page.url.pathname
+      ? parentCandidate
+      : null
+  );
 </script>
 
 {#snippet dropdownItem(name: string, url: Pathname)}
@@ -30,8 +43,72 @@
   </DropdownMenu.Item>
 {/snippet}
 
+{#snippet userMenu()}
+  {#if userState.loading}
+    <Spinner class="size-8 text-gray-600 dark:text-gray-300" />
+  {:else if userState.self}
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger
+        class="cursor-pointer text-gray-600 select-none hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-200"
+      >
+        <img
+          class="inline-block h-8 rounded-full"
+          src={userState.self.avatar}
+          alt="{userState.self.name}'s avatar"
+        />
+        <p class="hidden lg:inline-block">{userState.self.name}</p>
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.Group>
+          {@render dropdownItem('Profile', '/profile')}
+          {@render dropdownItem('Settings', '/settings/account')}
+          {@render dropdownItem('Logout', '/logout')}
+        </DropdownMenu.Group>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
+  {:else}
+    <Button variant="outline" href={resolve('/login')}>Login <LogIn /></Button>
+    <Button variant="outline" href={resolve('/signup')}>Sign Up <UserPlus /></Button>
+    <div class="hidden sm:flex sm:flex-row">
+      <a href={PUBLIC_GITHUB_PROJECT_URL} class="p-2" title="Project GitHub">
+        <GithubIcon class="size-6 fill-black dark:fill-white" />
+      </a>
+      <a href={PUBLIC_DISCORD_INVITE_URL} class="p-2" title="Community Discord">
+        <DiscordLogo class="size-6 fill-black dark:fill-white" />
+      </a>
+    </div>
+  {/if}
+{/snippet}
+
 <header class="flex h-12 shrink-0 items-center gap-2 border-b">
-  <div class="flex w-full items-center gap-2 px-3">
+  <!-- Mobile layout: back/menu | centered title | avatar -->
+  <div class="flex w-full items-center px-3 sm:hidden">
+    {#if parent?.href}
+      <a
+        href={prefixBase(parent.href)}
+        class="text-muted-foreground hover:text-foreground flex size-8 shrink-0 items-center justify-center"
+        title="Back to {parent.label}"
+      >
+        <ChevronLeft size={24} />
+      </a>
+    {:else}
+      <Button
+        variant="ghost"
+        class="size-8 shrink-0"
+        title="Toggle Sidebar"
+        onclick={() => sidebar.toggle()}
+      >
+        <PanelLeft size={24} class="m-0 text-gray-600 dark:text-gray-300" />
+      </Button>
+    {/if}
+
+    <span class="flex-1 truncate text-center text-sm font-semibold">{currentLabel}</span>
+
+    {@render userMenu()}
+  </div>
+
+  <!-- Desktop layout: sidebar toggle | separator | breadcrumb | lightswitch | avatar -->
+  <div class="hidden w-full items-center gap-2 px-3 sm:flex">
     <Button variant="ghost" class="size-8" title="Toggle Sidebar" onclick={() => sidebar.toggle()}>
       <PanelLeft size={24} class="m-0 text-gray-600 dark:text-gray-300" />
     </Button>
@@ -44,43 +121,8 @@
       )}
     >
       <div class="flex-1"></div>
-
       <LightSwitch />
-
-      {#if userState.loading}
-        <Spinner class="size-8 text-gray-600 dark:text-gray-300" />
-      {:else if userState.self}
-        <DropdownMenu.Root>
-          <DropdownMenu.Trigger
-            class="cursor-pointer text-gray-600 select-none hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-200"
-          >
-            <img
-              class="inline-block h-8 rounded-full"
-              src={userState.self.avatar}
-              alt="{userState.self.name}'s avatar"
-            />
-            <p class="hidden lg:inline-block">{userState.self.name}</p>
-          </DropdownMenu.Trigger>
-          <DropdownMenu.Content>
-            <DropdownMenu.Group>
-              {@render dropdownItem('Profile', '/profile')}
-              {@render dropdownItem('Settings', '/settings/account')}
-              {@render dropdownItem('Logout', '/logout')}
-            </DropdownMenu.Group>
-          </DropdownMenu.Content>
-        </DropdownMenu.Root>
-      {:else}
-        <Button variant="outline" href={resolve('/login')}>Login <LogIn /></Button>
-        <Button variant="outline" href={resolve('/signup')}>Sign Up <UserPlus /></Button>
-        <div class="hidden sm:flex sm:flex-row">
-          <a href={PUBLIC_GITHUB_PROJECT_URL} class="p-2" title="Project GitHub">
-            <GithubIcon class="size-6 fill-black dark:fill-white" />
-          </a>
-          <a href={PUBLIC_DISCORD_INVITE_URL} class="p-2" title="Community Discord">
-            <DiscordLogo class="size-6 fill-black dark:fill-white" />
-          </a>
-        </div>
-      {/if}
+      {@render userMenu()}
     </div>
   </div>
 </header>
