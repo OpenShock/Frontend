@@ -18,6 +18,7 @@
   import RichControlModule from '$lib/components/ControlModules/RichControlModule.svelte';
   import ShockerCard from '$lib/components/ControlModules/ShockerCard.svelte';
   import ShockerMenu from '$lib/components/ControlModules/impl/ShockerMenu.svelte';
+  import ShockerPauseButton from '$lib/components/ControlModules/impl/ShockerPauseButton.svelte';
   import SimpleControlHeader from '$lib/components/ControlModules/SimpleControlHeader.svelte';
   import SimpleControlModule from '$lib/components/ControlModules/SimpleControlModule.svelte';
   import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
@@ -162,6 +163,9 @@
   >
     {#snippet live()}
       <LiveButton {hubId} shockerId={shocker.id} compact />
+    {/snippet}
+    {#snippet pause()}
+      <ShockerPauseButton {shocker} />
     {/snippet}
     {#snippet menu()}
       <ShockerMenu {shocker} />

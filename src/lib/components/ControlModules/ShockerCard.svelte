@@ -12,6 +12,7 @@
     pauseReason?: string | null;
     resume?: () => Promise<void>;
     live?: Snippet;
+    pause?: Snippet;
     menu?: Snippet;
     children: Snippet;
     class?: string;
@@ -26,6 +27,7 @@
     pauseReason,
     resume,
     live,
+    pause,
     menu,
     children,
     class: className,
@@ -54,6 +56,9 @@
     </div>
     {#if live}
       <div class="shrink-0">{@render live()}</div>
+    {/if}
+    {#if pause}
+      <div class="shrink-0">{@render pause()}</div>
     {/if}
     {#if menu}
       <div class="shrink-0">{@render menu()}</div>
