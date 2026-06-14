@@ -3,7 +3,7 @@ import type { ResponseError } from '$lib/api';
 import { type ProblemDetails, isProblemDetails } from '$lib/errorhandling/ProblemDetails';
 import { isError, isFetchError, isResponseError, isTypeError } from '$lib/typeguards/errorGuards';
 import { toast } from 'svelte-sonner';
-import { isValidationError as isValidationProblem } from './ValidationProblemDetails';
+import { isValidationError } from './ValidationProblemDetails';
 
 export type HandleProblemCallback = (problem: ProblemDetails) => boolean;
 
@@ -44,7 +44,7 @@ async function handleResponseError(
     if (problem.detail) {
       console.log('%cDetail:    ', 'font-style: italic;', problem.detail);
     }
-    if (isValidationProblem(problem)) {
+    if (isValidationError(problem)) {
       // nicely tabulate the field errors
       console.groupCollapsed('%cField errors', 'font-style: italic;');
       for (const [field, messages] of Object.entries(problem.errors)) {
@@ -62,7 +62,15 @@ async function handleResponseError(
 
   if (handleProblemCallback && handleProblemCallback(problem)) return;
 
-  toast.error(problem.title);
+  if (isValidationError(problem)) {
+    const messages = Object.values(problem.errors).flat();
+    toast.error(problem.title, {
+      description: messages.length ? messages.join('\n') : problem.detail,
+    });
+    return;
+  }
+
+  toast.error(problem.title, { description: problem.detail });
 }
 
 export async function handleApiError(
