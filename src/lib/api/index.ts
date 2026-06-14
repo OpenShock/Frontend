@@ -7,9 +7,9 @@ client.interceptors.error.use((error, response, request) => {
     const method = request?.method ?? '';
     const msg = `${method} ${url} → ${response.status}`;
     if (response.status === 429) {
-      return new RateLimitError(response, parseRetryAfter(response), msg);
+      return new RateLimitError(response, parseRetryAfter(response), msg, error);
     }
-    return new ResponseError(response, msg);
+    return new ResponseError(response, msg, error);
   }
   if (error instanceof Error) return new FetchError(error, error.message);
   return new FetchError(new Error(String(error)), 'Unknown fetch error');

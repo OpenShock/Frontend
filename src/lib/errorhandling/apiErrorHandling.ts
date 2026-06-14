@@ -1,4 +1,5 @@
 import { dev } from '$app/environment';
+import type { ResponseError } from '$lib/api';
 import { type ProblemDetails, isProblemDetails } from '$lib/errorhandling/ProblemDetails';
 import { isError, isFetchError, isResponseError, isTypeError } from '$lib/typeguards/errorGuards';
 import { toast } from 'svelte-sonner';
@@ -18,28 +19,18 @@ export function registerOnUnauthorized(callback: () => void) {
 }
 
 async function handleResponseError(
-  response: Response,
+  error: ResponseError,
   handleProblemCallback: HandleProblemCallback | null
 ) {
+  const response = error.response;
   if (response.status === 401) {
     _onUnauthorized?.();
   }
 
-  const contentTypeHeader = response.headers.get('Content-Type');
-  if (!contentTypeHeader) {
-    console.error('No content type header found in response');
-    return;
-  }
-
-  if (!contentTypeHeader.startsWith('application/problem+json')) {
-    console.error(
-      'Content type header is not application/problem+json [' + contentTypeHeader + ']',
-      response
-    );
-    return;
-  }
-
-  const problem = await response.json();
+  // The HTTP client already consumed and parsed the response body before this
+  // error was constructed, so we read it from `error.body` rather than calling
+  // `response.json()` (which would throw "Body has already been consumed").
+  const problem = error.body;
   if (!isProblemDetails(problem)) {
     console.error('Content json is not a valid problemdetails object', problem);
     return null;
@@ -85,7 +76,7 @@ export async function handleApiError(
   }
 
   if (isResponseError(error)) {
-    handleResponseError(error.response, handleProblemCallback);
+    handleResponseError(error, handleProblemCallback);
     return;
   }
 
