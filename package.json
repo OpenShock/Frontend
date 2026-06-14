@@ -16,7 +16,8 @@
 		"test": "npm run test:unit -- --run && npm run test:e2e",
 		"test:e2e": "playwright test",
 		"test:unit": "vitest",
-		"regen-api": "node scripts/regenerate-api.js"
+		"regen-api": "node scripts/regenerate-api.js",
+		"update-shadcn": "node scripts/update-shadcn.js"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^2.1.0",
