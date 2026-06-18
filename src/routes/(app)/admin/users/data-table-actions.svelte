@@ -10,9 +10,10 @@
 
   interface Props {
     user: AdminUsersView;
+    onDeleted?: () => void;
   }
 
-  let { user }: Props = $props();
+  let { user, onDeleted }: Props = $props();
 
   let editDialogOpen = $state<boolean>(false);
   let deleteDialogOpen = $state<boolean>(false);
@@ -24,7 +25,7 @@
 </script>
 
 <UserEditDialog bind:open={editDialogOpen} {user} />
-<UserDeleteDialog bind:open={deleteDialogOpen} {user} />
+<UserDeleteDialog bind:open={deleteDialogOpen} {user} {onDeleted} />
 
 <TableActionMenu>
   <DropdownMenu.Label>User</DropdownMenu.Label>

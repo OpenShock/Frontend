@@ -25,7 +25,7 @@
     return isPrivileged ? RenderBlueCell(roles.toString()) : RenderBoldCell(roles.toString());
   };
 
-  const columns: ColumnDef<AdminUsersView>[] = [
+  const dataColumns: ColumnDef<AdminUsersView>[] = [
     CreateSortableColumnDef('name', 'Name', RenderCell),
     CreateSortableColumnDef('email', 'Email', RenderCell),
     CreateSortableColumnDef('passwordHashType', 'Password hash type', PasswordHashTypeRenderer),
@@ -36,7 +36,6 @@
     CreateSortableColumnDef('deactivatedByUserId', 'Deactivated by', (a) =>
       a ? RenderCell(a) : RenderRedCell('None')
     ),
-    CreateActionsColumnDef(DataTableActions, (user) => ({ user })),
   ];
 
   function escapeQuotes(str: string) {
@@ -80,6 +79,17 @@
   registerBreadcrumbs(() => [{ label: 'Users' }]);
 
   let isFetching = $state(false);
+
+  // Bumped to force a re-fetch after a mutation (e.g. user deletion).
+  let refreshNonce = $state(0);
+
+  const columns: ColumnDef<AdminUsersView>[] = [
+    ...dataColumns,
+    CreateActionsColumnDef(DataTableActions, (user) => ({
+      user,
+      onDeleted: () => refreshNonce++,
+    })),
+  ];
 
   let requestedPage = $state(1);
   let requestedPageSize = $state(100);
@@ -126,6 +136,7 @@
   });
 
   $effect(() => {
+    void refreshNonce; // re-run after a mutation
     const offset = (requestedPage - 1) * requestedPageSize;
 
     isFetching = true;
