@@ -129,12 +129,7 @@
       <li>what you've already tried from the previous steps</li>
       <li>any error messages or relevant terminal output</li>
     </ul>
-    <Button
-      href={PUBLIC_DISCORD_INVITE_URL}
-      target="_blank"
-      rel="noopener noreferrer"
-      class="w-fit"
-    >
+    <Button href={PUBLIC_DISCORD_INVITE_URL} target="_blank" rel="noopener" class="w-fit">
       <DiscordLogo class="fill-white dark:fill-black" />
       Join our Discord server
     </Button>

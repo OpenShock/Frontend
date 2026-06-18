@@ -92,7 +92,7 @@
         class="mb-auto ml-auto h-7 w-auto text-[#666] dark:text-[#999]"
         href="https://www.cloudflare.com/products/turnstile/?utm_source=turnstile&utm_campaign=widget"
         target="_blank"
-        rel="noopener"
+        rel="noopener noreferrer"
       >
         <CloudflareLogo class="mb-px h-[26px]" />
       </a>
