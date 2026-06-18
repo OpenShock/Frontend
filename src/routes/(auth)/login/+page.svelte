@@ -153,10 +153,10 @@
   By clicking Login, you agree to our <a
     href="https://openshock.org/tos"
     target="_blank"
-    rel="noopener noreferrer">Terms of Service</a
+    rel="noopener">Terms of Service</a
   >
   and
-  <a href="https://openshock.org/privacy" target="_blank" rel="noopener noreferrer"
+  <a href="https://openshock.org/privacy" target="_blank" rel="noopener"
     >Privacy Policy</a
   >.
 </FieldDescription>

@@ -74,7 +74,7 @@
       <Button
         href="https://download.openshock.org/drivers/CP210x_Universal_Windows_Driver.zip"
         target="_blank"
-        rel="noopener noreferrer"
+        rel="noopener"
       >
         <ArrowDownToLine />
         CP210x Universal Windows Driver
