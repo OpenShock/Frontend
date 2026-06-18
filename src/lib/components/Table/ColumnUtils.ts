@@ -6,11 +6,14 @@ import {
   formatElapsed,
   getReadableUserAgentName,
 } from '$lib/utils';
-import type {
-  BuiltInSortingFn,
-  ColumnDef,
-  SortingFnOption,
-  StringOrTemplateHeader,
+import {
+  sortingFns,
+  type BuiltInSortingFn,
+  type ColumnDef,
+  type Row,
+  type SortingFn,
+  type SortingFnOption,
+  type StringOrTemplateHeader,
 } from '@tanstack/table-core';
 import type { SemVer } from 'semver';
 import type { Component, ComponentProps } from 'svelte';
@@ -40,6 +43,37 @@ export function CreateColumnDef<TData extends object, TKey extends Extract<keyof
   };
 }
 
+// TanStack's 'auto' sorting can't compare Temporal.Instant values (they aren't
+// primitives — basic comparison invokes Temporal's valueOf, which throws), so it
+// breaks sorting on every date/time column. This default adds Temporal.Instant
+// support while otherwise mirroring how 'auto' resolves: numbers compare
+// numerically (basic), everything else uses the alphanumeric/natural comparator.
+function temporalAwareSortingFn<TData>(
+  rowA: Row<TData>,
+  rowB: Row<TData>,
+  columnId: string
+): number {
+  const a: unknown = rowA.getValue(columnId);
+  const b: unknown = rowB.getValue(columnId);
+
+  // Sort nullish values last (date columns render null as "Never", numbers "N/A").
+  if (a == null || b == null) {
+    if (a == null && b == null) return 0;
+    return a == null ? 1 : -1;
+  }
+
+  if (a instanceof Temporal.Instant && b instanceof Temporal.Instant) {
+    return Temporal.Instant.compare(a, b);
+  }
+
+  // Numbers (incl. negatives like RSSI) must compare numerically, not as strings.
+  if (typeof a === 'number' && typeof b === 'number') {
+    return a === b ? 0 : a > b ? 1 : -1;
+  }
+
+  return sortingFns.alphanumeric(rowA, rowB, columnId);
+}
+
 export function CreateSortableColumnDef<
   TData extends object,
   TKey extends Extract<keyof TData, string>,
@@ -58,7 +92,7 @@ export function CreateSortableColumnDef<
         sortFunct(row_a.getValue(accessorKey), row_b.getValue(accessorKey));
     }
   } else {
-    sortingFn = 'auto';
+    sortingFn = temporalAwareSortingFn as SortingFn<TData>;
   }
 
   return {
