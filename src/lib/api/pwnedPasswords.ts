@@ -12,6 +12,10 @@ export async function checkPwnedCount(password: string): Promise<number> {
   try {
     const response = await fetch(`https://api.pwnedpasswords.com/range/${hashPrefix}`);
 
+    if (!response.ok) {
+      throw new Error(`Pwned passwords range request failed with status ${response.status}`);
+    }
+
     raw = await response.text();
   } catch (error) {
     throw new Error('Error while fetching pwned passwords range', { cause: error });
