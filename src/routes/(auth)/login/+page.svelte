@@ -150,8 +150,13 @@
   </Card.Content>
 </Card.Root>
 <FieldDescription class="px-6 text-center">
-  By clicking Login, you agree to our <a href="https://openshock.org/tos" target="_blank"
-    >Terms of Service</a
+  By clicking Login, you agree to our <a
+    href="https://openshock.org/tos"
+    target="_blank"
+    rel="noopener noreferrer">Terms of Service</a
   >
-  and <a href="https://openshock.org/privacy" target="_blank">Privacy Policy</a>.
+  and
+  <a href="https://openshock.org/privacy" target="_blank" rel="noopener noreferrer"
+    >Privacy Policy</a
+  >.
 </FieldDescription>

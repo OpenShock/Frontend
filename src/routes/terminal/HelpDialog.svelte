@@ -74,6 +74,7 @@
       <Button
         href="https://download.openshock.org/drivers/CP210x_Universal_Windows_Driver.zip"
         target="_blank"
+        rel="noopener noreferrer"
       >
         <ArrowDownToLine />
         CP210x Universal Windows Driver
@@ -128,7 +129,12 @@
       <li>what you've already tried from the previous steps</li>
       <li>any error messages or relevant terminal output</li>
     </ul>
-    <Button href={PUBLIC_DISCORD_INVITE_URL} target="_blank" class="w-fit">
+    <Button
+      href={PUBLIC_DISCORD_INVITE_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="w-fit"
+    >
       <DiscordLogo class="fill-white dark:fill-black" />
       Join our Discord server
     </Button>
