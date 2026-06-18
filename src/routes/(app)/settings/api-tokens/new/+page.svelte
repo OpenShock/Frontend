@@ -46,6 +46,7 @@
   import * as Card from '$lib/components/ui/card/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { isValidTokenRedirectUri } from '$lib/utils/url';
   import CircleCheck from '@lucide/svelte/icons/circle-check';
   import KeyRound from '@lucide/svelte/icons/key-round';
   import { toast } from 'svelte-sonner';
@@ -96,6 +97,15 @@
 
     redirectUri = params.get('redirect_uri');
     const external = redirectUri !== null;
+
+    // Reject redirect targets that could exfiltrate the freshly minted token to
+    // an attacker (remote http(s) origins, javascript:/data: schemes, …).
+    if (redirectUri !== null && !isValidTokenRedirectUri(redirectUri)) {
+      redirectUri = null;
+      parseError =
+        'The provided redirect_uri is not allowed. Only loopback addresses or custom application schemes are permitted.';
+      return;
+    }
 
     const qName = params.get('name');
     const qPermissions = params.get('permissions');
@@ -174,7 +184,9 @@
 
   function redirectBack() {
     if (!tokenSecret || !redirectUri) return;
-    const target = redirectUri.replace('%', tokenSecret);
+    // redirectUri was validated in parseQueryParams; encode the token so it
+    // can't alter the URL structure of the (trusted) redirect target.
+    const target = redirectUri.replace('%', encodeURIComponent(tokenSecret));
     window.location.href = target;
   }
 

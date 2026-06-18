@@ -63,6 +63,7 @@ const {
   isShortLinkOrigin,
   isValidRedirectURL,
   isValidRedirectParam,
+  isValidTokenRedirectUri,
   sanitizeRedirectSearchParam,
   gotoQueryRedirectOrFallback,
   REDIRECT_QUERY_PARAM,
@@ -696,5 +697,36 @@ describe('isValidRedirectParam — additional', () => {
   it('rejects URL with backslash trickery', () => {
     // "/\\evil.com" is parsed by URL parser as protocol-relative → cross origin
     expect(isValidRedirectParam('/\\evil.com')).toBe(false);
+  });
+});
+
+describe('isValidTokenRedirectUri', () => {
+  it('accepts a custom application scheme', () => {
+    expect(isValidTokenRedirectUri('shockosc://callback?token=%')).toBe(true);
+  });
+
+  it('accepts http(s) loopback targets', () => {
+    expect(isValidTokenRedirectUri('http://localhost:1234/cb?t=%')).toBe(true);
+    expect(isValidTokenRedirectUri('https://127.0.0.1/cb?t=%')).toBe(true);
+    expect(isValidTokenRedirectUri('http://[::1]:8080/cb?t=%')).toBe(true);
+  });
+
+  it('rejects remote http(s) origins', () => {
+    expect(isValidTokenRedirectUri('https://evil.com/grab?t=%')).toBe(false);
+    expect(isValidTokenRedirectUri('http://localhost.evil.com/?t=%')).toBe(false);
+    expect(isValidTokenRedirectUri('https://localhost@evil.com/?t=%')).toBe(false);
+  });
+
+  it('rejects dangerous schemes', () => {
+    expect(isValidTokenRedirectUri('javascript:alert(1)')).toBe(false);
+    expect(isValidTokenRedirectUri('data:text/html,<script>1</script>')).toBe(false);
+    expect(isValidTokenRedirectUri('vbscript:msgbox(1)')).toBe(false);
+    expect(isValidTokenRedirectUri('file:///etc/passwd')).toBe(false);
+    expect(isValidTokenRedirectUri('blob:https://localhost/abc')).toBe(false);
+  });
+
+  it('rejects non-URL values', () => {
+    expect(isValidTokenRedirectUri('not a url')).toBe(false);
+    expect(isValidTokenRedirectUri('')).toBe(false);
   });
 });
