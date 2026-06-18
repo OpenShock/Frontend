@@ -92,6 +92,7 @@
       <Tooltip.Trigger
         class={cn('mr-4 size-9', buttonVariants({ variant: 'default' }))}
         onclick={acceptInvite}
+        aria-label="Accept invite"
       >
         <Check />
       </Tooltip.Trigger>
@@ -104,6 +105,7 @@
       <Tooltip.Trigger
         class={cn('mr-4 size-9', buttonVariants({ variant: 'destructive' }))}
         onclick={denyInvite}
+        aria-label="Deny invite"
       >
         <X />
       </Tooltip.Trigger>

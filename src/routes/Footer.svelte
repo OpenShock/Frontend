@@ -25,7 +25,13 @@
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
         {#snippet child({ props })}
-          <Button {...props} variant="ghost" size="icon" class="h-4 w-4">
+          <Button
+            {...props}
+            variant="ghost"
+            size="icon"
+            class="h-4 w-4"
+            aria-label="Server connection status"
+          >
             {#if getConnectionState() === HubConnectionState.Connected}
               <Wifi class="h-4 w-4 text-green-800" />
             {:else}
