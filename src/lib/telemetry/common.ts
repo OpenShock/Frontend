@@ -8,6 +8,7 @@ import {
   PUBLIC_SIGNOZ_TRACES_URL,
 } from '$env/static/public';
 import { telemetryConsent, type TelemetryLevel } from '$lib/state/telemetry-consent-state.svelte';
+import { isTruthy } from '$lib/utils/parse';
 import { resourceFromAttributes } from '@opentelemetry/resources';
 
 export const SERVICE_NAME = 'openshock-frontend';
@@ -79,7 +80,7 @@ export function telemetryLevel(): TelemetryLevel {
   if (typeof window === 'undefined') return 'off';
 
   // Deployment kill-switch: only ship from a deployment with a configured collector.
-  if (PUBLIC_SIGNOZ_LOGS_ENABLED !== 'true') return 'off';
+  if (!isTruthy(PUBLIC_SIGNOZ_LOGS_ENABLED)) return 'off';
 
   // Opt-in: respect the user's chosen consent level.
   return telemetryConsent.value;

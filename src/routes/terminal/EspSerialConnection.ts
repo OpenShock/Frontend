@@ -17,7 +17,6 @@ async function setupESPLoader(
     /* empty */
   }
 
-  console.log('setupESPLoader: ', serialPort);
   const transport = new Transport(serialPort);
 
   const flashOptions = {
@@ -75,8 +74,6 @@ async function setupApplication(serialPort: SerialPort): Promise<SerialPort> {
   } catch {
     /* empty */
   }
-
-  console.log('setupApplication: ', serialPort);
 
   try {
     // Need to connect to the ESP32 using the right settings.
@@ -310,7 +307,7 @@ export default class EspSerialConnection {
           }
         }
       } catch (e) {
-        console.log(e);
+        console.error(e);
         this.terminal.writeLine(`firmware disconnected: ${e}`);
       } finally {
         try {
@@ -347,11 +344,9 @@ export default class EspSerialConnection {
   }
 
   async disconnect() {
-    console.log('Disconnecting');
     await this._cycleTransport();
     this.serialPort = null;
     this.terminal.clean();
-    console.log('Disconnected');
   }
 
   async erase() {

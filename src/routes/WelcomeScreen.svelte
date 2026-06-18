@@ -326,7 +326,7 @@
     <a
       href={PUBLIC_GITHUB_PROJECT_URL}
       target="_blank"
-      rel="noopener noreferrer"
+      rel="noopener"
       class="group flex items-center gap-4 rounded-xl border border-white/10 bg-[#13131a] p-4 transition hover:border-white/30 hover:bg-[#181821]"
     >
       <div
