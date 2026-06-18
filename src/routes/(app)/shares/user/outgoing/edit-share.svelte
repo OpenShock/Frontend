@@ -135,9 +135,7 @@
               };
             }
           })
-          .catch((error) => {
-            toast.error(`Failed to update share ${share.id}: ${error.message}`);
-          })
+          .catch(handleApiError)
       );
     });
 
