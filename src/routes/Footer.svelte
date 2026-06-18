@@ -17,7 +17,7 @@
     Made with
     <span style="color: #e25555;">&#9829;</span>
     by the
-    <a target="_blank" rel="noopener" href={PUBLIC_GITHUB_PROJECT_URL}> OpenShock Team</a>
+    <a target="_blank" rel="noopener" href={PUBLIC_GITHUB_PROJECT_URL}>OpenShock Team</a>
   </div>
   <div class="flex items-center gap-2">
     <DropdownMenu.Root>
