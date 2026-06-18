@@ -36,6 +36,12 @@
       <Table.Body>
         {#each userSharesState.shares.outgoing as userShare, i (userShare.id)}
           <UserShareItem storeIndex={i} onOpenEdit={() => openEditDrawer(i)} />
+        {:else}
+          <Table.Row>
+            <Table.Cell class="text-muted-foreground py-8 text-center">
+              You haven't shared any shockers with other users yet.
+            </Table.Cell>
+          </Table.Row>
         {/each}
       </Table.Body>
     </Table.Root>

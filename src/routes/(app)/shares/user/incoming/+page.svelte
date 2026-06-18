@@ -37,6 +37,12 @@
       <Table.Body>
         {#each userSharesState.shares.incoming as incomingShare, i (incomingShare.id)}
           <IncomingShareItem share={incomingShare} onOpenEdit={() => openManageDrawer(i)} />
+        {:else}
+          <Table.Row>
+            <Table.Cell class="text-muted-foreground py-8 text-center">
+              No one has shared a shocker with you yet.
+            </Table.Cell>
+          </Table.Row>
         {/each}
       </Table.Body>
     </Table.Root>

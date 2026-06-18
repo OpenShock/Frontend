@@ -28,6 +28,12 @@
       <Table.Body>
         {#each userSharesState.outgoingInvites as invite (invite.id)}
           <OutgoingInviteItem shareInvite={invite} />
+        {:else}
+          <Table.Row>
+            <Table.Cell class="text-muted-foreground py-8 text-center">
+              You have no outgoing share invites.
+            </Table.Cell>
+          </Table.Row>
         {/each}
       </Table.Body>
     </Table.Root>
@@ -48,10 +54,16 @@
       <Table.Body>
         {#each userSharesState.incomingInvites as invite (invite.id)}
           <IncomingInviteItem shareInvite={invite} />
+        {:else}
+          <Table.Row>
+            <Table.Cell class="text-muted-foreground py-8 text-center">
+              You have no incoming share invites.
+            </Table.Cell>
+          </Table.Row>
         {/each}
       </Table.Body>
     </Table.Root>
   </div>
 {:catch error}
-  <div class="text-red-500">Failed to load incomding invites: {error.message}</div>
+  <div class="text-red-500">Failed to load incoming invites: {error.message}</div>
 {/await}
