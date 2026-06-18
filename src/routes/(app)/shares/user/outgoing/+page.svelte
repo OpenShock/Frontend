@@ -1,8 +1,10 @@
 <script lang="ts">
+  import * as Empty from '$lib/components/ui/empty';
   import { Spinner } from '$lib/components/ui/spinner';
   import * as Table from '$lib/components/ui/table';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { userSharesState, refreshUserShares } from '$lib/state/user-shares-state.svelte';
+  import Share2 from '@lucide/svelte/icons/share-2';
   import EditShare from './edit-share.svelte';
   import UserShareItem from './user-share-item.svelte';
 
@@ -31,21 +33,27 @@
     <Spinner class="size-8 text-gray-600 dark:text-gray-300" />
   </div>
 {:then}
-  <div class="mb-6 overflow-y-auto rounded-md border">
-    <Table.Root>
-      <Table.Body>
-        {#each userSharesState.shares.outgoing as userShare, i (userShare.id)}
-          <UserShareItem storeIndex={i} onOpenEdit={() => openEditDrawer(i)} />
-        {:else}
-          <Table.Row>
-            <Table.Cell class="text-muted-foreground py-8 text-center">
-              You haven't shared any shockers with other users yet.
-            </Table.Cell>
-          </Table.Row>
-        {/each}
-      </Table.Body>
-    </Table.Root>
-  </div>
+  {#if userSharesState.shares.outgoing.length === 0}
+    <Empty.Root class="mb-6 rounded-md border">
+      <Empty.Header>
+        <Empty.Media variant="icon">
+          <Share2 />
+        </Empty.Media>
+        <Empty.Title>No shared shockers</Empty.Title>
+        <Empty.Description>You haven't shared any shockers with other users yet.</Empty.Description>
+      </Empty.Header>
+    </Empty.Root>
+  {:else}
+    <div class="mb-6 overflow-y-auto rounded-md border">
+      <Table.Root>
+        <Table.Body>
+          {#each userSharesState.shares.outgoing as userShare, i (userShare.id)}
+            <UserShareItem storeIndex={i} onOpenEdit={() => openEditDrawer(i)} />
+          {/each}
+        </Table.Body>
+      </Table.Root>
+    </div>
+  {/if}
 {:catch error}
   <div class="text-red-500">Failed to load shares: {error.message}</div>
 {/await}
