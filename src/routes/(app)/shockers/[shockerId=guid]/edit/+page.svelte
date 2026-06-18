@@ -11,6 +11,7 @@
   import { page } from '$app/state';
   import Container from '$lib/components/Container.svelte';
   import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
+  import { RfIdMax, RfIdMin, isValidRfId } from '$lib/constants/ShockerConstants';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import { Spinner } from '$lib/components/ui/spinner';
@@ -43,6 +44,8 @@
       (name.trim() !== shocker.name || rfId !== shocker.rfId || model !== shocker.model)
   );
 
+  let rfIdValid = $derived(isValidRfId(rfId));
+
   onMount(async () => {
     try {
       const shockerId = page.params.shockerId!;
@@ -58,7 +61,7 @@
   });
 
   async function save() {
-    if (!shocker || !name.trim()) return;
+    if (!shocker || !name.trim() || !rfIdValid) return;
     saving = true;
     try {
       await shockerEditShocker({
@@ -134,7 +137,12 @@
 
           <Field class="gap-2">
             <FieldLabel>RF ID</FieldLabel>
-            <Input type="number" bind:value={rfId} min={1} />
+            <Input type="number" bind:value={rfId} min={RfIdMin} max={RfIdMax} step={1} />
+            {#if !rfIdValid}
+              <span class="text-destructive text-sm">
+                RF ID must be a whole number between {RfIdMin} and {RfIdMax}.
+              </span>
+            {/if}
           </Field>
 
           <Field class="gap-2">
@@ -171,7 +179,7 @@
           </Field>
         </Card.Content>
         <Card.Footer>
-          <Button disabled={saving || !name.trim() || !hasChanges} onclick={save}>
+          <Button disabled={saving || !name.trim() || !rfIdValid || !hasChanges} onclick={save}>
             {#if saving}<Spinner class="size-4" />{/if}
             Save Changes
           </Button>
