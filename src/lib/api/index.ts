@@ -32,6 +32,7 @@ export {
   adminConfigurationDelete,
   adminConfigurationList,
   adminConfigurationUpdate,
+  adminDeleteUser,
   adminGetOnlineDevices,
   adminGetUsers,
   adminListEmailProviderBlacklist,
