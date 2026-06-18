@@ -198,12 +198,14 @@ const LOOPBACK_HOSTNAMES = new Set(['localhost', '127.0.0.1', '[::1]', '::1']);
  * In that flow a freshly minted token is handed to an external app by
  * navigating the browser to its redirect URI, so this is deliberately more
  * permissive than {@link isValidRedirectParam} — it allows custom application
- * schemes (e.g. `shockosc://callback`). To prevent the token from being
- * exfiltrated to an attacker it rejects:
+ * schemes (e.g. `shockosc://callback`) and remote `https` origins (for
+ * web-based integrations). To prevent the token from being exfiltrated it
+ * rejects:
  *  - dangerous schemes that can execute script or render HTML
  *    (`javascript:`, `data:`, …)
- *  - remote `http(s)` origins — a token must never be shipped to an arbitrary
- *    web origin; only loopback addresses are allowed (for local apps)
+ *  - remote cleartext `http` origins — a token must never travel unencrypted
+ *    to a remote origin; `http` is only allowed for loopback addresses (for
+ *    local apps)
  *
  * @param value - The raw `redirect_uri` query parameter
  * @returns Whether the value is a safe token redirect target
@@ -218,9 +220,10 @@ export function isValidTokenRedirectUri(value: string): boolean {
 
   if (DANGEROUS_REDIRECT_SCHEMES.has(url.protocol)) return false;
 
-  // Web schemes may only target loopback — a token must never leave to a remote
-  // origin. Non-web (custom application) schemes are allowed through.
-  if (url.protocol === 'http:' || url.protocol === 'https:') {
+  // Cleartext http may only target loopback — a token must never travel
+  // unencrypted to a remote origin. https and custom (application) schemes are
+  // allowed through, since https keeps the token confidential in transit.
+  if (url.protocol === 'http:') {
     return LOOPBACK_HOSTNAMES.has(url.hostname);
   }
 

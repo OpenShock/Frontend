@@ -705,16 +705,21 @@ describe('isValidTokenRedirectUri', () => {
     expect(isValidTokenRedirectUri('shockosc://callback?token=%')).toBe(true);
   });
 
-  it('accepts http(s) loopback targets', () => {
+  it('accepts http loopback targets', () => {
     expect(isValidTokenRedirectUri('http://localhost:1234/cb?t=%')).toBe(true);
-    expect(isValidTokenRedirectUri('https://127.0.0.1/cb?t=%')).toBe(true);
     expect(isValidTokenRedirectUri('http://[::1]:8080/cb?t=%')).toBe(true);
   });
 
-  it('rejects remote http(s) origins', () => {
-    expect(isValidTokenRedirectUri('https://evil.com/grab?t=%')).toBe(false);
-    expect(isValidTokenRedirectUri('http://localhost.evil.com/?t=%')).toBe(false);
-    expect(isValidTokenRedirectUri('https://localhost@evil.com/?t=%')).toBe(false);
+  it('accepts remote https origins', () => {
+    expect(isValidTokenRedirectUri('https://127.0.0.1/cb?t=%')).toBe(true);
+    expect(isValidTokenRedirectUri('https://shockalarmclock.app/cb?t=%')).toBe(true);
+    expect(isValidTokenRedirectUri('https://evil.com/grab?t=%')).toBe(true);
+    expect(isValidTokenRedirectUri('https://localhost@evil.com/?t=%')).toBe(true);
+  });
+
+  it('rejects remote cleartext http origins', () => {
+    expect(isValidTokenRedirectUri('http://localhost.insecure.com/?t=%')).toBe(false);
+    expect(isValidTokenRedirectUri('http://insecure.com/cb?t=%')).toBe(false);
   });
 
   it('rejects dangerous schemes', () => {
