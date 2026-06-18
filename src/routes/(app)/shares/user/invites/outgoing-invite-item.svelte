@@ -106,6 +106,7 @@
       <Tooltip.Trigger
         class={cn('mr-4 size-9', buttonVariants({ variant: 'destructive' }))}
         onclick={removeInvite}
+        aria-label="Cancel invite"
       >
         <X />
       </Tooltip.Trigger>
