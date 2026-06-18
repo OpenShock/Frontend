@@ -1,4 +1,4 @@
-import { HubUpdateType, isHubUpdateType } from '$lib/signalr/models/HubUpdateType';
+import { isHubUpdateType } from '$lib/signalr/models/HubUpdateType';
 import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
 import { isString } from '$lib/typeguards';
 import { toast } from 'svelte-sonner';
@@ -9,10 +9,6 @@ export function handleSignalrDeviceUpdate(deviceId: unknown, updateType: unknown
     toast.error('Received invalid update from server!');
     return;
   }
-
-  const typeLabel = HubUpdateType[updateType];
-
-  console.log(`🔄 DeviceUpdate: ${deviceId} → ${typeLabel}`);
 
   refreshOwnHubs();
 }

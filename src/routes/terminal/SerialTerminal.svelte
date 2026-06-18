@@ -308,7 +308,14 @@
         placeholder="Type a command..."
         {disabled}
       />
-      <Button size="sm" variant="ghost" onclick={sendCommand} {disabled}>
+      <Button
+        size="sm"
+        variant="ghost"
+        onclick={sendCommand}
+        {disabled}
+        title="Send command"
+        aria-label="Send command"
+      >
         <Send class="h-3.5 w-3.5" />
       </Button>
     </div>

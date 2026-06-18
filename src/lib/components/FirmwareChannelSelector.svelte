@@ -6,6 +6,7 @@
     FirmwareChannels,
   } from '$lib/api/firmwareCDN';
   import * as ToggleGroup from '$lib/components/ui/toggle-group';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 
   /** Optional chip to constrain the list of boards to */
   //export let chip: string | null = null;
@@ -41,10 +42,12 @@
     const currentChannel = channel;
 
     // Fetch the channel version from the API.
-    FetchChannelVersion(currentChannel).then((ver) => {
-      version = ver ?? null;
-      versions[currentChannel] = version;
-    });
+    FetchChannelVersion(currentChannel)
+      .then((ver) => {
+        version = ver ?? null;
+        versions[currentChannel] = version;
+      })
+      .catch(handleApiError);
   });
 </script>
 

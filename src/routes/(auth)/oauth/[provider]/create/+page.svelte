@@ -8,7 +8,6 @@
   import { Button } from '$lib/components/ui/button';
   import * as Card from '$lib/components/ui/card/index.js';
   import { FieldDescription } from '$lib/components/ui/field/index.js';
-  import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { userState } from '$lib/state/user-state.svelte';
@@ -56,16 +55,8 @@
 
       goto(resolve('/home'));
     } catch (error) {
-      await handleApiError(error, (problem) => {
-        if (!isValidationError(problem)) return false;
-
-        console.log(mapToValRes(problem, 'Username'));
-        console.log(mapToValRes(problem, 'Password'));
-        console.log(mapToValRes(problem, 'Email'));
-        console.log(mapToValRes(problem, 'TurnstileResponse'));
-
-        return true;
-      });
+      // Let handleApiError surface validation messages via its generic toast.
+      await handleApiError(error);
     }
   }
 
@@ -81,8 +72,8 @@
           emailValid = true;
         }
       })
-      .catch((err) => {
-        console.error('Failed to fetch OAuth signup data', err);
+      .catch(async (err) => {
+        await handleApiError(err);
         goto(resolve('/login'));
       });
   });

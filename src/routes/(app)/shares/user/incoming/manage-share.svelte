@@ -89,7 +89,13 @@
                     >
                       <Copy />
                     </Button>
-                    <Button variant="destructive" onclick={() => handleDeleteClick(shocker)}>
+                    <Button
+                      variant="destructive"
+                      size="icon"
+                      title="Remove share"
+                      aria-label="Remove share"
+                      onclick={() => handleDeleteClick(shocker)}
+                    >
                       <Trash />
                     </Button>
                   </div>
