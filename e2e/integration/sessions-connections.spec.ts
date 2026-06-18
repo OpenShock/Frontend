@@ -55,7 +55,9 @@ test.describe('connections / OAuth page', () => {
       .catch(() => false);
     if (!providerVisible) {
       await expect(
-        authedPage.getByText(/no.*(provider|connection|configured)|none\s*(available|configured)/i).first()
+        authedPage
+          .getByText(/no.*(provider|connection|configured)|none\s*(available|configured)/i)
+          .first()
       ).toBeVisible({ timeout: 5000 });
     }
   });

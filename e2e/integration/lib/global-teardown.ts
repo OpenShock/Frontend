@@ -1,12 +1,7 @@
-import { execSync } from 'child_process';
-import path from 'path';
-
-const root = path.resolve(import.meta.dirname, '../../..');
-
+// The integration stack is started by the Playwright webServer command
+// (scripts/dev-integration.mjs) using Testcontainers, and is torn down when
+// that process exits. Testcontainers' Ryuk reaper also removes any orphaned
+// containers/networks as a backstop, so there is nothing to do here.
 export default function globalTeardown() {
-  if (!process.env.CI) return;
-  execSync('docker compose -f docker-compose.integration.yml down', {
-    cwd: root,
-    stdio: 'inherit',
-  });
+  // intentionally empty
 }

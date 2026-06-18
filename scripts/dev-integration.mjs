@@ -1,17 +1,15 @@
 #!/usr/bin/env node
-// Brings up the integration backend (docker-compose) and waits for it to be
+// Brings up the integration backend (via Testcontainers) and waits for it to be
 // reachable before launching `vite dev --mode integration`. Playwright starts
-// the webServer command before globalSetup, so we cannot rely on globalSetup
-// to start docker — we have to do it here, otherwise Vite SSR fetches race
-// the API container coming up and Playwright times out the webServer probe.
+// the webServer command before globalSetup, so we cannot rely on globalSetup to
+// start the backend — the stack has to be up here, otherwise Vite SSR fetches
+// race the API container coming up and Playwright times out the webServer probe.
 
-import { spawn, spawnSync } from 'node:child_process';
+import { spawn } from 'node:child_process';
 import { request as httpRequest } from 'node:http';
 import { request as httpsRequest } from 'node:https';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { startStack } from './integration-stack.mjs';
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const API_URL = process.env.VITE_API_PROXY_TARGET ?? 'https://localhost:5001';
 const TIMEOUT_MS = Number(process.env.INTEGRATION_BACKEND_TIMEOUT_MS ?? 10 * 60 * 1000);
 const POLL_INTERVAL_MS = 1500;
@@ -56,22 +54,16 @@ async function waitForBackend() {
   process.exit(1);
 }
 
-function startDockerStack() {
-  process.stdout.write('[dev:integration] starting docker-compose stack ...\n');
-  const result = spawnSync(
-    'docker',
-    ['compose', '-f', 'docker-compose.integration.yml', 'up', '-d', '--wait'],
-    { cwd: ROOT, stdio: 'inherit' }
+let stack;
+try {
+  stack = await startStack();
+} catch (err) {
+  process.stderr.write(
+    `[dev:integration] failed to start Testcontainers stack — is a Docker-compatible runtime available?\n${err}\n`
   );
-  if (result.status !== 0) {
-    process.stderr.write(
-      '[dev:integration] failed to start docker stack — is Docker Desktop running?\n'
-    );
-    process.exit(result.status ?? 1);
-  }
+  process.exit(1);
 }
 
-startDockerStack();
 await waitForBackend();
 
 const child = spawn('pnpm', ['exec', 'vite', 'dev', '--mode', 'integration'], {
@@ -79,11 +71,20 @@ const child = spawn('pnpm', ['exec', 'vite', 'dev', '--mode', 'integration'], {
   shell: process.platform === 'win32',
 });
 
-child.on('exit', (code, signal) => {
+let shuttingDown = false;
+async function shutdown(code, signal) {
+  if (shuttingDown) return;
+  shuttingDown = true;
+  await stack.stop().catch(() => {});
   if (signal) process.kill(process.pid, signal);
   else process.exit(code ?? 0);
-});
+}
+
+child.on('exit', (code, signal) => shutdown(code, signal));
 
 for (const sig of ['SIGINT', 'SIGTERM']) {
-  process.on(sig, () => child.kill(sig));
+  process.on(sig, () => {
+    // Forward to Vite; its exit handler triggers stack teardown.
+    child.kill(sig);
+  });
 }
