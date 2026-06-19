@@ -1,68 +1,166 @@
-import { PUBLIC_BACKEND_API_URL } from '$env/static/public';
-import { getBackendURL } from '$lib/utils/url';
-import {
-  APITokensApi,
-  AccountApi as AccountV1Api,
-  AdminApi,
-  type ConfigurationParameters,
-  Configuration as ConfigurationV1,
-  HubManagementApi as HubManagementV1Api,
-  MetaApi,
-  PublicShockerSharesApi,
-  SessionsApi,
-  ShockerSharesApi as ShockerSharesV1Api,
-  ShockersApi as ShockersV1Api,
-  UsersApi,
+import { FetchError, RateLimitError, ResponseError, parseRetryAfter } from './internal/errors';
+import { client } from './internal/v1/client.gen';
+
+client.interceptors.error.use((error, response, request) => {
+  if (response) {
+    const url = request?.url ?? '';
+    const method = request?.method ?? '';
+    const msg = `${method} ${url} → ${response.status}`;
+    if (response.status === 429) {
+      return new RateLimitError(response, parseRetryAfter(response), msg, error);
+    }
+    return new ResponseError(response, msg, error);
+  }
+  if (error instanceof Error) return new FetchError(error, error.message);
+  return new FetchError(new Error(String(error)), 'Unknown fetch error');
+});
+
+export { FetchError, RateLimitError, ResponseError } from './internal/errors';
+
+// One canonical version per method. v2 wins where both exist.
+export {
+  accountActivate,
+  accountEmailVerify,
+  accountLogout,
+  accountPasswordResetCheckValid,
+  accountPasswordResetComplete,
+  accountPasswordResetInitiate,
+  adminAddEmailProviderBlacklist,
+  adminAddUsernameBlacklist,
+  adminAddWebhook,
+  adminConfigurationAdd,
+  adminConfigurationDelete,
+  adminConfigurationList,
+  adminConfigurationUpdate,
+  adminDeleteUser,
+  adminGetOnlineDevices,
+  adminGetUsers,
+  adminListEmailProviderBlacklist,
+  adminListUsernameBlacklist,
+  adminListWebhooks,
+  adminModifyUser,
+  adminRemoveEmailProviderBlacklist,
+  adminRemoveUsernameBlacklist,
+  adminRemoveWebhook,
+  authenticatedAccountChangeEmail,
+  authenticatedAccountChangePassword,
+  authenticatedAccountChangeUsername,
+  authenticatedAccountDeactivate,
+  authenticatedAccountListOAuthConnections,
+  authenticatedAccountRemoveOAuthConnection,
+  devicesEditDevice,
+  devicesGetLiveControlGatewayInfo,
+  devicesGetPairCode,
+  devicesOtaGetOtaUpdateHistory,
+  devicesRegenerateDeviceToken,
+  devicesRemoveDevice,
+  publicGetOnlineDevicesStatistics,
+  publicGetPublicShare,
+  sessionsDeleteSession,
+  sessionsListSessions,
+  shareLinksAddShocker,
+  shareLinksCreatePublicShare,
+  shareLinksDeletePublicShare,
+  shareLinksEditShocker,
+  shareLinksList,
+  shareLinksPauseShocker,
+  shareLinksRemoveShocker,
+  shockerEditShocker,
+  shockerGetAllShockerLogs,
+  shockerGetShockerById,
+  shockerGetShockerLogs,
+  shockerListSharedShockers,
+  shockerListShockers,
+  shockerPauseShocker,
+  shockerRegisterShocker,
+  shockerRemoveShocker,
+  shockerShockerShareCodePause,
+  shockerShockerShareCodeUpdate,
+  shockerShockerShareRemove,
+  tokenDeleteDeleteToken,
+  usersGetByName,
+  usersGetSelf,
+  versionGetBackendInfo,
 } from './internal/v1';
-import {
-  AccountApi as AccountV2Api,
-  Configuration as ConfigurationV2,
-  HubManagementApi as HubManagementV2Api,
-  UserShockerSharesApi as ShockerSharesV2Api,
-  ShockersApi as ShockersV2Api,
+
+// Enum-like constants from v1 (each exports both a runtime value and a type).
+export {
+  ConfigurationValueType,
+  MatchTypeEnum,
+  OtaUpdateStatus,
+  PasswordHashingAlgorithm,
+  PermissionType,
+  RoleType,
+  ShockerModelType,
+} from './internal/v1';
+
+export type {
+  AdminOnlineDeviceResponse,
+  AdminUsersView,
+  AdminUsersViewPaginated,
+  BackendInfoResponse,
+  BasicUserInfo,
+  BooleanLegacyDataResponse,
+  ConfigurationItemDto,
+  DeviceWithShockersResponse,
+  EmailProviderBlacklistDto,
+  LogEntry,
+  LogEntryWithHub,
+  LoginSessionResponse,
+  NewShocker,
+  OAuthConnectionResponse,
+  OtaItem,
+  OwnPublicShareResponse,
+  OwnerShockerResponse,
+  PublicShareDevice,
+  PublicShareResponse,
+  PublicShareShocker,
+  SharedShocker,
+  ShockerResponse,
+  ShockerWithDevice,
+  UserNameBlacklistDto,
+  WebhookDto,
+} from './internal/v1';
+
+export {
+  accountCheckUsername,
+  accountLoginV2,
+  accountSignUpV2,
+  devicesCreateDeviceV2,
+  tokensCreateTokenV2,
+  tokensEditTokenV2,
+  tokensGetTokenByIdV2,
+  tokensListTokensV2,
+  tokensReportTokens,
+  tokensSelfGetSelfTokenV2,
+  tokensSetTokenPaused,
+  userSharesCreateShareInvite,
+  userSharesDeleteOutgoingInvite,
+  userSharesDenyIncomingInvite,
+  userSharesGetIncomingInvitesList,
+  userSharesGetOutgoingInvitesList,
+  userSharesGetSharesByUsers,
+  userSharesRedeemInvite,
 } from './internal/v2';
 
-function GetBasePath(): string {
-  if (!PUBLIC_BACKEND_API_URL) {
-    throw new Error('PUBLIC_BACKEND_API_URL is not set in the environment');
-  }
+export { ControlLimitMode, UsernameAvailability, UsernameErrorType } from './internal/v2';
 
-  try {
-    const url = getBackendURL();
-
-    if (url.pathname === '/') {
-      return url.origin;
-    }
-
-    // Trim trailing slashes
-    const pathname = url.pathname.replace(/\/+$/, '');
-
-    return `${url.origin}${pathname}`;
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    throw new Error(`PUBLIC_BACKEND_API_URL is not a valid URL: ${message}`, { cause: error });
-  }
-}
-
-const API_CONFIG: ConfigurationParameters = {
-  basePath: GetBasePath(),
-  credentials: 'include',
-};
-
-const DefaultApiV1Configuration = new ConfigurationV1(API_CONFIG);
-const DefaultApiV2Configuration = new ConfigurationV2(API_CONFIG);
-
-export const accountV1Api = new AccountV1Api(DefaultApiV1Configuration);
-export const accountV2Api = new AccountV2Api(DefaultApiV2Configuration);
-export const adminApi = new AdminApi(DefaultApiV1Configuration);
-export const apiTokensApi = new APITokensApi(DefaultApiV1Configuration);
-export const hubManagementV1Api = new HubManagementV1Api(DefaultApiV1Configuration);
-export const hubManagementV2Api = new HubManagementV2Api(DefaultApiV2Configuration);
-export const metaApi = new MetaApi(DefaultApiV1Configuration);
-export const sessionsApi = new SessionsApi(DefaultApiV1Configuration);
-export const shockersV1Api = new ShockersV1Api(DefaultApiV1Configuration);
-export const shockersV2Api = new ShockersV2Api(DefaultApiV2Configuration);
-export const publicShockerSharesApi = new PublicShockerSharesApi(DefaultApiV1Configuration);
-export const shockerSharesV1Api = new ShockerSharesV1Api(DefaultApiV1Configuration);
-export const shockerSharesV2Api = new ShockerSharesV2Api(DefaultApiV2Configuration);
-export const usersApi = new UsersApi(DefaultApiV1Configuration);
+export type {
+  CreateTokenRequestV2,
+  DurationLimitSettings,
+  EditTokenRequestV2,
+  IntensityLimitSettings,
+  SetTokenPausedRequest,
+  ShareInviteBaseDetails,
+  ShockerControlSettings,
+  ShockerLimits,
+  ShockerPermLimitPairWithIdAndName,
+  ShockerPermissions,
+  TokenCreatedResponseV2,
+  TokenPausedResponse,
+  TokenResponseV2,
+  UserShareInfo,
+  UsernameCheckResponse,
+  V2UserShares,
+  V2UserSharesListItem,
+} from './internal/v2';

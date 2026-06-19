@@ -1,9 +1,12 @@
 <script lang="ts">
-  import { Layers, LoaderCircle, LogsIcon, Plus, RotateCcw, Settings, Zap } from '@lucide/svelte';
+  import { PUBLIC_DISABLE_SHOCKER_MAP } from '$env/static/public';
+  import { isTruthy } from '$lib/utils/parse';
+  import { shockerPauseShocker, shockerRegisterShocker } from '$lib/api';
+  import type { NewShocker } from '$lib/api';
+  import { Layers, LogsIcon, Plus, RotateCcw, Settings, Zap } from '@lucide/svelte';
   import { resolve } from '$app/paths';
-  import { shockersV1Api } from '$lib/api';
-  import type { NewShocker } from '$lib/api/internal/v1';
   import Container from '$lib/components/Container.svelte';
+  import { Spinner } from '$lib/components/ui/spinner';
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import DialogShockerAdd, {
     defaultAddShockerData,
@@ -15,6 +18,7 @@
   import RichControlModule from '$lib/components/ControlModules/RichControlModule.svelte';
   import ShockerCard from '$lib/components/ControlModules/ShockerCard.svelte';
   import ShockerMenu from '$lib/components/ControlModules/impl/ShockerMenu.svelte';
+  import ShockerPauseButton from '$lib/components/ControlModules/impl/ShockerPauseButton.svelte';
   import SimpleControlHeader from '$lib/components/ControlModules/SimpleControlHeader.svelte';
   import SimpleControlModule from '$lib/components/ControlModules/SimpleControlModule.svelte';
   import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
@@ -28,10 +32,10 @@
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { ownHubs, onlineHubs, refreshOwnHubs } from '$lib/state/hubs-state.svelte';
   import {
-    ensureLiveConnection,
     getLiveConnection,
     liveConnections,
     LiveConnectionState,
+    registerHubShockers,
   } from '$lib/state/live-control-state.svelte';
   import { PersistedState } from '$lib/state/classes/persisted-state.svelte';
   import { onMount } from 'svelte';
@@ -51,21 +55,16 @@
     )
   );
 
-  // Eagerly create LiveDeviceConnection and LiveShockerState entries
-  // so template reads never mutate state (Svelte 5 forbids mutation in $derived/templates).
+  // Register each hub's shockers with the live-control state store
   $effect(() => {
     const currentHubIds: string[] = [];
     for (const [hubId, hub] of ownHubs) {
       currentHubIds.push(hubId);
-      ensureLiveConnection(hubId);
-      const conn = getLiveConnection(hubId);
-      if (conn) {
-        for (const shocker of hub.shockers) {
-          conn.ensureShockerState(shocker.id);
-        }
-      }
+      registerHubShockers(
+        hubId,
+        hub.shockers.map((s) => ({ id: s.id, isPaused: s.isPaused }))
+      );
     }
-    // Clean up connections for hubs that no longer exist
     for (const [hubId, conn] of liveConnections) {
       if (!currentHubIds.includes(hubId)) {
         conn.disconnect();
@@ -114,7 +113,7 @@
     }));
     if (!result) return;
     try {
-      await shockersV1Api.shockerRegisterShocker(result);
+      await shockerRegisterShocker({ body: result });
       toast.success('Shocker added');
       await refreshOwnHubs();
     } catch (error) {
@@ -129,11 +128,11 @@
     if (conn) serializeControlMessages(conn, [{ id, type, intensity, duration }]);
   }
 
-  async function ownResume(id: string) {
-    const result = await shockersV1Api.shockerPauseShocker(id, { pause: false });
+  async function ownResume(shockerId: string) {
+    const result = await shockerPauseShocker({ path: { shockerId }, body: { pause: false } });
     // Update the shocker's isPaused state
     for (const hub of ownHubs.values()) {
-      const shocker = hub.shockers.find((s) => s.id === id);
+      const shocker = hub.shockers.find((s) => s.id === shockerId);
       if (shocker) {
         shocker.isPaused = result.data;
         break;
@@ -143,7 +142,7 @@
 </script>
 
 {#snippet shockerCard(
-  shocker: import('$lib/api/internal/v1').ShockerResponse,
+  shocker: import('$lib/api').ShockerResponse,
   hubId: string,
   showHubBadge: boolean
 )}
@@ -160,16 +159,13 @@
     {showHubBadge}
     isPaused={shocker.isPaused}
     resume={() => ownResume(shocker.id)}
+    class="w-full"
   >
     {#snippet live()}
-      <LiveButton
-        {hubId}
-        shockerId={shocker.id}
-        isPaused={shocker.isPaused}
-        connection={liveConn}
-        {liveState}
-        compact
-      />
+      <LiveButton {hubId} shockerId={shocker.id} compact />
+    {/snippet}
+    {#snippet pause()}
+      <ShockerPauseButton {shocker} />
     {/snippet}
     {#snippet menu()}
       <ShockerMenu {shocker} />
@@ -191,14 +187,19 @@
 <Container>
   {#if loading}
     <div class="flex items-center gap-3 p-12">
-      <LoaderCircle class="size-6 animate-spin" />
+      <Spinner class="size-6" />
       <span class="text-muted-foreground">Loading shockers...</span>
     </div>
   {:else}
     <div class="flex w-full flex-wrap items-center justify-between gap-2">
       <h1 class="text-2xl font-bold">Shockers</h1>
       <div class="flex flex-wrap items-center gap-1">
-        <Button variant="secondary" size="sm" onclick={openAddShockerDialog}>
+        <Button
+          variant="secondary"
+          size="sm"
+          onclick={openAddShockerDialog}
+          data-tour="shockers-add"
+        >
           <Plus class="size-4" /> Add Shocker
         </Button>
         <Button
@@ -214,7 +215,13 @@
         <Popover.Root>
           <Popover.Trigger>
             {#snippet child({ props })}
-              <Button {...props} variant="ghost" size="sm" aria-label="View mode">
+              <Button
+                {...props}
+                variant="ghost"
+                size="sm"
+                aria-label="View mode"
+                data-tour="shockers-viewmode"
+              >
                 <Layers class="size-4" />
               </Button>
             {/snippet}
@@ -241,20 +248,28 @@
             >
               Simple
             </Button>
-            <Button
-              variant={moduleType === ModuleType.MapControlModule ? 'secondary' : 'ghost'}
-              size="sm"
-              onclick={() => (moduleType = ModuleType.MapControlModule)}
-            >
-              Map
-            </Button>
+            {#if !isTruthy(PUBLIC_DISABLE_SHOCKER_MAP)}
+              <Button
+                variant={moduleType === ModuleType.MapControlModule ? 'secondary' : 'ghost'}
+                size="sm"
+                onclick={() => (moduleType = ModuleType.MapControlModule)}
+              >
+                Map
+              </Button>
+            {/if}
           </Popover.Content>
         </Popover.Root>
         <!-- Settings button -->
         <Popover.Root>
           <Popover.Trigger>
             {#snippet child({ props })}
-              <Button {...props} variant="ghost" size="sm" aria-label="Settings">
+              <Button
+                {...props}
+                variant="ghost"
+                size="sm"
+                aria-label="Settings"
+                data-tour="shockers-layout"
+              >
                 <Settings class="size-4" />
               </Button>
             {/snippet}
@@ -302,14 +317,14 @@
       {#if moduleType === ModuleType.SimpleControlModule}
         <SimpleControlHeader bind:shockIntensity bind:vibrationIntensity bind:duration />
       {/if}
-      {#if moduleType === ModuleType.MapControlModule}
+      {#if !isTruthy(PUBLIC_DISABLE_SHOCKER_MAP) && moduleType === ModuleType.MapControlModule}
         <MapControlModule {shockers} />
       {:else if groupByHub.value}
-        <div class="flex flex-col gap-6">
+        <div class="flex w-full flex-col gap-6">
           {#each Array.from(ownHubs) as [hubId, hub] (hubId)}
             {@const online = onlineHubs.get(hubId)?.isOnline ?? false}
             {@const shockerCount = hub.shockers.length}
-            <div class="flex flex-col gap-3">
+            <div class="flex w-full flex-col gap-3">
               <div class="flex items-center gap-2">
                 <span
                   class="size-2.5 rounded-full {online ? 'bg-green-400' : 'bg-red-500'}"
@@ -320,7 +335,7 @@
                   {shockerCount} shocker{shockerCount !== 1 ? 's' : ''}
                 </span>
               </div>
-              <div class="flex flex-wrap justify-center gap-4">
+              <div class="grid w-full grid-cols-[repeat(auto-fill,minmax(20rem,1fr))] gap-4">
                 {#each hub.shockers as shocker (shocker.id)}
                   {@render shockerCard(shocker, hubId, false)}
                 {/each}
@@ -329,7 +344,7 @@
           {/each}
         </div>
       {:else}
-        <div class="flex flex-wrap justify-center gap-4">
+        <div class="grid w-full grid-cols-[repeat(auto-fill,minmax(20rem,1fr))] gap-4">
           {#each flatShockers as { shocker, hubId } (shocker.id)}
             {@render shockerCard(shocker, hubId, true)}
           {/each}

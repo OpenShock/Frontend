@@ -1,16 +1,30 @@
 <script lang="ts">
-  import type { AdminUsersView } from '$lib/api/internal/v1';
+  import { adminDeleteUser } from '$lib/api';
+  import type { AdminUsersView } from '$lib/api';
   import ConfirmDeleteDialog from '$lib/components/ConfirmDeleteDialog.svelte';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { toast } from 'svelte-sonner';
 
   interface Props {
     open: boolean;
     user: AdminUsersView;
+    onDeleted?: () => void;
   }
 
-  let { open = $bindable<boolean>(), user }: Props = $props();
+  let { open = $bindable<boolean>(), user, onDeleted }: Props = $props();
+
+  function onDeleteClicked() {
+    adminDeleteUser({ path: { userId: user.id } })
+      .then(() => {
+        toast.success(`Deleted user ${user.name}`);
+        onDeleted?.();
+      })
+      .catch(handleApiError)
+      .finally(() => (open = false));
+  }
 </script>
 
-<ConfirmDeleteDialog bind:open title="Delete user" onConfirm={() => {}}>
+<ConfirmDeleteDialog bind:open title="Delete user" onConfirm={onDeleteClicked}>
   {#snippet description()}
     Are you sure you want to delete <strong>{user.name}</strong>?<br />
     All data associated with this user will be permanently deleted.<br />

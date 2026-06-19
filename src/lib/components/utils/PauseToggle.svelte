@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { LoaderCircle, Pause, Play } from '@lucide/svelte';
-  import { shockersV1Api } from '$lib/api';
-  import type { BooleanLegacyDataResponse } from '$lib/api/internal/v1';
+  import { shockerPauseShocker, shockerShockerShareCodePause } from '$lib/api';
+  import type { BooleanLegacyDataResponse } from '$lib/api';
+  import { Pause, Play } from '@lucide/svelte';
   import { Button } from '$lib/components/ui/button';
-  import { toast } from 'svelte-sonner';
+  import { Spinner } from '$lib/components/ui/spinner';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 
   interface Props {
     shockerId: string;
@@ -21,21 +22,22 @@
     let pauseRequest: Promise<BooleanLegacyDataResponse>;
 
     if (userShareUserId) {
-      pauseRequest = shockersV1Api.shockerShockerShareCodePause(shockerId, userShareUserId, {
-        pause: !paused,
+      pauseRequest = shockerShockerShareCodePause({
+        path: { shockerId, sharedWithUserId: userShareUserId },
+        body: { pause: !paused },
       });
     } else {
-      pauseRequest = shockersV1Api.shockerPauseShocker(shockerId, { pause: !paused });
+      pauseRequest = shockerPauseShocker({
+        path: { shockerId },
+        body: { pause: !paused },
+      });
     }
 
     pauseRequest
       .then((newPausedState) => {
         paused = newPausedState.data;
       })
-      .catch((error) => {
-        toast.error(`Failed to toggle pause state: ${error.message}`);
-        console.error(error);
-      })
+      .catch(handleApiError)
       .finally(() => {
         requestInProgress = false;
         onPausedChange(paused);
@@ -52,7 +54,7 @@
   aria-busy={requestInProgress}
 >
   {#if requestInProgress}
-    <LoaderCircle class="animate-spin" />
+    <Spinner />
   {:else if paused}
     <Play />
   {:else}

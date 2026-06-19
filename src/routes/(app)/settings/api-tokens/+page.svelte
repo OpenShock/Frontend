@@ -1,13 +1,15 @@
 <script lang="ts">
+  import { tokensListTokensV2 } from '$lib/api';
+  import type { TokenResponseV2 } from '$lib/api';
+  import { resolve } from '$app/paths';
   import Plus from '@lucide/svelte/icons/plus';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
   import type { SortingState } from '@tanstack/table-core';
   import type { ColumnDef } from '@tanstack/table-core';
-  import { apiTokensApi } from '$lib/api';
-  import type { TokenCreatedResponse, TokenResponse } from '$lib/api/internal/v1';
   import Container from '$lib/components/Container.svelte';
   import {
     CreateActionsColumnDef,
+    CreateColumnDef,
     CreateSortableColumnDef,
     LocaleDateRenderer,
     RenderCell,
@@ -16,91 +18,71 @@
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from '$lib/components/ui/card';
-  import type { ProblemDetails } from '$lib/errorhandling/ProblemDetails';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
   import DataTableActions from './data-table-actions.svelte';
-  import TokenCreateDialog from './dialog-token-create.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import TokenCreatedDialog from './dialog-token-created.svelte';
 
   registerBreadcrumbs(() => [
     { label: 'Settings', href: '/settings/account' },
     { label: 'API Tokens' },
   ]);
-  let data = $state<TokenResponse[]>([]);
+
+  let tokens = $state<TokenResponseV2[]>([]);
   let sorting = $state<SortingState>([]);
 
-  function onCreated(token: TokenCreatedResponse) {
-    data = [
-      ...data,
-      {
-        id: token.id,
-        name: token.name,
-        createdOn: token.createdAt,
-        validUntil: token.validUntil,
-        lastUsed: token.lastUsed,
-        permissions: token.permissions,
-      },
-    ];
-    createdTokenSecret = token.token;
-    toast.success('Token created successfully');
+  async function loadTokens(): Promise<boolean> {
+    try {
+      tokens = await tokensListTokensV2();
+      return true;
+    } catch (error) {
+      await handleApiError(error);
+      return false;
+    }
   }
 
-  function onEdit(id: string, updater: (token: TokenResponse) => TokenResponse) {
-    const idx = data.findIndex((token) => token.id === id);
-    if (idx === -1) return;
-
-    data[idx] = updater(data[idx]);
+  function onEdit(id: string, updater: (token: TokenResponseV2) => TokenResponseV2) {
+    const idx = tokens.findIndex((t) => t.id === id);
+    if (idx !== -1) tokens[idx] = updater(tokens[idx]);
   }
 
-  async function onDeleted(id: string) {
-    data = data.filter((t) => t.id !== id);
+  function onDeleted(id: string) {
+    tokens = tokens.filter((t) => t.id !== id);
   }
 
-  const columns: ColumnDef<TokenResponse>[] = [
+  const columns: ColumnDef<TokenResponseV2>[] = [
     CreateSortableColumnDef('name', 'Name', RenderCell),
+    CreateColumnDef('shockerControl', 'Status', (sc) =>
+      sc.paused
+        ? { text: 'Paused', bold: true, color: 'orange' }
+        : { text: 'Active', bold: true, color: 'green' }
+    ),
     CreateSortableColumnDef('createdOn', 'Created at', LocaleDateRenderer),
     CreateSortableColumnDef('validUntil', 'Expires at', TimeSinceRelativeOrNeverRenderer),
     CreateSortableColumnDef('lastUsed', 'Last used', TimeSinceRelativeOrNeverRenderer),
     CreateActionsColumnDef(DataTableActions, (token) => ({ token, onEdit, onDeleted })),
   ];
 
-  let showGenerateTokenModal = $state<boolean>(false);
-  let createdTokenSecret = $state<string | null>(null);
-
-  function handleProblem(_problem: ProblemDetails): boolean {
-    return false;
-  }
-
-  async function loadTokens(successMessage?: string) {
-    try {
-      data = await apiTokensApi.tokensListTokens();
-      if (successMessage) {
-        toast.success(successMessage);
-      }
-    } catch (error) {
-      await handleApiError(error, handleProblem);
+  async function refresh() {
+    if (await loadTokens()) {
+      toast.success('Tokens refreshed successfully');
     }
   }
 
   onMount(loadTokens);
 </script>
 
-<TokenCreateDialog bind:open={showGenerateTokenModal} {onCreated} />
-<TokenCreatedDialog bind:token={createdTokenSecret} />
-
 <Container>
   <Card.Header class="w-full">
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
       API Tokens
       <div>
-        <Button onclick={() => (showGenerateTokenModal = true)}>
+        <Button href={resolve('/settings/api-tokens/new')}>
           <Plus />
           Generate Token
         </Button>
-        <Button onclick={() => loadTokens('Tokens refreshed successfully')}>
+        <Button onclick={refresh}>
           <RotateCcw />
           Refresh
         </Button>
@@ -109,6 +91,6 @@
     <Card.Description>API Tokens are used to authenticate with the OpenShock API</Card.Description>
   </Card.Header>
   <Card.Content class="flex w-full flex-col space-y-4">
-    <DataTable {data} {columns} {sorting} />
+    <DataTable data={tokens} {columns} {sorting} />
   </Card.Content>
 </Container>

@@ -1,10 +1,11 @@
 <script lang="ts">
   import { Check, Search } from '@lucide/svelte';
-  import { usersApi } from '$lib/api';
-  import type { BasicUserInfo } from '$lib/api/internal/v1';
+  import { ResponseError, usersGetByName } from '$lib/api';
+  import type { BasicUserInfo } from '$lib/api';
   import * as Avatar from '$lib/components/ui/avatar';
   import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input/index.js';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 
   interface Props {
     fetchedUser: BasicUserInfo | null;
@@ -15,14 +16,18 @@
 
   function check(event: Event) {
     event.preventDefault();
-    usersApi
-      .usersGetByName(userInput)
+    usersGetByName({ path: { username: userInput } })
       .then((user) => {
         fetchedUser = user;
         userInput = user.name;
       })
-      .catch(() => {
+      .catch((error) => {
         fetchedUser = null;
+        // A 404 just means no user by that name — expected, no toast.
+        // Surface anything else (network/server errors) to the user.
+        if (!(error instanceof ResponseError && error.response.status === 404)) {
+          handleApiError(error);
+        }
       });
   }
 

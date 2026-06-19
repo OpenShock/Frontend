@@ -13,7 +13,7 @@
 </script>
 
 <script lang="ts">
-  import { Loader } from '@lucide/svelte';
+  import { Spinner } from '$lib/components/ui/spinner';
   import type { TimeoutHandle } from '$lib/types/WAPI';
   import { cn } from '$lib/utils';
   import { onDestroy } from 'svelte';
@@ -62,7 +62,7 @@
       disabled={isDisabled}
     >
       {#if type === selfActive}
-        <Loader class="animate-spin" />
+        <Spinner />
       {:else}
         <Icon />
       {/if}

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { accountV2Api } from '$lib/api';
+  import { accountCheckUsername } from '$lib/api';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
@@ -43,7 +43,7 @@
 
   const requestAvailability = useDebounce(async (username: string) => {
     try {
-      const response = await accountV2Api.accountCheckUsername({ username });
+      const response = await accountCheckUsername({ body: { username } });
       validationResult = mapUsernameCheckResponse(response);
       checkResponses.set(username, validationResult);
     } catch (error) {

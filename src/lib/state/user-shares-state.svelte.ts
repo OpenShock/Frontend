@@ -1,5 +1,9 @@
-import { shockerSharesV2Api } from '$lib/api';
-import type { ShareInviteBaseDetails, V2UserShares } from '$lib/api/internal/v2';
+import type { ShareInviteBaseDetails, V2UserShares } from '$lib/api';
+import {
+  userSharesGetIncomingInvitesList,
+  userSharesGetOutgoingInvitesList,
+  userSharesGetSharesByUsers,
+} from '$lib/api';
 import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 
 let shares = $state<V2UserShares>({ outgoing: [], incoming: [] });
@@ -23,7 +27,7 @@ export const userSharesState = {
 
 export async function refreshUserShares() {
   try {
-    shares = await shockerSharesV2Api.userSharesGetSharesByUsers();
+    shares = await userSharesGetSharesByUsers();
   } catch (error) {
     handleApiError(error);
     throw error;
@@ -32,7 +36,7 @@ export async function refreshUserShares() {
 
 export async function refreshOutgoingInvites() {
   try {
-    outgoingInvites = await shockerSharesV2Api.userSharesGetOutgoingInvitesList();
+    outgoingInvites = await userSharesGetOutgoingInvitesList();
   } catch (error) {
     handleApiError(error);
     throw error;
@@ -41,7 +45,7 @@ export async function refreshOutgoingInvites() {
 
 export async function refreshIncomingInvites() {
   try {
-    incomingInvites = await shockerSharesV2Api.userSharesGetIncomingInvitesList();
+    incomingInvites = await userSharesGetIncomingInvitesList();
   } catch (error) {
     handleApiError(error);
     throw error;

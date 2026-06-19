@@ -1,24 +1,23 @@
 <script lang="ts">
+  import { accountSignUpV2 } from '$lib/api';
   import { Button } from '$lib/components/ui/button/index.js';
   import * as Card from '$lib/components/ui/card/index.js';
   import * as Field from '$lib/components/ui/field/index.js';
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import { accountV2Api } from '$lib/api';
   import Turnstile from '$lib/components/Turnstile.svelte';
   import EmailInput from '$lib/components/input/EmailInput.svelte';
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
   import * as Dialog from '$lib/components/ui/dialog';
-  import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
   import { toast } from 'svelte-sonner';
   import FieldSeparator from '$lib/components/ui/field/field-separator.svelte';
   import OauthButtons from '$lib/components/auth/oauth-buttons.svelte';
   import { ChevronLeft, Mail } from '@lucide/svelte';
-  import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
   import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte';
 
   registerBreadcrumbs(() => [{ label: 'Sign Up' }]);
@@ -44,11 +43,6 @@
 
   let useEmail = $state(false);
 
-  $effect(() => {
-    const providers = backendMetadata?.state?.oAuthProviders;
-    useEmail = providers === undefined || providers.length === 0;
-  });
-
   function onOpenChange(open: boolean) {
     if (!open) {
       accountCreated = false;
@@ -67,29 +61,17 @@
     }
 
     try {
-      await accountV2Api.accountSignUpV2({
-        username,
-        password,
-        email,
-        turnstileResponse,
+      await accountSignUpV2({
+        body: { username, password, email, turnstileResponse },
       });
       accountCreated = true;
     } catch (error) {
-      await handleApiError(error, (problem) => {
-        if (!isValidationError(problem)) return false;
-
-        console.log(mapToValRes(problem, 'Username'));
-        console.log(mapToValRes(problem, 'Password'));
-        console.log(mapToValRes(problem, 'Email'));
-        console.log(mapToValRes(problem, 'TurnstileResponse'));
-
-        return true;
-      });
+      await handleApiError(error);
     }
   }
 
-  let oauthProviders = $derived(backendMetadata.state?.oAuthProviders);
-  let anyOAuthProviders = $derived(oauthProviders !== undefined && oauthProviders.length > 0);
+  let oauthProviders = $derived(backendMetadata.state?.oAuthProviders ?? []);
+  let anyOAuthProviders = $derived(oauthProviders.length > 0);
 </script>
 
 <Dialog.Root bind:open={() => accountCreated, onOpenChange}>
@@ -129,7 +111,7 @@
         <Skeleton class="h-9 w-full"></Skeleton>
         <Skeleton class="h-1 w-full"></Skeleton>
         <Skeleton class="h-9 w-full"></Skeleton>
-      {:else if useEmail}
+      {:else if useEmail || !anyOAuthProviders}
         <form onsubmit={handleSubmission}>
           <div class="my-1 flex flex-col gap-1">
             {#if anyOAuthProviders}
@@ -185,7 +167,7 @@
         </form>
       {:else}
         {#if anyOAuthProviders}
-          <OauthButtons verb="Signup" />
+          <OauthButtons verb="Signup" providers={oauthProviders} />
           <FieldSeparator class="*:data-[slot=field-separator-content]:bg-card">Or</FieldSeparator>
         {/if}
         <Button variant="outline" class="w-full" onclick={() => (useEmail = true)}>

@@ -1,5 +1,7 @@
 <script lang="ts">
-  import { LoaderCircle, Pause, Play } from '@lucide/svelte';
+  import { Pause, Play } from '@lucide/svelte';
+  import { Spinner } from '$lib/components/ui/spinner';
+  import { cn } from '$lib/utils';
 
   interface Props {
     isPaused: boolean;
@@ -22,15 +24,22 @@
   }
 </script>
 
-{#if isPaused}
+<div
+  class={cn(
+    'absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 rounded-md bg-black/60 opacity-0 backdrop-blur-sm transition-opacity duration-300 ease-out',
+    isPaused ? 'pointer-events-auto opacity-100' : 'pointer-events-none'
+  )}
+  aria-hidden={!isPaused}
+>
   {#if resume}
     <button
-      class="group absolute inset-0 z-10 flex cursor-pointer flex-col items-center justify-center gap-2 rounded-md bg-black/60 backdrop-blur-sm transition-colors hover:bg-black/50"
+      class="group absolute inset-0 flex cursor-pointer flex-col items-center justify-center gap-2 rounded-md transition-colors hover:bg-black/10"
       onclick={handleResume}
-      disabled={resuming}
+      disabled={!isPaused || resuming}
+      tabindex={isPaused ? 0 : -1}
     >
       {#if resuming}
-        <LoaderCircle class="size-8 animate-spin text-white" />
+        <Spinner class="size-8 text-white" />
       {:else}
         <Pause class="size-8 text-white/60 group-hover:hidden" />
         <Play class="hidden size-8 text-white group-hover:block" />
@@ -45,17 +54,13 @@
       </span>
     </button>
   {:else}
-    <div
-      class="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 rounded-md bg-black/60 backdrop-blur-sm"
-    >
-      <Pause class="size-8 text-white/60" />
-      <span class="text-sm font-semibold text-white">
-        {#if pauseReason}
-          Paused at {pauseReason} level
-        {:else}
-          Paused
-        {/if}
-      </span>
-    </div>
+    <Pause class="size-8 text-white/60" />
+    <span class="text-sm font-semibold text-white">
+      {#if pauseReason}
+        Paused at {pauseReason} level
+      {:else}
+        Paused
+      {/if}
+    </span>
   {/if}
-{/if}
+</div>

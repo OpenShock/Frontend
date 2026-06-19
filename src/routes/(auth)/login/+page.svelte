@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { accountLoginV2 } from '$lib/api';
   import { resolve } from '$app/paths';
   import { Button } from '$lib/components/ui/button/index.js';
   import * as Card from '$lib/components/ui/card/index.js';
@@ -12,18 +13,23 @@
   import type { ValidationResult } from '$lib/types/ValidationResult';
   import PasswordInput from '$lib/components/input/PasswordInput.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
-  import { accountV2Api } from '$lib/api';
-  import { userState } from '$lib/state/user-state.svelte';
-  import { initializeSignalR } from '$lib/signalr/user.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
   import OauthButtons from '$lib/components/auth/oauth-buttons.svelte';
-  import { gotoQueryRedirectOrFallback } from '$lib/utils/url';
-  import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
+  import { gotoQueryRedirectOrFallback, consumeSearchParam } from '$lib/utils/url';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte';
+  import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
+  import { userState } from '$lib/state/user-state.svelte';
+  import { Skeleton } from '$lib/components/ui/skeleton';
+  import { getOAuthErrorMessage } from '$lib/auth/oauth-errors';
 
   registerBreadcrumbs(() => [{ label: 'Login' }]);
+
+  let oauthError = $state<string>();
+
+  consumeSearchParam('error', (code) => {
+    oauthError = code;
+  });
 
   let usernameOrEmail = $state('');
   let password = $state('');
@@ -40,19 +46,18 @@
     }
 
     try {
-      const account = await accountV2Api.accountLoginV2({
-        usernameOrEmail,
-        password,
-        turnstileResponse,
+      const account = await accountLoginV2({
+        body: { usernameOrEmail, password, turnstileResponse },
       });
+
       userState.setSelf({
         id: account.accountId,
         name: account.accountName,
         avatar: account.profileImage,
         email: account.accountEmail,
         roles: account.accountRoles,
+        hasPassword: true,
       });
-      await initializeSignalR();
 
       await gotoQueryRedirectOrFallback('/home');
     } catch (error) {
@@ -60,13 +65,15 @@
         if (!isValidationError(problem)) return false;
         usernameError = mapToValRes(problem, 'UsernameOrEmail');
         passwordError = mapToValRes(problem, 'Password');
-        return true;
+        // Only mark the problem as handled if we actually surfaced a field
+        // error; otherwise fall through so the generic toast is shown.
+        return usernameError !== null || passwordError !== null;
       });
     }
   }
 
-  let oauthProviders = $derived(backendMetadata.state?.oAuthProviders);
-  let anyOAuthProviders = $derived(oauthProviders !== undefined && oauthProviders.length > 0);
+  let providers = $derived(backendMetadata.state?.oAuthProviders ?? []);
+  let anyOAuthProviders = $derived(providers.length > 0);
 
   let canSubmit = $derived(
     usernameOrEmail.length > 0 && password.length > 0 && turnstileResponse != null
@@ -87,6 +94,11 @@
     </Card.Description>
   </Card.Header>
   <Card.Content>
+    {#if oauthError}
+      <p class="text-destructive mb-4 text-center text-sm" role="alert">
+        {getOAuthErrorMessage(oauthError)}
+      </p>
+    {/if}
     <FieldGroup>
       {#if backendMetadata.state === null}
         <Skeleton class="h-9 w-full"></Skeleton>
@@ -97,7 +109,7 @@
         <Skeleton class="h-9 w-full"></Skeleton>
       {:else}
         {#if anyOAuthProviders}
-          <OauthButtons />
+          <OauthButtons {providers} />
           <FieldSeparator class="*:data-[slot=field-separator-content]:bg-card">
             Or continue with
           </FieldSeparator>
@@ -138,8 +150,8 @@
   </Card.Content>
 </Card.Root>
 <FieldDescription class="px-6 text-center">
-  By clicking Login, you agree to our <a href="https://openshock.org/tos" target="_blank"
-    >Terms of Service</a
-  >
-  and <a href="https://openshock.org/privacy" target="_blank">Privacy Policy</a>.
+  By clicking Login, you agree to our
+  <a href="https://openshock.org/tos" target="_blank" rel="noopener">Terms of Service</a>
+  and
+  <a href="https://openshock.org/privacy" target="_blank" rel="noopener">Privacy Policy</a>.
 </FieldDescription>

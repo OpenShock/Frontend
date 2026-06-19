@@ -5,26 +5,36 @@
   import { SidebarProvider } from '$lib/components/ui/sidebar';
   import { Toaster } from '$lib/components/ui/sonner';
   import { buildMetaData } from '$lib/metadata';
-  import { type Snippet } from 'svelte';
+  import { onMount, untrack, type Snippet } from 'svelte';
+  import { maybePromptTelemetryConsent } from '$lib/telemetry/consent-prompt';
   import Footer from './Footer.svelte';
   import Header from './Header.svelte';
   import Sidebar from './Sidebar.svelte';
+  import WelcomeScreen from './WelcomeScreen.svelte';
   import '../app.css';
   import { IsMobile } from '$lib/hooks/is-mobile.svelte';
-  import { usePersistedState } from '$lib/state/classes/persisted-state.svelte';
   import DialogManager from '$lib/components/dialog-manager/dialog-manager.svelte';
+  import { TooltipProvider } from '$lib/components/ui/tooltip';
+  import type { LayoutData } from './$types';
 
   interface Props {
     children?: Snippet;
+    data: LayoutData;
   }
 
-  let { children }: Props = $props();
+  let { children, data }: Props = $props();
 
   let meta = $derived(buildMetaData(page.url));
 
   const mobile = new IsMobile();
-  const sidebarOpen = usePersistedState('sidebarOpen', false);
-  const isOpen = $derived(mobile.current ? false : sidebarOpen.value);
+  // Seeded from the sidebar:state cookie (read in +layout.server.ts) so SSR
+  // renders the persisted state and there's no flash on hydration.
+  let sidebarOpen = $state(untrack(() => data.sidebarOpen));
+  const isOpen = $derived(mobile.current ? false : sidebarOpen);
+
+  let welcomeOpen = $state(untrack(() => data.showWelcome));
+
+  onMount(() => maybePromptTelemetryConsent());
 </script>
 
 <BasicTags {...meta} />
@@ -33,23 +43,33 @@
 
 <Toaster position="top-center" />
 
-<DialogManager />
+<TooltipProvider delayDuration={250}>
+  <DialogManager />
 
-<SidebarProvider open={isOpen} onOpenChange={(v) => (sidebarOpen.value = v)}>
-  <Sidebar />
-  <div class="flex h-screen w-screen flex-1 flex-col overflow-hidden">
-    {#if PUBLIC_DEVELOPMENT_BANNER === 'true'}
-      <div class="top-0 left-0 z-1 flex-none bg-[orangered] text-center text-white">
-        <p>
-          This is the OpenShock <b>DEVELOPMENT</b> environment. <u>No data is saved</u>, and
-          regularly overwritten by production data
-        </p>
-      </div>
-    {/if}
-    <Header />
-    <main class="min-h-0 flex-1 overflow-x-hidden">
-      {@render children?.()}
-    </main>
-    <Footer />
-  </div>
-</SidebarProvider>
+  {#if welcomeOpen}
+    <WelcomeScreen
+      close={() => {
+        welcomeOpen = false;
+      }}
+    />
+  {/if}
+
+  <SidebarProvider open={isOpen} onOpenChange={(v) => (sidebarOpen = v)}>
+    <Sidebar />
+    <div class="flex h-screen w-screen flex-1 flex-col overflow-hidden">
+      {#if PUBLIC_DEVELOPMENT_BANNER === 'true'}
+        <div class="top-0 left-0 z-1 flex-none bg-[orangered] text-center text-white">
+          <p>
+            This is the OpenShock <b>DEVELOPMENT</b> environment. <u>No data is saved</u>, and
+            regularly overwritten by production data
+          </p>
+        </div>
+      {/if}
+      <Header />
+      <main class="min-h-0 flex-1 overflow-x-hidden">
+        {@render children?.()}
+      </main>
+      <Footer />
+    </div>
+  </SidebarProvider>
+</TooltipProvider>

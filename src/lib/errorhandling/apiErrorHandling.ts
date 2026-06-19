@@ -1,35 +1,36 @@
 import { dev } from '$app/environment';
+import type { ResponseError } from '$lib/api';
 import { type ProblemDetails, isProblemDetails } from '$lib/errorhandling/ProblemDetails';
-import {
-  isError,
-  isFetchError,
-  isRequiredError,
-  isResponseError,
-  isTypeError,
-} from '$lib/typeguards/errorGuards';
+import { isError, isFetchError, isResponseError, isTypeError } from '$lib/typeguards/errorGuards';
 import { toast } from 'svelte-sonner';
-import { isValidationError as isValidationProblem } from './ValidationProblemDetails';
+import { isValidationError } from './ValidationProblemDetails';
 
 export type HandleProblemCallback = (problem: ProblemDetails) => boolean;
 
+let _onUnauthorized: (() => void) | null = null;
+
+/**
+ * Register a callback that fires when any API response returns a 401.
+ * Used to clear auth state when the session expires mid-flight (which
+ * then tears down SignalR via the reactive lifecycle in auth-state).
+ */
+export function registerOnUnauthorized(callback: () => void) {
+  _onUnauthorized = callback;
+}
+
 async function handleResponseError(
-  response: Response,
+  error: ResponseError,
   handleProblemCallback: HandleProblemCallback | null
 ) {
-  const contentTypeHeader = response.headers.get('Content-Type');
-  if (!contentTypeHeader) {
-    console.error('No content type header found in response');
-    return;
+  const response = error.response;
+  if (response.status === 401) {
+    _onUnauthorized?.();
   }
 
-  if (!contentTypeHeader.startsWith('application/problem+json')) {
-    console.error(
-      'Content type header is not application/problem+json [' + contentTypeHeader + ']'
-    );
-    return;
-  }
-
-  const problem = await response.json();
+  // The HTTP client already consumed and parsed the response body before this
+  // error was constructed, so we read it from `error.body` rather than calling
+  // `response.json()` (which would throw "Body has already been consumed").
+  const problem = error.body;
   if (!isProblemDetails(problem)) {
     console.error('Content json is not a valid problemdetails object', problem);
     return null;
@@ -43,7 +44,7 @@ async function handleResponseError(
     if (problem.detail) {
       console.log('%cDetail:    ', 'font-style: italic;', problem.detail);
     }
-    if (isValidationProblem(problem)) {
+    if (isValidationError(problem)) {
       // nicely tabulate the field errors
       console.groupCollapsed('%cField errors', 'font-style: italic;');
       for (const [field, messages] of Object.entries(problem.errors)) {
@@ -61,7 +62,15 @@ async function handleResponseError(
 
   if (handleProblemCallback && handleProblemCallback(problem)) return;
 
-  toast.error(problem.title);
+  if (isValidationError(problem)) {
+    const messages = Object.values(problem.errors).flat();
+    toast.error(problem.title, {
+      description: messages.length ? messages.join('\n') : problem.detail,
+    });
+    return;
+  }
+
+  toast.error(problem.title, { description: problem.detail });
 }
 
 export async function handleApiError(
@@ -75,7 +84,7 @@ export async function handleApiError(
   }
 
   if (isResponseError(error)) {
-    handleResponseError(error.response, handleProblemCallback);
+    handleResponseError(error, handleProblemCallback);
     return;
   }
 
@@ -91,19 +100,7 @@ export async function handleApiError(
     return;
   }
 
-  if (isRequiredError(error)) {
-    // group it so you can collapse/expand in the dev console
-    console.groupCollapsed(
-      '%cRequiredError ⚠️ Missing parameter',
-      'color: orange; font-weight: bold;'
-    );
-    console.log('%cParameter:', 'font-weight: bold;', error.field);
-    console.log('%cMessage:  ', 'font-style: italic;', error.message);
-    console.trace(); // show stack trace so you know exactly where it bubbled up
-    console.groupEnd();
-  } else {
-    console.error(`Got ${error.name}`, error);
-  }
+  console.error(`Got ${error.name}`, error);
 
   toast.error('Internal error occured');
 }

@@ -1,7 +1,7 @@
 <script lang="ts" module>
   import type { ColumnDef } from '@tanstack/table-core';
-  import type { AdminUsersView } from '$lib/api/internal/v1';
-  import { PasswordHashingAlgorithm, RoleType } from '$lib/api/internal/v1';
+  import { PasswordHashingAlgorithm, RoleType, adminGetUsers } from '$lib/api';
+  import type { AdminUsersView, AdminUsersViewPaginated } from '$lib/api';
   import {
     CreateActionsColumnDef,
     CreateSortableColumnDef,
@@ -12,10 +12,7 @@
     RenderOrangeCell,
     RenderRedCell,
   } from '$lib/components/Table/ColumnUtils';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import DataTableActions from './data-table-actions.svelte';
-
-  registerBreadcrumbs(() => [{ label: 'Users' }]);
 
   const PasswordHashTypeRenderer = (passwordHashType: PasswordHashingAlgorithm) => {
     if (passwordHashType !== PasswordHashingAlgorithm.BCrypt)
@@ -28,7 +25,7 @@
     return isPrivileged ? RenderBlueCell(roles.toString()) : RenderBoldCell(roles.toString());
   };
 
-  const columns: ColumnDef<AdminUsersView>[] = [
+  const dataColumns: ColumnDef<AdminUsersView>[] = [
     CreateSortableColumnDef('name', 'Name', RenderCell),
     CreateSortableColumnDef('email', 'Email', RenderCell),
     CreateSortableColumnDef('passwordHashType', 'Password hash type', PasswordHashTypeRenderer),
@@ -39,7 +36,6 @@
     CreateSortableColumnDef('deactivatedByUserId', 'Deactivated by', (a) =>
       a ? RenderCell(a) : RenderRedCell('None')
     ),
-    CreateActionsColumnDef(DataTableActions, (user) => ({ user })),
   ];
 
   function escapeQuotes(str: string) {
@@ -71,17 +67,29 @@
 
 <script lang="ts">
   import type { SortingState } from '@tanstack/table-core';
-  import { adminApi } from '$lib/api';
-  import type { AdminUsersViewPaginated } from '$lib/api/internal/v1';
   import Container from '$lib/components/Container.svelte';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import PaginationFooter from '$lib/components/Table/PaginationFooter.svelte';
   import { CardHeader, CardTitle } from '$lib/components/ui/card';
   import { Input } from '$lib/components/ui/input';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { useDebounce } from '$lib/utils/debounce';
 
+  registerBreadcrumbs(() => [{ label: 'Users' }]);
+
   let isFetching = $state(false);
+
+  // Bumped to force a re-fetch after a mutation (e.g. user deletion).
+  let refreshNonce = $state(0);
+
+  const columns: ColumnDef<AdminUsersView>[] = [
+    ...dataColumns,
+    CreateActionsColumnDef(DataTableActions, (user) => ({
+      user,
+      onDeleted: () => refreshNonce++,
+    })),
+  ];
 
   let requestedPage = $state(1);
   let requestedPageSize = $state(100);
@@ -102,7 +110,7 @@
   );
 
   function handleResponse(response: AdminUsersViewPaginated) {
-    total = response.total;
+    total = Number(response.total);
     data = response.data;
     perPage = response.limit;
     if (page !== requestedPage) {
@@ -128,11 +136,18 @@
   });
 
   $effect(() => {
+    void refreshNonce; // re-run after a mutation
     const offset = (requestedPage - 1) * requestedPageSize;
 
     isFetching = true;
-    adminApi
-      .adminGetUsers(filterQuery, orderByQuery, offset, requestedPageSize)
+    adminGetUsers({
+      query: {
+        $filter: filterQuery,
+        $orderby: orderByQuery,
+        $offset: offset,
+        $limit: requestedPageSize,
+      },
+    })
       .then(handleResponse)
       .catch(handleApiError)
       .finally(() => (isFetching = false));

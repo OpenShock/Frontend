@@ -1,13 +1,13 @@
 <script lang="ts">
-  import { Pause, Play, Trash2 } from '@lucide/svelte';
-  import { publicShockerSharesApi } from '$lib/api';
-  import type { PublicShareShocker, ShockerPermissions } from '$lib/api/internal/v1';
+  import { shareLinksPauseShocker, shareLinksRemoveShocker } from '$lib/api';
+  import type { PublicShareShocker, ShockerPermissions } from '$lib/api';
+  import { Pause, Play, Trash2, Zap, Vibrate, Volume2, Radio } from '@lucide/svelte';
   import { Button } from '$lib/components/ui/button';
-  import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '$lib/components/ui/card';
   import { Label } from '$lib/components/ui/label';
   import { Slider } from '$lib/components/ui/slider';
   import { Switch } from '$lib/components/ui/switch';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { formatDurationSeconds } from '$lib/utils';
   import { toast } from 'svelte-sonner';
 
   interface Props {
@@ -18,7 +18,6 @@
 
   let { shareId, shocker = $bindable(), onRemoved }: Props = $props();
 
-  // Bit 4 (0b100) represents PublicShare pause reason
   const PUBLIC_SHARE_PAUSE_BIT = 4;
   let isPausedByPublicShare = $derived((shocker.paused & PUBLIC_SHARE_PAUSE_BIT) !== 0);
 
@@ -31,8 +30,9 @@
 
     try {
       const newPauseState = !isPausedByPublicShare;
-      const response = await publicShockerSharesApi.shareLinksPauseShocker(shareId, shocker.id, {
-        pause: newPauseState,
+      const response = await shareLinksPauseShocker({
+        path: { publicShareId: shareId, shockerId: shocker.id },
+        body: { pause: newPauseState },
       });
 
       if (response.data !== undefined) {
@@ -50,12 +50,9 @@
     shocker.permissions = { ...shocker.permissions, [feature]: enabled };
   };
 
-  // Local state for slider values (handles null defaults)
-  // API uses milliseconds, UI uses seconds for display
   let durationSeconds = $state(shocker.limits.duration ? shocker.limits.duration / 1000 : 30);
   let intensity = $state(shocker.limits.intensity ?? 100);
 
-  // Sync slider changes back to shocker (convert seconds to milliseconds for API)
   $effect(() => {
     const durationMs = durationSeconds * 1000;
     if (shocker.limits.duration !== durationMs) {
@@ -74,7 +71,7 @@
     isRemoving = true;
 
     try {
-      await publicShockerSharesApi.shareLinksRemoveShocker(shareId, shocker.id);
+      await shareLinksRemoveShocker({ path: { publicShareId: shareId, shockerId: shocker.id } });
       toast.success('Shocker removed from share');
       onRemoved?.(shocker.id);
     } catch (error) {
@@ -83,59 +80,95 @@
       isRemoving = false;
     }
   };
+
+  const features = [
+    { key: 'shock', label: 'Shock', icon: Zap },
+    { key: 'vibrate', label: 'Vibrate', icon: Vibrate },
+    { key: 'sound', label: 'Sound', icon: Volume2 },
+    { key: 'live', label: 'Live Control', icon: Radio },
+  ] satisfies { key: keyof ShockerPermissions; label: string; icon: typeof Zap }[];
 </script>
 
-<Card>
-  <CardHeader>
-    <CardTitle class="flex items-center justify-between">
-      <span class="text-lg font-medium">{shocker.name}</span>
-      <Button
-        variant="outline"
-        size="sm"
-        onclick={togglePause}
-        disabled={isTogglingPause}
-        title={isPausedByPublicShare ? 'Resume shocker' : 'Pause shocker'}
-      >
-        {#if isPausedByPublicShare}
-          <Play size={16} />
-        {:else}
-          <Pause size={16} />
-        {/if}
-      </Button>
-    </CardTitle>
-  </CardHeader>
+<div
+  class="border-surface-400-500-token bg-card flex w-80 flex-col overflow-hidden rounded-md border"
+>
+  <!-- Header — mirrors ShockerCard -->
+  <div class="border-border/60 flex items-center gap-2 border-b px-3 py-2">
+    <div class="flex min-w-0 flex-1 flex-col">
+      <h2 class="truncate text-sm leading-tight font-semibold" title={shocker.name}>
+        {shocker.name}
+      </h2>
+      {#if isPausedByPublicShare}
+        <span class="text-muted-foreground flex items-center gap-1.5 text-[11px]">
+          <span class="size-1.5 shrink-0 rounded-full bg-amber-400"></span>
+          Paused for this share
+        </span>
+      {/if}
+    </div>
+    <Button
+      variant="ghost"
+      size="icon"
+      class="h-7 w-7 shrink-0"
+      onclick={togglePause}
+      disabled={isTogglingPause}
+      title={isPausedByPublicShare ? 'Resume shocker' : 'Pause shocker'}
+    >
+      {#if isPausedByPublicShare}
+        <Play size={14} />
+      {:else}
+        <Pause size={14} />
+      {/if}
+    </Button>
+    <Button
+      variant="ghost"
+      size="icon"
+      class="text-destructive hover:text-destructive h-7 w-7 shrink-0"
+      onclick={removeShocker}
+      disabled={isRemoving}
+      title="Remove from share"
+    >
+      <Trash2 size={14} />
+    </Button>
+  </div>
 
-  <CardContent class="space-y-4">
-    <!-- Feature Toggles -->
-    <div class="space-y-2">
-      {#each ['shock', 'vibrate', 'sound', 'live'] satisfies (keyof ShockerPermissions)[] as feature (feature)}
-        <div class="flex items-center justify-between">
-          <Label class="capitalize">{feature === 'live' ? 'Live Control' : feature}</Label>
-          <Switch
-            checked={shocker.permissions[feature] ?? false}
-            onCheckedChange={(checked) => updatePermission(feature, checked)}
-          />
+  <!-- Body -->
+  <div class="flex flex-col gap-4 p-3">
+    <!-- Feature toggles -->
+    <div class="grid grid-cols-2 gap-2">
+      {#each features as { key, label, icon: Icon } (key)}
+        {@const enabled = shocker.permissions[key] ?? false}
+        <div
+          class="border-border/60 flex items-center justify-between gap-2 rounded-md border px-2.5 py-2 transition-colors"
+          class:opacity-60={!enabled}
+        >
+          <span class="flex min-w-0 items-center gap-2">
+            <Icon size={14} class="shrink-0" />
+            <span class="truncate text-xs font-medium">{label}</span>
+          </span>
+          <Switch checked={enabled} onCheckedChange={(checked) => updatePermission(key, checked)} />
         </div>
       {/each}
     </div>
 
-    <!-- Duration Slider -->
-    <div class="space-y-1">
-      <Label>Duration: {durationSeconds}s</Label>
-      <Slider type="single" bind:value={durationSeconds} min={1} max={30} step={0.1} />
-    </div>
+    <!-- Sliders -->
+    <div class="flex flex-col gap-3">
+      <div class="space-y-1.5">
+        <div class="flex items-center justify-between">
+          <Label class="text-xs">Max Duration</Label>
+          <span class="text-muted-foreground font-mono text-xs"
+            >{formatDurationSeconds(durationSeconds)}</span
+          >
+        </div>
+        <Slider type="single" bind:value={durationSeconds} min={1} max={30} step={0.1} />
+      </div>
 
-    <!-- Intensity Slider -->
-    <div class="space-y-1">
-      <Label>Intensity: {intensity}%</Label>
-      <Slider type="single" bind:value={intensity} min={1} max={100} step={1} />
+      <div class="space-y-1.5">
+        <div class="flex items-center justify-between">
+          <Label class="text-xs">Max Intensity</Label>
+          <span class="text-muted-foreground font-mono text-xs">{intensity}%</span>
+        </div>
+        <Slider type="single" bind:value={intensity} min={1} max={100} step={1} />
+      </div>
     </div>
-  </CardContent>
-
-  <CardFooter>
-    <Button variant="destructive" size="sm" onclick={removeShocker} disabled={isRemoving}>
-      <Trash2 size={16} class="mr-1" />
-      Remove
-    </Button>
-  </CardFooter>
-</Card>
+  </div>
+</div>

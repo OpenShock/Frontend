@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { Asterisk, LoaderCircle, Pause, Play } from '@lucide/svelte';
-  import { shockersV1Api } from '$lib/api';
-  import type { BooleanLegacyDataResponse } from '$lib/api/internal/v1';
+  import { shockerPauseShocker, shockerShockerShareCodePause } from '$lib/api';
+  import type { BooleanLegacyDataResponse } from '$lib/api';
+  import { Asterisk, Pause, Play } from '@lucide/svelte';
   import { Button } from '$lib/components/ui/button';
-  import { toast } from 'svelte-sonner';
+  import { Spinner } from '$lib/components/ui/spinner';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 
   interface Props {
     shockers: PauseToggleProps[];
@@ -43,10 +44,7 @@
     }
 
     Promise.all(pauseRequests)
-      .catch((error) => {
-        toast.error(`Failed to update shocker states`);
-        console.error(error);
-      })
+      .catch(handleApiError)
       .finally(() => {
         requestInProgress = false;
         onPausedChange(pause);
@@ -57,27 +55,19 @@
     let pauseRequest: Promise<BooleanLegacyDataResponse>;
 
     if (shocker.userShareUserId) {
-      pauseRequest = shockersV1Api.shockerShockerShareCodePause(
-        shocker.shockerId,
-        shocker.userShareUserId,
-        {
-          pause: pause,
-        }
-      );
+      pauseRequest = shockerShockerShareCodePause({
+        path: { shockerId: shocker.shockerId, sharedWithUserId: shocker.userShareUserId },
+        body: { pause },
+      });
     } else {
-      pauseRequest = shockersV1Api.shockerPauseShocker(shocker.shockerId, { pause: pause });
+      pauseRequest = shockerPauseShocker({
+        path: { shockerId: shocker.shockerId },
+        body: { pause },
+      });
     }
 
-    pauseRequest
-      .then((newPausedState) => {
-        shocker.paused = newPausedState.data;
-      })
-      .catch((error) => {
-        toast.error(`Failed to set shocker pause state`);
-        console.error(error);
-      });
-
-    await pauseRequest;
+    const newPausedState = await pauseRequest;
+    shocker.paused = newPausedState.data;
   }
 </script>
 
@@ -90,7 +80,7 @@
   aria-busy={requestInProgress}
 >
   {#if requestInProgress}
-    <LoaderCircle class="animate-spin" />
+    <Spinner />
   {:else if pausedBooleans === 'allTrue'}
     <Play />
   {:else if pausedBooleans === 'allFalse'}

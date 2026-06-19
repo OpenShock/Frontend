@@ -1,5 +1,5 @@
 <script lang="ts" generics="T">
-  import { LoaderCircle } from '@lucide/svelte';
+  import { Spinner } from '$lib/components/ui/spinner';
   import { Button } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
   import type { ConfirmProps } from './types.ts';
@@ -39,7 +39,7 @@
 <Dialog.Footer>
   <Button variant="outline" onclick={handleCancel}>{cancelButtonText}</Button>
   <Button disabled={loading} variant="destructive" onclick={handleConfirm}>
-    {#if loading}<LoaderCircle class="animate-spin" />{/if}
+    {#if loading}<Spinner />{/if}
     {confirmButtonText}
   </Button>
 </Dialog.Footer>

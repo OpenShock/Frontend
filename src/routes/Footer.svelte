@@ -17,15 +17,19 @@
     Made with
     <span style="color: #e25555;">&#9829;</span>
     by the
-    <a target="_blank" rel="noopener noreferrer" href={PUBLIC_GITHUB_PROJECT_URL}>
-      OpenShock Team</a
-    >
+    <a target="_blank" rel="noopener" href={PUBLIC_GITHUB_PROJECT_URL}>OpenShock Team</a>
   </div>
   <div class="flex items-center gap-2">
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
         {#snippet child({ props })}
-          <Button {...props} variant="ghost" size="icon" class="h-4 w-4">
+          <Button
+            {...props}
+            variant="ghost"
+            size="icon"
+            class="h-4 w-4"
+            aria-label="Server connection status"
+          >
             {#if getConnectionState() === HubConnectionState.Connected}
               <Wifi class="h-4 w-4 text-green-800" />
             {:else}

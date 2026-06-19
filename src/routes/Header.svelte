@@ -18,6 +18,7 @@
   import { prefixBase } from '$lib/utils/url';
   import { resolve } from '$app/paths';
   import { LogIn, UserPlus } from '@lucide/svelte';
+  import { Spinner } from '$lib/components/ui/spinner';
 
   let sidebar = useSidebar();
 </script>
@@ -46,7 +47,9 @@
 
       <LightSwitch />
 
-      {#if userState.self}
+      {#if userState.loading}
+        <Spinner class="size-8 text-gray-600 dark:text-gray-300" />
+      {:else if userState.self}
         <DropdownMenu.Root>
           <DropdownMenu.Trigger
             class="cursor-pointer text-gray-600 select-none hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-200"

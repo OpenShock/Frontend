@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { ShockerResponse } from '$lib/api/internal/v1';
+  import type { ShockerResponse } from '$lib/api';
   import { getConnection } from '$lib/signalr/user.svelte';
   import { ControlType } from '$lib/signalr/models/ControlType';
   import { serializeControlMessages } from '$lib/signalr/serializers/Control';

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Timer, Volume2, Zap } from '@lucide/svelte';
   import { ControlDurationProps, ControlIntensityProps } from '$lib/constants/ControlConstants';
+  import { formatDurationSeconds } from '$lib/utils';
   import CircleSlider from './impl/CircleSlider.svelte';
 
   interface Props {
@@ -29,7 +30,7 @@
     <p>{vibrationIntensity}%</p>
     <Timer />
     <input type="range" bind:value={duration} {...ControlDurationProps} />
-    <p>{duration}s</p>
+    <p>{formatDurationSeconds(duration)}</p>
   </div>
   <div class="flex flex-1 flex-row justify-between">
     <CircleSlider name="Shock" bind:value={shockIntensity} {...ControlIntensityProps} />

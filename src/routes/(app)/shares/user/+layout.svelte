@@ -2,7 +2,7 @@
   import { Barcode, Plus } from '@lucide/svelte';
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
-  import type { BasicUserInfo } from '$lib/api/internal/v1';
+  import type { BasicUserInfo } from '$lib/api';
   import Container from '$lib/components/Container.svelte';
   import { Button } from '$lib/components/ui/button';
   import * as Tabs from '$lib/components/ui/tabs/index.js';
@@ -81,24 +81,38 @@
 
 <Container class="flex flex-col">
   <PageHeader title="User Shares" subtitle="Direct permanent shares with users">
-    <Button onclick={() => (redeemDialogOpen = true)} class="self-end">
+    <Button
+      onclick={() => (redeemDialogOpen = true)}
+      class="self-end"
+      data-tour="user-shares-redeem"
+    >
       <Barcode />
       Redeem Code
     </Button>
-    <Button onclick={() => (createDialogOpen = true)} class="self-end">
+    <Button onclick={() => (createDialogOpen = true)} class="self-end" data-tour="user-shares-new">
       <Plus />
       New Share
     </Button>
   </PageHeader>
 
   <div class="flex w-full flex-none">
-    <Tabs.Root value={tab} class="w-100">
+    <Tabs.Root value={tab} class="w-100" data-tour="user-shares-tabs">
       <Tabs.List>
-        <Tabs.Trigger value="shares" onclick={() => navigateTo('outgoing')}>Shares</Tabs.Trigger>
-        <Tabs.Trigger value="incoming" onclick={() => navigateTo('incoming')}
-          >Shared with Me</Tabs.Trigger
+        <Tabs.Trigger
+          value="shares"
+          onclick={() => navigateTo('outgoing')}
+          data-tour="user-shares-tab-outgoing">Shares</Tabs.Trigger
         >
-        <Tabs.Trigger value="invites" onclick={() => navigateTo('invites')}>Invites</Tabs.Trigger>
+        <Tabs.Trigger
+          value="incoming"
+          onclick={() => navigateTo('incoming')}
+          data-tour="user-shares-tab-incoming">Shared with Me</Tabs.Trigger
+        >
+        <Tabs.Trigger
+          value="invites"
+          onclick={() => navigateTo('invites')}
+          data-tour="user-shares-tab-invites">Invites</Tabs.Trigger
+        >
       </Tabs.List>
     </Tabs.Root>
   </div>

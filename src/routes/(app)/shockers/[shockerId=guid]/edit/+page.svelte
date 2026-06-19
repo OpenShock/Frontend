@@ -1,13 +1,20 @@
 <script lang="ts">
+  import {
+    ShockerModelType,
+    shockerEditShocker,
+    shockerGetShockerById,
+    shockerRemoveShocker,
+  } from '$lib/api';
+  import type { ShockerWithDevice } from '$lib/api';
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
-  import { shockersV1Api } from '$lib/api';
-  import { ShockerModelType, type ShockerWithDevice } from '$lib/api/internal/v1';
   import Container from '$lib/components/Container.svelte';
   import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
+  import { RfIdMax, RfIdMin, isValidRfId } from '$lib/constants/ShockerConstants';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
+  import { Spinner } from '$lib/components/ui/spinner';
   import * as Card from '$lib/components/ui/card';
   import { Field, FieldLabel } from '$lib/components/ui/field/index.js';
   import { Input } from '$lib/components/ui/input';
@@ -16,7 +23,7 @@
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
-  import { ArrowLeft, LoaderCircle, Trash2 } from '@lucide/svelte';
+  import { ArrowLeft, Trash2 } from '@lucide/svelte';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
 
@@ -37,10 +44,12 @@
       (name.trim() !== shocker.name || rfId !== shocker.rfId || model !== shocker.model)
   );
 
+  let rfIdValid = $derived(isValidRfId(rfId));
+
   onMount(async () => {
     try {
       const shockerId = page.params.shockerId!;
-      const response = await shockersV1Api.shockerGetShockerById(shockerId);
+      const response = await shockerGetShockerById({ path: { shockerId } });
       shocker = response.data;
       name = shocker.name;
       rfId = shocker.rfId;
@@ -52,14 +61,17 @@
   });
 
   async function save() {
-    if (!shocker || !name.trim()) return;
+    if (!shocker || !name.trim() || !rfIdValid) return;
     saving = true;
     try {
-      await shockersV1Api.shockerEditShocker(shocker.id, {
-        name: name.trim(),
-        rfId,
-        model,
-        device: shocker.device,
+      await shockerEditShocker({
+        path: { shockerId: shocker.id },
+        body: {
+          name: name.trim(),
+          rfId,
+          model,
+          device: shocker.device,
+        },
       });
       shocker.name = name.trim();
       shocker.rfId = rfId;
@@ -82,7 +94,7 @@
     });
     if (!result.confirmed) return;
     try {
-      await shockersV1Api.shockerRemoveShocker(shocker.id);
+      await shockerRemoveShocker({ path: { shockerId: shocker.id } });
       toast.success(`Shocker "${shocker.name}" deleted`);
       await refreshOwnHubs();
       goto(resolve('/shockers/own'));
@@ -103,7 +115,7 @@
     </div>
   {:else if !shocker}
     <div class="flex items-center gap-3 p-12">
-      <LoaderCircle class="size-5 animate-spin" />
+      <Spinner class="size-5" />
       <span class="text-muted-foreground">Loading shocker...</span>
     </div>
   {:else}
@@ -125,7 +137,12 @@
 
           <Field class="gap-2">
             <FieldLabel>RF ID</FieldLabel>
-            <Input type="number" bind:value={rfId} min={1} />
+            <Input type="number" bind:value={rfId} min={RfIdMin} max={RfIdMax} step={1} />
+            {#if !rfIdValid}
+              <span class="text-destructive text-sm">
+                RF ID must be a whole number between {RfIdMin} and {RfIdMax}.
+              </span>
+            {/if}
           </Field>
 
           <Field class="gap-2">
@@ -162,8 +179,8 @@
           </Field>
         </Card.Content>
         <Card.Footer>
-          <Button disabled={saving || !name.trim() || !hasChanges} onclick={save}>
-            {#if saving}<LoaderCircle class="size-4 animate-spin" />{/if}
+          <Button disabled={saving || !name.trim() || !rfIdValid || !hasChanges} onclick={save}>
+            {#if saving}<Spinner class="size-4" />{/if}
             Save Changes
           </Button>
         </Card.Footer>

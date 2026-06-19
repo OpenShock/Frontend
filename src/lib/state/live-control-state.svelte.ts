@@ -1,7 +1,7 @@
-import { hubManagementV1Api } from '$lib/api';
+import { devicesGetLiveControlGatewayInfo } from '$lib/api';
 import { ControlType } from '$lib/signalr/models/ControlType';
 import { toast } from 'svelte-sonner';
-import { SvelteMap } from 'svelte/reactivity';
+import { SvelteMap, SvelteSet } from 'svelte/reactivity';
 
 const TICK_INTERVAL_MS = 100;
 
@@ -16,6 +16,7 @@ export class LiveShockerState {
   intensity = $state(0);
   type = $state<ControlType>(ControlType.Vibrate);
   isLive = $state(false);
+  isPaused = $state(false);
 }
 
 export class LiveDeviceConnection {
@@ -45,6 +46,38 @@ export class LiveDeviceConnection {
   }
 
   /**
+   * Register the full set of shockers belonging to this hub. Updates pause state for
+   * existing entries, creates missing ones, and removes entries no longer present.
+   * Call from $effect or event handler.
+   */
+  registerHubShockers(shockers: { id: string; isPaused: boolean }[]): void {
+    const ids = new SvelteSet(shockers.map((s) => s.id));
+    for (const s of shockers) {
+      let state = this.shockers.get(s.id);
+      if (!state) {
+        state = new LiveShockerState();
+        this.shockers.set(s.id, state);
+      }
+      state.isPaused = s.isPaused;
+    }
+    let removedLive = false;
+    for (const [id, state] of this.shockers) {
+      if (ids.has(id)) continue;
+      if (state.isLive) removedLive = true;
+      state.isLive = false;
+      state.isDragging = false;
+      state.intensity = 0;
+      this.shockers.delete(id);
+    }
+    if (removedLive) {
+      const anyLive = [...this.shockers.values()].some((s) => s.isLive);
+      if (!anyLive && this.state !== LiveConnectionState.Disconnected) {
+        this.disconnect();
+      }
+    }
+  }
+
+  /**
    * Read-only getter, safe for templates. Returns undefined if not yet initialised.
    */
   getShockerState(shockerId: string): LiveShockerState | undefined {
@@ -57,11 +90,8 @@ export class LiveDeviceConnection {
     const attempt = ++this.connectAttempt;
 
     try {
-      const res = await hubManagementV1Api.devicesGetLiveControlGatewayInfo(this.deviceId);
+      const res = await devicesGetLiveControlGatewayInfo({ path: { deviceId: this.deviceId } });
       if (attempt !== this.connectAttempt) return; // Stale attempt
-      if (!res.data) {
-        throw new Error('No LCG data returned');
-      }
 
       this.gateway = res.data.gateway;
       this.country = res.data.country;
@@ -214,6 +244,43 @@ export function ensureLiveConnection(deviceId: string): void {
  */
 export function getLiveConnection(deviceId: string): LiveDeviceConnection | undefined {
   return liveConnections.get(deviceId);
+}
+
+/**
+ * Register a hub's shockers with the live-control state store. Idempotent.
+ */
+export function registerHubShockers(
+  deviceId: string,
+  shockers: { id: string; isPaused: boolean }[]
+): void {
+  ensureLiveConnection(deviceId);
+  liveConnections.get(deviceId)!.registerHubShockers(shockers);
+}
+
+/**
+ * Start or stop live control for every registered shocker in the hub at once.
+ * When starting, paused shockers are skipped. When stopping, every shocker is stopped.
+ */
+export async function setHubLiveControl(deviceId: string, isLive: boolean) {
+  const conn = liveConnections.get(deviceId);
+  if (!conn) return;
+
+  if (isLive) {
+    for (const state of conn.shockers.values()) {
+      if (!state.isPaused) state.isLive = true;
+    }
+    const anyLive = [...conn.shockers.values()].some((x) => x.isLive);
+    if (anyLive && conn.state === LiveConnectionState.Disconnected) {
+      await conn.connect();
+    }
+  } else {
+    for (const state of conn.shockers.values()) {
+      state.isLive = false;
+    }
+    if (conn.state !== LiveConnectionState.Disconnected) {
+      conn.disconnect();
+    }
+  }
 }
 
 export async function toggleShockerLiveControl(deviceId: string, shockerId: string) {

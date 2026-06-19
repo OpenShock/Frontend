@@ -1,11 +1,11 @@
 <script lang="ts">
+  import { authenticatedAccountListOAuthConnections } from '$lib/api';
   import Link2 from '@lucide/svelte/icons/link-2';
   import Plus from '@lucide/svelte/icons/plus';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
   import Unlink from '@lucide/svelte/icons/unlink';
   import { page } from '$app/state';
-  import { accountV1Api } from '$lib/api';
-  import type { OAuthConnectionResponse } from '$lib/api/internal/v1/models';
+  import type { OAuthConnectionResponse } from '$lib/api';
   import { GetOAuthAuthorizeUrl } from '$lib/api/next/oauth';
   import Container from '$lib/components/Container.svelte';
   import { Button } from '$lib/components/ui/button';
@@ -60,7 +60,7 @@
     loadingConnections = true;
 
     try {
-      connections = await accountV1Api.authenticatedAccountListOAuthConnections();
+      connections = await authenticatedAccountListOAuthConnections();
     } catch (err) {
       await handleApiError(err);
     } finally {
@@ -117,7 +117,12 @@
       <Dropdown.Root>
         <Dropdown.Trigger>
           {#snippet child({ props })}
-            <Button {...props} variant="secondary" disabled={loadingProviders}>
+            <Button
+              {...props}
+              variant="secondary"
+              disabled={loadingProviders}
+              data-tour="connections-link"
+            >
               <Plus class="mr-2 size-4" />
               {loadingProviders ? 'Loading providers…' : 'Link new provider'}
             </Button>

@@ -48,6 +48,14 @@ function getWsUrlFromHttpUrl(url) {
   return 'ws' + url.substring(4); // Funny trick
 }
 
+function getOrigin(url) {
+  try {
+    return new URL(url).origin;
+  } catch (error) {
+    throw new Error(`Invalid URL [${url}]`, { cause: error });
+  }
+}
+
 function getSvelteBasePath() {
   try {
     const url = new URL(dotenv.PUBLIC_SITE_URL);
@@ -96,6 +104,9 @@ const config = {
           'https://firmware.openshock.org',
           'https://api.pwnedpasswords.com/range/',
           'https://cloudflareinsights.com',
+          // SigNoz / OpenTelemetry log + trace shipping endpoint origins.
+          getOrigin(dotenv.PUBLIC_SIGNOZ_LOGS_URL),
+          getOrigin(dotenv.PUBLIC_SIGNOZ_TRACES_URL),
         ],
         'script-src': [
           'self',

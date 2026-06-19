@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import { accountV1Api } from '$lib/api';
+  import { authenticatedAccountDeactivate } from '$lib/api';
   import { Button } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
@@ -10,8 +10,7 @@
   let deactivateDialogOpen = $state(false);
 
   function deactivateAccount() {
-    accountV1Api
-      .authenticatedAccountDeactivate()
+    authenticatedAccountDeactivate()
       .then(() => {
         toast.success('Account deactivated successfully');
         goto(resolve('/'));
@@ -36,9 +35,9 @@
 </Dialog.Root>
 
 <div
-  class="bg-surface-100-800-token flex w-full flex-col items-start gap-y-4 rounded-lg border border-red-600 p-4"
+  class="flex w-full flex-col items-start gap-y-4 rounded-lg border border-red-600/60 bg-red-950/10 p-4"
 >
-  <h1 class="h1">Danger Zone</h1>
+  <h2 class="text-base font-semibold text-red-500">Danger Zone</h2>
   <Button variant="destructive" class="w-full" onclick={() => (deactivateDialogOpen = true)}>
     Deactivate Account
   </Button>

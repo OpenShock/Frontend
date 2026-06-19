@@ -1,7 +1,7 @@
 <script lang="ts">
+  import { userSharesRedeemInvite } from '$lib/api';
+  import type { V2UserSharesListItem } from '$lib/api';
   import { Barcode, Zap } from '@lucide/svelte';
-  import { shockerSharesV2Api } from '$lib/api';
-  import type { V2UserSharesListItem } from '$lib/api/internal/v2';
   import * as Avatar from '$lib/components/ui/avatar';
   import Badge from '$lib/components/ui/badge/badge.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
@@ -29,7 +29,7 @@
 
   async function onFormSubmit() {
     try {
-      redeemPromise = shockerSharesV2Api.userSharesRedeemInvite(userInput);
+      redeemPromise = userSharesRedeemInvite({ path: { inviteId: userInput } });
       await redeemPromise;
       await refreshUserShares();
     } catch (error) {

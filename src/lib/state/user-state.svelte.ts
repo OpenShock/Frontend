@@ -1,4 +1,4 @@
-import { usersApi } from '$lib/api';
+import { usersGetSelf } from '$lib/api';
 import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 import type { ApiUser, ApiUserSelf } from '$lib/types/ApiUser';
 
@@ -54,7 +54,7 @@ export const userState = {
     loading = true;
 
     try {
-      const { data, message } = await usersApi.usersGetSelf();
+      const { data, message } = await usersGetSelf();
 
       if (!data) {
         console.error(`Failed to get user self: ${message}`);
@@ -68,6 +68,7 @@ export const userState = {
         avatar: data.image,
         roles: data.roles,
         email: data.email,
+        hasPassword: data.hasPassword,
       };
 
       loading = false;

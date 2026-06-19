@@ -11,6 +11,7 @@
   } from '@tanstack/table-core';
   import { FlexRender, createSvelteTable } from '$lib/components/ui/data-table';
   import * as Table from '$lib/components/ui/table';
+  import { cn } from '$lib/utils';
 
   interface Props {
     data: TData[];
@@ -19,6 +20,7 @@
     filters?: ColumnFiltersState;
     pagination?: PaginationState;
     onRowClick?: (row: TData) => void;
+    class?: string;
   }
 
   let {
@@ -28,6 +30,7 @@
     filters = $bindable(),
     pagination = $bindable(),
     onRowClick,
+    class: className,
   }: Props = $props();
 
   const table = createSvelteTable({
@@ -78,7 +81,7 @@
   });
 </script>
 
-<div class="overflow-y-auto rounded-md border">
+<div class={cn('overflow-y-auto rounded-md border', className)}>
   <Table.Root>
     <Table.Header>
       {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}

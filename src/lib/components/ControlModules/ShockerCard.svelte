@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
+  import { cn } from '$lib/utils';
   import PauseOverlay from './impl/PauseOverlay.svelte';
 
   interface Props {
@@ -11,8 +12,10 @@
     pauseReason?: string | null;
     resume?: () => Promise<void>;
     live?: Snippet;
+    pause?: Snippet;
     menu?: Snippet;
     children: Snippet;
+    class?: string;
   }
 
   let {
@@ -24,13 +27,18 @@
     pauseReason,
     resume,
     live,
+    pause,
     menu,
     children,
+    class: className,
   }: Props = $props();
 </script>
 
 <div
-  class="border-surface-400-500-token bg-card flex w-80 flex-col overflow-hidden rounded-md border"
+  class={cn(
+    'border-surface-400-500-token bg-card flex w-80 flex-col overflow-hidden rounded-md border',
+    className
+  )}
 >
   <!-- Header -->
   <div class="border-border/60 flex items-center gap-2 border-b px-3 py-2">
@@ -48,6 +56,9 @@
     </div>
     {#if live}
       <div class="shrink-0">{@render live()}</div>
+    {/if}
+    {#if pause}
+      <div class="shrink-0">{@render pause()}</div>
     {/if}
     {#if menu}
       <div class="shrink-0">{@render menu()}</div>

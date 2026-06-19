@@ -6,5 +6,6 @@ export * from './parse';
 export * from './rand';
 export * from './shadcn';
 export * from './shockerPause';
+export * from './temporal';
 export * from './time';
 export * from './userAgent';

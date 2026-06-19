@@ -1,11 +1,19 @@
 import { renderComponent } from '$lib/components/ui/data-table';
-import { isDate } from '$lib/typeguards';
-import { durationToString, elapsedToString, getReadableUserAgentName } from '$lib/utils';
-import type {
-  BuiltInSortingFn,
-  ColumnDef,
-  SortingFnOption,
-  StringOrTemplateHeader,
+import {
+  durationBetween,
+  formatDuration,
+  formatDurationSeconds,
+  formatElapsed,
+  getReadableUserAgentName,
+} from '$lib/utils';
+import {
+  sortingFns,
+  type BuiltInSortingFn,
+  type ColumnDef,
+  type Row,
+  type SortingFn,
+  type SortingFnOption,
+  type StringOrTemplateHeader,
 } from '@tanstack/table-core';
 import type { SemVer } from 'semver';
 import type { Component, ComponentProps } from 'svelte';
@@ -35,6 +43,37 @@ export function CreateColumnDef<TData extends object, TKey extends Extract<keyof
   };
 }
 
+// TanStack's 'auto' sorting can't compare Temporal.Instant values (they aren't
+// primitives — basic comparison invokes Temporal's valueOf, which throws), so it
+// breaks sorting on every date/time column. This default adds Temporal.Instant
+// support while otherwise mirroring how 'auto' resolves: numbers compare
+// numerically (basic), everything else uses the alphanumeric/natural comparator.
+function temporalAwareSortingFn<TData>(
+  rowA: Row<TData>,
+  rowB: Row<TData>,
+  columnId: string
+): number {
+  const a: unknown = rowA.getValue(columnId);
+  const b: unknown = rowB.getValue(columnId);
+
+  // Sort nullish values last (date columns render null as "Never", numbers "N/A").
+  if (a == null || b == null) {
+    if (a == null && b == null) return 0;
+    return a == null ? 1 : -1;
+  }
+
+  if (a instanceof Temporal.Instant && b instanceof Temporal.Instant) {
+    return Temporal.Instant.compare(a, b);
+  }
+
+  // Numbers (incl. negatives like RSSI) must compare numerically, not as strings.
+  if (typeof a === 'number' && typeof b === 'number') {
+    return a === b ? 0 : a > b ? 1 : -1;
+  }
+
+  return sortingFns.alphanumeric(rowA, rowB, columnId);
+}
+
 export function CreateSortableColumnDef<
   TData extends object,
   TKey extends Extract<keyof TData, string>,
@@ -53,7 +92,7 @@ export function CreateSortableColumnDef<
         sortFunct(row_a.getValue(accessorKey), row_b.getValue(accessorKey));
     }
   } else {
-    sortingFn = 'auto';
+    sortingFn = temporalAwareSortingFn as SortingFn<TData>;
   }
 
   return {
@@ -133,26 +172,44 @@ export const RenderCellWithTooltip = (content: string, tooltip: string): CellCon
   title: tooltip,
 });
 
-export const LocaleDateRenderer = (date: Date): CellContentProps =>
-  RenderCellWithTooltip(date.toLocaleDateString(), date.toString());
+export function LocaleDateRenderer(instant: Temporal.Instant): CellContentProps {
+  return RenderCellWithTooltip(
+    instant.toLocaleString(undefined, { dateStyle: 'short' }),
+    instant.toString()
+  );
+}
 
-export const LocaleDateTimeRenderer = (date: Date | null): CellContentProps =>
-  date ? RenderCellWithTooltip(date.toLocaleString(), date.toString()) : RenderCell('Never');
+export function LocaleDateTimeRenderer(instant: Temporal.Instant | null): CellContentProps {
+  if (!instant) return RenderCell('Never');
+  return RenderCellWithTooltip(instant.toLocaleString(), instant.toString());
+}
 
-export const TimeSinceDurationRenderer = (date: Date): CellContentProps =>
-  RenderCellWithTooltip(durationToString(Date.now() - date.getTime()), date.toString());
+export function TimeSinceDurationRenderer(instant: Temporal.Instant): CellContentProps {
+  return RenderCellWithTooltip(
+    formatDuration(durationBetween(instant, Temporal.Now.instant())),
+    instant.toString()
+  );
+}
 
-export const TimeSinceRelativeRenderer = (date: Date): CellContentProps =>
-  date.getTime() > 0
-    ? RenderCellWithTooltip(elapsedToString(date.getTime() - Date.now()), date.toString())
-    : CellOrangeNever;
+export function TimeSinceRelativeRenderer(instant: Temporal.Instant): CellContentProps {
+  if (instant.epochMilliseconds <= 0) return CellOrangeNever;
+  return RenderCellWithTooltip(
+    formatElapsed(durationBetween(Temporal.Now.instant(), instant)),
+    instant.toString()
+  );
+}
 
 export const TimeSinceRelativeOrNeverRenderer = (
-  date: Date | null | undefined
-): CellContentProps => (isDate(date) ? TimeSinceRelativeRenderer(date) : CellOrangeNever); // The isDate check is a workaround, for some reason if the input data is undefined, it will be transformed to a empty object and throws an error when trying to access getTime().
+  instant: Temporal.Instant | null | undefined
+): CellContentProps =>
+  instant instanceof Temporal.Instant ? TimeSinceRelativeRenderer(instant) : CellOrangeNever;
 
 export const NumberRenderer = (number: number | null): CellContentProps =>
   number ? RenderBoldCell(number.toString()) : CellNotApplicable;
+
+// Durations are stored/transmitted in milliseconds; display them in seconds with a unit.
+export const DurationRenderer = (durationMs: number | null): CellContentProps =>
+  durationMs ? RenderBoldCell(formatDurationSeconds(durationMs / 1000)) : CellNotApplicable;
 
 export const UserAgentRenderer = (userAgent: string | null): CellContentProps => {
   if (!userAgent) return CellRedUnknown;

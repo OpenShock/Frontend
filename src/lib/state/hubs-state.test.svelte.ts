@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('$lib/api', () => ({
-  shockersV1Api: { shockerListShockers: vi.fn() },
+  shockerListShockers: vi.fn(),
 }));
 
 vi.mock('$lib/errorhandling/apiErrorHandling', () => ({
@@ -71,9 +71,9 @@ describe('refreshOwnHubs', () => {
 
   it('populates ownHubs from API response', async () => {
     const { refreshOwnHubs, ownHubs } = await import('./hubs-state.svelte');
-    const { shockersV1Api } = await import('$lib/api');
+    const { shockerListShockers } = await import('$lib/api');
     const hub = { id: 'hub-1', name: 'Hub One', createdOn: new Date(), shockers: [] };
-    vi.mocked(shockersV1Api.shockerListShockers).mockResolvedValue({ data: [hub] } as any);
+    vi.mocked(shockerListShockers).mockResolvedValue({ data: [hub] } as any);
 
     await refreshOwnHubs();
 
@@ -83,8 +83,8 @@ describe('refreshOwnHubs', () => {
 
   it('populates multiple hubs', async () => {
     const { refreshOwnHubs, ownHubs } = await import('./hubs-state.svelte');
-    const { shockersV1Api } = await import('$lib/api');
-    vi.mocked(shockersV1Api.shockerListShockers).mockResolvedValue({
+    const { shockerListShockers } = await import('$lib/api');
+    vi.mocked(shockerListShockers).mockResolvedValue({
       data: [
         { id: 'hub-1', name: 'First', createdOn: new Date(), shockers: [] },
         { id: 'hub-2', name: 'Second', createdOn: new Date(), shockers: [] },
@@ -98,8 +98,8 @@ describe('refreshOwnHubs', () => {
 
   it('clears old entries on re-fetch', async () => {
     const { refreshOwnHubs, ownHubs } = await import('./hubs-state.svelte');
-    const { shockersV1Api } = await import('$lib/api');
-    vi.mocked(shockersV1Api.shockerListShockers)
+    const { shockerListShockers } = await import('$lib/api');
+    vi.mocked(shockerListShockers)
       .mockResolvedValueOnce({
         data: [{ id: 'hub-1', name: 'Old', createdOn: new Date(), shockers: [] }],
       } as any)
@@ -116,9 +116,9 @@ describe('refreshOwnHubs', () => {
 
   it('calls handleApiError and resolves when response has no data', async () => {
     const { refreshOwnHubs } = await import('./hubs-state.svelte');
-    const { shockersV1Api } = await import('$lib/api');
+    const { shockerListShockers } = await import('$lib/api');
     const { handleApiError } = await import('$lib/errorhandling/apiErrorHandling');
-    vi.mocked(shockersV1Api.shockerListShockers).mockResolvedValue({
+    vi.mocked(shockerListShockers).mockResolvedValue({
       data: null,
       message: '',
     } as any);
@@ -129,9 +129,9 @@ describe('refreshOwnHubs', () => {
 
   it('calls handleApiError and resolves when API throws', async () => {
     const { refreshOwnHubs } = await import('./hubs-state.svelte');
-    const { shockersV1Api } = await import('$lib/api');
+    const { shockerListShockers } = await import('$lib/api');
     const { handleApiError } = await import('$lib/errorhandling/apiErrorHandling');
-    vi.mocked(shockersV1Api.shockerListShockers).mockRejectedValue(new Error('Network'));
+    vi.mocked(shockerListShockers).mockRejectedValue(new Error('Network'));
 
     await expect(refreshOwnHubs()).resolves.toBeUndefined();
     expect(vi.mocked(handleApiError)).toHaveBeenCalled();

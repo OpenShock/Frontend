@@ -1,11 +1,15 @@
 <script lang="ts">
-  import { Trash2 } from '@lucide/svelte';
-  import { adminApi } from '$lib/api';
   import {
-    type EmailProviderBlacklistDto,
     MatchTypeEnum,
-    type UserNameBlacklistDto,
-  } from '$lib/api/internal/v1';
+    adminAddEmailProviderBlacklist,
+    adminAddUsernameBlacklist,
+    adminListEmailProviderBlacklist,
+    adminListUsernameBlacklist,
+    adminRemoveEmailProviderBlacklist,
+    adminRemoveUsernameBlacklist,
+  } from '$lib/api';
+  import type { EmailProviderBlacklistDto, UserNameBlacklistDto } from '$lib/api';
+  import { Trash2 } from '@lucide/svelte';
   import Container from '$lib/components/Container.svelte';
   import TextInput from '$lib/components/input/TextInput.svelte';
   import { Button } from '$lib/components/ui/button';
@@ -51,9 +55,9 @@
   async function loadUsernames() {
     isLoadingUsernames = true;
     try {
-      usernameBlacklist = await adminApi.adminListUsernameBlacklist(
-        usernameEntry.length > 0 ? usernameEntry : undefined
-      );
+      usernameBlacklist = await adminListUsernameBlacklist({
+        query: usernameEntry.length > 0 ? { match: usernameEntry } : undefined,
+      });
     } catch (err) {
       handleApiError(err);
     } finally {
@@ -64,9 +68,9 @@
   async function loadEmails() {
     isLoadingEmails = true;
     try {
-      emailBlacklist = await adminApi.adminListEmailProviderBlacklist(
-        emailEntry.length > 0 ? emailEntry : undefined
-      );
+      emailBlacklist = await adminListEmailProviderBlacklist({
+        query: emailEntry.length > 0 ? { match: emailEntry } : undefined,
+      });
     } catch (err) {
       handleApiError(err);
     } finally {
@@ -80,7 +84,7 @@
     if (!value) return;
 
     try {
-      await adminApi.adminAddUsernameBlacklist({ value, matchType: matchTypeEntry });
+      await adminAddUsernameBlacklist({ body: { value, matchType: matchTypeEntry } });
     } catch (err) {
       handleApiError(err);
     } finally {
@@ -91,7 +95,7 @@
 
   async function removeUsername(id: string) {
     try {
-      await adminApi.adminRemoveUsernameBlacklist(id);
+      await adminRemoveUsernameBlacklist({ path: { id } });
       loadUsernames();
     } catch (err) {
       handleApiError(err);
@@ -100,7 +104,7 @@
 
   async function addEmail(domain: string) {
     try {
-      await adminApi.adminAddEmailProviderBlacklist({ domains: [domain] });
+      await adminAddEmailProviderBlacklist({ body: { domains: [domain] } });
     } catch (err) {
       handleApiError(err);
     }
@@ -122,7 +126,7 @@
         .map((s) => s.trim())
         .filter((s) => s.length > 0);
       if (domains.length) {
-        await adminApi.adminAddEmailProviderBlacklist({ domains });
+        await adminAddEmailProviderBlacklist({ body: { domains } });
         emailEntry = '';
         loadEmails();
       }
@@ -133,7 +137,7 @@
 
   async function removeEmail(id: string) {
     try {
-      await adminApi.adminRemoveEmailProviderBlacklist(id);
+      await adminRemoveEmailProviderBlacklist({ path: { id } });
       loadEmails();
     } catch (err) {
       handleApiError(err);

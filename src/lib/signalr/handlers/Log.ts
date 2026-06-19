@@ -1,25 +1,24 @@
 import { dev } from '$app/environment';
-import { isControlLog } from '$lib/signalr/models/ControlLog';
-import { isControlLogSender } from '$lib/signalr/models/ControlLogSender';
+import { isControlLog, type ControlLog } from '$lib/signalr/models/ControlLog';
+import { isControlLogSender, type ControlLogSender } from '$lib/signalr/models/ControlLogSender';
 import { toast } from 'svelte-sonner';
 import { ControlType } from '../models/ControlType';
 
-export type ShockEventListener = (
-  shockerId: string,
-  controlType: ControlType,
-  duration: number,
-  intensity: number
-) => void;
+export type ShockEventListener = (sender: ControlLogSender, log: ControlLog) => void;
 
 type RegisteredListener = {
   id: string;
-  shockerId: string;
+  shockerId: string | null;
   callback: ShockEventListener;
 };
 
 const listeners: RegisteredListener[] = [];
 
-export function addShockEventListener(id: string, shockerId: string, callback: ShockEventListener) {
+export function addShockEventListener(
+  id: string,
+  shockerId: string | null,
+  callback: ShockEventListener
+) {
   listeners.push({ id, shockerId, callback });
 }
 
@@ -30,15 +29,10 @@ export function removeShockEventListener(id: string) {
   }
 }
 
-function emitShockEvent(
-  shockerId: string,
-  controlType: ControlType,
-  duration: number,
-  intensity: number
-) {
+function emitShockEvent(sender: ControlLogSender, log: ControlLog) {
   for (const listener of listeners) {
-    if (listener.shockerId === shockerId) {
-      listener.callback(shockerId, controlType, duration, intensity);
+    if (listener.shockerId === null || listener.shockerId === log.shocker.id) {
+      listener.callback(sender, log);
     }
   }
 }
@@ -65,7 +59,9 @@ export function handleSignalrLog(sender: unknown, logs: unknown) {
 
     // Iterate through each control log
     logs.forEach((log, index) => {
-      console.group(`Log #${index + 1} - ${new Date(log.executedAt).toLocaleString()}`);
+      console.group(
+        `Log #${index + 1} - ${Temporal.Instant.from(log.executedAt).toLocaleString()}`
+      );
       console.log('Shocker:', `${log.shocker.name} (${log.shocker.id})`);
       console.log('Type:', ControlType[log.type]);
       if (log.type !== ControlType.Stop) {
@@ -79,6 +75,6 @@ export function handleSignalrLog(sender: unknown, logs: unknown) {
   }
 
   logs.forEach((log) => {
-    emitShockEvent(log.shocker.id, log.type, log.duration, log.intensity);
+    emitShockEvent(sender, log);
   });
 }

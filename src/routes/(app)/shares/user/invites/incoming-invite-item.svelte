@@ -1,7 +1,7 @@
 <script lang="ts">
+  import { userSharesDenyIncomingInvite, userSharesRedeemInvite } from '$lib/api';
+  import type { ShareInviteBaseDetails } from '$lib/api';
   import { Check, X, Zap } from '@lucide/svelte';
-  import { shockerSharesV2Api } from '$lib/api';
-  import type { ShareInviteBaseDetails } from '$lib/api/internal/v2';
   import PermissionTooltip from '$lib/components/shares/permission-tooltip.svelte';
   import * as Avatar from '$lib/components/ui/avatar';
   import { Badge } from '$lib/components/ui/badge';
@@ -22,7 +22,7 @@
 
   async function acceptInvite() {
     try {
-      await shockerSharesV2Api.userSharesRedeemInvite(shareInvite.id);
+      await userSharesRedeemInvite({ path: { inviteId: shareInvite.id } });
       toast.success(`Accepted share invite for ${shareInvite.owner.name}`);
     } catch (error) {
       handleApiError(error);
@@ -33,7 +33,7 @@
 
   async function denyInviteCall(invite: ShareInviteBaseDetails) {
     try {
-      await shockerSharesV2Api.userSharesDenyIncomingInvite(invite.id);
+      await userSharesDenyIncomingInvite({ path: { inviteId: invite.id } });
       toast.success(`Declined share invite for ${invite.owner.name}`);
     } catch (error) {
       handleApiError(error);
@@ -92,6 +92,7 @@
       <Tooltip.Trigger
         class={cn('mr-4 size-9', buttonVariants({ variant: 'default' }))}
         onclick={acceptInvite}
+        aria-label="Accept invite"
       >
         <Check />
       </Tooltip.Trigger>
@@ -104,6 +105,7 @@
       <Tooltip.Trigger
         class={cn('mr-4 size-9', buttonVariants({ variant: 'destructive' }))}
         onclick={denyInvite}
+        aria-label="Deny invite"
       >
         <X />
       </Tooltip.Trigger>

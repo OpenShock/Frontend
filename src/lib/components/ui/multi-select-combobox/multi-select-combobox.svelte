@@ -6,7 +6,7 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
 	import { Checkbox } from '$lib/components/ui/checkbox/index.js';
-    import { LoaderCircle } from '@lucide/svelte';
+	import { Spinner } from '$lib/components/ui/spinner/index.js';
 
 	const id = $props.id();
 
@@ -57,7 +57,7 @@
 						placeholder}
 					</span>
 					{#if loading}
-						<LoaderCircle class="size-4 shrink-0 opacity-50 animate-spin" />
+						<Spinner class="size-4 shrink-0 opacity-50" />
 					{:else}
 						<ChevronsUpDownIcon class="size-4 shrink-0 opacity-50" />
 					{/if}

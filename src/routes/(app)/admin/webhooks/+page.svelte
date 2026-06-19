@@ -2,8 +2,8 @@
   import { RotateCcw } from '@lucide/svelte';
   import type { SortingState } from '@tanstack/table-core';
   import type { ColumnDef } from '@tanstack/table-core';
-  import { adminApi } from '$lib/api';
-  import type { WebhookDto } from '$lib/api/internal/v1';
+  import { adminListWebhooks } from '$lib/api';
+  import type { WebhookDto } from '$lib/api';
   import Container from '$lib/components/Container.svelte';
   import {
     CreateActionsColumnDef,
@@ -35,8 +35,7 @@
   let addDialogOpen = $state<boolean>(false);
 
   function fetchWebhooks() {
-    adminApi
-      .adminListWebhooks()
+    adminListWebhooks()
       .then((res) => {
         data = res;
       })
