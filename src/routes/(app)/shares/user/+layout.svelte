@@ -117,7 +117,7 @@
     </Tabs.Root>
   </div>
 
-  <div class="flex w-full flex-col space-y-4 overflow-auto">
+  <div class="flex w-full flex-1 flex-col space-y-4 overflow-auto">
     {@render children?.()}
   </div>
 </Container>

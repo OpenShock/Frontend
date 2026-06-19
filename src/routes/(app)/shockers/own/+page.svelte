@@ -7,6 +7,7 @@
   import { resolve } from '$app/paths';
   import Container from '$lib/components/Container.svelte';
   import { Spinner } from '$lib/components/ui/spinner';
+  import EmptyState from '$lib/components/EmptyState.svelte';
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import DialogShockerAdd, {
     defaultAddShockerData,
@@ -297,22 +298,23 @@
     <hr class="border-border" />
 
     {#if shockers.length === 0}
-      <div class="flex flex-col items-center justify-center gap-4 py-16">
-        <Zap class="text-muted-foreground size-12" />
-        <div class="text-center">
-          <h2 class="text-lg font-semibold">No shockers yet</h2>
-          <p class="text-muted-foreground text-sm">
-            {#if ownHubs.size === 0}
-              Create a hub first, then add shockers to it.
-            {:else}
-              Add a shocker to one of your hubs to get started.
-            {/if}
-          </p>
-        </div>
-        <Button onclick={openAddShockerDialog} disabled={ownHubs.size === 0}>
-          <Plus class="size-4" /> Add Shocker
-        </Button>
-      </div>
+      <EmptyState
+        icon={Zap}
+        title="No shockers yet"
+        description={ownHubs.size === 0
+          ? 'Create a hub first, then add shockers to it.'
+          : 'Add a shocker to one of your hubs to get started.'}
+      >
+        {#if ownHubs.size === 0}
+          <Button size="lg" href={resolve('/hubs')}>
+            <Plus class="size-4" /> Create a Hub
+          </Button>
+        {:else}
+          <Button size="lg" onclick={openAddShockerDialog}>
+            <Plus class="size-4" /> Add Shocker
+          </Button>
+        {/if}
+      </EmptyState>
     {:else}
       {#if moduleType === ModuleType.SimpleControlModule}
         <SimpleControlHeader bind:shockIntensity bind:vibrationIntensity bind:duration />
