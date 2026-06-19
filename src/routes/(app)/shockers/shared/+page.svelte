@@ -8,6 +8,7 @@
   import * as Avatar from '$lib/components/ui/avatar';
   import { Button } from '$lib/components/ui/button';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+  import EmptyState from '$lib/components/EmptyState.svelte';
   import { copyToClipboard } from '$lib/utils/clipboard.svelte';
   import { onlineHubs } from '$lib/state/hubs-state.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
@@ -65,11 +66,11 @@
     <PageHeader title="Shared Shockers" subtitle="Manage shared shockers with other users" />
 
     {#if !hasSharedShockers}
-      <div class="text-muted-foreground flex flex-col items-center justify-center py-12">
-        <User size={48} class="mb-4 opacity-50" />
-        <p class="text-lg">No shockers have been shared with you yet.</p>
-        <p class="text-sm">When someone shares their shockers with you, they'll appear here.</p>
-      </div>
+      <EmptyState
+        icon={User}
+        title="No shockers have been shared with you yet."
+        description="When someone shares their shockers with you, they'll appear here."
+      />
     {:else}
       <div class="flex w-full flex-col gap-5">
         {#each sharedHubsState.value as owner (owner.id)}
