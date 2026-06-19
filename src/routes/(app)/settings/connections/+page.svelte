@@ -10,6 +10,7 @@
   import Container from '$lib/components/Container.svelte';
   import { Button } from '$lib/components/ui/button';
   import * as Card from '$lib/components/ui/card';
+  import EmptyState from '$lib/components/EmptyState.svelte';
   import * as Dropdown from '$lib/components/ui/dropdown-menu';
   import * as Separator from '$lib/components/ui/separator';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
@@ -111,7 +112,7 @@
     </Card.Description>
   </Card.Header>
 
-  <Card.Content class="w-full space-y-6">
+  <Card.Content class="flex w-full flex-1 flex-col space-y-6">
     <!-- Quick actions -->
     <div class="flex flex-wrap gap-2">
       <Dropdown.Root>
@@ -162,12 +163,11 @@
         {/each}
       </div>
     {:else if connections.length === 0}
-      <div class="rounded-xl border p-6 text-sm">
-        <div class="mb-2 font-medium">No connections yet</div>
-        <div class="text-muted-foreground">
-          Choose “Link new provider” above to connect available providers.
-        </div>
-      </div>
+      <EmptyState
+        icon={Link2}
+        title="No connections yet"
+        description="Choose “Link new provider” above to connect available providers."
+      />
     {:else}
       <div class="grid gap-3 md:grid-cols-2">
         {#each backendMetadata.state!.oAuthProviders as p (p)}

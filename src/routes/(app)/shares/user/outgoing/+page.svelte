@@ -1,5 +1,5 @@
 <script lang="ts">
-  import * as Empty from '$lib/components/ui/empty';
+  import EmptyState from '$lib/components/EmptyState.svelte';
   import { Spinner } from '$lib/components/ui/spinner';
   import * as Table from '$lib/components/ui/table';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
@@ -34,15 +34,11 @@
   </div>
 {:then}
   {#if userSharesState.shares.outgoing.length === 0}
-    <Empty.Root class="mb-6 rounded-md border">
-      <Empty.Header>
-        <Empty.Media variant="icon">
-          <Share2 />
-        </Empty.Media>
-        <Empty.Title>No shared shockers</Empty.Title>
-        <Empty.Description>You haven't shared any shockers with other users yet.</Empty.Description>
-      </Empty.Header>
-    </Empty.Root>
+    <EmptyState
+      icon={Share2}
+      title="No shared shockers"
+      description="You haven't shared any shockers with other users yet."
+    />
   {:else}
     <div class="mb-6 overflow-y-auto rounded-md border">
       <Table.Root>

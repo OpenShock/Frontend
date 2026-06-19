@@ -3,7 +3,7 @@
   import { adminGetUsers } from '$lib/api';
   import type { AdminUsersView, AdminUsersViewPaginated } from '$lib/api';
   import Container from '$lib/components/Container.svelte';
-  import * as Empty from '$lib/components/ui/empty';
+  import EmptyState from '$lib/components/EmptyState.svelte';
   import { Spinner } from '$lib/components/ui/spinner';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
@@ -42,15 +42,7 @@
       <span class="text-muted-foreground">Loading user...</span>
     </div>
   {:else if !user}
-    <Empty.Root>
-      <Empty.Header>
-        <Empty.Media variant="icon">
-          <UserX />
-        </Empty.Media>
-        <Empty.Title>User not found</Empty.Title>
-        <Empty.Description>No user found with this ID.</Empty.Description>
-      </Empty.Header>
-    </Empty.Root>
+    <EmptyState icon={UserX} title="User not found" description="No user found with this ID." />
   {:else}
     {user.name}
   {/if}
