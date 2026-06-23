@@ -12,8 +12,8 @@
 
 <div
 	bind:this={ref}
-	data-slot="field-label"
-	class={cn("gap-2 text-sm leading-snug font-medium group-data-[disabled=true]/field:opacity-50 flex w-fit items-center leading-snug", className)}
+	data-slot="empty-header"
+	class={cn("gap-2 flex max-w-sm flex-col items-center", className)}
 	{...restProps}
 >
 	{@render children?.()}

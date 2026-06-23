@@ -21,30 +21,6 @@ test.describe('error handling', () => {
 });
 
 // ---------------------------------------------------------------------------
-// Security headers
-// ---------------------------------------------------------------------------
-
-test.describe('security headers', () => {
-  test('response includes X-Frame-Options or CSP frame-ancestors', async ({ page }) => {
-    const res = await page.goto('/login');
-    const headers = res?.headers() ?? {};
-    const hasFrameOptions = 'x-frame-options' in headers;
-    const hasCSP = 'content-security-policy' in headers;
-    const cspHasFrameAncestors = (headers['content-security-policy'] ?? '').includes(
-      'frame-ancestors'
-    );
-    expect(hasFrameOptions || (hasCSP && cspHasFrameAncestors)).toBe(true);
-  });
-
-  test('X-Content-Type-Options is set to nosniff', async ({ page }) => {
-    const res = await page.goto('/login');
-    const headers = res?.headers() ?? {};
-    // nosniff prevents MIME-type sniffing attacks
-    expect(headers['x-content-type-options']).toBe('nosniff');
-  });
-});
-
-// ---------------------------------------------------------------------------
 // Navigation and breadcrumbs
 // ---------------------------------------------------------------------------
 

@@ -1,6 +1,5 @@
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
-import path from 'node:path';
 
 const OUTPUT_DIRS = ['src/lib/api/internal/v1', 'src/lib/api/internal/v2'];
 
@@ -31,31 +30,6 @@ console.log('Sharing v1 client with v2...');
       `// Patched by scripts/regenerate-api.js: v2 reuses the v1 client instance.\nexport { client, type CreateClientConfig } from '../v1/client.gen';\n`
     );
     console.log(`  Patched ${v2Client}`);
-  }
-}
-
-console.log('');
-console.log('Rewriting Date → Temporal.Instant...');
-
-const PATCHED_FILES = ['types.gen.ts', 'transformers.gen.ts', 'sdk.gen.ts'];
-
-for (const dir of OUTPUT_DIRS) {
-  for (const filename of PATCHED_FILES) {
-    const filePath = path.join(dir, filename);
-    if (!fs.existsSync(filePath)) continue;
-
-    let source = fs.readFileSync(filePath, 'utf-8');
-    const before = source;
-
-    // Types: `Date`, `Date | null`, `Date[]`, `Array<Date>` → Temporal.Instant
-    source = source.replaceAll(/\bDate\b(?=\s*[|;,)\]}[>])/g, 'Temporal.Instant');
-    // Transformers/runtime: `new Date(value)` → `Temporal.Instant.from(value)`
-    source = source.replaceAll(/new Date\(([^)]+)\)/g, 'Temporal.Instant.from($1)');
-
-    if (source !== before) {
-      fs.writeFileSync(filePath, source);
-      console.log(`  Patched ${filePath}`);
-    }
   }
 }
 

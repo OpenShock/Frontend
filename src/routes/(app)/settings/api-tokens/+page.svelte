@@ -43,8 +43,7 @@
   }
 
   function onEdit(id: string, updater: (token: TokenResponseV2) => TokenResponseV2) {
-    const idx = tokens.findIndex((t) => t.id === id);
-    if (idx !== -1) tokens[idx] = updater(tokens[idx]);
+    tokens = tokens.map((t) => (t.id === id ? updater(t) : t));
   }
 
   function onDeleted(id: string) {

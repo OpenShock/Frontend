@@ -1,3 +1,5 @@
+import 'temporal-polyfill/global';
+
 import { base } from '$app/paths';
 import { versionGetBackendInfo } from '$lib/api';
 import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
@@ -56,12 +58,6 @@ function registerGlobalErrorCapture(): void {
   };
 }
 
-async function ensureTemporal(): Promise<void> {
-  if (typeof (globalThis as { Temporal?: unknown }).Temporal === 'undefined') {
-    await import('temporal-polyfill/global');
-  }
-}
-
 async function clientInit(): Promise<void> {
   const { data } = await versionGetBackendInfo();
   backendMetadata.set(data);
@@ -80,7 +76,6 @@ export async function init() {
   initTelemetry();
   registerGlobalErrorCapture();
   redirectLegacyHashRoute(base);
-  await ensureTemporal();
   await clientInit().catch(handleApiError);
   initializeColorScheme();
 }

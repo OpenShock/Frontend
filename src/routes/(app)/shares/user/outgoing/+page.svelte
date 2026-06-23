@@ -1,8 +1,10 @@
 <script lang="ts">
+  import EmptyState from '$lib/components/EmptyState.svelte';
   import { Spinner } from '$lib/components/ui/spinner';
   import * as Table from '$lib/components/ui/table';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { userSharesState, refreshUserShares } from '$lib/state/user-shares-state.svelte';
+  import Share2 from '@lucide/svelte/icons/share-2';
   import EditShare from './edit-share.svelte';
   import UserShareItem from './user-share-item.svelte';
 
@@ -32,9 +34,11 @@
   </div>
 {:then}
   {#if userSharesState.shares.outgoing.length === 0}
-    <div class="text-muted-foreground flex h-32 items-center justify-center text-sm">
-      No outgoing shares
-    </div>
+    <EmptyState
+      icon={Share2}
+      title="No shared shockers"
+      description="You haven't shared any shockers with other users yet."
+    />
   {:else}
     <div class="mb-6 overflow-y-auto rounded-md border">
       <Table.Root>

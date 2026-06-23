@@ -11,6 +11,7 @@
   import type { OwnPublicShareResponse } from '$lib/api';
   import Container from '$lib/components/Container.svelte';
   import CopyInput from '$lib/components/CopyInput.svelte';
+  import EmptyState from '$lib/components/EmptyState.svelte';
   import { Spinner } from '$lib/components/ui/spinner';
   import Button from '$lib/components/ui/button/button.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
@@ -93,19 +94,16 @@
       <Spinner class="size-8 text-gray-600 dark:text-gray-300" />
     </div>
   {:else if sortedShares.length === 0}
-    <div
-      class="border-border/60 text-muted-foreground flex w-full flex-col items-center justify-center gap-3 rounded-lg border border-dashed py-16"
+    <EmptyState
+      icon={Link2}
+      title="No public shares yet"
+      description="Create a link that anyone can use to control your shockers."
     >
-      <Link2 class="size-10 opacity-50" />
-      <div class="text-center">
-        <p class="text-foreground text-sm font-medium">No public shares yet</p>
-        <p class="mt-1 text-xs">Create a link that anyone can use to control your shockers.</p>
-      </div>
-      <Button onclick={() => (showAddShareModal = true)} size="sm">
+      <Button size="lg" onclick={() => (showAddShareModal = true)}>
         <Plus />
         New Share
       </Button>
-    </div>
+    </EmptyState>
   {:else}
     <div
       class="grid w-full grid-cols-1 gap-4 sm:[grid-template-columns:repeat(auto-fill,minmax(18rem,1fr))]"

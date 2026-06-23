@@ -1,12 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-
-// Mock $lib/api before any module loads. vi.mock is hoisted automatically.
-// The factory is re-called after each vi.resetModules(), so each test gets fresh vi.fn()s.
-vi.mock('$lib/api', () => ({
-  metaApi: {
-    versionGetBackendInfo: vi.fn(),
-  },
-}));
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 describe('backendMetadata', () => {
   // Reset module registry before each test so that module-level $state starts as null.
@@ -14,83 +6,58 @@ describe('backendMetadata', () => {
     vi.resetModules();
   });
 
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
-  it('state is null before init is called', async () => {
+  it('state is null before set is called', async () => {
     const { backendMetadata } = await import('./backend-metadata-state.svelte');
     expect(backendMetadata.state).toBeNull();
   });
 
-  it('init stores the API response in state', async () => {
+  it('set() stores the response without isUserAuthenticated', async () => {
     const { backendMetadata } = await import('./backend-metadata-state.svelte');
-    const { metaApi } = await import('$lib/api');
-    const mockData = { version: '1.0.0', currentTime: '2026-04-27T00:00:00Z' };
-    vi.mocked(metaApi.versionGetBackendInfo).mockResolvedValue({ data: mockData } as any);
+    const info = {
+      version: '1.0.0',
+      commit: 'abc123',
+      currentTime: '2026-04-27T00:00:00Z',
+      frontendUrl: 'https://example.com',
+      shortLinkUrl: 'https://example.com/s',
+      turnstileSiteKey: null,
+      oAuthProviders: [],
+      isUserAuthenticated: true,
+    };
 
-    await backendMetadata.init();
+    backendMetadata.set(info as any);
 
-    expect(backendMetadata.state).toEqual(mockData);
+    const { isUserAuthenticated: _ignored, ...rest } = info;
+    expect(backendMetadata.state).toEqual(rest);
+    expect(backendMetadata.state).not.toHaveProperty('isUserAuthenticated');
   });
 
-  it('init returns the fetched backend info', async () => {
+  it('set() overwrites state with new data on a second call', async () => {
     const { backendMetadata } = await import('./backend-metadata-state.svelte');
-    const { metaApi } = await import('$lib/api');
-    const mockData = { version: '2.0.0', currentTime: '2026-04-27T00:00:00Z' };
-    vi.mocked(metaApi.versionGetBackendInfo).mockResolvedValue({ data: mockData } as any);
+    const first = {
+      version: '1.0.0',
+      commit: 'aaa',
+      currentTime: '2026-01-01T00:00:00Z',
+      frontendUrl: 'https://example.com',
+      shortLinkUrl: 'https://example.com/s',
+      turnstileSiteKey: null,
+      oAuthProviders: [],
+      isUserAuthenticated: false,
+    };
+    const second = {
+      version: '1.1.0',
+      commit: 'bbb',
+      currentTime: '2026-04-27T00:00:00Z',
+      frontendUrl: 'https://example.com',
+      shortLinkUrl: 'https://example.com/s',
+      turnstileSiteKey: null,
+      oAuthProviders: [],
+      isUserAuthenticated: true,
+    };
 
-    const result = await backendMetadata.init();
+    backendMetadata.set(first as any);
+    backendMetadata.set(second as any);
 
-    expect(result).toEqual(mockData);
-  });
-
-  it('init throws when response.data is null', async () => {
-    const { backendMetadata } = await import('./backend-metadata-state.svelte');
-    const { metaApi } = await import('$lib/api');
-    vi.mocked(metaApi.versionGetBackendInfo).mockResolvedValue({
-      data: null,
-      message: 'Service unavailable',
-    } as any);
-
-    await expect(backendMetadata.init()).rejects.toThrow(
-      'Failed to get backend info: Service unavailable'
-    );
-  });
-
-  it('init throws when response.data is undefined', async () => {
-    const { backendMetadata } = await import('./backend-metadata-state.svelte');
-    const { metaApi } = await import('$lib/api');
-    vi.mocked(metaApi.versionGetBackendInfo).mockResolvedValue({ data: undefined } as any);
-
-    await expect(backendMetadata.init()).rejects.toThrow('Failed to get backend info');
-  });
-
-  it('state remains null if init throws', async () => {
-    const { backendMetadata } = await import('./backend-metadata-state.svelte');
-    const { metaApi } = await import('$lib/api');
-    vi.mocked(metaApi.versionGetBackendInfo).mockResolvedValue({
-      data: null,
-      message: 'Oops',
-    } as any);
-
-    await backendMetadata.init().catch(() => {});
-
-    expect(backendMetadata.state).toBeNull();
-  });
-
-  it('second init call overwrites state with new data', async () => {
-    const { backendMetadata } = await import('./backend-metadata-state.svelte');
-    const { metaApi } = await import('$lib/api');
-    const first = { version: '1.0.0', currentTime: '2026-01-01T00:00:00Z' };
-    const second = { version: '1.1.0', currentTime: '2026-04-27T00:00:00Z' };
-    vi.mocked(metaApi.versionGetBackendInfo)
-      .mockResolvedValueOnce({ data: first } as any)
-      .mockResolvedValueOnce({ data: second } as any);
-
-    await backendMetadata.init();
-    await backendMetadata.init();
-
-    expect(backendMetadata.state).toEqual(second);
+    expect(backendMetadata.state?.version).toBe('1.1.0');
+    expect(backendMetadata.state?.commit).toBe('bbb');
   });
 });

@@ -12,8 +12,11 @@
 
 <div
 	bind:this={ref}
-	data-slot="field-label"
-	class={cn("gap-2 text-sm leading-snug font-medium group-data-[disabled=true]/field:opacity-50 flex w-fit items-center leading-snug", className)}
+	data-slot="empty-description"
+	class={cn(
+		"text-sm/relaxed text-muted-foreground [&>a:hover]:text-primary text-sm/relaxed [&>a]:underline [&>a]:underline-offset-4",
+		className
+	)}
 	{...restProps}
 >
 	{@render children?.()}
