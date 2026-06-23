@@ -8,7 +8,14 @@ import net from 'node:net';
 import os from 'node:os';
 import { env } from 'node:process';
 import license from 'rollup-plugin-license';
-import { type Plugin, type PluginOption, type UserConfig, defineConfig, loadEnv } from 'vite';
+import {
+  type Plugin,
+  type PluginOption,
+  type ProxyOptions,
+  type UserConfig,
+  defineConfig,
+  loadEnv,
+} from 'vite';
 import devtoolsJson from 'vite-plugin-devtools-json';
 import mkcert from 'vite-plugin-mkcert';
 
@@ -148,7 +155,12 @@ function getPlugins(useLocalRedirect: boolean, redirectFqdn: string | null): Plu
 
 interface LocalServer {
   /** Vite `server` config (host/port + dev niceties). */
-  config: { forwardConsole: boolean; proxy: Record<string, never>; host: string; port: number };
+  config: {
+    forwardConsole: boolean;
+    proxy: Record<string, ProxyOptions>;
+    host: string;
+    port: number;
+  };
   /**
    * FQDN that needs a hosts redirect and a privileged-port bind before serving,
    * or null for plain `localhost` (no redirect/bind checks required).
@@ -169,11 +181,11 @@ function resolveServerConfig(mode: string, useLocalRedirect: boolean): LocalServ
 
   if (!useLocalRedirect) return undefined;
 
+  const domain = new URL(vars.PUBLIC_SITE_URL).hostname;
+
   // Vite 8: pipe browser console.* into the dev terminal so client errors land
   // alongside server logs without context-switching to browser devtools.
   const baseDevConfig = { forwardConsole: true, proxy: {} };
-
-  const domain = new URL(vars.PUBLIC_SITE_URL).hostname;
 
   if (domain === 'localhost') {
     return { config: { ...baseDevConfig, host: 'localhost', port: 8080 }, fqdn: null };
@@ -181,6 +193,34 @@ function resolveServerConfig(mode: string, useLocalRedirect: boolean): LocalServ
 
   const host = domain.startsWith('local.') ? domain : `local.${domain}`;
   return { config: { ...baseDevConfig, host, port: 443 }, fqdn: host };
+}
+
+// Integration mode serves plain HTTP on localhost and proxies /1,/2 to the API
+// container. No mkcert, no local.<domain> redirect, no privileged :443 bind and
+// no self-signed certs to trust — the browser only ever talks to this Vite
+// origin, so there is no CORS either. The API's `Secure` / `SameSite=None`
+// cookie attributes are stripped on the way back so the browser keeps the
+// session cookie over plain HTTP.
+function resolveIntegrationServer(): LocalServer {
+  const vars = { ...env, ...loadEnv('integration', process.cwd(), ['PUBLIC_', 'VITE_']) };
+  const target = vars.VITE_API_PROXY_TARGET ?? 'http://localhost:5001';
+  const proxy: Record<string, ProxyOptions> = {
+    '^/(1|2)(/.*)?$': {
+      target,
+      changeOrigin: true,
+      configure: (proxy) => {
+        proxy.on('proxyRes', (proxyRes) => {
+          const setCookie = proxyRes.headers['set-cookie'];
+          if (setCookie) {
+            proxyRes.headers['set-cookie'] = setCookie.map((cookie) =>
+              cookie.replace(/;\s*Secure/gi, '').replace(/;\s*SameSite=None/gi, '; SameSite=Lax')
+            );
+          }
+        });
+      },
+    },
+  };
+  return { config: { forwardConsole: true, proxy, host: 'localhost', port: 5173 }, fqdn: null };
 }
 
 // The hosts-redirect and :443 bind checks have real side effects (DNS lookups,
@@ -257,13 +297,19 @@ async function ensurePortBindable(host: string, port: number): Promise<void> {
 }
 
 export default defineConfig(({ command, mode, isPreview }) => {
-  const isLocalServe = command === 'serve' || isPreview === true;
+  const isVitest = isTruthy(env.VITEST) || mode === 'test';
+  const isLocalServe = (command === 'serve' || isPreview === true) && !isVitest;
   const isProduction = mode === 'production' && (isTruthy(env.DOCKER) || isTruthy(env.CF_PAGES));
+  const isIntegration = mode === 'integration';
 
-  // If we are running locally, ensure that local.{PUBLIC_SITE_URL} resolves to localhost, and then use mkcert to generate a certificate
-  const useLocalRedirect = isLocalServe && !isProduction && !isTruthy(env.CI);
+  // mkcert + local.{PUBLIC_SITE_URL} hosts redirect + privileged :443 bind are
+  // only for real local dev against a FQDN. Integration mode serves plain HTTP
+  // and proxies the API instead (resolveIntegrationServer), so it opts out.
+  const useLocalRedirect = isLocalServe && !isProduction && !isTruthy(env.CI) && !isIntegration;
 
-  const server = resolveServerConfig(mode, useLocalRedirect);
+  const server = isIntegration
+    ? resolveIntegrationServer()
+    : resolveServerConfig(mode, useLocalRedirect);
 
   return {
     build: {
@@ -282,6 +328,30 @@ export default defineConfig(({ command, mode, isPreview }) => {
     },
     plugins: getPlugins(useLocalRedirect, server?.fqdn ?? null),
     server: server?.config,
-    test: { include: ['src/**/*.{test,spec}.{js,ts}'] },
+    test: {
+      projects: [
+        {
+          extends: true,
+          test: {
+            name: 'unit',
+            environment: 'node',
+            include: ['src/**/*.{test,spec}.{js,ts}'],
+            exclude: ['src/**/*.{test,spec}.{component,svelte}.{js,ts}'],
+          },
+        },
+        {
+          extends: true,
+          // Resolve Svelte to its browser (client) build so that `mount` and
+          // other client-only APIs are available in the jsdom test environment.
+          resolve: { conditions: ['browser', 'module', 'svelte', 'development', 'production'] },
+          test: {
+            name: 'components',
+            environment: 'jsdom',
+            include: ['src/**/*.{test,spec}.{component,svelte}.{js,ts}'],
+            setupFiles: ['./vitest.setup.ts'],
+          },
+        },
+      ],
+    },
   } satisfies UserConfig;
 });
