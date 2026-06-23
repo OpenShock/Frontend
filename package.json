@@ -28,12 +28,12 @@
 		"@microsoft/signalr": "^10.0.0",
 		"@playwright/test": "^1.61.0",
 		"@sveltejs/adapter-cloudflare": "^7.2.9",
-		"@sveltejs/adapter-node": "^5.5.4",
+		"@sveltejs/adapter-node": "^5.5.5",
 		"@sveltejs/kit": "^2.66.0",
 		"@sveltejs/vite-plugin-svelte": "^7.1.2",
 		"@tailwindcss/vite": "^4.3.1",
 		"@tanstack/table-core": "^8.21.3",
-		"@types/node": "^25.9.3",
+		"@types/node": "^26.0.0",
 		"@types/semver": "^7.7.1",
 		"@types/w3c-web-serial": "^1.0.8",
 		"bits-ui": "2.18.1",
@@ -54,7 +54,7 @@
 		"prettier-plugin-svelte": "^4.1.1",
 		"prettier-plugin-tailwindcss": "^0.8.0",
 		"rollup-plugin-license": "^3.7.1",
-		"semver": "^7.8.4",
+		"semver": "^7.8.5",
 		"svelte": "^5.56.3",
 		"svelte-check": "^4.6.0",
 		"svelte-sonner": "^1.1.1",
@@ -91,5 +91,5 @@
 	"browserslist": [
 		"defaults and fully supports es6-module"
 	],
-	"packageManager": "pnpm@11.5.3"
+	"packageManager": "pnpm@11.8.0"
 }
