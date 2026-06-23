@@ -10,7 +10,7 @@ import { request as httpRequest } from 'node:http';
 import { request as httpsRequest } from 'node:https';
 import { startStack } from './integration-stack.mjs';
 
-const API_URL = process.env.VITE_API_PROXY_TARGET ?? 'https://localhost:5001';
+const API_URL = process.env.VITE_API_PROXY_TARGET ?? 'http://localhost:5001';
 const TIMEOUT_MS = Number(process.env.INTEGRATION_BACKEND_TIMEOUT_MS ?? 10 * 60 * 1000);
 const POLL_INTERVAL_MS = 1500;
 

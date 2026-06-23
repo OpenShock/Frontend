@@ -24,7 +24,7 @@ export function makeCredentials(prefix = 'pw'): Credentials {
 
 async function applyCookiesToContext(context: BrowserContext, cookies: AuthCookies): Promise<void> {
   const url = new URL(FRONTEND_URL);
-  const apiHost = new URL(process.env.TEST_BACKEND_URL ?? 'https://api.openshock.dev').hostname;
+  const apiHost = new URL(process.env.TEST_BACKEND_URL ?? 'http://localhost:5001').hostname;
   const parsed = cookies.flatMap((raw) => {
     const [pair, ...attrs] = raw.split(';').map((s) => s.trim());
     const [name, ...rest] = pair.split('=');
@@ -36,12 +36,10 @@ async function applyCookiesToContext(context: BrowserContext, cookies: AuthCooki
         return [k.toLowerCase(), v.join('=')];
       })
     );
-    const sameSite =
-      attrMap['samesite']?.toLowerCase() === 'none'
-        ? 'None'
-        : attrMap['samesite']?.toLowerCase() === 'strict'
-          ? 'Strict'
-          : 'Lax';
+    // The harness runs over plain HTTP, so a cookie can't be Secure (the browser
+    // would drop it) and can't be SameSite=None (Chromium requires Secure for
+    // None). Force a non-secure Lax/Strict cookie that survives the HTTP origin.
+    const sameSite = attrMap['samesite']?.toLowerCase() === 'strict' ? 'Strict' : 'Lax';
     return [
       {
         name,
@@ -49,8 +47,8 @@ async function applyCookiesToContext(context: BrowserContext, cookies: AuthCooki
         domain: attrMap['domain'] ?? apiHost,
         path: attrMap['path'] ?? '/',
         httpOnly: 'httponly' in attrMap,
-        secure: 'secure' in attrMap,
-        sameSite: sameSite as 'Lax' | 'None' | 'Strict',
+        secure: false,
+        sameSite: sameSite as 'Lax' | 'Strict',
       },
     ];
   });

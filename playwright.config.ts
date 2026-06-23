@@ -1,12 +1,7 @@
 import { defineConfig } from '@playwright/test';
 
-// Playwright's test-runner Node process makes direct fetch() calls to the API
-// container (self-signed cert) and to the Vite dev server (mkcert local CA).
-// Neither is in the system trust store, so relax verification for this process.
-process.env.NODE_TLS_REJECT_UNAUTHORIZED ??= '0';
-
-const FRONTEND_URL = process.env.TEST_FRONTEND_URL ?? 'https://localhost:5173';
-const BACKEND_URL = process.env.TEST_BACKEND_URL ?? 'https://localhost:5001';
+const FRONTEND_URL = process.env.TEST_FRONTEND_URL ?? 'http://localhost:5173';
+const BACKEND_URL = process.env.TEST_BACKEND_URL ?? 'http://localhost:5001';
 const MAILPIT_URL = process.env.TEST_MAILPIT_URL ?? 'http://localhost:8025';
 const TURNSTILE_BYPASS = process.env.TEST_TURNSTILE_BYPASS ?? 'dev-bypass';
 
@@ -23,7 +18,6 @@ export default defineConfig({
     command: 'pnpm dev:integration',
     url: FRONTEND_URL,
     reuseExistingServer: !process.env.CI,
-    ignoreHTTPSErrors: true,
     // Cold CI runs pull docker images and wait for healthchecks before Vite
     // starts (see scripts/dev-integration.mjs). 10 minutes covers worst-case
     // cold pulls on the GitHub-hosted runner.
@@ -31,7 +25,6 @@ export default defineConfig({
   },
   use: {
     baseURL: FRONTEND_URL,
-    ignoreHTTPSErrors: true,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',

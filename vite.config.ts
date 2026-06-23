@@ -8,7 +8,14 @@ import net from 'node:net';
 import os from 'node:os';
 import { env } from 'node:process';
 import license from 'rollup-plugin-license';
-import { type Plugin, type PluginOption, type UserConfig, defineConfig, loadEnv } from 'vite';
+import {
+  type Plugin,
+  type PluginOption,
+  type ProxyOptions,
+  type UserConfig,
+  defineConfig,
+  loadEnv,
+} from 'vite';
 import devtoolsJson from 'vite-plugin-devtools-json';
 import mkcert from 'vite-plugin-mkcert';
 
@@ -150,7 +157,7 @@ interface LocalServer {
   /** Vite `server` config (host/port + dev niceties). */
   config: {
     forwardConsole: boolean;
-    proxy: Record<string, object>;
+    proxy: Record<string, ProxyOptions>;
     host: string;
     port: number;
   };
@@ -166,7 +173,7 @@ interface LocalServer {
 // during `svelte-kit sync`, `svelte-check`, codegen, and builds. The actual
 // server-only side effects live in localDevChecksPlugin below.
 function resolveServerConfig(mode: string, useLocalRedirect: boolean): LocalServer | undefined {
-  const vars = { ...env, ...loadEnv(mode, process.cwd(), ['PUBLIC_', 'VITE_']) };
+  const vars = { ...env, ...loadEnv(mode, process.cwd(), ['PUBLIC_']) };
   if (!vars.PUBLIC_SITE_URL) {
     printError('PUBLIC_SITE_URL must be set in your environment');
     process.exit(1);
@@ -176,23 +183,9 @@ function resolveServerConfig(mode: string, useLocalRedirect: boolean): LocalServ
 
   const domain = new URL(vars.PUBLIC_SITE_URL).hostname;
 
-  // When an API proxy target is configured (integration mode), proxy /1 and /2
-  // through the Vite dev server so the browser never has to trust the API's
-  // self-signed certificate directly.
-  const apiProxyTarget = vars.VITE_API_PROXY_TARGET;
-  const proxy: Record<string, object> = apiProxyTarget
-    ? {
-        '^/(1|2)(/.*)?$': {
-          target: apiProxyTarget,
-          secure: false,
-          changeOrigin: true,
-        },
-      }
-    : {};
-
   // Vite 8: pipe browser console.* into the dev terminal so client errors land
   // alongside server logs without context-switching to browser devtools.
-  const baseDevConfig = { forwardConsole: true, proxy };
+  const baseDevConfig = { forwardConsole: true, proxy: {} };
 
   if (domain === 'localhost') {
     return { config: { ...baseDevConfig, host: 'localhost', port: 8080 }, fqdn: null };
@@ -200,6 +193,34 @@ function resolveServerConfig(mode: string, useLocalRedirect: boolean): LocalServ
 
   const host = domain.startsWith('local.') ? domain : `local.${domain}`;
   return { config: { ...baseDevConfig, host, port: 443 }, fqdn: host };
+}
+
+// Integration mode serves plain HTTP on localhost and proxies /1,/2 to the API
+// container. No mkcert, no local.<domain> redirect, no privileged :443 bind and
+// no self-signed certs to trust — the browser only ever talks to this Vite
+// origin, so there is no CORS either. The API's `Secure` / `SameSite=None`
+// cookie attributes are stripped on the way back so the browser keeps the
+// session cookie over plain HTTP.
+function resolveIntegrationServer(): LocalServer {
+  const vars = { ...env, ...loadEnv('integration', process.cwd(), ['PUBLIC_', 'VITE_']) };
+  const target = vars.VITE_API_PROXY_TARGET ?? 'http://localhost:5001';
+  const proxy: Record<string, ProxyOptions> = {
+    '^/(1|2)(/.*)?$': {
+      target,
+      changeOrigin: true,
+      configure: (proxy) => {
+        proxy.on('proxyRes', (proxyRes) => {
+          const setCookie = proxyRes.headers['set-cookie'];
+          if (setCookie) {
+            proxyRes.headers['set-cookie'] = setCookie.map((cookie) =>
+              cookie.replace(/;\s*Secure/gi, '').replace(/;\s*SameSite=None/gi, '; SameSite=Lax')
+            );
+          }
+        });
+      },
+    },
+  };
+  return { config: { forwardConsole: true, proxy, host: 'localhost', port: 5173 }, fqdn: null };
 }
 
 // The hosts-redirect and :443 bind checks have real side effects (DNS lookups,
@@ -279,18 +300,16 @@ export default defineConfig(({ command, mode, isPreview }) => {
   const isVitest = isTruthy(env.VITEST) || mode === 'test';
   const isLocalServe = (command === 'serve' || isPreview === true) && !isVitest;
   const isProduction = mode === 'production' && (isTruthy(env.DOCKER) || isTruthy(env.CF_PAGES));
+  const isIntegration = mode === 'integration';
 
-  // If we are running locally, ensure that local.{PUBLIC_SITE_URL} resolves to localhost, and then use mkcert to generate a certificate
-  const useLocalRedirect =
-    isLocalServe && !isProduction && (!isTruthy(env.CI) || mode === 'integration');
+  // mkcert + local.{PUBLIC_SITE_URL} hosts redirect + privileged :443 bind are
+  // only for real local dev against a FQDN. Integration mode serves plain HTTP
+  // and proxies the API instead (resolveIntegrationServer), so it opts out.
+  const useLocalRedirect = isLocalServe && !isProduction && !isTruthy(env.CI) && !isIntegration;
 
-  // Integration mode runs SSR fetches against Vite's mkcert-issued dev cert and a
-  // self-signed API cert; Node's TLS stack doesn't trust either out of the box.
-  if (mode === 'integration') {
-    process.env.NODE_TLS_REJECT_UNAUTHORIZED ??= '0';
-  }
-
-  const server = resolveServerConfig(mode, useLocalRedirect);
+  const server = isIntegration
+    ? resolveIntegrationServer()
+    : resolveServerConfig(mode, useLocalRedirect);
 
   return {
     build: {

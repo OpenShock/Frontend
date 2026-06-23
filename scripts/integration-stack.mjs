@@ -4,7 +4,7 @@
 // a crashed test run can't leave the stack running.
 //
 // The frontend's Vite dev server proxies /1 and /2 to the API on a fixed host
-// port (VITE_API_PROXY_TARGET, default https://localhost:5001), and the tests
+// port (VITE_API_PROXY_TARGET, default http://localhost:5001), and the tests
 // read mail from Mailpit on a fixed host port (default http://localhost:8025),
 // so those two containers bind fixed host ports. Postgres and Redis are only
 // reached by the API over the internal network, so they need no host ports.
@@ -29,7 +29,7 @@ function hostPortFromUrl(url, fallback) {
 const API_HOST_PORT = hostPortFromUrl(process.env.VITE_API_PROXY_TARGET, 5001);
 const MAILPIT_HOST_PORT = hostPortFromUrl(process.env.TEST_MAILPIT_URL, 8025);
 
-const FRONTEND_URL = process.env.TEST_FRONTEND_URL ?? 'https://localhost:5173';
+const FRONTEND_URL = process.env.TEST_FRONTEND_URL ?? 'http://localhost:5173';
 
 const log = (msg) => process.stdout.write(`[integration-stack] ${msg}\n`);
 
@@ -71,7 +71,10 @@ export async function startStack() {
 
   const api = await new GenericContainer(API_IMAGE)
     .withNetwork(network)
-    .withExposedPorts({ container: 443, host: API_HOST_PORT })
+    // Kestrel serves plain HTTP on container port 80 (and HTTPS on 443, unused
+    // here) — use HTTP directly so nothing in the toolchain has to trust a
+    // self-signed cert.
+    .withExposedPorts({ container: 80, host: API_HOST_PORT })
     .withEnvironment({
       ASPNETCORE_ENVIRONMENT: 'Development',
       OPENSHOCK_DISABLE_RATE_LIMITING: '1',
@@ -94,16 +97,13 @@ export async function startStack() {
       OPENSHOCK__LCG__COUNTRYCODE: 'DE',
     })
     .withWaitStrategy(
-      // The API serves HTTPS with a self-signed dev cert; any HTTP response
-      // (even 404) means Kestrel is up and migrations have completed.
-      Wait.forHttp('/', 443)
-        .usingTls()
-        .allowInsecure()
-        .forStatusCodeMatching(() => true)
+      // Any HTTP response (even 404) on 80 means Kestrel is up and migrations
+      // have completed.
+      Wait.forHttp('/', 80).forStatusCodeMatching(() => true)
     )
     .withStartupTimeout(Number(process.env.INTEGRATION_API_STARTUP_TIMEOUT_MS ?? 180_000))
     .start();
-  log(`api ready (https on host port ${API_HOST_PORT})`);
+  log(`api ready (http on host port ${API_HOST_PORT})`);
 
   const stop = async () => {
     log('stopping stack ...');
