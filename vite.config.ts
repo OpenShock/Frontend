@@ -115,11 +115,14 @@ async function ensureFqdnRedirect(expectedHost: string, fqdn: string) {
   process.exit(1);
 }
 
-function getPlugins(useLocalRedirect: boolean): PluginOption[] {
+function getPlugins(useLocalRedirect: boolean, redirectFqdn: string | null): PluginOption[] {
   const plugins: PluginOption = [];
 
   if (useLocalRedirect) {
     plugins.push(mkcert());
+    if (redirectFqdn) {
+      plugins.push(localDevChecksPlugin(redirectFqdn));
+    }
   }
 
   plugins.push(jsBannerPlugin('/*! For licenses information, see LICENSES.txt */'));
@@ -143,7 +146,21 @@ function getPlugins(useLocalRedirect: boolean): PluginOption[] {
   return plugins;
 }
 
-async function getServerConfig(mode: string, useLocalRedirect: boolean) {
+interface LocalServer {
+  /** Vite `server` config (host/port + dev niceties). */
+  config: { forwardConsole: boolean; proxy: Record<string, never>; host: string; port: number };
+  /**
+   * FQDN that needs a hosts redirect and a privileged-port bind before serving,
+   * or null for plain `localhost` (no redirect/bind checks required).
+   */
+  fqdn: string | null;
+}
+
+// Pure: only reads env and computes host/port. No DNS lookups, no socket binds,
+// no process.exit beyond the missing-config guard — so it is safe to evaluate
+// during `svelte-kit sync`, `svelte-check`, codegen, and builds. The actual
+// server-only side effects live in localDevChecksPlugin below.
+function resolveServerConfig(mode: string, useLocalRedirect: boolean): LocalServer | undefined {
   const vars = { ...env, ...loadEnv(mode, process.cwd(), ['PUBLIC_']) };
   if (!vars.PUBLIC_SITE_URL) {
     printError('PUBLIC_SITE_URL must be set in your environment');
@@ -159,22 +176,32 @@ async function getServerConfig(mode: string, useLocalRedirect: boolean) {
   const domain = new URL(vars.PUBLIC_SITE_URL).hostname;
 
   if (domain === 'localhost') {
-    return { ...baseDevConfig, host: 'localhost', port: 8080 };
+    return { config: { ...baseDevConfig, host: 'localhost', port: 8080 }, fqdn: null };
   }
 
-  let host = domain;
+  const host = domain.startsWith('local.') ? domain : `local.${domain}`;
+  return { config: { ...baseDevConfig, host, port: 443 }, fqdn: host };
+}
 
-  if (!domain.startsWith('local.')) {
-    host = `local.${domain}`;
-  }
-
-  // Ensure we have the host entry redirecting to localhost
-  await ensureFqdnRedirect('127.0.0.1', host);
-
-  // Check if we can bind to port 443 before Vite tries and fails with an unhelpful error
-  await ensurePortBindable(host, 443);
-
-  return { ...baseDevConfig, host, port: 443 };
+// The hosts-redirect and :443 bind checks have real side effects (DNS lookups,
+// probe sockets, process.exit on misconfig). They run ONLY when an actual dev or
+// preview server is starting — never during `svelte-kit sync`, `svelte-check`,
+// codegen, or production builds, all of which also evaluate this config.
+function localDevChecksPlugin(fqdn: string): Plugin {
+  let ran = false;
+  const runChecks = async () => {
+    if (ran) return;
+    ran = true;
+    // Ensure local.<domain> resolves to localhost so the frontend shares API cookies
+    await ensureFqdnRedirect('127.0.0.1', fqdn);
+    // Verify we can bind :443 before Vite tries and fails with an unhelpful error
+    await ensurePortBindable(fqdn, 443);
+  };
+  return {
+    name: 'local-dev-checks',
+    configureServer: runChecks, // `vite dev`
+    configurePreviewServer: runChecks, // `vite preview`
+  };
 }
 
 async function ensurePortBindable(host: string, port: number): Promise<void> {
@@ -229,12 +256,14 @@ async function ensurePortBindable(host: string, port: number): Promise<void> {
   return promise;
 }
 
-export default defineConfig(async ({ command, mode, isPreview }) => {
+export default defineConfig(({ command, mode, isPreview }) => {
   const isLocalServe = command === 'serve' || isPreview === true;
   const isProduction = mode === 'production' && (isTruthy(env.DOCKER) || isTruthy(env.CF_PAGES));
 
   // If we are running locally, ensure that local.{PUBLIC_SITE_URL} resolves to localhost, and then use mkcert to generate a certificate
   const useLocalRedirect = isLocalServe && !isProduction && !isTruthy(env.CI);
+
+  const server = resolveServerConfig(mode, useLocalRedirect);
 
   return {
     build: {
@@ -251,8 +280,8 @@ export default defineConfig(async ({ command, mode, isPreview }) => {
             : undefined,
       },
     },
-    plugins: getPlugins(useLocalRedirect),
-    server: await getServerConfig(mode, useLocalRedirect),
+    plugins: getPlugins(useLocalRedirect, server?.fqdn ?? null),
+    server: server?.config,
     test: { include: ['src/**/*.{test,spec}.{js,ts}'] },
   } satisfies UserConfig;
 });
