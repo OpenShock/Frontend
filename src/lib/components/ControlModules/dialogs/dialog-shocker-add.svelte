@@ -19,13 +19,13 @@
 </script>
 
 <script lang="ts">
-  import TextInput from '$lib/components/input/TextInput.svelte';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import * as Select from '$lib/components/ui/select';
-  import { Field, FieldLabel } from '$lib/components/ui/field/index.js';
-  import { Input } from '$lib/components/ui/input';
-  import type { DialogContentProps } from '$lib/components/dialog-manager/types';
+  import TextInput from '$core/components/input/TextInput.svelte';
+  import Button from '$hadcn/button/button.svelte';
+  import * as Dialog from '$hadcn/dialog';
+  import * as Select from '$hadcn/select';
+  import { Field, FieldLabel } from '$hadcn/field';
+  import { Input } from '$hadcn/input';
+  import type { DialogContentProps } from '$core/components/dialog-manager/types';
   import { RfIdMax, RfIdMin, isValidRfId } from '$lib/constants/ShockerConstants';
   import type { OwnHub } from '$lib/state/hubs-state.svelte';
 

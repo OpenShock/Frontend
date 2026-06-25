@@ -4,7 +4,7 @@
   import type { ColumnDef } from '@tanstack/table-core';
   import { adminListWebhooks } from '$lib/api';
   import type { WebhookDto } from '$lib/api';
-  import Container from '$lib/components/Container.svelte';
+  import Container from '$core/components/Container.svelte';
   import {
     CreateActionsColumnDef,
     CreateSortableColumnDef,
@@ -12,8 +12,8 @@
     RenderCell,
   } from '$lib/components/Table/ColumnUtils';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import { CardHeader, CardTitle } from '$lib/components/ui/card';
+  import { Button } from '$hadcn/button';
+  import { CardHeader, CardTitle } from '$hadcn/card';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
   import DataTableActions from './data-table-actions.svelte';

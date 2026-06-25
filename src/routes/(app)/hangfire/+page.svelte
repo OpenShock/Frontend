@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Container from '$lib/components/Container.svelte';
+  import Container from '$core/components/Container.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
 
   registerBreadcrumbs(() => [{ label: 'Hangfire' }]);

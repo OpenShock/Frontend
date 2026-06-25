@@ -1,7 +1,7 @@
 <script lang="ts" module>
-  import XLogo from '../svg/XLogo.svelte';
-  import DiscordLogo from '../svg/DiscordLogo.svelte';
-  import GoogleLogo from '../svg/GoogleLogo.svelte';
+  import XLogo from '$core/components/svg/XLogo.svelte';
+  import DiscordLogo from '$core/components/svg/DiscordLogo.svelte';
+  import GoogleLogo from '$core/components/svg/GoogleLogo.svelte';
 
   const providerDetails: Record<string, { icon: typeof XLogo; label: string }> = {
     discord: { icon: DiscordLogo, label: 'Discord' },
@@ -11,8 +11,8 @@
 </script>
 
 <script lang="ts">
-  import { Button } from '$lib/components/ui/button/index.js';
-  import { Field } from '$lib/components/ui/field/index.js';
+  import { Button } from '$hadcn/button';
+  import { Field } from '$hadcn/field';
   import { GetOAuthAuthorizeUrl } from '$lib/api/next/oauth';
   import { LogIn } from '@lucide/svelte';
 

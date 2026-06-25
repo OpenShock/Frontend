@@ -2,7 +2,7 @@
   import { shockerGetAllShockerLogs } from '$lib/api';
   import type { ColumnDef, SortingState } from '@tanstack/table-core';
   import type { LogEntryWithHub } from '$lib/api';
-  import Container from '$lib/components/Container.svelte';
+  import Container from '$core/components/Container.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
   import {
@@ -14,10 +14,10 @@
   } from '$lib/components/Table/ColumnUtils';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import PaginationFooter from '$lib/components/Table/PaginationFooter.svelte';
-  import { Badge } from '$lib/components/ui/badge';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import PageHeader from '$lib/components/PageHeader.svelte';
-  import MultiSelectCombobox from '$lib/components/ui/multi-select-combobox/multi-select-combobox.svelte';
+  import { Badge } from '$hadcn/badge';
+  import Button from '$hadcn/button/button.svelte';
+  import PageHeader from '$core/components/PageHeader.svelte';
+  import MultiSelectCombobox from '$core/components/multi-select-combobox/multi-select-combobox.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { addShockEventListener, removeShockEventListener } from '$lib/signalr/handlers/Log';
   import { ControlType } from '$lib/signalr/models/ControlType';

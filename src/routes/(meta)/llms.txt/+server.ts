@@ -1,3 +1,4 @@
+import { isTruthy } from '$core/utils/parse';
 import { env } from '$env/dynamic/public';
 import {
   PUBLIC_DISCORD_INVITE_URL,
@@ -5,7 +6,6 @@ import {
   PUBLIC_SITE_DESCRIPTION,
   PUBLIC_SITE_NAME,
 } from '$env/static/public';
-import { isTruthy } from '$lib/utils/parse';
 import { paths } from '$lib/utils/public-routes';
 import { getBackendURL, getSiteURL } from '$lib/utils/url';
 import { error } from '@sveltejs/kit';

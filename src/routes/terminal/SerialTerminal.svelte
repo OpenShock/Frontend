@@ -9,7 +9,7 @@
     Clock,
     Code,
   } from '@lucide/svelte';
-  import { Button } from '$lib/components/ui/button';
+  import { Button } from '$hadcn/button';
   import { stripAnsi } from './ansi';
   import { LOG_LEVEL_COLORS } from './constants';
   import type { TerminalLine } from './types';

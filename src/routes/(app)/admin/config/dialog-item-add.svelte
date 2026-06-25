@@ -1,11 +1,11 @@
 <script lang="ts">
   import { ConfigurationValueType, adminConfigurationAdd } from '$lib/api';
-  import TextInput from '$lib/components/input/TextInput.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import * as Select from '$lib/components/ui/select';
+  import TextInput from '$core/components/input/TextInput.svelte';
+  import { Button } from '$hadcn/button';
+  import * as Dialog from '$hadcn/dialog';
+  import * as Select from '$hadcn/select';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import type { ValidationResult } from '$lib/types/ValidationResult';
+  import type { ValidationResult } from '$core/types/ValidationResult';
   import { toast } from 'svelte-sonner';
 
   interface Props {

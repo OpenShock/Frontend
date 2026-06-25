@@ -1,5 +1,5 @@
+import { isTruthy } from '$core/utils/parse';
 import { env } from '$env/dynamic/public';
-import { isTruthy } from '$lib/utils/parse';
 import { getSiteURL } from '$lib/utils/url';
 import type { RequestHandler } from './$types';
 

@@ -1,9 +1,9 @@
 <script lang="ts">
   import { page } from '$app/state';
   import { PUBLIC_DEVELOPMENT_BANNER } from '$env/static/public';
-  import { BasicTags, OpenGraphTags, TwitterSummaryTags } from '$lib/components/metadata';
-  import { SidebarProvider } from '$lib/components/ui/sidebar';
-  import { Toaster } from '$lib/components/ui/sonner';
+  import { BasicTags, OpenGraphTags, TwitterSummaryTags } from '$core/components/metadata';
+  import { SidebarProvider } from '$hadcn/sidebar';
+  import { Toaster } from '$hadcn/sonner';
   import { buildMetaData } from '$lib/metadata';
   import { onMount, untrack, type Snippet } from 'svelte';
   import { maybePromptTelemetryConsent } from '$lib/telemetry/consent-prompt';
@@ -12,9 +12,9 @@
   import Sidebar from './Sidebar.svelte';
   import WelcomeScreen from './WelcomeScreen.svelte';
   import '../app.css';
-  import { IsMobile } from '$lib/hooks/is-mobile.svelte';
-  import DialogManager from '$lib/components/dialog-manager/dialog-manager.svelte';
-  import { TooltipProvider } from '$lib/components/ui/tooltip';
+  import { IsMobile } from '$core/hooks/is-mobile.svelte';
+  import DialogManager from '$core/components/dialog-manager/dialog-manager.svelte';
+  import { TooltipProvider } from '$hadcn/tooltip';
   import type { LayoutData } from './$types';
 
   interface Props {

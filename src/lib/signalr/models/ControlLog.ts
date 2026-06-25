@@ -1,5 +1,4 @@
-import { isObject } from '$lib/typeguards';
-import { HasNumber, HasString } from '$lib/typeguards/propGuards';
+import { HasNumber, HasString, isObject } from '$core/typeguards';
 import { ControlType, isControlType } from './ControlType';
 
 interface ControlLogShockerInfo {

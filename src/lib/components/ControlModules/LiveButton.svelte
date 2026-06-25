@@ -1,6 +1,6 @@
 <script lang="ts">
-  import * as Tooltip from '$lib/components/ui/tooltip';
-  import { Spinner } from '$lib/components/ui/spinner';
+  import * as Tooltip from '$hadcn/tooltip';
+  import { Spinner } from '$hadcn/spinner';
   import {
     LiveConnectionState,
     getLiveConnection,

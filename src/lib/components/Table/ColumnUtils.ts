@@ -1,11 +1,6 @@
-import { renderComponent } from '$lib/components/ui/data-table';
-import {
-  durationBetween,
-  formatDuration,
-  formatDurationSeconds,
-  formatElapsed,
-  getReadableUserAgentName,
-} from '$lib/utils';
+import { durationBetween, formatDuration, formatDurationSeconds, formatElapsed } from '$core/utils';
+import { renderComponent } from '$hadcn/data-table';
+import { getReadableUserAgentName } from '$lib/utils';
 import {
   sortingFns,
   type BuiltInSortingFn,

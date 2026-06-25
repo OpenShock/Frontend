@@ -10,17 +10,17 @@
   } from '$lib/api';
   import type { EmailProviderBlacklistDto, UserNameBlacklistDto } from '$lib/api';
   import { Trash2 } from '@lucide/svelte';
-  import Container from '$lib/components/Container.svelte';
-  import TextInput from '$lib/components/input/TextInput.svelte';
-  import { Button } from '$lib/components/ui/button';
+  import Container from '$core/components/Container.svelte';
+  import TextInput from '$core/components/input/TextInput.svelte';
+  import { Button } from '$hadcn/button';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
-  import { ScrollArea } from '$lib/components/ui/scroll-area';
-  import * as Select from '$lib/components/ui/select';
-  import { Separator } from '$lib/components/ui/separator';
+  import { Card, CardContent, CardHeader, CardTitle } from '$hadcn/card';
+  import { ScrollArea } from '$hadcn/scroll-area';
+  import * as Select from '$hadcn/select';
+  import { Separator } from '$hadcn/separator';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import type { ValidationResult } from '$lib/types/ValidationResult';
-  import { useDebounce } from '$lib/utils/debounce';
+  import type { ValidationResult } from '$core/types/ValidationResult';
+  import { useDebounce } from '$core/utils/debounce';
 
   registerBreadcrumbs(() => [{ label: 'Blacklists' }]);
 

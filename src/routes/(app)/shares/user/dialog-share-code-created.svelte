@@ -1,8 +1,8 @@
 <script lang="ts">
   import { Link } from '@lucide/svelte';
   import KeyRound from '@lucide/svelte/icons/key-round';
-  import CopyInput from '$lib/components/CopyInput.svelte';
-  import * as Dialog from '$lib/components/ui/dialog';
+  import CopyInput from '$core/components/CopyInput.svelte';
+  import * as Dialog from '$hadcn/dialog';
   import { getSiteShortURL } from '$lib/utils/url';
 
   interface Props {

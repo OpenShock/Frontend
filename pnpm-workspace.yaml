@@ -6,6 +6,7 @@ blockExoticSubdeps: true
 minimumReleaseAge: 4320 # 3 days
 
 minimumReleaseAgeExclude:
+  - '@openshock/*'
   - ws@8.20.1
 
 onlyBuiltDependencies:

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import EmptyState from '$lib/components/EmptyState.svelte';
-  import { Spinner } from '$lib/components/ui/spinner';
-  import * as Table from '$lib/components/ui/table';
+  import EmptyState from '$core/components/EmptyState.svelte';
+  import { Spinner } from '$hadcn/spinner';
+  import * as Table from '$hadcn/table';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { userSharesState, refreshUserShares } from '$lib/state/user-shares-state.svelte';
   import Share2 from '@lucide/svelte/icons/share-2';

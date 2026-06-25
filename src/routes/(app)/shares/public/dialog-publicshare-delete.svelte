@@ -1,7 +1,7 @@
 <script lang="ts">
   import { shareLinksDeletePublicShare } from '$lib/api';
   import type { OwnPublicShareResponse } from '$lib/api';
-  import ConfirmDeleteDialog from '$lib/components/ConfirmDeleteDialog.svelte';
+  import ConfirmDeleteDialog from '$core/components/ConfirmDeleteDialog.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { toast } from 'svelte-sonner';
 

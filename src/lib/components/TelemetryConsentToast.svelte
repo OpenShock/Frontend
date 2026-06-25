@@ -1,6 +1,6 @@
 <script lang="ts">
   import Bug from '@lucide/svelte/icons/bug';
-  import { Button } from '$lib/components/ui/button';
+  import { Button } from '$hadcn/button';
   import {
     telemetryConsent,
     telemetryPrompted,

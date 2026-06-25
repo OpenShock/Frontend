@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { LoginSessionResponse } from '$lib/api';
-  import TableActionMenu from '$lib/components/TableActionMenu.svelte';
-  import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-  import { copyToClipboard } from '$lib/utils/clipboard.svelte';
+  import TableActionMenu from '$core/components/TableActionMenu.svelte';
+  import * as DropdownMenu from '$hadcn/dropdown-menu';
+  import { copyToClipboard } from '$core/utils/clipboard.svelte';
   import { Ban, Copy } from '@lucide/svelte';
   import SessionRevokeDialog from './dialog-session-revoke.svelte';
 

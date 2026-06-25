@@ -2,12 +2,12 @@
   import { shareLinksPauseShocker, shareLinksRemoveShocker } from '$lib/api';
   import type { PublicShareShocker, ShockerPermissions } from '$lib/api';
   import { Pause, Play, Trash2, Zap, Vibrate, Volume2, Radio } from '@lucide/svelte';
-  import { Button } from '$lib/components/ui/button';
-  import { Label } from '$lib/components/ui/label';
-  import { Slider } from '$lib/components/ui/slider';
-  import { Switch } from '$lib/components/ui/switch';
+  import { Button } from '$hadcn/button';
+  import { Label } from '$hadcn/label';
+  import { Slider } from '$hadcn/slider';
+  import { Switch } from '$hadcn/switch';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { formatDurationSeconds } from '$lib/utils';
+  import { formatDurationSeconds } from '$core/utils';
   import { toast } from 'svelte-sonner';
 
   interface Props {

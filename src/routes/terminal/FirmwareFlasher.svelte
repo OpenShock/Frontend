@@ -1,8 +1,8 @@
 <script lang="ts">
   import { Microchip, TriangleAlert } from '@lucide/svelte';
   import { DownloadAndVerifyBoardBinary } from '$lib/api/firmwareCDN';
-  import { Button } from '$lib/components/ui/button';
-  import { Progress } from '$lib/components/ui/progress';
+  import { Button } from '$hadcn/button';
+  import { Progress } from '$hadcn/progress';
   import RiskAcknowledgementModal from './RiskAcknowledgementModal.svelte';
   import type EspSerialConnection from './EspSerialConnection';
 

@@ -72,6 +72,7 @@
 		"vitest": "^4.1.9"
 	},
 	"dependencies": {
+		"@openshock/svelte-core": "^0.1.0",
 		"@opentelemetry/api-logs": "^0.219.0",
 		"@opentelemetry/exporter-logs-otlp-http": "^0.219.0",
 		"@opentelemetry/exporter-trace-otlp-http": "^0.219.0",

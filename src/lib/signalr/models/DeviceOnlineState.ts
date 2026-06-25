@@ -1,5 +1,4 @@
-import { isObject } from '$lib/typeguards';
-import { HasBoolean, HasString, HasStringOrNull } from '$lib/typeguards/propGuards';
+import { HasBoolean, HasString, HasStringOrNull, isObject } from '$core/typeguards';
 
 export interface DeviceOnlineState {
   device: string;

@@ -1,15 +1,15 @@
 <script lang="ts">
   import { Copy, Ellipsis, User } from '@lucide/svelte';
-  import Container from '$lib/components/Container.svelte';
+  import Container from '$core/components/Container.svelte';
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import LiveButton from '$lib/components/ControlModules/LiveButton.svelte';
   import LiveControlModule from '$lib/components/ControlModules/LiveControlModule.svelte';
   import ShockerCard from '$lib/components/ControlModules/ShockerCard.svelte';
-  import * as Avatar from '$lib/components/ui/avatar';
-  import { Button } from '$lib/components/ui/button';
-  import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-  import EmptyState from '$lib/components/EmptyState.svelte';
-  import { copyToClipboard } from '$lib/utils/clipboard.svelte';
+  import * as Avatar from '$hadcn/avatar';
+  import { Button } from '$hadcn/button';
+  import * as DropdownMenu from '$hadcn/dropdown-menu';
+  import EmptyState from '$core/components/EmptyState.svelte';
+  import { copyToClipboard } from '$core/utils/clipboard.svelte';
   import { onlineHubs } from '$lib/state/hubs-state.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { ControlType } from '$lib/signalr/models/ControlType';
@@ -23,7 +23,7 @@
   } from '$lib/state/live-control-state.svelte';
   import { sharedHubsState, refreshSharedHubs } from '$lib/state/shared-hubs-state.svelte';
   import { onMount } from 'svelte';
-  import PageHeader from '$lib/components/PageHeader.svelte';
+  import PageHeader from '$core/components/PageHeader.svelte';
 
   registerBreadcrumbs(() => [{ label: 'Shared Shockers' }]);
 

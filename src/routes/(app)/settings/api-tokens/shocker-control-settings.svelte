@@ -22,11 +22,11 @@
 </script>
 
 <script lang="ts">
-  import { Label } from '$lib/components/ui/label';
-  import { Slider } from '$lib/components/ui/slider';
-  import { Switch } from '$lib/components/ui/switch';
-  import * as ToggleGroup from '$lib/components/ui/toggle-group';
-  import * as Tooltip from '$lib/components/ui/tooltip';
+  import { Label } from '$hadcn/label';
+  import { Slider } from '$hadcn/slider';
+  import { Switch } from '$hadcn/switch';
+  import * as ToggleGroup from '$hadcn/toggle-group';
+  import * as Tooltip from '$hadcn/tooltip';
 
   interface Props {
     settings: ShockerControlSettings;

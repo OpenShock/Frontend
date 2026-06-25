@@ -4,9 +4,9 @@
 
 <script lang="ts">
   import { Cpu, TriangleAlert, Unplug } from '@lucide/svelte';
-  import { Button } from '$lib/components/ui/button';
+  import { Button } from '$hadcn/button';
   import type { SerialContext } from '$lib/utils/serial-context.svelte';
-  import { NumberToHexPadded } from '$lib/utils/convert';
+  import { NumberToHexPadded } from '$core/utils/convert';
 
   interface Props {
     serial: SerialContext;

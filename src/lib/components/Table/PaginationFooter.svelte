@@ -1,13 +1,5 @@
 <script lang="ts">
-  import {
-    Content,
-    Ellipsis,
-    Item,
-    Link,
-    NextButton,
-    PrevButton,
-    Root,
-  } from '$lib/components/ui/pagination';
+  import { Content, Ellipsis, Item, Link, NextButton, PrevButton, Root } from '$hadcn/pagination';
 
   interface Props {
     count: number;

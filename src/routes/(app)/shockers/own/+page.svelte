@@ -1,13 +1,13 @@
 <script lang="ts">
   import { PUBLIC_DISABLE_SHOCKER_MAP } from '$env/static/public';
-  import { isTruthy } from '$lib/utils/parse';
+  import { isTruthy } from '$core/utils/parse';
   import { shockerPauseShocker, shockerRegisterShocker } from '$lib/api';
   import type { NewShocker } from '$lib/api';
   import { Layers, LogsIcon, Plus, RotateCcw, Settings, Zap } from '@lucide/svelte';
   import { resolve } from '$app/paths';
-  import Container from '$lib/components/Container.svelte';
-  import { Spinner } from '$lib/components/ui/spinner';
-  import EmptyState from '$lib/components/EmptyState.svelte';
+  import Container from '$core/components/Container.svelte';
+  import { Spinner } from '$hadcn/spinner';
+  import EmptyState from '$core/components/EmptyState.svelte';
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import DialogShockerAdd, {
     defaultAddShockerData,
@@ -22,9 +22,9 @@
   import ShockerPauseButton from '$lib/components/ControlModules/impl/ShockerPauseButton.svelte';
   import SimpleControlHeader from '$lib/components/ControlModules/SimpleControlHeader.svelte';
   import SimpleControlModule from '$lib/components/ControlModules/SimpleControlModule.svelte';
-  import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import * as Popover from '$lib/components/ui/popover';
+  import { dialog } from '$core/components/dialog-manager/dialog-store.svelte';
+  import { Button } from '$hadcn/button';
+  import * as Popover from '$hadcn/popover';
   import { ControlDurationDefault, ControlIntensityDefault } from '$lib/constants/ControlConstants';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { ControlType } from '$lib/signalr/models/ControlType';

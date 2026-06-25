@@ -2,8 +2,8 @@
   import { shockerPauseShocker, shockerShockerShareCodePause } from '$lib/api';
   import type { BooleanLegacyDataResponse } from '$lib/api';
   import { Pause, Play } from '@lucide/svelte';
-  import { Button } from '$lib/components/ui/button';
-  import { Spinner } from '$lib/components/ui/spinner';
+  import { Button } from '$hadcn/button';
+  import { Spinner } from '$hadcn/spinner';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 
   interface Props {

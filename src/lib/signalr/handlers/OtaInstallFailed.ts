@@ -1,5 +1,5 @@
+import { isBoolean, isNumber, isString } from '$core/typeguards';
 import { onlineHubs } from '$lib/state/hubs-state.svelte';
-import { isBoolean, isNumber, isString } from '$lib/typeguards';
 import { toast } from 'svelte-sonner';
 
 /**

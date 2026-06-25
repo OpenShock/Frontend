@@ -1,15 +1,15 @@
 <script lang="ts">
   import { tokenDeleteDeleteToken, tokensSetTokenPaused } from '$lib/api';
   import type { TokenResponseV2 } from '$lib/api';
-  import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
-  import type { DialogRenderProps } from '$lib/components/dialog-manager/types';
-  import TableActionMenu from '$lib/components/TableActionMenu.svelte';
-  import { buttonVariants } from '$lib/components/ui/button';
-  import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-  import * as Tooltip from '$lib/components/ui/tooltip';
+  import { dialog } from '$core/components/dialog-manager/dialog-store.svelte';
+  import type { DialogRenderProps } from '$core/components/dialog-manager/types';
+  import TableActionMenu from '$core/components/TableActionMenu.svelte';
+  import { buttonVariants } from '$hadcn/button';
+  import * as DropdownMenu from '$hadcn/dropdown-menu';
+  import * as Tooltip from '$hadcn/tooltip';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { cn } from '$lib/utils';
-  import { copyToClipboard } from '$lib/utils/clipboard.svelte';
+  import { cn } from '$core/utils/shadcn';
+  import { copyToClipboard } from '$core/utils/clipboard.svelte';
   import Pause from '@lucide/svelte/icons/pause';
   import Play from '@lucide/svelte/icons/play';
   import { Copy, Pencil, Trash2 } from '@lucide/svelte';

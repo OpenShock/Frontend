@@ -1,17 +1,12 @@
 <script lang="ts">
   import { accountLoginV2 } from '$lib/api';
   import { resolve } from '$app/paths';
-  import { Button } from '$lib/components/ui/button/index.js';
-  import * as Card from '$lib/components/ui/card/index.js';
-  import {
-    FieldGroup,
-    Field,
-    FieldDescription,
-    FieldSeparator,
-  } from '$lib/components/ui/field/index.js';
-  import TextInput from '$lib/components/input/TextInput.svelte';
-  import type { ValidationResult } from '$lib/types/ValidationResult';
-  import PasswordInput from '$lib/components/input/PasswordInput.svelte';
+  import { Button } from '$hadcn/button';
+  import * as Card from '$hadcn/card';
+  import { FieldGroup, Field, FieldDescription, FieldSeparator } from '$hadcn/field';
+  import TextInput from '$core/components/input/TextInput.svelte';
+  import type { ValidationResult } from '$core/types/ValidationResult';
+  import PasswordInput from '$core/components/input/PasswordInput.svelte';
   import Turnstile from '$lib/components/Turnstile.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
@@ -20,7 +15,7 @@
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
   import { userState } from '$lib/state/user-state.svelte';
-  import { Skeleton } from '$lib/components/ui/skeleton';
+  import { Skeleton } from '$hadcn/skeleton';
   import { getOAuthErrorMessage } from '$lib/auth/oauth-errors';
 
   registerBreadcrumbs(() => [{ label: 'Login' }]);
@@ -129,7 +124,7 @@
                 autocomplete="current-password"
                 bind:value={password}
                 validate={passwordError}
-                showForget
+                forgotHref={resolve('/forgot-password')}
               />
 
               <Turnstile

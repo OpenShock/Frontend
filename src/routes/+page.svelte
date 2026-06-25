@@ -1,7 +1,7 @@
 <script lang="ts">
   import { asset } from '$app/paths';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import DotGrid from '$lib/components/DotGrid.svelte';
+  import DotGrid from '$core/components/DotGrid.svelte';
 
   let { data } = $props();
 

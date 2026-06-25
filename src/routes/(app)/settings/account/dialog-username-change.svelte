@@ -2,8 +2,8 @@
   import { authenticatedAccountChangeUsername } from '$lib/api';
   import User from '@lucide/svelte/icons/user';
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import * as Dialog from '$lib/components/ui/dialog';
+  import { Button } from '$hadcn/button';
+  import * as Dialog from '$hadcn/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { userState } from '$lib/state/user-state.svelte';
   import type { ApiUserSelf } from '$lib/types/ApiUser';

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Timer, Volume2, Zap } from '@lucide/svelte';
   import { ControlDurationProps, ControlIntensityProps } from '$lib/constants/ControlConstants';
-  import { formatDurationSeconds } from '$lib/utils';
+  import { formatDurationSeconds } from '$core/utils';
   import CircleSlider from './impl/CircleSlider.svelte';
 
   interface Props {

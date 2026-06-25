@@ -2,9 +2,9 @@
   import { Check, Search } from '@lucide/svelte';
   import { ResponseError, usersGetByName } from '$lib/api';
   import type { BasicUserInfo } from '$lib/api';
-  import * as Avatar from '$lib/components/ui/avatar';
-  import { Button } from '$lib/components/ui/button';
-  import { Input } from '$lib/components/ui/input/index.js';
+  import * as Avatar from '$hadcn/avatar';
+  import { Button } from '$hadcn/button';
+  import { Input } from '$hadcn/input';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 
   interface Props {

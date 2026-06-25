@@ -1,12 +1,12 @@
 <script lang="ts">
   import ArrowDownToLine from '@lucide/svelte/icons/arrow-down-to-line';
   import { PUBLIC_DISCORD_INVITE_URL } from '$env/static/public';
-  import Code from '$lib/components/Code.svelte';
-  import Keyboard from '$lib/components/Keyboard.svelte';
+  import Code from '$core/components/Code.svelte';
+  import Keyboard from '$core/components/Keyboard.svelte';
   import Stepper, { type StepperStep } from '$lib/components/Stepper.svelte';
-  import DiscordLogo from '$lib/components/svg/DiscordLogo.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import * as Dialog from '$lib/components/ui/dialog';
+  import DiscordLogo from '$core/components/svg/DiscordLogo.svelte';
+  import { Button } from '$hadcn/button';
+  import * as Dialog from '$hadcn/dialog';
 
   interface Props {
     open: boolean;

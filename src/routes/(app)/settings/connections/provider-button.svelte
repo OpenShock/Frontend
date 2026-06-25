@@ -1,6 +1,6 @@
 <script lang="ts">
   import Link2 from '@lucide/svelte/icons/link-2';
-  import { Button } from '$lib/components/ui/button';
+  import { Button } from '$hadcn/button';
 
   interface Props {
     label: string;

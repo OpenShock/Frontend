@@ -2,13 +2,13 @@
   import { X, Zap } from '@lucide/svelte';
   import type { V2UserSharesListItem } from '$lib/api';
   import PermissionTooltip from '$lib/components/shares/permission-tooltip.svelte';
-  import * as Avatar from '$lib/components/ui/avatar';
-  import { Badge } from '$lib/components/ui/badge';
-  import { Button } from '$lib/components/ui/button';
-  import * as Table from '$lib/components/ui/table';
-  import * as Tooltip from '$lib/components/ui/tooltip';
+  import * as Avatar from '$hadcn/avatar';
+  import { Badge } from '$hadcn/badge';
+  import { Button } from '$hadcn/button';
+  import * as Table from '$hadcn/table';
+  import * as Tooltip from '$hadcn/tooltip';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
+  import { dialog } from '$core/components/dialog-manager/dialog-store.svelte';
   import { refreshOutgoingInvites } from '$lib/state/user-shares-state.svelte';
   import { toast } from 'svelte-sonner';
 

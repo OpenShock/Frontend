@@ -5,20 +5,25 @@
   import { goto } from '$app/navigation';
   import type { Pathname } from '$app/types';
   import { PUBLIC_DISCORD_INVITE_URL, PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
-  import LightSwitch from '$lib/components/LightSwitch.svelte';
-  import DiscordLogo from '$lib/components/svg/DiscordLogo.svelte';
-  import GithubIcon from '$lib/components/svg/GithubIcon.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-  import { Separator } from '$lib/components/ui/separator';
-  import { useSidebar } from '$lib/components/ui/sidebar';
+  import LightSwitch from '$core/components/LightSwitch.svelte';
+  import {
+    ColorScheme,
+    colorScheme,
+    getDarkReaderState,
+  } from '$lib/state/color-scheme-state.svelte';
+  import DiscordLogo from '$core/components/svg/DiscordLogo.svelte';
+  import GithubIcon from '$core/components/svg/GithubIcon.svelte';
+  import { Button } from '$hadcn/button';
+  import * as DropdownMenu from '$hadcn/dropdown-menu';
+  import { Separator } from '$hadcn/separator';
+  import { useSidebar } from '$hadcn/sidebar';
   import { userState } from '$lib/state/user-state.svelte';
-  import { cn } from '$lib/utils';
+  import { cn } from '$core/utils/shadcn';
   import Breadcrumb from './Breadcrumb.svelte';
   import { prefixBase } from '$lib/utils/url';
   import { resolve } from '$app/paths';
   import { LogIn, UserPlus } from '@lucide/svelte';
-  import { Spinner } from '$lib/components/ui/spinner';
+  import { Spinner } from '$hadcn/spinner';
 
   let sidebar = useSidebar();
 </script>
@@ -45,7 +50,12 @@
     >
       <div class="flex-1"></div>
 
-      <LightSwitch />
+      <LightSwitch
+        value={colorScheme.value}
+        onValueChange={(v) => (colorScheme.value = v as ColorScheme)}
+        confirmLightMode
+        darkReaderActive={getDarkReaderState().isActive}
+      />
 
       {#if userState.loading}
         <Spinner class="size-8 text-gray-600 dark:text-gray-300" />

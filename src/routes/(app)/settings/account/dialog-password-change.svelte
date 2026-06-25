@@ -1,11 +1,11 @@
 <script lang="ts">
   import { authenticatedAccountChangePassword } from '$lib/api';
   import KeyRound from '@lucide/svelte/icons/key-round';
-  import PasswordInput from '$lib/components/input/PasswordInput.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import * as Dialog from '$lib/components/ui/dialog';
+  import PasswordInput from '$core/components/input/PasswordInput.svelte';
+  import { Button } from '$hadcn/button';
+  import * as Dialog from '$hadcn/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
+  import { validatePasswordMatch } from '$core/inputvalidation/passwordValidator';
   import { toast } from 'svelte-sonner';
 
   interface Props {

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { asset } from '$app/paths';
-  import Container from '$lib/components/Container.svelte';
+  import Container from '$core/components/Container.svelte';
   import { AuthStatus, authState } from '$lib/state/auth-state.svelte';
   import { gotoQueryRedirectOrFallback, sanitizeRedirectSearchParam } from '$lib/utils/url';
   import { onMount, type Snippet } from 'svelte';

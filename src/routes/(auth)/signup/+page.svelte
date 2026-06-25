@@ -1,24 +1,24 @@
 <script lang="ts">
   import { accountSignUpV2 } from '$lib/api';
-  import { Button } from '$lib/components/ui/button/index.js';
-  import * as Card from '$lib/components/ui/card/index.js';
-  import * as Field from '$lib/components/ui/field/index.js';
+  import { Button } from '$hadcn/button';
+  import * as Card from '$hadcn/card';
+  import * as Field from '$hadcn/field';
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import Turnstile from '$lib/components/Turnstile.svelte';
-  import EmailInput from '$lib/components/input/EmailInput.svelte';
-  import PasswordInput from '$lib/components/input/PasswordInput.svelte';
-  import * as Dialog from '$lib/components/ui/dialog';
+  import EmailInput from '$core/components/input/EmailInput.svelte';
+  import PasswordInput from '$core/components/input/PasswordInput.svelte';
+  import * as Dialog from '$hadcn/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
+  import { validatePasswordMatch } from '$core/inputvalidation/passwordValidator';
   import { toast } from 'svelte-sonner';
-  import FieldSeparator from '$lib/components/ui/field/field-separator.svelte';
+  import FieldSeparator from '$hadcn/field/field-separator.svelte';
   import OauthButtons from '$lib/components/auth/oauth-buttons.svelte';
   import { ChevronLeft, Mail } from '@lucide/svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
-  import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte';
+  import Skeleton from '$hadcn/skeleton/skeleton.svelte';
 
   registerBreadcrumbs(() => [{ label: 'Sign Up' }]);
 
@@ -146,7 +146,6 @@
               bind:valid={passwordValid}
               validate
               showStrengthMeter
-              showForget={false}
             />
             <PasswordInput
               label="Confirm Password"
@@ -154,7 +153,6 @@
               autocomplete="new-password"
               bind:value={passwordConfirm}
               validate={validatePasswordMatch(passwordConfirm, password)}
-              showForget={false}
             />
             <Turnstile action="signup" onResponse={(response) => (turnstileResponse = response)} />
           </div>

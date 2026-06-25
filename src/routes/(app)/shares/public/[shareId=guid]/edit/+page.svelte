@@ -4,11 +4,11 @@
   import { ExternalLink, Plus, Save } from '@lucide/svelte';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
-  import CopyInput from '$lib/components/CopyInput.svelte';
-  import { Spinner } from '$lib/components/ui/spinner';
-  import { Button } from '$lib/components/ui/button';
-  import * as Avatar from '$lib/components/ui/avatar';
-  import * as Tooltip from '$lib/components/ui/tooltip/index.js';
+  import CopyInput from '$core/components/CopyInput.svelte';
+  import { Spinner } from '$hadcn/spinner';
+  import { Button } from '$hadcn/button';
+  import * as Avatar from '$hadcn/avatar';
+  import * as Tooltip from '$hadcn/tooltip';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
   import { onMount } from 'svelte';

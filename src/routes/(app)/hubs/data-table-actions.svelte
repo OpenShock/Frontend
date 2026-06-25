@@ -6,22 +6,22 @@
     devicesRemoveDevice,
   } from '$lib/api';
   import { goto } from '$app/navigation';
-  import CopyInput from '$lib/components/CopyInput.svelte';
-  import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
-  import type { DialogRenderProps } from '$lib/components/dialog-manager/types';
-  import TextInput from '$lib/components/input/TextInput.svelte';
-  import TableActionMenu from '$lib/components/TableActionMenu.svelte';
-  import { Badge } from '$lib/components/ui/badge';
-  import { Button } from '$lib/components/ui/button';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+  import CopyInput from '$core/components/CopyInput.svelte';
+  import { dialog } from '$core/components/dialog-manager/dialog-store.svelte';
+  import type { DialogRenderProps } from '$core/components/dialog-manager/types';
+  import TextInput from '$core/components/input/TextInput.svelte';
+  import TableActionMenu from '$core/components/TableActionMenu.svelte';
+  import { Badge } from '$hadcn/badge';
+  import { Button } from '$hadcn/button';
+  import * as Dialog from '$hadcn/dialog';
+  import * as DropdownMenu from '$hadcn/dropdown-menu';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { getConnection } from '$lib/signalr/user.svelte';
   import { serializeCaptivePortalMessage } from '$lib/signalr/serializers/CaptivePortal';
   import { serializeEmergencyStopMessage } from '$lib/signalr/serializers/EmergencyStop';
   import { serializeRebootMessage } from '$lib/signalr/serializers/Reboot';
   import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
-  import { copyToClipboard } from '$lib/utils/clipboard.svelte';
+  import { copyToClipboard } from '$core/utils/clipboard.svelte';
   import {
     Copy,
     KeyRound,

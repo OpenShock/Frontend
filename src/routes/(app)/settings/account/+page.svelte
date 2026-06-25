@@ -4,9 +4,9 @@
   import Mail from '@lucide/svelte/icons/mail';
   import User from '@lucide/svelte/icons/user';
   import { PUBLIC_SIGNOZ_LOGS_ENABLED } from '$env/static/public';
-  import Container from '$lib/components/Container.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import { ToggleGroup, ToggleGroupItem } from '$lib/components/ui/toggle-group';
+  import Container from '$core/components/Container.svelte';
+  import { Button } from '$hadcn/button';
+  import { ToggleGroup, ToggleGroupItem } from '$hadcn/toggle-group';
   import {
     telemetryConsent,
     telemetryPrompted,

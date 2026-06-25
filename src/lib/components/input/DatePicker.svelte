@@ -1,10 +1,10 @@
 <script lang="ts">
   import { DateFormatter, type DateValue, getLocalTimeZone } from '@internationalized/date';
   import CalendarIcon from '@lucide/svelte/icons/calendar';
-  import { buttonVariants } from '$lib/components/ui/button/index.js';
-  import { Calendar } from '$lib/components/ui/calendar/index.js';
-  import * as Popover from '$lib/components/ui/popover/index.js';
-  import { cn } from '$lib/utils/shadcn';
+  import { buttonVariants } from '$hadcn/button';
+  import { Calendar } from '$hadcn/calendar';
+  import * as Popover from '$hadcn/popover';
+  import { cn } from '$core/utils/shadcn';
 
   interface Props {
     value: DateValue | undefined;

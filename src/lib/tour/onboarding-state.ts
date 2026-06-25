@@ -1,5 +1,5 @@
+import { isTruthy } from '$core/utils/parse';
 import { PUBLIC_DISABLE_ONBOARDING } from '$env/static/public';
-import { isTruthy } from '$lib/utils/parse';
 
 export const WELCOME_COOKIE_NAME = 'os.welcomed';
 // Pre-cookie builds stored "welcome seen" under this localStorage key. Kept only

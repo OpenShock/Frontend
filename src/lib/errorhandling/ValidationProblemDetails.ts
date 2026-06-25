@@ -1,5 +1,5 @@
-import { isObject } from '$lib/typeguards';
-import type { ValidationResult } from '$lib/types/ValidationResult';
+import { isObject } from '$core/typeguards';
+import type { ValidationResult } from '$core/types/ValidationResult';
 import type { ProblemDetails } from './ProblemDetails';
 
 export interface ValidationProblemDetails extends ProblemDetails {

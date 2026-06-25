@@ -2,12 +2,12 @@
   import { userSharesRedeemInvite } from '$lib/api';
   import type { V2UserSharesListItem } from '$lib/api';
   import { Barcode, Zap } from '@lucide/svelte';
-  import * as Avatar from '$lib/components/ui/avatar';
-  import Badge from '$lib/components/ui/badge/badge.svelte';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import { Input } from '$lib/components/ui/input';
-  import * as Tooltip from '$lib/components/ui/tooltip';
+  import * as Avatar from '$hadcn/avatar';
+  import Badge from '$hadcn/badge/badge.svelte';
+  import Button from '$hadcn/button/button.svelte';
+  import * as Dialog from '$hadcn/dialog';
+  import { Input } from '$hadcn/input';
+  import * as Tooltip from '$hadcn/tooltip';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { refreshOutgoingInvites, refreshUserShares } from '$lib/state/user-shares-state.svelte';
 

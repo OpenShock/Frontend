@@ -1,7 +1,7 @@
+import { isEmailAddress } from '$core/inputvalidation/emailValidator';
+import type { ValidationResult } from '$core/types/ValidationResult';
 import type { UsernameCheckResponse } from '$lib/api';
 import { UsernameAvailability } from '$lib/api';
-import { isEmailAddress } from '$lib/inputvalidation/emailValidator';
-import type { ValidationResult } from '$lib/types/ValidationResult';
 
 const MultipleWhiteSpaceRegex = /\s{2,}/;
 

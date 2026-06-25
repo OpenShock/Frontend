@@ -1,5 +1,5 @@
+import { isTruthy } from '$core/utils/parse';
 import { env } from '$env/dynamic/public';
-import { isTruthy } from '$lib/utils/parse';
 import { publicRoutes } from '$lib/utils/public-routes';
 import { getSiteURL } from '$lib/utils/url';
 import { error } from '@sveltejs/kit';

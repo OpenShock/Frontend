@@ -1,5 +1,4 @@
-import { isObject, isString } from '$lib/typeguards';
-import { HasNumber, HasString } from '$lib/typeguards/propGuards';
+import { HasNumber, HasString, isObject, isString } from '$core/typeguards';
 
 export interface ProblemDetails {
   type: string;

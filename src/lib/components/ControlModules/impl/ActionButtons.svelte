@@ -1,6 +1,6 @@
 <script lang="ts" module>
   import { Volume2, Waves, Zap } from '@lucide/svelte';
-  import { buttonVariants } from '$lib/components/ui/button/button.svelte';
+  import { buttonVariants } from '$hadcn/button/button.svelte';
   import { ControlType } from '$lib/signalr/models/ControlType';
 
   const Buttons = [
@@ -13,9 +13,9 @@
 </script>
 
 <script lang="ts">
-  import { Spinner } from '$lib/components/ui/spinner';
+  import { Spinner } from '$hadcn/spinner';
   import type { TimeoutHandle } from '$lib/types/WAPI';
-  import { cn } from '$lib/utils';
+  import { cn } from '$core/utils/shadcn';
   import { onDestroy } from 'svelte';
 
   interface Props {

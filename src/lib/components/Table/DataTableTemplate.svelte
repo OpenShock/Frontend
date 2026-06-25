@@ -9,9 +9,9 @@
     getPaginationRowModel,
     getSortedRowModel,
   } from '@tanstack/table-core';
-  import { FlexRender, createSvelteTable } from '$lib/components/ui/data-table';
-  import * as Table from '$lib/components/ui/table';
-  import { cn } from '$lib/utils';
+  import { FlexRender, createSvelteTable } from '$hadcn/data-table';
+  import * as Table from '$hadcn/table';
+  import { cn } from '$core/utils/shadcn';
 
   interface Props {
     data: TData[];

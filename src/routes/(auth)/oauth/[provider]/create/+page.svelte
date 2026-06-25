@@ -3,11 +3,11 @@
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import { OAuthSignupFinalize, OAuthSignupGetData } from '$lib/api/next/oauth';
-  import EmailInput from '$lib/components/input/EmailInput.svelte';
+  import EmailInput from '$core/components/input/EmailInput.svelte';
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import * as Card from '$lib/components/ui/card/index.js';
-  import { FieldDescription } from '$lib/components/ui/field/index.js';
+  import { Button } from '$hadcn/button';
+  import * as Card from '$hadcn/card';
+  import { FieldDescription } from '$hadcn/field';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { userState } from '$lib/state/user-state.svelte';

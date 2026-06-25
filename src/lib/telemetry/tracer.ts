@@ -1,5 +1,5 @@
+import { isTruthy } from '$core/utils/parse';
 import { PUBLIC_SIGNOZ_TRACE_PROPAGATION } from '$env/static/public';
-import { isTruthy } from '$lib/utils/parse';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
 import { FetchInstrumentation } from '@opentelemetry/instrumentation-fetch';

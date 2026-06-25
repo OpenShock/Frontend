@@ -5,7 +5,7 @@
     type FirmwareChannel,
     FirmwareChannels,
   } from '$lib/api/firmwareCDN';
-  import * as ToggleGroup from '$lib/components/ui/toggle-group';
+  import * as ToggleGroup from '$hadcn/toggle-group';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 
   /** Optional chip to constrain the list of boards to */

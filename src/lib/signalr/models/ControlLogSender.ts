@@ -1,5 +1,4 @@
-import { isObject } from '$lib/typeguards';
-import { HasObject, HasString, HasStringOrNull } from '$lib/typeguards/propGuards';
+import { HasObject, HasString, HasStringOrNull, isObject } from '$core/typeguards';
 
 export interface ControlLogSender {
   connectionId: string;

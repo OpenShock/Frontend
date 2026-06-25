@@ -2,22 +2,22 @@
   import { devicesCreateDeviceV2 } from '$lib/api';
   import { Plus, Router } from '@lucide/svelte';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import * as Table from '$lib/components/ui/table';
-  import { IsMobile } from '$lib/hooks/is-mobile.svelte';
+  import Button from '$hadcn/button/button.svelte';
+  import * as Table from '$hadcn/table';
+  import { IsMobile } from '$core/hooks/is-mobile.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { onlineHubs, ownHubs, refreshOwnHubs } from '$lib/state/hubs-state.svelte';
   import { onMount } from 'svelte';
   import type { Hub } from './columns';
   import DataTableActions from './data-table-actions.svelte';
-  import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
-  import type { DialogRenderProps } from '$lib/components/dialog-manager/types';
+  import { dialog } from '$core/components/dialog-manager/dialog-store.svelte';
+  import type { DialogRenderProps } from '$core/components/dialog-manager/types';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 
-  import * as Dialog from '$lib/components/ui/dialog';
-  import TextInput from '$lib/components/input/TextInput.svelte';
-  import PageHeader from '$lib/components/PageHeader.svelte';
-  import Container from '$lib/components/Container.svelte';
+  import * as Dialog from '$hadcn/dialog';
+  import TextInput from '$core/components/input/TextInput.svelte';
+  import PageHeader from '$core/components/PageHeader.svelte';
+  import Container from '$core/components/Container.svelte';
 
   const isMobile = new IsMobile();
 

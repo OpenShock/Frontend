@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { twTextColor, type TwTextColor } from '$lib/types/Tailwind';
-  import { cn } from '$lib/utils';
+  import { twTextColor, type TwTextColor } from '$core/types/Tailwind';
+  import { cn } from '$core/utils/shadcn';
 
   interface Props {
     text: string;

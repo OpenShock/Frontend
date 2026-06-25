@@ -1,7 +1,7 @@
 <script lang="ts">
   import { authenticatedAccountRemoveOAuthConnection } from '$lib/api';
-  import { Button } from '$lib/components/ui/button';
-  import * as Dialog from '$lib/components/ui/dialog';
+  import { Button } from '$hadcn/button';
+  import * as Dialog from '$hadcn/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 
   interface Props {

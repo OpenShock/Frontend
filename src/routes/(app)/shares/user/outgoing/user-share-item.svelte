@@ -1,10 +1,10 @@
 <script lang="ts">
   import { Zap } from '@lucide/svelte';
   import PermissionTooltip from '$lib/components/shares/permission-tooltip.svelte';
-  import * as Avatar from '$lib/components/ui/avatar';
-  import { Badge } from '$lib/components/ui/badge';
-  import * as Table from '$lib/components/ui/table';
-  import * as Tooltip from '$lib/components/ui/tooltip';
+  import * as Avatar from '$hadcn/avatar';
+  import { Badge } from '$hadcn/badge';
+  import * as Table from '$hadcn/table';
+  import * as Tooltip from '$hadcn/tooltip';
   import MultiPauseToggle from '$lib/components/utils/MultiPauseToggle.svelte';
   import { userSharesState } from '$lib/state/user-shares-state.svelte';
   import { ShockerPause } from '$lib/utils';

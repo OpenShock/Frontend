@@ -1,8 +1,8 @@
 <script lang="ts">
   import { Plus } from '@lucide/svelte';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import MultiSelectCombobox from '$lib/components/ui/multi-select-combobox/multi-select-combobox.svelte';
+  import Button from '$hadcn/button/button.svelte';
+  import * as Dialog from '$hadcn/dialog';
+  import MultiSelectCombobox from '$core/components/multi-select-combobox/multi-select-combobox.svelte';
   import { ownHubs } from '$lib/state/hubs-state.svelte';
 
   let availableShockers = $derived(

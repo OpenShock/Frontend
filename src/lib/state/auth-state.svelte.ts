@@ -1,4 +1,4 @@
-import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
+import { dialog } from '$core/components/dialog-manager/dialog-store.svelte';
 import { registerOnUnauthorized } from '$lib/errorhandling/apiErrorHandling';
 import { destroySignalR, initializeSignalR } from '$lib/signalr/user.svelte';
 import {

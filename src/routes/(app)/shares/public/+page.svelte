@@ -9,19 +9,19 @@
   import { resolve } from '$app/paths';
   import { shareLinksList } from '$lib/api';
   import type { OwnPublicShareResponse } from '$lib/api';
-  import Container from '$lib/components/Container.svelte';
-  import CopyInput from '$lib/components/CopyInput.svelte';
-  import EmptyState from '$lib/components/EmptyState.svelte';
-  import { Spinner } from '$lib/components/ui/spinner';
-  import Button from '$lib/components/ui/button/button.svelte';
+  import Container from '$core/components/Container.svelte';
+  import CopyInput from '$core/components/CopyInput.svelte';
+  import EmptyState from '$core/components/EmptyState.svelte';
+  import { Spinner } from '$hadcn/spinner';
+  import Button from '$hadcn/button/button.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { durationBetween, formatDuration, formatElapsed } from '$lib/utils';
+  import { durationBetween, formatDuration, formatElapsed } from '$core/utils';
   import { getSiteShortURL } from '$lib/utils/url';
   import { onMount } from 'svelte';
   import DataTableActions from './data-table-actions.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import CreatePublicShareDialog from './dialog-publicshare-create.svelte';
-  import PageHeader from '$lib/components/PageHeader.svelte';
+  import PageHeader from '$core/components/PageHeader.svelte';
 
   registerBreadcrumbs(() => [{ label: 'Public Shares' }]);
 

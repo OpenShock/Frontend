@@ -19,6 +19,9 @@ importers:
 
   .:
     dependencies:
+      '@openshock/svelte-core':
+        specifier: ^0.1.0
+        version: 0.1.0(2cd3459784afbbe2cb9606225751a11d)
       '@opentelemetry/api-logs':
         specifier: ^0.219.0
         version: 0.219.0
@@ -749,6 +752,36 @@ packages:
     peerDependencies:
       '@emnapi/core': ^1.7.1
       '@emnapi/runtime': ^1.7.1
+
+  '@openshock/svelte-core@0.1.0':
+    resolution: {integrity: sha512-x2Un0wxlbSc5zfgcCBMd8OI6CtaqgyWI2yPB72Ze97ZyUZy1SmUzWROo68lWyMhGwZJZ3MgU9dYilPNZamMKKQ==}
+    peerDependencies:
+      '@internationalized/date': ^3.12.2
+      '@lucide/svelte': ^1.21.0
+      '@tanstack/table-core': ^8.21.3
+      bits-ui: 2.18.1
+      clsx: ^2.1.1
+      formsnap: ^2.0.1
+      svelte: ^5.56.1
+      svelte-sonner: ^1.1.1
+      sveltekit-superforms: ^2.30.1
+      tailwind-merge: ^3.6.0
+      tailwind-variants: ^3.2.2
+      temporal-polyfill: ^1.0.1
+      vaul-svelte: 1.0.0-next.7
+    peerDependenciesMeta:
+      '@internationalized/date':
+        optional: true
+      '@tanstack/table-core':
+        optional: true
+      formsnap:
+        optional: true
+      sveltekit-superforms:
+        optional: true
+      temporal-polyfill:
+        optional: true
+      vaul-svelte:
+        optional: true
 
   '@opentelemetry/api-logs@0.219.0':
     resolution: {integrity: sha512-FFx7YnaYJlIjqWW/AG/yAZ0L/NEY724PipXXXQLdtZPbLwBGbUMTGL1i/esI56TWfTUXxhLfpgrnWJCG8aUJyg==}
@@ -3441,6 +3474,23 @@ snapshots:
       '@emnapi/runtime': 1.10.0
       '@tybys/wasm-util': 0.10.2
     optional: true
+
+  '@openshock/svelte-core@0.1.0(2cd3459784afbbe2cb9606225751a11d)':
+    dependencies:
+      '@lucide/svelte': 1.21.0(svelte@5.56.3(@typescript-eslint/types@8.61.1))
+      bits-ui: 2.18.1(@internationalized/date@3.12.2)(@sveltejs/kit@2.66.0(@opentelemetry/api@1.9.1)(@sveltejs/vite-plugin-svelte@7.1.2(svelte@5.56.3(@typescript-eslint/types@8.61.1))(vite@8.0.16(@types/node@26.0.0)(esbuild@0.27.3)(jiti@2.7.0)))(svelte@5.56.3(@typescript-eslint/types@8.61.1))(typescript@6.0.3)(vite@8.0.16(@types/node@26.0.0)(esbuild@0.27.3)(jiti@2.7.0)))(svelte@5.56.3(@typescript-eslint/types@8.61.1))
+      clsx: 2.1.1
+      svelte: 5.56.3(@typescript-eslint/types@8.61.1)
+      svelte-sonner: 1.1.1(svelte@5.56.3(@typescript-eslint/types@8.61.1))
+      tailwind-merge: 3.6.0
+      tailwind-variants: 3.2.2(tailwind-merge@3.6.0)(tailwindcss@4.3.1)
+    optionalDependencies:
+      '@internationalized/date': 3.12.2
+      '@tanstack/table-core': 8.21.3
+      formsnap: 2.0.1(svelte@5.56.3(@typescript-eslint/types@8.61.1))(sveltekit-superforms@2.30.1(@sveltejs/kit@2.66.0(@opentelemetry/api@1.9.1)(@sveltejs/vite-plugin-svelte@7.1.2(svelte@5.56.3(@typescript-eslint/types@8.61.1))(vite@8.0.16(@types/node@26.0.0)(esbuild@0.27.3)(jiti@2.7.0)))(svelte@5.56.3(@typescript-eslint/types@8.61.1))(typescript@6.0.3)(vite@8.0.16(@types/node@26.0.0)(esbuild@0.27.3)(jiti@2.7.0)))(@types/json-schema@7.0.15)(svelte@5.56.3(@typescript-eslint/types@8.61.1))(typescript@6.0.3))
+      sveltekit-superforms: 2.30.1(@sveltejs/kit@2.66.0(@opentelemetry/api@1.9.1)(@sveltejs/vite-plugin-svelte@7.1.2(svelte@5.56.3(@typescript-eslint/types@8.61.1))(vite@8.0.16(@types/node@26.0.0)(esbuild@0.27.3)(jiti@2.7.0)))(svelte@5.56.3(@typescript-eslint/types@8.61.1))(typescript@6.0.3)(vite@8.0.16(@types/node@26.0.0)(esbuild@0.27.3)(jiti@2.7.0)))(@types/json-schema@7.0.15)(svelte@5.56.3(@typescript-eslint/types@8.61.1))(typescript@6.0.3)
+      temporal-polyfill: 1.0.1
+      vaul-svelte: 1.0.0-next.7(svelte@5.56.3(@typescript-eslint/types@8.61.1))
 
   '@opentelemetry/api-logs@0.219.0':
     dependencies:

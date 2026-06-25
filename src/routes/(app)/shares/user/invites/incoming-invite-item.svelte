@@ -3,15 +3,15 @@
   import type { ShareInviteBaseDetails } from '$lib/api';
   import { Check, X, Zap } from '@lucide/svelte';
   import PermissionTooltip from '$lib/components/shares/permission-tooltip.svelte';
-  import * as Avatar from '$lib/components/ui/avatar';
-  import { Badge } from '$lib/components/ui/badge';
-  import { buttonVariants } from '$lib/components/ui/button/index.js';
-  import * as Table from '$lib/components/ui/table';
-  import * as Tooltip from '$lib/components/ui/tooltip';
+  import * as Avatar from '$hadcn/avatar';
+  import { Badge } from '$hadcn/badge';
+  import { buttonVariants } from '$hadcn/button';
+  import * as Table from '$hadcn/table';
+  import * as Tooltip from '$hadcn/tooltip';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
+  import { dialog } from '$core/components/dialog-manager/dialog-store.svelte';
   import { refreshIncomingInvites } from '$lib/state/user-shares-state.svelte';
-  import { cn } from '$lib/utils';
+  import { cn } from '$core/utils/shadcn';
   import { toast } from 'svelte-sonner';
 
   interface Props {

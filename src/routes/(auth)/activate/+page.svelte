@@ -3,8 +3,8 @@
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import { accountActivate } from '$lib/api';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import * as Card from '$lib/components/ui/card/index.js';
+  import Button from '$hadcn/button/button.svelte';
+  import * as Card from '$hadcn/card';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { onMount } from 'svelte';

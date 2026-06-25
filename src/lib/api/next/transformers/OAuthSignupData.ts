@@ -1,5 +1,4 @@
-import { isObject } from '$lib/typeguards';
-import { HasString, HasStringOrNull } from '../../../typeguards/propGuards';
+import { HasString, HasStringOrNull, isObject } from '$core/typeguards';
 import { TransformError } from '../TransformError';
 import type { OAuthSignupData } from '../models/OAuthSignupData';
 

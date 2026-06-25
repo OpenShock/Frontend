@@ -1,4 +1,4 @@
-import { isNumber } from '$lib/typeguards';
+import { isNumber } from '$core/typeguards';
 
 export enum ControlType {
   Stop = 0,

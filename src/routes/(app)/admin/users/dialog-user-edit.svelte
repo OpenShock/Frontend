@@ -1,11 +1,11 @@
 <script lang="ts">
   import { RoleType, adminModifyUser } from '$lib/api';
   import type { AdminUsersView } from '$lib/api';
-  import EmailInput from '$lib/components/input/EmailInput.svelte';
+  import EmailInput from '$core/components/input/EmailInput.svelte';
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import { Checkbox } from '$lib/components/ui/checkbox';
-  import * as Dialog from '$lib/components/ui/dialog';
+  import { Button } from '$hadcn/button';
+  import { Checkbox } from '$hadcn/checkbox';
+  import * as Dialog from '$hadcn/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 
   interface Props {

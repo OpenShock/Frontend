@@ -1,6 +1,6 @@
 <script lang="ts" module>
   import { PermissionType } from '$lib/api';
-  import type { ValidationResult } from '$lib/types/ValidationResult';
+  import type { ValidationResult } from '$core/types/ValidationResult';
 
   type PermissionCategory = {
     name: string;
@@ -37,13 +37,13 @@
   import { page } from '$app/state';
   import { ControlLimitMode, tokensCreateTokenV2 } from '$lib/api';
   import type { ShockerControlSettings } from '$lib/api';
-  import Container from '$lib/components/Container.svelte';
-  import CopyInput from '$lib/components/CopyInput.svelte';
+  import Container from '$core/components/Container.svelte';
+  import CopyInput from '$core/components/CopyInput.svelte';
   import ExpirationPicker from '$lib/components/ExpirationPicker.svelte';
-  import TextInput from '$lib/components/input/TextInput.svelte';
-  import { Spinner } from '$lib/components/ui/spinner';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import * as Card from '$lib/components/ui/card/index.js';
+  import TextInput from '$core/components/input/TextInput.svelte';
+  import { Spinner } from '$hadcn/spinner';
+  import Button from '$hadcn/button/button.svelte';
+  import * as Card from '$hadcn/card';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { isValidTokenRedirectUri } from '$lib/utils/url';
