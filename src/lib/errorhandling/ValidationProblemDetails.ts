@@ -1,5 +1,5 @@
-import { isObject } from '$core/typeguards';
-import type { ValidationResult } from '$core/types/ValidationResult';
+import { isObject } from '@openshock/svelte-core/typeguards';
+import type { ValidationResult } from '@openshock/svelte-core/types/ValidationResult';
 import type { ProblemDetails } from './ProblemDetails';
 
 export interface ValidationProblemDetails extends ProblemDetails {

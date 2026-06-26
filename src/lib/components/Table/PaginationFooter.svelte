@@ -1,5 +1,13 @@
 <script lang="ts">
-  import { Content, Ellipsis, Item, Link, NextButton, PrevButton, Root } from '$hadcn/pagination';
+  import {
+    Content,
+    Ellipsis,
+    Item,
+    Link,
+    NextButton,
+    PrevButton,
+    Root,
+  } from '@openshock/svelte-core/ui/pagination';
 
   interface Props {
     count: number;

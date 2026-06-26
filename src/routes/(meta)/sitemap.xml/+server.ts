@@ -1,7 +1,7 @@
-import { isTruthy } from '$core/utils/parse';
 import { env } from '$env/dynamic/public';
 import { publicRoutes } from '$lib/utils/public-routes';
 import { getSiteURL } from '$lib/utils/url';
+import { isTruthy } from '@openshock/svelte-core/utils/parse';
 import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 

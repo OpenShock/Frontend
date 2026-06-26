@@ -2,12 +2,12 @@
   import { shareLinksPauseShocker, shareLinksRemoveShocker } from '$lib/api';
   import type { PublicShareShocker, ShockerPermissions } from '$lib/api';
   import { Pause, Play, Trash2, Zap, Vibrate, Volume2, Radio } from '@lucide/svelte';
-  import { Button } from '$hadcn/button';
-  import { Label } from '$hadcn/label';
-  import { Slider } from '$hadcn/slider';
-  import { Switch } from '$hadcn/switch';
+  import { Button } from '@openshock/svelte-core/ui/button';
+  import { Label } from '@openshock/svelte-core/ui/label';
+  import { Slider } from '@openshock/svelte-core/ui/slider';
+  import { Switch } from '@openshock/svelte-core/ui/switch';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { formatDurationSeconds } from '$core/utils';
+  import { formatDurationSeconds } from '@openshock/svelte-core/utils';
   import { toast } from 'svelte-sonner';
 
   interface Props {

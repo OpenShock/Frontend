@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { Button } from '$hadcn/button';
-  import * as Dialog from '$hadcn/dialog';
+  import { Button } from '@openshock/svelte-core/ui/button';
+  import * as Dialog from '@openshock/svelte-core/ui/dialog';
 
   interface Props {
     open: boolean;

@@ -1,7 +1,6 @@
 import 'temporal-polyfill/global';
 
 import { base } from '$app/paths';
-import { initializeColorScheme } from '$core/state/color-scheme-state.svelte';
 import { versionGetBackendInfo } from '$lib/api';
 import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 import { authState, startAuthLifecycle } from '$lib/state/auth-state.svelte';
@@ -9,6 +8,7 @@ import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
 import { userState } from '$lib/state/user-state.svelte';
 import { initTelemetry, log } from '$lib/telemetry/logger';
 import { redirectLegacyHashRoute } from '$lib/utils/legacy-hash-redirect';
+import { initializeColorScheme } from '@openshock/svelte-core/state/color-scheme-state.svelte';
 import type { HandleClientError } from '@sveltejs/kit';
 
 /** Best-effort extraction of a message + stack from an unknown thrown value. */

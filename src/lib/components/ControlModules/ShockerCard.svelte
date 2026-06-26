@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
-  import { cn } from '$core/utils/shadcn';
+  import { cn } from '@openshock/svelte-core/utils/shadcn';
   import PauseOverlay from './impl/PauseOverlay.svelte';
 
   interface Props {

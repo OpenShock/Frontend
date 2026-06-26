@@ -3,10 +3,10 @@
   import { resolve } from '$app/paths';
   import { accountPasswordResetInitiate } from '$lib/api';
   import Turnstile from '$lib/components/Turnstile.svelte';
-  import EmailInput from '$core/components/input/EmailInput.svelte';
-  import { Button } from '$hadcn/button';
-  import * as Card from '$hadcn/card';
-  import { Field, FieldDescription } from '$hadcn/field';
+  import { EmailInput } from '@openshock/svelte-core/components/input';
+  import { Button } from '@openshock/svelte-core/ui/button';
+  import * as Card from '@openshock/svelte-core/ui/card';
+  import { Field, FieldDescription } from '@openshock/svelte-core/ui/field';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { toast } from 'svelte-sonner';

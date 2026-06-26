@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Pause, Play } from '@lucide/svelte';
-  import { Spinner } from '$hadcn/spinner';
-  import { cn } from '$core/utils/shadcn';
+  import { Spinner } from '@openshock/svelte-core/ui/spinner';
+  import { cn } from '@openshock/svelte-core/utils/shadcn';
 
   interface Props {
     isPaused: boolean;

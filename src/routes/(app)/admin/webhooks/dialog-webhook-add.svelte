@@ -1,10 +1,10 @@
 <script lang="ts">
   import { adminAddWebhook } from '$lib/api';
-  import TextInput from '$core/components/input/TextInput.svelte';
-  import { Button } from '$hadcn/button';
-  import * as Dialog from '$hadcn/dialog';
+  import { TextInput } from '@openshock/svelte-core/components/input';
+  import { Button } from '@openshock/svelte-core/ui/button';
+  import * as Dialog from '@openshock/svelte-core/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import type { ValidationResult } from '$core/types/ValidationResult';
+  import type { ValidationResult } from '@openshock/svelte-core/types/ValidationResult';
   import { toast } from 'svelte-sonner';
 
   interface Props {

@@ -1,4 +1,3 @@
-import { isTruthy } from '$core/utils/parse';
 import { env } from '$env/dynamic/public';
 import {
   PUBLIC_DISCORD_INVITE_URL,
@@ -8,6 +7,7 @@ import {
 } from '$env/static/public';
 import { paths } from '$lib/utils/public-routes';
 import { getBackendURL, getSiteURL } from '$lib/utils/url';
+import { isTruthy } from '@openshock/svelte-core/utils/parse';
 import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 

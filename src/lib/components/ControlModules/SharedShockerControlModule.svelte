@@ -10,7 +10,7 @@
   import { getConnection } from '$lib/signalr/user.svelte';
   import { ControlType } from '$lib/signalr/models/ControlType';
   import { serializeControlMessages } from '$lib/signalr/serializers/Control';
-  import { formatDurationSeconds } from '$core/utils';
+  import { formatDurationSeconds } from '@openshock/svelte-core/utils';
   import { useShockerEvents } from '$lib/hooks/shocker-events.svelte';
   import ActionButtons from './impl/ActionButtons.svelte';
   import CircleSlider from './impl/CircleSlider.svelte';

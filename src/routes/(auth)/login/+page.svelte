@@ -1,12 +1,17 @@
 <script lang="ts">
   import { accountLoginV2 } from '$lib/api';
   import { resolve } from '$app/paths';
-  import { Button } from '$hadcn/button';
-  import * as Card from '$hadcn/card';
-  import { FieldGroup, Field, FieldDescription, FieldSeparator } from '$hadcn/field';
-  import TextInput from '$core/components/input/TextInput.svelte';
-  import type { ValidationResult } from '$core/types/ValidationResult';
-  import PasswordInput from '$core/components/input/PasswordInput.svelte';
+  import { Button } from '@openshock/svelte-core/ui/button';
+  import * as Card from '@openshock/svelte-core/ui/card';
+  import {
+    FieldGroup,
+    Field,
+    FieldDescription,
+    FieldSeparator,
+  } from '@openshock/svelte-core/ui/field';
+  import { TextInput } from '@openshock/svelte-core/components/input';
+  import type { ValidationResult } from '@openshock/svelte-core/types/ValidationResult';
+  import { PasswordInput } from '@openshock/svelte-core/components/input';
   import Turnstile from '$lib/components/Turnstile.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
@@ -15,7 +20,7 @@
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
   import { userState } from '$lib/state/user-state.svelte';
-  import { Skeleton } from '$hadcn/skeleton';
+  import { Skeleton } from '@openshock/svelte-core/ui/skeleton';
   import { getOAuthErrorMessage } from '$lib/auth/oauth-errors';
 
   registerBreadcrumbs(() => [{ label: 'Login' }]);

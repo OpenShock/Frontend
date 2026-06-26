@@ -1,5 +1,5 @@
 <script lang="ts" module>
-  import { getCircleX, getCircleY } from '$core/utils/math';
+  import { getCircleX, getCircleY } from '@openshock/svelte-core/utils/math';
 
   // Gauge constants
   const viewHeight = 100;
@@ -23,7 +23,7 @@
 </script>
 
 <script lang="ts">
-  import { RadToDeg, clamp, invLerp, lerp } from '$core/utils/math';
+  import { RadToDeg, clamp, invLerp, lerp } from '@openshock/svelte-core/utils/math';
   import { onDestroy } from 'svelte';
   import { cubicOut } from 'svelte/easing';
   import { Tween } from 'svelte/motion';

@@ -1,6 +1,6 @@
-import { isTruthy } from '$core/utils/parse';
 import { env } from '$env/dynamic/public';
 import { getSiteURL } from '$lib/utils/url';
+import { isTruthy } from '@openshock/svelte-core/utils/parse';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = ({ setHeaders }) => {

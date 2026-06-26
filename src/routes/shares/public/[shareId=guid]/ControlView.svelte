@@ -6,8 +6,8 @@
   import LiveControlModule from '$lib/components/ControlModules/LiveControlModule.svelte';
   import ShockerCard from '$lib/components/ControlModules/ShockerCard.svelte';
   import { getPauseReason } from '$lib/utils';
-  import * as Avatar from '$hadcn/avatar';
-  import * as Tooltip from '$hadcn/tooltip';
+  import * as Avatar from '@openshock/svelte-core/ui/avatar';
+  import * as Tooltip from '@openshock/svelte-core/ui/tooltip';
   import { ShareLinkSignalr } from '$lib/signalr/sharelink.svelte';
   import type { Control } from '$lib/signalr/models/Control';
   import { ControlType } from '$lib/signalr/models/ControlType';
@@ -19,9 +19,9 @@
   } from '$lib/state/live-control-state.svelte';
   import { onMount, untrack } from 'svelte';
   import { page } from '$app/state';
-  import CopyInput from '$core/components/CopyInput.svelte';
+  import { CopyInput } from '@openshock/svelte-core/components';
   import { getSiteShortURL } from '$lib/utils/url';
-  import { Button } from '$hadcn/button';
+  import { Button } from '@openshock/svelte-core/ui/button';
   import { Pencil } from '@lucide/svelte';
   import { userState } from '$lib/state/user-state.svelte';
   import { resolve } from '$app/paths';

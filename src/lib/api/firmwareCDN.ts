@@ -1,4 +1,4 @@
-import { HashBuffer } from '$core/utils/crypto';
+import { HashBuffer } from '@openshock/svelte-core/utils/crypto';
 
 export const FirmwareChannels = ['stable', 'beta', 'develop'] as const;
 export type FirmwareChannel = (typeof FirmwareChannels)[number];

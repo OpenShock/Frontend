@@ -10,17 +10,17 @@
   } from '$lib/api';
   import type { EmailProviderBlacklistDto, UserNameBlacklistDto } from '$lib/api';
   import { Trash2 } from '@lucide/svelte';
-  import Container from '$core/components/Container.svelte';
-  import TextInput from '$core/components/input/TextInput.svelte';
-  import { Button } from '$hadcn/button';
+  import { Container } from '@openshock/svelte-core/components';
+  import { TextInput } from '@openshock/svelte-core/components/input';
+  import { Button } from '@openshock/svelte-core/ui/button';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import { Card, CardContent, CardHeader, CardTitle } from '$hadcn/card';
-  import { ScrollArea } from '$hadcn/scroll-area';
-  import * as Select from '$hadcn/select';
-  import { Separator } from '$hadcn/separator';
+  import { Card, CardContent, CardHeader, CardTitle } from '@openshock/svelte-core/ui/card';
+  import { ScrollArea } from '@openshock/svelte-core/ui/scroll-area';
+  import * as Select from '@openshock/svelte-core/ui/select';
+  import { Separator } from '@openshock/svelte-core/ui/separator';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import type { ValidationResult } from '$core/types/ValidationResult';
-  import { useDebounce } from '$core/utils/debounce';
+  import type { ValidationResult } from '@openshock/svelte-core/types/ValidationResult';
+  import { useDebounce } from '@openshock/svelte-core/utils/debounce';
 
   registerBreadcrumbs(() => [{ label: 'Blacklists' }]);
 

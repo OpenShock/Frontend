@@ -1,6 +1,11 @@
-import { durationBetween, formatDuration, formatDurationSeconds, formatElapsed } from '$core/utils';
-import { renderComponent } from '$hadcn/data-table';
 import { getReadableUserAgentName } from '$lib/utils';
+import { renderComponent } from '@openshock/svelte-core/ui/data-table';
+import {
+  durationBetween,
+  formatDuration,
+  formatDurationSeconds,
+  formatElapsed,
+} from '@openshock/svelte-core/utils';
 import {
   sortingFns,
   type BuiltInSortingFn,

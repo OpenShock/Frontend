@@ -2,9 +2,9 @@
   import { Check, Search } from '@lucide/svelte';
   import { ResponseError, usersGetByName } from '$lib/api';
   import type { BasicUserInfo } from '$lib/api';
-  import * as Avatar from '$hadcn/avatar';
-  import { Button } from '$hadcn/button';
-  import { Input } from '$hadcn/input';
+  import * as Avatar from '@openshock/svelte-core/ui/avatar';
+  import { Button } from '@openshock/svelte-core/ui/button';
+  import { Input } from '@openshock/svelte-core/ui/input';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 
   interface Props {

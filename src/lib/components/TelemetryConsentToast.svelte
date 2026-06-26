@@ -1,6 +1,6 @@
 <script lang="ts">
   import Bug from '@lucide/svelte/icons/bug';
-  import { Button } from '$hadcn/button';
+  import { Button } from '@openshock/svelte-core/ui/button';
   import {
     telemetryConsent,
     telemetryPrompted,

@@ -1,9 +1,9 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import TableActionMenu from '$core/components/TableActionMenu.svelte';
-  import * as DropdownMenu from '$hadcn/dropdown-menu';
-  import { copyToClipboard } from '$core/utils/clipboard.svelte';
+  import { TableActionMenu } from '@openshock/svelte-core/components';
+  import * as DropdownMenu from '@openshock/svelte-core/ui/dropdown-menu';
+  import { copyToClipboard } from '@openshock/svelte-core/utils/clipboard.svelte';
   import { Copy, Pencil, Trash2, User } from '@lucide/svelte';
   import type { OnlineHub } from './columns';
 

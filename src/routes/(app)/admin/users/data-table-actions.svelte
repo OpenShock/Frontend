@@ -1,9 +1,9 @@
 <script lang="ts">
   import { RoleType } from '$lib/api';
   import type { AdminUsersView } from '$lib/api';
-  import TableActionMenu from '$core/components/TableActionMenu.svelte';
-  import * as DropdownMenu from '$hadcn/dropdown-menu';
-  import { copyToClipboard } from '$core/utils/clipboard.svelte';
+  import { TableActionMenu } from '@openshock/svelte-core/components';
+  import * as DropdownMenu from '@openshock/svelte-core/ui/dropdown-menu';
+  import { copyToClipboard } from '@openshock/svelte-core/utils/clipboard.svelte';
   import { Copy, KeyRound, Pencil, ShieldPlus, Trash2 } from '@lucide/svelte';
   import UserDeleteDialog from './dialog-user-delete.svelte';
   import UserEditDialog from './dialog-user-edit.svelte';

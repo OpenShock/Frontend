@@ -1,5 +1,5 @@
 <script lang="ts">
-  import * as Breadcrumb from '$hadcn/breadcrumb';
+  import * as Breadcrumb from '@openshock/svelte-core/ui/breadcrumb';
   import { breadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { prefixBase } from '$lib/utils/url';
 </script>

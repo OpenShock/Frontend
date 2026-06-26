@@ -84,13 +84,6 @@ const config = {
   },
   kit: {
     adapter: adapter(),
-    alias: {
-      // Shared OpenShock library. $core/<path> maps into its built output, so
-      // e.g. $core/components/Code.svelte, $core/utils, $core/types/Tailwind.
-      $core: 'node_modules/@openshock/svelte-core/dist',
-      // shadcn-svelte components specifically: $hadcn/button, $hadcn/dialog, …
-      $hadcn: 'node_modules/@openshock/svelte-core/dist/components/ui',
-    },
     paths: {
       base: getSvelteBasePath(),
     },

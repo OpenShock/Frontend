@@ -3,8 +3,8 @@
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import { accountEmailVerify } from '$lib/api';
-  import { Button } from '$hadcn/button';
-  import * as Card from '$hadcn/card';
+  import { Button } from '@openshock/svelte-core/ui/button';
+  import * as Card from '@openshock/svelte-core/ui/card';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { onMount } from 'svelte';

@@ -1,10 +1,10 @@
-import { isTruthy } from '$core/utils/parse';
-import { SIDEBAR_COOKIE_NAME } from '$hadcn/sidebar/constants';
 import {
   isOnboardingDisabled,
   isWelcomeSunset,
   WELCOME_COOKIE_NAME,
 } from '$lib/tour/onboarding-state';
+import { SIDEBAR_COOKIE_NAME } from '@openshock/svelte-core/components/ui/sidebar/constants';
+import { isTruthy } from '@openshock/svelte-core/utils/parse';
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = ({ cookies }) => {

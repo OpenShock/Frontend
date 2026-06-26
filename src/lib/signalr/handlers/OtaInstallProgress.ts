@@ -1,6 +1,6 @@
-import { isNumber, isString } from '$core/typeguards';
 import { isOtaUpdateProgressTask } from '$lib/signalr/models/OtaUpdateProgressTask';
 import { onlineHubs } from '$lib/state/hubs-state.svelte';
+import { isNumber, isString } from '@openshock/svelte-core/typeguards';
 import { toast } from 'svelte-sonner';
 
 /**

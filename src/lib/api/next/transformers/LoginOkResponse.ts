@@ -1,4 +1,4 @@
-import { HasBoolean, HasString, HasStringArray, isObject } from '$core/typeguards';
+import { HasBoolean, HasString, HasStringArray, isObject } from '@openshock/svelte-core/typeguards';
 import { TransformError } from '../TransformError';
 import type { LoginOkResponse } from '../models';
 import { IsRoleType } from './RoleType';

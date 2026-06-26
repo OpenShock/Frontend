@@ -1,4 +1,4 @@
-import { HasObject, HasString, HasStringOrNull, isObject } from '$core/typeguards';
+import { HasObject, HasString, HasStringOrNull, isObject } from '@openshock/svelte-core/typeguards';
 
 export interface ControlLogSender {
   connectionId: string;

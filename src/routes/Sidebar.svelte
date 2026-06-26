@@ -34,9 +34,9 @@
     MenuSubButton,
     Root,
     useSidebar,
-  } from '$hadcn/sidebar';
+  } from '@openshock/svelte-core/ui/sidebar';
   import { userState } from '$lib/state/user-state.svelte';
-  import type { AnyComponent } from '$core/types/AnyComponent';
+  import type { AnyComponent } from '@openshock/svelte-core/types/AnyComponent';
   import { isSerialSupported } from '$lib/utils/compatibility';
   import { Collapsible } from 'bits-ui';
   import { prefixBase } from '$lib/utils/url';

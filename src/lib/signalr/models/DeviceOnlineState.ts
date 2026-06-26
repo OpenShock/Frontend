@@ -1,4 +1,9 @@
-import { HasBoolean, HasString, HasStringOrNull, isObject } from '$core/typeguards';
+import {
+  HasBoolean,
+  HasString,
+  HasStringOrNull,
+  isObject,
+} from '@openshock/svelte-core/typeguards';
 
 export interface DeviceOnlineState {
   device: string;

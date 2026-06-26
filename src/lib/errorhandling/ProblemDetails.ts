@@ -1,4 +1,4 @@
-import { HasNumber, HasString, isObject, isString } from '$core/typeguards';
+import { HasNumber, HasString, isObject, isString } from '@openshock/svelte-core/typeguards';
 
 export interface ProblemDetails {
   type: string;

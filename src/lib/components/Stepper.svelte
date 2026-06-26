@@ -12,7 +12,7 @@
 <script lang="ts">
   import { untrack } from 'svelte';
   import { Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp } from '@lucide/svelte';
-  import { Button } from '$hadcn/button';
+  import { Button } from '@openshock/svelte-core/ui/button';
 
   interface Props {
     steps: StepperStep[];

@@ -1,9 +1,9 @@
 <script lang="ts">
   import { Link, Router, Share2, Zap } from '@lucide/svelte';
   import { resolve } from '$app/paths';
-  import Container from '$core/components/Container.svelte';
-  import * as Card from '$hadcn/card';
-  import { Button } from '$hadcn/button';
+  import { Container } from '@openshock/svelte-core/components';
+  import * as Card from '@openshock/svelte-core/ui/card';
+  import { Button } from '@openshock/svelte-core/ui/button';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { userState } from '$lib/state/user-state.svelte';
   import { onlineHubs, ownHubs, refreshOwnHubs } from '$lib/state/hubs-state.svelte';

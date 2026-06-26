@@ -3,7 +3,7 @@
   import type { ColumnDef } from '@tanstack/table-core';
   import { adminConfigurationList } from '$lib/api';
   import type { ConfigurationItemDto } from '$lib/api';
-  import Container from '$core/components/Container.svelte';
+  import { Container } from '@openshock/svelte-core/components';
   import {
     CreateActionsColumnDef,
     CreateSortableColumnDef,
@@ -12,8 +12,8 @@
   } from '$lib/components/Table/ColumnUtils';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
-  import { Button } from '$hadcn/button';
-  import { CardHeader, CardTitle } from '$hadcn/card';
+  import { Button } from '@openshock/svelte-core/ui/button';
+  import { CardHeader, CardTitle } from '@openshock/svelte-core/ui/card';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
   import DataTableActions from './data-table-actions.svelte';

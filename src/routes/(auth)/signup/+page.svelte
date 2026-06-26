@@ -1,24 +1,24 @@
 <script lang="ts">
   import { accountSignUpV2 } from '$lib/api';
-  import { Button } from '$hadcn/button';
-  import * as Card from '$hadcn/card';
-  import * as Field from '$hadcn/field';
+  import { Button } from '@openshock/svelte-core/ui/button';
+  import * as Card from '@openshock/svelte-core/ui/card';
+  import * as Field from '@openshock/svelte-core/ui/field';
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import Turnstile from '$lib/components/Turnstile.svelte';
-  import EmailInput from '$core/components/input/EmailInput.svelte';
-  import PasswordInput from '$core/components/input/PasswordInput.svelte';
-  import * as Dialog from '$hadcn/dialog';
+  import { EmailInput } from '@openshock/svelte-core/components/input';
+  import { PasswordInput } from '@openshock/svelte-core/components/input';
+  import * as Dialog from '@openshock/svelte-core/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { validatePasswordMatch } from '$core/inputvalidation/passwordValidator';
+  import { validatePasswordMatch } from '@openshock/svelte-core/inputvalidation/passwordValidator';
   import { toast } from 'svelte-sonner';
-  import FieldSeparator from '$hadcn/field/field-separator.svelte';
+  import { FieldSeparator } from '@openshock/svelte-core/ui/field';
   import OauthButtons from '$lib/components/auth/oauth-buttons.svelte';
   import { ChevronLeft, Mail } from '@lucide/svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
-  import Skeleton from '$hadcn/skeleton/skeleton.svelte';
+  import { Skeleton } from '@openshock/svelte-core/ui/skeleton';
 
   registerBreadcrumbs(() => [{ label: 'Sign Up' }]);
 

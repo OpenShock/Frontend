@@ -1,4 +1,4 @@
-import { HasString, HasStringOrNull, isObject } from '$core/typeguards';
+import { HasString, HasStringOrNull, isObject } from '@openshock/svelte-core/typeguards';
 import { TransformError } from '../TransformError';
 import type { OAuthSignupData } from '../models/OAuthSignupData';
 

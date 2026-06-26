@@ -1,6 +1,6 @@
-import { isString } from '$core/typeguards';
 import { isHubUpdateType } from '$lib/signalr/models/HubUpdateType';
 import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
+import { isString } from '@openshock/svelte-core/typeguards';
 import { toast } from 'svelte-sonner';
 
 export function handleSignalrDeviceUpdate(deviceId: unknown, updateType: unknown) {

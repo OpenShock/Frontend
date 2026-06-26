@@ -2,8 +2,8 @@
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
-  import Container from '$core/components/Container.svelte';
-  import { Spinner } from '$hadcn/spinner';
+  import { Container } from '@openshock/svelte-core/components';
+  import { Spinner } from '@openshock/svelte-core/ui/spinner';
   import { AuthStatus, authState } from '$lib/state/auth-state.svelte';
   import type { Snippet } from 'svelte';
 

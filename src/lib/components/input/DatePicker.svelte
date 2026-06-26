@@ -1,10 +1,10 @@
 <script lang="ts">
   import { DateFormatter, type DateValue, getLocalTimeZone } from '@internationalized/date';
   import CalendarIcon from '@lucide/svelte/icons/calendar';
-  import { buttonVariants } from '$hadcn/button';
-  import { Calendar } from '$hadcn/calendar';
-  import * as Popover from '$hadcn/popover';
-  import { cn } from '$core/utils/shadcn';
+  import { buttonVariants } from '@openshock/svelte-core/ui/button';
+  import { Calendar } from '@openshock/svelte-core/ui/calendar';
+  import * as Popover from '@openshock/svelte-core/ui/popover';
+  import { cn } from '@openshock/svelte-core/utils/shadcn';
 
   interface Props {
     value: DateValue | undefined;

@@ -5,8 +5,8 @@
   import { PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
   import { getConnectionState } from '$lib/signalr/user.svelte';
   import { Wifi, WifiOff } from '@lucide/svelte';
-  import * as DropdownMenu from '$hadcn/dropdown-menu';
-  import { Button } from '$hadcn/button';
+  import * as DropdownMenu from '@openshock/svelte-core/ui/dropdown-menu';
+  import { Button } from '@openshock/svelte-core/ui/button';
   import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
 </script>
 

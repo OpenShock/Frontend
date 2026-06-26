@@ -1,13 +1,13 @@
 <script lang="ts">
   import { AlertTriangle, Eye, RefreshCw, Send, TriangleAlert, WifiOff } from '@lucide/svelte';
-  import { Button } from '$hadcn/button';
-  import * as Card from '$hadcn/card';
-  import ConfirmDeleteDialog from '$core/components/ConfirmDeleteDialog.svelte';
-  import * as Dialog from '$hadcn/dialog';
-  import { Input } from '$hadcn/input';
-  import { Label } from '$hadcn/label';
-  import { Switch } from '$hadcn/switch';
-  import { Textarea } from '$hadcn/textarea';
+  import { Button } from '@openshock/svelte-core/ui/button';
+  import * as Card from '@openshock/svelte-core/ui/card';
+  import { ConfirmDeleteDialog } from '@openshock/svelte-core/components';
+  import * as Dialog from '@openshock/svelte-core/ui/dialog';
+  import { Input } from '@openshock/svelte-core/ui/input';
+  import { Label } from '@openshock/svelte-core/ui/label';
+  import { Switch } from '@openshock/svelte-core/ui/switch';
+  import { Textarea } from '@openshock/svelte-core/ui/textarea';
   import type { TerminalContext } from './TerminalContext.svelte';
 
   interface Props {

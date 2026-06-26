@@ -3,12 +3,12 @@
   import type { ShockerResponse } from '$lib/api';
   import { Copy, Ellipsis, Logs, Pencil, Share2, Trash2 } from '@lucide/svelte';
   import { goto } from '$app/navigation';
-  import { dialog } from '$core/components/dialog-manager/dialog-store.svelte';
-  import { Button } from '$hadcn/button';
-  import * as DropdownMenu from '$hadcn/dropdown-menu';
+  import { dialog } from '@openshock/svelte-core/components/dialog-manager';
+  import { Button } from '@openshock/svelte-core/ui/button';
+  import * as DropdownMenu from '@openshock/svelte-core/ui/dropdown-menu';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
-  import { copyToClipboard } from '$core/utils/clipboard.svelte';
+  import { copyToClipboard } from '@openshock/svelte-core/utils/clipboard.svelte';
   import { resolve } from '$app/paths';
   import { toast } from 'svelte-sonner';
 

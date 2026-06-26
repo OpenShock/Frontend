@@ -3,7 +3,7 @@
   import { asset, resolve } from '$app/paths';
   import { page } from '$app/state';
   import { PUBLIC_SITE_NAME } from '$env/static/public';
-  import { BasicTags, OpenGraphTags, TwitterSummaryTags } from '$core/components/metadata';
+  import { BasicTags, OpenGraphTags, TwitterSummaryTags } from '@openshock/svelte-core/metadata';
   import ArrowLeft from '@lucide/svelte/icons/arrow-left';
   import { isValidRedirectURL } from '$lib/utils/url';
 

@@ -4,9 +4,9 @@
   import { CircleUser, LogIn, Undo2 } from '@lucide/svelte';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
-  import { Button } from '$hadcn/button';
-  import * as Card from '$hadcn/card';
-  import Input from '$hadcn/input/input.svelte';
+  import { Button } from '@openshock/svelte-core/ui/button';
+  import * as Card from '@openshock/svelte-core/ui/card';
+  import { Input } from '@openshock/svelte-core/ui/input';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { userState } from '$lib/state/user-state.svelte';
