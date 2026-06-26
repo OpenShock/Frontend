@@ -20,8 +20,8 @@ importers:
   .:
     dependencies:
       '@openshock/svelte-core':
-        specifier: ^0.1.0
-        version: 0.1.0(2cd3459784afbbe2cb9606225751a11d)
+        specifier: ^0.2.1
+        version: 0.2.1(2cd3459784afbbe2cb9606225751a11d)
       '@opentelemetry/api-logs':
         specifier: ^0.219.0
         version: 0.219.0
@@ -753,8 +753,8 @@ packages:
       '@emnapi/core': ^1.7.1
       '@emnapi/runtime': ^1.7.1
 
-  '@openshock/svelte-core@0.1.0':
-    resolution: {integrity: sha512-x2Un0wxlbSc5zfgcCBMd8OI6CtaqgyWI2yPB72Ze97ZyUZy1SmUzWROo68lWyMhGwZJZ3MgU9dYilPNZamMKKQ==}
+  '@openshock/svelte-core@0.2.1':
+    resolution: {integrity: sha512-DPycxVZV/qFnw5QO3NJWNa3p9tfmsty2WHlzJbl1QzaBuFJcx+km1d6r6/boke9DjkQAvedHRLXNENaSlHUgRg==}
     peerDependencies:
       '@internationalized/date': ^3.12.2
       '@lucide/svelte': ^1.21.0
@@ -3475,7 +3475,7 @@ snapshots:
       '@tybys/wasm-util': 0.10.2
     optional: true
 
-  '@openshock/svelte-core@0.1.0(2cd3459784afbbe2cb9606225751a11d)':
+  '@openshock/svelte-core@0.2.1(2cd3459784afbbe2cb9606225751a11d)':
     dependencies:
       '@lucide/svelte': 1.21.0(svelte@5.56.3(@typescript-eslint/types@8.61.1))
       bits-ui: 2.18.1(@internationalized/date@3.12.2)(@sveltejs/kit@2.66.0(@opentelemetry/api@1.9.1)(@sveltejs/vite-plugin-svelte@7.1.2(svelte@5.56.3(@typescript-eslint/types@8.61.1))(vite@8.0.16(@types/node@26.0.0)(esbuild@0.27.3)(jiti@2.7.0)))(svelte@5.56.3(@typescript-eslint/types@8.61.1))(typescript@6.0.3)(vite@8.0.16(@types/node@26.0.0)(esbuild@0.27.3)(jiti@2.7.0)))(svelte@5.56.3(@typescript-eslint/types@8.61.1))

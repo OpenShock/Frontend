@@ -1,4 +1,4 @@
-import { PersistedState } from './classes/persisted-state.svelte';
+import { PersistedState } from '$core/state/classes/persisted-state.svelte';
 
 /**
  * How much diagnostic data the user agrees to send to SigNoz:

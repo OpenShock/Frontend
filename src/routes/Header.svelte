@@ -6,11 +6,6 @@
   import type { Pathname } from '$app/types';
   import { PUBLIC_DISCORD_INVITE_URL, PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
   import LightSwitch from '$core/components/LightSwitch.svelte';
-  import {
-    ColorScheme,
-    colorScheme,
-    getDarkReaderState,
-  } from '$lib/state/color-scheme-state.svelte';
   import DiscordLogo from '$core/components/svg/DiscordLogo.svelte';
   import GithubIcon from '$core/components/svg/GithubIcon.svelte';
   import { Button } from '$hadcn/button';
@@ -50,12 +45,7 @@
     >
       <div class="flex-1"></div>
 
-      <LightSwitch
-        value={colorScheme.value}
-        onValueChange={(v) => (colorScheme.value = v as ColorScheme)}
-        confirmLightMode
-        darkReaderActive={getDarkReaderState().isActive}
-      />
+      <LightSwitch />
 
       {#if userState.loading}
         <Spinner class="size-8 text-gray-600 dark:text-gray-300" />

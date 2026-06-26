@@ -38,7 +38,7 @@
     LiveConnectionState,
     registerHubShockers,
   } from '$lib/state/live-control-state.svelte';
-  import { PersistedState } from '$lib/state/classes/persisted-state.svelte';
+  import { PersistedState } from '$core/state/classes/persisted-state.svelte';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
 

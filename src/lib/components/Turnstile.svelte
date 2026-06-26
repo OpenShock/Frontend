@@ -4,7 +4,7 @@
   import { PUBLIC_TURNSTILE_DEV_BYPASS_VALUE } from '$env/static/public';
   import CloudflareLogo from '$core/components/svg/CloudflareLogo.svelte';
   import { Spinner } from '$hadcn/spinner';
-  import { ColorScheme, colorScheme } from '$lib/state/color-scheme-state.svelte';
+  import { ColorScheme, colorScheme } from '$core/state/color-scheme-state.svelte';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
   import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
