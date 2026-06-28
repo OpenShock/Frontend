@@ -1,6 +1,6 @@
 <script lang="ts">
   import Bug from '@lucide/svelte/icons/bug';
-  import { dev } from '$app/environment';
+  import { dev } from '$app/env';
   import { PUBLIC_TURNSTILE_DEV_BYPASS_VALUE } from '$env/static/public';
   import { CloudflareLogo } from '@openshock/svelte-core/components/svg';
   import { Spinner } from '@openshock/svelte-core/ui/spinner';

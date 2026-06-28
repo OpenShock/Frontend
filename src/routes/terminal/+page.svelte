@@ -7,7 +7,7 @@
     Unplug,
     Zap,
   } from '@lucide/svelte';
-  import { browser } from '$app/environment';
+  import { browser } from '$app/env';
   import type { FirmwareChannel } from '$lib/api/firmwareCDN';
   import { Container } from '@openshock/svelte-core/components';
   import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';

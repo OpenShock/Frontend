@@ -1,4 +1,4 @@
-import { version } from '$app/environment';
+import { version } from '$app/env';
 import {
   PUBLIC_BACKEND_API_URL,
   PUBLIC_SIGNOZ_DEPLOYMENT_ENVIRONMENT,
