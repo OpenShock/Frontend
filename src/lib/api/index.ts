@@ -24,7 +24,6 @@ export {
   accountLogout,
   accountPasswordResetCheckValid,
   accountPasswordResetComplete,
-  accountPasswordResetInitiate,
   adminAddEmailProviderBlacklist,
   adminAddUsernameBlacklist,
   adminAddWebhook,
@@ -125,6 +124,7 @@ export type {
 export {
   accountCheckUsername,
   accountLoginV2,
+  accountPasswordResetInitiateV2,
   accountSignUpV2,
   devicesCreateDeviceV2,
   tokensCreateTokenV2,
