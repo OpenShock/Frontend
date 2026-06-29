@@ -66,6 +66,8 @@ export default defineConfig(
       'yarn.lock',
       'src/lib/api/internal',
       'src/lib/components/ui',
+      // Workspace packages (e.g. svelte-core submodule) own their own linting
+      'packages/**',
     ],
   }
 );

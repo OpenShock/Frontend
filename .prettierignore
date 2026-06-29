@@ -7,6 +7,9 @@ node_modules
 /src/lib/api/internal
 /src/lib/components/ui
 /static
+
+# Workspace packages (e.g. svelte-core submodule) own their own formatting
+/packages
 .env
 .env.*
 !.env.example

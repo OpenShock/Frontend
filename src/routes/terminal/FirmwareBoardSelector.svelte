@@ -3,7 +3,11 @@
   import { FetchVersionBoards } from '$lib/api/firmwareCDN';
   import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
   import * as Command from '@openshock/svelte-core/components/ui/command/index.js';
-  import { Popover, PopoverContent, PopoverTrigger } from '@openshock/svelte-core/components/ui/popover/index.js';
+  import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+  } from '@openshock/svelte-core/components/ui/popover/index.js';
   import { cn } from '@openshock/svelte-core/utils/shadcn.js';
 
   /** Optional chip to constrain the list of boards to */

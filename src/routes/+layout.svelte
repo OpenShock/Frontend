@@ -1,7 +1,11 @@
 <script lang="ts">
   import { page } from '$app/state';
   import { PUBLIC_DEVELOPMENT_BANNER } from '$env/static/public';
-  import { BasicTags, OpenGraphTags, TwitterSummaryTags } from '@openshock/svelte-core/components/metadata/index.js';
+  import {
+    BasicTags,
+    OpenGraphTags,
+    TwitterSummaryTags,
+  } from '@openshock/svelte-core/components/metadata/index.js';
   import { SidebarProvider } from '@openshock/svelte-core/components/ui/sidebar/index.js';
   import { Toaster } from '@openshock/svelte-core/components/ui/sonner/index.js';
   import { buildMetaData } from '$lib/metadata';

@@ -1,4 +1,9 @@
-import { HasObject, HasString, HasStringOrNull, isObject } from '@openshock/svelte-core/typeguards/index.js';
+import {
+  HasObject,
+  HasString,
+  HasStringOrNull,
+  isObject,
+} from '@openshock/svelte-core/typeguards/index.js';
 
 export interface ControlLogSender {
   connectionId: string;

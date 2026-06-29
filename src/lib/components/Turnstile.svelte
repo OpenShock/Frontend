@@ -4,7 +4,10 @@
   import { PUBLIC_TURNSTILE_DEV_BYPASS_VALUE } from '$env/static/public';
   import { CloudflareLogo } from '@openshock/svelte-core/components/svg/index.js';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner/index.js';
-  import { ColorScheme, colorScheme } from '@openshock/svelte-core/state/color-scheme-state.svelte.js';
+  import {
+    ColorScheme,
+    colorScheme,
+  } from '@openshock/svelte-core/state/color-scheme-state.svelte.js';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
   import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';

@@ -14,7 +14,12 @@
   import { TextInput } from '@openshock/svelte-core/components/input/index.js';
   import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import { Card, CardContent, CardHeader, CardTitle } from '@openshock/svelte-core/components/ui/card/index.js';
+  import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+  } from '@openshock/svelte-core/components/ui/card/index.js';
   import { ScrollArea } from '@openshock/svelte-core/components/ui/scroll-area/index.js';
   import * as Select from '@openshock/svelte-core/components/ui/select/index.js';
   import { Separator } from '@openshock/svelte-core/components/ui/separator/index.js';

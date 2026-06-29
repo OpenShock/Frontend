@@ -15,7 +15,11 @@
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner/index.js';
   import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { durationBetween, formatDuration, formatElapsed } from '@openshock/svelte-core/utils/index.js';
+  import {
+    durationBetween,
+    formatDuration,
+    formatElapsed,
+  } from '@openshock/svelte-core/utils/index.js';
   import { getSiteShortURL } from '$lib/utils/url';
   import { onMount } from 'svelte';
   import DataTableActions from './data-table-actions.svelte';

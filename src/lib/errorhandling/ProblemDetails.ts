@@ -1,4 +1,9 @@
-import { HasNumber, HasString, isObject, isString } from '@openshock/svelte-core/typeguards/index.js';
+import {
+  HasNumber,
+  HasString,
+  isObject,
+  isString,
+} from '@openshock/svelte-core/typeguards/index.js';
 
 export interface ProblemDetails {
   type: string;
