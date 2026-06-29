@@ -148,7 +148,13 @@ function getPlugins(useLocalRedirect: boolean, redirectFqdn: string | null): Plu
 
 interface LocalServer {
   /** Vite `server` config (host/port + dev niceties). */
-  config: { forwardConsole: boolean; proxy: Record<string, never>; host: string; port: number };
+  config: {
+    forwardConsole: boolean;
+    proxy: Record<string, never>;
+    host: string;
+    port: number;
+    fs: { allow: string[] };
+  };
   /**
    * FQDN that needs a hosts redirect and a privileged-port bind before serving,
    * or null for plain `localhost` (no redirect/bind checks required).
@@ -171,7 +177,16 @@ function resolveServerConfig(mode: string, useLocalRedirect: boolean): LocalServ
 
   // Vite 8: pipe browser console.* into the dev terminal so client errors land
   // alongside server logs without context-switching to browser devtools.
-  const baseDevConfig = { forwardConsole: true, proxy: {} };
+  //
+  // `@openshock/svelte-core` is a workspace package consumed from source. pnpm
+  // symlinks it into node_modules, but Vite resolves symlinks to their real path
+  // (packages/svelte-core/src/...), which falls outside SvelteKit's default
+  // fs.allow list. Allow the package dir so its source modules can be served.
+  const baseDevConfig = {
+    forwardConsole: true,
+    proxy: {},
+    fs: { allow: ['./packages/svelte-core'] },
+  };
 
   const domain = new URL(vars.PUBLIC_SITE_URL).hostname;
 

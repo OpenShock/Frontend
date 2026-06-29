@@ -1,6 +1,6 @@
 <script lang="ts">
-  import * as Tooltip from '@openshock/svelte-core/ui/tooltip';
-  import { Spinner } from '@openshock/svelte-core/ui/spinner';
+  import * as Tooltip from '@openshock/svelte-core/components/ui/tooltip/index.js';
+  import { Spinner } from '@openshock/svelte-core/components/ui/spinner/index.js';
   import {
     LiveConnectionState,
     getLiveConnection,

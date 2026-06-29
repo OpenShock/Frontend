@@ -22,11 +22,11 @@
 </script>
 
 <script lang="ts">
-  import { Label } from '@openshock/svelte-core/ui/label';
-  import { Slider } from '@openshock/svelte-core/ui/slider';
-  import { Switch } from '@openshock/svelte-core/ui/switch';
-  import * as ToggleGroup from '@openshock/svelte-core/ui/toggle-group';
-  import * as Tooltip from '@openshock/svelte-core/ui/tooltip';
+  import { Label } from '@openshock/svelte-core/components/ui/label/index.js';
+  import { Slider } from '@openshock/svelte-core/components/ui/slider/index.js';
+  import { Switch } from '@openshock/svelte-core/components/ui/switch/index.js';
+  import * as ToggleGroup from '@openshock/svelte-core/components/ui/toggle-group/index.js';
+  import * as Tooltip from '@openshock/svelte-core/components/ui/tooltip/index.js';
 
   interface Props {
     settings: ShockerControlSettings;

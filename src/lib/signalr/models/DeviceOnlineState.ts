@@ -3,7 +3,7 @@ import {
   HasString,
   HasStringOrNull,
   isObject,
-} from '@openshock/svelte-core/typeguards';
+} from '@openshock/svelte-core/typeguards/index.js';
 
 export interface DeviceOnlineState {
   device: string;

@@ -7,7 +7,7 @@ import {
 } from '$env/static/public';
 import { paths } from '$lib/utils/public-routes';
 import { getBackendURL, getSiteURL } from '$lib/utils/url';
-import { isTruthy } from '@openshock/svelte-core/utils/parse';
+import { isTruthy } from '@openshock/svelte-core/utils/parse.js';
 import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 

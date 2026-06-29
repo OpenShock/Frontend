@@ -67,14 +67,14 @@
 
 <script lang="ts">
   import type { SortingState } from '@tanstack/table-core';
-  import { Container } from '@openshock/svelte-core/components';
+  import { Container } from '@openshock/svelte-core/components/index.js';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import PaginationFooter from '$lib/components/Table/PaginationFooter.svelte';
-  import { CardHeader, CardTitle } from '@openshock/svelte-core/ui/card';
-  import { Input } from '@openshock/svelte-core/ui/input';
+  import { CardHeader, CardTitle } from '@openshock/svelte-core/components/ui/card/index.js';
+  import { Input } from '@openshock/svelte-core/components/ui/input/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import { useDebounce } from '@openshock/svelte-core/utils/debounce';
+  import { useDebounce } from '@openshock/svelte-core/utils/debounce.js';
 
   registerBreadcrumbs(() => [{ label: 'Users' }]);
 

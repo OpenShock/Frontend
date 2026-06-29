@@ -5,7 +5,7 @@
 
 <script lang="ts">
   import { resolve } from '$app/paths';
-  import { Button } from '@openshock/svelte-core/ui/button';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { userState } from '$lib/state/user-state.svelte';
   import type { Snippet } from 'svelte';

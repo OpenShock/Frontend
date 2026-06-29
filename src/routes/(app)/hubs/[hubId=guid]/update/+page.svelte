@@ -59,12 +59,12 @@
   import { CircleCheck, CircleX, CloudDownload, RotateCcw, TriangleAlert } from '@lucide/svelte';
   import { page } from '$app/state';
   import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
-  import { Badge } from '@openshock/svelte-core/ui/badge';
-  import { Button } from '@openshock/svelte-core/ui/button';
-  import * as Card from '@openshock/svelte-core/ui/card';
-  import * as Dialog from '@openshock/svelte-core/ui/dialog';
-  import { Progress } from '@openshock/svelte-core/ui/progress';
-  import * as Table from '@openshock/svelte-core/ui/table';
+  import { Badge } from '@openshock/svelte-core/components/ui/badge/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import * as Card from '@openshock/svelte-core/components/ui/card/index.js';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog/index.js';
+  import { Progress } from '@openshock/svelte-core/components/ui/progress/index.js';
+  import * as Table from '@openshock/svelte-core/components/ui/table/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { getConnection } from '$lib/signalr/user.svelte';
   import { serializeOtaInstallMessage } from '$lib/signalr/serializers/OtaInstall';
@@ -75,11 +75,11 @@
     ownHubs,
     refreshOwnHubs,
   } from '$lib/state/hubs-state.svelte';
-  import { cn } from '@openshock/svelte-core/utils/shadcn';
-  import { NumberToHexPadded } from '@openshock/svelte-core/utils/convert';
+  import { cn } from '@openshock/svelte-core/utils/shadcn.js';
+  import { NumberToHexPadded } from '@openshock/svelte-core/utils/convert.js';
   import { onMount } from 'svelte';
   import type { FirmwareChannel } from '$lib/api/firmwareCDN';
-  import { PageHeader } from '@openshock/svelte-core/components';
+  import { PageHeader } from '@openshock/svelte-core/components/index.js';
 
   let hubLoaded = $state(false);
   let otaLogs = $state<OtaItem[]>([]);

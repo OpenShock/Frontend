@@ -1,11 +1,11 @@
 <script lang="ts">
   import { RoleType, adminModifyUser } from '$lib/api';
   import type { AdminUsersView } from '$lib/api';
-  import { EmailInput } from '@openshock/svelte-core/components/input';
+  import { EmailInput } from '@openshock/svelte-core/components/input/index.js';
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
-  import { Button } from '@openshock/svelte-core/ui/button';
-  import { Checkbox } from '@openshock/svelte-core/ui/checkbox';
-  import * as Dialog from '@openshock/svelte-core/ui/dialog';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import { Checkbox } from '@openshock/svelte-core/components/ui/checkbox/index.js';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 
   interface Props {

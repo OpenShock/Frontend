@@ -1,8 +1,8 @@
 <script lang="ts">
   import { Link } from '@lucide/svelte';
   import KeyRound from '@lucide/svelte/icons/key-round';
-  import { CopyInput } from '@openshock/svelte-core/components';
-  import * as Dialog from '@openshock/svelte-core/ui/dialog';
+  import { CopyInput } from '@openshock/svelte-core/components/index.js';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog/index.js';
   import { getSiteShortURL } from '$lib/utils/url';
 
   interface Props {

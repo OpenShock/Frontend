@@ -1,6 +1,6 @@
 <script lang="ts">
   import { ClockFading, Gauge } from '@lucide/svelte';
-  import { formatDurationSeconds } from '@openshock/svelte-core/utils';
+  import { formatDurationSeconds } from '@openshock/svelte-core/utils/index.js';
 
   interface Props {
     maxIntensity: number;

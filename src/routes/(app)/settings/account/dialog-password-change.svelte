@@ -1,11 +1,11 @@
 <script lang="ts">
   import { authenticatedAccountChangePassword } from '$lib/api';
   import KeyRound from '@lucide/svelte/icons/key-round';
-  import { PasswordInput } from '@openshock/svelte-core/components/input';
-  import { Button } from '@openshock/svelte-core/ui/button';
-  import * as Dialog from '@openshock/svelte-core/ui/dialog';
+  import { PasswordInput } from '@openshock/svelte-core/components/input/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { validatePasswordMatch } from '@openshock/svelte-core/inputvalidation/passwordValidator';
+  import { validatePasswordMatch } from '@openshock/svelte-core/inputvalidation/passwordValidator.js';
   import { toast } from 'svelte-sonner';
 
   interface Props {

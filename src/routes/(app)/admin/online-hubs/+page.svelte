@@ -2,10 +2,10 @@
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
   import type { ColumnFiltersState, SortingState } from '@tanstack/table-core';
   import { adminGetOnlineDevices } from '$lib/api';
-  import { Container } from '@openshock/svelte-core/components';
+  import { Container } from '@openshock/svelte-core/components/index.js';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
-  import { Button } from '@openshock/svelte-core/ui/button';
-  import * as Card from '@openshock/svelte-core/ui/card';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import * as Card from '@openshock/svelte-core/components/ui/card/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { SemVer } from 'semver';
   import { onMount } from 'svelte';

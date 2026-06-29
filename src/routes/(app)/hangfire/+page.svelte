@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Container } from '@openshock/svelte-core/components';
+  import { Container } from '@openshock/svelte-core/components/index.js';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
 
   registerBreadcrumbs(() => [{ label: 'Hangfire' }]);

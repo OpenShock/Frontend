@@ -1,7 +1,7 @@
 <script lang="ts">
   import { ChartNoAxesGantt, ClockFading, Gauge, Volume2, Waves, Zap } from '@lucide/svelte';
   import type { ShockerPermLimitPairWithIdAndName } from '$lib/api';
-  import { Badge } from '@openshock/svelte-core/ui/badge';
+  import { Badge } from '@openshock/svelte-core/components/ui/badge/index.js';
   import { getPauseReason } from '$lib/utils';
   import type { ClassValue } from 'svelte/elements';
 

@@ -1,11 +1,11 @@
 <script lang="ts">
   import { ConfigurationValueType, adminConfigurationAdd } from '$lib/api';
-  import { TextInput } from '@openshock/svelte-core/components/input';
-  import { Button } from '@openshock/svelte-core/ui/button';
-  import * as Dialog from '@openshock/svelte-core/ui/dialog';
-  import * as Select from '@openshock/svelte-core/ui/select';
+  import { TextInput } from '@openshock/svelte-core/components/input/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog/index.js';
+  import * as Select from '@openshock/svelte-core/components/ui/select/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import type { ValidationResult } from '@openshock/svelte-core/types/ValidationResult';
+  import type { ValidationResult } from '@openshock/svelte-core/types/ValidationResult.js';
   import { toast } from 'svelte-sonner';
 
   interface Props {

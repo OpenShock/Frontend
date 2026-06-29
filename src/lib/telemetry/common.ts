@@ -8,7 +8,7 @@ import {
   PUBLIC_SIGNOZ_TRACES_URL,
 } from '$env/static/public';
 import { telemetryConsent, type TelemetryLevel } from '$lib/state/telemetry-consent-state.svelte';
-import { isTruthy } from '@openshock/svelte-core/utils/parse';
+import { isTruthy } from '@openshock/svelte-core/utils/parse.js';
 import { resourceFromAttributes } from '@opentelemetry/resources';
 
 export const SERVICE_NAME = 'openshock-frontend';

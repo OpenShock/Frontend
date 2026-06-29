@@ -7,7 +7,7 @@ import {
   markTourCompleted,
   startWelcomeTour,
 } from '$lib/tour/welcome-tour';
-import { dialog } from '@openshock/svelte-core/components/dialog-manager';
+import { dialog } from '@openshock/svelte-core/components/dialog-manager/index.js';
 import { userState } from './user-state.svelte';
 
 export const AuthStatus = {

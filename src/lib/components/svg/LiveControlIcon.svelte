@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { cn } from '@openshock/svelte-core/utils/shadcn';
+  import { cn } from '@openshock/svelte-core/utils/shadcn.js';
 
   interface Props {
     class?: string;

@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { LoginSessionResponse } from '$lib/api';
-  import { TableActionMenu } from '@openshock/svelte-core/components';
-  import * as DropdownMenu from '@openshock/svelte-core/ui/dropdown-menu';
-  import { copyToClipboard } from '@openshock/svelte-core/utils/clipboard.svelte';
+  import { TableActionMenu } from '@openshock/svelte-core/components/index.js';
+  import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu/index.js';
+  import { copyToClipboard } from '@openshock/svelte-core/utils/clipboard.svelte.js';
   import { Ban, Copy } from '@lucide/svelte';
   import SessionRevokeDialog from './dialog-session-revoke.svelte';
 

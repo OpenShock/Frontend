@@ -1,15 +1,15 @@
 <script lang="ts">
   import { Copy, Ellipsis, User } from '@lucide/svelte';
-  import { Container } from '@openshock/svelte-core/components';
+  import { Container } from '@openshock/svelte-core/components/index.js';
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import LiveButton from '$lib/components/ControlModules/LiveButton.svelte';
   import LiveControlModule from '$lib/components/ControlModules/LiveControlModule.svelte';
   import ShockerCard from '$lib/components/ControlModules/ShockerCard.svelte';
-  import * as Avatar from '@openshock/svelte-core/ui/avatar';
-  import { Button } from '@openshock/svelte-core/ui/button';
-  import * as DropdownMenu from '@openshock/svelte-core/ui/dropdown-menu';
-  import { EmptyState } from '@openshock/svelte-core/components';
-  import { copyToClipboard } from '@openshock/svelte-core/utils/clipboard.svelte';
+  import * as Avatar from '@openshock/svelte-core/components/ui/avatar/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu/index.js';
+  import { EmptyState } from '@openshock/svelte-core/components/index.js';
+  import { copyToClipboard } from '@openshock/svelte-core/utils/clipboard.svelte.js';
   import { onlineHubs } from '$lib/state/hubs-state.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { ControlType } from '$lib/signalr/models/ControlType';
@@ -23,7 +23,7 @@
   } from '$lib/state/live-control-state.svelte';
   import { sharedHubsState, refreshSharedHubs } from '$lib/state/shared-hubs-state.svelte';
   import { onMount } from 'svelte';
-  import { PageHeader } from '@openshock/svelte-core/components';
+  import { PageHeader } from '@openshock/svelte-core/components/index.js';
 
   registerBreadcrumbs(() => [{ label: 'Shared Shockers' }]);
 

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Settings2, Zap } from '@lucide/svelte';
-  import * as Card from '@openshock/svelte-core/ui/card';
+  import * as Card from '@openshock/svelte-core/components/ui/card/index.js';
 
   export type Mode = 'flash' | 'configure';
 
