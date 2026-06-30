@@ -2,22 +2,22 @@
   import { devicesCreateDeviceV2 } from '$lib/api';
   import { Plus, Router } from '@lucide/svelte';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import * as Table from '$lib/components/ui/table';
-  import { IsMobile } from '$lib/hooks/is-mobile.svelte';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import * as Table from '@openshock/svelte-core/components/ui/table/index.js';
+  import { IsMobile } from '@openshock/svelte-core/hooks/is-mobile.svelte.js';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { onlineHubs, ownHubs, refreshOwnHubs } from '$lib/state/hubs-state.svelte';
   import { onMount } from 'svelte';
   import type { Hub } from './columns';
   import DataTableActions from './data-table-actions.svelte';
-  import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
-  import type { DialogRenderProps } from '$lib/components/dialog-manager/types';
+  import { dialog } from '@openshock/svelte-core/components/dialog-manager/index.js';
+  import type { DialogRenderProps } from '@openshock/svelte-core/components/dialog-manager/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 
-  import * as Dialog from '$lib/components/ui/dialog';
-  import TextInput from '$lib/components/input/TextInput.svelte';
-  import PageHeader from '$lib/components/PageHeader.svelte';
-  import Container from '$lib/components/Container.svelte';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog/index.js';
+  import { TextInput } from '@openshock/svelte-core/components/input/index.js';
+  import { PageHeader } from '@openshock/svelte-core/components/index.js';
+  import { Container } from '@openshock/svelte-core/components/index.js';
 
   const isMobile = new IsMobile();
 

@@ -1,5 +1,5 @@
-import { DecodeString, EncodeString } from '$lib/utils';
-import { md5 } from '$lib/utils/md5';
+import { DecodeString, EncodeString } from '@openshock/svelte-core/utils/index.js';
+import { md5 } from '@openshock/svelte-core/utils/md5.js';
 import { ESPLoader, type IEspLoaderTerminal, type LoaderOptions, Transport } from 'esptool-js';
 import { toast } from 'svelte-sonner';
 

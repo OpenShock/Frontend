@@ -1,3 +1,6 @@
+packages:
+  - 'packages/*'
+
 allowBuilds:
   esbuild: true
   sharp: true
@@ -6,6 +9,7 @@ blockExoticSubdeps: true
 minimumReleaseAge: 4320 # 3 days
 
 minimumReleaseAgeExclude:
+  - '@openshock/*'
   - ws@8.20.1
   - esbuild@0.28.1
   - js-yaml@4.1.2
@@ -22,6 +26,7 @@ overrides:
   esbuild@>=0.27.3 <0.28.1: ^0.28.1
   js-yaml@<4.1.1: '>=4.1.1'
   js-yaml@<=4.1.1: ^4.1.2
+  svelte@>=5.0.0 <5.56.4: ^5.56.4
   ts-deepmerge@<8.0.0: ^8.0.0
   undici@>=7.0.0 <7.24.0: '>=7.24.0'
   uuid@<14.0.0: '>=14.0.0'

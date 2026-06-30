@@ -1,10 +1,13 @@
 <script lang="ts">
   import Bug from '@lucide/svelte/icons/bug';
-  import { dev } from '$app/environment';
+  import { dev } from '$app/env';
   import { PUBLIC_TURNSTILE_DEV_BYPASS_VALUE } from '$env/static/public';
-  import CloudflareLogo from '$lib/components/svg/CloudflareLogo.svelte';
-  import { Spinner } from '$lib/components/ui/spinner';
-  import { ColorScheme, colorScheme } from '$lib/state/color-scheme-state.svelte';
+  import { CloudflareLogo } from '@openshock/svelte-core/components/svg/index.js';
+  import { Spinner } from '@openshock/svelte-core/components/ui/spinner/index.js';
+  import {
+    ColorScheme,
+    colorScheme,
+  } from '@openshock/svelte-core/state/color-scheme-state.svelte.js';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
   import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';

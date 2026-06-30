@@ -1,7 +1,7 @@
 <script lang="ts">
   import { authenticatedAccountRemoveOAuthConnection } from '$lib/api';
-  import { Button } from '$lib/components/ui/button';
-  import * as Dialog from '$lib/components/ui/dialog';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 
   interface Props {

@@ -1,8 +1,8 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import * as Card from '$lib/components/ui/card/index.js';
-  import { FieldDescription } from '$lib/components/ui/field/index.js';
+  import * as Card from '@openshock/svelte-core/components/ui/card/index.js';
+  import { FieldDescription } from '@openshock/svelte-core/components/ui/field/index.js';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { getOAuthErrorMessage } from '$lib/auth/oauth-errors';
   import { consumeSearchParam } from '$lib/utils/url';

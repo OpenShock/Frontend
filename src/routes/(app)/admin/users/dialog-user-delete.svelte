@@ -1,7 +1,7 @@
 <script lang="ts">
   import { adminDeleteUser } from '$lib/api';
   import type { AdminUsersView } from '$lib/api';
-  import ConfirmDeleteDialog from '$lib/components/ConfirmDeleteDialog.svelte';
+  import { ConfirmDeleteDialog } from '@openshock/svelte-core/components/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { toast } from 'svelte-sonner';
 

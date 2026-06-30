@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { browser } from '$app/environment';
+  import { browser } from '$app/env';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import { accountEmailVerify } from '$lib/api';
-  import { Button } from '$lib/components/ui/button';
-  import * as Card from '$lib/components/ui/card/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import * as Card from '@openshock/svelte-core/components/ui/card/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { onMount } from 'svelte';

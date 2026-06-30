@@ -6,10 +6,10 @@
   /* eslint-disable svelte/no-navigation-without-resolve -- only contains external URLs */
   import { asset } from '$app/paths';
   import { PUBLIC_DISCORD_INVITE_URL, PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
-  import DiscordLogo from '$lib/components/svg/DiscordLogo.svelte';
-  import GithubIcon from '$lib/components/svg/GithubIcon.svelte';
-  import DotGrid from '$lib/components/DotGrid.svelte';
-  import { Button } from '$lib/components/ui/button';
+  import { DiscordLogo } from '@openshock/svelte-core/components/svg/index.js';
+  import { GithubIcon } from '@openshock/svelte-core/components/svg/index.js';
+  import { DotGrid } from '@openshock/svelte-core/components/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
   import {
     markWelcomed,
     markTourCompleted,

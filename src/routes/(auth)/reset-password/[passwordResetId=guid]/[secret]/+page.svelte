@@ -4,11 +4,11 @@
   import { page } from '$app/state';
   import KeyRound from '@lucide/svelte/icons/key-round';
   import { accountPasswordResetCheckValid, accountPasswordResetComplete } from '$lib/api';
-  import PasswordInput from '$lib/components/input/PasswordInput.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import * as Card from '$lib/components/ui/card/index.js';
+  import { PasswordInput } from '@openshock/svelte-core/components/input/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import * as Card from '@openshock/svelte-core/components/ui/card/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
+  import { validatePasswordMatch } from '@openshock/svelte-core/inputvalidation/passwordValidator.js';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { toast } from 'svelte-sonner';
 

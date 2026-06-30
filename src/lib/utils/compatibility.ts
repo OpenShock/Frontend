@@ -1,4 +1,4 @@
-import { browser } from '$app/environment';
+import { browser } from '$app/env';
 import { UAParser } from 'ua-parser-js';
 
 const parser = browser ? new UAParser(navigator.userAgent) : null;

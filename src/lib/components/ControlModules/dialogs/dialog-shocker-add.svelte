@@ -19,13 +19,13 @@
 </script>
 
 <script lang="ts">
-  import TextInput from '$lib/components/input/TextInput.svelte';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import * as Select from '$lib/components/ui/select';
-  import { Field, FieldLabel } from '$lib/components/ui/field/index.js';
-  import { Input } from '$lib/components/ui/input';
-  import type { DialogContentProps } from '$lib/components/dialog-manager/types';
+  import { TextInput } from '@openshock/svelte-core/components/input/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog/index.js';
+  import * as Select from '@openshock/svelte-core/components/ui/select/index.js';
+  import { Field, FieldLabel } from '@openshock/svelte-core/components/ui/field/index.js';
+  import { Input } from '@openshock/svelte-core/components/ui/input/index.js';
+  import type { DialogContentProps } from '@openshock/svelte-core/components/dialog-manager/index.js';
   import { RfIdMax, RfIdMin, isValidRfId } from '$lib/constants/ShockerConstants';
   import type { OwnHub } from '$lib/state/hubs-state.svelte';
 

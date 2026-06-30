@@ -7,19 +7,19 @@
     Unplug,
     Zap,
   } from '@lucide/svelte';
-  import { browser } from '$app/environment';
+  import { browser } from '$app/env';
   import type { FirmwareChannel } from '$lib/api/firmwareCDN';
-  import Container from '$lib/components/Container.svelte';
+  import { Container } from '@openshock/svelte-core/components/index.js';
   import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
-  import ChromeLogo from '$lib/components/svg/ChromeLogo.svelte';
-  import EdgeLogo from '$lib/components/svg/EdgeLogo.svelte';
-  import OperaLogo from '$lib/components/svg/OperaLogo.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import * as Card from '$lib/components/ui/card';
-  import { Checkbox } from '$lib/components/ui/checkbox';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import { Label } from '$lib/components/ui/label';
-  import { Progress } from '$lib/components/ui/progress';
+  import { ChromeLogo } from '@openshock/svelte-core/components/svg/index.js';
+  import { EdgeLogo } from '@openshock/svelte-core/components/svg/index.js';
+  import { OperaLogo } from '@openshock/svelte-core/components/svg/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import * as Card from '@openshock/svelte-core/components/ui/card/index.js';
+  import { Checkbox } from '@openshock/svelte-core/components/ui/checkbox/index.js';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog/index.js';
+  import { Label } from '@openshock/svelte-core/components/ui/label/index.js';
+  import { Progress } from '@openshock/svelte-core/components/ui/progress/index.js';
   import { useSerial } from '$lib/utils/serial-context.svelte';
   import { getBrowserName } from '$lib/utils/compatibility';
   import DeviceConfigurator from './DeviceConfigurator.svelte';

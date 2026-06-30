@@ -1,12 +1,12 @@
 <script lang="ts">
   import { PermissionType, tokensEditTokenV2 } from '$lib/api';
   import type { ShockerControlSettings, TokenResponseV2 } from '$lib/api';
-  import type { DialogContentProps } from '$lib/components/dialog-manager/types';
-  import TextInput from '$lib/components/input/TextInput.svelte';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import * as Dialog from '$lib/components/ui/dialog';
+  import type { DialogContentProps } from '@openshock/svelte-core/components/dialog-manager/index.js';
+  import { TextInput } from '@openshock/svelte-core/components/input/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import type { ValidationResult } from '$lib/types/ValidationResult';
+  import type { ValidationResult } from '@openshock/svelte-core/types/ValidationResult.js';
   import { toast } from 'svelte-sonner';
   import ShockerControlSettingsEditor from './shocker-control-settings.svelte';
 

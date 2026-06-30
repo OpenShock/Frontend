@@ -3,9 +3,9 @@
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import type { BasicUserInfo } from '$lib/api';
-  import Container from '$lib/components/Container.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import * as Tabs from '$lib/components/ui/tabs/index.js';
+  import { Container } from '@openshock/svelte-core/components/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import * as Tabs from '@openshock/svelte-core/components/ui/tabs/index.js';
   import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
   import { type Snippet, onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
@@ -14,7 +14,7 @@
   import DialogShareCodeRedeem from './dialog-share-code-redeem.svelte';
   import { resolve } from '$app/paths';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import PageHeader from '$lib/components/PageHeader.svelte';
+  import { PageHeader } from '@openshock/svelte-core/components/index.js';
 
   registerBreadcrumbs(() => [{ label: 'User Shares', href: '/shares/user/outgoing' }]);
 

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { twTextColor, type TwTextColor } from '$lib/types/Tailwind';
-  import { cn } from '$lib/utils';
+  import { twTextColor, type TwTextColor } from '@openshock/svelte-core/types/Tailwind.js';
+  import { cn } from '@openshock/svelte-core/utils/shadcn.js';
 
   interface Props {
     text: string;

@@ -1,10 +1,14 @@
 <script lang="ts">
   import { Check, ChevronsUpDown } from '@lucide/svelte';
   import { FetchVersionBoards } from '$lib/api/firmwareCDN';
-  import { Button } from '$lib/components/ui/button';
-  import * as Command from '$lib/components/ui/command';
-  import { Popover, PopoverContent, PopoverTrigger } from '$lib/components/ui/popover';
-  import { cn } from '$lib/utils';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import * as Command from '@openshock/svelte-core/components/ui/command/index.js';
+  import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+  } from '@openshock/svelte-core/components/ui/popover/index.js';
+  import { cn } from '@openshock/svelte-core/utils/shadcn.js';
 
   /** Optional chip to constrain the list of boards to */
   //export let chip: string | null = null;

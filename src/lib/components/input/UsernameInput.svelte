@@ -1,6 +1,6 @@
 <script lang="ts">
   import { accountCheckUsername } from '$lib/api';
-  import TextInput from '$lib/components/input/TextInput.svelte';
+  import { TextInput } from '@openshock/svelte-core/components/input/index.js';
   import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import {
@@ -9,9 +9,9 @@
     mapUsernameCheckResponse,
     validateUsername,
   } from '$lib/inputvalidation/usernameValidator';
-  import type { AnyComponent } from '$lib/types/AnyComponent';
-  import type { ValidationResult } from '$lib/types/ValidationResult';
-  import { useDebounce } from '$lib/utils/debounce';
+  import type { AnyComponent } from '@openshock/svelte-core/types/AnyComponent.js';
+  import type { ValidationResult } from '@openshock/svelte-core/types/ValidationResult.js';
+  import { useDebounce } from '@openshock/svelte-core/utils/debounce.js';
   import type { Snippet } from 'svelte';
   import type { FullAutoFill } from 'svelte/elements';
 

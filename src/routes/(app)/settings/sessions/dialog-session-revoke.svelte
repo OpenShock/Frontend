@@ -1,7 +1,7 @@
 <script lang="ts">
   import { sessionsDeleteSession } from '$lib/api';
   import type { LoginSessionResponse } from '$lib/api';
-  import ConfirmDeleteDialog from '$lib/components/ConfirmDeleteDialog.svelte';
+  import { ConfirmDeleteDialog } from '@openshock/svelte-core/components/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { getReadableUserAgentName } from '$lib/utils/userAgent';
   import { toast } from 'svelte-sonner';

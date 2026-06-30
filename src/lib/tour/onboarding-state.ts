@@ -1,5 +1,5 @@
 import { PUBLIC_DISABLE_ONBOARDING } from '$env/static/public';
-import { isTruthy } from '$lib/utils/parse';
+import { isTruthy } from '@openshock/svelte-core/utils/parse.js';
 
 export const WELCOME_COOKIE_NAME = 'os.welcomed';
 // Pre-cookie builds stored "welcome seen" under this localStorage key. Kept only

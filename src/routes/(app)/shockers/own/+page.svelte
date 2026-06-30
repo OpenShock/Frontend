@@ -1,13 +1,13 @@
 <script lang="ts">
   import { PUBLIC_DISABLE_SHOCKER_MAP } from '$env/static/public';
-  import { isTruthy } from '$lib/utils/parse';
+  import { isTruthy } from '@openshock/svelte-core/utils/parse.js';
   import { shockerPauseShocker, shockerRegisterShocker } from '$lib/api';
   import type { NewShocker } from '$lib/api';
   import { Layers, LogsIcon, Plus, RotateCcw, Settings, Zap } from '@lucide/svelte';
   import { resolve } from '$app/paths';
-  import Container from '$lib/components/Container.svelte';
-  import { Spinner } from '$lib/components/ui/spinner';
-  import EmptyState from '$lib/components/EmptyState.svelte';
+  import { Container } from '@openshock/svelte-core/components/index.js';
+  import { Spinner } from '@openshock/svelte-core/components/ui/spinner/index.js';
+  import { EmptyState } from '@openshock/svelte-core/components/index.js';
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import DialogShockerAdd, {
     defaultAddShockerData,
@@ -22,9 +22,9 @@
   import ShockerPauseButton from '$lib/components/ControlModules/impl/ShockerPauseButton.svelte';
   import SimpleControlHeader from '$lib/components/ControlModules/SimpleControlHeader.svelte';
   import SimpleControlModule from '$lib/components/ControlModules/SimpleControlModule.svelte';
-  import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import * as Popover from '$lib/components/ui/popover';
+  import { dialog } from '@openshock/svelte-core/components/dialog-manager/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import * as Popover from '@openshock/svelte-core/components/ui/popover/index.js';
   import { ControlDurationDefault, ControlIntensityDefault } from '$lib/constants/ControlConstants';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { ControlType } from '$lib/signalr/models/ControlType';
@@ -38,7 +38,7 @@
     LiveConnectionState,
     registerHubShockers,
   } from '$lib/state/live-control-state.svelte';
-  import { PersistedState } from '$lib/state/classes/persisted-state.svelte';
+  import { PersistedState } from '@openshock/svelte-core/state/classes/persisted-state.svelte.js';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
 

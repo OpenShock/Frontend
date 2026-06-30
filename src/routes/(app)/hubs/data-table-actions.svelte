@@ -6,22 +6,22 @@
     devicesRemoveDevice,
   } from '$lib/api';
   import { goto } from '$app/navigation';
-  import CopyInput from '$lib/components/CopyInput.svelte';
-  import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
-  import type { DialogRenderProps } from '$lib/components/dialog-manager/types';
-  import TextInput from '$lib/components/input/TextInput.svelte';
-  import TableActionMenu from '$lib/components/TableActionMenu.svelte';
-  import { Badge } from '$lib/components/ui/badge';
-  import { Button } from '$lib/components/ui/button';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+  import { CopyInput } from '@openshock/svelte-core/components/index.js';
+  import { dialog } from '@openshock/svelte-core/components/dialog-manager/index.js';
+  import type { DialogRenderProps } from '@openshock/svelte-core/components/dialog-manager/index.js';
+  import { TextInput } from '@openshock/svelte-core/components/input/index.js';
+  import { TableActionMenu } from '@openshock/svelte-core/components/index.js';
+  import { Badge } from '@openshock/svelte-core/components/ui/badge/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog/index.js';
+  import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { getConnection } from '$lib/signalr/user.svelte';
   import { serializeCaptivePortalMessage } from '$lib/signalr/serializers/CaptivePortal';
   import { serializeEmergencyStopMessage } from '$lib/signalr/serializers/EmergencyStop';
   import { serializeRebootMessage } from '$lib/signalr/serializers/Reboot';
   import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
-  import { copyToClipboard } from '$lib/utils/clipboard.svelte';
+  import { copyToClipboard } from '@openshock/svelte-core/utils/clipboard.svelte.js';
   import {
     Copy,
     KeyRound,

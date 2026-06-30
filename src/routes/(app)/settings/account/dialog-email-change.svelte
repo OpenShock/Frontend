@@ -2,10 +2,10 @@
   import { authenticatedAccountChangeEmail } from '$lib/api';
   import KeyRound from '@lucide/svelte/icons/key-round';
   import Mail from '@lucide/svelte/icons/mail';
-  import EmailInput from '$lib/components/input/EmailInput.svelte';
-  import PasswordInput from '$lib/components/input/PasswordInput.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import * as Dialog from '$lib/components/ui/dialog';
+  import { EmailInput } from '@openshock/svelte-core/components/input/index.js';
+  import { PasswordInput } from '@openshock/svelte-core/components/input/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import type { ApiUserSelf } from '$lib/types/ApiUser';
   import { toast } from 'svelte-sonner';
