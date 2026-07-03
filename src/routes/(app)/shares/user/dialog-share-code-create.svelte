@@ -4,9 +4,9 @@
   import { Barcode, User } from '@lucide/svelte';
   import RestrictionsSelector from '$lib/components/shares/restrictions-selector.svelte';
   import UserSelector from '$lib/components/shares/user-selector.svelte';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import MultiSelectCombobox from '$lib/components/ui/multi-select-combobox/multi-select-combobox.svelte';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog/index.js';
+  import MultiSelectCombobox from '@openshock/svelte-core/components/multi-select-combobox/multi-select-combobox.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { ownHubs } from '$lib/state/hubs-state.svelte';
   import { refreshOutgoingInvites } from '$lib/state/user-shares-state.svelte';

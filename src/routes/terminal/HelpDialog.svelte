@@ -1,12 +1,12 @@
 <script lang="ts">
   import ArrowDownToLine from '@lucide/svelte/icons/arrow-down-to-line';
   import { PUBLIC_DISCORD_INVITE_URL } from '$env/static/public';
-  import Code from '$lib/components/Code.svelte';
-  import Keyboard from '$lib/components/Keyboard.svelte';
+  import { Code } from '@openshock/svelte-core/components/index.js';
+  import { Keyboard } from '@openshock/svelte-core/components/index.js';
   import Stepper, { type StepperStep } from '$lib/components/Stepper.svelte';
-  import DiscordLogo from '$lib/components/svg/DiscordLogo.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import * as Dialog from '$lib/components/ui/dialog';
+  import { DiscordLogo } from '@openshock/svelte-core/components/svg/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog/index.js';
 
   interface Props {
     open: boolean;
@@ -74,6 +74,7 @@
       <Button
         href="https://download.openshock.org/drivers/CP210x_Universal_Windows_Driver.zip"
         target="_blank"
+        rel="noopener"
       >
         <ArrowDownToLine />
         CP210x Universal Windows Driver
@@ -128,7 +129,7 @@
       <li>what you've already tried from the previous steps</li>
       <li>any error messages or relevant terminal output</li>
     </ul>
-    <Button href={PUBLIC_DISCORD_INVITE_URL} target="_blank" class="w-fit">
+    <Button href={PUBLIC_DISCORD_INVITE_URL} target="_blank" rel="noopener" class="w-fit">
       <DiscordLogo class="fill-white dark:fill-black" />
       Join our Discord server
     </Button>

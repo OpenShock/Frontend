@@ -6,7 +6,7 @@
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
   import type { SortingState } from '@tanstack/table-core';
   import type { ColumnDef } from '@tanstack/table-core';
-  import Container from '$lib/components/Container.svelte';
+  import { Container, PageHeader } from '@openshock/svelte-core/components/index.js';
   import {
     CreateActionsColumnDef,
     CreateColumnDef,
@@ -16,8 +16,7 @@
     TimeSinceRelativeOrNeverRenderer,
   } from '$lib/components/Table/ColumnUtils';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import PageHeader from '$lib/components/PageHeader.svelte';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
@@ -43,8 +42,7 @@
   }
 
   function onEdit(id: string, updater: (token: TokenResponseV2) => TokenResponseV2) {
-    const idx = tokens.findIndex((t) => t.id === id);
-    if (idx !== -1) tokens[idx] = updater(tokens[idx]);
+    tokens = tokens.map((t) => (t.id === id ? updater(t) : t));
   }
 
   function onDeleted(id: string) {

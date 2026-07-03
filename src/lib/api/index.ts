@@ -7,9 +7,9 @@ client.interceptors.error.use((error, response, request) => {
     const method = request?.method ?? '';
     const msg = `${method} ${url} → ${response.status}`;
     if (response.status === 429) {
-      return new RateLimitError(response, parseRetryAfter(response), msg);
+      return new RateLimitError(response, parseRetryAfter(response), msg, error);
     }
-    return new ResponseError(response, msg);
+    return new ResponseError(response, msg, error);
   }
   if (error instanceof Error) return new FetchError(error, error.message);
   return new FetchError(new Error(String(error)), 'Unknown fetch error');
@@ -24,7 +24,6 @@ export {
   accountLogout,
   accountPasswordResetCheckValid,
   accountPasswordResetComplete,
-  accountPasswordResetInitiate,
   adminAddEmailProviderBlacklist,
   adminAddUsernameBlacklist,
   adminAddWebhook,
@@ -32,6 +31,7 @@ export {
   adminConfigurationDelete,
   adminConfigurationList,
   adminConfigurationUpdate,
+  adminDeleteUser,
   adminGetOnlineDevices,
   adminGetUsers,
   adminListEmailProviderBlacklist,
@@ -125,6 +125,7 @@ export type {
 export {
   accountCheckUsername,
   accountLoginV2,
+  accountPasswordResetInitiateV2,
   accountSignUpV2,
   devicesCreateDeviceV2,
   tokensCreateTokenV2,

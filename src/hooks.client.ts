@@ -1,12 +1,14 @@
+import 'temporal-polyfill/global';
+
 import { base } from '$app/paths';
 import { versionGetBackendInfo } from '$lib/api';
 import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 import { authState, startAuthLifecycle } from '$lib/state/auth-state.svelte';
 import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
-import { initializeColorScheme } from '$lib/state/color-scheme-state.svelte';
 import { userState } from '$lib/state/user-state.svelte';
 import { initTelemetry, log } from '$lib/telemetry/logger';
 import { redirectLegacyHashRoute } from '$lib/utils/legacy-hash-redirect';
+import { initializeColorScheme } from '@openshock/svelte-core/state/color-scheme-state.svelte.js';
 import type { HandleClientError } from '@sveltejs/kit';
 
 /** Best-effort extraction of a message + stack from an unknown thrown value. */
@@ -56,12 +58,6 @@ function registerGlobalErrorCapture(): void {
   };
 }
 
-async function ensureTemporal(): Promise<void> {
-  if (typeof (globalThis as { Temporal?: unknown }).Temporal === 'undefined') {
-    await import('temporal-polyfill/global');
-  }
-}
-
 async function clientInit(): Promise<void> {
   const { data } = await versionGetBackendInfo();
   backendMetadata.set(data);
@@ -80,7 +76,6 @@ export async function init() {
   initTelemetry();
   registerGlobalErrorCapture();
   redirectLegacyHashRoute(base);
-  await ensureTemporal();
   await clientInit().catch(handleApiError);
   initializeColorScheme();
 }

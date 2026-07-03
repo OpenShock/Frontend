@@ -1,12 +1,12 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import { accountPasswordResetInitiate } from '$lib/api';
+  import { accountPasswordResetInitiateV2 } from '$lib/api';
   import Turnstile from '$lib/components/Turnstile.svelte';
-  import EmailInput from '$lib/components/input/EmailInput.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import * as Card from '$lib/components/ui/card/index.js';
-  import { Field, FieldDescription } from '$lib/components/ui/field/index.js';
+  import { EmailInput } from '@openshock/svelte-core/components/input/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import * as Card from '@openshock/svelte-core/components/ui/card/index.js';
+  import { Field, FieldDescription } from '@openshock/svelte-core/components/ui/field/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { toast } from 'svelte-sonner';
@@ -25,7 +25,7 @@
       return;
     }
 
-    accountPasswordResetInitiate({ body: { email } })
+    accountPasswordResetInitiateV2({ body: { email, turnstileResponse } })
       .then(() => {
         toast.success('Reset password request has been sent to the given email');
         goto(resolve('/login'));

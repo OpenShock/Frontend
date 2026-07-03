@@ -1,15 +1,14 @@
 <script lang="ts">
-  import { shockerPauseShocker, shockerRemoveShocker } from '$lib/api';
+  import { shockerRemoveShocker } from '$lib/api';
   import type { ShockerResponse } from '$lib/api';
-  import { Copy, Ellipsis, Logs, Pause, Pencil, Play, Share2, Trash2 } from '@lucide/svelte';
+  import { Copy, Ellipsis, Logs, Pencil, Share2, Trash2 } from '@lucide/svelte';
   import { goto } from '$app/navigation';
-  import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import { Spinner } from '$lib/components/ui/spinner';
-  import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+  import { dialog } from '@openshock/svelte-core/components/dialog-manager/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
-  import { copyToClipboard } from '$lib/utils/clipboard.svelte';
+  import { copyToClipboard } from '@openshock/svelte-core/utils/clipboard.svelte.js';
   import { resolve } from '$app/paths';
   import { toast } from 'svelte-sonner';
 
@@ -18,8 +17,6 @@
   }
 
   let { shocker }: Props = $props();
-
-  let pauseLoading = $state(false);
 
   function copyId() {
     copyToClipboard(shocker.id, 'ID copied to clipboard');
@@ -35,22 +32,6 @@
 
   function shareShocker() {
     goto(resolve(`/shares/user/outgoing?share=${shocker.id}`));
-  }
-
-  async function togglePause() {
-    pauseLoading = true;
-    try {
-      const result = await shockerPauseShocker({
-        path: { shockerId: shocker.id },
-        body: { pause: !shocker.isPaused },
-      });
-      shocker.isPaused = result.data ?? shocker.isPaused;
-      toast.success(shocker.isPaused ? 'Shocker paused' : 'Shocker resumed');
-    } catch (error) {
-      handleApiError(error);
-    } finally {
-      pauseLoading = false;
-    }
   }
 
   async function deleteShocker() {
@@ -82,16 +63,6 @@
   <DropdownMenu.Content>
     <DropdownMenu.Label>Shocker</DropdownMenu.Label>
     <DropdownMenu.Group>
-      <DropdownMenu.Item class="cursor-pointer" onclick={togglePause} disabled={pauseLoading}>
-        {#if pauseLoading}
-          <Spinner class="size-4" />
-        {:else if shocker.isPaused}
-          <Play class="size-4" />
-        {:else}
-          <Pause class="size-4" />
-        {/if}
-        {shocker.isPaused ? 'Resume' : 'Pause'}
-      </DropdownMenu.Item>
       <DropdownMenu.Item class="cursor-pointer" onclick={editShocker}>
         <Pencil class="size-4" />
         Edit

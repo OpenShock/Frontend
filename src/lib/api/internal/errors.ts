@@ -2,7 +2,13 @@ export class ResponseError extends Error {
   override name = 'ResponseError';
   constructor(
     public response: Response,
-    msg?: string
+    msg?: string,
+    /**
+     * The parsed response body. The HTTP client consumes the response body
+     * before this error is constructed, so `response.json()` would throw
+     * "Body has already been consumed". Read the already-parsed body from here.
+     */
+    public body?: unknown
   ) {
     super(msg);
   }
@@ -14,9 +20,10 @@ export class RateLimitError extends ResponseError {
     response: Response,
     /** Suggested wait in milliseconds parsed from Retry-After / X-RateLimit-Reset headers. */
     public retryAfterMs: number | null,
-    msg?: string
+    msg?: string,
+    body?: unknown
   ) {
-    super(response, msg);
+    super(response, msg, body);
   }
 }
 

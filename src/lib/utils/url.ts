@@ -183,6 +183,54 @@ export function isValidRedirectParam(value: string): boolean {
 }
 
 /**
+ * URL schemes that must never be used as a token redirect target. Navigating
+ * `window.location` to any of these can execute script or render
+ * attacker-controlled content in the page's origin.
+ */
+const DANGEROUS_REDIRECT_SCHEMES = new Set(['javascript:', 'data:', 'vbscript:', 'file:', 'blob:']);
+
+/** Loopback hostnames permitted for local `http(s)` token redirect targets. */
+const LOOPBACK_HOSTNAMES = new Set(['localhost', '127.0.0.1', '[::1]', '::1']);
+
+/**
+ * Validates a `redirect_uri` for the external-application API-token grant flow.
+ *
+ * In that flow a freshly minted token is handed to an external app by
+ * navigating the browser to its redirect URI, so this is deliberately more
+ * permissive than {@link isValidRedirectParam} — it allows custom application
+ * schemes (e.g. `shockosc://callback`) and remote `https` origins (for
+ * web-based integrations). To prevent the token from being exfiltrated it
+ * rejects:
+ *  - dangerous schemes that can execute script or render HTML
+ *    (`javascript:`, `data:`, …)
+ *  - remote cleartext `http` origins — a token must never travel unencrypted
+ *    to a remote origin; `http` is only allowed for loopback addresses (for
+ *    local apps)
+ *
+ * @param value - The raw `redirect_uri` query parameter
+ * @returns Whether the value is a safe token redirect target
+ */
+export function isValidTokenRedirectUri(value: string): boolean {
+  let url: URL;
+  try {
+    url = new URL(value);
+  } catch {
+    return false;
+  }
+
+  if (DANGEROUS_REDIRECT_SCHEMES.has(url.protocol)) return false;
+
+  // Cleartext http may only target loopback — a token must never travel
+  // unencrypted to a remote origin. https and custom (application) schemes are
+  // allowed through, since https keeps the token confidential in transit.
+  if (url.protocol === 'http:') {
+    return LOOPBACK_HOSTNAMES.has(url.hostname);
+  }
+
+  return true;
+}
+
+/**
  * Strips an invalid redirect query parameter from the current URL bar.
  *
  * Reads the given query parameter from SvelteKit's {@link page} state.

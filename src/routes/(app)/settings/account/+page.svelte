@@ -4,9 +4,12 @@
   import Mail from '@lucide/svelte/icons/mail';
   import User from '@lucide/svelte/icons/user';
   import { PUBLIC_SIGNOZ_LOGS_ENABLED } from '$env/static/public';
-  import Container from '$lib/components/Container.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import { ToggleGroup, ToggleGroupItem } from '$lib/components/ui/toggle-group';
+  import { Container } from '@openshock/svelte-core/components/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import {
+    ToggleGroup,
+    ToggleGroupItem,
+  } from '@openshock/svelte-core/components/ui/toggle-group/index.js';
   import {
     telemetryConsent,
     telemetryPrompted,

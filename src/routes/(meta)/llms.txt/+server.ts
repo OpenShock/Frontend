@@ -5,9 +5,9 @@ import {
   PUBLIC_SITE_DESCRIPTION,
   PUBLIC_SITE_NAME,
 } from '$env/static/public';
-import { isTruthy } from '$lib/utils/parse';
 import { paths } from '$lib/utils/public-routes';
 import { getBackendURL, getSiteURL } from '$lib/utils/url';
+import { isTruthy } from '@openshock/svelte-core/utils/parse.js';
 import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 

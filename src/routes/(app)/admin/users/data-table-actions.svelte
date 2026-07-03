@@ -1,18 +1,19 @@
 <script lang="ts">
   import { RoleType } from '$lib/api';
   import type { AdminUsersView } from '$lib/api';
-  import TableActionMenu from '$lib/components/TableActionMenu.svelte';
-  import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-  import { copyToClipboard } from '$lib/utils/clipboard.svelte';
+  import { TableActionMenu } from '@openshock/svelte-core/components/index.js';
+  import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu/index.js';
+  import { copyToClipboard } from '@openshock/svelte-core/utils/clipboard.svelte.js';
   import { Copy, KeyRound, Pencil, ShieldPlus, Trash2 } from '@lucide/svelte';
   import UserDeleteDialog from './dialog-user-delete.svelte';
   import UserEditDialog from './dialog-user-edit.svelte';
 
   interface Props {
     user: AdminUsersView;
+    onDeleted?: () => void;
   }
 
-  let { user }: Props = $props();
+  let { user, onDeleted }: Props = $props();
 
   let editDialogOpen = $state<boolean>(false);
   let deleteDialogOpen = $state<boolean>(false);
@@ -24,7 +25,7 @@
 </script>
 
 <UserEditDialog bind:open={editDialogOpen} {user} />
-<UserDeleteDialog bind:open={deleteDialogOpen} {user} />
+<UserDeleteDialog bind:open={deleteDialogOpen} {user} {onDeleted} />
 
 <TableActionMenu>
   <DropdownMenu.Label>User</DropdownMenu.Label>

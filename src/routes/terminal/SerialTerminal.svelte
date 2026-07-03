@@ -9,7 +9,7 @@
     Clock,
     Code,
   } from '@lucide/svelte';
-  import { Button } from '$lib/components/ui/button';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
   import { stripAnsi } from './ansi';
   import { LOG_LEVEL_COLORS } from './constants';
   import type { TerminalLine } from './types';
@@ -308,7 +308,14 @@
         placeholder="Type a command..."
         {disabled}
       />
-      <Button size="sm" variant="ghost" onclick={sendCommand} {disabled}>
+      <Button
+        size="sm"
+        variant="ghost"
+        onclick={sendCommand}
+        {disabled}
+        title="Send command"
+        aria-label="Send command"
+      >
         <Send class="h-3.5 w-3.5" />
       </Button>
     </div>

@@ -19,7 +19,7 @@ const sharedPlugins = [
   },
   {
     name: '@hey-api/transformers',
-    dates: true,
+    dates: 'temporal',
   },
 ] as const;
 

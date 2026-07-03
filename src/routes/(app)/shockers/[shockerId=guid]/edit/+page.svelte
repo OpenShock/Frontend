@@ -9,15 +9,16 @@
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
-  import Container from '$lib/components/Container.svelte';
-  import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
-  import TextInput from '$lib/components/input/TextInput.svelte';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import { Spinner } from '$lib/components/ui/spinner';
-  import * as Card from '$lib/components/ui/card';
-  import { Field, FieldLabel } from '$lib/components/ui/field/index.js';
-  import { Input } from '$lib/components/ui/input';
-  import * as Select from '$lib/components/ui/select';
+  import { Container } from '@openshock/svelte-core/components/index.js';
+  import { dialog } from '@openshock/svelte-core/components/dialog-manager/index.js';
+  import { RfIdMax, RfIdMin, isValidRfId } from '$lib/constants/ShockerConstants';
+  import { TextInput } from '@openshock/svelte-core/components/input/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import { Spinner } from '@openshock/svelte-core/components/ui/spinner/index.js';
+  import * as Card from '@openshock/svelte-core/components/ui/card/index.js';
+  import { Field, FieldLabel } from '@openshock/svelte-core/components/ui/field/index.js';
+  import { Input } from '@openshock/svelte-core/components/ui/input/index.js';
+  import * as Select from '@openshock/svelte-core/components/ui/select/index.js';
   import PauseToggle from '$lib/components/utils/PauseToggle.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
@@ -43,6 +44,8 @@
       (name.trim() !== shocker.name || rfId !== shocker.rfId || model !== shocker.model)
   );
 
+  let rfIdValid = $derived(isValidRfId(rfId));
+
   onMount(async () => {
     try {
       const shockerId = page.params.shockerId!;
@@ -58,7 +61,7 @@
   });
 
   async function save() {
-    if (!shocker || !name.trim()) return;
+    if (!shocker || !name.trim() || !rfIdValid) return;
     saving = true;
     try {
       await shockerEditShocker({
@@ -134,7 +137,12 @@
 
           <Field class="gap-2">
             <FieldLabel>RF ID</FieldLabel>
-            <Input type="number" bind:value={rfId} min={1} />
+            <Input type="number" bind:value={rfId} min={RfIdMin} max={RfIdMax} step={1} />
+            {#if !rfIdValid}
+              <span class="text-destructive text-sm">
+                RF ID must be a whole number between {RfIdMin} and {RfIdMax}.
+              </span>
+            {/if}
           </Field>
 
           <Field class="gap-2">
@@ -171,7 +179,7 @@
           </Field>
         </Card.Content>
         <Card.Footer>
-          <Button disabled={saving || !name.trim() || !hasChanges} onclick={save}>
+          <Button disabled={saving || !name.trim() || !rfIdValid || !hasChanges} onclick={save}>
             {#if saving}<Spinner class="size-4" />{/if}
             Save Changes
           </Button>

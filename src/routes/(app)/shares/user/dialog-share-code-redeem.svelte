@@ -2,12 +2,12 @@
   import { userSharesRedeemInvite } from '$lib/api';
   import type { V2UserSharesListItem } from '$lib/api';
   import { Barcode, Zap } from '@lucide/svelte';
-  import * as Avatar from '$lib/components/ui/avatar';
-  import Badge from '$lib/components/ui/badge/badge.svelte';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import { Input } from '$lib/components/ui/input';
-  import * as Tooltip from '$lib/components/ui/tooltip';
+  import * as Avatar from '@openshock/svelte-core/components/ui/avatar/index.js';
+  import { Badge } from '@openshock/svelte-core/components/ui/badge/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog/index.js';
+  import { Input } from '@openshock/svelte-core/components/ui/input/index.js';
+  import * as Tooltip from '@openshock/svelte-core/components/ui/tooltip/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { refreshOutgoingInvites, refreshUserShares } from '$lib/state/user-shares-state.svelte';
 

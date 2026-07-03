@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { LoginSessionResponse } from '$lib/api';
-  import { Badge } from '$lib/components/ui/badge';
-  import { Button } from '$lib/components/ui/button';
-  import { formatElapsed, durationBetween } from '$lib/utils/temporal';
+  import { Badge } from '@openshock/svelte-core/components/ui/badge/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import { formatElapsed, durationBetween } from '@openshock/svelte-core/utils/index.js';
   import { getReadableUserAgentName } from '$lib/utils/userAgent';
   import { UAParser } from 'ua-parser-js';
   import Monitor from '@lucide/svelte/icons/monitor';

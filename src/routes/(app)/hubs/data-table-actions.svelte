@@ -6,23 +6,24 @@
     devicesRemoveDevice,
   } from '$lib/api';
   import { goto } from '$app/navigation';
-  import CopyInput from '$lib/components/CopyInput.svelte';
-  import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
-  import type { DialogRenderProps } from '$lib/components/dialog-manager/types';
-  import TextInput from '$lib/components/input/TextInput.svelte';
-  import TableActionMenu from '$lib/components/TableActionMenu.svelte';
-  import { Badge } from '$lib/components/ui/badge';
-  import { Button } from '$lib/components/ui/button';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+  import { CopyInput } from '@openshock/svelte-core/components/index.js';
+  import { dialog } from '@openshock/svelte-core/components/dialog-manager/index.js';
+  import type { DialogRenderProps } from '@openshock/svelte-core/components/dialog-manager/index.js';
+  import { TextInput } from '@openshock/svelte-core/components/input/index.js';
+  import { TableActionMenu } from '@openshock/svelte-core/components/index.js';
+  import { Badge } from '@openshock/svelte-core/components/ui/badge/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog/index.js';
+  import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { getConnection } from '$lib/signalr/user.svelte';
   import { serializeCaptivePortalMessage } from '$lib/signalr/serializers/CaptivePortal';
   import { serializeEmergencyStopMessage } from '$lib/signalr/serializers/EmergencyStop';
   import { serializeRebootMessage } from '$lib/signalr/serializers/Reboot';
-  import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
-  import { copyToClipboard } from '$lib/utils/clipboard.svelte';
+  import { hubPairedSignals, refreshOwnHubs } from '$lib/state/hubs-state.svelte';
+  import { copyToClipboard } from '@openshock/svelte-core/utils/clipboard.svelte.js';
   import {
+    CircleCheck,
     Copy,
     KeyRound,
     Link,
@@ -79,8 +80,8 @@
   }
 
   async function openPairDialog() {
-    await dialog.open<{ loading: boolean; code: string | null }>({
-      data: { loading: false, code: null },
+    await dialog.open<{ loading: boolean; code: string | null; pairedBaseline: number }>({
+      data: { loading: false, code: null, pairedBaseline: 0 },
       contentSnippet: pairSnippet,
     });
   }
@@ -92,8 +93,14 @@
     });
   }
 
-  async function generatePairCode(data: { loading: boolean; code: string | null }) {
+  async function generatePairCode(data: {
+    loading: boolean;
+    code: string | null;
+    pairedBaseline: number;
+  }) {
     data.loading = true;
+    // Snapshot the paired counter so we only react to a consumption of *this* code.
+    data.pairedBaseline = hubPairedSignals.get(hub.id) ?? 0;
     try {
       const resp = await devicesGetPairCode({ path: { deviceId: hub.id } });
       data.code = resp.data;
@@ -134,18 +141,27 @@
   </div>
 {/snippet}
 
-{#snippet pairSnippet(props: DialogRenderProps<{ loading: boolean; code: string | null }>)}
+{#snippet pairSnippet(
+  props: DialogRenderProps<{ loading: boolean; code: string | null; pairedBaseline: number }>
+)}
+  {@const consumed =
+    !!props.data.code && (hubPairedSignals.get(hub.id) ?? 0) > props.data.pairedBaseline}
   <Dialog.Header>
     <Dialog.Title>
       {props.data.loading
         ? 'Generating...'
-        : props.data.code
-          ? 'Pair code generated'
-          : 'Generate pair code?'}
+        : consumed
+          ? 'Hub paired'
+          : props.data.code
+            ? 'Pair code generated'
+            : 'Generate pair code?'}
     </Dialog.Title>
     {#if !props.data.loading}
       <Dialog.Description>
-        {#if props.data.code}
+        {#if consumed}
+          <strong>{hub.name}</strong> consumed this pair code and is now paired.<br />
+          The code has been used and is no longer valid.
+        {:else if props.data.code}
           Pair code generated for <strong>{hub.name}</strong><br />
           The code below will not be accessible later, please copy it now and update clients with it
         {:else}
@@ -158,7 +174,13 @@
     {/if}
   </Dialog.Header>
   {#if !props.data.loading}
-    {#if props.data.code}
+    {#if consumed}
+      <div class="flex items-center gap-2 text-green-500">
+        <CircleCheck class="size-5" />
+        <span class="text-sm font-medium">Pairing complete</span>
+      </div>
+      <Button onclick={props.close}>Done</Button>
+    {:else if props.data.code}
       <div>
         <strong class="text-muted-foreground text-sm font-medium">Pair code:</strong>
         <CopyInput value={props.data.code} />

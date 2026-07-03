@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { WebhookDto } from '$lib/api';
-  import TableActionMenu from '$lib/components/TableActionMenu.svelte';
-  import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-  import { copyToClipboard } from '$lib/utils/clipboard.svelte';
+  import { TableActionMenu } from '@openshock/svelte-core/components/index.js';
+  import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu/index.js';
+  import { copyToClipboard } from '@openshock/svelte-core/utils/clipboard.svelte.js';
   import { Copy, Pencil, Trash2 } from '@lucide/svelte';
   import WebhookDeleteDialog from './dialog-webhook-delete.svelte';
 

@@ -1,4 +1,4 @@
-import { isNumber } from '$lib/typeguards';
+import { isNumber } from '@openshock/svelte-core/typeguards/index.js';
 
 export enum ControlType {
   Stop = 0,

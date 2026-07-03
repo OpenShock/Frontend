@@ -7,11 +7,10 @@
   import { page } from '$app/state';
   import type { OAuthConnectionResponse } from '$lib/api';
   import { GetOAuthAuthorizeUrl } from '$lib/api/next/oauth';
-  import Container from '$lib/components/Container.svelte';
-  import PageHeader from '$lib/components/PageHeader.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import * as Dropdown from '$lib/components/ui/dropdown-menu';
-  import * as Separator from '$lib/components/ui/separator';
+  import { Container, PageHeader, EmptyState } from '@openshock/svelte-core/components/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import * as Dropdown from '@openshock/svelte-core/components/ui/dropdown-menu/index.js';
+  import * as Separator from '@openshock/svelte-core/components/ui/separator/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
@@ -157,12 +156,11 @@
         {/each}
       </div>
     {:else if connections.length === 0}
-      <div class="rounded-xl border p-6 text-sm">
-        <div class="mb-2 font-medium">No connections yet</div>
-        <div class="text-muted-foreground">
-          Choose “Link new provider” above to connect available providers.
-        </div>
-      </div>
+      <EmptyState
+        icon={Link2}
+        title="No connections yet"
+        description="Choose “Link new provider” above to connect available providers."
+      />
     {:else}
       <div class="grid gap-3 md:grid-cols-2">
         {#each backendMetadata.state!.oAuthProviders as p (p)}

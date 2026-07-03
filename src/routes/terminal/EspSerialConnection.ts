@@ -1,5 +1,5 @@
-import { DecodeString, EncodeString } from '$lib/utils';
-import { md5 } from '$lib/utils/md5';
+import { DecodeString, EncodeString } from '@openshock/svelte-core/utils/index.js';
+import { md5 } from '@openshock/svelte-core/utils/md5.js';
 import { ESPLoader, type IEspLoaderTerminal, type LoaderOptions, Transport } from 'esptool-js';
 import { toast } from 'svelte-sonner';
 
@@ -17,7 +17,6 @@ async function setupESPLoader(
     /* empty */
   }
 
-  console.log('setupESPLoader: ', serialPort);
   const transport = new Transport(serialPort);
 
   const flashOptions = {
@@ -75,8 +74,6 @@ async function setupApplication(serialPort: SerialPort): Promise<SerialPort> {
   } catch {
     /* empty */
   }
-
-  console.log('setupApplication: ', serialPort);
 
   try {
     // Need to connect to the ESP32 using the right settings.
@@ -310,7 +307,7 @@ export default class EspSerialConnection {
           }
         }
       } catch (e) {
-        console.log(e);
+        console.error(e);
         this.terminal.writeLine(`firmware disconnected: ${e}`);
       } finally {
         try {
@@ -347,11 +344,9 @@ export default class EspSerialConnection {
   }
 
   async disconnect() {
-    console.log('Disconnecting');
     await this._cycleTransport();
     this.serialPort = null;
     this.terminal.clean();
-    console.log('Disconnected');
   }
 
   async erase() {

@@ -1,12 +1,13 @@
 <script lang="ts">
   import { PUBLIC_DISABLE_SHOCKER_MAP } from '$env/static/public';
-  import { isTruthy } from '$lib/utils/parse';
+  import { isTruthy } from '@openshock/svelte-core/utils/parse.js';
   import { shockerPauseShocker, shockerRegisterShocker } from '$lib/api';
   import type { NewShocker } from '$lib/api';
   import { Layers, LogsIcon, Plus, RotateCcw, Settings, Zap } from '@lucide/svelte';
   import { resolve } from '$app/paths';
-  import Container from '$lib/components/Container.svelte';
-  import { Spinner } from '$lib/components/ui/spinner';
+  import { Container } from '@openshock/svelte-core/components/index.js';
+  import { Spinner } from '@openshock/svelte-core/components/ui/spinner/index.js';
+  import { EmptyState } from '@openshock/svelte-core/components/index.js';
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import DialogShockerAdd, {
     defaultAddShockerData,
@@ -18,11 +19,12 @@
   import RichControlModule from '$lib/components/ControlModules/RichControlModule.svelte';
   import ShockerCard from '$lib/components/ControlModules/ShockerCard.svelte';
   import ShockerMenu from '$lib/components/ControlModules/impl/ShockerMenu.svelte';
+  import ShockerPauseButton from '$lib/components/ControlModules/impl/ShockerPauseButton.svelte';
   import SimpleControlHeader from '$lib/components/ControlModules/SimpleControlHeader.svelte';
   import SimpleControlModule from '$lib/components/ControlModules/SimpleControlModule.svelte';
-  import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import * as Popover from '$lib/components/ui/popover';
+  import { dialog } from '@openshock/svelte-core/components/dialog-manager/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import * as Popover from '@openshock/svelte-core/components/ui/popover/index.js';
   import { ControlDurationDefault, ControlIntensityDefault } from '$lib/constants/ControlConstants';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { ControlType } from '$lib/signalr/models/ControlType';
@@ -36,7 +38,7 @@
     LiveConnectionState,
     registerHubShockers,
   } from '$lib/state/live-control-state.svelte';
-  import { PersistedState } from '$lib/state/classes/persisted-state.svelte';
+  import { PersistedState } from '@openshock/svelte-core/state/classes/persisted-state.svelte.js';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
 
@@ -162,6 +164,9 @@
   >
     {#snippet live()}
       <LiveButton {hubId} shockerId={shocker.id} compact />
+    {/snippet}
+    {#snippet pause()}
+      <ShockerPauseButton {shocker} />
     {/snippet}
     {#snippet menu()}
       <ShockerMenu {shocker} />
@@ -293,22 +298,23 @@
     <hr class="border-border" />
 
     {#if shockers.length === 0}
-      <div class="flex flex-col items-center justify-center gap-4 py-16">
-        <Zap class="text-muted-foreground size-12" />
-        <div class="text-center">
-          <h2 class="text-lg font-semibold">No shockers yet</h2>
-          <p class="text-muted-foreground text-sm">
-            {#if ownHubs.size === 0}
-              Create a hub first, then add shockers to it.
-            {:else}
-              Add a shocker to one of your hubs to get started.
-            {/if}
-          </p>
-        </div>
-        <Button onclick={openAddShockerDialog} disabled={ownHubs.size === 0}>
-          <Plus class="size-4" /> Add Shocker
-        </Button>
-      </div>
+      <EmptyState
+        icon={Zap}
+        title="No shockers yet"
+        description={ownHubs.size === 0
+          ? 'Create a hub first, then add shockers to it.'
+          : 'Add a shocker to one of your hubs to get started.'}
+      >
+        {#if ownHubs.size === 0}
+          <Button size="lg" href={resolve('/hubs')}>
+            <Plus class="size-4" /> Create a Hub
+          </Button>
+        {:else}
+          <Button size="lg" onclick={openAddShockerDialog}>
+            <Plus class="size-4" /> Add Shocker
+          </Button>
+        {/if}
+      </EmptyState>
     {:else}
       {#if moduleType === ModuleType.SimpleControlModule}
         <SimpleControlHeader bind:shockIntensity bind:vibrationIntensity bind:duration />

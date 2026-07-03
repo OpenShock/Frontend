@@ -2,9 +2,9 @@
   import { shockerPauseShocker, shockerShockerShareCodePause } from '$lib/api';
   import type { BooleanLegacyDataResponse } from '$lib/api';
   import { Pause, Play } from '@lucide/svelte';
-  import { Button } from '$lib/components/ui/button';
-  import { Spinner } from '$lib/components/ui/spinner';
-  import { toast } from 'svelte-sonner';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import { Spinner } from '@openshock/svelte-core/components/ui/spinner/index.js';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 
   interface Props {
     shockerId: string;
@@ -37,10 +37,7 @@
       .then((newPausedState) => {
         paused = newPausedState.data;
       })
-      .catch((error) => {
-        toast.error(`Failed to toggle pause state: ${error.message}`);
-        console.error(error);
-      })
+      .catch(handleApiError)
       .finally(() => {
         requestInProgress = false;
         onPausedChange(paused);

@@ -1,4 +1,5 @@
 import { PUBLIC_SIGNOZ_TRACE_PROPAGATION } from '$env/static/public';
+import { isTruthy } from '@openshock/svelte-core/utils/parse.js';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
 import { FetchInstrumentation } from '@opentelemetry/instrumentation-fetch';
@@ -38,7 +39,7 @@ export function initTracing(): void {
   // Distributed tracing: attach `traceparent`/`tracestate` to API requests so the backend can
   // continue the trace. Cross-origin, so the backend's CORS must allow those request headers —
   // off by default to avoid breaking API calls before the backend is ready.
-  const propagateToBackend = PUBLIC_SIGNOZ_TRACE_PROPAGATION === 'true';
+  const propagateToBackend = isTruthy(PUBLIC_SIGNOZ_TRACE_PROPAGATION);
 
   registerInstrumentations({
     instrumentations: [

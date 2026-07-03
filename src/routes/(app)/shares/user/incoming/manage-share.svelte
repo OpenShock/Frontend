@@ -2,13 +2,13 @@
   import { shockerShockerShareRemove } from '$lib/api';
   import type { UserShareInfo } from '$lib/api';
   import { Copy, Trash } from '@lucide/svelte';
-  import * as Avatar from '$lib/components/ui/avatar';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import * as Drawer from '$lib/components/ui/drawer';
-  import * as Table from '$lib/components/ui/table/index.js';
+  import * as Avatar from '@openshock/svelte-core/components/ui/avatar/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import * as Drawer from '@openshock/svelte-core/components/ui/drawer/index.js';
+  import * as Table from '@openshock/svelte-core/components/ui/table/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { copyToClipboard } from '$lib/utils/clipboard.svelte';
-  import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
+  import { copyToClipboard } from '@openshock/svelte-core/utils/clipboard.svelte.js';
+  import { dialog } from '@openshock/svelte-core/components/dialog-manager/index.js';
   import { userSharesState, refreshUserShares } from '$lib/state/user-shares-state.svelte';
   import { userState } from '$lib/state/user-state.svelte';
   import { toast } from 'svelte-sonner';
@@ -89,7 +89,13 @@
                     >
                       <Copy />
                     </Button>
-                    <Button variant="destructive" onclick={() => handleDeleteClick(shocker)}>
+                    <Button
+                      variant="destructive"
+                      size="icon"
+                      title="Remove share"
+                      aria-label="Remove share"
+                      onclick={() => handleDeleteClick(shocker)}
+                    >
                       <Trash />
                     </Button>
                   </div>
