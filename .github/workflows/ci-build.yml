@@ -2,6 +2,10 @@ on:
   push:
     branches:
       - '**'
+    tags:
+      # Release + rc semver tags. Prereleases build & publish but never move `latest`.
+      - '[0-9]+.[0-9]+.[0-9]+'
+      - '[0-9]+.[0-9]+.[0-9]+-rc.[0-9]+'
   pull_request:
     branches:
       - '**'
@@ -68,10 +72,31 @@ jobs:
         with:
           submodules: recursive
 
+      # Decide whether this tag is the newest release (final versions only, no rc),
+      # so we only move `latest` when it actually is. Done locally from git tags —
+      # no API calls, so no rate-limit / network failure can block the publish.
+      - name: Determine if this is the newest release
+        id: latest-tag
+        if: github.ref_type == 'tag'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --tags --force --quiet
+          newest="$(git tag --list --sort=-v:refname | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | head -n1 || true)"
+          echo "Newest release tag: ${newest:-<none>}; this ref: ${GITHUB_REF_NAME}"
+          if [ "$newest" = "$GITHUB_REF_NAME" ]; then
+            echo "is-latest=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "is-latest=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: ./.github/actions/containerize
         with:
           registry: ghcr.io
           registry-path: ${{ github.repository_owner }}/frontend
           registry-username: ${{ github.actor }}
           registry-password: ${{ secrets.GITHUB_TOKEN }}
-          push-image: ${{ github.ref_type == 'branch' && github.event_name != 'pull_request' && (github.ref_name == 'master' || github.ref_name == 'develop')  }}
+          # Push on tag pushes (semver releases) and on master/develop branch pushes. Never on PRs.
+          push-image: ${{ github.event_name != 'pull_request' && (github.ref_type == 'tag' || github.ref_name == 'master' || github.ref_name == 'develop')  }}
+          # Move `latest` only when this tag is the newest release (not an rc, not a hotfix to an old version).
+          latest: ${{ steps.latest-tag.outputs.is-latest == 'true' }}
