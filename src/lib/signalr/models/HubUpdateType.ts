@@ -6,6 +6,8 @@ export enum HubUpdateType {
   HubDeleted = 3,
 
   HubShockersUpdate = 2,
+
+  HubPaired = 4,
 }
 
 export function isHubUpdateType(value: unknown): value is HubUpdateType {
@@ -16,6 +18,7 @@ export function isHubUpdateType(value: unknown): value is HubUpdateType {
       HubUpdateType.HubUpdated,
       HubUpdateType.HubDeleted,
       HubUpdateType.HubShockersUpdate,
+      HubUpdateType.HubPaired,
     ].includes(value)
   );
 }
