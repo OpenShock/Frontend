@@ -273,9 +273,7 @@ async function ensurePortBindable(host: string, port: number): Promise<void> {
 
 export default defineConfig(({ command, mode, isPreview }) => {
   const isLocalServe = command === 'serve' || isPreview === true;
-  // Cloudflare Pages builds run under `--mode cloudflare`; treat it as a production mode.
-  const isProductionMode = mode === 'production' || mode === 'cloudflare';
-  const isProduction = isProductionMode && (isTruthy(env.DOCKER) || isTruthy(env.CF_PAGES));
+  const isProduction = mode === 'production' && (isTruthy(env.DOCKER) || isTruthy(env.CF_PAGES));
 
   // If we are running locally, ensure that local.{PUBLIC_SITE_URL} resolves to localhost, and then use mkcert to generate a certificate
   const useLocalRedirect = isLocalServe && !isProduction && !isTruthy(env.CI);
@@ -291,9 +289,10 @@ export default defineConfig(({ command, mode, isPreview }) => {
         optimization: {
           inlineConst: { mode: 'smart', pass: 2 },
         },
-        treeshake: isProductionMode
-          ? { manualPureFunctions: ['console.log', 'console.debug', 'console.trace'] }
-          : undefined,
+        treeshake:
+          mode === 'production'
+            ? { manualPureFunctions: ['console.log', 'console.debug', 'console.trace'] }
+            : undefined,
       },
     },
     plugins: getPlugins(useLocalRedirect, server?.fqdn ?? null),
