@@ -6,6 +6,7 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "cross-env BUILD_ENV=production vite build",
+		"build:cloudflare": "cross-env BUILD_ENV=production vite build --mode cloudflare",
 		"preview": "cross-env BUILD_ENV=production vite preview",
 		"prepare": "svelte-kit sync || echo '' && husky",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",

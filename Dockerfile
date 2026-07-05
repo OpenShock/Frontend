@@ -1,6 +1,6 @@
 # Define versions as build arguments for easy updates
 ARG NODE_VERSION=26.3.1
-ARG PNPM_VERSION=11.8.0
+ARG PNPM_VERSION=11.10.0
 ARG ALPINE_VERSION=3.23
 
 FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION}

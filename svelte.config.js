@@ -16,7 +16,10 @@ const isDocker = process.env.DOCKER === 'true';
 // CI/Cloudflare/Docker each have their own flag.
 const isProductionBuild =
   isGithubActions || isCloudflare || isDocker || process.env.BUILD_ENV === 'production';
-const mode = isProductionBuild ? 'production' : 'development';
+// Cloudflare Pages builds run under their own env mode so they load `.env.cloudflare`
+// (the official deployment's config) instead of `.env.production`. Docker/CI/self-host
+// builds stay on `production` and never see the Cloudflare-only file.
+const mode = isCloudflare ? 'cloudflare' : isProductionBuild ? 'production' : 'development';
 
 const dotenv = { ...process.env, ...loadEnv(mode, process.cwd(), 'PUBLIC_') };
 
