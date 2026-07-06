@@ -2,8 +2,8 @@
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import { adminConfigurationListResponseTransformer, adminGetOnlineDevicesResponseTransformer, adminGetUsersResponseTransformer, adminListEmailProviderBlacklistResponseTransformer, adminListUsernameBlacklistResponseTransformer, adminListWebhooksResponseTransformer, authenticatedAccountListOAuthConnectionsResponseTransformer, devicesGetDeviceByIdResponseTransformer, devicesGetShockersResponseTransformer, devicesListDevicesResponseTransformer, devicesOtaGetOtaUpdateHistoryResponseTransformer, publicGetOnlineDevicesStatisticsResponseTransformer, publicGetPublicShareResponseTransformer, sessionsGetSelfSessionResponseTransformer, sessionsListSessionsResponseTransformer, shareLinksListResponseTransformer, shockerGetAllShockerLogsResponseTransformer, shockerGetShockerByIdResponseTransformer, shockerGetShockerLogsResponseTransformer, shockerGetUserSharesResponseTransformer, shockerListShockersResponseTransformer, shockerShockerShareCodeListResponseTransformer, tokensCreateTokenResponseTransformer, tokensGetTokenByIdResponseTransformer, tokensListTokensResponseTransformer, tokensSelfGetSelfTokenResponseTransformer, versionGetBackendInfoResponseTransformer } from './transformers.gen';
-import type { AccountActivateData, AccountActivateErrors, AccountActivateResponses, AccountCheckUsernameData, AccountCheckUsernameResponses, AccountEmailVerifyData, AccountEmailVerifyErrors, AccountEmailVerifyLegacyData, AccountEmailVerifyLegacyErrors, AccountEmailVerifyLegacyResponses, AccountEmailVerifyResponses, AccountLogoutData, AccountLogoutResponses, AccountPasswordResetCheckValidData, AccountPasswordResetCheckValidErrors, AccountPasswordResetCheckValidResponses, AccountPasswordResetCompleteData, AccountPasswordResetCompleteErrors, AccountPasswordResetCompleteResponses, AdminAddEmailProviderBlacklistData, AdminAddEmailProviderBlacklistResponses, AdminAddUsernameBlacklistData, AdminAddUsernameBlacklistResponses, AdminAddWebhookData, AdminAddWebhookErrors, AdminAddWebhookResponses, AdminConfigurationAddData, AdminConfigurationAddErrors, AdminConfigurationAddResponses, AdminConfigurationDeleteData, AdminConfigurationDeleteErrors, AdminConfigurationDeleteResponses, AdminConfigurationListData, AdminConfigurationListErrors, AdminConfigurationListResponses, AdminConfigurationUpdateData, AdminConfigurationUpdateErrors, AdminConfigurationUpdateResponses, AdminDeactivateUserData, AdminDeactivateUserErrors, AdminDeactivateUserResponses, AdminDeleteUserData, AdminDeleteUserErrors, AdminDeleteUserResponses, AdminGetOnlineDevicesData, AdminGetOnlineDevicesErrors, AdminGetOnlineDevicesResponses, AdminGetUsersData, AdminGetUsersErrors, AdminGetUsersResponses, AdminListEmailProviderBlacklistData, AdminListEmailProviderBlacklistResponses, AdminListUsernameBlacklistData, AdminListUsernameBlacklistResponses, AdminListWebhooksData, AdminListWebhooksErrors, AdminListWebhooksResponses, AdminModifyUserData, AdminModifyUserErrors, AdminModifyUserResponses, AdminReactivateUserData, AdminReactivateUserErrors, AdminReactivateUserResponses, AdminRemoveEmailProviderBlacklistData, AdminRemoveEmailProviderBlacklistErrors, AdminRemoveEmailProviderBlacklistResponses, AdminRemoveUsernameBlacklistData, AdminRemoveUsernameBlacklistErrors, AdminRemoveUsernameBlacklistResponses, AdminRemoveWebhookData, AdminRemoveWebhookErrors, AdminRemoveWebhookResponses, AuthenticatedAccountChangeEmailData, AuthenticatedAccountChangeEmailErrors, AuthenticatedAccountChangeEmailResponses, AuthenticatedAccountChangePasswordData, AuthenticatedAccountChangePasswordErrors, AuthenticatedAccountChangePasswordResponses, AuthenticatedAccountChangeUsernameData, AuthenticatedAccountChangeUsernameErrors, AuthenticatedAccountChangeUsernameResponses, AuthenticatedAccountDeactivateData, AuthenticatedAccountDeactivateErrors, AuthenticatedAccountDeactivateResponses, AuthenticatedAccountListOAuthConnectionsData, AuthenticatedAccountListOAuthConnectionsResponses, AuthenticatedAccountRemoveOAuthConnectionData, AuthenticatedAccountRemoveOAuthConnectionErrors, AuthenticatedAccountRemoveOAuthConnectionResponses, DeviceGetLiveControlGatewayData, DeviceGetLiveControlGatewayErrors, DeviceGetLiveControlGatewayResponses, DeviceGetSelfData, DeviceGetSelfResponses, DevicePairData, DevicePairErrors, DevicePairResponses, DevicesCreateDeviceData, DevicesCreateDeviceResponses, DevicesEditDeviceData, DevicesEditDeviceErrors, DevicesEditDeviceResponses, DevicesGetDeviceByIdData, DevicesGetDeviceByIdErrors, DevicesGetDeviceByIdResponses, DevicesGetLiveControlGatewayInfoData, DevicesGetLiveControlGatewayInfoErrors, DevicesGetLiveControlGatewayInfoResponses, DevicesGetPairCodeData, DevicesGetPairCodeErrors, DevicesGetPairCodeResponses, DevicesGetShockersData, DevicesGetShockersErrors, DevicesGetShockersResponses, DevicesListDevicesData, DevicesListDevicesResponses, DevicesOtaGetOtaUpdateHistoryData, DevicesOtaGetOtaUpdateHistoryErrors, DevicesOtaGetOtaUpdateHistoryResponses, DevicesRegenerateDeviceTokenData, DevicesRegenerateDeviceTokenErrors, DevicesRegenerateDeviceTokenResponses, DevicesRemoveDeviceData, DevicesRemoveDeviceErrors, DevicesRemoveDeviceResponses, PublicGetOnlineDevicesStatisticsData, PublicGetOnlineDevicesStatisticsResponses, PublicGetPublicShareData, PublicGetPublicShareErrors, PublicGetPublicShareResponses, SessionsDeleteSessionData, SessionsDeleteSessionErrors, SessionsDeleteSessionResponses, SessionsGetSelfSessionData, SessionsGetSelfSessionResponses, SessionsListSessionsData, SessionsListSessionsResponses, ShareLinksAddShockerData, ShareLinksAddShockerErrors, ShareLinksAddShockerResponses, ShareLinksCreatePublicShareData, ShareLinksCreatePublicShareResponses, ShareLinksDeletePublicShareData, ShareLinksDeletePublicShareErrors, ShareLinksDeletePublicShareResponses, ShareLinksEditShockerData, ShareLinksEditShockerErrors, ShareLinksEditShockerResponses, ShareLinksListData, ShareLinksListResponses, ShareLinksPauseShockerData, ShareLinksPauseShockerErrors, ShareLinksPauseShockerResponses, ShareLinksRemoveShockerData, ShareLinksRemoveShockerErrors, ShareLinksRemoveShockerResponses, SharesDeleteShareCodeData, SharesDeleteShareCodeErrors, SharesDeleteShareCodeResponses, SharesLinkShareCodeData, SharesLinkShareCodeErrors, SharesLinkShareCodeResponses, ShockerEditShockerData, ShockerEditShockerErrors, ShockerEditShockerResponses, ShockerGetAllShockerLogsData, ShockerGetAllShockerLogsResponses, ShockerGetShockerByIdData, ShockerGetShockerByIdErrors, ShockerGetShockerByIdResponses, ShockerGetShockerLogsData, ShockerGetShockerLogsErrors, ShockerGetShockerLogsResponses, ShockerGetUserSharesData, ShockerGetUserSharesErrors, ShockerGetUserSharesResponses, ShockerListSharedShockersData, ShockerListSharedShockersResponses, ShockerListShockersData, ShockerListShockersResponses, ShockerPauseShockerData, ShockerPauseShockerErrors, ShockerPauseShockerResponses, ShockerRegisterShockerData, ShockerRegisterShockerErrors, ShockerRegisterShockerResponses, ShockerRemoveShockerData, ShockerRemoveShockerErrors, ShockerRemoveShockerResponses, ShockerSendControlDeprecatedData, ShockerSendControlDeprecatedErrors, ShockerSendControlDeprecatedResponses, ShockerShockerShareCodeCreateData, ShockerShockerShareCodeCreateErrors, ShockerShockerShareCodeCreateResponses, ShockerShockerShareCodeListData, ShockerShockerShareCodeListErrors, ShockerShockerShareCodeListResponses, ShockerShockerShareCodePauseData, ShockerShockerShareCodePauseErrors, ShockerShockerShareCodePauseResponses, ShockerShockerShareCodeUpdateData, ShockerShockerShareCodeUpdateErrors, ShockerShockerShareCodeUpdateResponses, ShockerShockerShareRemoveData, ShockerShockerShareRemoveErrors, ShockerShockerShareRemoveResponses, TokenDeleteDeleteTokenData, TokenDeleteDeleteTokenErrors, TokenDeleteDeleteTokenResponses, TokensCreateTokenData, TokensCreateTokenResponses, TokensEditTokenData, TokensEditTokenErrors, TokensEditTokenResponses, TokensGetTokenByIdData, TokensGetTokenByIdErrors, TokensGetTokenByIdResponses, TokensListTokensData, TokensListTokensResponses, TokensReportTokensData, TokensReportTokensResponses, TokensSelfGetSelfTokenData, TokensSelfGetSelfTokenResponses, UsersGetByNameData, UsersGetByNameErrors, UsersGetByNameResponses, UsersGetSelfData, UsersGetSelfResponses, VersionGetBackendInfoData, VersionGetBackendInfoResponses } from './types.gen';
+import { adminConfigurationListResponseTransformer, adminGetEmailOutboxResponseTransformer, adminGetEmailOutboxStatsResponseTransformer, adminGetOnlineDevicesResponseTransformer, adminGetUsersResponseTransformer, adminListEmailProviderBlacklistResponseTransformer, adminListUsernameBlacklistResponseTransformer, adminListWebhooksResponseTransformer, adminSendTestEmailResponseTransformer, authenticatedAccountListOAuthConnectionsResponseTransformer, devicesGetDeviceByIdResponseTransformer, devicesGetShockersResponseTransformer, devicesListDevicesResponseTransformer, devicesOtaGetOtaUpdateHistoryResponseTransformer, publicGetOnlineDevicesStatisticsResponseTransformer, publicGetPublicShareResponseTransformer, sessionsGetSelfSessionResponseTransformer, sessionsListSessionsResponseTransformer, shareLinksListResponseTransformer, shockerGetAllShockerLogsResponseTransformer, shockerGetShockerByIdResponseTransformer, shockerGetShockerLogsResponseTransformer, shockerGetUserSharesResponseTransformer, shockerListShockersResponseTransformer, shockerShockerShareCodeListResponseTransformer, tokensCreateTokenResponseTransformer, tokensGetTokenByIdResponseTransformer, tokensListTokensResponseTransformer, tokensSelfGetSelfTokenResponseTransformer, versionGetBackendInfoResponseTransformer } from './transformers.gen';
+import type { AccountActivateData, AccountActivateErrors, AccountActivateResponses, AccountCheckUsernameData, AccountCheckUsernameResponses, AccountEmailVerifyData, AccountEmailVerifyErrors, AccountEmailVerifyLegacyData, AccountEmailVerifyLegacyErrors, AccountEmailVerifyLegacyResponses, AccountEmailVerifyResponses, AccountLogoutData, AccountLogoutResponses, AccountPasswordResetCheckValidData, AccountPasswordResetCheckValidErrors, AccountPasswordResetCheckValidResponses, AccountPasswordResetCompleteData, AccountPasswordResetCompleteErrors, AccountPasswordResetCompleteResponses, AdminAddEmailProviderBlacklistData, AdminAddEmailProviderBlacklistResponses, AdminAddUsernameBlacklistData, AdminAddUsernameBlacklistResponses, AdminAddWebhookData, AdminAddWebhookErrors, AdminAddWebhookResponses, AdminBulkCancelEmailOutboxData, AdminBulkCancelEmailOutboxErrors, AdminBulkCancelEmailOutboxResponses, AdminBulkDeleteEmailOutboxData, AdminBulkDeleteEmailOutboxErrors, AdminBulkDeleteEmailOutboxResponses, AdminBulkRequeueEmailOutboxData, AdminBulkRequeueEmailOutboxErrors, AdminBulkRequeueEmailOutboxResponses, AdminCancelEmailOutboxData, AdminCancelEmailOutboxErrors, AdminCancelEmailOutboxResponses, AdminConfigurationAddData, AdminConfigurationAddErrors, AdminConfigurationAddResponses, AdminConfigurationDeleteData, AdminConfigurationDeleteErrors, AdminConfigurationDeleteResponses, AdminConfigurationListData, AdminConfigurationListErrors, AdminConfigurationListResponses, AdminConfigurationUpdateData, AdminConfigurationUpdateErrors, AdminConfigurationUpdateResponses, AdminDeactivateUserData, AdminDeactivateUserErrors, AdminDeactivateUserResponses, AdminDeleteEmailOutboxData, AdminDeleteEmailOutboxErrors, AdminDeleteEmailOutboxResponses, AdminDeleteUserData, AdminDeleteUserErrors, AdminDeleteUserResponses, AdminGetEmailOutboxData, AdminGetEmailOutboxErrors, AdminGetEmailOutboxResponses, AdminGetEmailOutboxStatsData, AdminGetEmailOutboxStatsErrors, AdminGetEmailOutboxStatsResponses, AdminGetOnlineDevicesData, AdminGetOnlineDevicesErrors, AdminGetOnlineDevicesResponses, AdminGetUsersData, AdminGetUsersErrors, AdminGetUsersResponses, AdminListEmailProviderBlacklistData, AdminListEmailProviderBlacklistResponses, AdminListUsernameBlacklistData, AdminListUsernameBlacklistResponses, AdminListWebhooksData, AdminListWebhooksErrors, AdminListWebhooksResponses, AdminModifyUserData, AdminModifyUserErrors, AdminModifyUserResponses, AdminReactivateUserData, AdminReactivateUserErrors, AdminReactivateUserResponses, AdminRemoveEmailProviderBlacklistData, AdminRemoveEmailProviderBlacklistErrors, AdminRemoveEmailProviderBlacklistResponses, AdminRemoveUsernameBlacklistData, AdminRemoveUsernameBlacklistErrors, AdminRemoveUsernameBlacklistResponses, AdminRemoveWebhookData, AdminRemoveWebhookErrors, AdminRemoveWebhookResponses, AdminRequeueEmailOutboxData, AdminRequeueEmailOutboxErrors, AdminRequeueEmailOutboxResponses, AdminSendTestEmailData, AdminSendTestEmailErrors, AdminSendTestEmailResponses, AuthenticatedAccountChangeEmailData, AuthenticatedAccountChangeEmailErrors, AuthenticatedAccountChangeEmailResponses, AuthenticatedAccountChangePasswordData, AuthenticatedAccountChangePasswordErrors, AuthenticatedAccountChangePasswordResponses, AuthenticatedAccountChangeUsernameData, AuthenticatedAccountChangeUsernameErrors, AuthenticatedAccountChangeUsernameResponses, AuthenticatedAccountDeactivateData, AuthenticatedAccountDeactivateErrors, AuthenticatedAccountDeactivateResponses, AuthenticatedAccountListOAuthConnectionsData, AuthenticatedAccountListOAuthConnectionsResponses, AuthenticatedAccountRemoveOAuthConnectionData, AuthenticatedAccountRemoveOAuthConnectionErrors, AuthenticatedAccountRemoveOAuthConnectionResponses, DeviceGetLiveControlGatewayData, DeviceGetLiveControlGatewayErrors, DeviceGetLiveControlGatewayResponses, DeviceGetSelfData, DeviceGetSelfResponses, DevicePairData, DevicePairErrors, DevicePairResponses, DevicesCreateDeviceData, DevicesCreateDeviceResponses, DevicesEditDeviceData, DevicesEditDeviceErrors, DevicesEditDeviceResponses, DevicesGetDeviceByIdData, DevicesGetDeviceByIdErrors, DevicesGetDeviceByIdResponses, DevicesGetLiveControlGatewayInfoData, DevicesGetLiveControlGatewayInfoErrors, DevicesGetLiveControlGatewayInfoResponses, DevicesGetPairCodeData, DevicesGetPairCodeErrors, DevicesGetPairCodeResponses, DevicesGetShockersData, DevicesGetShockersErrors, DevicesGetShockersResponses, DevicesListDevicesData, DevicesListDevicesResponses, DevicesOtaGetOtaUpdateHistoryData, DevicesOtaGetOtaUpdateHistoryErrors, DevicesOtaGetOtaUpdateHistoryResponses, DevicesRegenerateDeviceTokenData, DevicesRegenerateDeviceTokenErrors, DevicesRegenerateDeviceTokenResponses, DevicesRemoveDeviceData, DevicesRemoveDeviceErrors, DevicesRemoveDeviceResponses, PublicGetOnlineDevicesStatisticsData, PublicGetOnlineDevicesStatisticsResponses, PublicGetPublicShareData, PublicGetPublicShareErrors, PublicGetPublicShareResponses, SessionsDeleteSessionData, SessionsDeleteSessionErrors, SessionsDeleteSessionResponses, SessionsGetSelfSessionData, SessionsGetSelfSessionResponses, SessionsListSessionsData, SessionsListSessionsResponses, ShareLinksAddShockerData, ShareLinksAddShockerErrors, ShareLinksAddShockerResponses, ShareLinksCreatePublicShareData, ShareLinksCreatePublicShareResponses, ShareLinksDeletePublicShareData, ShareLinksDeletePublicShareErrors, ShareLinksDeletePublicShareResponses, ShareLinksEditShockerData, ShareLinksEditShockerErrors, ShareLinksEditShockerResponses, ShareLinksListData, ShareLinksListResponses, ShareLinksPauseShockerData, ShareLinksPauseShockerErrors, ShareLinksPauseShockerResponses, ShareLinksRemoveShockerData, ShareLinksRemoveShockerErrors, ShareLinksRemoveShockerResponses, SharesDeleteShareCodeData, SharesDeleteShareCodeErrors, SharesDeleteShareCodeResponses, SharesLinkShareCodeData, SharesLinkShareCodeErrors, SharesLinkShareCodeResponses, ShockerEditShockerData, ShockerEditShockerErrors, ShockerEditShockerResponses, ShockerGetAllShockerLogsData, ShockerGetAllShockerLogsResponses, ShockerGetShockerByIdData, ShockerGetShockerByIdErrors, ShockerGetShockerByIdResponses, ShockerGetShockerLogsData, ShockerGetShockerLogsErrors, ShockerGetShockerLogsResponses, ShockerGetUserSharesData, ShockerGetUserSharesErrors, ShockerGetUserSharesResponses, ShockerListSharedShockersData, ShockerListSharedShockersResponses, ShockerListShockersData, ShockerListShockersResponses, ShockerPauseShockerData, ShockerPauseShockerErrors, ShockerPauseShockerResponses, ShockerRegisterShockerData, ShockerRegisterShockerErrors, ShockerRegisterShockerResponses, ShockerRemoveShockerData, ShockerRemoveShockerErrors, ShockerRemoveShockerResponses, ShockerSendControlDeprecatedData, ShockerSendControlDeprecatedErrors, ShockerSendControlDeprecatedResponses, ShockerShockerShareCodeCreateData, ShockerShockerShareCodeCreateErrors, ShockerShockerShareCodeCreateResponses, ShockerShockerShareCodeListData, ShockerShockerShareCodeListErrors, ShockerShockerShareCodeListResponses, ShockerShockerShareCodePauseData, ShockerShockerShareCodePauseErrors, ShockerShockerShareCodePauseResponses, ShockerShockerShareCodeUpdateData, ShockerShockerShareCodeUpdateErrors, ShockerShockerShareCodeUpdateResponses, ShockerShockerShareRemoveData, ShockerShockerShareRemoveErrors, ShockerShockerShareRemoveResponses, TokenDeleteDeleteTokenData, TokenDeleteDeleteTokenErrors, TokenDeleteDeleteTokenResponses, TokensCreateTokenData, TokensCreateTokenResponses, TokensEditTokenData, TokensEditTokenErrors, TokensEditTokenResponses, TokensGetTokenByIdData, TokensGetTokenByIdErrors, TokensGetTokenByIdResponses, TokensListTokensData, TokensListTokensResponses, TokensReportTokensData, TokensReportTokensResponses, TokensSelfGetSelfTokenData, TokensSelfGetSelfTokenResponses, UsersGetByNameData, UsersGetByNameErrors, UsersGetByNameResponses, UsersGetSelfData, UsersGetSelfResponses, VersionGetBackendInfoData, VersionGetBackendInfoResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -309,6 +309,118 @@ export const adminModifyUser = <ThrowOnError extends boolean = true>(options: Op
     headers: {
         'Content-Type': 'application/json',
         ...options.headers
+    }
+});
+
+/**
+ * Requeues many email outbox messages at once. Each id is treated exactly like the single-message
+ * requeue: only terminal (sent/failed/skipped) rows are affected; pending/sending rows and missing
+ * ids are skipped. Returns how many rows were actually requeued.
+ */
+export const adminBulkRequeueEmailOutbox = <ThrowOnError extends boolean = true>(options?: Options<AdminBulkRequeueEmailOutboxData, ThrowOnError>): RequestResult<AdminBulkRequeueEmailOutboxResponses, AdminBulkRequeueEmailOutboxErrors, ThrowOnError, 'data'> => (options?.client ?? client).post<AdminBulkRequeueEmailOutboxResponses, AdminBulkRequeueEmailOutboxErrors, ThrowOnError, 'data'>({
+    responseStyle: 'data',
+    url: '/1/admin/email/outbox/bulk/requeue',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options?.headers
+    }
+});
+
+/**
+ * Cancels many still-pending email outbox messages at once by marking them skipped. Rows that are
+ * not pending (already sending or terminal) and missing ids are skipped. Returns how many rows were
+ * actually cancelled.
+ */
+export const adminBulkCancelEmailOutbox = <ThrowOnError extends boolean = true>(options?: Options<AdminBulkCancelEmailOutboxData, ThrowOnError>): RequestResult<AdminBulkCancelEmailOutboxResponses, AdminBulkCancelEmailOutboxErrors, ThrowOnError, 'data'> => (options?.client ?? client).post<AdminBulkCancelEmailOutboxResponses, AdminBulkCancelEmailOutboxErrors, ThrowOnError, 'data'>({
+    responseStyle: 'data',
+    url: '/1/admin/email/outbox/bulk/cancel',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options?.headers
+    }
+});
+
+/**
+ * Permanently deletes many email outbox messages at once. Missing ids are skipped. Returns how many
+ * rows were actually deleted.
+ */
+export const adminBulkDeleteEmailOutbox = <ThrowOnError extends boolean = true>(options?: Options<AdminBulkDeleteEmailOutboxData, ThrowOnError>): RequestResult<AdminBulkDeleteEmailOutboxResponses, AdminBulkDeleteEmailOutboxErrors, ThrowOnError, 'data'> => (options?.client ?? client).post<AdminBulkDeleteEmailOutboxResponses, AdminBulkDeleteEmailOutboxErrors, ThrowOnError, 'data'>({
+    responseStyle: 'data',
+    url: '/1/admin/email/outbox/bulk/delete',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options?.headers
+    }
+});
+
+/**
+ * Cancels a still-pending email outbox message by marking it skipped, so it is never sent. Only
+ * pending messages can be cancelled; a message already being sent or in a terminal state cannot.
+ */
+export const adminCancelEmailOutbox = <ThrowOnError extends boolean = true>(options: Options<AdminCancelEmailOutboxData, ThrowOnError>): RequestResult<AdminCancelEmailOutboxResponses, AdminCancelEmailOutboxErrors, ThrowOnError, 'data'> => (options.client ?? client).post<AdminCancelEmailOutboxResponses, AdminCancelEmailOutboxErrors, ThrowOnError, 'data'>({
+    responseStyle: 'data',
+    url: '/1/admin/email/outbox/{id}/cancel',
+    ...options
+});
+
+/**
+ * Permanently deletes an email outbox message. If the delivery consumer is mid-send it simply finds
+ * the row gone and does nothing, so a delete never corrupts an in-flight send.
+ */
+export const adminDeleteEmailOutbox = <ThrowOnError extends boolean = true>(options: Options<AdminDeleteEmailOutboxData, ThrowOnError>): RequestResult<AdminDeleteEmailOutboxResponses, AdminDeleteEmailOutboxErrors, ThrowOnError, 'data'> => (options.client ?? client).delete<AdminDeleteEmailOutboxResponses, AdminDeleteEmailOutboxErrors, ThrowOnError, 'data'>({
+    responseStyle: 'data',
+    url: '/1/admin/email/outbox/{id}',
+    ...options
+});
+
+/**
+ * Lists email outbox messages, paginated. Supports the same OData-style
+ * `$filter`/`$orderby` as the users listing (e.g. `status eq 'failed'`,
+ * `recipient ilike '%@example.com'`). Defaults to newest first.
+ */
+export const adminGetEmailOutbox = <ThrowOnError extends boolean = true>(options?: Options<AdminGetEmailOutboxData, ThrowOnError>): RequestResult<AdminGetEmailOutboxResponses, AdminGetEmailOutboxErrors, ThrowOnError, 'data'> => (options?.client ?? client).get<AdminGetEmailOutboxResponses, AdminGetEmailOutboxErrors, ThrowOnError, 'data'>({
+    responseTransformer: adminGetEmailOutboxResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/admin/email/outbox',
+    ...options
+});
+
+/**
+ * Requeues a terminal (sent/failed/skipped) email outbox message: resets it to pending, due now,
+ * with a fresh attempt budget, and nudges the delivery consumer to send it immediately.
+ */
+export const adminRequeueEmailOutbox = <ThrowOnError extends boolean = true>(options: Options<AdminRequeueEmailOutboxData, ThrowOnError>): RequestResult<AdminRequeueEmailOutboxResponses, AdminRequeueEmailOutboxErrors, ThrowOnError, 'data'> => (options.client ?? client).post<AdminRequeueEmailOutboxResponses, AdminRequeueEmailOutboxErrors, ThrowOnError, 'data'>({
+    responseStyle: 'data',
+    url: '/1/admin/email/outbox/{id}/requeue',
+    ...options
+});
+
+/**
+ * Returns the number of email outbox messages in each delivery state.
+ */
+export const adminGetEmailOutboxStats = <ThrowOnError extends boolean = true>(options?: Options<AdminGetEmailOutboxStatsData, ThrowOnError>): RequestResult<AdminGetEmailOutboxStatsResponses, AdminGetEmailOutboxStatsErrors, ThrowOnError, 'data'> => (options?.client ?? client).get<AdminGetEmailOutboxStatsResponses, AdminGetEmailOutboxStatsErrors, ThrowOnError, 'data'>({
+    responseTransformer: adminGetEmailOutboxStatsResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/admin/email/outbox/stats',
+    ...options
+});
+
+/**
+ * Enqueues a preview/test email of the chosen type to the chosen address. It flows through the
+ * normal durable delivery pipeline - visible in the outbox listing - but is rendered with
+ * placeholder data and a dummy link, so it touches no request row and mints no token.
+ */
+export const adminSendTestEmail = <ThrowOnError extends boolean = true>(options?: Options<AdminSendTestEmailData, ThrowOnError>): RequestResult<AdminSendTestEmailResponses, AdminSendTestEmailErrors, ThrowOnError, 'data'> => (options?.client ?? client).post<AdminSendTestEmailResponses, AdminSendTestEmailErrors, ThrowOnError, 'data'>({
+    responseTransformer: adminSendTestEmailResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/admin/email/test',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options?.headers
     }
 });
 
