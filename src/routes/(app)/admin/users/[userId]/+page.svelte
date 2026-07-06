@@ -7,6 +7,7 @@
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { odataEq } from '$lib/utils/odata';
   import UserX from '@lucide/svelte/icons/user-x';
 
   let user = $state<AdminUsersView | null>(null);
@@ -27,8 +28,15 @@
   }
 
   $effect(() => {
+    const userId = page.params.userId;
+    if (!userId) {
+      user = null;
+      loading = false;
+      return;
+    }
+
     loading = true;
-    adminGetUsers({ query: { $filter: 'id eq ' + page.params.userId } })
+    adminGetUsers({ query: { $filter: odataEq('id', userId) } })
       .then(handleResponse)
       .catch(handleApiError)
       .finally(() => (loading = false));

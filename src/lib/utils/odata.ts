@@ -27,6 +27,18 @@ export function odataContains(field: string, value: string): string {
 }
 
 /**
+ * Free-text search box → filter clause. If the input contains an unescaped `%` wildcard it becomes
+ * an `ilike` pattern match; otherwise an exact `eq`. Returns `undefined` for blank input.
+ */
+export function odataSearch(field: string, input: string): string | undefined {
+  const trimmed = input.trim();
+  if (!trimmed) return undefined;
+  // Any `%` not preceded by a backslash is treated as a wildcard.
+  const hasWildcard = /(^|[^\\])%/.test(trimmed);
+  return hasWildcard ? odataILike(field, trimmed) : odataEq(field, trimmed);
+}
+
+/**
  * Join clauses with `and`, dropping empty/`undefined` ones. Returns `undefined` when nothing
  * is left, so it can be handed straight to a `$filter` query param.
  */

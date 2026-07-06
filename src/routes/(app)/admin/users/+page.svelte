@@ -13,6 +13,7 @@
     RenderRedCell,
   } from '$lib/components/Table/ColumnUtils';
   import DataTableActions from './data-table-actions.svelte';
+  import { odataAnd, odataSearch } from '$lib/utils/odata';
 
   const PasswordHashTypeRenderer = (passwordHashType: PasswordHashingAlgorithm) => {
     if (passwordHashType !== PasswordHashingAlgorithm.BCrypt)
@@ -37,32 +38,6 @@
       a ? RenderCell(a) : RenderRedCell('None')
     ),
   ];
-
-  function escapeQuotes(str: string) {
-    if (/[ '"\\]/.test(str)) {
-      const escaped = str.replace(/(['"\\])/g, '\\$1');
-      return `'${escaped}'`;
-    }
-    return str;
-  }
-
-  /**
-   * Build a single filter clause for `key` and `searchString`.
-   * - If there is any unescaped `%`, uses `ilike`.
-   * - Otherwise uses `eq`.
-   */
-  function createSearchQuery(key: string, searchString: string): string | undefined {
-    if (!searchString) return undefined;
-
-    // Detect any % not preceded by a backslash
-    const hasWildcard = /(^|[^\\])%/.test(searchString);
-
-    // Wrap & escape quotes/backslashes as before
-    const escaped = escapeQuotes(searchString);
-
-    const operator = hasWildcard ? 'ilike' : 'eq';
-    return `${key} ${operator} ${escaped}`;
-  }
 </script>
 
 <script lang="ts">
@@ -121,15 +96,7 @@
 
   const applyFilterQuery = useDebounce((query: string | undefined) => (filterQuery = query), 800);
   $effect(() => {
-    const queries: string[] = [];
-
-    const nameQ = createSearchQuery('name', nameSearch);
-    if (nameQ) queries.push(nameQ);
-
-    const emailQ = createSearchQuery('email', emailSearch);
-    if (emailQ) queries.push(emailQ);
-
-    const query = queries.length > 0 ? queries.join(' and ') : undefined;
+    const query = odataAnd(odataSearch('name', nameSearch), odataSearch('email', emailSearch));
     if (query === filterQuery) return;
 
     applyFilterQuery(query);

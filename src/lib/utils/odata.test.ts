@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { odataAnd, odataContains, odataEq, odataILike, odataLiteral } from './odata';
+import { odataAnd, odataContains, odataEq, odataILike, odataLiteral, odataSearch } from './odata';
 
 describe('odataLiteral', () => {
   it('always wraps in single quotes', () => {
@@ -31,5 +31,20 @@ describe('odataAnd', () => {
   it('drops empty clauses and returns undefined when nothing remains', () => {
     expect(odataAnd(undefined, false, '')).toBeUndefined();
     expect(odataAnd(odataEq('status', 'Sent'), undefined)).toBe("status eq 'Sent'");
+  });
+});
+
+describe('odataSearch', () => {
+  it('uses eq for plain input', () => {
+    expect(odataSearch('name', 'alice')).toBe("name eq 'alice'");
+  });
+
+  it('uses ilike when the input has a wildcard', () => {
+    expect(odataSearch('name', 'ali%')).toBe("name ilike 'ali%'");
+  });
+
+  it('trims and returns undefined for blank input', () => {
+    expect(odataSearch('name', '   ')).toBeUndefined();
+    expect(odataSearch('name', '')).toBeUndefined();
   });
 });
