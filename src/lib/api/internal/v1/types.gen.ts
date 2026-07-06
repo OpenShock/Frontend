@@ -271,11 +271,87 @@ export type EditTokenRequest = {
     permissions?: Array<PermissionType>;
 };
 
+/**
+ * A set of email outbox message ids to apply a bulk requeue/cancel/delete to.
+ */
+export type EmailOutboxBulkRequest = {
+    ids: Array<string>;
+};
+
+/**
+ * Outcome of a bulk email outbox operation: how many ids were requested and how many rows were
+ * actually affected (rows that were missing or in an ineligible state are silently not counted).
+ */
+export type EmailOutboxBulkResultDto = {
+    requested: number;
+    affected: number;
+};
+
+/**
+ * An OpenShock.Common.OpenShockDb.EmailOutboxMessage as exposed to admins on the mail-queue page. Mirrors the row
+ * verbatim - the outbox stores no rendered body and no usable secret, so every field is safe to show.
+ */
+export type EmailOutboxMessageDto = {
+    id: string;
+    type: EmailType;
+    recipient: string;
+    recipientName: string | null;
+    payload: {
+        [key: string]: string;
+    };
+    coalesceKey: string | null;
+    status: EmailStatus;
+    attemptCount: number;
+    nextAttemptAt: Temporal.Instant;
+    lastError: string | null;
+    createdAt: Temporal.Instant;
+    sentAt: Temporal.Instant | null;
+    failedAt: Temporal.Instant | null;
+};
+
+export type EmailOutboxMessageDtoPaginated = {
+    offset: number;
+    limit: number;
+    total: bigint;
+    data: Array<EmailOutboxMessageDto>;
+};
+
+/**
+ * Count of email outbox rows in each delivery state, for the admin mail-queue overview tiles.
+ */
+export type EmailOutboxStatsDto = {
+    pending: bigint;
+    sending: bigint;
+    sent: bigint;
+    failed: bigint;
+    skipped: bigint;
+    total: bigint;
+};
+
 export type EmailProviderBlacklistDto = {
     id: string;
     domain: string;
     createdAt: Temporal.Instant;
 };
+
+export const EmailStatus = {
+    Pending: 'Pending',
+    Sending: 'Sending',
+    Sent: 'Sent',
+    Failed: 'Failed',
+    Skipped: 'Skipped'
+} as const;
+
+export type EmailStatus = typeof EmailStatus[keyof typeof EmailStatus];
+
+export const EmailType = {
+    AccountActivation: 'AccountActivation',
+    PasswordReset: 'PasswordReset',
+    EmailVerification: 'EmailVerification',
+    EmailChangeNotice: 'EmailChangeNotice'
+} as const;
+
+export type EmailType = typeof EmailType[keyof typeof EmailType];
 
 export type GuidLegacyDataResponse = {
     message: string;
@@ -563,6 +639,22 @@ export const RoleType = {
 } as const;
 
 export type RoleType = typeof RoleType[keyof typeof RoleType];
+
+/**
+ * Request to enqueue a preview/test email of a chosen type to a chosen address. The message is
+ * delivered by the Cron pipeline with placeholder data and a dummy link (no token, no request row).
+ */
+export type SendTestEmailDto = {
+    type: EmailType;
+    /**
+     * Destination address for the test email.
+     */
+    recipient: string;
+    /**
+     * Optional display name for the recipient.
+     */
+    recipientName?: string | null;
+};
 
 export type ShareCodeInfo = {
     id: string;
@@ -1454,6 +1546,250 @@ export type AdminModifyUserResponses = {
      */
     200: unknown;
 };
+
+export type AdminBulkRequeueEmailOutboxData = {
+    body?: EmailOutboxBulkRequest;
+    path?: never;
+    query?: never;
+    url: '/1/admin/email/outbox/bulk/requeue';
+};
+
+export type AdminBulkRequeueEmailOutboxErrors = {
+    /**
+     * Unauthorized
+     */
+    401: unknown;
+};
+
+export type AdminBulkRequeueEmailOutboxResponses = {
+    /**
+     * Bulk requeue applied
+     */
+    200: EmailOutboxBulkResultDto;
+};
+
+export type AdminBulkRequeueEmailOutboxResponse = AdminBulkRequeueEmailOutboxResponses[keyof AdminBulkRequeueEmailOutboxResponses];
+
+export type AdminBulkCancelEmailOutboxData = {
+    body?: EmailOutboxBulkRequest;
+    path?: never;
+    query?: never;
+    url: '/1/admin/email/outbox/bulk/cancel';
+};
+
+export type AdminBulkCancelEmailOutboxErrors = {
+    /**
+     * Unauthorized
+     */
+    401: unknown;
+};
+
+export type AdminBulkCancelEmailOutboxResponses = {
+    /**
+     * Bulk cancel applied
+     */
+    200: EmailOutboxBulkResultDto;
+};
+
+export type AdminBulkCancelEmailOutboxResponse = AdminBulkCancelEmailOutboxResponses[keyof AdminBulkCancelEmailOutboxResponses];
+
+export type AdminBulkDeleteEmailOutboxData = {
+    body?: EmailOutboxBulkRequest;
+    path?: never;
+    query?: never;
+    url: '/1/admin/email/outbox/bulk/delete';
+};
+
+export type AdminBulkDeleteEmailOutboxErrors = {
+    /**
+     * Unauthorized
+     */
+    401: unknown;
+};
+
+export type AdminBulkDeleteEmailOutboxResponses = {
+    /**
+     * Bulk delete applied
+     */
+    200: EmailOutboxBulkResultDto;
+};
+
+export type AdminBulkDeleteEmailOutboxResponse = AdminBulkDeleteEmailOutboxResponses[keyof AdminBulkDeleteEmailOutboxResponses];
+
+export type AdminCancelEmailOutboxData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/1/admin/email/outbox/{id}/cancel';
+};
+
+export type AdminCancelEmailOutboxErrors = {
+    /**
+     * Unauthorized
+     */
+    401: unknown;
+    /**
+     * No such message
+     */
+    404: ProblemDetails;
+    /**
+     * Message is not pending
+     */
+    409: ProblemDetails;
+};
+
+export type AdminCancelEmailOutboxError = AdminCancelEmailOutboxErrors[keyof AdminCancelEmailOutboxErrors];
+
+export type AdminCancelEmailOutboxResponses = {
+    /**
+     * Cancelled
+     */
+    200: unknown;
+};
+
+export type AdminDeleteEmailOutboxData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/1/admin/email/outbox/{id}';
+};
+
+export type AdminDeleteEmailOutboxErrors = {
+    /**
+     * Unauthorized
+     */
+    401: unknown;
+    /**
+     * No such message
+     */
+    404: ProblemDetails;
+};
+
+export type AdminDeleteEmailOutboxError = AdminDeleteEmailOutboxErrors[keyof AdminDeleteEmailOutboxErrors];
+
+export type AdminDeleteEmailOutboxResponses = {
+    /**
+     * Deleted
+     */
+    200: unknown;
+};
+
+export type AdminGetEmailOutboxData = {
+    body?: never;
+    path?: never;
+    query?: {
+        $filter?: string;
+        $orderby?: string;
+        $offset?: number;
+        $limit?: number;
+    };
+    url: '/1/admin/email/outbox';
+};
+
+export type AdminGetEmailOutboxErrors = {
+    /**
+     * Unauthorized
+     */
+    401: unknown;
+};
+
+export type AdminGetEmailOutboxResponses = {
+    /**
+     * Paginated email outbox messages
+     */
+    200: EmailOutboxMessageDtoPaginated;
+};
+
+export type AdminGetEmailOutboxResponse = AdminGetEmailOutboxResponses[keyof AdminGetEmailOutboxResponses];
+
+export type AdminRequeueEmailOutboxData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/1/admin/email/outbox/{id}/requeue';
+};
+
+export type AdminRequeueEmailOutboxErrors = {
+    /**
+     * Unauthorized
+     */
+    401: unknown;
+    /**
+     * No such message
+     */
+    404: ProblemDetails;
+    /**
+     * Message is pending or currently being sent
+     */
+    409: ProblemDetails;
+};
+
+export type AdminRequeueEmailOutboxError = AdminRequeueEmailOutboxErrors[keyof AdminRequeueEmailOutboxErrors];
+
+export type AdminRequeueEmailOutboxResponses = {
+    /**
+     * Requeued
+     */
+    200: unknown;
+};
+
+export type AdminGetEmailOutboxStatsData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/1/admin/email/outbox/stats';
+};
+
+export type AdminGetEmailOutboxStatsErrors = {
+    /**
+     * Unauthorized
+     */
+    401: unknown;
+};
+
+export type AdminGetEmailOutboxStatsResponses = {
+    /**
+     * Per-status counts
+     */
+    200: EmailOutboxStatsDto;
+};
+
+export type AdminGetEmailOutboxStatsResponse = AdminGetEmailOutboxStatsResponses[keyof AdminGetEmailOutboxStatsResponses];
+
+export type AdminSendTestEmailData = {
+    body?: SendTestEmailDto;
+    path?: never;
+    query?: never;
+    url: '/1/admin/email/test';
+};
+
+export type AdminSendTestEmailErrors = {
+    /**
+     * Invalid recipient address
+     */
+    400: ProblemDetails;
+    /**
+     * Unauthorized
+     */
+    401: unknown;
+};
+
+export type AdminSendTestEmailError = AdminSendTestEmailErrors[keyof AdminSendTestEmailErrors];
+
+export type AdminSendTestEmailResponses = {
+    /**
+     * Test email enqueued
+     */
+    200: EmailOutboxMessageDto;
+};
+
+export type AdminSendTestEmailResponse = AdminSendTestEmailResponses[keyof AdminSendTestEmailResponses];
 
 export type AdminListEmailProviderBlacklistData = {
     body?: never;

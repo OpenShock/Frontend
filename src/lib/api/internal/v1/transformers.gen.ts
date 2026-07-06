@@ -2,7 +2,7 @@
 
 import { Temporal } from 'temporal-polyfill';
 
-import type { AdminConfigurationListResponse, AdminGetOnlineDevicesResponse, AdminGetUsersResponse, AdminListEmailProviderBlacklistResponse, AdminListUsernameBlacklistResponse, AdminListWebhooksResponse, AuthenticatedAccountListOAuthConnectionsResponse, DevicesGetDeviceByIdResponse, DevicesGetShockersResponse, DevicesListDevicesResponse, DevicesOtaGetOtaUpdateHistoryResponse, PublicGetOnlineDevicesStatisticsResponse, PublicGetPublicShareResponse, SessionsGetSelfSessionResponse, SessionsListSessionsResponse, ShareLinksListResponse, ShockerGetAllShockerLogsResponse, ShockerGetShockerByIdResponse, ShockerGetShockerLogsResponse, ShockerGetUserSharesResponse, ShockerListShockersResponse, ShockerShockerShareCodeListResponse, TokensCreateTokenResponse, TokensGetTokenByIdResponse, TokensListTokensResponse, TokensSelfGetSelfTokenResponse, VersionGetBackendInfoResponse } from './types.gen';
+import type { AdminConfigurationListResponse, AdminGetEmailOutboxResponse, AdminGetEmailOutboxStatsResponse, AdminGetOnlineDevicesResponse, AdminGetUsersResponse, AdminListEmailProviderBlacklistResponse, AdminListUsernameBlacklistResponse, AdminListWebhooksResponse, AdminSendTestEmailResponse, AuthenticatedAccountListOAuthConnectionsResponse, DevicesGetDeviceByIdResponse, DevicesGetShockersResponse, DevicesListDevicesResponse, DevicesOtaGetOtaUpdateHistoryResponse, PublicGetOnlineDevicesStatisticsResponse, PublicGetPublicShareResponse, SessionsGetSelfSessionResponse, SessionsListSessionsResponse, ShareLinksListResponse, ShockerGetAllShockerLogsResponse, ShockerGetShockerByIdResponse, ShockerGetShockerLogsResponse, ShockerGetUserSharesResponse, ShockerListShockersResponse, ShockerShockerShareCodeListResponse, TokensCreateTokenResponse, TokensGetTokenByIdResponse, TokensListTokensResponse, TokensSelfGetSelfTokenResponse, VersionGetBackendInfoResponse } from './types.gen';
 
 const tokenResponseSchemaResponseTransformer = (data: any) => {
     data.createdOn = Temporal.Instant.from(data.createdOn);
@@ -60,6 +60,49 @@ const configurationItemDtoSchemaResponseTransformer = (data: any) => {
 
 export const adminConfigurationListResponseTransformer = async (data: any): Promise<AdminConfigurationListResponse> => {
     data = data.map((item: any) => configurationItemDtoSchemaResponseTransformer(item));
+    return data;
+};
+
+const emailOutboxMessageDtoSchemaResponseTransformer = (data: any) => {
+    data.nextAttemptAt = Temporal.Instant.from(data.nextAttemptAt);
+    data.createdAt = Temporal.Instant.from(data.createdAt);
+    if (data.sentAt) {
+        data.sentAt = Temporal.Instant.from(data.sentAt);
+    }
+    if (data.failedAt) {
+        data.failedAt = Temporal.Instant.from(data.failedAt);
+    }
+    return data;
+};
+
+const emailOutboxMessageDtoPaginatedSchemaResponseTransformer = (data: any) => {
+    data.total = BigInt(data.total.toString());
+    data.data = data.data.map((item: any) => emailOutboxMessageDtoSchemaResponseTransformer(item));
+    return data;
+};
+
+export const adminGetEmailOutboxResponseTransformer = async (data: any): Promise<AdminGetEmailOutboxResponse> => {
+    data = emailOutboxMessageDtoPaginatedSchemaResponseTransformer(data);
+    return data;
+};
+
+const emailOutboxStatsDtoSchemaResponseTransformer = (data: any) => {
+    data.pending = BigInt(data.pending.toString());
+    data.sending = BigInt(data.sending.toString());
+    data.sent = BigInt(data.sent.toString());
+    data.failed = BigInt(data.failed.toString());
+    data.skipped = BigInt(data.skipped.toString());
+    data.total = BigInt(data.total.toString());
+    return data;
+};
+
+export const adminGetEmailOutboxStatsResponseTransformer = async (data: any): Promise<AdminGetEmailOutboxStatsResponse> => {
+    data = emailOutboxStatsDtoSchemaResponseTransformer(data);
+    return data;
+};
+
+export const adminSendTestEmailResponseTransformer = async (data: any): Promise<AdminSendTestEmailResponse> => {
+    data = emailOutboxMessageDtoSchemaResponseTransformer(data);
     return data;
 };
 

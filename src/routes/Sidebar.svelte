@@ -153,6 +153,10 @@
             href: '/admin/webhooks',
           },
           {
+            title: 'Mail',
+            href: '/admin/mail',
+          },
+          {
             title: 'Configuration',
             href: '/admin/config',
           },
