@@ -19,6 +19,7 @@
     RenderRedCell,
   } from '$lib/components/Table/ColumnUtils';
   import DataTableActions from './data-table-actions.svelte';
+  import { odataAnd, odataContains, odataEq } from '$lib/utils/odata';
 
   function StatusRenderer(status: EmailStatusType) {
     switch (status) {
@@ -39,14 +40,6 @@
     if (!error) return CellRedNone;
     const short = error.length > 60 ? error.slice(0, 57) + '…' : error;
     return RenderCellWithTooltip(short, error);
-  }
-
-  function escapeQuotes(str: string) {
-    if (/[ '"\\]/.test(str)) {
-      const escaped = str.replace(/(['"\\])/g, '\\$1');
-      return `'${escaped}'`;
-    }
-    return str;
   }
 </script>
 
@@ -150,14 +143,11 @@
 
   const applyFilterQuery = useDebounce((query: string | undefined) => (filterQuery = query), 600);
   $effect(() => {
-    const clauses: string[] = [];
-
     const recipient = recipientSearch.trim();
-    if (recipient) clauses.push(`recipient ilike ${escapeQuotes('%' + recipient + '%')}`);
-
-    if (statusFilter) clauses.push(`status eq ${statusFilter}`);
-
-    const query = clauses.length > 0 ? clauses.join(' and ') : undefined;
+    const query = odataAnd(
+      recipient && odataContains('recipient', recipient),
+      statusFilter && odataEq('status', statusFilter)
+    );
     if (query === filterQuery) return;
     applyFilterQuery(query);
   });
