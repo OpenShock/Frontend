@@ -68,6 +68,22 @@ export function getBackendURL(path?: BackendPath): URL {
   return url;
 }
 
+/**
+ * Builds the live-control-gateway WebSocket URL from the parts the backend advertises
+ * (`host`, `port`, and a full `path` that already includes the gateway's path prefix and the
+ * `/…/ws/live/{hubId}` route). The port is only included when it differs from the default 443,
+ * so a default-layout gateway yields `wss://host/…` exactly as before.
+ *
+ * @example
+ * getGatewayWsURL('gw.example.com', 443, '/1/ws/live/abc')       // wss://gw.example.com/1/ws/live/abc
+ * getGatewayWsURL('example.com', 8080, '/gateway/1/ws/live/abc') // wss://example.com:8080/gateway/1/ws/live/abc
+ */
+export function getGatewayWsURL(host: string, port: number, path: string): string {
+  const authority = port === 443 ? host : `${host}:${port}`;
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  return `wss://${authority}${normalizedPath}`;
+}
+
 // ---------------------------------------------------------------------------
 // Site URLs
 // ---------------------------------------------------------------------------

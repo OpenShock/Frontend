@@ -2010,14 +2010,6 @@ export type DevicesGetLiveControlGatewayInfoErrors = {
      * Device is not online
      */
     404: OpenShockProblem;
-    /**
-     * Device is online but not connected to a LCG node, you might need to upgrade your firmware to use this feature
-     */
-    412: OpenShockProblem;
-    /**
-     * Internal server error, lcg node could not be found
-     */
-    500: unknown;
 };
 
 export type DevicesGetLiveControlGatewayInfoError = DevicesGetLiveControlGatewayInfoErrors[keyof DevicesGetLiveControlGatewayInfoErrors];

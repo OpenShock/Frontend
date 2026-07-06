@@ -1,5 +1,6 @@
-import { devicesGetLiveControlGatewayInfo } from '$lib/api';
+import { devicesGetLiveControlGatewayInfoV2 } from '$lib/api';
 import { ControlType } from '$lib/signalr/models/ControlType';
+import { getGatewayWsURL } from '$lib/utils/url';
 import { toast } from 'svelte-sonner';
 import { SvelteMap, SvelteSet } from 'svelte/reactivity';
 
@@ -90,13 +91,17 @@ export class LiveDeviceConnection {
     const attempt = ++this.connectAttempt;
 
     try {
-      const res = await devicesGetLiveControlGatewayInfo({ path: { deviceId: this.deviceId } });
+      const info = await devicesGetLiveControlGatewayInfoV2({
+        path: { deviceId: this.deviceId },
+      });
       if (attempt !== this.connectAttempt) return; // Stale attempt
 
-      this.gateway = res.data.gateway;
-      this.country = res.data.country;
+      this.gateway = info.host;
+      this.country = info.country;
 
-      const ws = new WebSocket(`wss://${this.gateway}/1/ws/live/${this.deviceId}`);
+      // The server tells us where the gateway lives (host/port/base path); we own the route.
+      const path = `${info.pathPrefix}/1/ws/live/${this.deviceId}`;
+      const ws = new WebSocket(getGatewayWsURL(info.host, info.port, path));
       this.ws = ws;
 
       ws.onopen = () => {

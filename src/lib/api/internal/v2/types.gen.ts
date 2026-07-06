@@ -89,6 +89,13 @@ export type LcgNodeResponseV2 = {
     country: string;
 };
 
+export type LcgResponseV2 = {
+    host: string;
+    port: number;
+    pathPrefix: string;
+    country: string;
+};
+
 export type LegacyEmptyResponse = {
     message: string;
     data?: unknown;
@@ -616,6 +623,33 @@ export type DevicesCreateDeviceV2Responses = {
 };
 
 export type DevicesCreateDeviceV2Response = DevicesCreateDeviceV2Responses[keyof DevicesCreateDeviceV2Responses];
+
+export type DevicesGetLiveControlGatewayInfoV2Data = {
+    body?: never;
+    path: {
+        deviceId: string;
+    };
+    query?: never;
+    url: '/2/devices/{deviceId}/lcg';
+};
+
+export type DevicesGetLiveControlGatewayInfoV2Errors = {
+    /**
+     * Device does not exist or is not online
+     */
+    404: OpenShockProblem;
+};
+
+export type DevicesGetLiveControlGatewayInfoV2Error = DevicesGetLiveControlGatewayInfoV2Errors[keyof DevicesGetLiveControlGatewayInfoV2Errors];
+
+export type DevicesGetLiveControlGatewayInfoV2Responses = {
+    /**
+     * Successfully retrieved live control gateway info
+     */
+    200: LcgResponseV2;
+};
+
+export type DevicesGetLiveControlGatewayInfoV2Response = DevicesGetLiveControlGatewayInfoV2Responses[keyof DevicesGetLiveControlGatewayInfoV2Responses];
 
 export type ShockerSendControlData = {
     body?: ControlRequest;
