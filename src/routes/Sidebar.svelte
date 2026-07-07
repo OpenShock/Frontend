@@ -34,7 +34,7 @@
     MenuSubButton,
     Root,
     useSidebar,
-  } from '@openshock/svelte-core/components/ui/sidebar/index.js';
+  } from '@openshock/svelte-core/components/ui/sidebar';
   import { userState } from '$lib/state/user-state.svelte';
   import type { AnyComponent } from '@openshock/svelte-core/types/AnyComponent.js';
   import { isSerialSupported } from '$lib/utils/compatibility';

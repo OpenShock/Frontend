@@ -2,9 +2,9 @@
   import { Check, Search } from '@lucide/svelte';
   import { ResponseError, usersGetByName } from '$lib/api';
   import type { BasicUserInfo } from '$lib/api';
-  import * as Avatar from '@openshock/svelte-core/components/ui/avatar/index.js';
-  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
-  import { Input } from '@openshock/svelte-core/components/ui/input/index.js';
+  import * as Avatar from '@openshock/svelte-core/components/ui/avatar';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import { Input } from '@openshock/svelte-core/components/ui/input';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 
   interface Props {

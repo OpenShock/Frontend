@@ -9,11 +9,8 @@
     getPaginationRowModel,
     getSortedRowModel,
   } from '@tanstack/table-core';
-  import {
-    FlexRender,
-    createSvelteTable,
-  } from '@openshock/svelte-core/components/ui/data-table/index.js';
-  import * as Table from '@openshock/svelte-core/components/ui/table/index.js';
+  import { FlexRender, createSvelteTable } from '@openshock/svelte-core/components/ui/data-table';
+  import * as Table from '@openshock/svelte-core/components/ui/table';
   import { cn } from '@openshock/svelte-core/utils/shadcn.js';
 
   interface Props {

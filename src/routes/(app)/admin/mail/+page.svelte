@@ -51,12 +51,12 @@
     type EmailOutboxMessageDtoPaginated,
     type EmailOutboxStatsDto,
   } from '$lib/api';
-  import { Container } from '@openshock/svelte-core/components/index.js';
+  import { Container } from '@openshock/svelte-core/components';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import PaginationFooter from '$lib/components/Table/PaginationFooter.svelte';
-  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
-  import { CardHeader, CardTitle } from '@openshock/svelte-core/components/ui/card/index.js';
-  import { Input } from '@openshock/svelte-core/components/ui/input/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import { CardHeader, CardTitle } from '@openshock/svelte-core/components/ui/card';
+  import { Input } from '@openshock/svelte-core/components/ui/input';
   import { RotateCcw, Send } from '@lucide/svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';

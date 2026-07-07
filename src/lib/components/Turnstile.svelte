@@ -2,8 +2,8 @@
   import Bug from '@lucide/svelte/icons/bug';
   import { dev } from '$app/env';
   import { PUBLIC_TURNSTILE_DEV_BYPASS_VALUE } from '$env/static/public';
-  import { CloudflareLogo } from '@openshock/svelte-core/components/svg/index.js';
-  import { Spinner } from '@openshock/svelte-core/components/ui/spinner/index.js';
+  import { CloudflareLogo } from '@openshock/svelte-core/components/svg';
+  import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import {
     ColorScheme,
     colorScheme,

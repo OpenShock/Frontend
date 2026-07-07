@@ -2,8 +2,8 @@
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import type { OwnPublicShareResponse } from '$lib/api';
-  import { TableActionMenu } from '@openshock/svelte-core/components/index.js';
-  import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu/index.js';
+  import { TableActionMenu } from '@openshock/svelte-core/components';
+  import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
   import { copyToClipboard } from '@openshock/svelte-core/utils/clipboard.svelte.js';
   import { Copy, Eye, Pencil, Trash2 } from '@lucide/svelte';
   import SharelinkDeleteDialog from './dialog-publicshare-delete.svelte';

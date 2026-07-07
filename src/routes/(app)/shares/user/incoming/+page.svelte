@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { EmptyState } from '@openshock/svelte-core/components/index.js';
-  import { Spinner } from '@openshock/svelte-core/components/ui/spinner/index.js';
-  import * as Table from '@openshock/svelte-core/components/ui/table/index.js';
+  import { EmptyState } from '@openshock/svelte-core/components';
+  import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
+  import * as Table from '@openshock/svelte-core/components/ui/table';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { userSharesState, refreshUserShares } from '$lib/state/user-shares-state.svelte';
   import Inbox from '@lucide/svelte/icons/inbox';

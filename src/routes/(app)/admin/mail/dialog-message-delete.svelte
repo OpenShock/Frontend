@@ -1,6 +1,6 @@
 <script lang="ts">
   import { adminDeleteEmailOutbox, type EmailOutboxMessageDto } from '$lib/api';
-  import { ConfirmDeleteDialog } from '@openshock/svelte-core/components/index.js';
+  import { ConfirmDeleteDialog } from '@openshock/svelte-core/components';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { toast } from 'svelte-sonner';
 

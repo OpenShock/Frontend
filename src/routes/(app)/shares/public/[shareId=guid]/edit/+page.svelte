@@ -4,11 +4,11 @@
   import { ExternalLink, Plus, Save } from '@lucide/svelte';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
-  import { CopyInput } from '@openshock/svelte-core/components/index.js';
-  import { Spinner } from '@openshock/svelte-core/components/ui/spinner/index.js';
-  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
-  import * as Avatar from '@openshock/svelte-core/components/ui/avatar/index.js';
-  import * as Tooltip from '@openshock/svelte-core/components/ui/tooltip/index.js';
+  import { CopyInput } from '@openshock/svelte-core/components';
+  import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Avatar from '@openshock/svelte-core/components/ui/avatar';
+  import * as Tooltip from '@openshock/svelte-core/components/ui/tooltip';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
   import { onMount } from 'svelte';

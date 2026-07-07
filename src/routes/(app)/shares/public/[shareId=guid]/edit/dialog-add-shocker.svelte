@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Plus } from '@lucide/svelte';
-  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
-  import * as Dialog from '@openshock/svelte-core/components/ui/dialog/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
   import MultiSelectCombobox from '@openshock/svelte-core/components/multi-select-combobox/multi-select-combobox.svelte';
   import { ownHubs } from '$lib/state/hubs-state.svelte';
 

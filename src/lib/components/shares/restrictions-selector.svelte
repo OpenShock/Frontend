@@ -1,9 +1,9 @@
 <script lang="ts">
   import { Volume2, Waves, Zap } from '@lucide/svelte';
-  import { formatDurationSeconds } from '@openshock/svelte-core/utils/index.js';
-  import { Label } from '@openshock/svelte-core/components/ui/label/index.js';
-  import { Slider } from '@openshock/svelte-core/components/ui/slider/index.js';
-  import { Switch } from '@openshock/svelte-core/components/ui/switch/index.js';
+  import { formatDurationSeconds } from '@openshock/svelte-core/utils';
+  import { Label } from '@openshock/svelte-core/components/ui/label';
+  import { Slider } from '@openshock/svelte-core/components/ui/slider';
+  import { Switch } from '@openshock/svelte-core/components/ui/switch';
   import LiveControlIcon from '../svg/LiveControlIcon.svelte';
   import type { Component } from 'svelte';
 

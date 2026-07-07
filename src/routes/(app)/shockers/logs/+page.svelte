@@ -2,7 +2,7 @@
   import { shockerGetAllShockerLogs } from '$lib/api';
   import type { ColumnDef, SortingState } from '@tanstack/table-core';
   import type { LogEntryWithHub } from '$lib/api';
-  import { Container } from '@openshock/svelte-core/components/index.js';
+  import { Container } from '@openshock/svelte-core/components';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
   import {
@@ -14,9 +14,9 @@
   } from '$lib/components/Table/ColumnUtils';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import PaginationFooter from '$lib/components/Table/PaginationFooter.svelte';
-  import { Badge } from '@openshock/svelte-core/components/ui/badge/index.js';
-  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
-  import { PageHeader } from '@openshock/svelte-core/components/index.js';
+  import { Badge } from '@openshock/svelte-core/components/ui/badge';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import { PageHeader } from '@openshock/svelte-core/components';
   import MultiSelectCombobox from '@openshock/svelte-core/components/multi-select-combobox/multi-select-combobox.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { addShockEventListener, removeShockEventListener } from '$lib/signalr/handlers/Log';

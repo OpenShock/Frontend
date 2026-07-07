@@ -1,7 +1,7 @@
 <script lang="ts">
   import { adminRemoveWebhook } from '$lib/api';
   import type { WebhookDto } from '$lib/api';
-  import { ConfirmDeleteDialog } from '@openshock/svelte-core/components/index.js';
+  import { ConfirmDeleteDialog } from '@openshock/svelte-core/components';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { toast } from 'svelte-sonner';
 

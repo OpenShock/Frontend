@@ -9,23 +9,19 @@
   import { resolve } from '$app/paths';
   import { shareLinksList } from '$lib/api';
   import type { OwnPublicShareResponse } from '$lib/api';
-  import { Container } from '@openshock/svelte-core/components/index.js';
-  import { CopyInput } from '@openshock/svelte-core/components/index.js';
-  import { EmptyState } from '@openshock/svelte-core/components/index.js';
-  import { Spinner } from '@openshock/svelte-core/components/ui/spinner/index.js';
-  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import { Container } from '@openshock/svelte-core/components';
+  import { CopyInput } from '@openshock/svelte-core/components';
+  import { EmptyState } from '@openshock/svelte-core/components';
+  import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import {
-    durationBetween,
-    formatDuration,
-    formatElapsed,
-  } from '@openshock/svelte-core/utils/index.js';
+  import { durationBetween, formatDuration, formatElapsed } from '@openshock/svelte-core/utils';
   import { getSiteShortURL } from '$lib/utils/url';
   import { onMount } from 'svelte';
   import DataTableActions from './data-table-actions.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import CreatePublicShareDialog from './dialog-publicshare-create.svelte';
-  import { PageHeader } from '@openshock/svelte-core/components/index.js';
+  import { PageHeader } from '@openshock/svelte-core/components';
 
   registerBreadcrumbs(() => [{ label: 'Public Shares' }]);
 

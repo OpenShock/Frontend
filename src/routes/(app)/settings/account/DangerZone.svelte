@@ -2,8 +2,8 @@
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { authenticatedAccountDeactivate } from '$lib/api';
-  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
-  import * as Dialog from '@openshock/svelte-core/components/ui/dialog/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { toast } from 'svelte-sonner';
 

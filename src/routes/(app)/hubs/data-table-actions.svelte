@@ -6,15 +6,15 @@
     devicesRemoveDevice,
   } from '$lib/api';
   import { goto } from '$app/navigation';
-  import { CopyInput } from '@openshock/svelte-core/components/index.js';
-  import { dialog } from '@openshock/svelte-core/components/dialog-manager/index.js';
-  import type { DialogRenderProps } from '@openshock/svelte-core/components/dialog-manager/index.js';
-  import { TextInput } from '@openshock/svelte-core/components/input/index.js';
-  import { TableActionMenu } from '@openshock/svelte-core/components/index.js';
-  import { Badge } from '@openshock/svelte-core/components/ui/badge/index.js';
-  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
-  import * as Dialog from '@openshock/svelte-core/components/ui/dialog/index.js';
-  import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu/index.js';
+  import { CopyInput } from '@openshock/svelte-core/components';
+  import { dialog } from '@openshock/svelte-core/components/dialog-manager';
+  import type { DialogRenderProps } from '@openshock/svelte-core/components/dialog-manager';
+  import { TextInput } from '@openshock/svelte-core/components/input';
+  import { TableActionMenu } from '@openshock/svelte-core/components';
+  import { Badge } from '@openshock/svelte-core/components/ui/badge';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
+  import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { getConnection } from '$lib/signalr/user.svelte';
   import { serializeCaptivePortalMessage } from '$lib/signalr/serializers/CaptivePortal';

@@ -5,9 +5,9 @@
   import type { NewShocker } from '$lib/api';
   import { Layers, LogsIcon, Plus, RotateCcw, Settings, Zap } from '@lucide/svelte';
   import { resolve } from '$app/paths';
-  import { Container } from '@openshock/svelte-core/components/index.js';
-  import { Spinner } from '@openshock/svelte-core/components/ui/spinner/index.js';
-  import { EmptyState } from '@openshock/svelte-core/components/index.js';
+  import { Container } from '@openshock/svelte-core/components';
+  import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
+  import { EmptyState } from '@openshock/svelte-core/components';
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import DialogShockerAdd, {
     defaultAddShockerData,
@@ -22,9 +22,9 @@
   import ShockerPauseButton from '$lib/components/ControlModules/impl/ShockerPauseButton.svelte';
   import SimpleControlHeader from '$lib/components/ControlModules/SimpleControlHeader.svelte';
   import SimpleControlModule from '$lib/components/ControlModules/SimpleControlModule.svelte';
-  import { dialog } from '@openshock/svelte-core/components/dialog-manager/index.js';
-  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
-  import * as Popover from '@openshock/svelte-core/components/ui/popover/index.js';
+  import { dialog } from '@openshock/svelte-core/components/dialog-manager';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Popover from '@openshock/svelte-core/components/ui/popover';
   import { ControlDurationDefault, ControlIntensityDefault } from '$lib/constants/ControlConstants';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { ControlType } from '$lib/signalr/models/ControlType';

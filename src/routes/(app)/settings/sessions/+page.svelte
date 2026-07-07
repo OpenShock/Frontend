@@ -3,7 +3,7 @@
   import type { LoginSessionResponse } from '$lib/api';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
   import type { ColumnDef, SortingState } from '@tanstack/table-core';
-  import { Container } from '@openshock/svelte-core/components/index.js';
+  import { Container } from '@openshock/svelte-core/components';
   import {
     CreateActionsColumnDef,
     CreateColumnDef,
@@ -14,8 +14,8 @@
     UserAgentRenderer,
   } from '$lib/components/Table/ColumnUtils';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
-  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
-  import * as Card from '@openshock/svelte-core/components/ui/card/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Card from '@openshock/svelte-core/components/ui/card';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';

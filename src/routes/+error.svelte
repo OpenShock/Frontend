@@ -7,7 +7,7 @@
     BasicTags,
     OpenGraphTags,
     TwitterSummaryTags,
-  } from '@openshock/svelte-core/components/metadata/index.js';
+  } from '@openshock/svelte-core/components/metadata';
   import ArrowLeft from '@lucide/svelte/icons/arrow-left';
   import { isValidRedirectURL } from '$lib/utils/url';
 

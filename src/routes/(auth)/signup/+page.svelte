@@ -1,24 +1,24 @@
 <script lang="ts">
   import { accountSignUpV2 } from '$lib/api';
-  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
-  import * as Card from '@openshock/svelte-core/components/ui/card/index.js';
-  import * as Field from '@openshock/svelte-core/components/ui/field/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Card from '@openshock/svelte-core/components/ui/card';
+  import * as Field from '@openshock/svelte-core/components/ui/field';
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import Turnstile from '$lib/components/Turnstile.svelte';
-  import { EmailInput } from '@openshock/svelte-core/components/input/index.js';
-  import { PasswordInput } from '@openshock/svelte-core/components/input/index.js';
-  import * as Dialog from '@openshock/svelte-core/components/ui/dialog/index.js';
+  import { EmailInput } from '@openshock/svelte-core/components/input';
+  import { PasswordInput } from '@openshock/svelte-core/components/input';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { validatePasswordMatch } from '@openshock/svelte-core/inputvalidation/passwordValidator.js';
   import { toast } from 'svelte-sonner';
-  import { FieldSeparator } from '@openshock/svelte-core/components/ui/field/index.js';
+  import { FieldSeparator } from '@openshock/svelte-core/components/ui/field';
   import OauthButtons from '$lib/components/auth/oauth-buttons.svelte';
   import { ChevronLeft, Mail } from '@lucide/svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
-  import { Skeleton } from '@openshock/svelte-core/components/ui/skeleton/index.js';
+  import { Skeleton } from '@openshock/svelte-core/components/ui/skeleton';
 
   registerBreadcrumbs(() => [{ label: 'Sign Up' }]);
 

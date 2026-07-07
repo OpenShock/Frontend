@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { EmailOutboxMessageDto } from '$lib/api';
-  import * as Dialog from '@openshock/svelte-core/components/ui/dialog/index.js';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
   import { Temporal } from 'temporal-polyfill';
 
   interface Props {

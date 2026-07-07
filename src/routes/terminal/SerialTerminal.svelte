@@ -9,7 +9,7 @@
     Clock,
     Code,
   } from '@lucide/svelte';
-  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
   import { stripAnsi } from './ansi';
   import { LOG_LEVEL_COLORS } from './constants';
   import type { TerminalLine } from './types';
