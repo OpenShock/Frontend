@@ -41,7 +41,7 @@
       description="No one has shared a shocker with you yet."
     />
   {:else}
-    <div class="mb-6 overflow-y-auto rounded-md border">
+    <div class="mb-6 overflow-x-auto rounded-md border">
       <Table.Root>
         <Table.Body>
           {#each userSharesState.shares.incoming as incomingShare, i (incomingShare.id)}

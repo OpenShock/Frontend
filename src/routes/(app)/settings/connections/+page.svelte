@@ -7,10 +7,8 @@
   import { page } from '$app/state';
   import type { OAuthConnectionResponse } from '$lib/api';
   import { GetOAuthAuthorizeUrl } from '$lib/api/next/oauth';
-  import { Container } from '@openshock/svelte-core/components/index.js';
+  import { Container, PageHeader, EmptyState } from '@openshock/svelte-core/components/index.js';
   import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
-  import * as Card from '@openshock/svelte-core/components/ui/card/index.js';
-  import { EmptyState } from '@openshock/svelte-core/components/index.js';
   import * as Dropdown from '@openshock/svelte-core/components/ui/dropdown-menu/index.js';
   import * as Separator from '@openshock/svelte-core/components/ui/separator/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
@@ -97,22 +95,17 @@
 </script>
 
 <Container>
-  <Card.Header class="w-full">
-    <Card.Title class="flex items-center justify-between text-3xl">
-      OAuth Connections
-      <div class="flex items-center gap-2">
-        <Button variant="ghost" onclick={refresh} disabled={loading} aria-busy={loading}>
-          <RotateCcw class="mr-2 size-4" />
-          {loading ? 'Refreshing…' : 'Refresh'}
-        </Button>
-      </div>
-    </Card.Title>
-    <Card.Description>
-      Link or unlink third-party accounts to sign in faster and keep your profile in sync.
-    </Card.Description>
-  </Card.Header>
+  <PageHeader
+    title="OAuth Connections"
+    subtitle="Link or unlink third-party accounts to sign in faster and keep your profile in sync."
+  >
+    <Button variant="outline" onclick={refresh} disabled={loading} aria-busy={loading}>
+      <RotateCcw class="size-4" />
+      {loading ? 'Refreshing…' : 'Refresh'}
+    </Button>
+  </PageHeader>
 
-  <Card.Content class="flex w-full flex-1 flex-col space-y-6">
+  <div class="w-full space-y-6">
     <!-- Quick actions -->
     <div class="flex flex-wrap gap-2">
       <Dropdown.Root>
@@ -194,7 +187,7 @@
         {/each}
       </div>
     {/if}
-  </Card.Content>
+  </div>
 </Container>
 
 <!-- Confirm dialog lives once at root -->

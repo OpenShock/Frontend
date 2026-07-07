@@ -6,7 +6,7 @@
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
   import type { SortingState } from '@tanstack/table-core';
   import type { ColumnDef } from '@tanstack/table-core';
-  import { Container } from '@openshock/svelte-core/components/index.js';
+  import { Container, PageHeader } from '@openshock/svelte-core/components/index.js';
   import {
     CreateActionsColumnDef,
     CreateColumnDef,
@@ -17,7 +17,6 @@
   } from '$lib/components/Table/ColumnUtils';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
-  import * as Card from '@openshock/svelte-core/components/ui/card/index.js';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
@@ -73,23 +72,18 @@
 </script>
 
 <Container>
-  <Card.Header class="w-full">
-    <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
-      API Tokens
-      <div>
-        <Button href={resolve('/settings/api-tokens/new')}>
-          <Plus />
-          Generate Token
-        </Button>
-        <Button onclick={refresh}>
-          <RotateCcw />
-          Refresh
-        </Button>
-      </div>
-    </Card.Title>
-    <Card.Description>API Tokens are used to authenticate with the OpenShock API</Card.Description>
-  </Card.Header>
-  <Card.Content class="flex w-full flex-col space-y-4">
-    <DataTable data={tokens} {columns} {sorting} />
-  </Card.Content>
+  <PageHeader
+    title="API Tokens"
+    subtitle="API Tokens are used to authenticate with the OpenShock API"
+  >
+    <Button href={resolve('/settings/api-tokens/new')}>
+      <Plus />
+      Generate Token
+    </Button>
+    <Button onclick={refresh}>
+      <RotateCcw />
+      Refresh
+    </Button>
+  </PageHeader>
+  <DataTable data={tokens} {columns} {sorting} />
 </Container>

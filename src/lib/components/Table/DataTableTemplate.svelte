@@ -84,7 +84,7 @@
   });
 </script>
 
-<div class={cn('overflow-y-auto rounded-md border', className)}>
+<div class={cn('overflow-x-auto rounded-md border', className)}>
   <Table.Root>
     <Table.Header>
       {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
