@@ -23,7 +23,7 @@
 
 <Container class="items-center-safe justify-center-safe p-0!">
   <span class="flex items-center gap-2 self-center font-medium">
-    <img class="h-8" src={asset('/NavbarLogoSpin.svg')} alt="OpenShock Logo" />
+    <img class="h-8" src={asset('/logo.svg')} alt="OpenShock Logo" />
   </span>
   <div class="flex max-w-sm flex-col gap-6">
     {@render children?.()}

@@ -7,4 +7,7 @@
       <path style="fill:#afe3fe;fill-opacity:1;fill-rule:evenodd" d="M 279,112 254.5,232.5 H 328 L 221,388 245.5,267.5 H 172 Z" id="path134" />
     </g>
   </g>
+
+  <animateTransform href="#path18" attributeName="transform" type="rotate" from="0 250 250" to="360 250 250" dur="10s" repeatCount="indefinite" />
+
 </svg>

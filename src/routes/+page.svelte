@@ -11,7 +11,7 @@
 </script>
 
 <svelte:head>
-  <link rel="preload" href={asset('/NavbarLogoSpin.svg')} as="image" type="image/svg+xml" />
+  <link rel="preload" href={asset('/logo.svg')} as="image" type="image/svg+xml" />
 </svelte:head>
 
 <section
@@ -21,7 +21,7 @@
 >
   <DotGrid bind:this={grid} />
 
-  <img class="h-10 sm:h-16 md:h-22" src={asset('/NavbarLogoSpin.svg')} alt="OpenShock Logo" />
+  <img class="h-10 sm:h-16 md:h-22" src={asset('/logo.svg')} alt="OpenShock Logo" />
   <p class="relative text-lg opacity-75 md:text-2xl">
     The go-to platform for safe, reliable, real low-latency remote shocking.<br />
     {#if data.ok}
