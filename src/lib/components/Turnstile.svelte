@@ -48,6 +48,7 @@
     if (!siteKey) {
       console.info('Backend did not provide a Turnstile site key! Assuming its disabled.');
       disabled = true;
+      onResponse(PUBLIC_TURNSTILE_DEV_BYPASS_VALUE);
       return;
     }
 

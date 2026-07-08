@@ -23,7 +23,7 @@
     title: 'Service Unavailable',
     description: 'OpenShock is currently unavailable',
     image: {
-      src: asset('/logo.svg'),
+      src: asset('/Logo.svg'),
       alt: 'OpenShock Logo',
     },
   };

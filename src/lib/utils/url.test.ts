@@ -193,14 +193,14 @@ describe('getSiteAssetURL', () => {
   });
 
   it('builds a URL for a static asset', () => {
-    const url = getSiteAssetURL('/logo.svg' as never);
-    expect(url.href).toBe('https://openshock.app/logo.svg');
+    const url = getSiteAssetURL('/Logo.svg' as never);
+    expect(url.href).toBe('https://openshock.app/Logo.svg');
   });
 
   it('uses the asset() transform', () => {
     mocks.asset = (p: string) => `/_app/immutable${p}`;
-    const url = getSiteAssetURL('/logo.svg' as never);
-    expect(url.pathname).toBe('/_app/immutable/logo.svg');
+    const url = getSiteAssetURL('/Logo.svg' as never);
+    expect(url.pathname).toBe('/_app/immutable/Logo.svg');
   });
 });
 

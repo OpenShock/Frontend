@@ -11,8 +11,7 @@
 </script>
 
 <svelte:head>
-  <link rel="preload" href={asset('/IconSpinning.svg')} as="image" type="image/svg+xml" />
-  <link rel="preload" href={asset('/LogoBakedFont.svg')} as="image" type="image/svg+xml" />
+  <link rel="preload" href={asset('/NavbarLogoSpin.svg')} as="image" type="image/svg+xml" />
 </svelte:head>
 
 <section
@@ -22,20 +21,7 @@
 >
   <DotGrid bind:this={grid} />
 
-  <span class="relative flex">
-    <img
-      class="h-9 pr-2 sm:h-14 md:h-20 md:pr-4"
-      src={asset('/IconSpinning.svg')}
-      alt="logo"
-      fetchpriority="high"
-    />
-    <img
-      class="h-9 sm:h-14 md:h-20"
-      src={asset('/LogoBakedFont.svg')}
-      alt="logo"
-      fetchpriority="high"
-    />
-  </span>
+  <img class="h-10 sm:h-16 md:h-22" src={asset('/NavbarLogoSpin.svg')} alt="OpenShock Logo" />
   <p class="relative text-lg opacity-75 md:text-2xl">
     The go-to platform for safe, reliable, real low-latency remote shocking.<br />
     {#if data.ok}
