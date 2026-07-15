@@ -36,7 +36,11 @@
   let turnstileResponse = $state<string | null>(null);
 
   let canSubmit = $derived(
-    usernameValid && emailValid && passwordValid && password == passwordConfirm && turnstileResponse
+    usernameValid &&
+      emailValid &&
+      passwordValid &&
+      password == passwordConfirm &&
+      turnstileResponse != null
   );
 
   let accountCreated = $state(false);
@@ -56,7 +60,7 @@
   async function handleSubmission(e: SubmitEvent) {
     e.preventDefault();
 
-    if (!username || !email || !password || !passwordConfirm || !turnstileResponse) {
+    if (!username || !email || !password || !passwordConfirm || turnstileResponse == null) {
       return;
     }
 
