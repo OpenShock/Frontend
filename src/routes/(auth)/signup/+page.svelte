@@ -47,11 +47,16 @@
 
   let useEmail = $state(false);
 
+  // Instances without a mail provider never send an activation email; the account is usable right away.
+  let mailEnabled = $derived(backendMetadata.state?.isMailEnabled ?? true);
+
   function onOpenChange(open: boolean) {
     if (!open) {
       accountCreated = false;
       toast.success(
-        'Account created successfully. Please check your email to verify your account.'
+        mailEnabled
+          ? 'Account created successfully. Please check your email to verify your account.'
+          : 'Account created successfully. You can log in now.'
       );
       goto(resolve('/login'));
     }
@@ -84,8 +89,13 @@
       <Dialog.Title>Welcome! Thank you for signing up! ❤️</Dialog.Title>
       <Dialog.Description>
         <div class="flex flex-col gap-4">
-          <p>Your account has been created. 🎉 Please check your email to verify your account.</p>
-          <p>After verifying your email, you can log in to your account.</p>
+          {#if mailEnabled}
+            <p>Your account has been created. 🎉 Please check your email to verify your account.</p>
+            <p>After verifying your email, you can log in to your account.</p>
+          {:else}
+            <p>Your account has been created and is ready to use. 🎉</p>
+            <p>You can log in to your account now.</p>
+          {/if}
 
           <Button variant="default" size="sm" class="mt-4" onclick={() => goto(resolve('/login'))}
             >Ok</Button

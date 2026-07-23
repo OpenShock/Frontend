@@ -75,6 +75,9 @@
   let providers = $derived(backendMetadata.state?.oAuthProviders ?? []);
   let anyOAuthProviders = $derived(providers.length > 0);
 
+  // Without a mail provider the reset link can never be delivered, so don't offer the flow.
+  let mailEnabled = $derived(backendMetadata.state?.isMailEnabled ?? true);
+
   let canSubmit = $derived(
     usernameOrEmail.length > 0 && password.length > 0 && turnstileResponse != null
   );
@@ -129,7 +132,7 @@
                 autocomplete="current-password"
                 bind:value={password}
                 validate={passwordError}
-                forgotHref={resolve('/forgot-password')}
+                forgotHref={mailEnabled ? resolve('/forgot-password') : undefined}
               />
 
               <Turnstile

@@ -77,6 +77,7 @@ export type BackendInfoResponse = {
     shortLinkUrl: string;
     turnstileSiteKey: string | null;
     oAuthProviders: Array<string>;
+    isMailEnabled: boolean;
     isUserAuthenticated: boolean;
 };
 

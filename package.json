@@ -93,5 +93,5 @@
 	"browserslist": [
 		"defaults and fully supports es6-module"
 	],
-	"packageManager": "pnpm@11.9.0"
+	"packageManager": "pnpm@11.13.1"
 }
