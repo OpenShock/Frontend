@@ -70,7 +70,7 @@
       </form>
     {:else}
       <div class="flex flex-col gap-4">
-        <p class="text-center text-sm text-muted-foreground">
+        <p class="text-muted-foreground text-center text-sm">
           Password resets are unavailable on this instance because it has no mail provider
           configured. Please contact your administrator for help recovering your account.
         </p>

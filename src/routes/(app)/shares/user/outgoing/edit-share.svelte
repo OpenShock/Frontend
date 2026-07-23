@@ -192,7 +192,7 @@
 
 <Drawer.Root bind:open={editDrawer} direction="right">
   <Drawer.Content>
-    <div class="mx-auto flex h-full max-h-[100vh] w-full flex-col">
+    <div class="mx-auto flex h-full max-h-screen w-full flex-col">
       <Drawer.Header class="shrink-0 border-b">
         <Drawer.Description class="text-muted-foreground text-xs">
           Editing shares for

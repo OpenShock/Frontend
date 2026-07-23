@@ -56,7 +56,7 @@
         <Label class="text-xs">Max Intensity</Label>
         <span class="text-muted-foreground font-mono text-xs">{limits.intensity}%</span>
       </div>
-      <Slider type="single" bind:value={limits.intensity} min={0} max={100} step={1} />
+      <Slider type="single" bind:value={limits.intensity} min={1} max={100} step={1} />
     </div>
 
     <div class="space-y-1.5">
@@ -66,7 +66,7 @@
           >{formatDurationSeconds(limits.duration / 1000)}</span
         >
       </div>
-      <Slider type="single" bind:value={limits.duration} min={0} max={30_000} step={100} />
+      <Slider type="single" bind:value={limits.duration} min={300} max={30_000} step={100} />
     </div>
   </div>
 </div>

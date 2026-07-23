@@ -1,13 +1,10 @@
 <script lang="ts">
   import { shareLinksPauseShocker, shareLinksRemoveShocker } from '$lib/api';
-  import type { PublicShareShocker, ShockerPermissions } from '$lib/api';
-  import { Pause, Play, Trash2, Zap, Vibrate, Volume2, Radio } from '@lucide/svelte';
+  import type { PublicShareShocker } from '$lib/api';
+  import { Pause, Play, Trash2 } from '@lucide/svelte';
   import { Button } from '@openshock/svelte-core/components/ui/button';
-  import { Label } from '@openshock/svelte-core/components/ui/label';
-  import { Slider } from '@openshock/svelte-core/components/ui/slider';
-  import { Switch } from '@openshock/svelte-core/components/ui/switch';
+  import RestrictionsSelector from '$lib/components/shares/restrictions-selector.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { formatDurationSeconds } from '@openshock/svelte-core/utils';
   import { toast } from 'svelte-sonner';
 
   interface Props {
@@ -46,24 +43,22 @@
     }
   };
 
-  const updatePermission = (feature: keyof ShockerPermissions, enabled: boolean) => {
-    shocker.permissions = { ...shocker.permissions, [feature]: enabled };
-  };
-
-  let durationSeconds = $state(shocker.limits.duration ? shocker.limits.duration / 1000 : 30);
-  let intensity = $state(shocker.limits.intensity ?? 100);
-
-  $effect(() => {
-    const durationMs = durationSeconds * 1000;
-    if (shocker.limits.duration !== durationMs) {
-      shocker.limits = { ...shocker.limits, duration: durationMs };
-    }
+  // RestrictionsSelector needs non-nullable values; normalise the API shape and
+  // write edits back onto the shocker so the parent's save picks them up.
+  let permissions = $state({
+    shock: shocker.permissions.shock ?? false,
+    vibrate: shocker.permissions.vibrate ?? false,
+    sound: shocker.permissions.sound ?? false,
+    live: shocker.permissions.live ?? false,
+  });
+  let limits = $state({
+    intensity: shocker.limits.intensity ?? 100,
+    duration: shocker.limits.duration ?? 30_000,
   });
 
   $effect(() => {
-    if (shocker.limits.intensity !== intensity) {
-      shocker.limits = { ...shocker.limits, intensity };
-    }
+    shocker.permissions = permissions;
+    shocker.limits = limits;
   });
 
   const removeShocker = async () => {
@@ -80,13 +75,6 @@
       isRemoving = false;
     }
   };
-
-  const features = [
-    { key: 'shock', label: 'Shock', icon: Zap },
-    { key: 'vibrate', label: 'Vibrate', icon: Vibrate },
-    { key: 'sound', label: 'Sound', icon: Volume2 },
-    { key: 'live', label: 'Live Control', icon: Radio },
-  ] satisfies { key: keyof ShockerPermissions; label: string; icon: typeof Zap }[];
 </script>
 
 <div
@@ -132,43 +120,7 @@
   </div>
 
   <!-- Body -->
-  <div class="flex flex-col gap-4 p-3">
-    <!-- Feature toggles -->
-    <div class="grid grid-cols-2 gap-2">
-      {#each features as { key, label, icon: Icon } (key)}
-        {@const enabled = shocker.permissions[key] ?? false}
-        <div
-          class="border-border/60 flex items-center justify-between gap-2 rounded-md border px-2.5 py-2 transition-colors"
-          class:opacity-60={!enabled}
-        >
-          <span class="flex min-w-0 items-center gap-2">
-            <Icon size={14} class="shrink-0" />
-            <span class="truncate text-xs font-medium">{label}</span>
-          </span>
-          <Switch checked={enabled} onCheckedChange={(checked) => updatePermission(key, checked)} />
-        </div>
-      {/each}
-    </div>
-
-    <!-- Sliders -->
-    <div class="flex flex-col gap-3">
-      <div class="space-y-1.5">
-        <div class="flex items-center justify-between">
-          <Label class="text-xs">Max Duration</Label>
-          <span class="text-muted-foreground font-mono text-xs"
-            >{formatDurationSeconds(durationSeconds)}</span
-          >
-        </div>
-        <Slider type="single" bind:value={durationSeconds} min={1} max={30} step={0.1} />
-      </div>
-
-      <div class="space-y-1.5">
-        <div class="flex items-center justify-between">
-          <Label class="text-xs">Max Intensity</Label>
-          <span class="text-muted-foreground font-mono text-xs">{intensity}%</span>
-        </div>
-        <Slider type="single" bind:value={intensity} min={1} max={100} step={1} />
-      </div>
-    </div>
+  <div class="p-3">
+    <RestrictionsSelector bind:permissions bind:limits />
   </div>
 </div>

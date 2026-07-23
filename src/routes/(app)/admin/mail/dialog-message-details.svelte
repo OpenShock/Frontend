@@ -39,7 +39,7 @@
     <dl class="grid grid-cols-[minmax(8rem,auto)_1fr] gap-x-4 gap-y-2 text-sm">
       {#each rows as row (row.label)}
         <dt class="text-muted-foreground font-medium">{row.label}</dt>
-        <dd class="break-all font-mono">{row.value}</dd>
+        <dd class="font-mono break-all">{row.value}</dd>
       {/each}
     </dl>
 
@@ -51,7 +51,7 @@
         <dl class="grid grid-cols-[minmax(8rem,auto)_1fr] gap-x-4 gap-y-1 text-sm">
           {#each payloadEntries as [key, value] (key)}
             <dt class="text-muted-foreground font-mono">{key}</dt>
-            <dd class="break-all font-mono">{value}</dd>
+            <dd class="font-mono break-all">{value}</dd>
           {/each}
         </dl>
       {/if}

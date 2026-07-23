@@ -308,7 +308,7 @@
       <span class="pointer-events-none flex">
         <LogoMark class="ml-[0.667px] h-7.5 shrink-0" />
 
-        <span class="ml-1.5 grow flex items-center">
+        <span class="ml-1.5 flex grow items-center">
           <LogoText
             class="h-auto max-h-7.5 transition-opacity delay-100 duration-200 group-data-[collapsible=icon]:opacity-0 group-data-[collapsible=icon]:delay-0"
           />

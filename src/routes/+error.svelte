@@ -41,7 +41,7 @@
 <TwitterSummaryTags type="summary" {...meta} site="@OpenShockORG" creator="@OpenShockORG" />
 
 <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
-  <div class="text-primary/20 select-none text-[8rem] font-black leading-none sm:text-[12rem]">
+  <div class="text-primary/20 text-[8rem] leading-none font-black select-none sm:text-[12rem]">
     {page.status}
   </div>
   <p class="text-foreground mt-2 text-xl font-semibold">
