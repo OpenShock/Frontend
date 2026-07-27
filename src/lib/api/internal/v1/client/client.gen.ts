@@ -37,7 +37,7 @@ export const createClient = (config: Config = {}): Client => {
     ThrowOnError extends boolean = boolean,
     Url extends string = string,
   >(
-    options: RequestOptions<TData, TResponseStyle, ThrowOnError, Url>,
+    options: RequestOptions<TData, TResponseStyle, ThrowOnError, Url>
   ) => {
     const opts = {
       ..._config,
