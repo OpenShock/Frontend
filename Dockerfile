@@ -1,8 +1,7 @@
 # Define versions as build arguments for easy updates
-ARG NODE_VERSION=26.3.1
 ARG PNPM_VERSION=11.8.0
 
-FROM node:${NODE_VERSION}-trixie-slim
+FROM node:26.3.1-trixie-slim@sha256:f9b8bd6c62fcd007c08ce2bb2907485b624b968fd76094445822e0ec14002cf0
 
 ARG PNPM_VERSION
 ARG GIT_BRANCH
@@ -15,9 +14,7 @@ ENV GIT_BRANCH=${GIT_BRANCH}
 ENV GIT_COMMIT_SHA=${GIT_COMMIT_SHA}
 
 # Copy dependency manifests first (for caching)
-COPY package.json .
-COPY pnpm-lock.yaml .
-COPY pnpm-workspace.yaml .
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY patches/ patches/
 
 # Install pnpm via npm (works on any platform/libc, no tarball extraction needed)
