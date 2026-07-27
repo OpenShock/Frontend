@@ -4,6 +4,7 @@ import { Temporal } from 'temporal-polyfill';
 
 import type {
   AdminConfigurationListResponse,
+  AdminGetAdminAuditLogResponse,
   AdminGetEmailOutboxResponse,
   AdminGetEmailOutboxStatsResponse,
   AdminGetOnlineDevicesResponse,
@@ -12,6 +13,7 @@ import type {
   AdminListUsernameBlacklistResponse,
   AdminListWebhooksResponse,
   AdminSendTestEmailResponse,
+  AuthenticatedAccountGetAuditLogResponse,
   AuthenticatedAccountListOAuthConnectionsResponse,
   DevicesGetDeviceByIdResponse,
   DevicesGetShockersResponse,
@@ -78,6 +80,23 @@ export const tokensCreateTokenResponseTransformer = async (
   data: any
 ): Promise<TokensCreateTokenResponse> => {
   data = tokenCreatedResponseSchemaResponseTransformer(data);
+  return data;
+};
+
+const auditLogEntryResponseSchemaResponseTransformer = (data: any) => {
+  data.createdAt = Temporal.Instant.from(data.createdAt);
+  return data;
+};
+
+const auditLogEntryResponsePagedResultSchemaResponseTransformer = (data: any) => {
+  data.items = data.items.map((item: any) => auditLogEntryResponseSchemaResponseTransformer(item));
+  return data;
+};
+
+export const authenticatedAccountGetAuditLogResponseTransformer = async (
+  data: any
+): Promise<AuthenticatedAccountGetAuditLogResponse> => {
+  data = auditLogEntryResponsePagedResultSchemaResponseTransformer(data);
   return data;
 };
 
@@ -164,6 +183,13 @@ export const adminListEmailProviderBlacklistResponseTransformer = async (
   data: any
 ): Promise<AdminListEmailProviderBlacklistResponse> => {
   data = data.map((item: any) => emailProviderBlacklistDtoSchemaResponseTransformer(item));
+  return data;
+};
+
+export const adminGetAdminAuditLogResponseTransformer = async (
+  data: any
+): Promise<AdminGetAdminAuditLogResponse> => {
+  data = auditLogEntryResponsePagedResultSchemaResponseTransformer(data);
   return data;
 };
 

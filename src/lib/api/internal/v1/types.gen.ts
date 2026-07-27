@@ -70,6 +70,48 @@ export type AdminUsersViewPaginated = {
   data: Array<AdminUsersView>;
 };
 
+export const AuditAction = {
+  Login: 'Login',
+  Logout: 'Logout',
+  PasswordChanged: 'PasswordChanged',
+  EmailChangeRequested: 'EmailChangeRequested',
+  EmailChanged: 'EmailChanged',
+  UsernameChanged: 'UsernameChanged',
+  ApiTokenCreated: 'ApiTokenCreated',
+  ApiTokenDeleted: 'ApiTokenDeleted',
+  OAuthConnected: 'OAuthConnected',
+  OAuthDisconnected: 'OAuthDisconnected',
+  AccountDeactivated: 'AccountDeactivated',
+  AccountReactivated: 'AccountReactivated',
+  AccountDeleted: 'AccountDeleted',
+} as const;
+
+export type AuditAction = (typeof AuditAction)[keyof typeof AuditAction];
+
+export type AuditLogEntryResponse = {
+  id: string;
+  userId: string;
+  actorId: string | null;
+  action: AuditAction;
+  reason: string | null;
+  ipAddress: string | null;
+  userAgent: string | null;
+  metadata: AuditMetadata;
+  createdAt: Temporal.Instant;
+};
+
+export type AuditLogEntryResponsePagedResult = {
+  items: Array<AuditLogEntryResponse>;
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  readonly totalPages?: number;
+};
+
+export type AuditMetadata = {
+  [key: string]: never;
+};
+
 export type BackendInfoResponse = {
   version: string;
   commit: string;
@@ -78,6 +120,11 @@ export type BackendInfoResponse = {
   shortLinkUrl: string;
   turnstileSiteKey: string | null;
   oAuthProviders: Array<string>;
+  /**
+   * False when the instance has no mail provider configured. Accounts are then activated on
+   * creation, and no flow that relies on an emailed link (activation, password reset, email
+   * change) can complete.
+   */
   isMailEnabled: boolean;
   isUserAuthenticated: boolean;
 };
@@ -852,6 +899,13 @@ export type WebhookDto = {
   createdAt: Temporal.Instant;
 };
 
+export type AuditLogEntryResponsePagedResultWritable = {
+  items: Array<AuditLogEntryResponse>;
+  page: number;
+  pageSize: number;
+  totalCount: number;
+};
+
 export type LogEntryWithHubPagedResultWritable = {
   items: Array<LogEntryWithHub>;
   page: number;
@@ -1326,6 +1380,29 @@ export type AuthenticatedAccountDeactivateResponses = {
 export type AuthenticatedAccountDeactivateResponse =
   AuthenticatedAccountDeactivateResponses[keyof AuthenticatedAccountDeactivateResponses];
 
+export type AuthenticatedAccountGetAuditLogData = {
+  body?: never;
+  path?: never;
+  query?: {
+    page?: number;
+    pageSize?: number;
+    search?: string;
+    sort?: string;
+    sortDir?: SortDirection;
+  };
+  url: '/1/account/audit-log';
+};
+
+export type AuthenticatedAccountGetAuditLogResponses = {
+  /**
+   * A page of audit log entries.
+   */
+  200: AuditLogEntryResponsePagedResult;
+};
+
+export type AuthenticatedAccountGetAuditLogResponse =
+  AuthenticatedAccountGetAuditLogResponses[keyof AuthenticatedAccountGetAuditLogResponses];
+
 export type AuthenticatedAccountRemoveOAuthConnectionData = {
   body?: never;
   path: {
@@ -1505,6 +1582,7 @@ export type AdminDeactivateUserData = {
   };
   query?: {
     deleteLater?: boolean;
+    reason?: string;
   };
   url: '/1/admin/users/{userId}/deactivate';
 };
@@ -1528,7 +1606,9 @@ export type AdminDeleteUserData = {
   path: {
     userId: string;
   };
-  query?: never;
+  query?: {
+    reason?: string;
+  };
   url: '/1/admin/users/{userId}';
 };
 
@@ -1885,6 +1965,37 @@ export type AdminRemoveEmailProviderBlacklistResponses = {
   200: unknown;
 };
 
+export type AdminGetAdminAuditLogData = {
+  body?: never;
+  path?: never;
+  query?: {
+    page?: number;
+    pageSize?: number;
+    search?: string;
+    sort?: string;
+    sortDir?: SortDirection;
+    /**
+     * Optional: filter by the subject user (the account that was affected).
+     */
+    userId?: string;
+    /**
+     * Optional: filter by the actor (who performed the action).
+     */
+    actorId?: string;
+  };
+  url: '/1/admin/audit-log';
+};
+
+export type AdminGetAdminAuditLogResponses = {
+  /**
+   * A page of audit log entries.
+   */
+  200: AuditLogEntryResponsePagedResult;
+};
+
+export type AdminGetAdminAuditLogResponse =
+  AdminGetAdminAuditLogResponses[keyof AdminGetAdminAuditLogResponses];
+
 export type AdminGetOnlineDevicesData = {
   body?: never;
   path?: never;
@@ -1942,7 +2053,9 @@ export type AdminReactivateUserData = {
   path: {
     userId: string;
   };
-  query?: never;
+  query?: {
+    reason?: string;
+  };
   url: '/1/admin/users/{userId}/reactivate';
 };
 

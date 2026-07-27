@@ -4,6 +4,7 @@ import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape
 import { client } from './client.gen';
 import {
   adminConfigurationListResponseTransformer,
+  adminGetAdminAuditLogResponseTransformer,
   adminGetEmailOutboxResponseTransformer,
   adminGetEmailOutboxStatsResponseTransformer,
   adminGetOnlineDevicesResponseTransformer,
@@ -12,6 +13,7 @@ import {
   adminListUsernameBlacklistResponseTransformer,
   adminListWebhooksResponseTransformer,
   adminSendTestEmailResponseTransformer,
+  authenticatedAccountGetAuditLogResponseTransformer,
   authenticatedAccountListOAuthConnectionsResponseTransformer,
   devicesGetDeviceByIdResponseTransformer,
   devicesGetShockersResponseTransformer,
@@ -94,6 +96,8 @@ import type {
   AdminDeleteUserData,
   AdminDeleteUserErrors,
   AdminDeleteUserResponses,
+  AdminGetAdminAuditLogData,
+  AdminGetAdminAuditLogResponses,
   AdminGetEmailOutboxData,
   AdminGetEmailOutboxErrors,
   AdminGetEmailOutboxResponses,
@@ -146,6 +150,8 @@ import type {
   AuthenticatedAccountDeactivateData,
   AuthenticatedAccountDeactivateErrors,
   AuthenticatedAccountDeactivateResponses,
+  AuthenticatedAccountGetAuditLogData,
+  AuthenticatedAccountGetAuditLogResponses,
   AuthenticatedAccountListOAuthConnectionsData,
   AuthenticatedAccountListOAuthConnectionsResponses,
   AuthenticatedAccountRemoveOAuthConnectionData,
@@ -666,6 +672,24 @@ export const authenticatedAccountDeactivate = <ThrowOnError extends boolean = tr
   });
 
 /**
+ * Get the audit log for the current user's account.
+ */
+export const authenticatedAccountGetAuditLog = <ThrowOnError extends boolean = true>(
+  options?: Options<AuthenticatedAccountGetAuditLogData, ThrowOnError>
+): RequestResult<AuthenticatedAccountGetAuditLogResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<
+    AuthenticatedAccountGetAuditLogResponses,
+    unknown,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: authenticatedAccountGetAuditLogResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/account/audit-log',
+    ...options,
+  });
+
+/**
  * Remove an existing OAuth connection for the current user.
  */
 export const authenticatedAccountRemoveOAuthConnection = <ThrowOnError extends boolean = true>(
@@ -1130,6 +1154,19 @@ export const adminRemoveEmailProviderBlacklist = <ThrowOnError extends boolean =
   >({
     responseStyle: 'data',
     url: '/1/admin/blacklist/emailProviders/{id}',
+    ...options,
+  });
+
+/**
+ * Get audit log entries across all users. Optionally filter by subject user or actor.
+ */
+export const adminGetAdminAuditLog = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminGetAdminAuditLogData, ThrowOnError>
+): RequestResult<AdminGetAdminAuditLogResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<AdminGetAdminAuditLogResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: adminGetAdminAuditLogResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/admin/audit-log',
     ...options,
   });
 
