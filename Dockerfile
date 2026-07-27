@@ -1,38 +1,38 @@
 # Define versions as build arguments for easy updates
-ARG NODE_VERSION=26.3.1
-ARG PNPM_VERSION=11.8.0
-ARG ALPINE_VERSION=3.23
+ARG PNPM_VERSION=11.17.0
 
-FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION}
+FROM node:26.3.1-trixie-slim@sha256:f9b8bd6c62fcd007c08ce2bb2907485b624b968fd76094445822e0ec14002cf0
 
 ARG PNPM_VERSION
-ARG GIT_BRANCH
-ARG GIT_COMMIT_SHA
+
+RUN npm install -g pnpm@${PNPM_VERSION}
 
 WORKDIR /app
 ENV DOCKER=true
-ENV NODE_ENV=production
-ENV GIT_BRANCH=${GIT_BRANCH}
-ENV GIT_COMMIT_SHA=${GIT_COMMIT_SHA}
 
-# Copy dependency manifests first (for caching)
-COPY package.json .
-COPY pnpm-lock.yaml .
-COPY pnpm-workspace.yaml .
+# Copy only files that affect dependency fetching.
+COPY pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY patches/ patches/
 
-# Install pnpm via npm (works on any platform/libc, no tarball extraction needed)
-RUN npm install -g pnpm@${PNPM_VERSION}
+# Populate pnpm's package store with production and development dependencies.
+RUN pnpm fetch
 
-# Install all deps (incl. dev) — needed because the build runs at container start.
-# --prod=false forces dev deps even though NODE_ENV=production is set above.
-RUN pnpm install --frozen-lockfile --strict-peer-dependencies --prod=false
-
-# Copy full source after dependencies are cached
+# Copy source code and all workspace package.json files.
 COPY . .
+
+# Construct node_modules from the populated store.
+RUN pnpm install --offline --frozen-lockfile --strict-peer-dependencies --prod=false
 
 # Make entrypoint executable (in case the host bit was lost)
 RUN chmod +x /app/docker-entrypoint.sh
+
+# Frequently changing build metadata goes after dependency installation.
+ARG GIT_BRANCH
+ARG GIT_COMMIT_SHA
+
+ENV NODE_ENV=production
+ENV GIT_BRANCH=${GIT_BRANCH}
+ENV GIT_COMMIT_SHA=${GIT_COMMIT_SHA}
 
 EXPOSE 3000
 
