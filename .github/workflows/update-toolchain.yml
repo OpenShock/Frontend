@@ -146,20 +146,31 @@ jobs:
 
       - name: Open pull request
         if: steps.diff.outputs.changed == 'true'
-        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
-        with:
-          commit-message: 'chore: update Node/pnpm/base image versions'
-          title: 'chore: update Node/pnpm/base image versions'
-          body: |
-            Automated weekly update of the container toolchain.
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          BRANCH=chore/update-toolchain-versions
+          git checkout -B "$BRANCH"
+          git add -A
+          git commit -m "chore: update Node/pnpm/base image versions"
+          if git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null 2>&1; then
+            git push -u origin "$BRANCH" --force-with-lease
+          else
+            git push -u origin "$BRANCH"
+          fi
+          if ! gh pr view "$BRANCH" >/dev/null 2>&1; then
+            gh pr create --title "chore: update Node/pnpm/base image versions" --head "$BRANCH" --body-file - <<'EOF'
+          Automated weekly update of the container toolchain.
 
-            | Component | New version |
-            |---|---|
-            | Node (`NODE_VERSION` / `.nvmrc` / `engines.node`) | `${{ steps.resolve.outputs.node }}` |
-            | pnpm (`PNPM_VERSION` / `packageManager`) | `${{ steps.resolve.outputs.pnpm }}` |
-            | Base OS (`${{ steps.resolve.outputs.base_family }}`) | `${{ steps.resolve.outputs.base_version }}` |
+          | Component | New version |
+          |---|---|
+          | Node (`NODE_VERSION` / `.nvmrc` / `engines.node`) | `${{ steps.resolve.outputs.node }}` |
+          | pnpm (`PNPM_VERSION` / `packageManager`) | `${{ steps.resolve.outputs.pnpm }}` |
+          | Base OS (`${{ steps.resolve.outputs.base_family }}`) | `${{ steps.resolve.outputs.base_version }}` |
 
-            `pnpm run check`, `pnpm test:unit`, and a container build were run
-            against these new versions before this PR was opened.
-          branch: chore/update-toolchain-versions
-          delete-branch: true
+          `pnpm run check`, `pnpm test:unit`, and a container build were run
+          against these new versions before this PR was opened.
+          EOF
+          fi
