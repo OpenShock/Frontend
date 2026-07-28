@@ -146,7 +146,7 @@ jobs:
 
       - name: Open pull request
         if: steps.diff.outputs.changed == 'true'
-        uses: OpenShock/actions/open-pr-from-diff@7e9cf5cd05af3d97a363d80adad50cfe50a273d0 # v1.0.0
+        uses: OpenShock/actions/open-pr-from-diff@21ca2d511bca92cf24fb502fa302f82700822584 # v1.1.1
         with:
           branch: chore/update-toolchain-versions
           commit-message: 'chore: update Node/pnpm/base image versions'
