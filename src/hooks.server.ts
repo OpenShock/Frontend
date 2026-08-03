@@ -1,5 +1,39 @@
 import { env } from '$env/dynamic/private';
-import type { ServerInit } from '@sveltejs/kit';
+import { PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
+import type { Handle, ServerInit } from '@sveltejs/kit';
+
+/**
+ * Security + metadata headers for every dynamically rendered response.
+ *
+ * The root `_headers` file only applies to static assets on the Cloudflare
+ * deploy — SSR'd pages, and everything served by the Node/Docker deploy, get
+ * their headers here. Keep the two lists in sync.
+ */
+export const handle: Handle = async ({ event, resolve }) => {
+  const response = await resolve(event);
+
+  const headers: Record<string, string> = {
+    'X-Content-Type-Options': 'nosniff',
+    'X-Frame-Options': 'DENY',
+    'Referrer-Policy': 'strict-origin-when-cross-origin',
+    // Disable powerful features we never use, so injected/compromised script can't
+    // invoke them. `serial` is deliberately NOT restricted — the /terminal firmware
+    // flashing flow needs Web Serial, and its default allowlist is already `self`.
+    'Permissions-Policy':
+      'camera=(), microphone=(), geolocation=(), payment=(), browsing-topics=()',
+    // Severs `window.opener` from windows other origins open to us (tab-nabbing);
+    // `allow-popups` keeps popups we open ourselves (e.g. Turnstile) working.
+    'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
+    'Cross-Origin-Resource-Policy': 'same-origin',
+    // Project metadata for the curious.
+    'X-Source-Code': PUBLIC_GITHUB_PROJECT_URL,
+  };
+  for (const [name, value] of Object.entries(headers)) {
+    response.headers.set(name, value);
+  }
+
+  return response;
+};
 
 /**
  * Runs once when the SvelteKit server boots (Node adapter), before any request

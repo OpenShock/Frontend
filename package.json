@@ -25,6 +25,8 @@
 		"@internationalized/date": "^3.12.2",
 		"@lucide/svelte": "^1.28.0",
 		"@microsoft/signalr": "^10.0.0",
+		"@opentelemetry/api": "^1.9.1",
+		"@opentelemetry/sdk-trace-node": "^2.10.0",
 		"@playwright/test": "^1.62.1",
 		"@sveltejs/adapter-cloudflare": "^7.2.9",
 		"@sveltejs/adapter-node": "^5.5.7",
@@ -68,7 +70,8 @@
 		"vaul-svelte": "1.0.0-next.7",
 		"vite-plugin-devtools-json": "^1.1.0",
 		"vite-plugin-mkcert": "^2.1.0",
-		"vitest": "^4.1.10"
+		"vitest": "^4.1.10",
+		"wrangler": "^4.117.0"
 	},
 	"dependencies": {
 		"@openshock/svelte-core": "workspace:*",
