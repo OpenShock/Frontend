@@ -1,5 +1,5 @@
 # Define versions as build arguments for easy updates
-ARG PNPM_VERSION=11.17.0
+ARG PNPM_VERSION=11.18.0
 
 FROM node:26.3.1-trixie-slim@sha256:f9b8bd6c62fcd007c08ce2bb2907485b624b968fd76094445822e0ec14002cf0
 
