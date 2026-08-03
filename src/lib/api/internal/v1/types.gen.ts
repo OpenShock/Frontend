@@ -613,6 +613,10 @@ export const PermissionType = {
   ShockersPause: 'shockers.pause',
   DevicesEdit: 'devices.edit',
   DevicesAuth: 'devices.auth',
+  UsersharesEdit: 'usershares.edit',
+  UsersharesPause: 'usershares.pause',
+  PublicsharesPause: 'publicshares.pause',
+  PublicsharesEdit: 'publicshares.edit',
 } as const;
 
 export type PermissionType = (typeof PermissionType)[keyof typeof PermissionType];
