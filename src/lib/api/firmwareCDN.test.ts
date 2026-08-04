@@ -8,12 +8,12 @@ import {
 } from './firmwareCDN';
 
 // Mock the crypto util so hash verification is controllable in tests
-vi.mock('$lib/utils/crypto', () => ({
+vi.mock('@openshock/svelte-core/utils/crypto.js', () => ({
   HashBuffer: vi.fn(),
   HashString: vi.fn(),
 }));
 
-import { HashBuffer } from '$lib/utils/crypto';
+import { HashBuffer } from '@openshock/svelte-core/utils/crypto.js';
 
 beforeEach(() => {
   vi.stubGlobal('fetch', vi.fn());

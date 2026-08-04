@@ -1,12 +1,25 @@
+import type { ApiUserSelf } from '$lib/types/ApiUser';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('$lib/api', () => ({
-  usersApi: { usersGetSelf: vi.fn() },
+  usersGetSelf: vi.fn(),
 }));
 
 vi.mock('$lib/errorhandling/apiErrorHandling', () => ({
   handleApiError: vi.fn(),
 }));
+
+function makeSelf(overrides: Partial<ApiUserSelf> = {}): ApiUserSelf {
+  return {
+    id: 'u1',
+    name: 'Alice',
+    avatar: '',
+    roles: [],
+    email: 'alice@example.com',
+    hasPassword: true,
+    ...overrides,
+  };
+}
 
 describe('userState', () => {
   beforeEach(() => {
@@ -34,18 +47,14 @@ describe('userState', () => {
 
   it('setSelf() sets the self user', async () => {
     const { userState } = await import('./user-state.svelte');
-    const user = { id: 'u1', name: 'Alice', avatar: '', roles: [], email: 'alice@example.com' };
+    const user = makeSelf();
     userState.setSelf(user);
     expect(userState.self).toEqual(user);
   });
 
-  it('setSelf() updates the matching user in the all array', async () => {
+  it('setSelf() with new data replaces the previous self', async () => {
     const { userState } = await import('./user-state.svelte');
-    const original = { id: 'u1', name: 'Old', avatar: '', roles: [], email: 'old@example.com' };
-    // Bootstrap all via refreshSelf would need the API — set via direct state manipulation
-    // We can test updateAllFromSelf indirectly via setSelf after setting all manually:
-    // all is only updated via setSelf/setSelfName/setSelfEmail once refreshSelf runs.
-    // Here we just verify self is updated:
+    const original = makeSelf({ name: 'Old', email: 'old@example.com' });
     userState.setSelf(original);
     const updated = { ...original, name: 'Alice' };
     userState.setSelf(updated);
@@ -54,8 +63,7 @@ describe('userState', () => {
 
   it('setSelfName() updates name on self', async () => {
     const { userState } = await import('./user-state.svelte');
-    const user = { id: 'u1', name: 'Alice', avatar: '', roles: [], email: 'alice@example.com' };
-    userState.setSelf(user);
+    userState.setSelf(makeSelf());
     userState.setSelfName('Bob');
     expect(userState.self?.name).toBe('Bob');
   });
@@ -68,8 +76,7 @@ describe('userState', () => {
 
   it('setSelfEmail() updates email on self', async () => {
     const { userState } = await import('./user-state.svelte');
-    const user = { id: 'u1', name: 'Alice', avatar: '', roles: [], email: 'alice@example.com' };
-    userState.setSelf(user);
+    userState.setSelf(makeSelf());
     userState.setSelfEmail('new@example.com');
     expect(userState.self?.email).toBe('new@example.com');
   });
@@ -77,6 +84,7 @@ describe('userState', () => {
   it('setSelfEmail() is a no-op when self is null', async () => {
     const { userState } = await import('./user-state.svelte');
     expect(() => userState.setSelfEmail('x@y.com')).not.toThrow();
+    expect(userState.self).toBeNull();
   });
 });
 
@@ -91,15 +99,15 @@ describe('userState.refreshSelf', () => {
 
   it('returns true and sets self on successful API response', async () => {
     const { userState } = await import('./user-state.svelte');
-    const { usersApi } = await import('$lib/api');
-    vi.mocked(usersApi.usersGetSelf).mockResolvedValue({
+    const { usersGetSelf } = await import('$lib/api');
+    vi.mocked(usersGetSelf).mockResolvedValue({
       data: {
         id: 'u1',
         name: 'Alice',
         image: 'avatar.png',
         roles: [],
         email: 'alice@example.com',
-        rank: '',
+        hasPassword: true,
       },
     } as any);
 
@@ -112,15 +120,15 @@ describe('userState.refreshSelf', () => {
 
   it('maps image field to avatar', async () => {
     const { userState } = await import('./user-state.svelte');
-    const { usersApi } = await import('$lib/api');
-    vi.mocked(usersApi.usersGetSelf).mockResolvedValue({
+    const { usersGetSelf } = await import('$lib/api');
+    vi.mocked(usersGetSelf).mockResolvedValue({
       data: {
         id: 'u1',
         name: 'Alice',
         image: 'avatar.png',
         roles: [],
         email: 'alice@example.com',
-        rank: '',
+        hasPassword: true,
       },
     } as any);
 
@@ -130,8 +138,8 @@ describe('userState.refreshSelf', () => {
 
   it('returns false and calls reset() when response has no data', async () => {
     const { userState } = await import('./user-state.svelte');
-    const { usersApi } = await import('$lib/api');
-    vi.mocked(usersApi.usersGetSelf).mockResolvedValue({
+    const { usersGetSelf } = await import('$lib/api');
+    vi.mocked(usersGetSelf).mockResolvedValue({
       data: null,
       message: 'Unauthorized',
     } as any);
@@ -145,10 +153,10 @@ describe('userState.refreshSelf', () => {
 
   it('returns false and calls handleApiError when API throws', async () => {
     const { userState } = await import('./user-state.svelte');
-    const { usersApi } = await import('$lib/api');
+    const { usersGetSelf } = await import('$lib/api');
     const { handleApiError } = await import('$lib/errorhandling/apiErrorHandling');
     const err = new Error('Network failure');
-    vi.mocked(usersApi.usersGetSelf).mockRejectedValue(err);
+    vi.mocked(usersGetSelf).mockRejectedValue(err);
 
     const result = await userState.refreshSelf();
 
@@ -157,30 +165,14 @@ describe('userState.refreshSelf', () => {
     expect(vi.mocked(handleApiError)).toHaveBeenCalledWith(err, expect.any(Function));
   });
 
-  it('updateAllFromSelf updates matching user in the all array', async () => {
+  it('a second refreshSelf overwrites self with new data', async () => {
     const { userState } = await import('./user-state.svelte');
-    const { usersApi } = await import('$lib/api');
+    const { usersGetSelf } = await import('$lib/api');
 
-    const firstCall = {
-      id: 'u1',
-      name: 'OldName',
-      image: '',
-      roles: [],
-      email: 'a@b.com',
-      rank: '',
-    };
-    const secondCall = {
-      id: 'u1',
-      name: 'NewName',
-      image: '',
-      roles: [],
-      email: 'a@b.com',
-      rank: '',
-    };
-
-    vi.mocked(usersApi.usersGetSelf)
-      .mockResolvedValueOnce({ data: firstCall } as any)
-      .mockResolvedValueOnce({ data: secondCall } as any);
+    const base = { id: 'u1', image: '', roles: [], email: 'a@b.com', hasPassword: true };
+    vi.mocked(usersGetSelf)
+      .mockResolvedValueOnce({ data: { ...base, name: 'OldName' } } as any)
+      .mockResolvedValueOnce({ data: { ...base, name: 'NewName' } } as any);
 
     await userState.refreshSelf();
     await userState.refreshSelf();

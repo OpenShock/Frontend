@@ -88,7 +88,15 @@ describe('handleSignalrLog dispatch', () => {
     handleSignalrLog(validSender, [makeLog()]);
 
     expect(cb).toHaveBeenCalledOnce();
-    expect(cb).toHaveBeenCalledWith('sh-1', ControlType.Vibrate, 300, 50);
+    expect(cb).toHaveBeenCalledWith(
+      expect.objectContaining({ id: 'user-1' }),
+      expect.objectContaining({
+        shocker: expect.objectContaining({ id: 'sh-1' }),
+        type: ControlType.Vibrate,
+        duration: 300,
+        intensity: 50,
+      })
+    );
   });
 
   it('does not call listener for a different shocker', () => {

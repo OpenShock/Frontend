@@ -264,7 +264,13 @@ function resolveIntegrationServer(): LocalServer {
     },
   };
   return {
-    config: { forwardConsole: true, fs: { allow: ['./packages/svelte-core'] }, proxy, host: 'localhost', port: 5173 },
+    config: {
+      forwardConsole: true,
+      fs: { allow: ['./packages/svelte-core'] },
+      proxy,
+      host: 'localhost',
+      port: 5173,
+    },
     fqdn: null,
   };
 }

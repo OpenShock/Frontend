@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('$lib/api', () => ({
-  shockersV1Api: { shockerListSharedShockers: vi.fn() },
+  shockerListSharedShockers: vi.fn(),
 }));
 
 vi.mock('$lib/errorhandling/apiErrorHandling', () => ({
@@ -34,9 +34,10 @@ describe('refreshSharedHubs', () => {
 
   it('populates sharedHubsState.value from API response', async () => {
     const { refreshSharedHubs, sharedHubsState } = await import('./shared-hubs-state.svelte');
-    const { shockersV1Api } = await import('$lib/api');
     const hub = { id: 'shared-1', name: 'Shared Hub', image: '', devices: [] };
-    vi.mocked(shockersV1Api.shockerListSharedShockers).mockResolvedValue({ data: [hub] } as any);
+    vi.mocked((await import('$lib/api')).shockerListSharedShockers).mockResolvedValue({
+      data: [hub],
+    } as any);
 
     await refreshSharedHubs();
 
@@ -45,8 +46,7 @@ describe('refreshSharedHubs', () => {
 
   it('replaces existing value on re-fetch', async () => {
     const { refreshSharedHubs, sharedHubsState } = await import('./shared-hubs-state.svelte');
-    const { shockersV1Api } = await import('$lib/api');
-    vi.mocked(shockersV1Api.shockerListSharedShockers)
+    vi.mocked((await import('$lib/api')).shockerListSharedShockers)
       .mockResolvedValueOnce({ data: [{ id: 'old', name: 'Old', image: '', devices: [] }] } as any)
       .mockResolvedValueOnce({ data: [{ id: 'new', name: 'New', image: '', devices: [] }] } as any);
 
@@ -59,9 +59,8 @@ describe('refreshSharedHubs', () => {
 
   it('throws and calls handleApiError when response has no data', async () => {
     const { refreshSharedHubs } = await import('./shared-hubs-state.svelte');
-    const { shockersV1Api } = await import('$lib/api');
     const { handleApiError } = await import('$lib/errorhandling/apiErrorHandling');
-    vi.mocked(shockersV1Api.shockerListSharedShockers).mockResolvedValue({
+    vi.mocked((await import('$lib/api')).shockerListSharedShockers).mockResolvedValue({
       data: null,
       message: 'Forbidden',
     });
@@ -72,10 +71,9 @@ describe('refreshSharedHubs', () => {
 
   it('throws and calls handleApiError when API rejects', async () => {
     const { refreshSharedHubs } = await import('./shared-hubs-state.svelte');
-    const { shockersV1Api } = await import('$lib/api');
     const { handleApiError } = await import('$lib/errorhandling/apiErrorHandling');
     const err = new Error('Network error');
-    vi.mocked(shockersV1Api.shockerListSharedShockers).mockRejectedValue(err);
+    vi.mocked((await import('$lib/api')).shockerListSharedShockers).mockRejectedValue(err);
 
     await expect(refreshSharedHubs()).rejects.toThrow('Network error');
     expect(vi.mocked(handleApiError)).toHaveBeenCalledWith(err);
@@ -83,8 +81,7 @@ describe('refreshSharedHubs', () => {
 
   it('populates multiple shared hubs', async () => {
     const { refreshSharedHubs, sharedHubsState } = await import('./shared-hubs-state.svelte');
-    const { shockersV1Api } = await import('$lib/api');
-    vi.mocked(shockersV1Api.shockerListSharedShockers).mockResolvedValue({
+    vi.mocked((await import('$lib/api')).shockerListSharedShockers).mockResolvedValue({
       data: [
         { id: 'sh-1', name: 'Alpha', image: '', devices: [] },
         { id: 'sh-2', name: 'Beta', image: '', devices: [] },

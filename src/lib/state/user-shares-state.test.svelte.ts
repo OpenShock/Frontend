@@ -1,11 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('$lib/api', () => ({
-  shockerSharesV2Api: {
-    userSharesGetSharesByUsers: vi.fn(),
-    userSharesGetOutgoingInvitesList: vi.fn(),
-    userSharesGetIncomingInvitesList: vi.fn(),
-  },
+  userSharesGetSharesByUsers: vi.fn(),
+  userSharesGetOutgoingInvitesList: vi.fn(),
+  userSharesGetIncomingInvitesList: vi.fn(),
 }));
 
 vi.mock('$lib/errorhandling/apiErrorHandling', () => ({
@@ -51,9 +49,8 @@ describe('refreshUserShares', () => {
 
   it('sets shares from API response', async () => {
     const { refreshUserShares, userSharesState } = await import('./user-shares-state.svelte');
-    const { shockerSharesV2Api } = await import('$lib/api');
     const data = { outgoing: [{ id: 'u1' } as any], incoming: [] };
-    vi.mocked(shockerSharesV2Api.userSharesGetSharesByUsers).mockResolvedValue(data as any);
+    vi.mocked((await import('$lib/api')).userSharesGetSharesByUsers).mockResolvedValue(data as any);
 
     await refreshUserShares();
     expect(userSharesState.shares).toEqual(data);
@@ -61,10 +58,9 @@ describe('refreshUserShares', () => {
 
   it('calls handleApiError and rethrows on failure', async () => {
     const { refreshUserShares } = await import('./user-shares-state.svelte');
-    const { shockerSharesV2Api } = await import('$lib/api');
     const { handleApiError } = await import('$lib/errorhandling/apiErrorHandling');
     const err = new Error('Fetch failed');
-    vi.mocked(shockerSharesV2Api.userSharesGetSharesByUsers).mockRejectedValue(err);
+    vi.mocked((await import('$lib/api')).userSharesGetSharesByUsers).mockRejectedValue(err);
 
     await expect(refreshUserShares()).rejects.toThrow('Fetch failed');
     expect(vi.mocked(handleApiError)).toHaveBeenCalledWith(err);
@@ -82,9 +78,8 @@ describe('refreshOutgoingInvites', () => {
 
   it('sets outgoingInvites from API response', async () => {
     const { refreshOutgoingInvites, userSharesState } = await import('./user-shares-state.svelte');
-    const { shockerSharesV2Api } = await import('$lib/api');
     const invite = { id: 'inv-1', code: 'ABC' };
-    vi.mocked(shockerSharesV2Api.userSharesGetOutgoingInvitesList).mockResolvedValue([
+    vi.mocked((await import('$lib/api')).userSharesGetOutgoingInvitesList).mockResolvedValue([
       invite,
     ] as any);
 
@@ -94,10 +89,9 @@ describe('refreshOutgoingInvites', () => {
 
   it('calls handleApiError and rethrows on failure', async () => {
     const { refreshOutgoingInvites } = await import('./user-shares-state.svelte');
-    const { shockerSharesV2Api } = await import('$lib/api');
     const { handleApiError } = await import('$lib/errorhandling/apiErrorHandling');
     const err = new Error('Network error');
-    vi.mocked(shockerSharesV2Api.userSharesGetOutgoingInvitesList).mockRejectedValue(err);
+    vi.mocked((await import('$lib/api')).userSharesGetOutgoingInvitesList).mockRejectedValue(err);
 
     await expect(refreshOutgoingInvites()).rejects.toThrow('Network error');
     expect(vi.mocked(handleApiError)).toHaveBeenCalledWith(err);
@@ -115,9 +109,8 @@ describe('refreshIncomingInvites', () => {
 
   it('sets incomingInvites from API response', async () => {
     const { refreshIncomingInvites, userSharesState } = await import('./user-shares-state.svelte');
-    const { shockerSharesV2Api } = await import('$lib/api');
     const invite = { id: 'inv-2', code: 'XYZ' };
-    vi.mocked(shockerSharesV2Api.userSharesGetIncomingInvitesList).mockResolvedValue([
+    vi.mocked((await import('$lib/api')).userSharesGetIncomingInvitesList).mockResolvedValue([
       invite,
     ] as any);
 
@@ -127,10 +120,9 @@ describe('refreshIncomingInvites', () => {
 
   it('calls handleApiError and rethrows on failure', async () => {
     const { refreshIncomingInvites } = await import('./user-shares-state.svelte');
-    const { shockerSharesV2Api } = await import('$lib/api');
     const { handleApiError } = await import('$lib/errorhandling/apiErrorHandling');
     const err = new Error('Timeout');
-    vi.mocked(shockerSharesV2Api.userSharesGetIncomingInvitesList).mockRejectedValue(err);
+    vi.mocked((await import('$lib/api')).userSharesGetIncomingInvitesList).mockRejectedValue(err);
 
     await expect(refreshIncomingInvites()).rejects.toThrow('Timeout');
     expect(vi.mocked(handleApiError)).toHaveBeenCalledWith(err);

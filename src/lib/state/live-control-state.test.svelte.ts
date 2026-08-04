@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('$lib/api', () => ({
-  hubManagementV1Api: { devicesGetLiveControlGatewayInfo: vi.fn() },
+  devicesGetLiveControlGatewayInfoV2: vi.fn(),
 }));
 
 vi.mock('svelte-sonner', () => ({
@@ -128,10 +128,12 @@ describe('LiveDeviceConnection.connect', () => {
   it('sets state to Connecting then Connected on success', async () => {
     const { LiveDeviceConnection, LiveConnectionState } =
       await import('./live-control-state.svelte');
-    const { hubManagementV1Api } = await import('$lib/api');
-    vi.mocked(hubManagementV1Api.devicesGetLiveControlGatewayInfo).mockResolvedValue({
-      data: { gateway: 'gw.example.com', country: 'US' },
-      message: '',
+    const { devicesGetLiveControlGatewayInfoV2 } = await import('$lib/api');
+    vi.mocked(devicesGetLiveControlGatewayInfoV2).mockResolvedValue({
+      host: 'gw.example.com',
+      port: 443,
+      pathPrefix: '',
+      country: 'US',
     } as any);
 
     const conn = new LiveDeviceConnection('dev-1');
@@ -148,10 +150,12 @@ describe('LiveDeviceConnection.connect', () => {
 
   it('sets gateway and country from API response', async () => {
     const { LiveDeviceConnection } = await import('./live-control-state.svelte');
-    const { hubManagementV1Api } = await import('$lib/api');
-    vi.mocked(hubManagementV1Api.devicesGetLiveControlGatewayInfo).mockResolvedValue({
-      data: { gateway: 'gw.openshock.app', country: 'DE' },
-      message: '',
+    const { devicesGetLiveControlGatewayInfoV2 } = await import('$lib/api');
+    vi.mocked(devicesGetLiveControlGatewayInfoV2).mockResolvedValue({
+      host: 'gw.openshock.app',
+      port: 443,
+      pathPrefix: '',
+      country: 'DE',
     } as any);
 
     const conn = new LiveDeviceConnection('dev-1');
@@ -163,10 +167,12 @@ describe('LiveDeviceConnection.connect', () => {
 
   it('constructs WebSocket with correct URL', async () => {
     const { LiveDeviceConnection } = await import('./live-control-state.svelte');
-    const { hubManagementV1Api } = await import('$lib/api');
-    vi.mocked(hubManagementV1Api.devicesGetLiveControlGatewayInfo).mockResolvedValue({
-      data: { gateway: 'gw.example.com', country: 'US' },
-      message: '',
+    const { devicesGetLiveControlGatewayInfoV2 } = await import('$lib/api');
+    vi.mocked(devicesGetLiveControlGatewayInfoV2).mockResolvedValue({
+      host: 'gw.example.com',
+      port: 443,
+      pathPrefix: '',
+      country: 'US',
     } as any);
 
     const conn = new LiveDeviceConnection('dev-42');
@@ -175,15 +181,12 @@ describe('LiveDeviceConnection.connect', () => {
     expect(MockWebSocket.instances[0].url).toBe('wss://gw.example.com/1/ws/live/dev-42');
   });
 
-  it('goes Disconnected and shows toast when API returns no data', async () => {
+  it('goes Disconnected and shows toast when the API reports no gateway', async () => {
     const { LiveDeviceConnection, LiveConnectionState } =
       await import('./live-control-state.svelte');
-    const { hubManagementV1Api } = await import('$lib/api');
+    const { devicesGetLiveControlGatewayInfoV2 } = await import('$lib/api');
     const { toast } = await import('svelte-sonner');
-    vi.mocked(hubManagementV1Api.devicesGetLiveControlGatewayInfo).mockResolvedValue({
-      data: null,
-      message: '',
-    } as any);
+    vi.mocked(devicesGetLiveControlGatewayInfoV2).mockRejectedValue(new Error('No LCG assigned'));
 
     const conn = new LiveDeviceConnection('dev-1');
     await conn.connect();
@@ -195,11 +198,9 @@ describe('LiveDeviceConnection.connect', () => {
   it('goes Disconnected and shows toast when API throws', async () => {
     const { LiveDeviceConnection, LiveConnectionState } =
       await import('./live-control-state.svelte');
-    const { hubManagementV1Api } = await import('$lib/api');
+    const { devicesGetLiveControlGatewayInfoV2 } = await import('$lib/api');
     const { toast } = await import('svelte-sonner');
-    vi.mocked(hubManagementV1Api.devicesGetLiveControlGatewayInfo).mockRejectedValue(
-      new Error('Network')
-    );
+    vi.mocked(devicesGetLiveControlGatewayInfoV2).mockRejectedValue(new Error('Network'));
 
     const conn = new LiveDeviceConnection('dev-1');
     await conn.connect();
@@ -211,10 +212,12 @@ describe('LiveDeviceConnection.connect', () => {
   it('goes Disconnected when WebSocket fires close event', async () => {
     const { LiveDeviceConnection, LiveConnectionState } =
       await import('./live-control-state.svelte');
-    const { hubManagementV1Api } = await import('$lib/api');
-    vi.mocked(hubManagementV1Api.devicesGetLiveControlGatewayInfo).mockResolvedValue({
-      data: { gateway: 'gw.example.com', country: 'US' },
-      message: '',
+    const { devicesGetLiveControlGatewayInfoV2 } = await import('$lib/api');
+    vi.mocked(devicesGetLiveControlGatewayInfoV2).mockResolvedValue({
+      host: 'gw.example.com',
+      port: 443,
+      pathPrefix: '',
+      country: 'US',
     } as any);
 
     const conn = new LiveDeviceConnection('dev-1');
@@ -228,10 +231,12 @@ describe('LiveDeviceConnection.connect', () => {
   it('resets shocker live state on disconnect via WebSocket close', async () => {
     const { LiveDeviceConnection, LiveConnectionState } =
       await import('./live-control-state.svelte');
-    const { hubManagementV1Api } = await import('$lib/api');
-    vi.mocked(hubManagementV1Api.devicesGetLiveControlGatewayInfo).mockResolvedValue({
-      data: { gateway: 'gw.example.com', country: 'US' },
-      message: '',
+    const { devicesGetLiveControlGatewayInfoV2 } = await import('$lib/api');
+    vi.mocked(devicesGetLiveControlGatewayInfoV2).mockResolvedValue({
+      host: 'gw.example.com',
+      port: 443,
+      pathPrefix: '',
+      country: 'US',
     } as any);
 
     const conn = new LiveDeviceConnection('dev-1');
@@ -263,10 +268,12 @@ describe('LiveDeviceConnection.disconnect', () => {
 describe('LiveDeviceConnection WebSocket messages', () => {
   it('replies with Pong on Ping message', async () => {
     const { LiveDeviceConnection } = await import('./live-control-state.svelte');
-    const { hubManagementV1Api } = await import('$lib/api');
-    vi.mocked(hubManagementV1Api.devicesGetLiveControlGatewayInfo).mockResolvedValue({
-      data: { gateway: 'gw.example.com', country: 'US' },
-      message: '',
+    const { devicesGetLiveControlGatewayInfoV2 } = await import('$lib/api');
+    vi.mocked(devicesGetLiveControlGatewayInfoV2).mockResolvedValue({
+      host: 'gw.example.com',
+      port: 443,
+      pathPrefix: '',
+      country: 'US',
     } as any);
 
     const conn = new LiveDeviceConnection('dev-1');
@@ -283,10 +290,12 @@ describe('LiveDeviceConnection WebSocket messages', () => {
 
   it('updates latency on LatencyAnnounce message', async () => {
     const { LiveDeviceConnection } = await import('./live-control-state.svelte');
-    const { hubManagementV1Api } = await import('$lib/api');
-    vi.mocked(hubManagementV1Api.devicesGetLiveControlGatewayInfo).mockResolvedValue({
-      data: { gateway: 'gw.example.com', country: 'US' },
-      message: '',
+    const { devicesGetLiveControlGatewayInfoV2 } = await import('$lib/api');
+    vi.mocked(devicesGetLiveControlGatewayInfoV2).mockResolvedValue({
+      host: 'gw.example.com',
+      port: 443,
+      pathPrefix: '',
+      country: 'US',
     } as any);
 
     const conn = new LiveDeviceConnection('dev-1');
@@ -301,10 +310,12 @@ describe('LiveDeviceConnection WebSocket messages', () => {
 
   it('ignores malformed JSON messages without throwing', async () => {
     const { LiveDeviceConnection } = await import('./live-control-state.svelte');
-    const { hubManagementV1Api } = await import('$lib/api');
-    vi.mocked(hubManagementV1Api.devicesGetLiveControlGatewayInfo).mockResolvedValue({
-      data: { gateway: 'gw.example.com', country: 'US' },
-      message: '',
+    const { devicesGetLiveControlGatewayInfoV2 } = await import('$lib/api');
+    vi.mocked(devicesGetLiveControlGatewayInfoV2).mockResolvedValue({
+      host: 'gw.example.com',
+      port: 443,
+      pathPrefix: '',
+      country: 'US',
     } as any);
 
     const conn = new LiveDeviceConnection('dev-1');
@@ -319,11 +330,13 @@ describe('LiveDeviceConnection WebSocket messages', () => {
 describe('LiveDeviceConnection.sendFrame', () => {
   it('sends a Frame message when connected', async () => {
     const { LiveDeviceConnection } = await import('./live-control-state.svelte');
-    const { hubManagementV1Api } = await import('$lib/api');
+    const { devicesGetLiveControlGatewayInfoV2 } = await import('$lib/api');
     const { ControlType } = await import('$lib/signalr/models/ControlType');
-    vi.mocked(hubManagementV1Api.devicesGetLiveControlGatewayInfo).mockResolvedValue({
-      data: { gateway: 'gw.example.com', country: 'US' },
-      message: '',
+    vi.mocked(devicesGetLiveControlGatewayInfoV2).mockResolvedValue({
+      host: 'gw.example.com',
+      port: 443,
+      pathPrefix: '',
+      country: 'US',
     } as any);
 
     const conn = new LiveDeviceConnection('dev-1');
@@ -394,10 +407,12 @@ describe('toggleShockerLiveControl', () => {
   it('sets isLive=true and starts connect when toggling on', async () => {
     const { toggleShockerLiveControl, liveConnections } =
       await import('./live-control-state.svelte');
-    const { hubManagementV1Api } = await import('$lib/api');
-    vi.mocked(hubManagementV1Api.devicesGetLiveControlGatewayInfo).mockResolvedValue({
-      data: { gateway: 'gw.example.com', country: 'US' },
-      message: '',
+    const { devicesGetLiveControlGatewayInfoV2 } = await import('$lib/api');
+    vi.mocked(devicesGetLiveControlGatewayInfoV2).mockResolvedValue({
+      host: 'gw.example.com',
+      port: 443,
+      pathPrefix: '',
+      country: 'US',
     } as any);
 
     await toggleShockerLiveControl('dev-1', 'sh-1');
@@ -409,10 +424,12 @@ describe('toggleShockerLiveControl', () => {
   it('sets isLive=false when toggling off (already live)', async () => {
     const { toggleShockerLiveControl, liveConnections } =
       await import('./live-control-state.svelte');
-    const { hubManagementV1Api } = await import('$lib/api');
-    vi.mocked(hubManagementV1Api.devicesGetLiveControlGatewayInfo).mockResolvedValue({
-      data: { gateway: 'gw.example.com', country: 'US' },
-      message: '',
+    const { devicesGetLiveControlGatewayInfoV2 } = await import('$lib/api');
+    vi.mocked(devicesGetLiveControlGatewayInfoV2).mockResolvedValue({
+      host: 'gw.example.com',
+      port: 443,
+      pathPrefix: '',
+      country: 'US',
     } as any);
 
     // Toggle on
