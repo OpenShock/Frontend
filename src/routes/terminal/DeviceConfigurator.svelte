@@ -1,13 +1,13 @@
 <script lang="ts">
   import { AlertTriangle, Eye, RefreshCw, Send, TriangleAlert, WifiOff } from '@lucide/svelte';
-  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
-  import * as Card from '@openshock/svelte-core/components/ui/card/index.js';
-  import { ConfirmDeleteDialog } from '@openshock/svelte-core/components/index.js';
-  import * as Dialog from '@openshock/svelte-core/components/ui/dialog/index.js';
-  import { Input } from '@openshock/svelte-core/components/ui/input/index.js';
-  import { Label } from '@openshock/svelte-core/components/ui/label/index.js';
-  import { Switch } from '@openshock/svelte-core/components/ui/switch/index.js';
-  import { Textarea } from '@openshock/svelte-core/components/ui/textarea/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Card from '@openshock/svelte-core/components/ui/card';
+  import { ConfirmDeleteDialog } from '@openshock/svelte-core/components';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
+  import { Input } from '@openshock/svelte-core/components/ui/input';
+  import { Label } from '@openshock/svelte-core/components/ui/label';
+  import { Switch } from '@openshock/svelte-core/components/ui/switch';
+  import { Textarea } from '@openshock/svelte-core/components/ui/textarea';
   import type { TerminalContext } from './TerminalContext.svelte';
 
   interface Props {

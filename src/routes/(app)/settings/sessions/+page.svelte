@@ -1,7 +1,7 @@
 <script lang="ts">
   import { sessionsListSessions, sessionsGetSelfSession } from '$lib/api';
   import type { LoginSessionResponse } from '$lib/api';
-  import { Container, PageHeader } from '@openshock/svelte-core/components/index.js';
+  import { Container, PageHeader } from '@openshock/svelte-core/components';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';

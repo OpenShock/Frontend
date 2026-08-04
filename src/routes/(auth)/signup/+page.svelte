@@ -1,24 +1,24 @@
 <script lang="ts">
   import { accountSignUpV2 } from '$lib/api';
-  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
-  import * as Card from '@openshock/svelte-core/components/ui/card/index.js';
-  import * as Field from '@openshock/svelte-core/components/ui/field/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Card from '@openshock/svelte-core/components/ui/card';
+  import * as Field from '@openshock/svelte-core/components/ui/field';
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import Turnstile from '$lib/components/Turnstile.svelte';
-  import { EmailInput } from '@openshock/svelte-core/components/input/index.js';
-  import { PasswordInput } from '@openshock/svelte-core/components/input/index.js';
-  import * as Dialog from '@openshock/svelte-core/components/ui/dialog/index.js';
+  import { EmailInput } from '@openshock/svelte-core/components/input';
+  import { PasswordInput } from '@openshock/svelte-core/components/input';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { validatePasswordMatch } from '@openshock/svelte-core/inputvalidation/passwordValidator.js';
   import { toast } from 'svelte-sonner';
-  import { FieldSeparator } from '@openshock/svelte-core/components/ui/field/index.js';
+  import { FieldSeparator } from '@openshock/svelte-core/components/ui/field';
   import OauthButtons from '$lib/components/auth/oauth-buttons.svelte';
   import { ChevronLeft, Mail } from '@lucide/svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
-  import { Skeleton } from '@openshock/svelte-core/components/ui/skeleton/index.js';
+  import { Skeleton } from '@openshock/svelte-core/components/ui/skeleton';
 
   registerBreadcrumbs(() => [{ label: 'Sign Up' }]);
 
@@ -36,18 +36,27 @@
   let turnstileResponse = $state<string | null>(null);
 
   let canSubmit = $derived(
-    usernameValid && emailValid && passwordValid && password == passwordConfirm && turnstileResponse
+    usernameValid &&
+      emailValid &&
+      passwordValid &&
+      password == passwordConfirm &&
+      turnstileResponse != null
   );
 
   let accountCreated = $state(false);
 
   let useEmail = $state(false);
 
+  // Instances without a mail provider never send an activation email; the account is usable right away.
+  let mailEnabled = $derived(backendMetadata.state?.isMailEnabled ?? true);
+
   function onOpenChange(open: boolean) {
     if (!open) {
       accountCreated = false;
       toast.success(
-        'Account created successfully. Please check your email to verify your account.'
+        mailEnabled
+          ? 'Account created successfully. Please check your email to verify your account.'
+          : 'Account created successfully. You can log in now.'
       );
       goto(resolve('/login'));
     }
@@ -56,7 +65,7 @@
   async function handleSubmission(e: SubmitEvent) {
     e.preventDefault();
 
-    if (!username || !email || !password || !passwordConfirm || !turnstileResponse) {
+    if (!username || !email || !password || !passwordConfirm || turnstileResponse == null) {
       return;
     }
 
@@ -80,8 +89,13 @@
       <Dialog.Title>Welcome! Thank you for signing up! ❤️</Dialog.Title>
       <Dialog.Description>
         <div class="flex flex-col gap-4">
-          <p>Your account has been created. 🎉 Please check your email to verify your account.</p>
-          <p>After verifying your email, you can log in to your account.</p>
+          {#if mailEnabled}
+            <p>Your account has been created. 🎉 Please check your email to verify your account.</p>
+            <p>After verifying your email, you can log in to your account.</p>
+          {:else}
+            <p>Your account has been created and is ready to use. 🎉</p>
+            <p>You can log in to your account now.</p>
+          {/if}
 
           <Button variant="default" size="sm" class="mt-4" onclick={() => goto(resolve('/login'))}
             >Ok</Button

@@ -7,7 +7,7 @@
     NextButton,
     PrevButton,
     Root,
-  } from '@openshock/svelte-core/components/ui/pagination/index.js';
+  } from '@openshock/svelte-core/components/ui/pagination';
 
   interface Props {
     count: number;

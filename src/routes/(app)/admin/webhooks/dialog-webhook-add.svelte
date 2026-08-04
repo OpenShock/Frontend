@@ -1,8 +1,8 @@
 <script lang="ts">
   import { adminAddWebhook } from '$lib/api';
-  import { TextInput } from '@openshock/svelte-core/components/input/index.js';
-  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
-  import * as Dialog from '@openshock/svelte-core/components/ui/dialog/index.js';
+  import { TextInput } from '@openshock/svelte-core/components/input';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import type { ValidationResult } from '@openshock/svelte-core/types/ValidationResult.js';
   import { toast } from 'svelte-sonner';

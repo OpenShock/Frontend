@@ -6,10 +6,10 @@
   /* eslint-disable svelte/no-navigation-without-resolve -- only contains external URLs */
   import { asset } from '$app/paths';
   import { PUBLIC_DISCORD_INVITE_URL, PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
-  import { DiscordLogo } from '@openshock/svelte-core/components/svg/index.js';
-  import { GithubIcon } from '@openshock/svelte-core/components/svg/index.js';
-  import { DotGrid } from '@openshock/svelte-core/components/index.js';
-  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import { DiscordLogo } from '@openshock/svelte-core/components/svg';
+  import { GithubIcon } from '@openshock/svelte-core/components/svg';
+  import { DotGrid } from '@openshock/svelte-core/components';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
   import {
     markWelcomed,
     markTourCompleted,
@@ -124,7 +124,7 @@
 </script>
 
 <svelte:head>
-  <link rel="preload" href={asset('/logo.svg')} as="image" type="image/svg+xml" />
+  <link rel="preload" href={asset('/Logo.svg')} as="image" type="image/svg+xml" />
 </svelte:head>
 
 <div
@@ -246,7 +246,7 @@
 
     <img
       class="my-8 w-full max-w-3xl sm:my-12"
-      src={asset('/logo.svg')}
+      src={asset('/Logo.svg')}
       alt="OpenShock"
       draggable="false"
       fetchpriority="high"

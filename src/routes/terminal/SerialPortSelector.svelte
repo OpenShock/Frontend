@@ -4,7 +4,7 @@
 
 <script lang="ts">
   import { Cpu, TriangleAlert, Unplug } from '@lucide/svelte';
-  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
   import type { SerialContext } from '$lib/utils/serial-context.svelte';
   import { NumberToHexPadded } from '@openshock/svelte-core/utils/convert.js';
 

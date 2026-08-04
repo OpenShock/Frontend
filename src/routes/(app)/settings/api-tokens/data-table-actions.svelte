@@ -1,12 +1,12 @@
 <script lang="ts">
   import { tokenDeleteDeleteToken, tokensSetTokenPaused } from '$lib/api';
   import type { TokenResponseV2 } from '$lib/api';
-  import { dialog } from '@openshock/svelte-core/components/dialog-manager/index.js';
-  import type { DialogRenderProps } from '@openshock/svelte-core/components/dialog-manager/index.js';
-  import { TableActionMenu } from '@openshock/svelte-core/components/index.js';
-  import { buttonVariants } from '@openshock/svelte-core/components/ui/button/index.js';
-  import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu/index.js';
-  import * as Tooltip from '@openshock/svelte-core/components/ui/tooltip/index.js';
+  import { dialog } from '@openshock/svelte-core/components/dialog-manager';
+  import type { DialogRenderProps } from '@openshock/svelte-core/components/dialog-manager';
+  import { TableActionMenu } from '@openshock/svelte-core/components';
+  import { buttonVariants } from '@openshock/svelte-core/components/ui/button';
+  import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
+  import * as Tooltip from '@openshock/svelte-core/components/ui/tooltip';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { cn } from '@openshock/svelte-core/utils/shadcn.js';
   import { copyToClipboard } from '@openshock/svelte-core/utils/clipboard.svelte.js';

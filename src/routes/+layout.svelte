@@ -5,9 +5,9 @@
     BasicTags,
     OpenGraphTags,
     TwitterSummaryTags,
-  } from '@openshock/svelte-core/components/metadata/index.js';
-  import { SidebarProvider } from '@openshock/svelte-core/components/ui/sidebar/index.js';
-  import { Toaster } from '@openshock/svelte-core/components/ui/sonner/index.js';
+  } from '@openshock/svelte-core/components/metadata';
+  import { SidebarProvider } from '@openshock/svelte-core/components/ui/sidebar';
+  import { Toaster } from '@openshock/svelte-core/components/ui/sonner';
   import { buildMetaData } from '$lib/metadata';
   import { onMount, untrack, type Snippet } from 'svelte';
   import { maybePromptTelemetryConsent } from '$lib/telemetry/consent-prompt';
@@ -17,8 +17,8 @@
   import WelcomeScreen from './WelcomeScreen.svelte';
   import '../app.css';
   import { IsMobile } from '@openshock/svelte-core/hooks/is-mobile.svelte.js';
-  import { DialogManager } from '@openshock/svelte-core/components/dialog-manager/index.js';
-  import { TooltipProvider } from '@openshock/svelte-core/components/ui/tooltip/index.js';
+  import { DialogManager } from '@openshock/svelte-core/components/dialog-manager';
+  import { TooltipProvider } from '@openshock/svelte-core/components/ui/tooltip';
   import type { LayoutData } from './$types';
 
   interface Props {

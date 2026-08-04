@@ -16,7 +16,7 @@
     Wrench,
     Zap,
   } from '@lucide/svelte';
-  import { asset, resolve } from '$app/paths';
+  import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import type { Pathname } from '$app/types';
   import { RoleType } from '$lib/api';
@@ -34,12 +34,14 @@
     MenuSubButton,
     Root,
     useSidebar,
-  } from '@openshock/svelte-core/components/ui/sidebar/index.js';
+  } from '@openshock/svelte-core/components/ui/sidebar';
   import { userState } from '$lib/state/user-state.svelte';
   import type { AnyComponent } from '@openshock/svelte-core/types/AnyComponent.js';
   import { isSerialSupported } from '$lib/utils/compatibility';
   import { Collapsible } from 'bits-ui';
   import { prefixBase } from '$lib/utils/url';
+  import LogoMark from '$lib/components/svg/LogoMark.svelte';
+  import LogoText from '$lib/components/svg/LogoText.svelte';
 
   let currentUser = $derived(userState.self);
 
@@ -151,6 +153,10 @@
           {
             title: 'Webhooks',
             href: '/admin/webhooks',
+          },
+          {
+            title: 'Mail',
+            href: '/admin/mail',
           },
           {
             title: 'Configuration',
@@ -298,14 +304,13 @@
 <!-- group-data-[collapsible=icon]:opacity-0 -->
 <Root collapsible="icon">
   <Header>
-    <a href={resolve(currentUser ? '/home' : '/')}>
+    <a href={resolve(currentUser ? '/home' : '/')} aria-label="OpenShock home">
       <span class="pointer-events-none flex">
-        <img class="ml-[0.667px] h-7.5" src={asset('/IconSpinning.svg')} alt="OpenShock Logo" />
-        <span class="ml-1.5 grow">
-          <img
-            class="h-7.5 transition-opacity delay-100 duration-200 group-data-[collapsible=icon]:opacity-0 group-data-[collapsible=icon]:delay-0"
-            src={asset('/LogoTextOnly.svg')}
-            alt="OpenShock Logo"
+        <LogoMark class="ml-[0.667px] h-7.5 shrink-0" />
+
+        <span class="ml-1.5 flex grow items-center">
+          <LogoText
+            class="h-auto max-h-7.5 transition-opacity delay-100 duration-200 group-data-[collapsible=icon]:opacity-0 group-data-[collapsible=icon]:delay-0"
           />
         </span>
       </span>

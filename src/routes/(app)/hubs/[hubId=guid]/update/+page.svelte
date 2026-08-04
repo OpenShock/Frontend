@@ -59,12 +59,12 @@
   import { CircleCheck, CircleX, CloudDownload, RotateCcw, TriangleAlert } from '@lucide/svelte';
   import { page } from '$app/state';
   import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
-  import { Badge } from '@openshock/svelte-core/components/ui/badge/index.js';
-  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
-  import * as Card from '@openshock/svelte-core/components/ui/card/index.js';
-  import * as Dialog from '@openshock/svelte-core/components/ui/dialog/index.js';
-  import { Progress } from '@openshock/svelte-core/components/ui/progress/index.js';
-  import * as Table from '@openshock/svelte-core/components/ui/table/index.js';
+  import { Badge } from '@openshock/svelte-core/components/ui/badge';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Card from '@openshock/svelte-core/components/ui/card';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
+  import { Progress } from '@openshock/svelte-core/components/ui/progress';
+  import * as Table from '@openshock/svelte-core/components/ui/table';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { getConnection } from '$lib/signalr/user.svelte';
   import { serializeOtaInstallMessage } from '$lib/signalr/serializers/OtaInstall';
@@ -79,7 +79,7 @@
   import { NumberToHexPadded } from '@openshock/svelte-core/utils/convert.js';
   import { onMount } from 'svelte';
   import type { FirmwareChannel } from '$lib/api/firmwareCDN';
-  import { PageHeader } from '@openshock/svelte-core/components/index.js';
+  import { PageHeader } from '@openshock/svelte-core/components';
 
   let hubLoaded = $state(false);
   let otaLogs = $state<OtaItem[]>([]);

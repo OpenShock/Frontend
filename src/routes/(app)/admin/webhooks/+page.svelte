@@ -4,7 +4,7 @@
   import type { ColumnDef } from '@tanstack/table-core';
   import { adminListWebhooks } from '$lib/api';
   import type { WebhookDto } from '$lib/api';
-  import { Container } from '@openshock/svelte-core/components/index.js';
+  import { Container } from '@openshock/svelte-core/components';
   import {
     CreateActionsColumnDef,
     CreateSortableColumnDef,
@@ -12,8 +12,8 @@
     RenderCell,
   } from '$lib/components/Table/ColumnUtils';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
-  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
-  import { CardHeader, CardTitle } from '@openshock/svelte-core/components/ui/card/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import { CardHeader, CardTitle } from '@openshock/svelte-core/components/ui/card';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
   import DataTableActions from './data-table-actions.svelte';

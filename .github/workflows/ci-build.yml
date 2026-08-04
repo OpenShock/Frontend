@@ -2,6 +2,10 @@ on:
   push:
     branches:
       - '**'
+    tags:
+      # Release + rc semver tags. Prereleases build & publish but never move `latest`.
+      - '[0-9]+.[0-9]+.[0-9]+'
+      - '[0-9]+.[0-9]+.[0-9]+-rc.[0-9]+'
   pull_request:
     branches:
       - '**'
@@ -20,24 +24,21 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           submodules: recursive
 
-      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
-        name: Install pnpm
-        with:
-          run_install: false
-
       - name: Install Node.js
-        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version-file: .nvmrc
-          cache: 'pnpm'
 
-      - name: Install dependencies
-        shell: bash
-        run: pnpm install --frozen-lockfile --strict-peer-dependencies
+      - name: Install pnpm & dependencies
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+        with:
+          cache: true
+          run_install: |
+            - args: [--frozen-lockfile, --strict-peer-dependencies]
 
       - name: Check
         shell: bash
@@ -64,9 +65,27 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           submodules: recursive
+
+      # Decide whether this tag is the newest release (final versions only, no rc),
+      # so we only move `latest` when it actually is. Done locally from git tags —
+      # no API calls, so no rate-limit / network failure can block the publish.
+      - name: Determine if this is the newest release
+        id: latest-tag
+        if: github.ref_type == 'tag'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --tags --force --quiet
+          newest="$(git tag --list --sort=-v:refname | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | head -n1 || true)"
+          echo "Newest release tag: ${newest:-<none>}; this ref: ${GITHUB_REF_NAME}"
+          if [ "$newest" = "$GITHUB_REF_NAME" ]; then
+            echo "is-latest=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "is-latest=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - uses: ./.github/actions/containerize
         with:
@@ -74,4 +93,7 @@ jobs:
           registry-path: ${{ github.repository_owner }}/frontend
           registry-username: ${{ github.actor }}
           registry-password: ${{ secrets.GITHUB_TOKEN }}
-          push-image: ${{ github.ref_type == 'branch' && github.event_name != 'pull_request' && (github.ref_name == 'master' || github.ref_name == 'develop')  }}
+          # Push on tag pushes (semver releases) and on master/develop branch pushes. Never on PRs.
+          push-image: ${{ github.event_name != 'pull_request' && (github.ref_type == 'tag' || github.ref_name == 'master' || github.ref_name == 'develop')  }}
+          # Move `latest` only when this tag is the newest release (not an rc, not a hotfix to an old version).
+          latest: ${{ steps.latest-tag.outputs.is-latest == 'true' }}

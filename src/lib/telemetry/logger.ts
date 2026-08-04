@@ -18,7 +18,9 @@ function initLogs(): void {
 
   logsInitialized = true;
 
-  const processors = [new BatchLogRecordProcessor(new OTLPLogExporter({ url: LOGS_URL }))];
+  const processors = [
+    new BatchLogRecordProcessor({ exporter: new OTLPLogExporter({ url: LOGS_URL }) }),
+  ];
 
   logs.setGlobalLoggerProvider(new LoggerProvider({ resource: buildResource(), processors }));
 }

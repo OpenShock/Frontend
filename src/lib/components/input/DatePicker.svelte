@@ -1,9 +1,9 @@
 <script lang="ts">
   import { DateFormatter, type DateValue, getLocalTimeZone } from '@internationalized/date';
   import CalendarIcon from '@lucide/svelte/icons/calendar';
-  import { buttonVariants } from '@openshock/svelte-core/components/ui/button/index.js';
-  import { Calendar } from '@openshock/svelte-core/components/ui/calendar/index.js';
-  import * as Popover from '@openshock/svelte-core/components/ui/popover/index.js';
+  import { buttonVariants } from '@openshock/svelte-core/components/ui/button';
+  import { Calendar } from '@openshock/svelte-core/components/ui/calendar';
+  import * as Popover from '@openshock/svelte-core/components/ui/popover';
   import { cn } from '@openshock/svelte-core/utils/shadcn.js';
 
   interface Props {

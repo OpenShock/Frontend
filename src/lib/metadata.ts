@@ -1,7 +1,7 @@
 import { PUBLIC_SITE_DESCRIPTION, PUBLIC_SITE_NAME } from '$env/static/public';
 import { getSiteAssetURL } from './utils/url';
 
-const LogoSvgAssetURL = getSiteAssetURL('/logo.svg');
+const LogoSvgAssetURL = getSiteAssetURL('/Logo.svg');
 
 function getPageTitleAndDescription(_url: URL): { title: string; description: string } {
   const title = PUBLIC_SITE_NAME.trim();

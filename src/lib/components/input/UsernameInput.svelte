@@ -1,6 +1,6 @@
 <script lang="ts">
   import { accountCheckUsername } from '$lib/api';
-  import { TextInput } from '@openshock/svelte-core/components/input/index.js';
+  import { TextInput } from '@openshock/svelte-core/components/input';
   import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import {

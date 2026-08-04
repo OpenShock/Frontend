@@ -1,6 +1,6 @@
 <script lang="ts">
   import Link2 from '@lucide/svelte/icons/link-2';
-  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
 
   interface Props {
     label: string;

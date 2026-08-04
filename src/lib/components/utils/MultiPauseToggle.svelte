@@ -2,8 +2,8 @@
   import { shockerPauseShocker, shockerShockerShareCodePause } from '$lib/api';
   import type { BooleanLegacyDataResponse } from '$lib/api';
   import { Asterisk, Pause, Play } from '@lucide/svelte';
-  import { Button } from '@openshock/svelte-core/components/ui/button/index.js';
-  import { Spinner } from '@openshock/svelte-core/components/ui/spinner/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 
   interface Props {
