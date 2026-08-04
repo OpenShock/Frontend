@@ -1,6 +1,6 @@
 <script lang="ts" module>
-  import { ShockerModelType } from '$lib/api/internal/v1';
-
+  import { ShockerModelType } from '$lib/api';
+  import type { NewShocker } from '$lib/api';
   export interface AddShockerData {
     name: string;
     rfId: number;
@@ -19,14 +19,14 @@
 </script>
 
 <script lang="ts">
-  import type { NewShocker } from '$lib/api/internal/v1';
-  import TextInput from '$lib/components/input/TextInput.svelte';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import * as Select from '$lib/components/ui/select';
-  import { Field, FieldLabel } from '$lib/components/ui/field/index.js';
-  import { Input } from '$lib/components/ui/input';
-  import type { DialogContentProps } from '$lib/components/dialog-manager/types';
+  import { TextInput } from '@openshock/svelte-core/components/input';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
+  import * as Select from '@openshock/svelte-core/components/ui/select';
+  import { Field, FieldLabel } from '@openshock/svelte-core/components/ui/field';
+  import { Input } from '@openshock/svelte-core/components/ui/input';
+  import type { DialogContentProps } from '@openshock/svelte-core/components/dialog-manager';
+  import { RfIdMax, RfIdMin, isValidRfId } from '$lib/constants/ShockerConstants';
   import type { OwnHub } from '$lib/state/hubs-state.svelte';
 
   interface Props extends DialogContentProps<NewShocker | undefined> {
@@ -39,7 +39,9 @@
   // svelte-ignore state_referenced_locally -- intentionally captures initial value as own reactive copy
   let data: AddShockerData = $state(initialData);
 
-  let canSubmit = $derived(data.name.trim().length > 0 && data.rfId > 0 && data.device.length > 0);
+  let canSubmit = $derived(
+    data.name.trim().length > 0 && isValidRfId(data.rfId) && data.device.length > 0
+  );
 
   function submit() {
     if (!canSubmit) return;
@@ -61,7 +63,14 @@
 
   <Field class="gap-2">
     <FieldLabel>RF ID</FieldLabel>
-    <Input type="number" placeholder="12345" bind:value={data.rfId} min={1} />
+    <Input
+      type="number"
+      placeholder="12345"
+      bind:value={data.rfId}
+      min={RfIdMin}
+      max={RfIdMax}
+      step={1}
+    />
   </Field>
 
   <Field class="gap-2">

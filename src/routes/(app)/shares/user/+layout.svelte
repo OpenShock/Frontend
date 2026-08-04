@@ -2,10 +2,10 @@
   import { Barcode, Plus } from '@lucide/svelte';
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
-  import type { BasicUserInfo } from '$lib/api/internal/v1';
-  import Container from '$lib/components/Container.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import * as Tabs from '$lib/components/ui/tabs/index.js';
+  import type { BasicUserInfo } from '$lib/api';
+  import { Container } from '@openshock/svelte-core/components';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Tabs from '@openshock/svelte-core/components/ui/tabs';
   import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
   import { type Snippet, onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
@@ -14,7 +14,7 @@
   import DialogShareCodeRedeem from './dialog-share-code-redeem.svelte';
   import { resolve } from '$app/paths';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import PageHeader from '$lib/components/PageHeader.svelte';
+  import { PageHeader } from '@openshock/svelte-core/components';
 
   registerBreadcrumbs(() => [{ label: 'User Shares', href: '/shares/user/outgoing' }]);
 
@@ -22,6 +22,7 @@
   let redeemDialogOpen = $state(false);
   let createdCode = $state<string | null>(null);
   let redeemUserInput = $state<string>('');
+  let presharedShockerIds = $state<string[]>([]);
 
   let tab = $derived.by(() => {
     switch (page.url.pathname) {
@@ -59,38 +60,64 @@
       redeemDialogOpen = true;
       redeemUserInput = code ?? '';
     }
+
+    // Check for share query param and open the create dialog with shockers preselected
+    if (page.url.searchParams.has('share')) {
+      const ids = page.url.searchParams.getAll('share').flatMap((v) => v.split(','));
+      presharedShockerIds = ids.filter((id) => id.length > 0);
+      createDialogOpen = true;
+    }
   });
 </script>
 
-<DialogShareCodeCreate bind:open={createDialogOpen} {onCreatedCode} {onInvitedUser} />
+<DialogShareCodeCreate
+  bind:open={createDialogOpen}
+  preselectedShockerIds={presharedShockerIds}
+  {onCreatedCode}
+  {onInvitedUser}
+/>
 <DialogShareCodeCreated bind:code={createdCode} />
 <DialogShareCodeRedeem bind:open={redeemDialogOpen} bind:userInput={redeemUserInput} />
 
 <Container class="flex flex-col">
   <PageHeader title="User Shares" subtitle="Direct permanent shares with users">
-    <Button onclick={() => (redeemDialogOpen = true)} class="self-end">
+    <Button
+      onclick={() => (redeemDialogOpen = true)}
+      class="self-end"
+      data-tour="user-shares-redeem"
+    >
       <Barcode />
       Redeem Code
     </Button>
-    <Button onclick={() => (createDialogOpen = true)} class="self-end">
+    <Button onclick={() => (createDialogOpen = true)} class="self-end" data-tour="user-shares-new">
       <Plus />
       New Share
     </Button>
   </PageHeader>
 
   <div class="flex w-full flex-none">
-    <Tabs.Root value={tab} class="w-100">
+    <Tabs.Root value={tab} class="w-100" data-tour="user-shares-tabs">
       <Tabs.List>
-        <Tabs.Trigger value="shares" onclick={() => navigateTo('outgoing')}>Shares</Tabs.Trigger>
-        <Tabs.Trigger value="incoming" onclick={() => navigateTo('incoming')}
-          >Shared with Me</Tabs.Trigger
+        <Tabs.Trigger
+          value="shares"
+          onclick={() => navigateTo('outgoing')}
+          data-tour="user-shares-tab-outgoing">Shares</Tabs.Trigger
         >
-        <Tabs.Trigger value="invites" onclick={() => navigateTo('invites')}>Invites</Tabs.Trigger>
+        <Tabs.Trigger
+          value="incoming"
+          onclick={() => navigateTo('incoming')}
+          data-tour="user-shares-tab-incoming">Shared with Me</Tabs.Trigger
+        >
+        <Tabs.Trigger
+          value="invites"
+          onclick={() => navigateTo('invites')}
+          data-tour="user-shares-tab-invites">Invites</Tabs.Trigger
+        >
       </Tabs.List>
     </Tabs.Root>
   </div>
 
-  <div class="flex w-full flex-col space-y-4 overflow-auto">
+  <div class="flex w-full flex-1 flex-col space-y-4 overflow-auto">
     {@render children?.()}
   </div>
 </Container>

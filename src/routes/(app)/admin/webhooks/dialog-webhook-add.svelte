@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { adminApi } from '$lib/api';
-  import TextInput from '$lib/components/input/TextInput.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import * as Dialog from '$lib/components/ui/dialog';
+  import { adminAddWebhook } from '$lib/api';
+  import { TextInput } from '@openshock/svelte-core/components/input';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import type { ValidationResult } from '$lib/types/ValidationResult';
+  import type { ValidationResult } from '@openshock/svelte-core/types/ValidationResult.js';
   import { toast } from 'svelte-sonner';
 
   interface Props {
@@ -48,8 +48,7 @@
   let valid = $derived(name.length > 0 && url.length > 0 && urlValidationResult.valid);
 
   function createWebhook() {
-    adminApi
-      .adminAddWebhook({ name, url })
+    adminAddWebhook({ body: { name, url } })
       .then(() => {
         onAdded();
         toast.success('Created webhook');

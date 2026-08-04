@@ -51,7 +51,7 @@
 </script>
 
 {#if hasLimits}
-  <LimitsDisplay {maxIntensity} maxDurationSeconds={maxDuration} />
+  <LimitsDisplay {maxIntensity} {maxDuration} />
 {/if}
 
 <!-- Sliders -->

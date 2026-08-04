@@ -1,7 +1,7 @@
 <script lang="ts" module>
-  import XLogo from '../svg/XLogo.svelte';
-  import DiscordLogo from '../svg/DiscordLogo.svelte';
-  import GoogleLogo from '../svg/GoogleLogo.svelte';
+  import { XLogo } from '@openshock/svelte-core/components/svg';
+  import { DiscordLogo } from '@openshock/svelte-core/components/svg';
+  import { GoogleLogo } from '@openshock/svelte-core/components/svg';
 
   const providerDetails: Record<string, { icon: typeof XLogo; label: string }> = {
     discord: { icon: DiscordLogo, label: 'Discord' },
@@ -11,19 +11,16 @@
 </script>
 
 <script lang="ts">
-  import { Button } from '$lib/components/ui/button/index.js';
-  import { Field } from '$lib/components/ui/field/index.js';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import { Field } from '@openshock/svelte-core/components/ui/field';
   import { GetOAuthAuthorizeUrl } from '$lib/api/next/oauth';
   import { LogIn } from '@lucide/svelte';
-  import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
 
-  let { verb = 'Login' }: { verb?: string } = $props();
-
-  let oauthProviders = $derived(backendMetadata.state?.oAuthProviders);
+  let { verb = 'Login', providers }: { verb?: string; providers: string[] } = $props();
 </script>
 
 <Field>
-  {#each oauthProviders as provider (provider)}
+  {#each providers as provider (provider)}
     {@const detail = providerDetails[provider]}
     <form action={GetOAuthAuthorizeUrl(provider, 'LoginOrCreate')} method="POST">
       <Button variant="outline" type="submit" class="w-full">

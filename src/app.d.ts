@@ -1,3 +1,4 @@
+/// <reference types="temporal-polyfill/global" />
 import type { TurnstileInstance } from '$lib/types/TurnstileInstance';
 
 // See https://svelte.dev/docs/kit/types#app.d.ts

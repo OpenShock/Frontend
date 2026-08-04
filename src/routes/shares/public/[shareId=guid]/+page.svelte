@@ -1,12 +1,12 @@
 <script lang="ts">
+  import { publicGetPublicShare } from '$lib/api';
+  import type { PublicShareResponse } from '$lib/api';
   import { CircleUser, LogIn, Undo2 } from '@lucide/svelte';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
-  import { publicShockerSharesApi } from '$lib/api';
-  import type { PublicShareResponse } from '$lib/api/internal/v1';
-  import { Button } from '$lib/components/ui/button';
-  import * as Card from '$lib/components/ui/card/index.js';
-  import Input from '$lib/components/ui/input/input.svelte';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Card from '@openshock/svelte-core/components/ui/card';
+  import { Input } from '@openshock/svelte-core/components/ui/input';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { userState } from '$lib/state/user-state.svelte';
@@ -31,13 +31,13 @@
 
   // Fetch share details
   async function getShareDetails(): Promise<PublicShareResponse> {
-    const shareId = page.params.shareId;
-    if (!shareId) {
+    const publicShareId = page.params.shareId;
+    if (!publicShareId) {
       throw new Error('Share ID is missing from the URL parameters.');
     }
 
     try {
-      const response = (await publicShockerSharesApi.publicGetPublicShare(shareId)).data;
+      const response = (await publicGetPublicShare({ path: { publicShareId } })).data;
       shareData = response;
       return response;
     } catch (error) {

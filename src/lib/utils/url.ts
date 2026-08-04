@@ -1,8 +1,9 @@
-import { goto, replaceState } from '$app/navigation';
+import { afterNavigate, goto, replaceState } from '$app/navigation';
 import { asset, base, match } from '$app/paths';
 import { page } from '$app/state';
 import type { Asset, Pathname } from '$app/types';
 import { PUBLIC_BACKEND_API_URL, PUBLIC_SITE_SHORT_URL, PUBLIC_SITE_URL } from '$env/static/public';
+import { tick } from 'svelte';
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
@@ -65,6 +66,22 @@ export function getBackendURL(path?: BackendPath): URL {
   }
 
   return url;
+}
+
+/**
+ * Builds the live-control-gateway WebSocket URL from the parts the backend advertises
+ * (`host`, `port`, and a full `path` that already includes the gateway's path prefix and the
+ * `/…/ws/live/{hubId}` route). The port is only included when it differs from the default 443,
+ * so a default-layout gateway yields `wss://host/…` exactly as before.
+ *
+ * @example
+ * getGatewayWsURL('gw.example.com', 443, '/1/ws/live/abc')       // wss://gw.example.com/1/ws/live/abc
+ * getGatewayWsURL('example.com', 8080, '/gateway/1/ws/live/abc') // wss://example.com:8080/gateway/1/ws/live/abc
+ */
+export function getGatewayWsURL(host: string, port: number, path: string): string {
+  const authority = port === 443 ? host : `${host}:${port}`;
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  return `wss://${authority}${normalizedPath}`;
 }
 
 // ---------------------------------------------------------------------------
@@ -182,6 +199,54 @@ export function isValidRedirectParam(value: string): boolean {
 }
 
 /**
+ * URL schemes that must never be used as a token redirect target. Navigating
+ * `window.location` to any of these can execute script or render
+ * attacker-controlled content in the page's origin.
+ */
+const DANGEROUS_REDIRECT_SCHEMES = new Set(['javascript:', 'data:', 'vbscript:', 'file:', 'blob:']);
+
+/** Loopback hostnames permitted for local `http(s)` token redirect targets. */
+const LOOPBACK_HOSTNAMES = new Set(['localhost', '127.0.0.1', '[::1]', '::1']);
+
+/**
+ * Validates a `redirect_uri` for the external-application API-token grant flow.
+ *
+ * In that flow a freshly minted token is handed to an external app by
+ * navigating the browser to its redirect URI, so this is deliberately more
+ * permissive than {@link isValidRedirectParam} — it allows custom application
+ * schemes (e.g. `shockosc://callback`) and remote `https` origins (for
+ * web-based integrations). To prevent the token from being exfiltrated it
+ * rejects:
+ *  - dangerous schemes that can execute script or render HTML
+ *    (`javascript:`, `data:`, …)
+ *  - remote cleartext `http` origins — a token must never travel unencrypted
+ *    to a remote origin; `http` is only allowed for loopback addresses (for
+ *    local apps)
+ *
+ * @param value - The raw `redirect_uri` query parameter
+ * @returns Whether the value is a safe token redirect target
+ */
+export function isValidTokenRedirectUri(value: string): boolean {
+  let url: URL;
+  try {
+    url = new URL(value);
+  } catch {
+    return false;
+  }
+
+  if (DANGEROUS_REDIRECT_SCHEMES.has(url.protocol)) return false;
+
+  // Cleartext http may only target loopback — a token must never travel
+  // unencrypted to a remote origin. https and custom (application) schemes are
+  // allowed through, since https keeps the token confidential in transit.
+  if (url.protocol === 'http:') {
+    return LOOPBACK_HOSTNAMES.has(url.hostname);
+  }
+
+  return true;
+}
+
+/**
  * Strips an invalid redirect query parameter from the current URL bar.
  *
  * Reads the given query parameter from SvelteKit's {@link page} state.
@@ -208,6 +273,65 @@ export function sanitizeRedirectSearchParam(queryParam: string = REDIRECT_QUERY_
   }
 
   return false;
+}
+
+/**
+ * Registers an {@link afterNavigate} handler that reads a one-shot query
+ * parameter, hands its value to a callback, then strips it from the URL bar.
+ *
+ * Use this for transient signals carried in the URL — e.g. an OAuth `error`
+ * code passed back via redirect. The callback typically stashes the value in
+ * component state so the UI no longer depends on the query string, after which
+ * the parameter is removed via {@link replaceState}. This keeps the code out
+ * of the address bar and prevents it from reappearing on refresh.
+ *
+ * If the callback navigates away (or otherwise wants the parameter left
+ * intact), it can return `false` to skip the strip. A return of `void`/`true`
+ * strips as normal. The callback may be async and is awaited before stripping.
+ *
+ * Must be called synchronously during component initialisation (same
+ * constraint as {@link afterNavigate}). The handler is automatically torn
+ * down when the component is destroyed.
+ *
+ * @param queryParam - Name of the query parameter to consume
+ * @param onValue    - Called with the parameter value when it is present;
+ *                     return `false` to skip stripping the parameter
+ *
+ * @example
+ * ```ts
+ * // Consume and strip:
+ * consumeSearchParam('error', (code) => {
+ *   oauthError = code;
+ * });
+ *
+ * // Redirect on a specific value, leaving the param for the destination:
+ * consumeSearchParam('error', async (code) => {
+ *   if (code === 'emailAlreadyRegistered') {
+ *     await goto(resolve(`/login?error=${encodeURIComponent(code)}`), { replaceState: true });
+ *     return false;
+ *   }
+ *   errorCode = code;
+ * });
+ * ```
+ */
+export function consumeSearchParam(
+  queryParam: string,
+  onValue: (value: string) => boolean | void | Promise<boolean | void>
+): void {
+  afterNavigate(async () => {
+    const value = page.url.searchParams.get(queryParam);
+    if (value === null) return;
+
+    const result = await onValue(value);
+    if (result === false) return;
+
+    await tick();
+
+    const stripped = new URL(page.url);
+    stripped.searchParams.delete(queryParam);
+    /* eslint-disable-next-line svelte/no-navigation-without-resolve -- stripped is already a full URL */
+    replaceState(stripped, {});
+  });
 }
 
 /**

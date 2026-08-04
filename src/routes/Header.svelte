@@ -5,19 +5,20 @@
   import { goto } from '$app/navigation';
   import type { Pathname } from '$app/types';
   import { PUBLIC_DISCORD_INVITE_URL, PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
-  import LightSwitch from '$lib/components/LightSwitch.svelte';
-  import DiscordLogo from '$lib/components/svg/DiscordLogo.svelte';
-  import GithubIcon from '$lib/components/svg/GithubIcon.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-  import { Separator } from '$lib/components/ui/separator';
-  import { useSidebar } from '$lib/components/ui/sidebar';
+  import { LightSwitch } from '@openshock/svelte-core/components';
+  import { DiscordLogo } from '@openshock/svelte-core/components/svg';
+  import { GithubIcon } from '@openshock/svelte-core/components/svg';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
+  import { Separator } from '@openshock/svelte-core/components/ui/separator';
+  import { useSidebar } from '@openshock/svelte-core/components/ui/sidebar';
   import { userState } from '$lib/state/user-state.svelte';
-  import { cn } from '$lib/utils';
+  import { cn } from '@openshock/svelte-core/utils/shadcn.js';
   import Breadcrumb from './Breadcrumb.svelte';
   import { prefixBase } from '$lib/utils/url';
   import { resolve } from '$app/paths';
   import { LogIn, UserPlus } from '@lucide/svelte';
+  import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
 
   let sidebar = useSidebar();
 </script>
@@ -46,7 +47,9 @@
 
       <LightSwitch />
 
-      {#if userState.self}
+      {#if userState.loading}
+        <Spinner class="size-8 text-gray-600 dark:text-gray-300" />
+      {:else if userState.self}
         <DropdownMenu.Root>
           <DropdownMenu.Trigger
             class="cursor-pointer text-gray-600 select-none hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-200"

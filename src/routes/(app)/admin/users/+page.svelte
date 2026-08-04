@@ -1,7 +1,7 @@
 <script lang="ts" module>
   import type { ColumnDef } from '@tanstack/table-core';
-  import type { AdminUsersView } from '$lib/api/internal/v1';
-  import { PasswordHashingAlgorithm, RoleType } from '$lib/api/internal/v1';
+  import { PasswordHashingAlgorithm, RoleType, adminGetUsers } from '$lib/api';
+  import type { AdminUsersView, AdminUsersViewPaginated } from '$lib/api';
   import {
     CreateActionsColumnDef,
     CreateSortableColumnDef,
@@ -12,10 +12,8 @@
     RenderOrangeCell,
     RenderRedCell,
   } from '$lib/components/Table/ColumnUtils';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import DataTableActions from './data-table-actions.svelte';
-
-  registerBreadcrumbs(() => [{ label: 'Users' }]);
+  import { odataAnd, odataSearch } from '$lib/utils/odata';
 
   const PasswordHashTypeRenderer = (passwordHashType: PasswordHashingAlgorithm) => {
     if (passwordHashType !== PasswordHashingAlgorithm.BCrypt)
@@ -28,7 +26,7 @@
     return isPrivileged ? RenderBlueCell(roles.toString()) : RenderBoldCell(roles.toString());
   };
 
-  const columns: ColumnDef<AdminUsersView>[] = [
+  const dataColumns: ColumnDef<AdminUsersView>[] = [
     CreateSortableColumnDef('name', 'Name', RenderCell),
     CreateSortableColumnDef('email', 'Email', RenderCell),
     CreateSortableColumnDef('passwordHashType', 'Password hash type', PasswordHashTypeRenderer),
@@ -39,49 +37,34 @@
     CreateSortableColumnDef('deactivatedByUserId', 'Deactivated by', (a) =>
       a ? RenderCell(a) : RenderRedCell('None')
     ),
-    CreateActionsColumnDef(DataTableActions, (user) => ({ user })),
   ];
-
-  function escapeQuotes(str: string) {
-    if (/[ '"\\]/.test(str)) {
-      const escaped = str.replace(/(['"\\])/g, '\\$1');
-      return `'${escaped}'`;
-    }
-    return str;
-  }
-
-  /**
-   * Build a single filter clause for `key` and `searchString`.
-   * - If there is any unescaped `%`, uses `ilike`.
-   * - Otherwise uses `eq`.
-   */
-  function createSearchQuery(key: string, searchString: string): string | undefined {
-    if (!searchString) return undefined;
-
-    // Detect any % not preceded by a backslash
-    const hasWildcard = /(^|[^\\])%/.test(searchString);
-
-    // Wrap & escape quotes/backslashes as before
-    const escaped = escapeQuotes(searchString);
-
-    const operator = hasWildcard ? 'ilike' : 'eq';
-    return `${key} ${operator} ${escaped}`;
-  }
 </script>
 
 <script lang="ts">
   import type { SortingState } from '@tanstack/table-core';
-  import { adminApi } from '$lib/api';
-  import type { AdminUsersViewPaginated } from '$lib/api/internal/v1';
-  import Container from '$lib/components/Container.svelte';
+  import { Container } from '@openshock/svelte-core/components';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import PaginationFooter from '$lib/components/Table/PaginationFooter.svelte';
-  import { CardHeader, CardTitle } from '$lib/components/ui/card';
-  import { Input } from '$lib/components/ui/input';
+  import { CardHeader, CardTitle } from '@openshock/svelte-core/components/ui/card';
+  import { Input } from '@openshock/svelte-core/components/ui/input';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { useDebounce } from '$lib/utils/debounce';
+  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { useDebounce } from '@openshock/svelte-core/utils/debounce.js';
+
+  registerBreadcrumbs(() => [{ label: 'Users' }]);
 
   let isFetching = $state(false);
+
+  // Bumped to force a re-fetch after a mutation (e.g. user deletion).
+  let refreshNonce = $state(0);
+
+  const columns: ColumnDef<AdminUsersView>[] = [
+    ...dataColumns,
+    CreateActionsColumnDef(DataTableActions, (user) => ({
+      user,
+      onDeleted: () => refreshNonce++,
+    })),
+  ];
 
   let requestedPage = $state(1);
   let requestedPageSize = $state(100);
@@ -102,7 +85,7 @@
   );
 
   function handleResponse(response: AdminUsersViewPaginated) {
-    total = response.total;
+    total = Number(response.total);
     data = response.data;
     perPage = response.limit;
     if (page !== requestedPage) {
@@ -113,26 +96,25 @@
 
   const applyFilterQuery = useDebounce((query: string | undefined) => (filterQuery = query), 800);
   $effect(() => {
-    const queries: string[] = [];
-
-    const nameQ = createSearchQuery('name', nameSearch);
-    if (nameQ) queries.push(nameQ);
-
-    const emailQ = createSearchQuery('email', emailSearch);
-    if (emailQ) queries.push(emailQ);
-
-    const query = queries.length > 0 ? queries.join(' and ') : undefined;
+    const query = odataAnd(odataSearch('name', nameSearch), odataSearch('email', emailSearch));
     if (query === filterQuery) return;
 
     applyFilterQuery(query);
   });
 
   $effect(() => {
+    void refreshNonce; // re-run after a mutation
     const offset = (requestedPage - 1) * requestedPageSize;
 
     isFetching = true;
-    adminApi
-      .adminGetUsers(filterQuery, orderByQuery, offset, requestedPageSize)
+    adminGetUsers({
+      query: {
+        $filter: filterQuery,
+        $orderby: orderByQuery,
+        $offset: offset,
+        $limit: requestedPageSize,
+      },
+    })
       .then(handleResponse)
       .catch(handleApiError)
       .finally(() => (isFetching = false));

@@ -1,12 +1,11 @@
 <script lang="ts">
-  import { adminApi } from '$lib/api';
-  import { ConfigurationValueType } from '$lib/api/internal/v1';
-  import TextInput from '$lib/components/input/TextInput.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import * as Select from '$lib/components/ui/select';
+  import { ConfigurationValueType, adminConfigurationAdd } from '$lib/api';
+  import { TextInput } from '@openshock/svelte-core/components/input';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
+  import * as Select from '@openshock/svelte-core/components/ui/select';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import type { ValidationResult } from '$lib/types/ValidationResult';
+  import type { ValidationResult } from '@openshock/svelte-core/types/ValidationResult.js';
   import { toast } from 'svelte-sonner';
 
   interface Props {
@@ -54,8 +53,7 @@
   let valid = $derived(name.length > 0 && value.length > 0 && nameValidationResult.valid);
 
   function onSubmit() {
-    adminApi
-      .adminConfigurationAdd({ name, description, type: valueType, value })
+    adminConfigurationAdd({ body: { name, description, type: valueType, value } })
       .then(() => {
         onAdded();
         toast.success('Created configuration item');

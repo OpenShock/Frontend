@@ -1,4 +1,5 @@
 <script lang="ts" module>
+  import { tokensReportTokens } from '$lib/api';
   function isValid(str: string): boolean {
     return /^[0-9a-zA-Z]{32,64}$/i.test(str);
   }
@@ -8,14 +9,13 @@
   import OctagonAlert from '@lucide/svelte/icons/octagon-alert';
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import { apiTokensApi } from '$lib/api';
-  import Container from '$lib/components/Container.svelte';
+  import { Container } from '@openshock/svelte-core/components';
   import Turnstile from '$lib/components/Turnstile.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import * as Card from '$lib/components/ui/card';
-  import { Checkbox } from '$lib/components/ui/checkbox';
-  import { Label } from '$lib/components/ui/label';
-  import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Card from '@openshock/svelte-core/components/ui/card';
+  import { Checkbox } from '@openshock/svelte-core/components/ui/checkbox';
+  import { Label } from '@openshock/svelte-core/components/ui/label';
+  import { ScrollArea } from '@openshock/svelte-core/components/ui/scroll-area';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { toast } from 'svelte-sonner';
@@ -34,7 +34,7 @@
     if (!canSubmit || !turnstileResponse) return;
 
     try {
-      await apiTokensApi.tokensReportTokens({ turnstileResponse, secrets });
+      await tokensReportTokens({ body: { turnstileResponse, secrets } });
       goto(resolve('/login'));
     } catch (err) {
       await handleApiError(err);

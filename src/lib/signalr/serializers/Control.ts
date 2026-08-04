@@ -6,7 +6,8 @@ export async function serializeControlMessages(connection: HubConnection, contro
     'ControlV2',
     controls.map((control) => ({
       ...control,
-      duration: control.duration * 1000,
+      intensity: Math.round(control.intensity),
+      duration: Math.round(control.duration * 1000),
     })),
     null
   );

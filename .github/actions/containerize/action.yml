@@ -16,15 +16,19 @@ inputs:
   push-image:
     required: true
     description: If true, pushes the image to the registry
+  latest:
+    required: false
+    default: 'false'
+    description: If true, also tags the image as `latest` (set when the pushed tag is the newest release)
 
 runs:
   using: composite
   steps:
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
+      uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4.2.0
 
     - name: Log in to Container Registry
-      uses: docker/login-action@v3
+      uses: docker/login-action@371161bbe7024a29a25c5e19bfcbc0804fe9ad2c # v4.5.2
       with:
         registry: ${{ inputs.registry }}
         username: ${{ inputs.registry-username }}
@@ -32,13 +36,14 @@ runs:
 
     - name: Extract metadata (tags, labels) for Docker
       id: meta
-      uses: docker/metadata-action@v5
+      uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
       with:
         images: ${{ inputs.registry }}/${{ inputs.registry-path }}
         flavor: |
           latest=false
         tags: |
           type=raw,value={{branch}},enable=${{ github.ref_type == 'branch' && github.event_name != 'pull_request' }}
+          type=raw,value=latest,enable=${{ inputs.latest == 'true' }}
           type=ref,event=branch
           type=ref,event=pr
           type=semver,pattern={{major}},enable=${{ !startsWith(github.ref, 'refs/tags/v0') && !startsWith(github.ref, 'refs/tags/0') }}
@@ -46,7 +51,7 @@ runs:
           type=semver,pattern={{major}}.{{minor}}.{{patch}}
 
     - name: Build and push Docker image
-      uses: docker/build-push-action@v5
+      uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
       with:
         context: .
         push: ${{ inputs.push-image }}

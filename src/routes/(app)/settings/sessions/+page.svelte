@@ -1,9 +1,9 @@
 <script lang="ts">
+  import { sessionsListSessions } from '$lib/api';
+  import type { LoginSessionResponse } from '$lib/api';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
   import type { ColumnDef, SortingState } from '@tanstack/table-core';
-  import { sessionsApi } from '$lib/api';
-  import type { LoginSessionResponse } from '$lib/api/internal/v1';
-  import Container from '$lib/components/Container.svelte';
+  import { Container } from '@openshock/svelte-core/components';
   import {
     CreateActionsColumnDef,
     CreateColumnDef,
@@ -14,8 +14,8 @@
     UserAgentRenderer,
   } from '$lib/components/Table/ColumnUtils';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import * as Card from '$lib/components/ui/card';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Card from '@openshock/svelte-core/components/ui/card';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
@@ -48,7 +48,7 @@
 
   async function fetchSessions() {
     try {
-      data = await sessionsApi.sessionsListSessions();
+      data = await sessionsListSessions();
     } catch (error) {
       await handleApiError(error);
     }

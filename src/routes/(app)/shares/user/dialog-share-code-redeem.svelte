@@ -1,13 +1,13 @@
 <script lang="ts">
+  import { userSharesRedeemInvite } from '$lib/api';
+  import type { V2UserSharesListItem } from '$lib/api';
   import { Barcode, Zap } from '@lucide/svelte';
-  import { shockerSharesV2Api } from '$lib/api';
-  import type { V2UserSharesListItem } from '$lib/api/internal/v2';
-  import * as Avatar from '$lib/components/ui/avatar';
-  import Badge from '$lib/components/ui/badge/badge.svelte';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import { Input } from '$lib/components/ui/input';
-  import * as Tooltip from '$lib/components/ui/tooltip';
+  import * as Avatar from '@openshock/svelte-core/components/ui/avatar';
+  import { Badge } from '@openshock/svelte-core/components/ui/badge';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
+  import { Input } from '@openshock/svelte-core/components/ui/input';
+  import * as Tooltip from '@openshock/svelte-core/components/ui/tooltip';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { refreshOutgoingInvites, refreshUserShares } from '$lib/state/user-shares-state.svelte';
 
@@ -29,7 +29,7 @@
 
   async function onFormSubmit() {
     try {
-      redeemPromise = shockerSharesV2Api.userSharesRedeemInvite(userInput);
+      redeemPromise = userSharesRedeemInvite({ path: { inviteId: userInput } });
       await redeemPromise;
       await refreshUserShares();
     } catch (error) {

@@ -1,12 +1,12 @@
 <script lang="ts">
+  import { userSharesCreateShareInvite } from '$lib/api';
+  import type { BasicUserInfo } from '$lib/api';
   import { Barcode, User } from '@lucide/svelte';
-  import { shockerSharesV2Api } from '$lib/api';
-  import { type BasicUserInfo } from '$lib/api/internal/v1';
   import RestrictionsSelector from '$lib/components/shares/restrictions-selector.svelte';
   import UserSelector from '$lib/components/shares/user-selector.svelte';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import MultiSelectCombobox from '$lib/components/ui/multi-select-combobox/multi-select-combobox.svelte';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
+  import MultiSelectCombobox from '@openshock/svelte-core/components/multi-select-combobox/multi-select-combobox.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { ownHubs } from '$lib/state/hubs-state.svelte';
   import { refreshOutgoingInvites } from '$lib/state/user-shares-state.svelte';
@@ -24,11 +24,17 @@
 
   interface Props {
     open: boolean;
+    preselectedShockerIds?: string[];
     onCreatedCode: (code: string) => void;
     onInvitedUser: (user: BasicUserInfo) => void;
   }
 
-  let { open = $bindable(), onCreatedCode, onInvitedUser }: Props = $props();
+  let {
+    open = $bindable(),
+    preselectedShockerIds = [],
+    onCreatedCode,
+    onInvitedUser,
+  }: Props = $props();
 
   interface ShockerPermLimitPairButNotNull {
     permissions: {
@@ -62,6 +68,15 @@
     };
   }
 
+  // Seed preselection whenever the dialog transitions to open.
+  let wasOpen = false;
+  $effect(() => {
+    if (open && !wasOpen && preselectedShockerIds.length > 0) {
+      shockerIds = [...preselectedShockerIds];
+    }
+    wasOpen = open;
+  });
+
   function onOpenChange(o: boolean) {
     if (!o) {
       shockerIds = [];
@@ -73,13 +88,15 @@
 
   async function onFormSubmit() {
     try {
-      const createdCode = await shockerSharesV2Api.userSharesCreateShareInvite({
-        user: fetchedUser?.id,
-        shockers: shockerIds.map((id) => ({
-          id: id,
-          permissions: { ...restrictions.permissions },
-          limits: { ...restrictions.limits },
-        })),
+      const createdCode = await userSharesCreateShareInvite({
+        body: {
+          user: fetchedUser?.id,
+          shockers: shockerIds.map((id) => ({
+            id: id,
+            permissions: { ...restrictions.permissions },
+            limits: { ...restrictions.limits },
+          })),
+        },
       });
 
       if (fetchedUser) {

@@ -6,7 +6,8 @@
     FirmwareChannels,
     type FirmwareRelease,
   } from '$lib/api/firmwareRepo';
-  import * as ToggleGroup from '$lib/components/ui/toggle-group';
+  import * as ToggleGroup from '@openshock/svelte-core/components/ui/toggle-group';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 
   interface Props {
     channel?: FirmwareChannel;
@@ -49,10 +50,11 @@
         version = resp.version;
         cache[currentChannel] = resp;
       })
-      .catch(() => {
+      .catch((error) => {
         latestResponse = null;
         version = null;
         cache[currentChannel] = null;
+        handleApiError(error);
       });
   });
 </script>

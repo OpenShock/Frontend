@@ -1,6 +1,6 @@
 <script lang="ts">
   import { ClockFading, Gauge, Pause } from '@lucide/svelte';
-  import type { PublicShareShocker } from '$lib/api/internal/v1';
+  import type { PublicShareShocker } from '$lib/api';
   import {
     ControlDurationDefault,
     ControlDurationProps,
@@ -9,6 +9,7 @@
   } from '$lib/constants/ControlConstants';
   import type { Control } from '$lib/signalr/models/Control';
   import { ControlType } from '$lib/signalr/models/ControlType';
+  import { formatDurationSeconds } from '@openshock/svelte-core/utils';
   import { getPauseReason } from '$lib/utils';
   import { useShockerEvents } from '$lib/hooks/shocker-events.svelte';
   import ActionButtons from './impl/ActionButtons.svelte';
@@ -84,7 +85,7 @@
       </span>
       <span class="flex items-center gap-1" title="Max Duration">
         <ClockFading size={14} />
-        {maxDurationSeconds}s
+        {formatDurationSeconds(maxDurationSeconds)}
       </span>
     </div>
   </div>

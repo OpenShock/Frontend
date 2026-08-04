@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { sessionsApi } from '$lib/api';
-  import type { LoginSessionResponse } from '$lib/api/internal/v1';
-  import ConfirmDeleteDialog from '$lib/components/ConfirmDeleteDialog.svelte';
+  import { sessionsDeleteSession } from '$lib/api';
+  import type { LoginSessionResponse } from '$lib/api';
+  import { ConfirmDeleteDialog } from '@openshock/svelte-core/components';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { getReadableUserAgentName } from '$lib/utils/userAgent';
   import { toast } from 'svelte-sonner';
@@ -21,7 +21,9 @@
   }
 
   function revokeSession() {
-    sessionsApi.sessionsDeleteSession(session.id).then(handleDeleted).catch(handleApiError);
+    sessionsDeleteSession({ path: { sessionId: session.id } })
+      .then(handleDeleted)
+      .catch(handleApiError);
   }
 
   let readableUserAgent = $derived(

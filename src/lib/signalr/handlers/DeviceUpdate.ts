@@ -1,6 +1,6 @@
 import { HubUpdateType, isHubUpdateType } from '$lib/signalr/models/HubUpdateType';
-import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
-import { isString } from '$lib/typeguards';
+import { notifyHubPaired, refreshOwnHubs } from '$lib/state/hubs-state.svelte';
+import { isString } from '@openshock/svelte-core/typeguards/index.js';
 import { toast } from 'svelte-sonner';
 
 export function handleSignalrDeviceUpdate(deviceId: unknown, updateType: unknown) {
@@ -10,9 +10,11 @@ export function handleSignalrDeviceUpdate(deviceId: unknown, updateType: unknown
     return;
   }
 
-  const typeLabel = HubUpdateType[updateType];
-
-  console.log(`🔄 DeviceUpdate: ${deviceId} → ${typeLabel}`);
+  // Pairing doesn't change the hub list; just notify any open pair-code dialog.
+  if (updateType === HubUpdateType.HubPaired) {
+    notifyHubPaired(deviceId);
+    return;
+  }
 
   refreshOwnHubs();
 }

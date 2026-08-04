@@ -1,7 +1,7 @@
 import { env } from '$env/dynamic/public';
-import { isTruthy } from '$lib/utils/parse';
 import { publicRoutes } from '$lib/utils/public-routes';
 import { getSiteURL } from '$lib/utils/url';
+import { isTruthy } from '@openshock/svelte-core/utils/parse.js';
 import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
@@ -13,7 +13,7 @@ export const GET: RequestHandler = ({ setHeaders }) => {
     'cache-control': 'public, max-age=3600',
   });
 
-  const lastmod = new Date().toISOString().slice(0, 10);
+  const lastmod = Temporal.Now.plainDateISO('UTC').toString();
   const urls = publicRoutes
     .map((path) => `  <url><loc>${getSiteURL(path).href}</loc><lastmod>${lastmod}</lastmod></url>`)
     .join('\n');

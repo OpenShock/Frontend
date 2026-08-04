@@ -1,27 +1,27 @@
 <script lang="ts">
   import { HubConnectionState } from '@microsoft/signalr';
-  import type { PublicShareResponse } from '$lib/api/internal/v1';
+  import type { PublicShareResponse } from '$lib/api';
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import LiveButton from '$lib/components/ControlModules/LiveButton.svelte';
   import LiveControlModule from '$lib/components/ControlModules/LiveControlModule.svelte';
   import ShockerCard from '$lib/components/ControlModules/ShockerCard.svelte';
   import { getPauseReason } from '$lib/utils';
-  import * as Avatar from '$lib/components/ui/avatar';
-  import * as Tooltip from '$lib/components/ui/tooltip/index.js';
+  import * as Avatar from '@openshock/svelte-core/components/ui/avatar';
+  import * as Tooltip from '@openshock/svelte-core/components/ui/tooltip';
   import { ShareLinkSignalr } from '$lib/signalr/sharelink.svelte';
   import type { Control } from '$lib/signalr/models/Control';
   import { ControlType } from '$lib/signalr/models/ControlType';
   import {
-    ensureLiveConnection,
     getLiveConnection,
     liveConnections,
     LiveConnectionState,
+    registerHubShockers,
   } from '$lib/state/live-control-state.svelte';
   import { onMount, untrack } from 'svelte';
   import { page } from '$app/state';
-  import CopyInput from '$lib/components/CopyInput.svelte';
+  import { CopyInput } from '@openshock/svelte-core/components';
   import { getSiteShortURL } from '$lib/utils/url';
-  import { Button } from '$lib/components/ui/button';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
   import { Pencil } from '@lucide/svelte';
   import { userState } from '$lib/state/user-state.svelte';
   import { resolve } from '$app/paths';
@@ -48,7 +48,12 @@
   }
 
   function publicCtrl(id: string, type: ControlType, intensity: number, duration: number) {
-    control({ id, type, intensity, duration: duration * 1000 });
+    control({
+      id,
+      type,
+      intensity: Math.round(intensity),
+      duration: Math.round(duration * 1000),
+    });
   }
 
   const shareId = $derived(page.params.shareId);
@@ -63,18 +68,17 @@
     )
   );
 
-  // Eagerly create LiveDeviceConnection and LiveShockerState entries
+  // Register each hub's shockers with the live-control state store
   $effect(() => {
     const currentDeviceIds: string[] = [];
     for (const device of shareLinkRoot.devices ?? []) {
       currentDeviceIds.push(device.id);
-      ensureLiveConnection(device.id);
-      const conn = getLiveConnection(device.id);
-      if (conn) {
-        for (const shocker of device.shockers) {
-          conn.ensureShockerState(shocker.id);
-        }
-      }
+      registerHubShockers(
+        device.id,
+        device.shockers
+          .filter((s) => s.permissions.live)
+          .map((s) => ({ id: s.id, isPaused: s.paused !== 0 }))
+      );
     }
     for (const [deviceId, conn] of liveConnections) {
       if (!currentDeviceIds.includes(deviceId)) {
@@ -107,26 +111,24 @@
         <Button variant="outline" href={editUrl}><Pencil /> Edit</Button>
       {/if}
 
-      <Tooltip.Provider>
-        <Tooltip.Root delayDuration={250}>
-          <Tooltip.Trigger>
-            <span
-              class="mr-10 flex flex-row items-center rounded-md px-4 py-2 outline-1 outline-gray-500"
-            >
-              <Avatar.Root class="h-10 w-10">
-                <Avatar.Image src={shareLinkRoot.author.image} alt="User Avatar" />
-                <Avatar.Fallback>
-                  {shareLinkRoot.author.name.charAt(0)}
-                </Avatar.Fallback>
-              </Avatar.Root>
-              <p class="ml-4">{shareLinkRoot.author.name}</p>
-            </span>
-          </Tooltip.Trigger>
-          <Tooltip.Content>
-            <p>Shared by</p>
-          </Tooltip.Content>
-        </Tooltip.Root>
-      </Tooltip.Provider>
+      <Tooltip.Root>
+        <Tooltip.Trigger>
+          <span
+            class="mr-10 flex flex-row items-center rounded-md px-4 py-2 outline-1 outline-gray-500"
+          >
+            <Avatar.Root class="h-10 w-10">
+              <Avatar.Image src={shareLinkRoot.author.image} alt="User Avatar" />
+              <Avatar.Fallback>
+                {shareLinkRoot.author.name.charAt(0)}
+              </Avatar.Fallback>
+            </Avatar.Root>
+            <p class="ml-4">{shareLinkRoot.author.name}</p>
+          </span>
+        </Tooltip.Trigger>
+        <Tooltip.Content>
+          <p>Shared by</p>
+        </Tooltip.Content>
+      </Tooltip.Root>
     </div>
   </div>
 
@@ -143,14 +145,7 @@
       >
         {#snippet live()}
           {#if shocker.permissions.live}
-            <LiveButton
-              hubId={deviceId}
-              shockerId={shocker.id}
-              isPaused={shocker.paused !== 0}
-              connection={liveConn}
-              {liveState}
-              compact
-            />
+            <LiveButton hubId={deviceId} shockerId={shocker.id} compact />
           {/if}
         {/snippet}
         {#if isShockerLiveActive && liveState && liveConn}

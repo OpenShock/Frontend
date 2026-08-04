@@ -1,25 +1,24 @@
 <script lang="ts">
-  import { Button } from '$lib/components/ui/button/index.js';
-  import * as Card from '$lib/components/ui/card/index.js';
-  import * as Field from '$lib/components/ui/field/index.js';
+  import { accountSignUpV2 } from '$lib/api';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Card from '@openshock/svelte-core/components/ui/card';
+  import * as Field from '@openshock/svelte-core/components/ui/field';
   import UsernameInput from '$lib/components/input/UsernameInput.svelte';
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import { accountV2Api } from '$lib/api';
   import Turnstile from '$lib/components/Turnstile.svelte';
-  import EmailInput from '$lib/components/input/EmailInput.svelte';
-  import PasswordInput from '$lib/components/input/PasswordInput.svelte';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
+  import { EmailInput } from '@openshock/svelte-core/components/input';
+  import { PasswordInput } from '@openshock/svelte-core/components/input';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { validatePasswordMatch } from '$lib/inputvalidation/passwordValidator';
+  import { validatePasswordMatch } from '@openshock/svelte-core/inputvalidation/passwordValidator.js';
   import { toast } from 'svelte-sonner';
-  import FieldSeparator from '$lib/components/ui/field/field-separator.svelte';
+  import { FieldSeparator } from '@openshock/svelte-core/components/ui/field';
   import OauthButtons from '$lib/components/auth/oauth-buttons.svelte';
   import { ChevronLeft, Mail } from '@lucide/svelte';
-  import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte';
+  import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
+  import { Skeleton } from '@openshock/svelte-core/components/ui/skeleton';
 
   registerBreadcrumbs(() => [{ label: 'Sign Up' }]);
 
@@ -37,23 +36,27 @@
   let turnstileResponse = $state<string | null>(null);
 
   let canSubmit = $derived(
-    usernameValid && emailValid && passwordValid && password == passwordConfirm && turnstileResponse
+    usernameValid &&
+      emailValid &&
+      passwordValid &&
+      password == passwordConfirm &&
+      turnstileResponse != null
   );
 
   let accountCreated = $state(false);
 
   let useEmail = $state(false);
 
-  $effect(() => {
-    const providers = backendMetadata?.state?.oAuthProviders;
-    useEmail = providers === undefined || providers.length === 0;
-  });
+  // Instances without a mail provider never send an activation email; the account is usable right away.
+  let mailEnabled = $derived(backendMetadata.state?.isMailEnabled ?? true);
 
   function onOpenChange(open: boolean) {
     if (!open) {
       accountCreated = false;
       toast.success(
-        'Account created successfully. Please check your email to verify your account.'
+        mailEnabled
+          ? 'Account created successfully. Please check your email to verify your account.'
+          : 'Account created successfully. You can log in now.'
       );
       goto(resolve('/login'));
     }
@@ -62,34 +65,22 @@
   async function handleSubmission(e: SubmitEvent) {
     e.preventDefault();
 
-    if (!username || !email || !password || !passwordConfirm || !turnstileResponse) {
+    if (!username || !email || !password || !passwordConfirm || turnstileResponse == null) {
       return;
     }
 
     try {
-      await accountV2Api.accountSignUpV2({
-        username,
-        password,
-        email,
-        turnstileResponse,
+      await accountSignUpV2({
+        body: { username, password, email, turnstileResponse },
       });
       accountCreated = true;
     } catch (error) {
-      await handleApiError(error, (problem) => {
-        if (!isValidationError(problem)) return false;
-
-        console.log(mapToValRes(problem, 'Username'));
-        console.log(mapToValRes(problem, 'Password'));
-        console.log(mapToValRes(problem, 'Email'));
-        console.log(mapToValRes(problem, 'TurnstileResponse'));
-
-        return true;
-      });
+      await handleApiError(error);
     }
   }
 
-  let oauthProviders = $derived(backendMetadata.state?.oAuthProviders);
-  let anyOAuthProviders = $derived(oauthProviders !== undefined && oauthProviders.length > 0);
+  let oauthProviders = $derived(backendMetadata.state?.oAuthProviders ?? []);
+  let anyOAuthProviders = $derived(oauthProviders.length > 0);
 </script>
 
 <Dialog.Root bind:open={() => accountCreated, onOpenChange}>
@@ -98,8 +89,13 @@
       <Dialog.Title>Welcome! Thank you for signing up! ❤️</Dialog.Title>
       <Dialog.Description>
         <div class="flex flex-col gap-4">
-          <p>Your account has been created. 🎉 Please check your email to verify your account.</p>
-          <p>After verifying your email, you can log in to your account.</p>
+          {#if mailEnabled}
+            <p>Your account has been created. 🎉 Please check your email to verify your account.</p>
+            <p>After verifying your email, you can log in to your account.</p>
+          {:else}
+            <p>Your account has been created and is ready to use. 🎉</p>
+            <p>You can log in to your account now.</p>
+          {/if}
 
           <Button variant="default" size="sm" class="mt-4" onclick={() => goto(resolve('/login'))}
             >Ok</Button
@@ -129,7 +125,7 @@
         <Skeleton class="h-9 w-full"></Skeleton>
         <Skeleton class="h-1 w-full"></Skeleton>
         <Skeleton class="h-9 w-full"></Skeleton>
-      {:else if useEmail}
+      {:else if useEmail || !anyOAuthProviders}
         <form onsubmit={handleSubmission}>
           <div class="my-1 flex flex-col gap-1">
             {#if anyOAuthProviders}
@@ -164,7 +160,6 @@
               bind:valid={passwordValid}
               validate
               showStrengthMeter
-              showForget={false}
             />
             <PasswordInput
               label="Confirm Password"
@@ -172,7 +167,6 @@
               autocomplete="new-password"
               bind:value={passwordConfirm}
               validate={validatePasswordMatch(passwordConfirm, password)}
-              showForget={false}
             />
             <Turnstile action="signup" onResponse={(response) => (turnstileResponse = response)} />
           </div>
@@ -185,7 +179,7 @@
         </form>
       {:else}
         {#if anyOAuthProviders}
-          <OauthButtons verb="Signup" />
+          <OauthButtons verb="Signup" providers={oauthProviders} />
           <FieldSeparator class="*:data-[slot=field-separator-content]:bg-card">Or</FieldSeparator>
         {/if}
         <Button variant="outline" class="w-full" onclick={() => (useEmail = true)}>

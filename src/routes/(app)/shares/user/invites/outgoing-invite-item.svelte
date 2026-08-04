@@ -1,18 +1,18 @@
 <script lang="ts">
+  import { userSharesDeleteOutgoingInvite } from '$lib/api';
+  import type { ShareInviteBaseDetails } from '$lib/api';
   import { Key, X, Zap } from '@lucide/svelte';
-  import { shockerSharesV2Api } from '$lib/api';
-  import type { ShareInviteBaseDetails } from '$lib/api/internal/v2';
   import PermissionTooltip from '$lib/components/shares/permission-tooltip.svelte';
-  import * as Avatar from '$lib/components/ui/avatar';
-  import { Badge } from '$lib/components/ui/badge';
-  import { buttonVariants } from '$lib/components/ui/button/index.js';
-  import * as Table from '$lib/components/ui/table';
-  import * as Tooltip from '$lib/components/ui/tooltip';
+  import * as Avatar from '@openshock/svelte-core/components/ui/avatar';
+  import { Badge } from '@openshock/svelte-core/components/ui/badge';
+  import { buttonVariants } from '@openshock/svelte-core/components/ui/button';
+  import * as Table from '@openshock/svelte-core/components/ui/table';
+  import * as Tooltip from '@openshock/svelte-core/components/ui/tooltip';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
+  import { dialog } from '@openshock/svelte-core/components/dialog-manager';
   import { refreshOutgoingInvites } from '$lib/state/user-shares-state.svelte';
-  import { cn } from '$lib/utils';
-  import { copyToClipboard } from '$lib/utils/clipboard.svelte';
+  import { cn } from '@openshock/svelte-core/utils/shadcn.js';
+  import { copyToClipboard } from '@openshock/svelte-core/utils/clipboard.svelte.js';
   import { toast } from 'svelte-sonner';
 
   interface Props {
@@ -25,7 +25,7 @@
 
   async function removeInviteCall(invite: ShareInviteBaseDetails) {
     try {
-      await shockerSharesV2Api.userSharesDeleteOutgoingInvite(shareInvite.id);
+      await userSharesDeleteOutgoingInvite({ path: { inviteId: shareInvite.id } });
       if (invite.sharedWith) {
         toast.success(`Cancelled invite for ${invite.sharedWith.name} (${invite.id})`);
       } else {
@@ -106,6 +106,7 @@
       <Tooltip.Trigger
         class={cn('mr-4 size-9', buttonVariants({ variant: 'destructive' }))}
         onclick={removeInvite}
+        aria-label="Cancel invite"
       >
         <X />
       </Tooltip.Trigger>

@@ -1,10 +1,14 @@
 <script lang="ts">
   import { Check, ChevronsUpDown } from '@lucide/svelte';
   import { ExtractBoards, type FirmwareRelease } from '$lib/api/firmwareRepo';
-  import { Button } from '$lib/components/ui/button';
-  import * as Command from '$lib/components/ui/command';
-  import { Popover, PopoverContent, PopoverTrigger } from '$lib/components/ui/popover';
-  import { cn } from '$lib/utils';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Command from '@openshock/svelte-core/components/ui/command';
+  import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+  } from '@openshock/svelte-core/components/ui/popover';
+  import { cn } from '@openshock/svelte-core/utils/shadcn.js';
 
   interface Props {
     latestResponse: FirmwareRelease | null;

@@ -1,4 +1,4 @@
-import type { UserShareInfo } from '$lib/api/internal/v2';
+import type { UserShareInfo } from '$lib/api';
 import CompareShockerPermissions from '$lib/comparers/ShockerPermissionsComparer';
 import CompareShockerLimits from './ShockerLimitsComparer';
 

@@ -1,17 +1,17 @@
 <script lang="ts">
+  import { userSharesDenyIncomingInvite, userSharesRedeemInvite } from '$lib/api';
+  import type { ShareInviteBaseDetails } from '$lib/api';
   import { Check, X, Zap } from '@lucide/svelte';
-  import { shockerSharesV2Api } from '$lib/api';
-  import type { ShareInviteBaseDetails } from '$lib/api/internal/v2';
   import PermissionTooltip from '$lib/components/shares/permission-tooltip.svelte';
-  import * as Avatar from '$lib/components/ui/avatar';
-  import { Badge } from '$lib/components/ui/badge';
-  import { buttonVariants } from '$lib/components/ui/button/index.js';
-  import * as Table from '$lib/components/ui/table';
-  import * as Tooltip from '$lib/components/ui/tooltip';
+  import * as Avatar from '@openshock/svelte-core/components/ui/avatar';
+  import { Badge } from '@openshock/svelte-core/components/ui/badge';
+  import { buttonVariants } from '@openshock/svelte-core/components/ui/button';
+  import * as Table from '@openshock/svelte-core/components/ui/table';
+  import * as Tooltip from '@openshock/svelte-core/components/ui/tooltip';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
+  import { dialog } from '@openshock/svelte-core/components/dialog-manager';
   import { refreshIncomingInvites } from '$lib/state/user-shares-state.svelte';
-  import { cn } from '$lib/utils';
+  import { cn } from '@openshock/svelte-core/utils/shadcn.js';
   import { toast } from 'svelte-sonner';
 
   interface Props {
@@ -22,7 +22,7 @@
 
   async function acceptInvite() {
     try {
-      await shockerSharesV2Api.userSharesRedeemInvite(shareInvite.id);
+      await userSharesRedeemInvite({ path: { inviteId: shareInvite.id } });
       toast.success(`Accepted share invite for ${shareInvite.owner.name}`);
     } catch (error) {
       handleApiError(error);
@@ -33,7 +33,7 @@
 
   async function denyInviteCall(invite: ShareInviteBaseDetails) {
     try {
-      await shockerSharesV2Api.userSharesDenyIncomingInvite(invite.id);
+      await userSharesDenyIncomingInvite({ path: { inviteId: invite.id } });
       toast.success(`Declined share invite for ${invite.owner.name}`);
     } catch (error) {
       handleApiError(error);
@@ -92,6 +92,7 @@
       <Tooltip.Trigger
         class={cn('mr-4 size-9', buttonVariants({ variant: 'default' }))}
         onclick={acceptInvite}
+        aria-label="Accept invite"
       >
         <Check />
       </Tooltip.Trigger>
@@ -104,6 +105,7 @@
       <Tooltip.Trigger
         class={cn('mr-4 size-9', buttonVariants({ variant: 'destructive' }))}
         onclick={denyInvite}
+        aria-label="Deny invite"
       >
         <X />
       </Tooltip.Trigger>

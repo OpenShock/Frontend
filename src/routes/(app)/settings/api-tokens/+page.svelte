@@ -1,103 +1,78 @@
 <script lang="ts">
+  import { tokensListTokensV2 } from '$lib/api';
+  import type { TokenResponseV2 } from '$lib/api';
+  import { resolve } from '$app/paths';
   import Plus from '@lucide/svelte/icons/plus';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
   import type { SortingState } from '@tanstack/table-core';
   import type { ColumnDef } from '@tanstack/table-core';
-  import { apiTokensApi } from '$lib/api';
-  import type { TokenCreatedResponse, TokenResponse } from '$lib/api/internal/v1';
-  import Container from '$lib/components/Container.svelte';
+  import { Container } from '@openshock/svelte-core/components';
+  import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import {
     CreateActionsColumnDef,
+    CreateColumnDef,
     CreateSortableColumnDef,
     LocaleDateRenderer,
     RenderCell,
     TimeSinceRelativeOrNeverRenderer,
   } from '$lib/components/Table/ColumnUtils';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import * as Card from '$lib/components/ui/card';
-  import type { ProblemDetails } from '$lib/errorhandling/ProblemDetails';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Card from '@openshock/svelte-core/components/ui/card';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
   import DataTableActions from './data-table-actions.svelte';
-  import TokenCreateDialog from './dialog-token-create.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import TokenCreatedDialog from './dialog-token-created.svelte';
 
   registerBreadcrumbs(() => [
     { label: 'Settings', href: '/settings/account' },
     { label: 'API Tokens' },
   ]);
-  let data = $state<TokenResponse[]>([]);
+
+  let tokens = $derived(await tokensListTokensV2());
   let sorting = $state<SortingState>([]);
 
-  function onCreated(token: TokenCreatedResponse) {
-    data.push({
-      id: token.id,
-      name: token.name,
-      createdOn: token.createdAt,
-      validUntil: token.validUntil,
-      lastUsed: token.lastUsed,
-      permissions: token.permissions,
-    });
-    createdTokenSecret = token.token;
-    toast.success('Token created successfully');
+  function onEdit(id: string, updater: (token: TokenResponseV2) => TokenResponseV2) {
+    tokens = tokens.map((t) => (t.id === id ? updater(t) : t));
   }
 
-  function onEdit(id: string, updater: (token: TokenResponse) => TokenResponse) {
-    const idx = data.findIndex((token) => token.id === id);
-    if (idx === -1) return;
-
-    data[idx] = updater(data[idx]);
+  function onDeleted(id: string) {
+    tokens = tokens.filter((t) => t.id !== id);
   }
 
-  async function onDeleted(id: string) {
-    data = data.filter((t) => t.id !== id);
-  }
-
-  const columns: ColumnDef<TokenResponse>[] = [
+  const columns: ColumnDef<TokenResponseV2>[] = [
     CreateSortableColumnDef('name', 'Name', RenderCell),
+    CreateColumnDef('shockerControl', 'Status', (sc) =>
+      sc.paused
+        ? { text: 'Paused', bold: true, color: 'orange' }
+        : { text: 'Active', bold: true, color: 'green' }
+    ),
     CreateSortableColumnDef('createdOn', 'Created at', LocaleDateRenderer),
     CreateSortableColumnDef('validUntil', 'Expires at', TimeSinceRelativeOrNeverRenderer),
     CreateSortableColumnDef('lastUsed', 'Last used', TimeSinceRelativeOrNeverRenderer),
     CreateActionsColumnDef(DataTableActions, (token) => ({ token, onEdit, onDeleted })),
   ];
 
-  let showGenerateTokenModal = $state<boolean>(false);
-  let createdTokenSecret = $state<string | null>(null);
-
-  function handleProblem(_problem: ProblemDetails): boolean {
-    return false;
-  }
-
-  async function loadTokens(successMessage?: string) {
+  async function refresh() {
     try {
-      data = await apiTokensApi.tokensListTokens();
-      if (successMessage) {
-        toast.success(successMessage);
-      }
+      tokens = await tokensListTokensV2();
+      toast.success('Tokens refreshed successfully');
     } catch (error) {
-      await handleApiError(error, handleProblem);
+      await handleApiError(error);
     }
   }
-
-  onMount(loadTokens);
 </script>
-
-<TokenCreateDialog bind:open={showGenerateTokenModal} {onCreated} />
-<TokenCreatedDialog bind:token={createdTokenSecret} />
 
 <Container>
   <Card.Header class="w-full">
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
       API Tokens
       <div>
-        <Button onclick={() => (showGenerateTokenModal = true)}>
+        <Button href={resolve('/settings/api-tokens/new')}>
           <Plus />
           Generate Token
         </Button>
-        <Button onclick={() => loadTokens('Tokens refreshed successfully')}>
+        <Button onclick={refresh}>
           <RotateCcw />
           Refresh
         </Button>
@@ -106,6 +81,21 @@
     <Card.Description>API Tokens are used to authenticate with the OpenShock API</Card.Description>
   </Card.Header>
   <Card.Content class="flex w-full flex-col space-y-4">
-    <DataTable {data} {columns} {sorting} />
+    <svelte:boundary onerror={(error: unknown) => handleApiError(error)}>
+      <DataTable data={tokens} {columns} {sorting} />
+
+      {#snippet pending()}
+        <div class="flex h-64 w-full items-center justify-center">
+          <Spinner class="size-8 text-gray-600 dark:text-gray-300" />
+        </div>
+      {/snippet}
+
+      {#snippet failed(_error: unknown, reset: () => void)}
+        <div class="flex w-full flex-col items-center gap-3 py-12">
+          <p class="text-destructive text-sm">Failed to load API tokens.</p>
+          <Button variant="outline" onclick={reset}>Try again</Button>
+        </div>
+      {/snippet}
+    </svelte:boundary>
   </Card.Content>
 </Container>

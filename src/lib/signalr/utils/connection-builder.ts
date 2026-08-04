@@ -1,4 +1,4 @@
-import { dev } from '$app/environment';
+import { dev } from '$app/env';
 import { HttpTransportType, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 
 export function BuildSignalrConnection(url: string) {

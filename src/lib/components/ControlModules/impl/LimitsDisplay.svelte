@@ -1,12 +1,13 @@
 <script lang="ts">
   import { ClockFading, Gauge } from '@lucide/svelte';
+  import { formatDurationSeconds } from '@openshock/svelte-core/utils';
 
   interface Props {
     maxIntensity: number;
-    maxDurationSeconds: number;
+    maxDuration: number;
   }
 
-  let { maxIntensity, maxDurationSeconds }: Props = $props();
+  let { maxIntensity, maxDuration }: Props = $props();
 </script>
 
 <div class="text-muted-foreground flex gap-3 text-xs">
@@ -16,6 +17,6 @@
   </span>
   <span class="flex items-center gap-1" title="Max Duration">
     <ClockFading size={14} />
-    {maxDurationSeconds}s
+    {formatDurationSeconds(maxDuration)}
   </span>
 </div>

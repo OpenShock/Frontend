@@ -1,18 +1,15 @@
-import { metaApi } from '$lib/api';
-import type { BackendInfoResponse } from '$lib/api/internal/v1';
+import type { BackendInfoResponse } from '$lib/api';
 
-let _state = $state<BackendInfoResponse | null>(null);
+export type BackendMetadata = Omit<BackendInfoResponse, 'isUserAuthenticated'>;
+
+let _data = $state<BackendMetadata | null>(null);
 
 export const backendMetadata = {
   get state() {
-    return _state;
+    return _data;
   },
-  init: async () => {
-    const response = await metaApi.versionGetBackendInfo();
-    if (!response.data) throw new Error(`Failed to get backend info: ${response.message}`);
-
-    const responseData = response.data;
-    _state = responseData;
-    return responseData;
+  set(info: BackendInfoResponse) {
+    const { isUserAuthenticated: _ignored, ...rest } = info;
+    _data = rest;
   },
 };

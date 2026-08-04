@@ -5,8 +5,8 @@
     FindArtifact,
     type FirmwareRelease,
   } from '$lib/api/firmwareRepo';
-  import { Button } from '$lib/components/ui/button';
-  import { Progress } from '$lib/components/ui/progress';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import { Progress } from '@openshock/svelte-core/components/ui/progress';
   import RiskAcknowledgementModal from './RiskAcknowledgementModal.svelte';
   import type EspSerialConnection from './EspSerialConnection';
 

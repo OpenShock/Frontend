@@ -1,22 +1,23 @@
 <script lang="ts">
+  import { devicesCreateDeviceV2 } from '$lib/api';
   import { Plus, Router } from '@lucide/svelte';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import * as Table from '$lib/components/ui/table';
-  import { IsMobile } from '$lib/hooks/is-mobile.svelte';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Table from '@openshock/svelte-core/components/ui/table';
+  import { IsMobile } from '@openshock/svelte-core/hooks/is-mobile.svelte.js';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { onlineHubs, ownHubs, refreshOwnHubs } from '$lib/state/hubs-state.svelte';
   import { onMount } from 'svelte';
   import type { Hub } from './columns';
   import DataTableActions from './data-table-actions.svelte';
-  import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
-  import type { DialogRenderProps } from '$lib/components/dialog-manager/types';
-  import { hubManagementV2Api } from '$lib/api';
+  import { dialog } from '@openshock/svelte-core/components/dialog-manager';
+  import type { DialogRenderProps } from '@openshock/svelte-core/components/dialog-manager';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import TextInput from '$lib/components/input/TextInput.svelte';
-  import PageHeader from '$lib/components/PageHeader.svelte';
-  import Container from '$lib/components/Container.svelte';
+
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
+  import { TextInput } from '@openshock/svelte-core/components/input';
+  import { PageHeader } from '@openshock/svelte-core/components';
+  import { Container } from '@openshock/svelte-core/components';
 
   const isMobile = new IsMobile();
 
@@ -53,7 +54,7 @@
     });
     if (!result) return;
     try {
-      await hubManagementV2Api.devicesCreateDeviceV2({ name: result.name });
+      await devicesCreateDeviceV2({ body: { name: result.name } });
       await refreshOwnHubs();
     } catch (error) {
       handleApiError(error);
@@ -133,7 +134,9 @@
               {/if}
             </Table.Cell>
             <Table.Cell>{hub.firmware_version ?? '—'}</Table.Cell>
-            <Table.Cell>{hub.created_at.toLocaleDateString()}</Table.Cell>
+            <Table.Cell>
+              {hub.created_at.toLocaleString(undefined, { dateStyle: 'short' })}
+            </Table.Cell>
             <Table.Cell>
               <DataTableActions {hub} />
             </Table.Cell>

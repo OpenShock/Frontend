@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { accountV1Api } from '$lib/api';
-  import { Button } from '$lib/components/ui/button';
-  import * as Dialog from '$lib/components/ui/dialog';
+  import { authenticatedAccountRemoveOAuthConnection } from '$lib/api';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 
   interface Props {
@@ -19,7 +19,7 @@
     busy = true;
 
     try {
-      await accountV1Api.authenticatedAccountRemoveOAuthConnection(providerKey);
+      await authenticatedAccountRemoveOAuthConnection({ path: { provider: providerKey } });
       onDisconnected(providerKey);
       open = false;
     } catch (err) {

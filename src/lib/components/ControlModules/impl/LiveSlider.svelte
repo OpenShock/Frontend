@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onDestroy, onMount } from 'svelte';
   import type { LiveShockerState } from '$lib/state/live-control-state.svelte';
 
   interface Props {
@@ -10,9 +11,98 @@
   let { liveState, maxIntensity = 100, onRelease }: Props = $props();
 
   let container: HTMLDivElement | undefined = $state();
+  let canvas: HTMLCanvasElement | undefined = $state();
   let y = $state(1);
 
   let intensity = $derived(Math.round((1 - y) * maxIntensity));
+
+  const WINDOW_MS = 3000;
+  const SAMPLE_INTERVAL_MS = 16;
+  const MAX_SAMPLES = Math.ceil(WINDOW_MS / SAMPLE_INTERVAL_MS) + 2;
+
+  const SMOOTHING_TAU_MS = 50;
+
+  const samples: { t: number; v: number }[] = [];
+  let smoothed = 0;
+  let lastFrameAt = 0;
+  let lastSampleAt = 0;
+  let rafId = 0;
+  let strokeColor = '#ffffff';
+
+  function pushSample(now: number) {
+    samples.push({ t: now, v: smoothed });
+    if (samples.length > MAX_SAMPLES) samples.shift();
+    lastSampleAt = now;
+  }
+
+  function draw(now: number) {
+    rafId = requestAnimationFrame(draw);
+    if (!canvas) return;
+
+    const dt = lastFrameAt === 0 ? 0 : now - lastFrameAt;
+    lastFrameAt = now;
+    const alpha = 1 - Math.exp(-dt / SMOOTHING_TAU_MS);
+    smoothed += (liveState.intensity - smoothed) * alpha;
+
+    if (now - lastSampleAt >= SAMPLE_INTERVAL_MS) pushSample(now);
+
+    const dpr = window.devicePixelRatio || 1;
+    const cssW = canvas.clientWidth;
+    const cssH = canvas.clientHeight;
+    const w = Math.round(cssW * dpr);
+    const h = Math.round(cssH * dpr);
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w;
+      canvas.height = h;
+    }
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    ctx.clearRect(0, 0, w, h);
+    if (samples.length < 2) return;
+
+    const toX = (t: number) => w - ((now - t) / WINDOW_MS) * w;
+    const toY = (v: number) => h - (Math.min(v, maxIntensity) / maxIntensity) * h;
+
+    ctx.beginPath();
+    const first = samples[0];
+    ctx.moveTo(toX(first.t), toY(first.v));
+    for (let i = 1; i < samples.length; i++) {
+      const s = samples[i];
+      ctx.lineTo(toX(s.t), toY(s.v));
+    }
+
+    const gradient = ctx.createLinearGradient(0, 0, w, 0);
+    gradient.addColorStop(0, 'transparent');
+    gradient.addColorStop(0.4, strokeColor);
+    gradient.addColorStop(1, strokeColor);
+
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+
+    // Outer blurred glow pass
+    ctx.save();
+    ctx.lineWidth = 8 * dpr;
+    ctx.strokeStyle = gradient;
+    ctx.globalAlpha = 0.35;
+    ctx.filter = `blur(${4 * dpr}px)`;
+    ctx.stroke();
+    ctx.restore();
+
+    // Crisp inner pass
+    ctx.lineWidth = 4 * dpr;
+    ctx.strokeStyle = gradient;
+    ctx.stroke();
+  }
+
+  onMount(() => {
+    strokeColor = getComputedStyle(canvas!).color || strokeColor;
+    smoothed = liveState.intensity;
+    pushSample(performance.now());
+    rafId = requestAnimationFrame(draw);
+  });
+
+  onDestroy(() => cancelAnimationFrame(rafId));
 
   function startDrag(event: PointerEvent) {
     if (!container) return;
@@ -72,7 +162,7 @@
 <div class="relative h-full w-full p-4 select-none">
   <div
     bind:this={container}
-    class="border-border relative h-full w-full cursor-pointer overflow-hidden rounded-md border"
+    class="relative h-full w-full cursor-pointer"
     onpointerdown={startDrag}
     onpointermove={onPointerMove}
     onpointerup={stopDrag}
@@ -85,13 +175,16 @@
     aria-label="Live intensity"
     tabindex="0"
   >
-    <!-- Fill from bottom -->
-    <div
-      class="bg-muted pointer-events-none absolute bottom-0 left-0 w-full transition-none"
-      style="height: {(1 - y) * 100}%"
-    ></div>
+    <!-- Intensity-history graph: newest on the right, slides smoothly left over time -->
+    <div class="border-border absolute inset-0 overflow-hidden rounded-md border">
+      <canvas
+        bind:this={canvas}
+        class="text-primary pointer-events-none absolute inset-0 h-full w-full"
+        aria-hidden="true"
+      ></canvas>
+    </div>
 
-    <!-- Handle -->
+    <!-- Handle (outside the clipped rectangle so text can overflow) -->
     <div
       class="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 rounded-full transition-none
         {liveState.isDragging

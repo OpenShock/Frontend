@@ -1,25 +1,29 @@
 <script lang="ts">
-  import { User } from '@lucide/svelte';
-  import Container from '$lib/components/Container.svelte';
+  import { Copy, Ellipsis, User } from '@lucide/svelte';
+  import { Container } from '@openshock/svelte-core/components';
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import LiveButton from '$lib/components/ControlModules/LiveButton.svelte';
   import LiveControlModule from '$lib/components/ControlModules/LiveControlModule.svelte';
   import ShockerCard from '$lib/components/ControlModules/ShockerCard.svelte';
-  import * as Avatar from '$lib/components/ui/avatar';
+  import * as Avatar from '@openshock/svelte-core/components/ui/avatar';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
+  import { EmptyState } from '@openshock/svelte-core/components';
+  import { copyToClipboard } from '@openshock/svelte-core/utils/clipboard.svelte.js';
   import { onlineHubs } from '$lib/state/hubs-state.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { ControlType } from '$lib/signalr/models/ControlType';
   import { getConnection } from '$lib/signalr/user.svelte';
   import { serializeControlMessages } from '$lib/signalr/serializers/Control';
   import {
-    ensureLiveConnection,
     getLiveConnection,
     liveConnections,
     LiveConnectionState,
+    registerHubShockers,
   } from '$lib/state/live-control-state.svelte';
   import { sharedHubsState, refreshSharedHubs } from '$lib/state/shared-hubs-state.svelte';
   import { onMount } from 'svelte';
-  import PageHeader from '$lib/components/PageHeader.svelte';
+  import { PageHeader } from '@openshock/svelte-core/components';
 
   registerBreadcrumbs(() => [{ label: 'Shared Shockers' }]);
 
@@ -32,19 +36,18 @@
     if (conn) serializeControlMessages(conn, [{ id, type, intensity, duration }]);
   }
 
-  // Eagerly create LiveDeviceConnection and LiveShockerState entries
+  // Register each hub's shockers with the live-control state store
   $effect(() => {
     const currentDeviceIds: string[] = [];
     for (const owner of sharedHubsState.value) {
       for (const device of owner.devices) {
         currentDeviceIds.push(device.id);
-        ensureLiveConnection(device.id);
-        const conn = getLiveConnection(device.id);
-        if (conn) {
-          for (const shocker of device.shockers) {
-            conn.ensureShockerState(shocker.id);
-          }
-        }
+        registerHubShockers(
+          device.id,
+          device.shockers
+            .filter((s) => s.permissions.live)
+            .map((s) => ({ id: s.id, isPaused: s.isPaused }))
+        );
       }
     }
     for (const [deviceId, conn] of liveConnections) {
@@ -60,19 +63,14 @@
   {#if sharedHubsState.value == null}
     <p>Loading...</p>
   {:else}
-    <PageHeader title="Shared Shockers" subtitle="Manage shared shockers with other users"
-    ></PageHeader>
-    <div class="flex w-full content-center justify-between">
-      <h1 class="text-2xl font-bold">Shared Shockers</h1>
-    </div>
-    <hr class="border-border w-full" />
+    <PageHeader title="Shared Shockers" subtitle="Manage shared shockers with other users" />
 
     {#if !hasSharedShockers}
-      <div class="text-muted-foreground flex flex-col items-center justify-center py-12">
-        <User size={48} class="mb-4 opacity-50" />
-        <p class="text-lg">No shockers have been shared with you yet.</p>
-        <p class="text-sm">When someone shares their shockers with you, they'll appear here.</p>
-      </div>
+      <EmptyState
+        icon={User}
+        title="No shockers have been shared with you yet."
+        description="When someone shares their shockers with you, they'll appear here."
+      />
     {:else}
       <div class="flex w-full flex-col gap-5">
         {#each sharedHubsState.value as owner (owner.id)}
@@ -116,15 +114,37 @@
                   >
                     {#snippet live()}
                       {#if shocker.permissions.live}
-                        <LiveButton
-                          hubId={device.id}
-                          shockerId={shocker.id}
-                          isPaused={shocker.isPaused}
-                          connection={liveConn}
-                          {liveState}
-                          compact
-                        />
+                        <LiveButton hubId={device.id} shockerId={shocker.id} compact />
                       {/if}
+                    {/snippet}
+                    {#snippet menu()}
+                      <DropdownMenu.Root>
+                        <DropdownMenu.Trigger>
+                          {#snippet child({ props })}
+                            <Button
+                              {...props}
+                              variant="ghost"
+                              size="icon"
+                              class="relative size-8 p-0"
+                            >
+                              <span class="sr-only">Open menu</span>
+                              <Ellipsis class="size-4" />
+                            </Button>
+                          {/snippet}
+                        </DropdownMenu.Trigger>
+                        <DropdownMenu.Content>
+                          <DropdownMenu.Label>Shocker</DropdownMenu.Label>
+                          <DropdownMenu.Group>
+                            <DropdownMenu.Item
+                              class="cursor-pointer"
+                              onclick={() => copyToClipboard(shocker.id, 'ID copied to clipboard')}
+                            >
+                              <Copy class="size-4" />
+                              Copy ID
+                            </DropdownMenu.Item>
+                          </DropdownMenu.Group>
+                        </DropdownMenu.Content>
+                      </DropdownMenu.Root>
                     {/snippet}
                     {#if isShockerLiveActive && liveState && liveConn}
                       <LiveControlModule shockerId={shocker.id} {liveState} connection={liveConn} />
