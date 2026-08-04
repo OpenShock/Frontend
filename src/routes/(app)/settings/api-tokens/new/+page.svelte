@@ -195,7 +195,7 @@
 </script>
 
 <Container class="items-center-safe justify-center-safe overflow-y-auto">
-  <Card.Root class="w-lg max-w-2xl shrink-0">
+  <Card.Root class="w-full max-w-2xl shrink-0">
     {#if parseError}
       <Card.Header>
         <Card.Title class="text-2xl">API Token Request</Card.Title>

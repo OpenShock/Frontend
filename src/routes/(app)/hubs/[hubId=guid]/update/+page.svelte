@@ -356,38 +356,40 @@
             No update history found for this hub.
           </p>
         {:else}
-          <Table.Root class="w-full">
-            <Table.Header>
-              <Table.Row>
-                <Table.Head>ID</Table.Head>
-                <Table.Head>Started</Table.Head>
-                <Table.Head>Status</Table.Head>
-                <Table.Head>Version</Table.Head>
-                <Table.Head>Message</Table.Head>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {#each otaLogs as otaLog (otaLog.id)}
+          <div class="overflow-x-auto">
+            <Table.Root class="w-full">
+              <Table.Header>
                 <Table.Row>
-                  <Table.Cell class="text-muted-foreground font-mono text-xs">
-                    {NumberToHexPadded(otaLog.id, 8)}
-                  </Table.Cell>
-                  <Table.Cell class="text-sm" title={otaLog.startedAt.toLocaleString()}>
-                    {formatRelativeTime(otaLog.startedAt)}
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Badge variant={getStatusBadgeVariant(otaLog.status)}>
-                      {otaLog.status}
-                    </Badge>
-                  </Table.Cell>
-                  <Table.Cell class="font-mono text-sm">{otaLog.version}</Table.Cell>
-                  <Table.Cell class="text-muted-foreground max-w-xs truncate text-sm">
-                    {otaLog.message ?? '-'}
-                  </Table.Cell>
+                  <Table.Head>ID</Table.Head>
+                  <Table.Head>Started</Table.Head>
+                  <Table.Head>Status</Table.Head>
+                  <Table.Head>Version</Table.Head>
+                  <Table.Head>Message</Table.Head>
                 </Table.Row>
-              {/each}
-            </Table.Body>
-          </Table.Root>
+              </Table.Header>
+              <Table.Body>
+                {#each otaLogs as otaLog (otaLog.id)}
+                  <Table.Row>
+                    <Table.Cell class="text-muted-foreground font-mono text-xs">
+                      {NumberToHexPadded(otaLog.id, 8)}
+                    </Table.Cell>
+                    <Table.Cell class="text-sm" title={otaLog.startedAt.toLocaleString()}>
+                      {formatRelativeTime(otaLog.startedAt)}
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Badge variant={getStatusBadgeVariant(otaLog.status)}>
+                        {otaLog.status}
+                      </Badge>
+                    </Table.Cell>
+                    <Table.Cell class="font-mono text-sm">{otaLog.version}</Table.Cell>
+                    <Table.Cell class="text-muted-foreground max-w-xs truncate text-sm">
+                      {otaLog.message ?? '-'}
+                    </Table.Cell>
+                  </Table.Row>
+                {/each}
+              </Table.Body>
+            </Table.Root>
+          </div>
         {/if}
       </Card.Content>
     </Card.Root>

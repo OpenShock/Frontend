@@ -6,7 +6,7 @@
 </script>
 
 <Container>
-  <h1 class="text-3xl font-bold">Profile</h1>
+  <h1 class="hidden text-3xl font-bold sm:block">Profile</h1>
   <div
     class="border-border bg-card flex w-full flex-col items-center justify-center gap-3 rounded-lg border border-dashed py-20"
   >
