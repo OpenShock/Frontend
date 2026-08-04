@@ -1,10 +1,13 @@
 <script lang="ts">
   import Bug from '@lucide/svelte/icons/bug';
-  import { dev } from '$app/environment';
+  import { dev } from '$app/env';
   import { PUBLIC_TURNSTILE_DEV_BYPASS_VALUE } from '$env/static/public';
-  import CloudflareLogo from '$lib/components/svg/CloudflareLogo.svelte';
-  import { Spinner } from '$lib/components/ui/spinner';
-  import { ColorScheme, colorScheme } from '$lib/state/color-scheme-state.svelte';
+  import { CloudflareLogo } from '@openshock/svelte-core/components/svg';
+  import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
+  import {
+    ColorScheme,
+    colorScheme,
+  } from '@openshock/svelte-core/state/color-scheme-state.svelte.js';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
   import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
@@ -21,6 +24,7 @@
 
   let mounted = $state<boolean>(false);
   let widgetId: string | undefined;
+  let disabled = $state(false);
 
   function invalidateResponse() {
     onResponse(null);
@@ -33,9 +37,18 @@
     }
 
     let cancelled = false;
+
+    if (!backendMetadata.state) {
+      console.error('Backend metadata is not set!');
+      return;
+    }
+
     const siteKey = backendMetadata.state?.turnstileSiteKey;
+
     if (!siteKey) {
-      console.error('Backend did not provide a Turnstile site key!');
+      console.info('Backend did not provide a Turnstile site key! Assuming its disabled.');
+      disabled = true;
+      onResponse(PUBLIC_TURNSTILE_DEV_BYPASS_VALUE);
       return;
     }
 
@@ -73,7 +86,7 @@
 
 <!-- see: https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/#widget-size -->
 <div
-  class="mx-auto flex h-[65px] max-w-screen min-w-[300px] justify-center overflow-hidden"
+  class="mx-auto flex h-16.25 max-w-screen min-w-75 justify-center overflow-hidden"
   bind:this={element}
 >
   {#if !mounted}
@@ -81,7 +94,7 @@
     <div
       class="flex h-full items-center justify-center gap-3 border border-[#e0e0e0] bg-[#fafafa] p-3 select-none dark:border-[#666] dark:bg-[#222]"
     >
-      {#if dev}
+      {#if dev || disabled}
         <Bug />
         <span> Turnstile disabled </span>
       {:else}
@@ -94,7 +107,7 @@
         target="_blank"
         rel="noopener noreferrer"
       >
-        <CloudflareLogo class="mb-px h-[26px]" />
+        <CloudflareLogo class="mb-px h-6.5" />
       </a>
     </div>
   {/if}

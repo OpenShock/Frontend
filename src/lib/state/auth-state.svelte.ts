@@ -1,4 +1,3 @@
-import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
 import { registerOnUnauthorized } from '$lib/errorhandling/apiErrorHandling';
 import { destroySignalR, initializeSignalR } from '$lib/signalr/user.svelte';
 import {
@@ -8,6 +7,7 @@ import {
   markTourCompleted,
   startWelcomeTour,
 } from '$lib/tour/welcome-tour';
+import { dialog } from '@openshock/svelte-core/components/dialog-manager/index.js';
 import { userState } from './user-state.svelte';
 
 export const AuthStatus = {

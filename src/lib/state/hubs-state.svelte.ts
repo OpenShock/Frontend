@@ -35,6 +35,14 @@ export class HubOnlineState {
 export const ownHubs = new SvelteMap<string, OwnHub>();
 export const onlineHubs = new SvelteMap<string, HubOnlineState>();
 
+// Incremented each time a hub consumes a pair code (HubUpdateType.HubPaired).
+// The pair-code dialog watches this to react once its displayed code is used.
+export const hubPairedSignals = new SvelteMap<string, number>();
+
+export function notifyHubPaired(hubId: string) {
+  hubPairedSignals.set(hubId, (hubPairedSignals.get(hubId) ?? 0) + 1);
+}
+
 export async function refreshOwnHubs() {
   try {
     const { data } = await shockerListShockers();

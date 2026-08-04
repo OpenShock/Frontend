@@ -2,949 +2,2211 @@
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import { adminConfigurationListResponseTransformer, adminGetOnlineDevicesResponseTransformer, adminGetUsersResponseTransformer, adminListEmailProviderBlacklistResponseTransformer, adminListUsernameBlacklistResponseTransformer, adminListWebhooksResponseTransformer, authenticatedAccountListOAuthConnectionsResponseTransformer, devicesGetDeviceByIdResponseTransformer, devicesGetShockersResponseTransformer, devicesListDevicesResponseTransformer, devicesOtaGetOtaUpdateHistoryResponseTransformer, publicGetOnlineDevicesStatisticsResponseTransformer, publicGetPublicShareResponseTransformer, sessionsGetSelfSessionResponseTransformer, sessionsListSessionsResponseTransformer, shareLinksListResponseTransformer, shockerGetAllShockerLogsResponseTransformer, shockerGetShockerByIdResponseTransformer, shockerGetShockerLogsResponseTransformer, shockerGetUserSharesResponseTransformer, shockerListShockersResponseTransformer, shockerShockerShareCodeListResponseTransformer, tokensCreateTokenResponseTransformer, tokensGetTokenByIdResponseTransformer, tokensListTokensResponseTransformer, tokensSelfGetSelfTokenResponseTransformer, versionGetBackendInfoResponseTransformer } from './transformers.gen';
-import type { AccountActivateData, AccountActivateErrors, AccountActivateResponses, AccountCheckUsernameData, AccountCheckUsernameResponses, AccountEmailVerifyData, AccountEmailVerifyErrors, AccountEmailVerifyLegacyData, AccountEmailVerifyLegacyErrors, AccountEmailVerifyLegacyResponses, AccountEmailVerifyResponses, AccountLoginData, AccountLoginErrors, AccountLoginResponses, AccountLogoutData, AccountLogoutResponses, AccountPasswordResetCheckValidData, AccountPasswordResetCheckValidErrors, AccountPasswordResetCheckValidLegacyData, AccountPasswordResetCheckValidLegacyErrors, AccountPasswordResetCheckValidLegacyResponses, AccountPasswordResetCheckValidResponses, AccountPasswordResetCompleteData, AccountPasswordResetCompleteErrors, AccountPasswordResetCompleteLegacyData, AccountPasswordResetCompleteLegacyErrors, AccountPasswordResetCompleteLegacyResponses, AccountPasswordResetCompleteResponses, AccountPasswordResetInitiateData, AccountPasswordResetInitiateResponses, AccountSignUpData, AccountSignUpErrors, AccountSignUpResponses, AdminAddEmailProviderBlacklistData, AdminAddEmailProviderBlacklistResponses, AdminAddUsernameBlacklistData, AdminAddUsernameBlacklistResponses, AdminAddWebhookData, AdminAddWebhookErrors, AdminAddWebhookResponses, AdminConfigurationAddData, AdminConfigurationAddErrors, AdminConfigurationAddResponses, AdminConfigurationDeleteData, AdminConfigurationDeleteErrors, AdminConfigurationDeleteResponses, AdminConfigurationListData, AdminConfigurationListErrors, AdminConfigurationListResponses, AdminConfigurationUpdateData, AdminConfigurationUpdateErrors, AdminConfigurationUpdateResponses, AdminDeactivateUserData, AdminDeactivateUserErrors, AdminDeactivateUserResponses, AdminDeleteUserData, AdminDeleteUserErrors, AdminDeleteUserResponses, AdminGetOnlineDevicesData, AdminGetOnlineDevicesErrors, AdminGetOnlineDevicesResponses, AdminGetUsersData, AdminGetUsersErrors, AdminGetUsersResponses, AdminListEmailProviderBlacklistData, AdminListEmailProviderBlacklistResponses, AdminListUsernameBlacklistData, AdminListUsernameBlacklistResponses, AdminListWebhooksData, AdminListWebhooksErrors, AdminListWebhooksResponses, AdminModifyUserData, AdminModifyUserErrors, AdminModifyUserResponses, AdminReactivateUserData, AdminReactivateUserErrors, AdminReactivateUserResponses, AdminRemoveEmailProviderBlacklistData, AdminRemoveEmailProviderBlacklistErrors, AdminRemoveEmailProviderBlacklistResponses, AdminRemoveUsernameBlacklistData, AdminRemoveUsernameBlacklistErrors, AdminRemoveUsernameBlacklistResponses, AdminRemoveWebhookData, AdminRemoveWebhookErrors, AdminRemoveWebhookResponses, AuthenticatedAccountChangeEmailData, AuthenticatedAccountChangeEmailErrors, AuthenticatedAccountChangeEmailResponses, AuthenticatedAccountChangePasswordData, AuthenticatedAccountChangePasswordErrors, AuthenticatedAccountChangePasswordResponses, AuthenticatedAccountChangeUsernameData, AuthenticatedAccountChangeUsernameErrors, AuthenticatedAccountChangeUsernameResponses, AuthenticatedAccountDeactivateData, AuthenticatedAccountDeactivateErrors, AuthenticatedAccountDeactivateResponses, AuthenticatedAccountListOAuthConnectionsData, AuthenticatedAccountListOAuthConnectionsResponses, AuthenticatedAccountRemoveOAuthConnectionData, AuthenticatedAccountRemoveOAuthConnectionErrors, AuthenticatedAccountRemoveOAuthConnectionResponses, DeviceGetLiveControlGatewayData, DeviceGetLiveControlGatewayErrors, DeviceGetLiveControlGatewayResponses, DeviceGetSelfData, DeviceGetSelfResponses, DevicePairData, DevicePairErrors, DevicePairResponses, DevicesCreateDeviceData, DevicesCreateDeviceResponses, DevicesEditDeviceData, DevicesEditDeviceErrors, DevicesEditDeviceResponses, DevicesGetDeviceByIdData, DevicesGetDeviceByIdErrors, DevicesGetDeviceByIdResponses, DevicesGetLiveControlGatewayInfoData, DevicesGetLiveControlGatewayInfoErrors, DevicesGetLiveControlGatewayInfoResponses, DevicesGetPairCodeData, DevicesGetPairCodeErrors, DevicesGetPairCodeResponses, DevicesGetShockersData, DevicesGetShockersErrors, DevicesGetShockersResponses, DevicesListDevicesData, DevicesListDevicesResponses, DevicesOtaGetOtaUpdateHistoryData, DevicesOtaGetOtaUpdateHistoryErrors, DevicesOtaGetOtaUpdateHistoryResponses, DevicesRegenerateDeviceTokenData, DevicesRegenerateDeviceTokenErrors, DevicesRegenerateDeviceTokenResponses, DevicesRemoveDeviceData, DevicesRemoveDeviceErrors, DevicesRemoveDeviceResponses, PublicGetOnlineDevicesStatisticsData, PublicGetOnlineDevicesStatisticsResponses, PublicGetPublicShareData, PublicGetPublicShareErrors, PublicGetPublicShareResponses, SessionsDeleteSessionData, SessionsDeleteSessionErrors, SessionsDeleteSessionResponses, SessionsGetSelfSessionData, SessionsGetSelfSessionResponses, SessionsListSessionsData, SessionsListSessionsResponses, ShareLinksAddShockerData, ShareLinksAddShockerErrors, ShareLinksAddShockerResponses, ShareLinksCreatePublicShareData, ShareLinksCreatePublicShareResponses, ShareLinksDeletePublicShareData, ShareLinksDeletePublicShareErrors, ShareLinksDeletePublicShareResponses, ShareLinksEditShockerData, ShareLinksEditShockerErrors, ShareLinksEditShockerResponses, ShareLinksListData, ShareLinksListResponses, ShareLinksPauseShockerData, ShareLinksPauseShockerErrors, ShareLinksPauseShockerResponses, ShareLinksRemoveShockerData, ShareLinksRemoveShockerErrors, ShareLinksRemoveShockerResponses, SharesDeleteShareCodeData, SharesDeleteShareCodeErrors, SharesDeleteShareCodeResponses, SharesLinkShareCodeData, SharesLinkShareCodeErrors, SharesLinkShareCodeResponses, ShockerEditShockerData, ShockerEditShockerErrors, ShockerEditShockerResponses, ShockerGetAllShockerLogsData, ShockerGetAllShockerLogsResponses, ShockerGetShockerByIdData, ShockerGetShockerByIdErrors, ShockerGetShockerByIdResponses, ShockerGetShockerLogsData, ShockerGetShockerLogsErrors, ShockerGetShockerLogsResponses, ShockerGetUserSharesData, ShockerGetUserSharesErrors, ShockerGetUserSharesResponses, ShockerListSharedShockersData, ShockerListSharedShockersResponses, ShockerListShockersData, ShockerListShockersResponses, ShockerPauseShockerData, ShockerPauseShockerErrors, ShockerPauseShockerResponses, ShockerRegisterShockerData, ShockerRegisterShockerErrors, ShockerRegisterShockerResponses, ShockerRemoveShockerData, ShockerRemoveShockerErrors, ShockerRemoveShockerResponses, ShockerSendControlDeprecatedData, ShockerSendControlDeprecatedErrors, ShockerSendControlDeprecatedResponses, ShockerShockerShareCodeCreateData, ShockerShockerShareCodeCreateErrors, ShockerShockerShareCodeCreateResponses, ShockerShockerShareCodeListData, ShockerShockerShareCodeListErrors, ShockerShockerShareCodeListResponses, ShockerShockerShareCodePauseData, ShockerShockerShareCodePauseErrors, ShockerShockerShareCodePauseResponses, ShockerShockerShareCodeUpdateData, ShockerShockerShareCodeUpdateErrors, ShockerShockerShareCodeUpdateResponses, ShockerShockerShareRemoveData, ShockerShockerShareRemoveErrors, ShockerShockerShareRemoveResponses, TokenDeleteDeleteTokenData, TokenDeleteDeleteTokenErrors, TokenDeleteDeleteTokenResponses, TokensCreateTokenData, TokensCreateTokenResponses, TokensEditTokenData, TokensEditTokenErrors, TokensEditTokenResponses, TokensGetTokenByIdData, TokensGetTokenByIdErrors, TokensGetTokenByIdResponses, TokensListTokensData, TokensListTokensResponses, TokensReportTokensData, TokensReportTokensResponses, TokensSelfGetSelfTokenData, TokensSelfGetSelfTokenResponses, UsersGetByNameData, UsersGetByNameErrors, UsersGetByNameResponses, UsersGetSelfData, UsersGetSelfResponses, VersionGetBackendInfoData, VersionGetBackendInfoResponses } from './types.gen';
+import {
+  adminConfigurationListResponseTransformer,
+  adminGetAdminAuditLogResponseTransformer,
+  adminGetEmailOutboxResponseTransformer,
+  adminGetEmailOutboxStatsResponseTransformer,
+  adminGetOnlineDevicesResponseTransformer,
+  adminGetUsersResponseTransformer,
+  adminListEmailProviderBlacklistResponseTransformer,
+  adminListUsernameBlacklistResponseTransformer,
+  adminListWebhooksResponseTransformer,
+  adminSendTestEmailResponseTransformer,
+  authenticatedAccountGetAuditLogResponseTransformer,
+  authenticatedAccountListOAuthConnectionsResponseTransformer,
+  devicesGetDeviceByIdResponseTransformer,
+  devicesGetShockersResponseTransformer,
+  devicesListDevicesResponseTransformer,
+  devicesOtaGetOtaUpdateHistoryResponseTransformer,
+  publicGetOnlineDevicesStatisticsResponseTransformer,
+  publicGetPublicShareResponseTransformer,
+  sessionsGetSelfSessionResponseTransformer,
+  sessionsListSessionsResponseTransformer,
+  shareLinksListResponseTransformer,
+  shockerGetAllShockerLogsResponseTransformer,
+  shockerGetShockerByIdResponseTransformer,
+  shockerGetShockerLogsResponseTransformer,
+  shockerGetUserSharesResponseTransformer,
+  shockerListShockersResponseTransformer,
+  shockerShockerShareCodeListResponseTransformer,
+  tokensCreateTokenResponseTransformer,
+  tokensGetTokenByIdResponseTransformer,
+  tokensListTokensResponseTransformer,
+  tokensSelfGetSelfTokenResponseTransformer,
+  versionGetBackendInfoResponseTransformer,
+} from './transformers.gen';
+import type {
+  AccountActivateData,
+  AccountActivateErrors,
+  AccountActivateResponses,
+  AccountCheckUsernameData,
+  AccountCheckUsernameResponses,
+  AccountEmailVerifyData,
+  AccountEmailVerifyErrors,
+  AccountEmailVerifyLegacyData,
+  AccountEmailVerifyLegacyErrors,
+  AccountEmailVerifyLegacyResponses,
+  AccountEmailVerifyResponses,
+  AccountLogoutData,
+  AccountLogoutResponses,
+  AccountPasswordResetCheckValidData,
+  AccountPasswordResetCheckValidErrors,
+  AccountPasswordResetCheckValidResponses,
+  AccountPasswordResetCompleteData,
+  AccountPasswordResetCompleteErrors,
+  AccountPasswordResetCompleteResponses,
+  AdminAddEmailProviderBlacklistData,
+  AdminAddEmailProviderBlacklistResponses,
+  AdminAddUsernameBlacklistData,
+  AdminAddUsernameBlacklistResponses,
+  AdminAddWebhookData,
+  AdminAddWebhookErrors,
+  AdminAddWebhookResponses,
+  AdminBulkCancelEmailOutboxData,
+  AdminBulkCancelEmailOutboxErrors,
+  AdminBulkCancelEmailOutboxResponses,
+  AdminBulkDeleteEmailOutboxData,
+  AdminBulkDeleteEmailOutboxErrors,
+  AdminBulkDeleteEmailOutboxResponses,
+  AdminBulkRequeueEmailOutboxData,
+  AdminBulkRequeueEmailOutboxErrors,
+  AdminBulkRequeueEmailOutboxResponses,
+  AdminCancelEmailOutboxData,
+  AdminCancelEmailOutboxErrors,
+  AdminCancelEmailOutboxResponses,
+  AdminConfigurationAddData,
+  AdminConfigurationAddErrors,
+  AdminConfigurationAddResponses,
+  AdminConfigurationDeleteData,
+  AdminConfigurationDeleteErrors,
+  AdminConfigurationDeleteResponses,
+  AdminConfigurationListData,
+  AdminConfigurationListErrors,
+  AdminConfigurationListResponses,
+  AdminConfigurationUpdateData,
+  AdminConfigurationUpdateErrors,
+  AdminConfigurationUpdateResponses,
+  AdminDeactivateUserData,
+  AdminDeactivateUserErrors,
+  AdminDeactivateUserResponses,
+  AdminDeleteEmailOutboxData,
+  AdminDeleteEmailOutboxErrors,
+  AdminDeleteEmailOutboxResponses,
+  AdminDeleteUserData,
+  AdminDeleteUserErrors,
+  AdminDeleteUserResponses,
+  AdminGetAdminAuditLogData,
+  AdminGetAdminAuditLogResponses,
+  AdminGetEmailOutboxData,
+  AdminGetEmailOutboxErrors,
+  AdminGetEmailOutboxResponses,
+  AdminGetEmailOutboxStatsData,
+  AdminGetEmailOutboxStatsErrors,
+  AdminGetEmailOutboxStatsResponses,
+  AdminGetOnlineDevicesData,
+  AdminGetOnlineDevicesErrors,
+  AdminGetOnlineDevicesResponses,
+  AdminGetUsersData,
+  AdminGetUsersErrors,
+  AdminGetUsersResponses,
+  AdminListEmailProviderBlacklistData,
+  AdminListEmailProviderBlacklistResponses,
+  AdminListUsernameBlacklistData,
+  AdminListUsernameBlacklistResponses,
+  AdminListWebhooksData,
+  AdminListWebhooksErrors,
+  AdminListWebhooksResponses,
+  AdminModifyUserData,
+  AdminModifyUserErrors,
+  AdminModifyUserResponses,
+  AdminReactivateUserData,
+  AdminReactivateUserErrors,
+  AdminReactivateUserResponses,
+  AdminRemoveEmailProviderBlacklistData,
+  AdminRemoveEmailProviderBlacklistErrors,
+  AdminRemoveEmailProviderBlacklistResponses,
+  AdminRemoveUsernameBlacklistData,
+  AdminRemoveUsernameBlacklistErrors,
+  AdminRemoveUsernameBlacklistResponses,
+  AdminRemoveWebhookData,
+  AdminRemoveWebhookErrors,
+  AdminRemoveWebhookResponses,
+  AdminRequeueEmailOutboxData,
+  AdminRequeueEmailOutboxErrors,
+  AdminRequeueEmailOutboxResponses,
+  AdminSendTestEmailData,
+  AdminSendTestEmailErrors,
+  AdminSendTestEmailResponses,
+  AuthenticatedAccountChangeEmailData,
+  AuthenticatedAccountChangeEmailErrors,
+  AuthenticatedAccountChangeEmailResponses,
+  AuthenticatedAccountChangePasswordData,
+  AuthenticatedAccountChangePasswordErrors,
+  AuthenticatedAccountChangePasswordResponses,
+  AuthenticatedAccountChangeUsernameData,
+  AuthenticatedAccountChangeUsernameErrors,
+  AuthenticatedAccountChangeUsernameResponses,
+  AuthenticatedAccountDeactivateData,
+  AuthenticatedAccountDeactivateErrors,
+  AuthenticatedAccountDeactivateResponses,
+  AuthenticatedAccountGetAuditLogData,
+  AuthenticatedAccountGetAuditLogResponses,
+  AuthenticatedAccountListOAuthConnectionsData,
+  AuthenticatedAccountListOAuthConnectionsResponses,
+  AuthenticatedAccountRemoveOAuthConnectionData,
+  AuthenticatedAccountRemoveOAuthConnectionErrors,
+  AuthenticatedAccountRemoveOAuthConnectionResponses,
+  DeviceGetLiveControlGatewayData,
+  DeviceGetLiveControlGatewayErrors,
+  DeviceGetLiveControlGatewayResponses,
+  DeviceGetSelfData,
+  DeviceGetSelfResponses,
+  DevicePairData,
+  DevicePairErrors,
+  DevicePairResponses,
+  DevicesCreateDeviceData,
+  DevicesCreateDeviceResponses,
+  DevicesEditDeviceData,
+  DevicesEditDeviceErrors,
+  DevicesEditDeviceResponses,
+  DevicesGetDeviceByIdData,
+  DevicesGetDeviceByIdErrors,
+  DevicesGetDeviceByIdResponses,
+  DevicesGetLiveControlGatewayInfoData,
+  DevicesGetLiveControlGatewayInfoErrors,
+  DevicesGetLiveControlGatewayInfoResponses,
+  DevicesGetPairCodeData,
+  DevicesGetPairCodeErrors,
+  DevicesGetPairCodeResponses,
+  DevicesGetShockersData,
+  DevicesGetShockersErrors,
+  DevicesGetShockersResponses,
+  DevicesListDevicesData,
+  DevicesListDevicesResponses,
+  DevicesOtaGetOtaUpdateHistoryData,
+  DevicesOtaGetOtaUpdateHistoryErrors,
+  DevicesOtaGetOtaUpdateHistoryResponses,
+  DevicesRegenerateDeviceTokenData,
+  DevicesRegenerateDeviceTokenErrors,
+  DevicesRegenerateDeviceTokenResponses,
+  DevicesRemoveDeviceData,
+  DevicesRemoveDeviceErrors,
+  DevicesRemoveDeviceResponses,
+  PublicGetOnlineDevicesStatisticsData,
+  PublicGetOnlineDevicesStatisticsResponses,
+  PublicGetPublicShareData,
+  PublicGetPublicShareErrors,
+  PublicGetPublicShareResponses,
+  SessionsDeleteSessionData,
+  SessionsDeleteSessionErrors,
+  SessionsDeleteSessionResponses,
+  SessionsGetSelfSessionData,
+  SessionsGetSelfSessionResponses,
+  SessionsListSessionsData,
+  SessionsListSessionsResponses,
+  ShareLinksAddShockerData,
+  ShareLinksAddShockerErrors,
+  ShareLinksAddShockerResponses,
+  ShareLinksCreatePublicShareData,
+  ShareLinksCreatePublicShareResponses,
+  ShareLinksDeletePublicShareData,
+  ShareLinksDeletePublicShareErrors,
+  ShareLinksDeletePublicShareResponses,
+  ShareLinksEditShockerData,
+  ShareLinksEditShockerErrors,
+  ShareLinksEditShockerResponses,
+  ShareLinksListData,
+  ShareLinksListResponses,
+  ShareLinksPauseShockerData,
+  ShareLinksPauseShockerErrors,
+  ShareLinksPauseShockerResponses,
+  ShareLinksRemoveShockerData,
+  ShareLinksRemoveShockerErrors,
+  ShareLinksRemoveShockerResponses,
+  SharesDeleteShareCodeData,
+  SharesDeleteShareCodeErrors,
+  SharesDeleteShareCodeResponses,
+  SharesLinkShareCodeData,
+  SharesLinkShareCodeErrors,
+  SharesLinkShareCodeResponses,
+  ShockerEditShockerData,
+  ShockerEditShockerErrors,
+  ShockerEditShockerResponses,
+  ShockerGetAllShockerLogsData,
+  ShockerGetAllShockerLogsResponses,
+  ShockerGetShockerByIdData,
+  ShockerGetShockerByIdErrors,
+  ShockerGetShockerByIdResponses,
+  ShockerGetShockerLogsData,
+  ShockerGetShockerLogsErrors,
+  ShockerGetShockerLogsResponses,
+  ShockerGetUserSharesData,
+  ShockerGetUserSharesErrors,
+  ShockerGetUserSharesResponses,
+  ShockerListSharedShockersData,
+  ShockerListSharedShockersResponses,
+  ShockerListShockersData,
+  ShockerListShockersResponses,
+  ShockerPauseShockerData,
+  ShockerPauseShockerErrors,
+  ShockerPauseShockerResponses,
+  ShockerRegisterShockerData,
+  ShockerRegisterShockerErrors,
+  ShockerRegisterShockerResponses,
+  ShockerRemoveShockerData,
+  ShockerRemoveShockerErrors,
+  ShockerRemoveShockerResponses,
+  ShockerSendControlDeprecatedData,
+  ShockerSendControlDeprecatedErrors,
+  ShockerSendControlDeprecatedResponses,
+  ShockerShockerShareCodeCreateData,
+  ShockerShockerShareCodeCreateErrors,
+  ShockerShockerShareCodeCreateResponses,
+  ShockerShockerShareCodeListData,
+  ShockerShockerShareCodeListErrors,
+  ShockerShockerShareCodeListResponses,
+  ShockerShockerShareCodePauseData,
+  ShockerShockerShareCodePauseErrors,
+  ShockerShockerShareCodePauseResponses,
+  ShockerShockerShareCodeUpdateData,
+  ShockerShockerShareCodeUpdateErrors,
+  ShockerShockerShareCodeUpdateResponses,
+  ShockerShockerShareRemoveData,
+  ShockerShockerShareRemoveErrors,
+  ShockerShockerShareRemoveResponses,
+  TokenDeleteDeleteTokenData,
+  TokenDeleteDeleteTokenErrors,
+  TokenDeleteDeleteTokenResponses,
+  TokensCreateTokenData,
+  TokensCreateTokenResponses,
+  TokensEditTokenData,
+  TokensEditTokenErrors,
+  TokensEditTokenResponses,
+  TokensGetTokenByIdData,
+  TokensGetTokenByIdErrors,
+  TokensGetTokenByIdResponses,
+  TokensListTokensData,
+  TokensListTokensResponses,
+  TokensReportTokensData,
+  TokensReportTokensResponses,
+  TokensSelfGetSelfTokenData,
+  TokensSelfGetSelfTokenResponses,
+  UsersGetByNameData,
+  UsersGetByNameErrors,
+  UsersGetByNameResponses,
+  UsersGetSelfData,
+  UsersGetSelfResponses,
+  VersionGetBackendInfoData,
+  VersionGetBackendInfoResponses,
+} from './types.gen';
 
-export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
-    /**
-     * You can provide a client instance returned by `createClient()` instead of
-     * individual options. This might be also useful if you want to implement a
-     * custom client.
-     */
-    client?: Client;
-    /**
-     * You can pass arbitrary values through the `meta` object. This can be
-     * used to access values that aren't defined as part of the SDK function.
-     */
-    meta?: keyof ClientMeta extends never ? Record<string, unknown> : ClientMeta;
+export type Options<
+  TData extends TDataShape = TDataShape,
+  ThrowOnError extends boolean = boolean,
+  TResponse = unknown,
+> = Options2<TData, ThrowOnError, TResponse> & {
+  /**
+   * You can provide a client instance returned by `createClient()` instead of
+   * individual options. This might be also useful if you want to implement a
+   * custom client.
+   */
+  client?: Client;
+  /**
+   * You can pass arbitrary values through the `meta` object. This can be
+   * used to access values that aren't defined as part of the SDK function.
+   */
+  meta?: keyof ClientMeta extends never ? Record<string, unknown> : ClientMeta;
 };
 
 /**
  * Revoke a token
  */
-export const tokenDeleteDeleteToken = <ThrowOnError extends boolean = true>(options: Options<TokenDeleteDeleteTokenData, ThrowOnError>): RequestResult<TokenDeleteDeleteTokenResponses, TokenDeleteDeleteTokenErrors, ThrowOnError, 'data'> => (options.client ?? client).delete<TokenDeleteDeleteTokenResponses, TokenDeleteDeleteTokenErrors, ThrowOnError, 'data'>({
+export const tokenDeleteDeleteToken = <ThrowOnError extends boolean = true>(
+  options: Options<TokenDeleteDeleteTokenData, ThrowOnError>
+): RequestResult<
+  TokenDeleteDeleteTokenResponses,
+  TokenDeleteDeleteTokenErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).delete<
+    TokenDeleteDeleteTokenResponses,
+    TokenDeleteDeleteTokenErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/tokens/{tokenId}',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Get a token by id
  */
-export const tokensGetTokenById = <ThrowOnError extends boolean = true>(options: Options<TokensGetTokenByIdData, ThrowOnError>): RequestResult<TokensGetTokenByIdResponses, TokensGetTokenByIdErrors, ThrowOnError, 'data'> => (options.client ?? client).get<TokensGetTokenByIdResponses, TokensGetTokenByIdErrors, ThrowOnError, 'data'>({
+export const tokensGetTokenById = <ThrowOnError extends boolean = true>(
+  options: Options<TokensGetTokenByIdData, ThrowOnError>
+): RequestResult<TokensGetTokenByIdResponses, TokensGetTokenByIdErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).get<
+    TokensGetTokenByIdResponses,
+    TokensGetTokenByIdErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseTransformer: tokensGetTokenByIdResponseTransformer,
     responseStyle: 'data',
     url: '/1/tokens/{tokenId}',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Edit a token
  */
-export const tokensEditToken = <ThrowOnError extends boolean = true>(options: Options<TokensEditTokenData, ThrowOnError>): RequestResult<TokensEditTokenResponses, TokensEditTokenErrors, ThrowOnError, 'data'> => (options.client ?? client).patch<TokensEditTokenResponses, TokensEditTokenErrors, ThrowOnError, 'data'>({
+export const tokensEditToken = <ThrowOnError extends boolean = true>(
+  options: Options<TokensEditTokenData, ThrowOnError>
+): RequestResult<TokensEditTokenResponses, TokensEditTokenErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).patch<
+    TokensEditTokenResponses,
+    TokensEditTokenErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/tokens/{tokenId}',
     ...options,
     headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
 
 /**
  * Gets information about the current token used to access this endpoint
  */
-export const tokensSelfGetSelfToken = <ThrowOnError extends boolean = true>(options?: Options<TokensSelfGetSelfTokenData, ThrowOnError>): RequestResult<TokensSelfGetSelfTokenResponses, unknown, ThrowOnError, 'data'> => (options?.client ?? client).get<TokensSelfGetSelfTokenResponses, unknown, ThrowOnError, 'data'>({
+export const tokensSelfGetSelfToken = <ThrowOnError extends boolean = true>(
+  options?: Options<TokensSelfGetSelfTokenData, ThrowOnError>
+): RequestResult<TokensSelfGetSelfTokenResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<TokensSelfGetSelfTokenResponses, unknown, ThrowOnError, 'data'>({
     responseTransformer: tokensSelfGetSelfTokenResponseTransformer,
     responseStyle: 'data',
     url: '/1/tokens/self',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Endpoint to delete potentially compromised api tokens
  */
-export const tokensReportTokens = <ThrowOnError extends boolean = true>(options?: Options<TokensReportTokensData, ThrowOnError>): RequestResult<TokensReportTokensResponses, unknown, ThrowOnError, 'data'> => (options?.client ?? client).post<TokensReportTokensResponses, unknown, ThrowOnError, 'data'>({
+export const tokensReportTokens = <ThrowOnError extends boolean = true>(
+  options?: Options<TokensReportTokensData, ThrowOnError>
+): RequestResult<TokensReportTokensResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).post<TokensReportTokensResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
     url: '/1/tokens/report',
     ...options,
     headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers
-    }
-});
+      'Content-Type': 'application/json',
+      ...options?.headers,
+    },
+  });
 
 /**
  * List all tokens for the current user
  */
-export const tokensListTokens = <ThrowOnError extends boolean = true>(options?: Options<TokensListTokensData, ThrowOnError>): RequestResult<TokensListTokensResponses, unknown, ThrowOnError, 'data'> => (options?.client ?? client).get<TokensListTokensResponses, unknown, ThrowOnError, 'data'>({
+export const tokensListTokens = <ThrowOnError extends boolean = true>(
+  options?: Options<TokensListTokensData, ThrowOnError>
+): RequestResult<TokensListTokensResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<TokensListTokensResponses, unknown, ThrowOnError, 'data'>({
     responseTransformer: tokensListTokensResponseTransformer,
     responseStyle: 'data',
     url: '/1/tokens',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Create a new token
  */
-export const tokensCreateToken = <ThrowOnError extends boolean = true>(options?: Options<TokensCreateTokenData, ThrowOnError>): RequestResult<TokensCreateTokenResponses, unknown, ThrowOnError, 'data'> => (options?.client ?? client).post<TokensCreateTokenResponses, unknown, ThrowOnError, 'data'>({
+export const tokensCreateToken = <ThrowOnError extends boolean = true>(
+  options?: Options<TokensCreateTokenData, ThrowOnError>
+): RequestResult<TokensCreateTokenResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).post<TokensCreateTokenResponses, unknown, ThrowOnError, 'data'>({
     responseTransformer: tokensCreateTokenResponseTransformer,
     responseStyle: 'data',
     url: '/1/tokens',
     ...options,
     headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers
-    }
-});
+      'Content-Type': 'application/json',
+      ...options?.headers,
+    },
+  });
 
 /**
  * Activate account
  */
-export const accountActivate = <ThrowOnError extends boolean = true>(options?: Options<AccountActivateData, ThrowOnError>): RequestResult<AccountActivateResponses, AccountActivateErrors, ThrowOnError, 'data'> => (options?.client ?? client).post<AccountActivateResponses, AccountActivateErrors, ThrowOnError, 'data'>({
+export const accountActivate = <ThrowOnError extends boolean = true>(
+  options?: Options<AccountActivateData, ThrowOnError>
+): RequestResult<AccountActivateResponses, AccountActivateErrors, ThrowOnError, 'data'> =>
+  (options?.client ?? client).post<
+    AccountActivateResponses,
+    AccountActivateErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/account/activate',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Check if a username is available
  */
-export const accountCheckUsername = <ThrowOnError extends boolean = true>(options?: Options<AccountCheckUsernameData, ThrowOnError>): RequestResult<AccountCheckUsernameResponses, unknown, ThrowOnError, 'data'> => (options?.client ?? client).post<AccountCheckUsernameResponses, unknown, ThrowOnError, 'data'>({
+export const accountCheckUsername = <ThrowOnError extends boolean = true>(
+  options?: Options<AccountCheckUsernameData, ThrowOnError>
+): RequestResult<AccountCheckUsernameResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).post<AccountCheckUsernameResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
     url: '/1/account/username/check',
     ...options,
     headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers
-    }
-});
+      'Content-Type': 'application/json',
+      ...options?.headers,
+    },
+  });
 
-/**
- * Authenticate a user
- */
-export const accountLogin = <ThrowOnError extends boolean = true>(options?: Options<AccountLoginData, ThrowOnError>): RequestResult<AccountLoginResponses, AccountLoginErrors, ThrowOnError, 'data'> => (options?.client ?? client).post<AccountLoginResponses, AccountLoginErrors, ThrowOnError, 'data'>({
-    responseStyle: 'data',
-    url: '/1/account/login',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers
-    }
-});
-
-export const accountLogout = <ThrowOnError extends boolean = true>(options?: Options<AccountLogoutData, ThrowOnError>): RequestResult<AccountLogoutResponses, unknown, ThrowOnError, 'data'> => (options?.client ?? client).post<AccountLogoutResponses, unknown, ThrowOnError, 'data'>({
+export const accountLogout = <ThrowOnError extends boolean = true>(
+  options?: Options<AccountLogoutData, ThrowOnError>
+): RequestResult<AccountLogoutResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).post<AccountLogoutResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
     url: '/1/account/logout',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Check if a password reset is in progress
  */
-export const accountPasswordResetCheckValid = <ThrowOnError extends boolean = true>(options: Options<AccountPasswordResetCheckValidData, ThrowOnError>): RequestResult<AccountPasswordResetCheckValidResponses, AccountPasswordResetCheckValidErrors, ThrowOnError, 'data'> => (options.client ?? client).get<AccountPasswordResetCheckValidResponses, AccountPasswordResetCheckValidErrors, ThrowOnError, 'data'>({
+export const accountPasswordResetCheckValid = <ThrowOnError extends boolean = true>(
+  options: Options<AccountPasswordResetCheckValidData, ThrowOnError>
+): RequestResult<
+  AccountPasswordResetCheckValidResponses,
+  AccountPasswordResetCheckValidErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).get<
+    AccountPasswordResetCheckValidResponses,
+    AccountPasswordResetCheckValidErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/account/password-reset/{passwordResetId}/{secret}',
-    ...options
-});
-
-/**
- * Check if a password reset is in progress. Deprecated: use GET /password-reset/{id}/{secret} instead.
- *
- * @deprecated
- */
-export const accountPasswordResetCheckValidLegacy = <ThrowOnError extends boolean = true>(options: Options<AccountPasswordResetCheckValidLegacyData, ThrowOnError>): RequestResult<AccountPasswordResetCheckValidLegacyResponses, AccountPasswordResetCheckValidLegacyErrors, ThrowOnError, 'data'> => (options.client ?? client).head<AccountPasswordResetCheckValidLegacyResponses, AccountPasswordResetCheckValidLegacyErrors, ThrowOnError, 'data'>({
-    responseStyle: 'data',
-    url: '/1/account/recover/{passwordResetId}/{secret}',
-    ...options
-});
-
-/**
- * Complete a password reset process. Deprecated: use POST /password-reset/{id}/{secret}/complete instead.
- *
- * @deprecated
- */
-export const accountPasswordResetCompleteLegacy = <ThrowOnError extends boolean = true>(options: Options<AccountPasswordResetCompleteLegacyData, ThrowOnError>): RequestResult<AccountPasswordResetCompleteLegacyResponses, AccountPasswordResetCompleteLegacyErrors, ThrowOnError, 'data'> => (options.client ?? client).post<AccountPasswordResetCompleteLegacyResponses, AccountPasswordResetCompleteLegacyErrors, ThrowOnError, 'data'>({
-    responseStyle: 'data',
-    url: '/1/account/recover/{passwordResetId}/{secret}',
     ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
+  });
 
 /**
  * Complete a password reset process
  */
-export const accountPasswordResetComplete = <ThrowOnError extends boolean = true>(options: Options<AccountPasswordResetCompleteData, ThrowOnError>): RequestResult<AccountPasswordResetCompleteResponses, AccountPasswordResetCompleteErrors, ThrowOnError, 'data'> => (options.client ?? client).post<AccountPasswordResetCompleteResponses, AccountPasswordResetCompleteErrors, ThrowOnError, 'data'>({
+export const accountPasswordResetComplete = <ThrowOnError extends boolean = true>(
+  options: Options<AccountPasswordResetCompleteData, ThrowOnError>
+): RequestResult<
+  AccountPasswordResetCompleteResponses,
+  AccountPasswordResetCompleteErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).post<
+    AccountPasswordResetCompleteResponses,
+    AccountPasswordResetCompleteErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/account/password-reset/{passwordResetId}/{secret}/complete',
     ...options,
     headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
- * Initiate a password reset
- */
-export const accountPasswordResetInitiate = <ThrowOnError extends boolean = true>(options?: Options<AccountPasswordResetInitiateData, ThrowOnError>): RequestResult<AccountPasswordResetInitiateResponses, unknown, ThrowOnError, 'data'> => (options?.client ?? client).post<AccountPasswordResetInitiateResponses, unknown, ThrowOnError, 'data'>({
-    responseStyle: 'data',
-    url: '/1/account/reset',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers
-    }
-});
-
-/**
- * Signs up a new user
- */
-export const accountSignUp = <ThrowOnError extends boolean = true>(options?: Options<AccountSignUpData, ThrowOnError>): RequestResult<AccountSignUpResponses, AccountSignUpErrors, ThrowOnError, 'data'> => (options?.client ?? client).post<AccountSignUpResponses, AccountSignUpErrors, ThrowOnError, 'data'>({
-    responseStyle: 'data',
-    url: '/1/account/signup',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers
-    }
-});
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
 
 /**
  * Verify a pending email change using the token from the verification email.
  */
-export const accountEmailVerify = <ThrowOnError extends boolean = true>(options?: Options<AccountEmailVerifyData, ThrowOnError>): RequestResult<AccountEmailVerifyResponses, AccountEmailVerifyErrors, ThrowOnError, 'data'> => (options?.client ?? client).post<AccountEmailVerifyResponses, AccountEmailVerifyErrors, ThrowOnError, 'data'>({
+export const accountEmailVerify = <ThrowOnError extends boolean = true>(
+  options?: Options<AccountEmailVerifyData, ThrowOnError>
+): RequestResult<AccountEmailVerifyResponses, AccountEmailVerifyErrors, ThrowOnError, 'data'> =>
+  (options?.client ?? client).post<
+    AccountEmailVerifyResponses,
+    AccountEmailVerifyErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/account/email-change/verify',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Verify a pending email change. Deprecated: use POST /email-change/verify instead.
  *
  * @deprecated
  */
-export const accountEmailVerifyLegacy = <ThrowOnError extends boolean = true>(options?: Options<AccountEmailVerifyLegacyData, ThrowOnError>): RequestResult<AccountEmailVerifyLegacyResponses, AccountEmailVerifyLegacyErrors, ThrowOnError, 'data'> => (options?.client ?? client).post<AccountEmailVerifyLegacyResponses, AccountEmailVerifyLegacyErrors, ThrowOnError, 'data'>({
+export const accountEmailVerifyLegacy = <ThrowOnError extends boolean = true>(
+  options?: Options<AccountEmailVerifyLegacyData, ThrowOnError>
+): RequestResult<
+  AccountEmailVerifyLegacyResponses,
+  AccountEmailVerifyLegacyErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).post<
+    AccountEmailVerifyLegacyResponses,
+    AccountEmailVerifyLegacyErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/account/verify-email',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Initiate an email change for the current user. A verification link is sent to the new
  * address; the change is not applied until that link is opened.
  */
-export const authenticatedAccountChangeEmail = <ThrowOnError extends boolean = true>(options?: Options<AuthenticatedAccountChangeEmailData, ThrowOnError>): RequestResult<AuthenticatedAccountChangeEmailResponses, AuthenticatedAccountChangeEmailErrors, ThrowOnError, 'data'> => (options?.client ?? client).post<AuthenticatedAccountChangeEmailResponses, AuthenticatedAccountChangeEmailErrors, ThrowOnError, 'data'>({
+export const authenticatedAccountChangeEmail = <ThrowOnError extends boolean = true>(
+  options?: Options<AuthenticatedAccountChangeEmailData, ThrowOnError>
+): RequestResult<
+  AuthenticatedAccountChangeEmailResponses,
+  AuthenticatedAccountChangeEmailErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).post<
+    AuthenticatedAccountChangeEmailResponses,
+    AuthenticatedAccountChangeEmailErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/account/email-change',
     ...options,
     headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers
-    }
-});
+      'Content-Type': 'application/json',
+      ...options?.headers,
+    },
+  });
 
 /**
  * Change the password of the current user
  */
-export const authenticatedAccountChangePassword = <ThrowOnError extends boolean = true>(options?: Options<AuthenticatedAccountChangePasswordData, ThrowOnError>): RequestResult<AuthenticatedAccountChangePasswordResponses, AuthenticatedAccountChangePasswordErrors, ThrowOnError, 'data'> => (options?.client ?? client).post<AuthenticatedAccountChangePasswordResponses, AuthenticatedAccountChangePasswordErrors, ThrowOnError, 'data'>({
+export const authenticatedAccountChangePassword = <ThrowOnError extends boolean = true>(
+  options?: Options<AuthenticatedAccountChangePasswordData, ThrowOnError>
+): RequestResult<
+  AuthenticatedAccountChangePasswordResponses,
+  AuthenticatedAccountChangePasswordErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).post<
+    AuthenticatedAccountChangePasswordResponses,
+    AuthenticatedAccountChangePasswordErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/account/password',
     ...options,
     headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers
-    }
-});
+      'Content-Type': 'application/json',
+      ...options?.headers,
+    },
+  });
 
 /**
  * Change the username of the current user
  */
-export const authenticatedAccountChangeUsername = <ThrowOnError extends boolean = true>(options?: Options<AuthenticatedAccountChangeUsernameData, ThrowOnError>): RequestResult<AuthenticatedAccountChangeUsernameResponses, AuthenticatedAccountChangeUsernameErrors, ThrowOnError, 'data'> => (options?.client ?? client).post<AuthenticatedAccountChangeUsernameResponses, AuthenticatedAccountChangeUsernameErrors, ThrowOnError, 'data'>({
+export const authenticatedAccountChangeUsername = <ThrowOnError extends boolean = true>(
+  options?: Options<AuthenticatedAccountChangeUsernameData, ThrowOnError>
+): RequestResult<
+  AuthenticatedAccountChangeUsernameResponses,
+  AuthenticatedAccountChangeUsernameErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).post<
+    AuthenticatedAccountChangeUsernameResponses,
+    AuthenticatedAccountChangeUsernameErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/account/username',
     ...options,
     headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers
-    }
-});
+      'Content-Type': 'application/json',
+      ...options?.headers,
+    },
+  });
 
 /**
  * Deactivate currently logged in account
  */
-export const authenticatedAccountDeactivate = <ThrowOnError extends boolean = true>(options?: Options<AuthenticatedAccountDeactivateData, ThrowOnError>): RequestResult<AuthenticatedAccountDeactivateResponses, AuthenticatedAccountDeactivateErrors, ThrowOnError, 'data'> => (options?.client ?? client).delete<AuthenticatedAccountDeactivateResponses, AuthenticatedAccountDeactivateErrors, ThrowOnError, 'data'>({
+export const authenticatedAccountDeactivate = <ThrowOnError extends boolean = true>(
+  options?: Options<AuthenticatedAccountDeactivateData, ThrowOnError>
+): RequestResult<
+  AuthenticatedAccountDeactivateResponses,
+  AuthenticatedAccountDeactivateErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).delete<
+    AuthenticatedAccountDeactivateResponses,
+    AuthenticatedAccountDeactivateErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/account',
-    ...options
-});
+    ...options,
+  });
+
+/**
+ * Get the audit log for the current user's account.
+ */
+export const authenticatedAccountGetAuditLog = <ThrowOnError extends boolean = true>(
+  options?: Options<AuthenticatedAccountGetAuditLogData, ThrowOnError>
+): RequestResult<AuthenticatedAccountGetAuditLogResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<
+    AuthenticatedAccountGetAuditLogResponses,
+    unknown,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: authenticatedAccountGetAuditLogResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/account/audit-log',
+    ...options,
+  });
 
 /**
  * Remove an existing OAuth connection for the current user.
  */
-export const authenticatedAccountRemoveOAuthConnection = <ThrowOnError extends boolean = true>(options: Options<AuthenticatedAccountRemoveOAuthConnectionData, ThrowOnError>): RequestResult<AuthenticatedAccountRemoveOAuthConnectionResponses, AuthenticatedAccountRemoveOAuthConnectionErrors, ThrowOnError, 'data'> => (options.client ?? client).delete<AuthenticatedAccountRemoveOAuthConnectionResponses, AuthenticatedAccountRemoveOAuthConnectionErrors, ThrowOnError, 'data'>({
+export const authenticatedAccountRemoveOAuthConnection = <ThrowOnError extends boolean = true>(
+  options: Options<AuthenticatedAccountRemoveOAuthConnectionData, ThrowOnError>
+): RequestResult<
+  AuthenticatedAccountRemoveOAuthConnectionResponses,
+  AuthenticatedAccountRemoveOAuthConnectionErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).delete<
+    AuthenticatedAccountRemoveOAuthConnectionResponses,
+    AuthenticatedAccountRemoveOAuthConnectionErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/account/connections/{provider}',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * List OAuth connections linked to the current user.
  */
-export const authenticatedAccountListOAuthConnections = <ThrowOnError extends boolean = true>(options?: Options<AuthenticatedAccountListOAuthConnectionsData, ThrowOnError>): RequestResult<AuthenticatedAccountListOAuthConnectionsResponses, unknown, ThrowOnError, 'data'> => (options?.client ?? client).get<AuthenticatedAccountListOAuthConnectionsResponses, unknown, ThrowOnError, 'data'>({
+export const authenticatedAccountListOAuthConnections = <ThrowOnError extends boolean = true>(
+  options?: Options<AuthenticatedAccountListOAuthConnectionsData, ThrowOnError>
+): RequestResult<
+  AuthenticatedAccountListOAuthConnectionsResponses,
+  unknown,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).get<
+    AuthenticatedAccountListOAuthConnectionsResponses,
+    unknown,
+    ThrowOnError,
+    'data'
+  >({
     responseTransformer: authenticatedAccountListOAuthConnectionsResponseTransformer,
     responseStyle: 'data',
     url: '/1/account/connections',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Gets all configuration items
  */
-export const adminConfigurationList = <ThrowOnError extends boolean = true>(options?: Options<AdminConfigurationListData, ThrowOnError>): RequestResult<AdminConfigurationListResponses, AdminConfigurationListErrors, ThrowOnError, 'data'> => (options?.client ?? client).get<AdminConfigurationListResponses, AdminConfigurationListErrors, ThrowOnError, 'data'>({
+export const adminConfigurationList = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminConfigurationListData, ThrowOnError>
+): RequestResult<
+  AdminConfigurationListResponses,
+  AdminConfigurationListErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).get<
+    AdminConfigurationListResponses,
+    AdminConfigurationListErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseTransformer: adminConfigurationListResponseTransformer,
     responseStyle: 'data',
     url: '/1/admin/config',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Adds a new configuration
  */
-export const adminConfigurationAdd = <ThrowOnError extends boolean = true>(options?: Options<AdminConfigurationAddData, ThrowOnError>): RequestResult<AdminConfigurationAddResponses, AdminConfigurationAddErrors, ThrowOnError, 'data'> => (options?.client ?? client).post<AdminConfigurationAddResponses, AdminConfigurationAddErrors, ThrowOnError, 'data'>({
+export const adminConfigurationAdd = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminConfigurationAddData, ThrowOnError>
+): RequestResult<
+  AdminConfigurationAddResponses,
+  AdminConfigurationAddErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).post<
+    AdminConfigurationAddResponses,
+    AdminConfigurationAddErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/admin/config',
     ...options,
     headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers
-    }
-});
+      'Content-Type': 'application/json',
+      ...options?.headers,
+    },
+  });
 
 /**
  * Updates an existing configuration
  */
-export const adminConfigurationUpdate = <ThrowOnError extends boolean = true>(options?: Options<AdminConfigurationUpdateData, ThrowOnError>): RequestResult<AdminConfigurationUpdateResponses, AdminConfigurationUpdateErrors, ThrowOnError, 'data'> => (options?.client ?? client).put<AdminConfigurationUpdateResponses, AdminConfigurationUpdateErrors, ThrowOnError, 'data'>({
+export const adminConfigurationUpdate = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminConfigurationUpdateData, ThrowOnError>
+): RequestResult<
+  AdminConfigurationUpdateResponses,
+  AdminConfigurationUpdateErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).put<
+    AdminConfigurationUpdateResponses,
+    AdminConfigurationUpdateErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/admin/config',
     ...options,
     headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers
-    }
-});
+      'Content-Type': 'application/json',
+      ...options?.headers,
+    },
+  });
 
 /**
  * Deletes a configuration
  */
-export const adminConfigurationDelete = <ThrowOnError extends boolean = true>(options: Options<AdminConfigurationDeleteData, ThrowOnError>): RequestResult<AdminConfigurationDeleteResponses, AdminConfigurationDeleteErrors, ThrowOnError, 'data'> => (options.client ?? client).delete<AdminConfigurationDeleteResponses, AdminConfigurationDeleteErrors, ThrowOnError, 'data'>({
+export const adminConfigurationDelete = <ThrowOnError extends boolean = true>(
+  options: Options<AdminConfigurationDeleteData, ThrowOnError>
+): RequestResult<
+  AdminConfigurationDeleteResponses,
+  AdminConfigurationDeleteErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).delete<
+    AdminConfigurationDeleteResponses,
+    AdminConfigurationDeleteErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/admin/config/{name}',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Deactivates a user
  */
-export const adminDeactivateUser = <ThrowOnError extends boolean = true>(options: Options<AdminDeactivateUserData, ThrowOnError>): RequestResult<AdminDeactivateUserResponses, AdminDeactivateUserErrors, ThrowOnError, 'data'> => (options.client ?? client).put<AdminDeactivateUserResponses, AdminDeactivateUserErrors, ThrowOnError, 'data'>({
+export const adminDeactivateUser = <ThrowOnError extends boolean = true>(
+  options: Options<AdminDeactivateUserData, ThrowOnError>
+): RequestResult<AdminDeactivateUserResponses, AdminDeactivateUserErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).put<
+    AdminDeactivateUserResponses,
+    AdminDeactivateUserErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/admin/users/{userId}/deactivate',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Deletes a user
  */
-export const adminDeleteUser = <ThrowOnError extends boolean = true>(options: Options<AdminDeleteUserData, ThrowOnError>): RequestResult<AdminDeleteUserResponses, AdminDeleteUserErrors, ThrowOnError, 'data'> => (options.client ?? client).delete<AdminDeleteUserResponses, AdminDeleteUserErrors, ThrowOnError, 'data'>({
+export const adminDeleteUser = <ThrowOnError extends boolean = true>(
+  options: Options<AdminDeleteUserData, ThrowOnError>
+): RequestResult<AdminDeleteUserResponses, AdminDeleteUserErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).delete<
+    AdminDeleteUserResponses,
+    AdminDeleteUserErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/admin/users/{userId}',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Edits a user
  */
-export const adminModifyUser = <ThrowOnError extends boolean = true>(options: Options<AdminModifyUserData, ThrowOnError>): RequestResult<AdminModifyUserResponses, AdminModifyUserErrors, ThrowOnError, 'data'> => (options.client ?? client).patch<AdminModifyUserResponses, AdminModifyUserErrors, ThrowOnError, 'data'>({
+export const adminModifyUser = <ThrowOnError extends boolean = true>(
+  options: Options<AdminModifyUserData, ThrowOnError>
+): RequestResult<AdminModifyUserResponses, AdminModifyUserErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).patch<
+    AdminModifyUserResponses,
+    AdminModifyUserErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/admin/users/{userId}',
     ...options,
     headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
 
-export const adminListEmailProviderBlacklist = <ThrowOnError extends boolean = true>(options?: Options<AdminListEmailProviderBlacklistData, ThrowOnError>): RequestResult<AdminListEmailProviderBlacklistResponses, unknown, ThrowOnError, 'data'> => (options?.client ?? client).get<AdminListEmailProviderBlacklistResponses, unknown, ThrowOnError, 'data'>({
+/**
+ * Requeues many email outbox messages at once. Each id is treated exactly like the single-message
+ * requeue: only terminal (sent/failed/skipped) rows are affected; pending/sending rows and missing
+ * ids are skipped. Returns how many rows were actually requeued.
+ */
+export const adminBulkRequeueEmailOutbox = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminBulkRequeueEmailOutboxData, ThrowOnError>
+): RequestResult<
+  AdminBulkRequeueEmailOutboxResponses,
+  AdminBulkRequeueEmailOutboxErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).post<
+    AdminBulkRequeueEmailOutboxResponses,
+    AdminBulkRequeueEmailOutboxErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/admin/email/outbox/bulk/requeue',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options?.headers,
+    },
+  });
+
+/**
+ * Cancels many still-pending email outbox messages at once by marking them skipped. Rows that are
+ * not pending (already sending or terminal) and missing ids are skipped. Returns how many rows were
+ * actually cancelled.
+ */
+export const adminBulkCancelEmailOutbox = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminBulkCancelEmailOutboxData, ThrowOnError>
+): RequestResult<
+  AdminBulkCancelEmailOutboxResponses,
+  AdminBulkCancelEmailOutboxErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).post<
+    AdminBulkCancelEmailOutboxResponses,
+    AdminBulkCancelEmailOutboxErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/admin/email/outbox/bulk/cancel',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options?.headers,
+    },
+  });
+
+/**
+ * Permanently deletes many email outbox messages at once. Missing ids are skipped. Returns how many
+ * rows were actually deleted.
+ */
+export const adminBulkDeleteEmailOutbox = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminBulkDeleteEmailOutboxData, ThrowOnError>
+): RequestResult<
+  AdminBulkDeleteEmailOutboxResponses,
+  AdminBulkDeleteEmailOutboxErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).post<
+    AdminBulkDeleteEmailOutboxResponses,
+    AdminBulkDeleteEmailOutboxErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/admin/email/outbox/bulk/delete',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options?.headers,
+    },
+  });
+
+/**
+ * Cancels a still-pending email outbox message by marking it skipped, so it is never sent. Only
+ * pending messages can be cancelled; a message already being sent or in a terminal state cannot.
+ */
+export const adminCancelEmailOutbox = <ThrowOnError extends boolean = true>(
+  options: Options<AdminCancelEmailOutboxData, ThrowOnError>
+): RequestResult<
+  AdminCancelEmailOutboxResponses,
+  AdminCancelEmailOutboxErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).post<
+    AdminCancelEmailOutboxResponses,
+    AdminCancelEmailOutboxErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/admin/email/outbox/{id}/cancel',
+    ...options,
+  });
+
+/**
+ * Permanently deletes an email outbox message. If the delivery consumer is mid-send it simply finds
+ * the row gone and does nothing, so a delete never corrupts an in-flight send.
+ */
+export const adminDeleteEmailOutbox = <ThrowOnError extends boolean = true>(
+  options: Options<AdminDeleteEmailOutboxData, ThrowOnError>
+): RequestResult<
+  AdminDeleteEmailOutboxResponses,
+  AdminDeleteEmailOutboxErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).delete<
+    AdminDeleteEmailOutboxResponses,
+    AdminDeleteEmailOutboxErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/admin/email/outbox/{id}',
+    ...options,
+  });
+
+/**
+ * Lists email outbox messages, paginated. Supports the same OData-style
+ * `$filter`/`$orderby` as the users listing (e.g. `status eq 'failed'`,
+ * `recipient ilike '%@example.com'`). Defaults to newest first.
+ */
+export const adminGetEmailOutbox = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminGetEmailOutboxData, ThrowOnError>
+): RequestResult<AdminGetEmailOutboxResponses, AdminGetEmailOutboxErrors, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<
+    AdminGetEmailOutboxResponses,
+    AdminGetEmailOutboxErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: adminGetEmailOutboxResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/admin/email/outbox',
+    ...options,
+  });
+
+/**
+ * Requeues a terminal (sent/failed/skipped) email outbox message: resets it to pending, due now,
+ * with a fresh attempt budget, and nudges the delivery consumer to send it immediately.
+ */
+export const adminRequeueEmailOutbox = <ThrowOnError extends boolean = true>(
+  options: Options<AdminRequeueEmailOutboxData, ThrowOnError>
+): RequestResult<
+  AdminRequeueEmailOutboxResponses,
+  AdminRequeueEmailOutboxErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).post<
+    AdminRequeueEmailOutboxResponses,
+    AdminRequeueEmailOutboxErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/admin/email/outbox/{id}/requeue',
+    ...options,
+  });
+
+/**
+ * Returns the number of email outbox messages in each delivery state.
+ */
+export const adminGetEmailOutboxStats = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminGetEmailOutboxStatsData, ThrowOnError>
+): RequestResult<
+  AdminGetEmailOutboxStatsResponses,
+  AdminGetEmailOutboxStatsErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).get<
+    AdminGetEmailOutboxStatsResponses,
+    AdminGetEmailOutboxStatsErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: adminGetEmailOutboxStatsResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/admin/email/outbox/stats',
+    ...options,
+  });
+
+/**
+ * Enqueues a preview/test email of the chosen type to the chosen address. It flows through the
+ * normal durable delivery pipeline - visible in the outbox listing - but is rendered with
+ * placeholder data and a dummy link, so it touches no request row and mints no token.
+ */
+export const adminSendTestEmail = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminSendTestEmailData, ThrowOnError>
+): RequestResult<AdminSendTestEmailResponses, AdminSendTestEmailErrors, ThrowOnError, 'data'> =>
+  (options?.client ?? client).post<
+    AdminSendTestEmailResponses,
+    AdminSendTestEmailErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: adminSendTestEmailResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/admin/email/test',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options?.headers,
+    },
+  });
+
+export const adminListEmailProviderBlacklist = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminListEmailProviderBlacklistData, ThrowOnError>
+): RequestResult<AdminListEmailProviderBlacklistResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<
+    AdminListEmailProviderBlacklistResponses,
+    unknown,
+    ThrowOnError,
+    'data'
+  >({
     responseTransformer: adminListEmailProviderBlacklistResponseTransformer,
     responseStyle: 'data',
     url: '/1/admin/blacklist/emailProviders',
-    ...options
-});
+    ...options,
+  });
 
-export const adminAddEmailProviderBlacklist = <ThrowOnError extends boolean = true>(options?: Options<AdminAddEmailProviderBlacklistData, ThrowOnError>): RequestResult<AdminAddEmailProviderBlacklistResponses, unknown, ThrowOnError, 'data'> => (options?.client ?? client).post<AdminAddEmailProviderBlacklistResponses, unknown, ThrowOnError, 'data'>({
+export const adminAddEmailProviderBlacklist = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminAddEmailProviderBlacklistData, ThrowOnError>
+): RequestResult<AdminAddEmailProviderBlacklistResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).post<
+    AdminAddEmailProviderBlacklistResponses,
+    unknown,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/admin/blacklist/emailProviders',
     ...options,
     headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers
-    }
-});
+      'Content-Type': 'application/json',
+      ...options?.headers,
+    },
+  });
 
-export const adminRemoveEmailProviderBlacklist = <ThrowOnError extends boolean = true>(options: Options<AdminRemoveEmailProviderBlacklistData, ThrowOnError>): RequestResult<AdminRemoveEmailProviderBlacklistResponses, AdminRemoveEmailProviderBlacklistErrors, ThrowOnError, 'data'> => (options.client ?? client).delete<AdminRemoveEmailProviderBlacklistResponses, AdminRemoveEmailProviderBlacklistErrors, ThrowOnError, 'data'>({
+export const adminRemoveEmailProviderBlacklist = <ThrowOnError extends boolean = true>(
+  options: Options<AdminRemoveEmailProviderBlacklistData, ThrowOnError>
+): RequestResult<
+  AdminRemoveEmailProviderBlacklistResponses,
+  AdminRemoveEmailProviderBlacklistErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).delete<
+    AdminRemoveEmailProviderBlacklistResponses,
+    AdminRemoveEmailProviderBlacklistErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/admin/blacklist/emailProviders/{id}',
-    ...options
-});
+    ...options,
+  });
+
+/**
+ * Get audit log entries across all users. Optionally filter by subject user or actor.
+ */
+export const adminGetAdminAuditLog = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminGetAdminAuditLogData, ThrowOnError>
+): RequestResult<AdminGetAdminAuditLogResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<AdminGetAdminAuditLogResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: adminGetAdminAuditLogResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/admin/audit-log',
+    ...options,
+  });
 
 /**
  * Gets all online devices
  */
-export const adminGetOnlineDevices = <ThrowOnError extends boolean = true>(options?: Options<AdminGetOnlineDevicesData, ThrowOnError>): RequestResult<AdminGetOnlineDevicesResponses, AdminGetOnlineDevicesErrors, ThrowOnError, 'data'> => (options?.client ?? client).get<AdminGetOnlineDevicesResponses, AdminGetOnlineDevicesErrors, ThrowOnError, 'data'>({
+export const adminGetOnlineDevices = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminGetOnlineDevicesData, ThrowOnError>
+): RequestResult<
+  AdminGetOnlineDevicesResponses,
+  AdminGetOnlineDevicesErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).get<
+    AdminGetOnlineDevicesResponses,
+    AdminGetOnlineDevicesErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseTransformer: adminGetOnlineDevicesResponseTransformer,
     responseStyle: 'data',
     url: '/1/admin/monitoring/onlineDevices',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Gets all users, paginated
  */
-export const adminGetUsers = <ThrowOnError extends boolean = true>(options?: Options<AdminGetUsersData, ThrowOnError>): RequestResult<AdminGetUsersResponses, AdminGetUsersErrors, ThrowOnError, 'data'> => (options?.client ?? client).get<AdminGetUsersResponses, AdminGetUsersErrors, ThrowOnError, 'data'>({
+export const adminGetUsers = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminGetUsersData, ThrowOnError>
+): RequestResult<AdminGetUsersResponses, AdminGetUsersErrors, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<
+    AdminGetUsersResponses,
+    AdminGetUsersErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseTransformer: adminGetUsersResponseTransformer,
     responseStyle: 'data',
     url: '/1/admin/users',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Reactivates a user
  */
-export const adminReactivateUser = <ThrowOnError extends boolean = true>(options: Options<AdminReactivateUserData, ThrowOnError>): RequestResult<AdminReactivateUserResponses, AdminReactivateUserErrors, ThrowOnError, 'data'> => (options.client ?? client).put<AdminReactivateUserResponses, AdminReactivateUserErrors, ThrowOnError, 'data'>({
+export const adminReactivateUser = <ThrowOnError extends boolean = true>(
+  options: Options<AdminReactivateUserData, ThrowOnError>
+): RequestResult<AdminReactivateUserResponses, AdminReactivateUserErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).put<
+    AdminReactivateUserResponses,
+    AdminReactivateUserErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/admin/users/{userId}/reactivate',
-    ...options
-});
+    ...options,
+  });
 
-export const adminListUsernameBlacklist = <ThrowOnError extends boolean = true>(options?: Options<AdminListUsernameBlacklistData, ThrowOnError>): RequestResult<AdminListUsernameBlacklistResponses, unknown, ThrowOnError, 'data'> => (options?.client ?? client).get<AdminListUsernameBlacklistResponses, unknown, ThrowOnError, 'data'>({
+export const adminListUsernameBlacklist = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminListUsernameBlacklistData, ThrowOnError>
+): RequestResult<AdminListUsernameBlacklistResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<
+    AdminListUsernameBlacklistResponses,
+    unknown,
+    ThrowOnError,
+    'data'
+  >({
     responseTransformer: adminListUsernameBlacklistResponseTransformer,
     responseStyle: 'data',
     url: '/1/admin/blacklist/usernames',
-    ...options
-});
+    ...options,
+  });
 
-export const adminAddUsernameBlacklist = <ThrowOnError extends boolean = true>(options?: Options<AdminAddUsernameBlacklistData, ThrowOnError>): RequestResult<AdminAddUsernameBlacklistResponses, unknown, ThrowOnError, 'data'> => (options?.client ?? client).post<AdminAddUsernameBlacklistResponses, unknown, ThrowOnError, 'data'>({
+export const adminAddUsernameBlacklist = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminAddUsernameBlacklistData, ThrowOnError>
+): RequestResult<AdminAddUsernameBlacklistResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).post<
+    AdminAddUsernameBlacklistResponses,
+    unknown,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/admin/blacklist/usernames',
     ...options,
     headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers
-    }
-});
+      'Content-Type': 'application/json',
+      ...options?.headers,
+    },
+  });
 
-export const adminRemoveUsernameBlacklist = <ThrowOnError extends boolean = true>(options: Options<AdminRemoveUsernameBlacklistData, ThrowOnError>): RequestResult<AdminRemoveUsernameBlacklistResponses, AdminRemoveUsernameBlacklistErrors, ThrowOnError, 'data'> => (options.client ?? client).delete<AdminRemoveUsernameBlacklistResponses, AdminRemoveUsernameBlacklistErrors, ThrowOnError, 'data'>({
+export const adminRemoveUsernameBlacklist = <ThrowOnError extends boolean = true>(
+  options: Options<AdminRemoveUsernameBlacklistData, ThrowOnError>
+): RequestResult<
+  AdminRemoveUsernameBlacklistResponses,
+  AdminRemoveUsernameBlacklistErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).delete<
+    AdminRemoveUsernameBlacklistResponses,
+    AdminRemoveUsernameBlacklistErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/admin/blacklist/usernames/{id}',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * List webhooks
  */
-export const adminListWebhooks = <ThrowOnError extends boolean = true>(options?: Options<AdminListWebhooksData, ThrowOnError>): RequestResult<AdminListWebhooksResponses, AdminListWebhooksErrors, ThrowOnError, 'data'> => (options?.client ?? client).get<AdminListWebhooksResponses, AdminListWebhooksErrors, ThrowOnError, 'data'>({
+export const adminListWebhooks = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminListWebhooksData, ThrowOnError>
+): RequestResult<AdminListWebhooksResponses, AdminListWebhooksErrors, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<
+    AdminListWebhooksResponses,
+    AdminListWebhooksErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseTransformer: adminListWebhooksResponseTransformer,
     responseStyle: 'data',
     url: '/1/admin/webhooks',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Creates a webhook
  */
-export const adminAddWebhook = <ThrowOnError extends boolean = true>(options?: Options<AdminAddWebhookData, ThrowOnError>): RequestResult<AdminAddWebhookResponses, AdminAddWebhookErrors, ThrowOnError, 'data'> => (options?.client ?? client).post<AdminAddWebhookResponses, AdminAddWebhookErrors, ThrowOnError, 'data'>({
+export const adminAddWebhook = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminAddWebhookData, ThrowOnError>
+): RequestResult<AdminAddWebhookResponses, AdminAddWebhookErrors, ThrowOnError, 'data'> =>
+  (options?.client ?? client).post<
+    AdminAddWebhookResponses,
+    AdminAddWebhookErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/admin/webhooks',
     ...options,
     headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers
-    }
-});
+      'Content-Type': 'application/json',
+      ...options?.headers,
+    },
+  });
 
 /**
  * Removes a webhook
  */
-export const adminRemoveWebhook = <ThrowOnError extends boolean = true>(options: Options<AdminRemoveWebhookData, ThrowOnError>): RequestResult<AdminRemoveWebhookResponses, AdminRemoveWebhookErrors, ThrowOnError, 'data'> => (options.client ?? client).delete<AdminRemoveWebhookResponses, AdminRemoveWebhookErrors, ThrowOnError, 'data'>({
+export const adminRemoveWebhook = <ThrowOnError extends boolean = true>(
+  options: Options<AdminRemoveWebhookData, ThrowOnError>
+): RequestResult<AdminRemoveWebhookResponses, AdminRemoveWebhookErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).delete<
+    AdminRemoveWebhookResponses,
+    AdminRemoveWebhookErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/admin/webhooks/{id}',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Gets the best suited LCG node for the client
  */
-export const deviceGetLiveControlGateway = <ThrowOnError extends boolean = true>(options?: Options<DeviceGetLiveControlGatewayData, ThrowOnError>): RequestResult<DeviceGetLiveControlGatewayResponses, DeviceGetLiveControlGatewayErrors, ThrowOnError, 'data'> => (options?.client ?? client).get<DeviceGetLiveControlGatewayResponses, DeviceGetLiveControlGatewayErrors, ThrowOnError, 'data'>({
+export const deviceGetLiveControlGateway = <ThrowOnError extends boolean = true>(
+  options?: Options<DeviceGetLiveControlGatewayData, ThrowOnError>
+): RequestResult<
+  DeviceGetLiveControlGatewayResponses,
+  DeviceGetLiveControlGatewayErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).get<
+    DeviceGetLiveControlGatewayResponses,
+    DeviceGetLiveControlGatewayErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/device/assignLCG',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Gets information about the authenticated device.
  */
-export const deviceGetSelf = <ThrowOnError extends boolean = true>(options?: Options<DeviceGetSelfData, ThrowOnError>): RequestResult<DeviceGetSelfResponses, unknown, ThrowOnError, 'data'> => (options?.client ?? client).get<DeviceGetSelfResponses, unknown, ThrowOnError, 'data'>({
+export const deviceGetSelf = <ThrowOnError extends boolean = true>(
+  options?: Options<DeviceGetSelfData, ThrowOnError>
+): RequestResult<DeviceGetSelfResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<DeviceGetSelfResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
     url: '/1/device/self',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Pair a device with a pair code.
  */
-export const devicePair = <ThrowOnError extends boolean = true>(options: Options<DevicePairData, ThrowOnError>): RequestResult<DevicePairResponses, DevicePairErrors, ThrowOnError, 'data'> => (options.client ?? client).get<DevicePairResponses, DevicePairErrors, ThrowOnError, 'data'>({
+export const devicePair = <ThrowOnError extends boolean = true>(
+  options: Options<DevicePairData, ThrowOnError>
+): RequestResult<DevicePairResponses, DevicePairErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).get<DevicePairResponses, DevicePairErrors, ThrowOnError, 'data'>({
     responseStyle: 'data',
     url: '/1/device/pair/{pairCode}',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Gets the OTA update history for a device
  */
-export const devicesOtaGetOtaUpdateHistory = <ThrowOnError extends boolean = true>(options: Options<DevicesOtaGetOtaUpdateHistoryData, ThrowOnError>): RequestResult<DevicesOtaGetOtaUpdateHistoryResponses, DevicesOtaGetOtaUpdateHistoryErrors, ThrowOnError, 'data'> => (options.client ?? client).get<DevicesOtaGetOtaUpdateHistoryResponses, DevicesOtaGetOtaUpdateHistoryErrors, ThrowOnError, 'data'>({
+export const devicesOtaGetOtaUpdateHistory = <ThrowOnError extends boolean = true>(
+  options: Options<DevicesOtaGetOtaUpdateHistoryData, ThrowOnError>
+): RequestResult<
+  DevicesOtaGetOtaUpdateHistoryResponses,
+  DevicesOtaGetOtaUpdateHistoryErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).get<
+    DevicesOtaGetOtaUpdateHistoryResponses,
+    DevicesOtaGetOtaUpdateHistoryErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseTransformer: devicesOtaGetOtaUpdateHistoryResponseTransformer,
     responseStyle: 'data',
     url: '/1/devices/{deviceId}/ota',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Get all devices for the current user
  */
-export const devicesListDevices = <ThrowOnError extends boolean = true>(options?: Options<DevicesListDevicesData, ThrowOnError>): RequestResult<DevicesListDevicesResponses, unknown, ThrowOnError, 'data'> => (options?.client ?? client).get<DevicesListDevicesResponses, unknown, ThrowOnError, 'data'>({
+export const devicesListDevices = <ThrowOnError extends boolean = true>(
+  options?: Options<DevicesListDevicesData, ThrowOnError>
+): RequestResult<DevicesListDevicesResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<DevicesListDevicesResponses, unknown, ThrowOnError, 'data'>({
     responseTransformer: devicesListDevicesResponseTransformer,
     responseStyle: 'data',
     url: '/1/devices',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Create a new device for the current user
  */
-export const devicesCreateDevice = <ThrowOnError extends boolean = true>(options?: Options<DevicesCreateDeviceData, ThrowOnError>): RequestResult<DevicesCreateDeviceResponses, unknown, ThrowOnError, 'data'> => (options?.client ?? client).post<DevicesCreateDeviceResponses, unknown, ThrowOnError, 'data'>({
+export const devicesCreateDevice = <ThrowOnError extends boolean = true>(
+  options?: Options<DevicesCreateDeviceData, ThrowOnError>
+): RequestResult<DevicesCreateDeviceResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).post<DevicesCreateDeviceResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
     url: '/1/devices',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Remove a device from current user's account
  */
-export const devicesRemoveDevice = <ThrowOnError extends boolean = true>(options: Options<DevicesRemoveDeviceData, ThrowOnError>): RequestResult<DevicesRemoveDeviceResponses, DevicesRemoveDeviceErrors, ThrowOnError, 'data'> => (options.client ?? client).delete<DevicesRemoveDeviceResponses, DevicesRemoveDeviceErrors, ThrowOnError, 'data'>({
+export const devicesRemoveDevice = <ThrowOnError extends boolean = true>(
+  options: Options<DevicesRemoveDeviceData, ThrowOnError>
+): RequestResult<DevicesRemoveDeviceResponses, DevicesRemoveDeviceErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).delete<
+    DevicesRemoveDeviceResponses,
+    DevicesRemoveDeviceErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/devices/{deviceId}',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Get a device by its id
  */
-export const devicesGetDeviceById = <ThrowOnError extends boolean = true>(options: Options<DevicesGetDeviceByIdData, ThrowOnError>): RequestResult<DevicesGetDeviceByIdResponses, DevicesGetDeviceByIdErrors, ThrowOnError, 'data'> => (options.client ?? client).get<DevicesGetDeviceByIdResponses, DevicesGetDeviceByIdErrors, ThrowOnError, 'data'>({
+export const devicesGetDeviceById = <ThrowOnError extends boolean = true>(
+  options: Options<DevicesGetDeviceByIdData, ThrowOnError>
+): RequestResult<DevicesGetDeviceByIdResponses, DevicesGetDeviceByIdErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).get<
+    DevicesGetDeviceByIdResponses,
+    DevicesGetDeviceByIdErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseTransformer: devicesGetDeviceByIdResponseTransformer,
     responseStyle: 'data',
     url: '/1/devices/{deviceId}',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Edit a device
  */
-export const devicesEditDevice = <ThrowOnError extends boolean = true>(options: Options<DevicesEditDeviceData, ThrowOnError>): RequestResult<DevicesEditDeviceResponses, DevicesEditDeviceErrors, ThrowOnError, 'data'> => (options.client ?? client).patch<DevicesEditDeviceResponses, DevicesEditDeviceErrors, ThrowOnError, 'data'>({
+export const devicesEditDevice = <ThrowOnError extends boolean = true>(
+  options: Options<DevicesEditDeviceData, ThrowOnError>
+): RequestResult<DevicesEditDeviceResponses, DevicesEditDeviceErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).patch<
+    DevicesEditDeviceResponses,
+    DevicesEditDeviceErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/devices/{deviceId}',
     ...options,
     headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
 
 /**
  * Regenerate a device token
  */
-export const devicesRegenerateDeviceToken = <ThrowOnError extends boolean = true>(options: Options<DevicesRegenerateDeviceTokenData, ThrowOnError>): RequestResult<DevicesRegenerateDeviceTokenResponses, DevicesRegenerateDeviceTokenErrors, ThrowOnError, 'data'> => (options.client ?? client).put<DevicesRegenerateDeviceTokenResponses, DevicesRegenerateDeviceTokenErrors, ThrowOnError, 'data'>({
+export const devicesRegenerateDeviceToken = <ThrowOnError extends boolean = true>(
+  options: Options<DevicesRegenerateDeviceTokenData, ThrowOnError>
+): RequestResult<
+  DevicesRegenerateDeviceTokenResponses,
+  DevicesRegenerateDeviceTokenErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).put<
+    DevicesRegenerateDeviceTokenResponses,
+    DevicesRegenerateDeviceTokenErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/devices/{deviceId}',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Get a pair code for a device
  */
-export const devicesGetPairCode = <ThrowOnError extends boolean = true>(options: Options<DevicesGetPairCodeData, ThrowOnError>): RequestResult<DevicesGetPairCodeResponses, DevicesGetPairCodeErrors, ThrowOnError, 'data'> => (options.client ?? client).get<DevicesGetPairCodeResponses, DevicesGetPairCodeErrors, ThrowOnError, 'data'>({
+export const devicesGetPairCode = <ThrowOnError extends boolean = true>(
+  options: Options<DevicesGetPairCodeData, ThrowOnError>
+): RequestResult<DevicesGetPairCodeResponses, DevicesGetPairCodeErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).get<
+    DevicesGetPairCodeResponses,
+    DevicesGetPairCodeErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/devices/{deviceId}/pair',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Get LCG info for a device if it is online and connected to a LCG node
  */
-export const devicesGetLiveControlGatewayInfo = <ThrowOnError extends boolean = true>(options: Options<DevicesGetLiveControlGatewayInfoData, ThrowOnError>): RequestResult<DevicesGetLiveControlGatewayInfoResponses, DevicesGetLiveControlGatewayInfoErrors, ThrowOnError, 'data'> => (options.client ?? client).get<DevicesGetLiveControlGatewayInfoResponses, DevicesGetLiveControlGatewayInfoErrors, ThrowOnError, 'data'>({
+export const devicesGetLiveControlGatewayInfo = <ThrowOnError extends boolean = true>(
+  options: Options<DevicesGetLiveControlGatewayInfoData, ThrowOnError>
+): RequestResult<
+  DevicesGetLiveControlGatewayInfoResponses,
+  DevicesGetLiveControlGatewayInfoErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).get<
+    DevicesGetLiveControlGatewayInfoResponses,
+    DevicesGetLiveControlGatewayInfoErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/devices/{deviceId}/lcg',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Get all shockers for a device
  */
-export const devicesGetShockers = <ThrowOnError extends boolean = true>(options: Options<DevicesGetShockersData, ThrowOnError>): RequestResult<DevicesGetShockersResponses, DevicesGetShockersErrors, ThrowOnError, 'data'> => (options.client ?? client).get<DevicesGetShockersResponses, DevicesGetShockersErrors, ThrowOnError, 'data'>({
+export const devicesGetShockers = <ThrowOnError extends boolean = true>(
+  options: Options<DevicesGetShockersData, ThrowOnError>
+): RequestResult<DevicesGetShockersResponses, DevicesGetShockersErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).get<
+    DevicesGetShockersResponses,
+    DevicesGetShockersErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseTransformer: devicesGetShockersResponseTransformer,
     responseStyle: 'data',
     url: '/1/devices/{deviceId}/shockers',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Gets the version of the OpenShock backend.
  */
-export const versionGetBackendInfo = <ThrowOnError extends boolean = true>(options?: Options<VersionGetBackendInfoData, ThrowOnError>): RequestResult<VersionGetBackendInfoResponses, unknown, ThrowOnError, 'data'> => (options?.client ?? client).get<VersionGetBackendInfoResponses, unknown, ThrowOnError, 'data'>({
+export const versionGetBackendInfo = <ThrowOnError extends boolean = true>(
+  options?: Options<VersionGetBackendInfoData, ThrowOnError>
+): RequestResult<VersionGetBackendInfoResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<VersionGetBackendInfoResponses, unknown, ThrowOnError, 'data'>({
     responseTransformer: versionGetBackendInfoResponseTransformer,
     responseStyle: 'data',
     url: '/1',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Gets online devices statistics
  */
-export const publicGetOnlineDevicesStatistics = <ThrowOnError extends boolean = true>(options?: Options<PublicGetOnlineDevicesStatisticsData, ThrowOnError>): RequestResult<PublicGetOnlineDevicesStatisticsResponses, unknown, ThrowOnError, 'data'> => (options?.client ?? client).get<PublicGetOnlineDevicesStatisticsResponses, unknown, ThrowOnError, 'data'>({
+export const publicGetOnlineDevicesStatistics = <ThrowOnError extends boolean = true>(
+  options?: Options<PublicGetOnlineDevicesStatisticsData, ThrowOnError>
+): RequestResult<PublicGetOnlineDevicesStatisticsResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<
+    PublicGetOnlineDevicesStatisticsResponses,
+    unknown,
+    ThrowOnError,
+    'data'
+  >({
     responseTransformer: publicGetOnlineDevicesStatisticsResponseTransformer,
     responseStyle: 'data',
     url: '/1/public/stats',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Remove a shocker from a public share
  */
-export const shareLinksRemoveShocker = <ThrowOnError extends boolean = true>(options: Options<ShareLinksRemoveShockerData, ThrowOnError>): RequestResult<ShareLinksRemoveShockerResponses, ShareLinksRemoveShockerErrors, ThrowOnError, 'data'> => (options.client ?? client).delete<ShareLinksRemoveShockerResponses, ShareLinksRemoveShockerErrors, ThrowOnError, 'data'>({
+export const shareLinksRemoveShocker = <ThrowOnError extends boolean = true>(
+  options: Options<ShareLinksRemoveShockerData, ThrowOnError>
+): RequestResult<
+  ShareLinksRemoveShockerResponses,
+  ShareLinksRemoveShockerErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).delete<
+    ShareLinksRemoveShockerResponses,
+    ShareLinksRemoveShockerErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/shares/links/{publicShareId}/{shockerId}',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Edit a shocker in a public share
  */
-export const shareLinksEditShocker = <ThrowOnError extends boolean = true>(options: Options<ShareLinksEditShockerData, ThrowOnError>): RequestResult<ShareLinksEditShockerResponses, ShareLinksEditShockerErrors, ThrowOnError, 'data'> => (options.client ?? client).patch<ShareLinksEditShockerResponses, ShareLinksEditShockerErrors, ThrowOnError, 'data'>({
+export const shareLinksEditShocker = <ThrowOnError extends boolean = true>(
+  options: Options<ShareLinksEditShockerData, ThrowOnError>
+): RequestResult<
+  ShareLinksEditShockerResponses,
+  ShareLinksEditShockerErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).patch<
+    ShareLinksEditShockerResponses,
+    ShareLinksEditShockerErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/shares/links/{publicShareId}/{shockerId}',
     ...options,
     headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
 
 /**
  * Add a shocker to a public share
  */
-export const shareLinksAddShocker = <ThrowOnError extends boolean = true>(options: Options<ShareLinksAddShockerData, ThrowOnError>): RequestResult<ShareLinksAddShockerResponses, ShareLinksAddShockerErrors, ThrowOnError, 'data'> => (options.client ?? client).post<ShareLinksAddShockerResponses, ShareLinksAddShockerErrors, ThrowOnError, 'data'>({
+export const shareLinksAddShocker = <ThrowOnError extends boolean = true>(
+  options: Options<ShareLinksAddShockerData, ThrowOnError>
+): RequestResult<ShareLinksAddShockerResponses, ShareLinksAddShockerErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).post<
+    ShareLinksAddShockerResponses,
+    ShareLinksAddShockerErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/shares/links/{publicShareId}/{shockerId}',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Get all public shares for the current user
  */
-export const shareLinksList = <ThrowOnError extends boolean = true>(options?: Options<ShareLinksListData, ThrowOnError>): RequestResult<ShareLinksListResponses, unknown, ThrowOnError, 'data'> => (options?.client ?? client).get<ShareLinksListResponses, unknown, ThrowOnError, 'data'>({
+export const shareLinksList = <ThrowOnError extends boolean = true>(
+  options?: Options<ShareLinksListData, ThrowOnError>
+): RequestResult<ShareLinksListResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<ShareLinksListResponses, unknown, ThrowOnError, 'data'>({
     responseTransformer: shareLinksListResponseTransformer,
     responseStyle: 'data',
     url: '/1/shares/links',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Create a new public share
  */
-export const shareLinksCreatePublicShare = <ThrowOnError extends boolean = true>(options?: Options<ShareLinksCreatePublicShareData, ThrowOnError>): RequestResult<ShareLinksCreatePublicShareResponses, unknown, ThrowOnError, 'data'> => (options?.client ?? client).post<ShareLinksCreatePublicShareResponses, unknown, ThrowOnError, 'data'>({
+export const shareLinksCreatePublicShare = <ThrowOnError extends boolean = true>(
+  options?: Options<ShareLinksCreatePublicShareData, ThrowOnError>
+): RequestResult<ShareLinksCreatePublicShareResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).post<
+    ShareLinksCreatePublicShareResponses,
+    unknown,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/shares/links',
     ...options,
     headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers
-    }
-});
+      'Content-Type': 'application/json',
+      ...options?.headers,
+    },
+  });
 
 /**
  * Deletes a public share
  */
-export const shareLinksDeletePublicShare = <ThrowOnError extends boolean = true>(options: Options<ShareLinksDeletePublicShareData, ThrowOnError>): RequestResult<ShareLinksDeletePublicShareResponses, ShareLinksDeletePublicShareErrors, ThrowOnError, 'data'> => (options.client ?? client).delete<ShareLinksDeletePublicShareResponses, ShareLinksDeletePublicShareErrors, ThrowOnError, 'data'>({
+export const shareLinksDeletePublicShare = <ThrowOnError extends boolean = true>(
+  options: Options<ShareLinksDeletePublicShareData, ThrowOnError>
+): RequestResult<
+  ShareLinksDeletePublicShareResponses,
+  ShareLinksDeletePublicShareErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).delete<
+    ShareLinksDeletePublicShareResponses,
+    ShareLinksDeletePublicShareErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/shares/links/{publicShareId}',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Pause a shocker in a public share
  */
-export const shareLinksPauseShocker = <ThrowOnError extends boolean = true>(options: Options<ShareLinksPauseShockerData, ThrowOnError>): RequestResult<ShareLinksPauseShockerResponses, ShareLinksPauseShockerErrors, ThrowOnError, 'data'> => (options.client ?? client).post<ShareLinksPauseShockerResponses, ShareLinksPauseShockerErrors, ThrowOnError, 'data'>({
+export const shareLinksPauseShocker = <ThrowOnError extends boolean = true>(
+  options: Options<ShareLinksPauseShockerData, ThrowOnError>
+): RequestResult<
+  ShareLinksPauseShockerResponses,
+  ShareLinksPauseShockerErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).post<
+    ShareLinksPauseShockerResponses,
+    ShareLinksPauseShockerErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/shares/links/{publicShareId}/{shockerId}/pause',
     ...options,
     headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
 
 /**
  * Gets information about a public share.
  */
-export const publicGetPublicShare = <ThrowOnError extends boolean = true>(options: Options<PublicGetPublicShareData, ThrowOnError>): RequestResult<PublicGetPublicShareResponses, PublicGetPublicShareErrors, ThrowOnError, 'data'> => (options.client ?? client).get<PublicGetPublicShareResponses, PublicGetPublicShareErrors, ThrowOnError, 'data'>({
+export const publicGetPublicShare = <ThrowOnError extends boolean = true>(
+  options: Options<PublicGetPublicShareData, ThrowOnError>
+): RequestResult<PublicGetPublicShareResponses, PublicGetPublicShareErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).get<
+    PublicGetPublicShareResponses,
+    PublicGetPublicShareErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseTransformer: publicGetPublicShareResponseTransformer,
     responseStyle: 'data',
     url: '/1/public/shares/links/{publicShareId}',
-    ...options
-});
+    ...options,
+  });
 
-export const sessionsDeleteSession = <ThrowOnError extends boolean = true>(options: Options<SessionsDeleteSessionData, ThrowOnError>): RequestResult<SessionsDeleteSessionResponses, SessionsDeleteSessionErrors, ThrowOnError, 'data'> => (options.client ?? client).delete<SessionsDeleteSessionResponses, SessionsDeleteSessionErrors, ThrowOnError, 'data'>({
+export const sessionsDeleteSession = <ThrowOnError extends boolean = true>(
+  options: Options<SessionsDeleteSessionData, ThrowOnError>
+): RequestResult<
+  SessionsDeleteSessionResponses,
+  SessionsDeleteSessionErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).delete<
+    SessionsDeleteSessionResponses,
+    SessionsDeleteSessionErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/sessions/{sessionId}',
-    ...options
-});
+    ...options,
+  });
 
-export const sessionsListSessions = <ThrowOnError extends boolean = true>(options?: Options<SessionsListSessionsData, ThrowOnError>): RequestResult<SessionsListSessionsResponses, unknown, ThrowOnError, 'data'> => (options?.client ?? client).get<SessionsListSessionsResponses, unknown, ThrowOnError, 'data'>({
+export const sessionsListSessions = <ThrowOnError extends boolean = true>(
+  options?: Options<SessionsListSessionsData, ThrowOnError>
+): RequestResult<SessionsListSessionsResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<SessionsListSessionsResponses, unknown, ThrowOnError, 'data'>({
     responseTransformer: sessionsListSessionsResponseTransformer,
     responseStyle: 'data',
     url: '/1/sessions',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Gets information about the current token used to access this endpoint
  */
-export const sessionsGetSelfSession = <ThrowOnError extends boolean = true>(options?: Options<SessionsGetSelfSessionData, ThrowOnError>): RequestResult<SessionsGetSelfSessionResponses, unknown, ThrowOnError, 'data'> => (options?.client ?? client).get<SessionsGetSelfSessionResponses, unknown, ThrowOnError, 'data'>({
+export const sessionsGetSelfSession = <ThrowOnError extends boolean = true>(
+  options?: Options<SessionsGetSelfSessionData, ThrowOnError>
+): RequestResult<SessionsGetSelfSessionResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<SessionsGetSelfSessionResponses, unknown, ThrowOnError, 'data'>({
     responseTransformer: sessionsGetSelfSessionResponseTransformer,
     responseStyle: 'data',
     url: '/1/sessions/self',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Delete a share code
  */
-export const sharesDeleteShareCode = <ThrowOnError extends boolean = true>(options: Options<SharesDeleteShareCodeData, ThrowOnError>): RequestResult<SharesDeleteShareCodeResponses, SharesDeleteShareCodeErrors, ThrowOnError, 'data'> => (options.client ?? client).delete<SharesDeleteShareCodeResponses, SharesDeleteShareCodeErrors, ThrowOnError, 'data'>({
+export const sharesDeleteShareCode = <ThrowOnError extends boolean = true>(
+  options: Options<SharesDeleteShareCodeData, ThrowOnError>
+): RequestResult<
+  SharesDeleteShareCodeResponses,
+  SharesDeleteShareCodeErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).delete<
+    SharesDeleteShareCodeResponses,
+    SharesDeleteShareCodeErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/shares/code/{shareCodeId}',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Link a share code to your account
  */
-export const sharesLinkShareCode = <ThrowOnError extends boolean = true>(options: Options<SharesLinkShareCodeData, ThrowOnError>): RequestResult<SharesLinkShareCodeResponses, SharesLinkShareCodeErrors, ThrowOnError, 'data'> => (options.client ?? client).post<SharesLinkShareCodeResponses, SharesLinkShareCodeErrors, ThrowOnError, 'data'>({
+export const sharesLinkShareCode = <ThrowOnError extends boolean = true>(
+  options: Options<SharesLinkShareCodeData, ThrowOnError>
+): RequestResult<SharesLinkShareCodeResponses, SharesLinkShareCodeErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).post<
+    SharesLinkShareCodeResponses,
+    SharesLinkShareCodeErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/shares/code/{shareCodeId}',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Remove a shocker
  */
-export const shockerRemoveShocker = <ThrowOnError extends boolean = true>(options: Options<ShockerRemoveShockerData, ThrowOnError>): RequestResult<ShockerRemoveShockerResponses, ShockerRemoveShockerErrors, ThrowOnError, 'data'> => (options.client ?? client).delete<ShockerRemoveShockerResponses, ShockerRemoveShockerErrors, ThrowOnError, 'data'>({
+export const shockerRemoveShocker = <ThrowOnError extends boolean = true>(
+  options: Options<ShockerRemoveShockerData, ThrowOnError>
+): RequestResult<ShockerRemoveShockerResponses, ShockerRemoveShockerErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).delete<
+    ShockerRemoveShockerResponses,
+    ShockerRemoveShockerErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/shockers/{shockerId}',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Get information about a shocker.
  */
-export const shockerGetShockerById = <ThrowOnError extends boolean = true>(options: Options<ShockerGetShockerByIdData, ThrowOnError>): RequestResult<ShockerGetShockerByIdResponses, ShockerGetShockerByIdErrors, ThrowOnError, 'data'> => (options.client ?? client).get<ShockerGetShockerByIdResponses, ShockerGetShockerByIdErrors, ThrowOnError, 'data'>({
+export const shockerGetShockerById = <ThrowOnError extends boolean = true>(
+  options: Options<ShockerGetShockerByIdData, ThrowOnError>
+): RequestResult<
+  ShockerGetShockerByIdResponses,
+  ShockerGetShockerByIdErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).get<
+    ShockerGetShockerByIdResponses,
+    ShockerGetShockerByIdErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseTransformer: shockerGetShockerByIdResponseTransformer,
     responseStyle: 'data',
     url: '/1/shockers/{shockerId}',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Edit a shocker
  */
-export const shockerEditShocker = <ThrowOnError extends boolean = true>(options: Options<ShockerEditShockerData, ThrowOnError>): RequestResult<ShockerEditShockerResponses, ShockerEditShockerErrors, ThrowOnError, 'data'> => (options.client ?? client).patch<ShockerEditShockerResponses, ShockerEditShockerErrors, ThrowOnError, 'data'>({
+export const shockerEditShocker = <ThrowOnError extends boolean = true>(
+  options: Options<ShockerEditShockerData, ThrowOnError>
+): RequestResult<ShockerEditShockerResponses, ShockerEditShockerErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).patch<
+    ShockerEditShockerResponses,
+    ShockerEditShockerErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/shockers/{shockerId}',
     ...options,
     headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
 
 /**
  * Get the logs for a shocker
  */
-export const shockerGetShockerLogs = <ThrowOnError extends boolean = true>(options: Options<ShockerGetShockerLogsData, ThrowOnError>): RequestResult<ShockerGetShockerLogsResponses, ShockerGetShockerLogsErrors, ThrowOnError, 'data'> => (options.client ?? client).get<ShockerGetShockerLogsResponses, ShockerGetShockerLogsErrors, ThrowOnError, 'data'>({
+export const shockerGetShockerLogs = <ThrowOnError extends boolean = true>(
+  options: Options<ShockerGetShockerLogsData, ThrowOnError>
+): RequestResult<
+  ShockerGetShockerLogsResponses,
+  ShockerGetShockerLogsErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).get<
+    ShockerGetShockerLogsResponses,
+    ShockerGetShockerLogsErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseTransformer: shockerGetShockerLogsResponseTransformer,
     responseStyle: 'data',
     url: '/1/shockers/{shockerId}/logs',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Get a paged set of control logs across the caller's shockers.
  */
-export const shockerGetAllShockerLogs = <ThrowOnError extends boolean = true>(options?: Options<ShockerGetAllShockerLogsData, ThrowOnError>): RequestResult<ShockerGetAllShockerLogsResponses, unknown, ThrowOnError, 'data'> => (options?.client ?? client).get<ShockerGetAllShockerLogsResponses, unknown, ThrowOnError, 'data'>({
-    responseTransformer: shockerGetAllShockerLogsResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/shockers/logs',
-    ...options
-});
+export const shockerGetAllShockerLogs = <ThrowOnError extends boolean = true>(
+  options?: Options<ShockerGetAllShockerLogsData, ThrowOnError>
+): RequestResult<ShockerGetAllShockerLogsResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<ShockerGetAllShockerLogsResponses, unknown, ThrowOnError, 'data'>(
+    {
+      responseTransformer: shockerGetAllShockerLogsResponseTransformer,
+      responseStyle: 'data',
+      url: '/1/shockers/logs',
+      ...options,
+    }
+  );
 
 /**
  * List all shockers shared with the authenticated user.
  */
-export const shockerListSharedShockers = <ThrowOnError extends boolean = true>(options?: Options<ShockerListSharedShockersData, ThrowOnError>): RequestResult<ShockerListSharedShockersResponses, unknown, ThrowOnError, 'data'> => (options?.client ?? client).get<ShockerListSharedShockersResponses, unknown, ThrowOnError, 'data'>({
+export const shockerListSharedShockers = <ThrowOnError extends boolean = true>(
+  options?: Options<ShockerListSharedShockersData, ThrowOnError>
+): RequestResult<ShockerListSharedShockersResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<
+    ShockerListSharedShockersResponses,
+    unknown,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/shockers/shared',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * List all shockers belonging to the authenticated user.
  */
-export const shockerListShockers = <ThrowOnError extends boolean = true>(options?: Options<ShockerListShockersData, ThrowOnError>): RequestResult<ShockerListShockersResponses, unknown, ThrowOnError, 'data'> => (options?.client ?? client).get<ShockerListShockersResponses, unknown, ThrowOnError, 'data'>({
+export const shockerListShockers = <ThrowOnError extends boolean = true>(
+  options?: Options<ShockerListShockersData, ThrowOnError>
+): RequestResult<ShockerListShockersResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<ShockerListShockersResponses, unknown, ThrowOnError, 'data'>({
     responseTransformer: shockerListShockersResponseTransformer,
     responseStyle: 'data',
     url: '/1/shockers/own',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Pause or unpause a shocker
  */
-export const shockerPauseShocker = <ThrowOnError extends boolean = true>(options: Options<ShockerPauseShockerData, ThrowOnError>): RequestResult<ShockerPauseShockerResponses, ShockerPauseShockerErrors, ThrowOnError, 'data'> => (options.client ?? client).post<ShockerPauseShockerResponses, ShockerPauseShockerErrors, ThrowOnError, 'data'>({
+export const shockerPauseShocker = <ThrowOnError extends boolean = true>(
+  options: Options<ShockerPauseShockerData, ThrowOnError>
+): RequestResult<ShockerPauseShockerResponses, ShockerPauseShockerErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).post<
+    ShockerPauseShockerResponses,
+    ShockerPauseShockerErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/shockers/{shockerId}/pause',
     ...options,
     headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
 
 /**
  * Register a shocker
  */
-export const shockerRegisterShocker = <ThrowOnError extends boolean = true>(options?: Options<ShockerRegisterShockerData, ThrowOnError>): RequestResult<ShockerRegisterShockerResponses, ShockerRegisterShockerErrors, ThrowOnError, 'data'> => (options?.client ?? client).post<ShockerRegisterShockerResponses, ShockerRegisterShockerErrors, ThrowOnError, 'data'>({
+export const shockerRegisterShocker = <ThrowOnError extends boolean = true>(
+  options?: Options<ShockerRegisterShockerData, ThrowOnError>
+): RequestResult<
+  ShockerRegisterShockerResponses,
+  ShockerRegisterShockerErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).post<
+    ShockerRegisterShockerResponses,
+    ShockerRegisterShockerErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/shockers',
     ...options,
     headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers
-    }
-});
+      'Content-Type': 'application/json',
+      ...options?.headers,
+    },
+  });
 
 /**
  * Send a control message to shockers (Deprecated in favor of the /2/shockers/control endpoint)
  */
-export const shockerSendControlDeprecated = <ThrowOnError extends boolean = true>(options?: Options<ShockerSendControlDeprecatedData, ThrowOnError>): RequestResult<ShockerSendControlDeprecatedResponses, ShockerSendControlDeprecatedErrors, ThrowOnError, 'data'> => (options?.client ?? client).post<ShockerSendControlDeprecatedResponses, ShockerSendControlDeprecatedErrors, ThrowOnError, 'data'>({
+export const shockerSendControlDeprecated = <ThrowOnError extends boolean = true>(
+  options?: Options<ShockerSendControlDeprecatedData, ThrowOnError>
+): RequestResult<
+  ShockerSendControlDeprecatedResponses,
+  ShockerSendControlDeprecatedErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).post<
+    ShockerSendControlDeprecatedResponses,
+    ShockerSendControlDeprecatedErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/shockers/control',
     ...options,
     headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers
-    }
-});
+      'Content-Type': 'application/json',
+      ...options?.headers,
+    },
+  });
 
 /**
  * Get all user shares for a shocker
  */
-export const shockerGetUserShares = <ThrowOnError extends boolean = true>(options: Options<ShockerGetUserSharesData, ThrowOnError>): RequestResult<ShockerGetUserSharesResponses, ShockerGetUserSharesErrors, ThrowOnError, 'data'> => (options.client ?? client).get<ShockerGetUserSharesResponses, ShockerGetUserSharesErrors, ThrowOnError, 'data'>({
+export const shockerGetUserShares = <ThrowOnError extends boolean = true>(
+  options: Options<ShockerGetUserSharesData, ThrowOnError>
+): RequestResult<ShockerGetUserSharesResponses, ShockerGetUserSharesErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).get<
+    ShockerGetUserSharesResponses,
+    ShockerGetUserSharesErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseTransformer: shockerGetUserSharesResponseTransformer,
     responseStyle: 'data',
     url: '/1/shockers/{shockerId}/shares',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Create a share code for a shocker
  */
-export const shockerShockerShareCodeCreate = <ThrowOnError extends boolean = true>(options: Options<ShockerShockerShareCodeCreateData, ThrowOnError>): RequestResult<ShockerShockerShareCodeCreateResponses, ShockerShockerShareCodeCreateErrors, ThrowOnError, 'data'> => (options.client ?? client).post<ShockerShockerShareCodeCreateResponses, ShockerShockerShareCodeCreateErrors, ThrowOnError, 'data'>({
+export const shockerShockerShareCodeCreate = <ThrowOnError extends boolean = true>(
+  options: Options<ShockerShockerShareCodeCreateData, ThrowOnError>
+): RequestResult<
+  ShockerShockerShareCodeCreateResponses,
+  ShockerShockerShareCodeCreateErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).post<
+    ShockerShockerShareCodeCreateResponses,
+    ShockerShockerShareCodeCreateErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/shockers/{shockerId}/shares',
     ...options,
     headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
 
 /**
  * List all share codes for a shocker
  */
-export const shockerShockerShareCodeList = <ThrowOnError extends boolean = true>(options: Options<ShockerShockerShareCodeListData, ThrowOnError>): RequestResult<ShockerShockerShareCodeListResponses, ShockerShockerShareCodeListErrors, ThrowOnError, 'data'> => (options.client ?? client).get<ShockerShockerShareCodeListResponses, ShockerShockerShareCodeListErrors, ThrowOnError, 'data'>({
+export const shockerShockerShareCodeList = <ThrowOnError extends boolean = true>(
+  options: Options<ShockerShockerShareCodeListData, ThrowOnError>
+): RequestResult<
+  ShockerShockerShareCodeListResponses,
+  ShockerShockerShareCodeListErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).get<
+    ShockerShockerShareCodeListResponses,
+    ShockerShockerShareCodeListErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseTransformer: shockerShockerShareCodeListResponseTransformer,
     responseStyle: 'data',
     url: '/1/shockers/{shockerId}/shareCodes',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Remove a share for a shocker
  */
-export const shockerShockerShareRemove = <ThrowOnError extends boolean = true>(options: Options<ShockerShockerShareRemoveData, ThrowOnError>): RequestResult<ShockerShockerShareRemoveResponses, ShockerShockerShareRemoveErrors, ThrowOnError, 'data'> => (options.client ?? client).delete<ShockerShockerShareRemoveResponses, ShockerShockerShareRemoveErrors, ThrowOnError, 'data'>({
+export const shockerShockerShareRemove = <ThrowOnError extends boolean = true>(
+  options: Options<ShockerShockerShareRemoveData, ThrowOnError>
+): RequestResult<
+  ShockerShockerShareRemoveResponses,
+  ShockerShockerShareRemoveErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).delete<
+    ShockerShockerShareRemoveResponses,
+    ShockerShockerShareRemoveErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/shockers/{shockerId}/shares/{sharedWithUserId}',
-    ...options
-});
+    ...options,
+  });
 
 /**
  * Update a share for a shocker
  */
-export const shockerShockerShareCodeUpdate = <ThrowOnError extends boolean = true>(options: Options<ShockerShockerShareCodeUpdateData, ThrowOnError>): RequestResult<ShockerShockerShareCodeUpdateResponses, ShockerShockerShareCodeUpdateErrors, ThrowOnError, 'data'> => (options.client ?? client).patch<ShockerShockerShareCodeUpdateResponses, ShockerShockerShareCodeUpdateErrors, ThrowOnError, 'data'>({
+export const shockerShockerShareCodeUpdate = <ThrowOnError extends boolean = true>(
+  options: Options<ShockerShockerShareCodeUpdateData, ThrowOnError>
+): RequestResult<
+  ShockerShockerShareCodeUpdateResponses,
+  ShockerShockerShareCodeUpdateErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).patch<
+    ShockerShockerShareCodeUpdateResponses,
+    ShockerShockerShareCodeUpdateErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/shockers/{shockerId}/shares/{sharedWithUserId}',
     ...options,
     headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
 
 /**
  * Pause/Unpause a share code for a shocker
  */
-export const shockerShockerShareCodePause = <ThrowOnError extends boolean = true>(options: Options<ShockerShockerShareCodePauseData, ThrowOnError>): RequestResult<ShockerShockerShareCodePauseResponses, ShockerShockerShareCodePauseErrors, ThrowOnError, 'data'> => (options.client ?? client).post<ShockerShockerShareCodePauseResponses, ShockerShockerShareCodePauseErrors, ThrowOnError, 'data'>({
+export const shockerShockerShareCodePause = <ThrowOnError extends boolean = true>(
+  options: Options<ShockerShockerShareCodePauseData, ThrowOnError>
+): RequestResult<
+  ShockerShockerShareCodePauseResponses,
+  ShockerShockerShareCodePauseErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).post<
+    ShockerShockerShareCodePauseResponses,
+    ShockerShockerShareCodePauseErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/shockers/{shockerId}/shares/{sharedWithUserId}/pause',
     ...options,
     headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
 
 /**
  * Get the current user's information.
  */
-export const usersGetSelf = <ThrowOnError extends boolean = true>(options?: Options<UsersGetSelfData, ThrowOnError>): RequestResult<UsersGetSelfResponses, unknown, ThrowOnError, 'data'> => (options?.client ?? client).get<UsersGetSelfResponses, unknown, ThrowOnError, 'data'>({
+export const usersGetSelf = <ThrowOnError extends boolean = true>(
+  options?: Options<UsersGetSelfData, ThrowOnError>
+): RequestResult<UsersGetSelfResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<UsersGetSelfResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
     url: '/1/users/self',
-    ...options
-});
+    ...options,
+  });
 
-export const usersGetByName = <ThrowOnError extends boolean = true>(options: Options<UsersGetByNameData, ThrowOnError>): RequestResult<UsersGetByNameResponses, UsersGetByNameErrors, ThrowOnError, 'data'> => (options.client ?? client).get<UsersGetByNameResponses, UsersGetByNameErrors, ThrowOnError, 'data'>({
+export const usersGetByName = <ThrowOnError extends boolean = true>(
+  options: Options<UsersGetByNameData, ThrowOnError>
+): RequestResult<UsersGetByNameResponses, UsersGetByNameErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).get<
+    UsersGetByNameResponses,
+    UsersGetByNameErrors,
+    ThrowOnError,
+    'data'
+  >({
     responseStyle: 'data',
     url: '/1/users/by-name/{username}',
-    ...options
-});
+    ...options,
+  });

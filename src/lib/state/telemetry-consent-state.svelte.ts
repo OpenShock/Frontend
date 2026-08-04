@@ -1,4 +1,4 @@
-import { PersistedState } from './classes/persisted-state.svelte';
+import { PersistedState } from '@openshock/svelte-core/state/classes/persisted-state.svelte.js';
 
 /**
  * How much diagnostic data the user agrees to send to SigNoz:

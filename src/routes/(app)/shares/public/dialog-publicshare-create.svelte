@@ -1,9 +1,9 @@
 <script lang="ts">
   import { shareLinksCreatePublicShare } from '$lib/api';
   import ExpirationPicker from '$lib/components/ExpirationPicker.svelte';
-  import TextInput from '$lib/components/input/TextInput.svelte';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import * as Dialog from '$lib/components/ui/dialog';
+  import { TextInput } from '@openshock/svelte-core/components/input';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
   import { toast } from 'svelte-sonner';
 
   interface Props {

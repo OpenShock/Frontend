@@ -1,9 +1,9 @@
 <script lang="ts">
   import { adminConfigurationUpdate } from '$lib/api';
   import type { ConfigurationItemDto } from '$lib/api';
-  import TextInput from '$lib/components/input/TextInput.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import * as Dialog from '$lib/components/ui/dialog';
+  import { TextInput } from '@openshock/svelte-core/components/input';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { toast } from 'svelte-sonner';
 

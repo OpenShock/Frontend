@@ -1,9 +1,9 @@
 <script lang="ts">
   import { Volume2, Waves, Zap } from '@lucide/svelte';
-  import { formatDurationSeconds } from '$lib/utils';
-  import { Label } from '$lib/components/ui/label';
-  import { Slider } from '$lib/components/ui/slider';
-  import { Switch } from '$lib/components/ui/switch';
+  import { formatDurationSeconds } from '@openshock/svelte-core/utils';
+  import { Label } from '@openshock/svelte-core/components/ui/label';
+  import { Slider } from '@openshock/svelte-core/components/ui/slider';
+  import { Switch } from '@openshock/svelte-core/components/ui/switch';
   import LiveControlIcon from '../svg/LiveControlIcon.svelte';
   import type { Component } from 'svelte';
 
@@ -56,7 +56,7 @@
         <Label class="text-xs">Max Intensity</Label>
         <span class="text-muted-foreground font-mono text-xs">{limits.intensity}%</span>
       </div>
-      <Slider type="single" bind:value={limits.intensity} min={0} max={100} step={1} />
+      <Slider type="single" bind:value={limits.intensity} min={1} max={100} step={1} />
     </div>
 
     <div class="space-y-1.5">
@@ -66,7 +66,7 @@
           >{formatDurationSeconds(limits.duration / 1000)}</span
         >
       </div>
-      <Slider type="single" bind:value={limits.duration} min={0} max={30_000} step={100} />
+      <Slider type="single" bind:value={limits.duration} min={300} max={30_000} step={100} />
     </div>
   </div>
 </div>

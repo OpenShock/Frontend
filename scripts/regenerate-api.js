@@ -34,4 +34,16 @@ console.log('Sharing v1 client with v2...');
 }
 
 console.log('');
+console.log('Formatting generated output...');
+try {
+  execSync(`pnpm exec prettier --write ${OUTPUT_DIRS.join(' ')}`, {
+    stdio: 'inherit',
+    shell: true,
+  });
+} catch {
+  console.error('Formatting failed.');
+  process.exit(1);
+}
+
+console.log('');
 console.log('API regeneration complete.');

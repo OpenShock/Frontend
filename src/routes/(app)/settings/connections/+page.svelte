@@ -7,12 +7,12 @@
   import { page } from '$app/state';
   import type { OAuthConnectionResponse } from '$lib/api';
   import { GetOAuthAuthorizeUrl } from '$lib/api/next/oauth';
-  import Container from '$lib/components/Container.svelte';
-  import { Button } from '$lib/components/ui/button';
-  import * as Card from '$lib/components/ui/card';
-  import EmptyState from '$lib/components/EmptyState.svelte';
-  import * as Dropdown from '$lib/components/ui/dropdown-menu';
-  import * as Separator from '$lib/components/ui/separator';
+  import { Container } from '@openshock/svelte-core/components';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Card from '@openshock/svelte-core/components/ui/card';
+  import { EmptyState } from '@openshock/svelte-core/components';
+  import * as Dropdown from '@openshock/svelte-core/components/ui/dropdown-menu';
+  import * as Separator from '@openshock/svelte-core/components/ui/separator';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';

@@ -3,15 +3,15 @@
   import { Trash2 } from '@lucide/svelte';
   import { ComparePermissionsAndLimits } from '$lib/comparers/UserShareComparer';
   import RestrictionsSelector from '$lib/components/shares/restrictions-selector.svelte';
-  import { Spinner } from '$lib/components/ui/spinner';
-  import * as Avatar from '$lib/components/ui/avatar';
-  import { Button } from '$lib/components/ui/button';
-  import * as Drawer from '$lib/components/ui/drawer';
-  import * as Tabs from '$lib/components/ui/tabs';
+  import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
+  import * as Avatar from '@openshock/svelte-core/components/ui/avatar';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Drawer from '@openshock/svelte-core/components/ui/drawer';
+  import * as Tabs from '@openshock/svelte-core/components/ui/tabs';
   import MultiPauseToggle from '$lib/components/utils/MultiPauseToggle.svelte';
   import PauseToggle from '$lib/components/utils/PauseToggle.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { dialog } from '$lib/components/dialog-manager/dialog-store.svelte';
+  import { dialog } from '@openshock/svelte-core/components/dialog-manager';
   import { userSharesState, refreshUserShares } from '$lib/state/user-shares-state.svelte';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
@@ -192,7 +192,7 @@
 
 <Drawer.Root bind:open={editDrawer} direction="right">
   <Drawer.Content>
-    <div class="mx-auto flex h-full max-h-[100vh] w-full flex-col">
+    <div class="mx-auto flex h-full max-h-screen w-full flex-col">
       <Drawer.Header class="shrink-0 border-b">
         <Drawer.Description class="text-muted-foreground text-xs">
           Editing shares for

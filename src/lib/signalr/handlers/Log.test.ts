@@ -85,11 +85,10 @@ describe('handleSignalrLog dispatch', () => {
     const cb = vi.fn();
     trackListener('l-1', 'sh-1', cb);
 
-    const log = makeLog();
-    handleSignalrLog(validSender, [log]);
+    handleSignalrLog(validSender, [makeLog()]);
 
     expect(cb).toHaveBeenCalledOnce();
-    expect(cb).toHaveBeenCalledWith(validSender, log);
+    expect(cb).toHaveBeenCalledWith('sh-1', ControlType.Vibrate, 300, 50);
   });
 
   it('does not call listener for a different shocker', () => {

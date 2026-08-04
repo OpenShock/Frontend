@@ -1,4 +1,4 @@
-import { dev } from '$app/environment';
+import { dev } from '$app/env';
 import { isControlLog, type ControlLog } from '$lib/signalr/models/ControlLog';
 import { isControlLogSender, type ControlLogSender } from '$lib/signalr/models/ControlLogSender';
 import { toast } from 'svelte-sonner';

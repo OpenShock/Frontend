@@ -3,7 +3,11 @@
   import { asset, resolve } from '$app/paths';
   import { page } from '$app/state';
   import { PUBLIC_SITE_NAME } from '$env/static/public';
-  import { BasicTags, OpenGraphTags, TwitterSummaryTags } from '$lib/components/metadata';
+  import {
+    BasicTags,
+    OpenGraphTags,
+    TwitterSummaryTags,
+  } from '@openshock/svelte-core/components/metadata';
   import ArrowLeft from '@lucide/svelte/icons/arrow-left';
   import { isValidRedirectURL } from '$lib/utils/url';
 
@@ -19,7 +23,7 @@
     title: 'Service Unavailable',
     description: 'OpenShock is currently unavailable',
     image: {
-      src: asset('/logo.svg'),
+      src: asset('/Logo.svg'),
       alt: 'OpenShock Logo',
     },
   };
@@ -37,7 +41,7 @@
 <TwitterSummaryTags type="summary" {...meta} site="@OpenShockORG" creator="@OpenShockORG" />
 
 <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
-  <div class="text-primary/20 select-none text-[8rem] font-black leading-none sm:text-[12rem]">
+  <div class="text-primary/20 text-[8rem] leading-none font-black select-none sm:text-[12rem]">
     {page.status}
   </div>
   <p class="text-foreground mt-2 text-xl font-semibold">

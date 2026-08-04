@@ -11,9 +11,9 @@ updates:
     schedule:
       interval: weekly
       day: monday
-      time: '06:00'
+      time: '10:00'
     groups:
-      npm-dependencies:
+      npm:
         patterns:
           - '*' # Group all updates together
 
@@ -23,7 +23,7 @@ updates:
     schedule:
       interval: weekly
       day: monday
-      time: '06:00'
+      time: '10:00'
     groups:
       github-actions:
         patterns:

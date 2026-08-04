@@ -1,9 +1,9 @@
 <script lang="ts">
   import { parseAbsoluteToLocal, type ZonedDateTime } from '@internationalized/date';
-  import DateTimePicker from '$lib/components/datetime-picker/date-time-picker.svelte';
-  import * as Select from '$lib/components/ui/select';
-  import { GetValResColor } from '$lib/types/ValidationResult';
-  import { durationBetween, formatElapsed } from '$lib/utils';
+  import { DateTimePicker } from '@openshock/svelte-core/components/datetime-picker';
+  import * as Select from '@openshock/svelte-core/components/ui/select';
+  import { GetValResColor } from '@openshock/svelte-core/types/ValidationResult.js';
+  import { durationBetween, formatElapsed } from '@openshock/svelte-core/utils';
 
   interface Props {
     option?: string;

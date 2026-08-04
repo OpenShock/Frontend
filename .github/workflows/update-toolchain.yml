@@ -1,0 +1,164 @@
+on:
+  schedule:
+    - cron: '0 6 * * 1' # weekly, Monday 06:00 UTC — matches dependabot.yml's cadence
+  workflow_dispatch: # Manually invoked by user.
+
+name: update-toolchain
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-toolchain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Resolve latest Node, pnpm, and base OS versions
+        id: resolve
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          from_line="$(grep -m1 '^FROM node:' Dockerfile)"
+          if grep -q 'alpine' <<<"$from_line"; then
+            base_family=alpine
+          elif grep -qE '(slim|bookworm|trixie|bullseye)' <<<"$from_line"; then
+            base_family=debian
+          else
+            echo "::error::Unrecognized base image family in Dockerfile FROM line: $from_line"
+            exit 1
+          fi
+
+          # Absolute latest Node release across all lines (not locked to the current
+          # major) — nodejs.org's index is already sorted newest-first.
+          new_node="$(curl -fsSL https://nodejs.org/dist/index.json | jq -r '.[0].version' | sed 's/^v//')"
+
+          new_pnpm="$(curl -fsSL https://registry.npmjs.org/pnpm | jq -r '."dist-tags".latest')"
+
+          tags_json="$(curl -fsSL "https://hub.docker.com/v2/repositories/library/node/tags?page_size=100&name=${new_node}")"
+
+          if [ "$base_family" = alpine ]; then
+            # Alpine tags are plain numeric (alpine3.23, alpine3.24, ...) - sort and take the highest.
+            new_base="$(jq -r '.results[].name' <<<"$tags_json" \
+              | grep -E "^${new_node}-alpine[0-9]+\.[0-9]+$" \
+              | sed -E 's/^.*-alpine//' \
+              | sort -V | tail -n1)"
+          else
+            # Debian codenames aren't lexically ordered, so resolve via digest: the plain
+            # "-slim" tag is kept aliased upstream to whichever codename is current stable.
+            slim_digest="$(jq -r --arg t "${new_node}-slim" '.results[] | select(.name == $t) | .digest' <<<"$tags_json")"
+            new_base="$(jq -r --arg d "$slim_digest" --arg plain "${new_node}-slim" \
+              '.results[] | select(.name | endswith("-slim")) | select(.name != $plain) | select(.digest == $d) | .name' <<<"$tags_json" \
+              | sed -E 's/^.*-([a-z]+)-slim$/\1/' | head -n1)"
+          fi
+
+          if [ -z "$new_node" ] || [ -z "$new_pnpm" ] || [ -z "$new_base" ]; then
+            echo "::error::Failed to resolve one or more versions (node=$new_node pnpm=$new_pnpm base=$new_base)"
+            exit 1
+          fi
+
+          {
+            echo "node=$new_node"
+            echo "pnpm=$new_pnpm"
+            echo "base_family=$base_family"
+            echo "base_version=$new_base"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Apply version updates
+        shell: bash
+        env:
+          NEW_NODE: ${{ steps.resolve.outputs.node }}
+          NEW_PNPM: ${{ steps.resolve.outputs.pnpm }}
+          BASE_FAMILY: ${{ steps.resolve.outputs.base_family }}
+          NEW_BASE: ${{ steps.resolve.outputs.base_version }}
+        run: |
+          set -euo pipefail
+
+          sed -i "s/^ARG NODE_VERSION=.*/ARG NODE_VERSION=${NEW_NODE}/" Dockerfile
+          sed -i "s/^ARG PNPM_VERSION=.*/ARG PNPM_VERSION=${NEW_PNPM}/" Dockerfile
+
+          case "$BASE_FAMILY" in
+            alpine)
+              sed -i "s/^ARG ALPINE_VERSION=.*/ARG ALPINE_VERSION=${NEW_BASE}/" Dockerfile
+              ;;
+            debian)
+              # Convention: if/when the Dockerfile switches to a Debian-slim base, name its
+              # codename ARG `DEBIAN_VERSION` (e.g. `trixie`) so this step keeps working as-is.
+              sed -i "s/^ARG DEBIAN_VERSION=.*/ARG DEBIAN_VERSION=${NEW_BASE}/" Dockerfile
+              ;;
+          esac
+
+          echo "$NEW_NODE" > .nvmrc
+
+          sed -i "s/\"packageManager\": *\"pnpm@[^\"]*\"/\"packageManager\": \"pnpm@${NEW_PNPM}\"/" package.json
+
+          # Keep engines.node's major in sync too, since we now track Node's absolute
+          # latest release rather than staying locked to whatever major was pinned before.
+          new_node_major="${NEW_NODE%%.*}"
+          sed -i -E "s/(\"node\": *\")\^[0-9]+(\")/\1^${new_node_major}\2/" package.json
+
+      - name: Check for changes
+        id: diff
+        shell: bash
+        run: |
+          if git diff --quiet -- Dockerfile .nvmrc package.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Validate the bump ourselves: a PR opened by the default GITHUB_TOKEN does not
+      # trigger ci-build.yml's `pull_request` workflow (GitHub's loop-prevention rule),
+      # so run the same checks here before opening the PR rather than relying on that.
+      - name: Install Node.js
+        if: steps.diff.outputs.changed == 'true'
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+
+      - name: Install pnpm & dependencies
+        if: steps.diff.outputs.changed == 'true'
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+        with:
+          cache: true
+          run_install: |
+            - args: [--frozen-lockfile, --strict-peer-dependencies]
+
+      - name: Check
+        if: steps.diff.outputs.changed == 'true'
+        shell: bash
+        run: pnpm run check
+
+      - name: Test
+        if: steps.diff.outputs.changed == 'true'
+        shell: bash
+        run: pnpm test:unit
+
+      - name: Build container image
+        if: steps.diff.outputs.changed == 'true'
+        shell: bash
+        run: docker build --pull -f Dockerfile -t toolchain-update-check:latest .
+
+      - name: Open pull request
+        if: steps.diff.outputs.changed == 'true'
+        uses: OpenShock/actions/open-pr-from-diff@21ca2d511bca92cf24fb502fa302f82700822584 # v1.1.1
+        with:
+          branch: chore/update-toolchain-versions
+          commit-message: 'chore: update Node/pnpm/base image versions'
+          title: 'chore: update Node/pnpm/base image versions'
+          body: |
+            Automated weekly update of the container toolchain.
+
+            | Component | New version |
+            |---|---|
+            | Node (`NODE_VERSION` / `.nvmrc` / `engines.node`) | `${{ steps.resolve.outputs.node }}` |
+            | pnpm (`PNPM_VERSION` / `packageManager`) | `${{ steps.resolve.outputs.pnpm }}` |
+            | Base OS (`${{ steps.resolve.outputs.base_family }}`) | `${{ steps.resolve.outputs.base_version }}` |
+
+            `pnpm run check`, `pnpm test:unit`, and a container build were run
+            against these new versions before this PR was opened.

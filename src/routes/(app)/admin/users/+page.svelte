@@ -13,6 +13,7 @@
     RenderRedCell,
   } from '$lib/components/Table/ColumnUtils';
   import DataTableActions from './data-table-actions.svelte';
+  import { odataAnd, odataSearch } from '$lib/utils/odata';
 
   const PasswordHashTypeRenderer = (passwordHashType: PasswordHashingAlgorithm) => {
     if (passwordHashType !== PasswordHashingAlgorithm.BCrypt)
@@ -37,44 +38,18 @@
       a ? RenderCell(a) : RenderRedCell('None')
     ),
   ];
-
-  function escapeQuotes(str: string) {
-    if (/[ '"\\]/.test(str)) {
-      const escaped = str.replace(/(['"\\])/g, '\\$1');
-      return `'${escaped}'`;
-    }
-    return str;
-  }
-
-  /**
-   * Build a single filter clause for `key` and `searchString`.
-   * - If there is any unescaped `%`, uses `ilike`.
-   * - Otherwise uses `eq`.
-   */
-  function createSearchQuery(key: string, searchString: string): string | undefined {
-    if (!searchString) return undefined;
-
-    // Detect any % not preceded by a backslash
-    const hasWildcard = /(^|[^\\])%/.test(searchString);
-
-    // Wrap & escape quotes/backslashes as before
-    const escaped = escapeQuotes(searchString);
-
-    const operator = hasWildcard ? 'ilike' : 'eq';
-    return `${key} ${operator} ${escaped}`;
-  }
 </script>
 
 <script lang="ts">
   import type { SortingState } from '@tanstack/table-core';
-  import Container from '$lib/components/Container.svelte';
+  import { Container } from '@openshock/svelte-core/components';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import PaginationFooter from '$lib/components/Table/PaginationFooter.svelte';
-  import { CardHeader, CardTitle } from '$lib/components/ui/card';
-  import { Input } from '$lib/components/ui/input';
+  import { CardHeader, CardTitle } from '@openshock/svelte-core/components/ui/card';
+  import { Input } from '@openshock/svelte-core/components/ui/input';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import { useDebounce } from '$lib/utils/debounce';
+  import { useDebounce } from '@openshock/svelte-core/utils/debounce.js';
 
   registerBreadcrumbs(() => [{ label: 'Users' }]);
 
@@ -121,15 +96,7 @@
 
   const applyFilterQuery = useDebounce((query: string | undefined) => (filterQuery = query), 800);
   $effect(() => {
-    const queries: string[] = [];
-
-    const nameQ = createSearchQuery('name', nameSearch);
-    if (nameQ) queries.push(nameQ);
-
-    const emailQ = createSearchQuery('email', emailSearch);
-    if (emailQ) queries.push(emailQ);
-
-    const query = queries.length > 0 ? queries.join(' and ') : undefined;
+    const query = odataAnd(odataSearch('name', nameSearch), odataSearch('email', emailSearch));
     if (query === filterQuery) return;
 
     applyFilterQuery(query);

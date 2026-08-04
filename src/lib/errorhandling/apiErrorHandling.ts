@@ -1,4 +1,4 @@
-import { dev } from '$app/environment';
+import { dev } from '$app/env';
 import type { ResponseError } from '$lib/api';
 import { type ProblemDetails, isProblemDetails } from '$lib/errorhandling/ProblemDetails';
 import { isError, isFetchError, isResponseError, isTypeError } from '$lib/typeguards/errorGuards';

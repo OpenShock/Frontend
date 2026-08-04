@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('$lib/api', () => ({
-  devicesGetLiveControlGatewayInfo: vi.fn(),
+  hubManagementV1Api: { devicesGetLiveControlGatewayInfo: vi.fn() },
 }));
 
 vi.mock('svelte-sonner', () => ({
@@ -128,8 +128,8 @@ describe('LiveDeviceConnection.connect', () => {
   it('sets state to Connecting then Connected on success', async () => {
     const { LiveDeviceConnection, LiveConnectionState } =
       await import('./live-control-state.svelte');
-    const { devicesGetLiveControlGatewayInfo } = await import('$lib/api');
-    vi.mocked(devicesGetLiveControlGatewayInfo).mockResolvedValue({
+    const { hubManagementV1Api } = await import('$lib/api');
+    vi.mocked(hubManagementV1Api.devicesGetLiveControlGatewayInfo).mockResolvedValue({
       data: { gateway: 'gw.example.com', country: 'US' },
       message: '',
     } as any);
@@ -148,8 +148,8 @@ describe('LiveDeviceConnection.connect', () => {
 
   it('sets gateway and country from API response', async () => {
     const { LiveDeviceConnection } = await import('./live-control-state.svelte');
-    const { devicesGetLiveControlGatewayInfo } = await import('$lib/api');
-    vi.mocked(devicesGetLiveControlGatewayInfo).mockResolvedValue({
+    const { hubManagementV1Api } = await import('$lib/api');
+    vi.mocked(hubManagementV1Api.devicesGetLiveControlGatewayInfo).mockResolvedValue({
       data: { gateway: 'gw.openshock.app', country: 'DE' },
       message: '',
     } as any);
@@ -163,8 +163,8 @@ describe('LiveDeviceConnection.connect', () => {
 
   it('constructs WebSocket with correct URL', async () => {
     const { LiveDeviceConnection } = await import('./live-control-state.svelte');
-    const { devicesGetLiveControlGatewayInfo } = await import('$lib/api');
-    vi.mocked(devicesGetLiveControlGatewayInfo).mockResolvedValue({
+    const { hubManagementV1Api } = await import('$lib/api');
+    vi.mocked(hubManagementV1Api.devicesGetLiveControlGatewayInfo).mockResolvedValue({
       data: { gateway: 'gw.example.com', country: 'US' },
       message: '',
     } as any);
@@ -178,9 +178,9 @@ describe('LiveDeviceConnection.connect', () => {
   it('goes Disconnected and shows toast when API returns no data', async () => {
     const { LiveDeviceConnection, LiveConnectionState } =
       await import('./live-control-state.svelte');
-    const { devicesGetLiveControlGatewayInfo } = await import('$lib/api');
+    const { hubManagementV1Api } = await import('$lib/api');
     const { toast } = await import('svelte-sonner');
-    vi.mocked(devicesGetLiveControlGatewayInfo).mockResolvedValue({
+    vi.mocked(hubManagementV1Api.devicesGetLiveControlGatewayInfo).mockResolvedValue({
       data: null,
       message: '',
     } as any);
@@ -195,9 +195,11 @@ describe('LiveDeviceConnection.connect', () => {
   it('goes Disconnected and shows toast when API throws', async () => {
     const { LiveDeviceConnection, LiveConnectionState } =
       await import('./live-control-state.svelte');
-    const { devicesGetLiveControlGatewayInfo } = await import('$lib/api');
+    const { hubManagementV1Api } = await import('$lib/api');
     const { toast } = await import('svelte-sonner');
-    vi.mocked(devicesGetLiveControlGatewayInfo).mockRejectedValue(new Error('Network'));
+    vi.mocked(hubManagementV1Api.devicesGetLiveControlGatewayInfo).mockRejectedValue(
+      new Error('Network')
+    );
 
     const conn = new LiveDeviceConnection('dev-1');
     await conn.connect();
@@ -209,8 +211,8 @@ describe('LiveDeviceConnection.connect', () => {
   it('goes Disconnected when WebSocket fires close event', async () => {
     const { LiveDeviceConnection, LiveConnectionState } =
       await import('./live-control-state.svelte');
-    const { devicesGetLiveControlGatewayInfo } = await import('$lib/api');
-    vi.mocked(devicesGetLiveControlGatewayInfo).mockResolvedValue({
+    const { hubManagementV1Api } = await import('$lib/api');
+    vi.mocked(hubManagementV1Api.devicesGetLiveControlGatewayInfo).mockResolvedValue({
       data: { gateway: 'gw.example.com', country: 'US' },
       message: '',
     } as any);
@@ -226,8 +228,8 @@ describe('LiveDeviceConnection.connect', () => {
   it('resets shocker live state on disconnect via WebSocket close', async () => {
     const { LiveDeviceConnection, LiveConnectionState } =
       await import('./live-control-state.svelte');
-    const { devicesGetLiveControlGatewayInfo } = await import('$lib/api');
-    vi.mocked(devicesGetLiveControlGatewayInfo).mockResolvedValue({
+    const { hubManagementV1Api } = await import('$lib/api');
+    vi.mocked(hubManagementV1Api.devicesGetLiveControlGatewayInfo).mockResolvedValue({
       data: { gateway: 'gw.example.com', country: 'US' },
       message: '',
     } as any);
@@ -261,8 +263,8 @@ describe('LiveDeviceConnection.disconnect', () => {
 describe('LiveDeviceConnection WebSocket messages', () => {
   it('replies with Pong on Ping message', async () => {
     const { LiveDeviceConnection } = await import('./live-control-state.svelte');
-    const { devicesGetLiveControlGatewayInfo } = await import('$lib/api');
-    vi.mocked(devicesGetLiveControlGatewayInfo).mockResolvedValue({
+    const { hubManagementV1Api } = await import('$lib/api');
+    vi.mocked(hubManagementV1Api.devicesGetLiveControlGatewayInfo).mockResolvedValue({
       data: { gateway: 'gw.example.com', country: 'US' },
       message: '',
     } as any);
@@ -281,8 +283,8 @@ describe('LiveDeviceConnection WebSocket messages', () => {
 
   it('updates latency on LatencyAnnounce message', async () => {
     const { LiveDeviceConnection } = await import('./live-control-state.svelte');
-    const { devicesGetLiveControlGatewayInfo } = await import('$lib/api');
-    vi.mocked(devicesGetLiveControlGatewayInfo).mockResolvedValue({
+    const { hubManagementV1Api } = await import('$lib/api');
+    vi.mocked(hubManagementV1Api.devicesGetLiveControlGatewayInfo).mockResolvedValue({
       data: { gateway: 'gw.example.com', country: 'US' },
       message: '',
     } as any);
@@ -299,8 +301,8 @@ describe('LiveDeviceConnection WebSocket messages', () => {
 
   it('ignores malformed JSON messages without throwing', async () => {
     const { LiveDeviceConnection } = await import('./live-control-state.svelte');
-    const { devicesGetLiveControlGatewayInfo } = await import('$lib/api');
-    vi.mocked(devicesGetLiveControlGatewayInfo).mockResolvedValue({
+    const { hubManagementV1Api } = await import('$lib/api');
+    vi.mocked(hubManagementV1Api.devicesGetLiveControlGatewayInfo).mockResolvedValue({
       data: { gateway: 'gw.example.com', country: 'US' },
       message: '',
     } as any);
@@ -317,9 +319,9 @@ describe('LiveDeviceConnection WebSocket messages', () => {
 describe('LiveDeviceConnection.sendFrame', () => {
   it('sends a Frame message when connected', async () => {
     const { LiveDeviceConnection } = await import('./live-control-state.svelte');
-    const { devicesGetLiveControlGatewayInfo } = await import('$lib/api');
+    const { hubManagementV1Api } = await import('$lib/api');
     const { ControlType } = await import('$lib/signalr/models/ControlType');
-    vi.mocked(devicesGetLiveControlGatewayInfo).mockResolvedValue({
+    vi.mocked(hubManagementV1Api.devicesGetLiveControlGatewayInfo).mockResolvedValue({
       data: { gateway: 'gw.example.com', country: 'US' },
       message: '',
     } as any);
@@ -392,8 +394,8 @@ describe('toggleShockerLiveControl', () => {
   it('sets isLive=true and starts connect when toggling on', async () => {
     const { toggleShockerLiveControl, liveConnections } =
       await import('./live-control-state.svelte');
-    const { devicesGetLiveControlGatewayInfo } = await import('$lib/api');
-    vi.mocked(devicesGetLiveControlGatewayInfo).mockResolvedValue({
+    const { hubManagementV1Api } = await import('$lib/api');
+    vi.mocked(hubManagementV1Api.devicesGetLiveControlGatewayInfo).mockResolvedValue({
       data: { gateway: 'gw.example.com', country: 'US' },
       message: '',
     } as any);
@@ -407,8 +409,8 @@ describe('toggleShockerLiveControl', () => {
   it('sets isLive=false when toggling off (already live)', async () => {
     const { toggleShockerLiveControl, liveConnections } =
       await import('./live-control-state.svelte');
-    const { devicesGetLiveControlGatewayInfo } = await import('$lib/api');
-    vi.mocked(devicesGetLiveControlGatewayInfo).mockResolvedValue({
+    const { hubManagementV1Api } = await import('$lib/api');
+    vi.mocked(hubManagementV1Api.devicesGetLiveControlGatewayInfo).mockResolvedValue({
       data: { gateway: 'gw.example.com', country: 'US' },
       message: '',
     } as any);

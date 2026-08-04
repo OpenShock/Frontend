@@ -1,11 +1,11 @@
-import { renderComponent } from '$lib/components/ui/data-table';
+import { getReadableUserAgentName } from '$lib/utils';
+import { renderComponent } from '@openshock/svelte-core/components/ui/data-table/index.js';
 import {
   durationBetween,
   formatDuration,
   formatDurationSeconds,
   formatElapsed,
-  getReadableUserAgentName,
-} from '$lib/utils';
+} from '@openshock/svelte-core/utils/index.js';
 import {
   sortingFns,
   type BuiltInSortingFn,

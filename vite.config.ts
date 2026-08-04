@@ -1,11 +1,11 @@
 /// <reference types="vitest/config" />
+import adapterCloudflare from '@sveltejs/adapter-cloudflare';
+import adapterNode from '@sveltejs/adapter-node';
+import { type KitConfig } from '@sveltejs/kit';
 import { sveltekit } from '@sveltejs/kit/vite';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import tailwindcss from '@tailwindcss/vite';
-import boxen from 'boxen';
-import chalk from 'chalk';
-import dns from 'node:dns/promises';
-import net from 'node:net';
-import os from 'node:os';
+import * as child_process from 'node:child_process';
 import { env } from 'node:process';
 import license from 'rollup-plugin-license';
 import {
@@ -18,6 +18,7 @@ import {
 } from 'vite';
 import devtoolsJson from 'vite-plugin-devtools-json';
 import mkcert from 'vite-plugin-mkcert';
+import { localDevChecksPlugin } from './vite-plugins/local-dev-checks.ts';
 
 function jsBannerPlugin(banner: string): Plugin {
   // Matches preserved/legal comment markers that OXC's minifier strips when
@@ -44,122 +45,160 @@ function jsBannerPlugin(banner: string): Plugin {
         const hasLegal = Object.keys(chunk.modules).some((id) => modulesWithLegal.has(id));
         if (hasLegal) {
           chunk.code = banner + '\n' + chunk.code;
+          // The banner adds one generated line — shift the sourcemap mappings down
+          // by one to match (a leading ';' is an empty line in the VLQ encoding).
+          if (chunk.map) {
+            chunk.map.mappings = ';' + chunk.map.mappings;
+          }
         }
       }
     },
   };
 }
 
-const printError = (msg: string) => console.log(chalk.red.bold(msg));
-const printInfo = (msg: string) => console.log(chalk.blue.bold(msg));
-const printWhite = (msg: string) => console.log(chalk.white.bold(msg));
-
 const isTruthy = (value?: string) => value === 'true' || value === '1';
 
-async function ensureFqdnRedirect(expectedHost: string, fqdn: string) {
-  let resolvedAddress: string | null = null;
+// ---------------------------------------------------------------------------
+// SvelteKit configuration (previously svelte.config.js). Passing it to the
+// sveltekit() plugin is supported since kit 2.62 and keeps environment
+// detection, adapter selection, and the CSP in a single, type-checked file.
+// ---------------------------------------------------------------------------
 
+// Determine if we are running on Cloudflare (Pages git integration or Workers Builds)
+const isGithubActions = env.GITHUB_ACTIONS === 'true';
+const isWorkersCI = env.WORKERS_CI === '1';
+const isCloudflare = env.CF_PAGES === '1' || isWorkersCI;
+const isDocker = env.DOCKER === 'true';
+// Don't trust NODE_ENV — tools like svelte-check load this file mid-process and
+// can have NODE_ENV='production' set by transitively-imported plugins (vite,
+// vite-plugin-svelte) even though no production build is actually happening.
+// `pnpm build`/`pnpm preview` set BUILD_ENV=production explicitly via cross-env;
+// CI/Cloudflare/Docker each have their own flag.
+const isProductionBuild =
+  isGithubActions || isCloudflare || isDocker || env.BUILD_ENV === 'production';
+const buildMode = isProductionBuild ? 'production' : 'development';
+
+const dotenv = { ...env, ...loadEnv(buildMode, process.cwd(), 'PUBLIC_') };
+
+function getGitHash(): string | undefined {
+  if (isGithubActions) return env.GITHUB_SHA;
+  if (isWorkersCI) return env.WORKERS_CI_COMMIT_SHA;
+  // Cloudflare Pages prefixes its build vars with CF_PAGES_
+  if (isCloudflare) return env.CF_PAGES_COMMIT_SHA;
+  if (isDocker) return env.GIT_COMMIT_SHA;
+
+  return child_process.execSync('git rev-parse HEAD').toString().trim();
+}
+
+function getWsUrlFromHttpUrl(url: string | undefined): string {
+  if (!url || (!url.startsWith('https://') && !url.startsWith('http://'))) {
+    throw new Error(`Invalid URL [${url}]`);
+  }
+
+  return url.replace(/^http/, 'ws');
+}
+
+function getOrigin(url: string | undefined): string {
   try {
-    const result = await dns.lookup(fqdn);
-    resolvedAddress = result.address;
-    if (resolvedAddress === expectedHost) {
-      return;
-    }
-  } catch {
-    // DNS lookup failed — treat as misconfigured
+    return new URL(url ?? '').origin;
+  } catch (error) {
+    throw new Error(`Invalid URL [${url}]`, { cause: error });
   }
-
-  // Display the problem
-  printError('Local development host misconfiguration detected\n');
-  printWhite(`Domain: ${chalk.green.bold(fqdn)}`);
-  printWhite(`Expected IP: ${chalk.green.bold(expectedHost)}`);
-  printWhite(`Actual IP: ${chalk.bgRed.bold(resolvedAddress ?? '<no DNS entry>')}\n`);
-  printWhite('This prevents the local frontend from using cookies from the API.\n');
-
-  // Platform-specific fixes
-  const platform = os.platform();
-
-  if (platform === 'linux' || platform === 'darwin') {
-    printWhite('To add the entry to your hosts file, run this command:\n');
-    printInfo(`  echo "${expectedHost} ${fqdn}" | sudo tee -a /etc/hosts\n`);
-
-    if (platform === 'linux') {
-      const httpsMessage = [
-        'Node.js needs permission to serve HTTPS on port 443.\n',
-        'Option 1 (Recommended): Set up a reverse proxy',
-        '  Use Nginx or Caddy to proxy traffic to your Node server.',
-        '  This is more secure and follows best practices.\n',
-        'Option 2 (Quick fix): Grant Node.js permission to bind to privileged ports',
-        chalk.blue.bold(`  sudo setcap 'cap_net_bind_service=+ep' $(which node)\n`),
-        chalk.yellow.bold('  ⚠️  Security note: This allows Node to bind to ANY port below 1024.'),
-        chalk.yellow.bold('  Only use this in trusted development environments.'),
-      ].join('\n');
-
-      console.log(
-        boxen(httpsMessage, {
-          padding: 1,
-          margin: 1,
-          borderStyle: 'round',
-          borderColor: 'yellow',
-          title: 'Additional Linux Setup Required',
-          titleAlignment: 'center',
-        })
-      );
-      console.log('');
-    }
-  } else if (platform === 'win32') {
-    printWhite(
-      'To add the entry to your hosts file, run this command in PowerShell as Administrator:\n'
-    );
-    printInfo(
-      `  Add-Content -Path "C:\\Windows\\System32\\drivers\\etc\\hosts" -Value "${expectedHost} ${fqdn}"\n`
-    );
-  } else {
-    printWhite(`To fix: Update your hosts file to resolve "${fqdn}" to ${expectedHost}\n`);
-  }
-
-  printWhite('After updating the hosts file, restart the development server.\n');
-  process.exit(1);
 }
 
-function getPlugins(useLocalRedirect: boolean, redirectFqdn: string | null): PluginOption[] {
-  const plugins: PluginOption = [];
-
-  if (useLocalRedirect) {
-    plugins.push(mkcert());
-    if (redirectFqdn) {
-      plugins.push(localDevChecksPlugin(redirectFqdn));
-    }
+function getSvelteBasePath(): '' | `/${string}` {
+  try {
+    const url = new URL(dotenv.PUBLIC_SITE_URL ?? '');
+    // URL.pathname always starts with '/', which the KitConfig type can't know.
+    return url.pathname === '/' ? '' : (url.pathname as `/${string}`);
+  } catch (error) {
+    throw new Error(`PUBLIC_SITE_URL is not a valid URL: ${dotenv.PUBLIC_SITE_URL}`, {
+      cause: error,
+    });
   }
-
-  plugins.push(jsBannerPlugin('/*! For licenses information, see LICENSES.txt */'));
-  plugins.push(tailwindcss());
-  plugins.push(sveltekit());
-  plugins.push(devtoolsJson());
-
-  plugins.push(
-    license({
-      thirdParty: {
-        includePrivate: true,
-        includeSelf: true,
-        multipleVersions: true,
-        output: {
-          file: './.svelte-kit/output/client/LICENSES.txt', // TODO: This seems like a hack, check if theres a better way...
-        },
-      },
-    }) as PluginOption
-  ); // TODO: Figure out why typescript thinks this is incompatible ("as PluginOption" is mandatory for svelte check to succeed)
-
-  return plugins;
 }
+
+// CspDirectives itself isn't exported by @sveltejs/kit — derive it from the
+// (exported) KitConfig type instead of duplicating its shape here.
+type CspDirectives = NonNullable<NonNullable<KitConfig['csp']>['directives']>;
+
+const commitHash = getGitHash();
+
+// kit options sit at the top level here — the only layout difference to svelte.config.js.
+const sveltekitConfig = {
+  preprocess: vitePreprocess(),
+  vitePlugin: {
+    inspector: true,
+  },
+  compilerOptions: {
+    runes: true,
+  },
+  // Use the appropriate adapter
+  adapter: isCloudflare ? adapterCloudflare() : adapterNode(),
+  paths: {
+    base: getSvelteBasePath(),
+  },
+  csp: {
+    mode: 'nonce',
+    // Cast: several sources are runtime strings (PUBLIC_* env), which can't be checked
+    // against the HostSource template-literal types at compile time.
+    directives: {
+      'default-src': ['self'],
+      'frame-src': ['https://challenges.cloudflare.com'],
+      // Explicit rather than inherited: without it, worker-src would fall back to
+      // script-src and pick up the third-party script hosts allowed there.
+      'worker-src': ['self'],
+      'style-src': ['self', 'unsafe-inline'],
+      'img-src': ['self', 'https://*.wp.com', 'https://www.gravatar.com'],
+      'connect-src': [
+        'self',
+        dotenv.PUBLIC_BACKEND_API_URL,
+        getWsUrlFromHttpUrl(dotenv.PUBLIC_BACKEND_API_URL),
+        dotenv.PUBLIC_GATEWAY_CSP_WILDCARD,
+        getWsUrlFromHttpUrl(dotenv.PUBLIC_GATEWAY_CSP_WILDCARD),
+        'https://firmware.openshock.org',
+        'https://api.pwnedpasswords.com/range/',
+        'https://cloudflareinsights.com',
+        // SigNoz / OpenTelemetry log + trace shipping endpoint origins.
+        getOrigin(dotenv.PUBLIC_SIGNOZ_LOGS_URL),
+        getOrigin(dotenv.PUBLIC_SIGNOZ_TRACES_URL),
+      ],
+      'script-src': [
+        'self',
+        'https://challenges.cloudflare.com/turnstile/',
+        'https://static.cloudflareinsights.com',
+      ],
+      'object-src': ['none'],
+      'base-uri': ['self'],
+      // form-action does NOT fall back to default-src — without it, injected HTML
+      // could point a <form> at an attacker origin. The API origin is needed for the
+      // OAuth buttons' cross-origin POST; note Chrome also enforces form-action on
+      // the post-submit redirect to the OAuth provider.
+      'form-action': ['self', dotenv.PUBLIC_BACKEND_API_URL],
+      // Ignored on prerendered pages (meta-tag CSP) — the _headers file's
+      // X-Frame-Options covers those on Cloudflare.
+      'frame-ancestors': ['none'],
+    } as CspDirectives,
+  },
+  version: {
+    name: commitHash,
+  },
+  experimental: {
+    // Server-side OpenTelemetry spans for handle/load/form actions, collected by
+    // src/instrumentation.server.ts. Experimental (kit ≥2.31).
+    tracing: { server: true },
+    instrumentation: { server: true },
+  },
+} satisfies Parameters<typeof sveltekit>[0];
 
 interface LocalServer {
   /** Vite `server` config (host/port + dev niceties). */
   config: {
     forwardConsole: boolean;
-    proxy: Record<string, ProxyOptions>;
     host: string;
     port: number;
+    fs: { allow: string[] };
+    proxy: Record<string, ProxyOptions>;
   };
   /**
    * FQDN that needs a hosts redirect and a privileged-port bind before serving,
@@ -168,24 +207,28 @@ interface LocalServer {
   fqdn: string | null;
 }
 
-// Pure: only reads env and computes host/port. No DNS lookups, no socket binds,
-// no process.exit beyond the missing-config guard — so it is safe to evaluate
-// during `svelte-kit sync`, `svelte-check`, codegen, and builds. The actual
-// server-only side effects live in localDevChecksPlugin below.
-function resolveServerConfig(mode: string, useLocalRedirect: boolean): LocalServer | undefined {
-  const vars = { ...env, ...loadEnv(mode, process.cwd(), ['PUBLIC_']) };
-  if (!vars.PUBLIC_SITE_URL) {
-    printError('PUBLIC_SITE_URL must be set in your environment');
-    process.exit(1);
-  }
-
+// Pure: only computes host/port from the already-loaded env. No DNS lookups and
+// no socket binds — so it is safe to evaluate during `svelte-kit sync`,
+// `svelte-check`, codegen, and builds. The actual server-only side effects live
+// in vite-plugins/local-dev-checks.ts.
+function resolveServerConfig(useLocalRedirect: boolean): LocalServer | undefined {
   if (!useLocalRedirect) return undefined;
 
-  const domain = new URL(vars.PUBLIC_SITE_URL).hostname;
+  // Vite 8: pipe browser console errors/warnings into the dev terminal so client
+  // errors land alongside server logs without context-switching to devtools.
+  //
+  // `@openshock/svelte-core` is a workspace package consumed from source. pnpm
+  // symlinks it into node_modules, but Vite resolves symlinks to their real path
+  // (packages/svelte-core/src/...), which falls outside SvelteKit's default
+  // fs.allow list. Allow the package dir so its source modules can be served.
+  const baseDevConfig = {
+    forwardConsole: true,
+    fs: { allow: ['./packages/svelte-core'] },
+    proxy: {},
+  };
 
-  // Vite 8: pipe browser console.* into the dev terminal so client errors land
-  // alongside server logs without context-switching to browser devtools.
-  const baseDevConfig = { forwardConsole: true, proxy: {} };
+  // PUBLIC_SITE_URL was already validated at module load by getSvelteBasePath().
+  const domain = new URL(dotenv.PUBLIC_SITE_URL!).hostname;
 
   if (domain === 'localhost') {
     return { config: { ...baseDevConfig, host: 'localhost', port: 8080 }, fqdn: null };
@@ -220,96 +263,26 @@ function resolveIntegrationServer(): LocalServer {
       },
     },
   };
-  return { config: { forwardConsole: true, proxy, host: 'localhost', port: 5173 }, fqdn: null };
-}
-
-// The hosts-redirect and :443 bind checks have real side effects (DNS lookups,
-// probe sockets, process.exit on misconfig). They run ONLY when an actual dev or
-// preview server is starting — never during `svelte-kit sync`, `svelte-check`,
-// codegen, or production builds, all of which also evaluate this config.
-function localDevChecksPlugin(fqdn: string): Plugin {
-  let ran = false;
-  const runChecks = async () => {
-    if (ran) return;
-    ran = true;
-    // Ensure local.<domain> resolves to localhost so the frontend shares API cookies
-    await ensureFqdnRedirect('127.0.0.1', fqdn);
-    // Verify we can bind :443 before Vite tries and fails with an unhelpful error
-    await ensurePortBindable(fqdn, 443);
-  };
   return {
-    name: 'local-dev-checks',
-    configureServer: runChecks, // `vite dev`
-    configurePreviewServer: runChecks, // `vite preview`
+    config: { forwardConsole: true, fs: { allow: ['./packages/svelte-core'] }, proxy, host: 'localhost', port: 5173 },
+    fqdn: null,
   };
-}
-
-async function ensurePortBindable(host: string, port: number): Promise<void> {
-  const { promise, resolve } = Promise.withResolvers<void>();
-  const server = net.createServer();
-  server.once('error', (err: NodeJS.ErrnoException) => {
-    if (err.code === 'EACCES') {
-      const platform = os.platform();
-      let fix: string;
-
-      if (platform === 'linux') {
-        fix = [
-          `Node.js needs permission to serve HTTPS on port ${port}.\n`,
-          'Option 1 (Recommended): Set up a reverse proxy',
-          '  Use Nginx or Caddy to proxy traffic to your Node server.',
-          '  This is more secure and follows best practices.\n',
-          'Option 2 (Quick fix): Grant Node.js permission to bind to privileged ports',
-          chalk.blue.bold(`  sudo setcap 'cap_net_bind_service=+ep' $(which node)\n`),
-          chalk.yellow.bold(
-            '  ⚠️  Security note: This allows Node to bind to ANY port below 1024.'
-          ),
-          chalk.yellow.bold('  Only use this in trusted development environments.'),
-        ].join('\n');
-      } else if (platform === 'darwin') {
-        fix = [
-          `Node.js needs permission to serve HTTPS on port ${port}.\n`,
-          'Fix: Run the dev server with sudo, or set up a reverse proxy.',
-        ].join('\n');
-      } else {
-        fix = `Node.js does not have permission to bind to port ${port}.\nTry running with elevated privileges or use a reverse proxy.`;
-      }
-
-      console.log(
-        boxen(fix, {
-          padding: 1,
-          margin: 1,
-          borderStyle: 'round',
-          borderColor: 'yellow',
-          title: `Port ${port} Permission Denied`,
-          titleAlignment: 'center',
-        })
-      );
-      process.exit(1);
-    }
-    // For other errors (e.g. EADDRINUSE), let Vite handle them
-    resolve();
-  });
-  server.once('listening', () => {
-    server.close(() => resolve());
-  });
-  server.listen(port, host);
-  return promise;
 }
 
 export default defineConfig(({ command, mode, isPreview }) => {
-  const isVitest = isTruthy(env.VITEST) || mode === 'test';
-  const isLocalServe = (command === 'serve' || isPreview === true) && !isVitest;
+  const isLocalServe = command === 'serve' || isPreview === true;
   const isProduction = mode === 'production' && (isTruthy(env.DOCKER) || isTruthy(env.CF_PAGES));
+  // Vitest resolves this config with command 'serve', unit tests must never trigger mkcert or the hosts/port checks.
+  const isTest = mode === 'test' || isTruthy(env.VITEST);
   const isIntegration = mode === 'integration';
 
   // mkcert + local.{PUBLIC_SITE_URL} hosts redirect + privileged :443 bind are
   // only for real local dev against a FQDN. Integration mode serves plain HTTP
   // and proxies the API instead (resolveIntegrationServer), so it opts out.
-  const useLocalRedirect = isLocalServe && !isProduction && !isTruthy(env.CI) && !isIntegration;
+  const useLocalRedirect =
+    isLocalServe && !isProduction && !isTest && !isTruthy(env.CI) && !isIntegration;
 
-  const server = isIntegration
-    ? resolveIntegrationServer()
-    : resolveServerConfig(mode, useLocalRedirect);
+  const server = isIntegration ? resolveIntegrationServer() : resolveServerConfig(useLocalRedirect);
 
   return {
     build: {
@@ -318,7 +291,7 @@ export default defineConfig(({ command, mode, isPreview }) => {
           comments: { legal: false },
         },
         optimization: {
-          inlineConst: { mode: 'smart', pass: 2 },
+          inlineConst: { pass: 2 },
         },
         treeshake:
           mode === 'production'
@@ -326,9 +299,29 @@ export default defineConfig(({ command, mode, isPreview }) => {
             : undefined,
       },
     },
-    plugins: getPlugins(useLocalRedirect, server?.fqdn ?? null),
+    plugins: [
+      server ? mkcert() : undefined,
+      server?.fqdn ? localDevChecksPlugin(server.fqdn, server.config.port) : undefined,
+      jsBannerPlugin('/*! For licenses information, see LICENSES.txt */'),
+      tailwindcss(),
+      sveltekit(sveltekitConfig),
+      devtoolsJson(),
+      license({
+        thirdParty: {
+          includePrivate: true,
+          includeSelf: true,
+          multipleVersions: true,
+          output: {
+            file: './.svelte-kit/output/client/LICENSES.txt', // TODO: This seems like a hack, check if theres a better way...
+          },
+        },
+      }) as PluginOption, // TODO: Figure out why typescript thinks this is incompatible ("as PluginOption" is mandatory for svelte check to succeed)
+    ],
     server: server?.config,
+    preview: server ? { port: server.config.port } : undefined,
     test: {
+      // A test that runs no assertions fails instead of silently passing.
+      expect: { requireAssertions: true },
       projects: [
         {
           extends: true,

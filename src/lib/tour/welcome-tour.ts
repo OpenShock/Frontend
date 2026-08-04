@@ -1,4 +1,4 @@
-import { browser } from '$app/environment';
+import { browser } from '$app/env';
 import { goto } from '$app/navigation';
 import { resolve as resolvePath } from '$app/paths';
 import { driver, type Driver, type DriveStep } from 'driver.js';
