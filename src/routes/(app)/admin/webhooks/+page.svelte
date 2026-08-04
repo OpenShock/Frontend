@@ -57,7 +57,7 @@
     </CardTitle>
   </CardHeader>
   <div class="grid w-full gap-6 p-6">
-    <svelte:boundary onerror={(error) => handleApiError(error)}>
+    <svelte:boundary onerror={(error: unknown) => handleApiError(error)}>
       <DataTable {data} {columns} {sorting} />
 
       {#snippet pending()}
@@ -66,7 +66,7 @@
         </div>
       {/snippet}
 
-      {#snippet failed(_error, reset)}
+      {#snippet failed(_error: unknown, reset: () => void)}
         <div class="flex w-full flex-col items-center gap-3 py-12">
           <p class="text-destructive text-sm">Failed to load webhooks.</p>
           <Button variant="outline" onclick={reset}>Try again</Button>

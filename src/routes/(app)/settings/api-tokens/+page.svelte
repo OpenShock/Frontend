@@ -81,7 +81,7 @@
     <Card.Description>API Tokens are used to authenticate with the OpenShock API</Card.Description>
   </Card.Header>
   <Card.Content class="flex w-full flex-col space-y-4">
-    <svelte:boundary onerror={(error) => handleApiError(error)}>
+    <svelte:boundary onerror={(error: unknown) => handleApiError(error)}>
       <DataTable data={tokens} {columns} {sorting} />
 
       {#snippet pending()}
@@ -90,7 +90,7 @@
         </div>
       {/snippet}
 
-      {#snippet failed(_error, reset)}
+      {#snippet failed(_error: unknown, reset: () => void)}
         <div class="flex w-full flex-col items-center gap-3 py-12">
           <p class="text-destructive text-sm">Failed to load API tokens.</p>
           <Button variant="outline" onclick={reset}>Try again</Button>

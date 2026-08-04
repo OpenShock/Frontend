@@ -100,7 +100,7 @@
   </Card.Header>
 
   <Card.Content class="flex w-full flex-1 flex-col space-y-6">
-    <svelte:boundary onerror={(error) => handleApiError(error)}>
+    <svelte:boundary onerror={(error: unknown) => handleApiError(error)}>
       <!-- Quick actions -->
       <div class="flex flex-wrap gap-2">
         <Dropdown.Root>
@@ -176,7 +176,7 @@
         </div>
       {/snippet}
 
-      {#snippet failed(_error, reset)}
+      {#snippet failed(_error: unknown, reset: () => void)}
         <div class="flex w-full flex-col items-center gap-3 py-12">
           <p class="text-destructive text-sm">Failed to load OAuth connections.</p>
           <Button variant="outline" onclick={reset}>Try again</Button>
