@@ -72,7 +72,7 @@
 
     <div class="min-w-0 flex-1">
       <div class="flex items-center gap-2 overflow-hidden">
-        <span class="min-w-0 truncate font-semibold leading-tight">{readableName}</span>
+        <span class="min-w-0 truncate leading-tight font-semibold">{readableName}</span>
         {#if isCurrent}
           <Badge variant="outline" class="shrink-0 border-green-600 text-xs text-green-400">
             This device
