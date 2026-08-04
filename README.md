@@ -42,6 +42,7 @@ To clone the project you may need to rewrite git HTTPS urls to SSH for the submo
 You can do this with `git config --global url."git@github.com:".insteadOf "https://github.com/"`
 
 To get started with development, you will need to have **Node.js** and **pnpm** installed.
+We recommend using a node version manager of your choice.
 
 ### Install dependencies and build project
 
@@ -134,7 +135,6 @@ src/           # Application source code
 - `vite.config.ts` — Vite bundler config.
 - `svelte.config.js` — SvelteKit configuration.
 - `components.json` — Component metadata for shadcn.
-- `openapitools.json` — Codegen config from OpenAPI spec.
 - `playwright.config.ts` — End-to-end testing configuration (Playwright).
 
 ### 🌐 Environment Variables
@@ -157,6 +157,11 @@ Any file ending with `.local` are meant for setting local development variables 
 
 - `Dockerfile` — Container definition for deployment or local dev.
 - `.dockerignore` — Files to exclude from Docker build context.
+
+## Selfhosting
+
+A guide to selfhost can be found [on the wiki.](https://wiki.openshock.org/guides/selfhosting)
+Alternatively you can deploy it to cloudflare workers / pages using wrangler (or forking it).
 
 ## Support
 
