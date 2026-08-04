@@ -47,9 +47,12 @@ class AlsContextManager implements ContextManager {
 
   bind<T>(context: Context, target: T): T {
     if (typeof target !== 'function') return target;
+    // eslint-disable-next-line @typescript-eslint/no-this-alias -- the wrapper must forward the caller's dynamic `this`, so the manager is captured under another name
     const manager = this;
     return function (this: unknown, ...args: unknown[]) {
-      return manager.with(context, () => (target as (...a: unknown[]) => unknown).apply(this, args));
+      return manager.with(context, () =>
+        (target as (...a: unknown[]) => unknown).apply(this, args)
+      );
     } as T;
   }
 

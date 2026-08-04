@@ -50,6 +50,12 @@ export default defineConfig(
     },
   },
   {
+    files: ['**/*.test.ts', '**/*.test.svelte.ts', '**/*.spec.ts'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
+  {
     ignores: [
       '.DS_Store',
       'node_modules',

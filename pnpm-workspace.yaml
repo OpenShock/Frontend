@@ -2,8 +2,12 @@ packages:
   - 'packages/*'
 
 allowBuilds:
+  # testcontainers subdeps — build scripts not needed (ssh2/cpu-features have JS fallbacks)
+  cpu-features: false
   esbuild: true
+  protobufjs: false
   sharp: true
+  ssh2: false
   workerd: true
 blockExoticSubdeps: true
 minimumReleaseAge: 4320 # 3 days
