@@ -18,7 +18,9 @@
 
   let {
     channel = $bindable<FirmwareChannel>('stable'),
+    // eslint-disable-next-line no-useless-assignment -- $bindable fallback, not a dead assignment
     version = $bindable(null),
+    // eslint-disable-next-line no-useless-assignment -- $bindable fallback, not a dead assignment
     latestResponse = $bindable(null),
     disabled = false,
   }: Props = $props();
