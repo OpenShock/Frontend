@@ -1,53 +1,18 @@
 /**
- * For more details on how to configure Wrangler, refer to:
- * https://developers.cloudflare.com/workers/wrangler/configuration/
+ * Cloudflare Pages configuration (git-integration builds, CF_PAGES=1).
+ *
+ * Pages only honors a wrangler config that declares `pages_build_output_dir`
+ * and rejects Workers-format keys like `main`/`assets` — the Workers Builds
+ * pipeline uses wrangler.workers.jsonc instead. Keep the compatibility
+ * settings in the two files in sync.
+ *
+ * `name` must match the Pages project name in the Cloudflare dashboard,
+ * otherwise Pages skips this file and the compatibility flags are lost.
  */
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "openshock-frontend",
-  "main": ".svelte-kit/cloudflare/_worker.js",
+  "pages_build_output_dir": ".svelte-kit/cloudflare",
   "compatibility_date": "2026-07-24",
   "compatibility_flags": ["nodejs_compat", "nodejs_als"],
-  "assets": {
-    "binding": "ASSETS",
-    "directory": ".svelte-kit/cloudflare",
-  },
-  "observability": {
-    "enabled": false,
-    "head_sampling_rate": 1,
-    "logs": {
-      "enabled": true,
-      "head_sampling_rate": 1,
-      "persist": true,
-      "invocation_logs": true,
-    },
-    "traces": {
-      "enabled": true,
-      "persist": true,
-      "head_sampling_rate": 1,
-    },
-  },
-  "upload_source_maps": true,
-  /**
-   * Smart Placement
-   * https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
-   */
-  // "placement": {  "mode": "smart" }
-  /**
-   * Bindings
-   * Bindings allow your Worker to interact with resources on the Cloudflare Developer Platform, including
-   * databases, object storage, AI inference, real-time communication and more.
-   * https://developers.cloudflare.com/workers/runtime-apis/bindings/
-   */
-  /**
-   * Environment Variables
-   * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
-   * Note: Use secrets to store sensitive data.
-   * https://developers.cloudflare.com/workers/configuration/secrets/
-   */
-  /**
-   * Service Bindings (communicate between multiple Workers)
-   * https://developers.cloudflare.com/workers/wrangler/configuration/#service-bindings
-   */
-  // "services": [  {   "binding": "MY_SERVICE",   "service": "my-service"  } ]
 }

@@ -126,8 +126,13 @@ const sveltekitConfig = {
   compilerOptions: {
     runes: true,
   },
-  // Use the appropriate adapter
-  adapter: isCloudflare ? adapterCloudflare() : adapterNode(),
+  // Use the appropriate adapter. The adapter emits Workers-flavored output
+  // (main/assets) or Pages-flavored output (_routes.json) depending on which
+  // wrangler config it reads: wrangler.jsonc is the Pages one, Workers Builds
+  // deploys with wrangler.workers.jsonc.
+  adapter: isCloudflare
+    ? adapterCloudflare(isWorkersCI ? { config: 'wrangler.workers.jsonc' } : {})
+    : adapterNode(),
   paths: {
     base: getSvelteBasePath(),
   },
