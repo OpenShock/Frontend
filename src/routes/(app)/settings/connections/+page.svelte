@@ -5,7 +5,6 @@
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
   import Unlink from '@lucide/svelte/icons/unlink';
   import { page } from '$app/state';
-  import type { OAuthConnectionResponse } from '$lib/api';
   import { GetOAuthAuthorizeUrl } from '$lib/api/next/oauth';
   import { Container } from '@openshock/svelte-core/components';
   import { Button } from '@openshock/svelte-core/components/ui/button';
@@ -26,15 +25,11 @@
   ]);
 
   // ---------- state
-  let loading = $state(false); // overall refresh button state
-  let loadingProviders = $state(true);
-  let loadingConnections = $state(true);
+  let connections = $derived(await authenticatedAccountListOAuthConnections());
+  let refreshing = $state(false);
 
   // From redirect (?status=)
   let queryStatus = $derived(page.url.searchParams.get('status'));
-
-  // Data
-  let connections = $state<OAuthConnectionResponse[]>([]);
 
   // Disconnect dialog
   let disconnectDialog = $state<{ open: boolean; providerKey?: string; displayName?: string }>({
@@ -49,25 +44,17 @@
       else if (m === 'cancelled') toast.message('Link flow cancelled.');
       else toast.error('Linking failed.');
     }
-    // Load both providers and current connections
-    void refresh();
   });
 
   // ---------- helpers
   async function refresh() {
-    loading = true;
-    // Load in parallel, but keep individual spinners meaningful
-    loadingProviders = true;
-    loadingConnections = true;
-
+    refreshing = true;
     try {
       connections = await authenticatedAccountListOAuthConnections();
     } catch (err) {
       await handleApiError(err);
     } finally {
-      loadingProviders = false;
-      loadingConnections = false;
-      loading = false;
+      refreshing = false;
     }
   }
 
@@ -101,9 +88,9 @@
     <Card.Title class="flex items-center justify-between text-3xl">
       OAuth Connections
       <div class="flex items-center gap-2">
-        <Button variant="ghost" onclick={refresh} disabled={loading} aria-busy={loading}>
+        <Button variant="ghost" onclick={refresh} disabled={refreshing} aria-busy={refreshing}>
           <RotateCcw class="mr-2 size-4" />
-          {loading ? 'Refreshing…' : 'Refresh'}
+          {refreshing ? 'Refreshing…' : 'Refresh'}
         </Button>
       </div>
     </Card.Title>
@@ -113,26 +100,19 @@
   </Card.Header>
 
   <Card.Content class="flex w-full flex-1 flex-col space-y-6">
-    <!-- Quick actions -->
-    <div class="flex flex-wrap gap-2">
-      <Dropdown.Root>
-        <Dropdown.Trigger>
-          {#snippet child({ props })}
-            <Button
-              {...props}
-              variant="secondary"
-              disabled={loadingProviders}
-              data-tour="connections-link"
-            >
-              <Plus class="mr-2 size-4" />
-              {loadingProviders ? 'Loading providers…' : 'Link new provider'}
-            </Button>
-          {/snippet}
-        </Dropdown.Trigger>
-        <Dropdown.Content>
-          {#if loadingProviders}
-            <Dropdown.Item disabled>Loading…</Dropdown.Item>
-          {:else}
+    <svelte:boundary onerror={(error: unknown) => handleApiError(error)}>
+      <!-- Quick actions -->
+      <div class="flex flex-wrap gap-2">
+        <Dropdown.Root>
+          <Dropdown.Trigger>
+            {#snippet child({ props })}
+              <Button {...props} variant="secondary" data-tour="connections-link">
+                <Plus class="mr-2 size-4" />
+                Link new provider
+              </Button>
+            {/snippet}
+          </Dropdown.Trigger>
+          <Dropdown.Content>
             {#each backendMetadata.state!.oAuthProviders as provider (provider)}
               {#if !isConnected(provider)}
                 <Dropdown.Item>
@@ -145,55 +125,64 @@
                 </Dropdown.Item>
               {/if}
             {/each}
-          {/if}
-        </Dropdown.Content>
-      </Dropdown.Root>
-    </div>
-
-    <Separator.Root />
-
-    <!-- Connected list -->
-    {#if loadingConnections}
-      <div class="grid gap-3 md:grid-cols-2">
-        {#each Array(4)}
-          <div class="animate-pulse rounded-xl border p-4">
-            <div class="mb-2 h-5 w-40 rounded bg-black/10"></div>
-            <div class="h-4 w-64 rounded bg-black/5"></div>
-          </div>
-        {/each}
+          </Dropdown.Content>
+        </Dropdown.Root>
       </div>
-    {:else if connections.length === 0}
-      <EmptyState
-        icon={Link2}
-        title="No connections yet"
-        description="Choose “Link new provider” above to connect available providers."
-      />
-    {:else}
-      <div class="grid gap-3 md:grid-cols-2">
-        {#each backendMetadata.state!.oAuthProviders as p (p)}
-          {#if isConnected(p)}
-            <div class="flex items-center justify-between rounded-xl border p-4">
-              <div class="min-w-0">
-                <div class="truncate text-base font-medium">{p}</div>
-                <div class="text-muted-foreground truncate text-sm">
-                  {displayFor(p) ?? p}
+
+      <Separator.Root />
+
+      <!-- Connected list -->
+      {#if connections.length === 0}
+        <EmptyState
+          icon={Link2}
+          title="No connections yet"
+          description="Choose “Link new provider” above to connect available providers."
+        />
+      {:else}
+        <div class="grid gap-3 md:grid-cols-2">
+          {#each backendMetadata.state!.oAuthProviders as p (p)}
+            {#if isConnected(p)}
+              <div class="flex items-center justify-between rounded-xl border p-4">
+                <div class="min-w-0">
+                  <div class="truncate text-base font-medium">{p}</div>
+                  <div class="text-muted-foreground truncate text-sm">
+                    {displayFor(p) ?? p}
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <Button
+                    variant="ghost"
+                    onclick={() => confirmDisconnect(p)}
+                    class="text-red-600 hover:text-red-700"
+                  >
+                    <Unlink class="mr-2 size-4" />
+                    Unlink
+                  </Button>
                 </div>
               </div>
-              <div class="flex items-center gap-2">
-                <Button
-                  variant="ghost"
-                  onclick={() => confirmDisconnect(p)}
-                  class="text-red-600 hover:text-red-700"
-                >
-                  <Unlink class="mr-2 size-4" />
-                  Unlink
-                </Button>
-              </div>
+            {/if}
+          {/each}
+        </div>
+      {/if}
+
+      {#snippet pending()}
+        <div class="grid gap-3 md:grid-cols-2">
+          {#each Array(4)}
+            <div class="animate-pulse rounded-xl border p-4">
+              <div class="mb-2 h-5 w-40 rounded bg-black/10"></div>
+              <div class="h-4 w-64 rounded bg-black/5"></div>
             </div>
-          {/if}
-        {/each}
-      </div>
-    {/if}
+          {/each}
+        </div>
+      {/snippet}
+
+      {#snippet failed(_error: unknown, reset: () => void)}
+        <div class="flex w-full flex-col items-center gap-3 py-12">
+          <p class="text-destructive text-sm">Failed to load OAuth connections.</p>
+          <Button variant="outline" onclick={reset}>Try again</Button>
+        </div>
+      {/snippet}
+    </svelte:boundary>
   </Card.Content>
 </Container>
 

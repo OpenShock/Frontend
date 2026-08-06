@@ -7,6 +7,7 @@
   import type { SortingState } from '@tanstack/table-core';
   import type { ColumnDef } from '@tanstack/table-core';
   import { Container } from '@openshock/svelte-core/components';
+  import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import {
     CreateActionsColumnDef,
     CreateColumnDef,
@@ -19,7 +20,6 @@
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
   import DataTableActions from './data-table-actions.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
@@ -29,18 +29,8 @@
     { label: 'API Tokens' },
   ]);
 
-  let tokens = $state<TokenResponseV2[]>([]);
+  let tokens = $derived(await tokensListTokensV2());
   let sorting = $state<SortingState>([]);
-
-  async function loadTokens(): Promise<boolean> {
-    try {
-      tokens = await tokensListTokensV2();
-      return true;
-    } catch (error) {
-      await handleApiError(error);
-      return false;
-    }
-  }
 
   function onEdit(id: string, updater: (token: TokenResponseV2) => TokenResponseV2) {
     tokens = tokens.map((t) => (t.id === id ? updater(t) : t));
@@ -64,12 +54,13 @@
   ];
 
   async function refresh() {
-    if (await loadTokens()) {
+    try {
+      tokens = await tokensListTokensV2();
       toast.success('Tokens refreshed successfully');
+    } catch (error) {
+      await handleApiError(error);
     }
   }
-
-  onMount(loadTokens);
 </script>
 
 <Container>
@@ -90,6 +81,21 @@
     <Card.Description>API Tokens are used to authenticate with the OpenShock API</Card.Description>
   </Card.Header>
   <Card.Content class="flex w-full flex-col space-y-4">
-    <DataTable data={tokens} {columns} {sorting} />
+    <svelte:boundary onerror={(error: unknown) => handleApiError(error)}>
+      <DataTable data={tokens} {columns} {sorting} />
+
+      {#snippet pending()}
+        <div class="flex h-64 w-full items-center justify-center">
+          <Spinner class="size-8 text-gray-600 dark:text-gray-300" />
+        </div>
+      {/snippet}
+
+      {#snippet failed(_error: unknown, reset: () => void)}
+        <div class="flex w-full flex-col items-center gap-3 py-12">
+          <p class="text-destructive text-sm">Failed to load API tokens.</p>
+          <Button variant="outline" onclick={reset}>Try again</Button>
+        </div>
+      {/snippet}
+    </svelte:boundary>
   </Card.Content>
 </Container>

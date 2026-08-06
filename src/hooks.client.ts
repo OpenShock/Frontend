@@ -1,4 +1,8 @@
-import 'temporal-polyfill/global';
+// Temporal is native in every engine we support except Safari (ES2026: Node 26,
+// Chrome/Edge 144+, Firefox 139+) — only download the polyfill when it's missing.
+if (!('Temporal' in globalThis)) {
+  await import('temporal-polyfill/global');
+}
 
 import { base } from '$app/paths';
 import { versionGetBackendInfo } from '$lib/api';

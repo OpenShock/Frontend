@@ -5,6 +5,7 @@
   import { adminListWebhooks } from '$lib/api';
   import type { WebhookDto } from '$lib/api';
   import { Container } from '@openshock/svelte-core/components';
+  import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import {
     CreateActionsColumnDef,
     CreateSortableColumnDef,
@@ -15,7 +16,6 @@
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import { CardHeader, CardTitle } from '@openshock/svelte-core/components/ui/card';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { onMount } from 'svelte';
   import DataTableActions from './data-table-actions.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import WebhookAddDialog from './dialog-webhook-add.svelte';
@@ -29,36 +29,49 @@
     CreateActionsColumnDef(DataTableActions, (webhook) => ({ webhook })),
   ];
 
-  let data = $state<WebhookDto[]>([]);
+  let data = $derived(await adminListWebhooks());
   let sorting = $state<SortingState>([]);
 
   let addDialogOpen = $state<boolean>(false);
 
-  function fetchWebhooks() {
-    adminListWebhooks()
-      .then((res) => {
-        data = res;
-      })
-      .catch(handleApiError);
+  async function refresh() {
+    try {
+      data = await adminListWebhooks();
+    } catch (error) {
+      await handleApiError(error);
+    }
   }
-
-  onMount(fetchWebhooks);
 </script>
 
-<WebhookAddDialog bind:open={addDialogOpen} onAdded={fetchWebhooks} />
+<WebhookAddDialog bind:open={addDialogOpen} onAdded={refresh} />
 
 <Container>
   <CardHeader class="w-full">
     <CardTitle class="flex items-center justify-between space-x-2 text-3xl">
       Webhooks
       <Button onclick={() => (addDialogOpen = true)}>Add new</Button>
-      <Button class="text-xl" onclick={fetchWebhooks}>
+      <Button class="text-xl" onclick={refresh}>
         <RotateCcw />
         <span> Refresh </span>
       </Button>
     </CardTitle>
   </CardHeader>
   <div class="grid w-full gap-6 p-6">
-    <DataTable {data} {columns} {sorting} />
+    <svelte:boundary onerror={(error: unknown) => handleApiError(error)}>
+      <DataTable {data} {columns} {sorting} />
+
+      {#snippet pending()}
+        <div class="flex h-64 w-full items-center justify-center">
+          <Spinner class="size-8 text-gray-600 dark:text-gray-300" />
+        </div>
+      {/snippet}
+
+      {#snippet failed(_error: unknown, reset: () => void)}
+        <div class="flex w-full flex-col items-center gap-3 py-12">
+          <p class="text-destructive text-sm">Failed to load webhooks.</p>
+          <Button variant="outline" onclick={reset}>Try again</Button>
+        </div>
+      {/snippet}
+    </svelte:boundary>
   </div>
 </Container>

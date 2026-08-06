@@ -7,6 +7,7 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import tailwindcss from '@tailwindcss/vite';
 import * as child_process from 'node:child_process';
 import { env } from 'node:process';
+import { fileURLToPath } from 'node:url';
 import license from 'rollup-plugin-license';
 import { type Plugin, type PluginOption, type UserConfig, defineConfig, loadEnv } from 'vite';
 import devtoolsJson from 'vite-plugin-devtools-json';
@@ -122,10 +123,13 @@ const sveltekitConfig = {
   },
   compilerOptions: {
     runes: true,
+    // Await expressions in components (script top level, $derived, markup).
+    // The flag disappears in Svelte 6, where this becomes the default.
+    experimental: {
+      async: true,
+    },
   },
-  // Workers Builds deploys the adapter-cloudflare output described by the root
-  // wrangler.jsonc (auto-discovered); everything else — local builds, Docker,
-  // selfhosting — runs on Node.
+  // Use the appropriate adapter
   adapter: isCloudflare ? adapterCloudflare() : adapterNode(),
   paths: {
     base: getSvelteBasePath(),
@@ -244,6 +248,18 @@ export default defineConfig(({ command, mode, isPreview }) => {
   const server = resolveServerConfig(useLocalRedirect);
 
   return {
+    resolve: {
+      // Redirect the generated API client's bare `temporal-polyfill` imports to a
+      // shim that only loads the polyfill when the runtime lacks native Temporal
+      // (only Safari, as of 2026). Exact-match regex so `temporal-polyfill/global`
+      // inside the shim still resolves to the real package.
+      alias: [
+        {
+          find: /^temporal-polyfill$/,
+          replacement: fileURLToPath(new URL('./src/lib/temporal-shim.ts', import.meta.url)),
+        },
+      ],
+    },
     build: {
       rolldownOptions: {
         output: {
