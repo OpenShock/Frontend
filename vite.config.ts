@@ -58,11 +58,10 @@ const isTruthy = (value?: string) => value === 'true' || value === '1';
 // detection, adapter selection, and the CSP in a single, type-checked file.
 // ---------------------------------------------------------------------------
 
-// Determine if we are running on Cloudflare (Pages git integration or Workers Builds)
-const isGithubActions = env.GITHUB_ACTIONS === 'true';
-const isWorkersCI = env.WORKERS_CI === '1';
-const isCloudflare = env.CF_PAGES === '1' || isWorkersCI;
-const isDocker = env.DOCKER === 'true';
+// Determine if we are running on Cloudflare Workers Builds
+const isGithubActions = isTruthy(env.GITHUB_ACTIONS);
+const isCloudflare = isTruthy(env.WORKERS_CI);
+const isDocker = isTruthy(env.DOCKER);
 // Don't trust NODE_ENV — tools like svelte-check load this file mid-process and
 // can have NODE_ENV='production' set by transitively-imported plugins (vite,
 // vite-plugin-svelte) even though no production build is actually happening.
@@ -76,9 +75,7 @@ const dotenv = { ...env, ...loadEnv(buildMode, process.cwd(), 'PUBLIC_') };
 
 function getGitHash(): string | undefined {
   if (isGithubActions) return env.GITHUB_SHA;
-  if (isWorkersCI) return env.WORKERS_CI_COMMIT_SHA;
-  // Cloudflare Pages prefixes its build vars with CF_PAGES_
-  if (isCloudflare) return env.CF_PAGES_COMMIT_SHA;
+  if (isCloudflare) return env.WORKERS_CI_COMMIT_SHA;
   if (isDocker) return env.GIT_COMMIT_SHA;
 
   return child_process.execSync('git rev-parse HEAD').toString().trim();
@@ -237,7 +234,7 @@ function resolveServerConfig(useLocalRedirect: boolean): LocalServer | undefined
 
 export default defineConfig(({ command, mode, isPreview }) => {
   const isLocalServe = command === 'serve' || isPreview === true;
-  const isProduction = mode === 'production' && (isTruthy(env.DOCKER) || isTruthy(env.CF_PAGES));
+  const isProduction = mode === 'production' && (isTruthy(env.DOCKER) || isTruthy(env.WORKERS_CI));
   // Vitest resolves this config with command 'serve', unit tests must never trigger mkcert or the hosts/port checks.
   const isTest = mode === 'test' || isTruthy(env.VITEST);
 

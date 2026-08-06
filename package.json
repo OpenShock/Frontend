@@ -25,8 +25,6 @@
 		"@internationalized/date": "^3.12.2",
 		"@lucide/svelte": "^1.28.0",
 		"@microsoft/signalr": "^10.0.0",
-		"@opentelemetry/api": "^1.9.1",
-		"@opentelemetry/sdk-trace-base": "^2.10.0",
 		"@playwright/test": "^1.62.1",
 		"@sveltejs/adapter-cloudflare": "^7.2.9",
 		"@sveltejs/adapter-node": "^5.5.7",
@@ -70,10 +68,12 @@
 		"vaul-svelte": "1.0.0-next.7",
 		"vite-plugin-devtools-json": "^1.1.0",
 		"vite-plugin-mkcert": "^2.1.0",
-		"vitest": "^4.1.10"
+		"vitest": "^4.1.10",
+		"wrangler": "^4.117.0"
 	},
 	"dependencies": {
 		"@openshock/svelte-core": "workspace:*",
+		"@opentelemetry/api": "^1.9.1",
 		"@opentelemetry/api-logs": "^0.221.0",
 		"@opentelemetry/exporter-logs-otlp-http": "^0.221.0",
 		"@opentelemetry/exporter-trace-otlp-http": "^0.221.0",
@@ -81,6 +81,7 @@
 		"@opentelemetry/instrumentation-fetch": "^0.221.0",
 		"@opentelemetry/resources": "^2.10.0",
 		"@opentelemetry/sdk-logs": "^0.221.0",
+		"@opentelemetry/sdk-trace-node": "^2.10.0",
 		"@opentelemetry/sdk-trace-web": "^2.10.0",
 		"core": "workspace:@openshock/svelte-core@*",
 		"driver.js": "^1.8.0",
