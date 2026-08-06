@@ -59,9 +59,9 @@ const isTruthy = (value?: string) => value === 'true' || value === '1';
 // ---------------------------------------------------------------------------
 
 // Determine if we are running on Cloudflare Workers Builds
-const isGithubActions = env.GITHUB_ACTIONS === 'true';
-const isCloudflare = env.WORKERS_CI === '1';
-const isDocker = env.DOCKER === 'true';
+const isGithubActions = isTruthy(env.GITHUB_ACTIONS);
+const isCloudflare = isTruthy(env.WORKERS_CI);
+const isDocker = isTruthy(env.DOCKER);
 // Don't trust NODE_ENV — tools like svelte-check load this file mid-process and
 // can have NODE_ENV='production' set by transitively-imported plugins (vite,
 // vite-plugin-svelte) even though no production build is actually happening.
