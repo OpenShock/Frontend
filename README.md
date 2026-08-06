@@ -161,7 +161,7 @@ Any file ending with `.local` are meant for setting local development variables 
 ## Selfhosting
 
 A guide to selfhost can be found [on the wiki.](https://wiki.openshock.org/guides/selfhosting)
-Alternatively you can deploy it to cloudflare workers / pages using wrangler (or forking it).
+Alternatively you can deploy it to cloudflare workers using wrangler (or forking it).
 
 ## Support
 

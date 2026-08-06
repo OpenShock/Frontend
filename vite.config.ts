@@ -57,10 +57,9 @@ const isTruthy = (value?: string) => value === 'true' || value === '1';
 // detection, adapter selection, and the CSP in a single, type-checked file.
 // ---------------------------------------------------------------------------
 
-// Determine if we are running on Cloudflare (Pages git integration or Workers Builds)
+// Determine if we are running on Cloudflare Workers Builds
 const isGithubActions = env.GITHUB_ACTIONS === 'true';
-const isWorkersCI = env.WORKERS_CI === '1';
-const isCloudflare = env.CF_PAGES === '1' || isWorkersCI;
+const isCloudflare = env.WORKERS_CI === '1';
 const isDocker = env.DOCKER === 'true';
 // Don't trust NODE_ENV — tools like svelte-check load this file mid-process and
 // can have NODE_ENV='production' set by transitively-imported plugins (vite,
@@ -75,9 +74,7 @@ const dotenv = { ...env, ...loadEnv(buildMode, process.cwd(), 'PUBLIC_') };
 
 function getGitHash(): string | undefined {
   if (isGithubActions) return env.GITHUB_SHA;
-  if (isWorkersCI) return env.WORKERS_CI_COMMIT_SHA;
-  // Cloudflare Pages prefixes its build vars with CF_PAGES_
-  if (isCloudflare) return env.CF_PAGES_COMMIT_SHA;
+  if (isCloudflare) return env.WORKERS_CI_COMMIT_SHA;
   if (isDocker) return env.GIT_COMMIT_SHA;
 
   return child_process.execSync('git rev-parse HEAD').toString().trim();
@@ -126,13 +123,10 @@ const sveltekitConfig = {
   compilerOptions: {
     runes: true,
   },
-  // Use the appropriate adapter. The adapter emits Workers-flavored output
-  // (main/assets) or Pages-flavored output (_routes.json) depending on which
-  // wrangler config it reads: wrangler.jsonc is the Pages one, Workers Builds
-  // deploys with wrangler.workers.jsonc.
-  adapter: isCloudflare
-    ? adapterCloudflare(isWorkersCI ? { config: 'wrangler.workers.jsonc' } : {})
-    : adapterNode(),
+  // Workers Builds deploys the adapter-cloudflare output described by the root
+  // wrangler.jsonc (auto-discovered); everything else — local builds, Docker,
+  // selfhosting — runs on Node.
+  adapter: isCloudflare ? adapterCloudflare() : adapterNode(),
   paths: {
     base: getSvelteBasePath(),
   },
@@ -240,7 +234,7 @@ function resolveServerConfig(useLocalRedirect: boolean): LocalServer | undefined
 
 export default defineConfig(({ command, mode, isPreview }) => {
   const isLocalServe = command === 'serve' || isPreview === true;
-  const isProduction = mode === 'production' && (isTruthy(env.DOCKER) || isTruthy(env.CF_PAGES));
+  const isProduction = mode === 'production' && (isTruthy(env.DOCKER) || isTruthy(env.WORKERS_CI));
   // Vitest resolves this config with command 'serve', unit tests must never trigger mkcert or the hosts/port checks.
   const isTest = mode === 'test' || isTruthy(env.VITEST);
 
