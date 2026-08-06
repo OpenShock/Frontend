@@ -50,7 +50,7 @@ With Node.js installed, you can run the following commands to get started:
 
 ```bash
 pnpm i
-pnpm run build
+pnpm build
 ```
 
 ## Running locally
@@ -58,7 +58,7 @@ pnpm run build
 Running the frontend locally is as simple as this:
 
 ```bash
-pnpm run dev
+pnpm dev
 ```
 
 ### Hosts redirect
