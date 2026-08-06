@@ -172,11 +172,7 @@ const sveltekitConfig = {
       // the post-submit redirect to the OAuth provider.
       'form-action': ['self', dotenv.PUBLIC_BACKEND_API_URL],
       // Ignored on prerendered pages (meta-tag CSP) — the _headers file's
-      // X-Frame-Options covers those on Cloudflare, but nothing does on the
-      // Node/Docker deploy: adapter-node serves prerendered HTML through sirv
-      // before the SvelteKit handler, so hooks.server.ts `handle` never runs for
-      // it. Moot while `prerender = false` in src/routes/+layout.ts; revisit if
-      // any route starts prerendering.
+      // X-Frame-Options covers those on Cloudflare.
       'frame-ancestors': ['none'],
     } as CspDirectives,
   },
