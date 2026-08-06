@@ -31,10 +31,10 @@ This is the frontend for the OpenShock project that interfaces with the OpenShoc
 ## Available Commands
 
 - `pnpm i` - Install dependencies
-- `pnpm dev` - Start the development server
-- `pnpm build` - Build the project
-- `pnpm preview` - Preview the built project
-- `pnpm regen-api` - Generate the API client
+- `pnpm run dev` - Start the development server
+- `pnpm run build` - Build the project
+- `pnpm run preview` - Preview the built project
+- `pnpm run regen-api` - Generate the API client
 
 ## Setup
 
@@ -50,7 +50,7 @@ With Node.js installed, you can run the following commands to get started:
 
 ```bash
 pnpm i
-pnpm build
+pnpm run build
 ```
 
 ## Running locally
@@ -58,7 +58,7 @@ pnpm build
 Running the frontend locally is as simple as this:
 
 ```bash
-pnpm dev
+pnpm run dev
 ```
 
 ### Hosts redirect
