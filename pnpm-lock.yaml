@@ -25,6 +25,9 @@ importers:
       '@openshock/svelte-core':
         specifier: workspace:*
         version: link:packages/svelte-core
+      '@opentelemetry/api':
+        specifier: ^1.9.1
+        version: 1.9.1
       '@opentelemetry/api-logs':
         specifier: ^0.221.0
         version: 0.221.0
@@ -46,6 +49,9 @@ importers:
       '@opentelemetry/sdk-logs':
         specifier: ^0.221.0
         version: 0.221.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/sdk-trace-node':
+        specifier: ^2.10.0
+        version: 2.10.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/sdk-trace-web':
         specifier: ^2.10.0
         version: 2.10.0(@opentelemetry/api@1.9.1)
@@ -80,12 +86,6 @@ importers:
       '@microsoft/signalr':
         specifier: ^10.0.0
         version: 10.0.0(patch_hash=8117ca356b6ba091260c4f95dce214a6f63cb001019afa4840aea89ae0d8a010)
-      '@opentelemetry/api':
-        specifier: ^1.9.1
-        version: 1.9.1
-      '@opentelemetry/sdk-trace-node':
-        specifier: ^2.10.0
-        version: 2.10.0(@opentelemetry/api@1.9.1)
       '@playwright/test':
         specifier: ^1.62.1
         version: 1.62.1

@@ -14,5 +14,5 @@
   "name": "openshock-frontend",
   "pages_build_output_dir": ".svelte-kit/cloudflare",
   "compatibility_date": "2026-07-24",
-  "compatibility_flags": ["nodejs_compat", "nodejs_als"],
+  "compatibility_flags": ["nodejs_compat"],
 }
