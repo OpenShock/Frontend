@@ -10,7 +10,7 @@
  */
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "openshock-frontend",
+  "name": "openshock-app",
   "main": ".svelte-kit/cloudflare/_worker.js",
   "compatibility_date": "2026-07-24",
   "compatibility_flags": ["nodejs_compat"],
