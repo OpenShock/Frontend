@@ -34,7 +34,7 @@ This is the frontend for the OpenShock project that interfaces with the OpenShoc
 - `pnpm run dev` - Start the development server
 - `pnpm run build` - Build the project
 - `pnpm run preview` - Preview the built project
-- `pnpx regenßapi` - Generate the API client
+- `pnpx regen-api` - Generate the API client
 
 ## Setup
 
