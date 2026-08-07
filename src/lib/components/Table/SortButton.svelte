@@ -1,10 +1,13 @@
-<script lang="ts" generics="TData">
+<script lang="ts" generics="TFeatures extends SortableTableFeatures, TData extends RowData">
   import { ArrowDown, ArrowUp, ArrowUpDown } from '@lucide/svelte';
-  import type { Column } from '@tanstack/table-core';
+  import type { Column, Column_RowSorting, RowData } from '@tanstack/svelte-table';
+  import type { SortableTableFeatures } from './types';
 
   interface Props {
     name: string;
-    column: Column<TData, unknown>;
+    // The sorting half is spelled out because v9 only folds it into `Column`
+    // once `TFeatures` is a concrete feature set, which it isn't here.
+    column: Column<TFeatures, TData> & Column_RowSorting<TFeatures, TData>;
   }
 
   let { name, column }: Props = $props();
