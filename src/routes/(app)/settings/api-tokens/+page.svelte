@@ -2,27 +2,20 @@
   import { tokensListTokensV2 } from '$lib/api';
   import type { TokenResponseV2 } from '$lib/api';
   import { resolve } from '$app/paths';
+  import KeyRound from '@lucide/svelte/icons/key-round';
   import Plus from '@lucide/svelte/icons/plus';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
-  import type { SortingState } from '@tanstack/table-core';
-  import type { ColumnDef } from '@tanstack/table-core';
-  import { Container } from '@openshock/svelte-core/components';
+  import { Container, EmptyState } from '@openshock/svelte-core/components';
+  import { Badge } from '@openshock/svelte-core/components/ui/badge';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
-  import {
-    CreateActionsColumnDef,
-    CreateColumnDef,
-    CreateSortableColumnDef,
-    LocaleDateRenderer,
-    RenderCell,
-    TimeSinceRelativeOrNeverRenderer,
-  } from '$lib/components/Table/ColumnUtils';
-  import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
-  import DataTableActions from './data-table-actions.svelte';
+  import TokenActions from './token-actions.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { formatRelativeInstant } from '$lib/utils/datetime';
 
   registerBreadcrumbs(() => [
     { label: 'Settings', href: '/settings/account' },
@@ -30,7 +23,10 @@
   ]);
 
   let tokens = $derived(await tokensListTokensV2());
-  let sorting = $state<SortingState>([]);
+
+  // Re-read on a timer so the relative labels below stay current without
+  // refetching. Every label derives from this, so ticking it re-renders them.
+  let now = $state(Temporal.Now.instant());
 
   function onEdit(id: string, updater: (token: TokenResponseV2) => TokenResponseV2) {
     tokens = tokens.map((t) => (t.id === id ? updater(t) : t));
@@ -40,19 +36,6 @@
     tokens = tokens.filter((t) => t.id !== id);
   }
 
-  const columns: ColumnDef<TokenResponseV2>[] = [
-    CreateSortableColumnDef('name', 'Name', RenderCell),
-    CreateColumnDef('shockerControl', 'Status', (sc) =>
-      sc.paused
-        ? { text: 'Paused', bold: true, color: 'orange' }
-        : { text: 'Active', bold: true, color: 'green' }
-    ),
-    CreateSortableColumnDef('createdOn', 'Created at', LocaleDateRenderer),
-    CreateSortableColumnDef('validUntil', 'Expires at', TimeSinceRelativeOrNeverRenderer),
-    CreateSortableColumnDef('lastUsed', 'Last used', TimeSinceRelativeOrNeverRenderer),
-    CreateActionsColumnDef(DataTableActions, (token) => ({ token, onEdit, onDeleted })),
-  ];
-
   async function refresh() {
     try {
       tokens = await tokensListTokensV2();
@@ -61,6 +44,11 @@
       await handleApiError(error);
     }
   }
+
+  onMount(() => {
+    const interval = setInterval(() => (now = Temporal.Now.instant()), 5000);
+    return () => clearInterval(interval);
+  });
 </script>
 
 <Container>
@@ -82,7 +70,38 @@
   </Card.Header>
   <Card.Content class="flex w-full flex-col space-y-4">
     <svelte:boundary onerror={(error: unknown) => handleApiError(error)}>
-      <DataTable data={tokens} {columns} {sorting} />
+      {#if tokens.length === 0}
+        <EmptyState
+          icon={KeyRound}
+          title="No API tokens"
+          description="Generate a token to authenticate with the OpenShock API."
+        />
+      {:else}
+        <div class="divide-y rounded-md border">
+          {#each tokens as token (token.id)}
+            {@const lastUsed = formatRelativeInstant(token.lastUsed, now)}
+            {@const expires = formatRelativeInstant(token.validUntil, now)}
+            <div class="flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-3">
+              <div class="flex min-w-0 flex-1 items-center gap-2">
+                <span class="truncate font-medium">{token.name}</span>
+                <Badge variant={token.shockerControl.paused ? 'outline' : 'default'}>
+                  {token.shockerControl.paused ? 'Paused' : 'Active'}
+                </Badge>
+              </div>
+              <div
+                class="text-muted-foreground flex shrink-0 flex-wrap items-center gap-x-4 text-sm"
+              >
+                <span>
+                  Created {token.createdOn.toLocaleString(undefined, { dateStyle: 'short' })}
+                </span>
+                <span>{lastUsed ? `Last used ${lastUsed}` : 'Never used'}</span>
+                <span>{expires ? `Expires ${expires}` : 'Never expires'}</span>
+              </div>
+              <TokenActions {token} {onEdit} {onDeleted} />
+            </div>
+          {/each}
+        </div>
+      {/if}
 
       {#snippet pending()}
         <div class="flex h-64 w-full items-center justify-center">
