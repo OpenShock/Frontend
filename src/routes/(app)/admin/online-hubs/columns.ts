@@ -1,8 +1,6 @@
 import type { AdminOnlineDeviceResponse } from '$lib/api';
 import {
-  CreateActionsColumnDef,
-  CreateColumnDef,
-  CreateSortableColumnDef,
+  CreateColumnDefs,
   FirmwareVersionRenderer,
   NumberRenderer,
   RenderCell,
@@ -10,15 +8,20 @@ import {
   TimeSinceDurationRenderer,
   UserAgentRenderer,
 } from '$lib/components/Table/ColumnUtils';
-import type { ColumnDef } from '@tanstack/table-core';
 import { SemVer } from 'semver';
 import DataTableActions from './data-table-actions.svelte';
+import type { Features } from './data-table-features';
 
 export type OnlineHub = Omit<AdminOnlineDeviceResponse, 'firmwareVersion'> & {
   firmwareVersion: SemVer;
 };
 
-export const columns: ColumnDef<OnlineHub>[] = [
+const { CreateColumnDef, CreateSortableColumnDef, CreateActionsColumnDef } = CreateColumnDefs<
+  Features,
+  OnlineHub
+>();
+
+export const columns = [
   CreateSortableColumnDef('name', 'Name', RenderCell),
   CreateSortableColumnDef(
     'owner',

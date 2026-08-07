@@ -1,12 +1,9 @@
 <script lang="ts">
-  import type { SortingState } from '@tanstack/table-core';
-  import type { ColumnDef } from '@tanstack/table-core';
   import { adminConfigurationList } from '$lib/api';
   import type { ConfigurationItemDto } from '$lib/api';
   import { Container } from '@openshock/svelte-core/components';
   import {
-    CreateActionsColumnDef,
-    CreateSortableColumnDef,
+    CreateColumnDefs,
     LocaleDateTimeRenderer,
     RenderCell,
   } from '$lib/components/Table/ColumnUtils';
@@ -18,10 +15,16 @@
   import { onMount } from 'svelte';
   import DataTableActions from './data-table-actions.svelte';
   import WebhookAddDialog from './dialog-item-add.svelte';
+  import { features, type Features } from './data-table-features';
 
   registerBreadcrumbs(() => [{ label: 'Config' }]);
 
-  const columns: ColumnDef<ConfigurationItemDto>[] = [
+  const { CreateSortableColumnDef, CreateActionsColumnDef } = CreateColumnDefs<
+    Features,
+    ConfigurationItemDto
+  >();
+
+  const columns = [
     CreateSortableColumnDef('name', 'Name', RenderCell),
     CreateSortableColumnDef('description', 'Description', RenderCell),
     CreateSortableColumnDef('type', 'Type', RenderCell),
@@ -32,7 +35,6 @@
   ];
 
   let data = $state<ConfigurationItemDto[]>([]);
-  let sorting = $state<SortingState>([]);
 
   let addDialogOpen = $state<boolean>(false);
 
@@ -57,6 +59,6 @@
     </CardTitle>
   </CardHeader>
   <div class="grid w-full gap-6 p-6">
-    <DataTable {data} {columns} {sorting} />
+    <DataTable {data} {columns} {features} />
   </div>
 </Container>

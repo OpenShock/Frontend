@@ -1,14 +1,11 @@
 <script lang="ts">
   import { RotateCcw } from '@lucide/svelte';
-  import type { SortingState } from '@tanstack/table-core';
-  import type { ColumnDef } from '@tanstack/table-core';
   import { adminListWebhooks } from '$lib/api';
   import type { WebhookDto } from '$lib/api';
   import { Container } from '@openshock/svelte-core/components';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import {
-    CreateActionsColumnDef,
-    CreateSortableColumnDef,
+    CreateColumnDefs,
     LocaleDateTimeRenderer,
     RenderCell,
   } from '$lib/components/Table/ColumnUtils';
@@ -19,10 +16,16 @@
   import DataTableActions from './data-table-actions.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import WebhookAddDialog from './dialog-webhook-add.svelte';
+  import { features, type Features } from './data-table-features';
 
   registerBreadcrumbs(() => [{ label: 'Webhooks' }]);
 
-  const columns: ColumnDef<WebhookDto>[] = [
+  const { CreateSortableColumnDef, CreateActionsColumnDef } = CreateColumnDefs<
+    Features,
+    WebhookDto
+  >();
+
+  const columns = [
     CreateSortableColumnDef('name', 'Name', RenderCell),
     CreateSortableColumnDef('url', 'Url', RenderCell),
     CreateSortableColumnDef('createdAt', 'Created at', LocaleDateTimeRenderer),
@@ -30,7 +33,6 @@
   ];
 
   let data = $derived(await adminListWebhooks());
-  let sorting = $state<SortingState>([]);
 
   let addDialogOpen = $state<boolean>(false);
 
@@ -58,7 +60,7 @@
   </CardHeader>
   <div class="grid w-full gap-6 p-6">
     <svelte:boundary onerror={(error: unknown) => handleApiError(error)}>
-      <DataTable {data} {columns} {sorting} />
+      <DataTable {data} {columns} {features} />
 
       {#snippet pending()}
         <div class="flex h-64 w-full items-center justify-center">
