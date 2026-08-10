@@ -96,16 +96,7 @@
   </Tooltip.Root>
 
   <TableActionMenu>
-    <DropdownMenu.Label>API Token</DropdownMenu.Label>
     <DropdownMenu.Group>
-      <DropdownMenu.Item class="cursor-pointer" onclick={togglePaused}>
-        {#if token.shockerControl.paused}
-          <Play class="size-4" />
-        {:else}
-          <Pause class="size-4" />
-        {/if}
-        {token.shockerControl.paused ? 'Resume' : 'Pause'}
-      </DropdownMenu.Item>
       <DropdownMenu.Item class="cursor-pointer" onclick={openEditDialog}>
         <Pencil class="size-4" />
         Edit

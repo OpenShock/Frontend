@@ -6,7 +6,6 @@
   import Plus from '@lucide/svelte/icons/plus';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
   import { Container, EmptyState } from '@openshock/svelte-core/components';
-  import { Badge } from '@openshock/svelte-core/components/ui/badge';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
@@ -84,9 +83,6 @@
             <div class="flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-3">
               <div class="flex min-w-0 flex-1 items-center gap-2">
                 <span class="truncate font-medium">{token.name}</span>
-                <Badge variant={token.shockerControl.paused ? 'outline' : 'default'}>
-                  {token.shockerControl.paused ? 'Paused' : 'Active'}
-                </Badge>
               </div>
               <div
                 class="text-muted-foreground flex shrink-0 flex-wrap items-center gap-x-4 text-sm"
