@@ -62,7 +62,9 @@
     if (!expiresOn) {
       return { label: 'Never expires', tone: 'neutral' as const };
     }
-    const now = Temporal.Now.instant();
+    // Read from the ticker, not the clock directly: this is what makes the
+    // badge flip to "Expired" on its own while the page is open.
+    const now = clock.current;
     const isExpired = expiresOn.epochMilliseconds <= now.epochMilliseconds;
     if (isExpired) {
       return { label: 'Expired', tone: 'danger' as const };

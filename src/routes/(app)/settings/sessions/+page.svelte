@@ -69,7 +69,7 @@
   <Card.Header class="w-full">
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
       Sessions
-      <Button class="text-xl" onclick={onRefreshClicked}>
+      <Button class="text-xl" onclick={onRefreshClicked} disabled={loading}>
         <RotateCcw />
         <span> Refresh </span>
       </Button>
@@ -87,7 +87,7 @@
     {:else if failed && data.length === 0}
       <div class="flex w-full flex-col items-center gap-3 py-12">
         <p class="text-destructive text-sm">Failed to load sessions.</p>
-        <Button variant="outline" onclick={fetchSessions}>Try again</Button>
+        <Button variant="outline" onclick={fetchSessions} disabled={loading}>Try again</Button>
       </div>
     {:else if data.length === 0}
       <EmptyState
