@@ -11,7 +11,7 @@
   import { toast } from 'svelte-sonner';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { getReadableUserAgentName } from '$lib/utils';
-  import { formatRelativeInstant } from '$lib/utils/datetime';
+  import { formatRelativeInstant, formatRelativeInstantOrNull } from '$lib/utils/datetime';
   import SessionActions from './session-actions.svelte';
 
   registerBreadcrumbs(() => [
@@ -82,7 +82,7 @@
     {:else}
       <div class="divide-y rounded-md border">
         {#each data as session (session.id)}
-          {@const lastSeen = session.lastUsed ? formatRelativeInstant(session.lastUsed, now) : null}
+          {@const lastSeen = formatRelativeInstantOrNull(session.lastUsed, now)}
           <div class="flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-3">
             <div class="flex min-w-0 flex-1 items-center gap-2">
               <span class="truncate font-medium" title={session.userAgent ?? undefined}>

@@ -12,3 +12,11 @@ export function formatRelativeInstant(
 ): string {
   return formatElapsed(durationBetween(now, instant));
 }
+
+export function formatRelativeInstantOrNull(
+  instant: Temporal.Instant | null,
+  now: Temporal.Instant = Temporal.Now.instant()
+): string | null {
+  if (instant === null || instant.epochMilliseconds <= 0) return null;
+  return formatElapsed(durationBetween(now, instant));
+}

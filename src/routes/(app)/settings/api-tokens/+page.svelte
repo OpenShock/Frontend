@@ -14,7 +14,7 @@
   import { toast } from 'svelte-sonner';
   import TokenActions from './token-actions.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import { formatRelativeInstant } from '$lib/utils/datetime';
+  import { formatRelativeInstantOrNull } from '$lib/utils/datetime';
 
   registerBreadcrumbs(() => [
     { label: 'Settings', href: '/settings/account' },
@@ -78,8 +78,8 @@
       {:else}
         <div class="divide-y rounded-md border">
           {#each tokens as token (token.id)}
-            {@const lastUsed = formatRelativeInstant(token.lastUsed, now)}
-            {@const expires = formatRelativeInstant(token.validUntil, now)}
+            {@const lastUsed = formatRelativeInstantOrNull(token.lastUsed, now)}
+            {@const expires = formatRelativeInstantOrNull(token.validUntil, now)}
             <div class="flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-3">
               <div class="flex min-w-0 flex-1 items-center gap-2">
                 <span class="truncate font-medium">{token.name}</span>
