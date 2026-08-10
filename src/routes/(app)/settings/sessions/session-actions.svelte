@@ -21,7 +21,6 @@
 <SessionRevokeDialog bind:open={revokeDialogOpen} {session} {onRevoked} />
 
 <TableActionMenu>
-  <DropdownMenu.Label>Session</DropdownMenu.Label>
   <DropdownMenu.Group>
     <DropdownMenu.Item class="cursor-pointer" onclick={copyId}>
       <Copy class="size-4" />
