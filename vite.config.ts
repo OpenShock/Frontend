@@ -194,7 +194,7 @@ function buildSveltekitConfig(dotenv: PublicEnv): KitConfigParam {
       tracing: { server: true },
       instrumentation: { server: true },
     },
-  } ;
+  };
 }
 
 interface LocalServer {
