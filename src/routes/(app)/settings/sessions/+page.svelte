@@ -13,7 +13,7 @@
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { getReadableUserAgentName } from '$lib/utils';
   import { formatRelativeInstant, formatRelativeInstantOrNull } from '$lib/utils/datetime';
-  import { createNowTicker } from '$lib/utils/datetime.svelte';
+  import { createNowTicker } from '@openshock/svelte-core/utils';
   import SessionActions from './session-actions.svelte';
 
   registerBreadcrumbs(() => [

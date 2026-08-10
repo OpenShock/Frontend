@@ -8,7 +8,7 @@ import {
   TimeSinceDurationRenderer,
   UserAgentRenderer,
 } from '$lib/components/Table/ColumnUtils';
-import { createNowTicker } from '$lib/utils/datetime.svelte';
+import { createNowTicker } from '@openshock/svelte-core/utils';
 import { SemVer } from 'semver';
 import DataTableActions from './data-table-actions.svelte';
 import type { Features } from './data-table-features';

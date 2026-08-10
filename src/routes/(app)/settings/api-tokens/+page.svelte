@@ -14,7 +14,7 @@
   import TokenActions from './token-actions.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { formatRelativeInstantOrNull } from '$lib/utils/datetime';
-  import { createNowTicker } from '$lib/utils/datetime.svelte';
+  import { createNowTicker } from '@openshock/svelte-core/utils';
 
   registerBreadcrumbs(() => [
     { label: 'Settings', href: '/settings/account' },

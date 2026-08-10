@@ -22,7 +22,7 @@
   import CreatePublicShareDialog from './dialog-publicshare-create.svelte';
   import { PageHeader } from '@openshock/svelte-core/components';
   import { formatRelativeInstant } from '$lib/utils/datetime';
-  import { createNowTicker } from '$lib/utils/datetime.svelte';
+  import { createNowTicker } from '@openshock/svelte-core/utils';
 
   registerBreadcrumbs(() => [{ label: 'Public Shares' }]);
 
