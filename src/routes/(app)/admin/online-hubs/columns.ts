@@ -1,8 +1,6 @@
 import type { AdminOnlineDeviceResponse } from '$lib/api';
 import {
-  CreateActionsColumnDef,
-  CreateColumnDef,
-  CreateSortableColumnDef,
+  CreateColumnDefs,
   FirmwareVersionRenderer,
   NumberRenderer,
   RenderCell,
@@ -10,15 +8,27 @@ import {
   TimeSinceDurationRenderer,
   UserAgentRenderer,
 } from '$lib/components/Table/ColumnUtils';
-import type { ColumnDef } from '@tanstack/table-core';
+import { createNowTicker } from '@openshock/svelte-core/utils';
 import { SemVer } from 'semver';
 import DataTableActions from './data-table-actions.svelte';
+import type { Features } from './data-table-features';
 
 export type OnlineHub = Omit<AdminOnlineDeviceResponse, 'firmwareVersion'> & {
   firmwareVersion: SemVer;
 };
 
-export const columns: ColumnDef<OnlineHub>[] = [
+const { CreateColumnDef, CreateSortableColumnDef, CreateActionsColumnDef } = CreateColumnDefs<
+  Features,
+  OnlineHub
+>();
+
+// "Online for" and "Uptime" count up from a fixed instant, so their cells read
+// the clock as they render. That read is what subscribes them to the tick — and
+// it costs nothing while the table isn't mounted, so the columns can stay
+// static, as TanStack requires.
+const clock = createNowTicker();
+
+export const columns = [
   CreateSortableColumnDef('name', 'Name', RenderCell),
   CreateSortableColumnDef(
     'owner',
@@ -39,9 +49,11 @@ export const columns: ColumnDef<OnlineHub>[] = [
     }
   ),
   CreateColumnDef('gateway', 'Gateway', RenderCell),
-  CreateSortableColumnDef('connectedAt', 'Online for', TimeSinceDurationRenderer),
+  CreateSortableColumnDef('connectedAt', 'Online for', (i) =>
+    TimeSinceDurationRenderer(i, clock.current)
+  ),
   CreateColumnDef('userAgent', 'User Agent', UserAgentRenderer),
-  CreateSortableColumnDef('bootedAt', 'Uptime', TimeSinceDurationRenderer),
+  CreateSortableColumnDef('bootedAt', 'Uptime', (i) => TimeSinceDurationRenderer(i, clock.current)),
   CreateSortableColumnDef('latencyMs', 'Latency', NumberRenderer),
   CreateSortableColumnDef('rssi', 'RSSI', NumberRenderer),
   CreateActionsColumnDef(DataTableActions, (hub) => ({ hub })),

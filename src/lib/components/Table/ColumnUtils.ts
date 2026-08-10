@@ -1,56 +1,33 @@
 import { getReadableUserAgentName } from '$lib/utils';
-import { renderComponent } from '@openshock/svelte-core/components/ui/data-table/index.js';
+import { formatRelativeInstant } from '$lib/utils/datetime';
+import { formatDurationSeconds } from '@openshock/svelte-core/utils/index.js';
 import {
-  durationBetween,
-  formatDuration,
-  formatDurationSeconds,
-  formatElapsed,
-} from '@openshock/svelte-core/utils/index.js';
-import {
-  sortingFns,
-  type BuiltInSortingFn,
+  renderComponent,
+  sortFn_alphanumeric,
   type ColumnDef,
+  type ExtractSortFnKeys,
   type Row,
-  type SortingFn,
-  type SortingFnOption,
+  type RowData,
+  type SortFnOption,
   type StringOrTemplateHeader,
-} from '@tanstack/table-core';
+  type TableFeatures,
+} from '@tanstack/svelte-table';
 import type { SemVer } from 'semver';
 import type { Component, ComponentProps } from 'svelte';
 import CellContent from './CellContent.svelte';
 import DataTableSortButton from './SortButton.svelte';
+import type { SortableTableFeatures } from './types';
 
 type CellContentProps = ComponentProps<typeof CellContent>;
-
-function CreateSortHeader<TData>(name: string): StringOrTemplateHeader<TData, unknown> {
-  return ({ column }) =>
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic Svelte components can't be parameterized in .ts files
-    renderComponent(DataTableSortButton as Component<any>, {
-      name,
-      column,
-    });
-}
-
-export function CreateColumnDef<TData extends object, TKey extends Extract<keyof TData, string>>(
-  accessorKey: TKey,
-  headerName: string,
-  renderer: (content: TData[TKey]) => CellContentProps
-): ColumnDef<TData> {
-  return {
-    accessorKey,
-    header: headerName,
-    cell: ({ row }) => renderComponent(CellContent, renderer(row.original[accessorKey])),
-  };
-}
 
 // TanStack's 'auto' sorting can't compare Temporal.Instant values (they aren't
 // primitives — basic comparison invokes Temporal's valueOf, which throws), so it
 // breaks sorting on every date/time column. This default adds Temporal.Instant
 // support while otherwise mirroring how 'auto' resolves: numbers compare
 // numerically (basic), everything else uses the alphanumeric/natural comparator.
-function temporalAwareSortingFn<TData>(
-  rowA: Row<TData>,
-  rowB: Row<TData>,
+function temporalAwareSortFn<TFeatures extends TableFeatures, TData extends RowData>(
+  rowA: Row<TFeatures, TData>,
+  rowB: Row<TFeatures, TData>,
   columnId: string
 ): number {
   const a: unknown = rowA.getValue(columnId);
@@ -71,47 +48,92 @@ function temporalAwareSortingFn<TData>(
     return a === b ? 0 : a > b ? 1 : -1;
   }
 
-  return sortingFns.alphanumeric(rowA, rowB, columnId);
+  return sortFn_alphanumeric(rowA, rowB, columnId);
 }
 
-export function CreateSortableColumnDef<
-  TData extends object,
-  TKey extends Extract<keyof TData, string>,
->(
-  accessorKey: TKey,
-  headerName: string,
-  renderer: (content: TData[TKey]) => CellContentProps,
-  sortFunct?: 'auto' | ((a: TData[TKey], b: TData[TKey]) => number) | BuiltInSortingFn
-): ColumnDef<TData> {
-  let sortingFn: SortingFnOption<TData>;
-  if (sortFunct) {
-    if (typeof sortFunct === 'string') {
-      sortingFn = sortFunct;
-    } else {
-      sortingFn = (row_a, row_b) =>
-        sortFunct(row_a.getValue(accessorKey), row_b.getValue(accessorKey));
-    }
-  } else {
-    sortingFn = temporalAwareSortingFn as SortingFn<TData>;
+/**
+ * Binds the column-def builders to one table's feature set and row type.
+ *
+ * v9 threads `TFeatures` through every column type, and TypeScript can't infer
+ * it from these builders' arguments (it only appears in their return types), so
+ * it's pinned once per table here. The individual builders still infer their
+ * accessor key and actions-component types per call, so call sites are
+ * unchanged from v8:
+ *
+ * ```ts
+ * const { CreateSortableColumnDef, CreateActionsColumnDef } =
+ *   CreateColumnDefs<typeof features, WebhookDto>();
+ * ```
+ */
+export function CreateColumnDefs<TFeatures extends SortableTableFeatures, TData extends RowData>() {
+  // v9 derives the feature-dependent half of `ColumnDef` through a mapped type
+  // keyed on `keyof TFeatures`, which TypeScript can't reduce while `TFeatures`
+  // is still a type parameter. Authoring each literal against the fully
+  // populated `TableFeatures` shape keeps it properly checked, and the widening
+  // to the caller's feature set happens once, here.
+  const asColumnDef = (def: ColumnDef<TableFeatures, TData>) =>
+    def as unknown as ColumnDef<TFeatures, TData>;
+
+  function CreateSortHeader(name: string): StringOrTemplateHeader<TableFeatures, TData> {
+    return ({ column }) =>
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic Svelte components can't be parameterized in .ts files
+      renderComponent(DataTableSortButton as Component<any>, {
+        name,
+        column,
+      });
   }
 
-  return {
-    accessorKey,
-    header: CreateSortHeader(headerName),
-    cell: ({ row }) => renderComponent(CellContent, renderer(row.original[accessorKey])),
-    sortingFn,
-  };
-}
+  function CreateColumnDef<TKey extends Extract<keyof TData, string>>(
+    accessorKey: TKey,
+    headerName: string,
+    renderer: (content: TData[TKey]) => CellContentProps
+  ): ColumnDef<TFeatures, TData> {
+    return asColumnDef({
+      accessorKey,
+      header: headerName,
+      cell: ({ row }) => renderComponent(CellContent, renderer(row.original[accessorKey])),
+    });
+  }
 
-export function CreateActionsColumnDef<
-  TData,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- matches renderComponent's own constraint
-  T extends Component<any>,
->(component: T, getProps: (row: TData) => ComponentProps<T>): ColumnDef<TData> {
-  return {
-    id: 'actions',
-    cell: ({ row }) => renderComponent(component, getProps(row.original)),
-  };
+  function CreateSortableColumnDef<TKey extends Extract<keyof TData, string>>(
+    accessorKey: TKey,
+    headerName: string,
+    renderer: (content: TData[TKey]) => CellContentProps,
+    sortFunct?: 'auto' | ((a: TData[TKey], b: TData[TKey]) => number) | ExtractSortFnKeys<TFeatures>
+  ): ColumnDef<TFeatures, TData> {
+    let sortFn: SortFnOption<TFeatures, TData>;
+    if (sortFunct) {
+      if (typeof sortFunct === 'string') {
+        sortFn = sortFunct;
+      } else {
+        sortFn = (row_a, row_b) =>
+          sortFunct(row_a.getValue(accessorKey), row_b.getValue(accessorKey));
+      }
+    } else {
+      sortFn = (rowA, rowB, columnId) => temporalAwareSortFn(rowA, rowB, columnId);
+    }
+
+    return asColumnDef({
+      accessorKey,
+      header: CreateSortHeader(headerName),
+      cell: ({ row }) => renderComponent(CellContent, renderer(row.original[accessorKey])),
+      // Registered sort-fn names come from the caller's `sortFns`, which the
+      // generic `TableFeatures` shape used for checking doesn't know about.
+      sortFn: sortFn as SortFnOption<TableFeatures, TData>,
+    });
+  }
+
+  function CreateActionsColumnDef<
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- matches renderComponent's own constraint
+    T extends Component<any>,
+  >(component: T, getProps: (row: TData) => ComponentProps<T>): ColumnDef<TFeatures, TData> {
+    return asColumnDef({
+      id: 'actions',
+      cell: ({ row }) => renderComponent(component, getProps(row.original)),
+    });
+  }
+
+  return { CreateColumnDef, CreateSortableColumnDef, CreateActionsColumnDef };
 }
 
 // Pre-defined cell values
@@ -184,19 +206,17 @@ export function LocaleDateTimeRenderer(instant: Temporal.Instant | null): CellCo
   return RenderCellWithTooltip(instant.toLocaleString(), instant.toString());
 }
 
-export function TimeSinceDurationRenderer(instant: Temporal.Instant): CellContentProps {
-  return RenderCellWithTooltip(
-    formatDuration(durationBetween(instant, Temporal.Now.instant())),
-    instant.toString()
-  );
+// Pass `now` from a ticker to keep the label counting up; the default reads the
+// clock once and so is only correct at render time.
+export function TimeSinceDurationRenderer(
+  instant: Temporal.Instant,
+  now: Temporal.Instant = Temporal.Now.instant()
+): CellContentProps {
+  return RenderCellWithTooltip(formatRelativeInstant(instant, now), instant.toString());
 }
 
 export function TimeSinceRelativeRenderer(instant: Temporal.Instant): CellContentProps {
-  if (instant.epochMilliseconds <= 0) return CellOrangeNever;
-  return RenderCellWithTooltip(
-    formatElapsed(durationBetween(Temporal.Now.instant(), instant)),
-    instant.toString()
-  );
+  return RenderCellWithTooltip(formatRelativeInstant(instant), instant.toString());
 }
 
 export const TimeSinceRelativeOrNeverRenderer = (

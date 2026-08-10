@@ -1,5 +1,4 @@
 <script lang="ts" module>
-  import type { ColumnDef } from '@tanstack/table-core';
   import {
     EmailStatus,
     type EmailOutboxMessageDto,
@@ -7,8 +6,7 @@
   } from '$lib/api';
   import {
     CellRedNone,
-    CreateActionsColumnDef,
-    CreateSortableColumnDef,
+    CreateColumnDefs,
     LocaleDateTimeRenderer,
     RenderBlueCell,
     RenderBoldCell,
@@ -20,6 +18,7 @@
   } from '$lib/components/Table/ColumnUtils';
   import DataTableActions from './data-table-actions.svelte';
   import { odataAnd, odataContains, odataEq } from '$lib/utils/odata';
+  import type { Features } from './data-table-features';
 
   function StatusRenderer(status: EmailStatusType) {
     switch (status) {
@@ -44,7 +43,7 @@
 </script>
 
 <script lang="ts">
-  import type { SortingState } from '@tanstack/table-core';
+  import type { SortingState } from '@tanstack/svelte-table';
   import {
     adminGetEmailOutbox,
     adminGetEmailOutboxStats,
@@ -62,10 +61,16 @@
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { useDebounce } from '@openshock/svelte-core/utils/debounce.js';
   import SendTestDialog from './dialog-send-test.svelte';
+  import { features } from './data-table-features';
 
   registerBreadcrumbs(() => [{ label: 'Mail' }]);
 
-  const columns: ColumnDef<EmailOutboxMessageDto>[] = [
+  const { CreateSortableColumnDef, CreateActionsColumnDef } = CreateColumnDefs<
+    Features,
+    EmailOutboxMessageDto
+  >();
+
+  const columns = [
     CreateSortableColumnDef('type', 'Type', RenderCell),
     CreateSortableColumnDef('recipient', 'Recipient', RenderCell),
     CreateSortableColumnDef('status', 'Status', StatusRenderer),
@@ -215,12 +220,7 @@
       {/each}
     </div>
 
-    <DataTable
-      {data}
-      {columns}
-      bind:sorting
-      pagination={{ pageIndex: page - 1, pageSize: perPage }}
-    />
+    <DataTable {data} {columns} {features} bind:sorting manualSorting />
     <PaginationFooter
       count={total}
       {perPage}

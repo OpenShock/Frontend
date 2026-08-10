@@ -1,6 +1,5 @@
 <script lang="ts">
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
-  import type { ColumnFiltersState, SortingState } from '@tanstack/table-core';
   import { adminGetOnlineDevices } from '$lib/api';
   import { Container } from '@openshock/svelte-core/components';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
@@ -11,12 +10,11 @@
   import { onMount } from 'svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { type OnlineHub, columns } from './columns';
+  import { features } from './data-table-features';
 
   registerBreadcrumbs(() => [{ label: 'Online Hubs' }]);
 
   let data = $state<OnlineHub[]>([]);
-  let sorting = $state<SortingState>([]);
-  let filters = $state<ColumnFiltersState>([]);
 
   function fetchOnlineHubs() {
     adminGetOnlineDevices()
@@ -41,6 +39,6 @@
     </Card.Title>
   </Card.Header>
   <Card.Content>
-    <DataTable {data} {columns} {sorting} {filters} />
+    <DataTable {data} {columns} {features} />
   </Card.Content>
 </Container>

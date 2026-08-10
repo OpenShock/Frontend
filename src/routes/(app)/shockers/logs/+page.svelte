@@ -1,12 +1,12 @@
 <script lang="ts">
   import { shockerGetAllShockerLogs } from '$lib/api';
-  import type { ColumnDef, SortingState } from '@tanstack/table-core';
+  import type { SortingState } from '@tanstack/svelte-table';
   import type { LogEntryWithHub } from '$lib/api';
   import { Container } from '@openshock/svelte-core/components';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
   import {
-    CreateSortableColumnDef,
+    CreateColumnDefs,
     DurationRenderer,
     LocaleDateTimeRenderer,
     NumberRenderer,
@@ -23,6 +23,7 @@
   import { ControlType } from '$lib/signalr/models/ControlType';
   import { ownHubs, refreshOwnHubs } from '$lib/state/hubs-state.svelte';
   import { createUrlFilters } from '$lib/utils/urlFilters.svelte';
+  import { features, type Features } from './data-table-features';
 
   registerBreadcrumbs(() => [
     { label: 'Shockers', href: '/shockers/own' },
@@ -199,7 +200,9 @@
     };
   });
 
-  const columns: ColumnDef<LogEntryWithHub>[] = [
+  const { CreateSortableColumnDef } = CreateColumnDefs<Features, LogEntryWithHub>();
+
+  const columns = [
     CreateSortableColumnDef('hubName', 'Hub', (h) => RenderCell(h)),
     CreateSortableColumnDef('shockerName', 'Shocker', (s) => RenderCell(s)),
     CreateSortableColumnDef('createdOn', 'Time', LocaleDateTimeRenderer, (a, b) =>
@@ -253,7 +256,14 @@
       {/if}
     </div>
     <div class="flex min-h-0 flex-1 flex-col gap-6" bind:clientHeight={tableViewportHeight}>
-      <DataTable data={logs} {columns} bind:sorting class="min-h-0 flex-1" />
+      <DataTable
+        data={logs}
+        {columns}
+        {features}
+        bind:sorting
+        manualSorting
+        class="min-h-0 flex-1"
+      />
       <PaginationFooter
         count={total}
         perPage={pageSize}

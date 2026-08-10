@@ -15,13 +15,14 @@
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { durationBetween, formatDuration, formatElapsed } from '@openshock/svelte-core/utils';
   import { getSiteShortURL } from '$lib/utils/url';
   import { onMount } from 'svelte';
   import DataTableActions from './data-table-actions.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import CreatePublicShareDialog from './dialog-publicshare-create.svelte';
   import { PageHeader } from '@openshock/svelte-core/components';
+  import { formatRelativeInstant } from '$lib/utils/datetime';
+  import { createNowTicker } from '@openshock/svelte-core/utils';
 
   registerBreadcrumbs(() => [{ label: 'Public Shares' }]);
 
@@ -55,24 +56,26 @@
     danger: 'text-red-600 dark:text-red-400 ring-red-500/30',
   } as const;
 
+  const clock = createNowTicker();
+
   function expiryInfo(expiresOn: Temporal.Instant | null | undefined) {
     if (!expiresOn) {
       return { label: 'Never expires', tone: 'neutral' as const };
     }
-    const now = Temporal.Now.instant();
+    // Read from the ticker, not the clock directly: this is what makes the
+    // badge flip to "Expired" on its own while the page is open.
+    const now = clock.current;
     const isExpired = expiresOn.epochMilliseconds <= now.epochMilliseconds;
     if (isExpired) {
       return { label: 'Expired', tone: 'danger' as const };
     }
     return {
-      label: 'Expires ' + formatDuration(durationBetween(now, expiresOn)),
+      label: 'Expires ' + formatRelativeInstant(expiresOn, now),
       tone: 'warning' as const,
     };
   }
 
-  onMount(() => {
-    refreshPublicShares();
-  });
+  onMount(refreshPublicShares);
 </script>
 
 <CreatePublicShareDialog bind:open={showAddShareModal} onCreated={refreshPublicShares} />
@@ -105,9 +108,7 @@
       </Button>
     </EmptyState>
   {:else}
-    <div
-      class="grid w-full grid-cols-1 gap-4 sm:[grid-template-columns:repeat(auto-fill,minmax(18rem,1fr))]"
-    >
+    <div class="grid w-full grid-cols-1 gap-4 sm:grid-cols-[repeat(auto-fill,minmax(18rem,1fr))]">
       {#each sortedShares as share (share.id)}
         {@const url = getSiteShortURL(`/s/${share.id}`)}
         {@const exp = expiryInfo(share.expiresOn)}
@@ -147,7 +148,7 @@
           >
             <span class="flex items-center gap-1.5" title={share.createdOn.toString()}>
               <Clock class="size-3.5" />
-              {formatElapsed(durationBetween(Temporal.Now.instant(), share.createdOn))}
+              {formatRelativeInstant(share.createdOn, clock.current)}
             </span>
             <span
               class="flex items-center gap-1.5 rounded-full px-2 py-0.5 ring-1 ring-inset {expiryToneClasses[

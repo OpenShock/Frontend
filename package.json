@@ -31,7 +31,7 @@
 		"@sveltejs/kit": "^2.70.2",
 		"@sveltejs/vite-plugin-svelte": "^7.2.0",
 		"@tailwindcss/vite": "^4.3.3",
-		"@tanstack/table-core": "^8.21.3",
+		"@tanstack/svelte-table": "^9.0.0",
 		"@types/node": "^26.1.2",
 		"@types/semver": "^7.8.0",
 		"@types/w3c-web-serial": "^1.0.8",
