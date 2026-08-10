@@ -1,9 +1,9 @@
 import { getReadableUserAgentName } from '$lib/utils';
+import { formatRelativeInstant } from '$lib/utils/datetime';
 import {
   durationBetween,
   formatDuration,
   formatDurationSeconds,
-  formatElapsed,
 } from '@openshock/svelte-core/utils/index.js';
 import {
   renderComponent,
@@ -219,10 +219,7 @@ export function TimeSinceDurationRenderer(instant: Temporal.Instant): CellConten
 
 export function TimeSinceRelativeRenderer(instant: Temporal.Instant): CellContentProps {
   if (instant.epochMilliseconds <= 0) return CellOrangeNever;
-  return RenderCellWithTooltip(
-    formatElapsed(durationBetween(Temporal.Now.instant(), instant)),
-    instant.toString()
-  );
+  return RenderCellWithTooltip(formatRelativeInstant(instant), instant.toString());
 }
 
 export const TimeSinceRelativeOrNeverRenderer = (

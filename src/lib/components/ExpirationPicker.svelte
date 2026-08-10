@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { formatRelativeInstant } from '$lib/utils/datetime';
   import { parseAbsoluteToLocal, type ZonedDateTime } from '@internationalized/date';
   import { DateTimePicker } from '@openshock/svelte-core/components/datetime-picker';
   import * as Select from '@openshock/svelte-core/components/ui/select';
@@ -79,7 +80,7 @@
   {:else if option === 'never'}
     <p class="text-xs">This will never expire</p>
   {:else if instant}
-    {@const elapsed = formatElapsed(durationBetween(Temporal.Now.instant(), instant))}
+    {@const elapsed = formatRelativeInstant(instant)}
     {@const label = instant.toLocaleString(undefined, {
       timeZone: Temporal.Now.timeZoneId(),
       day: '2-digit',

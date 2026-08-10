@@ -22,6 +22,7 @@
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import CreatePublicShareDialog from './dialog-publicshare-create.svelte';
   import { PageHeader } from '@openshock/svelte-core/components';
+  import { formatRelativeInstant } from '$lib/utils/datetime';
 
   registerBreadcrumbs(() => [{ label: 'Public Shares' }]);
 
@@ -147,7 +148,7 @@
           >
             <span class="flex items-center gap-1.5" title={share.createdOn.toString()}>
               <Clock class="size-3.5" />
-              {formatElapsed(durationBetween(Temporal.Now.instant(), share.createdOn))}
+              {formatRelativeInstant(share.createdOn)}
             </span>
             <span
               class="flex items-center gap-1.5 rounded-full px-2 py-0.5 ring-1 ring-inset {expiryToneClasses[
