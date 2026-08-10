@@ -1,5 +1,9 @@
 import { getReadableUserAgentName } from '$lib/utils';
-import { durationBetween, formatDuration } from '@openshock/svelte-core/utils/index.js';
+import {
+  durationBetween,
+  formatDuration,
+  formatDurationSeconds,
+} from '@openshock/svelte-core/utils/index.js';
 import {
   renderComponent,
   sortFn_alphanumeric,
@@ -206,6 +210,10 @@ export function TimeSinceDurationRenderer(instant: Temporal.Instant): CellConten
 
 export const NumberRenderer = (number: number | null): CellContentProps =>
   number ? RenderBoldCell(number.toString()) : CellNotApplicable;
+
+// Durations are stored/transmitted in milliseconds; display them in seconds with a unit.
+export const DurationRenderer = (durationMs: number | null): CellContentProps =>
+  durationMs ? RenderBoldCell(formatDurationSeconds(durationMs / 1000)) : CellNotApplicable;
 
 export const UserAgentRenderer = (userAgent: string | null): CellContentProps => {
   if (!userAgent) return CellRedUnknown;
