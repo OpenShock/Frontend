@@ -218,7 +218,6 @@ export function TimeSinceDurationRenderer(instant: Temporal.Instant): CellConten
 }
 
 export function TimeSinceRelativeRenderer(instant: Temporal.Instant): CellContentProps {
-  if (instant.epochMilliseconds <= 0) return CellOrangeNever;
   return RenderCellWithTooltip(formatRelativeInstant(instant), instant.toString());
 }
 
