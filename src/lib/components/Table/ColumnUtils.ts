@@ -3,6 +3,7 @@ import {
   durationBetween,
   formatDuration,
   formatDurationSeconds,
+  formatElapsed,
 } from '@openshock/svelte-core/utils/index.js';
 import {
   renderComponent,
@@ -145,6 +146,7 @@ export const CellNotApplicable: CellContentProps = {
   bold: true,
   title: 'Not applicable',
 };
+export const CellOrangeNever: CellContentProps = { text: 'Never', bold: true, color: 'orange' };
 export const CellRedUnknown: CellContentProps = { text: 'Unknown', bold: true, color: 'red' };
 export const CellRedInvalid: CellContentProps = { text: 'Invalid', bold: true, color: 'red' };
 export const CellRedUnavailable: CellContentProps = {
@@ -196,6 +198,13 @@ export const RenderCellWithTooltip = (content: string, tooltip: string): CellCon
   title: tooltip,
 });
 
+export function LocaleDateRenderer(instant: Temporal.Instant): CellContentProps {
+  return RenderCellWithTooltip(
+    instant.toLocaleString(undefined, { dateStyle: 'short' }),
+    instant.toString()
+  );
+}
+
 export function LocaleDateTimeRenderer(instant: Temporal.Instant | null): CellContentProps {
   if (!instant) return RenderCell('Never');
   return RenderCellWithTooltip(instant.toLocaleString(), instant.toString());
@@ -207,6 +216,19 @@ export function TimeSinceDurationRenderer(instant: Temporal.Instant): CellConten
     instant.toString()
   );
 }
+
+export function TimeSinceRelativeRenderer(instant: Temporal.Instant): CellContentProps {
+  if (instant.epochMilliseconds <= 0) return CellOrangeNever;
+  return RenderCellWithTooltip(
+    formatElapsed(durationBetween(Temporal.Now.instant(), instant)),
+    instant.toString()
+  );
+}
+
+export const TimeSinceRelativeOrNeverRenderer = (
+  instant: Temporal.Instant | null | undefined
+): CellContentProps =>
+  instant instanceof Temporal.Instant ? TimeSinceRelativeRenderer(instant) : CellOrangeNever;
 
 export const NumberRenderer = (number: number | null): CellContentProps =>
   number ? RenderBoldCell(number.toString()) : CellNotApplicable;
