@@ -223,7 +223,7 @@ importers:
         specifier: ^2.31.1
         version: 2.31.1(@types/node@26.1.2)
       '@internationalized/date':
-        specifier: ^3.12.3
+        specifier: ^3.12.2
         version: 3.12.3
       '@lucide/svelte':
         specifier: ^1.28.0
@@ -243,6 +243,9 @@ importers:
       '@tailwindcss/vite':
         specifier: ^4.3.3
         version: 4.3.3(vite@8.2.0(@types/node@26.1.2)(esbuild@0.28.1)(jiti@2.7.0))
+      '@tanstack/table-core':
+        specifier: ^8.21.3
+        version: 8.21.3
       '@typescript/native':
         specifier: npm:typescript@~7.0.2
         version: typescript@7.0.2
@@ -268,7 +271,7 @@ importers:
         specifier: ^0.8.1
         version: 0.8.1(prettier-plugin-organize-imports@4.3.0(prettier@3.9.6)(typescript@6.0.3))(prettier-plugin-svelte@4.1.1(prettier@3.9.6)(svelte@5.56.8(@typescript-eslint/types@8.66.0)))(prettier@3.9.6)
       publint:
-        specifier: ^0.3.23
+        specifier: ^0.3.22
         version: 0.3.23
       svelte:
         specifier: ^5.56.8
@@ -286,13 +289,13 @@ importers:
         specifier: ^3.6.0
         version: 3.6.0
       tailwind-variants:
-        specifier: ^3.3.1
+        specifier: ^3.3.0
         version: 3.3.1(tailwind-merge@3.6.0)(tailwindcss@4.3.3)
       tailwindcss:
         specifier: ^4.3.3
         version: 4.3.3
       temporal-polyfill:
-        specifier: ^1.0.3
+        specifier: ^1.0.2
         version: 1.0.3
       tw-animate-css:
         specifier: ^1.4.0

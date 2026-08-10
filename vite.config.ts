@@ -14,6 +14,13 @@ import devtoolsJson from 'vite-plugin-devtools-json';
 import mkcert from 'vite-plugin-mkcert';
 import { localDevChecksPlugin } from './vite-plugins/local-dev-checks.ts';
 
+type PublicEnv = ReturnType<typeof loadPublicEnv>;
+type KitConfigParam = Parameters<typeof sveltekit>[0];
+
+// CspDirectives itself isn't exported by @sveltejs/kit — derive it from the
+// (exported) KitConfig type instead of duplicating its shape here.
+type CspDirectives = NonNullable<NonNullable<KitConfig['csp']>['directives']>;
+
 function jsBannerPlugin(banner: string): Plugin {
   // Matches preserved/legal comment markers that OXC's minifier strips when
   // `output.comments.legal === false`: `/*!` starts, plus `@license`,
@@ -62,16 +69,21 @@ const isTruthy = (value?: string) => value === 'true' || value === '1';
 const isGithubActions = isTruthy(env.GITHUB_ACTIONS);
 const isCloudflare = isTruthy(env.WORKERS_CI);
 const isDocker = isTruthy(env.DOCKER);
-// Don't trust NODE_ENV — tools like svelte-check load this file mid-process and
-// can have NODE_ENV='production' set by transitively-imported plugins (vite,
-// vite-plugin-svelte) even though no production build is actually happening.
-// `pnpm build`/`pnpm preview` set BUILD_ENV=production explicitly via cross-env;
-// CI/Cloudflare/Docker each have their own flag.
-const isProductionBuild =
-  isGithubActions || isCloudflare || isDocker || env.BUILD_ENV === 'production';
-const buildMode = isProductionBuild ? 'production' : 'development';
 
-const dotenv = { ...env, ...loadEnv(buildMode, process.cwd(), 'PUBLIC_') };
+/**
+ * PUBLIC_* values for a given Vite mode.
+ *
+ * This has to key off Vite's own `mode`, because that is what SvelteKit uses to
+ * resolve `$env/static/public` — the values the client is actually compiled
+ * against. Deriving it from anything else (NODE_ENV, a BUILD_ENV flag, CI
+ * detection) lets the CSP below be built from one .env file while the client is
+ * built from another; the symptom is the app's own connect-src blocking the API
+ * base URL it was compiled to call, because `.env` and `.env.development` point
+ * at different hosts.
+ */
+function loadPublicEnv(mode: string) {
+  return { ...env, ...loadEnv(mode, process.cwd(), 'PUBLIC_') };
+}
 
 function getGitHash(): string | undefined {
   if (isGithubActions) return env.GITHUB_SHA;
@@ -97,7 +109,7 @@ function getOrigin(url: string | undefined): string {
   }
 }
 
-function getSvelteBasePath(): '' | `/${string}` {
+function getSvelteBasePath(dotenv: PublicEnv): '' | `/${string}` {
   try {
     const url = new URL(dotenv.PUBLIC_SITE_URL ?? '');
     // URL.pathname always starts with '/', which the KitConfig type can't know.
@@ -109,83 +121,81 @@ function getSvelteBasePath(): '' | `/${string}` {
   }
 }
 
-// CspDirectives itself isn't exported by @sveltejs/kit — derive it from the
-// (exported) KitConfig type instead of duplicating its shape here.
-type CspDirectives = NonNullable<NonNullable<KitConfig['csp']>['directives']>;
-
 const commitHash = getGitHash();
 
 // kit options sit at the top level here — the only layout difference to svelte.config.js.
-const sveltekitConfig = {
-  preprocess: vitePreprocess(),
-  vitePlugin: {
-    inspector: true,
-  },
-  compilerOptions: {
-    runes: true,
-    // Await expressions in components (script top level, $derived, markup).
-    // The flag disappears in Svelte 6, where this becomes the default.
-    experimental: {
-      async: true,
+function buildSveltekitConfig(dotenv: PublicEnv): KitConfigParam {
+  return {
+    preprocess: vitePreprocess(),
+    vitePlugin: {
+      inspector: true,
     },
-  },
-  // Use the appropriate adapter
-  adapter: isCloudflare ? adapterCloudflare() : adapterNode(),
-  paths: {
-    base: getSvelteBasePath(),
-  },
-  csp: {
-    mode: 'nonce',
-    // Cast: several sources are runtime strings (PUBLIC_* env), which can't be checked
-    // against the HostSource template-literal types at compile time.
-    directives: {
-      'default-src': ['self'],
-      'frame-src': ['https://challenges.cloudflare.com'],
-      // Explicit rather than inherited: without it, worker-src would fall back to
-      // script-src and pick up the third-party script hosts allowed there.
-      'worker-src': ['self'],
-      'style-src': ['self', 'unsafe-inline'],
-      'img-src': ['self', 'https://*.wp.com', 'https://www.gravatar.com'],
-      'connect-src': [
-        'self',
-        dotenv.PUBLIC_BACKEND_API_URL,
-        getWsUrlFromHttpUrl(dotenv.PUBLIC_BACKEND_API_URL),
-        dotenv.PUBLIC_GATEWAY_CSP_WILDCARD,
-        getWsUrlFromHttpUrl(dotenv.PUBLIC_GATEWAY_CSP_WILDCARD),
-        'https://firmware.openshock.org',
-        'https://api.pwnedpasswords.com/range/',
-        'https://cloudflareinsights.com',
-        // SigNoz / OpenTelemetry log + trace shipping endpoint origins.
-        getOrigin(dotenv.PUBLIC_SIGNOZ_LOGS_URL),
-        getOrigin(dotenv.PUBLIC_SIGNOZ_TRACES_URL),
-      ],
-      'script-src': [
-        'self',
-        'https://challenges.cloudflare.com/turnstile/',
-        'https://static.cloudflareinsights.com',
-      ],
-      'object-src': ['none'],
-      'base-uri': ['self'],
-      // form-action does NOT fall back to default-src — without it, injected HTML
-      // could point a <form> at an attacker origin. The API origin is needed for the
-      // OAuth buttons' cross-origin POST; note Chrome also enforces form-action on
-      // the post-submit redirect to the OAuth provider.
-      'form-action': ['self', dotenv.PUBLIC_BACKEND_API_URL],
-      // Ignored on prerendered pages (meta-tag CSP) — the _headers file's
-      // X-Frame-Options covers those on Cloudflare.
-      'frame-ancestors': ['none'],
-    } as CspDirectives,
-  },
-  version: {
-    name: commitHash,
-  },
-  experimental: {
-    // Server-side OpenTelemetry spans for handle/load/form actions, collected by
-    // src/instrumentation.server.ts. Experimental (kit ≥2.31).
-    tracing: { server: true },
-    instrumentation: { server: true },
-  },
-} satisfies Parameters<typeof sveltekit>[0];
+    compilerOptions: {
+      runes: true,
+      // Await expressions in components (script top level, $derived, markup).
+      // The flag disappears in Svelte 6, where this becomes the default.
+      experimental: {
+        async: true,
+      },
+    },
+    // Use the appropriate adapter
+    adapter: isCloudflare ? adapterCloudflare() : adapterNode(),
+    paths: {
+      base: getSvelteBasePath(dotenv),
+    },
+    csp: {
+      mode: 'nonce',
+      // Cast: several sources are runtime strings (PUBLIC_* env), which can't be checked
+      // against the HostSource template-literal types at compile time.
+      directives: {
+        'default-src': ['self'],
+        'frame-src': ['https://challenges.cloudflare.com'],
+        // Explicit rather than inherited: without it, worker-src would fall back to
+        // script-src and pick up the third-party script hosts allowed there.
+        'worker-src': ['self'],
+        'style-src': ['self', 'unsafe-inline'],
+        'img-src': ['self', 'https://*.wp.com', 'https://www.gravatar.com'],
+        'connect-src': [
+          'self',
+          dotenv.PUBLIC_BACKEND_API_URL,
+          getWsUrlFromHttpUrl(dotenv.PUBLIC_BACKEND_API_URL),
+          dotenv.PUBLIC_GATEWAY_CSP_WILDCARD,
+          getWsUrlFromHttpUrl(dotenv.PUBLIC_GATEWAY_CSP_WILDCARD),
+          'https://firmware.openshock.org',
+          'https://api.pwnedpasswords.com/range/',
+          'https://cloudflareinsights.com',
+          // SigNoz / OpenTelemetry log + trace shipping endpoint origins.
+          getOrigin(dotenv.PUBLIC_SIGNOZ_LOGS_URL),
+          getOrigin(dotenv.PUBLIC_SIGNOZ_TRACES_URL),
+        ],
+        'script-src': [
+          'self',
+          'https://challenges.cloudflare.com/turnstile/',
+          'https://static.cloudflareinsights.com',
+        ],
+        'object-src': ['none'],
+        'base-uri': ['self'],
+        // form-action does NOT fall back to default-src — without it, injected HTML
+        // could point a <form> at an attacker origin. The API origin is needed for the
+        // OAuth buttons' cross-origin POST; note Chrome also enforces form-action on
+        // the post-submit redirect to the OAuth provider.
+        'form-action': ['self', dotenv.PUBLIC_BACKEND_API_URL],
+        // Ignored on prerendered pages (meta-tag CSP) — the _headers file's
+        // X-Frame-Options covers those on Cloudflare.
+        'frame-ancestors': ['none'],
+      } as CspDirectives,
+    },
+    version: {
+      name: commitHash,
+    },
+    experimental: {
+      // Server-side OpenTelemetry spans for handle/load/form actions, collected by
+      // src/instrumentation.server.ts. Experimental (kit ≥2.31).
+      tracing: { server: true },
+      instrumentation: { server: true },
+    },
+  };
+}
 
 interface LocalServer {
   /** Vite `server` config (host/port + dev niceties). */
@@ -206,7 +216,10 @@ interface LocalServer {
 // no socket binds — so it is safe to evaluate during `svelte-kit sync`,
 // `svelte-check`, codegen, and builds. The actual server-only side effects live
 // in vite-plugins/local-dev-checks.ts.
-function resolveServerConfig(useLocalRedirect: boolean): LocalServer | undefined {
+function resolveServerConfig(
+  useLocalRedirect: boolean,
+  dotenv: PublicEnv
+): LocalServer | undefined {
   if (!useLocalRedirect) return undefined;
 
   // Vite 8: pipe browser console errors/warnings into the dev terminal so client
@@ -233,6 +246,10 @@ function resolveServerConfig(useLocalRedirect: boolean): LocalServer | undefined
 }
 
 export default defineConfig(({ command, mode, isPreview }) => {
+  // Resolved here, from Vite's mode, so the CSP in buildSveltekitConfig always
+  // agrees with the `$env/static/public` values the client is compiled against.
+  const dotenv = loadPublicEnv(mode);
+
   const isLocalServe = command === 'serve' || isPreview === true;
   const isProduction = mode === 'production' && (isTruthy(env.DOCKER) || isTruthy(env.WORKERS_CI));
   // Vitest resolves this config with command 'serve', unit tests must never trigger mkcert or the hosts/port checks.
@@ -241,7 +258,7 @@ export default defineConfig(({ command, mode, isPreview }) => {
   // Serve locally at https://local.<domain> (mkcert cert + hosts entry) so the frontend shares cookies with the API.
   const useLocalRedirect = isLocalServe && !isProduction && !isTest && !isTruthy(env.CI);
 
-  const server = resolveServerConfig(useLocalRedirect);
+  const server = resolveServerConfig(useLocalRedirect, dotenv);
 
   return {
     resolve: {
@@ -275,7 +292,7 @@ export default defineConfig(({ command, mode, isPreview }) => {
       server?.fqdn ? localDevChecksPlugin(server.fqdn, server.config.port) : undefined,
       jsBannerPlugin('/*! For licenses information, see LICENSES.txt */'),
       tailwindcss(),
-      sveltekit(sveltekitConfig),
+      sveltekit(buildSveltekitConfig(dotenv)),
       devtoolsJson(),
       license({
         thirdParty: {
