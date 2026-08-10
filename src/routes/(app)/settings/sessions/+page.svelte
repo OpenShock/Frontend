@@ -82,9 +82,7 @@
     {:else}
       <div class="divide-y rounded-md border">
         {#each data as session (session.id)}
-          {@const lastSeen = formatRelativeInstant(session.lastUsed, now)}
-          {@const started = formatRelativeInstant(session.created, now)}
-          {@const expires = formatRelativeInstant(session.expires, now)}
+          {@const lastSeen = session.lastUsed ? formatRelativeInstant(session.lastUsed, now) : null}
           <div class="flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-3">
             <div class="flex min-w-0 flex-1 items-center gap-2">
               <span class="truncate font-medium" title={session.userAgent ?? undefined}>
@@ -94,8 +92,8 @@
             </div>
             <div class="text-muted-foreground flex shrink-0 flex-wrap items-center gap-x-4 text-sm">
               <span>{lastSeen ? `Last seen ${lastSeen}` : 'Never used'}</span>
-              <span>{started ? `Signed in ${started}` : 'Sign-in time unknown'}</span>
-              <span>{expires ? `Expires ${expires}` : 'Never expires'}</span>
+              <span>Signed in {formatRelativeInstant(session.created, now)}</span>
+              <span>Expires {formatRelativeInstant(session.expires, now)}</span>
             </div>
             <SessionActions {session} {onRevoked} />
           </div>

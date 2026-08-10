@@ -15,7 +15,7 @@
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { durationBetween, formatDuration, formatElapsed } from '@openshock/svelte-core/utils';
+  import { durationBetween, formatDuration } from '@openshock/svelte-core/utils';
   import { getSiteShortURL } from '$lib/utils/url';
   import { onMount } from 'svelte';
   import DataTableActions from './data-table-actions.svelte';
@@ -106,9 +106,7 @@
       </Button>
     </EmptyState>
   {:else}
-    <div
-      class="grid w-full grid-cols-1 gap-4 sm:[grid-template-columns:repeat(auto-fill,minmax(18rem,1fr))]"
-    >
+    <div class="grid w-full grid-cols-1 gap-4 sm:grid-cols-[repeat(auto-fill,minmax(18rem,1fr))]">
       {#each sortedShares as share (share.id)}
         {@const url = getSiteShortURL(`/s/${share.id}`)}
         {@const exp = expiryInfo(share.expiresOn)}

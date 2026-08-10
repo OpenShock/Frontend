@@ -4,7 +4,6 @@
   import { DateTimePicker } from '@openshock/svelte-core/components/datetime-picker';
   import * as Select from '@openshock/svelte-core/components/ui/select';
   import { GetValResColor } from '@openshock/svelte-core/types/ValidationResult.js';
-  import { durationBetween, formatElapsed } from '@openshock/svelte-core/utils';
 
   interface Props {
     option?: string;
