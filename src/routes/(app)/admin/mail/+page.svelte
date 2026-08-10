@@ -1,24 +1,14 @@
 <script lang="ts" module>
-  import {
-    EmailStatus,
-    type EmailOutboxMessageDto,
-    type EmailStatus as EmailStatusType,
-  } from '$lib/api';
+  import { EmailStatus, type EmailStatus as EmailStatusType } from '$lib/api';
   import {
     CellRedNone,
-    CreateColumnDefs,
-    LocaleDateTimeRenderer,
     RenderBlueCell,
     RenderBoldCell,
-    RenderCell,
     RenderCellWithTooltip,
     RenderGreenCell,
     RenderOrangeCell,
     RenderRedCell,
   } from '$lib/components/Table/ColumnUtils';
-  import DataTableActions from './data-table-actions.svelte';
-  import { odataAnd, odataContains, odataEq } from '$lib/utils/odata';
-  import type { Features } from './data-table-features';
 
   function StatusRenderer(status: EmailStatusType) {
     switch (status) {
@@ -40,15 +30,32 @@
     const short = error.length > 60 ? error.slice(0, 57) + '…' : error;
     return RenderCellWithTooltip(short, error);
   }
+
+  // Fixed presentation data — built once per module rather than per instance.
+  const statusTiles: { status: EmailStatusType; label: string; color: string }[] = [
+    { status: EmailStatus.Pending, label: 'Pending', color: 'text-orange-500' },
+    { status: EmailStatus.Sending, label: 'Sending', color: 'text-blue-500' },
+    { status: EmailStatus.Sent, label: 'Sent', color: 'text-green-500' },
+    { status: EmailStatus.Failed, label: 'Failed', color: 'text-red-500' },
+    { status: EmailStatus.Skipped, label: 'Skipped', color: 'text-muted-foreground' },
+  ];
 </script>
 
 <script lang="ts">
+  import DataTableActions from './data-table-actions.svelte';
+  import { odataAnd, odataContains, odataEq } from '$lib/utils/odata';
+  import {
+    CreateColumnDefs,
+    LocaleDateTimeRenderer,
+    RenderCell,
+  } from '$lib/components/Table/ColumnUtils';
   import type { SortingState } from '@tanstack/svelte-table';
   import {
     adminGetEmailOutbox,
     adminGetEmailOutboxStats,
     type EmailOutboxMessageDtoPaginated,
     type EmailOutboxStatsDto,
+    type EmailOutboxMessageDto,
   } from '$lib/api';
   import { Container } from '@openshock/svelte-core/components';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
@@ -61,7 +68,7 @@
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { useDebounce } from '@openshock/svelte-core/utils';
   import SendTestDialog from './dialog-send-test.svelte';
-  import { features } from './data-table-features';
+  import { features, type Features } from './data-table-features';
 
   registerBreadcrumbs(() => [{ label: 'Mail' }]);
 
@@ -82,14 +89,6 @@
       message,
       onChanged: () => refresh(),
     })),
-  ];
-
-  const statusTiles: { status: EmailStatusType; label: string; color: string }[] = [
-    { status: EmailStatus.Pending, label: 'Pending', color: 'text-orange-500' },
-    { status: EmailStatus.Sending, label: 'Sending', color: 'text-blue-500' },
-    { status: EmailStatus.Sent, label: 'Sent', color: 'text-green-500' },
-    { status: EmailStatus.Failed, label: 'Failed', color: 'text-red-500' },
-    { status: EmailStatus.Skipped, label: 'Skipped', color: 'text-muted-foreground' },
   ];
 
   let isFetching = $state(false);

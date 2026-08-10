@@ -1,6 +1,5 @@
 <script lang="ts" module>
-  import { OtaUpdateStatus, devicesOtaGetOtaUpdateHistory } from '$lib/api';
-  import type { OtaItem } from '$lib/api';
+  import { OtaUpdateStatus } from '$lib/api';
   import { OtaUpdateProgressTask } from '$lib/signalr/models/OtaUpdateProgressTask';
 
   // Task weights for weighted total progress (7 tasks, sums to 100)
@@ -56,6 +55,7 @@
 </script>
 
 <script lang="ts">
+  import { devicesOtaGetOtaUpdateHistory, type OtaItem } from '$lib/api';
   import { CircleCheck, CircleX, CloudDownload, RotateCcw, TriangleAlert } from '@lucide/svelte';
   import { page } from '$app/state';
   import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';

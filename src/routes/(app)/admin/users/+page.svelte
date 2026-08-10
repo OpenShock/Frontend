@@ -1,6 +1,6 @@
 <script lang="ts" module>
-  import { PasswordHashingAlgorithm, RoleType, adminGetUsers } from '$lib/api';
-  import type { AdminUsersView, AdminUsersViewPaginated } from '$lib/api';
+  import { PasswordHashingAlgorithm, RoleType } from '$lib/api';
+  import type { AdminUsersView } from '$lib/api';
   import {
     CreateColumnDefs,
     LocaleDateTimeRenderer,
@@ -10,8 +10,6 @@
     RenderOrangeCell,
     RenderRedCell,
   } from '$lib/components/Table/ColumnUtils';
-  import DataTableActions from './data-table-actions.svelte';
-  import { odataAnd, odataSearch } from '$lib/utils/odata';
   import type { Features } from './data-table-features';
 
   const PasswordHashTypeRenderer = (passwordHashType: PasswordHashingAlgorithm) => {
@@ -45,6 +43,9 @@
 </script>
 
 <script lang="ts">
+  import DataTableActions from './data-table-actions.svelte';
+  import { odataAnd, odataSearch } from '$lib/utils/odata';
+  import { adminGetUsers, type AdminUsersViewPaginated } from '$lib/api';
   import type { SortingState } from '@tanstack/svelte-table';
   import { Container } from '@openshock/svelte-core/components';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';

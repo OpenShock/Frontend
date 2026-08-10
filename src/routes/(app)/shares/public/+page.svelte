@@ -1,3 +1,12 @@
+<script lang="ts" module>
+  // Static class lookup — one copy per module, not one per instance.
+  const expiryToneClasses = {
+    neutral: 'text-muted-foreground ring-border',
+    warning: 'text-amber-600 dark:text-amber-400 ring-amber-500/30',
+    danger: 'text-red-600 dark:text-red-400 ring-red-500/30',
+  } as const;
+</script>
+
 <script lang="ts">
   import Plus from '@lucide/svelte/icons/plus';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
@@ -46,12 +55,6 @@
         loading = false;
       });
   }
-
-  const expiryToneClasses = {
-    neutral: 'text-muted-foreground ring-border',
-    warning: 'text-amber-600 dark:text-amber-400 ring-amber-500/30',
-    danger: 'text-red-600 dark:text-red-400 ring-red-500/30',
-  } as const;
 
   const clock = createNowTicker();
 

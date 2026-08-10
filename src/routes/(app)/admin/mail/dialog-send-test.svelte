@@ -1,5 +1,22 @@
+<script lang="ts" module>
+  import { EmailType } from '$lib/api';
+
+  // Derived once from the enum — the same for every dialog instance.
+  const typeLabels: Record<EmailType, string> = {
+    [EmailType.AccountActivation]: 'Account activation',
+    [EmailType.PasswordReset]: 'Password reset',
+    [EmailType.EmailVerification]: 'Email verification',
+    [EmailType.EmailChangeNotice]: 'Email change notice',
+  };
+
+  const typeOptions = Object.values(EmailType).map((type) => ({
+    value: type,
+    label: typeLabels[type],
+  }));
+</script>
+
 <script lang="ts">
-  import { EmailType, adminSendTestEmail } from '$lib/api';
+  import { adminSendTestEmail } from '$lib/api';
   import { TextInput } from '@openshock/svelte-core/components/input';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
@@ -14,18 +31,6 @@
   }
 
   let { open = $bindable<boolean>(), onSent }: Props = $props();
-
-  const typeLabels: Record<EmailType, string> = {
-    [EmailType.AccountActivation]: 'Account activation',
-    [EmailType.PasswordReset]: 'Password reset',
-    [EmailType.EmailVerification]: 'Email verification',
-    [EmailType.EmailChangeNotice]: 'Email change notice',
-  };
-
-  const typeOptions = Object.values(EmailType).map((type) => ({
-    value: type,
-    label: typeLabels[type],
-  }));
 
   let type = $state<EmailType>(EmailType.PasswordReset);
   let recipient = $state('');
