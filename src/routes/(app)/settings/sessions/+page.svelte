@@ -12,6 +12,7 @@
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { getReadableUserAgentName } from '$lib/utils';
   import { formatRelativeInstant, formatRelativeInstantOrNull } from '$lib/utils/datetime';
+  import { createNowTicker } from '$lib/utils/datetime.svelte';
   import SessionActions from './session-actions.svelte';
 
   registerBreadcrumbs(() => [
@@ -21,9 +22,7 @@
 
   let data = $state<LoginSessionResponse[]>([]);
 
-  // Re-read on a timer so the relative labels below stay current without
-  // refetching. Every label derives from this, so ticking it re-renders them.
-  let now = $state(Temporal.Now.instant());
+  const clock = createNowTicker();
 
   function onRevoked(sessionId: string) {
     const idx = data.findIndex((session) => session.id === sessionId);
@@ -50,12 +49,7 @@
     toast.success('Sessions refreshed successfully');
   }
 
-  onMount(() => {
-    fetchSessions();
-
-    const interval = setInterval(() => (now = Temporal.Now.instant()), 5000);
-    return () => clearInterval(interval);
-  });
+  onMount(fetchSessions);
 </script>
 
 <Container>
@@ -82,7 +76,7 @@
     {:else}
       <div class="divide-y rounded-md border">
         {#each data as session (session.id)}
-          {@const lastSeen = formatRelativeInstantOrNull(session.lastUsed, now)}
+          {@const lastSeen = formatRelativeInstantOrNull(session.lastUsed, clock.current)}
           <div class="flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-3">
             <div class="flex min-w-0 flex-1 items-center gap-2">
               <span class="truncate font-medium" title={session.userAgent ?? undefined}>
@@ -92,8 +86,8 @@
             </div>
             <div class="text-muted-foreground flex shrink-0 flex-wrap items-center gap-x-4 text-sm">
               <span>{lastSeen ? `Last seen ${lastSeen}` : 'Never used'}</span>
-              <span>Signed in {formatRelativeInstant(session.created, now)}</span>
-              <span>Expires {formatRelativeInstant(session.expires, now)}</span>
+              <span>Signed in {formatRelativeInstant(session.created, clock.current)}</span>
+              <span>Expires {formatRelativeInstant(session.expires, clock.current)}</span>
             </div>
             <SessionActions {session} {onRevoked} />
           </div>

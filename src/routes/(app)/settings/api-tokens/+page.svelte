@@ -10,11 +10,11 @@
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
   import TokenActions from './token-actions.svelte';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
   import { formatRelativeInstantOrNull } from '$lib/utils/datetime';
+  import { createNowTicker } from '$lib/utils/datetime.svelte';
 
   registerBreadcrumbs(() => [
     { label: 'Settings', href: '/settings/account' },
@@ -23,9 +23,7 @@
 
   let tokens = $derived(await tokensListTokensV2());
 
-  // Re-read on a timer so the relative labels below stay current without
-  // refetching. Every label derives from this, so ticking it re-renders them.
-  let now = $state(Temporal.Now.instant());
+  const clock = createNowTicker();
 
   function onEdit(id: string, updater: (token: TokenResponseV2) => TokenResponseV2) {
     tokens = tokens.map((t) => (t.id === id ? updater(t) : t));
@@ -43,11 +41,6 @@
       await handleApiError(error);
     }
   }
-
-  onMount(() => {
-    const interval = setInterval(() => (now = Temporal.Now.instant()), 5000);
-    return () => clearInterval(interval);
-  });
 </script>
 
 <Container>
@@ -78,8 +71,8 @@
       {:else}
         <div class="divide-y rounded-md border">
           {#each tokens as token (token.id)}
-            {@const lastUsed = formatRelativeInstantOrNull(token.lastUsed, now)}
-            {@const expires = formatRelativeInstantOrNull(token.validUntil, now)}
+            {@const lastUsed = formatRelativeInstantOrNull(token.lastUsed, clock.current)}
+            {@const expires = formatRelativeInstantOrNull(token.validUntil, clock.current)}
             <div class="flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-3">
               <div class="flex min-w-0 flex-1 items-center gap-2">
                 <span class="truncate font-medium">{token.name}</span>

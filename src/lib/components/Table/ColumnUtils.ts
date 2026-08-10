@@ -1,10 +1,6 @@
 import { getReadableUserAgentName } from '$lib/utils';
 import { formatRelativeInstant } from '$lib/utils/datetime';
-import {
-  durationBetween,
-  formatDuration,
-  formatDurationSeconds,
-} from '@openshock/svelte-core/utils/index.js';
+import { formatDurationSeconds } from '@openshock/svelte-core/utils/index.js';
 import {
   renderComponent,
   sortFn_alphanumeric,
@@ -210,11 +206,13 @@ export function LocaleDateTimeRenderer(instant: Temporal.Instant | null): CellCo
   return RenderCellWithTooltip(instant.toLocaleString(), instant.toString());
 }
 
-export function TimeSinceDurationRenderer(instant: Temporal.Instant): CellContentProps {
-  return RenderCellWithTooltip(
-    formatDuration(durationBetween(instant, Temporal.Now.instant())),
-    instant.toString()
-  );
+// Pass `now` from a ticker to keep the label counting up; the default reads the
+// clock once and so is only correct at render time.
+export function TimeSinceDurationRenderer(
+  instant: Temporal.Instant,
+  now: Temporal.Instant = Temporal.Now.instant()
+): CellContentProps {
+  return RenderCellWithTooltip(formatRelativeInstant(instant, now), instant.toString());
 }
 
 export function TimeSinceRelativeRenderer(instant: Temporal.Instant): CellContentProps {
