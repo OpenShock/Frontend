@@ -6,6 +6,7 @@
   import { Container, EmptyState } from '@openshock/svelte-core/components';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
+  import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
@@ -21,6 +22,10 @@
   ]);
 
   let data = $state<LoginSessionResponse[]>([]);
+  // Distinguished from "loaded and empty" so the empty state can't stand in for
+  // a request that is still running or has failed.
+  let loading = $state(true);
+  let failed = $state(false);
 
   const clock = createNowTicker();
 
@@ -36,17 +41,25 @@
     return getReadableUserAgentName(userAgent) ?? userAgent;
   }
 
-  async function fetchSessions() {
+  async function fetchSessions(): Promise<boolean> {
+    loading = true;
     try {
       data = await sessionsListSessions();
+      failed = false;
+      return true;
     } catch (error) {
+      failed = true;
       await handleApiError(error);
+      return false;
+    } finally {
+      loading = false;
     }
   }
 
   async function onRefreshClicked() {
-    await fetchSessions();
-    toast.success('Sessions refreshed successfully');
+    if (await fetchSessions()) {
+      toast.success('Sessions refreshed successfully');
+    }
   }
 
   onMount(fetchSessions);
@@ -67,7 +80,16 @@
     </Card.Description>
   </Card.Header>
   <Card.Content class="w-full">
-    {#if data.length === 0}
+    {#if loading && data.length === 0}
+      <div class="flex h-64 w-full items-center justify-center">
+        <Spinner class="size-8 text-gray-600 dark:text-gray-300" />
+      </div>
+    {:else if failed && data.length === 0}
+      <div class="flex w-full flex-col items-center gap-3 py-12">
+        <p class="text-destructive text-sm">Failed to load sessions.</p>
+        <Button variant="outline" onclick={fetchSessions}>Try again</Button>
+      </div>
+    {:else if data.length === 0}
       <EmptyState
         icon={MonitorSmartphone}
         title="No active sessions"
