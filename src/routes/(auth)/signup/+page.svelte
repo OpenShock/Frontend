@@ -7,11 +7,10 @@
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import Turnstile from '$lib/components/Turnstile.svelte';
-  import { EmailInput } from '@openshock/svelte-core/components/input';
-  import { PasswordInput } from '@openshock/svelte-core/components/input';
+  import { EmailInput, PasswordInput } from '@openshock/svelte-core/components/input';
   import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { validatePasswordMatch } from '@openshock/svelte-core/inputvalidation/passwordValidator.js';
+  import { validatePasswordMatch } from '@openshock/svelte-core/inputvalidation';
   import { toast } from 'svelte-sonner';
   import { FieldSeparator } from '@openshock/svelte-core/components/ui/field';
   import OauthButtons from '$lib/components/auth/oauth-buttons.svelte';

@@ -1,7 +1,7 @@
 import type { UsernameCheckResponse } from '$lib/api';
 import { UsernameAvailability } from '$lib/api';
-import { isEmailAddress } from '@openshock/svelte-core/inputvalidation/emailValidator.js';
-import type { ValidationResult } from '@openshock/svelte-core/types/ValidationResult.js';
+import { isEmailAddress } from '@openshock/svelte-core/inputvalidation';
+import type { ValidationResult } from '@openshock/svelte-core/types';
 
 const MultipleWhiteSpaceRegex = /\s{2,}/;
 

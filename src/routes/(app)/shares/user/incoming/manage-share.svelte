@@ -7,7 +7,7 @@
   import * as Drawer from '@openshock/svelte-core/components/ui/drawer';
   import * as Table from '@openshock/svelte-core/components/ui/table';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { copyToClipboard } from '@openshock/svelte-core/utils/clipboard.svelte.js';
+  import { copyToClipboard } from '@openshock/svelte-core/utils';
   import { dialog } from '@openshock/svelte-core/components/dialog-manager';
   import { userSharesState, refreshUserShares } from '$lib/state/user-shares-state.svelte';
   import { userState } from '$lib/state/user-state.svelte';

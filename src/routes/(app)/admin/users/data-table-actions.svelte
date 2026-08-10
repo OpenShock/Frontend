@@ -3,7 +3,7 @@
   import type { AdminUsersView } from '$lib/api';
   import { TableActionMenu } from '@openshock/svelte-core/components';
   import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
-  import { copyToClipboard } from '@openshock/svelte-core/utils/clipboard.svelte.js';
+  import { copyToClipboard } from '@openshock/svelte-core/utils';
   import { Copy, KeyRound, Pencil, ShieldPlus, Trash2 } from '@lucide/svelte';
   import UserDeleteDialog from './dialog-user-delete.svelte';
   import UserEditDialog from './dialog-user-edit.svelte';

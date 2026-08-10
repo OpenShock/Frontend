@@ -75,8 +75,7 @@
     ownHubs,
     refreshOwnHubs,
   } from '$lib/state/hubs-state.svelte';
-  import { cn } from '@openshock/svelte-core/utils/shadcn.js';
-  import { NumberToHexPadded } from '@openshock/svelte-core/utils/convert.js';
+  import { cn, NumberToHexPadded } from '@openshock/svelte-core/utils';
   import { onMount } from 'svelte';
   import type { FirmwareChannel } from '$lib/api/firmwareCDN';
   import { PageHeader } from '@openshock/svelte-core/components';

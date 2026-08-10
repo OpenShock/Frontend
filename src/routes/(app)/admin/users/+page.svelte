@@ -53,7 +53,7 @@
   import { Input } from '@openshock/svelte-core/components/ui/input';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import { useDebounce } from '@openshock/svelte-core/utils/debounce.js';
+  import { useDebounce } from '@openshock/svelte-core/utils';
   import { features } from './data-table-features';
 
   registerBreadcrumbs(() => [{ label: 'Users' }]);

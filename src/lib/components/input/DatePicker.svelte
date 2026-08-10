@@ -4,7 +4,7 @@
   import { buttonVariants } from '@openshock/svelte-core/components/ui/button';
   import { Calendar } from '@openshock/svelte-core/components/ui/calendar';
   import * as Popover from '@openshock/svelte-core/components/ui/popover';
-  import { cn } from '@openshock/svelte-core/utils/shadcn.js';
+  import { cn } from '@openshock/svelte-core/utils';
 
   interface Props {
     value: DateValue | undefined;

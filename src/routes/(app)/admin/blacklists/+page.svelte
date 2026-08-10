@@ -24,8 +24,8 @@
   import * as Select from '@openshock/svelte-core/components/ui/select';
   import { Separator } from '@openshock/svelte-core/components/ui/separator';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import type { ValidationResult } from '@openshock/svelte-core/types/ValidationResult.js';
-  import { useDebounce } from '@openshock/svelte-core/utils/debounce.js';
+  import type { ValidationResult } from '@openshock/svelte-core/types';
+  import { useDebounce } from '@openshock/svelte-core/utils';
 
   registerBreadcrumbs(() => [{ label: 'Blacklists' }]);
 

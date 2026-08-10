@@ -1,7 +1,5 @@
 <script lang="ts" module>
-  import { XLogo } from '@openshock/svelte-core/components/svg';
-  import { DiscordLogo } from '@openshock/svelte-core/components/svg';
-  import { GoogleLogo } from '@openshock/svelte-core/components/svg';
+  import { XLogo, DiscordLogo, GoogleLogo } from '@openshock/svelte-core/components/svg';
 
   const providerDetails: Record<string, { icon: typeof XLogo; label: string }> = {
     discord: { icon: DiscordLogo, label: 'Discord' },

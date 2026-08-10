@@ -5,7 +5,7 @@
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { validatePasswordMatch } from '@openshock/svelte-core/inputvalidation/passwordValidator.js';
+  import { validatePasswordMatch } from '@openshock/svelte-core/inputvalidation';
   import { toast } from 'svelte-sonner';
 
   interface Props {

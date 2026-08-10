@@ -8,7 +8,7 @@
     PopoverContent,
     PopoverTrigger,
   } from '@openshock/svelte-core/components/ui/popover';
-  import { cn } from '@openshock/svelte-core/utils/shadcn.js';
+  import { cn } from '@openshock/svelte-core/utils';
 
   /** Optional chip to constrain the list of boards to */
   //export let chip: string | null = null;

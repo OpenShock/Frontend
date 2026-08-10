@@ -11,8 +11,7 @@
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { dialog } from '@openshock/svelte-core/components/dialog-manager';
   import { refreshOutgoingInvites } from '$lib/state/user-shares-state.svelte';
-  import { cn } from '@openshock/svelte-core/utils/shadcn.js';
-  import { copyToClipboard } from '@openshock/svelte-core/utils/clipboard.svelte.js';
+  import { cn, copyToClipboard } from '@openshock/svelte-core/utils';
   import { toast } from 'svelte-sonner';
 
   interface Props {

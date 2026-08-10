@@ -9,9 +9,8 @@
     mapUsernameCheckResponse,
     validateUsername,
   } from '$lib/inputvalidation/usernameValidator';
-  import type { AnyComponent } from '@openshock/svelte-core/types/AnyComponent.js';
-  import type { ValidationResult } from '@openshock/svelte-core/types/ValidationResult.js';
-  import { useDebounce } from '@openshock/svelte-core/utils/debounce.js';
+  import type { AnyComponent, ValidationResult } from '@openshock/svelte-core/types';
+  import { useDebounce } from '@openshock/svelte-core/utils';
   import type { Snippet } from 'svelte';
   import type { FullAutoFill } from 'svelte/elements';
 

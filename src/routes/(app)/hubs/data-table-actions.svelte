@@ -6,11 +6,9 @@
     devicesRemoveDevice,
   } from '$lib/api';
   import { goto } from '$app/navigation';
-  import { CopyInput } from '@openshock/svelte-core/components';
-  import { dialog } from '@openshock/svelte-core/components/dialog-manager';
-  import type { DialogRenderProps } from '@openshock/svelte-core/components/dialog-manager';
+  import { CopyInput, TableActionMenu } from '@openshock/svelte-core/components';
+  import { dialog, type DialogRenderProps } from '@openshock/svelte-core/components/dialog-manager';
   import { TextInput } from '@openshock/svelte-core/components/input';
-  import { TableActionMenu } from '@openshock/svelte-core/components';
   import { Badge } from '@openshock/svelte-core/components/ui/badge';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
@@ -21,7 +19,7 @@
   import { serializeEmergencyStopMessage } from '$lib/signalr/serializers/EmergencyStop';
   import { serializeRebootMessage } from '$lib/signalr/serializers/Reboot';
   import { hubPairedSignals, refreshOwnHubs } from '$lib/state/hubs-state.svelte';
-  import { copyToClipboard } from '@openshock/svelte-core/utils/clipboard.svelte.js';
+  import { copyToClipboard } from '@openshock/svelte-core/utils';
   import {
     CircleCheck,
     Copy,

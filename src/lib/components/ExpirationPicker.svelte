@@ -3,7 +3,7 @@
   import { parseAbsoluteToLocal, type ZonedDateTime } from '@internationalized/date';
   import { DateTimePicker } from '@openshock/svelte-core/components/datetime-picker';
   import * as Select from '@openshock/svelte-core/components/ui/select';
-  import { GetValResColor } from '@openshock/svelte-core/types/ValidationResult.js';
+  import { GetValResColor } from '@openshock/svelte-core/types';
 
   interface Props {
     option?: string;

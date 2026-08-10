@@ -7,7 +7,7 @@
   } from '$lib/api';
   import { TableActionMenu } from '@openshock/svelte-core/components';
   import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
-  import { copyToClipboard } from '@openshock/svelte-core/utils/clipboard.svelte.js';
+  import { copyToClipboard } from '@openshock/svelte-core/utils';
   import { Ban, Copy, Eye, RotateCcw, Trash2 } from '@lucide/svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { toast } from 'svelte-sonner';

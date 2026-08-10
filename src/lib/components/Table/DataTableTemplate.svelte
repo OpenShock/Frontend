@@ -10,7 +10,7 @@
     type Updater,
   } from '@tanstack/svelte-table';
   import * as Table from '@openshock/svelte-core/components/ui/table';
-  import { cn } from '@openshock/svelte-core/utils/shadcn.js';
+  import { cn } from '@openshock/svelte-core/utils';
   import type { SortableTableFeatures } from './types';
 
   interface Props {

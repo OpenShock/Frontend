@@ -59,7 +59,7 @@
   import { RotateCcw, Send } from '@lucide/svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import { useDebounce } from '@openshock/svelte-core/utils/debounce.js';
+  import { useDebounce } from '@openshock/svelte-core/utils';
   import SendTestDialog from './dialog-send-test.svelte';
   import { features } from './data-table-features';
 

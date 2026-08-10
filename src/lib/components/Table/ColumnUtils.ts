@@ -1,6 +1,6 @@
 import { getReadableUserAgentName } from '$lib/utils';
 import { formatRelativeInstant } from '$lib/utils/datetime';
-import { formatDurationSeconds } from '@openshock/svelte-core/utils/index.js';
+import { formatDurationSeconds } from '@openshock/svelte-core/utils';
 import {
   renderComponent,
   sortFn_alphanumeric,

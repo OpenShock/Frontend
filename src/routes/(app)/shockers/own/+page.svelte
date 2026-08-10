@@ -1,13 +1,12 @@
 <script lang="ts">
   import { PUBLIC_DISABLE_SHOCKER_MAP } from '$env/static/public';
-  import { isTruthy } from '@openshock/svelte-core/utils/parse.js';
+  import { isTruthy } from '@openshock/svelte-core/utils';
   import { shockerPauseShocker, shockerRegisterShocker } from '$lib/api';
   import type { NewShocker } from '$lib/api';
   import { Layers, LogsIcon, Plus, RotateCcw, Settings, Zap } from '@lucide/svelte';
   import { resolve } from '$app/paths';
-  import { Container } from '@openshock/svelte-core/components';
+  import { Container, EmptyState } from '@openshock/svelte-core/components';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
-  import { EmptyState } from '@openshock/svelte-core/components';
   import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
   import DialogShockerAdd, {
     defaultAddShockerData,

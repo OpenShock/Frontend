@@ -1,4 +1,4 @@
-import { durationBetween, formatElapsed } from '@openshock/svelte-core/utils/index.js';
+import { durationBetween, formatElapsed } from '@openshock/svelte-core/utils';
 
 /**
  * Relative label for an instant — "in 3 days", "2 hours ago".

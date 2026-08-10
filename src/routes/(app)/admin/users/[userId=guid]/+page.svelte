@@ -2,8 +2,7 @@
   import { page } from '$app/state';
   import { adminGetUsers } from '$lib/api';
   import type { AdminUsersView, AdminUsersViewPaginated } from '$lib/api';
-  import { Container } from '@openshock/svelte-core/components';
-  import { EmptyState } from '@openshock/svelte-core/components';
+  import { Container, EmptyState } from '@openshock/svelte-core/components';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
