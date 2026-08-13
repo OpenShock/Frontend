@@ -4,6 +4,9 @@ import { HashBuffer } from '@openshock/svelte-core/utils/crypto.js';
 export const FirmwareChannels = ['stable', 'beta', 'develop'] as const;
 export type FirmwareChannel = (typeof FirmwareChannels)[number];
 
+export const FirmwareReleaseNoteTypes = ['breaking', 'warning', 'info', 'section'] as const;
+export type FirmwareReleaseNoteType = (typeof FirmwareReleaseNoteTypes)[number];
+
 export interface FirmwareArtifact {
   type: string;
   url: string;
@@ -11,72 +14,135 @@ export interface FirmwareArtifact {
   fileSize: number;
 }
 
+/** Chip reference. `name` matches esptool-js chip identifiers exactly (e.g. "ESP32-S3"). */
+export interface FirmwareChipRef {
+  id: string;
+  name: string;
+}
+
 export interface FirmwareBoard {
-  chip: string;
-  deprecated: boolean;
+  chip: FirmwareChipRef;
+  discontinued: boolean;
   artifacts: FirmwareArtifact[];
+}
+
+export interface FirmwareReleaseNote {
+  type: FirmwareReleaseNoteType;
+  title?: string | null;
+  content: string;
+}
+
+export interface FirmwareRepository {
+  id: string;
+  provider: string;
+  owner: string;
+  repo: string;
+}
+
+/** Source traceability. URLs are constructed server-side per provider. */
+export interface FirmwareSource {
+  repository: FirmwareRepository;
+  commitHash: string;
+  ref?: string | null;
+  runId?: string | null;
+  commitUrl: string;
+  refUrl?: string | null;
+  runUrl?: string | null;
 }
 
 export interface FirmwareRelease {
   version: string;
   channel: string;
   releaseDate: string;
-  changelog: string;
+  source: FirmwareSource;
+  releaseNotes: FirmwareReleaseNote[];
+  /** Keyed by canonical board name, e.g. "Wemos-D1-Mini-ESP32". */
   boards: Record<string, FirmwareBoard>;
-}
-
-export interface FirmwareUpdateResponse {
-  version: string;
-  artifact: FirmwareArtifact;
 }
 
 export interface FirmwareVersionSummary {
   version: string;
   channel: string;
   releaseDate: string;
-  changelog: string;
+  source: FirmwareSource;
+  releaseNotes: FirmwareReleaseNote[];
+}
+
+/** Minimal single-board response. `boardId` is the canonical board name. */
+export interface FirmwareBoardRelease {
+  version: string;
+  boardId: string;
+  artifacts: FirmwareArtifact[];
 }
 
 const BASE_URL = PUBLIC_FIRMWARE_REPO_URL.replace(/\/+$/, '');
 
+async function FetchJson<T>(url: string, what: string): Promise<T> {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`Failed to ${what}: ${response.status} ${response.statusText}`);
+  return (await response.json()) as T;
+}
+
+/** Most recent published release for a channel, with every board. */
 export async function FetchLatest(channel: FirmwareChannel): Promise<FirmwareRelease> {
-  const response = await fetch(`${BASE_URL}/v2/firmware/latest/${channel}`);
-  if (!response.ok)
-    throw new Error(`Failed to fetch latest firmware: ${response.status} ${response.statusText}`);
-  return await response.json();
+  return await FetchJson<FirmwareRelease>(
+    `${BASE_URL}/v2/firmware/latest/${channel}`,
+    'fetch latest firmware'
+  );
 }
 
-export async function FetchVersion(
-  channel: FirmwareChannel,
-  version: string
-): Promise<FirmwareRelease> {
-  const response = await fetch(`${BASE_URL}/v2/firmware/versions/${channel}/${version}`);
-  if (!response.ok)
-    throw new Error(`Failed to fetch firmware version: ${response.status} ${response.statusText}`);
-  return await response.json();
+/**
+ * Full release details for one version. Versions are globally unique, so this is not
+ * scoped by channel.
+ */
+export async function FetchVersion(version: string): Promise<FirmwareRelease> {
+  return await FetchJson<FirmwareRelease>(
+    `${BASE_URL}/v2/firmware/versions/${encodeURIComponent(version)}`,
+    'fetch firmware version'
+  );
 }
 
+/** Artifacts for a single board in a single version. `board` is the board name. */
+export async function FetchBoardRelease(
+  version: string,
+  board: string
+): Promise<FirmwareBoardRelease> {
+  return await FetchJson<FirmwareBoardRelease>(
+    `${BASE_URL}/v2/firmware/versions/${encodeURIComponent(version)}/${encodeURIComponent(board)}`,
+    'fetch board release'
+  );
+}
+
+/** Paginated version history. Channel is an optional filter, passed as a query parameter. */
 export async function FetchVersionHistory(
-  channel: FirmwareChannel,
+  channel?: FirmwareChannel | null,
   limit = 20,
   offset = 0
 ): Promise<{ versions: FirmwareVersionSummary[]; total: number }> {
   const params = new URLSearchParams({ limit: String(limit), offset: String(offset) });
-  const response = await fetch(`${BASE_URL}/v2/firmware/versions/${channel}?${params}`);
-  if (!response.ok)
-    throw new Error(`Failed to fetch version history: ${response.status} ${response.statusText}`);
-  return await response.json();
+  if (channel) params.set('channel', channel);
+
+  return await FetchJson<{ versions: FirmwareVersionSummary[]; total: number }>(
+    `${BASE_URL}/v2/firmware/versions?${params}`,
+    'fetch version history'
+  );
 }
 
+/**
+ * Board names available in a release, optionally narrowed to a chip.
+ *
+ * `chip` is matched against the chip's esptool-js name, which is what a connected-device
+ * detection returns.
+ */
 export function ExtractBoards(
   release: FirmwareRelease,
   chip?: string | null,
-  includeDeprecated = false
+  includeDiscontinued = false
 ): string[] {
   const entries = Object.entries(release.boards);
   const filtered = entries.filter(([, board]) => {
-    if (!includeDeprecated && board.deprecated) return false;
-    if (chip && board.chip !== chip) return false;
+    if (!includeDiscontinued && board.discontinued) return false;
+    if (chip && board.chip.name !== chip) return false;
     return true;
   });
   return filtered.map(([name]) => name).sort();
