@@ -88,7 +88,7 @@ async function FetchJson<T>(url: string, what: string): Promise<T> {
 /** Most recent published release for a channel, with every board. */
 export async function FetchLatest(channel: FirmwareChannel): Promise<FirmwareRelease> {
   return await FetchJson<FirmwareRelease>(
-    `${BASE_URL}/v2/firmware/latest/${channel}`,
+    `${BASE_URL}/2/firmware/latest/${channel}`,
     'fetch latest firmware'
   );
 }
@@ -99,7 +99,7 @@ export async function FetchLatest(channel: FirmwareChannel): Promise<FirmwareRel
  */
 export async function FetchVersion(version: string): Promise<FirmwareRelease> {
   return await FetchJson<FirmwareRelease>(
-    `${BASE_URL}/v2/firmware/versions/${encodeURIComponent(version)}`,
+    `${BASE_URL}/2/firmware/versions/${encodeURIComponent(version)}`,
     'fetch firmware version'
   );
 }
@@ -110,7 +110,7 @@ export async function FetchBoardRelease(
   board: string
 ): Promise<FirmwareBoardRelease> {
   return await FetchJson<FirmwareBoardRelease>(
-    `${BASE_URL}/v2/firmware/versions/${encodeURIComponent(version)}/${encodeURIComponent(board)}`,
+    `${BASE_URL}/2/firmware/versions/${encodeURIComponent(version)}/${encodeURIComponent(board)}`,
     'fetch board release'
   );
 }
@@ -125,7 +125,7 @@ export async function FetchVersionHistory(
   if (channel) params.set('channel', channel);
 
   return await FetchJson<{ versions: FirmwareVersionSummary[]; total: number }>(
-    `${BASE_URL}/v2/firmware/versions?${params}`,
+    `${BASE_URL}/2/firmware/versions?${params}`,
     'fetch version history'
   );
 }
