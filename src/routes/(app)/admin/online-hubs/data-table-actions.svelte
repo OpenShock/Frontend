@@ -3,7 +3,7 @@
   import { resolve } from '$app/paths';
   import { TableActionMenu } from '@openshock/svelte-core/components';
   import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
-  import { copyToClipboard } from '@openshock/svelte-core/utils/clipboard.svelte.js';
+  import { copyToClipboard } from '@openshock/svelte-core/utils';
   import { Copy, Pencil, Trash2, User } from '@lucide/svelte';
   import type { OnlineHub } from './columns';
 

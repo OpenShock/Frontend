@@ -4,7 +4,7 @@ import {
   WELCOME_COOKIE_NAME,
 } from '$lib/tour/onboarding-state';
 import { SIDEBAR_COOKIE_NAME } from '@openshock/svelte-core/components/ui/sidebar/constants.js';
-import { isTruthy } from '@openshock/svelte-core/utils/parse.js';
+import { isTruthy } from '@openshock/svelte-core/utils';
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = ({ cookies }) => {

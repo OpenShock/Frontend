@@ -15,7 +15,7 @@
 <script lang="ts">
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import type { TimeoutHandle } from '$lib/types/WAPI';
-  import { cn } from '@openshock/svelte-core/utils/shadcn.js';
+  import { cn } from '@openshock/svelte-core/utils';
   import { onDestroy } from 'svelte';
 
   interface Props {

@@ -5,7 +5,7 @@
   import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
   import * as Select from '@openshock/svelte-core/components/ui/select';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import type { ValidationResult } from '@openshock/svelte-core/types/ValidationResult.js';
+  import type { ValidationResult } from '@openshock/svelte-core/types';
   import { toast } from 'svelte-sonner';
 
   interface Props {

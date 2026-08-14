@@ -1,20 +1,7 @@
-<script lang="ts">
-  import { EmailType, adminSendTestEmail } from '$lib/api';
-  import { TextInput } from '@openshock/svelte-core/components/input';
-  import { Button } from '@openshock/svelte-core/components/ui/button';
-  import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
-  import * as Select from '@openshock/svelte-core/components/ui/select';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import type { ValidationResult } from '@openshock/svelte-core/types/ValidationResult.js';
-  import { toast } from 'svelte-sonner';
+<script lang="ts" module>
+  import { EmailType } from '$lib/api';
 
-  interface Props {
-    open: boolean;
-    onSent?: () => void;
-  }
-
-  let { open = $bindable<boolean>(), onSent }: Props = $props();
-
+  // Derived once from the enum — the same for every dialog instance.
   const typeLabels: Record<EmailType, string> = {
     [EmailType.AccountActivation]: 'Account activation',
     [EmailType.PasswordReset]: 'Password reset',
@@ -26,6 +13,24 @@
     value: type,
     label: typeLabels[type],
   }));
+</script>
+
+<script lang="ts">
+  import { adminSendTestEmail } from '$lib/api';
+  import { TextInput } from '@openshock/svelte-core/components/input';
+  import { Button } from '@openshock/svelte-core/components/ui/button';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
+  import * as Select from '@openshock/svelte-core/components/ui/select';
+  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import type { ValidationResult } from '@openshock/svelte-core/types';
+  import { toast } from 'svelte-sonner';
+
+  interface Props {
+    open: boolean;
+    onSent?: () => void;
+  }
+
+  let { open = $bindable<boolean>(), onSent }: Props = $props();
 
   let type = $state<EmailType>(EmailType.PasswordReset);
   let recipient = $state('');

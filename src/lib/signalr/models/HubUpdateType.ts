@@ -1,4 +1,4 @@
-import { isNumber } from '@openshock/svelte-core/typeguards/index.js';
+import { isNumber } from '@openshock/svelte-core/typeguards';
 
 export enum HubUpdateType {
   HubCreated = 0,

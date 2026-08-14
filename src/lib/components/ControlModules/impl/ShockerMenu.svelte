@@ -8,7 +8,7 @@
   import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
-  import { copyToClipboard } from '@openshock/svelte-core/utils/clipboard.svelte.js';
+  import { copyToClipboard } from '@openshock/svelte-core/utils';
   import { resolve } from '$app/paths';
   import { toast } from 'svelte-sonner';
 

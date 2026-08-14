@@ -6,10 +6,9 @@
   import Unlink from '@lucide/svelte/icons/unlink';
   import { page } from '$app/state';
   import { GetOAuthAuthorizeUrl } from '$lib/api/next/oauth';
-  import { Container } from '@openshock/svelte-core/components';
+  import { Container, EmptyState } from '@openshock/svelte-core/components';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
-  import { EmptyState } from '@openshock/svelte-core/components';
   import * as Dropdown from '@openshock/svelte-core/components/ui/dropdown-menu';
   import * as Separator from '@openshock/svelte-core/components/ui/separator';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';

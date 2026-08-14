@@ -1,4 +1,4 @@
-import type { AnyComponent } from '@openshock/svelte-core/types/AnyComponent.js';
+import type { AnyComponent } from '@openshock/svelte-core/types';
 
 export type ButtonSettings =
   | { text: string; class?: string; submits?: boolean; onClick: () => void }

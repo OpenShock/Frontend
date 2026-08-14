@@ -1,15 +1,13 @@
 <script lang="ts">
   import { tokenDeleteDeleteToken, tokensSetTokenPaused } from '$lib/api';
   import type { TokenResponseV2 } from '$lib/api';
-  import { dialog } from '@openshock/svelte-core/components/dialog-manager';
-  import type { DialogRenderProps } from '@openshock/svelte-core/components/dialog-manager';
+  import { dialog, type DialogRenderProps } from '@openshock/svelte-core/components/dialog-manager';
   import { TableActionMenu } from '@openshock/svelte-core/components';
   import { buttonVariants } from '@openshock/svelte-core/components/ui/button';
   import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
   import * as Tooltip from '@openshock/svelte-core/components/ui/tooltip';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { cn } from '@openshock/svelte-core/utils/shadcn.js';
-  import { copyToClipboard } from '@openshock/svelte-core/utils/clipboard.svelte.js';
+  import { cn, copyToClipboard } from '@openshock/svelte-core/utils';
   import Pause from '@lucide/svelte/icons/pause';
   import Play from '@lucide/svelte/icons/play';
   import { Copy, Pencil, Trash2 } from '@lucide/svelte';
@@ -96,16 +94,7 @@
   </Tooltip.Root>
 
   <TableActionMenu>
-    <DropdownMenu.Label>API Token</DropdownMenu.Label>
     <DropdownMenu.Group>
-      <DropdownMenu.Item class="cursor-pointer" onclick={togglePaused}>
-        {#if token.shockerControl.paused}
-          <Play class="size-4" />
-        {:else}
-          <Pause class="size-4" />
-        {/if}
-        {token.shockerControl.paused ? 'Resume' : 'Pause'}
-      </DropdownMenu.Item>
       <DropdownMenu.Item class="cursor-pointer" onclick={openEditDialog}>
         <Pencil class="size-4" />
         Edit

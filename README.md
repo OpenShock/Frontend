@@ -34,34 +34,15 @@ This is the frontend for the OpenShock project that interfaces with the OpenShoc
 - `pnpm run dev` - Start the development server
 - `pnpm run build` - Build the project
 - `pnpm run preview` - Preview the built project
-- `pnpx openapi-generator-cli generate` - Generate the API client
+- `pnpm run regen-api` - Generate the API client
 
 ## Setup
 
+To clone the project you may need to rewrite git HTTPS urls to SSH for the submodule checkout to work on your machine.
+You can do this with `git config --global url."git@github.com:".insteadOf "https://github.com/"`
+
 To get started with development, you will need to have **Node.js** and **pnpm** installed.
-
-We recommend using a version manager like [Volta](https://docs.volta.sh/guide/getting-started) to manage your Node.js versions.
-
-### Install Node.js and pnpm
-
-Install on Linux:
-
-```bash
-curl https://get.volta.sh | bash
-```
-
-Install on Windows:
-
-```pwsh
-winget install Volta.Volta
-```
-
-Then you can install the required **Node.js** and **pnpm** version by running a single command in the repository root directory:
-
-```bash
-volta install node
-volta install pnpm
-```
+We recommend using a node version manager of your choice.
 
 ### Install dependencies and build project
 
@@ -154,7 +135,6 @@ src/           # Application source code
 - `vite.config.ts` — Vite bundler config.
 - `svelte.config.js` — SvelteKit configuration.
 - `components.json` — Component metadata for shadcn.
-- `openapitools.json` — Codegen config from OpenAPI spec.
 - `playwright.config.ts` — End-to-end testing configuration (Playwright).
 
 ### 🌐 Environment Variables
@@ -177,6 +157,11 @@ Any file ending with `.local` are meant for setting local development variables 
 
 - `Dockerfile` — Container definition for deployment or local dev.
 - `.dockerignore` — Files to exclude from Docker build context.
+
+## Selfhosting
+
+A guide to selfhost can be found [on the wiki.](https://wiki.openshock.org/guides/selfhosting)
+Alternatively you can deploy it to cloudflare workers using wrangler (or forking it).
 
 ## Support
 

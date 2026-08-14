@@ -6,7 +6,7 @@
     type LiveShockerState,
     type LiveDeviceConnection,
   } from '$lib/state/live-control-state.svelte';
-  import { cn } from '@openshock/svelte-core/utils/shadcn.js';
+  import { cn } from '@openshock/svelte-core/utils';
   import LiveSlider from './impl/LiveSlider.svelte';
 
   interface Props {

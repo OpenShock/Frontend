@@ -1,8 +1,7 @@
 <script lang="ts">
   import ArrowDownToLine from '@lucide/svelte/icons/arrow-down-to-line';
   import { PUBLIC_DISCORD_INVITE_URL } from '$env/static/public';
-  import { Code } from '@openshock/svelte-core/components';
-  import { Keyboard } from '@openshock/svelte-core/components';
+  import { Code, Keyboard } from '@openshock/svelte-core/components';
   import Stepper, { type StepperStep } from '$lib/components/Stepper.svelte';
   import { DiscordLogo } from '@openshock/svelte-core/components/svg';
   import { Button } from '@openshock/svelte-core/components/ui/button';

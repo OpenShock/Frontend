@@ -1,4 +1,4 @@
-import { HasNumber, HasString, isObject } from '@openshock/svelte-core/typeguards/index.js';
+import { HasNumber, HasString, isObject } from '@openshock/svelte-core/typeguards';
 import { ControlType, isControlType } from './ControlType';
 
 interface ControlLogShockerInfo {

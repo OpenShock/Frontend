@@ -9,7 +9,7 @@
     PopoverContent,
     PopoverTrigger,
   } from '@openshock/svelte-core/components/ui/popover';
-  import { cn } from '@openshock/svelte-core/utils/shadcn.js';
+  import { cn } from '@openshock/svelte-core/utils';
 
   interface Props {
     latestResponse: FirmwareRelease | null;

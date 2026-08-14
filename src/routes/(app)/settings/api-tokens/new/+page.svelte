@@ -1,6 +1,6 @@
 <script lang="ts" module>
   import { PermissionType } from '$lib/api';
-  import type { ValidationResult } from '@openshock/svelte-core/types/ValidationResult.js';
+  import type { ValidationResult } from '@openshock/svelte-core/types';
 
   type PermissionCategory = {
     name: string;
@@ -37,8 +37,7 @@
   import { page } from '$app/state';
   import { ControlLimitMode, tokensCreateTokenV2 } from '$lib/api';
   import type { ShockerControlSettings } from '$lib/api';
-  import { Container } from '@openshock/svelte-core/components';
-  import { CopyInput } from '@openshock/svelte-core/components';
+  import { Container, CopyInput } from '@openshock/svelte-core/components';
   import ExpirationPicker from '$lib/components/ExpirationPicker.svelte';
   import { TextInput } from '@openshock/svelte-core/components/input';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';

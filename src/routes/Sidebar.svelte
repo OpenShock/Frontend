@@ -36,7 +36,7 @@
     useSidebar,
   } from '@openshock/svelte-core/components/ui/sidebar';
   import { userState } from '$lib/state/user-state.svelte';
-  import type { AnyComponent } from '@openshock/svelte-core/types/AnyComponent.js';
+  import type { AnyComponent } from '@openshock/svelte-core/types';
   import { isSerialSupported } from '$lib/utils/compatibility';
   import { Collapsible } from 'bits-ui';
   import { prefixBase } from '$lib/utils/url';

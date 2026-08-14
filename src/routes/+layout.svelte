@@ -16,7 +16,7 @@
   import Sidebar from './Sidebar.svelte';
   import WelcomeScreen from './WelcomeScreen.svelte';
   import '../app.css';
-  import { IsMobile } from '@openshock/svelte-core/hooks/is-mobile.svelte.js';
+  import { IsMobile } from '@openshock/svelte-core/hooks';
   import { DialogManager } from '@openshock/svelte-core/components/dialog-manager';
   import { TooltipProvider } from '@openshock/svelte-core/components/ui/tooltip';
   import type { LayoutData } from './$types';

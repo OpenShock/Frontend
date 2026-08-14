@@ -11,11 +11,8 @@ minimumReleaseAge: 4320 # 3 days
 minimumReleaseAgeExclude:
   - '@openshock/*'
   - cookie@0.7.0
-  - undici@7.24.0 || 7.28.0
-  - ws@8.20.1 || 8.21.0
-  - esbuild@0.28.1
-  - js-yaml@4.3.0
-  - sharp@0.35.0
+  - js-yaml@4.3.0 || 4.3.1
+  - undici@7.29.0
 
 onlyBuiltDependencies:
   - '@tailwindcss/oxide'
@@ -25,16 +22,11 @@ onlyBuiltDependencies:
 
 overrides:
   cookie@<0.7.0: ^0.7.0
-  esbuild@>=0.27.3 <0.28.1: ^0.28.1
   js-yaml@>=4.0.0 <4.3.0: ^4.3.0
-  sharp@<0.35.0: ^0.35.0
-  undici@>=7.0.0 <7.24.0: ^7.24.0
-  undici@>=7.0.0 <7.28.0: ^7.28.0
-  undici@>=7.17.0 <7.24.0: ^7.24.0
-  ws@>=8.0.0 <8.20.1: ^8.20.1
-  ws@>=8.0.0 <8.21.0: ^8.21.0
+  js-yaml@>=4.0.0 <4.3.1: ^4.3.1
+  undici@>=7.0.0 <7.29.0: ^7.29.0
 
 patchedDependencies:
-  '@microsoft/signalr@10.0.0': patches/signalr.patch
+  '@microsoft/signalr@10.0.11': patches/signalr.patch
 
 #trustPolicy: no-downgrade

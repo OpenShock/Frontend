@@ -1,10 +1,8 @@
 <script lang="ts" module>
-  import type { ColumnDef } from '@tanstack/table-core';
-  import { PasswordHashingAlgorithm, RoleType, adminGetUsers } from '$lib/api';
-  import type { AdminUsersView, AdminUsersViewPaginated } from '$lib/api';
+  import { PasswordHashingAlgorithm, RoleType } from '$lib/api';
+  import type { AdminUsersView } from '$lib/api';
   import {
-    CreateActionsColumnDef,
-    CreateSortableColumnDef,
+    CreateColumnDefs,
     LocaleDateTimeRenderer,
     RenderBlueCell,
     RenderBoldCell,
@@ -12,8 +10,7 @@
     RenderOrangeCell,
     RenderRedCell,
   } from '$lib/components/Table/ColumnUtils';
-  import DataTableActions from './data-table-actions.svelte';
-  import { odataAnd, odataSearch } from '$lib/utils/odata';
+  import type { Features } from './data-table-features';
 
   const PasswordHashTypeRenderer = (passwordHashType: PasswordHashingAlgorithm) => {
     if (passwordHashType !== PasswordHashingAlgorithm.BCrypt)
@@ -26,7 +23,12 @@
     return isPrivileged ? RenderBlueCell(roles.toString()) : RenderBoldCell(roles.toString());
   };
 
-  const dataColumns: ColumnDef<AdminUsersView>[] = [
+  const { CreateSortableColumnDef, CreateActionsColumnDef } = CreateColumnDefs<
+    Features,
+    AdminUsersView
+  >();
+
+  const dataColumns = [
     CreateSortableColumnDef('name', 'Name', RenderCell),
     CreateSortableColumnDef('email', 'Email', RenderCell),
     CreateSortableColumnDef('passwordHashType', 'Password hash type', PasswordHashTypeRenderer),
@@ -41,7 +43,10 @@
 </script>
 
 <script lang="ts">
-  import type { SortingState } from '@tanstack/table-core';
+  import DataTableActions from './data-table-actions.svelte';
+  import { odataAnd, odataSearch } from '$lib/utils/odata';
+  import { adminGetUsers, type AdminUsersViewPaginated } from '$lib/api';
+  import type { SortingState } from '@tanstack/svelte-table';
   import { Container } from '@openshock/svelte-core/components';
   import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
   import PaginationFooter from '$lib/components/Table/PaginationFooter.svelte';
@@ -49,7 +54,8 @@
   import { Input } from '@openshock/svelte-core/components/ui/input';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import { useDebounce } from '@openshock/svelte-core/utils/debounce.js';
+  import { useDebounce } from '@openshock/svelte-core/utils';
+  import { features } from './data-table-features';
 
   registerBreadcrumbs(() => [{ label: 'Users' }]);
 
@@ -58,7 +64,7 @@
   // Bumped to force a re-fetch after a mutation (e.g. user deletion).
   let refreshNonce = $state(0);
 
-  const columns: ColumnDef<AdminUsersView>[] = [
+  const columns = [
     ...dataColumns,
     CreateActionsColumnDef(DataTableActions, (user) => ({
       user,
@@ -132,12 +138,7 @@
     </CardTitle>
   </CardHeader>
   <div class="grid w-full gap-6 p-6">
-    <DataTable
-      {data}
-      {columns}
-      bind:sorting
-      pagination={{ pageIndex: page - 1, pageSize: perPage }}
-    />
+    <DataTable {data} {columns} {features} bind:sorting manualSorting />
     <PaginationFooter
       count={total}
       {perPage}

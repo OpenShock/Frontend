@@ -9,9 +9,8 @@
     FieldDescription,
     FieldSeparator,
   } from '@openshock/svelte-core/components/ui/field';
-  import { TextInput } from '@openshock/svelte-core/components/input';
-  import type { ValidationResult } from '@openshock/svelte-core/types/ValidationResult.js';
-  import { PasswordInput } from '@openshock/svelte-core/components/input';
+  import { TextInput, PasswordInput } from '@openshock/svelte-core/components/input';
+  import type { ValidationResult } from '@openshock/svelte-core/types';
   import Turnstile from '$lib/components/Turnstile.svelte';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
   import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';

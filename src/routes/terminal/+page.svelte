@@ -11,9 +11,7 @@
   import type { FirmwareChannel, FirmwareRelease } from '$lib/api/firmwareRepo/models';
   import { Container } from '@openshock/svelte-core/components';
   import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
-  import { ChromeLogo } from '@openshock/svelte-core/components/svg';
-  import { EdgeLogo } from '@openshock/svelte-core/components/svg';
-  import { OperaLogo } from '@openshock/svelte-core/components/svg';
+  import { ChromeLogo, EdgeLogo, OperaLogo } from '@openshock/svelte-core/components/svg';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
   import { Checkbox } from '@openshock/svelte-core/components/ui/checkbox';

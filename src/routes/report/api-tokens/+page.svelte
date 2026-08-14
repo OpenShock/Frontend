@@ -1,11 +1,11 @@
 <script lang="ts" module>
-  import { tokensReportTokens } from '$lib/api';
   function isValid(str: string): boolean {
     return /^[0-9a-zA-Z]{32,64}$/i.test(str);
   }
 </script>
 
 <script lang="ts">
+  import { tokensReportTokens } from '$lib/api';
   import OctagonAlert from '@lucide/svelte/icons/octagon-alert';
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';

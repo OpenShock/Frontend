@@ -1,6 +1,5 @@
 <script lang="ts" module>
-  import { OtaUpdateStatus, devicesOtaGetOtaUpdateHistory } from '$lib/api';
-  import type { OtaItem } from '$lib/api';
+  import { OtaUpdateStatus } from '$lib/api';
   import { OtaUpdateProgressTask } from '$lib/signalr/models/OtaUpdateProgressTask';
 
   // Task weights for weighted total progress (7 tasks, sums to 100)
@@ -56,6 +55,7 @@
 </script>
 
 <script lang="ts">
+  import { devicesOtaGetOtaUpdateHistory, type OtaItem } from '$lib/api';
   import { CircleCheck, CircleX, CloudDownload, RotateCcw, TriangleAlert } from '@lucide/svelte';
   import { page } from '$app/state';
   import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
@@ -75,8 +75,7 @@
     ownHubs,
     refreshOwnHubs,
   } from '$lib/state/hubs-state.svelte';
-  import { cn } from '@openshock/svelte-core/utils/shadcn.js';
-  import { NumberToHexPadded } from '@openshock/svelte-core/utils/convert.js';
+  import { cn, NumberToHexPadded } from '@openshock/svelte-core/utils';
   import { onMount } from 'svelte';
   import type { FirmwareChannel } from '$lib/api/firmwareRepo/models';
   import { PageHeader } from '@openshock/svelte-core/components';
