@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Check, ChevronsUpDown } from '@lucide/svelte';
-  import { ExtractBoards, type FirmwareRelease } from '$lib/api/firmwareRepo';
+  import { ExtractBoards } from '$lib/api/firmwareRepo/boards';
+  import type { FirmwareRelease } from '$lib/api/firmwareRepo/models';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Command from '@openshock/svelte-core/components/ui/command';
   import {

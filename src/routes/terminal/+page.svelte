@@ -8,7 +8,7 @@
     Zap,
   } from '@lucide/svelte';
   import { browser } from '$app/env';
-  import type { FirmwareChannel, FirmwareRelease } from '$lib/api/firmwareRepo';
+  import type { FirmwareChannel, FirmwareRelease } from '$lib/api/firmwareRepo/models';
   import { Container } from '@openshock/svelte-core/components';
   import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
   import { ChromeLogo } from '@openshock/svelte-core/components/svg';

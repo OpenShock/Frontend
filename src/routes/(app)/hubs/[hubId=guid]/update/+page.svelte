@@ -78,7 +78,7 @@
   import { cn } from '@openshock/svelte-core/utils/shadcn.js';
   import { NumberToHexPadded } from '@openshock/svelte-core/utils/convert.js';
   import { onMount } from 'svelte';
-  import type { FirmwareChannel } from '$lib/api/firmwareRepo';
+  import type { FirmwareChannel } from '$lib/api/firmwareRepo/models';
   import { PageHeader } from '@openshock/svelte-core/components';
 
   let hubLoaded = $state(false);

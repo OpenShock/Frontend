@@ -1,11 +1,11 @@
 <script lang="ts">
   import { CircleCheckBig, TriangleAlert } from '@lucide/svelte';
+  import { FetchLatest } from '$lib/api/firmwareRepo/firmware';
   import {
-    FetchLatest,
     type FirmwareChannel,
     FirmwareChannels,
     type FirmwareRelease,
-  } from '$lib/api/firmwareRepo';
+  } from '$lib/api/firmwareRepo/models';
   import * as ToggleGroup from '@openshock/svelte-core/components/ui/toggle-group';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 

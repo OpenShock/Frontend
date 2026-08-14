@@ -1,10 +1,7 @@
 <script lang="ts">
   import { Microchip, TriangleAlert } from '@lucide/svelte';
-  import {
-    DownloadAndVerifyArtifact,
-    FindArtifact,
-    type FirmwareRelease,
-  } from '$lib/api/firmwareRepo';
+  import { DownloadAndVerifyArtifact, FindArtifact } from '$lib/api/firmwareRepo/artifacts';
+  import type { FirmwareRelease } from '$lib/api/firmwareRepo/models';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import { Progress } from '@openshock/svelte-core/components/ui/progress';
   import RiskAcknowledgementModal from './RiskAcknowledgementModal.svelte';
