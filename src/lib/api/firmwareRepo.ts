@@ -162,9 +162,16 @@ export function FindArtifact(
 
 async function DownloadBinary(url: string): Promise<Uint8Array> {
   const response = await fetch(url);
-  if (!response.ok)
+  if (!response.ok) {
     throw new Error(`Failed to fetch ${url}: ${response.status} ${response.statusText}`);
-  return await response.bytes();
+  }
+
+  if ('bytes' in Response.prototype) {
+    return await response.bytes();
+  }
+
+  const buf = await response.arrayBuffer();
+  return new Uint8Array(buf);
 }
 
 export async function DownloadAndVerifyArtifact(artifact: FirmwareArtifact): Promise<Uint8Array> {
