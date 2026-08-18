@@ -176,9 +176,23 @@ function buildSveltekitConfig(dotenv: PublicEnv): KitConfigParam {
         'base-uri': ['self'],
         // form-action does NOT fall back to default-src — without it, injected HTML
         // could point a <form> at an attacker origin. The API origin is needed for the
-        // OAuth buttons' cross-origin POST; note Chrome also enforces form-action on
-        // the post-submit redirect to the OAuth provider.
-        'form-action': ['self', dotenv.PUBLIC_BACKEND_API_URL],
+        // OAuth buttons' cross-origin POST; the identity providers are needed because
+        // that POST answers with a 302 to them, and Chrome re-checks form-action on
+        // every hop of a form submission's redirect chain. Listed unconditionally —
+        // a provider the backend doesn't offer is simply never navigated to.
+        //
+        // These are the browser-facing authorization endpoints of the backend's
+        // handlers, not their token/userinfo endpoints (those are server-to-server and
+        // never navigated to). X needs both hosts: the handler builds a twitter.com
+        // URL, which 301s to x.com inside the same navigation.
+        'form-action': [
+          'self',
+          dotenv.PUBLIC_BACKEND_API_URL,
+          'https://discord.com',
+          'https://accounts.google.com',
+          'https://twitter.com',
+          'https://x.com',
+        ],
         // Ignored on prerendered pages (meta-tag CSP) — the _headers file's
         // X-Frame-Options covers those on Cloudflare.
         'frame-ancestors': ['none'],
