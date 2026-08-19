@@ -1,13 +1,14 @@
 <script lang="ts">
   import { Microchip, TriangleAlert } from '@lucide/svelte';
-  import { DownloadAndVerifyBoardBinary } from '$lib/api/firmwareCDN';
+  import { DownloadAndVerifyArtifact, FindArtifact } from '$lib/api/firmwareRepo/artifacts';
+  import type { FirmwareRelease } from '$lib/api/firmwareRepo/models';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import { Progress } from '@openshock/svelte-core/components/ui/progress';
   import RiskAcknowledgementModal from './RiskAcknowledgementModal.svelte';
   import type EspSerialConnection from './EspSerialConnection';
 
   interface Props {
-    version: string;
+    latestResponse: FirmwareRelease;
     board: string;
     connection: EspSerialConnection;
     eraseBeforeFlash: boolean;
@@ -17,7 +18,7 @@
   }
 
   let {
-    version,
+    latestResponse,
     board,
     connection,
     eraseBeforeFlash,
@@ -32,9 +33,16 @@
   let error = $state<string | null>(null);
 
   async function FlashDeviceImpl() {
-    if (!version || !board || !connection) {
+    if (!latestResponse || !board || !connection) {
       progressName = null;
       error = 'No device selected.';
+      return;
+    }
+
+    const artifact = FindArtifact(latestResponse, board, 'merged');
+    if (!artifact) {
+      progressName = null;
+      error = 'No merged firmware artifact found for this board.';
       return;
     }
 
@@ -51,7 +59,7 @@
 
     progressName = 'Downloading firmware...';
     progressPercent = null;
-    const firmware = await DownloadAndVerifyBoardBinary(version, board, 'firmware.bin');
+    const firmware = await DownloadAndVerifyArtifact(artifact);
     if (!firmware) {
       progressName = null;
       error = 'Failed to download firmware.';

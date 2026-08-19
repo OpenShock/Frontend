@@ -77,7 +77,7 @@
   } from '$lib/state/hubs-state.svelte';
   import { cn, NumberToHexPadded } from '@openshock/svelte-core/utils';
   import { onMount } from 'svelte';
-  import type { FirmwareChannel } from '$lib/api/firmwareCDN';
+  import type { FirmwareChannel } from '$lib/api/firmwareRepo/models';
   import { PageHeader } from '@openshock/svelte-core/components';
 
   let hubLoaded = $state(false);

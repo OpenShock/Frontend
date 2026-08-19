@@ -1,28 +1,31 @@
 <script lang="ts">
   import { CircleCheckBig, TriangleAlert } from '@lucide/svelte';
+  import { FetchLatest } from '$lib/api/firmwareRepo/firmware';
   import {
-    FetchChannelVersion,
     type FirmwareChannel,
     FirmwareChannels,
-  } from '$lib/api/firmwareCDN';
+    type FirmwareRelease,
+  } from '$lib/api/firmwareRepo/models';
   import * as ToggleGroup from '@openshock/svelte-core/components/ui/toggle-group';
   import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
 
-  /** Optional chip to constrain the list of boards to */
-  //export let chip: string | null = null;
   interface Props {
     channel?: FirmwareChannel;
     version?: string | null;
+    latestResponse?: FirmwareRelease | null;
     disabled?: boolean;
   }
 
   let {
     channel = $bindable<FirmwareChannel>('stable'),
+    // eslint-disable-next-line no-useless-assignment -- $bindable fallback, not a dead assignment
     version = $bindable(null),
+    // eslint-disable-next-line no-useless-assignment -- $bindable fallback, not a dead assignment
+    latestResponse = $bindable(null),
     disabled = false,
   }: Props = $props();
 
-  let versions = $state<{ [key in FirmwareChannel]?: string | null }>({});
+  let cache = $state<{ [key in FirmwareChannel]?: FirmwareRelease | null }>({});
 
   // Reactive effect to update the version based on the selected channel.
   $effect(() => {
@@ -32,22 +35,29 @@
     }
 
     // Use a cached value if available.
-    const cachedVersion = versions[channel];
-    if (cachedVersion !== undefined) {
-      version = cachedVersion;
+    const cached = cache[channel];
+    if (cached !== undefined) {
+      latestResponse = cached;
+      version = cached?.version ?? null;
       return;
     }
 
     // Capture the current channel to avoid race conditions if channel changes.
     const currentChannel = channel;
 
-    // Fetch the channel version from the API.
-    FetchChannelVersion(currentChannel)
-      .then((ver) => {
-        version = ver ?? null;
-        versions[currentChannel] = version;
+    // Fetch the latest firmware info from the repository server.
+    FetchLatest(currentChannel)
+      .then((resp) => {
+        latestResponse = resp;
+        version = resp.version;
+        cache[currentChannel] = resp;
       })
-      .catch(handleApiError);
+      .catch((error) => {
+        latestResponse = null;
+        version = null;
+        cache[currentChannel] = null;
+        handleApiError(error);
+      });
   });
 </script>
 

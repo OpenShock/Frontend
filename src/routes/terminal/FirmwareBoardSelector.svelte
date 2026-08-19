@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Check, ChevronsUpDown } from '@lucide/svelte';
-  import { FetchVersionBoards } from '$lib/api/firmwareCDN';
+  import { ExtractBoards } from '$lib/api/firmwareRepo/boards';
+  import type { FirmwareRelease } from '$lib/api/firmwareRepo/models';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Command from '@openshock/svelte-core/components/ui/command';
   import {
@@ -10,29 +11,23 @@
   } from '@openshock/svelte-core/components/ui/popover';
   import { cn } from '@openshock/svelte-core/utils';
 
-  /** Optional chip to constrain the list of boards to */
-  //export let chip: string | null = null;
   interface Props {
-    version: string | null;
+    latestResponse: FirmwareRelease | null;
+    chip?: string | null;
     selectedBoard?: string | null;
     disabled?: boolean;
   }
 
-  let { version, selectedBoard = $bindable(null), disabled = false }: Props = $props();
+  let {
+    latestResponse,
+    chip = null,
+    selectedBoard = $bindable(null),
+    disabled = false,
+  }: Props = $props();
 
-  let boardsCache = $state<{ [key: string]: string[] }>({});
+  let boards = $derived(latestResponse ? ExtractBoards(latestResponse, chip) : []);
   $effect(() => {
-    if (version && !(version in boardsCache)) {
-      let requestedVersion = version;
-      FetchVersionBoards(version).then((b) => {
-        boardsCache = { ...boardsCache, [requestedVersion]: b ?? [] };
-      });
-    }
-  });
-
-  let boards = $derived(version ? (boardsCache[version] ?? []) : []);
-  $effect(() => {
-    if (boards.length === 0) {
+    if (selectedBoard && !boards.includes(selectedBoard)) {
       selectedBoard = null;
     }
   });

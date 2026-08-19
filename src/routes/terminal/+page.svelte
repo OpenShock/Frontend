@@ -8,7 +8,7 @@
     Zap,
   } from '@lucide/svelte';
   import { browser } from '$app/env';
-  import type { FirmwareChannel } from '$lib/api/firmwareCDN';
+  import type { FirmwareChannel, FirmwareRelease } from '$lib/api/firmwareRepo/models';
   import { Container } from '@openshock/svelte-core/components';
   import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
   import { ChromeLogo, EdgeLogo, OperaLogo } from '@openshock/svelte-core/components/svg';
@@ -44,6 +44,7 @@
 
   let channel = $state<FirmwareChannel>('stable');
   let version = $state<string | null>(null);
+  let latestResponse = $state<FirmwareRelease | null>(null);
   // Tracks which channel+version the user explicitly confirmed. Changing either invalidates it.
   let confirmedChannel = $state<FirmwareChannel | null>(null);
   let confirmedVersion = $state<string | null>(null);
@@ -323,6 +324,7 @@
                             <FirmwareChannelSelector
                               bind:channel
                               bind:version
+                              bind:latestResponse
                               disabled={isFlashing}
                             />
                             {#if version}
@@ -350,7 +352,7 @@
                         {#if isCurrent}
                           <div class="flex flex-col gap-4">
                             <FirmwareBoardSelector
-                              {version}
+                              {latestResponse}
                               bind:selectedBoard={board}
                               disabled={isFlashing}
                             />
@@ -379,9 +381,9 @@
 
                       <!-- Step 3: Flash -->
                       {#if i === 2}
-                        {#if isCurrent && version && board && connection}
+                        {#if isCurrent && latestResponse && board && connection}
                           <FirmwareFlasher
-                            {version}
+                            {latestResponse}
                             {board}
                             {connection}
                             {eraseBeforeFlash}

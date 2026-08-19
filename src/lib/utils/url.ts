@@ -2,7 +2,12 @@ import { afterNavigate, goto, replaceState } from '$app/navigation';
 import { asset, base, match } from '$app/paths';
 import { page } from '$app/state';
 import type { Asset, Pathname } from '$app/types';
-import { PUBLIC_BACKEND_API_URL, PUBLIC_SITE_SHORT_URL, PUBLIC_SITE_URL } from '$env/static/public';
+import {
+  PUBLIC_BACKEND_API_URL,
+  PUBLIC_FIRMWARE_REPO_URL,
+  PUBLIC_SITE_SHORT_URL,
+  PUBLIC_SITE_URL,
+} from '$env/static/public';
 import { tick } from 'svelte';
 // ---------------------------------------------------------------------------
 // Constants
@@ -24,6 +29,16 @@ type BackendApiVersion = 1 | 2;
  * @example "2/account/login"
  */
 export type BackendPath = `${BackendApiVersion}` | `${BackendApiVersion}/${string}`;
+
+type FirmwareRepoApiVersion = 2;
+
+/**
+ * A path segment for the firmware repository server, always prefixed with a version number.
+ *
+ * @example "2"
+ * @example "2/firmware/latest/stable"
+ */
+export type FirmwareRepoPath = `${FirmwareRepoApiVersion}` | `${FirmwareRepoApiVersion}/${string}`;
 
 // ---------------------------------------------------------------------------
 // Backend
@@ -67,6 +82,53 @@ export function getBackendURL(path?: BackendPath): URL {
 
   return url;
 }
+
+// ---------------------------------------------------------------------------
+// Firmware repository
+// ---------------------------------------------------------------------------
+
+/**
+ * Builds a fully-qualified URL for the firmware repository server.
+ *
+ * The base URL is read from `PUBLIC_FIRMWARE_REPO_URL`. An optional
+ * version-prefixed path is appended when provided.
+ *
+ * @param path - Version-prefixed resource path (e.g. `"2/firmware/latest/stable"`)
+ * @returns A `URL` pointing at the firmware repository resource
+ *
+ * @throws {Error} If `PUBLIC_FIRMWARE_REPO_URL` is not HTTPS
+ * @throws {Error} If `PUBLIC_FIRMWARE_REPO_URL` contains query params or a hash
+ *
+ * @example
+ * ```ts
+ * getFirmwareRepoURL();                          // https://repo.example.com/
+ * getFirmwareRepoURL("2/firmware/latest/stable") // https://repo.example.com/2/firmware/latest/stable
+ * ```
+ */
+export function getFirmwareRepoURL(path?: FirmwareRepoPath): URL {
+  const url = new URL(PUBLIC_FIRMWARE_REPO_URL);
+
+  if (url.protocol !== 'https:') {
+    throw new Error('PUBLIC_FIRMWARE_REPO_URL must be an HTTPS URL');
+  }
+
+  if (url.search || url.hash) {
+    throw new Error('PUBLIC_FIRMWARE_REPO_URL must not contain query parameters or hash fragments');
+  }
+
+  if (path !== undefined) {
+    // Ensure exactly one slash between the base pathname and the appended path
+    const base = url.pathname.endsWith('/') ? url.pathname : `${url.pathname}/`;
+    const suffix = path.startsWith('/') ? path.slice(1) : path;
+    url.pathname = base + suffix;
+  }
+
+  return url;
+}
+
+// ---------------------------------------------------------------------------
+// Gateway
+// ---------------------------------------------------------------------------
 
 /**
  * Builds the live-control-gateway WebSocket URL from the parts the backend advertises
