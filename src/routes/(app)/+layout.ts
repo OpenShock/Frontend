@@ -1,4 +1,5 @@
 import { authState } from '#lib/state/auth-state.svelte.js';
+import { REDIRECT_QUERY_PARAM } from '#lib/utils/url.js';
 import { resolve } from '$app/paths';
 import { redirect } from '@sveltejs/kit';
 
@@ -9,7 +10,7 @@ export const prerender = false;
 // hooks.client.ts `init` has already populated authState before any load runs.
 export function load({ url }) {
   if (!authState.isAuthenticated) {
-    const next = encodeURIComponent(url.pathname + url.search);
-    redirect(303, `${resolve('login')}?next=${next}`);
+    const redirectTo = encodeURIComponent(url.pathname + url.search);
+    redirect(303, `${resolve('login')}?${REDIRECT_QUERY_PARAM}=${redirectTo}`);
   }
 }
