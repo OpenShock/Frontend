@@ -1,5 +1,5 @@
-import { isOtaUpdateProgressTask } from '$lib/signalr/models/OtaUpdateProgressTask';
-import { onlineHubs } from '$lib/state/hubs-state.svelte';
+import { isOtaUpdateProgressTask } from '#lib/signalr/models/OtaUpdateProgressTask.js';
+import { onlineHubs } from '#lib/state/hubs-state.svelte.js';
 import { isNumber, isString } from '@openshock/svelte-core/typeguards';
 import { toast } from 'svelte-sonner';
 

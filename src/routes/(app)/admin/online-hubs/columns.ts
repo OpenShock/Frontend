@@ -1,4 +1,4 @@
-import type { AdminOnlineDeviceResponse } from '$lib/api';
+import type { AdminOnlineDeviceResponse } from '#lib/api/index.js';
 import {
   CreateColumnDefs,
   FirmwareVersionRenderer,
@@ -7,7 +7,7 @@ import {
   RenderCellWithTooltip,
   TimeSinceDurationRenderer,
   UserAgentRenderer,
-} from '$lib/components/Table/ColumnUtils';
+} from '#lib/components/Table/ColumnUtils.js';
 import { createNowTicker } from '@openshock/svelte-core/utils';
 import { SemVer } from 'semver';
 import DataTableActions from './data-table-actions.svelte';

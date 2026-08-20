@@ -1,6 +1,6 @@
 <script lang="ts" module>
-  import { ControlLimitMode, type ShockerControlSettings } from '$lib/api';
-  import { ControlDurationProps, ControlIntensityProps } from '$lib/constants/ControlConstants';
+  import { ControlLimitMode, type ShockerControlSettings } from '#lib/api/index.js';
+  import { ControlDurationProps, ControlIntensityProps } from '#lib/constants/ControlConstants.js';
 
   // ControlIntensityProps is a percentage; ControlDurationProps is in seconds, but
   // shockerControl durations are in milliseconds, so convert at this boundary.

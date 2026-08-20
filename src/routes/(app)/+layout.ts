@@ -1,5 +1,5 @@
+import { authState } from '#lib/state/auth-state.svelte.js';
 import { resolve } from '$app/paths';
-import { authState } from '$lib/state/auth-state.svelte';
 import { redirect } from '@sveltejs/kit';
 
 // The pages below this one will be different from user-to-user so cannot be prerendered and really shouldnt be server rendered
@@ -10,6 +10,6 @@ export const prerender = false;
 export function load({ url }) {
   if (!authState.isAuthenticated) {
     const next = encodeURIComponent(url.pathname + url.search);
-    redirect(303, `${resolve('/login')}?next=${next}`);
+    redirect(303, `${resolve('login')}?next=${next}`);
   }
 }

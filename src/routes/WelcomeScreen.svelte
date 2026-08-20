@@ -3,9 +3,8 @@
 </script>
 
 <script lang="ts">
-  /* eslint-disable svelte/no-navigation-without-resolve -- only contains external URLs */
   import { asset } from '$app/paths';
-  import { PUBLIC_DISCORD_INVITE_URL, PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
+  import { PUBLIC_DISCORD_INVITE_URL, PUBLIC_GITHUB_PROJECT_URL } from '$app/env/public';
   import { DiscordLogo, GithubIcon } from '@openshock/svelte-core/components/svg';
   import { DotGrid } from '@openshock/svelte-core/components';
   import { Button } from '@openshock/svelte-core/components/ui/button';
@@ -14,8 +13,8 @@
     markTourCompleted,
     shouldShowWelcome,
     startWelcomeTour,
-  } from '$lib/tour/welcome-tour';
-  import { userState } from '$lib/state/user-state.svelte';
+  } from '#lib/tour/welcome-tour.js';
+  import { userState } from '#lib/state/user-state.svelte.js';
   import { ChevronLeft, ChevronRight, Sparkles } from '@lucide/svelte';
   import { onMount, type Snippet } from 'svelte';
   import { fade, fly } from 'svelte/transition';
@@ -25,7 +24,6 @@
     title: string;
     body: Snippet;
   }
-
   interface Props {
     close: () => void;
   }
@@ -123,7 +121,7 @@
 </script>
 
 <svelte:head>
-  <link rel="preload" href={asset('/Logo.svg')} as="image" type="image/svg+xml" />
+  <link rel="preload" href={asset('logo.svg')} as="image" type="image/svg+xml" />
 </svelte:head>
 
 <div
@@ -245,7 +243,7 @@
 
     <img
       class="my-8 w-full max-w-3xl sm:my-12"
-      src={asset('/Logo.svg')}
+      src={asset('logo.svg')}
       alt="OpenShock"
       draggable="false"
       fetchpriority="high"

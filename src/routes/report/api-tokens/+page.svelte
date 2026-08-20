@@ -5,22 +5,22 @@
 </script>
 
 <script lang="ts">
-  import { tokensReportTokens } from '$lib/api';
+  import { tokensReportTokens } from '#lib/api/index.js';
   import OctagonAlert from '@lucide/svelte/icons/octagon-alert';
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { Container } from '@openshock/svelte-core/components';
-  import Turnstile from '$lib/components/Turnstile.svelte';
+  import Turnstile from '#lib/components/Turnstile.svelte';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
   import { Checkbox } from '@openshock/svelte-core/components/ui/checkbox';
   import { Label } from '@openshock/svelte-core/components/ui/label';
   import { ScrollArea } from '@openshock/svelte-core/components/ui/scroll-area';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
   import { toast } from 'svelte-sonner';
 
-  registerBreadcrumbs(() => [{ label: 'Report API Tokens', href: '/report/api-tokens' }]);
+  registerBreadcrumbs(() => [{ label: 'Report API Tokens', href: 'report/api-tokens' }]);
 
   let secrets = $state<string[]>([]);
   let turnstileResponse = $state<string | null>(null);
@@ -35,7 +35,7 @@
 
     try {
       await tokensReportTokens({ body: { turnstileResponse, secrets } });
-      goto(resolve('/login'));
+      goto(resolve('login'));
     } catch (err) {
       await handleApiError(err);
     }
@@ -95,6 +95,7 @@
     <!-- Turnstile + Acknowledgement -->
     <div class="space-y-3">
       <Turnstile action="report-token" onResponse={(response) => (turnstileResponse = response)} />
+
       <div class="flex items-center space-x-2">
         <Checkbox
           id="acknowledgement"

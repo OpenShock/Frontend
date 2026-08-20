@@ -3,7 +3,7 @@
   import KeyRound from '@lucide/svelte/icons/key-round';
   import Mail from '@lucide/svelte/icons/mail';
   import User from '@lucide/svelte/icons/user';
-  import { PUBLIC_SIGNOZ_LOGS_ENABLED } from '$env/static/public';
+  import { PUBLIC_SIGNOZ_LOGS_ENABLED } from '$app/env/public';
   import { Container } from '@openshock/svelte-core/components';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import { ToggleGroup, ToggleGroupItem } from '@openshock/svelte-core/components/ui/toggle-group';
@@ -11,20 +11,25 @@
     telemetryConsent,
     telemetryPrompted,
     type TelemetryLevel,
-  } from '$lib/state/telemetry-consent-state.svelte';
-  import { initTelemetry } from '$lib/telemetry/logger';
-  import { userState } from '$lib/state/user-state.svelte';
+  } from '#lib/state/telemetry-consent-state.svelte.js';
+  import { initTelemetry } from '#lib/telemetry/logger.js';
+  import { userState } from '#lib/state/user-state.svelte.js';
   import ChangeEmailDialog from './dialog-email-change.svelte';
   import ChangePasswordDialog from './dialog-password-change.svelte';
   import ChangeUsernameDialog from './dialog-username-change.svelte';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
   import DangerZone from './DangerZone.svelte';
 
   const errorReportingAvailable = PUBLIC_SIGNOZ_LOGS_ENABLED === 'true';
 
   const telemetryOptions: { value: TelemetryLevel; label: string; description: string }[] = [
     { value: 'off', label: 'Off', description: 'Send nothing.' },
-    { value: 'errors', label: 'Errors', description: 'Send browser error reports only.' },
+    {
+      value: 'errors',
+      label: 'Errors',
+      description: 'Send browser error reports only.',
+    },
+
     {
       value: 'full',
       label: 'Full',
@@ -47,7 +52,7 @@
   );
 
   registerBreadcrumbs(() => [
-    { label: 'Settings', href: '/settings/account' },
+    { label: 'Settings', href: 'settings/account' },
     { label: 'Account' },
   ]);
 
@@ -74,6 +79,7 @@
           </div>
           <div class="text-muted-foreground">{account.name}</div>
         </div>
+
         <Button type="button" onclick={() => (usernameDialogOpen = true)}>Change Username</Button>
       </div>
 
@@ -89,10 +95,8 @@
           type="button"
           disabled={isOAuthOnly}
           title={isOAuthOnly ? 'Not available for OAuth-only accounts' : undefined}
-          onclick={() => (emailDialogOpen = true)}
+          onclick={() => (emailDialogOpen = true)}>Change Email</Button
         >
-          Change Email
-        </Button>
       </div>
 
       <div class="flex w-full items-center gap-2">
@@ -111,10 +115,8 @@
           type="button"
           disabled={isOAuthOnly}
           title={isOAuthOnly ? 'Not available for OAuth-only accounts' : undefined}
-          onclick={() => (passwordDialogOpen = true)}
+          onclick={() => (passwordDialogOpen = true)}>Change Password</Button
         >
-          Change Password
-        </Button>
       </div>
 
       {#if errorReportingAvailable}

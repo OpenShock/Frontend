@@ -1,4 +1,4 @@
-import { UsernameAvailability, UsernameErrorType } from '$lib/api';
+import { UsernameAvailability, UsernameErrorType } from '#lib/api/index.js';
 import { describe, expect, it } from 'vitest';
 import {
   UsernameAvailabilityUnknownValRes,

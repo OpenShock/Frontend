@@ -1,5 +1,5 @@
-import { HubUpdateType, isHubUpdateType } from '$lib/signalr/models/HubUpdateType';
-import { notifyHubPaired, refreshOwnHubs } from '$lib/state/hubs-state.svelte';
+import { HubUpdateType, isHubUpdateType } from '#lib/signalr/models/HubUpdateType.js';
+import { notifyHubPaired, refreshOwnHubs } from '#lib/state/hubs-state.svelte.js';
 import { isString } from '@openshock/svelte-core/typeguards';
 import { toast } from 'svelte-sonner';
 

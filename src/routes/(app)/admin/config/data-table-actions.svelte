@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { ConfigurationItemDto } from '$lib/api';
+  import type { ConfigurationItemDto } from '#lib/api/index.js';
   import { TableActionMenu } from '@openshock/svelte-core/components';
   import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
   import ItemDeleteDialog from './dialog-item-delete.svelte';

@@ -1,12 +1,12 @@
-import { registerOnUnauthorized } from '$lib/errorhandling/apiErrorHandling';
-import { destroySignalR, initializeSignalR } from '$lib/signalr/user.svelte';
+import { registerOnUnauthorized } from '#lib/errorhandling/apiErrorHandling.js';
+import { destroySignalR, initializeSignalR } from '#lib/signalr/user.svelte.js';
 import {
   hasCompletedTour,
   hasSeenWelcome,
   isOnboardingDisabled,
   markTourCompleted,
   startWelcomeTour,
-} from '$lib/tour/welcome-tour';
+} from '#lib/tour/welcome-tour.js';
 import { dialog } from '@openshock/svelte-core/components/dialog-manager';
 import { userState } from './user-state.svelte';
 

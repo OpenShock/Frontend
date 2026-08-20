@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { userSharesRedeemInvite } from '$lib/api';
-  import type { V2UserSharesListItem } from '$lib/api';
+  import { userSharesRedeemInvite } from '#lib/api/index.js';
+  import type { V2UserSharesListItem } from '#lib/api/index.js';
   import { Barcode, Zap } from '@lucide/svelte';
   import * as Avatar from '@openshock/svelte-core/components/ui/avatar';
   import { Badge } from '@openshock/svelte-core/components/ui/badge';
@@ -8,8 +8,11 @@
   import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
   import { Input } from '@openshock/svelte-core/components/ui/input';
   import * as Tooltip from '@openshock/svelte-core/components/ui/tooltip';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { refreshOutgoingInvites, refreshUserShares } from '$lib/state/user-shares-state.svelte';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+  import {
+    refreshOutgoingInvites,
+    refreshUserShares,
+  } from '#lib/state/user-shares-state.svelte.js';
 
   interface Props {
     open: boolean;

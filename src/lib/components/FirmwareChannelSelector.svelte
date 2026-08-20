@@ -4,9 +4,9 @@
     FetchChannelVersion,
     type FirmwareChannel,
     FirmwareChannels,
-  } from '$lib/api/firmwareCDN';
+  } from '#lib/api/firmwareCDN.js';
   import * as ToggleGroup from '@openshock/svelte-core/components/ui/toggle-group';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
 
   /** Optional chip to constrain the list of boards to */
   //export let chip: string | null = null;

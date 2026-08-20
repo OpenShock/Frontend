@@ -1,4 +1,4 @@
-import { onlineHubs } from '$lib/state/hubs-state.svelte';
+import { onlineHubs } from '#lib/state/hubs-state.svelte.js';
 import { isBoolean, isNumber, isString } from '@openshock/svelte-core/typeguards';
 import { toast } from 'svelte-sonner';
 

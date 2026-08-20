@@ -1,17 +1,17 @@
 <script lang="ts">
-  import { adminConfigurationList } from '$lib/api';
-  import type { ConfigurationItemDto } from '$lib/api';
+  import { adminConfigurationList } from '#lib/api/index.js';
+  import type { ConfigurationItemDto } from '#lib/api/index.js';
   import { Container } from '@openshock/svelte-core/components';
   import {
     CreateColumnDefs,
     LocaleDateTimeRenderer,
     RenderCell,
-  } from '$lib/components/Table/ColumnUtils';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
+  } from '#lib/components/Table/ColumnUtils.js';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
+  import DataTable from '#lib/components/Table/DataTableTemplate.svelte';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import { CardHeader, CardTitle } from '@openshock/svelte-core/components/ui/card';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import { onMount } from 'svelte';
   import DataTableActions from './data-table-actions.svelte';
   import WebhookAddDialog from './dialog-item-add.svelte';

@@ -18,8 +18,8 @@
   } from '@lucide/svelte';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
-  import type { Pathname } from '$app/types';
-  import { RoleType } from '$lib/api';
+  import type { Path } from '$app/types';
+  import { RoleType } from '#lib/api/index.js';
   import {
     Content,
     Footer,
@@ -35,13 +35,13 @@
     Root,
     useSidebar,
   } from '@openshock/svelte-core/components/ui/sidebar';
-  import { userState } from '$lib/state/user-state.svelte';
+  import { userState } from '#lib/state/user-state.svelte.js';
   import type { AnyComponent } from '@openshock/svelte-core/types';
-  import { isSerialSupported } from '$lib/utils/compatibility';
+  import { isSerialSupported } from '#lib/utils/compatibility.js';
   import { Collapsible } from 'bits-ui';
-  import { prefixBase } from '$lib/utils/url';
-  import LogoMark from '$lib/components/svg/LogoMark.svelte';
-  import LogoText from '$lib/components/svg/LogoText.svelte';
+  import { prefixBase } from '#lib/utils/url.js';
+  import LogoMark from '#lib/components/svg/LogoMark.svelte';
+  import LogoText from '#lib/components/svg/LogoText.svelte';
 
   let currentUser = $derived(userState.self);
 
@@ -51,10 +51,9 @@
   interface Entry {
     title: string;
   }
-
   interface Item extends Entry {
     class?: string;
-    href?: Pathname;
+    href?: Path;
     target?: string;
   }
 
@@ -76,36 +75,32 @@
       {
         title: 'Home',
         Icon: House,
-        href: isAuthenticated ? '/home' : '/',
+        href: isAuthenticated ? 'home' : '',
       },
     ];
 
     if (isAuthenticated) {
       menus.push(
-        {
-          title: 'Shockers',
-          Icon: Zap,
-          href: '/shockers/own',
-        },
+        { title: 'Shockers', Icon: Zap, href: 'shockers/own' },
         {
           title: 'Shared Shockers',
           Icon: Share2,
-          href: '/shockers/shared',
+          href: 'shockers/shared',
         },
         {
           title: 'Hubs',
           Icon: Router,
-          href: '/hubs',
+          href: 'hubs',
         },
         {
           title: 'User Shares',
           Icon: Users,
-          href: '/shares/user',
+          href: 'shares/user',
         },
         {
           title: 'Public Shares',
           Icon: Link,
-          href: '/shares/public',
+          href: 'shares/public',
         }
       );
     }
@@ -115,7 +110,7 @@
       menus.push({
         title: 'Serial Terminal',
         Icon: SquareTerminalIcon,
-        href: '/terminal',
+        href: 'terminal',
       });
     }
 
@@ -134,7 +129,7 @@
         subItems: [
           {
             title: 'Online Hubs',
-            href: '/admin/online-hubs',
+            href: 'admin/online-hubs',
           },
         ],
       },
@@ -144,30 +139,30 @@
         subItems: [
           {
             title: 'Users',
-            href: '/admin/users',
+            href: 'admin/users',
           },
           {
             title: 'Blacklists',
-            href: '/admin/blacklists',
+            href: 'admin/blacklists',
           },
           {
             title: 'Webhooks',
-            href: '/admin/webhooks',
+            href: 'admin/webhooks',
           },
           {
             title: 'Mail',
-            href: '/admin/mail',
+            href: 'admin/mail',
           },
           {
             title: 'Configuration',
-            href: '/admin/config',
+            href: 'admin/config',
           },
         ],
       },
       {
         title: 'Hangfire',
         Icon: Timer,
-        href: '/hangfire',
+        href: 'hangfire',
         target: '_blank',
       },
     ],
@@ -178,22 +173,22 @@
       {
         title: 'API Tokens',
         Icon: KeyRound,
-        href: '/settings/api-tokens',
+        href: 'settings/api-tokens',
       },
       {
         title: 'Sessions',
         Icon: MonitorSmartphone,
-        href: '/settings/sessions',
+        href: 'settings/sessions',
       },
       {
         title: 'Connections',
         Icon: IdCard,
-        href: '/settings/connections',
+        href: 'settings/connections',
       },
       {
         title: 'Account Settings',
         Icon: Settings,
-        href: '/settings/account',
+        href: 'settings/account',
       },
     ],
   };
@@ -216,27 +211,25 @@
   });
 
   function isPathMatch(path: string, href?: string) {
-    return path === href || path.startsWith(href + '/');
+    return href !== undefined && (path === href || path.startsWith(href + '/'));
   }
 </script>
 
 {#snippet menuSubItemSection(subItem: Item)}
-  <MenuSubButton
-    class={subItem.class}
-    isActive={isPathMatch(path, subItem.href)}
-    href={subItem.href}
-  >
+  {@const href = subItem.href === undefined ? undefined : prefixBase(subItem.href)}
+  <MenuSubButton class={subItem.class} isActive={isPathMatch(path, href)} {href}>
     {subItem.title}
   </MenuSubButton>
 {/snippet}
 
 {#snippet menuSection(menu: Menu)}
+  {@const href = menu.href === undefined ? undefined : prefixBase(menu.href)}
   <MenuItem>
-    <MenuButton class={menu.class} isActive={isPathMatch(path, menu.href)}>
+    <MenuButton class={menu.class} isActive={isPathMatch(path, href)}>
       {#snippet child({ props })}
-        <!-- prefixBase is used here because resolve() requires a route ID, not a plain pathname -->
+        <!-- prefixBase is used here because resolve() can't take a union-typed pathname -->
         <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-        <a href={menu.href ? prefixBase(menu.href) : undefined} {...props}>
+        <a {href} {...props}>
           <menu.Icon />
           <span>{menu.title}</span>
         </a>
@@ -304,7 +297,7 @@
 <!-- group-data-[collapsible=icon]:opacity-0 -->
 <Root collapsible="icon">
   <Header>
-    <a href={resolve(currentUser ? '/home' : '/')} aria-label="OpenShock home">
+    <a href={currentUser ? resolve('home') : resolve('')} aria-label="OpenShock home">
       <span class="pointer-events-none flex">
         <LogoMark class="ml-[0.667px] h-7.5 shrink-0" />
 
@@ -321,5 +314,5 @@
     <div class="grow"></div>
     {@render groupsSection(footerGroups)}
   </Content>
-  <Footer></Footer>
+  <Footer />
 </Root>

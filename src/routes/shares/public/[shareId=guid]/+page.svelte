@@ -1,21 +1,21 @@
 <script lang="ts">
-  import { publicGetPublicShare } from '$lib/api';
-  import type { PublicShareResponse } from '$lib/api';
+  import { publicGetPublicShare } from '#lib/api/index.js';
+  import type { PublicShareResponse } from '#lib/api/index.js';
   import { CircleUser, LogIn, Undo2 } from '@lucide/svelte';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
   import { Input } from '@openshock/svelte-core/components/ui/input';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import { userState } from '$lib/state/user-state.svelte';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
+  import { userState } from '#lib/state/user-state.svelte.js';
   import { onMount } from 'svelte';
   import ControlView from './ControlView.svelte';
 
   // Page is reactive and query parameters can change
   let loginUrl = $derived(
-    resolve(`/login?redirect=${encodeURIComponent(page.url.pathname + page.url.search)}`)
+    resolve(`login?redirect=${encodeURIComponent(page.url.pathname + page.url.search)}`)
   );
 
   let details = $state<Promise<PublicShareResponse>>(getShareDetails());
@@ -25,7 +25,7 @@
   let entered = $state(false);
 
   registerBreadcrumbs(() => [
-    { label: 'Public Shares', href: '/shares/public' },
+    { label: 'Public Shares', href: 'shares/public' },
     { label: shareData?.name ?? 'Public Share' },
   ]);
 
@@ -69,23 +69,25 @@
         </Card.Header>
         <Card.Content class="flex flex-col gap-2">
           {#if enterAsGuestClicked}
-            <Input placeholder="Guest Name" bind:value={guestName}></Input>
+            <Input placeholder="Guest Name" bind:value={guestName} />
             <span class="flex gap-2">
               <Button class="grow" variant="outline" onclick={() => (enterAsGuestClicked = false)}
-                ><Undo2 /> Back</Button
+                ><Undo2 />Back</Button
               >
+
               <Button
                 class="grow"
                 variant="outline"
                 disabled={guestName ? false : true}
-                onclick={() => (entered = true)}><LogIn /> Enter</Button
+                onclick={() => (entered = true)}><LogIn />Enter</Button
               >
             </span>
           {:else}
             <Button variant="outline" onclick={() => (enterAsGuestClicked = true)}
-              ><CircleUser /> Enter as Guest</Button
+              ><CircleUser />Enter as Guest</Button
             >
-            <Button variant="outline" href={loginUrl}><LogIn /> Login</Button>
+
+            <Button variant="outline" href={loginUrl}><LogIn />Login</Button>
           {/if}
         </Card.Content>
       </Card.Root>

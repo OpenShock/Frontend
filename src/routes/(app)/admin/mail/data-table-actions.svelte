@@ -4,12 +4,12 @@
     adminCancelEmailOutbox,
     adminRequeueEmailOutbox,
     type EmailOutboxMessageDto,
-  } from '$lib/api';
+  } from '#lib/api/index.js';
   import { TableActionMenu } from '@openshock/svelte-core/components';
   import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
   import { copyToClipboard } from '@openshock/svelte-core/utils';
   import { Ban, Copy, Eye, RotateCcw, Trash2 } from '@lucide/svelte';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import { toast } from 'svelte-sonner';
   import MessageDetailsDialog from './dialog-message-details.svelte';
   import MessageDeleteDialog from './dialog-message-delete.svelte';

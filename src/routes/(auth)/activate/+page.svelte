@@ -2,11 +2,11 @@
   import { browser } from '$app/env';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
-  import { accountActivate } from '$lib/api';
+  import { accountActivate } from '#lib/api/index.js';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
 
@@ -48,8 +48,8 @@
     </Card.Description>
   </Card.Header>
   {#if status === 'success'}
-    <Card.Content>
-      <Button class="w-full" href={resolve('/login')}>Continue to login</Button>
-    </Card.Content>
+    <Card.Content
+      ><Button class="w-full" href={resolve('login')}>Continue to login</Button></Card.Content
+    >
   {/if}
 </Card.Root>

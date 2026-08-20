@@ -1,6 +1,6 @@
-import { addShockEventListener, removeShockEventListener } from '$lib/signalr/handlers/Log';
-import type { ControlType } from '$lib/signalr/models/ControlType';
-import type { TimeoutHandle } from '$lib/types/WAPI';
+import { addShockEventListener, removeShockEventListener } from '#lib/signalr/handlers/Log.js';
+import type { ControlType } from '#lib/signalr/models/ControlType.js';
+import type { TimeoutHandle } from '#lib/types/WAPI.js';
 import { onMount } from 'svelte';
 
 /**

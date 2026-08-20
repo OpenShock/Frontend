@@ -1,6 +1,6 @@
-import { PUBLIC_SIGNOZ_LOGS_ENABLED } from '$env/static/public';
-import TelemetryConsentToast from '$lib/components/TelemetryConsentToast.svelte';
-import { telemetryPrompted } from '$lib/state/telemetry-consent-state.svelte';
+import TelemetryConsentToast from '#lib/components/TelemetryConsentToast.svelte';
+import { telemetryPrompted } from '#lib/state/telemetry-consent-state.svelte.js';
+import { PUBLIC_SIGNOZ_LOGS_ENABLED } from '$app/env/public';
 import { toast } from 'svelte-sonner';
 
 /**

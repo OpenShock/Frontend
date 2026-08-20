@@ -1,4 +1,4 @@
-import type { TurnstileRenderParameters } from '$lib/types/TurnstileRenderParameters';
+import type { TurnstileRenderParameters } from '#lib/types/TurnstileRenderParameters.js';
 
 export interface TurnstileInstance {
   execute: (

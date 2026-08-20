@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { WebhookDto } from '$lib/api';
+  import type { WebhookDto } from '#lib/api/index.js';
   import { TableActionMenu } from '@openshock/svelte-core/components';
   import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
   import { copyToClipboard } from '@openshock/svelte-core/utils';

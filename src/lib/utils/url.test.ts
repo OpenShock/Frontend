@@ -1,15 +1,15 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // ---------------------------------------------------------------------------
 // Mocks for SvelteKit modules
 // ---------------------------------------------------------------------------
 
+type MatchedRoute = { id: string; params: Record<string, string> } | null;
+
 const mocks = {
-  base: '',
   asset: (p: string) => p,
-  match: vi.fn<(path: string) => Promise<string | null>>().mockResolvedValue(null),
-  goto: vi.fn<(url: string) => Promise<void>>().mockResolvedValue(undefined),
-  replaceState: vi.fn(),
+  match: vi.fn<(path: string) => Promise<MatchedRoute>>().mockResolvedValue(null),
+  goto: vi.fn<(url: string | URL, opts?: unknown) => Promise<void>>().mockResolvedValue(undefined),
   page: {
     url: new URL('https://openshock.app/login'),
   },
@@ -19,16 +19,12 @@ const mocks = {
 };
 
 vi.mock('$app/paths', () => ({
-  get base() {
-    return mocks.base;
-  },
   asset: (p: string) => mocks.asset(p),
   match: (p: string) => mocks.match(p),
 }));
 
 vi.mock('$app/navigation', () => ({
-  goto: (...args: unknown[]) => mocks.goto(args[0] as string),
-  replaceState: (...args: unknown[]) => mocks.replaceState(args[0], args[1]),
+  goto: (...args: unknown[]) => mocks.goto(...(args as [string | URL, unknown?])),
 }));
 
 vi.mock('svelte-sonner', () => ({
@@ -41,7 +37,7 @@ vi.mock('$app/state', () => ({
   },
 }));
 
-vi.mock('$env/static/public', () => ({
+vi.mock('$app/env/public', () => ({
   get PUBLIC_BACKEND_API_URL() {
     return mocks.PUBLIC_BACKEND_API_URL;
   },
@@ -133,18 +129,17 @@ describe('getBackendURL', () => {
 // ---------------------------------------------------------------------------
 
 describe('prefixBase', () => {
-  afterEach(() => {
-    mocks.base = '';
+  beforeEach(() => {
+    mocks.PUBLIC_SITE_URL = 'https://openshock.app/';
   });
 
   it('returns the path as-is when base is empty', () => {
-    mocks.base = '';
-    expect(prefixBase('/settings/account' as never)).toBe('/settings/account');
+    expect(prefixBase('settings/account' as never)).toBe('/settings/account');
   });
 
   it('prepends the base path', () => {
-    mocks.base = '/app';
-    expect(prefixBase('/settings' as never)).toBe('/app/settings');
+    mocks.PUBLIC_SITE_URL = 'https://openshock.app/app/';
+    expect(prefixBase('settings' as never)).toBe('/app/settings');
   });
 });
 
@@ -154,30 +149,29 @@ describe('prefixBase', () => {
 
 describe('getSiteURL', () => {
   beforeEach(() => {
-    mocks.base = '';
     mocks.PUBLIC_SITE_URL = 'https://openshock.app/';
   });
 
   it('builds a URL from a pathname', () => {
-    const url = getSiteURL('/shockers/own' as never);
+    const url = getSiteURL('shockers/own' as never);
     expect(url.href).toBe('https://openshock.app/shockers/own');
   });
 
   it('appends search params', () => {
     const params = new URLSearchParams({ foo: 'bar', baz: '1' });
-    const url = getSiteURL('/path' as never, params);
+    const url = getSiteURL('path' as never, params);
     expect(url.searchParams.get('foo')).toBe('bar');
     expect(url.searchParams.get('baz')).toBe('1');
   });
 
   it('respects the base path', () => {
-    mocks.base = '/app';
-    const url = getSiteURL('/home' as never);
+    mocks.PUBLIC_SITE_URL = 'https://openshock.app/app/';
+    const url = getSiteURL('home' as never);
     expect(url.pathname).toBe('/app/home');
   });
 
   it('works without search params', () => {
-    const url = getSiteURL('/login' as never);
+    const url = getSiteURL('login' as never);
     expect(url.search).toBe('');
   });
 });
@@ -193,14 +187,14 @@ describe('getSiteAssetURL', () => {
   });
 
   it('builds a URL for a static asset', () => {
-    const url = getSiteAssetURL('/Logo.svg' as never);
-    expect(url.href).toBe('https://openshock.app/Logo.svg');
+    const url = getSiteAssetURL('logo.svg' as never);
+    expect(url.href).toBe('https://openshock.app/logo.svg');
   });
 
   it('uses the asset() transform', () => {
-    mocks.asset = (p: string) => `/_app/immutable${p}`;
-    const url = getSiteAssetURL('/Logo.svg' as never);
-    expect(url.pathname).toBe('/_app/immutable/Logo.svg');
+    mocks.asset = (p: string) => `/_app/immutable/${p}`;
+    const url = getSiteAssetURL('logo.svg' as never);
+    expect(url.pathname).toBe('/_app/immutable/logo.svg');
   });
 });
 
@@ -214,18 +208,18 @@ describe('getSiteShortURL', () => {
   });
 
   it('builds a short URL from a pathname', () => {
-    const url = getSiteShortURL('/usc/ABC123' as never);
+    const url = getSiteShortURL('usc/ABC123' as never);
     expect(url.href).toBe('https://shockl.ink/usc/ABC123');
   });
 
   it('trims trailing slashes from the base before appending', () => {
     mocks.PUBLIC_SITE_SHORT_URL = 'https://shockl.ink///';
-    const url = getSiteShortURL('/usc/XYZ' as never);
+    const url = getSiteShortURL('usc/XYZ' as never);
     expect(url.pathname).toBe('/usc/XYZ');
   });
 
   it('preserves the short URL origin', () => {
-    const url = getSiteShortURL('/t/code' as never);
+    const url = getSiteShortURL('t/code' as never);
     expect(url.origin).toBe('https://shockl.ink');
   });
 });
@@ -301,7 +295,7 @@ describe('isValidRedirectParam', () => {
 describe('sanitizeRedirectSearchParam', () => {
   beforeEach(() => {
     mocks.PUBLIC_SITE_URL = 'https://openshock.app/';
-    mocks.replaceState.mockClear();
+    mocks.goto.mockClear();
   });
 
   it('strips an invalid redirect param and returns true', () => {
@@ -312,9 +306,10 @@ describe('sanitizeRedirectSearchParam', () => {
     const result = sanitizeRedirectSearchParam();
 
     expect(result).toBe(true);
-    expect(mocks.replaceState).toHaveBeenCalledOnce();
-    const calledUrl = mocks.replaceState.mock.calls[0][0] as URL;
-    expect(calledUrl.searchParams.has('redirect')).toBe(false);
+    expect(mocks.goto).toHaveBeenCalledOnce();
+    const [calledUrl, options] = mocks.goto.mock.calls[0];
+    expect((calledUrl as URL).searchParams.has('redirect')).toBe(false);
+    expect(options).toEqual({ shallow: true, replace: true });
   });
 
   it('preserves a valid redirect param and returns false', () => {
@@ -325,7 +320,7 @@ describe('sanitizeRedirectSearchParam', () => {
     const result = sanitizeRedirectSearchParam();
 
     expect(result).toBe(false);
-    expect(mocks.replaceState).not.toHaveBeenCalled();
+    expect(mocks.goto).not.toHaveBeenCalled();
   });
 
   it('returns false when the param is missing', () => {
@@ -336,7 +331,7 @@ describe('sanitizeRedirectSearchParam', () => {
     const result = sanitizeRedirectSearchParam();
 
     expect(result).toBe(false);
-    expect(mocks.replaceState).not.toHaveBeenCalled();
+    expect(mocks.goto).not.toHaveBeenCalled();
   });
 
   it('uses a custom query param name', () => {
@@ -347,9 +342,10 @@ describe('sanitizeRedirectSearchParam', () => {
     const result = sanitizeRedirectSearchParam('return');
 
     expect(result).toBe(true);
-    expect(mocks.replaceState).toHaveBeenCalledOnce();
-    const calledUrl = mocks.replaceState.mock.calls[0][0] as URL;
-    expect(calledUrl.searchParams.has('return')).toBe(false);
+    expect(mocks.goto).toHaveBeenCalledOnce();
+    const [calledUrl, options] = mocks.goto.mock.calls[0];
+    expect((calledUrl as URL).searchParams.has('return')).toBe(false);
+    expect(options).toEqual({ shallow: true, replace: true });
   });
 });
 
@@ -359,7 +355,6 @@ describe('sanitizeRedirectSearchParam', () => {
 
 describe('gotoQueryRedirectOrFallback', () => {
   beforeEach(() => {
-    mocks.base = '';
     mocks.PUBLIC_SITE_URL = 'https://openshock.app/';
     mocks.page = { url: new URL('https://openshock.app/login') };
     mocks.goto.mockClear();
@@ -367,7 +362,7 @@ describe('gotoQueryRedirectOrFallback', () => {
   });
 
   it('navigates to the fallback when no redirect param exists', async () => {
-    await gotoQueryRedirectOrFallback('/home' as never);
+    await gotoQueryRedirectOrFallback('home' as never);
     expect(mocks.goto).toHaveBeenCalledWith('/home');
   });
 
@@ -375,9 +370,9 @@ describe('gotoQueryRedirectOrFallback', () => {
     mocks.page = {
       url: new URL('https://openshock.app/login?redirect=/settings/account'),
     };
-    mocks.match.mockResolvedValue('/settings/account');
+    mocks.match.mockResolvedValue({ id: '/settings/account', params: {} });
 
-    await gotoQueryRedirectOrFallback('/home' as never);
+    await gotoQueryRedirectOrFallback('home' as never);
     expect(mocks.goto).toHaveBeenCalledWith('/settings/account');
   });
 
@@ -385,9 +380,9 @@ describe('gotoQueryRedirectOrFallback', () => {
     mocks.page = {
       url: new URL('https://openshock.app/login?redirect=/settings%3Ftab%3Dsecurity'),
     };
-    mocks.match.mockResolvedValue('/settings');
+    mocks.match.mockResolvedValue({ id: '/settings', params: {} });
 
-    await gotoQueryRedirectOrFallback('/home' as never);
+    await gotoQueryRedirectOrFallback('home' as never);
     expect(mocks.goto).toHaveBeenCalledWith('/settings?tab=security');
   });
 
@@ -395,9 +390,9 @@ describe('gotoQueryRedirectOrFallback', () => {
     mocks.page = {
       url: new URL('https://openshock.app/login?redirect=/docs%23section-2'),
     };
-    mocks.match.mockResolvedValue('/docs');
+    mocks.match.mockResolvedValue({ id: '/docs', params: {} });
 
-    await gotoQueryRedirectOrFallback('/home' as never);
+    await gotoQueryRedirectOrFallback('home' as never);
     expect(mocks.goto).toHaveBeenCalledWith('/docs#section-2');
   });
 
@@ -405,9 +400,9 @@ describe('gotoQueryRedirectOrFallback', () => {
     mocks.page = {
       url: new URL('https://openshock.app/login?redirect=/settings%3Ftab%3Dsecurity%23advanced'),
     };
-    mocks.match.mockResolvedValue('/settings');
+    mocks.match.mockResolvedValue({ id: '/settings', params: {} });
 
-    await gotoQueryRedirectOrFallback('/home' as never);
+    await gotoQueryRedirectOrFallback('home' as never);
     expect(mocks.goto).toHaveBeenCalledWith('/settings?tab=security#advanced');
   });
 
@@ -417,7 +412,7 @@ describe('gotoQueryRedirectOrFallback', () => {
     };
     mocks.match.mockResolvedValue(null);
 
-    await gotoQueryRedirectOrFallback('/home' as never);
+    await gotoQueryRedirectOrFallback('home' as never);
     expect(mocks.goto).toHaveBeenCalledWith('/home');
   });
 
@@ -425,9 +420,9 @@ describe('gotoQueryRedirectOrFallback', () => {
     mocks.page = {
       url: new URL('https://openshock.app/login?redirect=https://evil.com/steal'),
     };
-    mocks.match.mockResolvedValue('/steal');
+    mocks.match.mockResolvedValue({ id: '/steal', params: {} });
 
-    await gotoQueryRedirectOrFallback('/home' as never);
+    await gotoQueryRedirectOrFallback('home' as never);
     expect(mocks.goto).toHaveBeenCalledWith('/home');
     expect(mocks.match).not.toHaveBeenCalled();
   });
@@ -436,9 +431,9 @@ describe('gotoQueryRedirectOrFallback', () => {
     mocks.page = {
       url: new URL('https://openshock.app/login?redirect=https://openshock.app:8080/admin'),
     };
-    mocks.match.mockResolvedValue('/admin');
+    mocks.match.mockResolvedValue({ id: '/admin', params: {} });
 
-    await gotoQueryRedirectOrFallback('/home' as never);
+    await gotoQueryRedirectOrFallback('home' as never);
     expect(mocks.goto).toHaveBeenCalledWith('/home');
     expect(mocks.match).not.toHaveBeenCalled();
   });
@@ -448,7 +443,7 @@ describe('gotoQueryRedirectOrFallback', () => {
       url: new URL('https://openshock.app/login?redirect=javascript:alert(1)'),
     };
 
-    await gotoQueryRedirectOrFallback('/home' as never);
+    await gotoQueryRedirectOrFallback('home' as never);
     expect(mocks.goto).toHaveBeenCalledWith('/home');
   });
 
@@ -457,7 +452,7 @@ describe('gotoQueryRedirectOrFallback', () => {
       url: new URL('https://openshock.app/login?redirect=:///invalid'),
     };
 
-    await gotoQueryRedirectOrFallback('/home' as never);
+    await gotoQueryRedirectOrFallback('home' as never);
     expect(mocks.goto).toHaveBeenCalledWith('/home');
   });
 
@@ -465,20 +460,20 @@ describe('gotoQueryRedirectOrFallback', () => {
     mocks.page = {
       url: new URL('https://openshock.app/login?return=/profile'),
     };
-    mocks.match.mockResolvedValue('/profile');
+    mocks.match.mockResolvedValue({ id: '/profile', params: {} });
 
-    await gotoQueryRedirectOrFallback('/home' as never, 'return');
+    await gotoQueryRedirectOrFallback('home' as never, 'return');
     expect(mocks.goto).toHaveBeenCalledWith('/profile');
   });
 
   it('prefixes the base path when navigating', async () => {
-    mocks.base = '/app';
+    mocks.PUBLIC_SITE_URL = 'https://openshock.app/app/';
     mocks.page = {
       url: new URL('https://openshock.app/app/login?redirect=/settings'),
     };
-    mocks.match.mockResolvedValue('/settings');
+    mocks.match.mockResolvedValue({ id: '/settings', params: {} });
 
-    await gotoQueryRedirectOrFallback('/home' as never);
+    await gotoQueryRedirectOrFallback('home' as never);
     expect(mocks.goto).toHaveBeenCalledWith('/app/settings');
   });
 });
@@ -569,18 +564,17 @@ describe('isShortLinkOrigin', () => {
 // ---------------------------------------------------------------------------
 
 describe('prefixBase — additional', () => {
-  afterEach(() => {
-    mocks.base = '';
+  beforeEach(() => {
+    mocks.PUBLIC_SITE_URL = 'https://openshock.app/';
   });
 
   it('handles the root pathname with no base', () => {
-    mocks.base = '';
-    expect(prefixBase('/' as never)).toBe('/');
+    expect(prefixBase('' as never)).toBe('/');
   });
 
   it('handles deeply nested pathnames', () => {
-    mocks.base = '/app';
-    expect(prefixBase('/a/b/c/d/e' as never)).toBe('/app/a/b/c/d/e');
+    mocks.PUBLIC_SITE_URL = 'https://openshock.app/app/';
+    expect(prefixBase('a/b/c/d/e' as never)).toBe('/app/a/b/c/d/e');
   });
 });
 
@@ -590,12 +584,11 @@ describe('prefixBase — additional', () => {
 
 describe('getSiteURL — additional', () => {
   beforeEach(() => {
-    mocks.base = '';
     mocks.PUBLIC_SITE_URL = 'https://openshock.app/';
   });
 
   it('encodes Unicode characters in pathnames', () => {
-    const url = getSiteURL('/café' as never);
+    const url = getSiteURL('café' as never);
     expect(url.pathname).toBe('/caf%C3%A9');
   });
 
@@ -603,14 +596,14 @@ describe('getSiteURL — additional', () => {
     const params = new URLSearchParams();
     params.append('k', '1');
     params.append('k', '2');
-    const url = getSiteURL('/path' as never, params);
+    const url = getSiteURL('path' as never, params);
     // forEach + searchParams.set semantics → last value wins
     expect(url.searchParams.get('k')).toBe('2');
     expect(url.searchParams.getAll('k')).toEqual(['2']);
   });
 
   it('handles empty URLSearchParams without altering URL', () => {
-    const url = getSiteURL('/path' as never, new URLSearchParams());
+    const url = getSiteURL('path' as never, new URLSearchParams());
     expect(url.search).toBe('');
   });
 });
@@ -622,13 +615,13 @@ describe('getSiteURL — additional', () => {
 describe('getSiteShortURL — additional', () => {
   it('handles a short URL base without trailing slash', () => {
     mocks.PUBLIC_SITE_SHORT_URL = 'https://shockl.ink';
-    const url = getSiteShortURL('/usc/ABC' as never);
+    const url = getSiteShortURL('usc/ABC' as never);
     expect(url.pathname).toBe('/usc/ABC');
   });
 
   it('handles a short URL base with sub-path', () => {
     mocks.PUBLIC_SITE_SHORT_URL = 'https://shockl.ink/s/';
-    const url = getSiteShortURL('/code' as never);
+    const url = getSiteShortURL('code' as never);
     expect(url.pathname).toBe('/s/code');
   });
 });
@@ -724,7 +717,9 @@ describe('isValidTokenRedirectUri', () => {
 
   it('rejects dangerous schemes', () => {
     expect(isValidTokenRedirectUri('javascript:alert(1)')).toBe(false);
-    expect(isValidTokenRedirectUri('data:text/html,<script>1</script>')).toBe(false);
+    // `\u002F` keeps this string from containing a literal `</script>`, which the Svelte
+    // parser used by `sv migrate` treats as the end of a script block even inside a string.
+    expect(isValidTokenRedirectUri('data:text/html,<script>1<\u002Fscript>')).toBe(false);
     expect(isValidTokenRedirectUri('vbscript:msgbox(1)')).toBe(false);
     expect(isValidTokenRedirectUri('file:///etc/passwd')).toBe(false);
     expect(isValidTokenRedirectUri('blob:https://localhost/abc')).toBe(false);

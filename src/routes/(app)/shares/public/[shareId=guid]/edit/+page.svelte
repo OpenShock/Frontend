@@ -1,6 +1,10 @@
 <script lang="ts">
-  import { publicGetPublicShare, shareLinksAddShocker, shareLinksEditShocker } from '$lib/api';
-  import type { PublicShareResponse } from '$lib/api';
+  import {
+    publicGetPublicShare,
+    shareLinksAddShocker,
+    shareLinksEditShocker,
+  } from '#lib/api/index.js';
+  import type { PublicShareResponse } from '#lib/api/index.js';
   import { ExternalLink, Plus, Save } from '@lucide/svelte';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
@@ -9,14 +13,14 @@
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Avatar from '@openshock/svelte-core/components/ui/avatar';
   import * as Tooltip from '@openshock/svelte-core/components/ui/tooltip';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+  import { refreshOwnHubs } from '#lib/state/hubs-state.svelte.js';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
   import SharedDevice from './SharedDevice.svelte';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
   import DialogAddShocker from './dialog-add-shocker.svelte';
-  import { getSiteShortURL } from '$lib/utils/url';
+  import { getSiteShortURL } from '#lib/utils/url.js';
 
   let publicShareRequest = $state<Promise<PublicShareResponse>>(getPublicShare());
   let publicShareData = $state<PublicShareResponse | null>(null);
@@ -25,11 +29,11 @@
   let isAddingShockers = $state(false);
 
   const shareId = $derived(page.params.shareId);
-  const publicUrl = $derived(resolve(`/shares/public/${shareId}`));
-  const shareUrl = $derived(getSiteShortURL(`/s/${shareId}`));
+  const publicUrl = $derived(resolve(`shares/public/${shareId}`));
+  const shareUrl = $derived(getSiteShortURL(`s/${shareId}`));
 
   registerBreadcrumbs(() => [
-    { label: 'Public Shares', href: '/shares/public' },
+    { label: 'Public Shares', href: 'shares/public' },
     { label: publicShareData?.name ?? 'Edit' },
   ]);
 
@@ -129,15 +133,12 @@
       <Button
         variant="outline"
         onclick={() => (showAddShockerModal = true)}
-        disabled={isAddingShockers}
+        disabled={isAddingShockers}><Plus />Add Shocker</Button
       >
-        <Plus />
-        Add Shocker
-      </Button>
-      <Button onclick={saveChanges} disabled={isSaving}>
-        <Save />
-        {isSaving ? 'Saving...' : 'Save'}
-      </Button>
+
+      <Button onclick={saveChanges} disabled={isSaving}
+        ><Save />{isSaving ? 'Saving...' : 'Save'}</Button
+      >
 
       {#if publicShareData}
         <Tooltip.Root>

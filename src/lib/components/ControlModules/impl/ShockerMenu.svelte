@@ -1,13 +1,13 @@
 <script lang="ts">
-  import { shockerRemoveShocker } from '$lib/api';
-  import type { ShockerResponse } from '$lib/api';
+  import { shockerRemoveShocker } from '#lib/api/index.js';
+  import type { ShockerResponse } from '#lib/api/index.js';
   import { Copy, Ellipsis, Logs, Pencil, Share2, Trash2 } from '@lucide/svelte';
   import { goto } from '$app/navigation';
   import { dialog } from '@openshock/svelte-core/components/dialog-manager';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+  import { refreshOwnHubs } from '#lib/state/hubs-state.svelte.js';
   import { copyToClipboard } from '@openshock/svelte-core/utils';
   import { resolve } from '$app/paths';
   import { toast } from 'svelte-sonner';
@@ -23,15 +23,15 @@
   }
 
   function viewLogs() {
-    goto(resolve(`/shockers/logs?shockerId=${shocker.id}`));
+    goto(resolve(`shockers/logs?shockerId=${shocker.id}`));
   }
 
   function editShocker() {
-    goto(resolve(`/shockers/${shocker.id}/edit`));
+    goto(resolve(`shockers/${shocker.id}/edit`));
   }
 
   function shareShocker() {
-    goto(resolve(`/shares/user/outgoing?share=${shocker.id}`));
+    goto(resolve(`shares/user/outgoing?share=${shocker.id}`));
   }
 
   async function deleteShocker() {
@@ -63,16 +63,14 @@
   <DropdownMenu.Content>
     <DropdownMenu.Label>Shocker</DropdownMenu.Label>
     <DropdownMenu.Group>
-      <DropdownMenu.Item class="cursor-pointer" onclick={editShocker}>
-        <Pencil class="size-4" />
-        Edit
-      </DropdownMenu.Item>
-      <DropdownMenu.Item class="cursor-pointer" onclick={shareShocker}>
-        <Share2 class="size-4" />
-        Share
-      </DropdownMenu.Item>
-      <DropdownMenu.Item class="cursor-pointer" onclick={viewLogs}>
-        <Logs class="size-4"></Logs> View Logs</DropdownMenu.Item
+      <DropdownMenu.Item class="cursor-pointer" onclick={editShocker}
+        ><Pencil class="size-4" />Edit</DropdownMenu.Item
+      >
+      <DropdownMenu.Item class="cursor-pointer" onclick={shareShocker}
+        ><Share2 class="size-4" />Share</DropdownMenu.Item
+      >
+      <DropdownMenu.Item class="cursor-pointer" onclick={viewLogs}
+        ><Logs class="size-4" />View Logs</DropdownMenu.Item
       >
       <DropdownMenu.Separator />
       <DropdownMenu.Item class="cursor-pointer" onclick={copyId}>

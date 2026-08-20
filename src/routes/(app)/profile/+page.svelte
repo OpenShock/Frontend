@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Container } from '@openshock/svelte-core/components';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
 
   registerBreadcrumbs(() => [{ label: 'Profile' }]);
 </script>

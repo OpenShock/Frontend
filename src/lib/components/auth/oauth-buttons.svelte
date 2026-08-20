@@ -11,7 +11,7 @@
 <script lang="ts">
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import { Field } from '@openshock/svelte-core/components/ui/field';
-  import { GetOAuthAuthorizeUrl } from '$lib/api/next/oauth';
+  import { GetOAuthAuthorizeUrl } from '#lib/api/next/oauth.js';
   import { LogIn } from '@lucide/svelte';
 
   let { verb = 'Login', providers }: { verb?: string; providers: string[] } = $props();

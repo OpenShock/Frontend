@@ -1,4 +1,4 @@
-import { publicGetOnlineDevicesStatistics } from '$lib/api';
+import { publicGetOnlineDevicesStatistics } from '#lib/api/index.js';
 
 type ResponseType = Promise<{ ok: false; error: string } | { ok: true; deviceCount: number }>;
 

@@ -1,22 +1,22 @@
 <script lang="ts">
-  import { accountSignUpV2 } from '$lib/api';
+  import { accountSignUpV2 } from '#lib/api/index.js';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
   import * as Field from '@openshock/svelte-core/components/ui/field';
-  import UsernameInput from '$lib/components/input/UsernameInput.svelte';
+  import UsernameInput from '#lib/components/input/UsernameInput.svelte';
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import Turnstile from '$lib/components/Turnstile.svelte';
+  import Turnstile from '#lib/components/Turnstile.svelte';
   import { EmailInput, PasswordInput } from '@openshock/svelte-core/components/input';
   import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import { validatePasswordMatch } from '@openshock/svelte-core/inputvalidation';
   import { toast } from 'svelte-sonner';
   import { FieldSeparator } from '@openshock/svelte-core/components/ui/field';
-  import OauthButtons from '$lib/components/auth/oauth-buttons.svelte';
+  import OauthButtons from '#lib/components/auth/oauth-buttons.svelte';
   import { ChevronLeft, Mail } from '@lucide/svelte';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
+  import { backendMetadata } from '#lib/state/backend-metadata-state.svelte.js';
   import { Skeleton } from '@openshock/svelte-core/components/ui/skeleton';
 
   registerBreadcrumbs(() => [{ label: 'Sign Up' }]);
@@ -57,7 +57,8 @@
           ? 'Account created successfully. Please check your email to verify your account.'
           : 'Account created successfully. You can log in now.'
       );
-      goto(resolve('/login'));
+
+      goto(resolve('login'));
     }
   }
 
@@ -96,7 +97,7 @@
             <p>You can log in to your account now.</p>
           {/if}
 
-          <Button variant="default" size="sm" class="mt-4" onclick={() => goto(resolve('/login'))}
+          <Button variant="default" size="sm" class="mt-4" onclick={() => goto(resolve('login'))}
             >Ok</Button
           >
         </div>
@@ -121,9 +122,9 @@
   <Card.Content>
     <Field.Group>
       {#if backendMetadata.state === null}
-        <Skeleton class="h-9 w-full"></Skeleton>
-        <Skeleton class="h-1 w-full"></Skeleton>
-        <Skeleton class="h-9 w-full"></Skeleton>
+        <Skeleton class="h-9 w-full" />
+        <Skeleton class="h-1 w-full" />
+        <Skeleton class="h-9 w-full" />
       {:else if useEmail || !anyOAuthProviders}
         <form onsubmit={handleSubmission}>
           <div class="my-1 flex flex-col gap-1">
@@ -132,11 +133,8 @@
                 variant="ghost"
                 size="sm"
                 class="text-muted-foreground hover:text-foreground -mx-2 -mt-2 mb-2 w-fit gap-1"
-                onclick={() => (useEmail = false)}
+                onclick={() => (useEmail = false)}><ChevronLeft class="size-4" />Back</Button
               >
-                <ChevronLeft class="size-4" />
-                Back
-              </Button>
             {/if}
 
             <UsernameInput
@@ -167,12 +165,14 @@
               bind:value={passwordConfirm}
               validate={validatePasswordMatch(passwordConfirm, password)}
             />
+
             <Turnstile action="signup" onResponse={(response) => (turnstileResponse = response)} />
           </div>
           <Field.Field class="mt-5">
             <Button type="submit" disabled={!canSubmit}>Create Account</Button>
             <Field.Description class="text-center">
-              Already have an account? <a href={resolve('/login')}>Sign in</a>
+              Already have an account?
+              <a href={resolve('login')}>Sign in</a>
             </Field.Description>
           </Field.Field>
         </form>
@@ -181,9 +181,10 @@
           <OauthButtons verb="Signup" providers={oauthProviders} />
           <FieldSeparator class="*:data-[slot=field-separator-content]:bg-card">Or</FieldSeparator>
         {/if}
-        <Button variant="outline" class="w-full" onclick={() => (useEmail = true)}>
-          <Mail />Signup with Email
-        </Button>
+
+        <Button variant="outline" class="w-full" onclick={() => (useEmail = true)}
+          ><Mail />Signup with Email</Button
+        >
       {/if}
     </Field.Group>
   </Card.Content>

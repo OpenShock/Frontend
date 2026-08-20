@@ -4,7 +4,7 @@
   import { page } from '$app/state';
   import { Container } from '@openshock/svelte-core/components';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
-  import { AuthStatus, authState } from '$lib/state/auth-state.svelte';
+  import { AuthStatus, authState } from '#lib/state/auth-state.svelte.js';
   import type { Snippet } from 'svelte';
 
   let { children }: { children: Snippet } = $props();
@@ -14,7 +14,7 @@
   $effect(() => {
     if (authState.status !== AuthStatus.Unauthenticated) return;
     const next = encodeURIComponent(page.url.pathname + page.url.search);
-    void goto(resolve(`/login?next=${next}`));
+    void goto(resolve(`login?next=${next}`));
   });
 </script>
 

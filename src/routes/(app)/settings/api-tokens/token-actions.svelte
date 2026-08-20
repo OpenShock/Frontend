@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { tokenDeleteDeleteToken, tokensSetTokenPaused } from '$lib/api';
-  import type { TokenResponseV2 } from '$lib/api';
+  import { tokenDeleteDeleteToken, tokensSetTokenPaused } from '#lib/api/index.js';
+  import type { TokenResponseV2 } from '#lib/api/index.js';
   import { dialog, type DialogRenderProps } from '@openshock/svelte-core/components/dialog-manager';
   import { TableActionMenu } from '@openshock/svelte-core/components';
   import { buttonVariants } from '@openshock/svelte-core/components/ui/button';
   import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
   import * as Tooltip from '@openshock/svelte-core/components/ui/tooltip';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import { cn, copyToClipboard } from '@openshock/svelte-core/utils';
   import Pause from '@lucide/svelte/icons/pause';
   import Play from '@lucide/svelte/icons/play';

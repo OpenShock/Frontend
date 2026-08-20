@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { adminConfigurationUpdate } from '$lib/api';
-  import type { ConfigurationItemDto } from '$lib/api';
+  import { adminConfigurationUpdate } from '#lib/api/index.js';
+  import type { ConfigurationItemDto } from '#lib/api/index.js';
   import { TextInput } from '@openshock/svelte-core/components/input';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import { toast } from 'svelte-sonner';
 
   interface Props {

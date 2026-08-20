@@ -4,7 +4,7 @@
     devicesGetPairCode,
     devicesRegenerateDeviceToken,
     devicesRemoveDevice,
-  } from '$lib/api';
+  } from '#lib/api/index.js';
   import { goto } from '$app/navigation';
   import { CopyInput, TableActionMenu } from '@openshock/svelte-core/components';
   import { dialog, type DialogRenderProps } from '@openshock/svelte-core/components/dialog-manager';
@@ -13,12 +13,12 @@
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
   import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { getConnection } from '$lib/signalr/user.svelte';
-  import { serializeCaptivePortalMessage } from '$lib/signalr/serializers/CaptivePortal';
-  import { serializeEmergencyStopMessage } from '$lib/signalr/serializers/EmergencyStop';
-  import { serializeRebootMessage } from '$lib/signalr/serializers/Reboot';
-  import { hubPairedSignals, refreshOwnHubs } from '$lib/state/hubs-state.svelte';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+  import { getConnection } from '#lib/signalr/user.svelte.js';
+  import { serializeCaptivePortalMessage } from '#lib/signalr/serializers/CaptivePortal.js';
+  import { serializeEmergencyStopMessage } from '#lib/signalr/serializers/EmergencyStop.js';
+  import { serializeRebootMessage } from '#lib/signalr/serializers/Reboot.js';
+  import { hubPairedSignals, refreshOwnHubs } from '#lib/state/hubs-state.svelte.js';
   import { copyToClipboard } from '@openshock/svelte-core/utils';
   import {
     CircleCheck,
@@ -230,13 +230,10 @@
 <TableActionMenu>
   <DropdownMenu.Label>Hub</DropdownMenu.Label>
   <DropdownMenu.Group>
-    <DropdownMenu.Item
-      class="cursor-pointer"
-      onclick={() => goto(resolve(`/hubs/${hub.id}/update`))}
+    <DropdownMenu.Item class="cursor-pointer" onclick={() => goto(resolve(`hubs/${hub.id}/update`))}
+      ><RefreshCw class="size-4" />Update</DropdownMenu.Item
     >
-      <RefreshCw class="size-4" />
-      Update
-    </DropdownMenu.Item>
+
     <DropdownMenu.Item
       class="cursor-pointer"
       onclick={() => serializeRebootMessage(getConnection(), hub.id)}

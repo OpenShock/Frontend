@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { tokensListTokensV2 } from '$lib/api';
-  import type { TokenResponseV2 } from '$lib/api';
+  import { tokensListTokensV2 } from '#lib/api/index.js';
+  import type { TokenResponseV2 } from '#lib/api/index.js';
   import { resolve } from '$app/paths';
   import KeyRound from '@lucide/svelte/icons/key-round';
   import Plus from '@lucide/svelte/icons/plus';
@@ -9,15 +9,15 @@
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import { toast } from 'svelte-sonner';
   import TokenActions from './token-actions.svelte';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import { formatRelativeInstantOrNull } from '$lib/utils/datetime';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
+  import { formatRelativeInstantOrNull } from '#lib/utils/datetime.js';
   import { createNowTicker } from '@openshock/svelte-core/utils';
 
   registerBreadcrumbs(() => [
-    { label: 'Settings', href: '/settings/account' },
+    { label: 'Settings', href: 'settings/account' },
     { label: 'API Tokens' },
   ]);
 
@@ -48,14 +48,8 @@
     <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
       API Tokens
       <div>
-        <Button href={resolve('/settings/api-tokens/new')}>
-          <Plus />
-          Generate Token
-        </Button>
-        <Button onclick={refresh}>
-          <RotateCcw />
-          Refresh
-        </Button>
+        <Button href={resolve('settings/api-tokens/new')}><Plus />Generate Token</Button>
+        <Button onclick={refresh}><RotateCcw />Refresh</Button>
       </div>
     </Card.Title>
     <Card.Description>API Tokens are used to authenticate with the OpenShock API</Card.Description>
@@ -86,6 +80,7 @@
                 <span>{lastUsed ? `Last used ${lastUsed}` : 'Never used'}</span>
                 <span>{expires ? `Expires ${expires}` : 'Never expires'}</span>
               </div>
+
               <TokenActions {token} {onEdit} {onDeleted} />
             </div>
           {/each}

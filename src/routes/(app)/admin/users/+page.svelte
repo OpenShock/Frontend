@@ -1,6 +1,6 @@
 <script lang="ts" module>
-  import { PasswordHashingAlgorithm, RoleType } from '$lib/api';
-  import type { AdminUsersView } from '$lib/api';
+  import { PasswordHashingAlgorithm, RoleType } from '#lib/api/index.js';
+  import type { AdminUsersView } from '#lib/api/index.js';
   import {
     CreateColumnDefs,
     LocaleDateTimeRenderer,
@@ -9,7 +9,7 @@
     RenderCell,
     RenderOrangeCell,
     RenderRedCell,
-  } from '$lib/components/Table/ColumnUtils';
+  } from '#lib/components/Table/ColumnUtils.js';
   import type { Features } from './data-table-features';
 
   const PasswordHashTypeRenderer = (passwordHashType: PasswordHashingAlgorithm) => {
@@ -44,16 +44,16 @@
 
 <script lang="ts">
   import DataTableActions from './data-table-actions.svelte';
-  import { odataAnd, odataSearch } from '$lib/utils/odata';
-  import { adminGetUsers, type AdminUsersViewPaginated } from '$lib/api';
+  import { odataAnd, odataSearch } from '#lib/utils/odata.js';
+  import { adminGetUsers, type AdminUsersViewPaginated } from '#lib/api/index.js';
   import type { SortingState } from '@tanstack/svelte-table';
   import { Container } from '@openshock/svelte-core/components';
-  import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
-  import PaginationFooter from '$lib/components/Table/PaginationFooter.svelte';
+  import DataTable from '#lib/components/Table/DataTableTemplate.svelte';
+  import PaginationFooter from '#lib/components/Table/PaginationFooter.svelte';
   import { CardHeader, CardTitle } from '@openshock/svelte-core/components/ui/card';
   import { Input } from '@openshock/svelte-core/components/ui/input';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
   import { useDebounce } from '@openshock/svelte-core/utils';
   import { features } from './data-table-features';
 

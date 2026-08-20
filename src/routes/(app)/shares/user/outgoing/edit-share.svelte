@@ -1,18 +1,18 @@
 <script lang="ts">
-  import { shockerShockerShareCodeUpdate, shockerShockerShareRemove } from '$lib/api';
+  import { shockerShockerShareCodeUpdate, shockerShockerShareRemove } from '#lib/api/index.js';
   import { Trash2 } from '@lucide/svelte';
-  import { ComparePermissionsAndLimits } from '$lib/comparers/UserShareComparer';
-  import RestrictionsSelector from '$lib/components/shares/restrictions-selector.svelte';
+  import { ComparePermissionsAndLimits } from '#lib/comparers/UserShareComparer.js';
+  import RestrictionsSelector from '#lib/components/shares/restrictions-selector.svelte';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import * as Avatar from '@openshock/svelte-core/components/ui/avatar';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Drawer from '@openshock/svelte-core/components/ui/drawer';
   import * as Tabs from '@openshock/svelte-core/components/ui/tabs';
-  import MultiPauseToggle from '$lib/components/utils/MultiPauseToggle.svelte';
-  import PauseToggle from '$lib/components/utils/PauseToggle.svelte';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import MultiPauseToggle from '#lib/components/utils/MultiPauseToggle.svelte';
+  import PauseToggle from '#lib/components/utils/PauseToggle.svelte';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import { dialog } from '@openshock/svelte-core/components/dialog-manager';
-  import { userSharesState, refreshUserShares } from '$lib/state/user-shares-state.svelte';
+  import { userSharesState, refreshUserShares } from '#lib/state/user-shares-state.svelte.js';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
 

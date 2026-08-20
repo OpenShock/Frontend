@@ -1,14 +1,14 @@
 <script lang="ts">
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
-  import { adminGetOnlineDevices } from '$lib/api';
+  import { adminGetOnlineDevices } from '#lib/api/index.js';
   import { Container } from '@openshock/svelte-core/components';
-  import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
+  import DataTable from '#lib/components/Table/DataTableTemplate.svelte';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import { SemVer } from 'semver';
   import { onMount } from 'svelte';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
   import { type OnlineHub, columns } from './columns';
   import { features } from './data-table-features';
 

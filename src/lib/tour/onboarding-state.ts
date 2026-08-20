@@ -1,4 +1,4 @@
-import { PUBLIC_DISABLE_ONBOARDING } from '$env/static/public';
+import { PUBLIC_DISABLE_ONBOARDING } from '$app/env/public';
 import { isTruthy } from '@openshock/svelte-core/utils';
 
 export const WELCOME_COOKIE_NAME = 'os.welcomed';

@@ -1,15 +1,15 @@
+import type { HandleClientError } from '@sveltejs/kit/hooks';
 import 'temporal-polyfill/global';
 
-import { base } from '$app/paths';
-import { versionGetBackendInfo } from '$lib/api';
-import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-import { authState, startAuthLifecycle } from '$lib/state/auth-state.svelte';
-import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
-import { userState } from '$lib/state/user-state.svelte';
-import { initTelemetry, log } from '$lib/telemetry/logger';
-import { redirectLegacyHashRoute } from '$lib/utils/legacy-hash-redirect';
+import { versionGetBackendInfo } from '#lib/api/index.js';
+import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+import { authState, startAuthLifecycle } from '#lib/state/auth-state.svelte.js';
+import { backendMetadata } from '#lib/state/backend-metadata-state.svelte.js';
+import { userState } from '#lib/state/user-state.svelte.js';
+import { initTelemetry, log } from '#lib/telemetry/logger.js';
+import { redirectLegacyHashRoute } from '#lib/utils/legacy-hash-redirect.js';
+import { basePath } from '#lib/utils/url.js';
 import { initializeColorScheme } from '@openshock/svelte-core/state/color-scheme-state.svelte.js';
-import type { HandleClientError } from '@sveltejs/kit';
 
 /** Best-effort extraction of a message + stack from an unknown thrown value. */
 function describeError(value: unknown): { message: string; stack?: string } {
@@ -75,7 +75,8 @@ async function clientInit(): Promise<void> {
 export async function init() {
   initTelemetry();
   registerGlobalErrorCapture();
-  redirectLegacyHashRoute(base);
+  // `basePath()` has no trailing slash — the mapped target already starts with one.
+  redirectLegacyHashRoute(basePath());
   await clientInit().catch(handleApiError);
   initializeColorScheme();
 }
@@ -83,13 +84,24 @@ export async function init() {
 /**
  * SvelteKit routes errors thrown during rendering, load, and navigation here instead of to
  * window.onerror — so forward them to telemetry too, otherwise they're silently swallowed.
+ *
+ * Since SvelteKit 3 this also receives *expected* errors: `error(...)` thrown by our own code
+ * (`kind: 'app'`) and SvelteKit's own 404s and the like (`kind: 'framework'`). Those are normal
+ * responses rather than defects, so they are logged at warn level and only unexpected throws
+ * are reported as errors.
  */
-export const handleError: HandleClientError = ({ error, event, status, message }) => {
-  const { message: errMessage, stack } = describeError(error);
-  log.error(errMessage, {
-    stack,
-    status,
-    route: event.route?.id ?? undefined,
-    kitMessage: message,
+export const handleError: HandleClientError = ({ kind, error, event }) => {
+  const route = event.route?.id ?? undefined;
+
+  if (kind === 'unknown') {
+    const { message, stack } = describeError(error);
+    log.error(message, { stack, status: 500, route, kind });
+    return;
+  }
+
+  log.warn(error.message, {
+    status: kind === 'framework' ? error.status : undefined,
+    route,
+    kind,
   });
 };

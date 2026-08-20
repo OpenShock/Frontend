@@ -1,6 +1,6 @@
-import { usersGetSelf } from '$lib/api';
-import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-import type { ApiUser, ApiUserSelf } from '$lib/types/ApiUser';
+import { usersGetSelf } from '#lib/api/index.js';
+import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+import type { ApiUser, ApiUserSelf } from '#lib/types/ApiUser.js';
 
 let loading = $state(true);
 let self = $state<ApiUserSelf | null>(null);

@@ -1,4 +1,4 @@
-import { getBackendURL, type BackendPath } from '$lib/utils/url';
+import { getBackendURL, type BackendPath } from '#lib/utils/url.js';
 import { ResponseError } from './ResponseError';
 
 export async function GetJson<T>(

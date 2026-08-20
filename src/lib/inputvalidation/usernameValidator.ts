@@ -1,5 +1,5 @@
-import type { UsernameCheckResponse } from '$lib/api';
-import { UsernameAvailability } from '$lib/api';
+import type { UsernameCheckResponse } from '#lib/api/index.js';
+import { UsernameAvailability } from '#lib/api/index.js';
 import { isEmailAddress } from '@openshock/svelte-core/inputvalidation';
 import type { ValidationResult } from '@openshock/svelte-core/types';
 
