@@ -5,6 +5,7 @@
   import { Container } from '@openshock/svelte-core/components';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import { AuthStatus, authState } from '$lib/state/auth-state.svelte';
+  import { REDIRECT_QUERY_PARAM } from '$lib/utils/url';
   import type { Snippet } from 'svelte';
 
   let { children }: { children: Snippet } = $props();
@@ -13,8 +14,8 @@
   // The initial auth gate happens in +layout.ts (load).
   $effect(() => {
     if (authState.status !== AuthStatus.Unauthenticated) return;
-    const next = encodeURIComponent(page.url.pathname + page.url.search);
-    void goto(resolve(`/login?next=${next}`));
+    const redirectTo = encodeURIComponent(page.url.pathname + page.url.search);
+    void goto(resolve(`/login?${REDIRECT_QUERY_PARAM}=${redirectTo}`));
   });
 </script>
 
