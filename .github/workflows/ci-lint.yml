@@ -28,12 +28,31 @@ jobs:
         with:
           node-version-file: .nvmrc
 
+      # `update-toolchain.yml` moves `ARG PNPM_VERSION` and `packageManager` together.
+      # A hand-edited bump can move one and leave the other, so the container would build
+      # with a different pnpm than CI and local installs use.
+      - name: Check pnpm Version Consistency
+        run: |
+          docker_pnpm="$(sed -n 's/^ARG PNPM_VERSION=//p' Dockerfile)"
+          pkg_pnpm="$(node -p "require('./package.json').packageManager.replace(/^pnpm@/, '')")"
+          if [ "$docker_pnpm" != "$pkg_pnpm" ]; then
+            echo "::error::Dockerfile ARG PNPM_VERSION ($docker_pnpm) does not match package.json packageManager (pnpm@$pkg_pnpm)"
+            exit 1
+          fi
+          echo "pnpm $pkg_pnpm is consistent across Dockerfile and package.json"
+
       - name: Install pnpm & dependencies
         uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
         with:
           cache: true
           run_install: |
             - args: [--frozen-lockfile, --strict-peer-dependencies]
+
+      # A stale lockfile entry can keep a second copy of a package that every range
+      # accepts a single version of. For svelte that surfaces as confusing type errors,
+      # since `SnippetReturn` is a `unique symbol` and so is nominal per declaration file.
+      - name: Check Lockfile Deduplication
+        run: pnpm dedupe --check
 
       - name: Run Formatting Check
         run: pnpm run format:check
