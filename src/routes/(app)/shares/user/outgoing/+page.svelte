@@ -2,8 +2,8 @@
   import { EmptyState } from '@openshock/svelte-core/components';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import * as Table from '@openshock/svelte-core/components/ui/table';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import { userSharesState, refreshUserShares } from '$lib/state/user-shares-state.svelte';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
+  import { userSharesState, refreshUserShares } from '#lib/state/user-shares-state.svelte.js';
   import Share2 from '@lucide/svelte/icons/share-2';
   import EditShare from './edit-share.svelte';
   import UserShareItem from './user-share-item.svelte';

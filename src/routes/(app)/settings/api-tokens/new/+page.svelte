@@ -1,5 +1,5 @@
 <script lang="ts" module>
-  import { PermissionType } from '$lib/api';
+  import { PermissionType } from '#lib/api/index.js';
   import type { ValidationResult } from '@openshock/svelte-core/types';
 
   type PermissionCategory = {
@@ -35,17 +35,17 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
-  import { ControlLimitMode, tokensCreateTokenV2 } from '$lib/api';
-  import type { ShockerControlSettings } from '$lib/api';
+  import { ControlLimitMode, tokensCreateTokenV2 } from '#lib/api/index.js';
+  import type { ShockerControlSettings } from '#lib/api/index.js';
   import { Container, CopyInput } from '@openshock/svelte-core/components';
-  import ExpirationPicker from '$lib/components/ExpirationPicker.svelte';
+  import ExpirationPicker from '#lib/components/ExpirationPicker.svelte';
   import { TextInput } from '@openshock/svelte-core/components/input';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import { isValidTokenRedirectUri } from '$lib/utils/url';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
+  import { isValidTokenRedirectUri } from '#lib/utils/url.js';
   import CircleCheck from '@lucide/svelte/icons/circle-check';
   import KeyRound from '@lucide/svelte/icons/key-round';
   import { toast } from 'svelte-sonner';
@@ -56,8 +56,8 @@
   } from '../shocker-control-settings.svelte';
 
   registerBreadcrumbs(() => [
-    { label: 'Settings', href: '/settings/account' },
-    { label: 'API Tokens', href: '/settings/api-tokens' },
+    { label: 'Settings', href: 'settings/account' },
+    { label: 'API Tokens', href: 'settings/api-tokens' },
     { label: 'New' },
   ]);
 
@@ -220,7 +220,7 @@
       </Card.Content>
       <Card.Footer class="flex justify-end space-x-2">
         <Button variant="outline" onclick={redirectBack}>Retry</Button>
-        <Button href={resolve('/settings/api-tokens')}>Finish</Button>
+        <Button href={resolve('settings/api-tokens')}>Finish</Button>
       </Card.Footer>
     {:else if tokenSecret}
       <Card.Header>
@@ -239,9 +239,10 @@
           {/snippet}
         </CopyInput>
       </Card.Content>
-      <Card.Footer class="flex justify-end">
-        <Button href={resolve('/settings/api-tokens')}>Done</Button>
-      </Card.Footer>
+
+      <Card.Footer class="flex justify-end"
+        ><Button href={resolve('settings/api-tokens')}>Done</Button></Card.Footer
+      >
     {:else}
       <Card.Header>
         <Card.Title class="text-2xl">
@@ -314,7 +315,7 @@
             Generate
           {/if}
         </Button>
-        <Button href={resolve(isExternal ? '/' : '/settings/api-tokens')} variant="outline">
+        <Button href={isExternal ? resolve('') : resolve('settings/api-tokens')} variant="outline">
           {isExternal ? 'Deny' : 'Cancel'}
         </Button>
       </Card.Footer>

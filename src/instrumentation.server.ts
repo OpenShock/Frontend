@@ -1,10 +1,10 @@
-import { version } from '$app/environment';
+import { version } from '$app/env';
 import {
   PUBLIC_SIGNOZ_DEPLOYMENT_ENVIRONMENT,
   PUBLIC_SIGNOZ_LOGS_ENABLED,
   PUBLIC_SIGNOZ_LOGS_URL,
   PUBLIC_SIGNOZ_TRACES_URL,
-} from '$env/static/public';
+} from '$app/env/public';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { resourceFromAttributes } from '@opentelemetry/resources';
 import { BatchSpanProcessor, NodeTracerProvider } from '@opentelemetry/sdk-trace-node';

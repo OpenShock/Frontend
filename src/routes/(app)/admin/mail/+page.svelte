@@ -1,5 +1,5 @@
 <script lang="ts" module>
-  import { EmailStatus, type EmailStatus as EmailStatusType } from '$lib/api';
+  import { EmailStatus, type EmailStatus as EmailStatusType } from '#lib/api/index.js';
   import {
     CellRedNone,
     RenderBlueCell,
@@ -8,7 +8,7 @@
     RenderGreenCell,
     RenderOrangeCell,
     RenderRedCell,
-  } from '$lib/components/Table/ColumnUtils';
+  } from '#lib/components/Table/ColumnUtils.js';
 
   function StatusRenderer(status: EmailStatusType) {
     switch (status) {
@@ -43,12 +43,12 @@
 
 <script lang="ts">
   import DataTableActions from './data-table-actions.svelte';
-  import { odataAnd, odataContains, odataEq } from '$lib/utils/odata';
+  import { odataAnd, odataContains, odataEq } from '#lib/utils/odata.js';
   import {
     CreateColumnDefs,
     LocaleDateTimeRenderer,
     RenderCell,
-  } from '$lib/components/Table/ColumnUtils';
+  } from '#lib/components/Table/ColumnUtils.js';
   import type { SortingState } from '@tanstack/svelte-table';
   import {
     adminGetEmailOutbox,
@@ -56,16 +56,16 @@
     type EmailOutboxMessageDtoPaginated,
     type EmailOutboxStatsDto,
     type EmailOutboxMessageDto,
-  } from '$lib/api';
+  } from '#lib/api/index.js';
   import { Container } from '@openshock/svelte-core/components';
-  import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
-  import PaginationFooter from '$lib/components/Table/PaginationFooter.svelte';
+  import DataTable from '#lib/components/Table/DataTableTemplate.svelte';
+  import PaginationFooter from '#lib/components/Table/PaginationFooter.svelte';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import { CardHeader, CardTitle } from '@openshock/svelte-core/components/ui/card';
   import { Input } from '@openshock/svelte-core/components/ui/input';
   import { RotateCcw, Send } from '@lucide/svelte';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
   import { useDebounce } from '@openshock/svelte-core/utils';
   import SendTestDialog from './dialog-send-test.svelte';
   import { features, type Features } from './data-table-features';

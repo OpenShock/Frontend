@@ -26,9 +26,9 @@
 		"@lucide/svelte": "^1.31.0",
 		"@microsoft/signalr": "^10.0.11",
 		"@playwright/test": "^1.62.1",
-		"@sveltejs/adapter-cloudflare": "^7.2.9",
-		"@sveltejs/adapter-node": "^5.5.7",
-		"@sveltejs/kit": "^2.70.2",
+		"@sveltejs/adapter-cloudflare": "8.0.0-next.6",
+		"@sveltejs/adapter-node": "6.0.0-next.10",
+		"@sveltejs/kit": "3.0.0-next.23",
 		"@sveltejs/vite-plugin-svelte": "^7.3.0",
 		"@tailwindcss/vite": "^4.3.3",
 		"@tanstack/svelte-table": "^9.1.2",
@@ -93,5 +93,9 @@
 	"browserslist": [
 		"defaults and fully supports es6-module"
 	],
-	"packageManager": "pnpm@11.22.0"
+	"packageManager": "pnpm@11.22.0",
+	"imports": {
+		"#lib": "./src/lib/index.js",
+		"#lib/*": "./src/lib/*"
+	}
 }

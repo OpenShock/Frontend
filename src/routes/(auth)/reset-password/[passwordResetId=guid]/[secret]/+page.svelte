@@ -3,13 +3,13 @@
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import KeyRound from '@lucide/svelte/icons/key-round';
-  import { accountPasswordResetCheckValid, accountPasswordResetComplete } from '$lib/api';
+  import { accountPasswordResetCheckValid, accountPasswordResetComplete } from '#lib/api/index.js';
   import { PasswordInput } from '@openshock/svelte-core/components/input';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import { validatePasswordMatch } from '@openshock/svelte-core/inputvalidation';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
   import { toast } from 'svelte-sonner';
 
   registerBreadcrumbs(() => [{ label: 'Reset Password' }]);
@@ -54,7 +54,7 @@
       });
 
       toast.success('Password has been reset');
-      goto(resolve('/login'));
+      goto(resolve('login'));
     } catch (e) {
       await handleApiError(e);
     } finally {
@@ -106,9 +106,9 @@
         <Button type="submit" disabled={!canSubmit}>Reset Password</Button>
       </form>
     {:else if !checking}
-      <Button class="w-full" onclick={() => goto(resolve('/forgot-password'))}>
-        Request a new reset link
-      </Button>
+      <Button class="w-full" onclick={() => goto(resolve('forgot-password'))}
+        >Request a new reset link</Button
+      >
     {/if}
   </Card.Content>
 </Card.Root>

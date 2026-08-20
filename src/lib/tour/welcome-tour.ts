@@ -462,7 +462,7 @@ export async function startWelcomeTour(): Promise<void> {
       },
       onDestroyed: () => {
         ctx.cleanup?.();
-        if (ctx.completed) goto(resolvePath('/home'));
+        if (ctx.completed) goto(resolvePath('home'));
         resolve();
       },
     });

@@ -3,7 +3,7 @@
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
   import MultiSelectCombobox from '@openshock/svelte-core/components/multi-select-combobox/multi-select-combobox.svelte';
-  import { ownHubs } from '$lib/state/hubs-state.svelte';
+  import { ownHubs } from '#lib/state/hubs-state.svelte.js';
 
   let availableShockers = $derived(
     ownHubs

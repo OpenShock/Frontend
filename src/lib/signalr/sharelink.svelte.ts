@@ -1,5 +1,5 @@
-import type { Control } from '$lib/signalr/models/Control';
-import { getBackendURL } from '$lib/utils/url';
+import type { Control } from '#lib/signalr/models/Control.js';
+import { getBackendURL } from '#lib/utils/url.js';
 import { type HubConnection, HubConnectionState } from '@microsoft/signalr';
 import { toast } from 'svelte-sonner';
 import { BuildSignalrConnection } from './utils/connection-builder';

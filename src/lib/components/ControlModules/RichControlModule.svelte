@@ -1,17 +1,17 @@
 <script lang="ts">
   import { Signal, Timer } from '@lucide/svelte';
-  import type { ShockerResponse } from '$lib/api';
+  import type { ShockerResponse } from '#lib/api/index.js';
   import {
     ControlDurationDefault,
     ControlDurationProps,
     ControlIntensityDefault,
     ControlIntensityProps,
-  } from '$lib/constants/ControlConstants';
-  import { getConnection } from '$lib/signalr/user.svelte';
-  import { ControlType } from '$lib/signalr/models/ControlType';
-  import { serializeControlMessages } from '$lib/signalr/serializers/Control';
+  } from '#lib/constants/ControlConstants.js';
+  import { getConnection } from '#lib/signalr/user.svelte.js';
+  import { ControlType } from '#lib/signalr/models/ControlType.js';
+  import { serializeControlMessages } from '#lib/signalr/serializers/Control.js';
   import { formatDurationSeconds } from '@openshock/svelte-core/utils';
-  import { useShockerEvents } from '$lib/hooks/shocker-events.svelte';
+  import { useShockerEvents } from '#lib/hooks/shocker-events.svelte.js';
   import ActionButtons from './impl/ActionButtons.svelte';
 
   interface Props {

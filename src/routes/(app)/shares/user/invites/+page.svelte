@@ -2,12 +2,12 @@
   import { EmptyState } from '@openshock/svelte-core/components';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import * as Table from '@openshock/svelte-core/components/ui/table';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
   import {
     userSharesState,
     refreshIncomingInvites,
     refreshOutgoingInvites,
-  } from '$lib/state/user-shares-state.svelte';
+  } from '#lib/state/user-shares-state.svelte.js';
   import MailPlus from '@lucide/svelte/icons/mail-plus';
   import Mail from '@lucide/svelte/icons/mail';
   import IncomingInviteItem from './incoming-invite-item.svelte';

@@ -2,18 +2,20 @@
   import { afterNavigate } from '$app/navigation';
   import { asset, resolve } from '$app/paths';
   import { page } from '$app/state';
-  import { PUBLIC_SITE_NAME } from '$env/static/public';
+  import { PUBLIC_SITE_NAME } from '$app/env/public';
   import {
     BasicTags,
     OpenGraphTags,
     TwitterSummaryTags,
   } from '@openshock/svelte-core/components/metadata';
   import ArrowLeft from '@lucide/svelte/icons/arrow-left';
-  import { isValidRedirectURL } from '$lib/utils/url';
+  import { isValidRedirectURL } from '#lib/utils/url.js';
 
   let previousPath = $state<string>(resolve('/'));
 
-  afterNavigate(({ from }) => {
+  afterNavigate(({ from, shallow }) => {
+    if (shallow) return;
+
     if (from?.url != null && isValidRedirectURL(from.url)) {
       previousPath = from.url.pathname;
     }
@@ -22,10 +24,7 @@
   const meta = {
     title: 'Service Unavailable',
     description: 'OpenShock is currently unavailable',
-    image: {
-      src: asset('/logo.svg'),
-      alt: 'OpenShock Logo',
-    },
+    image: { src: asset('logo.svg'), alt: 'OpenShock Logo' },
   };
 </script>
 
@@ -38,15 +37,18 @@
   determiner="auto"
   metaLocale="en_US"
 />
+
 <TwitterSummaryTags type="summary" {...meta} site="@OpenShockORG" creator="@OpenShockORG" />
 
 <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
   <div class="text-primary/20 text-[8rem] leading-none font-black select-none sm:text-[12rem]">
     {page.status}
   </div>
+
   <p class="text-foreground mt-2 text-xl font-semibold">
     {page.error?.message ?? 'Something went wrong.'}
   </p>
+
   <p class="text-muted-foreground mt-1 text-sm">
     {page.status === 404
       ? "The page you're looking for doesn't exist."

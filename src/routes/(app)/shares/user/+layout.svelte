@@ -2,20 +2,20 @@
   import { Barcode, Plus } from '@lucide/svelte';
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
-  import type { BasicUserInfo } from '$lib/api';
+  import type { BasicUserInfo } from '#lib/api/index.js';
   import { Container, PageHeader } from '@openshock/svelte-core/components';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Tabs from '@openshock/svelte-core/components/ui/tabs';
-  import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
+  import { refreshOwnHubs } from '#lib/state/hubs-state.svelte.js';
   import { type Snippet, onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
   import DialogShareCodeCreate from './dialog-share-code-create.svelte';
   import DialogShareCodeCreated from './dialog-share-code-created.svelte';
   import DialogShareCodeRedeem from './dialog-share-code-redeem.svelte';
   import { resolve } from '$app/paths';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
 
-  registerBreadcrumbs(() => [{ label: 'User Shares', href: '/shares/user/outgoing' }]);
+  registerBreadcrumbs(() => [{ label: 'User Shares', href: 'shares/user/outgoing' }]);
 
   let createDialogOpen = $state(false);
   let redeemDialogOpen = $state(false);
@@ -47,7 +47,7 @@
   }
 
   function navigateTo(path: 'incoming' | 'outgoing' | 'invites') {
-    goto(resolve(`/shares/user/${path}`));
+    goto(resolve(`shares/user/${path}`));
   }
 
   onMount(() => {
@@ -83,15 +83,12 @@
     <Button
       onclick={() => (redeemDialogOpen = true)}
       class="self-end"
-      data-tour="user-shares-redeem"
+      data-tour="user-shares-redeem"><Barcode />Redeem Code</Button
     >
-      <Barcode />
-      Redeem Code
-    </Button>
-    <Button onclick={() => (createDialogOpen = true)} class="self-end" data-tour="user-shares-new">
-      <Plus />
-      New Share
-    </Button>
+
+    <Button onclick={() => (createDialogOpen = true)} class="self-end" data-tour="user-shares-new"
+      ><Plus />New Share</Button
+    >
   </PageHeader>
 
   <div class="flex w-full flex-none">

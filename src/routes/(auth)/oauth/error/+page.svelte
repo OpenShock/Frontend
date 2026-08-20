@@ -3,9 +3,9 @@
   import { resolve } from '$app/paths';
   import * as Card from '@openshock/svelte-core/components/ui/card';
   import { FieldDescription } from '@openshock/svelte-core/components/ui/field';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import { getOAuthErrorMessage } from '$lib/auth/oauth-errors';
-  import { consumeSearchParam } from '$lib/utils/url';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
+  import { getOAuthErrorMessage } from '#lib/auth/oauth-errors.js';
+  import { consumeSearchParam } from '#lib/utils/url.js';
 
   registerBreadcrumbs(() => [{ label: 'Authentication Error' }]);
 
@@ -13,7 +13,7 @@
 
   consumeSearchParam('error', async (code) => {
     if (code === 'emailAlreadyRegistered') {
-      await goto(resolve(`/login?error=${encodeURIComponent(code)}`), { replaceState: true });
+      await goto(resolve(`login?error=${encodeURIComponent(code)}`), { replace: true });
       return false;
     }
     errorCode = code;
@@ -27,9 +27,9 @@
     </Card.Header>
     <Card.Content>
       <p class="text-destructive text-center" role="alert">{getOAuthErrorMessage(errorCode)}</p>
-      <FieldDescription class="mt-4 text-center">
-        <a href={resolve('/login')}>Back to login</a>
-      </FieldDescription>
+      <FieldDescription class="mt-4 text-center"
+        ><a href={resolve('login')}>Back to login</a></FieldDescription
+      >
     </Card.Content>
   </Card.Root>
 {/if}

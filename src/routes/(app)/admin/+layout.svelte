@@ -1,16 +1,16 @@
 <script lang="ts" module>
-  import { RoleType } from '$lib/api';
+  import { RoleType } from '#lib/api/index.js';
   const allowedRoles: RoleType[] = [RoleType.Admin, RoleType.System];
 </script>
 
 <script lang="ts">
   import { resolve } from '$app/paths';
   import { Button } from '@openshock/svelte-core/components/ui/button';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import { userState } from '$lib/state/user-state.svelte';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
+  import { userState } from '#lib/state/user-state.svelte.js';
   import type { Snippet } from 'svelte';
 
-  registerBreadcrumbs(() => [{ label: 'Admin', href: '/admin/users' }]);
+  registerBreadcrumbs(() => [{ label: 'Admin', href: 'admin/users' }]);
 
   interface Props {
     children?: Snippet;
@@ -27,5 +27,5 @@
   {@render children?.()}
 {:else}
   <h1 class="text-4xl">You do not have permission to access this page</h1>
-  <Button href={resolve('/home')}>Go Home</Button>
+  <Button href={resolve('home')}>Go Home</Button>
 {/if}

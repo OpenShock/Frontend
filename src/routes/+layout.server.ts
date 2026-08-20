@@ -2,7 +2,7 @@ import {
   isOnboardingDisabled,
   isWelcomeSunset,
   WELCOME_COOKIE_NAME,
-} from '$lib/tour/onboarding-state';
+} from '#lib/tour/onboarding-state.js';
 import { SIDEBAR_COOKIE_NAME } from '@openshock/svelte-core/components/ui/sidebar/constants.js';
 import { isTruthy } from '@openshock/svelte-core/utils';
 import type { LayoutServerLoad } from './$types';

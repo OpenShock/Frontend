@@ -1,25 +1,25 @@
 <script lang="ts">
-  import { authenticatedAccountListOAuthConnections } from '$lib/api';
+  import { authenticatedAccountListOAuthConnections } from '#lib/api/index.js';
   import Link2 from '@lucide/svelte/icons/link-2';
   import Plus from '@lucide/svelte/icons/plus';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
   import Unlink from '@lucide/svelte/icons/unlink';
   import { page } from '$app/state';
-  import { GetOAuthAuthorizeUrl } from '$lib/api/next/oauth';
+  import { GetOAuthAuthorizeUrl } from '#lib/api/next/oauth.js';
   import { Container, EmptyState } from '@openshock/svelte-core/components';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
   import * as Dropdown from '@openshock/svelte-core/components/ui/dropdown-menu';
   import * as Separator from '@openshock/svelte-core/components/ui/separator';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
   import DisconnectDialog from './dialog-oauth-disconnect.svelte';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
+  import { backendMetadata } from '#lib/state/backend-metadata-state.svelte.js';
 
   registerBreadcrumbs(() => [
-    { label: 'Settings', href: '/settings/account' },
+    { label: 'Settings', href: 'settings/account' },
     { label: 'Connections' },
   ]);
 

@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { authenticatedAccountChangeEmail } from '$lib/api';
+  import { authenticatedAccountChangeEmail } from '#lib/api/index.js';
   import KeyRound from '@lucide/svelte/icons/key-round';
   import Mail from '@lucide/svelte/icons/mail';
   import { EmailInput, PasswordInput } from '@openshock/svelte-core/components/input';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import type { ApiUserSelf } from '$lib/types/ApiUser';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+  import type { ApiUserSelf } from '#lib/types/ApiUser.js';
   import { toast } from 'svelte-sonner';
 
   interface Props {

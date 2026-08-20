@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { shockerPauseShocker, shockerShockerShareCodePause } from '$lib/api';
-  import type { BooleanLegacyDataResponse } from '$lib/api';
+  import { shockerPauseShocker, shockerShockerShareCodePause } from '#lib/api/index.js';
+  import type { BooleanLegacyDataResponse } from '#lib/api/index.js';
   import { Pause, Play } from '@lucide/svelte';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
 
   interface Props {
     shockerId: string;

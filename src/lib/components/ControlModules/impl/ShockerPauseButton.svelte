@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { shockerPauseShocker } from '$lib/api';
-  import type { ShockerResponse } from '$lib/api';
+  import { shockerPauseShocker } from '#lib/api/index.js';
+  import type { ShockerResponse } from '#lib/api/index.js';
   import { Pause, Play } from '@lucide/svelte';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import { toast } from 'svelte-sonner';
 
   interface Props {

@@ -1,5 +1,5 @@
-import type { UserShareInfo } from '$lib/api';
-import CompareShockerPermissions from '$lib/comparers/ShockerPermissionsComparer';
+import type { UserShareInfo } from '#lib/api/index.js';
+import CompareShockerPermissions from '#lib/comparers/ShockerPermissionsComparer.js';
 import CompareShockerLimits from './ShockerLimitsComparer';
 
 export function ComparePermissionsAndLimits(a: UserShareInfo, b: UserShareInfo) {

@@ -1,4 +1,4 @@
-import { PUBLIC_SIGNOZ_TRACE_PROPAGATION } from '$env/static/public';
+import { PUBLIC_SIGNOZ_TRACE_PROPAGATION } from '$app/env/public';
 import { isTruthy } from '@openshock/svelte-core/utils';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { registerInstrumentations } from '@opentelemetry/instrumentation';

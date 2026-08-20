@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Timer, Volume2, Zap } from '@lucide/svelte';
-  import { ControlDurationProps, ControlIntensityProps } from '$lib/constants/ControlConstants';
+  import { ControlDurationProps, ControlIntensityProps } from '#lib/constants/ControlConstants.js';
   import { formatDurationSeconds } from '@openshock/svelte-core/utils';
   import CircleSlider from './impl/CircleSlider.svelte';
 

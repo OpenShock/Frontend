@@ -1,12 +1,12 @@
-import { env } from '$env/dynamic/public';
-import { publicRoutes } from '$lib/utils/public-routes';
-import { getSiteURL } from '$lib/utils/url';
+import { publicRoutes } from '#lib/utils/public-routes.js';
+import { getSiteURL } from '#lib/utils/url.js';
+import { PUBLIC_DISABLE_SITEMAP } from '$app/env/public';
 import { isTruthy } from '@openshock/svelte-core/utils';
 import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = ({ setHeaders }) => {
-  if (isTruthy(env.PUBLIC_DISABLE_SITEMAP)) error(404);
+  if (isTruthy(PUBLIC_DISABLE_SITEMAP)) error(404);
 
   setHeaders({
     'content-type': 'application/xml; charset=utf-8',

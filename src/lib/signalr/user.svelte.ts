@@ -1,4 +1,4 @@
-import { getBackendURL } from '$lib/utils/url';
+import { getBackendURL } from '#lib/utils/url.js';
 import { type HubConnection, HubConnectionState } from '@microsoft/signalr';
 import { toast } from 'svelte-sonner';
 import {

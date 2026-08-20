@@ -1,42 +1,45 @@
 <script lang="ts">
-  import { PUBLIC_DISABLE_SHOCKER_MAP } from '$env/static/public';
+  import { PUBLIC_DISABLE_SHOCKER_MAP } from '$app/env/public';
   import { isTruthy } from '@openshock/svelte-core/utils';
-  import { shockerPauseShocker, shockerRegisterShocker } from '$lib/api';
-  import type { NewShocker } from '$lib/api';
+  import { shockerPauseShocker, shockerRegisterShocker } from '#lib/api/index.js';
+  import type { NewShocker } from '#lib/api/index.js';
   import { Layers, LogsIcon, Plus, RotateCcw, Settings, Zap } from '@lucide/svelte';
   import { resolve } from '$app/paths';
   import { Container, EmptyState } from '@openshock/svelte-core/components';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
-  import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
+  import ClassicControlModule from '#lib/components/ControlModules/ClassicControlModule.svelte';
   import DialogShockerAdd, {
     defaultAddShockerData,
-  } from '$lib/components/ControlModules/dialogs/dialog-shocker-add.svelte';
-  import LiveButton from '$lib/components/ControlModules/LiveButton.svelte';
-  import LiveControlModule from '$lib/components/ControlModules/LiveControlModule.svelte';
-  import MapControlModule from '$lib/components/ControlModules/MapControlModule.svelte';
-  import { ModuleType } from '$lib/components/ControlModules/ModuleType';
-  import RichControlModule from '$lib/components/ControlModules/RichControlModule.svelte';
-  import ShockerCard from '$lib/components/ControlModules/ShockerCard.svelte';
-  import ShockerMenu from '$lib/components/ControlModules/impl/ShockerMenu.svelte';
-  import ShockerPauseButton from '$lib/components/ControlModules/impl/ShockerPauseButton.svelte';
-  import SimpleControlHeader from '$lib/components/ControlModules/SimpleControlHeader.svelte';
-  import SimpleControlModule from '$lib/components/ControlModules/SimpleControlModule.svelte';
+  } from '#lib/components/ControlModules/dialogs/dialog-shocker-add.svelte';
+  import LiveButton from '#lib/components/ControlModules/LiveButton.svelte';
+  import LiveControlModule from '#lib/components/ControlModules/LiveControlModule.svelte';
+  import MapControlModule from '#lib/components/ControlModules/MapControlModule.svelte';
+  import { ModuleType } from '#lib/components/ControlModules/ModuleType.js';
+  import RichControlModule from '#lib/components/ControlModules/RichControlModule.svelte';
+  import ShockerCard from '#lib/components/ControlModules/ShockerCard.svelte';
+  import ShockerMenu from '#lib/components/ControlModules/impl/ShockerMenu.svelte';
+  import ShockerPauseButton from '#lib/components/ControlModules/impl/ShockerPauseButton.svelte';
+  import SimpleControlHeader from '#lib/components/ControlModules/SimpleControlHeader.svelte';
+  import SimpleControlModule from '#lib/components/ControlModules/SimpleControlModule.svelte';
   import { dialog } from '@openshock/svelte-core/components/dialog-manager';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Popover from '@openshock/svelte-core/components/ui/popover';
-  import { ControlDurationDefault, ControlIntensityDefault } from '$lib/constants/ControlConstants';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { ControlType } from '$lib/signalr/models/ControlType';
-  import { getConnection } from '$lib/signalr/user.svelte';
-  import { serializeControlMessages } from '$lib/signalr/serializers/Control';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import { ownHubs, onlineHubs, refreshOwnHubs } from '$lib/state/hubs-state.svelte';
+  import {
+    ControlDurationDefault,
+    ControlIntensityDefault,
+  } from '#lib/constants/ControlConstants.js';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+  import { ControlType } from '#lib/signalr/models/ControlType.js';
+  import { getConnection } from '#lib/signalr/user.svelte.js';
+  import { serializeControlMessages } from '#lib/signalr/serializers/Control.js';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
+  import { ownHubs, onlineHubs, refreshOwnHubs } from '#lib/state/hubs-state.svelte.js';
   import {
     getLiveConnection,
     liveConnections,
     LiveConnectionState,
     registerHubShockers,
-  } from '$lib/state/live-control-state.svelte';
+  } from '#lib/state/live-control-state.svelte.js';
   import { PersistedState } from '@openshock/svelte-core/state/classes/persisted-state.svelte.js';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
@@ -142,7 +145,7 @@
 </script>
 
 {#snippet shockerCard(
-  shocker: import('$lib/api').ShockerResponse,
+  shocker: import('#lib/api/index.js').ShockerResponse,
   hubId: string,
   showHubBadge: boolean
 )}
@@ -230,32 +233,27 @@
             <Button
               variant={moduleType === ModuleType.ClassicControlModule ? 'secondary' : 'ghost'}
               size="sm"
-              onclick={() => (moduleType = ModuleType.ClassicControlModule)}
+              onclick={() => (moduleType = ModuleType.ClassicControlModule)}>Classic</Button
             >
-              Classic
-            </Button>
+
             <Button
               variant={moduleType === ModuleType.RichControlModule ? 'secondary' : 'ghost'}
               size="sm"
-              onclick={() => (moduleType = ModuleType.RichControlModule)}
+              onclick={() => (moduleType = ModuleType.RichControlModule)}>Rich</Button
             >
-              Rich
-            </Button>
+
             <Button
               variant={moduleType === ModuleType.SimpleControlModule ? 'secondary' : 'ghost'}
               size="sm"
-              onclick={() => (moduleType = ModuleType.SimpleControlModule)}
+              onclick={() => (moduleType = ModuleType.SimpleControlModule)}>Simple</Button
             >
-              Simple
-            </Button>
+
             {#if !isTruthy(PUBLIC_DISABLE_SHOCKER_MAP)}
               <Button
                 variant={moduleType === ModuleType.MapControlModule ? 'secondary' : 'ghost'}
                 size="sm"
-                onclick={() => (moduleType = ModuleType.MapControlModule)}
+                onclick={() => (moduleType = ModuleType.MapControlModule)}>Map</Button
               >
-                Map
-              </Button>
             {/if}
           </Popover.Content>
         </Popover.Root>
@@ -278,19 +276,19 @@
             <Button
               variant={groupByHub.value ? 'secondary' : 'ghost'}
               size="sm"
-              onclick={() => (groupByHub.value = !groupByHub.value)}
+              onclick={() => (groupByHub.value = !groupByHub.value)}>Group by Hub</Button
             >
-              Group by Hub
-            </Button>
+
             <Button variant="ghost" size="sm" disabled>
               Global Limits
               <span class="text-muted-foreground ml-2 text-xs">(Coming soon)</span>
             </Button>
           </Popover.Content>
         </Popover.Root>
-        <Button variant="ghost" size="sm" aria-label="Logs" href={resolve('/shockers/logs')}>
-          <LogsIcon class="size-4" />
-        </Button>
+
+        <Button variant="ghost" size="sm" aria-label="Logs" href={resolve('shockers/logs')}
+          ><LogsIcon class="size-4" /></Button
+        >
       </div>
     </div>
 
@@ -305,9 +303,7 @@
           : 'Add a shocker to one of your hubs to get started.'}
       >
         {#if ownHubs.size === 0}
-          <Button size="lg" href={resolve('/hubs')}>
-            <Plus class="size-4" /> Create a Hub
-          </Button>
+          <Button size="lg" href={resolve('hubs')}><Plus class="size-4" />Create a Hub</Button>
         {:else}
           <Button size="lg" onclick={openAddShockerDialog}>
             <Plus class="size-4" /> Add Shocker

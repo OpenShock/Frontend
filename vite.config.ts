@@ -1,8 +1,7 @@
 /// <reference types="vitest/config" />
 import adapterCloudflare from '@sveltejs/adapter-cloudflare';
 import adapterNode from '@sveltejs/adapter-node';
-import { type KitConfig } from '@sveltejs/kit';
-import { sveltekit } from '@sveltejs/kit/vite';
+import { type Config as KitConfig, sveltekit } from '@sveltejs/kit/vite';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import tailwindcss from '@tailwindcss/vite';
 import * as child_process from 'node:child_process';
@@ -126,9 +125,7 @@ const commitHash = getGitHash();
 function buildSveltekitConfig(dotenv: PublicEnv): KitConfigParam {
   return {
     preprocess: vitePreprocess(),
-    vitePlugin: {
-      inspector: true,
-    },
+    inspector: true,
     compilerOptions: {
       runes: true,
       // Await expressions in components (script top level, $derived, markup).
@@ -201,12 +198,9 @@ function buildSveltekitConfig(dotenv: PublicEnv): KitConfigParam {
     version: {
       name: commitHash,
     },
-    experimental: {
-      // Server-side OpenTelemetry spans for handle/load/form actions, collected by
-      // src/instrumentation.server.ts. Experimental (kit ≥2.31).
-      tracing: { server: true },
-      instrumentation: { server: true },
-    },
+    // Server-side OpenTelemetry spans for handle/load/form actions, collected by
+    // src/instrumentation.server.ts, which kit picks up automatically when it exists.
+    tracing: { server: true },
   };
 }
 

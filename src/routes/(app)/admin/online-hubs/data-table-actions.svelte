@@ -22,15 +22,11 @@
   <DropdownMenu.Group>
     <DropdownMenu.Item
       class="cursor-pointer"
-      onclick={() => goto(resolve(`/admin/users/${hub.owner.id}`))}
+      onclick={() => goto(resolve(`admin/users/${hub.owner.id}`))}
+      ><User class="size-4" />View User</DropdownMenu.Item
     >
-      <User class="size-4" />
-      View User
-    </DropdownMenu.Item>
-    <DropdownMenu.Item class="cursor-pointer">
-      <Pencil class="size-4" />
-      Edit
-    </DropdownMenu.Item>
+
+    <DropdownMenu.Item class="cursor-pointer"><Pencil class="size-4" />Edit</DropdownMenu.Item>
     <DropdownMenu.Separator />
     <DropdownMenu.Item class="cursor-pointer" onclick={copyId}>
       <Copy class="size-4" />

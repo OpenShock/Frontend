@@ -1,26 +1,26 @@
 <script lang="ts">
   import { Copy, Ellipsis, User } from '@lucide/svelte';
   import { Container, EmptyState, PageHeader } from '@openshock/svelte-core/components';
-  import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
-  import LiveButton from '$lib/components/ControlModules/LiveButton.svelte';
-  import LiveControlModule from '$lib/components/ControlModules/LiveControlModule.svelte';
-  import ShockerCard from '$lib/components/ControlModules/ShockerCard.svelte';
+  import ClassicControlModule from '#lib/components/ControlModules/ClassicControlModule.svelte';
+  import LiveButton from '#lib/components/ControlModules/LiveButton.svelte';
+  import LiveControlModule from '#lib/components/ControlModules/LiveControlModule.svelte';
+  import ShockerCard from '#lib/components/ControlModules/ShockerCard.svelte';
   import * as Avatar from '@openshock/svelte-core/components/ui/avatar';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
   import { copyToClipboard } from '@openshock/svelte-core/utils';
-  import { onlineHubs } from '$lib/state/hubs-state.svelte';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import { ControlType } from '$lib/signalr/models/ControlType';
-  import { getConnection } from '$lib/signalr/user.svelte';
-  import { serializeControlMessages } from '$lib/signalr/serializers/Control';
+  import { onlineHubs } from '#lib/state/hubs-state.svelte.js';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
+  import { ControlType } from '#lib/signalr/models/ControlType.js';
+  import { getConnection } from '#lib/signalr/user.svelte.js';
+  import { serializeControlMessages } from '#lib/signalr/serializers/Control.js';
   import {
     getLiveConnection,
     liveConnections,
     LiveConnectionState,
     registerHubShockers,
-  } from '$lib/state/live-control-state.svelte';
-  import { sharedHubsState, refreshSharedHubs } from '$lib/state/shared-hubs-state.svelte';
+  } from '#lib/state/live-control-state.svelte.js';
+  import { sharedHubsState, refreshSharedHubs } from '#lib/state/shared-hubs-state.svelte.js';
   import { onMount } from 'svelte';
 
   registerBreadcrumbs(() => [{ label: 'Shared Shockers' }]);

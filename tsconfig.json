@@ -1,16 +1,18 @@
 {
-  "extends": "./.svelte-kit/tsconfig.json",
+  "extends": "$app/tsconfig",
   "compilerOptions": {
     "target": "es2025",
     "rewriteRelativeImportExtensions": true,
-    "checkJs": true,
-    "skipLibCheck": true,
     "sourceMap": true,
-    "moduleResolution": "bundler"
-  }
-  // Path aliases are handled by https://svelte.dev/docs/kit/configuration#alias
-  // except $lib which is handled by https://svelte.dev/docs/kit/configuration#files
-  //
-  // To make changes to top-level options such as include and exclude, we recommend extending
-  // the generated config; see https://svelte.dev/docs/kit/configuration#typescript
+    // svelte-check resolves `.svelte` imports itself and only understands tsconfig
+    // `paths`, not package.json `imports`. Mirror the `#lib` subpaths here so
+    // components imported through them keep their prop types.
+    "paths": {
+      "#lib": ["./src/lib/index.ts"],
+      "#lib/*": ["./src/lib/*"]
+    }
+  },
+  // `sv migrate` narrowed this to `src`; keep the config and plugin sources that
+  // the pre-migration setup type-checked as well.
+  "include": ["src", "e2e", "vite-plugins", "vite.config.ts", "playwright.config.ts"]
 }

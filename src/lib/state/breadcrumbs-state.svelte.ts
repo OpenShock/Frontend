@@ -1,10 +1,10 @@
-import type { Pathname } from '$app/types';
+import type { Path } from '$app/types';
 import { onDestroy, untrack } from 'svelte';
 import { SvelteMap } from 'svelte/reactivity';
 
 export interface BreadcrumbEntry {
   label: string;
-  href: Pathname | null;
+  href: Path | null;
 }
 
 const _slots = new SvelteMap<symbol, BreadcrumbEntry[]>();
@@ -16,7 +16,7 @@ export const breadcrumbs = {
 };
 
 export function registerBreadcrumbs(
-  entriesFn: () => Array<{ label: string; href?: Pathname | null }>
+  entriesFn: () => Array<{ label: string; href?: Path | null }>
 ): void {
   const id = Symbol();
   _slots.set(id, []);

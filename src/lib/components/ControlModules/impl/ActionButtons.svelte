@@ -1,7 +1,7 @@
 <script lang="ts" module>
   import { Volume2, Waves, Zap } from '@lucide/svelte';
   import { buttonVariants } from '@openshock/svelte-core/components/ui/button';
-  import { ControlType } from '$lib/signalr/models/ControlType';
+  import { ControlType } from '#lib/signalr/models/ControlType.js';
 
   const Buttons = [
     { type: ControlType.Sound, Icon: Volume2 },
@@ -14,7 +14,7 @@
 
 <script lang="ts">
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
-  import type { TimeoutHandle } from '$lib/types/WAPI';
+  import type { TimeoutHandle } from '#lib/types/WAPI.js';
   import { cn } from '@openshock/svelte-core/utils';
   import { onDestroy } from 'svelte';
 

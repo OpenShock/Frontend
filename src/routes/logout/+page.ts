@@ -1,8 +1,8 @@
+import { accountLogout } from '#lib/api/index.js';
+import { userState } from '#lib/state/user-state.svelte.js';
 import { browser } from '$app/env';
 import { goto } from '$app/navigation';
 import { resolve } from '$app/paths';
-import { accountLogout } from '$lib/api';
-import { userState } from '$lib/state/user-state.svelte';
 
 export const prerender = false;
 

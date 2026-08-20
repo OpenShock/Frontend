@@ -1,5 +1,5 @@
-import { getReadableUserAgentName } from '$lib/utils';
-import { formatRelativeInstant } from '$lib/utils/datetime';
+import { formatRelativeInstant } from '#lib/utils/datetime.js';
+import { getReadableUserAgentName } from '#lib/utils/index.js';
 import { formatDurationSeconds } from '@openshock/svelte-core/utils';
 import {
   renderComponent,

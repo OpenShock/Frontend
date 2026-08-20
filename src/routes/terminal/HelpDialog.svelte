@@ -1,8 +1,8 @@
 <script lang="ts">
   import ArrowDownToLine from '@lucide/svelte/icons/arrow-down-to-line';
-  import { PUBLIC_DISCORD_INVITE_URL } from '$env/static/public';
+  import { PUBLIC_DISCORD_INVITE_URL } from '$app/env/public';
   import { Code, Keyboard } from '@openshock/svelte-core/components';
-  import Stepper, { type StepperStep } from '$lib/components/Stepper.svelte';
+  import Stepper, { type StepperStep } from '#lib/components/Stepper.svelte';
   import { DiscordLogo } from '@openshock/svelte-core/components/svg';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
@@ -45,9 +45,8 @@
         Work through these steps in order. Each one rules out a common cause.
       </Dialog.Description>
     </Dialog.Header>
-    <div class="min-h-0 flex-1 px-1 sm:px-2">
-      <Stepper {steps} />
-    </div>
+
+    <div class="min-h-0 flex-1 px-1 sm:px-2"><Stepper {steps} /></div>
   </Dialog.Content>
 </Dialog.Root>
 

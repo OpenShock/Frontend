@@ -1,6 +1,6 @@
-import { env } from '$env/dynamic/private';
-import { PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
-import type { Handle, ServerInit } from '@sveltejs/kit';
+import { PRIVATE_BACKEND_TLS_INSECURE } from '$app/env/private';
+import { PUBLIC_GITHUB_PROJECT_URL } from '$app/env/public';
+import type { Handle, ServerInit } from '@sveltejs/kit/hooks';
 
 /**
  * Security + metadata headers for every dynamically rendered response.
@@ -58,7 +58,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 export const init: ServerInit = () => {
   // `typeof process` guard: on the Cloudflare adapter there is no Node `process`
   // and no self-signed-cert scenario, so this is a no-op there.
-  if (env.PRIVATE_BACKEND_TLS_INSECURE === 'true' && typeof process !== 'undefined') {
+  if (PRIVATE_BACKEND_TLS_INSECURE === 'true' && typeof process !== 'undefined') {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     console.warn(
       '[hooks.server] PRIVATE_BACKEND_TLS_INSECURE=true — TLS certificate validation is DISABLED for ' +

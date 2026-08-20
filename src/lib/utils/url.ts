@@ -1,8 +1,10 @@
-import { afterNavigate, goto, replaceState } from '$app/navigation';
-import { asset, base, match } from '$app/paths';
+import { afterNavigate, goto } from '$app/navigation';
+import { asset, match } from '$app/paths';
 import { page } from '$app/state';
-import type { Asset, Pathname } from '$app/types';
-import { PUBLIC_BACKEND_API_URL, PUBLIC_SITE_SHORT_URL, PUBLIC_SITE_URL } from '$env/static/public';
+import type { AssetPath, Path, PathnameWithSearchOrHash } from '$app/types';
+
+import { PUBLIC_BACKEND_API_URL, PUBLIC_SITE_SHORT_URL, PUBLIC_SITE_URL } from '$app/env/public';
+
 import { tick } from 'svelte';
 // ---------------------------------------------------------------------------
 // Constants
@@ -89,27 +91,45 @@ export function getGatewayWsURL(host: string, port: number, path: string): strin
 // ---------------------------------------------------------------------------
 
 /**
- * Prefixes a pathname with the configured SvelteKit {@link base} path.
+ * The configured SvelteKit base path, without a trailing slash (`''` when the
+ * app is served from the domain root).
  *
- * Unlike `$app/paths.resolve`, this does **not** resolve route IDs or
- * populate dynamic parameters — it simply concatenates {@link base}
- * with a concrete pathname.
+ * SvelteKit 3 removed the `base` export from `$app/paths`, and `resolve()` is not a
+ * substitute here: with `paths.relative` (the default) it returns a path relative to the
+ * page being rendered, which cannot be compared against `page.url.pathname` or used to
+ * build the absolute URLs {@link getSiteURL} hands to canonical tags and the sitemap.
+ * `vite.config.ts` derives kit's `base` from `PUBLIC_SITE_URL`'s pathname; deriving it
+ * the same way here always yields the absolute base path.
+ */
+export function basePath(): string {
+  const { pathname } = new URL(PUBLIC_SITE_URL);
+  return pathname.replace(/\/+$/, '');
+}
+
+/**
+ * Prefixes a pathname with the configured SvelteKit base path.
  *
- * @param path - A concrete internal pathname (e.g. `/settings/account`)
+ * Unlike `$app/paths.resolve`, this returns an absolute path (see {@link basePath}) and
+ * accepts a union-typed pathname — `resolve` is generic over a single literal path, so it
+ * cannot take a value typed as the whole {@link Path} union. It does **not** resolve route
+ * IDs or populate dynamic parameters either; it simply concatenates the base path with a
+ * concrete pathname.
+ *
+ * @param path - A concrete internal pathname (e.g. `settings/account`)
  * @returns The pathname prefixed with the current base path
  */
-export function prefixBase(path: Pathname): string {
-  return base + path;
+export function prefixBase(path: PathnameWithSearchOrHash): string {
+  return `${basePath()}/${path}`;
 }
 
 /**
  * Builds a fully-qualified site URL from an internal pathname.
  *
- * @param path         - Internal pathname (e.g. `/settings/account`)
+ * @param path         - Internal pathname (e.g. `settings/account`)
  * @param searchParams - Optional query parameters to append
  * @returns A `URL` rooted at `PUBLIC_SITE_URL`
  */
-export function getSiteURL(path: Pathname, searchParams?: URLSearchParams): URL {
+export function getSiteURL(path: Path, searchParams?: URLSearchParams): URL {
   const url = new URL(prefixBase(path), PUBLIC_SITE_URL);
 
   if (searchParams !== undefined) {
@@ -125,7 +145,7 @@ export function getSiteURL(path: Pathname, searchParams?: URLSearchParams): URL 
  * @param path - Asset path as typed by `$app/types.Asset`
  * @returns A `URL` rooted at `PUBLIC_SITE_URL`
  */
-export function getSiteAssetURL(path: Asset): URL {
+export function getSiteAssetURL(path: AssetPath): URL {
   return new URL(asset(path), PUBLIC_SITE_URL);
 }
 
@@ -136,9 +156,9 @@ export function getSiteAssetURL(path: Asset): URL {
  * @param path - Internal pathname to append
  * @returns A `URL` using the short domain
  */
-export function getSiteShortURL(path: Pathname): URL {
+export function getSiteShortURL(path: Path): URL {
   const url = new URL(PUBLIC_SITE_SHORT_URL);
-  url.pathname = url.pathname.replace(/\/+$/, '') + path;
+  url.pathname = `${url.pathname.replace(/\/+$/, '')}/${path}`;
   return url;
 }
 
@@ -251,7 +271,7 @@ export function isValidTokenRedirectUri(value: string): boolean {
  *
  * Reads the given query parameter from SvelteKit's {@link page} state.
  * If it is present and fails {@link isValidRedirectParam}, the parameter
- * is removed via SvelteKit's {@link replaceState} so the user never sees
+ * is removed via a shallow `goto` so the user never sees
  * a suspicious value in their address bar.
  *
  * Must be called after the SvelteKit router is initialised (e.g. in
@@ -265,10 +285,9 @@ export function sanitizeRedirectSearchParam(queryParam: string = REDIRECT_QUERY_
   if (value === null) return false;
 
   if (!isValidRedirectParam(value)) {
-    const sanitized = new URL(page.url);
+    const sanitized = new URL(page.url.href);
     sanitized.searchParams.delete(queryParam);
-    /* eslint-disable-next-line svelte/no-navigation-without-resolve -- sanitized is already a full URL */
-    replaceState(sanitized, {});
+    goto(sanitized, { shallow: true, replace: true });
     return true;
   }
 
@@ -282,7 +301,7 @@ export function sanitizeRedirectSearchParam(queryParam: string = REDIRECT_QUERY_
  * Use this for transient signals carried in the URL — e.g. an OAuth `error`
  * code passed back via redirect. The callback typically stashes the value in
  * component state so the UI no longer depends on the query string, after which
- * the parameter is removed via {@link replaceState}. This keeps the code out
+ * the parameter is removed via a shallow `goto`. This keeps the code out
  * of the address bar and prevents it from reappearing on refresh.
  *
  * If the callback navigates away (or otherwise wants the parameter left
@@ -307,7 +326,7 @@ export function sanitizeRedirectSearchParam(queryParam: string = REDIRECT_QUERY_
  * // Redirect on a specific value, leaving the param for the destination:
  * consumeSearchParam('error', async (code) => {
  *   if (code === 'emailAlreadyRegistered') {
- *     await goto(resolve(`/login?error=${encodeURIComponent(code)}`), { replaceState: true });
+ *     await goto(resolve(`login?error=${encodeURIComponent(code)}`), { replace: true });
  *     return false;
  *   }
  *   errorCode = code;
@@ -318,7 +337,9 @@ export function consumeSearchParam(
   queryParam: string,
   onValue: (value: string) => boolean | void | Promise<boolean | void>
 ): void {
-  afterNavigate(async () => {
+  afterNavigate(async ({ shallow }) => {
+    if (shallow) return;
+
     const value = page.url.searchParams.get(queryParam);
     if (value === null) return;
 
@@ -327,10 +348,9 @@ export function consumeSearchParam(
 
     await tick();
 
-    const stripped = new URL(page.url);
+    const stripped = new URL(page.url.href);
     stripped.searchParams.delete(queryParam);
-    /* eslint-disable-next-line svelte/no-navigation-without-resolve -- stripped is already a full URL */
-    replaceState(stripped, {});
+    goto(stripped, { shallow: true, replace: true });
   });
 }
 
@@ -343,6 +363,7 @@ export function consumeSearchParam(
  * @returns The pathname without the base prefix
  */
 function stripBase(path: string): string {
+  const base = basePath();
   if (base && path.startsWith(base)) {
     return path.slice(base.length) || '/';
   }
@@ -365,17 +386,16 @@ function stripBase(path: string): string {
  * @example
  * ```ts
  * // URL: /login?redirect=/settings/account%3Ftab%3Dsecurity
- * await gotoQueryRedirectOrFallback('/home', 'redirect');
+ * await gotoQueryRedirectOrFallback('home', 'redirect');
  * // → navigates to /settings/account?tab=security (if it matches a route)
  * // → otherwise navigates to /home
  * ```
  */
 export async function gotoQueryRedirectOrFallback(
-  fallback: Pathname,
+  fallback: Path,
   queryParam: string = REDIRECT_QUERY_PARAM
 ) {
-  let target: Pathname = fallback;
-
+  let target: PathnameWithSearchOrHash = fallback;
   const redirectParam = page.url.searchParams.get(queryParam);
 
   if (redirectParam !== null && isValidRedirectParam(redirectParam)) {
@@ -395,10 +415,11 @@ export async function gotoQueryRedirectOrFallback(
     }
 
     if (matched !== null) {
-      target = (pathname + parsed.search + parsed.hash) as Pathname;
+      // `Path` values are relative to the base path and carry no leading slash.
+      const relative = pathname.replace(/^\//, '');
+      target = (relative + parsed.search + parsed.hash) as PathnameWithSearchOrHash;
     }
   }
 
-  /* eslint-disable-next-line svelte/no-navigation-without-resolve -- target is already a resolved pathname, prefixBase just adds the base path */
   await goto(prefixBase(target));
 }

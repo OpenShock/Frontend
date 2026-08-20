@@ -6,7 +6,7 @@
     getLiveConnection,
     setHubLiveControl,
     toggleShockerLiveControl,
-  } from '$lib/state/live-control-state.svelte';
+  } from '#lib/state/live-control-state.svelte.js';
 
   interface Props {
     hubId: string;

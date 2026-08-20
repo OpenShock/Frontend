@@ -14,7 +14,7 @@ const LEVELS: readonly TelemetryLevel[] = ['off', 'errors', 'full'];
  * User consent for shipping browser diagnostics to SigNoz.
  *
  * Opt-in: defaults to `off`, so nothing is sent until the user explicitly chooses a level.
- * This gates {@link import('$lib/telemetry/common').telemetryLevel} in addition to the
+ * This gates {@link import('#lib/telemetry/common.js').telemetryLevel} in addition to the
  * deployment-level `PUBLIC_SIGNOZ_LOGS_ENABLED` env flag.
  */
 class TelemetryConsentState extends PersistedState<TelemetryLevel> {

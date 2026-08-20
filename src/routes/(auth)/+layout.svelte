@@ -1,8 +1,8 @@
 <script lang="ts">
   import { asset } from '$app/paths';
   import { Container } from '@openshock/svelte-core/components';
-  import { AuthStatus, authState } from '$lib/state/auth-state.svelte';
-  import { gotoQueryRedirectOrFallback, sanitizeRedirectSearchParam } from '$lib/utils/url';
+  import { AuthStatus, authState } from '#lib/state/auth-state.svelte.js';
+  import { gotoQueryRedirectOrFallback, sanitizeRedirectSearchParam } from '#lib/utils/url.js';
   import { onMount, type Snippet } from 'svelte';
   import { toast } from 'svelte-sonner';
 
@@ -16,14 +16,14 @@
 
   $effect(() => {
     if (authState.status === AuthStatus.Authenticated) {
-      void gotoQueryRedirectOrFallback('/home');
+      void gotoQueryRedirectOrFallback('home');
     }
   });
 </script>
 
 <Container class="items-center-safe justify-center-safe p-0!">
   <span class="flex items-center gap-2 self-center font-medium">
-    <img class="h-8" src={asset('/logo.svg')} alt="OpenShock Logo" />
+    <img class="h-8" src={asset('logo.svg')} alt="OpenShock Logo" />
   </span>
   <div class="flex max-w-sm flex-col gap-6">
     {@render children?.()}

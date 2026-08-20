@@ -1,16 +1,16 @@
 <script lang="ts">
-  import { shockerShockerShareRemove } from '$lib/api';
-  import type { UserShareInfo } from '$lib/api';
+  import { shockerShockerShareRemove } from '#lib/api/index.js';
+  import type { UserShareInfo } from '#lib/api/index.js';
   import { Copy, Trash } from '@lucide/svelte';
   import * as Avatar from '@openshock/svelte-core/components/ui/avatar';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Drawer from '@openshock/svelte-core/components/ui/drawer';
   import * as Table from '@openshock/svelte-core/components/ui/table';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import { copyToClipboard } from '@openshock/svelte-core/utils';
   import { dialog } from '@openshock/svelte-core/components/dialog-manager';
-  import { userSharesState, refreshUserShares } from '$lib/state/user-shares-state.svelte';
-  import { userState } from '$lib/state/user-state.svelte';
+  import { userSharesState, refreshUserShares } from '#lib/state/user-shares-state.svelte.js';
+  import { userState } from '#lib/state/user-state.svelte.js';
   import { toast } from 'svelte-sonner';
 
   interface Props {

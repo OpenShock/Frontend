@@ -1,3 +1,4 @@
 [submodule "packages/svelte-core"]
 	path = packages/svelte-core
 	url = https://github.com/OpenShock/svelte-core.git
+	branch = feature/svelte-kit-3

@@ -1,5 +1,5 @@
-import { env } from '$env/dynamic/public';
-import { getSiteURL } from '$lib/utils/url';
+import { getSiteURL } from '#lib/utils/url.js';
+import { PUBLIC_DENY_ROBOTS, PUBLIC_DISABLE_SITEMAP } from '$app/env/public';
 import { isTruthy } from '@openshock/svelte-core/utils';
 import type { RequestHandler } from './$types';
 
@@ -9,13 +9,13 @@ export const GET: RequestHandler = ({ setHeaders }) => {
     'cache-control': 'public, max-age=3600',
   });
 
-  if (isTruthy(env.PUBLIC_DENY_ROBOTS)) {
+  if (isTruthy(PUBLIC_DENY_ROBOTS)) {
     return new Response('User-agent: *\nDisallow: /\n');
   }
 
   const lines = ['User-agent: *', 'Allow: /'];
-  if (!isTruthy(env.PUBLIC_DISABLE_SITEMAP)) {
-    lines.push(`Sitemap: ${getSiteURL('/sitemap.xml').href}`);
+  if (!isTruthy(PUBLIC_DISABLE_SITEMAP)) {
+    lines.push(`Sitemap: ${getSiteURL('sitemap.xml').href}`);
   }
 
   return new Response(lines.join('\n') + '\n');
