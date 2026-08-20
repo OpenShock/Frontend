@@ -36,7 +36,8 @@
 
   let { data: initialData, hubs, resolve, close }: Props = $props();
 
-  // svelte-ignore state_referenced_locally -- intentionally captures initial value as own reactive copy
+  // intentionally captures initial value as own reactive copy
+  // svelte-ignore state_referenced_locally
   let data: AddShockerData = $state(initialData);
 
   let canSubmit = $derived(
