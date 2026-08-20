@@ -56,7 +56,7 @@
             {#if backendMetadata.state}
               <tr>
                 <td>Backend Version</td>
-                <td title={`Commit ${backendMetadata.state.commit}`}
+                <td title="Commit {backendMetadata.state.commit}"
                   >{backendMetadata.state.version}</td
                 >
               </tr>

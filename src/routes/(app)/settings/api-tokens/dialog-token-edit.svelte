@@ -22,8 +22,8 @@
   let name = $state(token.name);
   // svelte-ignore state_referenced_locally
   let permissions = $state(token.permissions);
+  // svelte-ignore state_referenced_locally
   let shockerControl = $state<ShockerControlSettings>(
-    // svelte-ignore state_referenced_locally
     structuredClone($state.snapshot(token.shockerControl))
   );
   let submitting = $state(false);

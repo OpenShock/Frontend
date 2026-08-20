@@ -33,7 +33,7 @@ export default defineConfig(
       'no-control-regex': 'off',
       'no-misleading-character-class': 'off',
       'no-useless-assignment': 'warn',
-      'svelte/no-unused-svelte-ignore': 'off',
+      'svelte/prefer-attribute-interpolation': 'error',
       '@typescript-eslint/no-unused-vars': [
         'warn',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
