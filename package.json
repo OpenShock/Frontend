@@ -45,7 +45,6 @@
 		"eslint-plugin-compat": "^7.0.2",
 		"eslint-plugin-svelte": "^3.22.0",
 		"esptool-js": "0.6.1",
-		"formsnap": "^2.0.1",
 		"globals": "^17.9.0",
 		"husky": "^9.1.7",
 		"prettier": "~3.9.6",
@@ -57,7 +56,6 @@
 		"svelte": "^5.56.8",
 		"svelte-check": "^4.7.4",
 		"svelte-sonner": "^1.1.1",
-		"sveltekit-superforms": "^2.30.2",
 		"tailwind-merge": "^3.6.0",
 		"tailwind-variants": "^3.3.1",
 		"tailwindcss": "^4.3.3",
@@ -83,7 +81,6 @@
 		"@opentelemetry/sdk-logs": "^0.221.0",
 		"@opentelemetry/sdk-trace-node": "^2.10.0",
 		"@opentelemetry/sdk-trace-web": "^2.10.0",
-		"core": "workspace:@openshock/svelte-core@*",
 		"driver.js": "^1.8.0",
 		"temporal-polyfill": "^1.0.3",
 		"vite": "^8.2.0"
