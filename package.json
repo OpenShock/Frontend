@@ -68,7 +68,7 @@
 		"vite-plugin-devtools-json": "^1.1.0",
 		"vite-plugin-mkcert": "^2.1.0",
 		"vitest": "^4.1.10",
-		"wrangler": "^4.123.0"
+		"wrangler": "^4.125.0"
 	},
 	"dependencies": {
 		"@openshock/svelte-core": "workspace:*",
