@@ -8,11 +8,9 @@ allowBuilds:
 blockExoticSubdeps: true
 minimumReleaseAge: 4320 # 3 days
 
+minimumReleaseAgeExcludePrune: true
 minimumReleaseAgeExclude:
   - '@openshock/*'
-  - cookie@0.7.0
-  - js-yaml@4.3.0 || 4.3.1
-  - undici@7.29.0
 
 onlyBuiltDependencies:
   - '@tailwindcss/oxide'
@@ -24,7 +22,6 @@ overrides:
   cookie@<0.7.0: ^0.7.0
   js-yaml@>=4.0.0 <4.3.0: ^4.3.0
   js-yaml@>=4.0.0 <4.3.1: ^4.3.1
-  undici@>=7.0.0 <7.29.0: ^7.29.0
 
 patchedDependencies:
   '@microsoft/signalr@10.0.11': patches/signalr.patch
