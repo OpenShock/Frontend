@@ -1,5 +1,5 @@
 name: containerize
-description: Builds and pushes the frontend Docker image
+description: Builds the frontend Docker image for a single platform and, if requested, pushes it by digest (tags are applied later by `containerize-merge`)
 inputs:
   registry:
     required: true
@@ -15,11 +15,10 @@ inputs:
     description: Password to log in to the container registry
   push-image:
     required: true
-    description: If true, pushes the image to the registry
-  latest:
-    required: false
-    default: 'false'
-    description: If true, also tags the image as `latest` (set when the pushed tag is the newest release)
+    description: If true, pushes the untagged per-platform image and uploads its digest as an artifact
+  platform:
+    required: true
+    description: Target platform (e.g. `linux/amd64`, `linux/arm64`). Should match the runner's native architecture to avoid QEMU emulation.
 
 runs:
   using: composite
@@ -34,29 +33,43 @@ runs:
         username: ${{ inputs.registry-username }}
         password: ${{ inputs.registry-password }}
 
-    - name: Extract metadata (tags, labels) for Docker
+    # Only labels are used here; tags are applied to the multi-arch manifest in `containerize-merge`.
+    - name: Extract metadata (labels) for Docker
       id: meta
       uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
       with:
         images: ${{ inputs.registry }}/${{ inputs.registry-path }}
-        flavor: |
-          latest=false
-        tags: |
-          type=raw,value={{branch}},enable=${{ github.ref_type == 'branch' && github.event_name != 'pull_request' }}
-          type=raw,value=latest,enable=${{ inputs.latest == 'true' }}
-          type=ref,event=branch
-          type=ref,event=pr
-          type=semver,pattern={{major}},enable=${{ !startsWith(github.ref, 'refs/tags/v0') && !startsWith(github.ref, 'refs/tags/0') }}
-          type=semver,pattern={{major}}.{{minor}}
-          type=semver,pattern={{major}}.{{minor}}.{{patch}}
 
-    - name: Build and push Docker image
+    - name: Build and push Docker image by digest
+      id: build
       uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
       with:
         context: .
-        push: ${{ inputs.push-image }}
-        tags: ${{ steps.meta.outputs.tags }}
+        platforms: ${{ inputs.platform }}
         labels: ${{ steps.meta.outputs.labels }}
+        outputs: type=image,name=${{ inputs.registry }}/${{ inputs.registry-path }},push-by-digest=true,name-canonical=true,push=${{ inputs.push-image }}
         build-args: |
           GIT_BRANCH=${{ github.head_ref || github.ref_name }}
           GIT_COMMIT_SHA=${{ github.sha }}
+
+    - name: Export digest
+      id: digest
+      if: inputs.push-image == 'true'
+      shell: bash
+      env:
+        DIGEST: ${{ steps.build.outputs.digest }}
+        PLATFORM: ${{ inputs.platform }}
+      run: |
+        set -euo pipefail
+        mkdir -p "$RUNNER_TEMP/digests"
+        touch "$RUNNER_TEMP/digests/${DIGEST#sha256:}"
+        echo "artifact-name=digests-${PLATFORM//\//-}" >> "$GITHUB_OUTPUT"
+
+    - name: Upload digest
+      if: inputs.push-image == 'true'
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: ${{ steps.digest.outputs.artifact-name }}
+        path: ${{ runner.temp }}/digests/*
+        if-no-files-found: error
+        retention-days: 1

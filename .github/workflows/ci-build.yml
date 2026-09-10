@@ -14,6 +14,10 @@ on:
 
 name: ci-build
 
+env:
+  # Push on tag pushes (semver releases) and on master/develop branch pushes. Never on PRs.
+  PUSH_IMAGE: ${{ github.event_name != 'pull_request' && (github.ref_type == 'tag' || github.ref_name == 'master' || github.ref_name == 'develop') }}
+
 jobs:
   test:
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
@@ -55,10 +59,45 @@ jobs:
         #run: pnpm test # TODO: Run dev full infra containers locally, seed them with data, and run tests against them. (alotta work, but worth it)
         run: pnpm test:unit
 
+  # Each platform builds natively on its own runner (no QEMU) and pushes an untagged image by
+  # digest; `merge-container` then stitches the digests into one multi-arch tag.
   build-container:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runner }}
     timeout-minutes: 10
     needs: test
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        include:
+          - platform: linux/amd64
+            runner: ubuntu-latest
+          - platform: linux/arm64
+            runner: ubuntu-24.04-arm
+    outputs:
+      push-image: ${{ env.PUSH_IMAGE }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: recursive
+
+      - uses: ./.github/actions/containerize
+        with:
+          registry: ghcr.io
+          registry-path: ${{ github.repository_owner }}/frontend
+          registry-username: ${{ github.actor }}
+          registry-password: ${{ secrets.GITHUB_TOKEN }}
+          push-image: ${{ env.PUSH_IMAGE }}
+          platform: ${{ matrix.platform }}
+
+  merge-container:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: build-container
+    if: needs.build-container.outputs.push-image == 'true'
     permissions:
       contents: read
       packages: write
@@ -66,8 +105,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          submodules: recursive
 
       # Decide whether this tag is the newest release (final versions only, no rc),
       # so we only move `latest` when it actually is. Done locally from git tags —
@@ -87,13 +124,11 @@ jobs:
             echo "is-latest=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - uses: ./.github/actions/containerize
+      - uses: ./.github/actions/containerize-merge
         with:
           registry: ghcr.io
           registry-path: ${{ github.repository_owner }}/frontend
           registry-username: ${{ github.actor }}
           registry-password: ${{ secrets.GITHUB_TOKEN }}
-          # Push on tag pushes (semver releases) and on master/develop branch pushes. Never on PRs.
-          push-image: ${{ github.event_name != 'pull_request' && (github.ref_type == 'tag' || github.ref_name == 'master' || github.ref_name == 'develop')  }}
           # Move `latest` only when this tag is the newest release (not an rc, not a hotfix to an old version).
           latest: ${{ steps.latest-tag.outputs.is-latest == 'true' }}
