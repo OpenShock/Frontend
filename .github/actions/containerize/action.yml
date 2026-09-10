@@ -33,12 +33,20 @@ runs:
         username: ${{ inputs.registry-username }}
         password: ${{ inputs.registry-password }}
 
+    # Image references must be lowercase, but registry-path usually contains the org name (`OpenShock`).
+    - name: Resolve image name
+      id: image
+      shell: bash
+      env:
+        IMAGE: ${{ inputs.registry }}/${{ inputs.registry-path }}
+      run: echo "name=${IMAGE,,}" >> "$GITHUB_OUTPUT"
+
     # Only labels are used here; tags are applied to the multi-arch manifest in `containerize-merge`.
     - name: Extract metadata (labels) for Docker
       id: meta
       uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
       with:
-        images: ${{ inputs.registry }}/${{ inputs.registry-path }}
+        images: ${{ steps.image.outputs.name }}
 
     - name: Build and push Docker image by digest
       id: build
@@ -47,7 +55,7 @@ runs:
         context: .
         platforms: ${{ inputs.platform }}
         labels: ${{ steps.meta.outputs.labels }}
-        outputs: type=image,name=${{ inputs.registry }}/${{ inputs.registry-path }},push-by-digest=true,name-canonical=true,push=${{ inputs.push-image }}
+        outputs: type=image,name=${{ steps.image.outputs.name }},push-by-digest=true,name-canonical=true,push=${{ inputs.push-image }}
         build-args: |
           GIT_BRANCH=${{ github.head_ref || github.ref_name }}
           GIT_COMMIT_SHA=${{ github.sha }}

@@ -38,6 +38,14 @@ runs:
         username: ${{ inputs.registry-username }}
         password: ${{ inputs.registry-password }}
 
+    # Image references must be lowercase, but registry-path usually contains the org name (`OpenShock`).
+    - name: Resolve image name
+      id: image
+      shell: bash
+      env:
+        IMAGE: ${{ inputs.registry }}/${{ inputs.registry-path }}
+      run: echo "name=${IMAGE,,}" >> "$GITHUB_OUTPUT"
+
     - name: Extract metadata (tags, annotations) for Docker
       id: meta
       uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
@@ -45,7 +53,7 @@ runs:
         # Annotate the manifest list itself so GHCR shows description/source for the multi-arch image.
         DOCKER_METADATA_ANNOTATIONS_LEVELS: index
       with:
-        images: ${{ inputs.registry }}/${{ inputs.registry-path }}
+        images: ${{ steps.image.outputs.name }}
         flavor: |
           latest=false
         tags: |
@@ -61,7 +69,7 @@ runs:
       shell: bash
       working-directory: ${{ runner.temp }}/digests
       env:
-        IMAGE: ${{ inputs.registry }}/${{ inputs.registry-path }}
+        IMAGE: ${{ steps.image.outputs.name }}
         META_JSON: ${{ steps.meta.outputs.json }}
       run: |
         set -euo pipefail
@@ -74,6 +82,6 @@ runs:
     - name: Inspect image
       shell: bash
       env:
-        IMAGE: ${{ inputs.registry }}/${{ inputs.registry-path }}
+        IMAGE: ${{ steps.image.outputs.name }}
         VERSION: ${{ steps.meta.outputs.version }}
       run: docker buildx imagetools inspect "$IMAGE:$VERSION"
