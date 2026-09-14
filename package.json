@@ -25,14 +25,14 @@
 		"@internationalized/date": "^3.12.4",
 		"@lucide/svelte": "^1.41.0",
 		"@microsoft/signalr": "^10.0.11",
-		"@playwright/test": "^1.62.1",
+		"@playwright/test": "^1.63.0",
 		"@sveltejs/adapter-cloudflare": "^7.2.9",
 		"@sveltejs/adapter-node": "^5.5.7",
 		"@sveltejs/kit": "^2.70.3",
 		"@sveltejs/vite-plugin-svelte": "^7.3.0",
 		"@tailwindcss/vite": "^4.3.3",
 		"@tanstack/svelte-table": "^9.2.4",
-		"@types/node": "^26.4.1",
+		"@types/node": "^26.5.1",
 		"@types/semver": "^7.8.0",
 		"@types/w3c-web-serial": "^1.0.8",
 		"@typescript/native": "npm:typescript@~7.0.2",
@@ -68,7 +68,7 @@
 		"vite-plugin-devtools-json": "^1.1.0",
 		"vite-plugin-mkcert": "^2.1.0",
 		"vitest": "^5.0.0",
-		"wrangler": "^4.129.0"
+		"wrangler": "^4.131.0"
 	},
 	"dependencies": {
 		"@openshock/svelte-core": "workspace:*",
