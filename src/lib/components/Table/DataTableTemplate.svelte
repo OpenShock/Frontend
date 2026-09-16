@@ -59,18 +59,18 @@
     },
     columns: columns as unknown as ColumnDef<TableFeatures, TData>[],
     manualSorting,
-    state: isControlled
-      ? {
-          get sorting() {
-            return sorting;
-          },
-        }
-      : undefined,
-    onSortingChange: isControlled
-      ? (updater: Updater<SortingState>) => {
-          sorting = typeof updater === 'function' ? updater(sorting ?? []) : updater;
-        }
-      : undefined,
+    // Omit these when uncontrolled: an explicit `onSortingChange: undefined`
+    // replaces table-core's default handler and sorting silently stops working.
+    ...(isControlled && {
+      state: {
+        get sorting() {
+          return sorting;
+        },
+      },
+      onSortingChange: (updater: Updater<SortingState>) => {
+        sorting = typeof updater === 'function' ? updater(sorting ?? []) : updater;
+      },
+    }),
   };
 
   const table = createTable(options as unknown as TableOptions<TFeatures, TData>);

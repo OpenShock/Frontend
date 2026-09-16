@@ -35,6 +35,8 @@ export type AdminOnlineDeviceResponse = {
   bootedAt: Temporal.Instant;
   latencyMs: number | null;
   rssi: number | null;
+  country: string | null;
+  ip: string | null;
 };
 
 export type AdminOnlineDeviceResponseArrayLegacyDataResponse = {
@@ -519,7 +521,7 @@ export type OpenShockProblem = {
    * @deprecated
    */
   readonly traceId?: string | null;
-  readonly requestId?: string | null;
+  requestId?: string | null;
   [key: string]: unknown;
 };
 
@@ -923,6 +925,7 @@ export type OpenShockProblemWritable = {
   status?: number | null;
   detail?: string | null;
   instance?: string | null;
+  requestId?: string | null;
   [key: string]: unknown;
 };
 
