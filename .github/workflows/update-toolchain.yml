@@ -126,8 +126,16 @@ jobs:
         uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
         with:
           cache: true
-          run_install: |
-            - args: [--frozen-lockfile, --strict-peer-dependencies]
+          run_install: false
+
+      # pnpm records its own version in pnpm-lock.yaml (`packageManagerDependencies`), so the
+      # `packageManager` bump above leaves the lockfile stale. Refresh it before the frozen install.
+      - name: Refresh lockfile & install dependencies
+        if: steps.diff.outputs.changed == 'true'
+        shell: bash
+        run: |
+          pnpm install --lockfile-only
+          pnpm install --frozen-lockfile --strict-peer-dependencies
 
       - name: Check
         if: steps.diff.outputs.changed == 'true'
