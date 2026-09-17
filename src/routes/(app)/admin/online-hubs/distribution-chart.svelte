@@ -1,7 +1,7 @@
 <script lang="ts" module>
   export interface DistributionBucket {
     key: string | null;
-    label: string;
+    name: string;
     count: number;
   }
 
@@ -20,9 +20,9 @@
     return Object.entries(counts)
       .map(([key, count]) => {
         const value = key === UNKNOWN ? null : key;
-        return { key: value ?? '', label: labelOf(value), count };
+        return { key: value ?? '', name: labelOf(value), count };
       })
-      .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
+      .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
   }
 
   function fold(ranked: DistributionBucket[], limit: number): DistributionBucket[] {
@@ -31,7 +31,7 @@
     const other = rest.reduce((sum, b) => sum + b.count, 0);
     return [
       ...ranked.slice(0, limit - 1),
-      { key: null, label: `Other (${rest.length})`, count: other },
+      { key: null, name: `Other (${rest.length})`, count: other },
     ];
   }
 </script>
@@ -46,28 +46,32 @@
 
   interface Props {
     title: string;
+    color: { light: string; dark: string };
     buckets: DistributionBucket[];
     limit?: number;
     selected?: string | null;
     onSelect?: (key: string | null) => void;
   }
 
-  let { title, buckets, limit = 8, selected = null, onSelect }: Props = $props();
+  let { title, color, buckets, limit = 8, selected = null, onSelect }: Props = $props();
 
   let expanded = $state(false);
   let canExpand = $derived(buckets.length > limit);
   let shown = $derived(expanded ? buckets : fold(buckets, limit));
 
   const ROW_HEIGHT = 32;
-  const MAX_LABEL = 16;
+  const MAX_LABEL = 24;
 
-  const chartConfig = {
-    count: { label: 'Hubs', color: 'var(--primary)' },
-  } satisfies Chart.ChartConfig;
+  // The stock tooltip titles itself with the x value, which is the count on a
+  // horizontal chart; `labelKey="name"` makes it look the bucket name up here instead.
+  let chartConfig = $derived<Chart.ChartConfig>({
+    ...Object.fromEntries(shown.map((b) => [b.name, { label: b.name }])),
+    count: { label: 'Hubs', theme: color },
+  });
 
   function barOpacity(bucket: DistributionBucket) {
-    if (bucket.key === null) return 0.4;
-    return selected === null || selected === bucket.key ? 1 : 0.25;
+    if (selected !== null) return selected === bucket.key ? 1 : 0.25;
+    return bucket.key === null ? 0.4 : 1;
   }
 
   const truncate = (label: string) =>
@@ -101,15 +105,15 @@
           <BarChart
             data={shown}
             orientation="horizontal"
-            y="label"
+            y="name"
             x="count"
             yScale={scaleBand().padding(0.3)}
-            series={[{ key: 'count', label: 'Hubs', color: chartConfig.count.color }]}
+            series={[{ key: 'count', label: 'Hubs', color: 'var(--color-count)' }]}
             axis="y"
             grid={false}
             rule={false}
             labels={{ offset: 6 }}
-            padding={{ left: 112, right: 28 }}
+            padding={{ left: 160, right: 28 }}
             tooltipContext={{
               // The tooltip layer sits above the bars and swallows their clicks.
               onclick: (_, { data: bucket }) => {
@@ -128,7 +132,7 @@
             }}
           >
             {#snippet tooltip()}
-              <Chart.Tooltip indicator="line" />
+              <Chart.Tooltip indicator="line" labelKey="name" />
             {/snippet}
           </BarChart>
         </Chart.Container>

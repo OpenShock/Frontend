@@ -1,21 +1,21 @@
 // userAgent.test.ts
 import { describe, expect, it, test } from 'vitest';
-import { getReadableUserAgentName } from './userAgent';
+import { getReadableUserAgentName, parseOpenShockUserAgent } from './userAgent';
 
 describe('getReadableUserAgentName', () => {
   describe('OpenShock-specific UAs', () => {
     const cases = [
       {
         ua: 'OpenShock/1.4.0 (arduino-esp32; Wemos-Lolin-S3; ESP32S3; Espressif)',
-        expected: 'OpenShock 1.4.0 on Arduino ESP32S3',
+        expected: 'Wemos Lolin S3 · ESP32-S3',
       },
       {
         ua: 'OpenShock/0.0.0-local (arduino-esp32; Wemos-D1-Mini-ESP32; ESP32; Espressif)',
-        expected: 'OpenShock 0.0.0-local on Arduino ESP32',
+        expected: 'Wemos D1 Mini ESP32 · ESP32',
       },
       {
         ua: 'OpenShock/1.1.2 (arduino-esp32; OpenShock-Core-V2; ESP32S3; Espressif)',
-        expected: 'OpenShock 1.1.2 on Arduino ESP32S3',
+        expected: 'OpenShock Core V2 · ESP32-S3',
       },
     ];
 
@@ -85,11 +85,10 @@ describe('getReadableUserAgentName — additional cases', () => {
   it('handles an OpenShock UA with C3 RISC-V CPU', () => {
     const ua = 'OpenShock/1.5.0 (arduino-esp32; Some-Board; ESP32C3; Espressif)';
     const result = getReadableUserAgentName(ua);
-    expect(result).toMatch(/^OpenShock 1\.5\.0 on Arduino/);
+    expect(result).toBe('Some Board · ESP32-C3');
   });
 
   it('handles an unrecognised OpenShock device gracefully', () => {
-    // Doesn't match the device regex, so model stays undefined
     const ua = 'OpenShock/1.0.0 (something-weird)';
     const result = getReadableUserAgentName(ua);
     // Browser+OS may or may not parse; just ensure no throw
@@ -104,5 +103,34 @@ describe('getReadableUserAgentName — additional cases', () => {
   it('handles UA with non-ASCII characters', () => {
     const ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; café) Chrome/100.0.0.0';
     expect(() => getReadableUserAgentName(ua)).not.toThrow();
+  });
+});
+
+describe('parseOpenShockUserAgent', () => {
+  it('splits a firmware user agent into its parts', () => {
+    expect(
+      parseOpenShockUserAgent('OpenShock/1.4.0 (arduino-esp32; Wemos-Lolin-S3; ESP32S3; Espressif)')
+    ).toEqual({
+      version: '1.4.0',
+      framework: 'arduino-esp32',
+      board: 'Wemos-Lolin-S3',
+      chip: 'ESP32S3',
+    });
+  });
+
+  it('does not depend on the framework name', () => {
+    expect(
+      parseOpenShockUserAgent('OpenShock/2.0.0 (ESP-IDF; OpenShock-Core-V2; ESP32C3; Espressif)')
+        ?.board
+    ).toBe('OpenShock-Core-V2');
+  });
+
+  test.each([
+    '',
+    'OpenShock/1.4.0',
+    'OpenShock/1.4.0 (arduino-esp32; ; ESP32S3; Espressif)',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+  ])('returns null for "%s"', (ua) => {
+    expect(parseOpenShockUserAgent(ua)).toBeNull();
   });
 });

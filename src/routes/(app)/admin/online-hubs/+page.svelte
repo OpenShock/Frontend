@@ -1,19 +1,44 @@
 <script lang="ts" module>
+  import { formatBoardName, parseOpenShockUserAgent } from '$lib/utils/userAgent';
   import { countryName, type OnlineHub } from './columns';
 
-  type Dimension = 'firmware' | 'country' | 'gateway';
+  type Dimension = 'firmware' | 'board' | 'country' | 'gateway';
 
-  const dimensions: Record<Dimension, { title: string; value: (hub: OnlineHub) => string | null }> =
+  const dimensions: Record<
+    Dimension,
     {
-      firmware: { title: 'Firmware', value: (hub) => hub.firmwareVersion.version },
-      country: { title: 'Country', value: (hub) => hub.country || null },
-      gateway: { title: 'Gateway', value: (hub) => hub.gateway },
-    };
+      title: string;
+      color: { light: string; dark: string };
+      value: (hub: OnlineHub) => string | null;
+    }
+  > = {
+    firmware: {
+      title: 'Firmware',
+      color: { light: '#2a78d6', dark: '#3987e5' },
+      value: (hub) => hub.firmwareVersion.version,
+    },
+    board: {
+      title: 'Board',
+      color: { light: '#a9489f', dark: '#bf5ab8' },
+      value: (hub) => (hub.userAgent && parseOpenShockUserAgent(hub.userAgent)?.board) || null,
+    },
+    country: {
+      title: 'Country',
+      color: { light: '#eb6834', dark: '#d95926' },
+      value: (hub) => hub.country || null,
+    },
+    gateway: {
+      title: 'Gateway',
+      color: { light: '#1baf7a', dark: '#199e70' },
+      value: (hub) => hub.gateway,
+    },
+  };
 
   const bucketLabel: Record<Dimension, (key: string | null) => string> = {
     firmware: (key) => key ?? 'Unknown',
     country: (key) => countryName(key) ?? 'Unknown',
     gateway: (key) => key?.split('.')[0] ?? 'Unknown',
+    board: (key) => (key ? formatBoardName(key) : 'Unknown'),
   };
 </script>
 
@@ -71,6 +96,7 @@
         hub.country,
         countryName(hub.country),
         hub.ip,
+        dimensions.board.value(hub),
       ].some((field) => field?.toLowerCase().includes(query));
     });
   });
@@ -108,6 +134,7 @@
     (Object.keys(dimensions) as Dimension[]).map((dimension) => ({
       dimension,
       title: dimensions[dimension].title,
+      color: dimensions[dimension].color,
       buckets: bucketize(data.map(dimensions[dimension].value), bucketLabel[dimension]),
     }))
   );
@@ -145,10 +172,11 @@
     </div>
 
     {#if hasLoaded}
-      <div class="grid grid-cols-1 gap-3 lg:grid-cols-3">
+      <div class="grid grid-cols-1 gap-3 lg:grid-cols-2">
         {#each charts as chart (chart.dimension)}
           <DistributionChart
             title={chart.title}
+            color={chart.color}
             buckets={chart.buckets}
             selected={filter?.dimension === chart.dimension ? filter.key : null}
             onSelect={(key) => (filter = key === null ? null : { dimension: chart.dimension, key })}

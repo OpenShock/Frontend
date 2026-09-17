@@ -13,6 +13,7 @@ import {
   TimeSinceDurationRenderer,
   UserAgentRenderer,
 } from '$lib/components/Table/ColumnUtils';
+import { getReadableUserAgentName } from '$lib/utils';
 import { createNowTicker } from '@openshock/svelte-core/utils';
 import { SemVer } from 'semver';
 import DataTableActions from './data-table-actions.svelte';
@@ -97,6 +98,11 @@ export const columns = [
   CreateSortableColumnDef('latencyMs', 'Latency', LatencyRenderer),
   CreateSortableColumnDef('rssi', 'RSSI', RssiRenderer),
   CreateSortableColumnDef('ip', 'IP', (ip) => (ip ? RenderCell(ip) : CellRedUnknown)),
-  CreateSortableColumnDef('userAgent', 'User Agent', UserAgentRenderer),
+  CreateSortableColumnDef('userAgent', 'Hardware', UserAgentRenderer, (a, b) => {
+    const nameA = a && getReadableUserAgentName(a);
+    const nameB = b && getReadableUserAgentName(b);
+    if (!nameA || !nameB) return nameA === nameB ? 0 : nameA ? -1 : 1;
+    return nameA.localeCompare(nameB);
+  }),
   CreateActionsColumnDef(DataTableActions, (hub) => ({ hub })),
 ];
