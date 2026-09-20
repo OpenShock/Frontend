@@ -27,6 +27,8 @@ export type AdminOnlineDeviceResponse = {
   owner: BasicUserInfo;
   /**
    * SemVer
+   *
+   * Lightweight semantic version model with optional prerelease and build metadata.
    */
   firmwareVersion: string;
   gateway: string;
@@ -102,16 +104,109 @@ export type AuditLogEntryResponse = {
   createdAt: Temporal.Instant;
 };
 
+/**
+ * Page of results for a paginated list endpoint.
+ */
 export type AuditLogEntryResponsePagedResult = {
+  /**
+   * Items on the current page.
+   */
   items: Array<AuditLogEntryResponse>;
+  /**
+   * 1-based current page index.
+   */
   page: number;
+  /**
+   * Page size used to produce this result.
+   */
   pageSize: number;
+  /**
+   * Total number of items across all pages matching the query.
+   */
   totalCount: number;
+  /**
+   * Total number of pages. Always at least 1, even when  is zero.
+   */
   readonly totalPages?: number;
 };
 
-export type AuditMetadata = {
-  [key: string]: never;
+export type AuditMetadata =
+  | ({
+      t: 'login';
+    } & AuditMetadataLoginMetadata)
+  | ({
+      t: 'usernameChanged';
+    } & AuditMetadataUsernameChangedMetadata)
+  | ({
+      t: 'emailChangeRequested';
+    } & AuditMetadataEmailChangeRequestedMetadata)
+  | ({
+      t: 'emailChanged';
+    } & AuditMetadataEmailChangedMetadata)
+  | ({
+      t: 'apiTokenCreated';
+    } & AuditMetadataApiTokenCreatedMetadata)
+  | ({
+      t: 'apiTokenDeleted';
+    } & AuditMetadataApiTokenDeletedMetadata)
+  | ({
+      t: 'oauthConnected';
+    } & AuditMetadataOAuthConnectedMetadata)
+  | ({
+      t: 'oauthDisconnected';
+    } & AuditMetadataOAuthDisconnectedMetadata)
+  | ({
+      t: 'accountDeactivated';
+    } & AuditMetadataAccountDeactivatedMetadata);
+
+export type AuditMetadataAccountDeactivatedMetadata = {
+  t?: 'accountDeactivated';
+  deleteLater: boolean;
+};
+
+export type AuditMetadataApiTokenCreatedMetadata = {
+  t?: 'apiTokenCreated';
+  tokenId: string;
+  name: string;
+  permissions: Array<string>;
+};
+
+export type AuditMetadataApiTokenDeletedMetadata = {
+  t?: 'apiTokenDeleted';
+  tokenId: string;
+  name: string;
+};
+
+export type AuditMetadataEmailChangedMetadata = {
+  t?: 'emailChanged';
+  old: string;
+  new: string;
+};
+
+export type AuditMetadataEmailChangeRequestedMetadata = {
+  t?: 'emailChangeRequested';
+  newEmail: string;
+};
+
+export type AuditMetadataLoginMetadata = {
+  t?: 'login';
+  sessionId: string;
+};
+
+export type AuditMetadataOAuthConnectedMetadata = {
+  t?: 'oauthConnected';
+  provider: string;
+};
+
+export type AuditMetadataOAuthDisconnectedMetadata = {
+  t?: 'oauthDisconnected';
+  provider: string;
+};
+
+export type AuditMetadataUsernameChangedMetadata = {
+  t?: 'usernameChanged';
+  old: string;
+  new: string;
 };
 
 export type BackendInfoResponse = {
@@ -177,7 +272,7 @@ export type ConfigurationAddItemRequest = {
   type: ConfigurationValueType;
   /**
    * The initial value for the configuration item, serialized as a string.
-   * Must conform to the format required by OpenShock.API.Controller.Admin.DTOs.ConfigurationAddItemRequest.Type.
+   * Must conform to the format required by Type.
    */
   value: string;
 };
@@ -211,7 +306,7 @@ export type ConfigurationItemDto = {
 
 /**
  * Request DTO for updating a configuration item.
- * Either OpenShock.API.Controller.Admin.DTOs.ConfigurationUpdateItemRequest.Description or OpenShock.API.Controller.Admin.DTOs.ConfigurationUpdateItemRequest.Value (or both) may be provided.
+ * Either Description or Value (or both) may be provided.
  * If both are null, no update action is performed.
  */
 export type ConfigurationUpdateItemRequest = {
@@ -226,7 +321,7 @@ export type ConfigurationUpdateItemRequest = {
   description?: string | null;
   /**
    * (Optional) New value for the configuration item.
-   * Must match the format expected by its existing OpenShock.Common.OpenShockDb.ConfigurationValueType.
+   * Must match the format expected by its existing ConfigurationValueType.
    */
   value?: string | null;
 };
@@ -247,6 +342,9 @@ export type Control = {
   type: ControlType;
   intensity: number;
   duration: number;
+  /**
+   * If true, overrides livecontrol
+   */
   exclusive?: boolean;
 };
 
@@ -267,9 +365,9 @@ export const ControlType = {
 export type ControlType = (typeof ControlType)[keyof typeof ControlType];
 
 export type CreateTokenRequest = {
+  validUntil?: Temporal.Instant | null;
   name: string;
   permissions?: Array<PermissionType>;
-  validUntil?: Temporal.Instant | null;
 };
 
 export type DeviceResponse = {
@@ -295,10 +393,10 @@ export type DeviceSelfResponseLegacyDataResponse = {
 };
 
 export type DeviceWithShockersResponse = {
+  shockers: Array<ShockerResponse>;
   id: string;
   name: string;
   createdOn: Temporal.Instant;
-  shockers: Array<ShockerResponse>;
 };
 
 export type DeviceWithShockersResponseArrayLegacyDataResponse = {
@@ -307,10 +405,10 @@ export type DeviceWithShockersResponseArrayLegacyDataResponse = {
 };
 
 export type DeviceWithTokenResponse = {
+  token: string | null;
   id: string;
   name: string;
   createdOn: Temporal.Instant;
-  token: string | null;
 };
 
 export type DeviceWithTokenResponseLegacyDataResponse = {
@@ -340,7 +438,7 @@ export type EmailOutboxBulkResultDto = {
 };
 
 /**
- * An OpenShock.Common.OpenShockDb.EmailOutboxMessage as exposed to admins on the mail-queue page. Mirrors the row
+ * An EmailOutboxMessage as exposed to admins on the mail-queue page. Mirrors the row
  * verbatim - the outbox stores no rendered body and no usable secret, so every field is safe to show.
  */
 export type EmailOutboxMessageDto = {
@@ -386,6 +484,9 @@ export type EmailProviderBlacklistDto = {
   createdAt: Temporal.Instant;
 };
 
+/**
+ * Delivery state of an .
+ */
 export const EmailStatus = {
   Pending: 'Pending',
   Sending: 'Sending',
@@ -394,8 +495,17 @@ export const EmailStatus = {
   Skipped: 'Skipped',
 } as const;
 
+/**
+ * Delivery state of an .
+ */
 export type EmailStatus = (typeof EmailStatus)[keyof typeof EmailStatus];
 
+/**
+ * The kind of email an  represents. The outbox stores
+ * only the intent to send one of these, never a rendered body or a usable secret, the
+ * consumer maps the type to the matching template and (for token-bearing types) mints a fresh
+ * secret at send time.
+ */
 export const EmailType = {
   AccountActivation: 'AccountActivation',
   PasswordReset: 'PasswordReset',
@@ -403,6 +513,12 @@ export const EmailType = {
   EmailChangeNotice: 'EmailChangeNotice',
 } as const;
 
+/**
+ * The kind of email an  represents. The outbox stores
+ * only the intent to send one of these, never a rendered body or a usable secret, the
+ * consumer maps the type to the matching template and (for token-bearing types) mints a fresh
+ * secret at send time.
+ */
 export type EmailType = (typeof EmailType)[keyof typeof EmailType];
 
 export type GuidLegacyDataResponse = {
@@ -466,11 +582,29 @@ export type LogEntryWithHub = {
   duration: number;
 };
 
+/**
+ * Page of results for a paginated list endpoint.
+ */
 export type LogEntryWithHubPagedResult = {
+  /**
+   * Items on the current page.
+   */
   items: Array<LogEntryWithHub>;
+  /**
+   * 1-based current page index.
+   */
   page: number;
+  /**
+   * Page size used to produce this result.
+   */
   pageSize: number;
+  /**
+   * Total number of items across all pages matching the query.
+   */
   totalCount: number;
+  /**
+   * Total number of pages. Always at least 1, even when  is zero.
+   */
   readonly totalPages?: number;
 };
 
@@ -508,8 +642,8 @@ export type OAuthConnectionResponse = {
 };
 
 export type OpenShockProblem = {
-  type?: string | null;
-  title?: string | null;
+  type: string | null;
+  title: string | null;
   status?: number | null;
   detail?: string | null;
   instance?: string | null;
@@ -531,6 +665,8 @@ export type OtaItem = {
   status: OtaUpdateStatus;
   /**
    * SemVer
+   *
+   * Lightweight semantic version model with optional prerelease and build metadata.
    */
   version: string;
   message: string | null;
@@ -551,18 +687,6 @@ export const OtaUpdateStatus = {
 
 export type OtaUpdateStatus = (typeof OtaUpdateStatus)[keyof typeof OtaUpdateStatus];
 
-export type OwnPublicShareResponse = {
-  id: string;
-  name: string;
-  createdOn: Temporal.Instant;
-  expiresOn?: Temporal.Instant | null;
-};
-
-export type OwnPublicShareResponseArrayLegacyDataResponse = {
-  message: string;
-  data: Array<OwnPublicShareResponse> | null;
-};
-
 export type OwnerShockerResponse = {
   id: string;
   name: string;
@@ -573,6 +697,18 @@ export type OwnerShockerResponse = {
 export type OwnerShockerResponseArrayLegacyDataResponse = {
   message: string;
   data: Array<OwnerShockerResponse> | null;
+};
+
+export type OwnPublicShareResponse = {
+  id: string;
+  name: string;
+  createdOn: Temporal.Instant;
+  expiresOn?: Temporal.Instant | null;
+};
+
+export type OwnPublicShareResponseArrayLegacyDataResponse = {
+  message: string;
+  data: Array<OwnPublicShareResponse> | null;
 };
 
 export const PasswordHashingAlgorithm = {
@@ -723,19 +859,6 @@ export type ShareCodeInfoArrayLegacyDataResponse = {
   data: Array<ShareCodeInfo> | null;
 };
 
-export type ShareInfo = {
-  sharedWith: BasicUserInfo;
-  createdOn: Temporal.Instant;
-  permissions: ShockerPermissions;
-  limits: ShockerLimits;
-  paused: boolean;
-};
-
-export type ShareInfoArrayLegacyDataResponse = {
-  message: string;
-  data: Array<ShareInfo> | null;
-};
-
 export type SharedDevice = {
   id: string;
   name: string;
@@ -748,6 +871,19 @@ export type SharedShocker = {
   isPaused: boolean;
   permissions: ShockerPermissions;
   limits: ShockerLimits;
+};
+
+export type ShareInfo = {
+  sharedWith: BasicUserInfo;
+  createdOn: Temporal.Instant;
+  permissions: ShockerPermissions;
+  limits: ShockerLimits;
+  paused: boolean;
+};
+
+export type ShareInfoArrayLegacyDataResponse = {
+  message: string;
+  data: Array<ShareInfo> | null;
 };
 
 export type ShockerLimits = {
@@ -764,11 +900,6 @@ export const ShockerModelType = {
 
 export type ShockerModelType = (typeof ShockerModelType)[keyof typeof ShockerModelType];
 
-export type ShockerPermLimitPair = {
-  permissions: ShockerPermissions;
-  limits: ShockerLimits;
-};
-
 export type ShockerPermissions = {
   vibrate: boolean;
   sound: boolean;
@@ -776,13 +907,18 @@ export type ShockerPermissions = {
   live?: boolean;
 };
 
+export type ShockerPermLimitPair = {
+  permissions: ShockerPermissions;
+  limits: ShockerLimits;
+};
+
 export type ShockerResponse = {
-  id: string;
-  rfId: number;
-  model: ShockerModelType;
   name: string;
   isPaused: boolean;
   createdOn: Temporal.Instant;
+  id: string;
+  rfId: number;
+  model: ShockerModelType;
 };
 
 export type ShockerResponseArrayLegacyDataResponse = {
@@ -791,13 +927,13 @@ export type ShockerResponseArrayLegacyDataResponse = {
 };
 
 export type ShockerWithDevice = {
-  id: string;
-  rfId: number;
-  model: ShockerModelType;
+  device: string;
   name: string;
   isPaused: boolean;
   createdOn: Temporal.Instant;
-  device: string;
+  id: string;
+  rfId: number;
+  model: ShockerModelType;
 };
 
 export type ShockerWithDeviceLegacyDataResponse = {
@@ -805,8 +941,14 @@ export type ShockerWithDeviceLegacyDataResponse = {
   data: ShockerWithDevice;
 };
 
+/**
+ * Sort direction for list endpoints.
+ */
 export const SortDirection = { Asc: 'Asc', Desc: 'Desc' } as const;
 
+/**
+ * Sort direction for list endpoints.
+ */
 export type SortDirection = (typeof SortDirection)[keyof typeof SortDirection];
 
 export type StatsResponse = {
@@ -842,33 +984,6 @@ export type TokenResponse = {
   permissions: Array<PermissionType>;
 };
 
-export type UserNameBlacklistDto = {
-  id: string;
-  value: string;
-  matchType: MatchTypeEnum;
-  createdAt: Temporal.Instant;
-};
-
-export type UserPatchDto = {
-  name?: string | null;
-  email?: string | null;
-};
-
-export type UserSelfResponse = {
-  id: string;
-  name: string;
-  email: string;
-  image: string;
-  roles: Array<RoleType>;
-  rank: string;
-  hasPassword: boolean;
-};
-
-export type UserSelfResponseLegacyDataResponse = {
-  message: string;
-  data: UserSelfResponse;
-};
-
 export const UsernameAvailability = {
   Available: 'Available',
   Taken: 'Taken',
@@ -876,6 +991,13 @@ export const UsernameAvailability = {
 } as const;
 
 export type UsernameAvailability = (typeof UsernameAvailability)[keyof typeof UsernameAvailability];
+
+export type UserNameBlacklistDto = {
+  id: string;
+  value: string;
+  matchType: MatchTypeEnum;
+  createdAt: Temporal.Instant;
+};
 
 export type UsernameCheckResponse = {
   availability: UsernameAvailability;
@@ -898,6 +1020,26 @@ export const UsernameErrorType = {
 
 export type UsernameErrorType = (typeof UsernameErrorType)[keyof typeof UsernameErrorType];
 
+export type UserPatchDto = {
+  name?: string | null;
+  email?: string | null;
+};
+
+export type UserSelfResponse = {
+  id: string;
+  name: string;
+  email: string;
+  image: string;
+  roles: Array<RoleType>;
+  rank: string;
+  hasPassword: boolean;
+};
+
+export type UserSelfResponseLegacyDataResponse = {
+  message: string;
+  data: UserSelfResponse;
+};
+
 export type WebhookDto = {
   id: string;
   name: string;
@@ -905,23 +1047,53 @@ export type WebhookDto = {
   createdAt: Temporal.Instant;
 };
 
+/**
+ * Page of results for a paginated list endpoint.
+ */
 export type AuditLogEntryResponsePagedResultWritable = {
+  /**
+   * Items on the current page.
+   */
   items: Array<AuditLogEntryResponse>;
+  /**
+   * 1-based current page index.
+   */
   page: number;
+  /**
+   * Page size used to produce this result.
+   */
   pageSize: number;
+  /**
+   * Total number of items across all pages matching the query.
+   */
   totalCount: number;
 };
 
+/**
+ * Page of results for a paginated list endpoint.
+ */
 export type LogEntryWithHubPagedResultWritable = {
+  /**
+   * Items on the current page.
+   */
   items: Array<LogEntryWithHub>;
+  /**
+   * 1-based current page index.
+   */
   page: number;
+  /**
+   * Page size used to produce this result.
+   */
   pageSize: number;
+  /**
+   * Total number of items across all pages matching the query.
+   */
   totalCount: number;
 };
 
 export type OpenShockProblemWritable = {
-  type?: string | null;
-  title?: string | null;
+  type: string | null;
+  title: string | null;
   status?: number | null;
   detail?: string | null;
   instance?: string | null;
@@ -929,9 +1101,72 @@ export type OpenShockProblemWritable = {
   [key: string]: unknown;
 };
 
+export type VersionGetBackendInfoData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/1';
+};
+
+export type VersionGetBackendInfoResponses = {
+  /**
+   * The version was successfully retrieved.
+   */
+  200: BackendInfoResponseLegacyDataResponse;
+};
+
+export type VersionGetBackendInfoResponse =
+  VersionGetBackendInfoResponses[keyof VersionGetBackendInfoResponses];
+
+export type UsersGetSelfData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/1/users/self';
+};
+
+export type UsersGetSelfResponses = {
+  /**
+   * The user's information was successfully retrieved.
+   */
+  200: UserSelfResponseLegacyDataResponse;
+};
+
+export type UsersGetSelfResponse = UsersGetSelfResponses[keyof UsersGetSelfResponses];
+
+export type UsersGetByNameData = {
+  body?: never;
+  path: {
+    username: string;
+  };
+  query?: never;
+  url: '/1/users/by-name/{username}';
+};
+
+export type UsersGetByNameErrors = {
+  /**
+   * Not Found
+   */
+  404: OpenShockProblem;
+};
+
+export type UsersGetByNameError = UsersGetByNameErrors[keyof UsersGetByNameErrors];
+
+export type UsersGetByNameResponses = {
+  /**
+   * OK
+   */
+  200: BasicUserInfo;
+};
+
+export type UsersGetByNameResponse = UsersGetByNameResponses[keyof UsersGetByNameResponses];
+
 export type TokenDeleteDeleteTokenData = {
   body?: never;
   path: {
+    /**
+     * Revoke a token
+     */
     tokenId: string;
   };
   query?: never;
@@ -962,6 +1197,9 @@ export type TokenDeleteDeleteTokenResponses = {
 export type TokensGetTokenByIdData = {
   body?: never;
   path: {
+    /**
+     * Get a token by id
+     */
     tokenId: string;
   };
   query?: never;
@@ -988,8 +1226,11 @@ export type TokensGetTokenByIdResponse =
   TokensGetTokenByIdResponses[keyof TokensGetTokenByIdResponses];
 
 export type TokensEditTokenData = {
-  body?: EditTokenRequest;
+  body: EditTokenRequest;
   path: {
+    /**
+     * Edit a token
+     */
     tokenId: string;
   };
   query?: never;
@@ -1030,7 +1271,7 @@ export type TokensSelfGetSelfTokenResponse =
   TokensSelfGetSelfTokenResponses[keyof TokensSelfGetSelfTokenResponses];
 
 export type TokensReportTokensData = {
-  body?: ReportTokensRequest;
+  body: ReportTokensRequest;
   path?: never;
   query?: never;
   url: '/1/tokens/report';
@@ -1060,7 +1301,7 @@ export type TokensListTokensResponses = {
 export type TokensListTokensResponse = TokensListTokensResponses[keyof TokensListTokensResponses];
 
 export type TokensCreateTokenData = {
-  body?: CreateTokenRequest;
+  body: CreateTokenRequest;
   path?: never;
   query?: never;
   url: '/1/tokens';
@@ -1076,1148 +1317,917 @@ export type TokensCreateTokenResponses = {
 export type TokensCreateTokenResponse =
   TokensCreateTokenResponses[keyof TokensCreateTokenResponses];
 
-export type AccountActivateData = {
-  body?: never;
-  path?: never;
-  query?: {
-    token?: string;
-  };
-  url: '/1/account/activate';
-};
-
-export type AccountActivateErrors = {
-  /**
-   * Bad Request
-   */
-  400: OpenShockProblem;
-};
-
-export type AccountActivateError = AccountActivateErrors[keyof AccountActivateErrors];
-
-export type AccountActivateResponses = {
-  200: unknown;
-};
-
-export type AccountCheckUsernameData = {
-  body?: ChangeUsernameRequest;
-  path?: never;
-  query?: never;
-  url: '/1/account/username/check';
-};
-
-export type AccountCheckUsernameResponses = {
-  /**
-   * OK
-   */
-  200: UsernameCheckResponse;
-};
-
-export type AccountCheckUsernameResponse =
-  AccountCheckUsernameResponses[keyof AccountCheckUsernameResponses];
-
-export type AccountLogoutData = {
-  body?: never;
-  path?: never;
-  query?: never;
-  url: '/1/account/logout';
-};
-
-export type AccountLogoutResponses = {
-  /**
-   * OK
-   */
-  200: unknown;
-};
-
-export type AccountPasswordResetCheckValidData = {
+export type ShockerRemoveShockerData = {
   body?: never;
   path: {
     /**
-     * The id of the password reset
+     * Remove a shocker
      */
-    passwordResetId: string;
-    /**
-     * The secret of the password reset
-     */
-    secret: string;
+    shockerId: string;
   };
   query?: never;
-  url: '/1/account/password-reset/{passwordResetId}/{secret}';
+  url: '/1/shockers/{shockerId}';
 };
 
-export type AccountPasswordResetCheckValidErrors = {
+export type ShockerRemoveShockerErrors = {
   /**
-   * Password reset process not found
+   * Shocker does not exist
    */
   404: OpenShockProblem;
 };
 
-export type AccountPasswordResetCheckValidError =
-  AccountPasswordResetCheckValidErrors[keyof AccountPasswordResetCheckValidErrors];
+export type ShockerRemoveShockerError =
+  ShockerRemoveShockerErrors[keyof ShockerRemoveShockerErrors];
 
-export type AccountPasswordResetCheckValidResponses = {
+export type ShockerRemoveShockerResponses = {
   /**
-   * Valid password reset process
+   * Successfully deleted shocker
    */
   200: LegacyEmptyResponse;
 };
 
-export type AccountPasswordResetCheckValidResponse =
-  AccountPasswordResetCheckValidResponses[keyof AccountPasswordResetCheckValidResponses];
+export type ShockerRemoveShockerResponse =
+  ShockerRemoveShockerResponses[keyof ShockerRemoveShockerResponses];
 
-export type AccountPasswordResetCompleteData = {
-  body?: PasswordResetProcessData;
+export type ShockerGetShockerByIdData = {
+  body?: never;
   path: {
     /**
-     * The id of the password reset
+     * Get information about a shocker.
      */
-    passwordResetId: string;
-    /**
-     * The secret of the password reset
-     */
-    secret: string;
+    shockerId: string;
   };
   query?: never;
-  url: '/1/account/password-reset/{passwordResetId}/{secret}/complete';
+  url: '/1/shockers/{shockerId}';
 };
 
-export type AccountPasswordResetCompleteErrors = {
+export type ShockerGetShockerByIdErrors = {
   /**
-   * Password reset process not found
+   * The shocker does not exist or you do not have access to it.
    */
   404: OpenShockProblem;
 };
 
-export type AccountPasswordResetCompleteError =
-  AccountPasswordResetCompleteErrors[keyof AccountPasswordResetCompleteErrors];
+export type ShockerGetShockerByIdError =
+  ShockerGetShockerByIdErrors[keyof ShockerGetShockerByIdErrors];
 
-export type AccountPasswordResetCompleteResponses = {
+export type ShockerGetShockerByIdResponses = {
   /**
-   * Password successfully changed
+   * The shocker information was successfully retrieved.
+   */
+  200: ShockerWithDeviceLegacyDataResponse;
+};
+
+export type ShockerGetShockerByIdResponse =
+  ShockerGetShockerByIdResponses[keyof ShockerGetShockerByIdResponses];
+
+export type ShockerEditShockerData = {
+  body: NewShocker;
+  path: {
+    /**
+     * Edit a shocker
+     */
+    shockerId: string;
+  };
+  query?: never;
+  url: '/1/shockers/{shockerId}';
+};
+
+export type ShockerEditShockerErrors = {
+  /**
+   * Shocker does not exist
+   */
+  404: OpenShockProblem;
+};
+
+export type ShockerEditShockerError = ShockerEditShockerErrors[keyof ShockerEditShockerErrors];
+
+export type ShockerEditShockerResponses = {
+  /**
+   * Successfully updated shocker
    */
   200: LegacyEmptyResponse;
 };
 
-export type AccountPasswordResetCompleteResponse =
-  AccountPasswordResetCompleteResponses[keyof AccountPasswordResetCompleteResponses];
+export type ShockerEditShockerResponse =
+  ShockerEditShockerResponses[keyof ShockerEditShockerResponses];
 
-export type AccountEmailVerifyData = {
-  body?: never;
-  path?: never;
-  query?: {
-    token?: string;
-  };
-  url: '/1/account/email-change/verify';
-};
-
-export type AccountEmailVerifyErrors = {
-  /**
-   * Token is invalid, already used, or the request has expired
-   */
-  400: OpenShockProblem;
-  /**
-   * The new email address was claimed by another account before verification completed
-   */
-  409: OpenShockProblem;
-};
-
-export type AccountEmailVerifyError = AccountEmailVerifyErrors[keyof AccountEmailVerifyErrors];
-
-export type AccountEmailVerifyResponses = {
-  /**
-   * Email change verified and applied
-   */
-  200: unknown;
-};
-
-export type AccountEmailVerifyLegacyData = {
-  body?: never;
-  path?: never;
-  query?: {
-    token?: string;
-  };
-  url: '/1/account/verify-email';
-};
-
-export type AccountEmailVerifyLegacyErrors = {
-  /**
-   * Token is invalid, already used, or the request has expired
-   */
-  400: OpenShockProblem;
-  /**
-   * The new email address was claimed by another account before verification completed
-   */
-  409: OpenShockProblem;
-};
-
-export type AccountEmailVerifyLegacyError =
-  AccountEmailVerifyLegacyErrors[keyof AccountEmailVerifyLegacyErrors];
-
-export type AccountEmailVerifyLegacyResponses = {
-  /**
-   * Email change verified and applied
-   */
-  200: unknown;
-};
-
-export type AuthenticatedAccountChangeEmailData = {
-  body?: ChangeEmailRequest;
-  path?: never;
-  query?: never;
-  url: '/1/account/email-change';
-};
-
-export type AuthenticatedAccountChangeEmailErrors = {
-  /**
-   * Bad Request
-   */
-  400: OpenShockProblem;
-  /**
-   * Unauthorized
-   */
-  401: OpenShockProblem;
-  /**
-   * Forbidden
-   */
-  403: OpenShockProblem;
-  /**
-   * Conflict
-   */
-  409: OpenShockProblem;
-  /**
-   * Too Many Requests
-   */
-  429: OpenShockProblem;
-};
-
-export type AuthenticatedAccountChangeEmailError =
-  AuthenticatedAccountChangeEmailErrors[keyof AuthenticatedAccountChangeEmailErrors];
-
-export type AuthenticatedAccountChangeEmailResponses = {
-  /**
-   * OK
-   */
-  200: unknown;
-};
-
-export type AuthenticatedAccountChangePasswordData = {
-  body?: ChangePasswordRequest;
-  path?: never;
-  query?: never;
-  url: '/1/account/password';
-};
-
-export type AuthenticatedAccountChangePasswordErrors = {
-  /**
-   * Forbidden
-   */
-  403: OpenShockProblem;
-  /**
-   * Conflict
-   */
-  409: OpenShockProblem;
-};
-
-export type AuthenticatedAccountChangePasswordError =
-  AuthenticatedAccountChangePasswordErrors[keyof AuthenticatedAccountChangePasswordErrors];
-
-export type AuthenticatedAccountChangePasswordResponses = {
-  /**
-   * OK
-   */
-  200: unknown;
-};
-
-export type AuthenticatedAccountChangeUsernameData = {
-  body?: ChangeUsernameRequest;
-  path?: never;
-  query?: never;
-  url: '/1/account/username';
-};
-
-export type AuthenticatedAccountChangeUsernameErrors = {
-  /**
-   * Bad Request
-   */
-  400: OpenShockProblem;
-  /**
-   * Forbidden
-   */
-  403: OpenShockProblem;
-  /**
-   * Conflict
-   */
-  409: OpenShockProblem;
-};
-
-export type AuthenticatedAccountChangeUsernameError =
-  AuthenticatedAccountChangeUsernameErrors[keyof AuthenticatedAccountChangeUsernameErrors];
-
-export type AuthenticatedAccountChangeUsernameResponses = {
-  /**
-   * OK
-   */
-  200: unknown;
-};
-
-export type AuthenticatedAccountDeactivateData = {
-  body?: never;
-  path?: never;
-  query?: never;
-  url: '/1/account';
-};
-
-export type AuthenticatedAccountDeactivateErrors = {
-  /**
-   * Forbidden
-   */
-  403: OpenShockProblem;
-};
-
-export type AuthenticatedAccountDeactivateError =
-  AuthenticatedAccountDeactivateErrors[keyof AuthenticatedAccountDeactivateErrors];
-
-export type AuthenticatedAccountDeactivateResponses = {
-  /**
-   * Done.
-   */
-  204: void;
-};
-
-export type AuthenticatedAccountDeactivateResponse =
-  AuthenticatedAccountDeactivateResponses[keyof AuthenticatedAccountDeactivateResponses];
-
-export type AuthenticatedAccountGetAuditLogData = {
-  body?: never;
-  path?: never;
-  query?: {
-    page?: number;
-    pageSize?: number;
-    search?: string;
-    sort?: string;
-    sortDir?: SortDirection;
-  };
-  url: '/1/account/audit-log';
-};
-
-export type AuthenticatedAccountGetAuditLogResponses = {
-  /**
-   * A page of audit log entries.
-   */
-  200: AuditLogEntryResponsePagedResult;
-};
-
-export type AuthenticatedAccountGetAuditLogResponse =
-  AuthenticatedAccountGetAuditLogResponses[keyof AuthenticatedAccountGetAuditLogResponses];
-
-export type AuthenticatedAccountRemoveOAuthConnectionData = {
+export type ShockerGetShockerLogsData = {
   body?: never;
   path: {
     /**
-     * Provider key (e.g. `discord`).
+     * Get the logs for a shocker
      */
-    provider: string;
+    shockerId: string;
   };
-  query?: never;
-  url: '/1/account/connections/{provider}';
-};
-
-export type AuthenticatedAccountRemoveOAuthConnectionErrors = {
-  /**
-   * No connection found for this provider.
-   */
-  404: ProblemDetails;
-};
-
-export type AuthenticatedAccountRemoveOAuthConnectionError =
-  AuthenticatedAccountRemoveOAuthConnectionErrors[keyof AuthenticatedAccountRemoveOAuthConnectionErrors];
-
-export type AuthenticatedAccountRemoveOAuthConnectionResponses = {
-  /**
-   * Connection removed.
-   */
-  204: void;
-};
-
-export type AuthenticatedAccountRemoveOAuthConnectionResponse =
-  AuthenticatedAccountRemoveOAuthConnectionResponses[keyof AuthenticatedAccountRemoveOAuthConnectionResponses];
-
-export type AuthenticatedAccountListOAuthConnectionsData = {
-  body?: never;
-  path?: never;
-  query?: never;
-  url: '/1/account/connections';
-};
-
-export type AuthenticatedAccountListOAuthConnectionsResponses = {
-  /**
-   * Returns the list of connections.
-   */
-  200: Array<OAuthConnectionResponse>;
-};
-
-export type AuthenticatedAccountListOAuthConnectionsResponse =
-  AuthenticatedAccountListOAuthConnectionsResponses[keyof AuthenticatedAccountListOAuthConnectionsResponses];
-
-export type AdminConfigurationListData = {
-  body?: never;
-  path?: never;
-  query?: never;
-  url: '/1/admin/config';
-};
-
-export type AdminConfigurationListErrors = {
-  /**
-   * Unauthorized
-   */
-  401: unknown;
-};
-
-export type AdminConfigurationListResponses = {
-  200: Array<ConfigurationItemDto>;
-};
-
-export type AdminConfigurationListResponse =
-  AdminConfigurationListResponses[keyof AdminConfigurationListResponses];
-
-export type AdminConfigurationAddData = {
-  body?: ConfigurationAddItemRequest;
-  path?: never;
-  query?: never;
-  url: '/1/admin/config';
-};
-
-export type AdminConfigurationAddErrors = {
-  /**
-   * Invalid name or value format
-   */
-  400: OpenShockProblem;
-  /**
-   * Unauthorized
-   */
-  401: unknown;
-  /**
-   * Already exists
-   */
-  409: OpenShockProblem;
-};
-
-export type AdminConfigurationAddError =
-  AdminConfigurationAddErrors[keyof AdminConfigurationAddErrors];
-
-export type AdminConfigurationAddResponses = {
-  /**
-   * Configuration added
-   */
-  200: unknown;
-};
-
-export type AdminConfigurationUpdateData = {
-  body?: ConfigurationUpdateItemRequest;
-  path?: never;
-  query?: never;
-  url: '/1/admin/config';
-};
-
-export type AdminConfigurationUpdateErrors = {
-  /**
-   * Invalid name or value format or type mismatch
-   */
-  400: OpenShockProblem;
-  /**
-   * Unauthorized
-   */
-  401: unknown;
-  /**
-   * Not found
-   */
-  404: OpenShockProblem;
-  /**
-   * Conflict
-   */
-  409: OpenShockProblem;
-};
-
-export type AdminConfigurationUpdateError =
-  AdminConfigurationUpdateErrors[keyof AdminConfigurationUpdateErrors];
-
-export type AdminConfigurationUpdateResponses = {
-  /**
-   * Configuration updated (or nothing to do)
-   */
-  200: unknown;
-};
-
-export type AdminConfigurationDeleteData = {
-  body?: never;
-  path: {
-    name: string;
+  query?: {
+    /**
+     * Get the logs for a shocker
+     */
+    offset?: number;
+    /**
+     * Get the logs for a shocker
+     */
+    limit?: number;
   };
-  query?: never;
-  url: '/1/admin/config/{name}';
+  url: '/1/shockers/{shockerId}/logs';
 };
 
-export type AdminConfigurationDeleteErrors = {
+export type ShockerGetShockerLogsErrors = {
   /**
-   * Invalid name format
-   */
-  400: OpenShockProblem;
-  /**
-   * Unauthorized
-   */
-  401: unknown;
-  /**
-   * Not found
+   * Shocker does not exist
    */
   404: OpenShockProblem;
 };
 
-export type AdminConfigurationDeleteError =
-  AdminConfigurationDeleteErrors[keyof AdminConfigurationDeleteErrors];
+export type ShockerGetShockerLogsError =
+  ShockerGetShockerLogsErrors[keyof ShockerGetShockerLogsErrors];
 
-export type AdminConfigurationDeleteResponses = {
+export type ShockerGetShockerLogsResponses = {
   /**
-   * Configuration deleted
+   * The logs
    */
-  200: unknown;
+  200: LogEntryArrayLegacyDataResponse;
 };
 
-export type AdminDeactivateUserData = {
-  body?: never;
-  path: {
-    userId: string;
-  };
-  query?: {
-    deleteLater?: boolean;
-    reason?: string;
-  };
-  url: '/1/admin/users/{userId}/deactivate';
-};
+export type ShockerGetShockerLogsResponse =
+  ShockerGetShockerLogsResponses[keyof ShockerGetShockerLogsResponses];
 
-export type AdminDeactivateUserErrors = {
-  /**
-   * Unauthorized
-   */
-  401: unknown;
-};
-
-export type AdminDeactivateUserResponses = {
-  /**
-   * OK
-   */
-  200: unknown;
-};
-
-export type AdminDeleteUserData = {
-  body?: never;
-  path: {
-    userId: string;
-  };
-  query?: {
-    reason?: string;
-  };
-  url: '/1/admin/users/{userId}';
-};
-
-export type AdminDeleteUserErrors = {
-  /**
-   * Unauthorized
-   */
-  401: unknown;
-};
-
-export type AdminDeleteUserResponses = {
-  /**
-   * OK
-   */
-  200: unknown;
-};
-
-export type AdminModifyUserData = {
-  body?: UserPatchDto;
-  path: {
-    userId: string;
-  };
-  query?: never;
-  url: '/1/admin/users/{userId}';
-};
-
-export type AdminModifyUserErrors = {
-  /**
-   * Unauthorized
-   */
-  401: unknown;
-  /**
-   * Not found
-   */
-  404: unknown;
-};
-
-export type AdminModifyUserResponses = {
-  /**
-   * OK
-   */
-  200: unknown;
-};
-
-export type AdminBulkRequeueEmailOutboxData = {
-  body?: EmailOutboxBulkRequest;
-  path?: never;
-  query?: never;
-  url: '/1/admin/email/outbox/bulk/requeue';
-};
-
-export type AdminBulkRequeueEmailOutboxErrors = {
-  /**
-   * Unauthorized
-   */
-  401: unknown;
-};
-
-export type AdminBulkRequeueEmailOutboxResponses = {
-  /**
-   * Bulk requeue applied
-   */
-  200: EmailOutboxBulkResultDto;
-};
-
-export type AdminBulkRequeueEmailOutboxResponse =
-  AdminBulkRequeueEmailOutboxResponses[keyof AdminBulkRequeueEmailOutboxResponses];
-
-export type AdminBulkCancelEmailOutboxData = {
-  body?: EmailOutboxBulkRequest;
-  path?: never;
-  query?: never;
-  url: '/1/admin/email/outbox/bulk/cancel';
-};
-
-export type AdminBulkCancelEmailOutboxErrors = {
-  /**
-   * Unauthorized
-   */
-  401: unknown;
-};
-
-export type AdminBulkCancelEmailOutboxResponses = {
-  /**
-   * Bulk cancel applied
-   */
-  200: EmailOutboxBulkResultDto;
-};
-
-export type AdminBulkCancelEmailOutboxResponse =
-  AdminBulkCancelEmailOutboxResponses[keyof AdminBulkCancelEmailOutboxResponses];
-
-export type AdminBulkDeleteEmailOutboxData = {
-  body?: EmailOutboxBulkRequest;
-  path?: never;
-  query?: never;
-  url: '/1/admin/email/outbox/bulk/delete';
-};
-
-export type AdminBulkDeleteEmailOutboxErrors = {
-  /**
-   * Unauthorized
-   */
-  401: unknown;
-};
-
-export type AdminBulkDeleteEmailOutboxResponses = {
-  /**
-   * Bulk delete applied
-   */
-  200: EmailOutboxBulkResultDto;
-};
-
-export type AdminBulkDeleteEmailOutboxResponse =
-  AdminBulkDeleteEmailOutboxResponses[keyof AdminBulkDeleteEmailOutboxResponses];
-
-export type AdminCancelEmailOutboxData = {
-  body?: never;
-  path: {
-    id: string;
-  };
-  query?: never;
-  url: '/1/admin/email/outbox/{id}/cancel';
-};
-
-export type AdminCancelEmailOutboxErrors = {
-  /**
-   * Unauthorized
-   */
-  401: unknown;
-  /**
-   * No such message
-   */
-  404: ProblemDetails;
-  /**
-   * Message is not pending
-   */
-  409: ProblemDetails;
-};
-
-export type AdminCancelEmailOutboxError =
-  AdminCancelEmailOutboxErrors[keyof AdminCancelEmailOutboxErrors];
-
-export type AdminCancelEmailOutboxResponses = {
-  /**
-   * Cancelled
-   */
-  200: unknown;
-};
-
-export type AdminDeleteEmailOutboxData = {
-  body?: never;
-  path: {
-    id: string;
-  };
-  query?: never;
-  url: '/1/admin/email/outbox/{id}';
-};
-
-export type AdminDeleteEmailOutboxErrors = {
-  /**
-   * Unauthorized
-   */
-  401: unknown;
-  /**
-   * No such message
-   */
-  404: ProblemDetails;
-};
-
-export type AdminDeleteEmailOutboxError =
-  AdminDeleteEmailOutboxErrors[keyof AdminDeleteEmailOutboxErrors];
-
-export type AdminDeleteEmailOutboxResponses = {
-  /**
-   * Deleted
-   */
-  200: unknown;
-};
-
-export type AdminGetEmailOutboxData = {
+export type ShockerGetAllShockerLogsData = {
   body?: never;
   path?: never;
   query?: {
-    $filter?: string;
-    $orderby?: string;
-    $offset?: number;
-    $limit?: number;
-  };
-  url: '/1/admin/email/outbox';
-};
-
-export type AdminGetEmailOutboxErrors = {
-  /**
-   * Unauthorized
-   */
-  401: unknown;
-};
-
-export type AdminGetEmailOutboxResponses = {
-  /**
-   * Paginated email outbox messages
-   */
-  200: EmailOutboxMessageDtoPaginated;
-};
-
-export type AdminGetEmailOutboxResponse =
-  AdminGetEmailOutboxResponses[keyof AdminGetEmailOutboxResponses];
-
-export type AdminRequeueEmailOutboxData = {
-  body?: never;
-  path: {
-    id: string;
-  };
-  query?: never;
-  url: '/1/admin/email/outbox/{id}/requeue';
-};
-
-export type AdminRequeueEmailOutboxErrors = {
-  /**
-   * Unauthorized
-   */
-  401: unknown;
-  /**
-   * No such message
-   */
-  404: ProblemDetails;
-  /**
-   * Message is pending or currently being sent
-   */
-  409: ProblemDetails;
-};
-
-export type AdminRequeueEmailOutboxError =
-  AdminRequeueEmailOutboxErrors[keyof AdminRequeueEmailOutboxErrors];
-
-export type AdminRequeueEmailOutboxResponses = {
-  /**
-   * Requeued
-   */
-  200: unknown;
-};
-
-export type AdminGetEmailOutboxStatsData = {
-  body?: never;
-  path?: never;
-  query?: never;
-  url: '/1/admin/email/outbox/stats';
-};
-
-export type AdminGetEmailOutboxStatsErrors = {
-  /**
-   * Unauthorized
-   */
-  401: unknown;
-};
-
-export type AdminGetEmailOutboxStatsResponses = {
-  /**
-   * Per-status counts
-   */
-  200: EmailOutboxStatsDto;
-};
-
-export type AdminGetEmailOutboxStatsResponse =
-  AdminGetEmailOutboxStatsResponses[keyof AdminGetEmailOutboxStatsResponses];
-
-export type AdminSendTestEmailData = {
-  body?: SendTestEmailDto;
-  path?: never;
-  query?: never;
-  url: '/1/admin/email/test';
-};
-
-export type AdminSendTestEmailErrors = {
-  /**
-   * Invalid recipient address
-   */
-  400: ProblemDetails;
-  /**
-   * Unauthorized
-   */
-  401: unknown;
-};
-
-export type AdminSendTestEmailError = AdminSendTestEmailErrors[keyof AdminSendTestEmailErrors];
-
-export type AdminSendTestEmailResponses = {
-  /**
-   * Test email enqueued
-   */
-  200: EmailOutboxMessageDto;
-};
-
-export type AdminSendTestEmailResponse =
-  AdminSendTestEmailResponses[keyof AdminSendTestEmailResponses];
-
-export type AdminListEmailProviderBlacklistData = {
-  body?: never;
-  path?: never;
-  query?: {
-    match?: string;
-  };
-  url: '/1/admin/blacklist/emailProviders';
-};
-
-export type AdminListEmailProviderBlacklistResponses = {
-  /**
-   * OK
-   */
-  200: Array<EmailProviderBlacklistDto>;
-};
-
-export type AdminListEmailProviderBlacklistResponse =
-  AdminListEmailProviderBlacklistResponses[keyof AdminListEmailProviderBlacklistResponses];
-
-export type AdminAddEmailProviderBlacklistData = {
-  body?: AddEmailProviderBlacklistDto;
-  path?: never;
-  query?: never;
-  url: '/1/admin/blacklist/emailProviders';
-};
-
-export type AdminAddEmailProviderBlacklistResponses = {
-  /**
-   * OK
-   */
-  200: unknown;
-};
-
-export type AdminRemoveEmailProviderBlacklistData = {
-  body?: never;
-  path: {
-    id: string;
-  };
-  query?: never;
-  url: '/1/admin/blacklist/emailProviders/{id}';
-};
-
-export type AdminRemoveEmailProviderBlacklistErrors = {
-  /**
-   * Not Found
-   */
-  404: ProblemDetails;
-};
-
-export type AdminRemoveEmailProviderBlacklistError =
-  AdminRemoveEmailProviderBlacklistErrors[keyof AdminRemoveEmailProviderBlacklistErrors];
-
-export type AdminRemoveEmailProviderBlacklistResponses = {
-  /**
-   * OK
-   */
-  200: unknown;
-};
-
-export type AdminGetAdminAuditLogData = {
-  body?: never;
-  path?: never;
-  query?: {
+    /**
+     * Page, sort, and search parameters. Supported sort keys: createdOn (default), intensity, duration, type, hubName, shockerName.
+     */
     page?: number;
+    /**
+     * Page, sort, and search parameters. Supported sort keys: createdOn (default), intensity, duration, type, hubName, shockerName.
+     */
     pageSize?: number;
+    /**
+     * Page, sort, and search parameters. Supported sort keys: createdOn (default), intensity, duration, type, hubName, shockerName.
+     */
     search?: string;
+    /**
+     * Page, sort, and search parameters. Supported sort keys: createdOn (default), intensity, duration, type, hubName, shockerName.
+     */
     sort?: string;
+    /**
+     * Page, sort, and search parameters. Supported sort keys: createdOn (default), intensity, duration, type, hubName, shockerName.
+     */
     sortDir?: SortDirection;
     /**
-     * Optional: filter by the subject user (the account that was affected).
+     * Optional shocker ID filter. When omitted or empty, logs for all of the caller's shockers are returned.
      */
-    userId?: string;
+    shockerIds?: Array<string>;
+  };
+  url: '/1/shockers/logs';
+};
+
+export type ShockerGetAllShockerLogsResponses = {
+  /**
+   * A page of logs.
+   */
+  200: LogEntryWithHubPagedResult;
+};
+
+export type ShockerGetAllShockerLogsResponse =
+  ShockerGetAllShockerLogsResponses[keyof ShockerGetAllShockerLogsResponses];
+
+export type ShockerListSharedShockersData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/1/shockers/shared';
+};
+
+export type ShockerListSharedShockersResponses = {
+  /**
+   * The shockers were successfully retrieved.
+   */
+  200: OwnerShockerResponseArrayLegacyDataResponse;
+};
+
+export type ShockerListSharedShockersResponse =
+  ShockerListSharedShockersResponses[keyof ShockerListSharedShockersResponses];
+
+export type ShockerListShockersData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/1/shockers/own';
+};
+
+export type ShockerListShockersResponses = {
+  /**
+   * The shockers were successfully retrieved.
+   */
+  200: DeviceWithShockersResponseArrayLegacyDataResponse;
+};
+
+export type ShockerListShockersResponse =
+  ShockerListShockersResponses[keyof ShockerListShockersResponses];
+
+export type ShockerPauseShockerData = {
+  body: PauseRequest;
+  path: {
     /**
-     * Optional: filter by the actor (who performed the action).
+     * Pause or unpause a shocker
      */
-    actorId?: string;
-  };
-  url: '/1/admin/audit-log';
-};
-
-export type AdminGetAdminAuditLogResponses = {
-  /**
-   * A page of audit log entries.
-   */
-  200: AuditLogEntryResponsePagedResult;
-};
-
-export type AdminGetAdminAuditLogResponse =
-  AdminGetAdminAuditLogResponses[keyof AdminGetAdminAuditLogResponses];
-
-export type AdminGetOnlineDevicesData = {
-  body?: never;
-  path?: never;
-  query?: never;
-  url: '/1/admin/monitoring/onlineDevices';
-};
-
-export type AdminGetOnlineDevicesErrors = {
-  /**
-   * Unauthorized
-   */
-  401: unknown;
-};
-
-export type AdminGetOnlineDevicesResponses = {
-  /**
-   * All online devices
-   */
-  200: AdminOnlineDeviceResponseArrayLegacyDataResponse;
-};
-
-export type AdminGetOnlineDevicesResponse =
-  AdminGetOnlineDevicesResponses[keyof AdminGetOnlineDevicesResponses];
-
-export type AdminGetUsersData = {
-  body?: never;
-  path?: never;
-  query?: {
-    $filter?: string;
-    $orderby?: string;
-    $offset?: number;
-    $limit?: number;
-  };
-  url: '/1/admin/users';
-};
-
-export type AdminGetUsersErrors = {
-  /**
-   * Unauthorized
-   */
-  401: unknown;
-};
-
-export type AdminGetUsersResponses = {
-  /**
-   * Paginated users
-   */
-  200: AdminUsersViewPaginated;
-};
-
-export type AdminGetUsersResponse = AdminGetUsersResponses[keyof AdminGetUsersResponses];
-
-export type AdminReactivateUserData = {
-  body?: never;
-  path: {
-    userId: string;
-  };
-  query?: {
-    reason?: string;
-  };
-  url: '/1/admin/users/{userId}/reactivate';
-};
-
-export type AdminReactivateUserErrors = {
-  /**
-   * Unauthorized
-   */
-  401: unknown;
-};
-
-export type AdminReactivateUserResponses = {
-  /**
-   * OK
-   */
-  200: unknown;
-};
-
-export type AdminListUsernameBlacklistData = {
-  body?: never;
-  path?: never;
-  query?: {
-    match?: string;
-  };
-  url: '/1/admin/blacklist/usernames';
-};
-
-export type AdminListUsernameBlacklistResponses = {
-  /**
-   * OK
-   */
-  200: Array<UserNameBlacklistDto>;
-};
-
-export type AdminListUsernameBlacklistResponse =
-  AdminListUsernameBlacklistResponses[keyof AdminListUsernameBlacklistResponses];
-
-export type AdminAddUsernameBlacklistData = {
-  body?: AddUsernameBlacklistDto;
-  path?: never;
-  query?: never;
-  url: '/1/admin/blacklist/usernames';
-};
-
-export type AdminAddUsernameBlacklistResponses = {
-  /**
-   * OK
-   */
-  200: unknown;
-};
-
-export type AdminRemoveUsernameBlacklistData = {
-  body?: never;
-  path: {
-    id: string;
+    shockerId: string;
   };
   query?: never;
-  url: '/1/admin/blacklist/usernames/{id}';
+  url: '/1/shockers/{shockerId}/pause';
 };
 
-export type AdminRemoveUsernameBlacklistErrors = {
+export type ShockerPauseShockerErrors = {
+  /**
+   * Shocker not found or does not belong to you
+   */
+  404: OpenShockProblem;
+};
+
+export type ShockerPauseShockerError = ShockerPauseShockerErrors[keyof ShockerPauseShockerErrors];
+
+export type ShockerPauseShockerResponses = {
+  /**
+   * Successfully set pause state
+   */
+  200: BooleanLegacyDataResponse;
+};
+
+export type ShockerPauseShockerResponse =
+  ShockerPauseShockerResponses[keyof ShockerPauseShockerResponses];
+
+export type ShockerRegisterShockerData = {
+  body: NewShocker;
+  path?: never;
+  query?: never;
+  url: '/1/shockers';
+};
+
+export type ShockerRegisterShockerErrors = {
+  /**
+   * You can have a maximum of 11 Shockers per Device.
+   */
+  400: OpenShockProblem;
+  /**
+   * Device does not exist
+   */
+  404: OpenShockProblem;
+};
+
+export type ShockerRegisterShockerError =
+  ShockerRegisterShockerErrors[keyof ShockerRegisterShockerErrors];
+
+export type ShockerRegisterShockerResponses = {
+  /**
+   * Successfully created shocker
+   */
+  201: GuidLegacyDataResponse;
+};
+
+export type ShockerRegisterShockerResponse =
+  ShockerRegisterShockerResponses[keyof ShockerRegisterShockerResponses];
+
+export type ShockerSendControlDeprecatedData = {
+  body: Array<Control>;
+  path?: never;
+  query?: never;
+  url: '/1/shockers/control';
+};
+
+export type ShockerSendControlDeprecatedErrors = {
+  /**
+   * Forbidden
+   */
+  403: OpenShockProblem;
   /**
    * Not Found
    */
-  404: ProblemDetails;
-};
-
-export type AdminRemoveUsernameBlacklistError =
-  AdminRemoveUsernameBlacklistErrors[keyof AdminRemoveUsernameBlacklistErrors];
-
-export type AdminRemoveUsernameBlacklistResponses = {
+  404: OpenShockProblem;
   /**
-   * OK
+   * Precondition Failed
    */
-  200: unknown;
+  412: OpenShockProblem;
 };
 
-export type AdminListWebhooksData = {
-  body?: never;
-  path?: never;
-  query?: never;
-  url: '/1/admin/webhooks';
-};
+export type ShockerSendControlDeprecatedError =
+  ShockerSendControlDeprecatedErrors[keyof ShockerSendControlDeprecatedErrors];
 
-export type AdminListWebhooksErrors = {
+export type ShockerSendControlDeprecatedResponses = {
   /**
-   * Unauthorized
+   * The control messages were successfully sent.
    */
-  401: unknown;
+  200: LegacyEmptyResponse;
 };
 
-export type AdminListWebhooksResponses = {
-  /**
-   * OK
-   */
-  200: Array<WebhookDto>;
-};
+export type ShockerSendControlDeprecatedResponse =
+  ShockerSendControlDeprecatedResponses[keyof ShockerSendControlDeprecatedResponses];
 
-export type AdminListWebhooksResponse =
-  AdminListWebhooksResponses[keyof AdminListWebhooksResponses];
-
-export type AdminAddWebhookData = {
-  body?: AddWebhookDto;
-  path?: never;
-  query?: never;
-  url: '/1/admin/webhooks';
-};
-
-export type AdminAddWebhookErrors = {
-  /**
-   * Bad Request
-   */
-  400: ProblemDetails;
-  /**
-   * Unauthorized
-   */
-  401: unknown;
-};
-
-export type AdminAddWebhookError = AdminAddWebhookErrors[keyof AdminAddWebhookErrors];
-
-export type AdminAddWebhookResponses = {
-  /**
-   * OK
-   */
-  200: unknown;
-};
-
-export type AdminRemoveWebhookData = {
+export type ShockerGetUserSharesData = {
   body?: never;
   path: {
-    id: string;
+    /**
+     * Id of the shocker
+     */
+    shockerId: string;
   };
   query?: never;
-  url: '/1/admin/webhooks/{id}';
+  url: '/1/shockers/{shockerId}/shares';
 };
 
-export type AdminRemoveWebhookErrors = {
+export type ShockerGetUserSharesErrors = {
   /**
-   * Unauthorized
+   * The shocker does not exist or you do not have access to it.
    */
-  401: unknown;
+  404: OpenShockProblem;
+};
+
+export type ShockerGetUserSharesError =
+  ShockerGetUserSharesErrors[keyof ShockerGetUserSharesErrors];
+
+export type ShockerGetUserSharesResponses = {
+  /**
+   * OK
+   */
+  200: ShareInfoArrayLegacyDataResponse;
+};
+
+export type ShockerGetUserSharesResponse =
+  ShockerGetUserSharesResponses[keyof ShockerGetUserSharesResponses];
+
+export type ShockerShockerShareCodeCreateData = {
+  body: ShockerPermLimitPair;
+  path: {
+    /**
+     * Create a share code for a shocker
+     */
+    shockerId: string;
+  };
+  query?: never;
+  url: '/1/shockers/{shockerId}/shares';
+};
+
+export type ShockerShockerShareCodeCreateErrors = {
+  /**
+   * Shocker does not exists or you do not have access to it.
+   */
+  404: OpenShockProblem;
+};
+
+export type ShockerShockerShareCodeCreateError =
+  ShockerShockerShareCodeCreateErrors[keyof ShockerShockerShareCodeCreateErrors];
+
+export type ShockerShockerShareCodeCreateResponses = {
+  /**
+   * The share code was successfully created.
+   */
+  200: GuidLegacyDataResponse;
+};
+
+export type ShockerShockerShareCodeCreateResponse =
+  ShockerShockerShareCodeCreateResponses[keyof ShockerShockerShareCodeCreateResponses];
+
+export type ShockerShockerShareCodeListData = {
+  body?: never;
+  path: {
+    /**
+     * List all share codes for a shocker
+     */
+    shockerId: string;
+  };
+  query?: never;
+  url: '/1/shockers/{shockerId}/shareCodes';
+};
+
+export type ShockerShockerShareCodeListErrors = {
   /**
    * Not Found
    */
-  404: ProblemDetails;
+  404: OpenShockProblem;
 };
 
-export type AdminRemoveWebhookError = AdminRemoveWebhookErrors[keyof AdminRemoveWebhookErrors];
+export type ShockerShockerShareCodeListError =
+  ShockerShockerShareCodeListErrors[keyof ShockerShockerShareCodeListErrors];
 
-export type AdminRemoveWebhookResponses = {
+export type ShockerShockerShareCodeListResponses = {
+  /**
+   * OK
+   */
+  200: ShareCodeInfoArrayLegacyDataResponse;
+};
+
+export type ShockerShockerShareCodeListResponse =
+  ShockerShockerShareCodeListResponses[keyof ShockerShockerShareCodeListResponses];
+
+export type ShockerShockerShareRemoveData = {
+  body?: never;
+  path: {
+    /**
+     * Remove a share for a shocker
+     */
+    shockerId: string;
+    /**
+     * Remove a share for a shocker
+     */
+    sharedWithUserId: string;
+  };
+  query?: never;
+  url: '/1/shockers/{shockerId}/shares/{sharedWithUserId}';
+};
+
+export type ShockerShockerShareRemoveErrors = {
+  /**
+   * Share does not exists or device/shocker does not belong to you nor is shared with you
+   */
+  404: OpenShockProblem;
+};
+
+export type ShockerShockerShareRemoveError =
+  ShockerShockerShareRemoveErrors[keyof ShockerShockerShareRemoveErrors];
+
+export type ShockerShockerShareRemoveResponses = {
+  /**
+   * Successfully removed share code
+   */
+  200: unknown;
+};
+
+export type ShockerShockerShareCodeUpdateData = {
+  body: ShockerPermLimitPair;
+  path: {
+    /**
+     * Update a share for a shocker
+     */
+    shockerId: string;
+    /**
+     * Update a share for a shocker
+     */
+    sharedWithUserId: string;
+  };
+  query?: never;
+  url: '/1/shockers/{shockerId}/shares/{sharedWithUserId}';
+};
+
+export type ShockerShockerShareCodeUpdateErrors = {
+  /**
+   * The share code does not exist or you do not have access to it.
+   */
+  404: OpenShockProblem;
+};
+
+export type ShockerShockerShareCodeUpdateError =
+  ShockerShockerShareCodeUpdateErrors[keyof ShockerShockerShareCodeUpdateErrors];
+
+export type ShockerShockerShareCodeUpdateResponses = {
+  /**
+   * Successfully updated share code
+   */
+  200: unknown;
+};
+
+export type ShockerShockerShareCodePauseData = {
+  body: PauseRequest;
+  path: {
+    /**
+     * Pause/Unpause a share code for a shocker
+     */
+    shockerId: string;
+    /**
+     * Pause/Unpause a share code for a shocker
+     */
+    sharedWithUserId: string;
+  };
+  query?: never;
+  url: '/1/shockers/{shockerId}/shares/{sharedWithUserId}/pause';
+};
+
+export type ShockerShockerShareCodePauseErrors = {
+  /**
+   * The share code does not exist or you do not have access to it.
+   */
+  404: OpenShockProblem;
+};
+
+export type ShockerShockerShareCodePauseError =
+  ShockerShockerShareCodePauseErrors[keyof ShockerShockerShareCodePauseErrors];
+
+export type ShockerShockerShareCodePauseResponses = {
+  /**
+   * Successfully updated pause status share
+   */
+  200: BooleanLegacyDataResponse;
+};
+
+export type ShockerShockerShareCodePauseResponse =
+  ShockerShockerShareCodePauseResponses[keyof ShockerShockerShareCodePauseResponses];
+
+export type SharesDeleteShareCodeData = {
+  body?: never;
+  path: {
+    /**
+     * Delete a share code
+     */
+    shareCodeId: string;
+  };
+  query?: never;
+  url: '/1/shares/code/{shareCodeId}';
+};
+
+export type SharesDeleteShareCodeErrors = {
+  /**
+   * Share code not found or does not belong to you
+   */
+  404: OpenShockProblem;
+};
+
+export type SharesDeleteShareCodeError =
+  SharesDeleteShareCodeErrors[keyof SharesDeleteShareCodeErrors];
+
+export type SharesDeleteShareCodeResponses = {
+  /**
+   * Deleted share code
+   */
+  200: LegacyEmptyResponse;
+};
+
+export type SharesDeleteShareCodeResponse =
+  SharesDeleteShareCodeResponses[keyof SharesDeleteShareCodeResponses];
+
+export type SharesLinkShareCodeData = {
+  body?: never;
+  path: {
+    /**
+     * Link a share code to your account
+     */
+    shareCodeId: string;
+  };
+  query?: never;
+  url: '/1/shares/code/{shareCodeId}';
+};
+
+export type SharesLinkShareCodeErrors = {
+  /**
+   * You cannot link your own shocker code / You already have this shocker linked to your account
+   */
+  400: OpenShockProblem;
+  /**
+   * Share code not found or does not belong to you
+   */
+  404: OpenShockProblem;
+  /**
+   * Error while linking share code to your account
+   */
+  500: unknown;
+};
+
+export type SharesLinkShareCodeError = SharesLinkShareCodeErrors[keyof SharesLinkShareCodeErrors];
+
+export type SharesLinkShareCodeResponses = {
+  /**
+   * Linked share code
+   */
+  200: LegacyEmptyResponse;
+};
+
+export type SharesLinkShareCodeResponse =
+  SharesLinkShareCodeResponses[keyof SharesLinkShareCodeResponses];
+
+export type ShareLinksRemoveShockerData = {
+  body?: never;
+  path: {
+    /**
+     * Remove a shocker from a public share
+     */
+    publicShareId: string;
+    /**
+     * Remove a shocker from a public share
+     */
+    shockerId: string;
+  };
+  query?: never;
+  url: '/1/shares/links/{publicShareId}/{shockerId}';
+};
+
+export type ShareLinksRemoveShockerErrors = {
+  /**
+   * Shocker does not exist in public share
+   */
+  400: unknown;
+  /**
+   * Public share or shocker does not exist
+   */
+  404: OpenShockProblem;
+};
+
+export type ShareLinksRemoveShockerError =
+  ShareLinksRemoveShockerErrors[keyof ShareLinksRemoveShockerErrors];
+
+export type ShareLinksRemoveShockerResponses = {
+  /**
+   * Successfully removed shocker
+   */
+  200: LegacyEmptyResponse;
+};
+
+export type ShareLinksRemoveShockerResponse =
+  ShareLinksRemoveShockerResponses[keyof ShareLinksRemoveShockerResponses];
+
+export type ShareLinksEditShockerData = {
+  body: PublicShareEditShocker;
+  path: {
+    /**
+     * Edit a shocker in a public share
+     */
+    publicShareId: string;
+    /**
+     * Edit a shocker in a public share
+     */
+    shockerId: string;
+  };
+  query?: never;
+  url: '/1/shares/links/{publicShareId}/{shockerId}';
+};
+
+export type ShareLinksEditShockerErrors = {
+  /**
+   * Shocker does not exist in public share
+   */
+  400: unknown;
+  /**
+   * Public share or shocker does not exist
+   */
+  404: OpenShockProblem;
+};
+
+export type ShareLinksEditShockerError =
+  ShareLinksEditShockerErrors[keyof ShareLinksEditShockerErrors];
+
+export type ShareLinksEditShockerResponses = {
+  /**
+   * Successfully updated shocker
+   */
+  200: string;
+};
+
+export type ShareLinksEditShockerResponse =
+  ShareLinksEditShockerResponses[keyof ShareLinksEditShockerResponses];
+
+export type ShareLinksAddShockerData = {
+  body?: never;
+  path: {
+    /**
+     * Add a shocker to a public share
+     */
+    publicShareId: string;
+    /**
+     * Add a shocker to a public share
+     */
+    shockerId: string;
+  };
+  query?: never;
+  url: '/1/shares/links/{publicShareId}/{shockerId}';
+};
+
+export type ShareLinksAddShockerErrors = {
+  /**
+   * Public share or shocker does not exist
+   */
+  404: OpenShockProblem;
+  /**
+   * Shocker already exists in public share
+   */
+  409: OpenShockProblem;
+};
+
+export type ShareLinksAddShockerError =
+  ShareLinksAddShockerErrors[keyof ShareLinksAddShockerErrors];
+
+export type ShareLinksAddShockerResponses = {
+  /**
+   * Successfully added shocker
+   */
+  200: LegacyEmptyResponse;
+};
+
+export type ShareLinksAddShockerResponse =
+  ShareLinksAddShockerResponses[keyof ShareLinksAddShockerResponses];
+
+export type ShareLinksListData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/1/shares/links';
+};
+
+export type ShareLinksListResponses = {
+  /**
+   * All public shares for the current user
+   */
+  200: OwnPublicShareResponseArrayLegacyDataResponse;
+};
+
+export type ShareLinksListResponse = ShareLinksListResponses[keyof ShareLinksListResponses];
+
+export type ShareLinksCreatePublicShareData = {
+  body: PublicShareCreate;
+  path?: never;
+  query?: never;
+  url: '/1/shares/links';
+};
+
+export type ShareLinksCreatePublicShareResponses = {
+  /**
+   * The created public share
+   */
+  200: GuidLegacyDataResponse;
+};
+
+export type ShareLinksCreatePublicShareResponse =
+  ShareLinksCreatePublicShareResponses[keyof ShareLinksCreatePublicShareResponses];
+
+export type ShareLinksDeletePublicShareData = {
+  body?: never;
+  path: {
+    /**
+     * Deletes a public share
+     */
+    publicShareId: string;
+  };
+  query?: never;
+  url: '/1/shares/links/{publicShareId}';
+};
+
+export type ShareLinksDeletePublicShareErrors = {
+  /**
+   * Public share not found or does not belong to you
+   */
+  404: OpenShockProblem;
+};
+
+export type ShareLinksDeletePublicShareError =
+  ShareLinksDeletePublicShareErrors[keyof ShareLinksDeletePublicShareErrors];
+
+export type ShareLinksDeletePublicShareResponses = {
+  /**
+   * Deleted public share
+   */
+  200: LegacyEmptyResponse;
+};
+
+export type ShareLinksDeletePublicShareResponse =
+  ShareLinksDeletePublicShareResponses[keyof ShareLinksDeletePublicShareResponses];
+
+export type ShareLinksPauseShockerData = {
+  body: PauseRequest;
+  path: {
+    /**
+     * Pause a shocker in a public share
+     */
+    publicShareId: string;
+    /**
+     * Pause a shocker in a public share
+     */
+    shockerId: string;
+  };
+  query?: never;
+  url: '/1/shares/links/{publicShareId}/{shockerId}/pause';
+};
+
+export type ShareLinksPauseShockerErrors = {
+  /**
+   * Shocker does not exist in public share
+   */
+  400: unknown;
+  /**
+   * Public share or shocker does not exist
+   */
+  404: OpenShockProblem;
+};
+
+export type ShareLinksPauseShockerError =
+  ShareLinksPauseShockerErrors[keyof ShareLinksPauseShockerErrors];
+
+export type ShareLinksPauseShockerResponses = {
+  /**
+   * Successfully updated paused state shocker
+   */
+  200: PauseReasonLegacyDataResponse;
+};
+
+export type ShareLinksPauseShockerResponse =
+  ShareLinksPauseShockerResponses[keyof ShareLinksPauseShockerResponses];
+
+export type SessionsDeleteSessionData = {
+  body?: never;
+  path: {
+    sessionId: string;
+  };
+  query?: never;
+  url: '/1/sessions/{sessionId}';
+};
+
+export type SessionsDeleteSessionErrors = {
+  /**
+   * Not Found
+   */
+  404: OpenShockProblem;
+};
+
+export type SessionsDeleteSessionError =
+  SessionsDeleteSessionErrors[keyof SessionsDeleteSessionErrors];
+
+export type SessionsDeleteSessionResponses = {
   /**
    * OK
    */
   200: unknown;
 };
+
+export type SessionsListSessionsData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/1/sessions';
+};
+
+export type SessionsListSessionsResponses = {
+  /**
+   * OK
+   */
+  200: Array<LoginSessionResponse>;
+};
+
+export type SessionsListSessionsResponse =
+  SessionsListSessionsResponses[keyof SessionsListSessionsResponses];
+
+export type SessionsGetSelfSessionData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/1/sessions/self';
+};
+
+export type SessionsGetSelfSessionResponses = {
+  /**
+   * OK
+   */
+  200: LoginSessionResponse;
+};
+
+export type SessionsGetSelfSessionResponse =
+  SessionsGetSelfSessionResponses[keyof SessionsGetSelfSessionResponses];
+
+export type PublicGetOnlineDevicesStatisticsData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/1/public/stats';
+};
+
+export type PublicGetOnlineDevicesStatisticsResponses = {
+  /**
+   * The statistics were successfully retrieved.
+   */
+  200: StatsResponseLegacyDataResponse;
+};
+
+export type PublicGetOnlineDevicesStatisticsResponse =
+  PublicGetOnlineDevicesStatisticsResponses[keyof PublicGetOnlineDevicesStatisticsResponses];
+
+export type PublicGetPublicShareData = {
+  body?: never;
+  path: {
+    /**
+     * Gets information about a public share.
+     */
+    publicShareId: string;
+  };
+  query?: never;
+  url: '/1/public/shares/links/{publicShareId}';
+};
+
+export type PublicGetPublicShareErrors = {
+  /**
+   * The public share does not exist.
+   */
+  404: OpenShockProblem;
+};
+
+export type PublicGetPublicShareError =
+  PublicGetPublicShareErrors[keyof PublicGetPublicShareErrors];
+
+export type PublicGetPublicShareResponses = {
+  /**
+   * The public share information was successfully retrieved.
+   */
+  200: PublicShareResponseLegacyDataResponse;
+};
+
+export type PublicGetPublicShareResponse =
+  PublicGetPublicShareResponses[keyof PublicGetPublicShareResponses];
 
 export type DeviceGetLiveControlGatewayData = {
   body?: never;
@@ -2389,6 +2399,9 @@ export type DevicesRemoveDeviceResponses = {
 export type DevicesGetDeviceByIdData = {
   body?: never;
   path: {
+    /**
+     * Get a device by its id
+     */
     deviceId: string;
   };
   query?: never;
@@ -2416,8 +2429,11 @@ export type DevicesGetDeviceByIdResponse =
   DevicesGetDeviceByIdResponses[keyof DevicesGetDeviceByIdResponses];
 
 export type DevicesEditDeviceData = {
-  body?: HubEditRequest;
+  body: HubEditRequest;
   path: {
+    /**
+     * Edit a device
+     */
     deviceId: string;
   };
   query?: never;
@@ -2479,6 +2495,9 @@ export type DevicesRegenerateDeviceTokenResponse =
 export type DevicesGetPairCodeData = {
   body?: never;
   path: {
+    /**
+     * Get a pair code for a device
+     */
     deviceId: string;
   };
   query?: never;
@@ -2507,6 +2526,9 @@ export type DevicesGetPairCodeResponse =
 export type DevicesGetLiveControlGatewayInfoData = {
   body?: never;
   path: {
+    /**
+     * Get LCG info for a device if it is online and connected to a LCG node
+     */
     deviceId: string;
   };
   query?: never;
@@ -2515,7 +2537,7 @@ export type DevicesGetLiveControlGatewayInfoData = {
 
 export type DevicesGetLiveControlGatewayInfoErrors = {
   /**
-   * Device is not online
+   * Device does not exist or does not belong to you
    */
   404: OpenShockProblem;
 };
@@ -2564,878 +2586,1258 @@ export type DevicesGetShockersResponses = {
 export type DevicesGetShockersResponse =
   DevicesGetShockersResponses[keyof DevicesGetShockersResponses];
 
-export type VersionGetBackendInfoData = {
+export type AdminConfigurationListData = {
   body?: never;
   path?: never;
   query?: never;
-  url: '/1';
+  url: '/1/admin/config';
 };
 
-export type VersionGetBackendInfoResponses = {
+export type AdminConfigurationListErrors = {
   /**
-   * The version was successfully retrieved.
+   * Unauthorized
    */
-  200: BackendInfoResponseLegacyDataResponse;
+  401: unknown;
 };
 
-export type VersionGetBackendInfoResponse =
-  VersionGetBackendInfoResponses[keyof VersionGetBackendInfoResponses];
+export type AdminConfigurationListResponses = {
+  /**
+   * OK
+   */
+  200: Array<ConfigurationItemDto>;
+};
 
-export type PublicGetOnlineDevicesStatisticsData = {
-  body?: never;
+export type AdminConfigurationListResponse =
+  AdminConfigurationListResponses[keyof AdminConfigurationListResponses];
+
+export type AdminConfigurationAddData = {
+  body: ConfigurationAddItemRequest;
   path?: never;
   query?: never;
-  url: '/1/public/stats';
+  url: '/1/admin/config';
 };
 
-export type PublicGetOnlineDevicesStatisticsResponses = {
+export type AdminConfigurationAddErrors = {
   /**
-   * The statistics were successfully retrieved.
+   * Invalid name or value format
    */
-  200: StatsResponseLegacyDataResponse;
-};
-
-export type PublicGetOnlineDevicesStatisticsResponse =
-  PublicGetOnlineDevicesStatisticsResponses[keyof PublicGetOnlineDevicesStatisticsResponses];
-
-export type ShareLinksRemoveShockerData = {
-  body?: never;
-  path: {
-    publicShareId: string;
-    shockerId: string;
-  };
-  query?: never;
-  url: '/1/shares/links/{publicShareId}/{shockerId}';
-};
-
-export type ShareLinksRemoveShockerErrors = {
+  400: OpenShockProblem;
   /**
-   * Shocker does not exist in public share
+   * Unauthorized
    */
-  400: unknown;
+  401: unknown;
   /**
-   * Public share or shocker does not exist
-   */
-  404: OpenShockProblem;
-};
-
-export type ShareLinksRemoveShockerError =
-  ShareLinksRemoveShockerErrors[keyof ShareLinksRemoveShockerErrors];
-
-export type ShareLinksRemoveShockerResponses = {
-  /**
-   * Successfully removed shocker
-   */
-  200: LegacyEmptyResponse;
-};
-
-export type ShareLinksRemoveShockerResponse =
-  ShareLinksRemoveShockerResponses[keyof ShareLinksRemoveShockerResponses];
-
-export type ShareLinksEditShockerData = {
-  body?: PublicShareEditShocker;
-  path: {
-    publicShareId: string;
-    shockerId: string;
-  };
-  query?: never;
-  url: '/1/shares/links/{publicShareId}/{shockerId}';
-};
-
-export type ShareLinksEditShockerErrors = {
-  /**
-   * Shocker does not exist in public share
-   */
-  400: unknown;
-  /**
-   * Public share or shocker does not exist
-   */
-  404: OpenShockProblem;
-};
-
-export type ShareLinksEditShockerError =
-  ShareLinksEditShockerErrors[keyof ShareLinksEditShockerErrors];
-
-export type ShareLinksEditShockerResponses = {
-  /**
-   * Successfully updated shocker
-   */
-  200: string;
-};
-
-export type ShareLinksEditShockerResponse =
-  ShareLinksEditShockerResponses[keyof ShareLinksEditShockerResponses];
-
-export type ShareLinksAddShockerData = {
-  body?: never;
-  path: {
-    publicShareId: string;
-    shockerId: string;
-  };
-  query?: never;
-  url: '/1/shares/links/{publicShareId}/{shockerId}';
-};
-
-export type ShareLinksAddShockerErrors = {
-  /**
-   * Public share or shocker does not exist
-   */
-  404: OpenShockProblem;
-  /**
-   * Shocker already exists in public share
+   * Already exists
    */
   409: OpenShockProblem;
 };
 
-export type ShareLinksAddShockerError =
-  ShareLinksAddShockerErrors[keyof ShareLinksAddShockerErrors];
+export type AdminConfigurationAddError =
+  AdminConfigurationAddErrors[keyof AdminConfigurationAddErrors];
 
-export type ShareLinksAddShockerResponses = {
+export type AdminConfigurationAddResponses = {
   /**
-   * Successfully added shocker
+   * Configuration added
    */
-  200: LegacyEmptyResponse;
+  200: unknown;
 };
 
-export type ShareLinksAddShockerResponse =
-  ShareLinksAddShockerResponses[keyof ShareLinksAddShockerResponses];
-
-export type ShareLinksListData = {
-  body?: never;
+export type AdminConfigurationUpdateData = {
+  body: ConfigurationUpdateItemRequest;
   path?: never;
   query?: never;
-  url: '/1/shares/links';
+  url: '/1/admin/config';
 };
 
-export type ShareLinksListResponses = {
+export type AdminConfigurationUpdateErrors = {
   /**
-   * All public shares for the current user
+   * Invalid name or value format or type mismatch
    */
-  200: OwnPublicShareResponseArrayLegacyDataResponse;
-};
-
-export type ShareLinksListResponse = ShareLinksListResponses[keyof ShareLinksListResponses];
-
-export type ShareLinksCreatePublicShareData = {
-  body?: PublicShareCreate;
-  path?: never;
-  query?: never;
-  url: '/1/shares/links';
-};
-
-export type ShareLinksCreatePublicShareResponses = {
+  400: OpenShockProblem;
   /**
-   * The created public share
+   * Unauthorized
    */
-  200: GuidLegacyDataResponse;
+  401: unknown;
+  /**
+   * Not found
+   */
+  404: OpenShockProblem;
+  /**
+   * Conflict
+   */
+  409: OpenShockProblem;
 };
 
-export type ShareLinksCreatePublicShareResponse =
-  ShareLinksCreatePublicShareResponses[keyof ShareLinksCreatePublicShareResponses];
+export type AdminConfigurationUpdateError =
+  AdminConfigurationUpdateErrors[keyof AdminConfigurationUpdateErrors];
 
-export type ShareLinksDeletePublicShareData = {
+export type AdminConfigurationUpdateResponses = {
+  /**
+   * Configuration updated (or nothing to do)
+   */
+  200: unknown;
+};
+
+export type AdminConfigurationDeleteData = {
   body?: never;
   path: {
-    publicShareId: string;
+    /**
+     * Deletes a configuration
+     */
+    name: string;
   };
   query?: never;
-  url: '/1/shares/links/{publicShareId}';
+  url: '/1/admin/config/{name}';
 };
 
-export type ShareLinksDeletePublicShareErrors = {
+export type AdminConfigurationDeleteErrors = {
   /**
-   * Public share not found or does not belong to you
+   * Invalid name format
+   */
+  400: OpenShockProblem;
+  /**
+   * Unauthorized
+   */
+  401: unknown;
+  /**
+   * Not found
    */
   404: OpenShockProblem;
 };
 
-export type ShareLinksDeletePublicShareError =
-  ShareLinksDeletePublicShareErrors[keyof ShareLinksDeletePublicShareErrors];
+export type AdminConfigurationDeleteError =
+  AdminConfigurationDeleteErrors[keyof AdminConfigurationDeleteErrors];
 
-export type ShareLinksDeletePublicShareResponses = {
+export type AdminConfigurationDeleteResponses = {
   /**
-   * Deleted public share
+   * Configuration deleted
    */
-  200: LegacyEmptyResponse;
+  200: unknown;
 };
 
-export type ShareLinksDeletePublicShareResponse =
-  ShareLinksDeletePublicShareResponses[keyof ShareLinksDeletePublicShareResponses];
-
-export type ShareLinksPauseShockerData = {
-  body?: PauseRequest;
-  path: {
-    publicShareId: string;
-    shockerId: string;
-  };
-  query?: never;
-  url: '/1/shares/links/{publicShareId}/{shockerId}/pause';
-};
-
-export type ShareLinksPauseShockerErrors = {
-  /**
-   * Shocker does not exist in public share
-   */
-  400: unknown;
-  /**
-   * Public share or shocker does not exist
-   */
-  404: OpenShockProblem;
-};
-
-export type ShareLinksPauseShockerError =
-  ShareLinksPauseShockerErrors[keyof ShareLinksPauseShockerErrors];
-
-export type ShareLinksPauseShockerResponses = {
-  /**
-   * Successfully updated paused state shocker
-   */
-  200: PauseReasonLegacyDataResponse;
-};
-
-export type ShareLinksPauseShockerResponse =
-  ShareLinksPauseShockerResponses[keyof ShareLinksPauseShockerResponses];
-
-export type PublicGetPublicShareData = {
+export type AdminDeactivateUserData = {
   body?: never;
   path: {
-    publicShareId: string;
+    /**
+     * Deactivates a user
+     */
+    userId: string;
   };
-  query?: never;
-  url: '/1/public/shares/links/{publicShareId}';
-};
-
-export type PublicGetPublicShareErrors = {
-  /**
-   * The public share does not exist.
-   */
-  404: OpenShockProblem;
-};
-
-export type PublicGetPublicShareError =
-  PublicGetPublicShareErrors[keyof PublicGetPublicShareErrors];
-
-export type PublicGetPublicShareResponses = {
-  /**
-   * The public share information was successfully retrieved.
-   */
-  200: PublicShareResponseLegacyDataResponse;
-};
-
-export type PublicGetPublicShareResponse =
-  PublicGetPublicShareResponses[keyof PublicGetPublicShareResponses];
-
-export type SessionsDeleteSessionData = {
-  body?: never;
-  path: {
-    sessionId: string;
+  query?: {
+    /**
+     * Deactivates a user
+     */
+    deleteLater?: boolean;
+    /**
+     * Deactivates a user
+     */
+    reason?: string;
   };
-  query?: never;
-  url: '/1/sessions/{sessionId}';
+  url: '/1/admin/users/{userId}/deactivate';
 };
 
-export type SessionsDeleteSessionErrors = {
+export type AdminDeactivateUserErrors = {
   /**
-   * Not Found
+   * Unauthorized
    */
-  404: OpenShockProblem;
+  401: unknown;
 };
 
-export type SessionsDeleteSessionError =
-  SessionsDeleteSessionErrors[keyof SessionsDeleteSessionErrors];
-
-export type SessionsDeleteSessionResponses = {
+export type AdminDeactivateUserResponses = {
   /**
    * OK
    */
   200: unknown;
 };
 
-export type SessionsListSessionsData = {
+export type AdminDeleteUserData = {
   body?: never;
-  path?: never;
-  query?: never;
-  url: '/1/sessions';
+  path: {
+    /**
+     * Deletes a user
+     */
+    userId: string;
+  };
+  query?: {
+    /**
+     * Deletes a user
+     */
+    reason?: string;
+  };
+  url: '/1/admin/users/{userId}';
 };
 
-export type SessionsListSessionsResponses = {
+export type AdminDeleteUserErrors = {
+  /**
+   * Unauthorized
+   */
+  401: unknown;
+};
+
+export type AdminDeleteUserResponses = {
   /**
    * OK
    */
-  200: Array<LoginSessionResponse>;
+  200: unknown;
 };
 
-export type SessionsListSessionsResponse =
-  SessionsListSessionsResponses[keyof SessionsListSessionsResponses];
-
-export type SessionsGetSelfSessionData = {
-  body?: never;
-  path?: never;
+export type AdminModifyUserData = {
+  body: UserPatchDto;
+  path: {
+    /**
+     * Edits a user
+     */
+    userId: string;
+  };
   query?: never;
-  url: '/1/sessions/self';
+  url: '/1/admin/users/{userId}';
 };
 
-export type SessionsGetSelfSessionResponses = {
+export type AdminModifyUserErrors = {
+  /**
+   * Unauthorized
+   */
+  401: unknown;
+  /**
+   * Not found
+   */
+  404: unknown;
+};
+
+export type AdminModifyUserResponses = {
   /**
    * OK
    */
-  200: LoginSessionResponse;
+  200: unknown;
 };
 
-export type SessionsGetSelfSessionResponse =
-  SessionsGetSelfSessionResponses[keyof SessionsGetSelfSessionResponses];
+export type AdminBulkRequeueEmailOutboxData = {
+  body: EmailOutboxBulkRequest;
+  path?: never;
+  query?: never;
+  url: '/1/admin/email/outbox/bulk/requeue';
+};
 
-export type SharesDeleteShareCodeData = {
+export type AdminBulkRequeueEmailOutboxErrors = {
+  /**
+   * Unauthorized
+   */
+  401: unknown;
+};
+
+export type AdminBulkRequeueEmailOutboxResponses = {
+  /**
+   * Bulk requeue applied
+   */
+  200: EmailOutboxBulkResultDto;
+};
+
+export type AdminBulkRequeueEmailOutboxResponse =
+  AdminBulkRequeueEmailOutboxResponses[keyof AdminBulkRequeueEmailOutboxResponses];
+
+export type AdminBulkCancelEmailOutboxData = {
+  body: EmailOutboxBulkRequest;
+  path?: never;
+  query?: never;
+  url: '/1/admin/email/outbox/bulk/cancel';
+};
+
+export type AdminBulkCancelEmailOutboxErrors = {
+  /**
+   * Unauthorized
+   */
+  401: unknown;
+};
+
+export type AdminBulkCancelEmailOutboxResponses = {
+  /**
+   * Bulk cancel applied
+   */
+  200: EmailOutboxBulkResultDto;
+};
+
+export type AdminBulkCancelEmailOutboxResponse =
+  AdminBulkCancelEmailOutboxResponses[keyof AdminBulkCancelEmailOutboxResponses];
+
+export type AdminBulkDeleteEmailOutboxData = {
+  body: EmailOutboxBulkRequest;
+  path?: never;
+  query?: never;
+  url: '/1/admin/email/outbox/bulk/delete';
+};
+
+export type AdminBulkDeleteEmailOutboxErrors = {
+  /**
+   * Unauthorized
+   */
+  401: unknown;
+};
+
+export type AdminBulkDeleteEmailOutboxResponses = {
+  /**
+   * Bulk delete applied
+   */
+  200: EmailOutboxBulkResultDto;
+};
+
+export type AdminBulkDeleteEmailOutboxResponse =
+  AdminBulkDeleteEmailOutboxResponses[keyof AdminBulkDeleteEmailOutboxResponses];
+
+export type AdminCancelEmailOutboxData = {
   body?: never;
   path: {
-    shareCodeId: string;
+    /**
+     * Cancels a still-pending email outbox message by marking it skipped, so it is never sent. Only
+     * pending messages can be cancelled; a message already being sent or in a terminal state cannot.
+     */
+    id: string;
   };
   query?: never;
-  url: '/1/shares/code/{shareCodeId}';
+  url: '/1/admin/email/outbox/{id}/cancel';
 };
 
-export type SharesDeleteShareCodeErrors = {
+export type AdminCancelEmailOutboxErrors = {
   /**
-   * Share code not found or does not belong to you
+   * Unauthorized
    */
-  404: OpenShockProblem;
-};
-
-export type SharesDeleteShareCodeError =
-  SharesDeleteShareCodeErrors[keyof SharesDeleteShareCodeErrors];
-
-export type SharesDeleteShareCodeResponses = {
+  401: unknown;
   /**
-   * Deleted share code
+   * No such message
    */
-  200: LegacyEmptyResponse;
+  404: ProblemDetails;
+  /**
+   * Message is not pending
+   */
+  409: ProblemDetails;
 };
 
-export type SharesDeleteShareCodeResponse =
-  SharesDeleteShareCodeResponses[keyof SharesDeleteShareCodeResponses];
+export type AdminCancelEmailOutboxError =
+  AdminCancelEmailOutboxErrors[keyof AdminCancelEmailOutboxErrors];
 
-export type SharesLinkShareCodeData = {
+export type AdminCancelEmailOutboxResponses = {
+  /**
+   * Cancelled
+   */
+  200: unknown;
+};
+
+export type AdminDeleteEmailOutboxData = {
   body?: never;
   path: {
-    shareCodeId: string;
+    /**
+     * Permanently deletes an email outbox message. If the delivery consumer is mid-send it simply finds
+     * the row gone and does nothing, so a delete never corrupts an in-flight send.
+     */
+    id: string;
   };
   query?: never;
-  url: '/1/shares/code/{shareCodeId}';
+  url: '/1/admin/email/outbox/{id}';
 };
 
-export type SharesLinkShareCodeErrors = {
+export type AdminDeleteEmailOutboxErrors = {
   /**
-   * You cannot link your own shocker code / You already have this shocker linked to your account
+   * Unauthorized
    */
-  400: OpenShockProblem;
+  401: unknown;
   /**
-   * Share code not found or does not belong to you
+   * No such message
    */
-  404: OpenShockProblem;
+  404: ProblemDetails;
+};
+
+export type AdminDeleteEmailOutboxError =
+  AdminDeleteEmailOutboxErrors[keyof AdminDeleteEmailOutboxErrors];
+
+export type AdminDeleteEmailOutboxResponses = {
   /**
-   * Error while linking share code to your account
+   * Deleted
    */
-  500: unknown;
+  200: unknown;
 };
 
-export type SharesLinkShareCodeError = SharesLinkShareCodeErrors[keyof SharesLinkShareCodeErrors];
-
-export type SharesLinkShareCodeResponses = {
-  /**
-   * Linked share code
-   */
-  200: LegacyEmptyResponse;
-};
-
-export type SharesLinkShareCodeResponse =
-  SharesLinkShareCodeResponses[keyof SharesLinkShareCodeResponses];
-
-export type ShockerRemoveShockerData = {
-  body?: never;
-  path: {
-    shockerId: string;
-  };
-  query?: never;
-  url: '/1/shockers/{shockerId}';
-};
-
-export type ShockerRemoveShockerErrors = {
-  /**
-   * Shocker does not exist
-   */
-  404: OpenShockProblem;
-};
-
-export type ShockerRemoveShockerError =
-  ShockerRemoveShockerErrors[keyof ShockerRemoveShockerErrors];
-
-export type ShockerRemoveShockerResponses = {
-  /**
-   * Successfully deleted shocker
-   */
-  200: LegacyEmptyResponse;
-};
-
-export type ShockerRemoveShockerResponse =
-  ShockerRemoveShockerResponses[keyof ShockerRemoveShockerResponses];
-
-export type ShockerGetShockerByIdData = {
-  body?: never;
-  path: {
-    shockerId: string;
-  };
-  query?: never;
-  url: '/1/shockers/{shockerId}';
-};
-
-export type ShockerGetShockerByIdErrors = {
-  /**
-   * The shocker does not exist or you do not have access to it.
-   */
-  404: OpenShockProblem;
-};
-
-export type ShockerGetShockerByIdError =
-  ShockerGetShockerByIdErrors[keyof ShockerGetShockerByIdErrors];
-
-export type ShockerGetShockerByIdResponses = {
-  /**
-   * The shocker information was successfully retrieved.
-   */
-  200: ShockerWithDeviceLegacyDataResponse;
-};
-
-export type ShockerGetShockerByIdResponse =
-  ShockerGetShockerByIdResponses[keyof ShockerGetShockerByIdResponses];
-
-export type ShockerEditShockerData = {
-  body?: NewShocker;
-  path: {
-    shockerId: string;
-  };
-  query?: never;
-  url: '/1/shockers/{shockerId}';
-};
-
-export type ShockerEditShockerErrors = {
-  /**
-   * Shocker does not exist
-   */
-  404: OpenShockProblem;
-};
-
-export type ShockerEditShockerError = ShockerEditShockerErrors[keyof ShockerEditShockerErrors];
-
-export type ShockerEditShockerResponses = {
-  /**
-   * Successfully updated shocker
-   */
-  200: LegacyEmptyResponse;
-};
-
-export type ShockerEditShockerResponse =
-  ShockerEditShockerResponses[keyof ShockerEditShockerResponses];
-
-export type ShockerGetShockerLogsData = {
-  body?: never;
-  path: {
-    shockerId: string;
-  };
-  query?: {
-    offset?: number;
-    limit?: number;
-  };
-  url: '/1/shockers/{shockerId}/logs';
-};
-
-export type ShockerGetShockerLogsErrors = {
-  /**
-   * Shocker does not exist
-   */
-  404: OpenShockProblem;
-};
-
-export type ShockerGetShockerLogsError =
-  ShockerGetShockerLogsErrors[keyof ShockerGetShockerLogsErrors];
-
-export type ShockerGetShockerLogsResponses = {
-  /**
-   * The logs
-   */
-  200: LogEntryArrayLegacyDataResponse;
-};
-
-export type ShockerGetShockerLogsResponse =
-  ShockerGetShockerLogsResponses[keyof ShockerGetShockerLogsResponses];
-
-export type ShockerGetAllShockerLogsData = {
+export type AdminGetEmailOutboxData = {
   body?: never;
   path?: never;
   query?: {
+    /**
+     * Lists email outbox messages, paginated. Supports the same OData-style
+     * `$filter`/`$orderby` as the users listing (e.g. `status eq 'failed'`,
+     * `recipient ilike '%@example.com'`). Defaults to newest first.
+     */
+    $filter?: string;
+    /**
+     * Lists email outbox messages, paginated. Supports the same OData-style
+     * `$filter`/`$orderby` as the users listing (e.g. `status eq 'failed'`,
+     * `recipient ilike '%@example.com'`). Defaults to newest first.
+     */
+    $orderby?: string;
+    /**
+     * Lists email outbox messages, paginated. Supports the same OData-style
+     * `$filter`/`$orderby` as the users listing (e.g. `status eq 'failed'`,
+     * `recipient ilike '%@example.com'`). Defaults to newest first.
+     */
+    $offset?: number;
+    /**
+     * Lists email outbox messages, paginated. Supports the same OData-style
+     * `$filter`/`$orderby` as the users listing (e.g. `status eq 'failed'`,
+     * `recipient ilike '%@example.com'`). Defaults to newest first.
+     */
+    $limit?: number;
+  };
+  url: '/1/admin/email/outbox';
+};
+
+export type AdminGetEmailOutboxErrors = {
+  /**
+   * Unauthorized
+   */
+  401: unknown;
+};
+
+export type AdminGetEmailOutboxResponses = {
+  /**
+   * Paginated email outbox messages
+   */
+  200: EmailOutboxMessageDtoPaginated;
+};
+
+export type AdminGetEmailOutboxResponse =
+  AdminGetEmailOutboxResponses[keyof AdminGetEmailOutboxResponses];
+
+export type AdminRequeueEmailOutboxData = {
+  body?: never;
+  path: {
+    /**
+     * Requeues a terminal (sent/failed/skipped) email outbox message: resets it to pending, due now,
+     * with a fresh attempt budget, and nudges the delivery consumer to send it immediately.
+     */
+    id: string;
+  };
+  query?: never;
+  url: '/1/admin/email/outbox/{id}/requeue';
+};
+
+export type AdminRequeueEmailOutboxErrors = {
+  /**
+   * Unauthorized
+   */
+  401: unknown;
+  /**
+   * No such message
+   */
+  404: ProblemDetails;
+  /**
+   * Message is pending or currently being sent
+   */
+  409: ProblemDetails;
+};
+
+export type AdminRequeueEmailOutboxError =
+  AdminRequeueEmailOutboxErrors[keyof AdminRequeueEmailOutboxErrors];
+
+export type AdminRequeueEmailOutboxResponses = {
+  /**
+   * Requeued
+   */
+  200: unknown;
+};
+
+export type AdminGetEmailOutboxStatsData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/1/admin/email/outbox/stats';
+};
+
+export type AdminGetEmailOutboxStatsErrors = {
+  /**
+   * Unauthorized
+   */
+  401: unknown;
+};
+
+export type AdminGetEmailOutboxStatsResponses = {
+  /**
+   * Per-status counts
+   */
+  200: EmailOutboxStatsDto;
+};
+
+export type AdminGetEmailOutboxStatsResponse =
+  AdminGetEmailOutboxStatsResponses[keyof AdminGetEmailOutboxStatsResponses];
+
+export type AdminSendTestEmailData = {
+  body: SendTestEmailDto;
+  path?: never;
+  query?: never;
+  url: '/1/admin/email/test';
+};
+
+export type AdminSendTestEmailErrors = {
+  /**
+   * Invalid recipient address
+   */
+  400: ProblemDetails;
+  /**
+   * Unauthorized
+   */
+  401: unknown;
+};
+
+export type AdminSendTestEmailError = AdminSendTestEmailErrors[keyof AdminSendTestEmailErrors];
+
+export type AdminSendTestEmailResponses = {
+  /**
+   * Test email enqueued
+   */
+  200: EmailOutboxMessageDto;
+};
+
+export type AdminSendTestEmailResponse =
+  AdminSendTestEmailResponses[keyof AdminSendTestEmailResponses];
+
+export type AdminListEmailProviderBlacklistData = {
+  body?: never;
+  path?: never;
+  query?: {
+    match?: string;
+  };
+  url: '/1/admin/blacklist/emailProviders';
+};
+
+export type AdminListEmailProviderBlacklistResponses = {
+  /**
+   * OK
+   */
+  200: Array<EmailProviderBlacklistDto>;
+};
+
+export type AdminListEmailProviderBlacklistResponse =
+  AdminListEmailProviderBlacklistResponses[keyof AdminListEmailProviderBlacklistResponses];
+
+export type AdminAddEmailProviderBlacklistData = {
+  body: AddEmailProviderBlacklistDto;
+  path?: never;
+  query?: never;
+  url: '/1/admin/blacklist/emailProviders';
+};
+
+export type AdminAddEmailProviderBlacklistResponses = {
+  /**
+   * OK
+   */
+  200: unknown;
+};
+
+export type AdminRemoveEmailProviderBlacklistData = {
+  body?: never;
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: '/1/admin/blacklist/emailProviders/{id}';
+};
+
+export type AdminRemoveEmailProviderBlacklistErrors = {
+  /**
+   * Not Found
+   */
+  404: ProblemDetails;
+};
+
+export type AdminRemoveEmailProviderBlacklistError =
+  AdminRemoveEmailProviderBlacklistErrors[keyof AdminRemoveEmailProviderBlacklistErrors];
+
+export type AdminRemoveEmailProviderBlacklistResponses = {
+  /**
+   * OK
+   */
+  200: unknown;
+};
+
+export type AdminGetAdminAuditLogData = {
+  body?: never;
+  path?: never;
+  query?: {
+    /**
+     * Page, sort, and search parameters.
+     */
     page?: number;
+    /**
+     * Page, sort, and search parameters.
+     */
     pageSize?: number;
+    /**
+     * Page, sort, and search parameters.
+     */
     search?: string;
+    /**
+     * Page, sort, and search parameters.
+     */
     sort?: string;
+    /**
+     * Page, sort, and search parameters.
+     */
     sortDir?: SortDirection;
     /**
-     * Optional shocker ID filter. When omitted or empty, logs for all of the caller's shockers are returned.
+     * Optional: filter by the subject user (the account that was affected).
      */
-    shockerIds?: Array<string>;
+    userId?: string;
+    /**
+     * Optional: filter by the actor (who performed the action).
+     */
+    actorId?: string;
   };
-  url: '/1/shockers/logs';
+  url: '/1/admin/audit-log';
 };
 
-export type ShockerGetAllShockerLogsResponses = {
+export type AdminGetAdminAuditLogResponses = {
   /**
-   * A page of logs.
+   * A page of audit log entries.
    */
-  200: LogEntryWithHubPagedResult;
+  200: AuditLogEntryResponsePagedResult;
 };
 
-export type ShockerGetAllShockerLogsResponse =
-  ShockerGetAllShockerLogsResponses[keyof ShockerGetAllShockerLogsResponses];
+export type AdminGetAdminAuditLogResponse =
+  AdminGetAdminAuditLogResponses[keyof AdminGetAdminAuditLogResponses];
 
-export type ShockerListSharedShockersData = {
+export type AdminGetOnlineDevicesData = {
   body?: never;
   path?: never;
   query?: never;
-  url: '/1/shockers/shared';
+  url: '/1/admin/monitoring/onlineDevices';
 };
 
-export type ShockerListSharedShockersResponses = {
+export type AdminGetOnlineDevicesErrors = {
   /**
-   * The shockers were successfully retrieved.
+   * Unauthorized
    */
-  200: OwnerShockerResponseArrayLegacyDataResponse;
+  401: unknown;
 };
 
-export type ShockerListSharedShockersResponse =
-  ShockerListSharedShockersResponses[keyof ShockerListSharedShockersResponses];
+export type AdminGetOnlineDevicesResponses = {
+  /**
+   * All online devices
+   */
+  200: AdminOnlineDeviceResponseArrayLegacyDataResponse;
+};
 
-export type ShockerListShockersData = {
+export type AdminGetOnlineDevicesResponse =
+  AdminGetOnlineDevicesResponses[keyof AdminGetOnlineDevicesResponses];
+
+export type AdminGetUsersData = {
   body?: never;
   path?: never;
-  query?: never;
-  url: '/1/shockers/own';
+  query?: {
+    /**
+     * Gets all users, paginated
+     */
+    $filter?: string;
+    /**
+     * Gets all users, paginated
+     */
+    $orderby?: string;
+    /**
+     * Gets all users, paginated
+     */
+    $offset?: number;
+    /**
+     * Gets all users, paginated
+     */
+    $limit?: number;
+  };
+  url: '/1/admin/users';
 };
 
-export type ShockerListShockersResponses = {
+export type AdminGetUsersErrors = {
   /**
-   * The shockers were successfully retrieved.
+   * Unauthorized
    */
-  200: DeviceWithShockersResponseArrayLegacyDataResponse;
+  401: unknown;
 };
 
-export type ShockerListShockersResponse =
-  ShockerListShockersResponses[keyof ShockerListShockersResponses];
+export type AdminGetUsersResponses = {
+  /**
+   * Paginated users
+   */
+  200: AdminUsersViewPaginated;
+};
 
-export type ShockerPauseShockerData = {
-  body?: PauseRequest;
+export type AdminGetUsersResponse = AdminGetUsersResponses[keyof AdminGetUsersResponses];
+
+export type AdminReactivateUserData = {
+  body?: never;
   path: {
-    shockerId: string;
+    /**
+     * Reactivates a user
+     */
+    userId: string;
   };
-  query?: never;
-  url: '/1/shockers/{shockerId}/pause';
+  query?: {
+    /**
+     * Reactivates a user
+     */
+    reason?: string;
+  };
+  url: '/1/admin/users/{userId}/reactivate';
 };
 
-export type ShockerPauseShockerErrors = {
+export type AdminReactivateUserErrors = {
   /**
-   * Shocker not found or does not belong to you
+   * Unauthorized
+   */
+  401: unknown;
+};
+
+export type AdminReactivateUserResponses = {
+  /**
+   * OK
+   */
+  200: unknown;
+};
+
+export type AdminListUsernameBlacklistData = {
+  body?: never;
+  path?: never;
+  query?: {
+    match?: string;
+  };
+  url: '/1/admin/blacklist/usernames';
+};
+
+export type AdminListUsernameBlacklistResponses = {
+  /**
+   * OK
+   */
+  200: Array<UserNameBlacklistDto>;
+};
+
+export type AdminListUsernameBlacklistResponse =
+  AdminListUsernameBlacklistResponses[keyof AdminListUsernameBlacklistResponses];
+
+export type AdminAddUsernameBlacklistData = {
+  body: AddUsernameBlacklistDto;
+  path?: never;
+  query?: never;
+  url: '/1/admin/blacklist/usernames';
+};
+
+export type AdminAddUsernameBlacklistResponses = {
+  /**
+   * OK
+   */
+  200: unknown;
+};
+
+export type AdminRemoveUsernameBlacklistData = {
+  body?: never;
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: '/1/admin/blacklist/usernames/{id}';
+};
+
+export type AdminRemoveUsernameBlacklistErrors = {
+  /**
+   * Not Found
+   */
+  404: ProblemDetails;
+};
+
+export type AdminRemoveUsernameBlacklistError =
+  AdminRemoveUsernameBlacklistErrors[keyof AdminRemoveUsernameBlacklistErrors];
+
+export type AdminRemoveUsernameBlacklistResponses = {
+  /**
+   * OK
+   */
+  200: unknown;
+};
+
+export type AdminListWebhooksData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/1/admin/webhooks';
+};
+
+export type AdminListWebhooksErrors = {
+  /**
+   * Unauthorized
+   */
+  401: unknown;
+};
+
+export type AdminListWebhooksResponses = {
+  /**
+   * OK
+   */
+  200: Array<WebhookDto>;
+};
+
+export type AdminListWebhooksResponse =
+  AdminListWebhooksResponses[keyof AdminListWebhooksResponses];
+
+export type AdminAddWebhookData = {
+  body: AddWebhookDto;
+  path?: never;
+  query?: never;
+  url: '/1/admin/webhooks';
+};
+
+export type AdminAddWebhookErrors = {
+  /**
+   * Bad Request
+   */
+  400: ProblemDetails;
+  /**
+   * Unauthorized
+   */
+  401: unknown;
+};
+
+export type AdminAddWebhookError = AdminAddWebhookErrors[keyof AdminAddWebhookErrors];
+
+export type AdminAddWebhookResponses = {
+  /**
+   * OK
+   */
+  200: unknown;
+};
+
+export type AdminRemoveWebhookData = {
+  body?: never;
+  path: {
+    /**
+     * Removes a webhook
+     */
+    id: string;
+  };
+  query?: never;
+  url: '/1/admin/webhooks/{id}';
+};
+
+export type AdminRemoveWebhookErrors = {
+  /**
+   * Unauthorized
+   */
+  401: unknown;
+  /**
+   * Not Found
+   */
+  404: ProblemDetails;
+};
+
+export type AdminRemoveWebhookError = AdminRemoveWebhookErrors[keyof AdminRemoveWebhookErrors];
+
+export type AdminRemoveWebhookResponses = {
+  /**
+   * OK
+   */
+  200: unknown;
+};
+
+export type AccountActivateData = {
+  body?: never;
+  path?: never;
+  query?: {
+    /**
+     * Activate account
+     */
+    token?: string;
+  };
+  url: '/1/account/activate';
+};
+
+export type AccountActivateErrors = {
+  /**
+   * Bad Request
+   */
+  400: OpenShockProblem;
+};
+
+export type AccountActivateError = AccountActivateErrors[keyof AccountActivateErrors];
+
+export type AccountActivateResponses = {
+  /**
+   * OK
+   */
+  200: unknown;
+};
+
+export type AccountCheckUsernameData = {
+  body: ChangeUsernameRequest;
+  path?: never;
+  query?: never;
+  url: '/1/account/username/check';
+};
+
+export type AccountCheckUsernameResponses = {
+  /**
+   * OK
+   */
+  200: UsernameCheckResponse;
+};
+
+export type AccountCheckUsernameResponse =
+  AccountCheckUsernameResponses[keyof AccountCheckUsernameResponses];
+
+export type AccountLogoutData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/1/account/logout';
+};
+
+export type AccountLogoutResponses = {
+  /**
+   * OK
+   */
+  200: unknown;
+};
+
+export type AccountPasswordResetCheckValidData = {
+  body?: never;
+  path: {
+    /**
+     * The id of the password reset
+     */
+    passwordResetId: string;
+    /**
+     * The secret of the password reset
+     */
+    secret: string;
+  };
+  query?: never;
+  url: '/1/account/password-reset/{passwordResetId}/{secret}';
+};
+
+export type AccountPasswordResetCheckValidErrors = {
+  /**
+   * Password reset process not found
    */
   404: OpenShockProblem;
 };
 
-export type ShockerPauseShockerError = ShockerPauseShockerErrors[keyof ShockerPauseShockerErrors];
+export type AccountPasswordResetCheckValidError =
+  AccountPasswordResetCheckValidErrors[keyof AccountPasswordResetCheckValidErrors];
 
-export type ShockerPauseShockerResponses = {
+export type AccountPasswordResetCheckValidResponses = {
   /**
-   * Successfully set pause state
+   * Valid password reset process
    */
-  200: BooleanLegacyDataResponse;
+  200: LegacyEmptyResponse;
 };
 
-export type ShockerPauseShockerResponse =
-  ShockerPauseShockerResponses[keyof ShockerPauseShockerResponses];
+export type AccountPasswordResetCheckValidResponse =
+  AccountPasswordResetCheckValidResponses[keyof AccountPasswordResetCheckValidResponses];
 
-export type ShockerRegisterShockerData = {
-  body?: NewShocker;
-  path?: never;
+export type AccountPasswordResetCompleteData = {
+  body: PasswordResetProcessData;
+  path: {
+    passwordResetId: string;
+    secret: string;
+  };
   query?: never;
-  url: '/1/shockers';
+  url: '/1/account/password-reset/{passwordResetId}/{secret}/complete';
 };
 
-export type ShockerRegisterShockerErrors = {
+export type AccountPasswordResetCompleteErrors = {
   /**
-   * You can have a maximum of 11 Shockers per Device.
+   * Password reset process not found
+   */
+  404: OpenShockProblem;
+};
+
+export type AccountPasswordResetCompleteError =
+  AccountPasswordResetCompleteErrors[keyof AccountPasswordResetCompleteErrors];
+
+export type AccountPasswordResetCompleteResponses = {
+  /**
+   * Password successfully changed
+   */
+  200: LegacyEmptyResponse;
+};
+
+export type AccountPasswordResetCompleteResponse =
+  AccountPasswordResetCompleteResponses[keyof AccountPasswordResetCompleteResponses];
+
+export type AccountEmailVerifyData = {
+  body?: never;
+  path?: never;
+  query?: {
+    /**
+     * Verify a pending email change using the token from the verification email.
+     */
+    token?: string;
+  };
+  url: '/1/account/email-change/verify';
+};
+
+export type AccountEmailVerifyErrors = {
+  /**
+   * Token is invalid, already used, or the request has expired
    */
   400: OpenShockProblem;
   /**
-   * Device does not exist
+   * The new email address was claimed by another account before verification completed
    */
-  404: OpenShockProblem;
+  409: OpenShockProblem;
 };
 
-export type ShockerRegisterShockerError =
-  ShockerRegisterShockerErrors[keyof ShockerRegisterShockerErrors];
+export type AccountEmailVerifyError = AccountEmailVerifyErrors[keyof AccountEmailVerifyErrors];
 
-export type ShockerRegisterShockerResponses = {
+export type AccountEmailVerifyResponses = {
   /**
-   * Successfully created shocker
+   * Email change verified and applied
    */
-  201: GuidLegacyDataResponse;
+  200: unknown;
 };
 
-export type ShockerRegisterShockerResponse =
-  ShockerRegisterShockerResponses[keyof ShockerRegisterShockerResponses];
+export type AccountEmailVerifyLegacyData = {
+  body?: never;
+  path?: never;
+  query?: {
+    /**
+     * Verify a pending email change. Deprecated: use POST /email-change/verify instead.
+     */
+    token?: string;
+  };
+  url: '/1/account/verify-email';
+};
 
-export type ShockerSendControlDeprecatedData = {
-  body?: Array<Control>;
+export type AccountEmailVerifyLegacyErrors = {
+  /**
+   * Token is invalid, already used, or the request has expired
+   */
+  400: OpenShockProblem;
+  /**
+   * The new email address was claimed by another account before verification completed
+   */
+  409: OpenShockProblem;
+};
+
+export type AccountEmailVerifyLegacyError =
+  AccountEmailVerifyLegacyErrors[keyof AccountEmailVerifyLegacyErrors];
+
+export type AccountEmailVerifyLegacyResponses = {
+  /**
+   * Email change verified and applied
+   */
+  200: unknown;
+};
+
+export type AuthenticatedAccountChangeEmailData = {
+  body: ChangeEmailRequest;
   path?: never;
   query?: never;
-  url: '/1/shockers/control';
+  url: '/1/account/email-change';
 };
 
-export type ShockerSendControlDeprecatedErrors = {
+export type AuthenticatedAccountChangeEmailErrors = {
+  /**
+   * Bad Request
+   */
+  400: OpenShockProblem;
+  /**
+   * Unauthorized
+   */
+  401: OpenShockProblem;
   /**
    * Forbidden
    */
   403: OpenShockProblem;
   /**
-   * Not Found
+   * Conflict
    */
-  404: OpenShockProblem;
+  409: OpenShockProblem;
   /**
-   * Precondition Failed
+   * Too Many Requests
    */
-  412: OpenShockProblem;
+  429: OpenShockProblem;
 };
 
-export type ShockerSendControlDeprecatedError =
-  ShockerSendControlDeprecatedErrors[keyof ShockerSendControlDeprecatedErrors];
+export type AuthenticatedAccountChangeEmailError =
+  AuthenticatedAccountChangeEmailErrors[keyof AuthenticatedAccountChangeEmailErrors];
 
-export type ShockerSendControlDeprecatedResponses = {
-  /**
-   * The control messages were successfully sent.
-   */
-  200: LegacyEmptyResponse;
-};
-
-export type ShockerSendControlDeprecatedResponse =
-  ShockerSendControlDeprecatedResponses[keyof ShockerSendControlDeprecatedResponses];
-
-export type ShockerGetUserSharesData = {
-  body?: never;
-  path: {
-    /**
-     * Id of the shocker
-     */
-    shockerId: string;
-  };
-  query?: never;
-  url: '/1/shockers/{shockerId}/shares';
-};
-
-export type ShockerGetUserSharesErrors = {
-  /**
-   * The shocker does not exist or you do not have access to it.
-   */
-  404: OpenShockProblem;
-};
-
-export type ShockerGetUserSharesError =
-  ShockerGetUserSharesErrors[keyof ShockerGetUserSharesErrors];
-
-export type ShockerGetUserSharesResponses = {
+export type AuthenticatedAccountChangeEmailResponses = {
   /**
    * OK
-   */
-  200: ShareInfoArrayLegacyDataResponse;
-};
-
-export type ShockerGetUserSharesResponse =
-  ShockerGetUserSharesResponses[keyof ShockerGetUserSharesResponses];
-
-export type ShockerShockerShareCodeCreateData = {
-  body?: ShockerPermLimitPair;
-  path: {
-    shockerId: string;
-  };
-  query?: never;
-  url: '/1/shockers/{shockerId}/shares';
-};
-
-export type ShockerShockerShareCodeCreateErrors = {
-  /**
-   * Shocker does not exists or you do not have access to it.
-   */
-  404: OpenShockProblem;
-};
-
-export type ShockerShockerShareCodeCreateError =
-  ShockerShockerShareCodeCreateErrors[keyof ShockerShockerShareCodeCreateErrors];
-
-export type ShockerShockerShareCodeCreateResponses = {
-  /**
-   * The share code was successfully created.
-   */
-  200: GuidLegacyDataResponse;
-};
-
-export type ShockerShockerShareCodeCreateResponse =
-  ShockerShockerShareCodeCreateResponses[keyof ShockerShockerShareCodeCreateResponses];
-
-export type ShockerShockerShareCodeListData = {
-  body?: never;
-  path: {
-    shockerId: string;
-  };
-  query?: never;
-  url: '/1/shockers/{shockerId}/shareCodes';
-};
-
-export type ShockerShockerShareCodeListErrors = {
-  /**
-   * Not Found
-   */
-  404: OpenShockProblem;
-};
-
-export type ShockerShockerShareCodeListError =
-  ShockerShockerShareCodeListErrors[keyof ShockerShockerShareCodeListErrors];
-
-export type ShockerShockerShareCodeListResponses = {
-  /**
-   * OK
-   */
-  200: ShareCodeInfoArrayLegacyDataResponse;
-};
-
-export type ShockerShockerShareCodeListResponse =
-  ShockerShockerShareCodeListResponses[keyof ShockerShockerShareCodeListResponses];
-
-export type ShockerShockerShareRemoveData = {
-  body?: never;
-  path: {
-    shockerId: string;
-    sharedWithUserId: string;
-  };
-  query?: never;
-  url: '/1/shockers/{shockerId}/shares/{sharedWithUserId}';
-};
-
-export type ShockerShockerShareRemoveErrors = {
-  /**
-   * Share does not exists or device/shocker does not belong to you nor is shared with you
-   */
-  404: OpenShockProblem;
-};
-
-export type ShockerShockerShareRemoveError =
-  ShockerShockerShareRemoveErrors[keyof ShockerShockerShareRemoveErrors];
-
-export type ShockerShockerShareRemoveResponses = {
-  /**
-   * Successfully removed share code
    */
   200: unknown;
 };
 
-export type ShockerShockerShareCodeUpdateData = {
-  body?: ShockerPermLimitPair;
-  path: {
-    shockerId: string;
-    sharedWithUserId: string;
-  };
+export type AuthenticatedAccountChangePasswordData = {
+  body: ChangePasswordRequest;
+  path?: never;
   query?: never;
-  url: '/1/shockers/{shockerId}/shares/{sharedWithUserId}';
+  url: '/1/account/password';
 };
 
-export type ShockerShockerShareCodeUpdateErrors = {
+export type AuthenticatedAccountChangePasswordErrors = {
   /**
-   * The share code does not exist or you do not have access to it.
+   * Forbidden
    */
-  404: OpenShockProblem;
+  403: OpenShockProblem;
+  /**
+   * Conflict
+   */
+  409: OpenShockProblem;
 };
 
-export type ShockerShockerShareCodeUpdateError =
-  ShockerShockerShareCodeUpdateErrors[keyof ShockerShockerShareCodeUpdateErrors];
+export type AuthenticatedAccountChangePasswordError =
+  AuthenticatedAccountChangePasswordErrors[keyof AuthenticatedAccountChangePasswordErrors];
 
-export type ShockerShockerShareCodeUpdateResponses = {
+export type AuthenticatedAccountChangePasswordResponses = {
   /**
-   * Successfully updated share code
+   * OK
    */
   200: unknown;
 };
 
-export type ShockerShockerShareCodePauseData = {
-  body?: PauseRequest;
-  path: {
-    shockerId: string;
-    sharedWithUserId: string;
-  };
+export type AuthenticatedAccountChangeUsernameData = {
+  body: ChangeUsernameRequest;
+  path?: never;
   query?: never;
-  url: '/1/shockers/{shockerId}/shares/{sharedWithUserId}/pause';
+  url: '/1/account/username';
 };
 
-export type ShockerShockerShareCodePauseErrors = {
+export type AuthenticatedAccountChangeUsernameErrors = {
   /**
-   * The share code does not exist or you do not have access to it.
+   * Bad Request
    */
-  404: OpenShockProblem;
-};
-
-export type ShockerShockerShareCodePauseError =
-  ShockerShockerShareCodePauseErrors[keyof ShockerShockerShareCodePauseErrors];
-
-export type ShockerShockerShareCodePauseResponses = {
+  400: OpenShockProblem;
   /**
-   * Successfully updated pause status share
+   * Forbidden
    */
-  200: BooleanLegacyDataResponse;
+  403: OpenShockProblem;
+  /**
+   * Conflict
+   */
+  409: OpenShockProblem;
 };
 
-export type ShockerShockerShareCodePauseResponse =
-  ShockerShockerShareCodePauseResponses[keyof ShockerShockerShareCodePauseResponses];
+export type AuthenticatedAccountChangeUsernameError =
+  AuthenticatedAccountChangeUsernameErrors[keyof AuthenticatedAccountChangeUsernameErrors];
 
-export type UsersGetSelfData = {
+export type AuthenticatedAccountChangeUsernameResponses = {
+  /**
+   * OK
+   */
+  200: unknown;
+};
+
+export type AuthenticatedAccountDeactivateData = {
   body?: never;
   path?: never;
   query?: never;
-  url: '/1/users/self';
+  url: '/1/account';
 };
 
-export type UsersGetSelfResponses = {
+export type AuthenticatedAccountDeactivateErrors = {
   /**
-   * The user's information was successfully retrieved.
+   * Forbidden
    */
-  200: UserSelfResponseLegacyDataResponse;
+  403: OpenShockProblem;
 };
 
-export type UsersGetSelfResponse = UsersGetSelfResponses[keyof UsersGetSelfResponses];
+export type AuthenticatedAccountDeactivateError =
+  AuthenticatedAccountDeactivateErrors[keyof AuthenticatedAccountDeactivateErrors];
 
-export type UsersGetByNameData = {
+export type AuthenticatedAccountDeactivateResponses = {
+  /**
+   * Done.
+   */
+  204: void;
+};
+
+export type AuthenticatedAccountDeactivateResponse =
+  AuthenticatedAccountDeactivateResponses[keyof AuthenticatedAccountDeactivateResponses];
+
+export type AuthenticatedAccountGetAuditLogData = {
+  body?: never;
+  path?: never;
+  query?: {
+    /**
+     * Page, sort, and search parameters.
+     */
+    page?: number;
+    /**
+     * Page, sort, and search parameters.
+     */
+    pageSize?: number;
+    /**
+     * Page, sort, and search parameters.
+     */
+    search?: string;
+    /**
+     * Page, sort, and search parameters.
+     */
+    sort?: string;
+    /**
+     * Page, sort, and search parameters.
+     */
+    sortDir?: SortDirection;
+  };
+  url: '/1/account/audit-log';
+};
+
+export type AuthenticatedAccountGetAuditLogResponses = {
+  /**
+   * A page of audit log entries.
+   */
+  200: AuditLogEntryResponsePagedResult;
+};
+
+export type AuthenticatedAccountGetAuditLogResponse =
+  AuthenticatedAccountGetAuditLogResponses[keyof AuthenticatedAccountGetAuditLogResponses];
+
+export type AuthenticatedAccountRemoveOAuthConnectionData = {
   body?: never;
   path: {
-    username: string;
+    /**
+     * Provider key (e.g. `discord`).
+     */
+    provider: string;
   };
   query?: never;
-  url: '/1/users/by-name/{username}';
+  url: '/1/account/connections/{provider}';
 };
 
-export type UsersGetByNameErrors = {
+export type AuthenticatedAccountRemoveOAuthConnectionErrors = {
   /**
-   * Not Found
+   * No connection found for this provider.
    */
-  404: OpenShockProblem;
+  404: ProblemDetails;
 };
 
-export type UsersGetByNameError = UsersGetByNameErrors[keyof UsersGetByNameErrors];
+export type AuthenticatedAccountRemoveOAuthConnectionError =
+  AuthenticatedAccountRemoveOAuthConnectionErrors[keyof AuthenticatedAccountRemoveOAuthConnectionErrors];
 
-export type UsersGetByNameResponses = {
+export type AuthenticatedAccountRemoveOAuthConnectionResponses = {
   /**
-   * OK
+   * Connection removed.
    */
-  200: BasicUserInfo;
+  204: void;
 };
 
-export type UsersGetByNameResponse = UsersGetByNameResponses[keyof UsersGetByNameResponses];
+export type AuthenticatedAccountRemoveOAuthConnectionResponse =
+  AuthenticatedAccountRemoveOAuthConnectionResponses[keyof AuthenticatedAccountRemoveOAuthConnectionResponses];
+
+export type AuthenticatedAccountListOAuthConnectionsData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/1/account/connections';
+};
+
+export type AuthenticatedAccountListOAuthConnectionsResponses = {
+  /**
+   * Returns the list of connections.
+   */
+  200: Array<OAuthConnectionResponse>;
+};
+
+export type AuthenticatedAccountListOAuthConnectionsResponse =
+  AuthenticatedAccountListOAuthConnectionsResponses[keyof AuthenticatedAccountListOAuthConnectionsResponses];

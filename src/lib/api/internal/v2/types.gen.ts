@@ -14,9 +14,9 @@ export type BasicUserInfo = {
 };
 
 export type BulkUserShareShockersUpdateRequest = {
+  shockers: Array<string>;
   permissions: ShockerPermissions;
   limits: ShockerLimits;
-  shockers: Array<string>;
 };
 
 export type ChangeUsernameRequest = {
@@ -28,11 +28,20 @@ export type Control = {
   type: ControlType;
   intensity: number;
   duration: number;
+  /**
+   * If true, overrides livecontrol
+   */
   exclusive?: boolean;
 };
 
+/**
+ * Determines how a per-token min/max limit is applied to an incoming control value.
+ */
 export const ControlLimitMode = { Clamp: 'Clamp', Lerp: 'Lerp' } as const;
 
+/**
+ * Determines how a per-token min/max limit is applied to an incoming control value.
+ */
 export type ControlLimitMode = (typeof ControlLimitMode)[keyof typeof ControlLimitMode];
 
 export type ControlRequest = {
@@ -55,10 +64,10 @@ export type CreateShareRequest = {
 };
 
 export type CreateTokenRequestV2 = {
+  validUntil?: Temporal.Instant | null;
   name: string;
   permissions: Array<PermissionType>;
   shockerControl: ShockerControlSettings;
-  validUntil?: Temporal.Instant | null;
 };
 
 export type DurationLimitSettings = {
@@ -91,8 +100,18 @@ export type LcgNodeResponseV2 = {
 };
 
 export type LcgResponseV2 = {
+  /**
+   * Public host of the gateway the hub is connected to.
+   */
   host: string;
+  /**
+   * Public port to connect to (default 443).
+   */
   port: number;
+  /**
+   * Base path prefix the gateway is served under, e.g. "/gateway" (empty for root). The client
+   * builds the full URL and appends the live-control route (`/1/ws/live/{hubId}`) itself.
+   */
   pathPrefix: string;
   country: string;
 };
@@ -118,8 +137,8 @@ export type LoginV2OkResponse = {
 };
 
 export type OpenShockProblem = {
-  type?: string | null;
-  title?: string | null;
+  type: string | null;
+  title: string | null;
   status?: number | null;
   detail?: string | null;
   instance?: string | null;
@@ -192,11 +211,11 @@ export type SetTokenPausedRequest = {
 };
 
 export type ShareInviteBaseDetails = {
+  shockers: Array<ShockerPermLimitPairWithIdAndName>;
   id: string;
   createdAt: Temporal.Instant;
   owner: BasicUserInfo;
   sharedWith: BasicUserInfo;
-  shockers: Array<ShockerPermLimitPairWithIdAndName>;
 };
 
 /**
@@ -216,24 +235,24 @@ export type ShockerLimits = {
   duration: number | null;
 };
 
-export type ShockerPermLimitPairWithId = {
-  permissions: ShockerPermissions;
-  limits: ShockerLimits;
-  id?: string;
-};
-
-export type ShockerPermLimitPairWithIdAndName = {
-  permissions: ShockerPermissions;
-  limits: ShockerLimits;
-  id?: string;
-  name: string;
-};
-
 export type ShockerPermissions = {
   vibrate: boolean;
   sound: boolean;
   shock: boolean;
   live?: boolean;
+};
+
+export type ShockerPermLimitPairWithId = {
+  id?: string;
+  permissions: ShockerPermissions;
+  limits: ShockerLimits;
+};
+
+export type ShockerPermLimitPairWithIdAndName = {
+  name: string;
+  id?: string;
+  permissions: ShockerPermissions;
+  limits: ShockerLimits;
 };
 
 export type SignUpV2 = {
@@ -271,27 +290,6 @@ export type TokenResponseV2 = {
   shockerControl: ShockerControlSettings;
 };
 
-export type UserShareInfo = {
-  id: string;
-  name: string;
-  createdOn: Temporal.Instant;
-  permissions: ShockerPermissions;
-  limits: ShockerLimits;
-  /**
-   * PauseReason
-   *
-   * An integer representing the reason(s) for the shocker being paused, expressed as a bitfield where reasons are OR'd together.
-   *
-   * Each bit corresponds to:
-   * - 1: Shocker
-   * - 2: UserShare
-   * - 4: PublicShare
-   *
-   * For example, a value of 6 (2 | 4) indicates both 'UserShare' and 'PublicShare' reasons.
-   */
-  paused: number;
-};
-
 export const UsernameAvailability = {
   Available: 'Available',
   Taken: 'Taken',
@@ -321,6 +319,27 @@ export const UsernameErrorType = {
 
 export type UsernameErrorType = (typeof UsernameErrorType)[keyof typeof UsernameErrorType];
 
+export type UserShareInfo = {
+  id: string;
+  name: string;
+  createdOn: Temporal.Instant;
+  permissions: ShockerPermissions;
+  limits: ShockerLimits;
+  /**
+   * PauseReason
+   *
+   * An integer representing the reason(s) for the shocker being paused, expressed as a bitfield where reasons are OR'd together.
+   *
+   * Each bit corresponds to:
+   * - 1: Shocker
+   * - 2: UserShare
+   * - 4: PublicShare
+   *
+   * For example, a value of 6 (2 | 4) indicates both 'UserShare' and 'PublicShare' reasons.
+   */
+  paused: number;
+};
+
 export type V2UserShares = {
   outgoing: Array<V2UserSharesListItem>;
   incoming: Array<V2UserSharesListItem>;
@@ -334,8 +353,8 @@ export type V2UserSharesListItem = {
 };
 
 export type OpenShockProblemWritable = {
-  type?: string | null;
-  title?: string | null;
+  type: string | null;
+  title: string | null;
   status?: number | null;
   detail?: string | null;
   instance?: string | null;
@@ -361,7 +380,7 @@ export type TokensSelfGetSelfTokenV2Response =
   TokensSelfGetSelfTokenV2Responses[keyof TokensSelfGetSelfTokenV2Responses];
 
 export type TokensReportTokensData = {
-  body?: ReportTokensRequest;
+  body: ReportTokensRequest;
   path?: never;
   query?: never;
   url: '/2/tokens/report';
@@ -392,7 +411,7 @@ export type TokensListTokensV2Response =
   TokensListTokensV2Responses[keyof TokensListTokensV2Responses];
 
 export type TokensCreateTokenV2Data = {
-  body?: CreateTokenRequestV2;
+  body: CreateTokenRequestV2;
   path?: never;
   query?: never;
   url: '/2/tokens';
@@ -411,6 +430,9 @@ export type TokensCreateTokenV2Response =
 export type TokensGetTokenByIdV2Data = {
   body?: never;
   path: {
+    /**
+     * Get a token by id
+     */
     tokenId: string;
   };
   query?: never;
@@ -438,8 +460,11 @@ export type TokensGetTokenByIdV2Response =
   TokensGetTokenByIdV2Responses[keyof TokensGetTokenByIdV2Responses];
 
 export type TokensEditTokenV2Data = {
-  body?: EditTokenRequestV2;
+  body: EditTokenRequestV2;
   path: {
+    /**
+     * Edit a token
+     */
     tokenId: string;
   };
   query?: never;
@@ -463,8 +488,11 @@ export type TokensEditTokenV2Responses = {
 };
 
 export type TokensSetTokenPausedData = {
-  body?: SetTokenPausedRequest;
+  body: SetTokenPausedRequest;
   path: {
+    /**
+     * Set whether a token is paused. A paused token may not send shocker control messages.
+     */
     tokenId: string;
   };
   query?: never;
@@ -491,188 +519,8 @@ export type TokensSetTokenPausedResponses = {
 export type TokensSetTokenPausedResponse =
   TokensSetTokenPausedResponses[keyof TokensSetTokenPausedResponses];
 
-export type AccountCheckUsernameData = {
-  body?: ChangeUsernameRequest;
-  path?: never;
-  query?: never;
-  url: '/2/account/username/check';
-};
-
-export type AccountCheckUsernameResponses = {
-  /**
-   * OK
-   */
-  200: UsernameCheckResponse;
-};
-
-export type AccountCheckUsernameResponse =
-  AccountCheckUsernameResponses[keyof AccountCheckUsernameResponses];
-
-export type AccountLoginV2Data = {
-  body?: LoginV2;
-  path?: never;
-  query?: never;
-  url: '/2/account/login';
-};
-
-export type AccountLoginV2Errors = {
-  /**
-   * Invalid username or password
-   */
-  401: OpenShockProblem;
-  /**
-   * Forbidden
-   */
-  403: OpenShockProblem;
-};
-
-export type AccountLoginV2Error = AccountLoginV2Errors[keyof AccountLoginV2Errors];
-
-export type AccountLoginV2Responses = {
-  /**
-   * User successfully logged in
-   */
-  200: LoginV2OkResponse;
-};
-
-export type AccountLoginV2Response = AccountLoginV2Responses[keyof AccountLoginV2Responses];
-
-export type AccountPasswordResetInitiateV2Data = {
-  body?: PasswordResetRequestV2;
-  path?: never;
-  query?: never;
-  url: '/2/account/password-reset';
-};
-
-export type AccountPasswordResetInitiateV2Errors = {
-  /**
-   * Forbidden
-   */
-  403: OpenShockProblem;
-};
-
-export type AccountPasswordResetInitiateV2Error =
-  AccountPasswordResetInitiateV2Errors[keyof AccountPasswordResetInitiateV2Errors];
-
-export type AccountPasswordResetInitiateV2Responses = {
-  /**
-   * Password reset email sent if the email is associated to an registered account
-   */
-  200: unknown;
-};
-
-export type AccountSignUpV2Data = {
-  body?: SignUpV2;
-  path?: never;
-  query?: never;
-  url: '/2/account/signup';
-};
-
-export type AccountSignUpV2Errors = {
-  /**
-   * Username or email already exists
-   */
-  400: unknown;
-  /**
-   * Forbidden
-   */
-  403: OpenShockProblem;
-  /**
-   * Conflict
-   */
-  409: OpenShockProblem;
-};
-
-export type AccountSignUpV2Error = AccountSignUpV2Errors[keyof AccountSignUpV2Errors];
-
-export type AccountSignUpV2Responses = {
-  /**
-   * User successfully signed up
-   */
-  200: unknown;
-};
-
-export type DeviceGetLiveControlGatewayV2Data = {
-  body?: never;
-  path?: never;
-  query?: {
-    version?: number;
-  };
-  url: '/2/device/assignLCG';
-};
-
-export type DeviceGetLiveControlGatewayV2Errors = {
-  /**
-   * Bad Request
-   */
-  400: OpenShockProblem;
-  /**
-   * Unable to find suitable LCG node
-   */
-  503: OpenShockProblem;
-};
-
-export type DeviceGetLiveControlGatewayV2Error =
-  DeviceGetLiveControlGatewayV2Errors[keyof DeviceGetLiveControlGatewayV2Errors];
-
-export type DeviceGetLiveControlGatewayV2Responses = {
-  /**
-   * Successfully assigned LCG node
-   */
-  200: LcgNodeResponseV2;
-};
-
-export type DeviceGetLiveControlGatewayV2Response =
-  DeviceGetLiveControlGatewayV2Responses[keyof DeviceGetLiveControlGatewayV2Responses];
-
-export type DevicesCreateDeviceV2Data = {
-  body?: HubCreateRequest;
-  path?: never;
-  query?: never;
-  url: '/2/devices';
-};
-
-export type DevicesCreateDeviceV2Responses = {
-  /**
-   * Successfully created device
-   */
-  201: string;
-};
-
-export type DevicesCreateDeviceV2Response =
-  DevicesCreateDeviceV2Responses[keyof DevicesCreateDeviceV2Responses];
-
-export type DevicesGetLiveControlGatewayInfoV2Data = {
-  body?: never;
-  path: {
-    deviceId: string;
-  };
-  query?: never;
-  url: '/2/devices/{deviceId}/lcg';
-};
-
-export type DevicesGetLiveControlGatewayInfoV2Errors = {
-  /**
-   * Device does not exist or is not online
-   */
-  404: OpenShockProblem;
-};
-
-export type DevicesGetLiveControlGatewayInfoV2Error =
-  DevicesGetLiveControlGatewayInfoV2Errors[keyof DevicesGetLiveControlGatewayInfoV2Errors];
-
-export type DevicesGetLiveControlGatewayInfoV2Responses = {
-  /**
-   * Successfully retrieved live control gateway info
-   */
-  200: LcgResponseV2;
-};
-
-export type DevicesGetLiveControlGatewayInfoV2Response =
-  DevicesGetLiveControlGatewayInfoV2Responses[keyof DevicesGetLiveControlGatewayInfoV2Responses];
-
 export type ShockerSendControlData = {
-  body?: ControlRequest;
+  body: ControlRequest;
   path?: never;
   query?: never;
   url: '/2/shockers/control';
@@ -706,7 +554,7 @@ export type ShockerSendControlResponse =
   ShockerSendControlResponses[keyof ShockerSendControlResponses];
 
 export type UserSharesCreateShareInviteData = {
-  body?: CreateShareRequest;
+  body: CreateShareRequest;
   path?: never;
   query?: never;
   url: '/2/shares/user/invites';
@@ -842,6 +690,9 @@ export type UserSharesDenyIncomingInviteResponses = {
 export type UserSharesRedeemInviteData = {
   body?: never;
   path: {
+    /**
+     * Accept a share request and share the shockers with the current user.
+     */
     inviteId: string;
   };
   query?: never;
@@ -869,7 +720,7 @@ export type UserSharesRedeemInviteResponse =
   UserSharesRedeemInviteResponses[keyof UserSharesRedeemInviteResponses];
 
 export type UserSharesBulkPauseUserShareShockersData = {
-  body?: PauseUserShareShockersRequest;
+  body: PauseUserShareShockersRequest;
   path: {
     userId: string;
   };
@@ -888,7 +739,7 @@ export type UserSharesBulkPauseUserShareShockersResponse =
   UserSharesBulkPauseUserShareShockersResponses[keyof UserSharesBulkPauseUserShareShockersResponses];
 
 export type UserSharesBulkRemoveUserShareShockersData = {
-  body?: Array<string>;
+  body: Array<string>;
   path: {
     userId: string;
   };
@@ -907,8 +758,11 @@ export type UserSharesBulkRemoveUserShareShockersResponse =
   UserSharesBulkRemoveUserShareShockersResponses[keyof UserSharesBulkRemoveUserShareShockersResponses];
 
 export type UserSharesBulkUserShareShockersUpdateData = {
-  body?: BulkUserShareShockersUpdateRequest;
+  body: BulkUserShareShockersUpdateRequest;
   path: {
+    /**
+     * Update user shares for a shocker
+     */
     userId: string;
   };
   query?: never;
@@ -928,6 +782,193 @@ export type UserSharesBulkUserShareShockersUpdateError =
 export type UserSharesBulkUserShareShockersUpdateResponses = {
   /**
    * Successfully updated share code
+   */
+  200: unknown;
+};
+
+export type DeviceGetLiveControlGatewayV2Data = {
+  body?: never;
+  path?: never;
+  query?: {
+    /**
+     * Gets the best suited LCG node for the client
+     */
+    version?: number;
+  };
+  url: '/2/device/assignLCG';
+};
+
+export type DeviceGetLiveControlGatewayV2Errors = {
+  /**
+   * Bad Request
+   */
+  400: OpenShockProblem;
+  /**
+   * Unable to find suitable LCG node
+   */
+  503: OpenShockProblem;
+};
+
+export type DeviceGetLiveControlGatewayV2Error =
+  DeviceGetLiveControlGatewayV2Errors[keyof DeviceGetLiveControlGatewayV2Errors];
+
+export type DeviceGetLiveControlGatewayV2Responses = {
+  /**
+   * Successfully assigned LCG node
+   */
+  200: LcgNodeResponseV2;
+};
+
+export type DeviceGetLiveControlGatewayV2Response =
+  DeviceGetLiveControlGatewayV2Responses[keyof DeviceGetLiveControlGatewayV2Responses];
+
+export type DevicesCreateDeviceV2Data = {
+  body: HubCreateRequest;
+  path?: never;
+  query?: never;
+  url: '/2/devices';
+};
+
+export type DevicesCreateDeviceV2Responses = {
+  /**
+   * Successfully created device
+   */
+  201: string;
+};
+
+export type DevicesCreateDeviceV2Response =
+  DevicesCreateDeviceV2Responses[keyof DevicesCreateDeviceV2Responses];
+
+export type DevicesGetLiveControlGatewayInfoV2Data = {
+  body?: never;
+  path: {
+    /**
+     * Gets the live control gateway a hub is connected to, including its public port and the full
+     * live-control WebSocket path (honoring the gateway's configured path prefix).
+     */
+    deviceId: string;
+  };
+  query?: never;
+  url: '/2/devices/{deviceId}/lcg';
+};
+
+export type DevicesGetLiveControlGatewayInfoV2Errors = {
+  /**
+   * Device does not exist or is not online
+   */
+  404: OpenShockProblem;
+};
+
+export type DevicesGetLiveControlGatewayInfoV2Error =
+  DevicesGetLiveControlGatewayInfoV2Errors[keyof DevicesGetLiveControlGatewayInfoV2Errors];
+
+export type DevicesGetLiveControlGatewayInfoV2Responses = {
+  /**
+   * Successfully retrieved live control gateway info
+   */
+  200: LcgResponseV2;
+};
+
+export type DevicesGetLiveControlGatewayInfoV2Response =
+  DevicesGetLiveControlGatewayInfoV2Responses[keyof DevicesGetLiveControlGatewayInfoV2Responses];
+
+export type AccountCheckUsernameData = {
+  body: ChangeUsernameRequest;
+  path?: never;
+  query?: never;
+  url: '/2/account/username/check';
+};
+
+export type AccountCheckUsernameResponses = {
+  /**
+   * OK
+   */
+  200: UsernameCheckResponse;
+};
+
+export type AccountCheckUsernameResponse =
+  AccountCheckUsernameResponses[keyof AccountCheckUsernameResponses];
+
+export type AccountLoginV2Data = {
+  body: LoginV2;
+  path?: never;
+  query?: never;
+  url: '/2/account/login';
+};
+
+export type AccountLoginV2Errors = {
+  /**
+   * Invalid username or password
+   */
+  401: OpenShockProblem;
+  /**
+   * Forbidden
+   */
+  403: OpenShockProblem;
+};
+
+export type AccountLoginV2Error = AccountLoginV2Errors[keyof AccountLoginV2Errors];
+
+export type AccountLoginV2Responses = {
+  /**
+   * User successfully logged in
+   */
+  200: LoginV2OkResponse;
+};
+
+export type AccountLoginV2Response = AccountLoginV2Responses[keyof AccountLoginV2Responses];
+
+export type AccountPasswordResetInitiateV2Data = {
+  body: PasswordResetRequestV2;
+  path?: never;
+  query?: never;
+  url: '/2/account/password-reset';
+};
+
+export type AccountPasswordResetInitiateV2Errors = {
+  /**
+   * Forbidden
+   */
+  403: OpenShockProblem;
+};
+
+export type AccountPasswordResetInitiateV2Error =
+  AccountPasswordResetInitiateV2Errors[keyof AccountPasswordResetInitiateV2Errors];
+
+export type AccountPasswordResetInitiateV2Responses = {
+  /**
+   * Password reset email sent if the email is associated to an registered account
+   */
+  200: unknown;
+};
+
+export type AccountSignUpV2Data = {
+  body: SignUpV2;
+  path?: never;
+  query?: never;
+  url: '/2/account/signup';
+};
+
+export type AccountSignUpV2Errors = {
+  /**
+   * Username or email already exists
+   */
+  400: unknown;
+  /**
+   * Forbidden
+   */
+  403: OpenShockProblem;
+  /**
+   * Conflict
+   */
+  409: OpenShockProblem;
+};
+
+export type AccountSignUpV2Error = AccountSignUpV2Errors[keyof AccountSignUpV2Errors];
+
+export type AccountSignUpV2Responses = {
+  /**
+   * User successfully signed up
    */
   200: unknown;
 };
