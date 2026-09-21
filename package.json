@@ -33,7 +33,7 @@
 		"@tailwindcss/vite": "^4.3.3",
 		"@tanstack/svelte-table": "^9.2.4",
 		"@types/d3-scale": "^4.0.9",
-		"@types/node": "^26.5.1",
+		"@types/node": "^26.6.1",
 		"@types/semver": "^7.8.0",
 		"@types/w3c-web-serial": "^1.0.8",
 		"@typescript/native": "npm:typescript@~7.0.2",
@@ -71,7 +71,7 @@
 		"vite-plugin-devtools-json": "^1.1.0",
 		"vite-plugin-mkcert": "^2.1.0",
 		"vitest": "^5.0.0",
-		"wrangler": "^4.131.1"
+		"wrangler": "^4.134.0"
 	},
 	"dependencies": {
 		"@openshock/svelte-core": "workspace:*",
