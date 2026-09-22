@@ -34,7 +34,7 @@
     <Button variant="ghost" class="size-8" title="Toggle Sidebar" onclick={() => sidebar.toggle()}>
       <PanelLeft size={24} class="m-0 text-gray-600 dark:text-gray-300" />
     </Button>
-    <Separator orientation="vertical" class="mr-2 data-[orientation=vertical]:h-4" />
+    <Separator orientation="vertical" class="mr-2 data-vertical:h-4 data-vertical:self-center" />
     <Breadcrumb />
     <div
       class={cn(
