@@ -32,8 +32,12 @@ async function handleResponseError(
   // `response.json()` (which would throw "Body has already been consumed").
   const problem = error.body;
   if (!isProblemDetails(problem)) {
+    // Not every service the frontend talks to speaks ProblemDetails — the firmware
+    // repository server returns plain HTTP errors with no body on the error object.
+    // Fall back to a generic toast so the failure still reaches the user.
     console.error('Content json is not a valid problemdetails object', problem);
-    return null;
+    toast.error('Internal error occured');
+    return;
   }
 
   if (dev) {
