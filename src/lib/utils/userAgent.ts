@@ -1,32 +1,40 @@
-import { UAParser, type UAParserExt } from 'ua-parser-js';
+import { UAParser } from 'ua-parser-js';
 
-const OpenShockExtension: UAParserExt = {
-  browser: [[/^(OpenShock)\/([-\w.+]+)/i], ['name', 'version']],
-  cpu: [
-    [/;\s*(ESP32(?:S[0-9]+)?);/i],
-    [['architecture', 'XTensa']],
-    [/;\s*(ESP32C[0-9]+);/i],
-    [['architecture', 'RISC-V']],
-  ],
-  device: [
-    [/;\s*(ESP32(?:[SC][0-9]+)?);\s*Espressif\)/i],
-    ['model', ['vendor', 'Espressif'], ['type', 'embedded']],
-  ],
-  os: [[/\(arduino-esp32;/i], [['name', 'Arduino']]],
-};
+export interface OpenShockUserAgent {
+  version: string;
+  framework: string;
+  board: string;
+  chip: string;
+}
+
+// Firmware user agents look like `OpenShock/<version> (<framework>; <board>; <chip>; Espressif)`.
+export function parseOpenShockUserAgent(userAgent: string): OpenShockUserAgent | null {
+  const match = /^OpenShock\/(\S+) \(([^)]*)\)/i.exec(userAgent);
+  if (!match) return null;
+
+  const details = match[2].split(';').map((part) => part.trim());
+  if (details.length !== 4 || details.slice(0, 3).some((part) => !part)) return null;
+
+  const [framework, board, chip] = details;
+  return { version: match[1], framework, board, chip };
+}
+
+export const formatBoardName = (board: string) => board.replaceAll('-', ' ');
+
+export const formatChipName = (chip: string) => chip.replace(/^ESP32([SC]\d+)$/i, 'ESP32-$1');
 
 export function getReadableUserAgentName(userAgent: string): string | null {
-  const ua = new UAParser(userAgent, OpenShockExtension);
+  const openShock = parseOpenShockUserAgent(userAgent);
+  if (openShock) {
+    return `${formatBoardName(openShock.board)} · ${formatChipName(openShock.chip)}`;
+  }
+
+  const ua = new UAParser(userAgent);
 
   const browser = ua.getBrowser();
   const os = ua.getOS();
 
   if (!browser.name || !os.name) return null;
-
-  if (browser.name === 'OpenShock') {
-    const device = ua.getDevice();
-    return `OpenShock ${browser.version} on ${os.name} ${device.model}`;
-  }
 
   let name = `${browser.name} on ${os.name}`;
 

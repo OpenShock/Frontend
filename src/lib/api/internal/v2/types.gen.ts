@@ -131,7 +131,7 @@ export type OpenShockProblem = {
    * @deprecated
    */
   readonly traceId?: string | null;
-  readonly requestId?: string | null;
+  requestId?: string | null;
   [key: string]: unknown;
 };
 
@@ -339,6 +339,7 @@ export type OpenShockProblemWritable = {
   status?: number | null;
   detail?: string | null;
   instance?: string | null;
+  requestId?: string | null;
   [key: string]: unknown;
 };
 
