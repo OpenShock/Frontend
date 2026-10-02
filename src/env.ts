@@ -1,23 +1,15 @@
 import { defineEnvVars } from '@sveltejs/kit/env';
-
-/** The truthy spellings accepted by `isTruthy` in `@openshock/svelte-core/utils`. */
-const TRUTHY = new Set(['1', 'true', 'yes', 'y', 'on']);
-
-/**
- * A `true` / `1` / `yes` / `y` / `on` flag, case-insensitive.
- *
- * Unset becomes `false`. That preserves the behaviour these variables had when they were read
- * through `$env/dynamic/*` before the SvelteKit 3 migration: consumers fed them to `isTruthy()`
- * or compared against `'true'`, for which `undefined` was already falsy.
- *
- * This deliberately reimplements `isTruthy` rather than importing it. SvelteKit evaluates this
- * module in a plain Node context to resolve `static` values, and the `@openshock/svelte-core/utils`
- * barrel reaches `clipboard.svelte.ts` -> `svelte-sonner` -> a `.svelte` file, which Node cannot
- * load. Keep this module free of app and package imports.
- */
-function flag(value: string | undefined): boolean {
-  return value !== undefined && TRUTHY.has(value.toLowerCase());
-}
+// `isTruthy` is the schema for every boolean variable below: it accepts `true` / `1` / `yes` / `y` /
+// `on` case-insensitively and treats everything else, including unset, as `false`. That preserves
+// the behaviour these variables had when they were read through `$env/dynamic/*` before the
+// SvelteKit 3 migration, where consumers fed them to `isTruthy()` or compared against `'true'`.
+//
+// It is imported straight from the submodule source rather than through
+// `@openshock/svelte-core/utils` because SvelteKit evaluates this module in a plain Node context to
+// resolve `static` values, and that barrel reaches `clipboard.svelte.ts` -> `svelte-sonner` -> a
+// `.svelte` file, which Node cannot load. Reaching the file directly keeps one definition and skips
+// the barrel.
+import { isTruthy } from '../packages/svelte-core/src/lib/utils/parse';
 
 /** Required free text, trimmed. Throws when unset or blank. */
 function text(label: string) {
@@ -145,7 +137,7 @@ export const variables = defineEnvVars({
       'allowing SSR/API calls to a backend using a self-signed certificate. Only for ' +
       'development or an isolated self-hosted network; leave unset in production. Read at ' +
       'runtime so it can be set as a container env var without rebuilding.',
-    schema: flag,
+    schema: isTruthy,
   },
 
   // --- Feature switches ----------------------------------------------------------------------
@@ -153,13 +145,13 @@ export const variables = defineEnvVars({
     public: true,
     static: true,
     description: 'Shows the "development deployment" banner above the app shell.',
-    schema: flag,
+    schema: isTruthy,
   },
   PUBLIC_DISABLE_ONBOARDING: {
     public: true,
     static: true,
     description: 'Suppresses the first-run onboarding tour.',
-    schema: flag,
+    schema: isTruthy,
   },
   PUBLIC_DISABLE_SHOCKER_MAP: {
     public: true,
@@ -167,7 +159,7 @@ export const variables = defineEnvVars({
     description:
       'Hides the shocker map control module. Static, so the map code is tree-shaken out of the ' +
       'client bundle when this is set.',
-    schema: flag,
+    schema: isTruthy,
   },
   PUBLIC_TURNSTILE_DEV_BYPASS_VALUE: {
     public: true,
@@ -183,17 +175,17 @@ export const variables = defineEnvVars({
   PUBLIC_DISABLE_SITEMAP: {
     public: true,
     description: 'Makes /sitemap.xml return 404 and drops its reference from /robots.txt.',
-    schema: flag,
+    schema: isTruthy,
   },
   PUBLIC_DENY_ROBOTS: {
     public: true,
     description: 'Serves a blanket disallow from /robots.txt.',
-    schema: flag,
+    schema: isTruthy,
   },
   PUBLIC_DISABLE_LLMS_TXT: {
     public: true,
     description: 'Makes /llms.txt return 404.',
-    schema: flag,
+    schema: isTruthy,
   },
 
   // --- Telemetry (SigNoz / OpenTelemetry) ----------------------------------------------------
@@ -203,7 +195,7 @@ export const variables = defineEnvVars({
     description:
       'Deployment kill-switch for every telemetry signal, not just logs. With this off, no ' +
       'consent prompt is shown and nothing is shipped.',
-    schema: flag,
+    schema: isTruthy,
   },
   PUBLIC_SIGNOZ_LOGS_URL: {
     public: true,
@@ -225,7 +217,7 @@ export const variables = defineEnvVars({
     description:
       'Propagates W3C trace context (traceparent/tracestate) to the backend API. Requires the ' +
       'backend CORS config to allow those request headers, so off by default.',
-    schema: flag,
+    schema: isTruthy,
   },
   PUBLIC_SIGNOZ_DEPLOYMENT_ENVIRONMENT: {
     public: true,
