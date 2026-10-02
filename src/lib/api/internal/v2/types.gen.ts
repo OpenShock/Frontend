@@ -786,42 +786,6 @@ export type UserSharesBulkUserShareShockersUpdateResponses = {
   200: unknown;
 };
 
-export type DeviceGetLiveControlGatewayV2Data = {
-  body?: never;
-  path?: never;
-  query?: {
-    /**
-     * Gets the best suited LCG node for the client
-     */
-    version?: number;
-  };
-  url: '/2/device/assignLCG';
-};
-
-export type DeviceGetLiveControlGatewayV2Errors = {
-  /**
-   * Bad Request
-   */
-  400: OpenShockProblem;
-  /**
-   * Unable to find suitable LCG node
-   */
-  503: OpenShockProblem;
-};
-
-export type DeviceGetLiveControlGatewayV2Error =
-  DeviceGetLiveControlGatewayV2Errors[keyof DeviceGetLiveControlGatewayV2Errors];
-
-export type DeviceGetLiveControlGatewayV2Responses = {
-  /**
-   * Successfully assigned LCG node
-   */
-  200: LcgNodeResponseV2;
-};
-
-export type DeviceGetLiveControlGatewayV2Response =
-  DeviceGetLiveControlGatewayV2Responses[keyof DeviceGetLiveControlGatewayV2Responses];
-
 export type DevicesCreateDeviceV2Data = {
   body: HubCreateRequest;
   path?: never;
@@ -871,6 +835,42 @@ export type DevicesGetLiveControlGatewayInfoV2Responses = {
 
 export type DevicesGetLiveControlGatewayInfoV2Response =
   DevicesGetLiveControlGatewayInfoV2Responses[keyof DevicesGetLiveControlGatewayInfoV2Responses];
+
+export type DeviceGetLiveControlGatewayV2Data = {
+  body?: never;
+  path?: never;
+  query?: {
+    /**
+     * Gets the best suited LCG node for the client
+     */
+    version?: number;
+  };
+  url: '/2/device/assignLCG';
+};
+
+export type DeviceGetLiveControlGatewayV2Errors = {
+  /**
+   * Bad Request
+   */
+  400: OpenShockProblem;
+  /**
+   * Unable to find suitable LCG node
+   */
+  503: OpenShockProblem;
+};
+
+export type DeviceGetLiveControlGatewayV2Error =
+  DeviceGetLiveControlGatewayV2Errors[keyof DeviceGetLiveControlGatewayV2Errors];
+
+export type DeviceGetLiveControlGatewayV2Responses = {
+  /**
+   * Successfully assigned LCG node
+   */
+  200: LcgNodeResponseV2;
+};
+
+export type DeviceGetLiveControlGatewayV2Response =
+  DeviceGetLiveControlGatewayV2Responses[keyof DeviceGetLiveControlGatewayV2Responses];
 
 export type AccountCheckUsernameData = {
   body: ChangeUsernameRequest;

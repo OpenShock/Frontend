@@ -38,12 +38,33 @@ export type AdminOnlineDeviceResponse = {
   latencyMs: number | null;
   rssi: number | null;
   country: string | null;
+  /**
+   * IpAddress
+   *
+   * An IPv4 or IPv6 address in its textual form.
+   */
   ip: string | null;
 };
 
 export type AdminOnlineDeviceResponseArrayLegacyDataResponse = {
   message: string;
   data: Array<AdminOnlineDeviceResponse> | null;
+};
+
+export type AdminOnlineGatewayResponse = {
+  id: string;
+  host: string;
+  port: number;
+  pathPrefix: string;
+  country: string;
+  latitude: number | null;
+  longitude: number | null;
+  /**
+   * Load the gateway advertises for hub assignment, in percent
+   */
+  load: number;
+  environment: string;
+  connectedHubs: number;
 };
 
 export type AdminUsersView = {
@@ -54,6 +75,7 @@ export type AdminUsersView = {
   roles: Array<RoleType>;
   createdAt: Temporal.Instant;
   activatedAt: Temporal.Instant | null;
+  createdByAutomationTokenId: string | null;
   deactivatedAt: Temporal.Instant | null;
   deactivatedByUserId: string | null;
   apiTokenCount: number;
@@ -74,6 +96,88 @@ export type AdminUsersViewPaginated = {
   data: Array<AdminUsersView>;
 };
 
+export type AdminUserView = {
+  id: string;
+  name: string;
+  email: string;
+  passwordHashType: PasswordHashingAlgorithm;
+  roles: Array<RoleType>;
+  createdAt: Temporal.Instant;
+  activatedAt: Temporal.Instant | null;
+  createdByAutomationTokenId: string | null;
+  activationRequest: AdminUserViewUserActivationRequest;
+  deactivation: AdminUserViewUserDeactivation;
+  hubs: Array<AdminUserViewHub>;
+  apiTokens: Array<AdminUserViewApiToken>;
+  usersNameChanges: Array<AdminUserViewNameChange>;
+  usersEmailChanges: Array<AdminUserViewEmailChange>;
+  passwordResets: Array<AdminUserViewPasswordReset>;
+  shockerControlLogsCount: number;
+};
+
+export type AdminUserViewApiToken = {
+  id: string;
+  name: string;
+  permissions: Array<PermissionType>;
+  validUntil: Temporal.Instant | null;
+  lastUsed: Temporal.Instant | null;
+  createdAt: Temporal.Instant;
+  /**
+   * IpAddress
+   *
+   * An IPv4 or IPv6 address in its textual form.
+   */
+  createdByIp: string;
+};
+
+export type AdminUserViewEmailChange = {
+  id: string;
+  email: string;
+  createdAt: Temporal.Instant;
+  usedAt: Temporal.Instant | null;
+};
+
+export type AdminUserViewHub = {
+  id: string;
+  name: string;
+  createdAt: Temporal.Instant;
+  shockers: Array<AdminUserViewShocker>;
+};
+
+export type AdminUserViewNameChange = {
+  id: number;
+  oldName: string;
+  createdAt: Temporal.Instant;
+};
+
+export type AdminUserViewPasswordReset = {
+  id: string;
+  createdAt: Temporal.Instant;
+  usedAt: Temporal.Instant | null;
+};
+
+export type AdminUserViewShocker = {
+  id: string;
+  name: string;
+  createdAt: Temporal.Instant;
+};
+
+export type AdminUserViewUserActivationRequest = {
+  emailSendAttempts: number;
+  createdAt: Temporal.Instant;
+};
+
+export type AdminUserViewUserDeactivation = {
+  deactivatedBy: AdminUserViewUserRef;
+  scheduledDeletionTime: Temporal.Instant | null;
+  deactivatedAt: Temporal.Instant;
+};
+
+export type AdminUserViewUserRef = {
+  id: string;
+  name: string;
+};
+
 export const AuditAction = {
   Login: 'Login',
   Logout: 'Logout',
@@ -88,6 +192,11 @@ export const AuditAction = {
   AccountDeactivated: 'AccountDeactivated',
   AccountReactivated: 'AccountReactivated',
   AccountDeleted: 'AccountDeleted',
+  AutomationTokenCreated: 'AutomationTokenCreated',
+  AutomationTokenUpdated: 'AutomationTokenUpdated',
+  AutomationTokenRotated: 'AutomationTokenRotated',
+  AutomationTokenDeleted: 'AutomationTokenDeleted',
+  AutomationTokenUsed: 'AutomationTokenUsed',
 } as const;
 
 export type AuditAction = (typeof AuditAction)[keyof typeof AuditAction];
@@ -98,6 +207,11 @@ export type AuditLogEntryResponse = {
   actorId: string | null;
   action: AuditAction;
   reason: string | null;
+  /**
+   * IpAddress
+   *
+   * An IPv4 or IPv6 address in its textual form.
+   */
   ipAddress: string | null;
   userAgent: string | null;
   metadata: AuditMetadata;
@@ -157,7 +271,22 @@ export type AuditMetadata =
     } & AuditMetadataOAuthDisconnectedMetadata)
   | ({
       t: 'accountDeactivated';
-    } & AuditMetadataAccountDeactivatedMetadata);
+    } & AuditMetadataAccountDeactivatedMetadata)
+  | ({
+      t: 'automationTokenCreated';
+    } & AuditMetadataAutomationTokenCreatedMetadata)
+  | ({
+      t: 'automationTokenUpdated';
+    } & AuditMetadataAutomationTokenUpdatedMetadata)
+  | ({
+      t: 'automationTokenRotated';
+    } & AuditMetadataAutomationTokenRotatedMetadata)
+  | ({
+      t: 'automationTokenDeleted';
+    } & AuditMetadataAutomationTokenDeletedMetadata)
+  | ({
+      t: 'automationTokenUsed';
+    } & AuditMetadataAutomationTokenUsedMetadata);
 
 export type AuditMetadataAccountDeactivatedMetadata = {
   t?: 'accountDeactivated';
@@ -175,6 +304,53 @@ export type AuditMetadataApiTokenDeletedMetadata = {
   t?: 'apiTokenDeleted';
   tokenId: string;
   name: string;
+};
+
+export type AuditMetadataAutomationTokenCreatedMetadata = {
+  t?: 'automationTokenCreated';
+  tokenId: string;
+  name: string;
+  types: Array<string>;
+  autoCleanupUsers: boolean;
+  autoCleanupAfter: string | null;
+};
+
+/**
+ * The token was deleted together with the  accounts it created.
+ */
+export type AuditMetadataAutomationTokenDeletedMetadata = {
+  t?: 'automationTokenDeleted';
+  tokenId: string;
+  name: string;
+  deletedAccountCount: number;
+};
+
+export type AuditMetadataAutomationTokenRotatedMetadata = {
+  t?: 'automationTokenRotated';
+  tokenId: string;
+  name: string;
+};
+
+/**
+ * The token's settings after the update.
+ */
+export type AuditMetadataAutomationTokenUpdatedMetadata = {
+  t?: 'automationTokenUpdated';
+  tokenId: string;
+  name: string;
+  types: Array<string>;
+  autoCleanupUsers: boolean;
+  autoCleanupAfter: string | null;
+};
+
+/**
+ * An automation token was used on this account.  is a `AutomationTokenFlow` name.
+ */
+export type AuditMetadataAutomationTokenUsedMetadata = {
+  t?: 'automationTokenUsed';
+  tokenId: string;
+  name: string;
+  flow: string;
 };
 
 export type AuditMetadataEmailChangedMetadata = {
@@ -208,6 +384,28 @@ export type AuditMetadataUsernameChangedMetadata = {
   old: string;
   new: string;
 };
+
+export type AutomationTokenDto = {
+  id: string;
+  name: string;
+  types: Array<AutomationTokenType>;
+  createdAt: Temporal.Instant;
+  lastUsedAt?: Temporal.Instant | null;
+  lastRotatedAt?: Temporal.Instant | null;
+  useCount?: bigint;
+  autoCleanupUsers?: boolean;
+  autoCleanupAfter?: string | null;
+};
+
+/**
+ * A protection that an automation token is allowed to switch off.
+ */
+export const AutomationTokenType = { Turnstile: 'Turnstile', RateLimit: 'RateLimit' } as const;
+
+/**
+ * A protection that an automation token is allowed to switch off.
+ */
+export type AutomationTokenType = (typeof AutomationTokenType)[keyof typeof AutomationTokenType];
 
 export type BackendInfoResponse = {
   version: string;
@@ -364,6 +562,28 @@ export const ControlType = {
 
 export type ControlType = (typeof ControlType)[keyof typeof ControlType];
 
+export type CreateAutomationTokenDto = {
+  name: string;
+  types: Array<AutomationTokenType>;
+  /**
+   * Whether the automated accounts this token creates are deleted once AutoCleanupAfter has
+   * passed since they were created. Off by default; accounts the token didn't create are never deleted.
+   */
+  autoCleanupUsers?: boolean;
+  autoCleanupAfter?: string | null;
+};
+
+export type CreatedAutomationTokenDto = {
+  id: string;
+  name: string;
+  secret: string;
+  types: Array<AutomationTokenType>;
+  createdAt: Temporal.Instant;
+  lastRotatedAt?: Temporal.Instant | null;
+  autoCleanupUsers?: boolean;
+  autoCleanupAfter?: string | null;
+};
+
 export type CreateTokenRequest = {
   validUntil?: Temporal.Instant | null;
   name: string;
@@ -485,7 +705,7 @@ export type EmailProviderBlacklistDto = {
 };
 
 /**
- * Delivery state of an .
+ * Delivery state of an email outbox message.
  */
 export const EmailStatus = {
   Pending: 'Pending',
@@ -496,12 +716,12 @@ export const EmailStatus = {
 } as const;
 
 /**
- * Delivery state of an .
+ * Delivery state of an email outbox message.
  */
 export type EmailStatus = (typeof EmailStatus)[keyof typeof EmailStatus];
 
 /**
- * The kind of email an  represents. The outbox stores
+ * The kind of email an outbox message represents. The outbox stores
  * only the intent to send one of these, never a rendered body or a usable secret, the
  * consumer maps the type to the matching template and (for token-bearing types) mints a fresh
  * secret at send time.
@@ -514,7 +734,7 @@ export const EmailType = {
 } as const;
 
 /**
- * The kind of email an  represents. The outbox stores
+ * The kind of email an outbox message represents. The outbox stores
  * only the intent to send one of these, never a rendered body or a usable secret, the
  * consumer maps the type to the matching template and (for token-bearing types) mints a fresh
  * secret at send time.
@@ -610,11 +830,20 @@ export type LogEntryWithHubPagedResult = {
 
 export type LoginSessionResponse = {
   id: string;
+  /**
+   * IpAddress
+   *
+   * An IPv4 or IPv6 address in its textual form.
+   */
   ip: string;
   userAgent: string;
   created: Temporal.Instant;
   expires: Temporal.Instant;
   lastUsed: Temporal.Instant | null;
+  asnOrg?: string | null;
+  isVpn?: boolean | null;
+  countryCode?: string | null;
+  city?: string | null;
 };
 
 export const MatchTypeEnum = { Exact: 'Exact', Contains: 'Contains' } as const;
@@ -722,6 +951,13 @@ export type PasswordHashingAlgorithm =
 
 export type PasswordResetProcessData = {
   password: string;
+};
+
+export type PatchAutomationTokenDto = {
+  name?: string | null;
+  types?: Array<AutomationTokenType> | null;
+  autoCleanupUsers?: boolean | null;
+  autoCleanupAfter?: string | null;
 };
 
 export type PauseReasonLegacyDataResponse = {
@@ -847,6 +1083,18 @@ export type SendTestEmailDto = {
    * Optional display name for the recipient.
    */
   recipientName?: string | null;
+};
+
+export type SetUserEmailRequestBody = {
+  email: string;
+};
+
+export type SetUserNameRequestBody = {
+  name: string;
+};
+
+export type SetUserPasswordRequestBody = {
+  password: string;
 };
 
 export type ShareCodeInfo = {
@@ -2229,79 +2477,6 @@ export type PublicGetPublicShareResponses = {
 export type PublicGetPublicShareResponse =
   PublicGetPublicShareResponses[keyof PublicGetPublicShareResponses];
 
-export type DeviceGetLiveControlGatewayData = {
-  body?: never;
-  path?: never;
-  query?: never;
-  url: '/1/device/assignLCG';
-};
-
-export type DeviceGetLiveControlGatewayErrors = {
-  /**
-   * Unable to find suitable LCG node
-   */
-  503: OpenShockProblem;
-};
-
-export type DeviceGetLiveControlGatewayError =
-  DeviceGetLiveControlGatewayErrors[keyof DeviceGetLiveControlGatewayErrors];
-
-export type DeviceGetLiveControlGatewayResponses = {
-  /**
-   * Successfully assigned LCG node
-   */
-  200: LcgNodeResponseLegacyDataResponse;
-};
-
-export type DeviceGetLiveControlGatewayResponse =
-  DeviceGetLiveControlGatewayResponses[keyof DeviceGetLiveControlGatewayResponses];
-
-export type DeviceGetSelfData = {
-  body?: never;
-  path?: never;
-  query?: never;
-  url: '/1/device/self';
-};
-
-export type DeviceGetSelfResponses = {
-  /**
-   * The device information was successfully retrieved.
-   */
-  200: DeviceSelfResponseLegacyDataResponse;
-};
-
-export type DeviceGetSelfResponse = DeviceGetSelfResponses[keyof DeviceGetSelfResponses];
-
-export type DevicePairData = {
-  body?: never;
-  path: {
-    /**
-     * The pair code to pair with.
-     */
-    pairCode: string;
-  };
-  query?: never;
-  url: '/1/device/pair/{pairCode}';
-};
-
-export type DevicePairErrors = {
-  /**
-   * No such pair code exists
-   */
-  404: OpenShockProblem;
-};
-
-export type DevicePairError = DevicePairErrors[keyof DevicePairErrors];
-
-export type DevicePairResponses = {
-  /**
-   * Successfully assigned LCG node
-   */
-  200: StringLegacyDataResponse;
-};
-
-export type DevicePairResponse = DevicePairResponses[keyof DevicePairResponses];
-
 export type DevicesOtaGetOtaUpdateHistoryData = {
   body?: never;
   path: {
@@ -2586,6 +2761,211 @@ export type DevicesGetShockersResponses = {
 export type DevicesGetShockersResponse =
   DevicesGetShockersResponses[keyof DevicesGetShockersResponses];
 
+export type DeviceGetLiveControlGatewayData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/1/device/assignLCG';
+};
+
+export type DeviceGetLiveControlGatewayErrors = {
+  /**
+   * Unable to find suitable LCG node
+   */
+  503: OpenShockProblem;
+};
+
+export type DeviceGetLiveControlGatewayError =
+  DeviceGetLiveControlGatewayErrors[keyof DeviceGetLiveControlGatewayErrors];
+
+export type DeviceGetLiveControlGatewayResponses = {
+  /**
+   * Successfully assigned LCG node
+   */
+  200: LcgNodeResponseLegacyDataResponse;
+};
+
+export type DeviceGetLiveControlGatewayResponse =
+  DeviceGetLiveControlGatewayResponses[keyof DeviceGetLiveControlGatewayResponses];
+
+export type DeviceGetSelfData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/1/device/self';
+};
+
+export type DeviceGetSelfResponses = {
+  /**
+   * The device information was successfully retrieved.
+   */
+  200: DeviceSelfResponseLegacyDataResponse;
+};
+
+export type DeviceGetSelfResponse = DeviceGetSelfResponses[keyof DeviceGetSelfResponses];
+
+export type DevicePairData = {
+  body?: never;
+  path: {
+    /**
+     * The pair code to pair with.
+     */
+    pairCode: string;
+  };
+  query?: never;
+  url: '/1/device/pair/{pairCode}';
+};
+
+export type DevicePairErrors = {
+  /**
+   * No such pair code exists
+   */
+  404: OpenShockProblem;
+};
+
+export type DevicePairError = DevicePairErrors[keyof DevicePairErrors];
+
+export type DevicePairResponses = {
+  /**
+   * Successfully assigned LCG node
+   */
+  200: StringLegacyDataResponse;
+};
+
+export type DevicePairResponse = DevicePairResponses[keyof DevicePairResponses];
+
+export type AdminListAutomationTokensData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/1/admin/automationTokens';
+};
+
+export type AdminListAutomationTokensResponses = {
+  /**
+   * OK
+   */
+  200: Array<AutomationTokenDto>;
+};
+
+export type AdminListAutomationTokensResponse =
+  AdminListAutomationTokensResponses[keyof AdminListAutomationTokensResponses];
+
+export type AdminCreateAutomationTokenData = {
+  body: CreateAutomationTokenDto;
+  path?: never;
+  query?: never;
+  url: '/1/admin/automationTokens';
+};
+
+export type AdminCreateAutomationTokenResponses = {
+  /**
+   * OK
+   */
+  200: CreatedAutomationTokenDto;
+};
+
+export type AdminCreateAutomationTokenResponse =
+  AdminCreateAutomationTokenResponses[keyof AdminCreateAutomationTokenResponses];
+
+export type AdminDeleteAutomationTokenData = {
+  body?: never;
+  path: {
+    /**
+     * Deletes an automation token together with every account it created. Refused while any of those
+     * accounts holds a privileged role
+     */
+    id: string;
+  };
+  query?: never;
+  url: '/1/admin/automationTokens/{id}';
+};
+
+export type AdminDeleteAutomationTokenErrors = {
+  /**
+   * Not Found
+   */
+  404: ProblemDetails;
+  /**
+   * Conflict
+   */
+  409: ProblemDetails;
+};
+
+export type AdminDeleteAutomationTokenError =
+  AdminDeleteAutomationTokenErrors[keyof AdminDeleteAutomationTokenErrors];
+
+export type AdminDeleteAutomationTokenResponses = {
+  /**
+   * OK
+   */
+  200: unknown;
+};
+
+export type AdminPatchAutomationTokenData = {
+  body: PatchAutomationTokenDto;
+  path: {
+    /**
+     * Updates an automation token
+     */
+    id: string;
+  };
+  query?: never;
+  url: '/1/admin/automationTokens/{id}';
+};
+
+export type AdminPatchAutomationTokenErrors = {
+  /**
+   * Not Found
+   */
+  404: ProblemDetails;
+};
+
+export type AdminPatchAutomationTokenError =
+  AdminPatchAutomationTokenErrors[keyof AdminPatchAutomationTokenErrors];
+
+export type AdminPatchAutomationTokenResponses = {
+  /**
+   * OK
+   */
+  200: AutomationTokenDto;
+};
+
+export type AdminPatchAutomationTokenResponse =
+  AdminPatchAutomationTokenResponses[keyof AdminPatchAutomationTokenResponses];
+
+export type AdminRotateAutomationTokenData = {
+  body?: never;
+  path: {
+    /**
+     * Rotates the secret of an automation token. The new secret is only returned once, in this response
+     */
+    id: string;
+  };
+  query?: never;
+  url: '/1/admin/automationTokens/{id}/rotate';
+};
+
+export type AdminRotateAutomationTokenErrors = {
+  /**
+   * Not Found
+   */
+  404: ProblemDetails;
+};
+
+export type AdminRotateAutomationTokenError =
+  AdminRotateAutomationTokenErrors[keyof AdminRotateAutomationTokenErrors];
+
+export type AdminRotateAutomationTokenResponses = {
+  /**
+   * OK
+   */
+  200: CreatedAutomationTokenDto;
+};
+
+export type AdminRotateAutomationTokenResponse =
+  AdminRotateAutomationTokenResponses[keyof AdminRotateAutomationTokenResponses];
+
 export type AdminConfigurationListData = {
   body?: never;
   path?: never;
@@ -2750,6 +3130,32 @@ export type AdminDeactivateUserResponses = {
   200: unknown;
 };
 
+export type AdminDeleteApiTokenData = {
+  body?: never;
+  path: {
+    /**
+     * Deletes an API token
+     */
+    tokenId: string;
+  };
+  query?: never;
+  url: '/1/admin/apitokens/{tokenId}';
+};
+
+export type AdminDeleteApiTokenErrors = {
+  /**
+   * Unauthorized
+   */
+  401: unknown;
+};
+
+export type AdminDeleteApiTokenResponses = {
+  /**
+   * OK
+   */
+  200: unknown;
+};
+
 export type AdminDeleteUserData = {
   body?: never;
   path: {
@@ -2780,6 +3186,40 @@ export type AdminDeleteUserResponses = {
    */
   200: unknown;
 };
+
+export type AdminGetUserByIdData = {
+  body?: never;
+  path: {
+    /**
+     * Gets a user by id
+     */
+    userId: string;
+  };
+  query?: never;
+  url: '/1/admin/users/{userId}';
+};
+
+export type AdminGetUserByIdErrors = {
+  /**
+   * Unauthorized
+   */
+  401: unknown;
+  /**
+   * Not found
+   */
+  404: ProblemDetails;
+};
+
+export type AdminGetUserByIdError = AdminGetUserByIdErrors[keyof AdminGetUserByIdErrors];
+
+export type AdminGetUserByIdResponses = {
+  /**
+   * User info
+   */
+  200: AdminUserView;
+};
+
+export type AdminGetUserByIdResponse = AdminGetUserByIdResponses[keyof AdminGetUserByIdResponses];
 
 export type AdminModifyUserData = {
   body: UserPatchDto;
@@ -3225,6 +3665,30 @@ export type AdminGetOnlineDevicesResponses = {
 export type AdminGetOnlineDevicesResponse =
   AdminGetOnlineDevicesResponses[keyof AdminGetOnlineDevicesResponses];
 
+export type AdminGetOnlineGatewaysData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/1/admin/monitoring/gateways';
+};
+
+export type AdminGetOnlineGatewaysErrors = {
+  /**
+   * Unauthorized
+   */
+  401: unknown;
+};
+
+export type AdminGetOnlineGatewaysResponses = {
+  /**
+   * All online gateways
+   */
+  200: Array<AdminOnlineGatewayResponse>;
+};
+
+export type AdminGetOnlineGatewaysResponse =
+  AdminGetOnlineGatewaysResponses[keyof AdminGetOnlineGatewaysResponses];
+
 export type AdminGetUsersData = {
   body?: never;
   path?: never;
@@ -3290,6 +3754,102 @@ export type AdminReactivateUserErrors = {
 };
 
 export type AdminReactivateUserResponses = {
+  /**
+   * OK
+   */
+  200: unknown;
+};
+
+export type AdminSetUserEmailData = {
+  body: SetUserEmailRequestBody;
+  path: {
+    userId: string;
+  };
+  query?: never;
+  url: '/1/admin/users/{userId}/email';
+};
+
+export type AdminSetUserEmailErrors = {
+  /**
+   * Unauthorized
+   */
+  401: unknown;
+  /**
+   * Not found
+   */
+  404: ProblemDetails;
+};
+
+export type AdminSetUserEmailError = AdminSetUserEmailErrors[keyof AdminSetUserEmailErrors];
+
+export type AdminSetUserEmailResponses = {
+  /**
+   * OK
+   */
+  200: unknown;
+};
+
+export type AdminSetUserNameData = {
+  body: SetUserNameRequestBody;
+  path: {
+    userId: string;
+  };
+  query?: never;
+  url: '/1/admin/users/{userId}/name';
+};
+
+export type AdminSetUserNameErrors = {
+  /**
+   * Unauthorized
+   */
+  401: unknown;
+  /**
+   * Not found
+   */
+  404: ProblemDetails;
+  /**
+   * The target account is deactivated or not yet activated
+   */
+  409: OpenShockProblem;
+};
+
+export type AdminSetUserNameError = AdminSetUserNameErrors[keyof AdminSetUserNameErrors];
+
+export type AdminSetUserNameResponses = {
+  /**
+   * OK
+   */
+  200: unknown;
+};
+
+export type AdminSetUserPasswordData = {
+  body: SetUserPasswordRequestBody;
+  path: {
+    userId: string;
+  };
+  query?: never;
+  url: '/1/admin/users/{userId}/password';
+};
+
+export type AdminSetUserPasswordErrors = {
+  /**
+   * Unauthorized
+   */
+  401: unknown;
+  /**
+   * Not found
+   */
+  404: ProblemDetails;
+  /**
+   * The target account is deactivated or not yet activated
+   */
+  409: OpenShockProblem;
+};
+
+export type AdminSetUserPasswordError =
+  AdminSetUserPasswordErrors[keyof AdminSetUserPasswordErrors];
+
+export type AdminSetUserPasswordResponses = {
   /**
    * OK
    */

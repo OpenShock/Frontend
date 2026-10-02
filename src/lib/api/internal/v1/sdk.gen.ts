@@ -4,14 +4,19 @@ import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape
 import { client } from './client.gen';
 import {
   adminConfigurationListResponseTransformer,
+  adminCreateAutomationTokenResponseTransformer,
   adminGetAdminAuditLogResponseTransformer,
   adminGetEmailOutboxResponseTransformer,
   adminGetEmailOutboxStatsResponseTransformer,
   adminGetOnlineDevicesResponseTransformer,
+  adminGetUserByIdResponseTransformer,
   adminGetUsersResponseTransformer,
+  adminListAutomationTokensResponseTransformer,
   adminListEmailProviderBlacklistResponseTransformer,
   adminListUsernameBlacklistResponseTransformer,
   adminListWebhooksResponseTransformer,
+  adminPatchAutomationTokenResponseTransformer,
+  adminRotateAutomationTokenResponseTransformer,
   adminSendTestEmailResponseTransformer,
   authenticatedAccountGetAuditLogResponseTransformer,
   authenticatedAccountListOAuthConnectionsResponseTransformer,
@@ -87,9 +92,17 @@ import type {
   AdminConfigurationUpdateData,
   AdminConfigurationUpdateErrors,
   AdminConfigurationUpdateResponses,
+  AdminCreateAutomationTokenData,
+  AdminCreateAutomationTokenResponses,
   AdminDeactivateUserData,
   AdminDeactivateUserErrors,
   AdminDeactivateUserResponses,
+  AdminDeleteApiTokenData,
+  AdminDeleteApiTokenErrors,
+  AdminDeleteApiTokenResponses,
+  AdminDeleteAutomationTokenData,
+  AdminDeleteAutomationTokenErrors,
+  AdminDeleteAutomationTokenResponses,
   AdminDeleteEmailOutboxData,
   AdminDeleteEmailOutboxErrors,
   AdminDeleteEmailOutboxResponses,
@@ -107,9 +120,17 @@ import type {
   AdminGetOnlineDevicesData,
   AdminGetOnlineDevicesErrors,
   AdminGetOnlineDevicesResponses,
+  AdminGetOnlineGatewaysData,
+  AdminGetOnlineGatewaysErrors,
+  AdminGetOnlineGatewaysResponses,
+  AdminGetUserByIdData,
+  AdminGetUserByIdErrors,
+  AdminGetUserByIdResponses,
   AdminGetUsersData,
   AdminGetUsersErrors,
   AdminGetUsersResponses,
+  AdminListAutomationTokensData,
+  AdminListAutomationTokensResponses,
   AdminListEmailProviderBlacklistData,
   AdminListEmailProviderBlacklistResponses,
   AdminListUsernameBlacklistData,
@@ -120,6 +141,9 @@ import type {
   AdminModifyUserData,
   AdminModifyUserErrors,
   AdminModifyUserResponses,
+  AdminPatchAutomationTokenData,
+  AdminPatchAutomationTokenErrors,
+  AdminPatchAutomationTokenResponses,
   AdminReactivateUserData,
   AdminReactivateUserErrors,
   AdminReactivateUserResponses,
@@ -135,9 +159,21 @@ import type {
   AdminRequeueEmailOutboxData,
   AdminRequeueEmailOutboxErrors,
   AdminRequeueEmailOutboxResponses,
+  AdminRotateAutomationTokenData,
+  AdminRotateAutomationTokenErrors,
+  AdminRotateAutomationTokenResponses,
   AdminSendTestEmailData,
   AdminSendTestEmailErrors,
   AdminSendTestEmailResponses,
+  AdminSetUserEmailData,
+  AdminSetUserEmailErrors,
+  AdminSetUserEmailResponses,
+  AdminSetUserNameData,
+  AdminSetUserNameErrors,
+  AdminSetUserNameResponses,
+  AdminSetUserPasswordData,
+  AdminSetUserPasswordErrors,
+  AdminSetUserPasswordResponses,
   AuthenticatedAccountChangeEmailData,
   AuthenticatedAccountChangeEmailErrors,
   AuthenticatedAccountChangeEmailResponses,
@@ -1086,52 +1122,6 @@ export const publicGetPublicShare = <ThrowOnError extends boolean = true>(
   });
 
 /**
- * Gets the best suited LCG node for the client
- */
-export const deviceGetLiveControlGateway = <ThrowOnError extends boolean = true>(
-  options?: Options<DeviceGetLiveControlGatewayData, ThrowOnError>
-): RequestResult<
-  DeviceGetLiveControlGatewayResponses,
-  DeviceGetLiveControlGatewayErrors,
-  ThrowOnError,
-  'data'
-> =>
-  (options?.client ?? client).get<
-    DeviceGetLiveControlGatewayResponses,
-    DeviceGetLiveControlGatewayErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/device/assignLCG',
-    ...options,
-  });
-
-/**
- * Gets information about the authenticated device.
- */
-export const deviceGetSelf = <ThrowOnError extends boolean = true>(
-  options?: Options<DeviceGetSelfData, ThrowOnError>
-): RequestResult<DeviceGetSelfResponses, unknown, ThrowOnError, 'data'> =>
-  (options?.client ?? client).get<DeviceGetSelfResponses, unknown, ThrowOnError, 'data'>({
-    responseStyle: 'data',
-    url: '/1/device/self',
-    ...options,
-  });
-
-/**
- * Pair a device with a pair code.
- */
-export const devicePair = <ThrowOnError extends boolean = true>(
-  options: Options<DevicePairData, ThrowOnError>
-): RequestResult<DevicePairResponses, DevicePairErrors, ThrowOnError, 'data'> =>
-  (options.client ?? client).get<DevicePairResponses, DevicePairErrors, ThrowOnError, 'data'>({
-    responseStyle: 'data',
-    url: '/1/device/pair/{pairCode}',
-    ...options,
-  });
-
-/**
  * Gets the OTA update history for a device
  */
 export const devicesOtaGetOtaUpdateHistory = <ThrowOnError extends boolean = true>(
@@ -1315,6 +1305,165 @@ export const devicesGetShockers = <ThrowOnError extends boolean = true>(
   });
 
 /**
+ * Gets the best suited LCG node for the client
+ */
+export const deviceGetLiveControlGateway = <ThrowOnError extends boolean = true>(
+  options?: Options<DeviceGetLiveControlGatewayData, ThrowOnError>
+): RequestResult<
+  DeviceGetLiveControlGatewayResponses,
+  DeviceGetLiveControlGatewayErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).get<
+    DeviceGetLiveControlGatewayResponses,
+    DeviceGetLiveControlGatewayErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/device/assignLCG',
+    ...options,
+  });
+
+/**
+ * Gets information about the authenticated device.
+ */
+export const deviceGetSelf = <ThrowOnError extends boolean = true>(
+  options?: Options<DeviceGetSelfData, ThrowOnError>
+): RequestResult<DeviceGetSelfResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<DeviceGetSelfResponses, unknown, ThrowOnError, 'data'>({
+    responseStyle: 'data',
+    url: '/1/device/self',
+    ...options,
+  });
+
+/**
+ * Pair a device with a pair code.
+ */
+export const devicePair = <ThrowOnError extends boolean = true>(
+  options: Options<DevicePairData, ThrowOnError>
+): RequestResult<DevicePairResponses, DevicePairErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).get<DevicePairResponses, DevicePairErrors, ThrowOnError, 'data'>({
+    responseStyle: 'data',
+    url: '/1/device/pair/{pairCode}',
+    ...options,
+  });
+
+/**
+ * Lists all automation tokens
+ */
+export const adminListAutomationTokens = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminListAutomationTokensData, ThrowOnError>
+): RequestResult<AdminListAutomationTokensResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<
+    AdminListAutomationTokensResponses,
+    unknown,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: adminListAutomationTokensResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/admin/automationTokens',
+    ...options,
+  });
+
+/**
+ * Creates an automation token. The secret is only returned once, in this response
+ */
+export const adminCreateAutomationToken = <ThrowOnError extends boolean = true>(
+  options: Options<AdminCreateAutomationTokenData, ThrowOnError>
+): RequestResult<AdminCreateAutomationTokenResponses, unknown, ThrowOnError, 'data'> =>
+  (options.client ?? client).post<
+    AdminCreateAutomationTokenResponses,
+    unknown,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: adminCreateAutomationTokenResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/admin/automationTokens',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+/**
+ * Deletes an automation token together with every account it created. Refused while any of those
+ * accounts holds a privileged role
+ */
+export const adminDeleteAutomationToken = <ThrowOnError extends boolean = true>(
+  options: Options<AdminDeleteAutomationTokenData, ThrowOnError>
+): RequestResult<
+  AdminDeleteAutomationTokenResponses,
+  AdminDeleteAutomationTokenErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).delete<
+    AdminDeleteAutomationTokenResponses,
+    AdminDeleteAutomationTokenErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/admin/automationTokens/{id}',
+    ...options,
+  });
+
+/**
+ * Updates an automation token
+ */
+export const adminPatchAutomationToken = <ThrowOnError extends boolean = true>(
+  options: Options<AdminPatchAutomationTokenData, ThrowOnError>
+): RequestResult<
+  AdminPatchAutomationTokenResponses,
+  AdminPatchAutomationTokenErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).patch<
+    AdminPatchAutomationTokenResponses,
+    AdminPatchAutomationTokenErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: adminPatchAutomationTokenResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/admin/automationTokens/{id}',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+/**
+ * Rotates the secret of an automation token. The new secret is only returned once, in this response
+ */
+export const adminRotateAutomationToken = <ThrowOnError extends boolean = true>(
+  options: Options<AdminRotateAutomationTokenData, ThrowOnError>
+): RequestResult<
+  AdminRotateAutomationTokenResponses,
+  AdminRotateAutomationTokenErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).post<
+    AdminRotateAutomationTokenResponses,
+    AdminRotateAutomationTokenErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: adminRotateAutomationTokenResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/admin/automationTokens/{id}/rotate',
+    ...options,
+  });
+
+/**
  * Gets all configuration items
  */
 export const adminConfigurationList = <ThrowOnError extends boolean = true>(
@@ -1429,6 +1578,23 @@ export const adminDeactivateUser = <ThrowOnError extends boolean = true>(
   });
 
 /**
+ * Deletes an API token
+ */
+export const adminDeleteApiToken = <ThrowOnError extends boolean = true>(
+  options: Options<AdminDeleteApiTokenData, ThrowOnError>
+): RequestResult<AdminDeleteApiTokenResponses, AdminDeleteApiTokenErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).delete<
+    AdminDeleteApiTokenResponses,
+    AdminDeleteApiTokenErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/admin/apitokens/{tokenId}',
+    ...options,
+  });
+
+/**
  * Deletes a user
  */
 export const adminDeleteUser = <ThrowOnError extends boolean = true>(
@@ -1440,6 +1606,24 @@ export const adminDeleteUser = <ThrowOnError extends boolean = true>(
     ThrowOnError,
     'data'
   >({
+    responseStyle: 'data',
+    url: '/1/admin/users/{userId}',
+    ...options,
+  });
+
+/**
+ * Gets a user by id
+ */
+export const adminGetUserById = <ThrowOnError extends boolean = true>(
+  options: Options<AdminGetUserByIdData, ThrowOnError>
+): RequestResult<AdminGetUserByIdResponses, AdminGetUserByIdErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).get<
+    AdminGetUserByIdResponses,
+    AdminGetUserByIdErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: adminGetUserByIdResponseTransformer,
     responseStyle: 'data',
     url: '/1/admin/users/{userId}',
     ...options,
@@ -1774,6 +1958,28 @@ export const adminGetOnlineDevices = <ThrowOnError extends boolean = true>(
   });
 
 /**
+ * Gets all online gateways
+ */
+export const adminGetOnlineGateways = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminGetOnlineGatewaysData, ThrowOnError>
+): RequestResult<
+  AdminGetOnlineGatewaysResponses,
+  AdminGetOnlineGatewaysErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).get<
+    AdminGetOnlineGatewaysResponses,
+    AdminGetOnlineGatewaysErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/admin/monitoring/gateways',
+    ...options,
+  });
+
+/**
  * Gets all users, paginated
  */
 export const adminGetUsers = <ThrowOnError extends boolean = true>(
@@ -1806,6 +2012,60 @@ export const adminReactivateUser = <ThrowOnError extends boolean = true>(
     responseStyle: 'data',
     url: '/1/admin/users/{userId}/reactivate',
     ...options,
+  });
+
+export const adminSetUserEmail = <ThrowOnError extends boolean = true>(
+  options: Options<AdminSetUserEmailData, ThrowOnError>
+): RequestResult<AdminSetUserEmailResponses, AdminSetUserEmailErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).put<
+    AdminSetUserEmailResponses,
+    AdminSetUserEmailErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/admin/users/{userId}/email',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+export const adminSetUserName = <ThrowOnError extends boolean = true>(
+  options: Options<AdminSetUserNameData, ThrowOnError>
+): RequestResult<AdminSetUserNameResponses, AdminSetUserNameErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).put<
+    AdminSetUserNameResponses,
+    AdminSetUserNameErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/admin/users/{userId}/name',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+export const adminSetUserPassword = <ThrowOnError extends boolean = true>(
+  options: Options<AdminSetUserPasswordData, ThrowOnError>
+): RequestResult<AdminSetUserPasswordResponses, AdminSetUserPasswordErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).put<
+    AdminSetUserPasswordResponses,
+    AdminSetUserPasswordErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/admin/users/{userId}/password',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
   });
 
 export const adminListUsernameBlacklist = <ThrowOnError extends boolean = true>(

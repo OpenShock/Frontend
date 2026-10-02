@@ -4,14 +4,19 @@ import { Temporal } from 'temporal-polyfill';
 
 import type {
   AdminConfigurationListResponse,
+  AdminCreateAutomationTokenResponse,
   AdminGetAdminAuditLogResponse,
   AdminGetEmailOutboxResponse,
   AdminGetEmailOutboxStatsResponse,
   AdminGetOnlineDevicesResponse,
+  AdminGetUserByIdResponse,
   AdminGetUsersResponse,
+  AdminListAutomationTokensResponse,
   AdminListEmailProviderBlacklistResponse,
   AdminListUsernameBlacklistResponse,
   AdminListWebhooksResponse,
+  AdminPatchAutomationTokenResponse,
+  AdminRotateAutomationTokenResponse,
   AdminSendTestEmailResponse,
   AuthenticatedAccountGetAuditLogResponse,
   AuthenticatedAccountListOAuthConnectionsResponse,
@@ -369,6 +374,56 @@ export const devicesGetShockersResponseTransformer = async (
   return data;
 };
 
+const automationTokenDtoSchemaResponseTransformer = (data: any) => {
+  data.createdAt = Temporal.Instant.from(data.createdAt);
+  if (data.lastUsedAt) {
+    data.lastUsedAt = Temporal.Instant.from(data.lastUsedAt);
+  }
+  if (data.lastRotatedAt) {
+    data.lastRotatedAt = Temporal.Instant.from(data.lastRotatedAt);
+  }
+  if (data.useCount) {
+    data.useCount = BigInt(data.useCount.toString());
+  }
+  return data;
+};
+
+export const adminListAutomationTokensResponseTransformer = async (
+  data: any
+): Promise<AdminListAutomationTokensResponse> => {
+  data = data.map((item: any) => automationTokenDtoSchemaResponseTransformer(item));
+  return data;
+};
+
+const createdAutomationTokenDtoSchemaResponseTransformer = (data: any) => {
+  data.createdAt = Temporal.Instant.from(data.createdAt);
+  if (data.lastRotatedAt) {
+    data.lastRotatedAt = Temporal.Instant.from(data.lastRotatedAt);
+  }
+  return data;
+};
+
+export const adminCreateAutomationTokenResponseTransformer = async (
+  data: any
+): Promise<AdminCreateAutomationTokenResponse> => {
+  data = createdAutomationTokenDtoSchemaResponseTransformer(data);
+  return data;
+};
+
+export const adminPatchAutomationTokenResponseTransformer = async (
+  data: any
+): Promise<AdminPatchAutomationTokenResponse> => {
+  data = automationTokenDtoSchemaResponseTransformer(data);
+  return data;
+};
+
+export const adminRotateAutomationTokenResponseTransformer = async (
+  data: any
+): Promise<AdminRotateAutomationTokenResponse> => {
+  data = createdAutomationTokenDtoSchemaResponseTransformer(data);
+  return data;
+};
+
 const configurationItemDtoSchemaResponseTransformer = (data: any) => {
   data.updatedAt = Temporal.Instant.from(data.updatedAt);
   data.createdAt = Temporal.Instant.from(data.createdAt);
@@ -379,6 +434,96 @@ export const adminConfigurationListResponseTransformer = async (
   data: any
 ): Promise<AdminConfigurationListResponse> => {
   data = data.map((item: any) => configurationItemDtoSchemaResponseTransformer(item));
+  return data;
+};
+
+const adminUserViewUserActivationRequestSchemaResponseTransformer = (data: any) => {
+  data.createdAt = Temporal.Instant.from(data.createdAt);
+  return data;
+};
+
+const adminUserViewUserDeactivationSchemaResponseTransformer = (data: any) => {
+  if (data.scheduledDeletionTime) {
+    data.scheduledDeletionTime = Temporal.Instant.from(data.scheduledDeletionTime);
+  }
+  data.deactivatedAt = Temporal.Instant.from(data.deactivatedAt);
+  return data;
+};
+
+const adminUserViewShockerSchemaResponseTransformer = (data: any) => {
+  data.createdAt = Temporal.Instant.from(data.createdAt);
+  return data;
+};
+
+const adminUserViewHubSchemaResponseTransformer = (data: any) => {
+  data.createdAt = Temporal.Instant.from(data.createdAt);
+  data.shockers = data.shockers.map((item: any) =>
+    adminUserViewShockerSchemaResponseTransformer(item)
+  );
+  return data;
+};
+
+const adminUserViewApiTokenSchemaResponseTransformer = (data: any) => {
+  if (data.validUntil) {
+    data.validUntil = Temporal.Instant.from(data.validUntil);
+  }
+  if (data.lastUsed) {
+    data.lastUsed = Temporal.Instant.from(data.lastUsed);
+  }
+  data.createdAt = Temporal.Instant.from(data.createdAt);
+  return data;
+};
+
+const adminUserViewNameChangeSchemaResponseTransformer = (data: any) => {
+  data.createdAt = Temporal.Instant.from(data.createdAt);
+  return data;
+};
+
+const adminUserViewEmailChangeSchemaResponseTransformer = (data: any) => {
+  data.createdAt = Temporal.Instant.from(data.createdAt);
+  if (data.usedAt) {
+    data.usedAt = Temporal.Instant.from(data.usedAt);
+  }
+  return data;
+};
+
+const adminUserViewPasswordResetSchemaResponseTransformer = (data: any) => {
+  data.createdAt = Temporal.Instant.from(data.createdAt);
+  if (data.usedAt) {
+    data.usedAt = Temporal.Instant.from(data.usedAt);
+  }
+  return data;
+};
+
+const adminUserViewSchemaResponseTransformer = (data: any) => {
+  data.createdAt = Temporal.Instant.from(data.createdAt);
+  if (data.activatedAt) {
+    data.activatedAt = Temporal.Instant.from(data.activatedAt);
+  }
+  data.activationRequest = adminUserViewUserActivationRequestSchemaResponseTransformer(
+    data.activationRequest
+  );
+  data.deactivation = adminUserViewUserDeactivationSchemaResponseTransformer(data.deactivation);
+  data.hubs = data.hubs.map((item: any) => adminUserViewHubSchemaResponseTransformer(item));
+  data.apiTokens = data.apiTokens.map((item: any) =>
+    adminUserViewApiTokenSchemaResponseTransformer(item)
+  );
+  data.usersNameChanges = data.usersNameChanges.map((item: any) =>
+    adminUserViewNameChangeSchemaResponseTransformer(item)
+  );
+  data.usersEmailChanges = data.usersEmailChanges.map((item: any) =>
+    adminUserViewEmailChangeSchemaResponseTransformer(item)
+  );
+  data.passwordResets = data.passwordResets.map((item: any) =>
+    adminUserViewPasswordResetSchemaResponseTransformer(item)
+  );
+  return data;
+};
+
+export const adminGetUserByIdResponseTransformer = async (
+  data: any
+): Promise<AdminGetUserByIdResponse> => {
+  data = adminUserViewSchemaResponseTransformer(data);
   return data;
 };
 
