@@ -320,6 +320,45 @@ export type Options<
 };
 
 /**
+ * Gets the version of the OpenShock backend.
+ */
+export const versionGetBackendInfo = <ThrowOnError extends boolean = true>(
+  options?: Options<VersionGetBackendInfoData, ThrowOnError>
+): RequestResult<VersionGetBackendInfoResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<VersionGetBackendInfoResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: versionGetBackendInfoResponseTransformer,
+    responseStyle: 'data',
+    url: '/1',
+    ...options,
+  });
+
+/**
+ * Get the current user's information.
+ */
+export const usersGetSelf = <ThrowOnError extends boolean = true>(
+  options?: Options<UsersGetSelfData, ThrowOnError>
+): RequestResult<UsersGetSelfResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<UsersGetSelfResponses, unknown, ThrowOnError, 'data'>({
+    responseStyle: 'data',
+    url: '/1/users/self',
+    ...options,
+  });
+
+export const usersGetByName = <ThrowOnError extends boolean = true>(
+  options: Options<UsersGetByNameData, ThrowOnError>
+): RequestResult<UsersGetByNameResponses, UsersGetByNameErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).get<
+    UsersGetByNameResponses,
+    UsersGetByNameErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/users/by-name/{username}',
+    ...options,
+  });
+
+/**
  * Revoke a token
  */
 export const tokenDeleteDeleteToken = <ThrowOnError extends boolean = true>(
@@ -397,15 +436,15 @@ export const tokensSelfGetSelfToken = <ThrowOnError extends boolean = true>(
  * Endpoint to delete potentially compromised api tokens
  */
 export const tokensReportTokens = <ThrowOnError extends boolean = true>(
-  options?: Options<TokensReportTokensData, ThrowOnError>
+  options: Options<TokensReportTokensData, ThrowOnError>
 ): RequestResult<TokensReportTokensResponses, unknown, ThrowOnError, 'data'> =>
-  (options?.client ?? client).post<TokensReportTokensResponses, unknown, ThrowOnError, 'data'>({
+  (options.client ?? client).post<TokensReportTokensResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
     url: '/1/tokens/report',
     ...options,
     headers: {
       'Content-Type': 'application/json',
-      ...options?.headers,
+      ...options.headers,
     },
   });
 
@@ -426,459 +465,73 @@ export const tokensListTokens = <ThrowOnError extends boolean = true>(
  * Create a new token
  */
 export const tokensCreateToken = <ThrowOnError extends boolean = true>(
-  options?: Options<TokensCreateTokenData, ThrowOnError>
+  options: Options<TokensCreateTokenData, ThrowOnError>
 ): RequestResult<TokensCreateTokenResponses, unknown, ThrowOnError, 'data'> =>
-  (options?.client ?? client).post<TokensCreateTokenResponses, unknown, ThrowOnError, 'data'>({
+  (options.client ?? client).post<TokensCreateTokenResponses, unknown, ThrowOnError, 'data'>({
     responseTransformer: tokensCreateTokenResponseTransformer,
     responseStyle: 'data',
     url: '/1/tokens',
     ...options,
     headers: {
       'Content-Type': 'application/json',
-      ...options?.headers,
+      ...options.headers,
     },
   });
 
 /**
- * Activate account
+ * Remove a shocker
  */
-export const accountActivate = <ThrowOnError extends boolean = true>(
-  options?: Options<AccountActivateData, ThrowOnError>
-): RequestResult<AccountActivateResponses, AccountActivateErrors, ThrowOnError, 'data'> =>
-  (options?.client ?? client).post<
-    AccountActivateResponses,
-    AccountActivateErrors,
+export const shockerRemoveShocker = <ThrowOnError extends boolean = true>(
+  options: Options<ShockerRemoveShockerData, ThrowOnError>
+): RequestResult<ShockerRemoveShockerResponses, ShockerRemoveShockerErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).delete<
+    ShockerRemoveShockerResponses,
+    ShockerRemoveShockerErrors,
     ThrowOnError,
     'data'
   >({
     responseStyle: 'data',
-    url: '/1/account/activate',
+    url: '/1/shockers/{shockerId}',
     ...options,
   });
 
 /**
- * Check if a username is available
+ * Get information about a shocker.
  */
-export const accountCheckUsername = <ThrowOnError extends boolean = true>(
-  options?: Options<AccountCheckUsernameData, ThrowOnError>
-): RequestResult<AccountCheckUsernameResponses, unknown, ThrowOnError, 'data'> =>
-  (options?.client ?? client).post<AccountCheckUsernameResponses, unknown, ThrowOnError, 'data'>({
-    responseStyle: 'data',
-    url: '/1/account/username/check',
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
-
-export const accountLogout = <ThrowOnError extends boolean = true>(
-  options?: Options<AccountLogoutData, ThrowOnError>
-): RequestResult<AccountLogoutResponses, unknown, ThrowOnError, 'data'> =>
-  (options?.client ?? client).post<AccountLogoutResponses, unknown, ThrowOnError, 'data'>({
-    responseStyle: 'data',
-    url: '/1/account/logout',
-    ...options,
-  });
-
-/**
- * Check if a password reset is in progress
- */
-export const accountPasswordResetCheckValid = <ThrowOnError extends boolean = true>(
-  options: Options<AccountPasswordResetCheckValidData, ThrowOnError>
+export const shockerGetShockerById = <ThrowOnError extends boolean = true>(
+  options: Options<ShockerGetShockerByIdData, ThrowOnError>
 ): RequestResult<
-  AccountPasswordResetCheckValidResponses,
-  AccountPasswordResetCheckValidErrors,
+  ShockerGetShockerByIdResponses,
+  ShockerGetShockerByIdErrors,
   ThrowOnError,
   'data'
 > =>
   (options.client ?? client).get<
-    AccountPasswordResetCheckValidResponses,
-    AccountPasswordResetCheckValidErrors,
+    ShockerGetShockerByIdResponses,
+    ShockerGetShockerByIdErrors,
     ThrowOnError,
     'data'
   >({
+    responseTransformer: shockerGetShockerByIdResponseTransformer,
     responseStyle: 'data',
-    url: '/1/account/password-reset/{passwordResetId}/{secret}',
+    url: '/1/shockers/{shockerId}',
     ...options,
   });
 
 /**
- * Complete a password reset process
+ * Edit a shocker
  */
-export const accountPasswordResetComplete = <ThrowOnError extends boolean = true>(
-  options: Options<AccountPasswordResetCompleteData, ThrowOnError>
-): RequestResult<
-  AccountPasswordResetCompleteResponses,
-  AccountPasswordResetCompleteErrors,
-  ThrowOnError,
-  'data'
-> =>
-  (options.client ?? client).post<
-    AccountPasswordResetCompleteResponses,
-    AccountPasswordResetCompleteErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/account/password-reset/{passwordResetId}/{secret}/complete',
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-  });
-
-/**
- * Verify a pending email change using the token from the verification email.
- */
-export const accountEmailVerify = <ThrowOnError extends boolean = true>(
-  options?: Options<AccountEmailVerifyData, ThrowOnError>
-): RequestResult<AccountEmailVerifyResponses, AccountEmailVerifyErrors, ThrowOnError, 'data'> =>
-  (options?.client ?? client).post<
-    AccountEmailVerifyResponses,
-    AccountEmailVerifyErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/account/email-change/verify',
-    ...options,
-  });
-
-/**
- * Verify a pending email change. Deprecated: use POST /email-change/verify instead.
- *
- * @deprecated
- */
-export const accountEmailVerifyLegacy = <ThrowOnError extends boolean = true>(
-  options?: Options<AccountEmailVerifyLegacyData, ThrowOnError>
-): RequestResult<
-  AccountEmailVerifyLegacyResponses,
-  AccountEmailVerifyLegacyErrors,
-  ThrowOnError,
-  'data'
-> =>
-  (options?.client ?? client).post<
-    AccountEmailVerifyLegacyResponses,
-    AccountEmailVerifyLegacyErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/account/verify-email',
-    ...options,
-  });
-
-/**
- * Initiate an email change for the current user. A verification link is sent to the new
- * address; the change is not applied until that link is opened.
- */
-export const authenticatedAccountChangeEmail = <ThrowOnError extends boolean = true>(
-  options?: Options<AuthenticatedAccountChangeEmailData, ThrowOnError>
-): RequestResult<
-  AuthenticatedAccountChangeEmailResponses,
-  AuthenticatedAccountChangeEmailErrors,
-  ThrowOnError,
-  'data'
-> =>
-  (options?.client ?? client).post<
-    AuthenticatedAccountChangeEmailResponses,
-    AuthenticatedAccountChangeEmailErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/account/email-change',
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
-
-/**
- * Change the password of the current user
- */
-export const authenticatedAccountChangePassword = <ThrowOnError extends boolean = true>(
-  options?: Options<AuthenticatedAccountChangePasswordData, ThrowOnError>
-): RequestResult<
-  AuthenticatedAccountChangePasswordResponses,
-  AuthenticatedAccountChangePasswordErrors,
-  ThrowOnError,
-  'data'
-> =>
-  (options?.client ?? client).post<
-    AuthenticatedAccountChangePasswordResponses,
-    AuthenticatedAccountChangePasswordErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/account/password',
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
-
-/**
- * Change the username of the current user
- */
-export const authenticatedAccountChangeUsername = <ThrowOnError extends boolean = true>(
-  options?: Options<AuthenticatedAccountChangeUsernameData, ThrowOnError>
-): RequestResult<
-  AuthenticatedAccountChangeUsernameResponses,
-  AuthenticatedAccountChangeUsernameErrors,
-  ThrowOnError,
-  'data'
-> =>
-  (options?.client ?? client).post<
-    AuthenticatedAccountChangeUsernameResponses,
-    AuthenticatedAccountChangeUsernameErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/account/username',
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
-
-/**
- * Deactivate currently logged in account
- */
-export const authenticatedAccountDeactivate = <ThrowOnError extends boolean = true>(
-  options?: Options<AuthenticatedAccountDeactivateData, ThrowOnError>
-): RequestResult<
-  AuthenticatedAccountDeactivateResponses,
-  AuthenticatedAccountDeactivateErrors,
-  ThrowOnError,
-  'data'
-> =>
-  (options?.client ?? client).delete<
-    AuthenticatedAccountDeactivateResponses,
-    AuthenticatedAccountDeactivateErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/account',
-    ...options,
-  });
-
-/**
- * Get the audit log for the current user's account.
- */
-export const authenticatedAccountGetAuditLog = <ThrowOnError extends boolean = true>(
-  options?: Options<AuthenticatedAccountGetAuditLogData, ThrowOnError>
-): RequestResult<AuthenticatedAccountGetAuditLogResponses, unknown, ThrowOnError, 'data'> =>
-  (options?.client ?? client).get<
-    AuthenticatedAccountGetAuditLogResponses,
-    unknown,
-    ThrowOnError,
-    'data'
-  >({
-    responseTransformer: authenticatedAccountGetAuditLogResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/account/audit-log',
-    ...options,
-  });
-
-/**
- * Remove an existing OAuth connection for the current user.
- */
-export const authenticatedAccountRemoveOAuthConnection = <ThrowOnError extends boolean = true>(
-  options: Options<AuthenticatedAccountRemoveOAuthConnectionData, ThrowOnError>
-): RequestResult<
-  AuthenticatedAccountRemoveOAuthConnectionResponses,
-  AuthenticatedAccountRemoveOAuthConnectionErrors,
-  ThrowOnError,
-  'data'
-> =>
-  (options.client ?? client).delete<
-    AuthenticatedAccountRemoveOAuthConnectionResponses,
-    AuthenticatedAccountRemoveOAuthConnectionErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/account/connections/{provider}',
-    ...options,
-  });
-
-/**
- * List OAuth connections linked to the current user.
- */
-export const authenticatedAccountListOAuthConnections = <ThrowOnError extends boolean = true>(
-  options?: Options<AuthenticatedAccountListOAuthConnectionsData, ThrowOnError>
-): RequestResult<
-  AuthenticatedAccountListOAuthConnectionsResponses,
-  unknown,
-  ThrowOnError,
-  'data'
-> =>
-  (options?.client ?? client).get<
-    AuthenticatedAccountListOAuthConnectionsResponses,
-    unknown,
-    ThrowOnError,
-    'data'
-  >({
-    responseTransformer: authenticatedAccountListOAuthConnectionsResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/account/connections',
-    ...options,
-  });
-
-/**
- * Gets all configuration items
- */
-export const adminConfigurationList = <ThrowOnError extends boolean = true>(
-  options?: Options<AdminConfigurationListData, ThrowOnError>
-): RequestResult<
-  AdminConfigurationListResponses,
-  AdminConfigurationListErrors,
-  ThrowOnError,
-  'data'
-> =>
-  (options?.client ?? client).get<
-    AdminConfigurationListResponses,
-    AdminConfigurationListErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseTransformer: adminConfigurationListResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/admin/config',
-    ...options,
-  });
-
-/**
- * Adds a new configuration
- */
-export const adminConfigurationAdd = <ThrowOnError extends boolean = true>(
-  options?: Options<AdminConfigurationAddData, ThrowOnError>
-): RequestResult<
-  AdminConfigurationAddResponses,
-  AdminConfigurationAddErrors,
-  ThrowOnError,
-  'data'
-> =>
-  (options?.client ?? client).post<
-    AdminConfigurationAddResponses,
-    AdminConfigurationAddErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/admin/config',
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
-
-/**
- * Updates an existing configuration
- */
-export const adminConfigurationUpdate = <ThrowOnError extends boolean = true>(
-  options?: Options<AdminConfigurationUpdateData, ThrowOnError>
-): RequestResult<
-  AdminConfigurationUpdateResponses,
-  AdminConfigurationUpdateErrors,
-  ThrowOnError,
-  'data'
-> =>
-  (options?.client ?? client).put<
-    AdminConfigurationUpdateResponses,
-    AdminConfigurationUpdateErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/admin/config',
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
-
-/**
- * Deletes a configuration
- */
-export const adminConfigurationDelete = <ThrowOnError extends boolean = true>(
-  options: Options<AdminConfigurationDeleteData, ThrowOnError>
-): RequestResult<
-  AdminConfigurationDeleteResponses,
-  AdminConfigurationDeleteErrors,
-  ThrowOnError,
-  'data'
-> =>
-  (options.client ?? client).delete<
-    AdminConfigurationDeleteResponses,
-    AdminConfigurationDeleteErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/admin/config/{name}',
-    ...options,
-  });
-
-/**
- * Deactivates a user
- */
-export const adminDeactivateUser = <ThrowOnError extends boolean = true>(
-  options: Options<AdminDeactivateUserData, ThrowOnError>
-): RequestResult<AdminDeactivateUserResponses, AdminDeactivateUserErrors, ThrowOnError, 'data'> =>
-  (options.client ?? client).put<
-    AdminDeactivateUserResponses,
-    AdminDeactivateUserErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/admin/users/{userId}/deactivate',
-    ...options,
-  });
-
-/**
- * Deletes a user
- */
-export const adminDeleteUser = <ThrowOnError extends boolean = true>(
-  options: Options<AdminDeleteUserData, ThrowOnError>
-): RequestResult<AdminDeleteUserResponses, AdminDeleteUserErrors, ThrowOnError, 'data'> =>
-  (options.client ?? client).delete<
-    AdminDeleteUserResponses,
-    AdminDeleteUserErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/admin/users/{userId}',
-    ...options,
-  });
-
-/**
- * Edits a user
- */
-export const adminModifyUser = <ThrowOnError extends boolean = true>(
-  options: Options<AdminModifyUserData, ThrowOnError>
-): RequestResult<AdminModifyUserResponses, AdminModifyUserErrors, ThrowOnError, 'data'> =>
+export const shockerEditShocker = <ThrowOnError extends boolean = true>(
+  options: Options<ShockerEditShockerData, ThrowOnError>
+): RequestResult<ShockerEditShockerResponses, ShockerEditShockerErrors, ThrowOnError, 'data'> =>
   (options.client ?? client).patch<
-    AdminModifyUserResponses,
-    AdminModifyUserErrors,
+    ShockerEditShockerResponses,
+    ShockerEditShockerErrors,
     ThrowOnError,
     'data'
   >({
     responseStyle: 'data',
-    url: '/1/admin/users/{userId}',
+    url: '/1/shockers/{shockerId}',
     ...options,
     headers: {
       'Content-Type': 'application/json',
@@ -887,452 +540,548 @@ export const adminModifyUser = <ThrowOnError extends boolean = true>(
   });
 
 /**
- * Requeues many email outbox messages at once. Each id is treated exactly like the single-message
- * requeue: only terminal (sent/failed/skipped) rows are affected; pending/sending rows and missing
- * ids are skipped. Returns how many rows were actually requeued.
+ * Get the logs for a shocker
  */
-export const adminBulkRequeueEmailOutbox = <ThrowOnError extends boolean = true>(
-  options?: Options<AdminBulkRequeueEmailOutboxData, ThrowOnError>
+export const shockerGetShockerLogs = <ThrowOnError extends boolean = true>(
+  options: Options<ShockerGetShockerLogsData, ThrowOnError>
 ): RequestResult<
-  AdminBulkRequeueEmailOutboxResponses,
-  AdminBulkRequeueEmailOutboxErrors,
+  ShockerGetShockerLogsResponses,
+  ShockerGetShockerLogsErrors,
   ThrowOnError,
   'data'
 > =>
-  (options?.client ?? client).post<
-    AdminBulkRequeueEmailOutboxResponses,
-    AdminBulkRequeueEmailOutboxErrors,
+  (options.client ?? client).get<
+    ShockerGetShockerLogsResponses,
+    ShockerGetShockerLogsErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: shockerGetShockerLogsResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/shockers/{shockerId}/logs',
+    ...options,
+  });
+
+/**
+ * Get a paged set of control logs across the caller's shockers.
+ */
+export const shockerGetAllShockerLogs = <ThrowOnError extends boolean = true>(
+  options?: Options<ShockerGetAllShockerLogsData, ThrowOnError>
+): RequestResult<ShockerGetAllShockerLogsResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<ShockerGetAllShockerLogsResponses, unknown, ThrowOnError, 'data'>(
+    {
+      responseTransformer: shockerGetAllShockerLogsResponseTransformer,
+      responseStyle: 'data',
+      url: '/1/shockers/logs',
+      ...options,
+    }
+  );
+
+/**
+ * List all shockers shared with the authenticated user.
+ */
+export const shockerListSharedShockers = <ThrowOnError extends boolean = true>(
+  options?: Options<ShockerListSharedShockersData, ThrowOnError>
+): RequestResult<ShockerListSharedShockersResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<
+    ShockerListSharedShockersResponses,
+    unknown,
     ThrowOnError,
     'data'
   >({
     responseStyle: 'data',
-    url: '/1/admin/email/outbox/bulk/requeue',
+    url: '/1/shockers/shared',
     ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
   });
 
 /**
- * Cancels many still-pending email outbox messages at once by marking them skipped. Rows that are
- * not pending (already sending or terminal) and missing ids are skipped. Returns how many rows were
- * actually cancelled.
+ * List all shockers belonging to the authenticated user.
  */
-export const adminBulkCancelEmailOutbox = <ThrowOnError extends boolean = true>(
-  options?: Options<AdminBulkCancelEmailOutboxData, ThrowOnError>
-): RequestResult<
-  AdminBulkCancelEmailOutboxResponses,
-  AdminBulkCancelEmailOutboxErrors,
-  ThrowOnError,
-  'data'
-> =>
-  (options?.client ?? client).post<
-    AdminBulkCancelEmailOutboxResponses,
-    AdminBulkCancelEmailOutboxErrors,
+export const shockerListShockers = <ThrowOnError extends boolean = true>(
+  options?: Options<ShockerListShockersData, ThrowOnError>
+): RequestResult<ShockerListShockersResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<ShockerListShockersResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: shockerListShockersResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/shockers/own',
+    ...options,
+  });
+
+/**
+ * Pause or unpause a shocker
+ */
+export const shockerPauseShocker = <ThrowOnError extends boolean = true>(
+  options: Options<ShockerPauseShockerData, ThrowOnError>
+): RequestResult<ShockerPauseShockerResponses, ShockerPauseShockerErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).post<
+    ShockerPauseShockerResponses,
+    ShockerPauseShockerErrors,
     ThrowOnError,
     'data'
   >({
     responseStyle: 'data',
-    url: '/1/admin/email/outbox/bulk/cancel',
+    url: '/1/shockers/{shockerId}/pause',
     ...options,
     headers: {
       'Content-Type': 'application/json',
-      ...options?.headers,
+      ...options.headers,
     },
   });
 
 /**
- * Permanently deletes many email outbox messages at once. Missing ids are skipped. Returns how many
- * rows were actually deleted.
+ * Register a shocker
  */
-export const adminBulkDeleteEmailOutbox = <ThrowOnError extends boolean = true>(
-  options?: Options<AdminBulkDeleteEmailOutboxData, ThrowOnError>
+export const shockerRegisterShocker = <ThrowOnError extends boolean = true>(
+  options: Options<ShockerRegisterShockerData, ThrowOnError>
 ): RequestResult<
-  AdminBulkDeleteEmailOutboxResponses,
-  AdminBulkDeleteEmailOutboxErrors,
-  ThrowOnError,
-  'data'
-> =>
-  (options?.client ?? client).post<
-    AdminBulkDeleteEmailOutboxResponses,
-    AdminBulkDeleteEmailOutboxErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/admin/email/outbox/bulk/delete',
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
-
-/**
- * Cancels a still-pending email outbox message by marking it skipped, so it is never sent. Only
- * pending messages can be cancelled; a message already being sent or in a terminal state cannot.
- */
-export const adminCancelEmailOutbox = <ThrowOnError extends boolean = true>(
-  options: Options<AdminCancelEmailOutboxData, ThrowOnError>
-): RequestResult<
-  AdminCancelEmailOutboxResponses,
-  AdminCancelEmailOutboxErrors,
+  ShockerRegisterShockerResponses,
+  ShockerRegisterShockerErrors,
   ThrowOnError,
   'data'
 > =>
   (options.client ?? client).post<
-    AdminCancelEmailOutboxResponses,
-    AdminCancelEmailOutboxErrors,
+    ShockerRegisterShockerResponses,
+    ShockerRegisterShockerErrors,
     ThrowOnError,
     'data'
   >({
     responseStyle: 'data',
-    url: '/1/admin/email/outbox/{id}/cancel',
+    url: '/1/shockers',
     ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
   });
 
 /**
- * Permanently deletes an email outbox message. If the delivery consumer is mid-send it simply finds
- * the row gone and does nothing, so a delete never corrupts an in-flight send.
+ * Send a control message to shockers (Deprecated in favor of the /2/shockers/control endpoint)
  */
-export const adminDeleteEmailOutbox = <ThrowOnError extends boolean = true>(
-  options: Options<AdminDeleteEmailOutboxData, ThrowOnError>
+export const shockerSendControlDeprecated = <ThrowOnError extends boolean = true>(
+  options: Options<ShockerSendControlDeprecatedData, ThrowOnError>
 ): RequestResult<
-  AdminDeleteEmailOutboxResponses,
-  AdminDeleteEmailOutboxErrors,
-  ThrowOnError,
-  'data'
-> =>
-  (options.client ?? client).delete<
-    AdminDeleteEmailOutboxResponses,
-    AdminDeleteEmailOutboxErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/admin/email/outbox/{id}',
-    ...options,
-  });
-
-/**
- * Lists email outbox messages, paginated. Supports the same OData-style
- * `$filter`/`$orderby` as the users listing (e.g. `status eq 'failed'`,
- * `recipient ilike '%@example.com'`). Defaults to newest first.
- */
-export const adminGetEmailOutbox = <ThrowOnError extends boolean = true>(
-  options?: Options<AdminGetEmailOutboxData, ThrowOnError>
-): RequestResult<AdminGetEmailOutboxResponses, AdminGetEmailOutboxErrors, ThrowOnError, 'data'> =>
-  (options?.client ?? client).get<
-    AdminGetEmailOutboxResponses,
-    AdminGetEmailOutboxErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseTransformer: adminGetEmailOutboxResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/admin/email/outbox',
-    ...options,
-  });
-
-/**
- * Requeues a terminal (sent/failed/skipped) email outbox message: resets it to pending, due now,
- * with a fresh attempt budget, and nudges the delivery consumer to send it immediately.
- */
-export const adminRequeueEmailOutbox = <ThrowOnError extends boolean = true>(
-  options: Options<AdminRequeueEmailOutboxData, ThrowOnError>
-): RequestResult<
-  AdminRequeueEmailOutboxResponses,
-  AdminRequeueEmailOutboxErrors,
+  ShockerSendControlDeprecatedResponses,
+  ShockerSendControlDeprecatedErrors,
   ThrowOnError,
   'data'
 > =>
   (options.client ?? client).post<
-    AdminRequeueEmailOutboxResponses,
-    AdminRequeueEmailOutboxErrors,
+    ShockerSendControlDeprecatedResponses,
+    ShockerSendControlDeprecatedErrors,
     ThrowOnError,
     'data'
   >({
     responseStyle: 'data',
-    url: '/1/admin/email/outbox/{id}/requeue',
+    url: '/1/shockers/control',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+/**
+ * Get all user shares for a shocker
+ */
+export const shockerGetUserShares = <ThrowOnError extends boolean = true>(
+  options: Options<ShockerGetUserSharesData, ThrowOnError>
+): RequestResult<ShockerGetUserSharesResponses, ShockerGetUserSharesErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).get<
+    ShockerGetUserSharesResponses,
+    ShockerGetUserSharesErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: shockerGetUserSharesResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/shockers/{shockerId}/shares',
     ...options,
   });
 
 /**
- * Returns the number of email outbox messages in each delivery state.
+ * Create a share code for a shocker
  */
-export const adminGetEmailOutboxStats = <ThrowOnError extends boolean = true>(
-  options?: Options<AdminGetEmailOutboxStatsData, ThrowOnError>
+export const shockerShockerShareCodeCreate = <ThrowOnError extends boolean = true>(
+  options: Options<ShockerShockerShareCodeCreateData, ThrowOnError>
 ): RequestResult<
-  AdminGetEmailOutboxStatsResponses,
-  AdminGetEmailOutboxStatsErrors,
+  ShockerShockerShareCodeCreateResponses,
+  ShockerShockerShareCodeCreateErrors,
   ThrowOnError,
   'data'
 > =>
-  (options?.client ?? client).get<
-    AdminGetEmailOutboxStatsResponses,
-    AdminGetEmailOutboxStatsErrors,
+  (options.client ?? client).post<
+    ShockerShockerShareCodeCreateResponses,
+    ShockerShockerShareCodeCreateErrors,
     ThrowOnError,
     'data'
   >({
-    responseTransformer: adminGetEmailOutboxStatsResponseTransformer,
     responseStyle: 'data',
-    url: '/1/admin/email/outbox/stats',
+    url: '/1/shockers/{shockerId}/shares',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+/**
+ * List all share codes for a shocker
+ */
+export const shockerShockerShareCodeList = <ThrowOnError extends boolean = true>(
+  options: Options<ShockerShockerShareCodeListData, ThrowOnError>
+): RequestResult<
+  ShockerShockerShareCodeListResponses,
+  ShockerShockerShareCodeListErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).get<
+    ShockerShockerShareCodeListResponses,
+    ShockerShockerShareCodeListErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: shockerShockerShareCodeListResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/shockers/{shockerId}/shareCodes',
     ...options,
   });
 
 /**
- * Enqueues a preview/test email of the chosen type to the chosen address. It flows through the
- * normal durable delivery pipeline - visible in the outbox listing - but is rendered with
- * placeholder data and a dummy link, so it touches no request row and mints no token.
+ * Remove a share for a shocker
  */
-export const adminSendTestEmail = <ThrowOnError extends boolean = true>(
-  options?: Options<AdminSendTestEmailData, ThrowOnError>
-): RequestResult<AdminSendTestEmailResponses, AdminSendTestEmailErrors, ThrowOnError, 'data'> =>
-  (options?.client ?? client).post<
-    AdminSendTestEmailResponses,
-    AdminSendTestEmailErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseTransformer: adminSendTestEmailResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/admin/email/test',
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
-
-export const adminListEmailProviderBlacklist = <ThrowOnError extends boolean = true>(
-  options?: Options<AdminListEmailProviderBlacklistData, ThrowOnError>
-): RequestResult<AdminListEmailProviderBlacklistResponses, unknown, ThrowOnError, 'data'> =>
-  (options?.client ?? client).get<
-    AdminListEmailProviderBlacklistResponses,
-    unknown,
-    ThrowOnError,
-    'data'
-  >({
-    responseTransformer: adminListEmailProviderBlacklistResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/admin/blacklist/emailProviders',
-    ...options,
-  });
-
-export const adminAddEmailProviderBlacklist = <ThrowOnError extends boolean = true>(
-  options?: Options<AdminAddEmailProviderBlacklistData, ThrowOnError>
-): RequestResult<AdminAddEmailProviderBlacklistResponses, unknown, ThrowOnError, 'data'> =>
-  (options?.client ?? client).post<
-    AdminAddEmailProviderBlacklistResponses,
-    unknown,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/admin/blacklist/emailProviders',
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
-
-export const adminRemoveEmailProviderBlacklist = <ThrowOnError extends boolean = true>(
-  options: Options<AdminRemoveEmailProviderBlacklistData, ThrowOnError>
+export const shockerShockerShareRemove = <ThrowOnError extends boolean = true>(
+  options: Options<ShockerShockerShareRemoveData, ThrowOnError>
 ): RequestResult<
-  AdminRemoveEmailProviderBlacklistResponses,
-  AdminRemoveEmailProviderBlacklistErrors,
+  ShockerShockerShareRemoveResponses,
+  ShockerShockerShareRemoveErrors,
   ThrowOnError,
   'data'
 > =>
   (options.client ?? client).delete<
-    AdminRemoveEmailProviderBlacklistResponses,
-    AdminRemoveEmailProviderBlacklistErrors,
+    ShockerShockerShareRemoveResponses,
+    ShockerShockerShareRemoveErrors,
     ThrowOnError,
     'data'
   >({
     responseStyle: 'data',
-    url: '/1/admin/blacklist/emailProviders/{id}',
+    url: '/1/shockers/{shockerId}/shares/{sharedWithUserId}',
     ...options,
   });
 
 /**
- * Get audit log entries across all users. Optionally filter by subject user or actor.
+ * Update a share for a shocker
  */
-export const adminGetAdminAuditLog = <ThrowOnError extends boolean = true>(
-  options?: Options<AdminGetAdminAuditLogData, ThrowOnError>
-): RequestResult<AdminGetAdminAuditLogResponses, unknown, ThrowOnError, 'data'> =>
-  (options?.client ?? client).get<AdminGetAdminAuditLogResponses, unknown, ThrowOnError, 'data'>({
-    responseTransformer: adminGetAdminAuditLogResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/admin/audit-log',
-    ...options,
-  });
-
-/**
- * Gets all online devices
- */
-export const adminGetOnlineDevices = <ThrowOnError extends boolean = true>(
-  options?: Options<AdminGetOnlineDevicesData, ThrowOnError>
+export const shockerShockerShareCodeUpdate = <ThrowOnError extends boolean = true>(
+  options: Options<ShockerShockerShareCodeUpdateData, ThrowOnError>
 ): RequestResult<
-  AdminGetOnlineDevicesResponses,
-  AdminGetOnlineDevicesErrors,
+  ShockerShockerShareCodeUpdateResponses,
+  ShockerShockerShareCodeUpdateErrors,
   ThrowOnError,
   'data'
 > =>
-  (options?.client ?? client).get<
-    AdminGetOnlineDevicesResponses,
-    AdminGetOnlineDevicesErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseTransformer: adminGetOnlineDevicesResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/admin/monitoring/onlineDevices',
-    ...options,
-  });
-
-/**
- * Gets all users, paginated
- */
-export const adminGetUsers = <ThrowOnError extends boolean = true>(
-  options?: Options<AdminGetUsersData, ThrowOnError>
-): RequestResult<AdminGetUsersResponses, AdminGetUsersErrors, ThrowOnError, 'data'> =>
-  (options?.client ?? client).get<
-    AdminGetUsersResponses,
-    AdminGetUsersErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseTransformer: adminGetUsersResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/admin/users',
-    ...options,
-  });
-
-/**
- * Reactivates a user
- */
-export const adminReactivateUser = <ThrowOnError extends boolean = true>(
-  options: Options<AdminReactivateUserData, ThrowOnError>
-): RequestResult<AdminReactivateUserResponses, AdminReactivateUserErrors, ThrowOnError, 'data'> =>
-  (options.client ?? client).put<
-    AdminReactivateUserResponses,
-    AdminReactivateUserErrors,
+  (options.client ?? client).patch<
+    ShockerShockerShareCodeUpdateResponses,
+    ShockerShockerShareCodeUpdateErrors,
     ThrowOnError,
     'data'
   >({
     responseStyle: 'data',
-    url: '/1/admin/users/{userId}/reactivate',
-    ...options,
-  });
-
-export const adminListUsernameBlacklist = <ThrowOnError extends boolean = true>(
-  options?: Options<AdminListUsernameBlacklistData, ThrowOnError>
-): RequestResult<AdminListUsernameBlacklistResponses, unknown, ThrowOnError, 'data'> =>
-  (options?.client ?? client).get<
-    AdminListUsernameBlacklistResponses,
-    unknown,
-    ThrowOnError,
-    'data'
-  >({
-    responseTransformer: adminListUsernameBlacklistResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/admin/blacklist/usernames',
-    ...options,
-  });
-
-export const adminAddUsernameBlacklist = <ThrowOnError extends boolean = true>(
-  options?: Options<AdminAddUsernameBlacklistData, ThrowOnError>
-): RequestResult<AdminAddUsernameBlacklistResponses, unknown, ThrowOnError, 'data'> =>
-  (options?.client ?? client).post<
-    AdminAddUsernameBlacklistResponses,
-    unknown,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/admin/blacklist/usernames',
+    url: '/1/shockers/{shockerId}/shares/{sharedWithUserId}',
     ...options,
     headers: {
       'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
-
-export const adminRemoveUsernameBlacklist = <ThrowOnError extends boolean = true>(
-  options: Options<AdminRemoveUsernameBlacklistData, ThrowOnError>
-): RequestResult<
-  AdminRemoveUsernameBlacklistResponses,
-  AdminRemoveUsernameBlacklistErrors,
-  ThrowOnError,
-  'data'
-> =>
-  (options.client ?? client).delete<
-    AdminRemoveUsernameBlacklistResponses,
-    AdminRemoveUsernameBlacklistErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/admin/blacklist/usernames/{id}',
-    ...options,
-  });
-
-/**
- * List webhooks
- */
-export const adminListWebhooks = <ThrowOnError extends boolean = true>(
-  options?: Options<AdminListWebhooksData, ThrowOnError>
-): RequestResult<AdminListWebhooksResponses, AdminListWebhooksErrors, ThrowOnError, 'data'> =>
-  (options?.client ?? client).get<
-    AdminListWebhooksResponses,
-    AdminListWebhooksErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseTransformer: adminListWebhooksResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/admin/webhooks',
-    ...options,
-  });
-
-/**
- * Creates a webhook
- */
-export const adminAddWebhook = <ThrowOnError extends boolean = true>(
-  options?: Options<AdminAddWebhookData, ThrowOnError>
-): RequestResult<AdminAddWebhookResponses, AdminAddWebhookErrors, ThrowOnError, 'data'> =>
-  (options?.client ?? client).post<
-    AdminAddWebhookResponses,
-    AdminAddWebhookErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/admin/webhooks',
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
+      ...options.headers,
     },
   });
 
 /**
- * Removes a webhook
+ * Pause/Unpause a share code for a shocker
  */
-export const adminRemoveWebhook = <ThrowOnError extends boolean = true>(
-  options: Options<AdminRemoveWebhookData, ThrowOnError>
-): RequestResult<AdminRemoveWebhookResponses, AdminRemoveWebhookErrors, ThrowOnError, 'data'> =>
-  (options.client ?? client).delete<
-    AdminRemoveWebhookResponses,
-    AdminRemoveWebhookErrors,
+export const shockerShockerShareCodePause = <ThrowOnError extends boolean = true>(
+  options: Options<ShockerShockerShareCodePauseData, ThrowOnError>
+): RequestResult<
+  ShockerShockerShareCodePauseResponses,
+  ShockerShockerShareCodePauseErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).post<
+    ShockerShockerShareCodePauseResponses,
+    ShockerShockerShareCodePauseErrors,
     ThrowOnError,
     'data'
   >({
     responseStyle: 'data',
-    url: '/1/admin/webhooks/{id}',
+    url: '/1/shockers/{shockerId}/shares/{sharedWithUserId}/pause',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+/**
+ * Delete a share code
+ */
+export const sharesDeleteShareCode = <ThrowOnError extends boolean = true>(
+  options: Options<SharesDeleteShareCodeData, ThrowOnError>
+): RequestResult<
+  SharesDeleteShareCodeResponses,
+  SharesDeleteShareCodeErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).delete<
+    SharesDeleteShareCodeResponses,
+    SharesDeleteShareCodeErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/shares/code/{shareCodeId}',
+    ...options,
+  });
+
+/**
+ * Link a share code to your account
+ */
+export const sharesLinkShareCode = <ThrowOnError extends boolean = true>(
+  options: Options<SharesLinkShareCodeData, ThrowOnError>
+): RequestResult<SharesLinkShareCodeResponses, SharesLinkShareCodeErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).post<
+    SharesLinkShareCodeResponses,
+    SharesLinkShareCodeErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/shares/code/{shareCodeId}',
+    ...options,
+  });
+
+/**
+ * Remove a shocker from a public share
+ */
+export const shareLinksRemoveShocker = <ThrowOnError extends boolean = true>(
+  options: Options<ShareLinksRemoveShockerData, ThrowOnError>
+): RequestResult<
+  ShareLinksRemoveShockerResponses,
+  ShareLinksRemoveShockerErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).delete<
+    ShareLinksRemoveShockerResponses,
+    ShareLinksRemoveShockerErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/shares/links/{publicShareId}/{shockerId}',
+    ...options,
+  });
+
+/**
+ * Edit a shocker in a public share
+ */
+export const shareLinksEditShocker = <ThrowOnError extends boolean = true>(
+  options: Options<ShareLinksEditShockerData, ThrowOnError>
+): RequestResult<
+  ShareLinksEditShockerResponses,
+  ShareLinksEditShockerErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).patch<
+    ShareLinksEditShockerResponses,
+    ShareLinksEditShockerErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/shares/links/{publicShareId}/{shockerId}',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+/**
+ * Add a shocker to a public share
+ */
+export const shareLinksAddShocker = <ThrowOnError extends boolean = true>(
+  options: Options<ShareLinksAddShockerData, ThrowOnError>
+): RequestResult<ShareLinksAddShockerResponses, ShareLinksAddShockerErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).post<
+    ShareLinksAddShockerResponses,
+    ShareLinksAddShockerErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/shares/links/{publicShareId}/{shockerId}',
+    ...options,
+  });
+
+/**
+ * Get all public shares for the current user
+ */
+export const shareLinksList = <ThrowOnError extends boolean = true>(
+  options?: Options<ShareLinksListData, ThrowOnError>
+): RequestResult<ShareLinksListResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<ShareLinksListResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: shareLinksListResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/shares/links',
+    ...options,
+  });
+
+/**
+ * Create a new public share
+ */
+export const shareLinksCreatePublicShare = <ThrowOnError extends boolean = true>(
+  options: Options<ShareLinksCreatePublicShareData, ThrowOnError>
+): RequestResult<ShareLinksCreatePublicShareResponses, unknown, ThrowOnError, 'data'> =>
+  (options.client ?? client).post<
+    ShareLinksCreatePublicShareResponses,
+    unknown,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/shares/links',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+/**
+ * Deletes a public share
+ */
+export const shareLinksDeletePublicShare = <ThrowOnError extends boolean = true>(
+  options: Options<ShareLinksDeletePublicShareData, ThrowOnError>
+): RequestResult<
+  ShareLinksDeletePublicShareResponses,
+  ShareLinksDeletePublicShareErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).delete<
+    ShareLinksDeletePublicShareResponses,
+    ShareLinksDeletePublicShareErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/shares/links/{publicShareId}',
+    ...options,
+  });
+
+/**
+ * Pause a shocker in a public share
+ */
+export const shareLinksPauseShocker = <ThrowOnError extends boolean = true>(
+  options: Options<ShareLinksPauseShockerData, ThrowOnError>
+): RequestResult<
+  ShareLinksPauseShockerResponses,
+  ShareLinksPauseShockerErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).post<
+    ShareLinksPauseShockerResponses,
+    ShareLinksPauseShockerErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/shares/links/{publicShareId}/{shockerId}/pause',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+export const sessionsDeleteSession = <ThrowOnError extends boolean = true>(
+  options: Options<SessionsDeleteSessionData, ThrowOnError>
+): RequestResult<
+  SessionsDeleteSessionResponses,
+  SessionsDeleteSessionErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).delete<
+    SessionsDeleteSessionResponses,
+    SessionsDeleteSessionErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/sessions/{sessionId}',
+    ...options,
+  });
+
+export const sessionsListSessions = <ThrowOnError extends boolean = true>(
+  options?: Options<SessionsListSessionsData, ThrowOnError>
+): RequestResult<SessionsListSessionsResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<SessionsListSessionsResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: sessionsListSessionsResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/sessions',
+    ...options,
+  });
+
+/**
+ * Gets information about the current token used to access this endpoint
+ */
+export const sessionsGetSelfSession = <ThrowOnError extends boolean = true>(
+  options?: Options<SessionsGetSelfSessionData, ThrowOnError>
+): RequestResult<SessionsGetSelfSessionResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<SessionsGetSelfSessionResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: sessionsGetSelfSessionResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/sessions/self',
+    ...options,
+  });
+
+/**
+ * Gets online devices statistics
+ */
+export const publicGetOnlineDevicesStatistics = <ThrowOnError extends boolean = true>(
+  options?: Options<PublicGetOnlineDevicesStatisticsData, ThrowOnError>
+): RequestResult<PublicGetOnlineDevicesStatisticsResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<
+    PublicGetOnlineDevicesStatisticsResponses,
+    unknown,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: publicGetOnlineDevicesStatisticsResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/public/stats',
+    ...options,
+  });
+
+/**
+ * Gets information about a public share.
+ */
+export const publicGetPublicShare = <ThrowOnError extends boolean = true>(
+  options: Options<PublicGetPublicShareData, ThrowOnError>
+): RequestResult<PublicGetPublicShareResponses, PublicGetPublicShareErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).get<
+    PublicGetPublicShareResponses,
+    PublicGetPublicShareErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: publicGetPublicShareResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/public/shares/links/{publicShareId}',
     ...options,
   });
 
@@ -1566,77 +1315,150 @@ export const devicesGetShockers = <ThrowOnError extends boolean = true>(
   });
 
 /**
- * Gets the version of the OpenShock backend.
+ * Gets all configuration items
  */
-export const versionGetBackendInfo = <ThrowOnError extends boolean = true>(
-  options?: Options<VersionGetBackendInfoData, ThrowOnError>
-): RequestResult<VersionGetBackendInfoResponses, unknown, ThrowOnError, 'data'> =>
-  (options?.client ?? client).get<VersionGetBackendInfoResponses, unknown, ThrowOnError, 'data'>({
-    responseTransformer: versionGetBackendInfoResponseTransformer,
-    responseStyle: 'data',
-    url: '/1',
-    ...options,
-  });
-
-/**
- * Gets online devices statistics
- */
-export const publicGetOnlineDevicesStatistics = <ThrowOnError extends boolean = true>(
-  options?: Options<PublicGetOnlineDevicesStatisticsData, ThrowOnError>
-): RequestResult<PublicGetOnlineDevicesStatisticsResponses, unknown, ThrowOnError, 'data'> =>
+export const adminConfigurationList = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminConfigurationListData, ThrowOnError>
+): RequestResult<
+  AdminConfigurationListResponses,
+  AdminConfigurationListErrors,
+  ThrowOnError,
+  'data'
+> =>
   (options?.client ?? client).get<
-    PublicGetOnlineDevicesStatisticsResponses,
-    unknown,
+    AdminConfigurationListResponses,
+    AdminConfigurationListErrors,
     ThrowOnError,
     'data'
   >({
-    responseTransformer: publicGetOnlineDevicesStatisticsResponseTransformer,
+    responseTransformer: adminConfigurationListResponseTransformer,
     responseStyle: 'data',
-    url: '/1/public/stats',
+    url: '/1/admin/config',
     ...options,
   });
 
 /**
- * Remove a shocker from a public share
+ * Adds a new configuration
  */
-export const shareLinksRemoveShocker = <ThrowOnError extends boolean = true>(
-  options: Options<ShareLinksRemoveShockerData, ThrowOnError>
+export const adminConfigurationAdd = <ThrowOnError extends boolean = true>(
+  options: Options<AdminConfigurationAddData, ThrowOnError>
 ): RequestResult<
-  ShareLinksRemoveShockerResponses,
-  ShareLinksRemoveShockerErrors,
+  AdminConfigurationAddResponses,
+  AdminConfigurationAddErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).post<
+    AdminConfigurationAddResponses,
+    AdminConfigurationAddErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/admin/config',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+/**
+ * Updates an existing configuration
+ */
+export const adminConfigurationUpdate = <ThrowOnError extends boolean = true>(
+  options: Options<AdminConfigurationUpdateData, ThrowOnError>
+): RequestResult<
+  AdminConfigurationUpdateResponses,
+  AdminConfigurationUpdateErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).put<
+    AdminConfigurationUpdateResponses,
+    AdminConfigurationUpdateErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/admin/config',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+/**
+ * Deletes a configuration
+ */
+export const adminConfigurationDelete = <ThrowOnError extends boolean = true>(
+  options: Options<AdminConfigurationDeleteData, ThrowOnError>
+): RequestResult<
+  AdminConfigurationDeleteResponses,
+  AdminConfigurationDeleteErrors,
   ThrowOnError,
   'data'
 > =>
   (options.client ?? client).delete<
-    ShareLinksRemoveShockerResponses,
-    ShareLinksRemoveShockerErrors,
+    AdminConfigurationDeleteResponses,
+    AdminConfigurationDeleteErrors,
     ThrowOnError,
     'data'
   >({
     responseStyle: 'data',
-    url: '/1/shares/links/{publicShareId}/{shockerId}',
+    url: '/1/admin/config/{name}',
     ...options,
   });
 
 /**
- * Edit a shocker in a public share
+ * Deactivates a user
  */
-export const shareLinksEditShocker = <ThrowOnError extends boolean = true>(
-  options: Options<ShareLinksEditShockerData, ThrowOnError>
-): RequestResult<
-  ShareLinksEditShockerResponses,
-  ShareLinksEditShockerErrors,
-  ThrowOnError,
-  'data'
-> =>
+export const adminDeactivateUser = <ThrowOnError extends boolean = true>(
+  options: Options<AdminDeactivateUserData, ThrowOnError>
+): RequestResult<AdminDeactivateUserResponses, AdminDeactivateUserErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).put<
+    AdminDeactivateUserResponses,
+    AdminDeactivateUserErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/admin/users/{userId}/deactivate',
+    ...options,
+  });
+
+/**
+ * Deletes a user
+ */
+export const adminDeleteUser = <ThrowOnError extends boolean = true>(
+  options: Options<AdminDeleteUserData, ThrowOnError>
+): RequestResult<AdminDeleteUserResponses, AdminDeleteUserErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).delete<
+    AdminDeleteUserResponses,
+    AdminDeleteUserErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/admin/users/{userId}',
+    ...options,
+  });
+
+/**
+ * Edits a user
+ */
+export const adminModifyUser = <ThrowOnError extends boolean = true>(
+  options: Options<AdminModifyUserData, ThrowOnError>
+): RequestResult<AdminModifyUserResponses, AdminModifyUserErrors, ThrowOnError, 'data'> =>
   (options.client ?? client).patch<
-    ShareLinksEditShockerResponses,
-    ShareLinksEditShockerErrors,
+    AdminModifyUserResponses,
+    AdminModifyUserErrors,
     ThrowOnError,
     'data'
   >({
     responseStyle: 'data',
-    url: '/1/shares/links/{publicShareId}/{shockerId}',
+    url: '/1/admin/users/{userId}',
     ...options,
     headers: {
       'Content-Type': 'application/json',
@@ -1645,97 +1467,26 @@ export const shareLinksEditShocker = <ThrowOnError extends boolean = true>(
   });
 
 /**
- * Add a shocker to a public share
+ * Requeues many email outbox messages at once. Each id is treated exactly like the single-message
+ * requeue: only terminal (sent/failed/skipped) rows are affected; pending/sending rows and missing
+ * ids are skipped. Returns how many rows were actually requeued.
  */
-export const shareLinksAddShocker = <ThrowOnError extends boolean = true>(
-  options: Options<ShareLinksAddShockerData, ThrowOnError>
-): RequestResult<ShareLinksAddShockerResponses, ShareLinksAddShockerErrors, ThrowOnError, 'data'> =>
-  (options.client ?? client).post<
-    ShareLinksAddShockerResponses,
-    ShareLinksAddShockerErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/shares/links/{publicShareId}/{shockerId}',
-    ...options,
-  });
-
-/**
- * Get all public shares for the current user
- */
-export const shareLinksList = <ThrowOnError extends boolean = true>(
-  options?: Options<ShareLinksListData, ThrowOnError>
-): RequestResult<ShareLinksListResponses, unknown, ThrowOnError, 'data'> =>
-  (options?.client ?? client).get<ShareLinksListResponses, unknown, ThrowOnError, 'data'>({
-    responseTransformer: shareLinksListResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/shares/links',
-    ...options,
-  });
-
-/**
- * Create a new public share
- */
-export const shareLinksCreatePublicShare = <ThrowOnError extends boolean = true>(
-  options?: Options<ShareLinksCreatePublicShareData, ThrowOnError>
-): RequestResult<ShareLinksCreatePublicShareResponses, unknown, ThrowOnError, 'data'> =>
-  (options?.client ?? client).post<
-    ShareLinksCreatePublicShareResponses,
-    unknown,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/shares/links',
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
-
-/**
- * Deletes a public share
- */
-export const shareLinksDeletePublicShare = <ThrowOnError extends boolean = true>(
-  options: Options<ShareLinksDeletePublicShareData, ThrowOnError>
+export const adminBulkRequeueEmailOutbox = <ThrowOnError extends boolean = true>(
+  options: Options<AdminBulkRequeueEmailOutboxData, ThrowOnError>
 ): RequestResult<
-  ShareLinksDeletePublicShareResponses,
-  ShareLinksDeletePublicShareErrors,
-  ThrowOnError,
-  'data'
-> =>
-  (options.client ?? client).delete<
-    ShareLinksDeletePublicShareResponses,
-    ShareLinksDeletePublicShareErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/shares/links/{publicShareId}',
-    ...options,
-  });
-
-/**
- * Pause a shocker in a public share
- */
-export const shareLinksPauseShocker = <ThrowOnError extends boolean = true>(
-  options: Options<ShareLinksPauseShockerData, ThrowOnError>
-): RequestResult<
-  ShareLinksPauseShockerResponses,
-  ShareLinksPauseShockerErrors,
+  AdminBulkRequeueEmailOutboxResponses,
+  AdminBulkRequeueEmailOutboxErrors,
   ThrowOnError,
   'data'
 > =>
   (options.client ?? client).post<
-    ShareLinksPauseShockerResponses,
-    ShareLinksPauseShockerErrors,
+    AdminBulkRequeueEmailOutboxResponses,
+    AdminBulkRequeueEmailOutboxErrors,
     ThrowOnError,
     'data'
   >({
     responseStyle: 'data',
-    url: '/1/shares/links/{publicShareId}/{shockerId}/pause',
+    url: '/1/admin/email/outbox/bulk/requeue',
     ...options,
     headers: {
       'Content-Type': 'application/json',
@@ -1744,158 +1495,26 @@ export const shareLinksPauseShocker = <ThrowOnError extends boolean = true>(
   });
 
 /**
- * Gets information about a public share.
+ * Cancels many still-pending email outbox messages at once by marking them skipped. Rows that are
+ * not pending (already sending or terminal) and missing ids are skipped. Returns how many rows were
+ * actually cancelled.
  */
-export const publicGetPublicShare = <ThrowOnError extends boolean = true>(
-  options: Options<PublicGetPublicShareData, ThrowOnError>
-): RequestResult<PublicGetPublicShareResponses, PublicGetPublicShareErrors, ThrowOnError, 'data'> =>
-  (options.client ?? client).get<
-    PublicGetPublicShareResponses,
-    PublicGetPublicShareErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseTransformer: publicGetPublicShareResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/public/shares/links/{publicShareId}',
-    ...options,
-  });
-
-export const sessionsDeleteSession = <ThrowOnError extends boolean = true>(
-  options: Options<SessionsDeleteSessionData, ThrowOnError>
+export const adminBulkCancelEmailOutbox = <ThrowOnError extends boolean = true>(
+  options: Options<AdminBulkCancelEmailOutboxData, ThrowOnError>
 ): RequestResult<
-  SessionsDeleteSessionResponses,
-  SessionsDeleteSessionErrors,
+  AdminBulkCancelEmailOutboxResponses,
+  AdminBulkCancelEmailOutboxErrors,
   ThrowOnError,
   'data'
 > =>
-  (options.client ?? client).delete<
-    SessionsDeleteSessionResponses,
-    SessionsDeleteSessionErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/sessions/{sessionId}',
-    ...options,
-  });
-
-export const sessionsListSessions = <ThrowOnError extends boolean = true>(
-  options?: Options<SessionsListSessionsData, ThrowOnError>
-): RequestResult<SessionsListSessionsResponses, unknown, ThrowOnError, 'data'> =>
-  (options?.client ?? client).get<SessionsListSessionsResponses, unknown, ThrowOnError, 'data'>({
-    responseTransformer: sessionsListSessionsResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/sessions',
-    ...options,
-  });
-
-/**
- * Gets information about the current token used to access this endpoint
- */
-export const sessionsGetSelfSession = <ThrowOnError extends boolean = true>(
-  options?: Options<SessionsGetSelfSessionData, ThrowOnError>
-): RequestResult<SessionsGetSelfSessionResponses, unknown, ThrowOnError, 'data'> =>
-  (options?.client ?? client).get<SessionsGetSelfSessionResponses, unknown, ThrowOnError, 'data'>({
-    responseTransformer: sessionsGetSelfSessionResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/sessions/self',
-    ...options,
-  });
-
-/**
- * Delete a share code
- */
-export const sharesDeleteShareCode = <ThrowOnError extends boolean = true>(
-  options: Options<SharesDeleteShareCodeData, ThrowOnError>
-): RequestResult<
-  SharesDeleteShareCodeResponses,
-  SharesDeleteShareCodeErrors,
-  ThrowOnError,
-  'data'
-> =>
-  (options.client ?? client).delete<
-    SharesDeleteShareCodeResponses,
-    SharesDeleteShareCodeErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/shares/code/{shareCodeId}',
-    ...options,
-  });
-
-/**
- * Link a share code to your account
- */
-export const sharesLinkShareCode = <ThrowOnError extends boolean = true>(
-  options: Options<SharesLinkShareCodeData, ThrowOnError>
-): RequestResult<SharesLinkShareCodeResponses, SharesLinkShareCodeErrors, ThrowOnError, 'data'> =>
   (options.client ?? client).post<
-    SharesLinkShareCodeResponses,
-    SharesLinkShareCodeErrors,
+    AdminBulkCancelEmailOutboxResponses,
+    AdminBulkCancelEmailOutboxErrors,
     ThrowOnError,
     'data'
   >({
     responseStyle: 'data',
-    url: '/1/shares/code/{shareCodeId}',
-    ...options,
-  });
-
-/**
- * Remove a shocker
- */
-export const shockerRemoveShocker = <ThrowOnError extends boolean = true>(
-  options: Options<ShockerRemoveShockerData, ThrowOnError>
-): RequestResult<ShockerRemoveShockerResponses, ShockerRemoveShockerErrors, ThrowOnError, 'data'> =>
-  (options.client ?? client).delete<
-    ShockerRemoveShockerResponses,
-    ShockerRemoveShockerErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/shockers/{shockerId}',
-    ...options,
-  });
-
-/**
- * Get information about a shocker.
- */
-export const shockerGetShockerById = <ThrowOnError extends boolean = true>(
-  options: Options<ShockerGetShockerByIdData, ThrowOnError>
-): RequestResult<
-  ShockerGetShockerByIdResponses,
-  ShockerGetShockerByIdErrors,
-  ThrowOnError,
-  'data'
-> =>
-  (options.client ?? client).get<
-    ShockerGetShockerByIdResponses,
-    ShockerGetShockerByIdErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseTransformer: shockerGetShockerByIdResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/shockers/{shockerId}',
-    ...options,
-  });
-
-/**
- * Edit a shocker
- */
-export const shockerEditShocker = <ThrowOnError extends boolean = true>(
-  options: Options<ShockerEditShockerData, ThrowOnError>
-): RequestResult<ShockerEditShockerResponses, ShockerEditShockerErrors, ThrowOnError, 'data'> =>
-  (options.client ?? client).patch<
-    ShockerEditShockerResponses,
-    ShockerEditShockerErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/shockers/{shockerId}',
+    url: '/1/admin/email/outbox/bulk/cancel',
     ...options,
     headers: {
       'Content-Type': 'application/json',
@@ -1904,87 +1523,194 @@ export const shockerEditShocker = <ThrowOnError extends boolean = true>(
   });
 
 /**
- * Get the logs for a shocker
+ * Permanently deletes many email outbox messages at once. Missing ids are skipped. Returns how many
+ * rows were actually deleted.
  */
-export const shockerGetShockerLogs = <ThrowOnError extends boolean = true>(
-  options: Options<ShockerGetShockerLogsData, ThrowOnError>
+export const adminBulkDeleteEmailOutbox = <ThrowOnError extends boolean = true>(
+  options: Options<AdminBulkDeleteEmailOutboxData, ThrowOnError>
 ): RequestResult<
-  ShockerGetShockerLogsResponses,
-  ShockerGetShockerLogsErrors,
+  AdminBulkDeleteEmailOutboxResponses,
+  AdminBulkDeleteEmailOutboxErrors,
   ThrowOnError,
   'data'
 > =>
-  (options.client ?? client).get<
-    ShockerGetShockerLogsResponses,
-    ShockerGetShockerLogsErrors,
+  (options.client ?? client).post<
+    AdminBulkDeleteEmailOutboxResponses,
+    AdminBulkDeleteEmailOutboxErrors,
     ThrowOnError,
     'data'
   >({
-    responseTransformer: shockerGetShockerLogsResponseTransformer,
     responseStyle: 'data',
-    url: '/1/shockers/{shockerId}/logs',
+    url: '/1/admin/email/outbox/bulk/delete',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+/**
+ * Cancels a still-pending email outbox message by marking it skipped, so it is never sent. Only
+ * pending messages can be cancelled; a message already being sent or in a terminal state cannot.
+ */
+export const adminCancelEmailOutbox = <ThrowOnError extends boolean = true>(
+  options: Options<AdminCancelEmailOutboxData, ThrowOnError>
+): RequestResult<
+  AdminCancelEmailOutboxResponses,
+  AdminCancelEmailOutboxErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).post<
+    AdminCancelEmailOutboxResponses,
+    AdminCancelEmailOutboxErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/admin/email/outbox/{id}/cancel',
     ...options,
   });
 
 /**
- * Get a paged set of control logs across the caller's shockers.
+ * Permanently deletes an email outbox message. If the delivery consumer is mid-send it simply finds
+ * the row gone and does nothing, so a delete never corrupts an in-flight send.
  */
-export const shockerGetAllShockerLogs = <ThrowOnError extends boolean = true>(
-  options?: Options<ShockerGetAllShockerLogsData, ThrowOnError>
-): RequestResult<ShockerGetAllShockerLogsResponses, unknown, ThrowOnError, 'data'> =>
-  (options?.client ?? client).get<ShockerGetAllShockerLogsResponses, unknown, ThrowOnError, 'data'>(
-    {
-      responseTransformer: shockerGetAllShockerLogsResponseTransformer,
-      responseStyle: 'data',
-      url: '/1/shockers/logs',
-      ...options,
-    }
-  );
+export const adminDeleteEmailOutbox = <ThrowOnError extends boolean = true>(
+  options: Options<AdminDeleteEmailOutboxData, ThrowOnError>
+): RequestResult<
+  AdminDeleteEmailOutboxResponses,
+  AdminDeleteEmailOutboxErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).delete<
+    AdminDeleteEmailOutboxResponses,
+    AdminDeleteEmailOutboxErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/admin/email/outbox/{id}',
+    ...options,
+  });
 
 /**
- * List all shockers shared with the authenticated user.
+ * Lists email outbox messages, paginated. Supports the same OData-style
+ * `$filter`/`$orderby` as the users listing (e.g. `status eq 'failed'`,
+ * `recipient ilike '%@example.com'`). Defaults to newest first.
  */
-export const shockerListSharedShockers = <ThrowOnError extends boolean = true>(
-  options?: Options<ShockerListSharedShockersData, ThrowOnError>
-): RequestResult<ShockerListSharedShockersResponses, unknown, ThrowOnError, 'data'> =>
+export const adminGetEmailOutbox = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminGetEmailOutboxData, ThrowOnError>
+): RequestResult<AdminGetEmailOutboxResponses, AdminGetEmailOutboxErrors, ThrowOnError, 'data'> =>
   (options?.client ?? client).get<
-    ShockerListSharedShockersResponses,
+    AdminGetEmailOutboxResponses,
+    AdminGetEmailOutboxErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: adminGetEmailOutboxResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/admin/email/outbox',
+    ...options,
+  });
+
+/**
+ * Requeues a terminal (sent/failed/skipped) email outbox message: resets it to pending, due now,
+ * with a fresh attempt budget, and nudges the delivery consumer to send it immediately.
+ */
+export const adminRequeueEmailOutbox = <ThrowOnError extends boolean = true>(
+  options: Options<AdminRequeueEmailOutboxData, ThrowOnError>
+): RequestResult<
+  AdminRequeueEmailOutboxResponses,
+  AdminRequeueEmailOutboxErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).post<
+    AdminRequeueEmailOutboxResponses,
+    AdminRequeueEmailOutboxErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/admin/email/outbox/{id}/requeue',
+    ...options,
+  });
+
+/**
+ * Returns the number of email outbox messages in each delivery state.
+ */
+export const adminGetEmailOutboxStats = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminGetEmailOutboxStatsData, ThrowOnError>
+): RequestResult<
+  AdminGetEmailOutboxStatsResponses,
+  AdminGetEmailOutboxStatsErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).get<
+    AdminGetEmailOutboxStatsResponses,
+    AdminGetEmailOutboxStatsErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: adminGetEmailOutboxStatsResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/admin/email/outbox/stats',
+    ...options,
+  });
+
+/**
+ * Enqueues a preview/test email of the chosen type to the chosen address. It flows through the
+ * normal durable delivery pipeline - visible in the outbox listing - but is rendered with
+ * placeholder data and a dummy link, so it touches no request row and mints no token.
+ */
+export const adminSendTestEmail = <ThrowOnError extends boolean = true>(
+  options: Options<AdminSendTestEmailData, ThrowOnError>
+): RequestResult<AdminSendTestEmailResponses, AdminSendTestEmailErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).post<
+    AdminSendTestEmailResponses,
+    AdminSendTestEmailErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: adminSendTestEmailResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/admin/email/test',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+export const adminListEmailProviderBlacklist = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminListEmailProviderBlacklistData, ThrowOnError>
+): RequestResult<AdminListEmailProviderBlacklistResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<
+    AdminListEmailProviderBlacklistResponses,
+    unknown,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: adminListEmailProviderBlacklistResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/admin/blacklist/emailProviders',
+    ...options,
+  });
+
+export const adminAddEmailProviderBlacklist = <ThrowOnError extends boolean = true>(
+  options: Options<AdminAddEmailProviderBlacklistData, ThrowOnError>
+): RequestResult<AdminAddEmailProviderBlacklistResponses, unknown, ThrowOnError, 'data'> =>
+  (options.client ?? client).post<
+    AdminAddEmailProviderBlacklistResponses,
     unknown,
     ThrowOnError,
     'data'
   >({
     responseStyle: 'data',
-    url: '/1/shockers/shared',
-    ...options,
-  });
-
-/**
- * List all shockers belonging to the authenticated user.
- */
-export const shockerListShockers = <ThrowOnError extends boolean = true>(
-  options?: Options<ShockerListShockersData, ThrowOnError>
-): RequestResult<ShockerListShockersResponses, unknown, ThrowOnError, 'data'> =>
-  (options?.client ?? client).get<ShockerListShockersResponses, unknown, ThrowOnError, 'data'>({
-    responseTransformer: shockerListShockersResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/shockers/own',
-    ...options,
-  });
-
-/**
- * Pause or unpause a shocker
- */
-export const shockerPauseShocker = <ThrowOnError extends boolean = true>(
-  options: Options<ShockerPauseShockerData, ThrowOnError>
-): RequestResult<ShockerPauseShockerResponses, ShockerPauseShockerErrors, ThrowOnError, 'data'> =>
-  (options.client ?? client).post<
-    ShockerPauseShockerResponses,
-    ShockerPauseShockerErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/shockers/{shockerId}/pause',
+    url: '/1/admin/blacklist/emailProviders',
     ...options,
     headers: {
       'Content-Type': 'application/json',
@@ -1992,166 +1718,180 @@ export const shockerPauseShocker = <ThrowOnError extends boolean = true>(
     },
   });
 
-/**
- * Register a shocker
- */
-export const shockerRegisterShocker = <ThrowOnError extends boolean = true>(
-  options?: Options<ShockerRegisterShockerData, ThrowOnError>
+export const adminRemoveEmailProviderBlacklist = <ThrowOnError extends boolean = true>(
+  options: Options<AdminRemoveEmailProviderBlacklistData, ThrowOnError>
 ): RequestResult<
-  ShockerRegisterShockerResponses,
-  ShockerRegisterShockerErrors,
-  ThrowOnError,
-  'data'
-> =>
-  (options?.client ?? client).post<
-    ShockerRegisterShockerResponses,
-    ShockerRegisterShockerErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/shockers',
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
-
-/**
- * Send a control message to shockers (Deprecated in favor of the /2/shockers/control endpoint)
- */
-export const shockerSendControlDeprecated = <ThrowOnError extends boolean = true>(
-  options?: Options<ShockerSendControlDeprecatedData, ThrowOnError>
-): RequestResult<
-  ShockerSendControlDeprecatedResponses,
-  ShockerSendControlDeprecatedErrors,
-  ThrowOnError,
-  'data'
-> =>
-  (options?.client ?? client).post<
-    ShockerSendControlDeprecatedResponses,
-    ShockerSendControlDeprecatedErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/shockers/control',
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
-
-/**
- * Get all user shares for a shocker
- */
-export const shockerGetUserShares = <ThrowOnError extends boolean = true>(
-  options: Options<ShockerGetUserSharesData, ThrowOnError>
-): RequestResult<ShockerGetUserSharesResponses, ShockerGetUserSharesErrors, ThrowOnError, 'data'> =>
-  (options.client ?? client).get<
-    ShockerGetUserSharesResponses,
-    ShockerGetUserSharesErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseTransformer: shockerGetUserSharesResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/shockers/{shockerId}/shares',
-    ...options,
-  });
-
-/**
- * Create a share code for a shocker
- */
-export const shockerShockerShareCodeCreate = <ThrowOnError extends boolean = true>(
-  options: Options<ShockerShockerShareCodeCreateData, ThrowOnError>
-): RequestResult<
-  ShockerShockerShareCodeCreateResponses,
-  ShockerShockerShareCodeCreateErrors,
-  ThrowOnError,
-  'data'
-> =>
-  (options.client ?? client).post<
-    ShockerShockerShareCodeCreateResponses,
-    ShockerShockerShareCodeCreateErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/shockers/{shockerId}/shares',
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-  });
-
-/**
- * List all share codes for a shocker
- */
-export const shockerShockerShareCodeList = <ThrowOnError extends boolean = true>(
-  options: Options<ShockerShockerShareCodeListData, ThrowOnError>
-): RequestResult<
-  ShockerShockerShareCodeListResponses,
-  ShockerShockerShareCodeListErrors,
-  ThrowOnError,
-  'data'
-> =>
-  (options.client ?? client).get<
-    ShockerShockerShareCodeListResponses,
-    ShockerShockerShareCodeListErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseTransformer: shockerShockerShareCodeListResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/shockers/{shockerId}/shareCodes',
-    ...options,
-  });
-
-/**
- * Remove a share for a shocker
- */
-export const shockerShockerShareRemove = <ThrowOnError extends boolean = true>(
-  options: Options<ShockerShockerShareRemoveData, ThrowOnError>
-): RequestResult<
-  ShockerShockerShareRemoveResponses,
-  ShockerShockerShareRemoveErrors,
+  AdminRemoveEmailProviderBlacklistResponses,
+  AdminRemoveEmailProviderBlacklistErrors,
   ThrowOnError,
   'data'
 > =>
   (options.client ?? client).delete<
-    ShockerShockerShareRemoveResponses,
-    ShockerShockerShareRemoveErrors,
+    AdminRemoveEmailProviderBlacklistResponses,
+    AdminRemoveEmailProviderBlacklistErrors,
     ThrowOnError,
     'data'
   >({
     responseStyle: 'data',
-    url: '/1/shockers/{shockerId}/shares/{sharedWithUserId}',
+    url: '/1/admin/blacklist/emailProviders/{id}',
     ...options,
   });
 
 /**
- * Update a share for a shocker
+ * Get audit log entries across all users. Optionally filter by subject user or actor.
  */
-export const shockerShockerShareCodeUpdate = <ThrowOnError extends boolean = true>(
-  options: Options<ShockerShockerShareCodeUpdateData, ThrowOnError>
+export const adminGetAdminAuditLog = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminGetAdminAuditLogData, ThrowOnError>
+): RequestResult<AdminGetAdminAuditLogResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<AdminGetAdminAuditLogResponses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: adminGetAdminAuditLogResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/admin/audit-log',
+    ...options,
+  });
+
+/**
+ * Gets all online devices
+ */
+export const adminGetOnlineDevices = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminGetOnlineDevicesData, ThrowOnError>
 ): RequestResult<
-  ShockerShockerShareCodeUpdateResponses,
-  ShockerShockerShareCodeUpdateErrors,
+  AdminGetOnlineDevicesResponses,
+  AdminGetOnlineDevicesErrors,
   ThrowOnError,
   'data'
 > =>
-  (options.client ?? client).patch<
-    ShockerShockerShareCodeUpdateResponses,
-    ShockerShockerShareCodeUpdateErrors,
+  (options?.client ?? client).get<
+    AdminGetOnlineDevicesResponses,
+    AdminGetOnlineDevicesErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: adminGetOnlineDevicesResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/admin/monitoring/onlineDevices',
+    ...options,
+  });
+
+/**
+ * Gets all users, paginated
+ */
+export const adminGetUsers = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminGetUsersData, ThrowOnError>
+): RequestResult<AdminGetUsersResponses, AdminGetUsersErrors, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<
+    AdminGetUsersResponses,
+    AdminGetUsersErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: adminGetUsersResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/admin/users',
+    ...options,
+  });
+
+/**
+ * Reactivates a user
+ */
+export const adminReactivateUser = <ThrowOnError extends boolean = true>(
+  options: Options<AdminReactivateUserData, ThrowOnError>
+): RequestResult<AdminReactivateUserResponses, AdminReactivateUserErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).put<
+    AdminReactivateUserResponses,
+    AdminReactivateUserErrors,
     ThrowOnError,
     'data'
   >({
     responseStyle: 'data',
-    url: '/1/shockers/{shockerId}/shares/{sharedWithUserId}',
+    url: '/1/admin/users/{userId}/reactivate',
+    ...options,
+  });
+
+export const adminListUsernameBlacklist = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminListUsernameBlacklistData, ThrowOnError>
+): RequestResult<AdminListUsernameBlacklistResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<
+    AdminListUsernameBlacklistResponses,
+    unknown,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: adminListUsernameBlacklistResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/admin/blacklist/usernames',
+    ...options,
+  });
+
+export const adminAddUsernameBlacklist = <ThrowOnError extends boolean = true>(
+  options: Options<AdminAddUsernameBlacklistData, ThrowOnError>
+): RequestResult<AdminAddUsernameBlacklistResponses, unknown, ThrowOnError, 'data'> =>
+  (options.client ?? client).post<
+    AdminAddUsernameBlacklistResponses,
+    unknown,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/admin/blacklist/usernames',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+export const adminRemoveUsernameBlacklist = <ThrowOnError extends boolean = true>(
+  options: Options<AdminRemoveUsernameBlacklistData, ThrowOnError>
+): RequestResult<
+  AdminRemoveUsernameBlacklistResponses,
+  AdminRemoveUsernameBlacklistErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).delete<
+    AdminRemoveUsernameBlacklistResponses,
+    AdminRemoveUsernameBlacklistErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/admin/blacklist/usernames/{id}',
+    ...options,
+  });
+
+/**
+ * List webhooks
+ */
+export const adminListWebhooks = <ThrowOnError extends boolean = true>(
+  options?: Options<AdminListWebhooksData, ThrowOnError>
+): RequestResult<AdminListWebhooksResponses, AdminListWebhooksErrors, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<
+    AdminListWebhooksResponses,
+    AdminListWebhooksErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: adminListWebhooksResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/admin/webhooks',
+    ...options,
+  });
+
+/**
+ * Creates a webhook
+ */
+export const adminAddWebhook = <ThrowOnError extends boolean = true>(
+  options: Options<AdminAddWebhookData, ThrowOnError>
+): RequestResult<AdminAddWebhookResponses, AdminAddWebhookErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).post<
+    AdminAddWebhookResponses,
+    AdminAddWebhookErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/admin/webhooks',
     ...options,
     headers: {
       'Content-Type': 'application/json',
@@ -2160,24 +1900,102 @@ export const shockerShockerShareCodeUpdate = <ThrowOnError extends boolean = tru
   });
 
 /**
- * Pause/Unpause a share code for a shocker
+ * Removes a webhook
  */
-export const shockerShockerShareCodePause = <ThrowOnError extends boolean = true>(
-  options: Options<ShockerShockerShareCodePauseData, ThrowOnError>
+export const adminRemoveWebhook = <ThrowOnError extends boolean = true>(
+  options: Options<AdminRemoveWebhookData, ThrowOnError>
+): RequestResult<AdminRemoveWebhookResponses, AdminRemoveWebhookErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).delete<
+    AdminRemoveWebhookResponses,
+    AdminRemoveWebhookErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/admin/webhooks/{id}',
+    ...options,
+  });
+
+/**
+ * Activate account
+ */
+export const accountActivate = <ThrowOnError extends boolean = true>(
+  options?: Options<AccountActivateData, ThrowOnError>
+): RequestResult<AccountActivateResponses, AccountActivateErrors, ThrowOnError, 'data'> =>
+  (options?.client ?? client).post<
+    AccountActivateResponses,
+    AccountActivateErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/account/activate',
+    ...options,
+  });
+
+/**
+ * Check if a username is available
+ */
+export const accountCheckUsername = <ThrowOnError extends boolean = true>(
+  options: Options<AccountCheckUsernameData, ThrowOnError>
+): RequestResult<AccountCheckUsernameResponses, unknown, ThrowOnError, 'data'> =>
+  (options.client ?? client).post<AccountCheckUsernameResponses, unknown, ThrowOnError, 'data'>({
+    responseStyle: 'data',
+    url: '/1/account/username/check',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+export const accountLogout = <ThrowOnError extends boolean = true>(
+  options?: Options<AccountLogoutData, ThrowOnError>
+): RequestResult<AccountLogoutResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).post<AccountLogoutResponses, unknown, ThrowOnError, 'data'>({
+    responseStyle: 'data',
+    url: '/1/account/logout',
+    ...options,
+  });
+
+/**
+ * Check if a password reset is in progress
+ */
+export const accountPasswordResetCheckValid = <ThrowOnError extends boolean = true>(
+  options: Options<AccountPasswordResetCheckValidData, ThrowOnError>
 ): RequestResult<
-  ShockerShockerShareCodePauseResponses,
-  ShockerShockerShareCodePauseErrors,
+  AccountPasswordResetCheckValidResponses,
+  AccountPasswordResetCheckValidErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).get<
+    AccountPasswordResetCheckValidResponses,
+    AccountPasswordResetCheckValidErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/account/password-reset/{passwordResetId}/{secret}',
+    ...options,
+  });
+
+export const accountPasswordResetComplete = <ThrowOnError extends boolean = true>(
+  options: Options<AccountPasswordResetCompleteData, ThrowOnError>
+): RequestResult<
+  AccountPasswordResetCompleteResponses,
+  AccountPasswordResetCompleteErrors,
   ThrowOnError,
   'data'
 > =>
   (options.client ?? client).post<
-    ShockerShockerShareCodePauseResponses,
-    ShockerShockerShareCodePauseErrors,
+    AccountPasswordResetCompleteResponses,
+    AccountPasswordResetCompleteErrors,
     ThrowOnError,
     'data'
   >({
     responseStyle: 'data',
-    url: '/1/shockers/{shockerId}/shares/{sharedWithUserId}/pause',
+    url: '/1/account/password-reset/{passwordResetId}/{secret}/complete',
     ...options,
     headers: {
       'Content-Type': 'application/json',
@@ -2186,27 +2004,206 @@ export const shockerShockerShareCodePause = <ThrowOnError extends boolean = true
   });
 
 /**
- * Get the current user's information.
+ * Verify a pending email change using the token from the verification email.
  */
-export const usersGetSelf = <ThrowOnError extends boolean = true>(
-  options?: Options<UsersGetSelfData, ThrowOnError>
-): RequestResult<UsersGetSelfResponses, unknown, ThrowOnError, 'data'> =>
-  (options?.client ?? client).get<UsersGetSelfResponses, unknown, ThrowOnError, 'data'>({
-    responseStyle: 'data',
-    url: '/1/users/self',
-    ...options,
-  });
-
-export const usersGetByName = <ThrowOnError extends boolean = true>(
-  options: Options<UsersGetByNameData, ThrowOnError>
-): RequestResult<UsersGetByNameResponses, UsersGetByNameErrors, ThrowOnError, 'data'> =>
-  (options.client ?? client).get<
-    UsersGetByNameResponses,
-    UsersGetByNameErrors,
+export const accountEmailVerify = <ThrowOnError extends boolean = true>(
+  options?: Options<AccountEmailVerifyData, ThrowOnError>
+): RequestResult<AccountEmailVerifyResponses, AccountEmailVerifyErrors, ThrowOnError, 'data'> =>
+  (options?.client ?? client).post<
+    AccountEmailVerifyResponses,
+    AccountEmailVerifyErrors,
     ThrowOnError,
     'data'
   >({
     responseStyle: 'data',
-    url: '/1/users/by-name/{username}',
+    url: '/1/account/email-change/verify',
+    ...options,
+  });
+
+/**
+ * Verify a pending email change. Deprecated: use POST /email-change/verify instead.
+ *
+ * @deprecated
+ */
+export const accountEmailVerifyLegacy = <ThrowOnError extends boolean = true>(
+  options?: Options<AccountEmailVerifyLegacyData, ThrowOnError>
+): RequestResult<
+  AccountEmailVerifyLegacyResponses,
+  AccountEmailVerifyLegacyErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).post<
+    AccountEmailVerifyLegacyResponses,
+    AccountEmailVerifyLegacyErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/account/verify-email',
+    ...options,
+  });
+
+/**
+ * Initiate an email change for the current user. A verification link is sent to the new
+ * address; the change is not applied until that link is opened.
+ */
+export const authenticatedAccountChangeEmail = <ThrowOnError extends boolean = true>(
+  options: Options<AuthenticatedAccountChangeEmailData, ThrowOnError>
+): RequestResult<
+  AuthenticatedAccountChangeEmailResponses,
+  AuthenticatedAccountChangeEmailErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).post<
+    AuthenticatedAccountChangeEmailResponses,
+    AuthenticatedAccountChangeEmailErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/account/email-change',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+/**
+ * Change the password of the current user
+ */
+export const authenticatedAccountChangePassword = <ThrowOnError extends boolean = true>(
+  options: Options<AuthenticatedAccountChangePasswordData, ThrowOnError>
+): RequestResult<
+  AuthenticatedAccountChangePasswordResponses,
+  AuthenticatedAccountChangePasswordErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).post<
+    AuthenticatedAccountChangePasswordResponses,
+    AuthenticatedAccountChangePasswordErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/account/password',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+/**
+ * Change the username of the current user
+ */
+export const authenticatedAccountChangeUsername = <ThrowOnError extends boolean = true>(
+  options: Options<AuthenticatedAccountChangeUsernameData, ThrowOnError>
+): RequestResult<
+  AuthenticatedAccountChangeUsernameResponses,
+  AuthenticatedAccountChangeUsernameErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).post<
+    AuthenticatedAccountChangeUsernameResponses,
+    AuthenticatedAccountChangeUsernameErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/account/username',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+/**
+ * Deactivate currently logged in account
+ */
+export const authenticatedAccountDeactivate = <ThrowOnError extends boolean = true>(
+  options?: Options<AuthenticatedAccountDeactivateData, ThrowOnError>
+): RequestResult<
+  AuthenticatedAccountDeactivateResponses,
+  AuthenticatedAccountDeactivateErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).delete<
+    AuthenticatedAccountDeactivateResponses,
+    AuthenticatedAccountDeactivateErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/account',
+    ...options,
+  });
+
+/**
+ * Get the audit log for the current user's account.
+ */
+export const authenticatedAccountGetAuditLog = <ThrowOnError extends boolean = true>(
+  options?: Options<AuthenticatedAccountGetAuditLogData, ThrowOnError>
+): RequestResult<AuthenticatedAccountGetAuditLogResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<
+    AuthenticatedAccountGetAuditLogResponses,
+    unknown,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: authenticatedAccountGetAuditLogResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/account/audit-log',
+    ...options,
+  });
+
+/**
+ * Remove an existing OAuth connection for the current user.
+ */
+export const authenticatedAccountRemoveOAuthConnection = <ThrowOnError extends boolean = true>(
+  options: Options<AuthenticatedAccountRemoveOAuthConnectionData, ThrowOnError>
+): RequestResult<
+  AuthenticatedAccountRemoveOAuthConnectionResponses,
+  AuthenticatedAccountRemoveOAuthConnectionErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).delete<
+    AuthenticatedAccountRemoveOAuthConnectionResponses,
+    AuthenticatedAccountRemoveOAuthConnectionErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/account/connections/{provider}',
+    ...options,
+  });
+
+/**
+ * List OAuth connections linked to the current user.
+ */
+export const authenticatedAccountListOAuthConnections = <ThrowOnError extends boolean = true>(
+  options?: Options<AuthenticatedAccountListOAuthConnectionsData, ThrowOnError>
+): RequestResult<
+  AuthenticatedAccountListOAuthConnectionsResponses,
+  unknown,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).get<
+    AuthenticatedAccountListOAuthConnectionsResponses,
+    unknown,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: authenticatedAccountListOAuthConnectionsResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/account/connections',
     ...options,
   });

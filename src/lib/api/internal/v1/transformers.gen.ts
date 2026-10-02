@@ -37,6 +37,23 @@ import type {
   VersionGetBackendInfoResponse,
 } from './types.gen';
 
+const backendInfoResponseSchemaResponseTransformer = (data: any) => {
+  data.currentTime = Temporal.Instant.from(data.currentTime);
+  return data;
+};
+
+const backendInfoResponseLegacyDataResponseSchemaResponseTransformer = (data: any) => {
+  data.data = backendInfoResponseSchemaResponseTransformer(data.data);
+  return data;
+};
+
+export const versionGetBackendInfoResponseTransformer = async (
+  data: any
+): Promise<VersionGetBackendInfoResponse> => {
+  data = backendInfoResponseLegacyDataResponseSchemaResponseTransformer(data);
+  return data;
+};
+
 const tokenResponseSchemaResponseTransformer = (data: any) => {
   data.createdOn = Temporal.Instant.from(data.createdOn);
   if (data.validUntil) {
@@ -83,32 +100,272 @@ export const tokensCreateTokenResponseTransformer = async (
   return data;
 };
 
-const auditLogEntryResponseSchemaResponseTransformer = (data: any) => {
-  data.createdAt = Temporal.Instant.from(data.createdAt);
+const shockerWithDeviceSchemaResponseTransformer = (data: any) => {
+  data.createdOn = Temporal.Instant.from(data.createdOn);
   return data;
 };
 
-const auditLogEntryResponsePagedResultSchemaResponseTransformer = (data: any) => {
-  data.items = data.items.map((item: any) => auditLogEntryResponseSchemaResponseTransformer(item));
+const shockerWithDeviceLegacyDataResponseSchemaResponseTransformer = (data: any) => {
+  data.data = shockerWithDeviceSchemaResponseTransformer(data.data);
   return data;
 };
 
-export const authenticatedAccountGetAuditLogResponseTransformer = async (
+export const shockerGetShockerByIdResponseTransformer = async (
   data: any
-): Promise<AuthenticatedAccountGetAuditLogResponse> => {
-  data = auditLogEntryResponsePagedResultSchemaResponseTransformer(data);
+): Promise<ShockerGetShockerByIdResponse> => {
+  data = shockerWithDeviceLegacyDataResponseSchemaResponseTransformer(data);
   return data;
 };
 
-const oAuthConnectionResponseSchemaResponseTransformer = (data: any) => {
-  data.linkedAt = Temporal.Instant.from(data.linkedAt);
+const logEntrySchemaResponseTransformer = (data: any) => {
+  data.createdOn = Temporal.Instant.from(data.createdOn);
   return data;
 };
 
-export const authenticatedAccountListOAuthConnectionsResponseTransformer = async (
+const logEntryArrayLegacyDataResponseSchemaResponseTransformer = (data: any) => {
+  if (data.data) {
+    data.data = data.data.map((item: any) => logEntrySchemaResponseTransformer(item));
+  }
+  return data;
+};
+
+export const shockerGetShockerLogsResponseTransformer = async (
   data: any
-): Promise<AuthenticatedAccountListOAuthConnectionsResponse> => {
-  data = data.map((item: any) => oAuthConnectionResponseSchemaResponseTransformer(item));
+): Promise<ShockerGetShockerLogsResponse> => {
+  data = logEntryArrayLegacyDataResponseSchemaResponseTransformer(data);
+  return data;
+};
+
+const logEntryWithHubSchemaResponseTransformer = (data: any) => {
+  data.createdOn = Temporal.Instant.from(data.createdOn);
+  return data;
+};
+
+const logEntryWithHubPagedResultSchemaResponseTransformer = (data: any) => {
+  data.items = data.items.map((item: any) => logEntryWithHubSchemaResponseTransformer(item));
+  return data;
+};
+
+export const shockerGetAllShockerLogsResponseTransformer = async (
+  data: any
+): Promise<ShockerGetAllShockerLogsResponse> => {
+  data = logEntryWithHubPagedResultSchemaResponseTransformer(data);
+  return data;
+};
+
+const shockerResponseSchemaResponseTransformer = (data: any) => {
+  data.createdOn = Temporal.Instant.from(data.createdOn);
+  return data;
+};
+
+const deviceWithShockersResponseSchemaResponseTransformer = (data: any) => {
+  data.shockers = data.shockers.map((item: any) => shockerResponseSchemaResponseTransformer(item));
+  data.createdOn = Temporal.Instant.from(data.createdOn);
+  return data;
+};
+
+const deviceWithShockersResponseArrayLegacyDataResponseSchemaResponseTransformer = (data: any) => {
+  if (data.data) {
+    data.data = data.data.map((item: any) =>
+      deviceWithShockersResponseSchemaResponseTransformer(item)
+    );
+  }
+  return data;
+};
+
+export const shockerListShockersResponseTransformer = async (
+  data: any
+): Promise<ShockerListShockersResponse> => {
+  data = deviceWithShockersResponseArrayLegacyDataResponseSchemaResponseTransformer(data);
+  return data;
+};
+
+const shareInfoSchemaResponseTransformer = (data: any) => {
+  data.createdOn = Temporal.Instant.from(data.createdOn);
+  return data;
+};
+
+const shareInfoArrayLegacyDataResponseSchemaResponseTransformer = (data: any) => {
+  if (data.data) {
+    data.data = data.data.map((item: any) => shareInfoSchemaResponseTransformer(item));
+  }
+  return data;
+};
+
+export const shockerGetUserSharesResponseTransformer = async (
+  data: any
+): Promise<ShockerGetUserSharesResponse> => {
+  data = shareInfoArrayLegacyDataResponseSchemaResponseTransformer(data);
+  return data;
+};
+
+const shareCodeInfoSchemaResponseTransformer = (data: any) => {
+  data.createdOn = Temporal.Instant.from(data.createdOn);
+  return data;
+};
+
+const shareCodeInfoArrayLegacyDataResponseSchemaResponseTransformer = (data: any) => {
+  if (data.data) {
+    data.data = data.data.map((item: any) => shareCodeInfoSchemaResponseTransformer(item));
+  }
+  return data;
+};
+
+export const shockerShockerShareCodeListResponseTransformer = async (
+  data: any
+): Promise<ShockerShockerShareCodeListResponse> => {
+  data = shareCodeInfoArrayLegacyDataResponseSchemaResponseTransformer(data);
+  return data;
+};
+
+const ownPublicShareResponseSchemaResponseTransformer = (data: any) => {
+  data.createdOn = Temporal.Instant.from(data.createdOn);
+  if (data.expiresOn) {
+    data.expiresOn = Temporal.Instant.from(data.expiresOn);
+  }
+  return data;
+};
+
+const ownPublicShareResponseArrayLegacyDataResponseSchemaResponseTransformer = (data: any) => {
+  if (data.data) {
+    data.data = data.data.map((item: any) => ownPublicShareResponseSchemaResponseTransformer(item));
+  }
+  return data;
+};
+
+export const shareLinksListResponseTransformer = async (
+  data: any
+): Promise<ShareLinksListResponse> => {
+  data = ownPublicShareResponseArrayLegacyDataResponseSchemaResponseTransformer(data);
+  return data;
+};
+
+const loginSessionResponseSchemaResponseTransformer = (data: any) => {
+  data.created = Temporal.Instant.from(data.created);
+  data.expires = Temporal.Instant.from(data.expires);
+  if (data.lastUsed) {
+    data.lastUsed = Temporal.Instant.from(data.lastUsed);
+  }
+  return data;
+};
+
+export const sessionsListSessionsResponseTransformer = async (
+  data: any
+): Promise<SessionsListSessionsResponse> => {
+  data = data.map((item: any) => loginSessionResponseSchemaResponseTransformer(item));
+  return data;
+};
+
+export const sessionsGetSelfSessionResponseTransformer = async (
+  data: any
+): Promise<SessionsGetSelfSessionResponse> => {
+  data = loginSessionResponseSchemaResponseTransformer(data);
+  return data;
+};
+
+const statsResponseSchemaResponseTransformer = (data: any) => {
+  data.devicesOnline = BigInt(data.devicesOnline.toString());
+  return data;
+};
+
+const statsResponseLegacyDataResponseSchemaResponseTransformer = (data: any) => {
+  data.data = statsResponseSchemaResponseTransformer(data.data);
+  return data;
+};
+
+export const publicGetOnlineDevicesStatisticsResponseTransformer = async (
+  data: any
+): Promise<PublicGetOnlineDevicesStatisticsResponse> => {
+  data = statsResponseLegacyDataResponseSchemaResponseTransformer(data);
+  return data;
+};
+
+const publicShareResponseSchemaResponseTransformer = (data: any) => {
+  data.createdOn = Temporal.Instant.from(data.createdOn);
+  if (data.expiresOn) {
+    data.expiresOn = Temporal.Instant.from(data.expiresOn);
+  }
+  return data;
+};
+
+const publicShareResponseLegacyDataResponseSchemaResponseTransformer = (data: any) => {
+  data.data = publicShareResponseSchemaResponseTransformer(data.data);
+  return data;
+};
+
+export const publicGetPublicShareResponseTransformer = async (
+  data: any
+): Promise<PublicGetPublicShareResponse> => {
+  data = publicShareResponseLegacyDataResponseSchemaResponseTransformer(data);
+  return data;
+};
+
+const otaItemSchemaResponseTransformer = (data: any) => {
+  data.startedAt = Temporal.Instant.from(data.startedAt);
+  return data;
+};
+
+const otaItemIReadOnlyCollectionLegacyDataResponseSchemaResponseTransformer = (data: any) => {
+  if (data.data) {
+    data.data = data.data.map((item: any) => otaItemSchemaResponseTransformer(item));
+  }
+  return data;
+};
+
+export const devicesOtaGetOtaUpdateHistoryResponseTransformer = async (
+  data: any
+): Promise<DevicesOtaGetOtaUpdateHistoryResponse> => {
+  data = otaItemIReadOnlyCollectionLegacyDataResponseSchemaResponseTransformer(data);
+  return data;
+};
+
+const deviceResponseSchemaResponseTransformer = (data: any) => {
+  data.createdOn = Temporal.Instant.from(data.createdOn);
+  return data;
+};
+
+const deviceResponseArrayLegacyDataResponseSchemaResponseTransformer = (data: any) => {
+  if (data.data) {
+    data.data = data.data.map((item: any) => deviceResponseSchemaResponseTransformer(item));
+  }
+  return data;
+};
+
+export const devicesListDevicesResponseTransformer = async (
+  data: any
+): Promise<DevicesListDevicesResponse> => {
+  data = deviceResponseArrayLegacyDataResponseSchemaResponseTransformer(data);
+  return data;
+};
+
+const deviceWithTokenResponseSchemaResponseTransformer = (data: any) => {
+  data.createdOn = Temporal.Instant.from(data.createdOn);
+  return data;
+};
+
+const deviceWithTokenResponseLegacyDataResponseSchemaResponseTransformer = (data: any) => {
+  data.data = deviceWithTokenResponseSchemaResponseTransformer(data.data);
+  return data;
+};
+
+export const devicesGetDeviceByIdResponseTransformer = async (
+  data: any
+): Promise<DevicesGetDeviceByIdResponse> => {
+  data = deviceWithTokenResponseLegacyDataResponseSchemaResponseTransformer(data);
+  return data;
+};
+
+const shockerResponseArrayLegacyDataResponseSchemaResponseTransformer = (data: any) => {
+  if (data.data) {
+    data.data = data.data.map((item: any) => shockerResponseSchemaResponseTransformer(item));
+  }
+  return data;
+};
+
+export const devicesGetShockersResponseTransformer = async (
+  data: any
+): Promise<DevicesGetShockersResponse> => {
+  data = shockerResponseArrayLegacyDataResponseSchemaResponseTransformer(data);
   return data;
 };
 
@@ -183,6 +440,16 @@ export const adminListEmailProviderBlacklistResponseTransformer = async (
   data: any
 ): Promise<AdminListEmailProviderBlacklistResponse> => {
   data = data.map((item: any) => emailProviderBlacklistDtoSchemaResponseTransformer(item));
+  return data;
+};
+
+const auditLogEntryResponseSchemaResponseTransformer = (data: any) => {
+  data.createdAt = Temporal.Instant.from(data.createdAt);
+  return data;
+};
+
+const auditLogEntryResponsePagedResultSchemaResponseTransformer = (data: any) => {
+  data.items = data.items.map((item: any) => auditLogEntryResponseSchemaResponseTransformer(item));
   return data;
 };
 
@@ -263,288 +530,21 @@ export const adminListWebhooksResponseTransformer = async (
   return data;
 };
 
-const otaItemSchemaResponseTransformer = (data: any) => {
-  data.startedAt = Temporal.Instant.from(data.startedAt);
-  return data;
-};
-
-const otaItemIReadOnlyCollectionLegacyDataResponseSchemaResponseTransformer = (data: any) => {
-  if (data.data) {
-    data.data = data.data.map((item: any) => otaItemSchemaResponseTransformer(item));
-  }
-  return data;
-};
-
-export const devicesOtaGetOtaUpdateHistoryResponseTransformer = async (
+export const authenticatedAccountGetAuditLogResponseTransformer = async (
   data: any
-): Promise<DevicesOtaGetOtaUpdateHistoryResponse> => {
-  data = otaItemIReadOnlyCollectionLegacyDataResponseSchemaResponseTransformer(data);
+): Promise<AuthenticatedAccountGetAuditLogResponse> => {
+  data = auditLogEntryResponsePagedResultSchemaResponseTransformer(data);
   return data;
 };
 
-const deviceResponseSchemaResponseTransformer = (data: any) => {
-  data.createdOn = Temporal.Instant.from(data.createdOn);
+const oAuthConnectionResponseSchemaResponseTransformer = (data: any) => {
+  data.linkedAt = Temporal.Instant.from(data.linkedAt);
   return data;
 };
 
-const deviceResponseArrayLegacyDataResponseSchemaResponseTransformer = (data: any) => {
-  if (data.data) {
-    data.data = data.data.map((item: any) => deviceResponseSchemaResponseTransformer(item));
-  }
-  return data;
-};
-
-export const devicesListDevicesResponseTransformer = async (
+export const authenticatedAccountListOAuthConnectionsResponseTransformer = async (
   data: any
-): Promise<DevicesListDevicesResponse> => {
-  data = deviceResponseArrayLegacyDataResponseSchemaResponseTransformer(data);
-  return data;
-};
-
-const deviceWithTokenResponseSchemaResponseTransformer = (data: any) => {
-  data.createdOn = Temporal.Instant.from(data.createdOn);
-  return data;
-};
-
-const deviceWithTokenResponseLegacyDataResponseSchemaResponseTransformer = (data: any) => {
-  data.data = deviceWithTokenResponseSchemaResponseTransformer(data.data);
-  return data;
-};
-
-export const devicesGetDeviceByIdResponseTransformer = async (
-  data: any
-): Promise<DevicesGetDeviceByIdResponse> => {
-  data = deviceWithTokenResponseLegacyDataResponseSchemaResponseTransformer(data);
-  return data;
-};
-
-const shockerResponseSchemaResponseTransformer = (data: any) => {
-  data.createdOn = Temporal.Instant.from(data.createdOn);
-  return data;
-};
-
-const shockerResponseArrayLegacyDataResponseSchemaResponseTransformer = (data: any) => {
-  if (data.data) {
-    data.data = data.data.map((item: any) => shockerResponseSchemaResponseTransformer(item));
-  }
-  return data;
-};
-
-export const devicesGetShockersResponseTransformer = async (
-  data: any
-): Promise<DevicesGetShockersResponse> => {
-  data = shockerResponseArrayLegacyDataResponseSchemaResponseTransformer(data);
-  return data;
-};
-
-const backendInfoResponseSchemaResponseTransformer = (data: any) => {
-  data.currentTime = Temporal.Instant.from(data.currentTime);
-  return data;
-};
-
-const backendInfoResponseLegacyDataResponseSchemaResponseTransformer = (data: any) => {
-  data.data = backendInfoResponseSchemaResponseTransformer(data.data);
-  return data;
-};
-
-export const versionGetBackendInfoResponseTransformer = async (
-  data: any
-): Promise<VersionGetBackendInfoResponse> => {
-  data = backendInfoResponseLegacyDataResponseSchemaResponseTransformer(data);
-  return data;
-};
-
-const statsResponseSchemaResponseTransformer = (data: any) => {
-  data.devicesOnline = BigInt(data.devicesOnline.toString());
-  return data;
-};
-
-const statsResponseLegacyDataResponseSchemaResponseTransformer = (data: any) => {
-  data.data = statsResponseSchemaResponseTransformer(data.data);
-  return data;
-};
-
-export const publicGetOnlineDevicesStatisticsResponseTransformer = async (
-  data: any
-): Promise<PublicGetOnlineDevicesStatisticsResponse> => {
-  data = statsResponseLegacyDataResponseSchemaResponseTransformer(data);
-  return data;
-};
-
-const ownPublicShareResponseSchemaResponseTransformer = (data: any) => {
-  data.createdOn = Temporal.Instant.from(data.createdOn);
-  if (data.expiresOn) {
-    data.expiresOn = Temporal.Instant.from(data.expiresOn);
-  }
-  return data;
-};
-
-const ownPublicShareResponseArrayLegacyDataResponseSchemaResponseTransformer = (data: any) => {
-  if (data.data) {
-    data.data = data.data.map((item: any) => ownPublicShareResponseSchemaResponseTransformer(item));
-  }
-  return data;
-};
-
-export const shareLinksListResponseTransformer = async (
-  data: any
-): Promise<ShareLinksListResponse> => {
-  data = ownPublicShareResponseArrayLegacyDataResponseSchemaResponseTransformer(data);
-  return data;
-};
-
-const publicShareResponseSchemaResponseTransformer = (data: any) => {
-  data.createdOn = Temporal.Instant.from(data.createdOn);
-  if (data.expiresOn) {
-    data.expiresOn = Temporal.Instant.from(data.expiresOn);
-  }
-  return data;
-};
-
-const publicShareResponseLegacyDataResponseSchemaResponseTransformer = (data: any) => {
-  data.data = publicShareResponseSchemaResponseTransformer(data.data);
-  return data;
-};
-
-export const publicGetPublicShareResponseTransformer = async (
-  data: any
-): Promise<PublicGetPublicShareResponse> => {
-  data = publicShareResponseLegacyDataResponseSchemaResponseTransformer(data);
-  return data;
-};
-
-const loginSessionResponseSchemaResponseTransformer = (data: any) => {
-  data.created = Temporal.Instant.from(data.created);
-  data.expires = Temporal.Instant.from(data.expires);
-  if (data.lastUsed) {
-    data.lastUsed = Temporal.Instant.from(data.lastUsed);
-  }
-  return data;
-};
-
-export const sessionsListSessionsResponseTransformer = async (
-  data: any
-): Promise<SessionsListSessionsResponse> => {
-  data = data.map((item: any) => loginSessionResponseSchemaResponseTransformer(item));
-  return data;
-};
-
-export const sessionsGetSelfSessionResponseTransformer = async (
-  data: any
-): Promise<SessionsGetSelfSessionResponse> => {
-  data = loginSessionResponseSchemaResponseTransformer(data);
-  return data;
-};
-
-const shockerWithDeviceSchemaResponseTransformer = (data: any) => {
-  data.createdOn = Temporal.Instant.from(data.createdOn);
-  return data;
-};
-
-const shockerWithDeviceLegacyDataResponseSchemaResponseTransformer = (data: any) => {
-  data.data = shockerWithDeviceSchemaResponseTransformer(data.data);
-  return data;
-};
-
-export const shockerGetShockerByIdResponseTransformer = async (
-  data: any
-): Promise<ShockerGetShockerByIdResponse> => {
-  data = shockerWithDeviceLegacyDataResponseSchemaResponseTransformer(data);
-  return data;
-};
-
-const logEntrySchemaResponseTransformer = (data: any) => {
-  data.createdOn = Temporal.Instant.from(data.createdOn);
-  return data;
-};
-
-const logEntryArrayLegacyDataResponseSchemaResponseTransformer = (data: any) => {
-  if (data.data) {
-    data.data = data.data.map((item: any) => logEntrySchemaResponseTransformer(item));
-  }
-  return data;
-};
-
-export const shockerGetShockerLogsResponseTransformer = async (
-  data: any
-): Promise<ShockerGetShockerLogsResponse> => {
-  data = logEntryArrayLegacyDataResponseSchemaResponseTransformer(data);
-  return data;
-};
-
-const logEntryWithHubSchemaResponseTransformer = (data: any) => {
-  data.createdOn = Temporal.Instant.from(data.createdOn);
-  return data;
-};
-
-const logEntryWithHubPagedResultSchemaResponseTransformer = (data: any) => {
-  data.items = data.items.map((item: any) => logEntryWithHubSchemaResponseTransformer(item));
-  return data;
-};
-
-export const shockerGetAllShockerLogsResponseTransformer = async (
-  data: any
-): Promise<ShockerGetAllShockerLogsResponse> => {
-  data = logEntryWithHubPagedResultSchemaResponseTransformer(data);
-  return data;
-};
-
-const deviceWithShockersResponseSchemaResponseTransformer = (data: any) => {
-  data.createdOn = Temporal.Instant.from(data.createdOn);
-  data.shockers = data.shockers.map((item: any) => shockerResponseSchemaResponseTransformer(item));
-  return data;
-};
-
-const deviceWithShockersResponseArrayLegacyDataResponseSchemaResponseTransformer = (data: any) => {
-  if (data.data) {
-    data.data = data.data.map((item: any) =>
-      deviceWithShockersResponseSchemaResponseTransformer(item)
-    );
-  }
-  return data;
-};
-
-export const shockerListShockersResponseTransformer = async (
-  data: any
-): Promise<ShockerListShockersResponse> => {
-  data = deviceWithShockersResponseArrayLegacyDataResponseSchemaResponseTransformer(data);
-  return data;
-};
-
-const shareInfoSchemaResponseTransformer = (data: any) => {
-  data.createdOn = Temporal.Instant.from(data.createdOn);
-  return data;
-};
-
-const shareInfoArrayLegacyDataResponseSchemaResponseTransformer = (data: any) => {
-  if (data.data) {
-    data.data = data.data.map((item: any) => shareInfoSchemaResponseTransformer(item));
-  }
-  return data;
-};
-
-export const shockerGetUserSharesResponseTransformer = async (
-  data: any
-): Promise<ShockerGetUserSharesResponse> => {
-  data = shareInfoArrayLegacyDataResponseSchemaResponseTransformer(data);
-  return data;
-};
-
-const shareCodeInfoSchemaResponseTransformer = (data: any) => {
-  data.createdOn = Temporal.Instant.from(data.createdOn);
-  return data;
-};
-
-const shareCodeInfoArrayLegacyDataResponseSchemaResponseTransformer = (data: any) => {
-  if (data.data) {
-    data.data = data.data.map((item: any) => shareCodeInfoSchemaResponseTransformer(item));
-  }
-  return data;
-};
-
-export const shockerShockerShareCodeListResponseTransformer = async (
-  data: any
-): Promise<ShockerShockerShareCodeListResponse> => {
-  data = shareCodeInfoArrayLegacyDataResponseSchemaResponseTransformer(data);
+): Promise<AuthenticatedAccountListOAuthConnectionsResponse> => {
+  data = data.map((item: any) => oAuthConnectionResponseSchemaResponseTransformer(item));
   return data;
 };

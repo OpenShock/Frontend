@@ -116,15 +116,15 @@ export const tokensSelfGetSelfTokenV2 = <ThrowOnError extends boolean = true>(
  * Endpoint to delete potentially compromised api tokens
  */
 export const tokensReportTokens = <ThrowOnError extends boolean = true>(
-  options?: Options<TokensReportTokensData, ThrowOnError>
+  options: Options<TokensReportTokensData, ThrowOnError>
 ): RequestResult<TokensReportTokensResponses, unknown, ThrowOnError, 'data'> =>
-  (options?.client ?? client).post<TokensReportTokensResponses, unknown, ThrowOnError, 'data'>({
+  (options.client ?? client).post<TokensReportTokensResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
     url: '/2/tokens/report',
     ...options,
     headers: {
       'Content-Type': 'application/json',
-      ...options?.headers,
+      ...options.headers,
     },
   });
 
@@ -145,16 +145,16 @@ export const tokensListTokensV2 = <ThrowOnError extends boolean = true>(
  * Create a new token
  */
 export const tokensCreateTokenV2 = <ThrowOnError extends boolean = true>(
-  options?: Options<TokensCreateTokenV2Data, ThrowOnError>
+  options: Options<TokensCreateTokenV2Data, ThrowOnError>
 ): RequestResult<TokensCreateTokenV2Responses, unknown, ThrowOnError, 'data'> =>
-  (options?.client ?? client).post<TokensCreateTokenV2Responses, unknown, ThrowOnError, 'data'>({
+  (options.client ?? client).post<TokensCreateTokenV2Responses, unknown, ThrowOnError, 'data'>({
     responseTransformer: tokensCreateTokenV2ResponseTransformer,
     responseStyle: 'data',
     url: '/2/tokens',
     ...options,
     headers: {
       'Content-Type': 'application/json',
-      ...options?.headers,
+      ...options.headers,
     },
   });
 
@@ -219,157 +219,12 @@ export const tokensSetTokenPaused = <ThrowOnError extends boolean = true>(
   });
 
 /**
- * Check if a username is available
- */
-export const accountCheckUsername = <ThrowOnError extends boolean = true>(
-  options?: Options<AccountCheckUsernameData, ThrowOnError>
-): RequestResult<AccountCheckUsernameResponses, unknown, ThrowOnError, 'data'> =>
-  (options?.client ?? client).post<AccountCheckUsernameResponses, unknown, ThrowOnError, 'data'>({
-    responseStyle: 'data',
-    url: '/2/account/username/check',
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
-
-/**
- * Authenticate a user
- */
-export const accountLoginV2 = <ThrowOnError extends boolean = true>(
-  options?: Options<AccountLoginV2Data, ThrowOnError>
-): RequestResult<AccountLoginV2Responses, AccountLoginV2Errors, ThrowOnError, 'data'> =>
-  (options?.client ?? client).post<
-    AccountLoginV2Responses,
-    AccountLoginV2Errors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/2/account/login',
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
-
-/**
- * Initiate a password reset
- */
-export const accountPasswordResetInitiateV2 = <ThrowOnError extends boolean = true>(
-  options?: Options<AccountPasswordResetInitiateV2Data, ThrowOnError>
-): RequestResult<
-  AccountPasswordResetInitiateV2Responses,
-  AccountPasswordResetInitiateV2Errors,
-  ThrowOnError,
-  'data'
-> =>
-  (options?.client ?? client).post<
-    AccountPasswordResetInitiateV2Responses,
-    AccountPasswordResetInitiateV2Errors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/2/account/password-reset',
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
-
-/**
- * Signs up a new user
- */
-export const accountSignUpV2 = <ThrowOnError extends boolean = true>(
-  options?: Options<AccountSignUpV2Data, ThrowOnError>
-): RequestResult<AccountSignUpV2Responses, AccountSignUpV2Errors, ThrowOnError, 'data'> =>
-  (options?.client ?? client).post<
-    AccountSignUpV2Responses,
-    AccountSignUpV2Errors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/2/account/signup',
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
-
-/**
- * Gets the best suited LCG node for the client
- */
-export const deviceGetLiveControlGatewayV2 = <ThrowOnError extends boolean = true>(
-  options?: Options<DeviceGetLiveControlGatewayV2Data, ThrowOnError>
-): RequestResult<
-  DeviceGetLiveControlGatewayV2Responses,
-  DeviceGetLiveControlGatewayV2Errors,
-  ThrowOnError,
-  'data'
-> =>
-  (options?.client ?? client).get<
-    DeviceGetLiveControlGatewayV2Responses,
-    DeviceGetLiveControlGatewayV2Errors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/2/device/assignLCG',
-    ...options,
-  });
-
-/**
- * Create a new device for the current user
- */
-export const devicesCreateDeviceV2 = <ThrowOnError extends boolean = true>(
-  options?: Options<DevicesCreateDeviceV2Data, ThrowOnError>
-): RequestResult<DevicesCreateDeviceV2Responses, unknown, ThrowOnError, 'data'> =>
-  (options?.client ?? client).post<DevicesCreateDeviceV2Responses, unknown, ThrowOnError, 'data'>({
-    responseStyle: 'data',
-    url: '/2/devices',
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
-
-/**
- * Gets the live control gateway a hub is connected to, including its public port and the full
- * live-control WebSocket path (honoring the gateway's configured path prefix).
- */
-export const devicesGetLiveControlGatewayInfoV2 = <ThrowOnError extends boolean = true>(
-  options: Options<DevicesGetLiveControlGatewayInfoV2Data, ThrowOnError>
-): RequestResult<
-  DevicesGetLiveControlGatewayInfoV2Responses,
-  DevicesGetLiveControlGatewayInfoV2Errors,
-  ThrowOnError,
-  'data'
-> =>
-  (options.client ?? client).get<
-    DevicesGetLiveControlGatewayInfoV2Responses,
-    DevicesGetLiveControlGatewayInfoV2Errors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/2/devices/{deviceId}/lcg',
-    ...options,
-  });
-
-/**
  * Send a control message to shockers
  */
 export const shockerSendControl = <ThrowOnError extends boolean = true>(
-  options?: Options<ShockerSendControlData, ThrowOnError>
+  options: Options<ShockerSendControlData, ThrowOnError>
 ): RequestResult<ShockerSendControlResponses, ShockerSendControlErrors, ThrowOnError, 'data'> =>
-  (options?.client ?? client).post<
+  (options.client ?? client).post<
     ShockerSendControlResponses,
     ShockerSendControlErrors,
     ThrowOnError,
@@ -380,19 +235,19 @@ export const shockerSendControl = <ThrowOnError extends boolean = true>(
     ...options,
     headers: {
       'Content-Type': 'application/json',
-      ...options?.headers,
+      ...options.headers,
     },
   });
 
 export const userSharesCreateShareInvite = <ThrowOnError extends boolean = true>(
-  options?: Options<UserSharesCreateShareInviteData, ThrowOnError>
+  options: Options<UserSharesCreateShareInviteData, ThrowOnError>
 ): RequestResult<
   UserSharesCreateShareInviteResponses,
   UserSharesCreateShareInviteErrors,
   ThrowOnError,
   'data'
 > =>
-  (options?.client ?? client).post<
+  (options.client ?? client).post<
     UserSharesCreateShareInviteResponses,
     UserSharesCreateShareInviteErrors,
     ThrowOnError,
@@ -403,7 +258,7 @@ export const userSharesCreateShareInvite = <ThrowOnError extends boolean = true>
     ...options,
     headers: {
       'Content-Type': 'application/json',
-      ...options?.headers,
+      ...options.headers,
     },
   });
 
@@ -568,6 +423,151 @@ export const userSharesBulkUserShareShockersUpdate = <ThrowOnError extends boole
   >({
     responseStyle: 'data',
     url: '/2/shares/user/{userId}/shockers',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+/**
+ * Gets the best suited LCG node for the client
+ */
+export const deviceGetLiveControlGatewayV2 = <ThrowOnError extends boolean = true>(
+  options?: Options<DeviceGetLiveControlGatewayV2Data, ThrowOnError>
+): RequestResult<
+  DeviceGetLiveControlGatewayV2Responses,
+  DeviceGetLiveControlGatewayV2Errors,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).get<
+    DeviceGetLiveControlGatewayV2Responses,
+    DeviceGetLiveControlGatewayV2Errors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/2/device/assignLCG',
+    ...options,
+  });
+
+/**
+ * Create a new device for the current user
+ */
+export const devicesCreateDeviceV2 = <ThrowOnError extends boolean = true>(
+  options: Options<DevicesCreateDeviceV2Data, ThrowOnError>
+): RequestResult<DevicesCreateDeviceV2Responses, unknown, ThrowOnError, 'data'> =>
+  (options.client ?? client).post<DevicesCreateDeviceV2Responses, unknown, ThrowOnError, 'data'>({
+    responseStyle: 'data',
+    url: '/2/devices',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+/**
+ * Gets the live control gateway a hub is connected to, including its public port and the full
+ * live-control WebSocket path (honoring the gateway's configured path prefix).
+ */
+export const devicesGetLiveControlGatewayInfoV2 = <ThrowOnError extends boolean = true>(
+  options: Options<DevicesGetLiveControlGatewayInfoV2Data, ThrowOnError>
+): RequestResult<
+  DevicesGetLiveControlGatewayInfoV2Responses,
+  DevicesGetLiveControlGatewayInfoV2Errors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).get<
+    DevicesGetLiveControlGatewayInfoV2Responses,
+    DevicesGetLiveControlGatewayInfoV2Errors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/2/devices/{deviceId}/lcg',
+    ...options,
+  });
+
+/**
+ * Check if a username is available
+ */
+export const accountCheckUsername = <ThrowOnError extends boolean = true>(
+  options: Options<AccountCheckUsernameData, ThrowOnError>
+): RequestResult<AccountCheckUsernameResponses, unknown, ThrowOnError, 'data'> =>
+  (options.client ?? client).post<AccountCheckUsernameResponses, unknown, ThrowOnError, 'data'>({
+    responseStyle: 'data',
+    url: '/2/account/username/check',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+/**
+ * Authenticate a user
+ */
+export const accountLoginV2 = <ThrowOnError extends boolean = true>(
+  options: Options<AccountLoginV2Data, ThrowOnError>
+): RequestResult<AccountLoginV2Responses, AccountLoginV2Errors, ThrowOnError, 'data'> =>
+  (options.client ?? client).post<
+    AccountLoginV2Responses,
+    AccountLoginV2Errors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/2/account/login',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+/**
+ * Initiate a password reset
+ */
+export const accountPasswordResetInitiateV2 = <ThrowOnError extends boolean = true>(
+  options: Options<AccountPasswordResetInitiateV2Data, ThrowOnError>
+): RequestResult<
+  AccountPasswordResetInitiateV2Responses,
+  AccountPasswordResetInitiateV2Errors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).post<
+    AccountPasswordResetInitiateV2Responses,
+    AccountPasswordResetInitiateV2Errors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/2/account/password-reset',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+/**
+ * Signs up a new user
+ */
+export const accountSignUpV2 = <ThrowOnError extends boolean = true>(
+  options: Options<AccountSignUpV2Data, ThrowOnError>
+): RequestResult<AccountSignUpV2Responses, AccountSignUpV2Errors, ThrowOnError, 'data'> =>
+  (options.client ?? client).post<
+    AccountSignUpV2Responses,
+    AccountSignUpV2Errors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/2/account/signup',
     ...options,
     headers: {
       'Content-Type': 'application/json',
