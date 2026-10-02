@@ -53,7 +53,7 @@
   import {
     adminGetEmailOutbox,
     adminGetEmailOutboxStats,
-    type EmailOutboxMessageDtoPaginated,
+    type PaginatedOfEmailOutboxMessageDto,
     type EmailOutboxStatsDto,
     type EmailOutboxMessageDto,
   } from '#lib/api/index.js';
@@ -138,7 +138,7 @@
     }
   }
 
-  function handleResponse(response: EmailOutboxMessageDtoPaginated) {
+  function handleResponse(response: PaginatedOfEmailOutboxMessageDto) {
     total = Number(response.total);
     data = response.data;
     perPage = response.limit;

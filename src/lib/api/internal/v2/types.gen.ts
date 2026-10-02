@@ -46,7 +46,7 @@ export type ControlLimitMode = (typeof ControlLimitMode)[keyof typeof ControlLim
 
 export type ControlRequest = {
   shocks: Array<Control>;
-  customName?: string | null;
+  customName?: null | string;
 };
 
 export const ControlType = {
@@ -60,13 +60,16 @@ export type ControlType = (typeof ControlType)[keyof typeof ControlType];
 
 export type CreateShareRequest = {
   shockers: Array<ShockerPermLimitPairWithId>;
-  user?: string | null;
+  user?: null | string;
 };
 
 export type CreateTokenRequestV2 = {
-  validUntil?: Temporal.Instant | null;
+  validUntil?: null | Temporal.Instant;
   name: string;
   permissions: Array<PermissionType>;
+  /**
+   * Per-token shocker control configuration. When omitted, the permissive default is used.
+   */
   shockerControl: ShockerControlSettings;
 };
 
@@ -79,6 +82,9 @@ export type DurationLimitSettings = {
 export type EditTokenRequestV2 = {
   name: string;
   permissions: Array<PermissionType>;
+  /**
+   * Per-token shocker control configuration. When omitted, the permissive default is used.
+   */
   shockerControl: ShockerControlSettings;
 };
 
@@ -137,21 +143,20 @@ export type LoginV2OkResponse = {
 };
 
 export type OpenShockProblem = {
-  type: string | null;
-  title: string | null;
-  status?: number | null;
-  detail?: string | null;
-  instance?: string | null;
+  type: null | string;
+  title: null | string;
+  status?: null | number;
+  detail?: null | string;
+  instance?: null | string;
   /**
    * @deprecated
    */
-  readonly message?: string;
+  message?: string;
   /**
    * @deprecated
    */
-  readonly traceId?: string | null;
-  requestId?: string | null;
-  [key: string]: unknown;
+  traceId?: null | string;
+  requestId?: null | string;
 };
 
 export type PasswordResetRequestV2 = {
@@ -215,7 +220,7 @@ export type ShareInviteBaseDetails = {
   id: string;
   createdAt: Temporal.Instant;
   owner: BasicUserInfo;
-  sharedWith: BasicUserInfo;
+  sharedWith: null | BasicUserInfo;
 };
 
 /**
@@ -231,8 +236,8 @@ export type ShockerControlSettings = {
 };
 
 export type ShockerLimits = {
-  intensity: number | null;
-  duration: number | null;
+  intensity: null | number;
+  duration: null | number;
 };
 
 export type ShockerPermissions = {
@@ -267,8 +272,8 @@ export type TokenCreatedResponseV2 = {
   name: string;
   token: string;
   createdAt: Temporal.Instant;
-  validUntil: Temporal.Instant | null;
-  lastUsed: Temporal.Instant | null;
+  validUntil: null | Temporal.Instant;
+  lastUsed: null | Temporal.Instant;
   permissions: Array<PermissionType>;
   shockerControl: ShockerControlSettings;
 };
@@ -284,8 +289,8 @@ export type TokenResponseV2 = {
   id: string;
   name: string;
   createdOn: Temporal.Instant;
-  validUntil: Temporal.Instant | null;
-  lastUsed: Temporal.Instant | null;
+  validUntil: null | Temporal.Instant;
+  lastUsed: null | Temporal.Instant;
   permissions: Array<PermissionType>;
   shockerControl: ShockerControlSettings;
 };
@@ -300,7 +305,7 @@ export type UsernameAvailability = (typeof UsernameAvailability)[keyof typeof Us
 
 export type UsernameCheckResponse = {
   availability: UsernameAvailability;
-  error?: UsernameError;
+  error?: null | UsernameError;
 };
 
 export type UsernameError = {
@@ -350,16 +355,6 @@ export type V2UserSharesListItem = {
   name: string;
   image: string;
   shares: Array<UserShareInfo>;
-};
-
-export type OpenShockProblemWritable = {
-  type: string | null;
-  title: string | null;
-  status?: number | null;
-  detail?: string | null;
-  instance?: string | null;
-  requestId?: string | null;
-  [key: string]: unknown;
 };
 
 export type TokensSelfGetSelfTokenV2Data = {

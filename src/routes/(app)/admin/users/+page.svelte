@@ -12,7 +12,9 @@
   } from '#lib/components/Table/ColumnUtils.js';
   import type { Features } from './data-table-features';
 
-  const PasswordHashTypeRenderer = (passwordHashType: PasswordHashingAlgorithm) => {
+  const PasswordHashTypeRenderer = (passwordHashType: PasswordHashingAlgorithm | null) => {
+    // An account that only ever signed in through an OAuth provider has no password to hash.
+    if (passwordHashType === null) return RenderCell('None');
     if (passwordHashType !== PasswordHashingAlgorithm.BCrypt)
       return RenderOrangeCell(passwordHashType);
     return RenderBoldCell(passwordHashType);
@@ -45,7 +47,7 @@
 <script lang="ts">
   import DataTableActions from './data-table-actions.svelte';
   import { odataAnd, odataSearch } from '#lib/utils/odata.js';
-  import { adminGetUsers, type AdminUsersViewPaginated } from '#lib/api/index.js';
+  import { adminGetUsers, type PaginatedOfAdminUsersView } from '#lib/api/index.js';
   import type { SortingState } from '@tanstack/svelte-table';
   import { Container } from '@openshock/svelte-core/components';
   import DataTable from '#lib/components/Table/DataTableTemplate.svelte';
@@ -90,7 +92,7 @@
     sorting.length > 0 ? sorting[0].id + ' ' + (sorting[0].desc ? 'desc' : 'asc') : undefined
   );
 
-  function handleResponse(response: AdminUsersViewPaginated) {
+  function handleResponse(response: PaginatedOfAdminUsersView) {
     total = Number(response.total);
     data = response.data;
     perPage = response.limit;

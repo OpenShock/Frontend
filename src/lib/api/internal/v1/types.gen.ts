@@ -33,22 +33,17 @@ export type AdminOnlineDeviceResponse = {
   firmwareVersion: string;
   gateway: string;
   connectedAt: Temporal.Instant;
-  userAgent: string | null;
+  userAgent: null | string;
   bootedAt: Temporal.Instant;
-  latencyMs: number | null;
-  rssi: number | null;
-  country: string | null;
+  latencyMs: null | number;
+  rssi: null | number;
+  country: null | string;
   /**
    * IpAddress
    *
    * An IPv4 or IPv6 address in its textual form.
    */
-  ip: string | null;
-};
-
-export type AdminOnlineDeviceResponseArrayLegacyDataResponse = {
-  message: string;
-  data: Array<AdminOnlineDeviceResponse> | null;
+  ip: null | string;
 };
 
 export type AdminOnlineGatewayResponse = {
@@ -57,8 +52,8 @@ export type AdminOnlineGatewayResponse = {
   port: number;
   pathPrefix: string;
   country: string;
-  latitude: number | null;
-  longitude: number | null;
+  latitude: null | number;
+  longitude: null | number;
   /**
    * Load the gateway advertises for hub assignment, in percent
    */
@@ -71,13 +66,13 @@ export type AdminUsersView = {
   id: string;
   name: string;
   email: string;
-  passwordHashType: PasswordHashingAlgorithm;
+  passwordHashType: null | PasswordHashingAlgorithm;
   roles: Array<RoleType>;
   createdAt: Temporal.Instant;
-  activatedAt: Temporal.Instant | null;
-  createdByAutomationTokenId: string | null;
-  deactivatedAt: Temporal.Instant | null;
-  deactivatedByUserId: string | null;
+  activatedAt: null | Temporal.Instant;
+  createdByAutomationTokenId: null | string;
+  deactivatedAt: null | Temporal.Instant;
+  deactivatedByUserId: null | string;
   apiTokenCount: number;
   passwordResetCount: number;
   shockerUserShareCount: number;
@@ -89,13 +84,6 @@ export type AdminUsersView = {
   shockerControlLogCount: number;
 };
 
-export type AdminUsersViewPaginated = {
-  offset: number;
-  limit: number;
-  total: bigint;
-  data: Array<AdminUsersView>;
-};
-
 export type AdminUserView = {
   id: string;
   name: string;
@@ -103,10 +91,10 @@ export type AdminUserView = {
   passwordHashType: PasswordHashingAlgorithm;
   roles: Array<RoleType>;
   createdAt: Temporal.Instant;
-  activatedAt: Temporal.Instant | null;
-  createdByAutomationTokenId: string | null;
-  activationRequest: AdminUserViewUserActivationRequest;
-  deactivation: AdminUserViewUserDeactivation;
+  activatedAt: null | Temporal.Instant;
+  createdByAutomationTokenId: null | string;
+  activationRequest: null | AdminUserViewUserActivationRequest;
+  deactivation: null | AdminUserViewUserDeactivation;
   hubs: Array<AdminUserViewHub>;
   apiTokens: Array<AdminUserViewApiToken>;
   usersNameChanges: Array<AdminUserViewNameChange>;
@@ -119,8 +107,8 @@ export type AdminUserViewApiToken = {
   id: string;
   name: string;
   permissions: Array<PermissionType>;
-  validUntil: Temporal.Instant | null;
-  lastUsed: Temporal.Instant | null;
+  validUntil: null | Temporal.Instant;
+  lastUsed: null | Temporal.Instant;
   createdAt: Temporal.Instant;
   /**
    * IpAddress
@@ -134,7 +122,7 @@ export type AdminUserViewEmailChange = {
   id: string;
   email: string;
   createdAt: Temporal.Instant;
-  usedAt: Temporal.Instant | null;
+  usedAt: null | Temporal.Instant;
 };
 
 export type AdminUserViewHub = {
@@ -153,7 +141,7 @@ export type AdminUserViewNameChange = {
 export type AdminUserViewPasswordReset = {
   id: string;
   createdAt: Temporal.Instant;
-  usedAt: Temporal.Instant | null;
+  usedAt: null | Temporal.Instant;
 };
 
 export type AdminUserViewShocker = {
@@ -169,7 +157,7 @@ export type AdminUserViewUserActivationRequest = {
 
 export type AdminUserViewUserDeactivation = {
   deactivatedBy: AdminUserViewUserRef;
-  scheduledDeletionTime: Temporal.Instant | null;
+  scheduledDeletionTime: null | Temporal.Instant;
   deactivatedAt: Temporal.Instant;
 };
 
@@ -204,44 +192,18 @@ export type AuditAction = (typeof AuditAction)[keyof typeof AuditAction];
 export type AuditLogEntryResponse = {
   id: string;
   userId: string;
-  actorId: string | null;
+  actorId: null | string;
   action: AuditAction;
-  reason: string | null;
+  reason: null | string;
   /**
    * IpAddress
    *
    * An IPv4 or IPv6 address in its textual form.
    */
-  ipAddress: string | null;
-  userAgent: string | null;
-  metadata: AuditMetadata;
+  ipAddress: null | string;
+  userAgent: null | string;
+  metadata: null | AuditMetadata;
   createdAt: Temporal.Instant;
-};
-
-/**
- * Page of results for a paginated list endpoint.
- */
-export type AuditLogEntryResponsePagedResult = {
-  /**
-   * Items on the current page.
-   */
-  items: Array<AuditLogEntryResponse>;
-  /**
-   * 1-based current page index.
-   */
-  page: number;
-  /**
-   * Page size used to produce this result.
-   */
-  pageSize: number;
-  /**
-   * Total number of items across all pages matching the query.
-   */
-  totalCount: number;
-  /**
-   * Total number of pages. Always at least 1, even when  is zero.
-   */
-  readonly totalPages?: number;
 };
 
 export type AuditMetadata =
@@ -312,7 +274,7 @@ export type AuditMetadataAutomationTokenCreatedMetadata = {
   name: string;
   types: Array<string>;
   autoCleanupUsers: boolean;
-  autoCleanupAfter: string | null;
+  autoCleanupAfter: null | string;
 };
 
 /**
@@ -340,7 +302,7 @@ export type AuditMetadataAutomationTokenUpdatedMetadata = {
   name: string;
   types: Array<string>;
   autoCleanupUsers: boolean;
-  autoCleanupAfter: string | null;
+  autoCleanupAfter: null | string;
 };
 
 /**
@@ -390,11 +352,11 @@ export type AutomationTokenDto = {
   name: string;
   types: Array<AutomationTokenType>;
   createdAt: Temporal.Instant;
-  lastUsedAt?: Temporal.Instant | null;
-  lastRotatedAt?: Temporal.Instant | null;
+  lastUsedAt?: null | Temporal.Instant;
+  lastRotatedAt?: null | Temporal.Instant;
   useCount?: bigint;
   autoCleanupUsers?: boolean;
-  autoCleanupAfter?: string | null;
+  autoCleanupAfter?: null | string;
 };
 
 /**
@@ -413,7 +375,7 @@ export type BackendInfoResponse = {
   currentTime: Temporal.Instant;
   frontendUrl: string;
   shortLinkUrl: string;
-  turnstileSiteKey: string | null;
+  turnstileSiteKey: null | string;
   oAuthProviders: Array<string>;
   /**
    * False when the instance has no mail provider configured. Accounts are then activated on
@@ -424,20 +386,10 @@ export type BackendInfoResponse = {
   isUserAuthenticated: boolean;
 };
 
-export type BackendInfoResponseLegacyDataResponse = {
-  message: string;
-  data: BackendInfoResponse;
-};
-
 export type BasicUserInfo = {
   id: string;
   name: string;
   image: string;
-};
-
-export type BooleanLegacyDataResponse = {
-  message: string;
-  data: boolean;
 };
 
 export type ChangeEmailRequest = {
@@ -467,6 +419,9 @@ export type ConfigurationAddItemRequest = {
    * A human-readable description of the configuration item’s purpose.
    */
   description: string;
+  /**
+   * The data type of the configuration value.
+   */
   type: ConfigurationValueType;
   /**
    * The initial value for the configuration item, serialized as a string.
@@ -487,6 +442,9 @@ export type ConfigurationItemDto = {
    * A human-readable description of what this configuration item controls.
    */
   description: string;
+  /**
+   * The data type of the configuration value.
+   */
   type: ConfigurationValueType;
   /**
    * The current value of the configuration item, serialized as a string.
@@ -516,12 +474,12 @@ export type ConfigurationUpdateItemRequest = {
   /**
    * (Optional) New description for the configuration item.
    */
-  description?: string | null;
+  description?: null | string;
   /**
    * (Optional) New value for the configuration item.
    * Must match the format expected by its existing ConfigurationValueType.
    */
-  value?: string | null;
+  value?: null | string;
 };
 
 export const ConfigurationValueType = {
@@ -550,7 +508,7 @@ export type ControlLogSenderLight = {
   id: string;
   name: string;
   image: string;
-  customName: string | null;
+  customName: null | string;
 };
 
 export const ControlType = {
@@ -570,7 +528,7 @@ export type CreateAutomationTokenDto = {
    * passed since they were created. Off by default; accounts the token didn't create are never deleted.
    */
   autoCleanupUsers?: boolean;
-  autoCleanupAfter?: string | null;
+  autoCleanupAfter?: null | string;
 };
 
 export type CreatedAutomationTokenDto = {
@@ -579,13 +537,13 @@ export type CreatedAutomationTokenDto = {
   secret: string;
   types: Array<AutomationTokenType>;
   createdAt: Temporal.Instant;
-  lastRotatedAt?: Temporal.Instant | null;
+  lastRotatedAt?: null | Temporal.Instant;
   autoCleanupUsers?: boolean;
-  autoCleanupAfter?: string | null;
+  autoCleanupAfter?: null | string;
 };
 
 export type CreateTokenRequest = {
-  validUntil?: Temporal.Instant | null;
+  validUntil?: null | Temporal.Instant;
   name: string;
   permissions?: Array<PermissionType>;
 };
@@ -596,20 +554,10 @@ export type DeviceResponse = {
   createdOn: Temporal.Instant;
 };
 
-export type DeviceResponseArrayLegacyDataResponse = {
-  message: string;
-  data: Array<DeviceResponse> | null;
-};
-
 export type DeviceSelfResponse = {
   id: string;
   name: string;
   shockers: Array<MinimalShocker>;
-};
-
-export type DeviceSelfResponseLegacyDataResponse = {
-  message: string;
-  data: DeviceSelfResponse;
 };
 
 export type DeviceWithShockersResponse = {
@@ -619,21 +567,11 @@ export type DeviceWithShockersResponse = {
   createdOn: Temporal.Instant;
 };
 
-export type DeviceWithShockersResponseArrayLegacyDataResponse = {
-  message: string;
-  data: Array<DeviceWithShockersResponse> | null;
-};
-
 export type DeviceWithTokenResponse = {
-  token: string | null;
+  token: null | string;
   id: string;
   name: string;
   createdOn: Temporal.Instant;
-};
-
-export type DeviceWithTokenResponseLegacyDataResponse = {
-  message: string;
-  data: DeviceWithTokenResponse;
 };
 
 export type EditTokenRequest = {
@@ -665,25 +603,18 @@ export type EmailOutboxMessageDto = {
   id: string;
   type: EmailType;
   recipient: string;
-  recipientName: string | null;
+  recipientName: null | string;
   payload: {
     [key: string]: string;
   };
-  coalesceKey: string | null;
+  coalesceKey: null | string;
   status: EmailStatus;
   attemptCount: number;
   nextAttemptAt: Temporal.Instant;
-  lastError: string | null;
+  lastError: null | string;
   createdAt: Temporal.Instant;
-  sentAt: Temporal.Instant | null;
-  failedAt: Temporal.Instant | null;
-};
-
-export type EmailOutboxMessageDtoPaginated = {
-  offset: number;
-  limit: number;
-  total: bigint;
-  data: Array<EmailOutboxMessageDto>;
+  sentAt: null | Temporal.Instant;
+  failedAt: null | Temporal.Instant;
 };
 
 /**
@@ -741,11 +672,6 @@ export const EmailType = {
  */
 export type EmailType = (typeof EmailType)[keyof typeof EmailType];
 
-export type GuidLegacyDataResponse = {
-  message: string;
-  data: string;
-};
-
 export type HubEditRequest = {
   name: string;
 };
@@ -755,19 +681,136 @@ export type LcgNodeResponse = {
   country: string;
 };
 
-export type LcgNodeResponseLegacyDataResponse = {
-  message: string;
-  data: LcgNodeResponse;
-};
-
 export type LcgResponse = {
   gateway: string;
   country: string;
 };
 
-export type LcgResponseLegacyDataResponse = {
+export type LegacyDataResponseOfArrayOfAdminOnlineDeviceResponse = {
+  message: string;
+  data: Array<AdminOnlineDeviceResponse>;
+};
+
+export type LegacyDataResponseOfArrayOfDeviceResponse = {
+  message: string;
+  data: Array<DeviceResponse>;
+};
+
+export type LegacyDataResponseOfArrayOfDeviceWithShockersResponse = {
+  message: string;
+  data: Array<DeviceWithShockersResponse>;
+};
+
+export type LegacyDataResponseOfArrayOfLogEntry = {
+  message: string;
+  data: Array<LogEntry>;
+};
+
+export type LegacyDataResponseOfArrayOfOwnerShockerResponse = {
+  message: string;
+  data: Array<OwnerShockerResponse>;
+};
+
+export type LegacyDataResponseOfArrayOfOwnPublicShareResponse = {
+  message: string;
+  data: Array<OwnPublicShareResponse>;
+};
+
+export type LegacyDataResponseOfArrayOfShareCodeInfo = {
+  message: string;
+  data: Array<ShareCodeInfo>;
+};
+
+export type LegacyDataResponseOfArrayOfShareInfo = {
+  message: string;
+  data: Array<ShareInfo>;
+};
+
+export type LegacyDataResponseOfArrayOfShockerResponse = {
+  message: string;
+  data: Array<ShockerResponse>;
+};
+
+export type LegacyDataResponseOfBackendInfoResponse = {
+  message: string;
+  data: BackendInfoResponse;
+};
+
+export type LegacyDataResponseOfboolean = {
+  message: string;
+  data: boolean;
+};
+
+export type LegacyDataResponseOfDeviceSelfResponse = {
+  message: string;
+  data: DeviceSelfResponse;
+};
+
+export type LegacyDataResponseOfDeviceWithTokenResponse = {
+  message: string;
+  data: DeviceWithTokenResponse;
+};
+
+export type LegacyDataResponseOfGuid = {
+  message: string;
+  data: string;
+};
+
+export type LegacyDataResponseOfIReadOnlyCollectionOfOtaItem = {
+  message: string;
+  data: Array<OtaItem>;
+};
+
+export type LegacyDataResponseOfLcgNodeResponse = {
+  message: string;
+  data: LcgNodeResponse;
+};
+
+export type LegacyDataResponseOfLcgResponse = {
   message: string;
   data: LcgResponse;
+};
+
+export type LegacyDataResponseOfPauseReason = {
+  message: string;
+  /**
+   * PauseReason
+   *
+   * An integer representing the reason(s) for the shocker being paused, expressed as a bitfield where reasons are OR'd together.
+   *
+   * Each bit corresponds to:
+   * - 1: Shocker
+   * - 2: UserShare
+   * - 4: PublicShare
+   *
+   * For example, a value of 6 (2 | 4) indicates both 'UserShare' and 'PublicShare' reasons.
+   */
+  data: number;
+};
+
+export type LegacyDataResponseOfPublicShareResponse = {
+  message: string;
+  data: PublicShareResponse;
+};
+
+export type LegacyDataResponseOfShockerWithDevice = {
+  message: string;
+  data: ShockerWithDevice;
+};
+
+export type LegacyDataResponseOfStatsResponse = {
+  message: string;
+  data: StatsResponse;
+};
+
+export type LegacyDataResponseOfstring = {
+  message: string;
+  data: string;
+};
+
+export type LegacyDataResponseOfUserSelfResponse = {
+  message: string;
+  data: UserSelfResponse;
 };
 
 export type LegacyEmptyResponse = {
@@ -784,11 +827,6 @@ export type LogEntry = {
   duration: number;
 };
 
-export type LogEntryArrayLegacyDataResponse = {
-  message: string;
-  data: Array<LogEntry> | null;
-};
-
 export type LogEntryWithHub = {
   id: string;
   hubId: string;
@@ -802,32 +840,6 @@ export type LogEntryWithHub = {
   duration: number;
 };
 
-/**
- * Page of results for a paginated list endpoint.
- */
-export type LogEntryWithHubPagedResult = {
-  /**
-   * Items on the current page.
-   */
-  items: Array<LogEntryWithHub>;
-  /**
-   * 1-based current page index.
-   */
-  page: number;
-  /**
-   * Page size used to produce this result.
-   */
-  pageSize: number;
-  /**
-   * Total number of items across all pages matching the query.
-   */
-  totalCount: number;
-  /**
-   * Total number of pages. Always at least 1, even when  is zero.
-   */
-  readonly totalPages?: number;
-};
-
 export type LoginSessionResponse = {
   id: string;
   /**
@@ -839,11 +851,11 @@ export type LoginSessionResponse = {
   userAgent: string;
   created: Temporal.Instant;
   expires: Temporal.Instant;
-  lastUsed: Temporal.Instant | null;
-  asnOrg?: string | null;
-  isVpn?: boolean | null;
-  countryCode?: string | null;
-  city?: string | null;
+  lastUsed: null | Temporal.Instant;
+  asnOrg?: null | string;
+  isVpn?: null | boolean;
+  countryCode?: null | string;
+  city?: null | string;
 };
 
 export const MatchTypeEnum = { Exact: 'Exact', Contains: 'Contains' } as const;
@@ -866,26 +878,25 @@ export type NewShocker = {
 export type OAuthConnectionResponse = {
   providerKey: string;
   externalId: string;
-  displayName: string | null;
+  displayName: null | string;
   linkedAt: Temporal.Instant;
 };
 
 export type OpenShockProblem = {
-  type: string | null;
-  title: string | null;
-  status?: number | null;
-  detail?: string | null;
-  instance?: string | null;
+  type: null | string;
+  title: null | string;
+  status?: null | number;
+  detail?: null | string;
+  instance?: null | string;
   /**
    * @deprecated
    */
-  readonly message?: string;
+  message?: string;
   /**
    * @deprecated
    */
-  readonly traceId?: string | null;
-  requestId?: string | null;
-  [key: string]: unknown;
+  traceId?: null | string;
+  requestId?: null | string;
 };
 
 export type OtaItem = {
@@ -898,12 +909,7 @@ export type OtaItem = {
    * Lightweight semantic version model with optional prerelease and build metadata.
    */
   version: string;
-  message: string | null;
-};
-
-export type OtaItemIReadOnlyCollectionLegacyDataResponse = {
-  message: string;
-  data: Array<OtaItem> | null;
+  message: null | string;
 };
 
 export const OtaUpdateStatus = {
@@ -923,21 +929,77 @@ export type OwnerShockerResponse = {
   devices: Array<SharedDevice>;
 };
 
-export type OwnerShockerResponseArrayLegacyDataResponse = {
-  message: string;
-  data: Array<OwnerShockerResponse> | null;
-};
-
 export type OwnPublicShareResponse = {
   id: string;
   name: string;
   createdOn: Temporal.Instant;
-  expiresOn?: Temporal.Instant | null;
+  expiresOn?: null | Temporal.Instant;
 };
 
-export type OwnPublicShareResponseArrayLegacyDataResponse = {
-  message: string;
-  data: Array<OwnPublicShareResponse> | null;
+/**
+ * Page of results for a paginated list endpoint.
+ */
+export type PagedResultOfAuditLogEntryResponse = {
+  /**
+   * Items on the current page.
+   */
+  items: Array<AuditLogEntryResponse>;
+  /**
+   * 1-based current page index.
+   */
+  page: number;
+  /**
+   * Page size used to produce this result.
+   */
+  pageSize: number;
+  /**
+   * Total number of items across all pages matching the query.
+   */
+  totalCount: number;
+  /**
+   * Total number of pages. Always at least 1, even when  is zero.
+   */
+  totalPages?: number;
+};
+
+/**
+ * Page of results for a paginated list endpoint.
+ */
+export type PagedResultOfLogEntryWithHub = {
+  /**
+   * Items on the current page.
+   */
+  items: Array<LogEntryWithHub>;
+  /**
+   * 1-based current page index.
+   */
+  page: number;
+  /**
+   * Page size used to produce this result.
+   */
+  pageSize: number;
+  /**
+   * Total number of items across all pages matching the query.
+   */
+  totalCount: number;
+  /**
+   * Total number of pages. Always at least 1, even when  is zero.
+   */
+  totalPages?: number;
+};
+
+export type PaginatedOfAdminUsersView = {
+  offset: number;
+  limit: number;
+  total: bigint;
+  data: Array<AdminUsersView>;
+};
+
+export type PaginatedOfEmailOutboxMessageDto = {
+  offset: number;
+  limit: number;
+  total: bigint;
+  data: Array<EmailOutboxMessageDto>;
 };
 
 export const PasswordHashingAlgorithm = {
@@ -954,27 +1016,10 @@ export type PasswordResetProcessData = {
 };
 
 export type PatchAutomationTokenDto = {
-  name?: string | null;
-  types?: Array<AutomationTokenType> | null;
-  autoCleanupUsers?: boolean | null;
-  autoCleanupAfter?: string | null;
-};
-
-export type PauseReasonLegacyDataResponse = {
-  message: string;
-  /**
-   * PauseReason
-   *
-   * An integer representing the reason(s) for the shocker being paused, expressed as a bitfield where reasons are OR'd together.
-   *
-   * Each bit corresponds to:
-   * - 1: Shocker
-   * - 2: UserShare
-   * - 4: PublicShare
-   *
-   * For example, a value of 6 (2 | 4) indicates both 'UserShare' and 'PublicShare' reasons.
-   */
-  data: number;
+  name?: null | string;
+  types?: null | Array<AutomationTokenType>;
+  autoCleanupUsers?: null | boolean;
+  autoCleanupAfter?: null | string;
 };
 
 export type PauseRequest = {
@@ -996,17 +1041,16 @@ export const PermissionType = {
 export type PermissionType = (typeof PermissionType)[keyof typeof PermissionType];
 
 export type ProblemDetails = {
-  type?: string | null;
-  title?: string | null;
-  status?: number | null;
-  detail?: string | null;
-  instance?: string | null;
-  [key: string]: unknown;
+  type?: null | string;
+  title?: null | string;
+  status?: null | number;
+  detail?: null | string;
+  instance?: null | string;
 };
 
 export type PublicShareCreate = {
   name: string;
-  expiresOn?: Temporal.Instant | null;
+  expiresOn?: null | Temporal.Instant;
 };
 
 export type PublicShareDevice = {
@@ -1018,21 +1062,16 @@ export type PublicShareDevice = {
 export type PublicShareEditShocker = {
   permissions: ShockerPermissions;
   limits: ShockerLimits;
-  cooldown?: number | null;
+  cooldown?: null | number;
 };
 
 export type PublicShareResponse = {
   id: string;
   name: string;
   createdOn: Temporal.Instant;
-  expiresOn?: Temporal.Instant | null;
+  expiresOn?: null | Temporal.Instant;
   author: BasicUserInfo;
   devices?: Array<PublicShareDevice>;
-};
-
-export type PublicShareResponseLegacyDataResponse = {
-  message: string;
-  data: PublicShareResponse;
 };
 
 export type PublicShareShocker = {
@@ -1074,6 +1113,9 @@ export type RoleType = (typeof RoleType)[keyof typeof RoleType];
  * delivered by the Cron pipeline with placeholder data and a dummy link (no token, no request row).
  */
 export type SendTestEmailDto = {
+  /**
+   * Which template to preview.
+   */
   type: EmailType;
   /**
    * Destination address for the test email.
@@ -1082,7 +1124,7 @@ export type SendTestEmailDto = {
   /**
    * Optional display name for the recipient.
    */
-  recipientName?: string | null;
+  recipientName?: null | string;
 };
 
 export type SetUserEmailRequestBody = {
@@ -1100,11 +1142,6 @@ export type SetUserPasswordRequestBody = {
 export type ShareCodeInfo = {
   id: string;
   createdOn: Temporal.Instant;
-};
-
-export type ShareCodeInfoArrayLegacyDataResponse = {
-  message: string;
-  data: Array<ShareCodeInfo> | null;
 };
 
 export type SharedDevice = {
@@ -1129,14 +1166,9 @@ export type ShareInfo = {
   paused: boolean;
 };
 
-export type ShareInfoArrayLegacyDataResponse = {
-  message: string;
-  data: Array<ShareInfo> | null;
-};
-
 export type ShockerLimits = {
-  intensity: number | null;
-  duration: number | null;
+  intensity: null | number;
+  duration: null | number;
 };
 
 export const ShockerModelType = {
@@ -1169,11 +1201,6 @@ export type ShockerResponse = {
   model: ShockerModelType;
 };
 
-export type ShockerResponseArrayLegacyDataResponse = {
-  message: string;
-  data: Array<ShockerResponse> | null;
-};
-
 export type ShockerWithDevice = {
   device: string;
   name: string;
@@ -1182,11 +1209,6 @@ export type ShockerWithDevice = {
   id: string;
   rfId: number;
   model: ShockerModelType;
-};
-
-export type ShockerWithDeviceLegacyDataResponse = {
-  message: string;
-  data: ShockerWithDevice;
 };
 
 /**
@@ -1203,22 +1225,12 @@ export type StatsResponse = {
   devicesOnline: bigint;
 };
 
-export type StatsResponseLegacyDataResponse = {
-  message: string;
-  data: StatsResponse;
-};
-
-export type StringLegacyDataResponse = {
-  message: string;
-  data: string | null;
-};
-
 export type TokenCreatedResponse = {
   id: string;
   name: string;
   token: string;
   createdAt: Temporal.Instant;
-  validUntil: Temporal.Instant | null;
+  validUntil: null | Temporal.Instant;
   lastUsed: Temporal.Instant;
   permissions: Array<PermissionType>;
 };
@@ -1227,7 +1239,7 @@ export type TokenResponse = {
   id: string;
   name: string;
   createdOn: Temporal.Instant;
-  validUntil: Temporal.Instant | null;
+  validUntil: null | Temporal.Instant;
   lastUsed: Temporal.Instant;
   permissions: Array<PermissionType>;
 };
@@ -1249,7 +1261,7 @@ export type UserNameBlacklistDto = {
 
 export type UsernameCheckResponse = {
   availability: UsernameAvailability;
-  error?: UsernameError;
+  error?: null | UsernameError;
 };
 
 export type UsernameError = {
@@ -1269,8 +1281,8 @@ export const UsernameErrorType = {
 export type UsernameErrorType = (typeof UsernameErrorType)[keyof typeof UsernameErrorType];
 
 export type UserPatchDto = {
-  name?: string | null;
-  email?: string | null;
+  name?: null | string;
+  email?: null | string;
 };
 
 export type UserSelfResponse = {
@@ -1283,70 +1295,11 @@ export type UserSelfResponse = {
   hasPassword: boolean;
 };
 
-export type UserSelfResponseLegacyDataResponse = {
-  message: string;
-  data: UserSelfResponse;
-};
-
 export type WebhookDto = {
   id: string;
   name: string;
   url: string;
   createdAt: Temporal.Instant;
-};
-
-/**
- * Page of results for a paginated list endpoint.
- */
-export type AuditLogEntryResponsePagedResultWritable = {
-  /**
-   * Items on the current page.
-   */
-  items: Array<AuditLogEntryResponse>;
-  /**
-   * 1-based current page index.
-   */
-  page: number;
-  /**
-   * Page size used to produce this result.
-   */
-  pageSize: number;
-  /**
-   * Total number of items across all pages matching the query.
-   */
-  totalCount: number;
-};
-
-/**
- * Page of results for a paginated list endpoint.
- */
-export type LogEntryWithHubPagedResultWritable = {
-  /**
-   * Items on the current page.
-   */
-  items: Array<LogEntryWithHub>;
-  /**
-   * 1-based current page index.
-   */
-  page: number;
-  /**
-   * Page size used to produce this result.
-   */
-  pageSize: number;
-  /**
-   * Total number of items across all pages matching the query.
-   */
-  totalCount: number;
-};
-
-export type OpenShockProblemWritable = {
-  type: string | null;
-  title: string | null;
-  status?: number | null;
-  detail?: string | null;
-  instance?: string | null;
-  requestId?: string | null;
-  [key: string]: unknown;
 };
 
 export type VersionGetBackendInfoData = {
@@ -1360,7 +1313,7 @@ export type VersionGetBackendInfoResponses = {
   /**
    * The version was successfully retrieved.
    */
-  200: BackendInfoResponseLegacyDataResponse;
+  200: LegacyDataResponseOfBackendInfoResponse;
 };
 
 export type VersionGetBackendInfoResponse =
@@ -1377,7 +1330,7 @@ export type UsersGetSelfResponses = {
   /**
    * The user's information was successfully retrieved.
    */
-  200: UserSelfResponseLegacyDataResponse;
+  200: LegacyDataResponseOfUserSelfResponse;
 };
 
 export type UsersGetSelfResponse = UsersGetSelfResponses[keyof UsersGetSelfResponses];
@@ -1623,7 +1576,7 @@ export type ShockerGetShockerByIdResponses = {
   /**
    * The shocker information was successfully retrieved.
    */
-  200: ShockerWithDeviceLegacyDataResponse;
+  200: LegacyDataResponseOfShockerWithDevice;
 };
 
 export type ShockerGetShockerByIdResponse =
@@ -1695,7 +1648,7 @@ export type ShockerGetShockerLogsResponses = {
   /**
    * The logs
    */
-  200: LogEntryArrayLegacyDataResponse;
+  200: LegacyDataResponseOfArrayOfLogEntry;
 };
 
 export type ShockerGetShockerLogsResponse =
@@ -1737,7 +1690,7 @@ export type ShockerGetAllShockerLogsResponses = {
   /**
    * A page of logs.
    */
-  200: LogEntryWithHubPagedResult;
+  200: PagedResultOfLogEntryWithHub;
 };
 
 export type ShockerGetAllShockerLogsResponse =
@@ -1754,7 +1707,7 @@ export type ShockerListSharedShockersResponses = {
   /**
    * The shockers were successfully retrieved.
    */
-  200: OwnerShockerResponseArrayLegacyDataResponse;
+  200: LegacyDataResponseOfArrayOfOwnerShockerResponse;
 };
 
 export type ShockerListSharedShockersResponse =
@@ -1771,7 +1724,7 @@ export type ShockerListShockersResponses = {
   /**
    * The shockers were successfully retrieved.
    */
-  200: DeviceWithShockersResponseArrayLegacyDataResponse;
+  200: LegacyDataResponseOfArrayOfDeviceWithShockersResponse;
 };
 
 export type ShockerListShockersResponse =
@@ -1802,7 +1755,7 @@ export type ShockerPauseShockerResponses = {
   /**
    * Successfully set pause state
    */
-  200: BooleanLegacyDataResponse;
+  200: LegacyDataResponseOfboolean;
 };
 
 export type ShockerPauseShockerResponse =
@@ -1833,7 +1786,7 @@ export type ShockerRegisterShockerResponses = {
   /**
    * Successfully created shocker
    */
-  201: GuidLegacyDataResponse;
+  201: LegacyDataResponseOfGuid;
 };
 
 export type ShockerRegisterShockerResponse =
@@ -1900,7 +1853,7 @@ export type ShockerGetUserSharesResponses = {
   /**
    * OK
    */
-  200: ShareInfoArrayLegacyDataResponse;
+  200: LegacyDataResponseOfArrayOfShareInfo;
 };
 
 export type ShockerGetUserSharesResponse =
@@ -1932,7 +1885,7 @@ export type ShockerShockerShareCodeCreateResponses = {
   /**
    * The share code was successfully created.
    */
-  200: GuidLegacyDataResponse;
+  200: LegacyDataResponseOfGuid;
 };
 
 export type ShockerShockerShareCodeCreateResponse =
@@ -1964,7 +1917,7 @@ export type ShockerShockerShareCodeListResponses = {
   /**
    * OK
    */
-  200: ShareCodeInfoArrayLegacyDataResponse;
+  200: LegacyDataResponseOfArrayOfShareCodeInfo;
 };
 
 export type ShockerShockerShareCodeListResponse =
@@ -2066,7 +2019,7 @@ export type ShockerShockerShareCodePauseResponses = {
   /**
    * Successfully updated pause status share
    */
-  200: BooleanLegacyDataResponse;
+  200: LegacyDataResponseOfboolean;
 };
 
 export type ShockerShockerShareCodePauseResponse =
@@ -2274,7 +2227,7 @@ export type ShareLinksListResponses = {
   /**
    * All public shares for the current user
    */
-  200: OwnPublicShareResponseArrayLegacyDataResponse;
+  200: LegacyDataResponseOfArrayOfOwnPublicShareResponse;
 };
 
 export type ShareLinksListResponse = ShareLinksListResponses[keyof ShareLinksListResponses];
@@ -2290,7 +2243,7 @@ export type ShareLinksCreatePublicShareResponses = {
   /**
    * The created public share
    */
-  200: GuidLegacyDataResponse;
+  200: LegacyDataResponseOfGuid;
 };
 
 export type ShareLinksCreatePublicShareResponse =
@@ -2362,7 +2315,7 @@ export type ShareLinksPauseShockerResponses = {
   /**
    * Successfully updated paused state shocker
    */
-  200: PauseReasonLegacyDataResponse;
+  200: LegacyDataResponseOfPauseReason;
 };
 
 export type ShareLinksPauseShockerResponse =
@@ -2439,7 +2392,7 @@ export type PublicGetOnlineDevicesStatisticsResponses = {
   /**
    * The statistics were successfully retrieved.
    */
-  200: StatsResponseLegacyDataResponse;
+  200: LegacyDataResponseOfStatsResponse;
 };
 
 export type PublicGetOnlineDevicesStatisticsResponse =
@@ -2471,7 +2424,7 @@ export type PublicGetPublicShareResponses = {
   /**
    * The public share information was successfully retrieved.
    */
-  200: PublicShareResponseLegacyDataResponse;
+  200: LegacyDataResponseOfPublicShareResponse;
 };
 
 export type PublicGetPublicShareResponse =
@@ -2503,7 +2456,7 @@ export type DevicesOtaGetOtaUpdateHistoryResponses = {
   /**
    * OK
    */
-  200: OtaItemIReadOnlyCollectionLegacyDataResponse;
+  200: LegacyDataResponseOfIReadOnlyCollectionOfOtaItem;
 };
 
 export type DevicesOtaGetOtaUpdateHistoryResponse =
@@ -2520,7 +2473,7 @@ export type DevicesListDevicesResponses = {
   /**
    * All devices for the current user
    */
-  200: DeviceResponseArrayLegacyDataResponse;
+  200: LegacyDataResponseOfArrayOfDeviceResponse;
 };
 
 export type DevicesListDevicesResponse =
@@ -2597,7 +2550,7 @@ export type DevicesGetDeviceByIdResponses = {
   /**
    * The device
    */
-  200: DeviceWithTokenResponseLegacyDataResponse;
+  200: LegacyDataResponseOfDeviceWithTokenResponse;
 };
 
 export type DevicesGetDeviceByIdResponse =
@@ -2692,7 +2645,7 @@ export type DevicesGetPairCodeResponses = {
   /**
    * The pair code
    */
-  200: StringLegacyDataResponse;
+  200: LegacyDataResponseOfstring;
 };
 
 export type DevicesGetPairCodeResponse =
@@ -2724,7 +2677,7 @@ export type DevicesGetLiveControlGatewayInfoResponses = {
   /**
    * LCG node was found and device is online
    */
-  200: LcgResponseLegacyDataResponse;
+  200: LegacyDataResponseOfLcgResponse;
 };
 
 export type DevicesGetLiveControlGatewayInfoResponse =
@@ -2755,7 +2708,7 @@ export type DevicesGetShockersResponses = {
   /**
    * All shockers for the device
    */
-  200: ShockerResponseArrayLegacyDataResponse;
+  200: LegacyDataResponseOfArrayOfShockerResponse;
 };
 
 export type DevicesGetShockersResponse =
@@ -2782,7 +2735,7 @@ export type DeviceGetLiveControlGatewayResponses = {
   /**
    * Successfully assigned LCG node
    */
-  200: LcgNodeResponseLegacyDataResponse;
+  200: LegacyDataResponseOfLcgNodeResponse;
 };
 
 export type DeviceGetLiveControlGatewayResponse =
@@ -2799,7 +2752,7 @@ export type DeviceGetSelfResponses = {
   /**
    * The device information was successfully retrieved.
    */
-  200: DeviceSelfResponseLegacyDataResponse;
+  200: LegacyDataResponseOfDeviceSelfResponse;
 };
 
 export type DeviceGetSelfResponse = DeviceGetSelfResponses[keyof DeviceGetSelfResponses];
@@ -2829,7 +2782,7 @@ export type DevicePairResponses = {
   /**
    * Successfully assigned LCG node
    */
-  200: StringLegacyDataResponse;
+  200: LegacyDataResponseOfstring;
 };
 
 export type DevicePairResponse = DevicePairResponses[keyof DevicePairResponses];
@@ -3438,7 +3391,7 @@ export type AdminGetEmailOutboxResponses = {
   /**
    * Paginated email outbox messages
    */
-  200: EmailOutboxMessageDtoPaginated;
+  200: PaginatedOfEmailOutboxMessageDto;
 };
 
 export type AdminGetEmailOutboxResponse =
@@ -3635,7 +3588,7 @@ export type AdminGetAdminAuditLogResponses = {
   /**
    * A page of audit log entries.
    */
-  200: AuditLogEntryResponsePagedResult;
+  200: PagedResultOfAuditLogEntryResponse;
 };
 
 export type AdminGetAdminAuditLogResponse =
@@ -3659,7 +3612,7 @@ export type AdminGetOnlineDevicesResponses = {
   /**
    * All online devices
    */
-  200: AdminOnlineDeviceResponseArrayLegacyDataResponse;
+  200: LegacyDataResponseOfArrayOfAdminOnlineDeviceResponse;
 };
 
 export type AdminGetOnlineDevicesResponse =
@@ -3724,7 +3677,7 @@ export type AdminGetUsersResponses = {
   /**
    * Paginated users
    */
-  200: AdminUsersViewPaginated;
+  200: PaginatedOfAdminUsersView;
 };
 
 export type AdminGetUsersResponse = AdminGetUsersResponses[keyof AdminGetUsersResponses];
@@ -4347,7 +4300,7 @@ export type AuthenticatedAccountGetAuditLogResponses = {
   /**
    * A page of audit log entries.
    */
-  200: AuditLogEntryResponsePagedResult;
+  200: PagedResultOfAuditLogEntryResponse;
 };
 
 export type AuthenticatedAccountGetAuditLogResponse =

@@ -47,7 +47,7 @@ const backendInfoResponseSchemaResponseTransformer = (data: any) => {
   return data;
 };
 
-const backendInfoResponseLegacyDataResponseSchemaResponseTransformer = (data: any) => {
+const legacyDataResponseOfBackendInfoResponseSchemaResponseTransformer = (data: any) => {
   data.data = backendInfoResponseSchemaResponseTransformer(data.data);
   return data;
 };
@@ -55,7 +55,7 @@ const backendInfoResponseLegacyDataResponseSchemaResponseTransformer = (data: an
 export const versionGetBackendInfoResponseTransformer = async (
   data: any
 ): Promise<VersionGetBackendInfoResponse> => {
-  data = backendInfoResponseLegacyDataResponseSchemaResponseTransformer(data);
+  data = legacyDataResponseOfBackendInfoResponseSchemaResponseTransformer(data);
   return data;
 };
 
@@ -110,7 +110,7 @@ const shockerWithDeviceSchemaResponseTransformer = (data: any) => {
   return data;
 };
 
-const shockerWithDeviceLegacyDataResponseSchemaResponseTransformer = (data: any) => {
+const legacyDataResponseOfShockerWithDeviceSchemaResponseTransformer = (data: any) => {
   data.data = shockerWithDeviceSchemaResponseTransformer(data.data);
   return data;
 };
@@ -118,7 +118,7 @@ const shockerWithDeviceLegacyDataResponseSchemaResponseTransformer = (data: any)
 export const shockerGetShockerByIdResponseTransformer = async (
   data: any
 ): Promise<ShockerGetShockerByIdResponse> => {
-  data = shockerWithDeviceLegacyDataResponseSchemaResponseTransformer(data);
+  data = legacyDataResponseOfShockerWithDeviceSchemaResponseTransformer(data);
   return data;
 };
 
@@ -127,17 +127,15 @@ const logEntrySchemaResponseTransformer = (data: any) => {
   return data;
 };
 
-const logEntryArrayLegacyDataResponseSchemaResponseTransformer = (data: any) => {
-  if (data.data) {
-    data.data = data.data.map((item: any) => logEntrySchemaResponseTransformer(item));
-  }
+const legacyDataResponseOfArrayOfLogEntrySchemaResponseTransformer = (data: any) => {
+  data.data = data.data.map((item: any) => logEntrySchemaResponseTransformer(item));
   return data;
 };
 
 export const shockerGetShockerLogsResponseTransformer = async (
   data: any
 ): Promise<ShockerGetShockerLogsResponse> => {
-  data = logEntryArrayLegacyDataResponseSchemaResponseTransformer(data);
+  data = legacyDataResponseOfArrayOfLogEntrySchemaResponseTransformer(data);
   return data;
 };
 
@@ -146,7 +144,7 @@ const logEntryWithHubSchemaResponseTransformer = (data: any) => {
   return data;
 };
 
-const logEntryWithHubPagedResultSchemaResponseTransformer = (data: any) => {
+const pagedResultOfLogEntryWithHubSchemaResponseTransformer = (data: any) => {
   data.items = data.items.map((item: any) => logEntryWithHubSchemaResponseTransformer(item));
   return data;
 };
@@ -154,7 +152,7 @@ const logEntryWithHubPagedResultSchemaResponseTransformer = (data: any) => {
 export const shockerGetAllShockerLogsResponseTransformer = async (
   data: any
 ): Promise<ShockerGetAllShockerLogsResponse> => {
-  data = logEntryWithHubPagedResultSchemaResponseTransformer(data);
+  data = pagedResultOfLogEntryWithHubSchemaResponseTransformer(data);
   return data;
 };
 
@@ -169,19 +167,19 @@ const deviceWithShockersResponseSchemaResponseTransformer = (data: any) => {
   return data;
 };
 
-const deviceWithShockersResponseArrayLegacyDataResponseSchemaResponseTransformer = (data: any) => {
-  if (data.data) {
-    data.data = data.data.map((item: any) =>
-      deviceWithShockersResponseSchemaResponseTransformer(item)
-    );
-  }
+const legacyDataResponseOfArrayOfDeviceWithShockersResponseSchemaResponseTransformer = (
+  data: any
+) => {
+  data.data = data.data.map((item: any) =>
+    deviceWithShockersResponseSchemaResponseTransformer(item)
+  );
   return data;
 };
 
 export const shockerListShockersResponseTransformer = async (
   data: any
 ): Promise<ShockerListShockersResponse> => {
-  data = deviceWithShockersResponseArrayLegacyDataResponseSchemaResponseTransformer(data);
+  data = legacyDataResponseOfArrayOfDeviceWithShockersResponseSchemaResponseTransformer(data);
   return data;
 };
 
@@ -190,17 +188,15 @@ const shareInfoSchemaResponseTransformer = (data: any) => {
   return data;
 };
 
-const shareInfoArrayLegacyDataResponseSchemaResponseTransformer = (data: any) => {
-  if (data.data) {
-    data.data = data.data.map((item: any) => shareInfoSchemaResponseTransformer(item));
-  }
+const legacyDataResponseOfArrayOfShareInfoSchemaResponseTransformer = (data: any) => {
+  data.data = data.data.map((item: any) => shareInfoSchemaResponseTransformer(item));
   return data;
 };
 
 export const shockerGetUserSharesResponseTransformer = async (
   data: any
 ): Promise<ShockerGetUserSharesResponse> => {
-  data = shareInfoArrayLegacyDataResponseSchemaResponseTransformer(data);
+  data = legacyDataResponseOfArrayOfShareInfoSchemaResponseTransformer(data);
   return data;
 };
 
@@ -209,17 +205,15 @@ const shareCodeInfoSchemaResponseTransformer = (data: any) => {
   return data;
 };
 
-const shareCodeInfoArrayLegacyDataResponseSchemaResponseTransformer = (data: any) => {
-  if (data.data) {
-    data.data = data.data.map((item: any) => shareCodeInfoSchemaResponseTransformer(item));
-  }
+const legacyDataResponseOfArrayOfShareCodeInfoSchemaResponseTransformer = (data: any) => {
+  data.data = data.data.map((item: any) => shareCodeInfoSchemaResponseTransformer(item));
   return data;
 };
 
 export const shockerShockerShareCodeListResponseTransformer = async (
   data: any
 ): Promise<ShockerShockerShareCodeListResponse> => {
-  data = shareCodeInfoArrayLegacyDataResponseSchemaResponseTransformer(data);
+  data = legacyDataResponseOfArrayOfShareCodeInfoSchemaResponseTransformer(data);
   return data;
 };
 
@@ -231,17 +225,15 @@ const ownPublicShareResponseSchemaResponseTransformer = (data: any) => {
   return data;
 };
 
-const ownPublicShareResponseArrayLegacyDataResponseSchemaResponseTransformer = (data: any) => {
-  if (data.data) {
-    data.data = data.data.map((item: any) => ownPublicShareResponseSchemaResponseTransformer(item));
-  }
+const legacyDataResponseOfArrayOfOwnPublicShareResponseSchemaResponseTransformer = (data: any) => {
+  data.data = data.data.map((item: any) => ownPublicShareResponseSchemaResponseTransformer(item));
   return data;
 };
 
 export const shareLinksListResponseTransformer = async (
   data: any
 ): Promise<ShareLinksListResponse> => {
-  data = ownPublicShareResponseArrayLegacyDataResponseSchemaResponseTransformer(data);
+  data = legacyDataResponseOfArrayOfOwnPublicShareResponseSchemaResponseTransformer(data);
   return data;
 };
 
@@ -273,7 +265,7 @@ const statsResponseSchemaResponseTransformer = (data: any) => {
   return data;
 };
 
-const statsResponseLegacyDataResponseSchemaResponseTransformer = (data: any) => {
+const legacyDataResponseOfStatsResponseSchemaResponseTransformer = (data: any) => {
   data.data = statsResponseSchemaResponseTransformer(data.data);
   return data;
 };
@@ -281,7 +273,7 @@ const statsResponseLegacyDataResponseSchemaResponseTransformer = (data: any) => 
 export const publicGetOnlineDevicesStatisticsResponseTransformer = async (
   data: any
 ): Promise<PublicGetOnlineDevicesStatisticsResponse> => {
-  data = statsResponseLegacyDataResponseSchemaResponseTransformer(data);
+  data = legacyDataResponseOfStatsResponseSchemaResponseTransformer(data);
   return data;
 };
 
@@ -293,7 +285,7 @@ const publicShareResponseSchemaResponseTransformer = (data: any) => {
   return data;
 };
 
-const publicShareResponseLegacyDataResponseSchemaResponseTransformer = (data: any) => {
+const legacyDataResponseOfPublicShareResponseSchemaResponseTransformer = (data: any) => {
   data.data = publicShareResponseSchemaResponseTransformer(data.data);
   return data;
 };
@@ -301,7 +293,7 @@ const publicShareResponseLegacyDataResponseSchemaResponseTransformer = (data: an
 export const publicGetPublicShareResponseTransformer = async (
   data: any
 ): Promise<PublicGetPublicShareResponse> => {
-  data = publicShareResponseLegacyDataResponseSchemaResponseTransformer(data);
+  data = legacyDataResponseOfPublicShareResponseSchemaResponseTransformer(data);
   return data;
 };
 
@@ -310,17 +302,15 @@ const otaItemSchemaResponseTransformer = (data: any) => {
   return data;
 };
 
-const otaItemIReadOnlyCollectionLegacyDataResponseSchemaResponseTransformer = (data: any) => {
-  if (data.data) {
-    data.data = data.data.map((item: any) => otaItemSchemaResponseTransformer(item));
-  }
+const legacyDataResponseOfIReadOnlyCollectionOfOtaItemSchemaResponseTransformer = (data: any) => {
+  data.data = data.data.map((item: any) => otaItemSchemaResponseTransformer(item));
   return data;
 };
 
 export const devicesOtaGetOtaUpdateHistoryResponseTransformer = async (
   data: any
 ): Promise<DevicesOtaGetOtaUpdateHistoryResponse> => {
-  data = otaItemIReadOnlyCollectionLegacyDataResponseSchemaResponseTransformer(data);
+  data = legacyDataResponseOfIReadOnlyCollectionOfOtaItemSchemaResponseTransformer(data);
   return data;
 };
 
@@ -329,17 +319,15 @@ const deviceResponseSchemaResponseTransformer = (data: any) => {
   return data;
 };
 
-const deviceResponseArrayLegacyDataResponseSchemaResponseTransformer = (data: any) => {
-  if (data.data) {
-    data.data = data.data.map((item: any) => deviceResponseSchemaResponseTransformer(item));
-  }
+const legacyDataResponseOfArrayOfDeviceResponseSchemaResponseTransformer = (data: any) => {
+  data.data = data.data.map((item: any) => deviceResponseSchemaResponseTransformer(item));
   return data;
 };
 
 export const devicesListDevicesResponseTransformer = async (
   data: any
 ): Promise<DevicesListDevicesResponse> => {
-  data = deviceResponseArrayLegacyDataResponseSchemaResponseTransformer(data);
+  data = legacyDataResponseOfArrayOfDeviceResponseSchemaResponseTransformer(data);
   return data;
 };
 
@@ -348,7 +336,7 @@ const deviceWithTokenResponseSchemaResponseTransformer = (data: any) => {
   return data;
 };
 
-const deviceWithTokenResponseLegacyDataResponseSchemaResponseTransformer = (data: any) => {
+const legacyDataResponseOfDeviceWithTokenResponseSchemaResponseTransformer = (data: any) => {
   data.data = deviceWithTokenResponseSchemaResponseTransformer(data.data);
   return data;
 };
@@ -356,21 +344,19 @@ const deviceWithTokenResponseLegacyDataResponseSchemaResponseTransformer = (data
 export const devicesGetDeviceByIdResponseTransformer = async (
   data: any
 ): Promise<DevicesGetDeviceByIdResponse> => {
-  data = deviceWithTokenResponseLegacyDataResponseSchemaResponseTransformer(data);
+  data = legacyDataResponseOfDeviceWithTokenResponseSchemaResponseTransformer(data);
   return data;
 };
 
-const shockerResponseArrayLegacyDataResponseSchemaResponseTransformer = (data: any) => {
-  if (data.data) {
-    data.data = data.data.map((item: any) => shockerResponseSchemaResponseTransformer(item));
-  }
+const legacyDataResponseOfArrayOfShockerResponseSchemaResponseTransformer = (data: any) => {
+  data.data = data.data.map((item: any) => shockerResponseSchemaResponseTransformer(item));
   return data;
 };
 
 export const devicesGetShockersResponseTransformer = async (
   data: any
 ): Promise<DevicesGetShockersResponse> => {
-  data = shockerResponseArrayLegacyDataResponseSchemaResponseTransformer(data);
+  data = legacyDataResponseOfArrayOfShockerResponseSchemaResponseTransformer(data);
   return data;
 };
 
@@ -500,10 +486,14 @@ const adminUserViewSchemaResponseTransformer = (data: any) => {
   if (data.activatedAt) {
     data.activatedAt = Temporal.Instant.from(data.activatedAt);
   }
-  data.activationRequest = adminUserViewUserActivationRequestSchemaResponseTransformer(
-    data.activationRequest
-  );
-  data.deactivation = adminUserViewUserDeactivationSchemaResponseTransformer(data.deactivation);
+  if (data.activationRequest) {
+    data.activationRequest = adminUserViewUserActivationRequestSchemaResponseTransformer(
+      data.activationRequest
+    );
+  }
+  if (data.deactivation) {
+    data.deactivation = adminUserViewUserDeactivationSchemaResponseTransformer(data.deactivation);
+  }
   data.hubs = data.hubs.map((item: any) => adminUserViewHubSchemaResponseTransformer(item));
   data.apiTokens = data.apiTokens.map((item: any) =>
     adminUserViewApiTokenSchemaResponseTransformer(item)
@@ -539,7 +529,7 @@ const emailOutboxMessageDtoSchemaResponseTransformer = (data: any) => {
   return data;
 };
 
-const emailOutboxMessageDtoPaginatedSchemaResponseTransformer = (data: any) => {
+const paginatedOfEmailOutboxMessageDtoSchemaResponseTransformer = (data: any) => {
   data.total = BigInt(data.total.toString());
   data.data = data.data.map((item: any) => emailOutboxMessageDtoSchemaResponseTransformer(item));
   return data;
@@ -548,7 +538,7 @@ const emailOutboxMessageDtoPaginatedSchemaResponseTransformer = (data: any) => {
 export const adminGetEmailOutboxResponseTransformer = async (
   data: any
 ): Promise<AdminGetEmailOutboxResponse> => {
-  data = emailOutboxMessageDtoPaginatedSchemaResponseTransformer(data);
+  data = paginatedOfEmailOutboxMessageDtoSchemaResponseTransformer(data);
   return data;
 };
 
@@ -593,7 +583,7 @@ const auditLogEntryResponseSchemaResponseTransformer = (data: any) => {
   return data;
 };
 
-const auditLogEntryResponsePagedResultSchemaResponseTransformer = (data: any) => {
+const pagedResultOfAuditLogEntryResponseSchemaResponseTransformer = (data: any) => {
   data.items = data.items.map((item: any) => auditLogEntryResponseSchemaResponseTransformer(item));
   return data;
 };
@@ -601,7 +591,7 @@ const auditLogEntryResponsePagedResultSchemaResponseTransformer = (data: any) =>
 export const adminGetAdminAuditLogResponseTransformer = async (
   data: any
 ): Promise<AdminGetAdminAuditLogResponse> => {
-  data = auditLogEntryResponsePagedResultSchemaResponseTransformer(data);
+  data = pagedResultOfAuditLogEntryResponseSchemaResponseTransformer(data);
   return data;
 };
 
@@ -611,19 +601,19 @@ const adminOnlineDeviceResponseSchemaResponseTransformer = (data: any) => {
   return data;
 };
 
-const adminOnlineDeviceResponseArrayLegacyDataResponseSchemaResponseTransformer = (data: any) => {
-  if (data.data) {
-    data.data = data.data.map((item: any) =>
-      adminOnlineDeviceResponseSchemaResponseTransformer(item)
-    );
-  }
+const legacyDataResponseOfArrayOfAdminOnlineDeviceResponseSchemaResponseTransformer = (
+  data: any
+) => {
+  data.data = data.data.map((item: any) =>
+    adminOnlineDeviceResponseSchemaResponseTransformer(item)
+  );
   return data;
 };
 
 export const adminGetOnlineDevicesResponseTransformer = async (
   data: any
 ): Promise<AdminGetOnlineDevicesResponse> => {
-  data = adminOnlineDeviceResponseArrayLegacyDataResponseSchemaResponseTransformer(data);
+  data = legacyDataResponseOfArrayOfAdminOnlineDeviceResponseSchemaResponseTransformer(data);
   return data;
 };
 
@@ -638,7 +628,7 @@ const adminUsersViewSchemaResponseTransformer = (data: any) => {
   return data;
 };
 
-const adminUsersViewPaginatedSchemaResponseTransformer = (data: any) => {
+const paginatedOfAdminUsersViewSchemaResponseTransformer = (data: any) => {
   data.total = BigInt(data.total.toString());
   data.data = data.data.map((item: any) => adminUsersViewSchemaResponseTransformer(item));
   return data;
@@ -647,7 +637,7 @@ const adminUsersViewPaginatedSchemaResponseTransformer = (data: any) => {
 export const adminGetUsersResponseTransformer = async (
   data: any
 ): Promise<AdminGetUsersResponse> => {
-  data = adminUsersViewPaginatedSchemaResponseTransformer(data);
+  data = paginatedOfAdminUsersViewSchemaResponseTransformer(data);
   return data;
 };
 
@@ -678,7 +668,7 @@ export const adminListWebhooksResponseTransformer = async (
 export const authenticatedAccountGetAuditLogResponseTransformer = async (
   data: any
 ): Promise<AuthenticatedAccountGetAuditLogResponse> => {
-  data = auditLogEntryResponsePagedResultSchemaResponseTransformer(data);
+  data = pagedResultOfAuditLogEntryResponseSchemaResponseTransformer(data);
   return data;
 };
 
