@@ -32,7 +32,8 @@
     open = o;
   }
 
-  function onFormSubmit() {
+  function onFormSubmit(event: SubmitEvent) {
+    event.preventDefault();
     const selectedShockers = shockerIds.map((id) => ({
       id,
       name: availableShockers.find((shocker) => shocker.value === id)?.label || '',
@@ -52,13 +53,7 @@
       >
     </Dialog.Header>
 
-    <form
-      class="min-w-0 space-y-4"
-      onsubmit={(e) => {
-        e.preventDefault();
-        void onFormSubmit();
-      }}
-    >
+    <form class="min-w-0 space-y-4" id="add-shockers" onsubmit={onFormSubmit}>
       <MultiSelectCombobox
         bind:selected={shockerIds}
         options={availableShockers}
@@ -69,7 +64,12 @@
     </form>
     <Dialog.Footer>
       <Button variant="outline" onclick={() => (open = false)}>Cancel</Button>
-      <Button onclick={onFormSubmit} disabled={!shockerIds.length} class="flex items-center">
+      <Button
+        type="submit"
+        form="add-shockers"
+        disabled={!shockerIds.length}
+        class="flex items-center"
+      >
         <Plus />
         Add Shockers
       </Button>

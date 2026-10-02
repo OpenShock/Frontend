@@ -28,7 +28,8 @@
   );
   let submitting = $state(false);
 
-  async function saveChanges() {
+  async function saveChanges(event: SubmitEvent) {
+    event.preventDefault();
     submitting = true;
     try {
       await tokensEditTokenV2({
@@ -83,13 +84,7 @@
     <Dialog.Title>Edit API token</Dialog.Title>
     <Dialog.Description></Dialog.Description>
   </Dialog.Header>
-  <form
-    class="space-y-4"
-    onsubmit={(e) => {
-      e.preventDefault();
-      void saveChanges();
-    }}
-  >
+  <form class="space-y-4" id="edit-api-token" onsubmit={saveChanges}>
     <TextInput
       label="Token Name"
       placeholder="Token name..."
@@ -127,7 +122,11 @@
 
   <Dialog.Footer>
     <Button variant="outline" onclick={close} disabled={submitting}>Cancel</Button>
-    <Button onclick={saveChanges} disabled={submitting || !nameValidationResult.valid}>
+    <Button
+      type="submit"
+      form="edit-api-token"
+      disabled={submitting || !nameValidationResult.valid}
+    >
       Save Changes
     </Button>
   </Dialog.Footer>

@@ -30,7 +30,8 @@
     open = o;
   }
 
-  async function onFormSubmit() {
+  async function onFormSubmit(event: SubmitEvent) {
+    event.preventDefault();
     try {
       redeemPromise = userSharesRedeemInvite({ path: { inviteId: userInput } });
       await redeemPromise;
@@ -50,13 +51,7 @@
       <Dialog.Description>Enter the share code to redeem</Dialog.Description>
     </Dialog.Header>
 
-    <form
-      class="min-w-0 space-y-4"
-      onsubmit={(e) => {
-        e.preventDefault();
-        void onFormSubmit();
-      }}
-    >
+    <form class="min-w-0 space-y-4" onsubmit={onFormSubmit}>
       <Input
         bind:value={userInput}
         disabled={redeemPromise !== null}
@@ -103,11 +98,7 @@
           <p class="text-destructive">Error redeeming code: {error.message}</p>
         {/await}
       {:else}
-        <Button
-          onclick={onFormSubmit}
-          class="flex w-full items-center"
-          disabled={redeemPromise !== null}
-        >
+        <Button type="submit" class="flex w-full items-center" disabled={redeemPromise !== null}>
           <Barcode />
           Redeem
         </Button>

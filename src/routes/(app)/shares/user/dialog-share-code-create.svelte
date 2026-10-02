@@ -86,7 +86,8 @@
     open = o;
   }
 
-  async function onFormSubmit() {
+  async function onFormSubmit(event: SubmitEvent) {
+    event.preventDefault();
     try {
       const createdCode = await userSharesCreateShareInvite({
         body: {
@@ -120,13 +121,7 @@
       <Dialog.Description>Create a Share Code or Invite</Dialog.Description>
     </Dialog.Header>
 
-    <form
-      class="min-w-0 space-y-4"
-      onsubmit={(e) => {
-        e.preventDefault();
-        void onFormSubmit();
-      }}
-    >
+    <form class="min-w-0 space-y-4" id="create-share-code" onsubmit={onFormSubmit}>
       <UserSelector bind:fetchedUser />
 
       <MultiSelectCombobox
@@ -144,7 +139,7 @@
     </form>
     <Dialog.Footer>
       <Button variant="outline" onclick={() => (open = false)}>Cancel</Button>
-      <Button onclick={onFormSubmit} class="flex items-center">
+      <Button type="submit" form="create-share-code" class="flex items-center">
         {#if fetchedUser}
           <User />
           Send Share Invite
