@@ -69,6 +69,9 @@
     </Dialog.Header>
     <TextInput label="Name" bind:value={name} />
     <TextInput type="url" label="Url" bind:value={url} validationResult={urlValidationResult} />
-    <Button onclick={createWebhook} disabled={!valid}>Create</Button>
+    <Dialog.Footer>
+      <Button variant="outline" onclick={() => (open = false)}>Cancel</Button>
+      <Button onclick={createWebhook} disabled={!valid}>Create</Button>
+    </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>

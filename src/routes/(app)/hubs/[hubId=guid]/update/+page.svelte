@@ -204,7 +204,7 @@
 <Dialog.Root bind:open={() => confirmOpen, (o) => (confirmOpen = o)}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Confirm Firmware Update</Dialog.Title>
+      <Dialog.Title>Confirm firmware update</Dialog.Title>
       <Dialog.Description>
         Update <strong>{hubName}</strong> to version <strong>{version}</strong>?
         {#if channel !== 'stable'}
@@ -225,7 +225,7 @@
 </Dialog.Root>
 
 <Container>
-  <PageHeader title="Update {hubName}" subtitle="Manage firmware updates for this hub" />
+  <PageHeader title="Update {hubName}" subtitle="Manage firmware updates for this hub." />
   <div class="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-6">
     {#if hub}
       <!-- Status -->

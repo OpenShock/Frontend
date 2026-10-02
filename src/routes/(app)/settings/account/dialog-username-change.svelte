@@ -58,7 +58,7 @@
 <Dialog.Root bind:open>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Change Username</Dialog.Title>
+      <Dialog.Title>Change username</Dialog.Title>
       <Dialog.Description>Enter a new username.</Dialog.Description>
     </Dialog.Header>
 
@@ -71,9 +71,12 @@
         bind:valid={usernameValid}
         Icon={User}
       />
-      <Button type="submit" disabled={!usernameValid || username === account.name || loading}>
-        Change Username
-      </Button>
+      <Dialog.Footer>
+        <Button type="button" variant="outline" onclick={() => (open = false)}>Cancel</Button>
+        <Button type="submit" disabled={!usernameValid || username === account.name || loading}>
+          Change Username
+        </Button>
+      </Dialog.Footer>
     </form>
   </Dialog.Content>
 </Dialog.Root>

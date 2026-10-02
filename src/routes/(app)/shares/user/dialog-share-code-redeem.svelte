@@ -46,7 +46,7 @@
 <Dialog.Root bind:open={() => open, onOpenChange}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Redeem Share Code</Dialog.Title>
+      <Dialog.Title>Redeem share code</Dialog.Title>
       <Dialog.Description>Enter the share code to redeem</Dialog.Description>
     </Dialog.Header>
 

@@ -50,6 +50,9 @@
       bind:value={name}
       bind:valid={nameValid}
     />
-    <Button onclick={setName} disabled={!valid}>Change username</Button>
+    <Dialog.Footer>
+      <Button variant="outline" onclick={() => (open = false)}>Cancel</Button>
+      <Button onclick={setName} disabled={!valid}>Change username</Button>
+    </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>

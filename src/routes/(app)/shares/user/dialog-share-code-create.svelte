@@ -116,7 +116,7 @@
 <Dialog.Root bind:open={() => open, onOpenChange}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>New Share Code</Dialog.Title>
+      <Dialog.Title>New share code</Dialog.Title>
       <Dialog.Description>Create a Share Code or Invite</Dialog.Description>
     </Dialog.Header>
 
@@ -142,14 +142,17 @@
         bind:limits={restrictions.limits}
       />
     </form>
-    <Button onclick={onFormSubmit} class="flex items-center">
-      {#if fetchedUser}
-        <User />
-        Send Share Invite
-      {:else}
-        <Barcode />
-        Create Share Code
-      {/if}
-    </Button>
+    <Dialog.Footer>
+      <Button variant="outline" onclick={() => (open = false)}>Cancel</Button>
+      <Button onclick={onFormSubmit} class="flex items-center">
+        {#if fetchedUser}
+          <User />
+          Send Share Invite
+        {:else}
+          <Barcode />
+          Create Share Code
+        {/if}
+      </Button>
+    </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>

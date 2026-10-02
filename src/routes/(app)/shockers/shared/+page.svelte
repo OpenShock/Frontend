@@ -66,7 +66,7 @@
   {#if sharedHubsState.value == null}
     <PageLoading />
   {:else}
-    <PageHeader title="Shared Shockers" subtitle="Manage shared shockers with other users" />
+    <PageHeader title="Shared Shockers" subtitle="Shockers other users have shared with you." />
 
     {#if !hasSharedShockers}
       <EmptyState

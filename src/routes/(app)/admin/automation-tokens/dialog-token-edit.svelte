@@ -121,6 +121,9 @@
       bind:valid={autoCleanupValid}
     />
 
-    <Button onclick={applyChanges} disabled={!valid}>Apply</Button>
+    <Dialog.Footer>
+      <Button variant="outline" onclick={() => (open = false)}>Cancel</Button>
+      <Button onclick={applyChanges} disabled={!valid}>Apply</Button>
+    </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>

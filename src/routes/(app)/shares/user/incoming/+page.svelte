@@ -52,5 +52,5 @@
     </div>
   {/if}
 {:catch error}
-  <div class="text-destructive">Failed to load outgoing invites: {error.message}</div>
+  <div class="text-destructive">Failed to load incoming shares: {error.message}</div>
 {/await}

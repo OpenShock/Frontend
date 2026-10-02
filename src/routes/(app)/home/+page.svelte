@@ -99,7 +99,7 @@
           <Router class="size-5" />
           <div class="text-left">
             <div class="font-medium">Hubs</div>
-            <div class="text-muted-foreground text-xs">Manage your devices</div>
+            <div class="text-muted-foreground text-xs">Manage your hubs</div>
           </div>
         </Button>
         <Button
@@ -149,7 +149,7 @@
           <Card.Title>Add Your First Shocker</Card.Title>
           <Card.Description>
             You have {hubCount} hub{hubCount > 1 ? 's' : ''} set up. Add a shocker to start controlling
-            your devices.
+            it.
           </Card.Description>
         </Card.Header>
 

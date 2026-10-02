@@ -56,7 +56,7 @@
 </script>
 
 <Dialog.Header>
-  <Dialog.Title>Add Shocker</Dialog.Title>
+  <Dialog.Title>Add shocker</Dialog.Title>
   <Dialog.Description>Register a new shocker to one of your hubs.</Dialog.Description>
 </Dialog.Header>
 <div class="flex flex-col gap-4 py-2">

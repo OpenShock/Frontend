@@ -55,13 +55,16 @@
         {/each}
       </div>
     </div>
-    <Button
-      onclick={sendit}
-      disabled={(usernameSet && !usernameValid) ||
-        (emailSet && !emailValid) ||
-        (!usernameSet && !emailSet)}
-    >
-      Apply
-    </Button>
+    <Dialog.Footer>
+      <Button variant="outline" onclick={() => (open = false)}>Cancel</Button>
+      <Button
+        onclick={sendit}
+        disabled={(usernameSet && !usernameValid) ||
+          (emailSet && !emailValid) ||
+          (!usernameSet && !emailSet)}
+      >
+        Apply
+      </Button>
+    </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>

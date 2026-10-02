@@ -86,6 +86,9 @@
       </Select.Content>
     </Select.Root>
     <TextInput label="Value" bind:value />
-    <Button onclick={onSubmit} disabled={!valid}>Create</Button>
+    <Dialog.Footer>
+      <Button variant="outline" onclick={() => (open = false)}>Cancel</Button>
+      <Button onclick={onSubmit} disabled={!valid}>Create</Button>
+    </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>

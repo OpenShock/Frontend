@@ -215,7 +215,7 @@
 </script>
 
 <Container>
-  <PageHeader title="Shocker Logs" subtitle="These are the logs for all shockers.">
+  <PageHeader title="Shocker Logs" subtitle="Every control command sent to your shockers.">
     <Badge
       variant={liveUpdatesActive ? 'default' : 'secondary'}
       class="gap-1.5"

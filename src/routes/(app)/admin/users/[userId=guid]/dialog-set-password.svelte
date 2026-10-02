@@ -53,6 +53,9 @@
       showStrengthMeter
       onPwnedCheckError={handleApiError}
     />
-    <Button onclick={setPassword} disabled={!valid}>Set password</Button>
+    <Dialog.Footer>
+      <Button variant="outline" onclick={() => (open = false)}>Cancel</Button>
+      <Button onclick={setPassword} disabled={!valid}>Set password</Button>
+    </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>

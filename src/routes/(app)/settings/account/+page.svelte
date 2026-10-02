@@ -77,7 +77,9 @@
           <div class="text-muted-foreground">{account.name}</div>
         </div>
 
-        <Button type="button" onclick={() => (usernameDialogOpen = true)}>Change Username</Button>
+        <Button type="button" variant="outline" onclick={() => (usernameDialogOpen = true)}>
+          Change Username
+        </Button>
       </div>
 
       <div class="flex w-full items-center gap-2">
@@ -90,6 +92,7 @@
         </div>
         <Button
           type="button"
+          variant="outline"
           disabled={isOAuthOnly}
           title={isOAuthOnly ? 'Not available for OAuth-only accounts' : undefined}
           onclick={() => (emailDialogOpen = true)}>Change Email</Button
@@ -110,6 +113,7 @@
         </div>
         <Button
           type="button"
+          variant="outline"
           disabled={isOAuthOnly}
           title={isOAuthOnly ? 'Not available for OAuth-only accounts' : undefined}
           onclick={() => (passwordDialogOpen = true)}>Change Password</Button

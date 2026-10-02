@@ -25,7 +25,7 @@
 <Dialog.Root bind:open={() => deactivateDialogOpen, (o) => (deactivateDialogOpen = o)}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Deactivate Account</Dialog.Title>
+      <Dialog.Title>Deactivate account</Dialog.Title>
       <Dialog.Description>Are you sure you want to deactivate your account?</Dialog.Description>
     </Dialog.Header>
     <Button variant="destructive" class="w-full" onclick={deactivateAccount}>

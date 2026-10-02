@@ -61,7 +61,7 @@
 <Dialog.Root bind:open>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Change Password</Dialog.Title>
+      <Dialog.Title>Change password</Dialog.Title>
       <Dialog.Description>Enter your current password and choose a new one.</Dialog.Description>
     </Dialog.Header>
 
@@ -94,7 +94,10 @@
         validate={passwordConfirmValid}
       />
 
-      <Button type="submit" disabled={!canSubmitPassword}>Change Password</Button>
+      <Dialog.Footer>
+        <Button type="button" variant="outline" onclick={() => (open = false)}>Cancel</Button>
+        <Button type="submit" disabled={!canSubmitPassword}>Change Password</Button>
+      </Dialog.Footer>
     </form>
   </Dialog.Content>
 </Dialog.Root>

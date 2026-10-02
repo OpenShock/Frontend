@@ -67,7 +67,7 @@
   props: DialogRenderProps<{ name: string }, { name: string } | undefined>
 )}
   <Dialog.Header>
-    <Dialog.Title>Create Hub</Dialog.Title>
+    <Dialog.Title>Create hub</Dialog.Title>
   </Dialog.Header>
   <TextInput label="Hub Name" placeholder="My Hub" bind:value={props.data.name} />
   <Button
@@ -79,12 +79,12 @@
 {/snippet}
 
 <Container class="w-full">
-  <PageHeader title="Hubs" subtitle="This is a list of all hubs you own">
+  <PageHeader title="Hubs" subtitle="Every hub registered to your account.">
     <Button onclick={openCreateHubDialog}>
       <Plus />
       Add Hub
     </Button>
-    <Button onclick={refreshOwnHubs}>
+    <Button variant="outline" onclick={refreshOwnHubs}>
       <RotateCcw />
       Refresh
     </Button>

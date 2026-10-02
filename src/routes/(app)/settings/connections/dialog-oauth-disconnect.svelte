@@ -39,11 +39,11 @@
       </Dialog.Description>
     </Dialog.Header>
 
-    <div class="flex justify-end gap-2">
-      <Button variant="secondary" onclick={() => (open = false)} disabled={busy}>Cancel</Button>
+    <Dialog.Footer>
+      <Button variant="outline" onclick={() => (open = false)} disabled={busy}>Cancel</Button>
       <Button variant="destructive" onclick={doUnlink} disabled={busy} aria-busy={busy}>
         Unlink
       </Button>
-    </div>
+    </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>

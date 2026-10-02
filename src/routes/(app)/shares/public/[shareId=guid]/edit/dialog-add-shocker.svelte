@@ -46,7 +46,7 @@
 <Dialog.Root bind:open={() => open, onOpenChange}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Add Shockers</Dialog.Title>
+      <Dialog.Title>Add shockers</Dialog.Title>
       <Dialog.Description
         >Add Shockers to a Public Share, you can set the limits once added.</Dialog.Description
       >
@@ -67,9 +67,12 @@
         noMatchText="Not matching shockers"
       ></MultiSelectCombobox>
     </form>
-    <Button onclick={onFormSubmit} disabled={!shockerIds.length} class="flex items-center">
-      <Plus />
-      Add Shockers
-    </Button>
+    <Dialog.Footer>
+      <Button variant="outline" onclick={() => (open = false)}>Cancel</Button>
+      <Button onclick={onFormSubmit} disabled={!shockerIds.length} class="flex items-center">
+        <Plus />
+        Add Shockers
+      </Button>
+    </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>

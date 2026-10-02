@@ -34,11 +34,14 @@
 <Dialog.Root bind:open={() => open, (o) => (open = o)}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Create Public Share</Dialog.Title>
+      <Dialog.Title>Create public share</Dialog.Title>
     </Dialog.Header>
     <TextInput label="Name" bind:value={name} />
     <ExpirationPicker bind:option={expireOption} bind:instant={expireInstant} />
 
-    <Button onclick={createShareLink}>Create</Button>
+    <Dialog.Footer>
+      <Button variant="outline" onclick={() => (open = false)}>Cancel</Button>
+      <Button onclick={createShareLink}>Create</Button>
+    </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>

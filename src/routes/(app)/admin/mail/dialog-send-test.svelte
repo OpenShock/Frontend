@@ -92,6 +92,9 @@
       />
     </div>
 
-    <Button onclick={onSubmit} disabled={!valid || submitting}>Send</Button>
+    <Dialog.Footer>
+      <Button variant="outline" onclick={() => (open = false)}>Cancel</Button>
+      <Button onclick={onSubmit} disabled={!valid || submitting}>Send</Button>
+    </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>

@@ -79,14 +79,14 @@
 <DialogShareCodeRedeem bind:open={redeemDialogOpen} bind:userInput={redeemUserInput} />
 
 <Container class="flex flex-col">
-  <PageHeader title="User Shares" subtitle="Direct permanent shares with users">
+  <PageHeader title="User Shares" subtitle="Direct permanent shares with other users.">
     <Button
+      variant="outline"
       onclick={() => (redeemDialogOpen = true)}
-      class="self-end"
       data-tour="user-shares-redeem"><Barcode />Redeem Code</Button
     >
 
-    <Button onclick={() => (createDialogOpen = true)} class="self-end" data-tour="user-shares-new"
+    <Button onclick={() => (createDialogOpen = true)} data-tour="user-shares-new"
       ><Plus />New Share</Button
     >
   </PageHeader>

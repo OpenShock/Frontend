@@ -16,7 +16,7 @@
     token: TokenResponseV2;
   }
 
-  let { token, resolve }: Props = $props();
+  let { token, resolve, close }: Props = $props();
 
   // svelte-ignore state_referenced_locally
   let name = $state(token.name);
@@ -80,7 +80,7 @@
 
 <div class="max-h-[80vh] space-y-4 overflow-y-auto pr-1">
   <Dialog.Header>
-    <Dialog.Title>Edit API Token</Dialog.Title>
+    <Dialog.Title>Edit API token</Dialog.Title>
     <Dialog.Description></Dialog.Description>
   </Dialog.Header>
   <form
@@ -125,11 +125,10 @@
     </div>
   </form>
 
-  <Button
-    variant="default"
-    onclick={saveChanges}
-    disabled={submitting || !nameValidationResult.valid}
-  >
-    Save Changes
-  </Button>
+  <Dialog.Footer>
+    <Button variant="outline" onclick={close} disabled={submitting}>Cancel</Button>
+    <Button onclick={saveChanges} disabled={submitting || !nameValidationResult.valid}>
+      Save Changes
+    </Button>
+  </Dialog.Footer>
 </div>
