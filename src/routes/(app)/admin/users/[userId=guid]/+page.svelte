@@ -1,21 +1,6 @@
-<script lang="ts" module>
-  import type { AdminUserView } from '#lib/api/index.js';
-
-  /**
-   * The API marks `activationRequest` and `deactivation` required, but both are
-   * `$ref` properties, which its schema generator cannot annotate as nullable —
-   * an activated account sends `activationRequest: null`, and one that was never
-   * deactivated sends `deactivation: null`. Reading the response through this
-   * shape keeps those cases visible to the compiler.
-   */
-  type UserView = Omit<AdminUserView, 'activationRequest' | 'deactivation'> & {
-    activationRequest: AdminUserView['activationRequest'] | null;
-    deactivation: AdminUserView['deactivation'] | null;
-  };
-</script>
-
 <script lang="ts">
   import { page } from '$app/state';
+  import type { AdminUserView } from '#lib/api/index.js';
   import { resolve } from '$app/paths';
   import { RoleType, adminGetUserById } from '#lib/api/index.js';
   import AtSign from '@lucide/svelte/icons/at-sign';
@@ -43,7 +28,7 @@
 
   const PRIVILEGED_ROLES: RoleType[] = [RoleType.Admin, RoleType.System];
 
-  let user = $state<UserView | null>(null);
+  let user = $state<AdminUserView | null>(null);
   let notFound = $state(false);
   let hasLoaded = $state(false);
   let isFetching = $state(false);
@@ -94,7 +79,7 @@
 
     isFetching = true;
     adminGetUserById({ path: { userId }, signal: controller.signal })
-      .then((response: UserView) => {
+      .then((response) => {
         if (cancelled) return;
         user = response;
         notFound = false;
