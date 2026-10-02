@@ -21,7 +21,18 @@ import type { Features } from './data-table-features';
 
 export type OnlineHub = Omit<AdminOnlineDeviceResponse, 'firmwareVersion'> & {
   firmwareVersion: SemVer;
+  network: HubNetwork | null;
 };
+
+// The autonomous system the hub connected from, null when GeoIP could not resolve it.
+export interface HubNetwork {
+  asn: number;
+  org: string | null;
+}
+
+export const asnLabel = (asn: number) => `AS${asn}`;
+
+export const networkName = (network: HubNetwork) => network.org ?? asnLabel(network.asn);
 
 export const WEAK_RSSI_DBM = -80;
 
@@ -44,6 +55,12 @@ function LatencyRenderer(latencyMs: number | null) {
 function CountryRenderer(code: string | null) {
   const name = countryName(code);
   return name && code ? RenderCellWithTooltip(name, code) : CellRedUnknown;
+}
+
+function NetworkRenderer(network: HubNetwork | null) {
+  return network
+    ? RenderCellWithTooltip(networkName(network), asnLabel(network.asn))
+    : CellRedUnknown;
 }
 
 function RssiRenderer(rssi: number | null) {
@@ -70,6 +87,10 @@ export const columns = [
     const nameB = countryName(b);
     if (nameA === null || nameB === null) return nameA === nameB ? 0 : nameA === null ? 1 : -1;
     return nameA.localeCompare(nameB);
+  }),
+  CreateSortableColumnDef('network', 'Network', NetworkRenderer, (a, b) => {
+    if (a === null || b === null) return a === b ? 0 : a === null ? 1 : -1;
+    return networkName(a).localeCompare(networkName(b));
   }),
   CreateSortableColumnDef('gateway', 'Gateway', RenderCell),
   CreateSortableColumnDef('connectedAt', 'Online for', (i) =>
