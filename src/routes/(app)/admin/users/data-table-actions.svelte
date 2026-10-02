@@ -1,10 +1,12 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
   import { RoleType } from '#lib/api/index.js';
   import type { AdminUsersView } from '#lib/api/index.js';
   import { TableActionMenu } from '@openshock/svelte-core/components';
   import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
   import { copyToClipboard } from '@openshock/svelte-core/utils';
-  import { Copy, KeyRound, Pencil, ShieldPlus, Trash2 } from '@lucide/svelte';
+  import { Copy, Eye, KeyRound, Pencil, ShieldPlus, Trash2 } from '@lucide/svelte';
   import UserDeleteDialog from './dialog-user-delete.svelte';
   import UserEditDialog from './dialog-user-edit.svelte';
 
@@ -30,6 +32,14 @@
 <TableActionMenu>
   <DropdownMenu.Label>User</DropdownMenu.Label>
   <DropdownMenu.Group>
+    <DropdownMenu.Item
+      class="cursor-pointer"
+      onclick={() => goto(resolve(`admin/users/${user.id}`))}
+    >
+      <Eye class="size-4" />
+      View details
+    </DropdownMenu.Item>
+    <DropdownMenu.Separator />
     <DropdownMenu.Item class="cursor-pointer" onclick={() => (editDialogOpen = true)}>
       <Pencil class="size-4" />
       Edit

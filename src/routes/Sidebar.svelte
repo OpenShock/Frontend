@@ -131,6 +131,10 @@
             title: 'Online Hubs',
             href: 'admin/online-hubs',
           },
+          {
+            title: 'Online Gateways',
+            href: 'admin/online-gateways',
+          },
         ],
       },
       {
@@ -152,6 +156,10 @@
           {
             title: 'Mail',
             href: 'admin/mail',
+          },
+          {
+            title: 'Automation Tokens',
+            href: 'admin/automation-tokens',
           },
           {
             title: 'Configuration',
