@@ -13,16 +13,14 @@
 
   let { open = $bindable<boolean>(), user, onDeleted }: Props = $props();
 
-  function onDeleteClicked() {
-    return adminDeleteUser({ path: { userId: user.id } })
-      .then(() => {
-        toast.success(`Deleted user ${user.name}`);
-        onDeleted?.();
-      })
-      .catch(async (error) => {
-        await handleApiError(error);
-        throw error;
-      });
+  async function onDeleteClicked() {
+    try {
+      await adminDeleteUser({ path: { userId: user.id } });
+      toast.success(`Deleted user ${user.name}`);
+      onDeleted?.();
+    } catch (error) {
+      await handleApiError(error);
+    }
   }
 </script>
 

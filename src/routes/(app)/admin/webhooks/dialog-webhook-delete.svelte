@@ -12,15 +12,13 @@
 
   let { open = $bindable<boolean>(), webhook }: Props = $props();
 
-  function onDeleteClicked() {
-    return adminRemoveWebhook({ path: { id: webhook.id } })
-      .then(() => {
-        toast.success('Removed webhook');
-      })
-      .catch(async (error) => {
-        await handleApiError(error);
-        throw error;
-      });
+  async function onDeleteClicked() {
+    try {
+      await adminRemoveWebhook({ path: { id: webhook.id } });
+      toast.success('Removed webhook');
+    } catch (error) {
+      await handleApiError(error);
+    }
   }
 </script>
 

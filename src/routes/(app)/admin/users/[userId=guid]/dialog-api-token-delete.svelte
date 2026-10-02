@@ -12,16 +12,14 @@
 
   let { open = $bindable<boolean>(), token, onDeleted }: Props = $props();
 
-  function onDeleteClicked() {
-    return adminDeleteApiToken({ path: { tokenId: token.id } })
-      .then(() => {
-        onDeleted();
-        toast.success('Deleted API token');
-      })
-      .catch(async (error) => {
-        await handleApiError(error);
-        throw error;
-      });
+  async function onDeleteClicked() {
+    try {
+      await adminDeleteApiToken({ path: { tokenId: token.id } });
+      toast.success('Deleted API token');
+      onDeleted();
+    } catch (error) {
+      await handleApiError(error);
+    }
   }
 </script>
 

@@ -14,18 +14,14 @@
 
   let { open = $bindable(), session, onRevoked }: Props = $props();
 
-  function handleDeleted() {
-    toast.success('Session revoked successfully');
-    return onRevoked(session.id);
-  }
-
-  function revokeSession() {
-    return sessionsDeleteSession({ path: { sessionId: session.id } })
-      .then(handleDeleted)
-      .catch(async (error) => {
-        await handleApiError(error);
-        throw error;
-      });
+  async function revokeSession() {
+    try {
+      await sessionsDeleteSession({ path: { sessionId: session.id } });
+      toast.success('Session revoked successfully');
+      onRevoked(session.id);
+    } catch (error) {
+      await handleApiError(error);
+    }
   }
 
   let readableUserAgent = $derived(
