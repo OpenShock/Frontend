@@ -22,11 +22,15 @@
   let { open = $bindable(), userInput = $bindable() }: Props = $props();
   let redeeming = $state(false);
   let result = $state<V2UserSharesListItem | null>(null);
+  // Bumped on close so a request that finishes after dismissal cannot write into the next opening.
+  let generation = 0;
 
   function onOpenChange(o: boolean) {
     if (!o) {
+      generation++;
       userInput = '';
       result = null;
+      redeeming = false;
     }
     open = o;
   }
@@ -36,13 +40,15 @@
     const inviteId = userInput.trim();
     if (redeeming || !inviteId) return;
     redeeming = true;
+    const current = generation;
     try {
-      result = await userSharesRedeemInvite({ path: { inviteId } });
+      const redeemed = await userSharesRedeemInvite({ path: { inviteId } });
+      if (current === generation) result = redeemed;
       await refreshUserShares();
     } catch (error) {
       await handleApiError(error);
     } finally {
-      redeeming = false;
+      if (current === generation) redeeming = false;
       refreshOutgoingInvites();
     }
   }
