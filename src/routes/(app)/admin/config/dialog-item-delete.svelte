@@ -14,13 +14,12 @@
   let { open = $bindable<boolean>(), item, onDeleted }: Props = $props();
 
   function onSubmit() {
-    adminConfigurationDelete({ path: { name: item.name } })
+    return adminConfigurationDelete({ path: { name: item.name } })
       .then(() => {
         onDeleted();
         toast.success('Removed item');
       })
-      .catch(handleApiError)
-      .finally(() => (open = false));
+      .catch(handleApiError);
   }
 </script>
 

@@ -3,10 +3,15 @@
   import type { LoginSessionResponse } from '#lib/api/index.js';
   import MonitorSmartphone from '@lucide/svelte/icons/monitor-smartphone';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
-  import { Container, EmptyState, PageHeader } from '@openshock/svelte-core/components';
+  import {
+    Container,
+    EmptyState,
+    PageError,
+    PageHeader,
+    PageLoading,
+  } from '@openshock/svelte-core/components';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
-  import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
@@ -77,14 +82,9 @@
   </PageHeader>
   <Card.Content class="w-full">
     {#if loading && data.length === 0}
-      <div class="flex h-64 w-full items-center justify-center">
-        <Spinner class="text-muted-foreground size-8" />
-      </div>
+      <PageLoading />
     {:else if failed && data.length === 0}
-      <div class="flex w-full flex-col items-center gap-3 py-12">
-        <p class="text-destructive text-sm">Failed to load sessions.</p>
-        <Button variant="outline" onclick={fetchSessions} disabled={loading}>Try again</Button>
-      </div>
+      <PageError message="Failed to load sessions." onRetry={fetchSessions} />
     {:else if data.length === 0}
       <EmptyState
         icon={MonitorSmartphone}

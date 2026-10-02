@@ -1,7 +1,7 @@
 <script lang="ts">
+  import RowActions from '#lib/components/Table/RowActions.svelte';
+  import { Pencil, Trash2 } from '@lucide/svelte';
   import type { ConfigurationItemDto } from '#lib/api/index.js';
-  import { TableActionMenu } from '@openshock/svelte-core/components';
-  import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
   import ItemDeleteDialog from './dialog-item-delete.svelte';
   import ItemEditDialog from './dialog-item-edit.svelte';
 
@@ -19,7 +19,16 @@
 <ItemEditDialog bind:open={editDialogOpen} {item} onEdited={onChange} />
 <ItemDeleteDialog bind:open={deleteDialogOpen} {item} onDeleted={onChange} />
 
-<TableActionMenu>
-  <DropdownMenu.Item onclick={() => (editDialogOpen = true)}>Edit</DropdownMenu.Item>
-  <DropdownMenu.Item onclick={() => (deleteDialogOpen = true)}>Delete</DropdownMenu.Item>
-</TableActionMenu>
+<RowActions
+  label="Item"
+  actions={[
+    { label: 'Edit', icon: Pencil, onclick: () => (editDialogOpen = true) },
+    {
+      label: 'Delete',
+      icon: Trash2,
+      onclick: () => (deleteDialogOpen = true),
+      destructive: true,
+      separatorBefore: true,
+    },
+  ]}
+/>

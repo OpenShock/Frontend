@@ -6,7 +6,7 @@
   import Unlink from '@lucide/svelte/icons/unlink';
   import { page } from '$app/state';
   import { GetOAuthAuthorizeUrl } from '#lib/api/next/oauth.js';
-  import { Container, EmptyState, PageHeader } from '@openshock/svelte-core/components';
+  import { Container, EmptyState, PageError, PageHeader } from '@openshock/svelte-core/components';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
   import * as Dropdown from '@openshock/svelte-core/components/ui/dropdown-menu';
@@ -171,10 +171,7 @@
       {/snippet}
 
       {#snippet failed(_error: unknown, reset: () => void)}
-        <div class="flex w-full flex-col items-center gap-3 py-12">
-          <p class="text-destructive text-sm">Failed to load OAuth connections.</p>
-          <Button variant="outline" onclick={reset}>Try again</Button>
-        </div>
+        <PageError message="Failed to load OAuth connections." onRetry={reset} />
       {/snippet}
     </svelte:boundary>
   </Card.Content>

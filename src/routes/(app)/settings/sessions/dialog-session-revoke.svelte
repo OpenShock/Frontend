@@ -15,13 +15,12 @@
   let { open = $bindable(), session, onRevoked }: Props = $props();
 
   function handleDeleted() {
-    onRevoked(session.id);
     toast.success('Session revoked successfully');
-    open = false;
+    return onRevoked(session.id);
   }
 
   function revokeSession() {
-    sessionsDeleteSession({ path: { sessionId: session.id } })
+    return sessionsDeleteSession({ path: { sessionId: session.id } })
       .then(handleDeleted)
       .catch(handleApiError);
   }

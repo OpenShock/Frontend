@@ -2,8 +2,7 @@
   import { Plus, RotateCcw } from '@lucide/svelte';
   import { adminListWebhooks } from '#lib/api/index.js';
   import type { WebhookDto } from '#lib/api/index.js';
-  import { Container, PageHeader } from '@openshock/svelte-core/components';
-  import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
+  import { Container, PageError, PageHeader, PageLoading } from '@openshock/svelte-core/components';
   import {
     CreateColumnDefs,
     LocaleDateTimeRenderer,
@@ -59,16 +58,11 @@
       <DataTable {data} {columns} {features} mobileColumns={['name']} />
 
       {#snippet pending()}
-        <div class="flex h-64 w-full items-center justify-center">
-          <Spinner class="text-muted-foreground size-8" />
-        </div>
+        <PageLoading />
       {/snippet}
 
       {#snippet failed(_error: unknown, reset: () => void)}
-        <div class="flex w-full flex-col items-center gap-3 py-12">
-          <p class="text-destructive text-sm">Failed to load webhooks.</p>
-          <Button variant="outline" onclick={reset}>Try again</Button>
-        </div>
+        <PageError message="Failed to load webhooks." onRetry={reset} />
       {/snippet}
     </svelte:boundary>
   </div>

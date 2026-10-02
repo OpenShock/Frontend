@@ -14,13 +14,12 @@
   let { open = $bindable<boolean>(), token, onDeleted }: Props = $props();
 
   function onDeleteClicked() {
-    adminDeleteAutomationToken({ path: { id: token.id } })
+    return adminDeleteAutomationToken({ path: { id: token.id } })
       .then(() => {
         onDeleted();
         toast.success('Deleted automation token');
       })
-      .catch(handleApiError)
-      .finally(() => (open = false));
+      .catch(handleApiError);
   }
 </script>
 

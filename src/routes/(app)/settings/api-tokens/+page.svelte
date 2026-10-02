@@ -5,8 +5,13 @@
   import KeyRound from '@lucide/svelte/icons/key-round';
   import Plus from '@lucide/svelte/icons/plus';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
-  import { Container, EmptyState, PageHeader } from '@openshock/svelte-core/components';
-  import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
+  import {
+    Container,
+    EmptyState,
+    PageError,
+    PageHeader,
+    PageLoading,
+  } from '@openshock/svelte-core/components';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
   import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
@@ -85,16 +90,11 @@
       {/if}
 
       {#snippet pending()}
-        <div class="flex h-64 w-full items-center justify-center">
-          <Spinner class="text-muted-foreground size-8" />
-        </div>
+        <PageLoading />
       {/snippet}
 
       {#snippet failed(_error: unknown, reset: () => void)}
-        <div class="flex w-full flex-col items-center gap-3 py-12">
-          <p class="text-destructive text-sm">Failed to load API tokens.</p>
-          <Button variant="outline" onclick={reset}>Try again</Button>
-        </div>
+        <PageError message="Failed to load API tokens." onRetry={reset} />
       {/snippet}
     </svelte:boundary>
   </Card.Content>

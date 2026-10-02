@@ -1,6 +1,11 @@
 <script lang="ts">
   import { Copy, Ellipsis, User } from '@lucide/svelte';
-  import { Container, EmptyState, PageHeader } from '@openshock/svelte-core/components';
+  import {
+    Container,
+    EmptyState,
+    PageHeader,
+    PageLoading,
+  } from '@openshock/svelte-core/components';
   import ClassicControlModule from '#lib/components/ControlModules/ClassicControlModule.svelte';
   import LiveButton from '#lib/components/ControlModules/LiveButton.svelte';
   import LiveControlModule from '#lib/components/ControlModules/LiveControlModule.svelte';
@@ -59,7 +64,7 @@
 
 <Container>
   {#if sharedHubsState.value == null}
-    <p>Loading...</p>
+    <PageLoading />
   {:else}
     <PageHeader title="Shared Shockers" subtitle="Manage shared shockers with other users" />
 

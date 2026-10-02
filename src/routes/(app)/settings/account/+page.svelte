@@ -4,7 +4,7 @@
   import Mail from '@lucide/svelte/icons/mail';
   import User from '@lucide/svelte/icons/user';
   import { PUBLIC_SIGNOZ_LOGS_ENABLED } from '$app/env/public';
-  import { Container, PageHeader } from '@openshock/svelte-core/components';
+  import { Container, PageHeader, PageLoading } from '@openshock/svelte-core/components';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import { ToggleGroup, ToggleGroupItem } from '@openshock/svelte-core/components/ui/toggle-group';
   import {
@@ -154,5 +154,5 @@
     </div>
   </Container>
 {:else}
-  Loading...
+  <PageLoading />
 {/if}

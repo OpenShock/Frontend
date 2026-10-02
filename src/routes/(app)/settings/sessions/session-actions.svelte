@@ -1,7 +1,6 @@
 <script lang="ts">
+  import RowActions from '#lib/components/Table/RowActions.svelte';
   import type { LoginSessionResponse } from '#lib/api/index.js';
-  import { TableActionMenu } from '@openshock/svelte-core/components';
-  import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
   import { copyToClipboard } from '@openshock/svelte-core/utils';
   import { Ban, Copy } from '@lucide/svelte';
   import SessionRevokeDialog from './dialog-session-revoke.svelte';
@@ -20,19 +19,15 @@
 
 <SessionRevokeDialog bind:open={revokeDialogOpen} {session} {onRevoked} />
 
-<TableActionMenu>
-  <DropdownMenu.Group>
-    <DropdownMenu.Item class="cursor-pointer" onclick={copyId}>
-      <Copy class="size-4" />
-      Copy ID
-    </DropdownMenu.Item>
-    <DropdownMenu.Separator />
-    <DropdownMenu.Item
-      class="text-destructive cursor-pointer"
-      onclick={() => (revokeDialogOpen = true)}
-    >
-      <Ban class="size-4" />
-      Revoke
-    </DropdownMenu.Item>
-  </DropdownMenu.Group>
-</TableActionMenu>
+<RowActions
+  actions={[
+    { label: 'Copy ID', icon: Copy, onclick: copyId },
+    {
+      label: 'Revoke',
+      icon: Ban,
+      onclick: () => (revokeDialogOpen = true),
+      destructive: true,
+      separatorBefore: true,
+    },
+  ]}
+/>

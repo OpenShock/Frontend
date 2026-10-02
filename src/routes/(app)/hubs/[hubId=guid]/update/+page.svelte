@@ -78,7 +78,7 @@
   import { cn, NumberToHexPadded } from '@openshock/svelte-core/utils';
   import { onMount } from 'svelte';
   import type { FirmwareChannel } from '#lib/api/firmwareCDN.js';
-  import { Container, PageHeader } from '@openshock/svelte-core/components';
+  import { Container, PageHeader, PageLoading } from '@openshock/svelte-core/components';
 
   let hubLoaded = $state(false);
   let otaLogs = $state<OtaItem[]>([]);
@@ -395,7 +395,7 @@
         </Card.Content>
       </Card.Root>
     {:else if isLoading}
-      <p class="text-muted-foreground">Loading hub information...</p>
+      <PageLoading label="Loading hub information..." />
     {:else}
       <p class="text-muted-foreground">Hub not found.</p>
     {/if}

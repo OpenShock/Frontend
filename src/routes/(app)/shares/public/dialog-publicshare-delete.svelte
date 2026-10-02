@@ -14,15 +14,12 @@
   let { open = $bindable<boolean>(), publicShare, onDeleted }: Props = $props();
 
   function deleteShareLink() {
-    shareLinksDeletePublicShare({ path: { publicShareId: publicShare.id } })
+    return shareLinksDeletePublicShare({ path: { publicShareId: publicShare.id } })
       .then(() => {
         onDeleted();
         toast.success('Deleted publicShare successfully');
       })
-      .catch(handleApiError)
-      .finally(() => {
-        open = false;
-      });
+      .catch(handleApiError);
   }
 </script>
 

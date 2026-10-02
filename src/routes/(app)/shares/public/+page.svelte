@@ -18,8 +18,13 @@
   import { resolve } from '$app/paths';
   import { shareLinksList } from '#lib/api/index.js';
   import type { OwnPublicShareResponse } from '#lib/api/index.js';
-  import { Container, CopyInput, EmptyState, PageHeader } from '@openshock/svelte-core/components';
-  import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
+  import {
+    Container,
+    CopyInput,
+    EmptyState,
+    PageHeader,
+    PageLoading,
+  } from '@openshock/svelte-core/components';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import { getSiteShortURL } from '#lib/utils/url.js';
@@ -87,9 +92,7 @@
   </PageHeader>
 
   {#if loading && data.length === 0}
-    <div class="flex h-64 w-full items-center justify-center">
-      <Spinner class="text-muted-foreground size-8" />
-    </div>
+    <PageLoading />
   {:else if sortedShares.length === 0}
     <EmptyState
       icon={Link2}

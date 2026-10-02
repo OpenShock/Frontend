@@ -46,11 +46,10 @@
 <script lang="ts">
   import { RotateCcw, X } from '@lucide/svelte';
   import { adminGetOnlineDevices } from '#lib/api/index.js';
-  import { Container, PageHeader } from '@openshock/svelte-core/components';
+  import { Container, PageHeader, PageLoading } from '@openshock/svelte-core/components';
   import DataTable from '#lib/components/Table/DataTableTemplate.svelte';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import { Input } from '@openshock/svelte-core/components/ui/input';
-  import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import { SemVer } from 'semver';
   import { onMount } from 'svelte';
@@ -203,9 +202,7 @@
         class="min-h-80 w-full"
       />
     {:else}
-      <div class="flex h-64 w-full items-center justify-center">
-        <Spinner class="text-muted-foreground size-8" />
-      </div>
+      <PageLoading />
     {/if}
   </div>
 </Container>
