@@ -60,12 +60,8 @@
 
   <SidebarProvider open={isOpen} onOpenChange={(v) => (sidebarOpen = v)}>
     <Sidebar />
-    <!-- `svh` to match the sidebar wrapper's `min-h-svh`: `h-screen` is `100vh`,
-         the viewport with a phone's URL bar hidden, so the shell outgrew the
-         visible page and left it scrollable by exactly that bar's height. The
-         mobile sidebar is a sheet, and locking and unlocking body scroll around
-         its transition then shifted the whole page for a frame. `w-full` for the
-         same reason on the other axis: `100vw` counts the scrollbar. -->
+    <!-- `h-svh` matches the sidebar wrapper; `100vh` left the page scrollable by the height of a phone's URL bar.
+         `w-full` because `100vw` counts the scrollbar. -->
     <div class="flex h-svh w-full flex-1 flex-col overflow-hidden">
       {#if PUBLIC_DEVELOPMENT_BANNER}
         <div class="top-0 left-0 z-1 flex-none bg-[orangered] text-center text-white">

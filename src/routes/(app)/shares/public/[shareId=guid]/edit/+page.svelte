@@ -135,7 +135,7 @@
       <Tooltip.Root>
         <Tooltip.Trigger>
           <span
-            class="outline-ring ml-2 flex flex-row items-center rounded-md px-3 py-1.5 outline-1"
+            class="outline-muted-foreground/50 ml-2 flex flex-row items-center rounded-md px-3 py-1.5 outline-1"
           >
             <Avatar.Root class="h-8 w-8">
               <Avatar.Image src={publicShareData.author.image} alt="User Avatar" />
@@ -153,34 +153,36 @@
     {/if}
   </PageHeader>
 
-  <CopyInput value={shareUrl.href} displayValue={shareUrl.host + shareUrl.pathname} />
+  <div class="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-6">
+    <CopyInput value={shareUrl.href} displayValue={shareUrl.host + shareUrl.pathname} />
 
-  {#await publicShareRequest}
-    <div class="flex h-full w-full items-center justify-center">
-      <Spinner class="text-muted-foreground size-8" />
-    </div>
-  {:then}
-    {#if publicShareData?.devices?.length && shareId}
-      <div class="flex flex-col gap-8">
-        {#each publicShareData.devices as device, i (device.id)}
-          <SharedDevice {shareId} bind:device={publicShareData.devices[i]} {onShockerRemoved} />
-        {/each}
+    {#await publicShareRequest}
+      <div class="flex h-full w-full items-center justify-center">
+        <Spinner class="text-muted-foreground size-8" />
       </div>
-    {:else}
-      <EmptyState
-        icon={Zap}
-        title="No shockers in this share"
-        description="Add a shocker and anyone with the link will be able to control it."
-      >
-        <Button onclick={() => (showAddShockerModal = true)} disabled={isAddingShockers}>
-          <Plus />Add Shocker
-        </Button>
-      </EmptyState>
-    {/if}
-  {:catch error}
-    <div class="flex h-full flex-col items-center justify-center">
-      <p>Error fetching public share details</p>
-      <pre>{error.message}</pre>
-    </div>
-  {/await}
+    {:then}
+      {#if publicShareData?.devices?.length && shareId}
+        <div class="flex flex-col gap-8">
+          {#each publicShareData.devices as device, i (device.id)}
+            <SharedDevice {shareId} bind:device={publicShareData.devices[i]} {onShockerRemoved} />
+          {/each}
+        </div>
+      {:else}
+        <EmptyState
+          icon={Zap}
+          title="No shockers in this share"
+          description="Add a shocker and anyone with the link will be able to control it."
+        >
+          <Button onclick={() => (showAddShockerModal = true)} disabled={isAddingShockers}>
+            <Plus />Add Shocker
+          </Button>
+        </EmptyState>
+      {/if}
+    {:catch error}
+      <div class="flex h-full w-full flex-col items-center justify-center">
+        <p>Error fetching public share details</p>
+        <pre>{error.message}</pre>
+      </div>
+    {/await}
+  </div>
 </Container>

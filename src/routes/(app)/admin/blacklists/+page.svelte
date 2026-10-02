@@ -177,7 +177,7 @@
 <Container>
   <PageHeader
     title="Blacklists"
-    subtitle="Usernames and email addresses blocked from registering."
+    subtitle="Usernames and email providers blocked from registering."
   />
   <div class="grid w-full grid-cols-1 gap-6 md:grid-cols-2">
     <!-- Username Blacklist -->

@@ -28,7 +28,8 @@
   <p class="relative text-lg opacity-75 md:text-2xl">
     The go-to platform for safe, reliable, real low-latency remote shocking.<br />
     {#if data.ok}
-      <span class="font-semibold">{data.deviceCount}</span> hubs online right now.
+      <span class="font-semibold">{data.deviceCount}</span>
+      {data.deviceCount === 1 ? 'hub' : 'hubs'} online right now.
     {/if}
   </p>
   <div class="relative flex space-x-4 pt-8 text-sm opacity-75">
