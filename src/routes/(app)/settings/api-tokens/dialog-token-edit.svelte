@@ -78,7 +78,7 @@
   let nameValidationResult = $derived(nameValidation(name));
 </script>
 
-<div class="max-h-[80vh] space-y-4 overflow-y-auto pr-1">
+<div class="max-h-[85dvh] space-y-4 overflow-y-auto pr-1">
   <Dialog.Header>
     <Dialog.Title>Edit API token</Dialog.Title>
     <Dialog.Description></Dialog.Description>

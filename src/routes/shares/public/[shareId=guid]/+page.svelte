@@ -62,7 +62,7 @@
     <ControlView {shareLinkRoot} {guestName} />
   {:else}
     <div class="flex h-full w-full items-center justify-center">
-      <Card.Root class="w-[400px]">
+      <Card.Root class="w-full max-w-sm">
         <Card.Header class="text-center">
           <Card.Title class="text-xl"><h1>Public Share Link</h1></Card.Title>
           <Card.Description>Enter as a guest or login with your OpenShock account</Card.Description>

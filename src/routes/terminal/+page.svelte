@@ -355,7 +355,7 @@
                               disabled={isFlashing}
                             />
 
-                            <div class="items-top flex space-x-2">
+                            <div class="flex items-start gap-2">
                               <Checkbox id="erase-before-flash" bind:checked={eraseBeforeFlash} />
                               <div class="grid gap-1.5 leading-none">
                                 <Label

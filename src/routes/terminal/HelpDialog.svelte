@@ -31,7 +31,7 @@
 
 <Dialog.Root bind:open={() => open, onOpenChange}>
   <Dialog.Content
-    class="flex h-[90vh] max-h-[90vh] w-[95vw] max-w-[95vw] flex-col gap-4 sm:w-[90vw] sm:max-w-4xl lg:max-w-5xl xl:max-w-6xl"
+    class="flex h-[90dvh] w-[95vw] max-w-[95vw] flex-col gap-4 sm:w-[90vw] sm:max-w-4xl lg:max-w-5xl xl:max-w-6xl"
   >
     <Dialog.Header>
       <Dialog.Title>

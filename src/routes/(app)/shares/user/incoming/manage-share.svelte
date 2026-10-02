@@ -58,7 +58,7 @@
 
 <Drawer.Root bind:open={editDrawer} direction="right">
   <Drawer.Content>
-    <div class="mx-auto flex max-h-[100vh] w-full flex-col">
+    <div class="mx-auto flex max-h-dvh w-full flex-col">
       <Drawer.Header class="shrink-0">
         <Drawer.Description>Manage Shares from</Drawer.Description>
         <Drawer.Title class="mt-1 flex items-center gap-2">
