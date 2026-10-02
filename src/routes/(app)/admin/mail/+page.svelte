@@ -202,7 +202,7 @@
     </CardTitle>
   </CardHeader>
 
-  <div class="grid w-full gap-6 p-6">
+  <div class="flex min-h-0 w-full flex-1 flex-col gap-6 py-6">
     <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
       {#each statusTiles as tile (tile.status)}
         <button
@@ -219,7 +219,14 @@
       {/each}
     </div>
 
-    <DataTable {data} {columns} {features} bind:sorting manualSorting />
+    <DataTable
+      {data}
+      {columns}
+      {features}
+      mobileColumns={['recipient', 'status']}
+      bind:sorting
+      manualSorting
+    />
     <PaginationFooter
       count={total}
       {perPage}

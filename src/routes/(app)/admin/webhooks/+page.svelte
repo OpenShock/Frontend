@@ -58,9 +58,9 @@
       </Button>
     </CardTitle>
   </CardHeader>
-  <div class="grid w-full gap-6 p-6">
+  <div class="flex min-h-0 w-full flex-1 flex-col gap-6 py-6">
     <svelte:boundary onerror={(error: unknown) => handleApiError(error)}>
-      <DataTable {data} {columns} {features} />
+      <DataTable {data} {columns} {features} mobileColumns={['name']} />
 
       {#snippet pending()}
         <div class="flex h-64 w-full items-center justify-center">

@@ -259,9 +259,9 @@
         data={logs}
         {columns}
         {features}
+        mobileColumns={['shockerName', 'createdOn']}
         bind:sorting
         manualSorting
-        class="min-h-0 flex-1"
       />
       <PaginationFooter
         count={total}

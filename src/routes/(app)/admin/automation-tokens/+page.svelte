@@ -53,7 +53,7 @@
     </Button>
   </PageHeader>
 
-  <div class="flex w-full min-w-0 flex-col gap-6">
+  <div class="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-6">
     {#if !hasLoaded}
       <div class="flex h-64 w-full items-center justify-center">
         <Spinner class="size-8 text-gray-600 dark:text-gray-300" />
@@ -70,7 +70,7 @@
         </Button>
       </EmptyState>
     {:else}
-      <DataTable {data} {columns} {features} class="w-full" />
+      <DataTable {data} {columns} {features} mobileColumns={['name', 'useCount']} class="w-full" />
     {/if}
   </div>
 </Container>

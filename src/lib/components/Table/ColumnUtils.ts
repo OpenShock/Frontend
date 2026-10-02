@@ -16,9 +16,15 @@ import type { SemVer } from 'semver';
 import type { Component, ComponentProps } from 'svelte';
 import CellContent from './CellContent.svelte';
 import DataTableSortButton from './SortButton.svelte';
-import type { SortableTableFeatures } from './types';
+import type { DataTableColumnMeta, DataTableFeatures } from './types';
 
 type CellContentProps = ComponentProps<typeof CellContent>;
+
+// The shape the column literals below are authored against. `meta` is typed
+// from the feature set's `columnMeta` slot, which the generic `TableFeatures`
+// shape leaves optional, so that slot is pinned here for the same reason
+// `asColumnDef` exists at all.
+type AuthoringFeatures = TableFeatures & { columnMeta: DataTableColumnMeta };
 
 // TanStack's 'auto' sorting can't compare Temporal.Instant values (they aren't
 // primitives — basic comparison invokes Temporal's valueOf, which throws), so it
@@ -65,16 +71,16 @@ function temporalAwareSortFn<TFeatures extends TableFeatures, TData extends RowD
  *   CreateColumnDefs<typeof features, WebhookDto>();
  * ```
  */
-export function CreateColumnDefs<TFeatures extends SortableTableFeatures, TData extends RowData>() {
+export function CreateColumnDefs<TFeatures extends DataTableFeatures, TData extends RowData>() {
   // v9 derives the feature-dependent half of `ColumnDef` through a mapped type
   // keyed on `keyof TFeatures`, which TypeScript can't reduce while `TFeatures`
   // is still a type parameter. Authoring each literal against the fully
   // populated `TableFeatures` shape keeps it properly checked, and the widening
   // to the caller's feature set happens once, here.
-  const asColumnDef = (def: ColumnDef<TableFeatures, TData>) =>
+  const asColumnDef = (def: ColumnDef<AuthoringFeatures, TData>) =>
     def as unknown as ColumnDef<TFeatures, TData>;
 
-  function CreateSortHeader(name: string): StringOrTemplateHeader<TableFeatures, TData> {
+  function CreateSortHeader(name: string): StringOrTemplateHeader<AuthoringFeatures, TData> {
     return ({ column }) =>
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic Svelte components can't be parameterized in .ts files
       renderComponent(DataTableSortButton as Component<any>, {
@@ -92,6 +98,7 @@ export function CreateColumnDefs<TFeatures extends SortableTableFeatures, TData 
       accessorKey,
       header: headerName,
       cell: ({ row }) => renderComponent(CellContent, renderer(row.original[accessorKey])),
+      meta: { label: headerName },
     });
   }
 
@@ -117,9 +124,10 @@ export function CreateColumnDefs<TFeatures extends SortableTableFeatures, TData 
       accessorKey,
       header: CreateSortHeader(headerName),
       cell: ({ row }) => renderComponent(CellContent, renderer(row.original[accessorKey])),
+      meta: { label: headerName },
       // Registered sort-fn names come from the caller's `sortFns`, which the
       // generic `TableFeatures` shape used for checking doesn't know about.
-      sortFn: sortFn as SortFnOption<TableFeatures, TData>,
+      sortFn: sortFn as SortFnOption<AuthoringFeatures, TData>,
     });
   }
 

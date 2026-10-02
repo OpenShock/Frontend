@@ -1,7 +1,7 @@
-<script lang="ts" generics="TFeatures extends SortableTableFeatures, TData extends RowData">
+<script lang="ts" generics="TFeatures extends DataTableFeatures, TData extends RowData">
   import { ArrowDown, ArrowUp, ArrowUpDown } from '@lucide/svelte';
   import type { Column, Column_RowSorting, RowData } from '@tanstack/svelte-table';
-  import type { SortableTableFeatures } from './types';
+  import type { DataTableFeatures } from './types';
 
   interface Props {
     name: string;

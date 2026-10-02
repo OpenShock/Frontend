@@ -46,6 +46,8 @@
 
 <script lang="ts">
   import DataTableActions from './data-table-actions.svelte';
+  import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
   import { odataAnd, odataSearch } from '#lib/utils/odata.js';
   import { adminGetUsers, type PaginatedOfAdminUsersView } from '#lib/api/index.js';
   import type { SortingState } from '@tanstack/svelte-table';
@@ -139,8 +141,18 @@
       </div>
     </CardTitle>
   </CardHeader>
-  <div class="grid w-full gap-6 p-6">
-    <DataTable {data} {columns} {features} bind:sorting manualSorting />
+  <!-- The table owns the leftover viewport height and scrolls inside it, so the
+       header and the pagination footer stay put while the rows move. -->
+  <div class="flex min-h-0 w-full flex-1 flex-col gap-6 py-6">
+    <DataTable
+      {data}
+      {columns}
+      {features}
+      mobileColumns={['name', 'email']}
+      bind:sorting
+      manualSorting
+      onRowClick={(user) => goto(resolve(`admin/users/${user.id}`))}
+    />
     <PaginationFooter
       count={total}
       {perPage}

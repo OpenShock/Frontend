@@ -86,7 +86,7 @@
     </Button>
   </PageHeader>
 
-  <div class="flex w-full min-w-0 flex-col gap-6">
+  <div class="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-6">
     <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
       {#each stats as stat (stat.label)}
         <div class="bg-card flex min-w-0 flex-col rounded-lg border p-4">
@@ -104,7 +104,13 @@
     </div>
 
     {#if hasLoaded}
-      <DataTable data={filtered} {columns} {features} class="w-full" />
+      <DataTable
+        data={filtered}
+        {columns}
+        {features}
+        mobileColumns={['id', 'load']}
+        class="w-full"
+      />
     {:else}
       <div class="flex h-64 w-full items-center justify-center">
         <Spinner class="size-8 text-gray-600 dark:text-gray-300" />

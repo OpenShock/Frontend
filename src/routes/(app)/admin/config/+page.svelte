@@ -58,7 +58,7 @@
       <Button onclick={() => (addDialogOpen = true)}>Add new</Button>
     </CardTitle>
   </CardHeader>
-  <div class="grid w-full gap-6 p-6">
-    <DataTable {data} {columns} {features} />
+  <div class="flex min-h-0 w-full flex-1 flex-col gap-6 py-6">
+    <DataTable {data} {columns} {features} mobileColumns={['name', 'value']} />
   </div>
 </Container>
