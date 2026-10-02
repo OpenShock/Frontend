@@ -1,6 +1,6 @@
 <script lang="ts">
   import { shockerPauseShocker, shockerShockerShareCodePause } from '#lib/api/index.js';
-  import type { BooleanLegacyDataResponse } from '#lib/api/index.js';
+  import type { LegacyDataResponseOfboolean } from '#lib/api/index.js';
   import { Asterisk, Pause, Play } from '@lucide/svelte';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
@@ -52,7 +52,7 @@
   }
 
   async function SetPauseState(shocker: PauseToggleProps, pause: boolean) {
-    let pauseRequest: Promise<BooleanLegacyDataResponse>;
+    let pauseRequest: Promise<LegacyDataResponseOfboolean>;
 
     if (shocker.userShareUserId) {
       pauseRequest = shockerShockerShareCodePause({

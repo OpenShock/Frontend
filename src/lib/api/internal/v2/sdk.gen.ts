@@ -431,28 +431,6 @@ export const userSharesBulkUserShareShockersUpdate = <ThrowOnError extends boole
   });
 
 /**
- * Gets the best suited LCG node for the client
- */
-export const deviceGetLiveControlGatewayV2 = <ThrowOnError extends boolean = true>(
-  options?: Options<DeviceGetLiveControlGatewayV2Data, ThrowOnError>
-): RequestResult<
-  DeviceGetLiveControlGatewayV2Responses,
-  DeviceGetLiveControlGatewayV2Errors,
-  ThrowOnError,
-  'data'
-> =>
-  (options?.client ?? client).get<
-    DeviceGetLiveControlGatewayV2Responses,
-    DeviceGetLiveControlGatewayV2Errors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/2/device/assignLCG',
-    ...options,
-  });
-
-/**
  * Create a new device for the current user
  */
 export const devicesCreateDeviceV2 = <ThrowOnError extends boolean = true>(
@@ -488,6 +466,28 @@ export const devicesGetLiveControlGatewayInfoV2 = <ThrowOnError extends boolean 
   >({
     responseStyle: 'data',
     url: '/2/devices/{deviceId}/lcg',
+    ...options,
+  });
+
+/**
+ * Gets the best suited LCG node for the client
+ */
+export const deviceGetLiveControlGatewayV2 = <ThrowOnError extends boolean = true>(
+  options?: Options<DeviceGetLiveControlGatewayV2Data, ThrowOnError>
+): RequestResult<
+  DeviceGetLiveControlGatewayV2Responses,
+  DeviceGetLiveControlGatewayV2Errors,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).get<
+    DeviceGetLiveControlGatewayV2Responses,
+    DeviceGetLiveControlGatewayV2Errors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/2/device/assignLCG',
     ...options,
   });
 

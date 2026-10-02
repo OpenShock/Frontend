@@ -82,7 +82,6 @@ export {
   type LoginV2,
   type LoginV2OkResponse,
   type OpenShockProblem,
-  type OpenShockProblemWritable,
   type PasswordResetRequestV2,
   type PauseUserShareShockersRequest,
   type PauseUserShareShockersResponse,

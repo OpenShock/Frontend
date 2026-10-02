@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from '$app/state';
   import { adminGetUsers } from '#lib/api/index.js';
-  import type { AdminUsersView, AdminUsersViewPaginated } from '#lib/api/index.js';
+  import type { AdminUsersView, PaginatedOfAdminUsersView } from '#lib/api/index.js';
   import { Container, EmptyState } from '@openshock/svelte-core/components';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
@@ -17,7 +17,7 @@
     { label: user?.name ?? (loading ? 'Loading...' : 'Not found') },
   ]);
 
-  function handleResponse(page: AdminUsersViewPaginated) {
+  function handleResponse(page: PaginatedOfAdminUsersView) {
     if (page.data.length === 0) {
       user = null;
       return;
