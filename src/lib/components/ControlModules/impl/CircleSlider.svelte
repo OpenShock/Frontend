@@ -150,7 +150,7 @@
     <!-- background arc -->
     <path
       d={calcSvgPathData(angleEnd)}
-      class="stroke-muted cursor-pointer fill-none stroke-20"
+      class="stroke-muted-foreground/20 cursor-pointer fill-none stroke-20"
       stroke-linecap="round"
       aria-hidden="true"
       onpointerdown={startTracking}
@@ -177,7 +177,7 @@
       aria-valuenow={value}
       aria-valuemax={max}
       aria-labelledby={labelId}
-      class="fill-background stroke-border cursor-move drop-shadow-md outline-none focus:ring-2 focus:ring-blue-500/60"
+      class="fill-background stroke-muted-foreground/50 focus-visible:stroke-ring cursor-move drop-shadow-md outline-none focus-visible:stroke-3"
     />
   </svg>
 

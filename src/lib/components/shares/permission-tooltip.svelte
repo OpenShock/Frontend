@@ -14,7 +14,12 @@
 
   function permClass(enabled: boolean): ClassValue {
     let base = 'p-1 rounded-lg ';
-    return base + (enabled ? 'bg-success' : 'bg-destructive');
+    return (
+      base +
+      (enabled
+        ? 'bg-success text-success-foreground'
+        : 'bg-destructive text-destructive-foreground')
+    );
   }
 
   let pausedReason = $derived(pauseState ? getPauseReason(pauseState) : null);
@@ -31,25 +36,25 @@
       class={permClass(shockerShare.permissions.shock)}
       title={shockerShare.permissions.shock ? 'Shock enabled' : 'Shock disabled'}
     >
-      <Zap color="white" />
+      <Zap />
     </span>
     <span
       class={permClass(shockerShare.permissions.vibrate)}
       title={shockerShare.permissions.vibrate ? 'Vibrate enabled' : 'Vibrate disabled'}
     >
-      <Waves color="white" />
+      <Waves />
     </span>
     <span
       class={permClass(shockerShare.permissions.sound)}
       title={shockerShare.permissions.sound ? 'Sound enabled' : 'Sound disabled'}
     >
-      <Volume2 color="white" />
+      <Volume2 />
     </span>
     <span
       class={permClass(shockerShare.permissions.live!)}
       title={shockerShare.permissions.live ? 'Live enabled' : 'Live disabled'}
     >
-      <ChartNoAxesGantt color="white" />
+      <ChartNoAxesGantt />
     </span>
   </div>
   <div class="flex justify-center gap-2">

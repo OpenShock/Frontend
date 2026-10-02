@@ -13,7 +13,7 @@
 >
   <div>
     Made with
-    <span class="text-destructive">♥</span>
+    <span class="text-[#e25555]">♥</span>
     by the
     <a target="_blank" rel="noopener" href={PUBLIC_GITHUB_PROJECT_URL}>OpenShock Team</a>
   </div>

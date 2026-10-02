@@ -68,7 +68,7 @@
       class="border-destructive bg-destructive/10 flex items-start gap-3 rounded-md border-l-4 p-4"
     >
       <OctagonAlert class="text-destructive" />
-      <p class="text-destructive text-sm leading-snug">
+      <p class="text-foreground text-sm leading-snug">
         <strong>This form is only for reporting accidentally leaked API tokens.</strong><br />
         <u>Intentional abuse will result in bans or severe endpoint restrictions.</u>
       </p>
@@ -81,8 +81,8 @@
         <p
           class="mb-1 rounded px-2 py-1 font-mono text-sm break-all
                 {isValid(secret)
-            ? 'bg-success/15 text-success'
-            : 'bg-destructive/15 text-destructive'}"
+            ? 'bg-success/15 border-success border-l-2'
+            : 'bg-destructive/15 border-destructive border-l-2'}"
         >
           {secret}
         </p>
@@ -90,7 +90,7 @@
     </ScrollArea>
     {#if !isAllValid}
       <div
-        class="border-destructive/40 bg-destructive/10 text-destructive mt-2 flex items-start gap-2 rounded-md border p-3 text-sm"
+        class="border-destructive/40 bg-destructive/10 text-foreground mt-2 flex items-start gap-2 rounded-md border p-3 text-sm"
       >
         <span> One or more tokens appear to be invalid. Please check for formatting issues. </span>
       </div>

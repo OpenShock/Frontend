@@ -278,7 +278,7 @@
                       <button
                         class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold transition-colors
                         {isCompleted
-                          ? 'bg-success text-white'
+                          ? 'bg-success text-success-foreground'
                           : isCurrent
                             ? 'bg-primary text-primary-foreground'
                             : 'border-muted-foreground/30 text-muted-foreground/50 border-2'}"
