@@ -44,6 +44,35 @@
 
   const copyId = () => copyToClipboard(hub.id, 'ID copied to clipboard');
 
+  async function confirmHubCommand(
+    title: string,
+    desc: string,
+    confirmButtonText: string,
+    send: () => void
+  ) {
+    const result = await dialog.confirm({ title, desc, confirmButtonText });
+    if (!result.confirmed) return;
+    send();
+  }
+
+  const rebootHub = () =>
+    confirmHubCommand(
+      `Reboot ${hub.name}?`,
+      'The hub will disconnect and restart. Any shockers paired to it stop responding until it comes back online.',
+      'Reboot',
+      () => serializeRebootMessage(getConnection(), hub.id)
+    );
+
+  const setCaptivePortal = (enabled: boolean) =>
+    confirmHubCommand(
+      enabled ? `Enable Wi-Fi hotspot on ${hub.name}?` : `Disable Wi-Fi hotspot on ${hub.name}?`,
+      enabled
+        ? 'The hub broadcasts its own setup network. It stays reachable on your Wi-Fi, but the hotspot is open to anyone in range until you turn it off.'
+        : 'The setup hotspot shuts down. If the hub is not already on your Wi-Fi you will need physical access to set it up again.',
+      enabled ? 'Enable' : 'Disable',
+      () => serializeCaptivePortalMessage(getConnection(), hub.id, enabled)
+    );
+
   async function editHub(name: string, close: () => void) {
     try {
       await devicesEditDevice({ path: { deviceId: hub.id }, body: { name } });
@@ -234,24 +263,15 @@
       ><RefreshCw class="size-4" />Update</DropdownMenu.Item
     >
 
-    <DropdownMenu.Item
-      class="cursor-pointer"
-      onclick={() => serializeRebootMessage(getConnection(), hub.id)}
-    >
+    <DropdownMenu.Item class="cursor-pointer" onclick={rebootHub}>
       <RotateCcw class="size-4" />
       Reboot
     </DropdownMenu.Item>
-    <DropdownMenu.Item
-      class="cursor-pointer"
-      onclick={() => serializeCaptivePortalMessage(getConnection(), hub.id, true)}
-    >
+    <DropdownMenu.Item class="cursor-pointer" onclick={() => setCaptivePortal(true)}>
       <Wifi class="size-4" />
       Enable Wi-Fi hotspot
     </DropdownMenu.Item>
-    <DropdownMenu.Item
-      class="cursor-pointer"
-      onclick={() => serializeCaptivePortalMessage(getConnection(), hub.id, false)}
-    >
+    <DropdownMenu.Item class="cursor-pointer" onclick={() => setCaptivePortal(false)}>
       <WifiOff class="size-4" />
       Disable Wi-Fi hotspot
     </DropdownMenu.Item>
