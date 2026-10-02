@@ -68,7 +68,7 @@
           <p>Redeeming...</p>
         {:then result}
           <div class="flex flex-col gap-2">
-            <p class="text-green-500">Redeemed successfully!</p>
+            <p class="text-success">Redeemed successfully!</p>
 
             <span class="flex items-center gap-2">
               <Avatar.Root class="h-15 w-15">
@@ -79,7 +79,7 @@
             </span>
 
             <span
-              class="bg-sidebar flex h-[26px] items-center rounded-2xl px-1.5 py-0.5 ring-1 ring-slate-800"
+              class="bg-sidebar ring-border flex h-[26px] items-center rounded-2xl px-1.5 py-0.5 ring-1"
             >
               <Zap size="15" />
               <p class="ml-2 inline-block sm:hidden">{result.shares.length}</p>
@@ -100,7 +100,7 @@
             </span>
           </div>
         {:catch error}
-          <p class="text-red-500">Error redeeming code: {error.message}</p>
+          <p class="text-destructive">Error redeeming code: {error.message}</p>
         {/await}
       {:else}
         <Button

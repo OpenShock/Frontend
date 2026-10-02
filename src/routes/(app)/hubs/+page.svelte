@@ -109,7 +109,7 @@
               {#if hub.is_online && hub.firmware_version}
                 <span>{hub.firmware_version}</span>
               {:else}
-                <span class="text-red-500">Offline</span>
+                <span class="text-destructive">Offline</span>
               {/if}
             </div>
           </div>
@@ -134,9 +134,9 @@
             <Table.Cell>{hub.name}</Table.Cell>
             <Table.Cell>
               {#if hub.is_online}
-                <span class="text-green-500">Online</span>
+                <span class="text-success">Online</span>
               {:else}
-                <span class="text-red-500">Offline</span>
+                <span class="text-destructive">Offline</span>
               {/if}
             </Table.Cell>
             <Table.Cell>{hub.firmware_version ?? '—'}</Table.Cell>

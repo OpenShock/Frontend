@@ -202,7 +202,7 @@
   </Dialog.Header>
   {#if !props.data.loading}
     {#if consumed}
-      <div class="flex items-center gap-2 text-green-500">
+      <div class="text-success flex items-center gap-2">
         <CircleCheck class="size-5" />
         <span class="text-sm font-medium">Pairing complete</span>
       </div>
@@ -294,13 +294,13 @@
     </DropdownMenu.Item>
     <DropdownMenu.Separator />
     <DropdownMenu.Item
-      class="cursor-pointer text-red-500"
+      class="text-destructive cursor-pointer"
       onclick={() => serializeEmergencyStopMessage(getConnection(), hub.id)}
     >
       <OctagonX class="size-4" />
       Emergency Stop
     </DropdownMenu.Item>
-    <DropdownMenu.Item class="cursor-pointer text-red-500" onclick={openDeleteDialog}>
+    <DropdownMenu.Item class="text-destructive cursor-pointer" onclick={openDeleteDialog}>
       <Trash2 class="size-4" />
       Delete
     </DropdownMenu.Item>

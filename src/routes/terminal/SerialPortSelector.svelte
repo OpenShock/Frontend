@@ -79,14 +79,14 @@
   {#if port !== null || (errorMessage !== null && errorMessage.name !== 'NotFoundError')}
     <div class="p-2">
       {#if port !== null}
-        <p class="text-green-500">
+        <p class="text-success">
           Device connected: <span class="font-bold">{GetHardwareID(port)}</span>
         </p>
       {/if}
       {#if errorMessage !== null && errorMessage.name !== 'NotFoundError'}
         <div class="flex flex-row items-center justify-start gap-2">
-          <TriangleAlert color="#eab308" />
-          <p class="text-yellow-500">Error: {errorMessage.message}</p>
+          <TriangleAlert class="text-warning" />
+          <p class="text-warning">Error: {errorMessage.message}</p>
         </div>
       {/if}
     </div>

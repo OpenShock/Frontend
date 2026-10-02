@@ -208,7 +208,7 @@
       <Dialog.Description>
         Update <strong>{hubName}</strong> to version <strong>{version}</strong>?
         {#if channel !== 'stable'}
-          <p class="mt-2 text-yellow-500">
+          <p class="text-warning mt-2">
             This version may not be from the stable channel and could contain bugs.
           </p>
         {/if}
@@ -235,7 +235,7 @@
       <Card.Content>
         <div class="flex flex-wrap items-center gap-3">
           {#if hub.isOnline}
-            <Badge variant="default" class="bg-green-600">Online</Badge>
+            <Badge variant="default" class="bg-success">Online</Badge>
           {:else}
             <Badge variant="destructive">Offline</Badge>
           {/if}
@@ -254,29 +254,29 @@
         class={cn(
           'flex items-start gap-3 rounded-lg border p-4',
           hub.otaResult.success
-            ? 'border-green-500/50 bg-green-500/10'
-            : 'border-red-500/50 bg-red-500/10'
+            ? 'border-success/50 bg-success/10'
+            : 'border-destructive/50 bg-destructive/10'
         )}
       >
         {#if hub.otaResult.success}
-          <CircleCheck class="mt-0.5 size-5 shrink-0 text-green-500" />
+          <CircleCheck class="text-success mt-0.5 size-5 shrink-0" />
           <div class="flex flex-col gap-2">
-            <p class="font-medium text-green-500">{hub.otaResult.message}</p>
+            <p class="text-success font-medium">{hub.otaResult.message}</p>
             <div class="flex gap-2">
               <Button variant="outline" size="sm" href="/hubs">Back to Hubs</Button>
               <Button variant="outline" size="sm" onclick={resetResult}>Flash Again</Button>
             </div>
           </div>
         {:else if hub.otaResult.message.includes('rolled back')}
-          <TriangleAlert class="mt-0.5 size-5 shrink-0 text-yellow-500" />
+          <TriangleAlert class="text-warning mt-0.5 size-5 shrink-0" />
           <div class="flex flex-col gap-2">
-            <p class="font-medium text-yellow-500">{hub.otaResult.message}</p>
+            <p class="text-warning font-medium">{hub.otaResult.message}</p>
             <Button variant="outline" size="sm" onclick={resetResult}>Try Again</Button>
           </div>
         {:else}
-          <CircleX class="mt-0.5 size-5 shrink-0 text-red-500" />
+          <CircleX class="text-destructive mt-0.5 size-5 shrink-0" />
           <div class="flex flex-col gap-2">
-            <p class="font-medium text-red-500">{hub.otaResult.message}</p>
+            <p class="text-destructive font-medium">{hub.otaResult.message}</p>
             <Button variant="outline" size="sm" onclick={resetResult}>Try Again</Button>
           </div>
         {/if}

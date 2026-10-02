@@ -152,7 +152,7 @@
                   <Button
                     variant="ghost"
                     onclick={() => confirmDisconnect(p)}
-                    class="text-red-600 hover:text-red-700"
+                    class="text-destructive hover:text-destructive"
                   >
                     <Unlink class="mr-2 size-4" />
                     Unlink
@@ -168,8 +168,8 @@
         <div class="grid gap-3 md:grid-cols-2">
           {#each Array(4)}
             <div class="animate-pulse rounded-xl border p-4">
-              <div class="mb-2 h-5 w-40 rounded bg-black/10"></div>
-              <div class="h-4 w-64 rounded bg-black/5"></div>
+              <div class="bg-muted mb-2 h-5 w-40 rounded"></div>
+              <div class="bg-muted/60 h-4 w-64 rounded"></div>
             </div>
           {/each}
         </div>

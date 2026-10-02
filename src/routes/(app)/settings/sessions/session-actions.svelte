@@ -28,7 +28,7 @@
     </DropdownMenu.Item>
     <DropdownMenu.Separator />
     <DropdownMenu.Item
-      class="cursor-pointer text-red-500"
+      class="text-destructive cursor-pointer"
       onclick={() => (revokeDialogOpen = true)}
     >
       <Ban class="size-4" />

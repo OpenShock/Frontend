@@ -62,16 +62,16 @@
 
   <div class="flex flex-row items-center justify-start gap-2 pl-2">
     {#if channel === 'stable'}
-      <CircleCheckBig color="#22c55e" />
-      <p class="text-green-500">This is the recommended channel.</p>
+      <CircleCheckBig class="text-success" />
+      <p class="text-success">This is the recommended channel.</p>
       <!--
     {:else if channel === 'beta'}
-      <TriangleAlert color="#eab308" />
-      <p class="text-yellow-500">This channel might contain bugs.</p>
+      <TriangleAlert class="text-warning" />
+      <p class="text-warning">This channel might contain bugs.</p>
     -->
     {:else}
-      <TriangleAlert color="#ef4444" />
-      <p class="font-bold text-red-500" role="alert">
+      <TriangleAlert class="text-destructive" />
+      <p class="text-destructive font-bold" role="alert">
         DO NOT USE THIS UNLESS YOU KNOW WHAT YOU ARE DOING
       </p>
     {/if}

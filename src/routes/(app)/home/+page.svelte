@@ -60,8 +60,8 @@
           <Card.Title class="text-sm font-medium">Hub Status</Card.Title>
           <div
             class={onlineHubCount > 0
-              ? 'size-2 rounded-full bg-green-500'
-              : 'size-2 rounded-full bg-red-500'}
+              ? 'bg-success size-2 rounded-full'
+              : 'bg-destructive size-2 rounded-full'}
           ></div>
         </Card.Header>
         <Card.Content>

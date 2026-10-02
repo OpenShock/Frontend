@@ -249,9 +249,9 @@
       {:else if user.activationRequest}
         {@const request = user.activationRequest}
         <div
-          class="flex flex-wrap items-start gap-3 rounded-lg border border-orange-500/40 bg-orange-500/5 p-4"
+          class="border-warning/40 bg-warning/5 flex flex-wrap items-start gap-3 rounded-lg border p-4"
         >
-          <TriangleAlert class="size-5 shrink-0 text-orange-500" />
+          <TriangleAlert class="text-warning size-5 shrink-0" />
           <div class="flex min-w-0 flex-col gap-1 text-sm">
             <span class="font-medium">Awaiting activation</span>
             <span class="text-muted-foreground">

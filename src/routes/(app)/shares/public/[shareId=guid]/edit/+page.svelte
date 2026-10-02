@@ -144,7 +144,7 @@
         <Tooltip.Root>
           <Tooltip.Trigger>
             <span
-              class="ml-2 flex flex-row items-center rounded-md px-3 py-1.5 outline-1 outline-gray-500"
+              class="outline-ring ml-2 flex flex-row items-center rounded-md px-3 py-1.5 outline-1"
             >
               <Avatar.Root class="h-8 w-8">
                 <Avatar.Image src={publicShareData.author.image} alt="User Avatar" />
@@ -165,7 +165,7 @@
 
   {#await publicShareRequest}
     <div class="flex h-full w-full items-center justify-center">
-      <Spinner class="size-8 text-gray-600 dark:text-gray-300" />
+      <Spinner class="text-muted-foreground size-8" />
     </div>
   {:then}
     {#if publicShareData?.devices?.length && shareId}

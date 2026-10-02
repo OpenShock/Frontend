@@ -200,12 +200,12 @@
         <Card.Title class="text-2xl">API Token Request</Card.Title>
       </Card.Header>
       <Card.Content>
-        <span class="text-red-500">{parseError}</span>
+        <span class="text-destructive">{parseError}</span>
       </Card.Content>
     {:else if tokenSecret && isExternal}
       <Card.Header>
         <Card.Title class="flex items-center gap-2 text-2xl">
-          <CircleCheck class="text-green-500" />
+          <CircleCheck class="text-success" />
           Access granted
         </Card.Title>
         <Card.Description>
@@ -225,7 +225,7 @@
     {:else if tokenSecret}
       <Card.Header>
         <Card.Title class="flex items-center gap-2 text-2xl">
-          <CircleCheck class="text-green-500" />
+          <CircleCheck class="text-success" />
           API Token Generated
         </Card.Title>
         <Card.Description>

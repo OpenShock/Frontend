@@ -14,7 +14,7 @@
 
   function permClass(enabled: boolean): ClassValue {
     let base = 'p-1 rounded-lg ';
-    return base + (enabled ? 'bg-green-500' : 'bg-red-500');
+    return base + (enabled ? 'bg-success' : 'bg-destructive');
   }
 
   let pausedReason = $derived(pauseState ? getPauseReason(pauseState) : null);

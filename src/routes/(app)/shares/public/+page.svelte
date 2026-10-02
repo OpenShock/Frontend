@@ -2,8 +2,8 @@
   // Static class lookup — one copy per module, not one per instance.
   const expiryToneClasses = {
     neutral: 'text-muted-foreground ring-border',
-    warning: 'text-amber-600 dark:text-amber-400 ring-amber-500/30',
-    danger: 'text-red-600 dark:text-red-400 ring-red-500/30',
+    warning: 'text-warning ring-warning/30',
+    danger: 'text-destructive ring-destructive/30',
   } as const;
 </script>
 
@@ -88,7 +88,7 @@
 
   {#if loading && data.length === 0}
     <div class="flex h-64 w-full items-center justify-center">
-      <Spinner class="size-8 text-gray-600 dark:text-gray-300" />
+      <Spinner class="text-muted-foreground size-8" />
     </div>
   {:else if sortedShares.length === 0}
     <EmptyState

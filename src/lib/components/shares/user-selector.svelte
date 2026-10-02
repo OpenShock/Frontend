@@ -35,7 +35,7 @@
 </script>
 
 <form class="flex items-center gap-2" onsubmit={check}>
-  <Avatar.Root class={(fetchedUser ? 'border-3 border-green-500' : '') + ' h-15 w-15'}>
+  <Avatar.Root class={(fetchedUser ? 'border-success border-3' : '') + ' h-15 w-15'}>
     <Avatar.Image
       src={fetchedUser?.image}
       alt={fetchedUser ? `${fetchedUser.name}'s avatar` : 'User avatar'}

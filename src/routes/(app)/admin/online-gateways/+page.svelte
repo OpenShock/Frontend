@@ -64,7 +64,7 @@
         label: 'Highest load',
         value: maxLoad === null ? '—' : `${maxLoad}%`,
         detail: `Alerts at ≥ ${HIGH_LOAD_PERCENT}%`,
-        color: maxLoad !== null && maxLoad >= HIGH_LOAD_PERCENT ? 'text-red-500' : '',
+        color: maxLoad !== null && maxLoad >= HIGH_LOAD_PERCENT ? 'text-destructive' : '',
       },
     ];
   });
@@ -113,7 +113,7 @@
       />
     {:else}
       <div class="flex h-64 w-full items-center justify-center">
-        <Spinner class="size-8 text-gray-600 dark:text-gray-300" />
+        <Spinner class="text-muted-foreground size-8" />
       </div>
     {/if}
   </div>

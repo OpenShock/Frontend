@@ -226,12 +226,12 @@
       <span class="relative flex size-2">
         {#if liveUpdatesActive}
           <span
-            class="absolute inline-flex size-full animate-ping rounded-full bg-green-400 opacity-75"
+            class="bg-success absolute inline-flex size-full animate-ping rounded-full opacity-75"
           ></span>
         {/if}
         <span
           class="relative inline-flex size-2 rounded-full {liveUpdatesActive
-            ? 'bg-green-500'
+            ? 'bg-success'
             : 'bg-muted-foreground'}"
         ></span>
       </span>

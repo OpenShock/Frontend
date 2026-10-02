@@ -56,7 +56,7 @@
   <div class="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-6">
     {#if !hasLoaded}
       <div class="flex h-64 w-full items-center justify-center">
-        <Spinner class="size-8 text-gray-600 dark:text-gray-300" />
+        <Spinner class="text-muted-foreground size-8" />
       </div>
     {:else if data.length === 0}
       <EmptyState

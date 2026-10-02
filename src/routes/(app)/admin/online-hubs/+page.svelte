@@ -120,13 +120,13 @@
       {
         label: 'Median latency',
         value: medianLatency === null ? '—' : `${medianLatency} ms`,
-        color: medianLatency !== null && medianLatency >= HIGH_LATENCY_MS ? 'text-orange-500' : '',
+        color: medianLatency !== null && medianLatency >= HIGH_LATENCY_MS ? 'text-warning' : '',
       },
       {
         label: 'Weak signal',
         value: weakSignal.toString(),
         detail: `RSSI ≤ ${WEAK_RSSI_DBM} dBm`,
-        color: weakSignal > 0 ? 'text-red-500' : '',
+        color: weakSignal > 0 ? 'text-destructive' : '',
       },
     ];
   });
@@ -204,7 +204,7 @@
       />
     {:else}
       <div class="flex h-64 w-full items-center justify-center">
-        <Spinner class="size-8 text-gray-600 dark:text-gray-300" />
+        <Spinner class="text-muted-foreground size-8" />
       </div>
     {/if}
   </div>

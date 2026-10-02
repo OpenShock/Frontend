@@ -78,7 +78,7 @@
         Copy ID
       </DropdownMenu.Item>
       <DropdownMenu.Separator />
-      <DropdownMenu.Item class="cursor-pointer text-red-500" onclick={deleteShocker}>
+      <DropdownMenu.Item class="text-destructive cursor-pointer" onclick={deleteShocker}>
         <Trash2 class="size-4" />
         Delete
       </DropdownMenu.Item>

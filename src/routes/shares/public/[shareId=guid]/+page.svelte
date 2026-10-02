@@ -94,5 +94,5 @@
     </div>
   {/if}
 {:catch error}
-  <p style="color: red">{error.message}</p>
+  <p class="text-destructive">{error.message}</p>
 {/await}

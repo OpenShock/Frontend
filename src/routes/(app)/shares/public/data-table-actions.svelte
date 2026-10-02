@@ -45,7 +45,7 @@
       </DropdownMenu.Item>
       <DropdownMenu.Separator />
       <DropdownMenu.Item
-        class="cursor-pointer text-red-500"
+        class="text-destructive cursor-pointer"
         onclick={() => (deleteDialogOpen = true)}><Trash2 class="size-4" />Delete</DropdownMenu.Item
       >
     </DropdownMenu.Group>

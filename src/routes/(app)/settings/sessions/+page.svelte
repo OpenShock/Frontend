@@ -82,7 +82,7 @@
   <Card.Content class="w-full">
     {#if loading && data.length === 0}
       <div class="flex h-64 w-full items-center justify-center">
-        <Spinner class="size-8 text-gray-600 dark:text-gray-300" />
+        <Spinner class="text-muted-foreground size-8" />
       </div>
     {:else if failed && data.length === 0}
       <div class="flex w-full flex-col items-center gap-3 py-12">

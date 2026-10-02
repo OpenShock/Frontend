@@ -204,7 +204,7 @@
             <div class="flex items-center justify-between text-sm">
               <div class="flex items-center space-x-2">
                 <span>{item.value}</span>
-                <span class="rounded bg-gray-800 px-2 py-0.5 text-xs">{item.matchType}</span>
+                <span class="bg-muted rounded px-2 py-0.5 text-xs">{item.matchType}</span>
               </div>
               <Button
                 variant="ghost"
@@ -213,7 +213,7 @@
                 disabled={isLoadingUsernames}
                 title="Remove {item.value}"
               >
-                <Trash2 size="16" class="text-red-500" />
+                <Trash2 size="16" class="text-destructive" />
               </Button>
             </div>
             <Separator />
@@ -255,7 +255,7 @@
                 disabled={isLoadingEmails}
                 title="Remove {item.domain}"
               >
-                <Trash2 size="16" class="text-red-500" />
+                <Trash2 size="16" class="text-destructive" />
               </Button>
             </div>
             <Separator />

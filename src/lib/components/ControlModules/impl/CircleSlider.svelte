@@ -150,7 +150,7 @@
     <!-- background arc -->
     <path
       d={calcSvgPathData(angleEnd)}
-      class="cursor-pointer fill-none stroke-neutral-200 stroke-20 dark:stroke-neutral-800"
+      class="stroke-muted cursor-pointer fill-none stroke-20"
       stroke-linecap="round"
       aria-hidden="true"
       onpointerdown={startTracking}
@@ -177,7 +177,7 @@
       aria-valuenow={value}
       aria-valuemax={max}
       aria-labelledby={labelId}
-      class="cursor-move fill-white stroke-neutral-400 drop-shadow-md outline-none focus:ring-2 focus:ring-blue-500/60 dark:fill-neutral-900 dark:stroke-neutral-700"
+      class="fill-background stroke-border cursor-move drop-shadow-md outline-none focus:ring-2 focus:ring-blue-500/60"
     />
   </svg>
 
@@ -191,14 +191,14 @@
     {max}
     {step}
     aria-label="Value"
-    class="hide-spinners absolute top-1/2 left-1/2 w-10 -translate-1/2 border-none bg-transparent text-center text-xl font-bold text-gray-900 focus:outline-none dark:text-gray-100"
+    class="hide-spinners text-foreground absolute top-1/2 left-1/2 w-10 -translate-1/2 border-none bg-transparent text-center text-xl font-bold focus:outline-none"
   />
 
   <!-- gauge label -->
   <label
     id={labelId}
     for={inputId}
-    class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/10 text-center text-neutral-600 dark:text-neutral-300"
+    class="text-muted-foreground absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/10 text-center"
   >
     {name}
   </label>

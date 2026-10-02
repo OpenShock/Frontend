@@ -106,8 +106,8 @@
   <div class="flex flex-col items-start justify-start gap-2 p-2">
     {#if error}
       <div class="flex flex-row items-center justify-start gap-2">
-        <TriangleAlert color="#ef4444" />
-        <p class="text-red-500">Error: {error}</p>
+        <TriangleAlert class="text-destructive" />
+        <p class="text-destructive">Error: {error}</p>
       </div>
     {:else}
       <span>

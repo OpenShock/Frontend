@@ -278,7 +278,7 @@
                       <button
                         class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold transition-colors
                         {isCompleted
-                          ? 'bg-green-500 text-white'
+                          ? 'bg-success text-white'
                           : isCurrent
                             ? 'bg-primary text-primary-foreground'
                             : 'border-muted-foreground/30 text-muted-foreground/50 border-2'}"
@@ -296,7 +296,7 @@
                       {#if !isLast}
                         <div
                           class="w-0.5 flex-1 {isCompleted
-                            ? 'bg-green-500/40'
+                            ? 'bg-success/40'
                             : 'bg-muted-foreground/20'}"
                           style="min-height: 1.5rem;"
                         ></div>

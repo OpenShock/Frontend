@@ -33,10 +33,10 @@
 
   // Fixed presentation data — built once per module rather than per instance.
   const statusTiles: { status: EmailStatusType; label: string; color: string }[] = [
-    { status: EmailStatus.Pending, label: 'Pending', color: 'text-orange-500' },
-    { status: EmailStatus.Sending, label: 'Sending', color: 'text-blue-500' },
-    { status: EmailStatus.Sent, label: 'Sent', color: 'text-green-500' },
-    { status: EmailStatus.Failed, label: 'Failed', color: 'text-red-500' },
+    { status: EmailStatus.Pending, label: 'Pending', color: 'text-warning' },
+    { status: EmailStatus.Sending, label: 'Sending', color: 'text-info' },
+    { status: EmailStatus.Sent, label: 'Sent', color: 'text-success' },
+    { status: EmailStatus.Failed, label: 'Failed', color: 'text-destructive' },
     { status: EmailStatus.Skipped, label: 'Skipped', color: 'text-muted-foreground' },
   ];
 </script>

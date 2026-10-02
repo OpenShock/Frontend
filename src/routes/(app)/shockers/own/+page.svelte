@@ -323,7 +323,7 @@
             <div class="flex w-full flex-col gap-3">
               <div class="flex items-center gap-2">
                 <span
-                  class="size-2.5 rounded-full {online ? 'bg-green-400' : 'bg-red-500'}"
+                  class="size-2.5 rounded-full {online ? 'bg-success' : 'bg-destructive'}"
                   title={online ? 'Online' : 'Offline'}
                 ></span>
                 <span class="text-lg font-semibold">{hub.name}</span>
