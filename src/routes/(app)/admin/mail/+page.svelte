@@ -33,10 +33,10 @@
 
   // Fixed presentation data — built once per module rather than per instance.
   const statusTiles: { status: EmailStatusType; label: string; color: string }[] = [
-    { status: EmailStatus.Pending, label: 'Pending', color: 'text-orange-500' },
-    { status: EmailStatus.Sending, label: 'Sending', color: 'text-blue-500' },
-    { status: EmailStatus.Sent, label: 'Sent', color: 'text-green-500' },
-    { status: EmailStatus.Failed, label: 'Failed', color: 'text-red-500' },
+    { status: EmailStatus.Pending, label: 'Pending', color: 'text-warning' },
+    { status: EmailStatus.Sending, label: 'Sending', color: 'text-info' },
+    { status: EmailStatus.Sent, label: 'Sent', color: 'text-success' },
+    { status: EmailStatus.Failed, label: 'Failed', color: 'text-destructive' },
     { status: EmailStatus.Skipped, label: 'Skipped', color: 'text-muted-foreground' },
   ];
 </script>
@@ -57,11 +57,10 @@
     type EmailOutboxStatsDto,
     type EmailOutboxMessageDto,
   } from '#lib/api/index.js';
-  import { Container } from '@openshock/svelte-core/components';
+  import { Container, PageHeader } from '@openshock/svelte-core/components';
   import DataTable from '#lib/components/Table/DataTableTemplate.svelte';
   import PaginationFooter from '#lib/components/Table/PaginationFooter.svelte';
   import { Button } from '@openshock/svelte-core/components/ui/button';
-  import { CardHeader, CardTitle } from '@openshock/svelte-core/components/ui/card';
   import { Input } from '@openshock/svelte-core/components/ui/input';
   import { RotateCcw, Send } from '@lucide/svelte';
   import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
@@ -185,24 +184,19 @@
 <SendTestDialog bind:open={sendDialogOpen} onSent={refresh} />
 
 <Container>
-  <CardHeader class="w-full">
-    <CardTitle class="flex flex-wrap items-center justify-between gap-2 text-3xl">
-      Mail queue
-      <div class="flex items-center gap-2">
-        <Input placeholder="Filter recipients..." bind:value={recipientSearch} class="max-w-xs" />
-        <Button onclick={() => (sendDialogOpen = true)}>
-          <Send class="size-4" />
-          <span>Send test</span>
-        </Button>
-        <Button variant="outline" onclick={refresh}>
-          <RotateCcw class="size-4" />
-          <span>Refresh</span>
-        </Button>
-      </div>
-    </CardTitle>
-  </CardHeader>
+  <PageHeader title="Mail Queue" subtitle="Outgoing mail queued or sent by this instance.">
+    <Input placeholder="Filter recipients..." bind:value={recipientSearch} class="w-full sm:w-48" />
+    <Button onclick={() => (sendDialogOpen = true)}>
+      <Send class="size-4" />
+      Send test
+    </Button>
+    <Button variant="outline" onclick={refresh}>
+      <RotateCcw class="size-4" />
+      Refresh
+    </Button>
+  </PageHeader>
 
-  <div class="flex min-h-0 w-full flex-1 flex-col gap-6 py-6">
+  <div class="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-6">
     <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
       {#each statusTiles as tile (tile.status)}
         <button

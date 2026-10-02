@@ -16,7 +16,7 @@
     token: TokenResponseV2;
   }
 
-  let { token, resolve }: Props = $props();
+  let { token, resolve, close }: Props = $props();
 
   // svelte-ignore state_referenced_locally
   let name = $state(token.name);
@@ -28,7 +28,8 @@
   );
   let submitting = $state(false);
 
-  async function saveChanges() {
+  async function saveChanges(event: SubmitEvent) {
+    event.preventDefault();
     submitting = true;
     try {
       await tokensEditTokenV2({
@@ -78,52 +79,57 @@
   let nameValidationResult = $derived(nameValidation(name));
 </script>
 
-<div class="max-h-[80vh] space-y-4 overflow-y-auto pr-1">
-  <Dialog.Header>
-    <Dialog.Title>Edit API Token</Dialog.Title>
-    <Dialog.Description></Dialog.Description>
-  </Dialog.Header>
-  <form class="modal-form border-surface-500 rounded-container-token space-y-4">
-    <TextInput
-      label="Token Name"
-      placeholder="Token name..."
-      bind:value={name}
-      validationResult={nameValidationResult}
-    />
+<div class="flex max-h-[85dvh] flex-col gap-4">
+  <div class="min-h-0 space-y-4 overflow-y-auto pr-1">
+    <Dialog.Header>
+      <Dialog.Title>Edit API token</Dialog.Title>
+      <Dialog.Description></Dialog.Description>
+    </Dialog.Header>
+    <form class="space-y-4" id="edit-api-token" onsubmit={saveChanges}>
+      <TextInput
+        label="Token Name"
+        placeholder="Token name..."
+        bind:value={name}
+        validationResult={nameValidationResult}
+      />
 
-    <div class="mt-4">
-      <h2>Permissions</h2>
-      <div class="border-surface-500 mt-3 flex flex-col space-y-4 rounded-md border p-4">
-        {#each permissionCategories as permission (permission.name)}
-          <span class="capitalize">{permission.name}</span>
-          {#each permission.perms as perm (perm.key)}
-            <label class="mt-0! ml-4">
-              <input
-                type="checkbox"
-                class="checkbox capitalize"
-                value={perm.key}
-                bind:group={permissions}
-              />
-              {perm.name}
-            </label>
+      <div class="mt-4">
+        <h2>Permissions</h2>
+        <div class="mt-3 flex flex-col space-y-4 rounded-md border p-4">
+          {#each permissionCategories as permission (permission.name)}
+            <span class="capitalize">{permission.name}</span>
+            {#each permission.perms as perm (perm.key)}
+              <label class="mt-0! ml-4">
+                <input
+                  type="checkbox"
+                  class="checkbox capitalize"
+                  value={perm.key}
+                  bind:group={permissions}
+                />
+                {perm.name}
+              </label>
+            {/each}
           {/each}
-        {/each}
+        </div>
       </div>
-    </div>
 
-    <div class="mt-4">
-      <h2>Shocker Control</h2>
-      <div class="mt-3">
-        <ShockerControlSettingsEditor bind:settings={shockerControl} />
+      <div class="mt-4">
+        <h2>Shocker Control</h2>
+        <div class="mt-3">
+          <ShockerControlSettingsEditor bind:settings={shockerControl} />
+        </div>
       </div>
-    </div>
-  </form>
+    </form>
+  </div>
 
-  <Button
-    variant="default"
-    onclick={saveChanges}
-    disabled={submitting || !nameValidationResult.valid}
-  >
-    Save Changes
-  </Button>
+  <Dialog.Footer>
+    <Button variant="outline" onclick={close} disabled={submitting}>Cancel</Button>
+    <Button
+      type="submit"
+      form="edit-api-token"
+      disabled={submitting || !nameValidationResult.valid}
+    >
+      Save Changes
+    </Button>
+  </Dialog.Footer>
 </div>

@@ -43,6 +43,12 @@ export function notifyHubPaired(hubId: string) {
   hubPairedSignals.set(hubId, (hubPairedSignals.get(hubId) ?? 0) + 1);
 }
 
+// Whether ownHubs reflects the server yet, so an empty map can be told apart from "not fetched".
+export const ownHubsStatus = $state<{ loaded: boolean; failed: boolean }>({
+  loaded: false,
+  failed: false,
+});
+
 export async function refreshOwnHubs() {
   try {
     const { data } = await shockerListShockers();
@@ -52,7 +58,10 @@ export async function refreshOwnHubs() {
     for (const d of data) {
       ownHubs.set(d.id, d);
     }
+    ownHubsStatus.loaded = true;
+    ownHubsStatus.failed = false;
   } catch (error) {
+    ownHubsStatus.failed = true;
     handleApiError(error);
   }
 }

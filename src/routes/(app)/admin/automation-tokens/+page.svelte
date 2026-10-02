@@ -1,10 +1,14 @@
 <script lang="ts">
   import { adminListAutomationTokens } from '#lib/api/index.js';
   import { Bot, Plus, RotateCcw } from '@lucide/svelte';
-  import { Container, EmptyState, PageHeader } from '@openshock/svelte-core/components';
+  import {
+    Container,
+    EmptyState,
+    PageHeader,
+    PageLoading,
+  } from '@openshock/svelte-core/components';
   import DataTable from '#lib/components/Table/DataTableTemplate.svelte';
   import { Button } from '@openshock/svelte-core/components/ui/button';
-  import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
   import { onMount } from 'svelte';
@@ -55,9 +59,7 @@
 
   <div class="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-6">
     {#if !hasLoaded}
-      <div class="flex h-64 w-full items-center justify-center">
-        <Spinner class="size-8 text-gray-600 dark:text-gray-300" />
-      </div>
+      <PageLoading />
     {:else if data.length === 0}
       <EmptyState
         icon={Bot}

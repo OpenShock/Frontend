@@ -12,14 +12,14 @@
 
   let { open = $bindable<boolean>(), message, onDeleted }: Props = $props();
 
-  function onDeleteClicked() {
-    adminDeleteEmailOutbox({ path: { id: message.id } })
-      .then(() => {
-        toast.success('Deleted message');
-        onDeleted?.();
-      })
-      .catch(handleApiError)
-      .finally(() => (open = false));
+  async function onDeleteClicked() {
+    try {
+      await adminDeleteEmailOutbox({ path: { id: message.id } });
+      toast.success('Deleted message');
+      onDeleted?.();
+    } catch (error) {
+      await handleApiError(error);
+    }
   }
 </script>
 

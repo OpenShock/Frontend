@@ -32,13 +32,13 @@
     open = o;
   }
 
-  function onFormSubmit() {
+  function onFormSubmit(event: SubmitEvent) {
+    event.preventDefault();
     const selectedShockers = shockerIds.map((id) => ({
       id,
       name: availableShockers.find((shocker) => shocker.value === id)?.label || '',
     }));
-    shockerIds = [];
-    open = false;
+    onOpenChange(false);
     onAddedShockers(selectedShockers);
   }
 </script>
@@ -46,13 +46,13 @@
 <Dialog.Root bind:open={() => open, onOpenChange}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Add Shockers</Dialog.Title>
-      <Dialog.Description
-        >Add Shockers to a Public Share, you can set the limits once added.</Dialog.Description
-      >
+      <Dialog.Title>Add shockers</Dialog.Title>
+      <Dialog.Description>
+        Add shockers to this public share. You can set their limits once they are added.
+      </Dialog.Description>
     </Dialog.Header>
 
-    <form class="modal-form border-surface-500 rounded-container-token min-w-0 space-y-4">
+    <form class="min-w-0 space-y-4" id="add-shockers" onsubmit={onFormSubmit}>
       <MultiSelectCombobox
         bind:selected={shockerIds}
         options={availableShockers}
@@ -61,9 +61,17 @@
         noMatchText="Not matching shockers"
       ></MultiSelectCombobox>
     </form>
-    <Button onclick={onFormSubmit} disabled={!shockerIds.length} class="flex items-center">
-      <Plus />
-      Add Shockers
-    </Button>
+    <Dialog.Footer>
+      <Button variant="outline" onclick={() => onOpenChange(false)}>Cancel</Button>
+      <Button
+        type="submit"
+        form="add-shockers"
+        disabled={!shockerIds.length}
+        class="flex items-center"
+      >
+        <Plus />
+        Add Shockers
+      </Button>
+    </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>

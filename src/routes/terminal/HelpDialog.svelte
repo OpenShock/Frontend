@@ -31,7 +31,7 @@
 
 <Dialog.Root bind:open={() => open, onOpenChange}>
   <Dialog.Content
-    class="flex h-[90vh] max-h-[90vh] w-[95vw] max-w-[95vw] flex-col gap-4 sm:w-[90vw] sm:max-w-4xl lg:max-w-5xl xl:max-w-6xl"
+    class="flex h-[90dvh] w-[95vw] max-w-[95vw] flex-col gap-4 sm:w-[90vw] sm:max-w-4xl lg:max-w-5xl xl:max-w-6xl"
   >
     <Dialog.Header>
       <Dialog.Title>
@@ -128,7 +128,7 @@
       <li>any error messages or relevant terminal output</li>
     </ul>
     <Button href={PUBLIC_DISCORD_INVITE_URL} target="_blank" rel="noopener" class="w-fit">
-      <DiscordLogo class="fill-white dark:fill-black" />
+      <DiscordLogo class="fill-current" />
       Join our Discord server
     </Button>
   </div>

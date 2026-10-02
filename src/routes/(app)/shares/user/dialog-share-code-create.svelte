@@ -52,6 +52,7 @@
   let shockerIds = $state<string[]>([]);
   let restrictions = $state<ShockerPermLimitPairButNotNull>(getDefaultRestrictions());
   let fetchedUser = $state<BasicUserInfo | null>(null);
+  let submitting = $state(false);
 
   function getDefaultRestrictions(): ShockerPermLimitPairButNotNull {
     return {
@@ -86,7 +87,10 @@
     open = o;
   }
 
-  async function onFormSubmit() {
+  async function onFormSubmit(event: SubmitEvent) {
+    event.preventDefault();
+    if (submitting || shockerIds.length === 0) return;
+    submitting = true;
     try {
       const createdCode = await userSharesCreateShareInvite({
         body: {
@@ -104,10 +108,11 @@
       } else {
         onCreatedCode(createdCode);
       }
-      open = false;
+      onOpenChange(false);
     } catch (error) {
       await handleApiError(error);
     } finally {
+      submitting = false;
       refreshOutgoingInvites();
     }
   }
@@ -116,11 +121,11 @@
 <Dialog.Root bind:open={() => open, onOpenChange}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>New Share Code</Dialog.Title>
+      <Dialog.Title>New share code</Dialog.Title>
       <Dialog.Description>Create a Share Code or Invite</Dialog.Description>
     </Dialog.Header>
 
-    <form class="modal-form border-surface-500 rounded-container-token min-w-0 space-y-4">
+    <form class="min-w-0 space-y-4" id="create-share-code" onsubmit={onFormSubmit}>
       <UserSelector bind:fetchedUser />
 
       <MultiSelectCombobox
@@ -136,14 +141,22 @@
         bind:limits={restrictions.limits}
       />
     </form>
-    <Button onclick={onFormSubmit} class="flex items-center">
-      {#if fetchedUser}
-        <User />
-        Send Share Invite
-      {:else}
-        <Barcode />
-        Create Share Code
-      {/if}
-    </Button>
+    <Dialog.Footer>
+      <Button variant="outline" onclick={() => onOpenChange(false)}>Cancel</Button>
+      <Button
+        type="submit"
+        form="create-share-code"
+        class="flex items-center"
+        disabled={submitting || shockerIds.length === 0}
+      >
+        {#if fetchedUser}
+          <User />
+          Send Share Invite
+        {:else}
+          <Barcode />
+          Create Share Code
+        {/if}
+      </Button>
+    </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>

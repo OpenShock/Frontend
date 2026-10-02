@@ -84,7 +84,7 @@
 
 <Card.Root>
   <Card.Header class="text-center">
-    <Card.Title class="text-xl">Welcome back</Card.Title>
+    <Card.Title class="text-xl"><h1>Welcome back</h1></Card.Title>
     <Card.Description>
       {#if backendMetadata.state === null}
         Loading available login methods

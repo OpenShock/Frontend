@@ -257,7 +257,7 @@
 
   <!-- Output area -->
   <div
-    class="flex-1 overflow-y-auto bg-black/5 p-2 font-mono text-xs dark:bg-black/30"
+    class="bg-muted dark:bg-background flex-1 overflow-y-auto p-2 font-mono text-xs"
     bind:this={scrollContainer}
     onscroll={handleScroll}
     role="log"

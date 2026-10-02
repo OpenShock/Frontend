@@ -1,7 +1,8 @@
 <script lang="ts">
+  import { Plus } from '@lucide/svelte';
   import { adminConfigurationList } from '#lib/api/index.js';
   import type { ConfigurationItemDto } from '#lib/api/index.js';
-  import { Container } from '@openshock/svelte-core/components';
+  import { Container, PageHeader } from '@openshock/svelte-core/components';
   import {
     CreateColumnDefs,
     LocaleDateTimeRenderer,
@@ -10,7 +11,6 @@
   import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
   import DataTable from '#lib/components/Table/DataTableTemplate.svelte';
   import { Button } from '@openshock/svelte-core/components/ui/button';
-  import { CardHeader, CardTitle } from '@openshock/svelte-core/components/ui/card';
   import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import { onMount } from 'svelte';
   import DataTableActions from './data-table-actions.svelte';
@@ -52,13 +52,10 @@
 <WebhookAddDialog bind:open={addDialogOpen} onAdded={fetchWebhooks} />
 
 <Container>
-  <CardHeader class="w-full">
-    <CardTitle class="flex items-center justify-between space-x-2 text-3xl">
-      Configuration
-      <Button onclick={() => (addDialogOpen = true)}>Add new</Button>
-    </CardTitle>
-  </CardHeader>
-  <div class="flex min-h-0 w-full flex-1 flex-col gap-6 py-6">
+  <PageHeader title="Configuration" subtitle="Runtime configuration values for this instance.">
+    <Button onclick={() => (addDialogOpen = true)}><Plus />Add Value</Button>
+  </PageHeader>
+  <div class="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-6">
     <DataTable {data} {columns} {features} mobileColumns={['name', 'value']} />
   </div>
 </Container>

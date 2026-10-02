@@ -51,10 +51,9 @@
   import { odataAnd, odataSearch } from '#lib/utils/odata.js';
   import { adminGetUsers, type PaginatedOfAdminUsersView } from '#lib/api/index.js';
   import type { SortingState } from '@tanstack/svelte-table';
-  import { Container } from '@openshock/svelte-core/components';
+  import { Container, PageHeader } from '@openshock/svelte-core/components';
   import DataTable from '#lib/components/Table/DataTableTemplate.svelte';
   import PaginationFooter from '#lib/components/Table/PaginationFooter.svelte';
-  import { CardHeader, CardTitle } from '@openshock/svelte-core/components/ui/card';
   import { Input } from '@openshock/svelte-core/components/ui/input';
   import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
@@ -132,18 +131,13 @@
 </script>
 
 <Container>
-  <CardHeader class="w-full">
-    <CardTitle class="flex items-center justify-between space-x-2 text-3xl">
-      Users
-      <div class="flex items-center justify-end space-x-2">
-        <Input placeholder="Filter names..." bind:value={nameSearch} class="max-w-sm" />
-        <Input placeholder="Filter emails..." bind:value={emailSearch} class="max-w-sm" />
-      </div>
-    </CardTitle>
-  </CardHeader>
+  <PageHeader title="Users" subtitle="Every account registered on this instance.">
+    <Input placeholder="Filter names..." bind:value={nameSearch} class="w-full sm:w-48" />
+    <Input placeholder="Filter emails..." bind:value={emailSearch} class="w-full sm:w-48" />
+  </PageHeader>
   <!-- The table owns the leftover viewport height and scrolls inside it, so the
        header and the pagination footer stay put while the rows move. -->
-  <div class="flex min-h-0 w-full flex-1 flex-col gap-6 py-6">
+  <div class="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-6">
     <DataTable
       {data}
       {columns}

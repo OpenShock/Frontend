@@ -215,7 +215,7 @@
 </script>
 
 <Container>
-  <PageHeader title="Shocker Logs" subtitle="These are the logs for all shockers.">
+  <PageHeader title="Shocker Logs" subtitle="Every control command sent to your shockers.">
     <Badge
       variant={liveUpdatesActive ? 'default' : 'secondary'}
       class="gap-1.5"
@@ -226,19 +226,19 @@
       <span class="relative flex size-2">
         {#if liveUpdatesActive}
           <span
-            class="absolute inline-flex size-full animate-ping rounded-full bg-green-400 opacity-75"
+            class="bg-success absolute inline-flex size-full animate-ping rounded-full opacity-75"
           ></span>
         {/if}
         <span
           class="relative inline-flex size-2 rounded-full {liveUpdatesActive
-            ? 'bg-green-500'
+            ? 'bg-success'
             : 'bg-muted-foreground'}"
         ></span>
       </span>
       {liveUpdatesActive ? 'Live' : 'Paused'}
     </Badge>
   </PageHeader>
-  <div class="flex min-h-0 w-full flex-1 flex-col gap-6">
+  <div class="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-6">
     <div class="flex items-end gap-2">
       <div class="w-64">
         <MultiSelectCombobox

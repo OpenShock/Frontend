@@ -30,7 +30,7 @@
 
 {#await refreshPromise}
   <div class="flex h-full w-full items-center justify-center">
-    <Spinner class="size-8 text-gray-600 dark:text-gray-300" />
+    <Spinner class="text-muted-foreground size-8" />
   </div>
 {:then}
   {#if userSharesState.shares.outgoing.length === 0}
@@ -51,5 +51,5 @@
     </div>
   {/if}
 {:catch error}
-  <div class="text-red-500">Failed to load shares: {error.message}</div>
+  <div class="text-destructive">Failed to load shares: {error.message}</div>
 {/await}

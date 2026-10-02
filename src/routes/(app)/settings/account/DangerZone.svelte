@@ -25,7 +25,7 @@
 <Dialog.Root bind:open={() => deactivateDialogOpen, (o) => (deactivateDialogOpen = o)}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Deactivate Account</Dialog.Title>
+      <Dialog.Title>Deactivate account</Dialog.Title>
       <Dialog.Description>Are you sure you want to deactivate your account?</Dialog.Description>
     </Dialog.Header>
     <Button variant="destructive" class="w-full" onclick={deactivateAccount}>
@@ -35,9 +35,9 @@
 </Dialog.Root>
 
 <div
-  class="flex w-full flex-col items-start gap-y-4 rounded-lg border border-red-600/60 bg-red-950/10 p-4"
+  class="border-destructive/60 bg-destructive/10 flex w-full flex-col items-start gap-y-4 rounded-lg border p-4"
 >
-  <h2 class="text-base font-semibold text-red-500">Danger Zone</h2>
+  <h2 class="text-destructive text-base font-semibold">Danger Zone</h2>
   <Button variant="destructive" class="w-full" onclick={() => (deactivateDialogOpen = true)}>
     Deactivate Account
   </Button>

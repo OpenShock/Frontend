@@ -31,7 +31,7 @@
   >
     <Dialog.Header>
       <Dialog.Title class="flex items-center gap-2">
-        <CircleCheck class="size-5 text-green-500" />
+        <CircleCheck class="text-success size-5" />
         {title}
       </Dialog.Title>
       <Dialog.Description>
@@ -49,7 +49,7 @@
     {/if}
 
     <p class="text-muted-foreground flex items-start gap-2 text-sm">
-      <TriangleAlert class="size-4 shrink-0 text-orange-500" />
+      <TriangleAlert class="text-warning size-4 shrink-0" />
       <span>
         This secret lets its holder bypass the protections granted to the token. Store it somewhere
         only the automation can read.

@@ -61,7 +61,7 @@
     <DropdownMenu.Item
       onclick={() => (deleteDialogOpen = true)}
       disabled={isPrivileged}
-      class={isPrivileged ? undefined : 'cursor-pointer text-red-500'}
+      class={isPrivileged ? undefined : 'text-destructive cursor-pointer'}
     >
       <Trash2 class="size-4" />
       Delete

@@ -34,7 +34,7 @@
 
 <Card.Root>
   <Card.Header class="text-center">
-    <Card.Title class="text-xl">Verify Email</Card.Title>
+    <Card.Title class="text-xl"><h1>Verify Email</h1></Card.Title>
     <Card.Description>
       {#if status === 'verifying'}
         Verifying your email address...

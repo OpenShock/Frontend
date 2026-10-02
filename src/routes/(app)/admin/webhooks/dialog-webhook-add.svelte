@@ -47,15 +47,21 @@
 
   let valid = $derived(name.length > 0 && url.length > 0 && urlValidationResult.valid);
 
-  function createWebhook() {
-    adminAddWebhook({ body: { name, url } })
-      .then(() => {
-        onAdded();
-        toast.success('Created webhook');
-        open = false;
-      })
-      .catch(handleApiError)
-      .finally(() => (open = false));
+  let submitting = $state(false);
+
+  async function createWebhook() {
+    if (submitting) return;
+    submitting = true;
+    try {
+      await adminAddWebhook({ body: { name, url } });
+      onAdded();
+      toast.success('Created webhook');
+      open = false;
+    } catch (error) {
+      await handleApiError(error);
+    } finally {
+      submitting = false;
+    }
   }
 </script>
 
@@ -69,6 +75,9 @@
     </Dialog.Header>
     <TextInput label="Name" bind:value={name} />
     <TextInput type="url" label="Url" bind:value={url} validationResult={urlValidationResult} />
-    <Button onclick={createWebhook} disabled={!valid}>Create</Button>
+    <Dialog.Footer>
+      <Button variant="outline" onclick={() => (open = false)}>Cancel</Button>
+      <Button onclick={createWebhook} disabled={submitting || !valid}>Create</Button>
+    </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>

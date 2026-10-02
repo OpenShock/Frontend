@@ -9,7 +9,7 @@
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
-  import { Container } from '@openshock/svelte-core/components';
+  import { Container, PageError, PageHeader, PageLoading } from '@openshock/svelte-core/components';
   import { dialog } from '@openshock/svelte-core/components/dialog-manager';
   import { RfIdMax, RfIdMin, isValidRfId } from '#lib/constants/ShockerConstants.js';
   import { TextInput } from '@openshock/svelte-core/components/input';
@@ -105,28 +105,19 @@
 </script>
 
 <Container>
+  <PageHeader title="Edit Shocker" subtitle="Change this shocker's details or remove it.">
+    <Button variant="outline" href={resolve('shockers/own')}>
+      <ArrowLeft />
+      Back to Shockers
+    </Button>
+  </PageHeader>
+
   {#if loadError}
-    <div class="flex flex-col items-center gap-4 py-12">
-      <p class="text-muted-foreground">Failed to load shocker.</p>
-      <Button variant="outline" href={resolve('shockers/own')}
-        ><ArrowLeft class="size-4" />Back to Shockers</Button
-      >
-    </div>
+    <PageError message="Failed to load shocker." />
   {:else if !shocker}
-    <div class="flex items-center gap-3 p-12">
-      <Spinner class="size-5" />
-      <span class="text-muted-foreground">Loading shocker...</span>
-    </div>
+    <PageLoading label="Loading shocker..." />
   {:else}
     <div class="mx-auto flex w-full max-w-lg flex-col gap-6 py-4">
-      <div class="flex items-center gap-3">
-        <Button variant="ghost" size="icon" href={resolve('shockers/own')} aria-label="Back"
-          ><ArrowLeft class="size-4" /></Button
-        >
-
-        <h1 class="text-2xl font-bold">Edit Shocker</h1>
-      </div>
-
       <Card.Root>
         <Card.Header>
           <Card.Title>Shocker Details</Card.Title>

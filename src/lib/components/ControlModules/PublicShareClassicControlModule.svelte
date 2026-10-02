@@ -62,7 +62,7 @@
 </script>
 
 <div
-  class="border-surface-400-500-token flex flex-col items-center justify-center gap-2 overflow-hidden rounded-md border p-2"
+  class="flex flex-col items-center justify-center gap-2 overflow-hidden rounded-md border p-2"
   class:opacity-50={isPaused}
 >
   <!-- Title -->

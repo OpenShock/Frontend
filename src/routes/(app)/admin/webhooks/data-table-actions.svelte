@@ -1,7 +1,6 @@
 <script lang="ts">
+  import RowActions from '#lib/components/Table/RowActions.svelte';
   import type { WebhookDto } from '#lib/api/index.js';
-  import { TableActionMenu } from '@openshock/svelte-core/components';
-  import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
   import { copyToClipboard } from '@openshock/svelte-core/utils';
   import { Copy, Pencil, Trash2 } from '@lucide/svelte';
   import WebhookDeleteDialog from './dialog-webhook-delete.svelte';
@@ -19,25 +18,17 @@
 
 <WebhookDeleteDialog bind:open={deleteDialogOpen} {webhook} />
 
-<TableActionMenu>
-  <DropdownMenu.Label>Webhook</DropdownMenu.Label>
-  <DropdownMenu.Group>
-    <DropdownMenu.Item class="cursor-pointer">
-      <Pencil class="size-4" />
-      Edit
-    </DropdownMenu.Item>
-    <DropdownMenu.Separator />
-    <DropdownMenu.Item class="cursor-pointer" onclick={copyId}>
-      <Copy class="size-4" />
-      Copy ID
-    </DropdownMenu.Item>
-    <DropdownMenu.Separator />
-    <DropdownMenu.Item
-      class="cursor-pointer text-red-500"
-      onclick={() => (deleteDialogOpen = true)}
-    >
-      <Trash2 class="size-4" />
-      Delete
-    </DropdownMenu.Item>
-  </DropdownMenu.Group>
-</TableActionMenu>
+<RowActions
+  label="Webhook"
+  actions={[
+    { label: 'Edit', icon: Pencil, disabled: true },
+    { label: 'Copy ID', icon: Copy, onclick: copyId, separatorBefore: true },
+    {
+      label: 'Delete',
+      icon: Trash2,
+      onclick: () => (deleteDialogOpen = true),
+      destructive: true,
+      separatorBefore: true,
+    },
+  ]}
+/>

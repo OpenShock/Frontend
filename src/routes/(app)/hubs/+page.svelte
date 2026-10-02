@@ -6,7 +6,12 @@
   import * as Table from '@openshock/svelte-core/components/ui/table';
   import { IsMobile } from '@openshock/svelte-core/hooks';
   import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
-  import { onlineHubs, ownHubs, refreshOwnHubs } from '#lib/state/hubs-state.svelte.js';
+  import {
+    onlineHubs,
+    ownHubs,
+    ownHubsStatus,
+    refreshOwnHubs,
+  } from '#lib/state/hubs-state.svelte.js';
   import { onMount } from 'svelte';
   import type { Hub } from './columns';
   import DataTableActions from './data-table-actions.svelte';
@@ -15,7 +20,13 @@
 
   import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
   import { TextInput } from '@openshock/svelte-core/components/input';
-  import { PageHeader, Container } from '@openshock/svelte-core/components';
+  import {
+    PageHeader,
+    Container,
+    EmptyState,
+    PageError,
+    PageLoading,
+  } from '@openshock/svelte-core/components';
 
   const isMobile = new IsMobile();
 
@@ -67,7 +78,7 @@
   props: DialogRenderProps<{ name: string }, { name: string } | undefined>
 )}
   <Dialog.Header>
-    <Dialog.Title>Create Hub</Dialog.Title>
+    <Dialog.Title>Create hub</Dialog.Title>
   </Dialog.Header>
   <TextInput label="Hub Name" placeholder="My Hub" bind:value={props.data.name} />
   <Button
@@ -79,18 +90,30 @@
 {/snippet}
 
 <Container class="w-full">
-  <PageHeader title="Hubs" subtitle="This is a list of all hubs you own">
+  <PageHeader title="Hubs" subtitle="Every hub registered to your account.">
     <Button onclick={openCreateHubDialog}>
       <Plus />
       Add Hub
     </Button>
-    <Button onclick={refreshOwnHubs}>
+    <Button variant="outline" onclick={refreshOwnHubs}>
       <RotateCcw />
       Refresh
     </Button>
   </PageHeader>
 
-  {#if isMobile.current}
+  {#if !ownHubsStatus.loaded && ownHubsStatus.failed}
+    <PageError message="Failed to load hubs." onRetry={refreshOwnHubs} />
+  {:else if !ownHubsStatus.loaded}
+    <PageLoading />
+  {:else if data.length === 0}
+    <EmptyState
+      icon={Router}
+      title="No hubs yet"
+      description="A hub is the device that relays commands to your shockers. Add one to get started."
+    >
+      <Button size="lg" onclick={openCreateHubDialog}><Plus />Add Hub</Button>
+    </EmptyState>
+  {:else if isMobile.current}
     <div class="grid w-full gap-6">
       {#each data as hub (hub.id)}
         <div class="flex items-center justify-between gap-4">
@@ -101,7 +124,7 @@
               {#if hub.is_online && hub.firmware_version}
                 <span>{hub.firmware_version}</span>
               {:else}
-                <span class="text-red-500">Offline</span>
+                <span class="text-destructive">Offline</span>
               {/if}
             </div>
           </div>
@@ -126,9 +149,9 @@
             <Table.Cell>{hub.name}</Table.Cell>
             <Table.Cell>
               {#if hub.is_online}
-                <span class="text-green-500">Online</span>
+                <span class="text-success">Online</span>
               {:else}
-                <span class="text-red-500">Offline</span>
+                <span class="text-destructive">Offline</span>
               {/if}
             </Table.Cell>
             <Table.Cell>{hub.firmware_version ?? '—'}</Table.Cell>
@@ -138,10 +161,6 @@
             <Table.Cell>
               <DataTableActions {hub} />
             </Table.Cell>
-          </Table.Row>
-        {:else}
-          <Table.Row>
-            <Table.Cell colspan={5} class="h-24 text-center">No hubs found.</Table.Cell>
           </Table.Row>
         {/each}
       </Table.Body>

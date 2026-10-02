@@ -197,16 +197,16 @@
   <Card.Root class="w-lg max-w-2xl shrink-0">
     {#if parseError}
       <Card.Header>
-        <Card.Title class="text-2xl">API Token Request</Card.Title>
+        <Card.Title class="text-2xl"><h1>API Token Request</h1></Card.Title>
       </Card.Header>
       <Card.Content>
-        <span class="text-red-500">{parseError}</span>
+        <span class="text-destructive">{parseError}</span>
       </Card.Content>
     {:else if tokenSecret && isExternal}
       <Card.Header>
         <Card.Title class="flex items-center gap-2 text-2xl">
-          <CircleCheck class="text-green-500" />
-          Access granted
+          <CircleCheck class="text-success" />
+          <h1>Access granted</h1>
         </Card.Title>
         <Card.Description>
           The token has been created and shared with the application. Redirecting you back to<br />
@@ -225,8 +225,8 @@
     {:else if tokenSecret}
       <Card.Header>
         <Card.Title class="flex items-center gap-2 text-2xl">
-          <CircleCheck class="text-green-500" />
-          API Token Generated
+          <CircleCheck class="text-success" />
+          <h1>API Token Generated</h1>
         </Card.Title>
         <Card.Description>
           Please copy your API Token now, you will not be able to view it again later!
@@ -246,7 +246,7 @@
     {:else}
       <Card.Header>
         <Card.Title class="text-2xl">
-          {isExternal ? 'API Token Request' : 'New API Token'}
+          <h1>{isExternal ? 'API Token Request' : 'New API Token'}</h1>
         </Card.Title>
         <Card.Description>
           {#if isExternal}
@@ -276,7 +276,7 @@
 
         <div>
           <h2>Permissions</h2>
-          <div class="border-surface-500 mt-3 flex flex-col space-y-4 rounded-md border p-4">
+          <div class="mt-3 flex flex-col space-y-4 rounded-md border p-4">
             {#each permissionCategories as permission (permission.name)}
               <span>{capitalizeFirstLetter(permission.name)}</span>
               {#each permission.perms as perm (perm.key)}

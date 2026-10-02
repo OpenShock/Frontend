@@ -60,7 +60,9 @@
 
   <SidebarProvider open={isOpen} onOpenChange={(v) => (sidebarOpen = v)}>
     <Sidebar />
-    <div class="flex h-screen w-screen flex-1 flex-col overflow-hidden">
+    <!-- `h-svh` matches the sidebar wrapper; `100vh` left the page scrollable by the height of a phone's URL bar.
+         `w-full` because `100vw` counts the scrollbar. -->
+    <div class="flex h-svh w-full flex-1 flex-col overflow-hidden">
       {#if PUBLIC_DEVELOPMENT_BANNER}
         <div class="top-0 left-0 z-1 flex-none bg-[orangered] text-center text-white">
           <p>

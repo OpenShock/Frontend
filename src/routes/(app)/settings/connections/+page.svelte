@@ -6,7 +6,7 @@
   import Unlink from '@lucide/svelte/icons/unlink';
   import { page } from '$app/state';
   import { GetOAuthAuthorizeUrl } from '#lib/api/next/oauth.js';
-  import { Container, EmptyState } from '@openshock/svelte-core/components';
+  import { Container, EmptyState, PageError, PageHeader } from '@openshock/svelte-core/components';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
   import * as Dropdown from '@openshock/svelte-core/components/ui/dropdown-menu';
@@ -83,20 +83,15 @@
 </script>
 
 <Container>
-  <Card.Header class="w-full">
-    <Card.Title class="flex items-center justify-between text-3xl">
-      OAuth Connections
-      <div class="flex items-center gap-2">
-        <Button variant="ghost" onclick={refresh} disabled={refreshing} aria-busy={refreshing}>
-          <RotateCcw class="mr-2 size-4" />
-          {refreshing ? 'Refreshing…' : 'Refresh'}
-        </Button>
-      </div>
-    </Card.Title>
-    <Card.Description>
-      Link or unlink third-party accounts to sign in faster and keep your profile in sync.
-    </Card.Description>
-  </Card.Header>
+  <PageHeader
+    title="OAuth Connections"
+    subtitle="Link or unlink third-party accounts to sign in faster and keep your profile in sync."
+  >
+    <Button variant="outline" onclick={refresh} disabled={refreshing} aria-busy={refreshing}>
+      <RotateCcw class="size-4" />
+      {refreshing ? 'Refreshing…' : 'Refresh'}
+    </Button>
+  </PageHeader>
 
   <Card.Content class="flex w-full flex-1 flex-col space-y-6">
     <svelte:boundary onerror={(error: unknown) => handleApiError(error)}>
@@ -152,7 +147,7 @@
                   <Button
                     variant="ghost"
                     onclick={() => confirmDisconnect(p)}
-                    class="text-red-600 hover:text-red-700"
+                    class="text-destructive hover:text-destructive"
                   >
                     <Unlink class="mr-2 size-4" />
                     Unlink
@@ -168,18 +163,15 @@
         <div class="grid gap-3 md:grid-cols-2">
           {#each Array(4)}
             <div class="animate-pulse rounded-xl border p-4">
-              <div class="mb-2 h-5 w-40 rounded bg-black/10"></div>
-              <div class="h-4 w-64 rounded bg-black/5"></div>
+              <div class="bg-muted-foreground/15 mb-2 h-5 w-40 rounded"></div>
+              <div class="bg-muted-foreground/10 h-4 w-64 rounded"></div>
             </div>
           {/each}
         </div>
       {/snippet}
 
       {#snippet failed(_error: unknown, reset: () => void)}
-        <div class="flex w-full flex-col items-center gap-3 py-12">
-          <p class="text-destructive text-sm">Failed to load OAuth connections.</p>
-          <Button variant="outline" onclick={reset}>Try again</Button>
-        </div>
+        <PageError message="Failed to load OAuth connections." onRetry={reset} />
       {/snippet}
     </svelte:boundary>
   </Card.Content>

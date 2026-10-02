@@ -21,7 +21,7 @@
 
 {#if authState.status !== AuthStatus.Authenticated}
   <Container>
-    <Spinner class="size-20 text-gray-600 dark:text-gray-300" />
+    <Spinner class="text-muted-foreground size-20" />
   </Container>
 {:else}
   {@render children()}

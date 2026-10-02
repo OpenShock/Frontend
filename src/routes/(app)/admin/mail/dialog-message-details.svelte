@@ -30,7 +30,7 @@
 </script>
 
 <Dialog.Root bind:open={() => open, (o) => (open = o)}>
-  <Dialog.Content class="max-h-[85vh] overflow-y-auto sm:max-w-2xl">
+  <Dialog.Content class="max-h-[85dvh] overflow-y-auto sm:max-w-2xl">
     <Dialog.Header>
       <Dialog.Title>Message details</Dialog.Title>
       <Dialog.Description>Outbox message {message.id}</Dialog.Description>

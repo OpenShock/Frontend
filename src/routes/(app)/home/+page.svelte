@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Link, Router, Share2, Zap } from '@lucide/svelte';
   import { resolve } from '$app/paths';
-  import { Container } from '@openshock/svelte-core/components';
+  import { Container, PageHeader } from '@openshock/svelte-core/components';
   import * as Card from '@openshock/svelte-core/components/ui/card';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
@@ -25,12 +25,11 @@
 
 <Container>
   <div class="flex w-full flex-col gap-6">
-    <div>
-      <h1 class="text-3xl font-bold">
-        Welcome back{userState.self ? `, ${userState.self.name}` : ''}
-      </h1>
-      <p class="text-muted-foreground mt-1">Here's an overview of your OpenShock setup.</p>
-    </div>
+    <PageHeader
+      title="Welcome back{userState.self ? `, ${userState.self.name}` : ''}"
+      subtitle="Here's an overview of your OpenShock setup."
+      class="mb-0"
+    />
 
     <!-- Stats cards -->
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -60,8 +59,8 @@
           <Card.Title class="text-sm font-medium">Hub Status</Card.Title>
           <div
             class={onlineHubCount > 0
-              ? 'size-2 rounded-full bg-green-500'
-              : 'size-2 rounded-full bg-red-500'}
+              ? 'bg-success size-2 rounded-full'
+              : 'bg-destructive size-2 rounded-full'}
           ></div>
         </Card.Header>
         <Card.Content>
@@ -100,7 +99,7 @@
           <Router class="size-5" />
           <div class="text-left">
             <div class="font-medium">Hubs</div>
-            <div class="text-muted-foreground text-xs">Manage your devices</div>
+            <div class="text-muted-foreground text-xs">Manage your hubs</div>
           </div>
         </Button>
         <Button
@@ -150,7 +149,7 @@
           <Card.Title>Add Your First Shocker</Card.Title>
           <Card.Description>
             You have {hubCount} hub{hubCount > 1 ? 's' : ''} set up. Add a shocker to start controlling
-            your devices.
+            it.
           </Card.Description>
         </Card.Header>
 

@@ -5,10 +5,10 @@
     shareLinksEditShocker,
   } from '#lib/api/index.js';
   import type { PublicShareResponse } from '#lib/api/index.js';
-  import { ExternalLink, Plus, Save } from '@lucide/svelte';
+  import { ExternalLink, Plus, Save, Zap } from '@lucide/svelte';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
-  import { CopyInput } from '@openshock/svelte-core/components';
+  import { Container, CopyInput, EmptyState, PageHeader } from '@openshock/svelte-core/components';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Avatar from '@openshock/svelte-core/components/ui/avatar';
@@ -112,78 +112,77 @@
 
 <DialogAddShocker bind:open={showAddShockerModal} {onAddedShockers} />
 
-<div class="m-5 flex h-full w-full flex-col gap-10">
-  <div class="grid grid-cols-3 grid-rows-1 items-center gap-4">
-    <div class="flex w-full flex-col">
-      <h1 class="text-2xl font-bold">
-        Public Share: {publicShareData?.name ?? 'Loading...'}
-      </h1>
-      <p class="text-muted-foreground text-sm">Editing — changes apply when you save.</p>
-    </div>
+<Container>
+  <PageHeader
+    title="Public Share: {publicShareData?.name ?? 'Loading...'}"
+    subtitle="Editing — changes apply when you save."
+  >
+    <Button variant="outline" href={publicUrl}>
+      <ExternalLink />
+      View
+    </Button>
+    <Button
+      variant="outline"
+      onclick={() => (showAddShockerModal = true)}
+      disabled={isAddingShockers}><Plus />Add Shocker</Button
+    >
 
-    <div class="flex items-center">
-      <CopyInput value={shareUrl.href} displayValue={shareUrl.host + shareUrl.pathname} />
-    </div>
+    <Button onclick={saveChanges} disabled={isSaving}
+      ><Save />{isSaving ? 'Saving...' : 'Save'}</Button
+    >
 
-    <div class="flex items-center justify-end gap-2">
-      <Button variant="outline" href={publicUrl}>
-        <ExternalLink />
-        View
-      </Button>
-      <Button
-        variant="outline"
-        onclick={() => (showAddShockerModal = true)}
-        disabled={isAddingShockers}><Plus />Add Shocker</Button
-      >
-
-      <Button onclick={saveChanges} disabled={isSaving}
-        ><Save />{isSaving ? 'Saving...' : 'Save'}</Button
-      >
-
-      {#if publicShareData}
-        <Tooltip.Root>
-          <Tooltip.Trigger>
-            <span
-              class="ml-2 flex flex-row items-center rounded-md px-3 py-1.5 outline-1 outline-gray-500"
-            >
-              <Avatar.Root class="h-8 w-8">
-                <Avatar.Image src={publicShareData.author.image} alt="User Avatar" />
-                <Avatar.Fallback>
-                  {publicShareData.author.name.charAt(0)}
-                </Avatar.Fallback>
-              </Avatar.Root>
-              <p class="ml-3 text-sm">{publicShareData.author.name}</p>
-            </span>
-          </Tooltip.Trigger>
-          <Tooltip.Content>
-            <p>Shared by</p>
-          </Tooltip.Content>
-        </Tooltip.Root>
-      {/if}
-    </div>
-  </div>
-
-  {#await publicShareRequest}
-    <div class="flex h-full w-full items-center justify-center">
-      <Spinner class="size-8 text-gray-600 dark:text-gray-300" />
-    </div>
-  {:then}
-    {#if publicShareData?.devices?.length && shareId}
-      <div class="flex flex-col gap-8">
-        {#each publicShareData.devices as device, i (device.id)}
-          <SharedDevice {shareId} bind:device={publicShareData.devices[i]} {onShockerRemoved} />
-        {/each}
-      </div>
-    {:else}
-      <div class="text-muted-foreground flex h-32 flex-col items-center justify-center">
-        <p>No shockers added to this share yet.</p>
-        <p class="text-sm">Click "Add Shocker" to get started.</p>
-      </div>
+    {#if publicShareData}
+      <Tooltip.Root>
+        <Tooltip.Trigger>
+          <span
+            class="outline-muted-foreground/50 ml-2 flex flex-row items-center rounded-md px-3 py-1.5 outline-1"
+          >
+            <Avatar.Root class="h-8 w-8">
+              <Avatar.Image src={publicShareData.author.image} alt="User Avatar" />
+              <Avatar.Fallback>
+                {publicShareData.author.name.charAt(0)}
+              </Avatar.Fallback>
+            </Avatar.Root>
+            <p class="ml-3 text-sm">{publicShareData.author.name}</p>
+          </span>
+        </Tooltip.Trigger>
+        <Tooltip.Content>
+          <p>Shared by</p>
+        </Tooltip.Content>
+      </Tooltip.Root>
     {/if}
-  {:catch error}
-    <div class="flex h-full flex-col items-center justify-center">
-      <p>Error fetching public share details</p>
-      <pre>{error.message}</pre>
-    </div>
-  {/await}
-</div>
+  </PageHeader>
+
+  <div class="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-6">
+    <CopyInput value={shareUrl.href} displayValue={shareUrl.host + shareUrl.pathname} />
+
+    {#await publicShareRequest}
+      <div class="flex h-full w-full items-center justify-center">
+        <Spinner class="text-muted-foreground size-8" />
+      </div>
+    {:then}
+      {#if publicShareData?.devices?.length && shareId}
+        <div class="flex flex-col gap-8">
+          {#each publicShareData.devices as device, i (device.id)}
+            <SharedDevice {shareId} bind:device={publicShareData.devices[i]} {onShockerRemoved} />
+          {/each}
+        </div>
+      {:else}
+        <EmptyState
+          icon={Zap}
+          title="No shockers in this share"
+          description="Add a shocker and anyone with the link will be able to control it."
+        >
+          <Button onclick={() => (showAddShockerModal = true)} disabled={isAddingShockers}>
+            <Plus />Add Shocker
+          </Button>
+        </EmptyState>
+      {/if}
+    {:catch error}
+      <div class="flex h-full w-full flex-col items-center justify-center">
+        <p>Error fetching public share details</p>
+        <pre>{error.message}</pre>
+      </div>
+    {/await}
+  </div>
+</Container>

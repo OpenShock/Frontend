@@ -14,8 +14,7 @@
   let userInput = $state('');
   let { fetchedUser = $bindable(null) }: Props = $props();
 
-  function check(event: Event) {
-    event.preventDefault();
+  function check() {
     usersGetByName({ path: { username: userInput } })
       .then((user) => {
         fetchedUser = user;
@@ -32,21 +31,34 @@
   }
 
   let inputModified = $derived(fetchedUser?.name !== userInput);
+
+  // Not a <form>: this sits inside the share dialog's form, and nested forms are invalid HTML.
+  // Enter runs the lookup while the name is unconfirmed, and otherwise falls through to the outer form.
+  function onKeydown(event: KeyboardEvent) {
+    if (event.key !== 'Enter' || !inputModified) return;
+    event.preventDefault();
+    check();
+  }
 </script>
 
-<form class="flex items-center gap-2" onsubmit={check}>
-  <Avatar.Root class={(fetchedUser ? 'border-3 border-green-500' : '') + ' h-15 w-15'}>
+<div class="flex items-center gap-2">
+  <Avatar.Root class={(fetchedUser ? 'border-success border-3' : '') + ' h-15 w-15'}>
     <Avatar.Image
       src={fetchedUser?.image}
       alt={fetchedUser ? `${fetchedUser.name}'s avatar` : 'User avatar'}
     />
     <Avatar.Fallback>?</Avatar.Fallback>
   </Avatar.Root>
-  <Input bind:value={userInput} placeholder="Enter user name" aria-label="Username to search" />
+  <Input
+    bind:value={userInput}
+    onkeydown={onKeydown}
+    placeholder="Enter user name"
+    aria-label="Username to search"
+  />
   <Button
     onclick={check}
     disabled={!inputModified}
-    type="submit"
+    type="button"
     title={inputModified ? 'Search user' : 'User found'}
   >
     {#if inputModified}
@@ -55,4 +67,4 @@
       <Check />
     {/if}
   </Button>
-</form>
+</div>

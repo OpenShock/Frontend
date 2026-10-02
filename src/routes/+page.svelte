@@ -21,12 +21,15 @@
 >
   <DotGrid bind:this={grid} />
 
-  <img class="h-10 sm:h-16 md:h-22" src={asset('logo.svg')} alt="OpenShock Logo" />
+  <h1>
+    <img class="h-10 sm:h-16 md:h-22" src={asset('logo.svg')} alt="OpenShock" />
+  </h1>
 
   <p class="relative text-lg opacity-75 md:text-2xl">
     The go-to platform for safe, reliable, real low-latency remote shocking.<br />
     {#if data.ok}
-      <span class="font-semibold">{data.deviceCount}</span> people online right now.
+      <span class="font-semibold">{data.deviceCount}</span>
+      {data.deviceCount === 1 ? 'hub' : 'hubs'} online right now.
     {/if}
   </p>
   <div class="relative flex space-x-4 pt-8 text-sm opacity-75">

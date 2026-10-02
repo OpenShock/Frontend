@@ -87,7 +87,7 @@
             <Button
               variant="ghost"
               size="icon"
-              class="text-red-500"
+              class="text-destructive"
               title="Delete token"
               onclick={() => (tokenToDelete = token)}
             >

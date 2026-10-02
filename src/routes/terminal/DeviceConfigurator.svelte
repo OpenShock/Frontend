@@ -257,11 +257,6 @@
     if (stripped.length === 0 || stripped.length % 4 !== 0) return false;
     return /^[A-Za-z0-9+/]+={0,2}$/.test(stripped);
   }
-
-  function handleFactoryReset() {
-    confirmFactoryResetOpen = false;
-    send('factoryreset');
-  }
 </script>
 
 <div class="flex flex-col gap-4">
@@ -689,7 +684,7 @@
   bind:open={confirmFactoryResetOpen}
   title="Factory reset device?"
   actionLabel="Wipe config"
-  onConfirm={handleFactoryReset}
+  onConfirm={() => send('factoryreset')}
 >
   {#snippet description()}
     This will erase all configuration on the device; WiFi networks, backend credentials, pins, and

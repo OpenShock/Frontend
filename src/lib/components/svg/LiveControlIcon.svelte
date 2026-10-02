@@ -11,7 +11,7 @@
 
 <svg
   role="img"
-  class={cn('fill-black dark:fill-white', className)}
+  class={cn('fill-current', className)}
   width={size}
   height={size}
   viewBox="0 0 50 50"

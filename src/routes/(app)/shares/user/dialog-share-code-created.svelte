@@ -22,7 +22,7 @@
 <Dialog.Root bind:open={() => code !== null, onOpenChanged}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Share Code Generated</Dialog.Title>
+      <Dialog.Title>Share code generated</Dialog.Title>
       <Dialog.Description>Please copy share code or code link!</Dialog.Description>
     </Dialog.Header>
     <div class="flex flex-col items-center space-y-4">

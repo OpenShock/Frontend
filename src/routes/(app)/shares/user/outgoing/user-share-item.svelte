@@ -29,9 +29,7 @@
     <p class="ml-4">{userShare.name}</p>
   </Table.Cell>
   <Table.Cell>
-    <span
-      class="bg-sidebar flex w-max items-center rounded-2xl px-1.5 py-0.5 ring-1 ring-slate-800"
-    >
+    <span class="bg-sidebar ring-border flex w-max items-center rounded-2xl px-1.5 py-0.5 ring-1">
       <Zap size="15" />
       <p class="ml-2 inline-block sm:hidden">{userShare.shares.length}</p>
       <div class="hidden sm:inline-block">

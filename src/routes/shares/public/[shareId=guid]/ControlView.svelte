@@ -95,8 +95,8 @@
       <h1 class="text-2xl font-bold">Public Share: {shareLinkRoot.name}</h1>
       <p
         class={shareLinkSignalr.getState() === HubConnectionState.Connected
-          ? 'text-green-500'
-          : 'text-red-500'}
+          ? 'text-success'
+          : 'text-destructive'}
       >
         {shareLinkSignalr.getState()}
       </p>
@@ -114,7 +114,7 @@
       <Tooltip.Root>
         <Tooltip.Trigger>
           <span
-            class="mr-10 flex flex-row items-center rounded-md px-4 py-2 outline-1 outline-gray-500"
+            class="outline-muted-foreground/50 mr-10 flex flex-row items-center rounded-md px-4 py-2 outline-1"
           >
             <Avatar.Root class="h-10 w-10">
               <Avatar.Image src={shareLinkRoot.author.image} alt="User Avatar" />

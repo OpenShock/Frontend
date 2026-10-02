@@ -204,8 +204,8 @@
   <div class="min-h-0 flex-1 overflow-y-auto">
     <Container>
       <Card.Header class="w-full">
-        <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
-          Serial Terminal
+        <Card.Title class="flex items-center justify-between gap-2 text-3xl">
+          <h1>Serial Terminal</h1>
           {#if serial}
             <Button variant="outline" onclick={() => (showHelpDialog = true)}>
               <MessageCircleQuestionMark />
@@ -278,7 +278,7 @@
                       <button
                         class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold transition-colors
                         {isCompleted
-                          ? 'bg-green-500 text-white'
+                          ? 'bg-success text-success-foreground'
                           : isCurrent
                             ? 'bg-primary text-primary-foreground'
                             : 'border-muted-foreground/30 text-muted-foreground/50 border-2'}"
@@ -296,7 +296,7 @@
                       {#if !isLast}
                         <div
                           class="w-0.5 flex-1 {isCompleted
-                            ? 'bg-green-500/40'
+                            ? 'bg-success/40'
                             : 'bg-muted-foreground/20'}"
                           style="min-height: 1.5rem;"
                         ></div>
@@ -355,7 +355,7 @@
                               disabled={isFlashing}
                             />
 
-                            <div class="items-top flex space-x-2">
+                            <div class="flex items-start gap-2">
                               <Checkbox id="erase-before-flash" bind:checked={eraseBeforeFlash} />
                               <div class="grid gap-1.5 leading-none">
                                 <Label

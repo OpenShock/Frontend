@@ -5,8 +5,13 @@
   import KeyRound from '@lucide/svelte/icons/key-round';
   import Plus from '@lucide/svelte/icons/plus';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
-  import { Container, EmptyState } from '@openshock/svelte-core/components';
-  import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
+  import {
+    Container,
+    EmptyState,
+    PageError,
+    PageHeader,
+    PageLoading,
+  } from '@openshock/svelte-core/components';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
   import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
@@ -44,16 +49,13 @@
 </script>
 
 <Container>
-  <Card.Header class="w-full">
-    <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
-      API Tokens
-      <div>
-        <Button href={resolve('settings/api-tokens/new')}><Plus />Generate Token</Button>
-        <Button onclick={refresh}><RotateCcw />Refresh</Button>
-      </div>
-    </Card.Title>
-    <Card.Description>API Tokens are used to authenticate with the OpenShock API</Card.Description>
-  </Card.Header>
+  <PageHeader
+    title="API Tokens"
+    subtitle="API Tokens are used to authenticate with the OpenShock API."
+  >
+    <Button href={resolve('settings/api-tokens/new')}><Plus />Generate Token</Button>
+    <Button variant="outline" onclick={refresh}><RotateCcw />Refresh</Button>
+  </PageHeader>
   <Card.Content class="flex w-full flex-col space-y-4">
     <svelte:boundary onerror={(error: unknown) => handleApiError(error)}>
       {#if tokens.length === 0}
@@ -88,16 +90,11 @@
       {/if}
 
       {#snippet pending()}
-        <div class="flex h-64 w-full items-center justify-center">
-          <Spinner class="size-8 text-gray-600 dark:text-gray-300" />
-        </div>
+        <PageLoading />
       {/snippet}
 
       {#snippet failed(_error: unknown, reset: () => void)}
-        <div class="flex w-full flex-col items-center gap-3 py-12">
-          <p class="text-destructive text-sm">Failed to load API tokens.</p>
-          <Button variant="outline" onclick={reset}>Try again</Button>
-        </div>
+        <PageError message="Failed to load API tokens." onRetry={reset} />
       {/snippet}
     </svelte:boundary>
   </Card.Content>

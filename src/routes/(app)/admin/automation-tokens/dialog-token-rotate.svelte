@@ -50,6 +50,9 @@
         using it will be rejected until it is given the new one.
       </Dialog.Description>
     </Dialog.Header>
-    <Button variant="destructive" onclick={rotate} disabled={isSubmitting}>Rotate</Button>
+    <Dialog.Footer>
+      <Button variant="outline" onclick={() => (open = false)}>Cancel</Button>
+      <Button variant="destructive" onclick={rotate} disabled={isSubmitting}>Rotate</Button>
+    </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>

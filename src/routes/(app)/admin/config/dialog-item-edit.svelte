@@ -21,29 +21,37 @@
   let value = $state(item.value);
 
   let valid = $derived(value.length > 0);
+  let submitting = $state(false);
 
-  function onSubmit() {
-    adminConfigurationUpdate({ body: { name: item.name, description, value } })
-      .then(() => {
-        onEdited();
-        toast.success('Created configuration item');
-        open = false;
-      })
-      .catch(handleApiError)
-      .finally(() => (open = false));
+  async function onSubmit() {
+    if (submitting) return;
+    submitting = true;
+    try {
+      await adminConfigurationUpdate({ body: { name: item.name, description, value } });
+      onEdited();
+      toast.success('Updated configuration item');
+      open = false;
+    } catch (error) {
+      await handleApiError(error);
+    } finally {
+      submitting = false;
+    }
   }
 </script>
 
 <Dialog.Root bind:open={() => open, (o) => (open = o)}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Add configuration item</Dialog.Title>
+      <Dialog.Title>Edit configuration item</Dialog.Title>
       <Dialog.Description>
         <strong>BE CAREFUL. This will alter the server's behaviour!</strong>
       </Dialog.Description>
     </Dialog.Header>
     <TextInput label="Description" bind:value={description} />
     <TextInput label="Value" bind:value />
-    <Button onclick={onSubmit} disabled={!valid}>Create</Button>
+    <Dialog.Footer>
+      <Button variant="outline" onclick={() => (open = false)}>Cancel</Button>
+      <Button onclick={onSubmit} disabled={submitting || !valid}>Save</Button>
+    </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>

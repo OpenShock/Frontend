@@ -22,16 +22,25 @@
   let emailValid = $state(true);
   let emailSet = $derived(email.length > 0 && email != user.email);
 
-  function sendit() {
-    adminModifyUser({
-      path: { userId: user.id },
-      body: {
-        name: usernameSet ? username : null,
-        email: emailSet ? email : null,
-      },
-    })
-      .then(() => (open = false))
-      .catch(handleApiError);
+  let submitting = $state(false);
+
+  async function sendit() {
+    if (submitting) return;
+    submitting = true;
+    try {
+      await adminModifyUser({
+        path: { userId: user.id },
+        body: {
+          name: usernameSet ? username : null,
+          email: emailSet ? email : null,
+        },
+      });
+      open = false;
+    } catch (error) {
+      await handleApiError(error);
+    } finally {
+      submitting = false;
+    }
   }
 </script>
 
@@ -49,19 +58,23 @@
     <EmailInput label="Email" placeholder={user.email} bind:value={email} bind:valid={emailValid} />
     <div>
       <h2>Roles</h2>
-      <div class="border-surface-500 flex flex-col space-y-4 rounded-md border p-4">
+      <div class="flex flex-col space-y-4 rounded-md border p-4">
         {#each [RoleType.Support, RoleType.Staff, RoleType.Admin, RoleType.System] as role (role)}
           <span><Checkbox checked={user.roles.includes(role)} /> {role}</span>
         {/each}
       </div>
     </div>
-    <Button
-      onclick={sendit}
-      disabled={(usernameSet && !usernameValid) ||
-        (emailSet && !emailValid) ||
-        (!usernameSet && !emailSet)}
-    >
-      Apply
-    </Button>
+    <Dialog.Footer>
+      <Button variant="outline" onclick={() => (open = false)}>Cancel</Button>
+      <Button
+        onclick={sendit}
+        disabled={submitting ||
+          (usernameSet && !usernameValid) ||
+          (emailSet && !emailValid) ||
+          (!usernameSet && !emailSet)}
+      >
+        Apply
+      </Button>
+    </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>

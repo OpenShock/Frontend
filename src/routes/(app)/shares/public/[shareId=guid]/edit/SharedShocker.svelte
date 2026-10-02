@@ -77,9 +77,7 @@
   };
 </script>
 
-<div
-  class="border-surface-400-500-token bg-card flex w-80 flex-col overflow-hidden rounded-md border"
->
+<div class="bg-card flex w-80 flex-col overflow-hidden rounded-md border">
   <!-- Header — mirrors ShockerCard -->
   <div class="border-border/60 flex items-center gap-2 border-b px-3 py-2">
     <div class="flex min-w-0 flex-1 flex-col">
@@ -88,7 +86,7 @@
       </h2>
       {#if isPausedByPublicShare}
         <span class="text-muted-foreground flex items-center gap-1.5 text-[11px]">
-          <span class="size-1.5 shrink-0 rounded-full bg-amber-400"></span>
+          <span class="bg-warning size-1.5 shrink-0 rounded-full"></span>
           Paused for this share
         </span>
       {/if}

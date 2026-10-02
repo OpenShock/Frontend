@@ -68,11 +68,10 @@
   import { ChartBar, ChevronDown, RotateCcw, X } from '@lucide/svelte';
   import { cn } from '@openshock/svelte-core/utils';
   import { adminGetOnlineDevices } from '#lib/api/index.js';
-  import { Container, PageHeader } from '@openshock/svelte-core/components';
+  import { Container, PageHeader, PageLoading } from '@openshock/svelte-core/components';
   import DataTable from '#lib/components/Table/DataTableTemplate.svelte';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import { Input } from '@openshock/svelte-core/components/ui/input';
-  import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import { SemVer } from 'semver';
   import { onMount } from 'svelte';
@@ -181,13 +180,13 @@
       {
         label: 'Median latency',
         value: medianLatency === null ? '—' : `${medianLatency} ms`,
-        color: medianLatency !== null && medianLatency >= HIGH_LATENCY_MS ? 'text-orange-500' : '',
+        color: medianLatency !== null && medianLatency >= HIGH_LATENCY_MS ? 'text-warning' : '',
       },
       {
         label: 'Weak signal',
         value: weakSignal.toString(),
         detail: `RSSI ≤ ${WEAK_RSSI_DBM} dBm`,
-        color: weakSignal > 0 ? 'text-red-500' : '',
+        color: weakSignal > 0 ? 'text-destructive' : '',
       },
     ];
   });
@@ -299,9 +298,7 @@
         class="min-h-80 w-full"
       />
     {:else}
-      <div class="flex h-64 w-full items-center justify-center">
-        <Spinner class="size-8 text-gray-600 dark:text-gray-300" />
-      </div>
+      <PageLoading />
     {/if}
   </div>
 </Container>

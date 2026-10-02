@@ -54,7 +54,7 @@
 <Dialog.Root bind:open>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Change Email</Dialog.Title>
+      <Dialog.Title>Change email</Dialog.Title>
       <Dialog.Description>
         Enter your new email address and confirm with your current password.
       </Dialog.Description>
@@ -76,12 +76,18 @@
         bind:value={currentPassword}
         Icon={KeyRound}
       />
-      <Button
-        type="submit"
-        disabled={!emailValid || email === account.email || currentPassword.length === 0 || loading}
-      >
-        Change Email
-      </Button>
+      <Dialog.Footer>
+        <Button type="button" variant="outline" onclick={() => (open = false)}>Cancel</Button>
+        <Button
+          type="submit"
+          disabled={!emailValid ||
+            email === account.email ||
+            currentPassword.length === 0 ||
+            loading}
+        >
+          Change Email
+        </Button>
+      </Dialog.Footer>
     </form>
   </Dialog.Content>
 </Dialog.Root>

@@ -13,7 +13,7 @@
 >
   <div>
     Made with
-    <span style="color: #e25555;">♥</span>
+    <span class="text-[#e25555]">♥</span>
     by the
     <a target="_blank" rel="noopener" href={PUBLIC_GITHUB_PROJECT_URL}>OpenShock Team</a>
   </div>
@@ -29,9 +29,9 @@
             aria-label="Server connection status"
           >
             {#if getConnectionState() === HubConnectionState.Connected}
-              <Wifi class="h-4 w-4 text-green-800" />
+              <Wifi class="text-success h-4 w-4" />
             {:else}
-              <WifiOff class="h-4 w-4 text-red-800" />
+              <WifiOff class="text-destructive h-4 w-4" />
             {/if}
           </Button>
         {/snippet}
@@ -44,10 +44,10 @@
               <td>
                 <p class="flex items-center justify-end gap-2">
                   {#if getConnectionState() === HubConnectionState.Connected}
-                    <Wifi class="h-4 w-4 text-green-800" />
+                    <Wifi class="text-success h-4 w-4" />
                     {getConnectionState()}
                   {:else}
-                    <WifiOff class="h-4 w-4 text-red-800" />
+                    <WifiOff class="text-destructive h-4 w-4" />
                     {getConnectionState()}
                   {/if}
                 </p></td

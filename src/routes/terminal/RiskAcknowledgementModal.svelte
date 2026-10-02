@@ -18,15 +18,15 @@
       <Dialog.Title>⚠️ UNSTABLE FIRMWARE</Dialog.Title>
       <Dialog.Description class="space-y-3">
         <p>
-          You are about to flash <strong class="text-red-500">experimental firmware</strong>
-          that is <strong class="text-red-500">known to be unstable</strong>.
+          You are about to flash <strong class="text-destructive">experimental firmware</strong>
+          that is <strong class="text-destructive">known to be unstable</strong>.
         </p>
 
         <p>
           This may permanently brick your device, require manual recovery, or render it unusable.
         </p>
 
-        <p class="font-semibold text-red-500">
+        <p class="text-destructive font-semibold">
           We will NOT provide support for issues caused by this firmware.
         </p>
       </Dialog.Description>

@@ -91,9 +91,7 @@
 >
   {#if !mounted}
     <!-- Turnstile placeholder -->
-    <div
-      class="flex h-full items-center justify-center gap-3 border border-[#e0e0e0] bg-[#fafafa] p-3 select-none dark:border-[#666] dark:bg-[#222]"
-    >
+    <div class="bg-muted flex h-full items-center justify-center gap-3 border p-3 select-none">
       {#if dev || disabled}
         <Bug />
         <span> Turnstile disabled </span>
@@ -102,7 +100,7 @@
         <span> Loading... </span>
       {/if}
       <a
-        class="mb-auto ml-auto h-7 w-auto text-[#666] dark:text-[#999]"
+        class="text-muted-foreground mb-auto ml-auto h-7 w-auto"
         href="https://www.cloudflare.com/products/turnstile/?utm_source=turnstile&utm_campaign=widget"
         target="_blank"
         rel="noopener noreferrer"

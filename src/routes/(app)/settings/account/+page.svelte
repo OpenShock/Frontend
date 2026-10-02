@@ -4,7 +4,7 @@
   import Mail from '@lucide/svelte/icons/mail';
   import User from '@lucide/svelte/icons/user';
   import { PUBLIC_SIGNOZ_LOGS_ENABLED } from '$app/env/public';
-  import { Container } from '@openshock/svelte-core/components';
+  import { Container, PageHeader, PageLoading } from '@openshock/svelte-core/components';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import { ToggleGroup, ToggleGroupItem } from '@openshock/svelte-core/components/ui/toggle-group';
   import {
@@ -64,11 +64,10 @@
 
 {#if account}
   <Container>
+    <PageHeader title="Account Settings" subtitle="Your sign-in details and account actions." />
     <div
       class="bg-card border-border flex w-full flex-col items-start gap-y-6 rounded-lg border p-6"
     >
-      <h1 class="text-xl font-bold">Account Settings</h1>
-
       <div class="flex w-full items-center gap-2">
         <div class="grow">
           <div class="flex items-center gap-2 font-medium">
@@ -78,7 +77,9 @@
           <div class="text-muted-foreground">{account.name}</div>
         </div>
 
-        <Button type="button" onclick={() => (usernameDialogOpen = true)}>Change Username</Button>
+        <Button type="button" variant="outline" onclick={() => (usernameDialogOpen = true)}>
+          Change Username
+        </Button>
       </div>
 
       <div class="flex w-full items-center gap-2">
@@ -91,6 +92,7 @@
         </div>
         <Button
           type="button"
+          variant="outline"
           disabled={isOAuthOnly}
           title={isOAuthOnly ? 'Not available for OAuth-only accounts' : undefined}
           onclick={() => (emailDialogOpen = true)}>Change Email</Button
@@ -111,6 +113,7 @@
         </div>
         <Button
           type="button"
+          variant="outline"
           disabled={isOAuthOnly}
           title={isOAuthOnly ? 'Not available for OAuth-only accounts' : undefined}
           onclick={() => (passwordDialogOpen = true)}>Change Password</Button
@@ -155,5 +158,5 @@
     </div>
   </Container>
 {:else}
-  Loading...
+  <PageLoading />
 {/if}

@@ -115,6 +115,9 @@
       bind:valid={autoCleanupValid}
     />
 
-    <Button onclick={createToken} disabled={!valid}>Create</Button>
+    <Dialog.Footer>
+      <Button variant="outline" onclick={() => (open = false)}>Cancel</Button>
+      <Button onclick={createToken} disabled={!valid}>Create</Button>
+    </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>
