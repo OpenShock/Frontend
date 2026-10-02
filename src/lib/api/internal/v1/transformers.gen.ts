@@ -598,6 +598,9 @@ export const adminGetAdminAuditLogResponseTransformer = async (
 const adminOnlineDeviceResponseSchemaResponseTransformer = (data: any) => {
   data.connectedAt = Temporal.Instant.from(data.connectedAt);
   data.bootedAt = Temporal.Instant.from(data.bootedAt);
+  if (data.asn) {
+    data.asn = BigInt(data.asn.toString());
+  }
   return data;
 };
 

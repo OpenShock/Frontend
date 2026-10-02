@@ -49,11 +49,11 @@
     color: { light: string; dark: string };
     buckets: DistributionBucket[];
     limit?: number;
-    selected?: string | null;
-    onSelect?: (key: string | null) => void;
+    selected?: string[];
+    onSelect?: (key: string) => void;
   }
 
-  let { title, color, buckets, limit = 8, selected = null, onSelect }: Props = $props();
+  let { title, color, buckets, limit = 8, selected = [], onSelect }: Props = $props();
 
   let expanded = $state(false);
   let canExpand = $derived(buckets.length > limit);
@@ -70,7 +70,7 @@
   });
 
   function barOpacity(bucket: DistributionBucket) {
-    if (selected !== null) return selected === bucket.key ? 1 : 0.25;
+    if (selected.length > 0) return bucket.key !== null && selected.includes(bucket.key) ? 1 : 0.25;
     return bucket.key === null ? 0.4 : 1;
   }
 
@@ -118,7 +118,7 @@
               // The tooltip layer sits above the bars and swallows their clicks.
               onclick: (_, { data: bucket }) => {
                 if (bucket.key === null || !onSelect) return;
-                onSelect(selected === bucket.key ? null : bucket.key);
+                onSelect(bucket.key);
               },
             }}
             props={{

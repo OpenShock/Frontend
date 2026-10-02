@@ -44,6 +44,8 @@ export type AdminOnlineDeviceResponse = {
    * An IPv4 or IPv6 address in its textual form.
    */
   ip: null | string;
+  asn: null | bigint;
+  asnOrg: null | string;
 };
 
 export type AdminOnlineGatewayResponse = {
@@ -60,28 +62,6 @@ export type AdminOnlineGatewayResponse = {
   load: number;
   environment: string;
   connectedHubs: number;
-};
-
-export type AdminUsersView = {
-  id: string;
-  name: string;
-  email: string;
-  passwordHashType: null | PasswordHashingAlgorithm;
-  roles: Array<RoleType>;
-  createdAt: Temporal.Instant;
-  activatedAt: null | Temporal.Instant;
-  createdByAutomationTokenId: null | string;
-  deactivatedAt: null | Temporal.Instant;
-  deactivatedByUserId: null | string;
-  apiTokenCount: number;
-  passwordResetCount: number;
-  shockerUserShareCount: number;
-  shockerPublicShareCount: number;
-  emailChangeRequestCount: number;
-  nameChangeRequestCount: number;
-  deviceCount: number;
-  shockerCount: number;
-  shockerControlLogCount: number;
 };
 
 export type AdminUserView = {
@@ -164,6 +144,28 @@ export type AdminUserViewUserDeactivation = {
 export type AdminUserViewUserRef = {
   id: string;
   name: string;
+};
+
+export type AdminUsersView = {
+  id: string;
+  name: string;
+  email: string;
+  passwordHashType: null | PasswordHashingAlgorithm;
+  roles: Array<RoleType>;
+  createdAt: Temporal.Instant;
+  activatedAt: null | Temporal.Instant;
+  createdByAutomationTokenId: null | string;
+  deactivatedAt: null | Temporal.Instant;
+  deactivatedByUserId: null | string;
+  apiTokenCount: number;
+  passwordResetCount: number;
+  shockerUserShareCount: number;
+  shockerPublicShareCount: number;
+  emailChangeRequestCount: number;
+  nameChangeRequestCount: number;
+  deviceCount: number;
+  shockerCount: number;
+  shockerControlLogCount: number;
 };
 
 export const AuditAction = {
@@ -315,15 +317,15 @@ export type AuditMetadataAutomationTokenUsedMetadata = {
   flow: string;
 };
 
+export type AuditMetadataEmailChangeRequestedMetadata = {
+  t?: 'emailChangeRequested';
+  newEmail: string;
+};
+
 export type AuditMetadataEmailChangedMetadata = {
   t?: 'emailChanged';
   old: string;
   new: string;
-};
-
-export type AuditMetadataEmailChangeRequestedMetadata = {
-  t?: 'emailChangeRequested';
-  newEmail: string;
 };
 
 export type AuditMetadataLoginMetadata = {
@@ -531,6 +533,12 @@ export type CreateAutomationTokenDto = {
   autoCleanupAfter?: null | string;
 };
 
+export type CreateTokenRequest = {
+  validUntil?: null | Temporal.Instant;
+  name: string;
+  permissions?: Array<PermissionType>;
+};
+
 export type CreatedAutomationTokenDto = {
   id: string;
   name: string;
@@ -540,12 +548,6 @@ export type CreatedAutomationTokenDto = {
   lastRotatedAt?: null | Temporal.Instant;
   autoCleanupUsers?: boolean;
   autoCleanupAfter?: null | string;
-};
-
-export type CreateTokenRequest = {
-  validUntil?: null | Temporal.Instant;
-  name: string;
-  permissions?: Array<PermissionType>;
 };
 
 export type DeviceResponse = {
@@ -706,14 +708,14 @@ export type LegacyDataResponseOfArrayOfLogEntry = {
   data: Array<LogEntry>;
 };
 
-export type LegacyDataResponseOfArrayOfOwnerShockerResponse = {
-  message: string;
-  data: Array<OwnerShockerResponse>;
-};
-
 export type LegacyDataResponseOfArrayOfOwnPublicShareResponse = {
   message: string;
   data: Array<OwnPublicShareResponse>;
+};
+
+export type LegacyDataResponseOfArrayOfOwnerShockerResponse = {
+  message: string;
+  data: Array<OwnerShockerResponse>;
 };
 
 export type LegacyDataResponseOfArrayOfShareCodeInfo = {
@@ -734,11 +736,6 @@ export type LegacyDataResponseOfArrayOfShockerResponse = {
 export type LegacyDataResponseOfBackendInfoResponse = {
   message: string;
   data: BackendInfoResponse;
-};
-
-export type LegacyDataResponseOfboolean = {
-  message: string;
-  data: boolean;
 };
 
 export type LegacyDataResponseOfDeviceSelfResponse = {
@@ -803,14 +800,19 @@ export type LegacyDataResponseOfStatsResponse = {
   data: StatsResponse;
 };
 
-export type LegacyDataResponseOfstring = {
-  message: string;
-  data: string;
-};
-
 export type LegacyDataResponseOfUserSelfResponse = {
   message: string;
   data: UserSelfResponse;
+};
+
+export type LegacyDataResponseOfboolean = {
+  message: string;
+  data: boolean;
+};
+
+export type LegacyDataResponseOfstring = {
+  message: string;
+  data: string;
 };
 
 export type LegacyEmptyResponse = {
@@ -922,18 +924,18 @@ export const OtaUpdateStatus = {
 
 export type OtaUpdateStatus = (typeof OtaUpdateStatus)[keyof typeof OtaUpdateStatus];
 
-export type OwnerShockerResponse = {
-  id: string;
-  name: string;
-  image: string;
-  devices: Array<SharedDevice>;
-};
-
 export type OwnPublicShareResponse = {
   id: string;
   name: string;
   createdOn: Temporal.Instant;
   expiresOn?: null | Temporal.Instant;
+};
+
+export type OwnerShockerResponse = {
+  id: string;
+  name: string;
+  image: string;
+  devices: Array<SharedDevice>;
 };
 
 /**
@@ -1144,6 +1146,14 @@ export type ShareCodeInfo = {
   createdOn: Temporal.Instant;
 };
 
+export type ShareInfo = {
+  sharedWith: BasicUserInfo;
+  createdOn: Temporal.Instant;
+  permissions: ShockerPermissions;
+  limits: ShockerLimits;
+  paused: boolean;
+};
+
 export type SharedDevice = {
   id: string;
   name: string;
@@ -1156,14 +1166,6 @@ export type SharedShocker = {
   isPaused: boolean;
   permissions: ShockerPermissions;
   limits: ShockerLimits;
-};
-
-export type ShareInfo = {
-  sharedWith: BasicUserInfo;
-  createdOn: Temporal.Instant;
-  permissions: ShockerPermissions;
-  limits: ShockerLimits;
-  paused: boolean;
 };
 
 export type ShockerLimits = {
@@ -1180,16 +1182,16 @@ export const ShockerModelType = {
 
 export type ShockerModelType = (typeof ShockerModelType)[keyof typeof ShockerModelType];
 
+export type ShockerPermLimitPair = {
+  permissions: ShockerPermissions;
+  limits: ShockerLimits;
+};
+
 export type ShockerPermissions = {
   vibrate: boolean;
   sound: boolean;
   shock: boolean;
   live?: boolean;
-};
-
-export type ShockerPermLimitPair = {
-  permissions: ShockerPermissions;
-  limits: ShockerLimits;
 };
 
 export type ShockerResponse = {
@@ -1244,6 +1246,28 @@ export type TokenResponse = {
   permissions: Array<PermissionType>;
 };
 
+export type UserNameBlacklistDto = {
+  id: string;
+  value: string;
+  matchType: MatchTypeEnum;
+  createdAt: Temporal.Instant;
+};
+
+export type UserPatchDto = {
+  name?: null | string;
+  email?: null | string;
+};
+
+export type UserSelfResponse = {
+  id: string;
+  name: string;
+  email: string;
+  image: string;
+  roles: Array<RoleType>;
+  rank: string;
+  hasPassword: boolean;
+};
+
 export const UsernameAvailability = {
   Available: 'Available',
   Taken: 'Taken',
@@ -1251,13 +1275,6 @@ export const UsernameAvailability = {
 } as const;
 
 export type UsernameAvailability = (typeof UsernameAvailability)[keyof typeof UsernameAvailability];
-
-export type UserNameBlacklistDto = {
-  id: string;
-  value: string;
-  matchType: MatchTypeEnum;
-  createdAt: Temporal.Instant;
-};
 
 export type UsernameCheckResponse = {
   availability: UsernameAvailability;
@@ -1279,21 +1296,6 @@ export const UsernameErrorType = {
 } as const;
 
 export type UsernameErrorType = (typeof UsernameErrorType)[keyof typeof UsernameErrorType];
-
-export type UserPatchDto = {
-  name?: null | string;
-  email?: null | string;
-};
-
-export type UserSelfResponse = {
-  id: string;
-  name: string;
-  email: string;
-  image: string;
-  roles: Array<RoleType>;
-  rank: string;
-  hasPassword: boolean;
-};
 
 export type WebhookDto = {
   id: string;

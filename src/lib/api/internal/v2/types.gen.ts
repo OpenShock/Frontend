@@ -240,13 +240,6 @@ export type ShockerLimits = {
   duration: null | number;
 };
 
-export type ShockerPermissions = {
-  vibrate: boolean;
-  sound: boolean;
-  shock: boolean;
-  live?: boolean;
-};
-
 export type ShockerPermLimitPairWithId = {
   id?: string;
   permissions: ShockerPermissions;
@@ -258,6 +251,13 @@ export type ShockerPermLimitPairWithIdAndName = {
   id?: string;
   permissions: ShockerPermissions;
   limits: ShockerLimits;
+};
+
+export type ShockerPermissions = {
+  vibrate: boolean;
+  sound: boolean;
+  shock: boolean;
+  live?: boolean;
 };
 
 export type SignUpV2 = {
@@ -295,6 +295,27 @@ export type TokenResponseV2 = {
   shockerControl: ShockerControlSettings;
 };
 
+export type UserShareInfo = {
+  id: string;
+  name: string;
+  createdOn: Temporal.Instant;
+  permissions: ShockerPermissions;
+  limits: ShockerLimits;
+  /**
+   * PauseReason
+   *
+   * An integer representing the reason(s) for the shocker being paused, expressed as a bitfield where reasons are OR'd together.
+   *
+   * Each bit corresponds to:
+   * - 1: Shocker
+   * - 2: UserShare
+   * - 4: PublicShare
+   *
+   * For example, a value of 6 (2 | 4) indicates both 'UserShare' and 'PublicShare' reasons.
+   */
+  paused: number;
+};
+
 export const UsernameAvailability = {
   Available: 'Available',
   Taken: 'Taken',
@@ -323,27 +344,6 @@ export const UsernameErrorType = {
 } as const;
 
 export type UsernameErrorType = (typeof UsernameErrorType)[keyof typeof UsernameErrorType];
-
-export type UserShareInfo = {
-  id: string;
-  name: string;
-  createdOn: Temporal.Instant;
-  permissions: ShockerPermissions;
-  limits: ShockerLimits;
-  /**
-   * PauseReason
-   *
-   * An integer representing the reason(s) for the shocker being paused, expressed as a bitfield where reasons are OR'd together.
-   *
-   * Each bit corresponds to:
-   * - 1: Shocker
-   * - 2: UserShare
-   * - 4: PublicShare
-   *
-   * For example, a value of 6 (2 | 4) indicates both 'UserShare' and 'PublicShare' reasons.
-   */
-  paused: number;
-};
 
 export type V2UserShares = {
   outgoing: Array<V2UserSharesListItem>;
