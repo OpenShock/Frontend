@@ -32,12 +32,10 @@ function originOf(url: string, fallback: string): string {
 // (client logs, client traces, and these server spans) despite the `LOGS` in its name;
 // PUBLIC_SIGNOZ_TRACES_URL likewise falls back to the logs collector's origin below.
 //
-// It is a `$env/static/public` import, so this whole block is dead-code eliminated at
+// It is a static `$app/env/public` import, so this whole block is dead-code eliminated at
 // build time when the flag is off — the default in `.env`. A deploy that wants server
 // traces must set it in the build environment, not just at runtime.
-const enabled = PUBLIC_SIGNOZ_LOGS_ENABLED === 'true' || PUBLIC_SIGNOZ_LOGS_ENABLED === '1';
-
-if (enabled) {
+if (PUBLIC_SIGNOZ_LOGS_ENABLED) {
   try {
     const collectorOrigin = originOf(PUBLIC_SIGNOZ_LOGS_URL, DEFAULT_COLLECTOR_ORIGIN);
     const tracesUrl = PUBLIC_SIGNOZ_TRACES_URL || `${collectorOrigin}/v1/traces`;

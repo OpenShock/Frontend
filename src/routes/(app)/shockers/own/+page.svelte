@@ -1,6 +1,5 @@
 <script lang="ts">
   import { PUBLIC_DISABLE_SHOCKER_MAP } from '$app/env/public';
-  import { isTruthy } from '@openshock/svelte-core/utils';
   import { shockerPauseShocker, shockerRegisterShocker } from '#lib/api/index.js';
   import type { NewShocker } from '#lib/api/index.js';
   import { Layers, LogsIcon, Plus, RotateCcw, Settings, Zap } from '@lucide/svelte';
@@ -248,7 +247,7 @@
               onclick={() => (moduleType = ModuleType.SimpleControlModule)}>Simple</Button
             >
 
-            {#if !isTruthy(PUBLIC_DISABLE_SHOCKER_MAP)}
+            {#if !PUBLIC_DISABLE_SHOCKER_MAP}
               <Button
                 variant={moduleType === ModuleType.MapControlModule ? 'secondary' : 'ghost'}
                 size="sm"
@@ -314,7 +313,7 @@
       {#if moduleType === ModuleType.SimpleControlModule}
         <SimpleControlHeader bind:shockIntensity bind:vibrationIntensity bind:duration />
       {/if}
-      {#if !isTruthy(PUBLIC_DISABLE_SHOCKER_MAP) && moduleType === ModuleType.MapControlModule}
+      {#if !PUBLIC_DISABLE_SHOCKER_MAP && moduleType === ModuleType.MapControlModule}
         <MapControlModule {shockers} />
       {:else if groupByHub.value}
         <div class="flex w-full flex-col gap-6">

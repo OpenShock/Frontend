@@ -58,7 +58,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 export const init: ServerInit = () => {
   // `typeof process` guard: on the Cloudflare adapter there is no Node `process`
   // and no self-signed-cert scenario, so this is a no-op there.
-  if (PRIVATE_BACKEND_TLS_INSECURE === 'true' && typeof process !== 'undefined') {
+  if (PRIVATE_BACKEND_TLS_INSECURE && typeof process !== 'undefined') {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     console.warn(
       '[hooks.server] PRIVATE_BACKEND_TLS_INSECURE=true — TLS certificate validation is DISABLED for ' +

@@ -7,7 +7,6 @@ import {
   PUBLIC_SITE_DESCRIPTION,
   PUBLIC_SITE_NAME,
 } from '$app/env/public';
-import { isTruthy } from '@openshock/svelte-core/utils';
 import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
@@ -17,20 +16,18 @@ const HIDDEN_SEGMENTS: ReadonlySet<string> = new Set(['admin', 'hangfire']);
 const SWAGGER_VERSIONS = [1, 2] as const;
 
 export const GET: RequestHandler = ({ setHeaders }) => {
-  if (isTruthy(PUBLIC_DISABLE_LLMS_TXT)) error(404);
+  if (PUBLIC_DISABLE_LLMS_TXT) error(404);
 
   setHeaders({
     'content-type': 'text/plain; charset=utf-8',
     'cache-control': 'public, max-age=3600',
   });
 
-  const name = PUBLIC_SITE_NAME.trim();
-  const description = PUBLIC_SITE_DESCRIPTION.trim();
-  const isOpenShock = name.toLowerCase() === 'openshock';
+  const isOpenShock = PUBLIC_SITE_NAME.toLowerCase() === 'openshock';
 
   const summary = isOpenShock
-    ? `OpenShock — ${description}`
-    : `${name} — an independent instance of OpenShock — ${description}`;
+    ? `OpenShock — ${PUBLIC_SITE_DESCRIPTION}`
+    : `${PUBLIC_SITE_NAME} — an independent instance of OpenShock — ${PUBLIC_SITE_DESCRIPTION}`;
 
   // Public, linkable routes grouped by role.
   const publicPaths = paths
@@ -72,11 +69,11 @@ export const GET: RequestHandler = ({ setHeaders }) => {
     .map((path) => `- /${path}`)
     .join('\n');
 
-  const body = `# ${name}
+  const body = `# ${PUBLIC_SITE_NAME}
 
 > ${summary}
 
-${name} is the web frontend of the OpenShock platform. Authenticated users manage \
+${PUBLIC_SITE_NAME} is the web frontend of the OpenShock platform. Authenticated users manage \
 hubs (ESP32-based bridges), shockers, share permissions, API tokens, and live control \
 sessions. Unauthenticated visitors can flash firmware to a device over WebSerial or sign \
 up for an account.

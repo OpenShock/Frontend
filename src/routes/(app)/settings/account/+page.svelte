@@ -20,8 +20,6 @@
   import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
   import DangerZone from './DangerZone.svelte';
 
-  const errorReportingAvailable = PUBLIC_SIGNOZ_LOGS_ENABLED === 'true';
-
   const telemetryOptions: { value: TelemetryLevel; label: string; description: string }[] = [
     { value: 'off', label: 'Off', description: 'Send nothing.' },
     {
@@ -119,7 +117,7 @@
         >
       </div>
 
-      {#if errorReportingAvailable}
+      {#if PUBLIC_SIGNOZ_LOGS_ENABLED}
         <div class="flex w-full flex-col gap-2">
           <div class="flex w-full items-center gap-2">
             <div class="grow">

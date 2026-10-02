@@ -11,7 +11,7 @@ import { toast } from 'svelte-sonner';
 export function maybePromptTelemetryConsent(): void {
   if (typeof window === 'undefined') return;
   // Only ask where telemetry can actually ship.
-  if (PUBLIC_SIGNOZ_LOGS_ENABLED !== 'true') return;
+  if (!PUBLIC_SIGNOZ_LOGS_ENABLED) return;
   if (telemetryPrompted.value) return;
 
   const id = toast(TelemetryConsentToast, {
