@@ -6,7 +6,12 @@
   import * as Table from '@openshock/svelte-core/components/ui/table';
   import { IsMobile } from '@openshock/svelte-core/hooks';
   import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
-  import { onlineHubs, ownHubs, refreshOwnHubs } from '#lib/state/hubs-state.svelte.js';
+  import {
+    onlineHubs,
+    ownHubs,
+    ownHubsStatus,
+    refreshOwnHubs,
+  } from '#lib/state/hubs-state.svelte.js';
   import { onMount } from 'svelte';
   import type { Hub } from './columns';
   import DataTableActions from './data-table-actions.svelte';
@@ -15,7 +20,13 @@
 
   import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
   import { TextInput } from '@openshock/svelte-core/components/input';
-  import { PageHeader, Container, EmptyState } from '@openshock/svelte-core/components';
+  import {
+    PageHeader,
+    Container,
+    EmptyState,
+    PageError,
+    PageLoading,
+  } from '@openshock/svelte-core/components';
 
   const isMobile = new IsMobile();
 
@@ -90,7 +101,11 @@
     </Button>
   </PageHeader>
 
-  {#if data.length === 0}
+  {#if !ownHubsStatus.loaded && ownHubsStatus.failed}
+    <PageError message="Failed to load hubs." onRetry={refreshOwnHubs} />
+  {:else if !ownHubsStatus.loaded}
+    <PageLoading />
+  {:else if data.length === 0}
     <EmptyState
       icon={Router}
       title="No hubs yet"

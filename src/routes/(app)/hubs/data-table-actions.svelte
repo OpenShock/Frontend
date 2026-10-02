@@ -35,6 +35,8 @@
   } from '@lucide/svelte';
   import type { Hub } from './columns';
   import { resolve } from '$app/paths';
+  import { HubConnectionState, type HubConnection } from '@microsoft/signalr';
+  import { toast } from 'svelte-sonner';
 
   interface Props {
     hub: Hub;
@@ -44,19 +46,28 @@
 
   const copyId = () => copyToClipboard(hub.id, 'ID copied to clipboard');
 
+  async function sendHubCommand(send: (connection: HubConnection) => Promise<void>) {
+    const connection = getConnection();
+    if (connection?.state !== HubConnectionState.Connected) {
+      toast.error('Not connected to the server', { description: 'Try again in a moment.' });
+      return;
+    }
+    try {
+      await send(connection);
+    } catch (error) {
+      await handleApiError(error);
+    }
+  }
+
   async function confirmHubCommand(
     title: string,
     desc: string,
     confirmButtonText: string,
-    send: () => Promise<void>
+    send: (connection: HubConnection) => Promise<void>
   ) {
     const result = await dialog.confirm({ title, desc, confirmButtonText });
     if (!result.confirmed) return;
-    try {
-      await send();
-    } catch (error) {
-      await handleApiError(error);
-    }
+    await sendHubCommand(send);
   }
 
   const rebootHub = () =>
@@ -64,7 +75,7 @@
       `Reboot ${hub.name}?`,
       'The hub will disconnect and restart. Any shockers paired to it stop responding until it comes back online.',
       'Reboot',
-      () => serializeRebootMessage(getConnection(), hub.id)
+      (connection) => serializeRebootMessage(connection, hub.id)
     );
 
   const setCaptivePortal = (enabled: boolean) =>
@@ -74,7 +85,7 @@
         ? 'The hub broadcasts its own setup network. It stays reachable on your Wi-Fi, but the hotspot is open to anyone in range until you turn it off.'
         : 'The setup hotspot shuts down. If the hub is not already on your Wi-Fi you will need physical access to set it up again.',
       enabled ? 'Enable' : 'Disable',
-      () => serializeCaptivePortalMessage(getConnection(), hub.id, enabled)
+      (connection) => serializeCaptivePortalMessage(connection, hub.id, enabled)
     );
 
   async function editHub(name: string, close: () => void) {
@@ -299,7 +310,8 @@
     <DropdownMenu.Separator />
     <DropdownMenu.Item
       class="text-destructive cursor-pointer"
-      onclick={() => serializeEmergencyStopMessage(getConnection(), hub.id)}
+      onclick={() =>
+        sendHubCommand((connection) => serializeEmergencyStopMessage(connection, hub.id))}
     >
       <OctagonX class="size-4" />
       Emergency Stop
