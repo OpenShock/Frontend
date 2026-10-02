@@ -13,7 +13,7 @@ import {
   TimeSinceDurationRenderer,
   UserAgentRenderer,
 } from '#lib/components/Table/ColumnUtils.js';
-import { getReadableUserAgentName } from '#lib/utils/index.js';
+import { countryName, getReadableUserAgentName } from '#lib/utils/index.js';
 import { createNowTicker } from '@openshock/svelte-core/utils';
 import { SemVer } from 'semver';
 import DataTableActions from './data-table-actions.svelte';
@@ -39,25 +39,6 @@ function LatencyRenderer(latencyMs: number | null) {
   if (latencyMs === null) return CellNotApplicable;
   const text = `${latencyMs} ms`;
   return latencyMs >= HIGH_LATENCY_MS ? RenderOrangeCell(text) : RenderBoldCell(text);
-}
-
-const regionNames = new Intl.DisplayNames(undefined, { type: 'region', fallback: 'code' });
-
-// Cloudflare's CF-IPCountry uses `XX` for unknown and `T1` for Tor.
-export function countryName(code: string | null): string | null {
-  switch (code) {
-    case null:
-    case '':
-    case 'XX':
-      return null;
-    case 'T1':
-      return 'Tor';
-  }
-  try {
-    return regionNames.of(code) ?? code;
-  } catch {
-    return code;
-  }
 }
 
 function CountryRenderer(code: string | null) {

@@ -1,6 +1,7 @@
 <script lang="ts" module>
+  import { countryName } from '#lib/utils/index.js';
   import { formatBoardName, parseOpenShockUserAgent } from '#lib/utils/userAgent.js';
-  import { countryName, type OnlineHub } from './columns';
+  import { type OnlineHub } from './columns';
 
   type Dimension = 'firmware' | 'board' | 'country' | 'gateway';
 
