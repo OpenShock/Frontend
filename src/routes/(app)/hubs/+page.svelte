@@ -15,7 +15,7 @@
 
   import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
   import { TextInput } from '@openshock/svelte-core/components/input';
-  import { PageHeader, Container } from '@openshock/svelte-core/components';
+  import { PageHeader, Container, EmptyState } from '@openshock/svelte-core/components';
 
   const isMobile = new IsMobile();
 
@@ -90,7 +90,15 @@
     </Button>
   </PageHeader>
 
-  {#if isMobile.current}
+  {#if data.length === 0}
+    <EmptyState
+      icon={Router}
+      title="No hubs yet"
+      description="A hub is the device that relays commands to your shockers. Add one to get started."
+    >
+      <Button size="lg" onclick={openCreateHubDialog}><Plus />Add Hub</Button>
+    </EmptyState>
+  {:else if isMobile.current}
     <div class="grid w-full gap-6">
       {#each data as hub (hub.id)}
         <div class="flex items-center justify-between gap-4">
@@ -138,10 +146,6 @@
             <Table.Cell>
               <DataTableActions {hub} />
             </Table.Cell>
-          </Table.Row>
-        {:else}
-          <Table.Row>
-            <Table.Cell colspan={5} class="h-24 text-center">No hubs found.</Table.Cell>
           </Table.Row>
         {/each}
       </Table.Body>
