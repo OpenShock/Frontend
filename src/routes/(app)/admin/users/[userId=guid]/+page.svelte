@@ -51,6 +51,11 @@
   // Bumped to force a re-fetch after a mutation.
   let refreshNonce = $state(0);
 
+  // Which user `user` holds. Deliberately not `$state`: the fetching effect
+  // compares against it, and a reactive read there would make the effect
+  // re-run on its own writes.
+  let displayedUserId: string | undefined = undefined;
+
   let setNameOpen = $state(false);
   let setEmailOpen = $state(false);
   let setPasswordOpen = $state(false);
@@ -65,31 +70,55 @@
   $effect(() => {
     void refreshNonce; // re-run after a mutation
     const userId = page.params.userId;
+
+    if (displayedUserId !== userId) {
+      // Navigating to another user: the controls act on whatever `user` holds,
+      // so the previous account must not stay on screen while the new one loads.
+      displayedUserId = userId;
+      user = null;
+      notFound = false;
+      hasLoaded = false;
+    }
+
     if (!userId) {
       notFound = true;
       hasLoaded = true;
       return;
     }
 
+    // A superseded request must not write to the page, or a slow response for
+    // the previous user would overwrite the current one. The flag also covers
+    // unmounting, where the abort rejection would otherwise raise a toast.
+    let cancelled = false;
+    const controller = new AbortController();
+
     isFetching = true;
-    adminGetUserById({ path: { userId } })
+    adminGetUserById({ path: { userId }, signal: controller.signal })
       .then((response: UserView) => {
+        if (cancelled) return;
         user = response;
         notFound = false;
       })
-      .catch((error: unknown) =>
+      .catch((error: unknown) => {
+        if (cancelled) return;
         // A missing user is the page's own empty state, not an error toast.
-        handleApiError(error, (problem) => {
+        return handleApiError(error, (problem) => {
           if (problem.status !== 404) return false;
           user = null;
           notFound = true;
           return true;
-        })
-      )
+        });
+      })
       .finally(() => {
+        if (cancelled) return;
         isFetching = false;
         hasLoaded = true;
       });
+
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
   });
 
   const refresh = () => refreshNonce++;
