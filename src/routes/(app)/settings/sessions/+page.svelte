@@ -3,7 +3,7 @@
   import type { LoginSessionResponse } from '#lib/api/index.js';
   import MonitorSmartphone from '@lucide/svelte/icons/monitor-smartphone';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
-  import { Container, EmptyState } from '@openshock/svelte-core/components';
+  import { Container, EmptyState, PageHeader } from '@openshock/svelte-core/components';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
@@ -66,19 +66,15 @@
 </script>
 
 <Container>
-  <Card.Header class="w-full">
-    <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
-      Sessions
-      <Button class="text-xl" onclick={onRefreshClicked} disabled={loading}>
-        <RotateCcw />
-        <span> Refresh </span>
-      </Button>
-    </Card.Title>
-    <Card.Description>
-      This is a list of all active sessions of your account. Revoke any sessions you do not
-      recognize.
-    </Card.Description>
-  </Card.Header>
+  <PageHeader
+    title="Sessions"
+    subtitle="Every active session on your account. Revoke any you do not recognize."
+  >
+    <Button variant="outline" onclick={onRefreshClicked} disabled={loading}>
+      <RotateCcw />
+      Refresh
+    </Button>
+  </PageHeader>
   <Card.Content class="w-full">
     {#if loading && data.length === 0}
       <div class="flex h-64 w-full items-center justify-center">

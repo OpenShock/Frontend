@@ -238,7 +238,7 @@
       {liveUpdatesActive ? 'Live' : 'Paused'}
     </Badge>
   </PageHeader>
-  <div class="flex min-h-0 w-full flex-1 flex-col gap-6">
+  <div class="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-6">
     <div class="flex items-end gap-2">
       <div class="w-64">
         <MultiSelectCombobox

@@ -82,7 +82,7 @@
 <Card.Root>
   <Card.Header class="text-center">
     <Card.Title class="text-xl">
-      Sign Up With <span class="capitalize">{page.params.provider}</span>
+      <h1>Sign Up With <span class="capitalize">{page.params.provider}</span></h1>
     </Card.Title>
     <Card.Description>Complete your account details</Card.Description>
   </Card.Header>

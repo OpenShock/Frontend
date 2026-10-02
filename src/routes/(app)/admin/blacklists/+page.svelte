@@ -10,7 +10,7 @@
   } from '#lib/api/index.js';
   import type { EmailProviderBlacklistDto, UserNameBlacklistDto } from '#lib/api/index.js';
   import { Trash2 } from '@lucide/svelte';
-  import { Container } from '@openshock/svelte-core/components';
+  import { Container, PageHeader } from '@openshock/svelte-core/components';
   import { TextInput } from '@openshock/svelte-core/components/input';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
@@ -174,94 +174,100 @@
   });
 </script>
 
-<Container class="grid grid-cols-1 gap-6 md:grid-cols-2">
-  <!-- Username Blacklist -->
-  <Card>
-    <CardHeader>
-      <CardTitle>Username Blacklist</CardTitle>
-      <TextInput autocomplete="off" placeholder="e.g. baduser123" bind:value={usernameEntry}>
-        {#snippet after()}
-          <Select.Root type="single" name="matchType" bind:value={matchTypeEntry}>
-            <Select.Trigger class="w-[150px]">{triggerLabel}</Select.Trigger>
-            <Select.Content>
-              <Select.Group>
-                <Select.Label>Match Type</Select.Label>
-                {#each matchTypes as m (m.value)}
-                  <Select.Item value={m.value} label={m.label}>{m.label}</Select.Item>
-                {/each}
-              </Select.Group>
-            </Select.Content>
-          </Select.Root>
+<Container>
+  <PageHeader
+    title="Blacklists"
+    subtitle="Usernames and email addresses blocked from registering."
+  />
+  <div class="grid w-full grid-cols-1 gap-6 md:grid-cols-2">
+    <!-- Username Blacklist -->
+    <Card>
+      <CardHeader>
+        <CardTitle>Username Blacklist</CardTitle>
+        <TextInput autocomplete="off" placeholder="e.g. baduser123" bind:value={usernameEntry}>
+          {#snippet after()}
+            <Select.Root type="single" name="matchType" bind:value={matchTypeEntry}>
+              <Select.Trigger class="w-[150px]">{triggerLabel}</Select.Trigger>
+              <Select.Content>
+                <Select.Group>
+                  <Select.Label>Match Type</Select.Label>
+                  {#each matchTypes as m (m.value)}
+                    <Select.Item value={m.value} label={m.label}>{m.label}</Select.Item>
+                  {/each}
+                </Select.Group>
+              </Select.Content>
+            </Select.Root>
 
-          <Button onclick={addUsernameEntry} disabled={isLoadingUsernames}>Add</Button>
-        {/snippet}
-      </TextInput>
-    </CardHeader>
-    <CardContent class="overflow-clip">
-      <ScrollArea>
-        <div class="space-y-2">
-          {#each limit(usernameBlacklist, 10) as item (item.id)}
-            <div class="flex items-center justify-between text-sm">
-              <div class="flex items-center space-x-2">
-                <span>{item.value}</span>
-                <span class="bg-muted rounded px-2 py-0.5 text-xs">{item.matchType}</span>
+            <Button onclick={addUsernameEntry} disabled={isLoadingUsernames}>Add</Button>
+          {/snippet}
+        </TextInput>
+      </CardHeader>
+      <CardContent class="overflow-clip">
+        <ScrollArea>
+          <div class="space-y-2">
+            {#each limit(usernameBlacklist, 10) as item (item.id)}
+              <div class="flex items-center justify-between text-sm">
+                <div class="flex items-center space-x-2">
+                  <span>{item.value}</span>
+                  <span class="bg-muted rounded px-2 py-0.5 text-xs">{item.matchType}</span>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onclick={() => removeUsername(item.id)}
+                  disabled={isLoadingUsernames}
+                  title="Remove {item.value}"
+                >
+                  <Trash2 size="16" class="text-destructive" />
+                </Button>
               </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onclick={() => removeUsername(item.id)}
-                disabled={isLoadingUsernames}
-                title="Remove {item.value}"
-              >
-                <Trash2 size="16" class="text-destructive" />
-              </Button>
-            </div>
-            <Separator />
-          {/each}
-        </div>
-      </ScrollArea>
-    </CardContent>
-  </Card>
+              <Separator />
+            {/each}
+          </div>
+        </ScrollArea>
+      </CardContent>
+    </Card>
 
-  <!-- Email-Provider Blacklist -->
-  <Card>
-    <CardHeader>
-      <CardTitle>Email-Provider Blacklist</CardTitle>
-      <TextInput
-        type="url"
-        autocomplete="off"
-        placeholder="e.g. gmail.com"
-        bind:value={emailEntry}
-        validationResult={emailEntryValid}
-      >
-        {#snippet after()}
-          <Button onclick={addEmailEntry} disabled={isLoadingEmails}>Add</Button>
-          <Button onclick={addEmailsBatch} disabled={isLoadingEmails}
-            >Batch Upload From Clipboard</Button
-          >
-        {/snippet}
-      </TextInput>
-    </CardHeader>
-    <CardContent class="overflow-clip">
-      <ScrollArea>
-        <div class="space-y-2">
-          {#each limit(emailBlacklist, 10) as item (item.id)}
-            <div class="flex items-center justify-between text-sm">
-              <span>{item.domain}</span>
-              <Button
-                variant="ghost"
-                size="sm"
-                onclick={() => removeEmail(item.id)}
-                disabled={isLoadingEmails}
-                title="Remove {item.domain}"
-              >
-                <Trash2 size="16" class="text-destructive" />
-              </Button>
-            </div>
-            <Separator />
-          {/each}
-        </div>
-      </ScrollArea>
-    </CardContent>
-  </Card>
+    <!-- Email-Provider Blacklist -->
+    <Card>
+      <CardHeader>
+        <CardTitle>Email-Provider Blacklist</CardTitle>
+        <TextInput
+          type="url"
+          autocomplete="off"
+          placeholder="e.g. gmail.com"
+          bind:value={emailEntry}
+          validationResult={emailEntryValid}
+        >
+          {#snippet after()}
+            <Button onclick={addEmailEntry} disabled={isLoadingEmails}>Add</Button>
+            <Button onclick={addEmailsBatch} disabled={isLoadingEmails}
+              >Batch Upload From Clipboard</Button
+            >
+          {/snippet}
+        </TextInput>
+      </CardHeader>
+      <CardContent class="overflow-clip">
+        <ScrollArea>
+          <div class="space-y-2">
+            {#each limit(emailBlacklist, 10) as item (item.id)}
+              <div class="flex items-center justify-between text-sm">
+                <span>{item.domain}</span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onclick={() => removeEmail(item.id)}
+                  disabled={isLoadingEmails}
+                  title="Remove {item.domain}"
+                >
+                  <Trash2 size="16" class="text-destructive" />
+                </Button>
+              </div>
+              <Separator />
+            {/each}
+          </div>
+        </ScrollArea>
+      </CardContent>
+    </Card>
+  </div>
 </Container>

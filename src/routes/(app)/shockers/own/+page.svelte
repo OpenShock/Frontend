@@ -4,7 +4,7 @@
   import type { NewShocker } from '#lib/api/index.js';
   import { Layers, LogsIcon, Plus, RotateCcw, Settings, Zap } from '@lucide/svelte';
   import { resolve } from '$app/paths';
-  import { Container, EmptyState } from '@openshock/svelte-core/components';
+  import { Container, EmptyState, PageHeader } from '@openshock/svelte-core/components';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import ClassicControlModule from '#lib/components/ControlModules/ClassicControlModule.svelte';
   import DialogShockerAdd, {
@@ -193,8 +193,7 @@
       <span class="text-muted-foreground">Loading shockers...</span>
     </div>
   {:else}
-    <div class="flex w-full flex-wrap items-center justify-between gap-2">
-      <h1 class="text-2xl font-bold">Shockers</h1>
+    <PageHeader title="Shockers" subtitle="Every shocker paired to your hubs.">
       <div class="flex flex-wrap items-center gap-1">
         <Button
           variant="secondary"
@@ -289,9 +288,7 @@
           ><LogsIcon class="size-4" /></Button
         >
       </div>
-    </div>
-
-    <hr class="border-border" />
+    </PageHeader>
 
     {#if shockers.length === 0}
       <EmptyState

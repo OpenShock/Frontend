@@ -21,7 +21,9 @@
 >
   <DotGrid bind:this={grid} />
 
-  <img class="h-10 sm:h-16 md:h-22" src={asset('logo.svg')} alt="OpenShock Logo" />
+  <h1>
+    <img class="h-10 sm:h-16 md:h-22" src={asset('logo.svg')} alt="OpenShock" />
+  </h1>
 
   <p class="relative text-lg opacity-75 md:text-2xl">
     The go-to platform for safe, reliable, real low-latency remote shocking.<br />

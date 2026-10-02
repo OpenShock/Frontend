@@ -69,7 +69,7 @@
 
 <Card.Root>
   <Card.Header class="text-center">
-    <Card.Title class="text-xl">Reset Password</Card.Title>
+    <Card.Title class="text-xl"><h1>Reset Password</h1></Card.Title>
     <Card.Description>
       {#if checking}
         Verifying reset link...

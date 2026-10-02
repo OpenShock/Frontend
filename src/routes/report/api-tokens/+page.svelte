@@ -56,8 +56,8 @@
 
 <Container class="max-w-3xl space-y-6">
   <Card.Header>
-    <Card.Title class="flex items-center justify-between text-3xl font-semibold">
-      Report Leaked API Tokens
+    <Card.Title class="flex items-center justify-between gap-2 text-3xl font-semibold">
+      <h1>Report Leaked API Tokens</h1>
       <Button onclick={pasteFromClipboard} size="sm" variant="outline">Paste from clipboard</Button>
     </Card.Title>
   </Card.Header>

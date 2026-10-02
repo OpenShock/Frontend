@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Link, Router, Share2, Zap } from '@lucide/svelte';
   import { resolve } from '$app/paths';
-  import { Container } from '@openshock/svelte-core/components';
+  import { Container, PageHeader } from '@openshock/svelte-core/components';
   import * as Card from '@openshock/svelte-core/components/ui/card';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
@@ -25,12 +25,11 @@
 
 <Container>
   <div class="flex w-full flex-col gap-6">
-    <div>
-      <h1 class="text-3xl font-bold">
-        Welcome back{userState.self ? `, ${userState.self.name}` : ''}
-      </h1>
-      <p class="text-muted-foreground mt-1">Here's an overview of your OpenShock setup.</p>
-    </div>
+    <PageHeader
+      title="Welcome back{userState.self ? `, ${userState.self.name}` : ''}"
+      subtitle="Here's an overview of your OpenShock setup."
+      class="mb-0"
+    />
 
     <!-- Stats cards -->
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">

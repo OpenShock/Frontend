@@ -204,8 +204,8 @@
   <div class="min-h-0 flex-1 overflow-y-auto">
     <Container>
       <Card.Header class="w-full">
-        <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
-          Serial Terminal
+        <Card.Title class="flex items-center justify-between gap-2 text-3xl">
+          <h1>Serial Terminal</h1>
           {#if serial}
             <Button variant="outline" onclick={() => (showHelpDialog = true)}>
               <MessageCircleQuestionMark />

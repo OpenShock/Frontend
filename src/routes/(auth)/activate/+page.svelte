@@ -34,7 +34,7 @@
 
 <Card.Root>
   <Card.Header class="text-center">
-    <Card.Title class="text-xl">Activate Account</Card.Title>
+    <Card.Title class="text-xl"><h1>Activate Account</h1></Card.Title>
     <Card.Description>
       {#if status === 'activating'}
         Activating your account...

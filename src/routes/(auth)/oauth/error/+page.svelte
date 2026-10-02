@@ -23,7 +23,7 @@
 {#if errorCode}
   <Card.Root>
     <Card.Header class="text-center">
-      <Card.Title class="text-xl">Authentication Error</Card.Title>
+      <Card.Title class="text-xl"><h1>Authentication Error</h1></Card.Title>
     </Card.Header>
     <Card.Content>
       <p class="text-destructive text-center" role="alert">{getOAuthErrorMessage(errorCode)}</p>

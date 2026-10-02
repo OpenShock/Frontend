@@ -4,7 +4,7 @@
   import Mail from '@lucide/svelte/icons/mail';
   import User from '@lucide/svelte/icons/user';
   import { PUBLIC_SIGNOZ_LOGS_ENABLED } from '$app/env/public';
-  import { Container } from '@openshock/svelte-core/components';
+  import { Container, PageHeader } from '@openshock/svelte-core/components';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import { ToggleGroup, ToggleGroupItem } from '@openshock/svelte-core/components/ui/toggle-group';
   import {
@@ -64,11 +64,10 @@
 
 {#if account}
   <Container>
+    <PageHeader title="Account Settings" subtitle="Your sign-in details and account actions." />
     <div
       class="bg-card border-border flex w-full flex-col items-start gap-y-6 rounded-lg border p-6"
     >
-      <h1 class="text-xl font-bold">Account Settings</h1>
-
       <div class="flex w-full items-center gap-2">
         <div class="grow">
           <div class="flex items-center gap-2 font-medium">

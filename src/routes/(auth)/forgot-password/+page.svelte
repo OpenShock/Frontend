@@ -42,7 +42,7 @@
 
 <Card.Root>
   <Card.Header class="text-center">
-    <Card.Title class="text-xl">Forgot Password</Card.Title>
+    <Card.Title class="text-xl"><h1>Forgot Password</h1></Card.Title>
     <Card.Description>Enter your email to reset your password</Card.Description>
   </Card.Header>
   <Card.Content>

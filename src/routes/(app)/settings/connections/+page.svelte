@@ -6,7 +6,7 @@
   import Unlink from '@lucide/svelte/icons/unlink';
   import { page } from '$app/state';
   import { GetOAuthAuthorizeUrl } from '#lib/api/next/oauth.js';
-  import { Container, EmptyState } from '@openshock/svelte-core/components';
+  import { Container, EmptyState, PageHeader } from '@openshock/svelte-core/components';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
   import * as Dropdown from '@openshock/svelte-core/components/ui/dropdown-menu';
@@ -83,20 +83,15 @@
 </script>
 
 <Container>
-  <Card.Header class="w-full">
-    <Card.Title class="flex items-center justify-between text-3xl">
-      OAuth Connections
-      <div class="flex items-center gap-2">
-        <Button variant="ghost" onclick={refresh} disabled={refreshing} aria-busy={refreshing}>
-          <RotateCcw class="mr-2 size-4" />
-          {refreshing ? 'Refreshing…' : 'Refresh'}
-        </Button>
-      </div>
-    </Card.Title>
-    <Card.Description>
-      Link or unlink third-party accounts to sign in faster and keep your profile in sync.
-    </Card.Description>
-  </Card.Header>
+  <PageHeader
+    title="OAuth Connections"
+    subtitle="Link or unlink third-party accounts to sign in faster and keep your profile in sync."
+  >
+    <Button variant="outline" onclick={refresh} disabled={refreshing} aria-busy={refreshing}>
+      <RotateCcw class="size-4" />
+      {refreshing ? 'Refreshing…' : 'Refresh'}
+    </Button>
+  </PageHeader>
 
   <Card.Content class="flex w-full flex-1 flex-col space-y-6">
     <svelte:boundary onerror={(error: unknown) => handleApiError(error)}>

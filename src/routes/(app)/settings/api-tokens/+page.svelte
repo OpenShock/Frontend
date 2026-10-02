@@ -5,7 +5,7 @@
   import KeyRound from '@lucide/svelte/icons/key-round';
   import Plus from '@lucide/svelte/icons/plus';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
-  import { Container, EmptyState } from '@openshock/svelte-core/components';
+  import { Container, EmptyState, PageHeader } from '@openshock/svelte-core/components';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
@@ -44,16 +44,13 @@
 </script>
 
 <Container>
-  <Card.Header class="w-full">
-    <Card.Title class="flex items-center justify-between space-x-2 text-3xl">
-      API Tokens
-      <div>
-        <Button href={resolve('settings/api-tokens/new')}><Plus />Generate Token</Button>
-        <Button onclick={refresh}><RotateCcw />Refresh</Button>
-      </div>
-    </Card.Title>
-    <Card.Description>API Tokens are used to authenticate with the OpenShock API</Card.Description>
-  </Card.Header>
+  <PageHeader
+    title="API Tokens"
+    subtitle="API Tokens are used to authenticate with the OpenShock API."
+  >
+    <Button href={resolve('settings/api-tokens/new')}><Plus />Generate Token</Button>
+    <Button variant="outline" onclick={refresh}><RotateCcw />Refresh</Button>
+  </PageHeader>
   <Card.Content class="flex w-full flex-col space-y-4">
     <svelte:boundary onerror={(error: unknown) => handleApiError(error)}>
       {#if tokens.length === 0}

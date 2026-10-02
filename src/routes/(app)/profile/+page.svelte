@@ -1,15 +1,16 @@
 <script lang="ts">
-  import { Container } from '@openshock/svelte-core/components';
+  import { Container, EmptyState, PageHeader } from '@openshock/svelte-core/components';
+  import { UserCircle } from '@lucide/svelte';
   import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
 
   registerBreadcrumbs(() => [{ label: 'Profile' }]);
 </script>
 
 <Container>
-  <h1 class="text-3xl font-bold">Profile</h1>
-  <div
-    class="border-border bg-card flex w-full flex-col items-center justify-center gap-3 rounded-lg border border-dashed py-20"
-  >
-    <p class="text-muted-foreground text-sm">Your profile page is coming soon.</p>
-  </div>
+  <PageHeader title="Profile" />
+  <EmptyState
+    icon={UserCircle}
+    title="Profile is coming soon"
+    description="Your public profile is not available yet. Account details live under Settings."
+  />
 </Container>
