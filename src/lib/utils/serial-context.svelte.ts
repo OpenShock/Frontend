@@ -1,4 +1,4 @@
-import { isSerialSupported } from '$lib/utils/compatibility';
+import { isSerialSupported } from '#lib/utils/compatibility.js';
 import { onMount } from 'svelte';
 
 export class SerialContext {

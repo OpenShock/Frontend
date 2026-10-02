@@ -1,6 +1,6 @@
+import { authState } from '#lib/state/auth-state.svelte.js';
+import { REDIRECT_QUERY_PARAM } from '#lib/utils/url.js';
 import { resolve } from '$app/paths';
-import { authState } from '$lib/state/auth-state.svelte';
-import { REDIRECT_QUERY_PARAM } from '$lib/utils/url';
 import { redirect } from '@sveltejs/kit';
 
 // The pages below this one will be different from user-to-user so cannot be prerendered and really shouldnt be server rendered
@@ -11,6 +11,6 @@ export const prerender = false;
 export function load({ url }) {
   if (!authState.isAuthenticated) {
     const redirectTo = encodeURIComponent(url.pathname + url.search);
-    redirect(303, `${resolve('/login')}?${REDIRECT_QUERY_PARAM}=${redirectTo}`);
+    redirect(303, `${resolve('login')}?${REDIRECT_QUERY_PARAM}=${redirectTo}`);
   }
 }

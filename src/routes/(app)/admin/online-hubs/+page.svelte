@@ -1,5 +1,5 @@
 <script lang="ts" module>
-  import { formatBoardName, parseOpenShockUserAgent } from '$lib/utils/userAgent';
+  import { formatBoardName, parseOpenShockUserAgent } from '#lib/utils/userAgent.js';
   import { countryName, type OnlineHub } from './columns';
 
   type Dimension = 'firmware' | 'board' | 'country' | 'gateway';
@@ -44,16 +44,16 @@
 
 <script lang="ts">
   import { RotateCcw, X } from '@lucide/svelte';
-  import { adminGetOnlineDevices } from '$lib/api';
+  import { adminGetOnlineDevices } from '#lib/api/index.js';
   import { Container, PageHeader } from '@openshock/svelte-core/components';
-  import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
+  import DataTable from '#lib/components/Table/DataTableTemplate.svelte';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import { Input } from '@openshock/svelte-core/components/ui/input';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import { SemVer } from 'semver';
   import { onMount } from 'svelte';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
   import { HIGH_LATENCY_MS, WEAK_RSSI_DBM, columns } from './columns';
   import DistributionChart, { bucketize } from './distribution-chart.svelte';
   import { features } from './data-table-features';

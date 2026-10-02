@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import type { OwnPublicShareResponse } from '$lib/api';
+  import type { OwnPublicShareResponse } from '#lib/api/index.js';
   import { TableActionMenu } from '@openshock/svelte-core/components';
   import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
   import { copyToClipboard } from '@openshock/svelte-core/utils';
@@ -28,18 +28,16 @@
     <DropdownMenu.Group>
       <DropdownMenu.Item
         class="cursor-pointer"
-        onclick={() => goto(resolve(`/shares/public/${publicShare.id}`))}
+        onclick={() => goto(resolve(`shares/public/${publicShare.id}`))}
+        ><Eye class="size-4" />View</DropdownMenu.Item
       >
-        <Eye class="size-4" />
-        View
-      </DropdownMenu.Item>
+
       <DropdownMenu.Item
         class="cursor-pointer"
-        onclick={() => goto(resolve(`/shares/public/${publicShare.id}/edit`))}
+        onclick={() => goto(resolve(`shares/public/${publicShare.id}/edit`))}
+        ><Pencil class="size-4" />Edit</DropdownMenu.Item
       >
-        <Pencil class="size-4" />
-        Edit
-      </DropdownMenu.Item>
+
       <DropdownMenu.Separator />
       <DropdownMenu.Item class="cursor-pointer" onclick={copyId}>
         <Copy class="size-4" />
@@ -48,11 +46,8 @@
       <DropdownMenu.Separator />
       <DropdownMenu.Item
         class="cursor-pointer text-red-500"
-        onclick={() => (deleteDialogOpen = true)}
+        onclick={() => (deleteDialogOpen = true)}><Trash2 class="size-4" />Delete</DropdownMenu.Item
       >
-        <Trash2 class="size-4" />
-        Delete
-      </DropdownMenu.Item>
     </DropdownMenu.Group>
   </TableActionMenu>
 </span>

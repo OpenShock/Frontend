@@ -1,4 +1,4 @@
-import type { ShockerLimits } from '$lib/api';
+import type { ShockerLimits } from '#lib/api/index.js';
 
 export default function CompareShockerLimits(a: ShockerLimits, b: ShockerLimits) {
   // Compare the limits of the two shocker objects

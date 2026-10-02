@@ -11,6 +11,9 @@ minimumReleaseAge: 4320 # 3 days
 minimumReleaseAgeExcludePrune: true
 minimumReleaseAgeExclude:
   - '@openshock/*'
+  - '@sveltejs/adapter-cloudflare@8.0.0'
+  - '@sveltejs/adapter-node@6.0.0'
+  - '@sveltejs/kit@3.0.0'
 
 onlyBuiltDependencies:
   - '@tailwindcss/oxide'

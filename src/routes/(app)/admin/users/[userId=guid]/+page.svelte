@@ -1,19 +1,19 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import { adminGetUsers } from '$lib/api';
-  import type { AdminUsersView, AdminUsersViewPaginated } from '$lib/api';
+  import { adminGetUsers } from '#lib/api/index.js';
+  import type { AdminUsersView, AdminUsersViewPaginated } from '#lib/api/index.js';
   import { Container, EmptyState } from '@openshock/svelte-core/components';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import { odataEq } from '$lib/utils/odata';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
+  import { odataEq } from '#lib/utils/odata.js';
   import UserX from '@lucide/svelte/icons/user-x';
 
   let user = $state<AdminUsersView | null>(null);
   let loading = $state(true);
 
   registerBreadcrumbs(() => [
-    { label: 'Users', href: '/admin/users' },
+    { label: 'Users', href: 'admin/users' },
     { label: user?.name ?? (loading ? 'Loading...' : 'Not found') },
   ]);
 

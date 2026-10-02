@@ -1,6 +1,6 @@
-import type { OwnerShockerResponse } from '$lib/api';
-import { shockerListSharedShockers } from '$lib/api';
-import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+import type { OwnerShockerResponse } from '#lib/api/index.js';
+import { shockerListSharedShockers } from '#lib/api/index.js';
+import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
 
 let sharedHubs = $state<OwnerShockerResponse[]>([]);
 

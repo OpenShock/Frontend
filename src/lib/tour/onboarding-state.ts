@@ -1,4 +1,4 @@
-import { PUBLIC_DISABLE_ONBOARDING } from '$env/static/public';
+import { PUBLIC_DISABLE_ONBOARDING } from '$app/env/public';
 import { isTruthy } from '@openshock/svelte-core/utils';
 
 export const WELCOME_COOKIE_NAME = 'os.welcomed';
@@ -18,7 +18,7 @@ const CURRENT_TOUR_VERSION = 1;
 const TOUR_VERSION_KEY = 'os.tourCompletedVersion';
 
 export function isOnboardingDisabled(): boolean {
-  return isTruthy(PUBLIC_DISABLE_ONBOARDING);
+  return PUBLIC_DISABLE_ONBOARDING;
 }
 
 function readWelcomeCookie(): boolean {

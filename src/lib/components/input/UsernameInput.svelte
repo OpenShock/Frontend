@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { accountCheckUsername } from '$lib/api';
+  import { accountCheckUsername } from '#lib/api/index.js';
   import { TextInput } from '@openshock/svelte-core/components/input';
-  import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { isValidationError, mapToValRes } from '#lib/errorhandling/ValidationProblemDetails.js';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import {
     UsernameCheckingAvailabilityValRes,
     UsernameInternalServerErrorValRes,
     mapUsernameCheckResponse,
     validateUsername,
-  } from '$lib/inputvalidation/usernameValidator';
+  } from '#lib/inputvalidation/usernameValidator.js';
   import type { AnyComponent, ValidationResult } from '@openshock/svelte-core/types';
   import { useDebounce } from '@openshock/svelte-core/utils';
   import type { Snippet } from 'svelte';

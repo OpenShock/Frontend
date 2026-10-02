@@ -1,17 +1,17 @@
 <script lang="ts">
   import { asset } from '$app/paths';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
   import { DotGrid } from '@openshock/svelte-core/components';
 
   let { data } = $props();
 
-  registerBreadcrumbs(() => [{ label: 'OpenShock', href: '/' }]);
+  registerBreadcrumbs(() => [{ label: 'OpenShock', href: '' }]);
 
   let grid: DotGrid | undefined = $state();
 </script>
 
 <svelte:head>
-  <link rel="preload" href={asset('/logo.svg')} as="image" type="image/svg+xml" />
+  <link rel="preload" href={asset('logo.svg')} as="image" type="image/svg+xml" />
 </svelte:head>
 
 <section
@@ -21,7 +21,8 @@
 >
   <DotGrid bind:this={grid} />
 
-  <img class="h-10 sm:h-16 md:h-22" src={asset('/logo.svg')} alt="OpenShock Logo" />
+  <img class="h-10 sm:h-16 md:h-22" src={asset('logo.svg')} alt="OpenShock Logo" />
+
   <p class="relative text-lg opacity-75 md:text-2xl">
     The go-to platform for safe, reliable, real low-latency remote shocking.<br />
     {#if data.ok}

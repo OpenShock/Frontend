@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { ShockerResponse } from '$lib/api';
-  import { getConnection } from '$lib/signalr/user.svelte';
-  import { ControlType } from '$lib/signalr/models/ControlType';
-  import { serializeControlMessages } from '$lib/signalr/serializers/Control';
-  import { useShockerEvents } from '$lib/hooks/shocker-events.svelte';
+  import type { ShockerResponse } from '#lib/api/index.js';
+  import { getConnection } from '#lib/signalr/user.svelte.js';
+  import { ControlType } from '#lib/signalr/models/ControlType.js';
+  import { serializeControlMessages } from '#lib/signalr/serializers/Control.js';
+  import { useShockerEvents } from '#lib/hooks/shocker-events.svelte.js';
   import ActionButtons from './impl/ActionButtons.svelte';
 
   interface Props {

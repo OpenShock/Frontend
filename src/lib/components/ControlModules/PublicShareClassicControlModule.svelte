@@ -1,17 +1,17 @@
 <script lang="ts">
   import { ClockFading, Gauge, Pause } from '@lucide/svelte';
-  import type { PublicShareShocker } from '$lib/api';
+  import type { PublicShareShocker } from '#lib/api/index.js';
   import {
     ControlDurationDefault,
     ControlDurationProps,
     ControlIntensityDefault,
     ControlIntensityProps,
-  } from '$lib/constants/ControlConstants';
-  import type { Control } from '$lib/signalr/models/Control';
-  import { ControlType } from '$lib/signalr/models/ControlType';
+  } from '#lib/constants/ControlConstants.js';
+  import type { Control } from '#lib/signalr/models/Control.js';
+  import { ControlType } from '#lib/signalr/models/ControlType.js';
   import { formatDurationSeconds } from '@openshock/svelte-core/utils';
-  import { getPauseReason } from '$lib/utils';
-  import { useShockerEvents } from '$lib/hooks/shocker-events.svelte';
+  import { getPauseReason } from '#lib/utils/index.js';
+  import { useShockerEvents } from '#lib/hooks/shocker-events.svelte.js';
   import ActionButtons from './impl/ActionButtons.svelte';
   import CircleSlider from './impl/CircleSlider.svelte';
 

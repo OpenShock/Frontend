@@ -1,23 +1,23 @@
 <script lang="ts">
-  import { sessionsListSessions } from '$lib/api';
-  import type { LoginSessionResponse } from '$lib/api';
+  import { sessionsListSessions } from '#lib/api/index.js';
+  import type { LoginSessionResponse } from '#lib/api/index.js';
   import MonitorSmartphone from '@lucide/svelte/icons/monitor-smartphone';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
   import { Container, EmptyState } from '@openshock/svelte-core/components';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import { getReadableUserAgentName } from '$lib/utils';
-  import { formatRelativeInstant, formatRelativeInstantOrNull } from '$lib/utils/datetime';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
+  import { getReadableUserAgentName } from '#lib/utils/index.js';
+  import { formatRelativeInstant, formatRelativeInstantOrNull } from '#lib/utils/datetime.js';
   import { createNowTicker } from '@openshock/svelte-core/utils';
   import SessionActions from './session-actions.svelte';
 
   registerBreadcrumbs(() => [
-    { label: 'Settings', href: '/settings/account' },
+    { label: 'Settings', href: 'settings/account' },
     { label: 'Sessions' },
   ]);
 

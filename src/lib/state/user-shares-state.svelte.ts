@@ -1,10 +1,10 @@
-import type { ShareInviteBaseDetails, V2UserShares } from '$lib/api';
+import type { ShareInviteBaseDetails, V2UserShares } from '#lib/api/index.js';
 import {
   userSharesGetIncomingInvitesList,
   userSharesGetOutgoingInvitesList,
   userSharesGetSharesByUsers,
-} from '$lib/api';
-import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+} from '#lib/api/index.js';
+import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
 
 let shares = $state<V2UserShares>({ outgoing: [], incoming: [] });
 let outgoingInvites = $state<ShareInviteBaseDetails[]>([]);

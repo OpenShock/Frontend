@@ -4,8 +4,8 @@
   import { page } from '$app/state';
   import { Container } from '@openshock/svelte-core/components';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
-  import { AuthStatus, authState } from '$lib/state/auth-state.svelte';
-  import { REDIRECT_QUERY_PARAM } from '$lib/utils/url';
+  import { AuthStatus, authState } from '#lib/state/auth-state.svelte.js';
+  import { REDIRECT_QUERY_PARAM } from '#lib/utils/url.js';
   import type { Snippet } from 'svelte';
 
   let { children }: { children: Snippet } = $props();
@@ -15,7 +15,7 @@
   $effect(() => {
     if (authState.status !== AuthStatus.Unauthenticated) return;
     const redirectTo = encodeURIComponent(page.url.pathname + page.url.search);
-    void goto(resolve(`/login?${REDIRECT_QUERY_PARAM}=${redirectTo}`));
+    void goto(resolve(`login?${REDIRECT_QUERY_PARAM}=${redirectTo}`));
   });
 </script>
 

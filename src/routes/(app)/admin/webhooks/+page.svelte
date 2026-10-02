@@ -1,20 +1,20 @@
 <script lang="ts">
   import { RotateCcw } from '@lucide/svelte';
-  import { adminListWebhooks } from '$lib/api';
-  import type { WebhookDto } from '$lib/api';
+  import { adminListWebhooks } from '#lib/api/index.js';
+  import type { WebhookDto } from '#lib/api/index.js';
   import { Container } from '@openshock/svelte-core/components';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import {
     CreateColumnDefs,
     LocaleDateTimeRenderer,
     RenderCell,
-  } from '$lib/components/Table/ColumnUtils';
-  import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
+  } from '#lib/components/Table/ColumnUtils.js';
+  import DataTable from '#lib/components/Table/DataTableTemplate.svelte';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import { CardHeader, CardTitle } from '@openshock/svelte-core/components/ui/card';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import DataTableActions from './data-table-actions.svelte';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
   import WebhookAddDialog from './dialog-webhook-add.svelte';
   import { features, type Features } from './data-table-features';
 

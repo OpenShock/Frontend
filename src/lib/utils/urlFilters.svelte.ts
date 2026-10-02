@@ -55,7 +55,7 @@ function parseValue(
  * a function that is called during component init — same rules as Svelte runes).
  *
  * On mount the state is seeded from the current URL, falling back to any declared default.
- * Whenever a filter value changes, the URL is updated with replaceState so the address bar
+ * Whenever a filter value changes, the URL is updated with a replacing `goto` so the address bar
  * always reflects the current filter state and users can copy/share the link.
  *
  * @example
@@ -104,7 +104,7 @@ export function createUrlFilters<T extends Record<string, ParamDef>>(
   const state = $state(init) as FilterState<T>;
   const keys = Object.keys(defs);
 
-  // Whenever any filter value changes, update the URL with replaceState so the
+  // Whenever any filter value changes, replace the URL in place so the
   // address bar stays in sync without adding a history entry.
   // page.url is read inside untrack() so URL changes caused by our own goto
   // call do not re-trigger this effect (avoids an infinite loop).
@@ -117,7 +117,7 @@ export function createUrlFilters<T extends Record<string, ParamDef>>(
 
     untrack(() => {
       // eslint-disable-next-line svelte/prefer-svelte-reactivity
-      const params = new URLSearchParams(page.url.searchParams);
+      const params = new URLSearchParams(page.url.search);
       for (const key of keys) {
         const value = snapshot[key];
         if (value === null) {
@@ -128,8 +128,7 @@ export function createUrlFilters<T extends Record<string, ParamDef>>(
           params.delete(key);
         }
       }
-      // eslint-disable-next-line svelte/no-navigation-without-resolve
-      goto(`?${params}`, { replaceState: true, keepFocus: true, noScroll: true });
+      goto(`?${params}`, { replace: true, reset: false });
 
       // Persist to localStorage so filters survive navigation
       if (storageKey) {

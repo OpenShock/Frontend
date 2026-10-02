@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { formatRelativeInstant } from '$lib/utils/datetime';
+  import { formatRelativeInstant } from '#lib/utils/datetime.js';
   import { parseAbsoluteToLocal, type ZonedDateTime } from '@internationalized/date';
   import { DateTimePicker } from '@openshock/svelte-core/components/datetime-picker';
   import * as Select from '@openshock/svelte-core/components/ui/select';

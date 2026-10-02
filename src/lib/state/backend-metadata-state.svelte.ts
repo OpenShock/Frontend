@@ -1,4 +1,4 @@
-import type { BackendInfoResponse } from '$lib/api';
+import type { BackendInfoResponse } from '#lib/api/index.js';
 
 export type BackendMetadata = Omit<BackendInfoResponse, 'isUserAuthenticated'>;
 

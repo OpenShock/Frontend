@@ -1,11 +1,11 @@
-import type { Pathname } from '$app/types';
+import type { Path } from '$app/types';
 
 export type RouteParam = { name: string; type: string };
 
 export type RouteInfo = {
   categories: readonly string[];
   parameters: readonly RouteParam[];
-  path: Pathname;
+  path: Path;
   original: string;
 };
 
@@ -36,7 +36,9 @@ export function fileToPath(file: string): RouteInfo {
     segments.push(part);
   }
 
-  const path = (segments.length ? '/' + segments.join('/') : '/') as Pathname;
+  // SvelteKit 3 `Path` values are relative to the base path and have no leading slash;
+  // the root route is the empty string.
+  const path = segments.join('/') as Path;
   return { categories, parameters, path, original };
 }
 
@@ -46,12 +48,11 @@ export const paths: readonly RouteInfo[] = Object.keys(
 
 const byPath = (a: RouteInfo, b: RouteInfo) => a.path.localeCompare(b.path);
 
-export const publicRoutes: readonly Pathname[] = paths
+export const publicRoutes: readonly Path[] = paths
   .filter((p) => !p.categories.includes('app') && p.parameters.length === 0)
   .toSorted(byPath)
   .map((p) => p.path);
-
-export const authenticatedRoutes: readonly Pathname[] = paths
+export const authenticatedRoutes: readonly Path[] = paths
   .filter((p) => p.categories.includes('app'))
   .toSorted(byPath)
   .map((p) => p.path);

@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { shockerGetAllShockerLogs } from '$lib/api';
+  import { shockerGetAllShockerLogs } from '#lib/api/index.js';
   import type { SortingState } from '@tanstack/svelte-table';
-  import type { LogEntryWithHub } from '$lib/api';
+  import type { LogEntryWithHub } from '#lib/api/index.js';
   import { Container, PageHeader } from '@openshock/svelte-core/components';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import { onMount } from 'svelte';
   import {
     CreateColumnDefs,
@@ -11,21 +11,21 @@
     LocaleDateTimeRenderer,
     NumberRenderer,
     RenderCell,
-  } from '$lib/components/Table/ColumnUtils';
-  import DataTable from '$lib/components/Table/DataTableTemplate.svelte';
-  import PaginationFooter from '$lib/components/Table/PaginationFooter.svelte';
+  } from '#lib/components/Table/ColumnUtils.js';
+  import DataTable from '#lib/components/Table/DataTableTemplate.svelte';
+  import PaginationFooter from '#lib/components/Table/PaginationFooter.svelte';
   import { Badge } from '@openshock/svelte-core/components/ui/badge';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import MultiSelectCombobox from '@openshock/svelte-core/components/multi-select-combobox/multi-select-combobox.svelte';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import { addShockEventListener, removeShockEventListener } from '$lib/signalr/handlers/Log';
-  import { ControlType } from '$lib/signalr/models/ControlType';
-  import { ownHubs, refreshOwnHubs } from '$lib/state/hubs-state.svelte';
-  import { createUrlFilters } from '$lib/utils/urlFilters.svelte';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
+  import { addShockEventListener, removeShockEventListener } from '#lib/signalr/handlers/Log.js';
+  import { ControlType } from '#lib/signalr/models/ControlType.js';
+  import { ownHubs, refreshOwnHubs } from '#lib/state/hubs-state.svelte.js';
+  import { createUrlFilters } from '#lib/utils/urlFilters.svelte.js';
   import { features, type Features } from './data-table-features';
 
   registerBreadcrumbs(() => [
-    { label: 'Shockers', href: '/shockers/own' },
+    { label: 'Shockers', href: 'shockers/own' },
     { label: 'Shocker Logs' },
   ]);
 

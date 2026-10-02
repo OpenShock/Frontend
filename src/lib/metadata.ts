@@ -1,36 +1,26 @@
-import { PUBLIC_SITE_DESCRIPTION, PUBLIC_SITE_NAME } from '$env/static/public';
+import { PUBLIC_SITE_DESCRIPTION, PUBLIC_SITE_NAME } from '$app/env/public';
+import type { ReadonlyURL } from '$app/state';
 import { getSiteAssetURL } from './utils/url';
 
-const LogoSvgAssetURL = getSiteAssetURL('/logo.svg');
+const LogoSvgAssetURL = getSiteAssetURL('logo.svg');
 
-function getPageTitleAndDescription(_url: URL): { title: string; description: string } {
-  const title = PUBLIC_SITE_NAME.trim();
-  const details = PUBLIC_SITE_DESCRIPTION.trim();
-
+function getPageTitleAndDescription(_url: ReadonlyURL): { title: string; description: string } {
   let description: string;
-  switch (title.toLowerCase()) {
+  switch (PUBLIC_SITE_NAME.toLowerCase()) {
     case 'openshock':
-      description = `Welcome to OpenShock, ${details}`;
+      description = `Welcome to OpenShock, ${PUBLIC_SITE_DESCRIPTION}`;
       break;
     default:
-      description = `Welcome to ${title}, an independent instance of OpenShock - ${details}`;
+      description = `Welcome to ${PUBLIC_SITE_NAME}, an independent instance of OpenShock - ${PUBLIC_SITE_DESCRIPTION}`;
       break;
   }
 
-  return { title, description };
+  return { title: PUBLIC_SITE_NAME, description };
 }
 
-export function buildMetaData(url: URL) {
+export function buildMetaData(url: ReadonlyURL) {
   const { title, description } = getPageTitleAndDescription(url);
+  const image = { src: LogoSvgAssetURL.href, alt: 'OpenShock Logo' };
 
-  const image = {
-    src: LogoSvgAssetURL.href,
-    alt: 'OpenShock Logo',
-  };
-
-  return {
-    title,
-    description,
-    image,
-  };
+  return { title, description, image };
 }

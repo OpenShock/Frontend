@@ -16,18 +16,18 @@
   import Infinity_ from '@lucide/svelte/icons/infinity';
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import { shareLinksList } from '$lib/api';
-  import type { OwnPublicShareResponse } from '$lib/api';
+  import { shareLinksList } from '#lib/api/index.js';
+  import type { OwnPublicShareResponse } from '#lib/api/index.js';
   import { Container, CopyInput, EmptyState, PageHeader } from '@openshock/svelte-core/components';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import { Button } from '@openshock/svelte-core/components/ui/button';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { getSiteShortURL } from '$lib/utils/url';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+  import { getSiteShortURL } from '#lib/utils/url.js';
   import { onMount } from 'svelte';
   import DataTableActions from './data-table-actions.svelte';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
   import CreatePublicShareDialog from './dialog-publicshare-create.svelte';
-  import { formatRelativeInstant } from '$lib/utils/datetime';
+  import { formatRelativeInstant } from '#lib/utils/datetime.js';
   import { createNowTicker } from '@openshock/svelte-core/utils';
 
   registerBreadcrumbs(() => [{ label: 'Public Shares' }]);
@@ -82,14 +82,8 @@
 
 <Container>
   <PageHeader title="Public Shares" subtitle="A link anyone can use — no account required.">
-    <Button variant="outline" onclick={refreshPublicShares}>
-      <RotateCcw />
-      Refresh
-    </Button>
-    <Button onclick={() => (showAddShareModal = true)}>
-      <Plus />
-      New Share
-    </Button>
+    <Button variant="outline" onclick={refreshPublicShares}><RotateCcw />Refresh</Button>
+    <Button onclick={() => (showAddShareModal = true)}><Plus />New Share</Button>
   </PageHeader>
 
   {#if loading && data.length === 0}
@@ -101,25 +95,22 @@
       icon={Link2}
       title="No public shares yet"
       description="Create a link that anyone can use to control your shockers."
+      ><Button size="lg" onclick={() => (showAddShareModal = true)}><Plus />New Share</Button
+      ></EmptyState
     >
-      <Button size="lg" onclick={() => (showAddShareModal = true)}>
-        <Plus />
-        New Share
-      </Button>
-    </EmptyState>
   {:else}
     <div class="grid w-full grid-cols-1 gap-4 sm:grid-cols-[repeat(auto-fill,minmax(18rem,1fr))]">
       {#each sortedShares as share (share.id)}
-        {@const url = getSiteShortURL(`/s/${share.id}`)}
+        {@const url = getSiteShortURL(`s/${share.id}`)}
         {@const exp = expiryInfo(share.expiresOn)}
         <div
           role="button"
           tabindex="0"
-          onclick={() => goto(resolve(`/shares/public/${share.id}`))}
+          onclick={() => goto(resolve(`shares/public/${share.id}`))}
           onkeydown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
-              goto(resolve(`/shares/public/${share.id}`));
+              goto(resolve(`shares/public/${share.id}`));
             }
           }}
           class="border-border/60 bg-card hover:border-primary/40 hover:bg-accent/30 group mx-auto flex w-full max-w-md cursor-pointer flex-col gap-3 rounded-lg border p-4 text-left transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none sm:mx-0 sm:max-w-none"

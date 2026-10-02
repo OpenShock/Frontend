@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { PublicShareDevice } from '$lib/api';
+  import type { PublicShareDevice } from '#lib/api/index.js';
   import SharedShocker from './SharedShocker.svelte';
 
   interface Props {

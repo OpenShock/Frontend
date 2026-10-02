@@ -1,29 +1,29 @@
 <script lang="ts">
   import { HubConnectionState } from '@microsoft/signalr';
-  import type { PublicShareResponse } from '$lib/api';
-  import ClassicControlModule from '$lib/components/ControlModules/ClassicControlModule.svelte';
-  import LiveButton from '$lib/components/ControlModules/LiveButton.svelte';
-  import LiveControlModule from '$lib/components/ControlModules/LiveControlModule.svelte';
-  import ShockerCard from '$lib/components/ControlModules/ShockerCard.svelte';
-  import { getPauseReason } from '$lib/utils';
+  import type { PublicShareResponse } from '#lib/api/index.js';
+  import ClassicControlModule from '#lib/components/ControlModules/ClassicControlModule.svelte';
+  import LiveButton from '#lib/components/ControlModules/LiveButton.svelte';
+  import LiveControlModule from '#lib/components/ControlModules/LiveControlModule.svelte';
+  import ShockerCard from '#lib/components/ControlModules/ShockerCard.svelte';
+  import { getPauseReason } from '#lib/utils/index.js';
   import * as Avatar from '@openshock/svelte-core/components/ui/avatar';
   import * as Tooltip from '@openshock/svelte-core/components/ui/tooltip';
-  import { ShareLinkSignalr } from '$lib/signalr/sharelink.svelte';
-  import type { Control } from '$lib/signalr/models/Control';
-  import { ControlType } from '$lib/signalr/models/ControlType';
+  import { ShareLinkSignalr } from '#lib/signalr/sharelink.svelte.js';
+  import type { Control } from '#lib/signalr/models/Control.js';
+  import { ControlType } from '#lib/signalr/models/ControlType.js';
   import {
     getLiveConnection,
     liveConnections,
     LiveConnectionState,
     registerHubShockers,
-  } from '$lib/state/live-control-state.svelte';
+  } from '#lib/state/live-control-state.svelte.js';
   import { onMount, untrack } from 'svelte';
   import { page } from '$app/state';
   import { CopyInput } from '@openshock/svelte-core/components';
-  import { getSiteShortURL } from '$lib/utils/url';
+  import { getSiteShortURL } from '#lib/utils/url.js';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import { Pencil } from '@lucide/svelte';
-  import { userState } from '$lib/state/user-state.svelte';
+  import { userState } from '#lib/state/user-state.svelte.js';
   import { resolve } from '$app/paths';
 
   interface Props {
@@ -58,8 +58,8 @@
 
   const shareId = $derived(page.params.shareId);
 
-  let editUrl = $derived(resolve(`/shares/public/${shareId}/edit`));
-  const shareUrl = $derived(getSiteShortURL(`/s/${shareId}`));
+  let editUrl = $derived(resolve(`shares/public/${shareId}/edit`));
+  const shareUrl = $derived(getSiteShortURL(`s/${shareId}`));
 
   // Flatten devices+shockers while keeping the deviceId
   const flatShockers = $derived(

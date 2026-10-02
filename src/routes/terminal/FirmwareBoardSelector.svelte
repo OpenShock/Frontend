@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Check, ChevronsUpDown } from '@lucide/svelte';
-  import { FetchVersionBoards } from '$lib/api/firmwareCDN';
+  import { FetchVersionBoards } from '#lib/api/firmwareCDN.js';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Command from '@openshock/svelte-core/components/ui/command';
   import {

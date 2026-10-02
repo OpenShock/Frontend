@@ -1,4 +1,4 @@
-import type { ShockerModelType } from '$lib/api';
+import type { ShockerModelType } from '#lib/api/index.js';
 export type Shocker = {
   id: string;
   rf_id: number;

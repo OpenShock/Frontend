@@ -2,15 +2,15 @@
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
-  import { OAuthSignupFinalize, OAuthSignupGetData } from '$lib/api/next/oauth';
+  import { OAuthSignupFinalize, OAuthSignupGetData } from '#lib/api/next/oauth.js';
   import { EmailInput } from '@openshock/svelte-core/components/input';
-  import UsernameInput from '$lib/components/input/UsernameInput.svelte';
+  import UsernameInput from '#lib/components/input/UsernameInput.svelte';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
   import { FieldDescription } from '@openshock/svelte-core/components/ui/field';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import { userState } from '$lib/state/user-state.svelte';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
+  import { userState } from '#lib/state/user-state.svelte.js';
   import { onMount } from 'svelte';
 
   registerBreadcrumbs(() => [{ label: `Sign Up With ${page.params.provider ?? 'OAuth'}` }]);
@@ -40,7 +40,7 @@
       });
 
       if (!account.isVerified) {
-        goto(resolve('/login?message=signup-success'));
+        goto(resolve('login?message=signup-success'));
         return;
       }
 
@@ -53,7 +53,7 @@
         hasPassword: false,
       });
 
-      goto(resolve('/home'));
+      goto(resolve('home'));
     } catch (error) {
       // Let handleApiError surface validation messages via its generic toast.
       await handleApiError(error);
@@ -74,7 +74,7 @@
       })
       .catch(async (err) => {
         await handleApiError(err);
-        goto(resolve('/login'));
+        goto(resolve('login'));
       });
   });
 </script>

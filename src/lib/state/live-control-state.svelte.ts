@@ -1,6 +1,6 @@
-import { devicesGetLiveControlGatewayInfoV2 } from '$lib/api';
-import { ControlType } from '$lib/signalr/models/ControlType';
-import { getGatewayWsURL } from '$lib/utils/url';
+import { devicesGetLiveControlGatewayInfoV2 } from '#lib/api/index.js';
+import { ControlType } from '#lib/signalr/models/ControlType.js';
+import { getGatewayWsURL } from '#lib/utils/url.js';
 import { toast } from 'svelte-sonner';
 import { SvelteMap, SvelteSet } from 'svelte/reactivity';
 

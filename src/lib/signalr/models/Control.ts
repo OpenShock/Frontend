@@ -1,4 +1,4 @@
-import type { ControlType } from '$lib/signalr/models/ControlType';
+import type { ControlType } from '#lib/signalr/models/ControlType.js';
 
 export interface Control {
   /**

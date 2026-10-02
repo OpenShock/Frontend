@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { shareLinksCreatePublicShare } from '$lib/api';
-  import ExpirationPicker from '$lib/components/ExpirationPicker.svelte';
+  import { shareLinksCreatePublicShare } from '#lib/api/index.js';
+  import ExpirationPicker from '#lib/components/ExpirationPicker.svelte';
   import { TextInput } from '@openshock/svelte-core/components/input';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Dialog from '@openshock/svelte-core/components/ui/dialog';

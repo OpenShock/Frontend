@@ -22,7 +22,7 @@
   <DropdownMenu.Group>
     <DropdownMenu.Item
       class="cursor-pointer"
-      onclick={() => goto(resolve(`/admin/users/${hub.owner.id}`))}
+      onclick={() => goto(resolve(`admin/users/${hub.owner.id}`))}
     >
       <User class="size-4" />
       View User

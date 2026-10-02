@@ -1,15 +1,15 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import { accountPasswordResetInitiateV2 } from '$lib/api';
-  import Turnstile from '$lib/components/Turnstile.svelte';
+  import { accountPasswordResetInitiateV2 } from '#lib/api/index.js';
+  import Turnstile from '#lib/components/Turnstile.svelte';
   import { EmailInput } from '@openshock/svelte-core/components/input';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
   import { Field, FieldDescription } from '@openshock/svelte-core/components/ui/field';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
+  import { backendMetadata } from '#lib/state/backend-metadata-state.svelte.js';
   import { toast } from 'svelte-sonner';
 
   registerBreadcrumbs(() => [{ label: 'Forgot Password' }]);
@@ -32,7 +32,7 @@
     accountPasswordResetInitiateV2({ body: { email, turnstileResponse } })
       .then(() => {
         toast.success('Reset password request has been sent to the given email');
-        goto(resolve('/login'));
+        goto(resolve('login'));
       })
       .catch(handleApiError);
   }
@@ -64,7 +64,8 @@
         <Field class="mt-1">
           <Button type="submit" disabled={!canSubmit}>Reset Password</Button>
           <FieldDescription class="text-center">
-            Remember your password? <a href={resolve('/login')}>Sign in</a>
+            Remember your password?
+            <a href={resolve('login')}>Sign in</a>
           </FieldDescription>
         </Field>
       </form>
@@ -76,7 +77,8 @@
         </p>
         <Field class="mt-1">
           <FieldDescription class="text-center">
-            Remember your password? <a href={resolve('/login')}>Sign in</a>
+            Remember your password?
+            <a href={resolve('login')}>Sign in</a>
           </FieldDescription>
         </Field>
       </div>

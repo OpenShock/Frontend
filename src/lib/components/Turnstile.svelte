@@ -1,7 +1,7 @@
 <script lang="ts">
   import Bug from '@lucide/svelte/icons/bug';
   import { dev } from '$app/env';
-  import { PUBLIC_TURNSTILE_DEV_BYPASS_VALUE } from '$env/static/public';
+  import { PUBLIC_TURNSTILE_DEV_BYPASS_VALUE } from '$app/env/public';
   import { CloudflareLogo } from '@openshock/svelte-core/components/svg';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import {
@@ -10,7 +10,7 @@
   } from '@openshock/svelte-core/state/color-scheme-state.svelte.js';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
-  import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
+  import { backendMetadata } from '#lib/state/backend-metadata-state.svelte.js';
 
   interface Props {
     action: string;

@@ -1,7 +1,12 @@
+import type { ResponseError } from '#lib/api/index.js';
+import { type ProblemDetails, isProblemDetails } from '#lib/errorhandling/ProblemDetails.js';
+import {
+  isError,
+  isFetchError,
+  isResponseError,
+  isTypeError,
+} from '#lib/typeguards/errorGuards.js';
 import { dev } from '$app/env';
-import type { ResponseError } from '$lib/api';
-import { type ProblemDetails, isProblemDetails } from '$lib/errorhandling/ProblemDetails';
-import { isError, isFetchError, isResponseError, isTypeError } from '$lib/typeguards/errorGuards';
 import { toast } from 'svelte-sonner';
 import { isValidationError } from './ValidationProblemDetails';
 

@@ -4,14 +4,14 @@
     shockerEditShocker,
     shockerGetShockerById,
     shockerRemoveShocker,
-  } from '$lib/api';
-  import type { ShockerWithDevice } from '$lib/api';
+  } from '#lib/api/index.js';
+  import type { ShockerWithDevice } from '#lib/api/index.js';
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import { Container } from '@openshock/svelte-core/components';
   import { dialog } from '@openshock/svelte-core/components/dialog-manager';
-  import { RfIdMax, RfIdMin, isValidRfId } from '$lib/constants/ShockerConstants';
+  import { RfIdMax, RfIdMin, isValidRfId } from '#lib/constants/ShockerConstants.js';
   import { TextInput } from '@openshock/svelte-core/components/input';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
@@ -19,10 +19,10 @@
   import { Field, FieldLabel } from '@openshock/svelte-core/components/ui/field';
   import { Input } from '@openshock/svelte-core/components/ui/input';
   import * as Select from '@openshock/svelte-core/components/ui/select';
-  import PauseToggle from '$lib/components/utils/PauseToggle.svelte';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import { refreshOwnHubs } from '$lib/state/hubs-state.svelte';
+  import PauseToggle from '#lib/components/utils/PauseToggle.svelte';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
+  import { refreshOwnHubs } from '#lib/state/hubs-state.svelte.js';
   import { ArrowLeft, Trash2 } from '@lucide/svelte';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
@@ -35,7 +35,7 @@
   let saving = $state(false);
 
   registerBreadcrumbs(() => [
-    { label: 'Shockers', href: '/shockers/own' },
+    { label: 'Shockers', href: 'shockers/own' },
     { label: shocker?.name ?? 'Edit Shocker' },
   ]);
 
@@ -97,7 +97,7 @@
       await shockerRemoveShocker({ path: { shockerId: shocker.id } });
       toast.success(`Shocker "${shocker.name}" deleted`);
       await refreshOwnHubs();
-      goto(resolve('/shockers/own'));
+      goto(resolve('shockers/own'));
     } catch (error) {
       handleApiError(error);
     }
@@ -108,10 +108,9 @@
   {#if loadError}
     <div class="flex flex-col items-center gap-4 py-12">
       <p class="text-muted-foreground">Failed to load shocker.</p>
-      <Button variant="outline" href={resolve('/shockers/own')}>
-        <ArrowLeft class="size-4" />
-        Back to Shockers
-      </Button>
+      <Button variant="outline" href={resolve('shockers/own')}
+        ><ArrowLeft class="size-4" />Back to Shockers</Button
+      >
     </div>
   {:else if !shocker}
     <div class="flex items-center gap-3 p-12">
@@ -121,9 +120,10 @@
   {:else}
     <div class="mx-auto flex w-full max-w-lg flex-col gap-6 py-4">
       <div class="flex items-center gap-3">
-        <Button variant="ghost" size="icon" href={resolve('/shockers/own')} aria-label="Back">
-          <ArrowLeft class="size-4" />
-        </Button>
+        <Button variant="ghost" size="icon" href={resolve('shockers/own')} aria-label="Back"
+          ><ArrowLeft class="size-4" /></Button
+        >
+
         <h1 class="text-2xl font-bold">Edit Shocker</h1>
       </div>
 

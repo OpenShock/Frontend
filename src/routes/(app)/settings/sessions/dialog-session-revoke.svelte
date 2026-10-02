@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { sessionsDeleteSession } from '$lib/api';
-  import type { LoginSessionResponse } from '$lib/api';
+  import { sessionsDeleteSession } from '#lib/api/index.js';
+  import type { LoginSessionResponse } from '#lib/api/index.js';
   import { ConfirmDeleteDialog } from '@openshock/svelte-core/components';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { getReadableUserAgentName } from '$lib/utils/userAgent';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+  import { getReadableUserAgentName } from '#lib/utils/userAgent.js';
   import { toast } from 'svelte-sonner';
 
   interface Props {

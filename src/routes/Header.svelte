@@ -1,20 +1,18 @@
 <script lang="ts">
-  /* eslint-disable svelte/no-navigation-without-resolve -- uses prefixBase for dynamic navigation and external URLs */
-
   import PanelLeft from '@lucide/svelte/icons/panel-left';
   import { goto } from '$app/navigation';
-  import type { Pathname } from '$app/types';
-  import { PUBLIC_DISCORD_INVITE_URL, PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
+  import type { Path } from '$app/types';
+  import { PUBLIC_DISCORD_INVITE_URL, PUBLIC_GITHUB_PROJECT_URL } from '$app/env/public';
   import { LightSwitch } from '@openshock/svelte-core/components';
   import { DiscordLogo, GithubIcon } from '@openshock/svelte-core/components/svg';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
   import { Separator } from '@openshock/svelte-core/components/ui/separator';
   import { useSidebar } from '@openshock/svelte-core/components/ui/sidebar';
-  import { userState } from '$lib/state/user-state.svelte';
+  import { userState } from '#lib/state/user-state.svelte.js';
   import { cn } from '@openshock/svelte-core/utils';
   import Breadcrumb from './Breadcrumb.svelte';
-  import { prefixBase } from '$lib/utils/url';
+  import { prefixBase } from '#lib/utils/url.js';
   import { resolve } from '$app/paths';
   import { LogIn, UserPlus } from '@lucide/svelte';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
@@ -22,8 +20,8 @@
   let sidebar = useSidebar();
 </script>
 
-{#snippet dropdownItem(name: string, url: Pathname)}
-  <!-- prefixBase is used here because resolve() requires a route ID, not a plain pathname -->
+{#snippet dropdownItem(name: string, url: Path)}
+  <!-- prefixBase is used here because resolve() can't take a union-typed pathname -->
   <DropdownMenu.Item class="cursor-pointer" onclick={() => goto(prefixBase(url))}>
     {name}
   </DropdownMenu.Item>
@@ -62,15 +60,15 @@
           </DropdownMenu.Trigger>
           <DropdownMenu.Content>
             <DropdownMenu.Group>
-              {@render dropdownItem('Profile', '/profile')}
-              {@render dropdownItem('Settings', '/settings/account')}
-              {@render dropdownItem('Logout', '/logout')}
+              {@render dropdownItem('Profile', 'profile')}
+              {@render dropdownItem('Settings', 'settings/account')}
+              {@render dropdownItem('Logout', 'logout')}
             </DropdownMenu.Group>
           </DropdownMenu.Content>
         </DropdownMenu.Root>
       {:else}
-        <Button variant="outline" href={resolve('/login')}>Login <LogIn /></Button>
-        <Button variant="outline" href={resolve('/signup')}>Sign Up <UserPlus /></Button>
+        <Button variant="outline" href={resolve('login')}>Login <LogIn /></Button>
+        <Button variant="outline" href={resolve('signup')}>Sign Up <UserPlus /></Button>
         <div class="hidden sm:flex sm:flex-row">
           <a href={PUBLIC_GITHUB_PROJECT_URL} class="p-2" title="Project GitHub">
             <GithubIcon class="size-6 fill-black dark:fill-white" />

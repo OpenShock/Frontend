@@ -1,5 +1,5 @@
 <script lang="ts" module>
-  import { ShockerModelType } from '$lib/api';
+  import { ShockerModelType } from '#lib/api/index.js';
   export interface AddShockerData {
     name: string;
     rfId: number;
@@ -18,7 +18,7 @@
 </script>
 
 <script lang="ts">
-  import type { NewShocker } from '$lib/api';
+  import type { NewShocker } from '#lib/api/index.js';
   import { TextInput } from '@openshock/svelte-core/components/input';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
@@ -26,8 +26,8 @@
   import { Field, FieldLabel } from '@openshock/svelte-core/components/ui/field';
   import { Input } from '@openshock/svelte-core/components/ui/input';
   import type { DialogContentProps } from '@openshock/svelte-core/components/dialog-manager';
-  import { RfIdMax, RfIdMin, isValidRfId } from '$lib/constants/ShockerConstants';
-  import type { OwnHub } from '$lib/state/hubs-state.svelte';
+  import { RfIdMax, RfIdMin, isValidRfId } from '#lib/constants/ShockerConstants.js';
+  import type { OwnHub } from '#lib/state/hubs-state.svelte.js';
 
   interface Props extends DialogContentProps<NewShocker | undefined> {
     data: AddShockerData;

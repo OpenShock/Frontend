@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte';
-  import type { LiveShockerState } from '$lib/state/live-control-state.svelte';
+  import type { LiveShockerState } from '#lib/state/live-control-state.svelte.js';
 
   interface Props {
     liveState: LiveShockerState;

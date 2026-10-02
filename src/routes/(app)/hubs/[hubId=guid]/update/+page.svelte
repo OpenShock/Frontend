@@ -1,6 +1,6 @@
 <script lang="ts" module>
-  import { OtaUpdateStatus } from '$lib/api';
-  import { OtaUpdateProgressTask } from '$lib/signalr/models/OtaUpdateProgressTask';
+  import { OtaUpdateStatus } from '#lib/api/index.js';
+  import { OtaUpdateProgressTask } from '#lib/signalr/models/OtaUpdateProgressTask.js';
 
   // Task weights for weighted total progress (7 tasks, sums to 100)
   const TASK_WEIGHTS = [4, 2, 22, 2, 49, 1, 20];
@@ -55,29 +55,29 @@
 </script>
 
 <script lang="ts">
-  import { devicesOtaGetOtaUpdateHistory, type OtaItem } from '$lib/api';
+  import { devicesOtaGetOtaUpdateHistory, type OtaItem } from '#lib/api/index.js';
   import { CircleCheck, CircleX, CloudDownload, RotateCcw, TriangleAlert } from '@lucide/svelte';
   import { page } from '$app/state';
-  import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
+  import FirmwareChannelSelector from '#lib/components/FirmwareChannelSelector.svelte';
   import { Badge } from '@openshock/svelte-core/components/ui/badge';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
   import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
   import { Progress } from '@openshock/svelte-core/components/ui/progress';
   import * as Table from '@openshock/svelte-core/components/ui/table';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { getConnection } from '$lib/signalr/user.svelte';
-  import { serializeOtaInstallMessage } from '$lib/signalr/serializers/OtaInstall';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+  import { getConnection } from '#lib/signalr/user.svelte.js';
+  import { serializeOtaInstallMessage } from '#lib/signalr/serializers/OtaInstall.js';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
   import {
     HubOnlineState,
     onlineHubs,
     ownHubs,
     refreshOwnHubs,
-  } from '$lib/state/hubs-state.svelte';
+  } from '#lib/state/hubs-state.svelte.js';
   import { cn, NumberToHexPadded } from '@openshock/svelte-core/utils';
   import { onMount } from 'svelte';
-  import type { FirmwareChannel } from '$lib/api/firmwareCDN';
+  import type { FirmwareChannel } from '#lib/api/firmwareCDN.js';
   import { PageHeader } from '@openshock/svelte-core/components';
 
   let hubLoaded = $state(false);
@@ -193,8 +193,8 @@
   $effect(() => fetchOtaLogs(page.params.hubId));
 
   registerBreadcrumbs(() => [
-    { label: 'Hubs', href: '/hubs' },
-    { label: hubName, href: '/hubs' },
+    { label: 'Hubs', href: 'hubs' },
+    { label: hubName, href: 'hubs' },
     { label: 'Update' },
   ]);
 

@@ -3,14 +3,14 @@
   import KeyRound from '@lucide/svelte/icons/key-round';
   import { CopyInput } from '@openshock/svelte-core/components';
   import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
-  import { getSiteShortURL } from '$lib/utils/url';
+  import { getSiteShortURL } from '#lib/utils/url.js';
 
   interface Props {
     code: string | null;
   }
 
   let { code = $bindable() }: Props = $props();
-  let link = $derived(code ? getSiteShortURL(`/usc/${code}`).href : '');
+  let link = $derived(code ? getSiteShortURL(`usc/${code}`).href : '');
 
   function onOpenChanged(open: boolean) {
     if (!open) {

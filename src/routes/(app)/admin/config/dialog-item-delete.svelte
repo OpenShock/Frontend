@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { adminConfigurationDelete } from '$lib/api';
-  import type { ConfigurationItemDto } from '$lib/api';
+  import { adminConfigurationDelete } from '#lib/api/index.js';
+  import type { ConfigurationItemDto } from '#lib/api/index.js';
   import { ConfirmDeleteDialog } from '@openshock/svelte-core/components';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import { toast } from 'svelte-sonner';
 
   interface Props {

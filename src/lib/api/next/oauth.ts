@@ -1,4 +1,4 @@
-import { getBackendURL } from '$lib/utils/url';
+import { getBackendURL } from '#lib/utils/url.js';
 import { GetJson, PostJson } from './base';
 import type { LoginOkResponse, OAuthFinalizeRequest, OAuthSignupData } from './models';
 import { TransformLoginOkResponse, TransformOAuthSignupData } from './transformers';

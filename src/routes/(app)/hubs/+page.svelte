@@ -1,17 +1,17 @@
 <script lang="ts">
-  import { devicesCreateDeviceV2 } from '$lib/api';
+  import { devicesCreateDeviceV2 } from '#lib/api/index.js';
   import { Plus, Router } from '@lucide/svelte';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Table from '@openshock/svelte-core/components/ui/table';
   import { IsMobile } from '@openshock/svelte-core/hooks';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import { onlineHubs, ownHubs, refreshOwnHubs } from '$lib/state/hubs-state.svelte';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
+  import { onlineHubs, ownHubs, refreshOwnHubs } from '#lib/state/hubs-state.svelte.js';
   import { onMount } from 'svelte';
   import type { Hub } from './columns';
   import DataTableActions from './data-table-actions.svelte';
   import { dialog, type DialogRenderProps } from '@openshock/svelte-core/components/dialog-manager';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
 
   import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
   import { TextInput } from '@openshock/svelte-core/components/input';
@@ -59,7 +59,7 @@
     }
   }
 
-  registerBreadcrumbs(() => [{ label: 'Hubs', href: '/hubs' }]);
+  registerBreadcrumbs(() => [{ label: 'Hubs', href: 'hubs' }]);
   onMount(refreshOwnHubs);
 </script>
 

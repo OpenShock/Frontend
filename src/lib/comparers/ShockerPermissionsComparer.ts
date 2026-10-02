@@ -1,4 +1,4 @@
-import type { ShockerPermissions } from '$lib/api';
+import type { ShockerPermissions } from '#lib/api/index.js';
 
 export default function CompareShockerPermissions(a: ShockerPermissions, b: ShockerPermissions) {
   // Compare the permissions and limits of the two shocker objects

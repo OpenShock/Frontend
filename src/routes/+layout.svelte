@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import { PUBLIC_DEVELOPMENT_BANNER } from '$env/static/public';
+  import { PUBLIC_DEVELOPMENT_BANNER } from '$app/env/public';
   import {
     BasicTags,
     OpenGraphTags,
@@ -8,9 +8,9 @@
   } from '@openshock/svelte-core/components/metadata';
   import { SidebarProvider } from '@openshock/svelte-core/components/ui/sidebar';
   import { Toaster } from '@openshock/svelte-core/components/ui/sonner';
-  import { buildMetaData } from '$lib/metadata';
+  import { buildMetaData } from '#lib/metadata.js';
   import { onMount, untrack, type Snippet } from 'svelte';
-  import { maybePromptTelemetryConsent } from '$lib/telemetry/consent-prompt';
+  import { maybePromptTelemetryConsent } from '#lib/telemetry/consent-prompt.js';
   import Footer from './Footer.svelte';
   import Header from './Header.svelte';
   import Sidebar from './Sidebar.svelte';
@@ -61,7 +61,7 @@
   <SidebarProvider open={isOpen} onOpenChange={(v) => (sidebarOpen = v)}>
     <Sidebar />
     <div class="flex h-screen w-screen flex-1 flex-col overflow-hidden">
-      {#if PUBLIC_DEVELOPMENT_BANNER === 'true'}
+      {#if PUBLIC_DEVELOPMENT_BANNER}
         <div class="top-0 left-0 z-1 flex-none bg-[orangered] text-center text-white">
           <p>
             This is the OpenShock <b>DEVELOPMENT</b> environment. <u>No data is saved</u>, and

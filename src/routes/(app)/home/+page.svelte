@@ -4,12 +4,12 @@
   import { Container } from '@openshock/svelte-core/components';
   import * as Card from '@openshock/svelte-core/components/ui/card';
   import { Button } from '@openshock/svelte-core/components/ui/button';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import { userState } from '$lib/state/user-state.svelte';
-  import { onlineHubs, ownHubs, refreshOwnHubs } from '$lib/state/hubs-state.svelte';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
+  import { userState } from '#lib/state/user-state.svelte.js';
+  import { onlineHubs, ownHubs, refreshOwnHubs } from '#lib/state/hubs-state.svelte.js';
   import { onMount } from 'svelte';
 
-  registerBreadcrumbs(() => [{ label: 'Home', href: '/home' }]);
+  registerBreadcrumbs(() => [{ label: 'Home', href: 'home' }]);
 
   let shockerCount = $derived(ownHubs.values().reduce((sum, hub) => sum + hub.shockers.length, 0));
   let hubCount = $derived(ownHubs.size);
@@ -87,7 +87,7 @@
         <Button
           variant="outline"
           class="h-auto justify-start gap-3 p-4"
-          href={resolve('/shockers/own')}
+          href={resolve('shockers/own')}
         >
           <Zap class="size-5" />
           <div class="text-left">
@@ -95,7 +95,8 @@
             <div class="text-muted-foreground text-xs">Control your shockers</div>
           </div>
         </Button>
-        <Button variant="outline" class="h-auto justify-start gap-3 p-4" href={resolve('/hubs')}>
+
+        <Button variant="outline" class="h-auto justify-start gap-3 p-4" href={resolve('hubs')}>
           <Router class="size-5" />
           <div class="text-left">
             <div class="font-medium">Hubs</div>
@@ -105,7 +106,7 @@
         <Button
           variant="outline"
           class="h-auto justify-start gap-3 p-4"
-          href={resolve('/shockers/shared')}
+          href={resolve('shockers/shared')}
         >
           <Share2 class="size-5" />
           <div class="text-left">
@@ -116,7 +117,7 @@
         <Button
           variant="outline"
           class="h-auto justify-start gap-3 p-4"
-          href={resolve('/shares/public')}
+          href={resolve('shares/public')}
         >
           <Link class="size-5" />
           <div class="text-left">
@@ -137,12 +138,11 @@
             shockers to it.
           </Card.Description>
         </Card.Header>
-        <Card.Footer>
-          <Button href={resolve('/hubs')}>
-            <Router class="size-4" />
-            Set Up a Hub
-          </Button>
-        </Card.Footer>
+
+        <Card.Footer
+          ><Button href={resolve('hubs')}><Router class="size-4" />Set Up a Hub</Button
+          ></Card.Footer
+        >
       </Card.Root>
     {:else if shockerCount === 0}
       <Card.Root class="border-dashed">
@@ -153,12 +153,11 @@
             your devices.
           </Card.Description>
         </Card.Header>
-        <Card.Footer>
-          <Button href={resolve('/shockers/own')}>
-            <Zap class="size-4" />
-            Go to Shockers
-          </Button>
-        </Card.Footer>
+
+        <Card.Footer
+          ><Button href={resolve('shockers/own')}><Zap class="size-4" />Go to Shockers</Button
+          ></Card.Footer
+        >
       </Card.Root>
     {/if}
   </div>

@@ -1,15 +1,15 @@
 <script lang="ts">
   import { X, Zap } from '@lucide/svelte';
-  import type { V2UserSharesListItem } from '$lib/api';
-  import PermissionTooltip from '$lib/components/shares/permission-tooltip.svelte';
+  import type { V2UserSharesListItem } from '#lib/api/index.js';
+  import PermissionTooltip from '#lib/components/shares/permission-tooltip.svelte';
   import * as Avatar from '@openshock/svelte-core/components/ui/avatar';
   import { Badge } from '@openshock/svelte-core/components/ui/badge';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Table from '@openshock/svelte-core/components/ui/table';
   import * as Tooltip from '@openshock/svelte-core/components/ui/tooltip';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import { dialog } from '@openshock/svelte-core/components/dialog-manager';
-  import { refreshOutgoingInvites } from '$lib/state/user-shares-state.svelte';
+  import { refreshOutgoingInvites } from '#lib/state/user-shares-state.svelte.js';
   import { toast } from 'svelte-sonner';
 
   interface Props {

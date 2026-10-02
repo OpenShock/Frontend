@@ -1,4 +1,4 @@
-import type { AdminOnlineDeviceResponse } from '$lib/api';
+import type { AdminOnlineDeviceResponse } from '#lib/api/index.js';
 import {
   CellNotApplicable,
   CellRedUnknown,
@@ -12,8 +12,8 @@ import {
   RenderRedCell,
   TimeSinceDurationRenderer,
   UserAgentRenderer,
-} from '$lib/components/Table/ColumnUtils';
-import { getReadableUserAgentName } from '$lib/utils';
+} from '#lib/components/Table/ColumnUtils.js';
+import { getReadableUserAgentName } from '#lib/utils/index.js';
 import { createNowTicker } from '@openshock/svelte-core/utils';
 import { SemVer } from 'semver';
 import DataTableActions from './data-table-actions.svelte';

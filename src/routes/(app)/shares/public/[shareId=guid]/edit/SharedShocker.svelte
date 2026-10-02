@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { shareLinksPauseShocker, shareLinksRemoveShocker } from '$lib/api';
-  import type { PublicShareShocker } from '$lib/api';
+  import { shareLinksPauseShocker, shareLinksRemoveShocker } from '#lib/api/index.js';
+  import type { PublicShareShocker } from '#lib/api/index.js';
   import { Pause, Play, Trash2 } from '@lucide/svelte';
   import { Button } from '@openshock/svelte-core/components/ui/button';
-  import RestrictionsSelector from '$lib/components/shares/restrictions-selector.svelte';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import RestrictionsSelector from '#lib/components/shares/restrictions-selector.svelte';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import { toast } from 'svelte-sonner';
 
   interface Props {

@@ -1,11 +1,11 @@
 <script lang="ts">
   import { Check, Search } from '@lucide/svelte';
-  import { ResponseError, usersGetByName } from '$lib/api';
-  import type { BasicUserInfo } from '$lib/api';
+  import { ResponseError, usersGetByName } from '#lib/api/index.js';
+  import type { BasicUserInfo } from '#lib/api/index.js';
   import * as Avatar from '@openshock/svelte-core/components/ui/avatar';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import { Input } from '@openshock/svelte-core/components/ui/input';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
 
   interface Props {
     fetchedUser: BasicUserInfo | null;

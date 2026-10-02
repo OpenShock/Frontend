@@ -5,7 +5,7 @@ describe('fileToPath', () => {
   it('parses the root route', () => {
     const result = fileToPath('/src/routes/+page.svelte');
     expect(result).toEqual({
-      path: '/',
+      path: '',
       original: '/',
       categories: [],
       parameters: [],
@@ -15,7 +15,7 @@ describe('fileToPath', () => {
   it('parses a simple path', () => {
     const result = fileToPath('/src/routes/about/+page.svelte');
     expect(result).toEqual({
-      path: '/about',
+      path: 'about',
       original: '/about',
       categories: [],
       parameters: [],
@@ -25,7 +25,7 @@ describe('fileToPath', () => {
   it('parses nested segments', () => {
     const result = fileToPath('/src/routes/settings/account/+page.svelte');
     expect(result).toEqual({
-      path: '/settings/account',
+      path: 'settings/account',
       original: '/settings/account',
       categories: [],
       parameters: [],
@@ -35,7 +35,7 @@ describe('fileToPath', () => {
   it('extracts route groups as categories', () => {
     const result = fileToPath('/src/routes/(auth)/login/+page.svelte');
     expect(result).toEqual({
-      path: '/login',
+      path: 'login',
       original: '/(auth)/login',
       categories: ['auth'],
       parameters: [],
@@ -45,7 +45,7 @@ describe('fileToPath', () => {
   it('extracts multiple route groups', () => {
     const result = fileToPath('/src/routes/(app)/(settings)/profile/+page.svelte');
     expect(result).toEqual({
-      path: '/profile',
+      path: 'profile',
       original: '/(app)/(settings)/profile',
       categories: ['app', 'settings'],
       parameters: [],
@@ -55,7 +55,7 @@ describe('fileToPath', () => {
   it('extracts untyped parameters', () => {
     const result = fileToPath('/src/routes/user/[id]/+page.svelte');
     expect(result).toEqual({
-      path: '/user/[id]',
+      path: 'user/[id]',
       original: '/user/[id]',
       categories: [],
       parameters: [{ name: 'id', type: 'unknown' }],
@@ -65,7 +65,7 @@ describe('fileToPath', () => {
   it('extracts typed parameters', () => {
     const result = fileToPath('/src/routes/user/[id=integer]/+page.svelte');
     expect(result).toEqual({
-      path: '/user/[id]',
+      path: 'user/[id]',
       original: '/user/[id=integer]',
       categories: [],
       parameters: [{ name: 'id', type: 'integer' }],
@@ -75,7 +75,7 @@ describe('fileToPath', () => {
   it('handles groups, params, and segments together', () => {
     const result = fileToPath('/src/routes/(app)/org/[slug=string]/members/+page.svelte');
     expect(result).toEqual({
-      path: '/org/[slug]/members',
+      path: 'org/[slug]/members',
       original: '/(app)/org/[slug=string]/members',
       categories: ['app'],
       parameters: [{ name: 'slug', type: 'string' }],
@@ -86,7 +86,7 @@ describe('fileToPath', () => {
 describe('fileToPath — edge cases', () => {
   it('handles a path with multiple parameters', () => {
     const result = fileToPath('/src/routes/blog/[year=integer]/[slug]/+page.svelte');
-    expect(result.path).toBe('/blog/[year]/[slug]');
+    expect(result.path).toBe('blog/[year]/[slug]');
     expect(result.parameters).toEqual([
       { name: 'year', type: 'integer' },
       { name: 'slug', type: 'unknown' },
@@ -97,7 +97,7 @@ describe('fileToPath — edge cases', () => {
   it('handles a path with no +page.svelte suffix (returns original cleaned)', () => {
     // No /+page.svelte to strip; path becomes the segments after /src/routes
     const result = fileToPath('/src/routes/foo/bar');
-    expect(result.path).toBe('/foo/bar');
+    expect(result.path).toBe('foo/bar');
     expect(result.original).toBe('/foo/bar');
   });
 
@@ -105,7 +105,7 @@ describe('fileToPath — edge cases', () => {
     const result = fileToPath('/somewhere/else/+page.svelte');
     // Only the +page.svelte suffix gets stripped
     expect(result.original).toBe('/somewhere/else');
-    expect(result.path).toBe('/somewhere/else');
+    expect(result.path).toBe('somewhere/else');
   });
 
   it('handles an empty parameter type defaulting to "unknown"', () => {
@@ -117,7 +117,7 @@ describe('fileToPath — edge cases', () => {
 
   it('handles consecutive groups followed by root', () => {
     const result = fileToPath('/src/routes/(marketing)/+page.svelte');
-    expect(result.path).toBe('/');
+    expect(result.path).toBe('');
     expect(result.original).toBe('/(marketing)');
     expect(result.categories).toEqual(['marketing']);
     expect(result.parameters).toEqual([]);
@@ -125,30 +125,30 @@ describe('fileToPath — edge cases', () => {
 
   it('handles trailing slashes by ignoring empty segments', () => {
     const result = fileToPath('/src/routes/foo//bar/+page.svelte');
-    expect(result.path).toBe('/foo/bar');
+    expect(result.path).toBe('foo/bar');
   });
 
   it('handles a path with a parameter at the root', () => {
     const result = fileToPath('/src/routes/[token]/+page.svelte');
-    expect(result.path).toBe('/[token]');
+    expect(result.path).toBe('[token]');
     expect(result.parameters).toEqual([{ name: 'token', type: 'unknown' }]);
   });
 
   it('handles a parameter with hyphen and equals sign in type', () => {
     const result = fileToPath('/src/routes/x/[id=uuid]/+page.svelte');
     expect(result.parameters).toEqual([{ name: 'id', type: 'uuid' }]);
-    expect(result.path).toBe('/x/[id]');
+    expect(result.path).toBe('x/[id]');
   });
 
-  it('returns "/" path when input is exactly /src/routes', () => {
+  it('returns the root path when input is exactly /src/routes', () => {
     const result = fileToPath('/src/routes');
-    expect(result.path).toBe('/');
+    expect(result.path).toBe('');
     expect(result.original).toBe('/');
   });
 
-  it('returns original "/" when only +page.svelte suffix exists at root', () => {
+  it('returns the root path when only the +page.svelte suffix exists at root', () => {
     const result = fileToPath('/src/routes/+page.svelte');
-    expect(result.path).toBe('/');
+    expect(result.path).toBe('');
     expect(result.original).toBe('/');
     expect(result.categories).toEqual([]);
     expect(result.parameters).toEqual([]);

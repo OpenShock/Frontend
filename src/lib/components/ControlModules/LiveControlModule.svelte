@@ -1,11 +1,11 @@
 <script lang="ts">
   import { Volume2, Waves, Zap } from '@lucide/svelte';
   import { buttonVariants } from '@openshock/svelte-core/components/ui/button';
-  import { ControlType } from '$lib/signalr/models/ControlType';
+  import { ControlType } from '#lib/signalr/models/ControlType.js';
   import {
     type LiveShockerState,
     type LiveDeviceConnection,
-  } from '$lib/state/live-control-state.svelte';
+  } from '#lib/state/live-control-state.svelte.js';
   import { cn } from '@openshock/svelte-core/utils';
   import LiveSlider from './impl/LiveSlider.svelte';
 

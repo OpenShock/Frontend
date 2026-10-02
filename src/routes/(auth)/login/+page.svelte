@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { accountLoginV2 } from '$lib/api';
+  import { accountLoginV2 } from '#lib/api/index.js';
   import { resolve } from '$app/paths';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
@@ -11,16 +11,16 @@
   } from '@openshock/svelte-core/components/ui/field';
   import { TextInput, PasswordInput } from '@openshock/svelte-core/components/input';
   import type { ValidationResult } from '@openshock/svelte-core/types';
-  import Turnstile from '$lib/components/Turnstile.svelte';
-  import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-  import { isValidationError, mapToValRes } from '$lib/errorhandling/ValidationProblemDetails';
-  import OauthButtons from '$lib/components/auth/oauth-buttons.svelte';
-  import { gotoQueryRedirectOrFallback, consumeSearchParam } from '$lib/utils/url';
-  import { registerBreadcrumbs } from '$lib/state/breadcrumbs-state.svelte';
-  import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
-  import { userState } from '$lib/state/user-state.svelte';
+  import Turnstile from '#lib/components/Turnstile.svelte';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+  import { isValidationError, mapToValRes } from '#lib/errorhandling/ValidationProblemDetails.js';
+  import OauthButtons from '#lib/components/auth/oauth-buttons.svelte';
+  import { gotoQueryRedirectOrFallback, consumeSearchParam } from '#lib/utils/url.js';
+  import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
+  import { backendMetadata } from '#lib/state/backend-metadata-state.svelte.js';
+  import { userState } from '#lib/state/user-state.svelte.js';
   import { Skeleton } from '@openshock/svelte-core/components/ui/skeleton';
-  import { getOAuthErrorMessage } from '$lib/auth/oauth-errors';
+  import { getOAuthErrorMessage } from '#lib/auth/oauth-errors.js';
 
   registerBreadcrumbs(() => [{ label: 'Login' }]);
 
@@ -58,7 +58,7 @@
         hasPassword: true,
       });
 
-      await gotoQueryRedirectOrFallback('/home');
+      await gotoQueryRedirectOrFallback('home');
     } catch (error) {
       await handleApiError(error, (problem) => {
         if (!isValidationError(problem)) return false;
@@ -103,18 +103,18 @@
     {/if}
     <FieldGroup>
       {#if backendMetadata.state === null}
-        <Skeleton class="h-9 w-full"></Skeleton>
-        <Skeleton class="h-1 w-full"></Skeleton>
-        <Skeleton class="h-9 w-full"></Skeleton>
-        <Skeleton class="h-9 w-full"></Skeleton>
-        <Skeleton class="h-16 w-full"></Skeleton>
-        <Skeleton class="h-9 w-full"></Skeleton>
+        <Skeleton class="h-9 w-full" />
+        <Skeleton class="h-1 w-full" />
+        <Skeleton class="h-9 w-full" />
+        <Skeleton class="h-9 w-full" />
+        <Skeleton class="h-16 w-full" />
+        <Skeleton class="h-9 w-full" />
       {:else}
         {#if anyOAuthProviders}
           <OauthButtons {providers} />
-          <FieldSeparator class="*:data-[slot=field-separator-content]:bg-card">
-            Or continue with
-          </FieldSeparator>
+          <FieldSeparator class="*:data-[slot=field-separator-content]:bg-card"
+            >Or continue with</FieldSeparator
+          >
         {/if}
         <form onsubmit={handleSubmission}>
           <div>
@@ -131,7 +131,7 @@
                 autocomplete="current-password"
                 bind:value={password}
                 validate={passwordError}
-                forgotHref={mailEnabled ? resolve('/forgot-password') : undefined}
+                forgotHref={mailEnabled ? resolve('forgot-password') : undefined}
               />
 
               <Turnstile
@@ -142,7 +142,8 @@
             <Field class="mt-5">
               <Button type="submit" disabled={!canSubmit}>Login</Button>
               <FieldDescription class="text-center">
-                Don't have an account? <a href={resolve('/signup')}>Sign up</a>
+                Don't have an account?
+                <a href={resolve('signup')}>Sign up</a>
               </FieldDescription>
             </Field>
           </div>

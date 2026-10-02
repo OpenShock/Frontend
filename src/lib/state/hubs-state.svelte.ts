@@ -1,7 +1,7 @@
-import type { DeviceWithShockersResponse } from '$lib/api';
-import { shockerListShockers } from '$lib/api';
-import { handleApiError } from '$lib/errorhandling/apiErrorHandling';
-import type { OtaUpdateProgressTask } from '$lib/signalr/models/OtaUpdateProgressTask';
+import type { DeviceWithShockersResponse } from '#lib/api/index.js';
+import { shockerListShockers } from '#lib/api/index.js';
+import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+import type { OtaUpdateProgressTask } from '#lib/signalr/models/OtaUpdateProgressTask.js';
 import { SvelteMap } from 'svelte/reactivity';
 
 export type OwnHub = DeviceWithShockersResponse;

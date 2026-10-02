@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { RoleType } from '$lib/api';
-  import type { AdminUsersView } from '$lib/api';
+  import { RoleType } from '#lib/api/index.js';
+  import type { AdminUsersView } from '#lib/api/index.js';
   import { TableActionMenu } from '@openshock/svelte-core/components';
   import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
   import { copyToClipboard } from '@openshock/svelte-core/utils';

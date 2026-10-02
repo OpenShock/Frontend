@@ -1,13 +1,11 @@
 <script lang="ts">
-  /* eslint-disable svelte/no-navigation-without-resolve -- only contains external URLs */
-
   import { HubConnectionState } from '@microsoft/signalr';
-  import { PUBLIC_GITHUB_PROJECT_URL } from '$env/static/public';
-  import { getConnectionState } from '$lib/signalr/user.svelte';
+  import { PUBLIC_GITHUB_PROJECT_URL } from '$app/env/public';
+  import { getConnectionState } from '#lib/signalr/user.svelte.js';
   import { Wifi, WifiOff } from '@lucide/svelte';
   import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
   import { Button } from '@openshock/svelte-core/components/ui/button';
-  import { backendMetadata } from '$lib/state/backend-metadata-state.svelte';
+  import { backendMetadata } from '#lib/state/backend-metadata-state.svelte.js';
 </script>
 
 <footer
@@ -15,7 +13,7 @@
 >
   <div>
     Made with
-    <span style="color: #e25555;">&#9829;</span>
+    <span style="color: #e25555;">♥</span>
     by the
     <a target="_blank" rel="noopener" href={PUBLIC_GITHUB_PROJECT_URL}>OpenShock Team</a>
   </div>

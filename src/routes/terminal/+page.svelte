@@ -8,9 +8,9 @@
     Zap,
   } from '@lucide/svelte';
   import { browser } from '$app/env';
-  import type { FirmwareChannel } from '$lib/api/firmwareCDN';
+  import type { FirmwareChannel } from '#lib/api/firmwareCDN.js';
   import { Container } from '@openshock/svelte-core/components';
-  import FirmwareChannelSelector from '$lib/components/FirmwareChannelSelector.svelte';
+  import FirmwareChannelSelector from '#lib/components/FirmwareChannelSelector.svelte';
   import { ChromeLogo, EdgeLogo, OperaLogo } from '@openshock/svelte-core/components/svg';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
@@ -18,8 +18,8 @@
   import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
   import { Label } from '@openshock/svelte-core/components/ui/label';
   import { Progress } from '@openshock/svelte-core/components/ui/progress';
-  import { useSerial } from '$lib/utils/serial-context.svelte';
-  import { getBrowserName } from '$lib/utils/compatibility';
+  import { useSerial } from '#lib/utils/serial-context.svelte.js';
+  import { getBrowserName } from '#lib/utils/compatibility.js';
   import DeviceConfigurator from './DeviceConfigurator.svelte';
   import FirmwareBoardSelector from './FirmwareBoardSelector.svelte';
   import FirmwareFlasher from './FirmwareFlasher.svelte';

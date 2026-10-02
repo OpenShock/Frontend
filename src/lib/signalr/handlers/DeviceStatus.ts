@@ -1,5 +1,5 @@
-import { isDeviceOnlineState } from '$lib/signalr/models/DeviceOnlineState';
-import { HubOnlineState, onlineHubs } from '$lib/state/hubs-state.svelte';
+import { isDeviceOnlineState } from '#lib/signalr/models/DeviceOnlineState.js';
+import { HubOnlineState, onlineHubs } from '#lib/state/hubs-state.svelte.js';
 import { toast } from 'svelte-sonner';
 
 export function handleSignalrDeviceStatus(array: unknown) {

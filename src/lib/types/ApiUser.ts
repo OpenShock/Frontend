@@ -1,4 +1,4 @@
-import type { RoleType } from '$lib/api';
+import type { RoleType } from '#lib/api/index.js';
 export interface ApiUser {
   id: string;
   name: string;

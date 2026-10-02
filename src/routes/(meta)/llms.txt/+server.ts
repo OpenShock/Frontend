@@ -1,13 +1,12 @@
-import { env } from '$env/dynamic/public';
+import { paths } from '#lib/utils/public-routes.js';
+import { getBackendURL, getSiteURL } from '#lib/utils/url.js';
 import {
+  PUBLIC_DISABLE_LLMS_TXT,
   PUBLIC_DISCORD_INVITE_URL,
   PUBLIC_GITHUB_PROJECT_URL,
   PUBLIC_SITE_DESCRIPTION,
   PUBLIC_SITE_NAME,
-} from '$env/static/public';
-import { paths } from '$lib/utils/public-routes';
-import { getBackendURL, getSiteURL } from '$lib/utils/url';
-import { isTruthy } from '@openshock/svelte-core/utils';
+} from '$app/env/public';
 import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
@@ -17,20 +16,18 @@ const HIDDEN_SEGMENTS: ReadonlySet<string> = new Set(['admin', 'hangfire']);
 const SWAGGER_VERSIONS = [1, 2] as const;
 
 export const GET: RequestHandler = ({ setHeaders }) => {
-  if (isTruthy(env.PUBLIC_DISABLE_LLMS_TXT)) error(404);
+  if (PUBLIC_DISABLE_LLMS_TXT) error(404);
 
   setHeaders({
     'content-type': 'text/plain; charset=utf-8',
     'cache-control': 'public, max-age=3600',
   });
 
-  const name = PUBLIC_SITE_NAME.trim();
-  const description = PUBLIC_SITE_DESCRIPTION.trim();
-  const isOpenShock = name.toLowerCase() === 'openshock';
+  const isOpenShock = PUBLIC_SITE_NAME.toLowerCase() === 'openshock';
 
   const summary = isOpenShock
-    ? `OpenShock — ${description}`
-    : `${name} — an independent instance of OpenShock — ${description}`;
+    ? `OpenShock — ${PUBLIC_SITE_DESCRIPTION}`
+    : `${PUBLIC_SITE_NAME} — an independent instance of OpenShock — ${PUBLIC_SITE_DESCRIPTION}`;
 
   // Public, linkable routes grouped by role.
   const publicPaths = paths
@@ -41,7 +38,7 @@ export const GET: RequestHandler = ({ setHeaders }) => {
   const authPages = publicPaths.filter((p) => p.categories.includes('auth'));
 
   const renderLinks = (list: typeof publicPaths) =>
-    list.map((p) => `- [${p.path}](${getSiteURL(p.path).href})`).join('\n');
+    list.map((p) => `- [/${p.path}](${getSiteURL(p.path).href})`).join('\n');
 
   const generalList = renderLinks(generalPages);
   const authList = renderLinks(authPages);
@@ -55,11 +52,11 @@ export const GET: RequestHandler = ({ setHeaders }) => {
   // Authenticated app routes — listed for crawlers with a "not indexable" notice.
   const appPaths = paths
     .filter((p) => p.categories.includes('app'))
-    .filter((p) => !HIDDEN_SEGMENTS.has(p.path.split('/')[1] ?? ''));
+    .filter((p) => !HIDDEN_SEGMENTS.has(p.path.split('/')[0] ?? ''));
 
   const appSegments = [
     ...new Set(
-      appPaths.map((p) => p.path.split('/')[1]).filter((seg): seg is string => Boolean(seg))
+      appPaths.map((p) => p.path.split('/')[0]).filter((seg): seg is string => Boolean(seg))
     ),
   ]
     .sort()
@@ -69,14 +66,14 @@ export const GET: RequestHandler = ({ setHeaders }) => {
   const appList = appPaths
     .map((p) => p.path)
     .toSorted()
-    .map((path) => `- ${path}`)
+    .map((path) => `- /${path}`)
     .join('\n');
 
-  const body = `# ${name}
+  const body = `# ${PUBLIC_SITE_NAME}
 
 > ${summary}
 
-${name} is the web frontend of the OpenShock platform. Authenticated users manage \
+${PUBLIC_SITE_NAME} is the web frontend of the OpenShock platform. Authenticated users manage \
 hubs (ESP32-based bridges), shockers, share permissions, API tokens, and live control \
 sessions. Unauthenticated visitors can flash firmware to a device over WebSerial or sign \
 up for an account.

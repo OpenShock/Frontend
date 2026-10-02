@@ -5,8 +5,8 @@
     telemetryConsent,
     telemetryPrompted,
     type TelemetryLevel,
-  } from '$lib/state/telemetry-consent-state.svelte';
-  import { initTelemetry } from '$lib/telemetry/logger';
+  } from '#lib/state/telemetry-consent-state.svelte.js';
+  import { initTelemetry } from '#lib/telemetry/logger.js';
 
   interface Props {
     /** Dismisses this toast. Provided by the caller with the toast id. */

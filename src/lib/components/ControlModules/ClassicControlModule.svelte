@@ -4,9 +4,9 @@
     ControlDurationProps,
     ControlIntensityDefault,
     ControlIntensityProps,
-  } from '$lib/constants/ControlConstants';
-  import { ControlType } from '$lib/signalr/models/ControlType';
-  import { useShockerEvents } from '$lib/hooks/shocker-events.svelte';
+  } from '#lib/constants/ControlConstants.js';
+  import { ControlType } from '#lib/signalr/models/ControlType.js';
+  import { useShockerEvents } from '#lib/hooks/shocker-events.svelte.js';
   import ActionButtons from './impl/ActionButtons.svelte';
   import CircleSlider from './impl/CircleSlider.svelte';
   import LimitsDisplay from './impl/LimitsDisplay.svelte';
