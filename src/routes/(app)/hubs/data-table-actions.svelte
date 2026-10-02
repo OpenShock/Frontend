@@ -48,11 +48,15 @@
     title: string,
     desc: string,
     confirmButtonText: string,
-    send: () => void
+    send: () => Promise<void>
   ) {
     const result = await dialog.confirm({ title, desc, confirmButtonText });
     if (!result.confirmed) return;
-    send();
+    try {
+      await send();
+    } catch (error) {
+      await handleApiError(error);
+    }
   }
 
   const rebootHub = () =>
