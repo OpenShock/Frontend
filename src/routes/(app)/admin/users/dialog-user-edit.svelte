@@ -22,16 +22,25 @@
   let emailValid = $state(true);
   let emailSet = $derived(email.length > 0 && email != user.email);
 
-  function sendit() {
-    adminModifyUser({
-      path: { userId: user.id },
-      body: {
-        name: usernameSet ? username : null,
-        email: emailSet ? email : null,
-      },
-    })
-      .then(() => (open = false))
-      .catch(handleApiError);
+  let submitting = $state(false);
+
+  async function sendit() {
+    if (submitting) return;
+    submitting = true;
+    try {
+      await adminModifyUser({
+        path: { userId: user.id },
+        body: {
+          name: usernameSet ? username : null,
+          email: emailSet ? email : null,
+        },
+      });
+      open = false;
+    } catch (error) {
+      await handleApiError(error);
+    } finally {
+      submitting = false;
+    }
   }
 </script>
 
@@ -59,7 +68,8 @@
       <Button variant="outline" onclick={() => (open = false)}>Cancel</Button>
       <Button
         onclick={sendit}
-        disabled={(usernameSet && !usernameValid) ||
+        disabled={submitting ||
+          (usernameSet && !usernameValid) ||
           (emailSet && !emailValid) ||
           (!usernameSet && !emailSet)}
       >

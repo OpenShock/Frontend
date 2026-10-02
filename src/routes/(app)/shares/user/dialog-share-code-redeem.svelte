@@ -20,25 +20,29 @@
   }
 
   let { open = $bindable(), userInput = $bindable() }: Props = $props();
-  let redeemPromise = $state<Promise<V2UserSharesListItem> | null>(null);
+  let redeeming = $state(false);
+  let result = $state<V2UserSharesListItem | null>(null);
 
   function onOpenChange(o: boolean) {
     if (!o) {
       userInput = '';
-      redeemPromise = null;
+      result = null;
     }
     open = o;
   }
 
   async function onFormSubmit(event: SubmitEvent) {
     event.preventDefault();
+    const inviteId = userInput.trim();
+    if (redeeming || !inviteId) return;
+    redeeming = true;
     try {
-      redeemPromise = userSharesRedeemInvite({ path: { inviteId: userInput } });
-      await redeemPromise;
+      result = await userSharesRedeemInvite({ path: { inviteId } });
       await refreshUserShares();
     } catch (error) {
       await handleApiError(error);
     } finally {
+      redeeming = false;
       refreshOutgoingInvites();
     }
   }
@@ -54,53 +58,51 @@
     <form class="min-w-0 space-y-4" onsubmit={onFormSubmit}>
       <Input
         bind:value={userInput}
-        disabled={redeemPromise !== null}
+        disabled={redeeming || result !== null}
         placeholder="Enter share code"
       />
 
-      {#if redeemPromise}
-        {#await redeemPromise}
-          <p>Redeeming...</p>
-        {:then result}
-          <div class="flex flex-col gap-2">
-            <p class="text-success">Redeemed successfully!</p>
+      {#if result}
+        <div class="flex flex-col gap-2">
+          <p class="text-success">Redeemed successfully!</p>
 
-            <span class="flex items-center gap-2">
-              <Avatar.Root class="h-15 w-15">
-                <Avatar.Image src={result.image} alt="User Avatar" />
-                <Avatar.Fallback>{result.name.charAt(0)}</Avatar.Fallback>
-              </Avatar.Root>
-              <p class="ml-4">{result.name}</p>
-            </span>
+          <span class="flex items-center gap-2">
+            <Avatar.Root class="h-15 w-15">
+              <Avatar.Image src={result.image} alt="User Avatar" />
+              <Avatar.Fallback>{result.name.charAt(0)}</Avatar.Fallback>
+            </Avatar.Root>
+            <p class="ml-4">{result.name}</p>
+          </span>
 
-            <span
-              class="bg-sidebar ring-border flex h-[26px] items-center rounded-2xl px-1.5 py-0.5 ring-1"
-            >
-              <Zap size="15" />
-              <p class="ml-2 inline-block sm:hidden">{result.shares.length}</p>
-              <div class="hidden sm:inline-block">
-                {#each result.shares as share (share.id)}
-                  <Tooltip.Root>
-                    <Tooltip.Trigger class="flex items-center">
-                      <Badge class="ml-2" variant={share.paused ? 'destructive' : 'default'}
-                        >{share.name}</Badge
-                      >
-                    </Tooltip.Trigger>
-                    <Tooltip.Content>
-                      <p>Shared shockers</p>
-                    </Tooltip.Content>
-                  </Tooltip.Root>
-                {/each}
-              </div>
-            </span>
-          </div>
-        {:catch error}
-          <p class="text-destructive">Error redeeming code: {error.message}</p>
-        {/await}
+          <span
+            class="bg-sidebar ring-border flex h-[26px] items-center rounded-2xl px-1.5 py-0.5 ring-1"
+          >
+            <Zap size="15" />
+            <p class="ml-2 inline-block sm:hidden">{result.shares.length}</p>
+            <div class="hidden sm:inline-block">
+              {#each result.shares as share (share.id)}
+                <Tooltip.Root>
+                  <Tooltip.Trigger class="flex items-center">
+                    <Badge class="ml-2" variant={share.paused ? 'destructive' : 'default'}
+                      >{share.name}</Badge
+                    >
+                  </Tooltip.Trigger>
+                  <Tooltip.Content>
+                    <p>Shared shockers</p>
+                  </Tooltip.Content>
+                </Tooltip.Root>
+              {/each}
+            </div>
+          </span>
+        </div>
       {:else}
-        <Button type="submit" class="flex w-full items-center" disabled={redeemPromise !== null}>
+        <Button
+          type="submit"
+          class="flex w-full items-center"
+          disabled={redeeming || !userInput.trim()}
+        >
           <Barcode />
-          Redeem
+          {redeeming ? 'Redeeming...' : 'Redeem'}
         </Button>
       {/if}
     </form>

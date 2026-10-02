@@ -18,7 +18,10 @@
         toast.success('Deleted message');
         onDeleted?.();
       })
-      .catch(handleApiError);
+      .catch(async (error) => {
+        await handleApiError(error);
+        throw error;
+      });
   }
 </script>
 

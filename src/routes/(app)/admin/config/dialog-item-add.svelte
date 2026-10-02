@@ -52,15 +52,21 @@
 
   let valid = $derived(name.length > 0 && value.length > 0 && nameValidationResult.valid);
 
-  function onSubmit() {
-    adminConfigurationAdd({ body: { name, description, type: valueType, value } })
-      .then(() => {
-        onAdded();
-        toast.success('Created configuration item');
-        open = false;
-      })
-      .catch(handleApiError)
-      .finally(() => (open = false));
+  let submitting = $state(false);
+
+  async function onSubmit() {
+    if (submitting) return;
+    submitting = true;
+    try {
+      await adminConfigurationAdd({ body: { name, description, type: valueType, value } });
+      onAdded();
+      toast.success('Created configuration item');
+      open = false;
+    } catch (error) {
+      await handleApiError(error);
+    } finally {
+      submitting = false;
+    }
   }
 </script>
 
@@ -88,7 +94,7 @@
     <TextInput label="Value" bind:value />
     <Dialog.Footer>
       <Button variant="outline" onclick={() => (open = false)}>Cancel</Button>
-      <Button onclick={onSubmit} disabled={!valid}>Create</Button>
+      <Button onclick={onSubmit} disabled={submitting || !valid}>Create</Button>
     </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>

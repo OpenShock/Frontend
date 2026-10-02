@@ -4,6 +4,7 @@
   import { TextInput } from '@openshock/svelte-core/components/input';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
+  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import { toast } from 'svelte-sonner';
 
   interface Props {
@@ -17,17 +18,23 @@
   let expireOption = $state('never');
   let expireInstant = $state<Temporal.Instant | null>(null);
 
-  function createShareLink() {
-    shareLinksCreatePublicShare({
-      body: { name, expiresOn: expireInstant ?? undefined },
-    })
-      .then(() => {
-        onCreated();
-        toast.success('Created new publicshare');
-      })
-      .finally(() => {
-        open = false;
+  let submitting = $state(false);
+
+  async function createShareLink() {
+    if (submitting) return;
+    submitting = true;
+    try {
+      await shareLinksCreatePublicShare({
+        body: { name, expiresOn: expireInstant ?? undefined },
       });
+      onCreated();
+      toast.success('Created new public share');
+      open = false;
+    } catch (error) {
+      await handleApiError(error);
+    } finally {
+      submitting = false;
+    }
   }
 </script>
 
@@ -41,7 +48,7 @@
 
     <Dialog.Footer>
       <Button variant="outline" onclick={() => (open = false)}>Cancel</Button>
-      <Button onclick={createShareLink}>Create</Button>
+      <Button onclick={createShareLink} disabled={submitting}>Create</Button>
     </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>

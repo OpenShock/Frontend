@@ -52,6 +52,7 @@
   let shockerIds = $state<string[]>([]);
   let restrictions = $state<ShockerPermLimitPairButNotNull>(getDefaultRestrictions());
   let fetchedUser = $state<BasicUserInfo | null>(null);
+  let submitting = $state(false);
 
   function getDefaultRestrictions(): ShockerPermLimitPairButNotNull {
     return {
@@ -88,6 +89,8 @@
 
   async function onFormSubmit(event: SubmitEvent) {
     event.preventDefault();
+    if (submitting || shockerIds.length === 0) return;
+    submitting = true;
     try {
       const createdCode = await userSharesCreateShareInvite({
         body: {
@@ -105,10 +108,11 @@
       } else {
         onCreatedCode(createdCode);
       }
-      open = false;
+      onOpenChange(false);
     } catch (error) {
       await handleApiError(error);
     } finally {
+      submitting = false;
       refreshOutgoingInvites();
     }
   }
@@ -138,8 +142,13 @@
       />
     </form>
     <Dialog.Footer>
-      <Button variant="outline" onclick={() => (open = false)}>Cancel</Button>
-      <Button type="submit" form="create-share-code" class="flex items-center">
+      <Button variant="outline" onclick={() => onOpenChange(false)}>Cancel</Button>
+      <Button
+        type="submit"
+        form="create-share-code"
+        class="flex items-center"
+        disabled={submitting || shockerIds.length === 0}
+      >
         {#if fetchedUser}
           <User />
           Send Share Invite

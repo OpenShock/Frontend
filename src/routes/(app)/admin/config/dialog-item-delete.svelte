@@ -19,7 +19,10 @@
         onDeleted();
         toast.success('Removed item');
       })
-      .catch(handleApiError);
+      .catch(async (error) => {
+        await handleApiError(error);
+        throw error;
+      });
   }
 </script>
 

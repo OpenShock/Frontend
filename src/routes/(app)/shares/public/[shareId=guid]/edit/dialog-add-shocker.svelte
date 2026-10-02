@@ -38,8 +38,7 @@
       id,
       name: availableShockers.find((shocker) => shocker.value === id)?.label || '',
     }));
-    shockerIds = [];
-    open = false;
+    onOpenChange(false);
     onAddedShockers(selectedShockers);
   }
 </script>
@@ -48,9 +47,9 @@
   <Dialog.Content>
     <Dialog.Header>
       <Dialog.Title>Add shockers</Dialog.Title>
-      <Dialog.Description
-        >Add Shockers to a Public Share, you can set the limits once added.</Dialog.Description
-      >
+      <Dialog.Description>
+        Add shockers to this public share. You can set their limits once they are added.
+      </Dialog.Description>
     </Dialog.Header>
 
     <form class="min-w-0 space-y-4" id="add-shockers" onsubmit={onFormSubmit}>
@@ -63,7 +62,7 @@
       ></MultiSelectCombobox>
     </form>
     <Dialog.Footer>
-      <Button variant="outline" onclick={() => (open = false)}>Cancel</Button>
+      <Button variant="outline" onclick={() => onOpenChange(false)}>Cancel</Button>
       <Button
         type="submit"
         form="add-shockers"

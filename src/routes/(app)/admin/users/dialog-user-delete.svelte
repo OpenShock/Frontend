@@ -19,7 +19,10 @@
         toast.success(`Deleted user ${user.name}`);
         onDeleted?.();
       })
-      .catch(handleApiError);
+      .catch(async (error) => {
+        await handleApiError(error);
+        throw error;
+      });
   }
 </script>
 

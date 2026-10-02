@@ -22,7 +22,10 @@
   function revokeSession() {
     return sessionsDeleteSession({ path: { sessionId: session.id } })
       .then(handleDeleted)
-      .catch(handleApiError);
+      .catch(async (error) => {
+        await handleApiError(error);
+        throw error;
+      });
   }
 
   let readableUserAgent = $derived(

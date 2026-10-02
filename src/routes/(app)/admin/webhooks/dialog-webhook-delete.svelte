@@ -17,7 +17,10 @@
       .then(() => {
         toast.success('Removed webhook');
       })
-      .catch(handleApiError);
+      .catch(async (error) => {
+        await handleApiError(error);
+        throw error;
+      });
   }
 </script>
 

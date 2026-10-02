@@ -19,7 +19,10 @@
         onDeleted();
         toast.success('Deleted publicShare successfully');
       })
-      .catch(handleApiError);
+      .catch(async (error) => {
+        await handleApiError(error);
+        throw error;
+      });
   }
 </script>
 

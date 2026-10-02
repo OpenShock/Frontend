@@ -18,7 +18,10 @@
         onDeleted();
         toast.success('Deleted API token');
       })
-      .catch(handleApiError);
+      .catch(async (error) => {
+        await handleApiError(error);
+        throw error;
+      });
   }
 </script>
 

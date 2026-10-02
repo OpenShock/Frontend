@@ -19,7 +19,10 @@
         onDeleted();
         toast.success('Deleted automation token');
       })
-      .catch(handleApiError);
+      .catch(async (error) => {
+        await handleApiError(error);
+        throw error;
+      });
   }
 </script>
 
