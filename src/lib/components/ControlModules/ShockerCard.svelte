@@ -36,7 +36,7 @@
 
 <div
   class={cn(
-    'border-surface-400-500-token bg-card flex w-80 flex-col overflow-hidden rounded-md border',
+    'bg-card flex w-80 flex-col overflow-hidden rounded-md border',
     className
   )}
 >

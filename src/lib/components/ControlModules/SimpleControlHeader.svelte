@@ -18,7 +18,7 @@
 </script>
 
 <div
-  class="border-surface-400-500-token flex flex-row items-center justify-center gap-16 rounded-md border px-8 py-2"
+  class="flex flex-row items-center justify-center gap-16 rounded-md border px-8 py-2"
 >
   <!-- Sliders -->
   <div class="grid flex-1 grid-cols-[24px_auto_40px] items-center gap-1 text-center">

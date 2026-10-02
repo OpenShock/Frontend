@@ -83,7 +83,13 @@
     <Dialog.Title>Edit API Token</Dialog.Title>
     <Dialog.Description></Dialog.Description>
   </Dialog.Header>
-  <form class="modal-form border-surface-500 rounded-container-token space-y-4">
+  <form
+    class="space-y-4"
+    onsubmit={(e) => {
+      e.preventDefault();
+      void saveChanges();
+    }}
+  >
     <TextInput
       label="Token Name"
       placeholder="Token name..."
@@ -93,7 +99,7 @@
 
     <div class="mt-4">
       <h2>Permissions</h2>
-      <div class="border-surface-500 mt-3 flex flex-col space-y-4 rounded-md border p-4">
+      <div class="mt-3 flex flex-col space-y-4 rounded-md border p-4">
         {#each permissionCategories as permission (permission.name)}
           <span class="capitalize">{permission.name}</span>
           {#each permission.perms as perm (perm.key)}

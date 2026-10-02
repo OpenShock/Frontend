@@ -78,7 +78,7 @@
 </script>
 
 <div
-  class="border-surface-400-500-token bg-card flex w-80 flex-col overflow-hidden rounded-md border"
+  class="bg-card flex w-80 flex-col overflow-hidden rounded-md border"
 >
   <!-- Header — mirrors ShockerCard -->
   <div class="border-border/60 flex items-center gap-2 border-b px-3 py-2">

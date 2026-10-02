@@ -49,7 +49,7 @@
     <EmailInput label="Email" placeholder={user.email} bind:value={email} bind:valid={emailValid} />
     <div>
       <h2>Roles</h2>
-      <div class="border-surface-500 flex flex-col space-y-4 rounded-md border p-4">
+      <div class="flex flex-col space-y-4 rounded-md border p-4">
         {#each [RoleType.Support, RoleType.Staff, RoleType.Admin, RoleType.System] as role (role)}
           <span><Checkbox checked={user.roles.includes(role)} /> {role}</span>
         {/each}

@@ -50,7 +50,13 @@
       <Dialog.Description>Enter the share code to redeem</Dialog.Description>
     </Dialog.Header>
 
-    <form class="modal-form border-surface-500 rounded-container-token min-w-0 space-y-4">
+    <form
+      class="min-w-0 space-y-4"
+      onsubmit={(e) => {
+        e.preventDefault();
+        void onFormSubmit();
+      }}
+    >
       <Input
         bind:value={userInput}
         disabled={redeemPromise !== null}

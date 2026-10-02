@@ -57,7 +57,7 @@
   {/each}
 {/snippet}
 
-<div class="border-surface-500 flex flex-col gap-5 rounded-md border p-4">
+<div class="flex flex-col gap-5 rounded-md border p-4">
   <div class="flex items-center justify-between gap-2">
     <div class="flex flex-col">
       <Label class="text-sm font-medium">Paused</Label>
