@@ -33,7 +33,7 @@
 		"@tailwindcss/vite": "^4.3.3",
 		"@tanstack/svelte-table": "^9.2.4",
 		"@types/d3-scale": "^4.0.9",
-		"@types/node": "^26.6.3",
+		"@types/node": "^26.6.4",
 		"@types/semver": "^7.8.0",
 		"@types/w3c-web-serial": "^1.0.8",
 		"@typescript/native": "npm:typescript@~7.0.2",
@@ -48,7 +48,7 @@
 		"eslint-plugin-compat": "^7.0.2",
 		"eslint-plugin-svelte": "^3.23.0",
 		"esptool-js": "0.7.0",
-		"globals": "^17.12.0",
+		"globals": "^17.13.0",
 		"husky": "^9.1.7",
 		"layerchart": "^2.5.0",
 		"prettier": "~3.9.9",
@@ -71,7 +71,7 @@
 		"vite-plugin-devtools-json": "^1.1.0",
 		"vite-plugin-mkcert": "^2.1.0",
 		"vitest": "^5.0.2",
-		"wrangler": "^4.143.0"
+		"wrangler": "^4.146.0"
 	},
 	"dependencies": {
 		"@openshock/svelte-core": "workspace:*",
