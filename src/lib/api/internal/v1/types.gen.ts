@@ -606,6 +606,10 @@ export type EmailOutboxMessageDto = {
   type: EmailType;
   recipient: string;
   recipientName: null | string;
+  /**
+   * The user currently registered under Recipient, or null if there is none.
+   */
+  recipientUserId: null | string;
   payload: {
     [key: string]: string;
   };

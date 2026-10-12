@@ -1,5 +1,6 @@
 import { formatRelativeInstant } from '#lib/utils/datetime.js';
 import { getReadableUserAgentName } from '#lib/utils/index.js';
+import { resolve } from '$app/paths';
 import { formatDurationSeconds } from '@openshock/svelte-core/utils';
 import {
   renderComponent,
@@ -92,12 +93,13 @@ export function CreateColumnDefs<TFeatures extends DataTableFeatures, TData exte
   function CreateColumnDef<TKey extends Extract<keyof TData, string>>(
     accessorKey: TKey,
     headerName: string,
-    renderer: (content: TData[TKey]) => CellContentProps
+    renderer: (content: TData[TKey], row: TData) => CellContentProps
   ): ColumnDef<TFeatures, TData> {
     return asColumnDef({
       accessorKey,
       header: headerName,
-      cell: ({ row }) => renderComponent(CellContent, renderer(row.original[accessorKey])),
+      cell: ({ row }) =>
+        renderComponent(CellContent, renderer(row.original[accessorKey], row.original)),
       meta: { label: headerName },
     });
   }
@@ -105,7 +107,7 @@ export function CreateColumnDefs<TFeatures extends DataTableFeatures, TData exte
   function CreateSortableColumnDef<TKey extends Extract<keyof TData, string>>(
     accessorKey: TKey,
     headerName: string,
-    renderer: (content: TData[TKey]) => CellContentProps,
+    renderer: (content: TData[TKey], row: TData) => CellContentProps,
     sortFunct?: 'auto' | ((a: TData[TKey], b: TData[TKey]) => number) | ExtractSortFnKeys<TFeatures>
   ): ColumnDef<TFeatures, TData> {
     let sortFn: SortFnOption<TFeatures, TData>;
@@ -123,7 +125,8 @@ export function CreateColumnDefs<TFeatures extends DataTableFeatures, TData exte
     return asColumnDef({
       accessorKey,
       header: CreateSortHeader(headerName),
-      cell: ({ row }) => renderComponent(CellContent, renderer(row.original[accessorKey])),
+      cell: ({ row }) =>
+        renderComponent(CellContent, renderer(row.original[accessorKey], row.original)),
       meta: { label: headerName },
       // Registered sort-fn names come from the caller's `sortFns`, which the
       // generic `TableFeatures` shape used for checking doesn't know about.
@@ -200,6 +203,18 @@ export const RenderCellWithTooltip = (content: string, tooltip: string): CellCon
   text: content,
   bold: true,
   title: tooltip,
+});
+
+// Links to the admin page of `userId`, or renders plain text when there is no such user.
+export const RenderAdminUserLinkCell = (
+  content: string,
+  userId: string | null,
+  tooltip?: string
+): CellContentProps => ({
+  text: content,
+  bold: true,
+  title: tooltip,
+  href: userId ? resolve(`admin/users/${userId}`) : undefined,
 });
 
 export function LocaleDateRenderer(instant: Temporal.Instant): CellContentProps {

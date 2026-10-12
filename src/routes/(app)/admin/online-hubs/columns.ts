@@ -4,6 +4,7 @@ import {
   CellRedUnknown,
   CreateColumnDefs,
   FirmwareVersionRenderer,
+  RenderAdminUserLinkCell,
   RenderBoldCell,
   RenderCell,
   RenderCellWithTooltip,
@@ -76,7 +77,7 @@ export const columns = [
   CreateSortableColumnDef(
     'owner',
     'Owner',
-    (owner) => RenderCellWithTooltip(owner.name, owner.id),
+    (owner) => RenderAdminUserLinkCell(owner.name, owner.id, owner.id),
     (a, b) => a.name.localeCompare(b.name)
   ),
   CreateSortableColumnDef('firmwareVersion', 'Firmware', FirmwareVersionRenderer, (a, b) =>

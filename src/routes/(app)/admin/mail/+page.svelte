@@ -47,6 +47,7 @@
   import {
     CreateColumnDefs,
     LocaleDateTimeRenderer,
+    RenderAdminUserLinkCell,
     RenderCell,
   } from '#lib/components/Table/ColumnUtils.js';
   import type { SortingState } from '@tanstack/svelte-table';
@@ -78,7 +79,9 @@
 
   const columns = [
     CreateSortableColumnDef('type', 'Type', RenderCell),
-    CreateSortableColumnDef('recipient', 'Recipient', RenderCell),
+    CreateSortableColumnDef('recipient', 'Recipient', (recipient, message) =>
+      RenderAdminUserLinkCell(recipient, message.recipientUserId)
+    ),
     CreateSortableColumnDef('status', 'Status', StatusRenderer),
     CreateSortableColumnDef('attemptCount', 'Attempts', (n) => RenderCell(n.toString())),
     CreateSortableColumnDef('createdAt', 'Created', LocaleDateTimeRenderer),
