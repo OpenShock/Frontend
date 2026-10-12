@@ -58,7 +58,7 @@
       <div class="flex flex-col gap-0.5 text-xs">
         <span>
           {#if isActive}
-            Live — {connection?.gateway} ({connection?.country}) — {connection?.latency}ms
+            Live via {connection?.gateway} ({connection?.country}), {connection?.latency}ms
           {:else if isConnecting}
             Connecting...
           {:else}
@@ -73,7 +73,7 @@
   </Tooltip.Root>
   {#if isActive && connection && !compact}
     <span class="text-muted-foreground text-[10px]">
-      {connection.gateway} ({connection.country}) — {connection.latency}ms
+      {connection.gateway} ({connection.country}), {connection.latency}ms
     </span>
   {/if}
 </div>
