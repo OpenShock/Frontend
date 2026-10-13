@@ -1,10 +1,9 @@
 <script lang="ts">
-  import { RoleType, adminModifyUser } from '#lib/api/index.js';
+  import { adminModifyUser } from '#lib/api/index.js';
   import type { AdminUsersView } from '#lib/api/index.js';
   import { EmailInput } from '@openshock/svelte-core/components/input';
   import UsernameInput from '#lib/components/input/UsernameInput.svelte';
   import { Button } from '@openshock/svelte-core/components/ui/button';
-  import { Checkbox } from '@openshock/svelte-core/components/ui/checkbox';
   import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
   import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
 
@@ -56,14 +55,6 @@
       bind:valid={usernameValid}
     />
     <EmailInput label="Email" placeholder={user.email} bind:value={email} bind:valid={emailValid} />
-    <div>
-      <h2>Roles</h2>
-      <div class="flex flex-col space-y-4 rounded-md border p-4">
-        {#each [RoleType.Support, RoleType.Staff, RoleType.Admin, RoleType.System] as role (role)}
-          <span><Checkbox checked={user.roles.includes(role)} /> {role}</span>
-        {/each}
-      </div>
-    </div>
     <Dialog.Footer>
       <Button variant="outline" onclick={() => (open = false)}>Cancel</Button>
       <Button

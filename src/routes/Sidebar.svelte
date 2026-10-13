@@ -7,6 +7,7 @@
     Link,
     MonitorSmartphone,
     Router,
+    ScrollText,
     Settings,
     Share2,
     SquareActivity,
@@ -16,6 +17,7 @@
     Wrench,
     Zap,
   } from '@lucide/svelte';
+  import { PUBLIC_HANGFIRE_URL } from '$app/env/public';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import type { Path } from '$app/types';
@@ -59,6 +61,8 @@
 
   interface Menu extends Item {
     Icon: AnyComponent;
+    /** Fully-qualified URL to an external site. Rendered verbatim (no base prefix, opened as a plain link). */
+    externalHref?: string;
     collapsible?: { open: boolean };
     subItems?: Item[];
   }
@@ -167,12 +171,17 @@
           },
         ],
       },
-      {
-        title: 'Hangfire',
-        Icon: Timer,
-        href: 'hangfire',
-        target: '_blank',
-      },
+      // Hangfire lives on a separate deployment; only surface it when its URL is configured.
+      ...(PUBLIC_HANGFIRE_URL
+        ? [
+            {
+              title: 'Hangfire',
+              Icon: Timer,
+              externalHref: PUBLIC_HANGFIRE_URL,
+              target: '_blank',
+            } satisfies Menu,
+          ]
+        : []),
     ],
   };
   const settingsGroup: Group = {
@@ -187,6 +196,11 @@
         title: 'Sessions',
         Icon: MonitorSmartphone,
         href: 'settings/sessions',
+      },
+      {
+        title: 'Audit Log',
+        Icon: ScrollText,
+        href: 'settings/audit-log',
       },
       {
         title: 'Connections',
@@ -235,12 +249,19 @@
   <MenuItem>
     <MenuButton class={menu.class} isActive={isPathMatch(path, href)}>
       {#snippet child({ props })}
+        <!-- External links are rendered verbatim; internal ones get the base prefix. -->
         <!-- prefixBase is used here because resolve() can't take a union-typed pathname -->
-        <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-        <a {href} {...props}>
+        <!-- eslint-disable svelte/no-navigation-without-resolve -->
+        <a
+          href={menu.externalHref ?? href}
+          target={menu.target}
+          rel={menu.externalHref ? 'noopener noreferrer' : undefined}
+          {...props}
+        >
           <menu.Icon />
           <span>{menu.title}</span>
         </a>
+        <!-- eslint-enable svelte/no-navigation-without-resolve -->
       {/snippet}
       {#snippet tooltipContent()}
         {menu.title}

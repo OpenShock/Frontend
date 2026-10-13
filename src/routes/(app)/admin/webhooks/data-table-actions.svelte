@@ -2,7 +2,7 @@
   import RowActions from '#lib/components/Table/RowActions.svelte';
   import type { WebhookDto } from '#lib/api/index.js';
   import { copyToClipboard } from '@openshock/svelte-core/utils';
-  import { Copy, Pencil, Trash2 } from '@lucide/svelte';
+  import { Copy, Trash2 } from '@lucide/svelte';
   import WebhookDeleteDialog from './dialog-webhook-delete.svelte';
 
   interface Props {
@@ -21,8 +21,7 @@
 <RowActions
   label="Webhook"
   actions={[
-    { label: 'Edit', icon: Pencil, disabled: true },
-    { label: 'Copy ID', icon: Copy, onclick: copyId, separatorBefore: true },
+    { label: 'Copy ID', icon: Copy, onclick: copyId },
     {
       label: 'Delete',
       icon: Trash2,

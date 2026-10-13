@@ -131,6 +131,14 @@ export const variables = defineEnvVars({
       'paths are appended to it.',
     schema: url('PUBLIC_BACKEND_API_URL', { strict: true }),
   },
+  PUBLIC_HANGFIRE_URL: {
+    public: true,
+    static: true,
+    description:
+      'Full URL of the external Hangfire dashboard, linked from the admin sidebar. The link is ' +
+      'hidden when left empty.',
+    schema: optionalUrl('PUBLIC_HANGFIRE_URL'),
+  },
   PRIVATE_BACKEND_TLS_INSECURE: {
     description:
       "INSECURE. Disables TLS certificate validation for the server's own outgoing requests, " +

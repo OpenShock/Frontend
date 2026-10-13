@@ -6,9 +6,10 @@
   import { TableActionMenu } from '@openshock/svelte-core/components';
   import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
   import { copyToClipboard } from '@openshock/svelte-core/utils';
-  import { Copy, Eye, KeyRound, Pencil, ShieldPlus, Trash2 } from '@lucide/svelte';
+  import { Copy, Eye, KeyRound, Pencil, Trash2 } from '@lucide/svelte';
   import UserDeleteDialog from './dialog-user-delete.svelte';
   import UserEditDialog from './dialog-user-edit.svelte';
+  import SetPasswordDialog from './[userId=guid]/dialog-set-password.svelte';
 
   interface Props {
     user: AdminUsersView;
@@ -19,6 +20,7 @@
 
   let editDialogOpen = $state<boolean>(false);
   let deleteDialogOpen = $state<boolean>(false);
+  let passwordDialogOpen = $state<boolean>(false);
   let isPrivileged = $derived(
     [RoleType.Admin, RoleType.System].some((role) => user.roles.includes(role))
   );
@@ -28,6 +30,12 @@
 
 <UserEditDialog bind:open={editDialogOpen} {user} />
 <UserDeleteDialog bind:open={deleteDialogOpen} {user} {onDeleted} />
+<SetPasswordDialog
+  bind:open={passwordDialogOpen}
+  userId={user.id}
+  userName={user.name}
+  onChanged={() => {}}
+/>
 
 <TableActionMenu>
   <DropdownMenu.Label>User</DropdownMenu.Label>
@@ -44,13 +52,9 @@
       <Pencil class="size-4" />
       Edit
     </DropdownMenu.Item>
-    <DropdownMenu.Item class="cursor-pointer">
-      <ShieldPlus class="size-4" />
-      Promote
-    </DropdownMenu.Item>
-    <DropdownMenu.Item class="cursor-pointer">
+    <DropdownMenu.Item class="cursor-pointer" onclick={() => (passwordDialogOpen = true)}>
       <KeyRound class="size-4" />
-      Reset password
+      Set password
     </DropdownMenu.Item>
     <DropdownMenu.Separator />
     <DropdownMenu.Item class="cursor-pointer" onclick={copyId}>
