@@ -335,7 +335,10 @@ export default defineConfig(({ command, mode, isPreview }) => {
       },
     },
     plugins: [
-      server ? mkcert() : undefined,
+      // Not in integration mode: it serves plain HTTP on localhost (see
+      // resolveIntegrationServer), and mkcert would both download a binary in CI and flip the
+      // dev server to HTTPS, which the Playwright webServer URL does not expect.
+      server && !isIntegration ? mkcert() : undefined,
       server?.fqdn ? localDevChecksPlugin(server.fqdn, server.config.port) : undefined,
       jsBannerPlugin('/*! For licenses information, see LICENSES.txt */'),
       tailwindcss(),
