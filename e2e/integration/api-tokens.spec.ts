@@ -84,25 +84,24 @@ test.describe('API tokens', () => {
 
     // Find the row containing our token, open the actions menu, then delete
     const tokenRow = authedPage.locator('tr').filter({ hasText: tokenName }).first();
-    if (await tokenRow.count()) {
-      // Click the ellipsis/actions button to open the dropdown
-      const actionsBtn = tokenRow.getByRole('button', { name: /open menu/i }).first();
-      if (await actionsBtn.count()) {
-        await actionsBtn.click();
-        // Click the Delete item in the dropdown
-        const deleteItem = authedPage.getByRole('menuitem', { name: /delete/i }).first();
-        if (await deleteItem.isVisible({ timeout: 1000 }).catch(() => false)) {
-          await deleteItem.click();
-          // Confirm deletion in the dialog
-          const confirmBtn = authedPage.getByRole('button', { name: /delete/i }).first();
-          if (await confirmBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
-            await confirmBtn.click();
-          }
-          await authedPage.waitForTimeout(1500);
-          // Token should no longer appear
-          await expect(authedPage.getByText(tokenName)).not.toBeVisible({ timeout: 3000 });
-        }
-      }
-    }
+    await expect(tokenRow).toBeVisible();
+
+    // TableActionMenu's trigger carries an sr-only "Open menu" label.
+    const actionsBtn = tokenRow.getByRole('button', { name: /open menu/i }).first();
+    await expect(actionsBtn).toBeVisible();
+    await actionsBtn.click();
+
+    const deleteItem = authedPage.getByRole('menuitem', { name: /delete/i }).first();
+    await expect(deleteItem).toBeVisible();
+    await deleteItem.click();
+
+    const confirmBtn = authedPage
+      .getByRole('dialog')
+      .getByRole('button', { name: /delete/i })
+      .first();
+    await expect(confirmBtn).toBeVisible();
+    await confirmBtn.click();
+
+    await expect(authedPage.getByText(tokenName)).toHaveCount(0, { timeout: 5000 });
   });
 });

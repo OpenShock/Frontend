@@ -16,40 +16,36 @@ test.describe('account settings', () => {
   });
 
   test('displays current email', async ({ authedPage, user }) => {
-    // Email is shown as a placeholder on the change-email input
-    await expect(
-      authedPage.locator(`input[placeholder*="${user.credentials.email}"]`)
-    ).toBeVisible();
+    await expect(authedPage.getByText(user.credentials.email, { exact: false })).toBeVisible();
   });
 
   test('update username with a valid new name', async ({ authedPage }) => {
     const newName = `upd_${Date.now().toString(36)}`;
 
-    // Find and update the username field
-    const usernameInput = authedPage.getByLabel(/username/i).first();
-    await usernameInput.fill(newName);
+    // The page shows the username as text; changing it goes through a dialog.
+    await authedPage.getByRole('button', { name: /change username/i }).click();
+    const dialog = authedPage.getByRole('dialog');
+    await expect(dialog).toBeVisible();
+    await dialog.getByLabel(/new username/i).fill(newName);
+    await dialog.getByRole('button', { name: /^change username$/i }).click();
 
-    const saveBtn = authedPage.getByRole('button', { name: /save|update|submit|change/i }).first();
-    await saveBtn.click();
-
-    // Expect a success toast or feedback
-    await expect(
-      authedPage.locator('[data-sonner-toast], [role="status"], .toast, [aria-live]').first()
-    )
-      .toBeVisible({ timeout: 5000 })
-      .catch(() => {
-        // Not all UIs show a toast — just ensure no error state
-      });
+    // The new name has to survive a reload — a toast alone would not prove it was saved.
+    await expect(dialog).toBeHidden();
+    await authedPage.reload();
+    await authedPage.waitForLoadState('networkidle');
+    await expect(authedPage.getByText(newName, { exact: false })).toBeVisible();
   });
 
   test('rejects username that is too short', async ({ authedPage }) => {
-    const usernameInput = authedPage.getByLabel(/username/i).first();
+    await authedPage.getByRole('button', { name: /change username/i }).click();
+    const dialog = authedPage.getByRole('dialog');
+    await expect(dialog).toBeVisible();
+
+    const usernameInput = dialog.getByLabel(/new username/i);
     await usernameInput.fill('ab');
 
-    // The input should show aria-invalid and the Change button should be disabled
     await expect(usernameInput).toHaveAttribute('aria-invalid', 'true', { timeout: 3000 });
-    const saveBtn = authedPage.getByRole('button', { name: /change/i }).first();
-    await expect(saveBtn).toBeDisabled();
+    await expect(dialog.getByRole('button', { name: /^change username$/i })).toBeDisabled();
   });
 });
 
@@ -66,11 +62,13 @@ test.describe('sessions', () => {
     await authedPage.goto('/settings/sessions');
     await authedPage.waitForLoadState('networkidle');
     // Should show the current session
-    await expect(authedPage.getByRole('row').or(authedPage.locator('[data-session]')).first())
-      .toBeVisible({ timeout: 5000 })
-      .catch(async () => {
-        // Try looking for any session-related text
-        await expect(authedPage.getByText(/current|active|session/i).first()).toBeVisible();
-      });
+    // One auto-waiting assertion over the shapes the page may use, so a missing list fails.
+    await expect(
+      authedPage
+        .getByRole('row')
+        .or(authedPage.locator('[data-session]'))
+        .or(authedPage.getByText(/current|active|session/i))
+        .first()
+    ).toBeVisible({ timeout: 5000 });
   });
 });

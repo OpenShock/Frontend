@@ -44,12 +44,18 @@ test.describe('browser signup flow', () => {
 
     await page.getByRole('button', { name: /create account/i }).click();
 
-    // Either a success dialog appears, or the page redirects to /login
-    const dialogTitle = page.getByText(/welcome|account created|thank you/i);
-    const redirectedToLogin = page.url().includes('login');
-    const hasDialog = await dialogTitle.isVisible({ timeout: 8_000 }).catch(() => false);
-
-    expect(hasDialog || redirectedToLogin).toBe(true);
+    // Either a success dialog appears or the page redirects to /login, and which one happens
+    // is timing-dependent — so wait on the two together. Reading page.url() up front could
+    // not see a later redirect, and isVisible() ignores its timeout rather than waiting.
+    await expect
+      .poll(
+        async () => {
+          if (/login/.test(page.url())) return true;
+          return page.getByText(/welcome|account created|thank you/i).isVisible();
+        },
+        { timeout: 15_000 }
+      )
+      .toBe(true);
 
     // Cleanup: dismiss dialog and delete via API is handled in teardown
   });

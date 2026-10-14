@@ -24,7 +24,6 @@ export function makeCredentials(prefix = 'pw'): Credentials {
 
 async function applyCookiesToContext(context: BrowserContext, cookies: AuthCookies): Promise<void> {
   const url = new URL(FRONTEND_URL);
-  const apiHost = new URL(process.env.TEST_BACKEND_URL ?? 'http://localhost:5001').hostname;
   const parsed = cookies.flatMap((raw) => {
     const [pair, ...attrs] = raw.split(';').map((s) => s.trim());
     const [name, ...rest] = pair.split('=');
@@ -44,7 +43,7 @@ async function applyCookiesToContext(context: BrowserContext, cookies: AuthCooki
       {
         name,
         value,
-        domain: attrMap['domain'] ?? apiHost,
+        domain: attrMap['domain'] ?? url.hostname,
         path: attrMap['path'] ?? '/',
         httpOnly: 'httponly' in attrMap,
         secure: false,
@@ -53,8 +52,6 @@ async function applyCookiesToContext(context: BrowserContext, cookies: AuthCooki
     ];
   });
   await context.addCookies(parsed);
-  // touch the URL so SvelteKit picks up state
-  void url;
 }
 
 export type TestUser = {

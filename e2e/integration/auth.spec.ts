@@ -104,32 +104,17 @@ test.describe('logout', () => {
     await authedPage.goto('/home');
     await authedPage.waitForURL(/\/home/);
 
-    // Look for a logout button/menu item (may require opening a user menu first)
-    const logoutBtn = authedPage.getByRole('button', { name: /log out|sign out/i });
-    const logoutLink = authedPage.getByRole('link', { name: /log out|sign out/i });
+    // The logout control lives in the header's avatar dropdown as a menuitem labelled
+    // "Logout" — not a button or link, and not present until the menu is open.
+    const userMenu = authedPage.getByRole('button', { name: /avatar/i }).first();
+    await expect(userMenu).toBeVisible();
+    await userMenu.click();
 
-    const hasBtn = await logoutBtn.count();
-    const hasLink = await logoutLink.count();
+    const logoutItem = authedPage.getByRole('menuitem', { name: /^logout$/i });
+    await expect(logoutItem).toBeVisible();
+    await logoutItem.click();
 
-    if (hasBtn === 0 && hasLink === 0) {
-      // Look for a user/avatar menu to open first
-      const avatar = authedPage.getByRole('button', { name: /account|profile|menu/i }).first();
-      if (await avatar.count()) {
-        await avatar.click();
-        await authedPage.waitForTimeout(300);
-      }
-    }
-
-    const logoutEl = authedPage
-      .getByRole('button', { name: /log out|sign out/i })
-      .or(authedPage.getByRole('link', { name: /log out|sign out/i }))
-      .first();
-
-    if (await logoutEl.count()) {
-      await logoutEl.click();
-      // After logout, should land on login page or home (public)
-      await authedPage.waitForURL(/\/login|\/$/i, { timeout: 5000 });
-    }
+    await authedPage.waitForURL(/\/login|\/$/i, { timeout: 5000 });
   });
 
   test('API logout invalidates the session cookie', async ({ user }) => {

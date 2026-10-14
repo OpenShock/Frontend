@@ -51,9 +51,17 @@ test.describe('login via browser UI', () => {
     );
     await btn.click();
 
-    // Should show an error toast or inline message — not crash
-    await page.waitForTimeout(3_000);
-    expect(page.url()).toMatch(/login/);
+    // The failed login surfaces through handleApiError — a sonner toast, or an inline
+    // validation message on the form. Asserting on it means a dead submit button fails
+    // the test, which a URL check cannot: the URL is already /login before the click.
+    await expect(
+      page
+        .locator('[data-sonner-toast]')
+        .or(page.getByRole('alert'))
+        .or(page.locator('[aria-invalid="true"]'))
+        .first()
+    ).toBeVisible({ timeout: 10_000 });
+    await expect(page).toHaveURL(/login/);
   });
 
   test('successful login redirects to /home', async ({ authedPage }) => {
