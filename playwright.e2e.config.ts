@@ -13,7 +13,7 @@
  *   to MailPit's SMTP port (default 1025).
  *
  *   docker run -d -p 8025:8025 -p 1025:1025 axllent/mailpit
- *   TEST_MAILPIT_URL=http://localhost:8025 pnpm test:e2e:full
+ *   TEST_MAILPIT_URL=http://localhost:8025 pnpm test:e2e
  */
 
 import { defineConfig } from '@playwright/test';

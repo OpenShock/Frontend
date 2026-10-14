@@ -8,7 +8,8 @@ const TURNSTILE_BYPASS = process.env.TEST_TURNSTILE_BYPASS ?? 'dev-bypass';
 export default defineConfig({
   testDir: 'e2e/integration',
   testMatch: /.*\.spec\.ts$/,
-  reporter: process.env.CI ? 'github' : 'html',
+  // `github` annotates the run; `html` is what the workflow uploads on failure.
+  reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : 'html',
   fullyParallel: false,
   workers: 1,
   retries: process.env.CI ? 1 : 0,
