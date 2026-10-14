@@ -2,7 +2,6 @@
   import { HubConnectionState } from '@microsoft/signalr';
   import type { PublicShareResponse } from '#lib/api/index.js';
   import ClassicControlModule from '#lib/components/ControlModules/ClassicControlModule.svelte';
-  import LiveButton from '#lib/components/ControlModules/LiveButton.svelte';
   import LiveControlModule from '#lib/components/ControlModules/LiveControlModule.svelte';
   import ShockerCard from '#lib/components/ControlModules/ShockerCard.svelte';
   import { getPauseReason } from '#lib/utils/index.js';
@@ -143,11 +142,6 @@
         isPaused={shocker.paused !== 0}
         pauseReason={getPauseReason(shocker.paused)}
       >
-        {#snippet live()}
-          {#if shocker.permissions.live}
-            <LiveButton hubId={deviceId} shockerId={shocker.id} compact />
-          {/if}
-        {/snippet}
         {#if isShockerLiveActive && liveState && liveConn}
           <LiveControlModule shockerId={shocker.id} {liveState} connection={liveConn} />
         {:else}
