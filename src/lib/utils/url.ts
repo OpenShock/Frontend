@@ -3,7 +3,12 @@ import { asset, match } from '$app/paths';
 import { page } from '$app/state';
 import type { AssetPath, Path, PathnameWithSearchOrHash } from '$app/types';
 
-import { PUBLIC_BACKEND_API_URL, PUBLIC_SITE_SHORT_URL, PUBLIC_SITE_URL } from '$app/env/public';
+import {
+  PUBLIC_ALLOW_INSECURE_LOCAL_API,
+  PUBLIC_BACKEND_API_URL,
+  PUBLIC_SITE_SHORT_URL,
+  PUBLIC_SITE_URL,
+} from '$app/env/public';
 
 import { tick } from 'svelte';
 // ---------------------------------------------------------------------------
@@ -52,7 +57,10 @@ export type BackendPath = `${BackendApiVersion}` | `${BackendApiVersion}/${strin
 export function getBackendURL(path?: BackendPath): URL {
   const url = new URL(PUBLIC_BACKEND_API_URL);
 
-  if (url.protocol !== 'https:') {
+  // Mirrors the exemption in `src/env.ts`: the integration stack's API is plain HTTP on loopback.
+  const loopback =
+    url.hostname === 'localhost' || url.hostname === '127.0.0.1' || url.hostname === '[::1]';
+  if (url.protocol !== 'https:' && !(PUBLIC_ALLOW_INSECURE_LOCAL_API && loopback)) {
     throw new Error('PUBLIC_BACKEND_API_URL must be an HTTPS URL');
   }
 

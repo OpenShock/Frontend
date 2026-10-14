@@ -69,6 +69,9 @@ await waitForBackend();
 const child = spawn('pnpm', ['exec', 'vite', 'dev', '--mode', 'integration'], {
   stdio: 'inherit',
   shell: process.platform === 'win32',
+  // Lets src/env.ts and #lib/utils/url.ts accept the stack's plain-HTTP loopback API URL. Scoped
+  // to this child so it cannot leak into a production build.
+  env: { ...process.env, PUBLIC_ALLOW_INSECURE_LOCAL_API: '1' },
 });
 
 let shuttingDown = false;
