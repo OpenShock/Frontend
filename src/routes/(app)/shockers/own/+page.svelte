@@ -2,7 +2,7 @@
   import { PUBLIC_DISABLE_SHOCKER_MAP } from '$app/env/public';
   import { shockerPauseShocker, shockerRegisterShocker } from '#lib/api/index.js';
   import type { NewShocker } from '#lib/api/index.js';
-  import { Layers, LogsIcon, Plus, RotateCcw, Settings, Zap } from '@lucide/svelte';
+  import { ChartColumn, Layers, LogsIcon, Plus, RotateCcw, Settings, Zap } from '@lucide/svelte';
   import { resolve } from '$app/paths';
   import { Container, EmptyState, PageHeader } from '@openshock/svelte-core/components';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
@@ -286,6 +286,9 @@
 
         <Button variant="ghost" size="sm" aria-label="Logs" href={resolve('shockers/logs')}
           ><LogsIcon class="size-4" /></Button
+        >
+        <Button variant="ghost" size="sm" aria-label="Stats" href={resolve('shockers/stats')}
+          ><ChartColumn class="size-4" /></Button
         >
       </div>
     </PageHeader>
