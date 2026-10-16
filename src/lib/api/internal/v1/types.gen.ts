@@ -362,12 +362,16 @@ export type AutomationTokenDto = {
 };
 
 /**
- * A protection that an automation token is allowed to switch off.
+ * A protection that an automation token is allowed to switch off, or a service capability it grants.
  */
-export const AutomationTokenType = { Turnstile: 'Turnstile', RateLimit: 'RateLimit' } as const;
+export const AutomationTokenType = {
+  Turnstile: 'Turnstile',
+  RateLimit: 'RateLimit',
+  ControlStatsRead: 'ControlStatsRead',
+} as const;
 
 /**
- * A protection that an automation token is allowed to switch off.
+ * A protection that an automation token is allowed to switch off, or a service capability it grants.
  */
 export type AutomationTokenType = (typeof AutomationTokenType)[keyof typeof AutomationTokenType];
 
@@ -513,6 +517,54 @@ export type ControlLogSenderLight = {
   customName: null | string;
 };
 
+export type ControlStatChangesRequest = {
+  /**
+   * The cursor returned by the previous call, omit for an initial sync of every requested user.
+   */
+  since?: null | Temporal.Instant;
+  /**
+   * The users the caller is interested in, only these are ever reported.
+   */
+  userIds: Array<string>;
+};
+
+export type ControlStatChangesResponse = {
+  /**
+   * Pass as `since` on the next call.
+   */
+  cursor: Temporal.Instant;
+  users: Array<UserControlStatTotals>;
+};
+
+/**
+ * Aggregated activity of one control type, split by whether it was live control.
+ */
+export type ControlStatTotals = {
+  type: ControlType;
+  live: boolean;
+  /**
+   * Number of controls, for live control the number of continuous bursts.
+   */
+  count: bigint;
+  durationMs: bigint;
+  /**
+   * Average intensity weighted by duration.
+   */
+  averageIntensity: number;
+  maxIntensity: number;
+};
+
+export type ControlStatsResponse = {
+  /**
+   * Activity on shockers you own.
+   */
+  received: ReceivedControlStats;
+  /**
+   * Activity you sent to shockers, your own included.
+   */
+  given: GivenControlStats;
+};
+
 export const ControlType = {
   Stop: 'Stop',
   Shock: 'Shock',
@@ -548,6 +600,14 @@ export type CreatedAutomationTokenDto = {
   lastRotatedAt?: null | Temporal.Instant;
   autoCleanupUsers?: boolean;
   autoCleanupAfter?: null | string;
+};
+
+export type DailyControlStats = {
+  /**
+   * Day in the requested time zone.
+   */
+  date: Temporal.PlainDate;
+  stats: Array<ControlStatTotals>;
 };
 
 export type DeviceResponse = {
@@ -673,6 +733,11 @@ export const EmailType = {
  * secret at send time.
  */
 export type EmailType = (typeof EmailType)[keyof typeof EmailType];
+
+export type GivenControlStats = {
+  totals: Array<ControlStatTotals>;
+  owners: Array<UserControlStats>;
+};
 
 export type HubEditRequest = {
   name: string;
@@ -1096,6 +1161,13 @@ export type PublicShareShocker = {
   paused: number;
 };
 
+export type ReceivedControlStats = {
+  totals: Array<ControlStatTotals>;
+  shockers: Array<ShockerControlStats>;
+  controllers: Array<UserControlStats>;
+  days: Array<DailyControlStats>;
+};
+
 export type ReportTokensRequest = {
   turnstileResponse: string;
   secrets: Array<string>;
@@ -1166,6 +1238,15 @@ export type SharedShocker = {
   isPaused: boolean;
   permissions: ShockerPermissions;
   limits: ShockerLimits;
+};
+
+export type ShockerControlStats = {
+  /**
+   * Null for shockers that have since been deleted, these are combined into one entry.
+   */
+  shockerId: null | string;
+  shockerName: null | string;
+  stats: Array<ControlStatTotals>;
 };
 
 export type ShockerLimits = {
@@ -1244,6 +1325,33 @@ export type TokenResponse = {
   validUntil: null | Temporal.Instant;
   lastUsed: Temporal.Instant;
   permissions: Array<PermissionType>;
+};
+
+/**
+ * Lifetime totals of one user, the same views as ControlStatsResponse without breakdowns.
+ */
+export type UserControlStatTotals = {
+  userId: string;
+  /**
+   * Activity on shockers the user owns.
+   */
+  received: Array<ControlStatTotals>;
+  /**
+   * Activity the user sent to shockers, their own included.
+   */
+  given: Array<ControlStatTotals>;
+};
+
+export type UserControlStats = {
+  /**
+   * Null for guests (public shares).
+   */
+  userId: null | string;
+  /**
+   * Null for guests and deleted users.
+   */
+  user: null | BasicUserInfo;
+  stats: Array<ControlStatTotals>;
 };
 
 export type UserNameBlacklistDto = {
@@ -1336,6 +1444,46 @@ export type UsersGetSelfResponses = {
 };
 
 export type UsersGetSelfResponse = UsersGetSelfResponses[keyof UsersGetSelfResponses];
+
+export type UsersGetSelfControlStatsData = {
+  body?: never;
+  path?: never;
+  query?: {
+    /**
+     * IANA time zone the daily breakdown and the date range are in, e.g. `Europe/Berlin`, defaults to UTC.
+     */
+    tz?: string;
+    /**
+     * First day to include (inclusive), defaults to all time.
+     */
+    from?: Temporal.PlainDate;
+    /**
+     * Last day to include (inclusive), defaults to today.
+     */
+    to?: Temporal.PlainDate;
+  };
+  url: '/1/users/self/control-stats';
+};
+
+export type UsersGetSelfControlStatsErrors = {
+  /**
+   * Unknown time zone or invalid range.
+   */
+  400: OpenShockProblem;
+};
+
+export type UsersGetSelfControlStatsError =
+  UsersGetSelfControlStatsErrors[keyof UsersGetSelfControlStatsErrors];
+
+export type UsersGetSelfControlStatsResponses = {
+  /**
+   * The statistics.
+   */
+  200: ControlStatsResponse;
+};
+
+export type UsersGetSelfControlStatsResponse =
+  UsersGetSelfControlStatsResponses[keyof UsersGetSelfControlStatsResponses];
 
 export type UsersGetByNameData = {
   body?: never;
@@ -2431,6 +2579,33 @@ export type PublicGetPublicShareResponses = {
 
 export type PublicGetPublicShareResponse =
   PublicGetPublicShareResponses[keyof PublicGetPublicShareResponses];
+
+export type IntegrationsGetControlStatChangesData = {
+  body: ControlStatChangesRequest;
+  path?: never;
+  query?: never;
+  url: '/1/integrations/control-stats/changes';
+};
+
+export type IntegrationsGetControlStatChangesErrors = {
+  /**
+   * No automation token granting ControlStatsRead was presented.
+   */
+  403: OpenShockProblem;
+};
+
+export type IntegrationsGetControlStatChangesError =
+  IntegrationsGetControlStatChangesErrors[keyof IntegrationsGetControlStatChangesErrors];
+
+export type IntegrationsGetControlStatChangesResponses = {
+  /**
+   * The changed users' totals and the cursor to pass next time.
+   */
+  200: ControlStatChangesResponse;
+};
+
+export type IntegrationsGetControlStatChangesResponse =
+  IntegrationsGetControlStatChangesResponses[keyof IntegrationsGetControlStatChangesResponses];
 
 export type DevicesOtaGetOtaUpdateHistoryData = {
   body?: never;

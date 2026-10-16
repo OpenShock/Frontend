@@ -1,5 +1,6 @@
 <script lang="ts">
   import {
+    ChartColumn,
     ChevronDown,
     House,
     IdCard,
@@ -86,6 +87,7 @@
     if (isAuthenticated) {
       menus.push(
         { title: 'Shockers', Icon: Zap, href: 'shockers/own' },
+        { title: 'Shocker Stats', Icon: ChartColumn, href: 'shockers/stats' },
         {
           title: 'Shared Shockers',
           Icon: Share2,
