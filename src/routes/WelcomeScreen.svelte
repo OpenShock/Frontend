@@ -303,6 +303,8 @@
   <p>Something broken or missing? The faster you report it, the faster we can fix it.</p>
 
   <div class="mt-8 grid gap-3 sm:grid-cols-2">
+    <!-- External links: resolve() only applies to app routes. -->
+    <!-- eslint-disable svelte/no-navigation-without-resolve -->
     <a
       href={PUBLIC_DISCORD_INVITE_URL}
       target="_blank"
@@ -336,6 +338,7 @@
         <div class="truncate text-sm text-white/60">Open an issue</div>
       </div>
     </a>
+    <!-- eslint-enable svelte/no-navigation-without-resolve -->
   </div>
 
   <p class="mt-6 text-sm text-white/50">Lots more is landing soon. Thanks for sticking with us.</p>

@@ -22,6 +22,7 @@
 
 {#snippet dropdownItem(name: string, url: Path)}
   <!-- prefixBase is used here because resolve() can't take a union-typed pathname -->
+  <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
   <DropdownMenu.Item class="cursor-pointer" onclick={() => goto(prefixBase(url))}>
     {name}
   </DropdownMenu.Item>
@@ -70,12 +71,15 @@
         <Button variant="outline" href={resolve('login')}>Login <LogIn /></Button>
         <Button variant="outline" href={resolve('signup')}>Sign Up <UserPlus /></Button>
         <div class="hidden sm:flex sm:flex-row">
+          <!-- External links: resolve() only applies to app routes. -->
+          <!-- eslint-disable svelte/no-navigation-without-resolve -->
           <a href={PUBLIC_GITHUB_PROJECT_URL} class="p-2" title="Project GitHub">
             <GithubIcon class="fill-foreground size-6" />
           </a>
           <a href={PUBLIC_DISCORD_INVITE_URL} class="p-2" title="Community Discord">
             <DiscordLogo class="fill-foreground size-6" />
           </a>
+          <!-- eslint-enable svelte/no-navigation-without-resolve -->
         </div>
       {/if}
     </div>
