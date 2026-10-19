@@ -25,13 +25,13 @@
 		"@internationalized/date": "^3.12.4",
 		"@lucide/svelte": "^1.56.0",
 		"@microsoft/signalr": "^10.0.11",
-		"@playwright/test": "^1.64.0",
-		"@sveltejs/adapter-cloudflare": "8.0.0",
+		"@playwright/test": "^1.64.1",
+		"@sveltejs/adapter-cloudflare": "8.0.1",
 		"@sveltejs/adapter-node": "6.0.0",
 		"@sveltejs/kit": "^3.0.0",
 		"@sveltejs/vite-plugin-svelte": "^7.3.1",
 		"@tailwindcss/vite": "^4.3.3",
-		"@tanstack/svelte-table": "^9.2.8",
+		"@tanstack/svelte-table": "^9.3.1",
 		"@types/d3-scale": "^4.0.9",
 		"@types/node": "^26.6.5",
 		"@types/semver": "^7.8.0",
@@ -68,10 +68,10 @@
 		"typescript-eslint": "^8.71.2",
 		"ua-parser-js": "2.0.10",
 		"vaul-svelte": "1.0.0-next.7",
-		"vite-plugin-devtools-json": "^1.1.1",
+		"vite-plugin-devtools-json": "^1.1.2",
 		"vite-plugin-mkcert": "^2.1.0",
 		"vitest": "^5.0.4",
-		"wrangler": "^4.149.0"
+		"wrangler": "^4.151.1"
 	},
 	"dependencies": {
 		"@openshock/svelte-core": "workspace:*",
@@ -85,7 +85,7 @@
 		"@opentelemetry/sdk-logs": "^0.223.0",
 		"@opentelemetry/sdk-trace-node": "^2.12.0",
 		"@opentelemetry/sdk-trace-web": "^2.12.0",
-		"driver.js": "^1.9.0",
+		"driver.js": "^1.10.1",
 		"temporal-polyfill": "^1.0.5",
 		"vite": "^8.3.4"
 	},
