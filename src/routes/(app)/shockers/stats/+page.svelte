@@ -80,19 +80,20 @@
   let fetchToken = 0;
 
   $effect(() => {
-    const query = { tz: timeZone, from: from?.toString(), to: to.toString() };
+    const query = { tz: timeZone, from, to };
 
     const token = ++fetchToken;
     isFetching = true;
     usersGetSelfControlStats({
+      query,
       // The generated serializer drops Temporal values, so the dates are sent as ISO strings.
-      querySerializer: () => {
+      querySerializer: (params) => {
         // eslint-disable-next-line svelte/prefer-svelte-reactivity
-        const params = new URLSearchParams();
-        for (const [key, value] of Object.entries(query)) {
-          if (value !== undefined) params.set(key, value);
+        const search = new URLSearchParams();
+        for (const [key, value] of Object.entries(params)) {
+          if (value !== undefined) search.set(key, String(value));
         }
-        return params.toString();
+        return search.toString();
       },
     })
       .then((res) => {
@@ -101,6 +102,7 @@
       })
       .catch((err) => {
         if (token !== fetchToken) return;
+        stats = null;
         handleApiError(err);
       })
       .finally(() => {
