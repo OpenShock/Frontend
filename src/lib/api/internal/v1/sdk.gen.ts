@@ -24,6 +24,7 @@ import {
   devicesGetShockersResponseTransformer,
   devicesListDevicesResponseTransformer,
   devicesOtaGetOtaUpdateHistoryResponseTransformer,
+  integrationsGetControlStatChangesResponseTransformer,
   publicGetOnlineDevicesStatisticsResponseTransformer,
   publicGetPublicShareResponseTransformer,
   sessionsGetSelfSessionResponseTransformer,
@@ -39,6 +40,7 @@ import {
   tokensGetTokenByIdResponseTransformer,
   tokensListTokensResponseTransformer,
   tokensSelfGetSelfTokenResponseTransformer,
+  usersGetSelfControlStatsResponseTransformer,
   versionGetBackendInfoResponseTransformer,
 } from './transformers.gen';
 import type {
@@ -229,6 +231,9 @@ import type {
   DevicesRemoveDeviceData,
   DevicesRemoveDeviceErrors,
   DevicesRemoveDeviceResponses,
+  IntegrationsGetControlStatChangesData,
+  IntegrationsGetControlStatChangesErrors,
+  IntegrationsGetControlStatChangesResponses,
   PublicGetOnlineDevicesStatisticsData,
   PublicGetOnlineDevicesStatisticsResponses,
   PublicGetPublicShareData,
@@ -331,6 +336,9 @@ import type {
   UsersGetByNameData,
   UsersGetByNameErrors,
   UsersGetByNameResponses,
+  UsersGetSelfControlStatsData,
+  UsersGetSelfControlStatsErrors,
+  UsersGetSelfControlStatsResponses,
   UsersGetSelfData,
   UsersGetSelfResponses,
   VersionGetBackendInfoData,
@@ -377,6 +385,29 @@ export const usersGetSelf = <ThrowOnError extends boolean = true>(
   (options?.client ?? client).get<UsersGetSelfResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
     url: '/1/users/self',
+    ...options,
+  });
+
+/**
+ * Get control statistics for the current user, both for their own shockers and for controls they sent.
+ */
+export const usersGetSelfControlStats = <ThrowOnError extends boolean = true>(
+  options?: Options<UsersGetSelfControlStatsData, ThrowOnError>
+): RequestResult<
+  UsersGetSelfControlStatsResponses,
+  UsersGetSelfControlStatsErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).get<
+    UsersGetSelfControlStatsResponses,
+    UsersGetSelfControlStatsErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: usersGetSelfControlStatsResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/users/self/control-stats',
     ...options,
   });
 
@@ -1119,6 +1150,41 @@ export const publicGetPublicShare = <ThrowOnError extends boolean = true>(
     responseStyle: 'data',
     url: '/1/public/shares/links/{publicShareId}',
     ...options,
+  });
+
+/**
+ * Lets a service holding many users keep their lifetime control stats in sync with a single call per tick.
+ * Returns the lifetime totals of every requested user whose stats changed since the given cursor.
+ *
+ * Requires an automation token granting `ControlStatsRead`. "Changed since" is answered from when each
+ * stats row was last written rather than the time it covers, so live control stats written late (e.g. after a
+ * database outage) are still picked up. Rows deleted along with their owner lower the totals of everyone who
+ * controlled them without leaving a row behind, those are picked up from ControlStatRemoval. The
+ * lookback is widened by ChangeOverlap to cover writes still committing while the previous call
+ * read, so a user can be reported again although nothing changed.
+ */
+export const integrationsGetControlStatChanges = <ThrowOnError extends boolean = true>(
+  options: Options<IntegrationsGetControlStatChangesData, ThrowOnError>
+): RequestResult<
+  IntegrationsGetControlStatChangesResponses,
+  IntegrationsGetControlStatChangesErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).post<
+    IntegrationsGetControlStatChangesResponses,
+    IntegrationsGetControlStatChangesErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: integrationsGetControlStatChangesResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/integrations/control-stats/changes',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
   });
 
 /**
