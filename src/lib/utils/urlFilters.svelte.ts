@@ -128,6 +128,7 @@ export function createUrlFilters<T extends Record<string, ParamDef>>(
           params.delete(key);
         }
       }
+      // eslint-disable-next-line svelte/no-navigation-without-resolve -- query-only update of the current page
       goto(`?${params}`, { replace: true, reset: false });
 
       // Persist to localStorage so filters survive navigation

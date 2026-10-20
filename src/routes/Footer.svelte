@@ -15,6 +15,7 @@
     Made with
     <span class="text-[#e25555]">♥</span>
     by the
+    <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- external link -->
     <a target="_blank" rel="noopener" href={PUBLIC_GITHUB_PROJECT_URL}>OpenShock Team</a>
   </div>
   <div class="flex items-center gap-2">

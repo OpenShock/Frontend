@@ -287,6 +287,7 @@ export function sanitizeRedirectSearchParam(queryParam: string = REDIRECT_QUERY_
   if (!isValidRedirectParam(value)) {
     const sanitized = new URL(page.url.href);
     sanitized.searchParams.delete(queryParam);
+    // eslint-disable-next-line svelte/no-navigation-without-resolve -- current page URL, already base-prefixed
     goto(sanitized, { shallow: true, replace: true });
     return true;
   }
@@ -350,6 +351,7 @@ export function consumeSearchParam(
 
     const stripped = new URL(page.url.href);
     stripped.searchParams.delete(queryParam);
+    // eslint-disable-next-line svelte/no-navigation-without-resolve -- current page URL, already base-prefixed
     goto(stripped, { shallow: true, replace: true });
   });
 }
@@ -421,5 +423,6 @@ export async function gotoQueryRedirectOrFallback(
     }
   }
 
+  // eslint-disable-next-line svelte/no-navigation-without-resolve -- target is a validated, base-relative path; resolve() can't take a dynamic pathname
   await goto(prefixBase(target));
 }
