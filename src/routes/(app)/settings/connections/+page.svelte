@@ -100,7 +100,7 @@
         <Dropdown.Root>
           <Dropdown.Trigger>
             {#snippet child({ props })}
-              <Button {...props} variant="secondary" data-tour="connections-link">
+              <Button {...props} variant="secondary">
                 <Plus class="mr-2 size-4" />
                 Link new provider
               </Button>

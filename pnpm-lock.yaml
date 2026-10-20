@@ -207,9 +207,6 @@ importers:
       '@opentelemetry/sdk-trace-web':
         specifier: ^2.12.0
         version: 2.12.0(@opentelemetry/api@1.9.1)
-      driver.js:
-        specifier: ^1.10.1
-        version: 1.10.1
       temporal-polyfill:
         specifier: ^1.0.5
         version: 1.0.5
@@ -2308,9 +2305,6 @@ packages:
   dotenv@17.4.2:
     resolution: {integrity: sha512-nI4U3TottKAcAD9LLud4Cb7b2QztQMUEfHbvhTH09bqXTxnSie8WnjPALV/WMCrJZ6UV/qHJ6L03OqO3LcdYZw==}
     engines: {node: '>=12'}
-
-  driver.js@1.10.1:
-    resolution: {integrity: sha512-mpcJ15eIRWnGMykeIWjr0CdQF00/JzImFOEXy/VponYgMbP/y46t24MPBDO3PV/rH6CjdSe3T7WQ9cP3GvEPdQ==}
 
   electron-to-chromium@1.5.440:
     resolution: {integrity: sha512-SghDzqdJokdz8zP8YNlvS74+CwLRoUPDGvP/gFA+HrKVw+pOshUAgx8pXR37xl/u16zGae746rFNWvZ/22kU2Q==}
@@ -5057,8 +5051,6 @@ snapshots:
   devalue@5.9.4: {}
 
   dotenv@17.4.2: {}
-
-  driver.js@1.10.1: {}
 
   electron-to-chromium@1.5.440: {}
 

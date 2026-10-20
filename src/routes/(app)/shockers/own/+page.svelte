@@ -195,12 +195,7 @@
   {:else}
     <PageHeader title="Shockers" subtitle="Every shocker paired to your hubs.">
       <div class="flex flex-wrap items-center gap-1">
-        <Button
-          variant="secondary"
-          size="sm"
-          onclick={openAddShockerDialog}
-          data-tour="shockers-add"
-        >
+        <Button variant="secondary" size="sm" onclick={openAddShockerDialog}>
           <Plus class="size-4" /> Add Shocker
         </Button>
         <Button
@@ -216,13 +211,7 @@
         <Popover.Root>
           <Popover.Trigger>
             {#snippet child({ props })}
-              <Button
-                {...props}
-                variant="ghost"
-                size="sm"
-                aria-label="View mode"
-                data-tour="shockers-viewmode"
-              >
+              <Button {...props} variant="ghost" size="sm" aria-label="View mode">
                 <Layers class="size-4" />
               </Button>
             {/snippet}
@@ -259,13 +248,7 @@
         <Popover.Root>
           <Popover.Trigger>
             {#snippet child({ props })}
-              <Button
-                {...props}
-                variant="ghost"
-                size="sm"
-                aria-label="Settings"
-                data-tour="shockers-layout"
-              >
+              <Button {...props} variant="ghost" size="sm" aria-label="Settings">
                 <Settings class="size-4" />
               </Button>
             {/snippet}

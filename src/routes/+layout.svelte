@@ -14,7 +14,6 @@
   import Footer from './Footer.svelte';
   import Header from './Header.svelte';
   import Sidebar from './Sidebar.svelte';
-  import WelcomeScreen from './WelcomeScreen.svelte';
   import '../app.css';
   import { IsMobile } from '@openshock/svelte-core/hooks';
   import { DialogManager } from '@openshock/svelte-core/components/dialog-manager';
@@ -36,8 +35,6 @@
   let sidebarOpen = $state(untrack(() => data.sidebarOpen));
   const isOpen = $derived(mobile.current ? false : sidebarOpen);
 
-  let welcomeOpen = $state(untrack(() => data.showWelcome));
-
   onMount(() => maybePromptTelemetryConsent());
 </script>
 
@@ -49,14 +46,6 @@
 
 <TooltipProvider delayDuration={250}>
   <DialogManager />
-
-  {#if welcomeOpen}
-    <WelcomeScreen
-      close={() => {
-        welcomeOpen = false;
-      }}
-    />
-  {/if}
 
   <SidebarProvider open={isOpen} onOpenChange={(v) => (sidebarOpen = v)}>
     <Sidebar />
