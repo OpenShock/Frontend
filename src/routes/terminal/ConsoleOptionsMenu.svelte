@@ -37,7 +37,10 @@
     <Settings2 class="mr-1 h-3.5 w-3.5" />
     Options
   </DropdownMenu.Trigger>
-  <DropdownMenu.Content align="end" class="min-w-48">
+  <DropdownMenu.Content
+    align="end"
+    class="min-w-48 rounded-sm [&_[data-slot$=item]]:rounded-sm [&_[data-slot$=sub-trigger]]:rounded-sm"
+  >
     <DropdownMenu.CheckboxItem
       checked={settings.hideSystem}
       onCheckedChange={(v) => (settings.hideSystem = v)}
@@ -64,7 +67,7 @@
           {TIMESTAMP_LABELS[settings.timestampMode]}
         </span>
       </DropdownMenu.SubTrigger>
-      <DropdownMenu.SubContent>
+      <DropdownMenu.SubContent class="rounded-sm [&_[data-slot$=item]]:rounded-sm">
         <DropdownMenu.RadioGroup
           value={settings.timestampMode}
           onValueChange={(v) => (settings.timestampMode = v as TimestampMode)}

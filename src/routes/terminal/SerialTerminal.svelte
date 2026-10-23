@@ -538,7 +538,7 @@
         {#if colorsOpen}
           <div
             bind:this={colorsPanelEl}
-            class="bg-popover text-popover-foreground ring-foreground/10 absolute z-10 flex w-72 flex-col gap-3 rounded-lg p-3 shadow-lg ring-1"
+            class="bg-popover text-popover-foreground ring-foreground/10 absolute z-10 flex w-72 flex-col gap-3 rounded-sm p-3 shadow-lg ring-1"
             style={colorsPos
               ? `left: ${colorsPos.x}px; top: ${colorsPos.y}px`
               : 'left: 50%; top: 50%; transform: translate(-50%, -50%)'}

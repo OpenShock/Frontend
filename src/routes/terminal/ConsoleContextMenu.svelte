@@ -48,10 +48,10 @@
 
   // Mirrors dropdown-menu-content.svelte.
   const contentClass =
-    'bg-popover text-popover-foreground ring-foreground/10 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 z-50 min-w-48 origin-(--bits-context-menu-content-transform-origin) overflow-hidden rounded-lg p-1 shadow-md ring-1 duration-100';
+    'bg-popover text-popover-foreground ring-foreground/10 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 z-50 min-w-48 origin-(--bits-context-menu-content-transform-origin) overflow-hidden rounded-sm p-1 shadow-md ring-1 duration-100';
   // Mirrors dropdown-menu-item.svelte, also used for sub triggers.
   const itemClass =
-    "focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center gap-1.5 rounded-md px-1.5 py-1 text-sm outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
+    "focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center gap-1.5 rounded-sm px-1.5 py-1 text-sm outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
   // Checkbox and radio items reserve room on the right for the check mark.
   const checkItemClass = `${itemClass} pr-8`;
   // Mirrors dropdown-menu-separator.svelte.
