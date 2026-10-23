@@ -9,9 +9,10 @@ export interface AnsiSegment {
   style: Record<string, string>;
 }
 
-import type { LogLevel } from './types';
+import type { LogFormat, LogLevel } from './types';
 
 export interface ParsedLogLine {
+  format: LogFormat;
   logLevel: LogLevel;
   deviceUptime: number;
   tag: string;
@@ -35,6 +36,7 @@ export function parseLogLine(text: string): ParsedLogLine | null {
   let match = LOG_OPENSHOCK_REGEX.exec(text);
   if (match) {
     return {
+      format: 'openshock',
       logLevel: match[2] as LogLevel,
       deviceUptime: parseInt(match[1], 10),
       tag: match[3].trim(),
@@ -44,6 +46,7 @@ export function parseLogLine(text: string): ParsedLogLine | null {
   match = LOG_ESPIDF_REGEX.exec(text);
   if (match) {
     return {
+      format: 'espidf',
       logLevel: match[1] as LogLevel,
       deviceUptime: parseInt(match[2], 10),
       tag: match[3].trim(),
@@ -97,6 +100,18 @@ const ANSI_REGEX = new RegExp(`${ESC}\\[([0-9;]*?)([a-zA-Z])`, 'g');
 /**
  * Parse ANSI escape sequences in text and return styled segments.
  */
+/**
+ * OpenShock log messages start with the function name followed by bracketed scopes, e.g.
+ * "TransmitTask(): [RFTransmitter] [pin-1] RMT loop running".
+ * Move the scopes in front of the function so lines group visually by component.
+ */
+const OPENSHOCK_SCOPE_REGEX = /^([A-Za-z_~][\w:<>~]*\(\)):\s*((?:\[[^\]]*\]\s*)+)(.*)$/s;
+export function reorderOpenShockScopes(message: string): string {
+  const match = OPENSHOCK_SCOPE_REGEX.exec(message);
+  if (!match) return message;
+  return `${match[2].trim()} ${match[1]}: ${match[3]}`;
+}
+
 export function parseAnsi(text: string): AnsiSegment[] {
   if (!text) return [{ text: '', style: {} }];
 

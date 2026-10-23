@@ -5,8 +5,7 @@
 <script lang="ts">
   import { Cpu, TriangleAlert, Unplug } from '@lucide/svelte';
   import { Button } from '@openshock/svelte-core/components/ui/button';
-  import type { SerialContext } from '#lib/utils/serial-context.svelte.js';
-  import { NumberToHexPadded } from '@openshock/svelte-core/utils';
+  import { getHardwareId, type SerialContext } from '#lib/utils/serial-context.svelte.js';
 
   interface Props {
     serial: SerialContext;
@@ -39,23 +38,6 @@
       });
   }
 
-  function GetHardwareID(serialPort: SerialPort | null) {
-    const info = serialPort?.getInfo();
-    if (!info || (!info.usbVendorId && !info.usbProductId)) {
-      return 'Unknown';
-    }
-
-    let parts: string[] = [];
-    if (info.usbVendorId) {
-      parts.push(`VID_${NumberToHexPadded(info.usbVendorId, 4)}`);
-    }
-    if (info.usbProductId) {
-      parts.push(`PID_${NumberToHexPadded(info.usbProductId, 4)}`);
-    }
-
-    return parts.join('&');
-  }
-
   // Remove port if disconnected
   $effect(() => {
     if (port && !serial.ports.includes(port)) {
@@ -80,7 +62,7 @@
     <div class="p-2">
       {#if port !== null}
         <p class="text-success">
-          Device connected: <span class="font-bold">{GetHardwareID(port)}</span>
+          Device connected: <span class="font-bold">{getHardwareId(port)}</span>
         </p>
       {/if}
       {#if errorMessage !== null && errorMessage.name !== 'NotFoundError'}
