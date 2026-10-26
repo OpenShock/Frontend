@@ -35,7 +35,7 @@
 		"@types/d3-scale": "^4.0.9",
 		"@types/node": "^26.6.5",
 		"@types/semver": "^7.8.0",
-		"@types/w3c-web-serial": "^1.0.8",
+		"@types/w3c-web-serial": "^1.0.9",
 		"@typescript/native": "npm:typescript@~7.0.2",
 		"bits-ui": "2.20.0",
 		"boxen": "^9.0.0",
@@ -71,7 +71,7 @@
 		"vite-plugin-devtools-json": "^1.1.2",
 		"vite-plugin-mkcert": "^2.1.0",
 		"vitest": "^5.0.5",
-		"wrangler": "^4.151.3"
+		"wrangler": "^4.152.0"
 	},
 	"dependencies": {
 		"@openshock/svelte-core": "workspace:*",
