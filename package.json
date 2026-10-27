@@ -23,7 +23,7 @@
 		"@eslint/js": "latest",
 		"@hey-api/openapi-ts": "^0.99.0",
 		"@internationalized/date": "^3.12.4",
-		"@lucide/svelte": "^1.60.0",
+		"@lucide/svelte": "^1.61.0",
 		"@microsoft/signalr": "^10.0.11",
 		"@playwright/test": "^1.64.1",
 		"@sveltejs/adapter-cloudflare": "8.0.1",
@@ -35,9 +35,9 @@
 		"@types/d3-scale": "^4.0.9",
 		"@types/node": "^26.6.5",
 		"@types/semver": "^7.8.0",
-		"@types/w3c-web-serial": "^1.0.8",
+		"@types/w3c-web-serial": "^1.0.9",
 		"@typescript/native": "npm:typescript@~7.0.2",
-		"bits-ui": "2.20.0",
+		"bits-ui": "2.20.2",
 		"boxen": "^9.0.0",
 		"chalk": "^6.0.1",
 		"clsx": "^2.1.1",
@@ -50,7 +50,7 @@
 		"esptool-js": "0.7.0",
 		"globals": "^17.13.0",
 		"husky": "^9.1.7",
-		"layerchart": "^2.8.1",
+		"layerchart": "^2.9.1",
 		"prettier": "~3.9.10",
 		"prettier-plugin-organize-imports": "~4.3.0",
 		"prettier-plugin-svelte": "~4.1.1",
@@ -71,7 +71,7 @@
 		"vite-plugin-devtools-json": "^1.1.2",
 		"vite-plugin-mkcert": "^2.1.0",
 		"vitest": "^5.0.5",
-		"wrangler": "^4.151.3"
+		"wrangler": "^4.152.0"
 	},
 	"dependencies": {
 		"@openshock/svelte-core": "workspace:*",
@@ -87,7 +87,7 @@
 		"@opentelemetry/sdk-trace": "^3.0.0",
 		"driver.js": "^1.10.2",
 		"temporal-polyfill": "^1.0.6",
-		"vite": "^8.3.4"
+		"vite": "^8.3.5"
 	},
 	"engines": {
 		"node": "^26",
@@ -96,7 +96,7 @@
 	"browserslist": [
 		"defaults and fully supports es6-module"
 	],
-	"packageManager": "pnpm@12.5.1",
+	"packageManager": "pnpm@12.15.0",
 	"imports": {
 		"#lib": "./src/lib/index.js",
 		"#lib/*": "./src/lib/*"
