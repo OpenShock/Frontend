@@ -1,8 +1,14 @@
 import { PUBLIC_SIGNOZ_TRACE_PROPAGATION } from '$app/env/public';
+import { context, propagation, trace } from '@opentelemetry/api';
+import {
+  CompositePropagator,
+  W3CBaggagePropagator,
+  W3CTraceContextPropagator,
+} from '@opentelemetry/core';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
 import { FetchInstrumentation } from '@opentelemetry/instrumentation-fetch';
-import { BatchSpanProcessor, WebTracerProvider } from '@opentelemetry/sdk-trace-web';
+import { BatchSpanProcessor, StackContextManager, TracerProvider } from '@opentelemetry/sdk-trace';
 import { API_ORIGIN, buildResource, telemetryLevel, TRACES_URL } from './common';
 
 let tracingInitialized = false;
@@ -25,11 +31,19 @@ export function initTracing(): void {
 
   tracingInitialized = true;
 
-  const spanProcessors = [new BatchSpanProcessor(new OTLPTraceExporter({ url: TRACES_URL }))];
+  const spanProcessors = [
+    new BatchSpanProcessor({ exporter: new OTLPTraceExporter({ url: TRACES_URL }) }),
+  ];
 
-  const provider = new WebTracerProvider({ resource: buildResource(), spanProcessors });
-  // Default (StackContextManager) — no zone.js, no global patching beyond fetch instrumentation.
-  provider.register();
+  const provider = new TracerProvider({ resource: buildResource(), spanProcessors });
+  // StackContextManager: no zone.js, no global patching beyond fetch instrumentation.
+  context.setGlobalContextManager(new StackContextManager().enable());
+  propagation.setGlobalPropagator(
+    new CompositePropagator({
+      propagators: [new W3CTraceContextPropagator(), new W3CBaggagePropagator()],
+    })
+  );
+  trace.setGlobalTracerProvider(provider);
 
   // Trace ONLY our API: ignore every URL that does not start with the API origin. This also
   // excludes the OTLP trace export itself (different origin), avoiding a feedback loop.

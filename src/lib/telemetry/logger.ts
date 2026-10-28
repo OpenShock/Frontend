@@ -1,4 +1,4 @@
-import { logs, SeverityNumber, type LogAttributes } from '@opentelemetry/api-logs';
+import { logs, SeverityNumber, type Attributes } from '@opentelemetry/api';
 import { OTLPLogExporter } from '@opentelemetry/exporter-logs-otlp-http';
 import { BatchLogRecordProcessor, LoggerProvider } from '@opentelemetry/sdk-logs';
 import { buildResource, LOGS_URL, SERVICE_NAME, telemetryLevel } from './common';
@@ -43,7 +43,7 @@ function emit(
   severityText: string,
   severityNumber: SeverityNumber,
   message: string,
-  attributes?: LogAttributes
+  attributes?: Attributes
 ): void {
   try {
     getLogger().emit({ severityText, severityNumber, body: message, attributes });
@@ -54,10 +54,10 @@ function emit(
 
 /** Convenience helpers that no-op safely when telemetry is disabled/uninitialized. */
 export const log = {
-  info: (message: string, attributes?: LogAttributes) =>
+  info: (message: string, attributes?: Attributes) =>
     emit('INFO', SeverityNumber.INFO, message, attributes),
-  warn: (message: string, attributes?: LogAttributes) =>
+  warn: (message: string, attributes?: Attributes) =>
     emit('WARN', SeverityNumber.WARN, message, attributes),
-  error: (message: string, attributes?: LogAttributes) =>
+  error: (message: string, attributes?: Attributes) =>
     emit('ERROR', SeverityNumber.ERROR, message, attributes),
 };

@@ -226,7 +226,7 @@
 
 <Container>
   <PageHeader title="Update {hubName}" subtitle="Manage firmware updates for this hub." />
-  <div class="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-6">
+  <div class="flex w-full min-w-0 flex-1 flex-col gap-6">
     {#if hub}
       <!-- Status -->
       <Card.Root>
