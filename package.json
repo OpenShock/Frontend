@@ -85,7 +85,6 @@
 		"@opentelemetry/resources": "^3.0.0",
 		"@opentelemetry/sdk-logs": "^3.0.0",
 		"@opentelemetry/sdk-trace": "^3.0.0",
-		"driver.js": "^1.10.2",
 		"temporal-polyfill": "^1.0.6",
 		"vite": "^8.3.5"
 	},
