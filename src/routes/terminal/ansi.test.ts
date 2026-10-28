@@ -1,11 +1,38 @@
 import { describe, expect, it } from 'vitest';
-import { parseAnsi, parseLogLine, stripAnsi } from './ansi';
+import { parseAnsi, parseLogLine, reorderOpenShockScopes, stripAnsi } from './ansi';
+
+describe('reorderOpenShockScopes', () => {
+  it('moves a single scope before the function', () => {
+    expect(reorderOpenShockScopes('app_main(): [main] Board: OpenShock-Core-V2')).toBe(
+      '[main] app_main(): Board: OpenShock-Core-V2'
+    );
+  });
+
+  it('moves multiple scopes before the function', () => {
+    expect(reorderOpenShockScopes('TransmitTask(): [RFTransmitter] [pin-1] RMT loop running')).toBe(
+      '[RFTransmitter] [pin-1] TransmitTask(): RMT loop running'
+    );
+  });
+
+  it('leaves messages without scopes alone', () => {
+    expect(reorderOpenShockScopes('SaveFromJSON(): failed')).toBe('SaveFromJSON(): failed');
+  });
+
+  it('leaves messages without a function alone', () => {
+    expect(reorderOpenShockScopes('[main] plain message')).toBe('[main] plain message');
+  });
+
+  it('handles an empty remainder', () => {
+    expect(reorderOpenShockScopes('init(): [Boot]')).toBe('[Boot] init(): ');
+  });
+});
 
 describe('parseLogLine', () => {
   describe('OpenShock format: [uptimeMs][LEVEL][tag]', () => {
     it('parses error line', () => {
       const result = parseLogLine('[56984][E][Config.cpp:185] SaveFromJSON():');
       expect(result).toEqual({
+        format: 'openshock',
         logLevel: 'E',
         deviceUptime: 56984,
         tag: 'Config.cpp:185',
@@ -16,6 +43,7 @@ describe('parseLogLine', () => {
     it('parses warning line', () => {
       const result = parseLogLine('[1234][W][WiFi.cpp:42] connect(): timeout');
       expect(result).toEqual({
+        format: 'openshock',
         logLevel: 'W',
         deviceUptime: 1234,
         tag: 'WiFi.cpp:42',
@@ -26,6 +54,7 @@ describe('parseLogLine', () => {
     it('parses info line', () => {
       const result = parseLogLine('[500][I][Main.cpp:10] setup(): ready');
       expect(result).toEqual({
+        format: 'openshock',
         logLevel: 'I',
         deviceUptime: 500,
         tag: 'Main.cpp:10',
@@ -36,6 +65,7 @@ describe('parseLogLine', () => {
     it('parses debug line', () => {
       const result = parseLogLine('[99999][D][Serial.cpp:77] read(): got 12 bytes');
       expect(result).toEqual({
+        format: 'openshock',
         logLevel: 'D',
         deviceUptime: 99999,
         tag: 'Serial.cpp:77',
@@ -46,6 +76,7 @@ describe('parseLogLine', () => {
     it('parses verbose line', () => {
       const result = parseLogLine('[0][V][Boot.cpp:1] init():');
       expect(result).toEqual({
+        format: 'openshock',
         logLevel: 'V',
         deviceUptime: 0,
         tag: 'Boot.cpp:1',
@@ -56,6 +87,7 @@ describe('parseLogLine', () => {
     it('parses with leading ANSI escape', () => {
       const result = parseLogLine('\x1b[0;31m[56984][E][Config.cpp:185] SaveFromJSON():');
       expect(result).toEqual({
+        format: 'openshock',
         logLevel: 'E',
         deviceUptime: 56984,
         tag: 'Config.cpp:185',
@@ -66,6 +98,7 @@ describe('parseLogLine', () => {
     it('parses with multiple leading ANSI escapes', () => {
       const result = parseLogLine('\x1b[0m\x1b[1;33m[200][W][Net.cpp:5] warn():');
       expect(result).toEqual({
+        format: 'openshock',
         logLevel: 'W',
         deviceUptime: 200,
         tag: 'Net.cpp:5',
@@ -76,6 +109,7 @@ describe('parseLogLine', () => {
     it('parses space-padded uptime', () => {
       const result = parseLogLine('[ 56464][V][ssl_client.cpp:369] some message');
       expect(result).toEqual({
+        format: 'openshock',
         logLevel: 'V',
         deviceUptime: 56464,
         tag: 'ssl_client.cpp:369',
@@ -88,6 +122,7 @@ describe('parseLogLine', () => {
     it('parses error line', () => {
       const result = parseLogLine('E (12345) wifi: connection failed');
       expect(result).toEqual({
+        format: 'espidf',
         logLevel: 'E',
         deviceUptime: 12345,
         tag: 'wifi',
@@ -98,6 +133,7 @@ describe('parseLogLine', () => {
     it('parses warning line', () => {
       const result = parseLogLine('W (500) httpd_parse: some warning');
       expect(result).toEqual({
+        format: 'espidf',
         logLevel: 'W',
         deviceUptime: 500,
         tag: 'httpd_parse',
@@ -107,12 +143,19 @@ describe('parseLogLine', () => {
 
     it('parses info line', () => {
       const result = parseLogLine('I (3000) MAIN: started');
-      expect(result).toEqual({ logLevel: 'I', deviceUptime: 3000, tag: 'MAIN', messageOffset: 15 });
+      expect(result).toEqual({
+        format: 'espidf',
+        logLevel: 'I',
+        deviceUptime: 3000,
+        tag: 'MAIN',
+        messageOffset: 15,
+      });
     });
 
     it('parses debug line', () => {
       const result = parseLogLine('D (100) spi_flash: read 4096 bytes');
       expect(result).toEqual({
+        format: 'espidf',
         logLevel: 'D',
         deviceUptime: 100,
         tag: 'spi_flash',
@@ -122,12 +165,19 @@ describe('parseLogLine', () => {
 
     it('parses verbose line', () => {
       const result = parseLogLine('V (0) boot: init complete');
-      expect(result).toEqual({ logLevel: 'V', deviceUptime: 0, tag: 'boot', messageOffset: 12 });
+      expect(result).toEqual({
+        format: 'espidf',
+        logLevel: 'V',
+        deviceUptime: 0,
+        tag: 'boot',
+        messageOffset: 12,
+      });
     });
 
     it('parses with leading ANSI escape', () => {
       const result = parseLogLine('\x1b[0;32mI (12345) wifi: connected');
       expect(result).toEqual({
+        format: 'espidf',
         logLevel: 'I',
         deviceUptime: 12345,
         tag: 'wifi',
@@ -157,7 +207,13 @@ describe('parseLogLine', () => {
   it('prefers OpenShock format over ESP-IDF', () => {
     // A line that could only match OpenShock format
     const result = parseLogLine('[100][I][tag] msg');
-    expect(result).toEqual({ logLevel: 'I', deviceUptime: 100, tag: 'tag', messageOffset: 14 });
+    expect(result).toEqual({
+      format: 'openshock',
+      logLevel: 'I',
+      deviceUptime: 100,
+      tag: 'tag',
+      messageOffset: 14,
+    });
   });
 });
 
