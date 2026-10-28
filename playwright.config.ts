@@ -12,6 +12,10 @@ export default defineConfig({
   reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : 'html',
   fullyParallel: false,
   workers: 1,
+  // The `user` fixture signs up and activates an account before the test body runs, and
+  // activation waits on mail that the Cron host delivers asynchronously. That wait counts
+  // against the test's own budget, so the 30s default leaves too little for the test itself.
+  timeout: 60 * 1000,
   retries: process.env.CI ? 1 : 0,
   globalSetup: './e2e/integration/lib/global-setup.ts',
   globalTeardown: './e2e/integration/lib/global-teardown.ts',
