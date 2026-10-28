@@ -1,13 +1,5 @@
 import { registerOnUnauthorized } from '#lib/errorhandling/apiErrorHandling.js';
 import { destroySignalR, initializeSignalR } from '#lib/signalr/user.svelte.js';
-import {
-  hasCompletedTour,
-  hasSeenWelcome,
-  isOnboardingDisabled,
-  markTourCompleted,
-  startWelcomeTour,
-} from '#lib/tour/welcome-tour.js';
-import { dialog } from '@openshock/svelte-core/components/dialog-manager';
 import { userState } from './user-state.svelte';
 
 export const AuthStatus = {
@@ -33,18 +25,6 @@ export const authState = {
   },
 };
 
-async function maybeTourPrompt() {
-  if (isOnboardingDisabled() || hasCompletedTour() || !hasSeenWelcome()) return;
-  const result = await dialog.confirm({
-    title: 'Take the quick tour?',
-    desc: "You skipped it earlier. It only takes a minute and shows you what's new.",
-    confirmButtonText: 'Sure, show me',
-    cancelButtonText: 'No thanks',
-  });
-  if (result.confirmed) await startWelcomeTour();
-  else markTourCompleted();
-}
-
 /**
  * Wires up the reactive side-effects of auth state:
  *   - SignalR connects/disconnects as the user logs in/out.
@@ -61,7 +41,6 @@ export function startAuthLifecycle() {
     $effect(() => {
       const self = userState.self;
       if (self && !prevSelf) {
-        void maybeTourPrompt();
         void initializeSignalR();
       } else if (!self) {
         void destroySignalR();

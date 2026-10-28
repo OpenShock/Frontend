@@ -8,6 +8,7 @@ import { backendMetadata } from '#lib/state/backend-metadata-state.svelte.js';
 import { userState } from '#lib/state/user-state.svelte.js';
 import { initTelemetry, log } from '#lib/telemetry/logger.js';
 import { redirectLegacyHashRoute } from '#lib/utils/legacy-hash-redirect.js';
+import { removeLegacyStorage } from '#lib/utils/legacy-storage-cleanup.js';
 import { basePath } from '#lib/utils/url.js';
 import { initializeColorScheme } from '@openshock/svelte-core/state/color-scheme-state.svelte.js';
 
@@ -77,6 +78,7 @@ export async function init() {
   registerGlobalErrorCapture();
   // `basePath()` has no trailing slash — the mapped target already starts with one.
   redirectLegacyHashRoute(basePath());
+  removeLegacyStorage();
   await clientInit().catch(handleApiError);
   initializeColorScheme();
 }

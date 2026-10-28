@@ -176,12 +176,6 @@ export const variables = defineEnvVars({
     description: 'Shows the "development deployment" banner above the app shell.',
     schema: isTruthy,
   },
-  PUBLIC_DISABLE_ONBOARDING: {
-    public: true,
-    static: true,
-    description: 'Suppresses the first-run onboarding tour.',
-    schema: isTruthy,
-  },
   PUBLIC_DISABLE_SHOCKER_MAP: {
     public: true,
     static: true,

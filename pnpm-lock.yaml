@@ -233,9 +233,6 @@ importers:
       '@opentelemetry/sdk-trace':
         specifier: ^3.0.0
         version: 3.0.0(@opentelemetry/api@1.10.0)
-      driver.js:
-        specifier: ^1.10.2
-        version: 1.10.2
       temporal-polyfill:
         specifier: ^1.0.6
         version: 1.0.6
@@ -2569,9 +2566,6 @@ packages:
   dotenv@17.4.2:
     resolution: {integrity: sha512-nI4U3TottKAcAD9LLud4Cb7b2QztQMUEfHbvhTH09bqXTxnSie8WnjPALV/WMCrJZ6UV/qHJ6L03OqO3LcdYZw==}
     engines: {node: '>=12'}
-
-  driver.js@1.10.2:
-    resolution: {integrity: sha512-L/EMTriJPAmg+5kIFmrjzt3TI+1NblhHOV/UZkfpgU/uxhSflGheynMBxk5oImDSy6seAEkIl6MzNOc0zdoKtg==}
 
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
@@ -5998,8 +5992,6 @@ snapshots:
   dom-accessibility-api@0.6.3: {}
 
   dotenv@17.4.2: {}
-
-  driver.js@1.10.2: {}
 
   eastasianwidth@0.2.0: {}
 
