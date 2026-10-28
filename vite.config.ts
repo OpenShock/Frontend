@@ -7,7 +7,14 @@ import tailwindcss from '@tailwindcss/vite';
 import * as child_process from 'node:child_process';
 import { env } from 'node:process';
 import license from 'rollup-plugin-license';
-import { type Plugin, type PluginOption, type UserConfig, defineConfig, loadEnv } from 'vite';
+import {
+  type Plugin,
+  type PluginOption,
+  type ProxyOptions,
+  type UserConfig,
+  defineConfig,
+  loadEnv,
+} from 'vite';
 import devtoolsJson from 'vite-plugin-devtools-json';
 import mkcert from 'vite-plugin-mkcert';
 import { localDevChecksPlugin } from './vite-plugins/local-dev-checks.ts';
@@ -211,6 +218,7 @@ interface LocalServer {
     host: string;
     port: number;
     fs: { allow: string[] };
+    proxy: Record<string, ProxyOptions>;
   };
   /**
    * FQDN that needs a hosts redirect and a privileged-port bind before serving,
@@ -239,6 +247,7 @@ function resolveServerConfig(
   const baseDevConfig = {
     forwardConsole: true,
     fs: { allow: ['./packages/svelte-core'] },
+    proxy: {},
   };
 
   // PUBLIC_SITE_URL was already validated at module load by getSvelteBasePath().
@@ -252,6 +261,43 @@ function resolveServerConfig(
   return { config: { ...baseDevConfig, host, port: 443 }, fqdn: host };
 }
 
+// Integration mode serves plain HTTP on localhost and proxies /1,/2 to the API
+// container. No mkcert, no local.<domain> redirect, no privileged :443 bind and
+// no self-signed certs to trust — the browser only ever talks to this Vite
+// origin, so there is no CORS either. The API's `Secure` / `SameSite=None`
+// cookie attributes are stripped on the way back so the browser keeps the
+// session cookie over plain HTTP.
+function resolveIntegrationServer(): LocalServer {
+  const vars = { ...env, ...loadEnv('integration', process.cwd(), ['PUBLIC_', 'VITE_']) };
+  const target = vars.VITE_API_PROXY_TARGET ?? 'http://localhost:5001';
+  const proxy: Record<string, ProxyOptions> = {
+    '^/(1|2)(/.*)?$': {
+      target,
+      changeOrigin: true,
+      configure: (proxy) => {
+        proxy.on('proxyRes', (proxyRes) => {
+          const setCookie = proxyRes.headers['set-cookie'];
+          if (setCookie) {
+            proxyRes.headers['set-cookie'] = setCookie.map((cookie) =>
+              cookie.replace(/;\s*Secure/gi, '').replace(/;\s*SameSite=None/gi, '; SameSite=Lax')
+            );
+          }
+        });
+      },
+    },
+  };
+  return {
+    config: {
+      forwardConsole: true,
+      fs: { allow: ['./packages/svelte-core'] },
+      proxy,
+      host: 'localhost',
+      port: 5173,
+    },
+    fqdn: null,
+  };
+}
+
 export default defineConfig(({ command, mode, isPreview }) => {
   // Resolved here, from Vite's mode, so the CSP in buildSveltekitConfig always
   // agrees with the `$env/static/public` values the client is compiled against.
@@ -261,11 +307,17 @@ export default defineConfig(({ command, mode, isPreview }) => {
   const isProduction = mode === 'production' && (isTruthy(env.DOCKER) || isTruthy(env.WORKERS_CI));
   // Vitest resolves this config with command 'serve', unit tests must never trigger mkcert or the hosts/port checks.
   const isTest = mode === 'test' || isTruthy(env.VITEST);
+  const isIntegration = mode === 'integration';
 
-  // Serve locally at https://local.<domain> (mkcert cert + hosts entry) so the frontend shares cookies with the API.
-  const useLocalRedirect = isLocalServe && !isProduction && !isTest && !isTruthy(env.CI);
+  // mkcert + local.{PUBLIC_SITE_URL} hosts redirect + privileged :443 bind are
+  // only for real local dev against a FQDN. Integration mode serves plain HTTP
+  // and proxies the API instead (resolveIntegrationServer), so it opts out.
+  const useLocalRedirect =
+    isLocalServe && !isProduction && !isTest && !isTruthy(env.CI) && !isIntegration;
 
-  const server = resolveServerConfig(useLocalRedirect, dotenv);
+  const server = isIntegration
+    ? resolveIntegrationServer()
+    : resolveServerConfig(useLocalRedirect, dotenv);
 
   return {
     build: {
@@ -283,7 +335,10 @@ export default defineConfig(({ command, mode, isPreview }) => {
       },
     },
     plugins: [
-      server ? mkcert() : undefined,
+      // Not in integration mode: it serves plain HTTP on localhost (see
+      // resolveIntegrationServer), and mkcert would both download a binary in CI and flip the
+      // dev server to HTTPS, which the Playwright webServer URL does not expect.
+      server && !isIntegration ? mkcert() : undefined,
       server?.fqdn ? localDevChecksPlugin(server.fqdn, server.config.port) : undefined,
       jsBannerPlugin('/*! For licenses information, see LICENSES.txt */'),
       tailwindcss(),
@@ -309,9 +364,22 @@ export default defineConfig(({ command, mode, isPreview }) => {
         {
           extends: true,
           test: {
-            name: 'server',
+            name: 'unit',
+            environment: 'node',
             include: ['src/**/*.{test,spec}.{js,ts}'],
-            exclude: ['src/**/*.svelte.{test,spec}.{js,ts}'],
+            exclude: ['src/**/*.{test,spec}.{component,svelte}.{js,ts}'],
+          },
+        },
+        {
+          extends: true,
+          // Resolve Svelte to its browser (client) build so that `mount` and
+          // other client-only APIs are available in the jsdom test environment.
+          resolve: { conditions: ['browser', 'module', 'svelte', 'development', 'production'] },
+          test: {
+            name: 'components',
+            environment: 'jsdom',
+            include: ['src/**/*.{test,spec}.{component,svelte}.{js,ts}'],
+            setupFiles: ['./vitest.setup.ts'],
           },
         },
       ],

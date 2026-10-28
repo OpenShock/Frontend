@@ -11,6 +11,18 @@ import { defineEnvVars } from '@sveltejs/kit/env';
 // the barrel.
 import { isTruthy } from '../packages/svelte-core/src/lib/utils/parse';
 
+/**
+ * Read from the process environment rather than from the variable below, because this module's own
+ * schemas run before `$app/env/public` exists. `scripts/dev-integration.mjs` is the only thing that
+ * sets it; deliberately not in `.env.integration`, since a value there would reach the app but not
+ * this read, leaving the two halves of the check disagreeing.
+ */
+const allowInsecureLocalApi = isTruthy(process.env.PUBLIC_ALLOW_INSECURE_LOCAL_API);
+
+function isLoopbackHost(hostname: string): boolean {
+  return hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '[::1]';
+}
+
 /** Required free text, trimmed. Throws when unset or blank. */
 function text(label: string) {
   return (value: string | undefined): string => {
@@ -45,7 +57,7 @@ function parseUrl(label: string, value: string, strict: boolean): string {
   }
 
   if (strict) {
-    if (url.protocol !== 'https:') {
+    if (url.protocol !== 'https:' && !(allowInsecureLocalApi && isLoopbackHost(url.hostname))) {
       throw new Error(`${label} must be an HTTPS URL`);
     }
     if (url.search || url.hash) {
@@ -130,6 +142,15 @@ export const variables = defineEnvVars({
       'Base URL of the OpenShock API. Must be HTTPS with no query string or fragment, since ' +
       'paths are appended to it.',
     schema: url('PUBLIC_BACKEND_API_URL', { strict: true }),
+  },
+  PUBLIC_ALLOW_INSECURE_LOCAL_API: {
+    public: true,
+    static: true,
+    description:
+      'Allows PUBLIC_BACKEND_API_URL to be a plain-HTTP loopback URL, for the integration stack ' +
+      'which serves the API over HTTP so nothing has to trust a self-signed cert. Never set this ' +
+      'on a deployment.',
+    schema: isTruthy,
   },
   PUBLIC_HANGFIRE_URL: {
     public: true,
