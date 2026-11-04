@@ -57,6 +57,9 @@
       return;
     }
 
+    // A new attempt may be for a different account; only re-show the notice if this one is unactivated too.
+    activationPending = false;
+
     try {
       const account = await accountLoginV2({
         body: { usernameOrEmail, password, turnstileResponse },
