@@ -100,6 +100,7 @@ export {
   tokenDeleteDeleteToken,
   usersGetByName,
   usersGetSelf,
+  usersGetSelfControlStats,
   versionGetBackendInfo,
 } from './internal/v1';
 
@@ -107,6 +108,7 @@ export {
 export {
   AutomationTokenType,
   ConfigurationValueType,
+  ControlType,
   EmailStatus,
   EmailType,
   MatchTypeEnum,
@@ -135,7 +137,10 @@ export type {
   BackendInfoResponse,
   BasicUserInfo,
   ConfigurationItemDto,
+  ControlStatTotals,
+  ControlStatsResponse,
   CreatedAutomationTokenDto,
+  DailyControlStats,
   DeviceWithShockersResponse,
   EmailOutboxBulkResultDto,
   EmailOutboxMessageDto,
@@ -157,8 +162,10 @@ export type {
   PublicShareResponse,
   PublicShareShocker,
   SharedShocker,
+  ShockerControlStats,
   ShockerResponse,
   ShockerWithDevice,
+  UserControlStats,
   UserNameBlacklistDto,
   WebhookDto,
 } from './internal/v1';
