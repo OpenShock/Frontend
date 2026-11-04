@@ -12,7 +12,7 @@
   let errorCode = $state<string>();
 
   consumeSearchParam('error', async (code) => {
-    if (code === 'emailAlreadyRegistered') {
+    if (code === 'emailAlreadyRegistered' || code === 'accountNotActivated') {
       await goto(resolve(`login?error=${encodeURIComponent(code)}`), { replace: true });
       return false;
     }

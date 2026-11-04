@@ -14,6 +14,7 @@
   import { toast } from 'svelte-sonner';
   import { FieldSeparator } from '@openshock/svelte-core/components/ui/field';
   import OauthButtons from '#lib/components/auth/oauth-buttons.svelte';
+  import ResendActivationButton from '#lib/components/auth/resend-activation-button.svelte';
   import { ChevronLeft, Mail } from '@lucide/svelte';
   import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
   import { backendMetadata } from '#lib/state/backend-metadata-state.svelte.js';
@@ -92,6 +93,7 @@
           {#if mailEnabled}
             <p>Your account has been created. 🎉 Please check your email to verify your account.</p>
             <p>After verifying your email, you can log in to your account.</p>
+            <ResendActivationButton class="self-start px-0" />
           {:else}
             <p>Your account has been created and is ready to use. 🎉</p>
             <p>You can log in to your account now.</p>
