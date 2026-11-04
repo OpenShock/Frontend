@@ -138,8 +138,8 @@
           {:else}
             <p>
               Your account isn't activated yet. We've sent an activation link to your email address.
-              Check your inbox and spam folder. If nothing arrives, try logging in again in about 10
-              minutes to get a new link.
+              Check your inbox and spam folder. If nothing arrives, try logging in again later to
+              get a new link.
             </p>
           {/if}
           <ResendActivationButton class="h-auto px-0" />

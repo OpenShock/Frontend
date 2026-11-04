@@ -21,13 +21,11 @@
           toast.success('Activation email sent. Check your inbox and spam folder.');
           break;
         case 'throttled':
-          toast.info(
-            'An activation email was sent recently. Please wait a few minutes and try again.'
-          );
+          toast.info('Too many activation emails have been requested. Please try again later.');
           break;
         case 'unavailable':
           toast.info(
-            'There is no pending activation to resend. Try logging in to get a new activation email.'
+            "No activation email can be resent from this browser. If your account isn't activated yet, logging in sends a new link."
           );
           break;
       }
