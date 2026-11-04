@@ -39,5 +39,8 @@ export async function ResendActivationEmail(): Promise<ResendActivationResult> {
   if (res.status === 429) return 'throttled';
   if (res.status === 400) return 'unavailable';
 
-  throw new ResponseError(res, `Unexpected status ${res.status} for POST ${url}`);
+  // handleApiError reads problem details from `body`, so parse it here.
+  // A non-JSON body leaves it undefined.
+  const body: unknown = await res.json().catch(() => undefined);
+  throw new ResponseError(res, `Unexpected status ${res.status} for POST ${url}`, body);
 }

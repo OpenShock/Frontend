@@ -38,7 +38,8 @@ async function handleResponseError(
   const problem = error.body;
   if (!isProblemDetails(problem)) {
     console.error('Content json is not a valid problemdetails object', problem);
-    return null;
+    toast.error('Unexpected server response', { description: `HTTP ${response.status}` });
+    return;
   }
 
   if (dev) {
