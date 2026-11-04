@@ -21,13 +21,26 @@
   import { userState } from '#lib/state/user-state.svelte.js';
   import { Skeleton } from '@openshock/svelte-core/components/ui/skeleton';
   import { getOAuthErrorMessage } from '#lib/auth/oauth-errors.js';
+  import { MailCheck } from '@lucide/svelte';
 
   registerBreadcrumbs(() => [{ label: 'Login' }]);
 
   let oauthError = $state<string>();
 
+  // Shown after an OAuth signup that still needs activation, and whenever a login attempt (password or
+  // OAuth) hits an unactivated account - the API (re)sends the activation email in that case, rate limited.
+  let activationPending = $state(false);
+
   consumeSearchParam('error', (code) => {
+    if (code === 'accountNotActivated') {
+      activationPending = true;
+      return;
+    }
     oauthError = code;
+  });
+
+  consumeSearchParam('message', (msg) => {
+    if (msg === 'signup-success') activationPending = true;
   });
 
   let usernameOrEmail = $state('');
@@ -61,6 +74,10 @@
       await gotoQueryRedirectOrFallback('home');
     } catch (error) {
       await handleApiError(error, (problem) => {
+        if (problem.type === 'Account.AccountNotActivated') {
+          activationPending = true;
+          return true;
+        }
         if (!isValidationError(problem)) return false;
         usernameError = mapToValRes(problem, 'UsernameOrEmail');
         passwordError = mapToValRes(problem, 'Password');
@@ -96,6 +113,19 @@
     </Card.Description>
   </Card.Header>
   <Card.Content>
+    {#if activationPending}
+      <div
+        class="bg-muted text-foreground mb-4 flex items-start gap-3 rounded-md border p-3 text-sm"
+        role="status"
+      >
+        <MailCheck class="mt-0.5 size-4 shrink-0" />
+        <p>
+          Your account isn't activated yet. We've sent an activation link to your email address.
+          Check your inbox and spam folder. If nothing arrives, try logging in again in about 10
+          minutes to get a new link.
+        </p>
+      </div>
+    {/if}
     {#if oauthError}
       <p class="text-destructive mb-4 text-center text-sm" role="alert">
         {getOAuthErrorMessage(oauthError)}

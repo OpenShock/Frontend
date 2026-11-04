@@ -7,6 +7,9 @@ export const OAUTH_ERROR_MESSAGES: Record<string, string> = {
   mustBeAuthenticated: 'You must be signed in to link an external account.',
   emailAlreadyRegistered:
     'An account with this email already exists. Sign in to that account to link this provider.',
+  accountNotActivated:
+    'Your account has not been activated yet. Check your inbox for the activation email, then try again.',
+  accountDeactivated: 'This account has been deactivated.',
   internalError: 'Something went wrong on our end. Please try again in a moment.',
   unknown: 'Unknown error occurred.',
 };
