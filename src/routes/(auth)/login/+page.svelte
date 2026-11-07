@@ -52,6 +52,7 @@
   let usernameOrEmail = $state('');
   let password = $state('');
   let turnstileResponse = $state<string | null>(null);
+  let turnstile = $state<Turnstile>();
 
   let usernameError = $state<ValidationResult | null>(null);
   let passwordError = $state<ValidationResult | null>(null);
@@ -83,6 +84,7 @@
 
       await gotoQueryRedirectOrFallback('home');
     } catch (error) {
+      turnstile?.reset();
       await handleApiError(error, (problem) => {
         if (problem.type === 'Account.AccountNotActivated') {
           activationPending = true;
@@ -185,6 +187,7 @@
               />
 
               <Turnstile
+                bind:this={turnstile}
                 action="signin"
                 onResponse={(response) => (turnstileResponse = response)}
               />

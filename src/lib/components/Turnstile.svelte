@@ -30,6 +30,13 @@
     onResponse(null);
   }
 
+  // Each Turnstile token is single-use, so the widget must issue a new one after a failed submit.
+  export function reset() {
+    if (dev || disabled || !widgetId) return;
+    invalidateResponse();
+    window.turnstile?.reset(widgetId);
+  }
+
   onMount(() => {
     if (dev) {
       onResponse(PUBLIC_TURNSTILE_DEV_BYPASS_VALUE);

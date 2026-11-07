@@ -21,6 +21,7 @@
   let emailValid = $state(false);
 
   let turnstileResponse = $state<string | null>(null);
+  let turnstile = $state<Turnstile>();
 
   function handleSubmission(e: SubmitEvent) {
     e.preventDefault();
@@ -34,7 +35,10 @@
         toast.success('Reset password request has been sent to the given email');
         goto(resolve('login'));
       })
-      .catch(handleApiError);
+      .catch((error) => {
+        turnstile?.reset();
+        return handleApiError(error);
+      });
   }
 
   let canSubmit = $derived(emailValid && turnstileResponse != null);
@@ -57,6 +61,7 @@
         />
 
         <Turnstile
+          bind:this={turnstile}
           action="forgot-password"
           onResponse={(response) => (turnstileResponse = response)}
         />

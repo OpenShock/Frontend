@@ -24,6 +24,7 @@
 
   let secrets = $state<string[]>([]);
   let turnstileResponse = $state<string | null>(null);
+  let turnstile = $state<Turnstile>();
   let acknowledgement = $state(false);
   let isAllValid = $derived(secrets.every(isValid));
   let canSubmit = $derived(
@@ -37,6 +38,7 @@
       await tokensReportTokens({ body: { turnstileResponse, secrets } });
       goto(resolve('login'));
     } catch (err) {
+      turnstile?.reset();
       await handleApiError(err);
     }
   }
@@ -98,7 +100,11 @@
 
     <!-- Turnstile + Acknowledgement -->
     <div class="space-y-3">
-      <Turnstile action="report-token" onResponse={(response) => (turnstileResponse = response)} />
+      <Turnstile
+        bind:this={turnstile}
+        action="report-token"
+        onResponse={(response) => (turnstileResponse = response)}
+      />
 
       <div class="flex items-center space-x-2">
         <Checkbox

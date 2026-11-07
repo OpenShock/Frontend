@@ -34,6 +34,7 @@
   let passwordConfirm = $state('');
 
   let turnstileResponse = $state<string | null>(null);
+  let turnstile = $state<Turnstile>();
 
   let canSubmit = $derived(
     usernameValid &&
@@ -76,6 +77,7 @@
       });
       accountCreated = true;
     } catch (error) {
+      turnstile?.reset();
       await handleApiError(error);
     }
   }
@@ -168,7 +170,11 @@
               validate={validatePasswordMatch(passwordConfirm, password)}
             />
 
-            <Turnstile action="signup" onResponse={(response) => (turnstileResponse = response)} />
+            <Turnstile
+              bind:this={turnstile}
+              action="signup"
+              onResponse={(response) => (turnstileResponse = response)}
+            />
           </div>
           <Field.Field class="mt-5">
             <Button type="submit" disabled={!canSubmit}>Create Account</Button>
