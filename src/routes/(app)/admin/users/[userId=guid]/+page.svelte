@@ -87,11 +87,12 @@
       .catch((error: unknown) => {
         if (cancelled) return;
         // A missing user is the page's own empty state, not an error toast.
-        return handleApiError(error, (problem) => {
-          if (problem.status !== 404) return false;
-          user = null;
-          notFound = true;
-          return true;
+        return handleApiError(error, {
+          fallback: (problem) => {
+            if (problem.status !== 404) return false;
+            user = null;
+            notFound = true;
+          },
         });
       })
       .finally(() => {

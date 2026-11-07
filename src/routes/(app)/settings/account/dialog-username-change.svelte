@@ -42,13 +42,7 @@
 
       open = false;
     } catch (e) {
-      await handleApiError(e, (problem) => {
-        if (problem.type !== 'Account.Username.Invalid') return false;
-
-        toast.error('Invalid Username');
-
-        return true;
-      });
+      await handleApiError(e);
     } finally {
       loading = false;
     }

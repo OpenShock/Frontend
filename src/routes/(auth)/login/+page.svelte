@@ -12,9 +12,8 @@
   import { TextInput, PasswordInput } from '@openshock/svelte-core/components/input';
   import type { ValidationResult } from '@openshock/svelte-core/types';
   import Turnstile from '#lib/components/Turnstile.svelte';
-  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
-  import { handleTurnstileProblem } from '#lib/errorhandling/turnstileErrors.js';
-  import { isValidationError, mapToValRes } from '#lib/errorhandling/ValidationProblemDetails.js';
+  import { describeProblem, handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+  import { fieldErrors } from '#lib/errorhandling/ValidationProblemDetails.js';
   import OauthButtons from '#lib/components/auth/oauth-buttons.svelte';
   import { gotoQueryRedirectOrFallback, consumeSearchParam } from '#lib/utils/url.js';
   import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
@@ -91,26 +90,24 @@
       await gotoQueryRedirectOrFallback('home');
     } catch (error) {
       turnstile?.reset();
-      await handleApiError(error, (problem) => {
-        if (handleTurnstileProblem(problem)) return true;
-        if (problem.type === 'Account.AccountNotActivated') {
+      await handleApiError(error, {
+        'Account.AccountNotActivated': () => {
           activationPending = true;
-          return true;
-        }
-        if (problem.type === 'Account.OAuthOnly') {
+        },
+        'Account.OAuthOnly': () => {
           oauthOnly = true;
-          return true;
-        }
-        if (problem.type === 'Login.InvalidCredentials') {
-          passwordError = { valid: false, message: 'Invalid username or password' };
-          return true;
-        }
-        if (!isValidationError(problem)) return false;
-        usernameError = mapToValRes(problem, 'UsernameOrEmail');
-        passwordError = mapToValRes(problem, 'Password');
-        // Only mark the problem as handled if we actually surfaced a field
-        // error; otherwise fall through so the generic toast is shown.
-        return usernameError !== null || passwordError !== null;
+        },
+        'Login.InvalidCredentials': (problem) => {
+          passwordError = { valid: false, message: describeProblem(problem).title };
+        },
+        'Validation.Error': (problem) => {
+          ({ UsernameOrEmail: usernameError, Password: passwordError } = fieldErrors(problem, [
+            'UsernameOrEmail',
+            'Password',
+          ]));
+          // Only count as handled if a field error was surfaced; otherwise the generic toast shows.
+          return usernameError !== null || passwordError !== null;
+        },
       });
     }
   }

@@ -46,4 +46,12 @@ try {
 }
 
 console.log('');
+console.log('Checking problem type registry against the API source...');
+try {
+  execSync('node scripts/check-problem-types.js', { stdio: 'inherit', shell: true });
+} catch {
+  console.warn('Problem type check failed; see output above.');
+}
+
+console.log('');
 console.log('API regeneration complete.');
