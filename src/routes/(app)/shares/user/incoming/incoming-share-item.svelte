@@ -1,5 +1,6 @@
 <script lang="ts">
   import { X, Zap } from '@lucide/svelte';
+  import { userSharesBulkRemoveUserShareShockers } from '#lib/api/index.js';
   import type { V2UserSharesListItem } from '#lib/api/index.js';
   import PermissionTooltip from '#lib/components/shares/permission-tooltip.svelte';
   import * as Avatar from '@openshock/svelte-core/components/ui/avatar';
@@ -9,7 +10,8 @@
   import * as Tooltip from '@openshock/svelte-core/components/ui/tooltip';
   import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import { dialog } from '@openshock/svelte-core/components/dialog-manager';
-  import { refreshOutgoingInvites } from '#lib/state/user-shares-state.svelte.js';
+  import { refreshUserShares } from '#lib/state/user-shares-state.svelte.js';
+  import { userState } from '#lib/state/user-state.svelte.js';
   import { toast } from 'svelte-sonner';
 
   interface Props {
@@ -21,11 +23,16 @@
 
   async function removeShareCall(value: V2UserSharesListItem) {
     try {
+      // The recipient removes every shocker the other user shared with them.
+      await userSharesBulkRemoveUserShareShockers({
+        path: { userId: userState.self!.id },
+        body: value.shares.map((shocker) => shocker.id),
+      });
       toast.success(`Removed share for ${value.name}`);
     } catch (error) {
-      handleApiError(error);
+      await handleApiError(error);
     } finally {
-      refreshOutgoingInvites();
+      await refreshUserShares();
     }
   }
 

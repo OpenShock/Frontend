@@ -177,6 +177,7 @@ export {
   tokensReportTokens,
   tokensSelfGetSelfTokenV2,
   tokensSetTokenPaused,
+  userSharesBulkRemoveUserShareShockers,
   userSharesCreateShareInvite,
   userSharesDeleteOutgoingInvite,
   userSharesDenyIncomingInvite,
