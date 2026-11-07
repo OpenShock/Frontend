@@ -26,7 +26,13 @@
     { label: 'API Tokens' },
   ]);
 
-  let tokens = $derived(await tokensListTokensV2());
+  let tokens = $state<TokenResponseV2[]>([]);
+  // Awaited inside the boundary below so its pending and failed snippets cover the initial load.
+  let initialLoad = $state(loadTokens());
+
+  async function loadTokens() {
+    tokens = await tokensListTokensV2();
+  }
 
   const clock = createNowTicker();
 
@@ -58,6 +64,7 @@
   </PageHeader>
   <Card.Content class="flex w-full flex-col space-y-4">
     <svelte:boundary onerror={(error: unknown) => handleApiError(error)}>
+      {await initialLoad}
       {#if tokens.length === 0}
         <EmptyState
           icon={KeyRound}
@@ -94,7 +101,13 @@
       {/snippet}
 
       {#snippet failed(_error: unknown, reset: () => void)}
-        <PageError message="Failed to load API tokens." onRetry={reset} />
+        <PageError
+          message="Failed to load API tokens."
+          onRetry={() => {
+            initialLoad = loadTokens();
+            reset();
+          }}
+        />
       {/snippet}
     </svelte:boundary>
   </Card.Content>

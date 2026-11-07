@@ -1,5 +1,8 @@
 <script lang="ts">
-  import { authenticatedAccountListOAuthConnections } from '#lib/api/index.js';
+  import {
+    type OAuthConnectionResponse,
+    authenticatedAccountListOAuthConnections,
+  } from '#lib/api/index.js';
   import Link2 from '@lucide/svelte/icons/link-2';
   import Plus from '@lucide/svelte/icons/plus';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
@@ -24,7 +27,13 @@
   ]);
 
   // ---------- state
-  let connections = $derived(await authenticatedAccountListOAuthConnections());
+  let connections = $state<OAuthConnectionResponse[]>([]);
+  // Awaited inside the boundary below so its pending and failed snippets cover the initial load.
+  let initialLoad = $state(loadConnections());
+
+  async function loadConnections() {
+    connections = await authenticatedAccountListOAuthConnections();
+  }
   let refreshing = $state(false);
 
   // From redirect (?status=)
@@ -95,6 +104,7 @@
 
   <Card.Content class="flex w-full flex-1 flex-col space-y-6">
     <svelte:boundary onerror={(error: unknown) => handleApiError(error)}>
+      {await initialLoad}
       <!-- Quick actions -->
       <div class="flex flex-wrap gap-2">
         <Dropdown.Root>
@@ -171,7 +181,13 @@
       {/snippet}
 
       {#snippet failed(_error: unknown, reset: () => void)}
-        <PageError message="Failed to load OAuth connections." onRetry={reset} />
+        <PageError
+          message="Failed to load OAuth connections."
+          onRetry={() => {
+            initialLoad = loadConnections();
+            reset();
+          }}
+        />
       {/snippet}
     </svelte:boundary>
   </Card.Content>
