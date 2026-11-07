@@ -1,11 +1,25 @@
 <script lang="ts">
   import { HubConnectionState } from '@microsoft/signalr';
+  import { version as frontendCommit } from '$app/env';
   import { PUBLIC_GITHUB_PROJECT_URL } from '$app/env/public';
   import { getConnectionState } from '#lib/signalr/user.svelte.js';
   import { Wifi, WifiOff } from '@lucide/svelte';
   import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import { backendMetadata } from '#lib/state/backend-metadata-state.svelte.js';
+
+  function shortCommit(commit: string): string {
+    return commit.slice(0, 7);
+  }
+
+  function commitUrl(repo: string, commit: string): string {
+    return `${PUBLIC_GITHUB_PROJECT_URL}/${repo}/commit/${commit}`;
+  }
+
+  const frontendCommitUrl = commitUrl('Frontend', frontendCommit);
+  const backendCommitUrl = $derived(
+    backendMetadata.state ? commitUrl('API', backendMetadata.state.commit) : undefined
+  );
 </script>
 
 <footer
@@ -54,12 +68,26 @@
                 </p></td
               >
             </tr>
+            <tr>
+              <td>Frontend Version</td>
+              <td title="Commit {frontendCommit}">
+                <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- external link -->
+                <a target="_blank" rel="noopener" href={frontendCommitUrl}
+                  >{shortCommit(frontendCommit)}</a
+                >
+              </td>
+            </tr>
             {#if backendMetadata.state}
               <tr>
                 <td>Backend Version</td>
-                <td title="Commit {backendMetadata.state.commit}"
-                  >{backendMetadata.state.version}</td
-                >
+                <td title="Commit {backendMetadata.state.commit}">
+                  <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- external link -->
+                  <a target="_blank" rel="noopener" href={backendCommitUrl}
+                    >{backendMetadata.state.version} ({shortCommit(
+                      backendMetadata.state.commit
+                    )})</a
+                  >
+                </td>
               </tr>
             {/if}
           </tbody>
