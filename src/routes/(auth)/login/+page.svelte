@@ -13,6 +13,7 @@
   import type { ValidationResult } from '@openshock/svelte-core/types';
   import Turnstile from '#lib/components/Turnstile.svelte';
   import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+  import { handleTurnstileProblem } from '#lib/errorhandling/turnstileErrors.js';
   import { isValidationError, mapToValRes } from '#lib/errorhandling/ValidationProblemDetails.js';
   import OauthButtons from '#lib/components/auth/oauth-buttons.svelte';
   import { gotoQueryRedirectOrFallback, consumeSearchParam } from '#lib/utils/url.js';
@@ -21,7 +22,7 @@
   import { userState } from '#lib/state/user-state.svelte.js';
   import { Skeleton } from '@openshock/svelte-core/components/ui/skeleton';
   import { getOAuthErrorMessage } from '#lib/auth/oauth-errors.js';
-  import { MailCheck } from '@lucide/svelte';
+  import { MailCheck, KeyRound } from '@lucide/svelte';
   import ResendActivationButton from '#lib/components/auth/resend-activation-button.svelte';
 
   registerBreadcrumbs(() => [{ label: 'Login' }]);
@@ -33,6 +34,8 @@
   let activationPending = $state(false);
   // Picks the wording; the resend button shows itself whenever this browser holds the resend cookie.
   let activationFromSignup = $state(false);
+  // Set when a password login hits an account that was created through OAuth and has no password.
+  let oauthOnly = $state(false);
 
   consumeSearchParam('error', (code) => {
     if (code === 'accountNotActivated') {
@@ -67,6 +70,9 @@
     // A new attempt may be for a different account; only re-show the notice if this one is unactivated too.
     activationPending = false;
     activationFromSignup = false;
+    oauthOnly = false;
+    usernameError = null;
+    passwordError = null;
 
     try {
       const account = await accountLoginV2({
@@ -86,8 +92,17 @@
     } catch (error) {
       turnstile?.reset();
       await handleApiError(error, (problem) => {
+        if (handleTurnstileProblem(problem)) return true;
         if (problem.type === 'Account.AccountNotActivated') {
           activationPending = true;
+          return true;
+        }
+        if (problem.type === 'Account.OAuthOnly') {
+          oauthOnly = true;
+          return true;
+        }
+        if (problem.type === 'Login.InvalidCredentials') {
+          passwordError = { valid: false, message: 'Invalid username or password' };
           return true;
         }
         if (!isValidationError(problem)) return false;
@@ -146,6 +161,18 @@
           {/if}
           <ResendActivationButton class="h-auto px-0" />
         </div>
+      </div>
+    {/if}
+    {#if oauthOnly}
+      <div
+        class="bg-muted text-foreground mb-4 flex items-start gap-3 rounded-md border p-3 text-sm"
+        role="alert"
+      >
+        <KeyRound class="mt-0.5 size-4 shrink-0" />
+        <p>
+          This account has no password. Sign in with the provider you signed up with
+          {#if anyOAuthProviders}using the buttons above{/if}.
+        </p>
       </div>
     {/if}
     {#if oauthError}

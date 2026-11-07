@@ -10,6 +10,7 @@
   import { EmailInput, PasswordInput } from '@openshock/svelte-core/components/input';
   import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
   import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+  import { handleTurnstileProblem } from '#lib/errorhandling/turnstileErrors.js';
   import { validatePasswordMatch } from '@openshock/svelte-core/inputvalidation';
   import { toast } from 'svelte-sonner';
   import { FieldSeparator } from '@openshock/svelte-core/components/ui/field';
@@ -78,7 +79,7 @@
       accountCreated = true;
     } catch (error) {
       turnstile?.reset();
-      await handleApiError(error);
+      await handleApiError(error, handleTurnstileProblem);
     }
   }
 

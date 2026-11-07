@@ -8,6 +8,7 @@
   import * as Card from '@openshock/svelte-core/components/ui/card';
   import { Field, FieldDescription } from '@openshock/svelte-core/components/ui/field';
   import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+  import { handleTurnstileProblem } from '#lib/errorhandling/turnstileErrors.js';
   import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
   import { backendMetadata } from '#lib/state/backend-metadata-state.svelte.js';
   import { toast } from 'svelte-sonner';
@@ -37,7 +38,7 @@
       })
       .catch((error) => {
         turnstile?.reset();
-        return handleApiError(error);
+        return handleApiError(error, handleTurnstileProblem);
       });
   }
 
