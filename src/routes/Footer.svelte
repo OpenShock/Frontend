@@ -83,9 +83,7 @@
                 <td title="Commit {backendMetadata.state.commit}">
                   <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- external link -->
                   <a target="_blank" rel="noopener" href={backendCommitUrl}
-                    >{backendMetadata.state.version} ({shortCommit(
-                      backendMetadata.state.commit
-                    )})</a
+                    >{backendMetadata.state.version}</a
                   >
                 </td>
               </tr>
