@@ -131,14 +131,18 @@
   }
 
   async function ownResume(shockerId: string) {
-    const result = await shockerPauseShocker({ path: { shockerId }, body: { pause: false } });
-    // Update the shocker's isPaused state
-    for (const hub of ownHubs.values()) {
-      const shocker = hub.shockers.find((s) => s.id === shockerId);
-      if (shocker) {
-        shocker.isPaused = result.data;
-        break;
+    try {
+      const result = await shockerPauseShocker({ path: { shockerId }, body: { pause: false } });
+      // Update the shocker's isPaused state
+      for (const hub of ownHubs.values()) {
+        const shocker = hub.shockers.find((s) => s.id === shockerId);
+        if (shocker) {
+          shocker.isPaused = result.data;
+          break;
+        }
       }
+    } catch (error) {
+      await handleApiError(error);
     }
   }
 </script>
