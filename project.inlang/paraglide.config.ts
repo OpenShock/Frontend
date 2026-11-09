@@ -6,7 +6,8 @@ export default defineConfig({
   // Pinned so the CLI (used by `check`) and the Vite plugin emit the same layout.
   outputStructure: 'message-modules',
   // `custom-query` is the one-off `?lang=` override, see src/lib/i18n/query-locale.ts.
-  strategy: ['custom-query', 'cookie', 'preferredLanguage', 'baseLocale'],
+  // `custom-preferred` replaces `preferredLanguage` to map zh-CN and zh-TW to our Chinese locales, see src/lib/i18n/preferred-locale.ts.
+  strategy: ['custom-query', 'cookie', 'custom-preferred', 'baseLocale'],
   cookieSameSite: 'lax',
   cookieSecure: 'auto',
 });

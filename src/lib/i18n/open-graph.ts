@@ -9,6 +9,11 @@ const OG_LOCALES: Record<Locale, string> = {
   fi: 'fi_FI',
   fr: 'fr_FR',
   et: 'et_EE',
+  nl: 'nl_NL',
+  uk: 'uk_UA',
+  ja: 'ja_JP',
+  'zh-Hans': 'zh_CN',
+  'zh-Hant': 'zh_TW',
   // Not a real language, so it shares English's territory.
   uwu: 'en_US',
 };

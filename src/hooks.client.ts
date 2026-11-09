@@ -1,6 +1,7 @@
 import type { HandleClientError } from '@sveltejs/kit/hooks';
 import 'temporal-polyfill/global';
 
+import '#lib/i18n/preferred-locale.js';
 import '#lib/i18n/query-locale.js';
 
 import { versionGetBackendInfo } from '#lib/api/index.js';

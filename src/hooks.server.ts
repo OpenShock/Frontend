@@ -1,3 +1,4 @@
+import '#lib/i18n/preferred-locale.js';
 import '#lib/i18n/query-locale.js';
 import { getTextDirection } from '#lib/paraglide/runtime.js';
 import { paraglideMiddleware } from '#lib/paraglide/server.js';
