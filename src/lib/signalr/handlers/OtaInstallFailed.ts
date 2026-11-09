@@ -1,3 +1,4 @@
+import { m } from '#lib/paraglide/messages.js';
 import { onlineHubs } from '#lib/state/hubs-state.svelte.js';
 import { isBoolean, isNumber, isString } from '@openshock/svelte-core/typeguards';
 import { toast } from 'svelte-sonner';
@@ -13,7 +14,7 @@ export function handleSignalrOtaInstallFailed(
 ): void {
   if (!isString(hubId) || !isNumber(updateId) || !isBoolean(fatal) || !isString(message)) {
     console.error('Invalid OTA install failed payload', hubId, updateId, fatal, message);
-    toast.error('Received invalid OTA install failure data!');
+    toast.error(m.signalr_invalid_ota());
     return;
   }
 
@@ -23,5 +24,5 @@ export function handleSignalrOtaInstallFailed(
     hub.otaResult = { success: false, message };
   }
 
-  toast.error(`Hub firmware update failed: ${message}`);
+  toast.error(m.ota_toast_failed({ message }));
 }

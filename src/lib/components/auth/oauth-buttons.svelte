@@ -9,12 +9,13 @@
 </script>
 
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import { Field } from '@openshock/svelte-core/components/ui/field';
   import { GetOAuthAuthorizeUrl } from '#lib/api/next/oauth.js';
   import { LogIn } from '@lucide/svelte';
 
-  let { verb = 'Login', providers }: { verb?: string; providers: string[] } = $props();
+  let { mode = 'login', providers }: { mode?: 'login' | 'signup'; providers: string[] } = $props();
 </script>
 
 <Field>
@@ -27,7 +28,9 @@
         {:else}
           <LogIn />
         {/if}
-        {verb} with {detail?.label ?? provider}
+        {mode === 'signup'
+          ? m.oauth_signup_with({ provider: detail?.label ?? provider })
+          : m.oauth_login_with({ provider: detail?.label ?? provider })}
       </Button>
     </form>
   {/each}

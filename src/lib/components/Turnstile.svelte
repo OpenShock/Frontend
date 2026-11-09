@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import Bug from '@lucide/svelte/icons/bug';
   import { dev } from '$app/env';
   import { PUBLIC_TURNSTILE_DEV_BYPASS_VALUE } from '$app/env/public';
@@ -64,7 +65,7 @@
     // See: https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/#explicitly-render-the-turnstile-widget
     if (!window.turnstile) {
       console.error('Failed to load Cloudflare Turnstile');
-      toast.error('Internal Error');
+      toast.error(m.common_internal_error());
       return;
     }
 
@@ -101,10 +102,10 @@
     <div class="bg-muted flex h-full items-center justify-center gap-3 border p-3 select-none">
       {#if dev || disabled}
         <Bug />
-        <span> Turnstile disabled </span>
+        <span>{m.turnstile_disabled()}</span>
       {:else}
         <Spinner class="size-8" />
-        <span> Loading... </span>
+        <span>{m.common_loading()}</span>
       {/if}
       <a
         class="text-muted-foreground mb-auto ml-auto h-7 w-auto"

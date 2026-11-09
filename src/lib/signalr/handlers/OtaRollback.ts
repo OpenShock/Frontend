@@ -1,3 +1,4 @@
+import { m } from '#lib/paraglide/messages.js';
 import { onlineHubs } from '#lib/state/hubs-state.svelte.js';
 import { isNumber, isString } from '@openshock/svelte-core/typeguards';
 import { toast } from 'svelte-sonner';
@@ -8,7 +9,7 @@ import { toast } from 'svelte-sonner';
 export function handleSignalrOtaRollback(hubId: unknown, updateId: unknown): void {
   if (!isString(hubId) || !isNumber(updateId)) {
     console.error('Invalid OTA rollback payload', hubId, updateId);
-    toast.error('Received invalid OTA rollback data!');
+    toast.error(m.signalr_invalid_ota());
     return;
   }
 
@@ -18,5 +19,5 @@ export function handleSignalrOtaRollback(hubId: unknown, updateId: unknown): voi
     hub.otaResult = { success: false, message: 'Device rolled back to previous version' };
   }
 
-  toast.warning('Hub firmware rolled back to previous version');
+  toast.warning(m.ota_toast_rolled_back());
 }

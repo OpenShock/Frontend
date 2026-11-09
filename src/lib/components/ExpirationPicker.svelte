@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
+  import { intlLocale } from '#lib/i18n/intl.js';
   import { formatRelativeInstant } from '#lib/utils/datetime.js';
   import { parseAbsoluteToLocal, type ZonedDateTime } from '@internationalized/date';
   import { DateTimePicker } from '@openshock/svelte-core/components/datetime-picker';
@@ -20,14 +22,14 @@
     label: string;
     getInstant: () => Temporal.Instant | null;
   }[] = [
-    { value: 'never', label: 'Never', getInstant: () => null },
-    { value: 'custom', label: 'Custom', getInstant: () => instant },
-    { value: '1days', label: '1 Day', getInstant: inDays(1) },
-    { value: '7days', label: '7 Days', getInstant: inDays(7) },
-    { value: '30days', label: '30 Days', getInstant: inDays(30) },
-    { value: '90days', label: '90 Days', getInstant: inDays(90) },
-    { value: '180days', label: '180 Days', getInstant: inDays(180) },
-    { value: '365days', label: '365 Days', getInstant: inDays(365) },
+    { value: 'never', label: m.expiration_never(), getInstant: () => null },
+    { value: 'custom', label: m.expiration_custom(), getInstant: () => instant },
+    { value: '1days', label: m.expiration_days({ count: 1 }), getInstant: inDays(1) },
+    { value: '7days', label: m.expiration_days({ count: 7 }), getInstant: inDays(7) },
+    { value: '30days', label: m.expiration_days({ count: 30 }), getInstant: inDays(30) },
+    { value: '90days', label: m.expiration_days({ count: 90 }), getInstant: inDays(90) },
+    { value: '180days', label: m.expiration_days({ count: 180 }), getInstant: inDays(180) },
+    { value: '365days', label: m.expiration_days({ count: 365 }), getInstant: inDays(365) },
   ];
 
   let selectedExpiration = $derived(expirationOptions.find((o) => o.value === option));
@@ -49,13 +51,13 @@
 
   let validationResult = $derived(
     option === 'custom' && !instant
-      ? { valid: false, message: 'Expire date is required' }
+      ? { valid: false, message: m.expiration_required() }
       : { valid: true }
   );
 </script>
 
 <label>
-  <span>Expiration</span>
+  <span>{m.expiration_label()}</span>
   <Select.Root type="single" name="expiration" bind:value={option}>
     <Select.Trigger class="w-45">
       {selectedExpiration?.label}
@@ -77,10 +79,10 @@
   {#if 'message' in validationResult}
     <p class="text-xs text-{GetValResColor(validationResult)}">{validationResult.message}</p>
   {:else if option === 'never'}
-    <p class="text-xs">This will never expire</p>
+    <p class="text-xs">{m.expiration_never_desc()}</p>
   {:else if instant}
     {@const elapsed = formatRelativeInstant(instant)}
-    {@const label = instant.toLocaleString(undefined, {
+    {@const label = instant.toLocaleString(intlLocale(), {
       timeZone: Temporal.Now.timeZoneId(),
       day: '2-digit',
       month: '2-digit',
@@ -88,6 +90,8 @@
       hour: '2-digit',
       minute: '2-digit',
     })}
-    <p class="text-xs" aria-label={label}>Expires {elapsed} ({label})</p>
+    <p class="text-xs" aria-label={label}>
+      {m.expiration_expires_at({ time: elapsed, date: label })}
+    </p>
   {/if}
 </label>

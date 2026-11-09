@@ -254,7 +254,7 @@ export default class EspSerialConnection {
       return true;
     } catch (e) {
       console.error(e);
-      toast.error(`Failed to enter bootloader: ${e}`);
+      toast.error(m.terminal_toast_bootloader_failed({ error: String(e) }));
       return false;
     }
   }
@@ -337,7 +337,7 @@ export default class EspSerialConnection {
       return true;
     } catch (e) {
       console.error(e);
-      toast.error(`Failed to enter application mode: ${e}`);
+      toast.error(m.terminal_toast_app_mode_failed({ error: String(e) }));
       this.serialPort = null;
       return false;
     }

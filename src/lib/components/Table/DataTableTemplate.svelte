@@ -1,4 +1,5 @@
 <script lang="ts" generics="TFeatures extends DataTableFeatures, TData extends RowData">
+  import { m } from '#lib/paraglide/messages.js';
   import { ChevronRight } from '@lucide/svelte';
   import {
     FlexRender,
@@ -206,7 +207,7 @@
               <button
                 class="text-muted-foreground flex items-center"
                 aria-expanded={row.getIsExpanded()}
-                aria-label={row.getIsExpanded() ? 'Hide details' : 'Show details'}
+                aria-label={row.getIsExpanded() ? m.table_hide_details() : m.table_show_details()}
                 onclick={() => row.toggleExpanded()}
               >
                 <ChevronRight
@@ -242,7 +243,9 @@
         {/if}
       {:else}
         <Table.Row>
-          <Table.Cell colspan={columns.length} class="h-24 text-center">No results.</Table.Cell>
+          <Table.Cell colspan={columns.length} class="h-24 text-center"
+            >{m.table_no_results()}</Table.Cell
+          >
         </Table.Row>
       {/each}
     </Table.Body>

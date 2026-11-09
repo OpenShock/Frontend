@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import Bug from '@lucide/svelte/icons/bug';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import {
@@ -27,17 +28,20 @@
 <div class="flex flex-col gap-3">
   <div class="flex items-center gap-2 font-medium">
     <Bug class="size-4" />
-    Help improve OpenShock?
+    {m.telemetry_toast_title()}
   </div>
   <p class="text-muted-foreground text-sm">
-    Send diagnostics to help us fix crashes and slow API calls. Reports include the error message,
-    stack trace and your IP. You can change this any time in Account settings.
+    {m.telemetry_toast_desc()}
   </p>
   <div class="flex flex-wrap justify-end gap-2">
-    <Button type="button" size="sm" variant="ghost" onclick={() => choose('off')}>No thanks</Button>
+    <Button type="button" size="sm" variant="ghost" onclick={() => choose('off')}
+      >{m.telemetry_toast_no()}</Button
+    >
     <Button type="button" size="sm" variant="outline" onclick={() => choose('errors')}>
-      Errors only
+      {m.telemetry_toast_errors()}
     </Button>
-    <Button type="button" size="sm" onclick={() => choose('full')}>Full</Button>
+    <Button type="button" size="sm" onclick={() => choose('full')}
+      >{m.account_telemetry_full()}</Button
+    >
   </div>
 </div>

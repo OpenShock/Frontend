@@ -190,7 +190,7 @@
         </form>
       {:else}
         {#if anyOAuthProviders}
-          <OauthButtons verb="Signup" providers={oauthProviders} />
+          <OauthButtons mode="signup" providers={oauthProviders} />
           <FieldSeparator class="*:data-[slot=field-separator-content]:bg-card"
             >{m.auth_signup_or()}</FieldSeparator
           >
