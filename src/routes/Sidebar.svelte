@@ -176,7 +176,7 @@
       ...(PUBLIC_HANGFIRE_URL
         ? [
             {
-              title: m.sidebar_admin_hangfire(),
+              title: 'Hangfire',
               Icon: Timer,
               externalHref: PUBLIC_HANGFIRE_URL,
               target: '_blank',

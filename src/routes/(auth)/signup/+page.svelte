@@ -102,7 +102,7 @@
           {/if}
 
           <Button variant="default" size="sm" class="mt-4" onclick={() => goto(resolve('login'))}
-            >{m.auth_signup_dialog_ok()}</Button
+            >Ok</Button
           >
         </div>
       </Dialog.Description>
