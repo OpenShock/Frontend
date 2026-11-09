@@ -65,11 +65,9 @@
     {#if channel === 'stable'}
       <CircleCheckBig class="text-success" />
       <p class="text-success">{m.terminal_channel_recommended()}</p>
-      <!--
     {:else if channel === 'beta'}
       <TriangleAlert class="text-warning" />
       <p class="text-warning">{m.channel_bugs_warning()}</p>
-    -->
     {:else}
       <TriangleAlert class="text-destructive" />
       <p class="text-destructive font-bold" role="alert">
