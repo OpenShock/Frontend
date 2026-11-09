@@ -45,7 +45,6 @@
         aria-label={m.footer_language_label()}
       >
         <Languages class="size-4" />
-        <LocaleFlag locale={current} />
         {nativeName(current)}
       </Button>
     {/snippet}
