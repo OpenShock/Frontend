@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import {
     Send,
     Trash2,
@@ -318,7 +319,7 @@
   const clipboard = useClipboard();
 
   function copySettings() {
-    void copyToClipboard(settings.exportString(), 'Console settings copied');
+    void copyToClipboard(settings.exportString(), m.terminal_toast_settings_copied());
   }
 
   async function importSettings() {
@@ -326,18 +327,21 @@
     try {
       text = await navigator.clipboard.readText();
     } catch {
-      toast.error('Could not read the clipboard');
+      toast.error(m.terminal_toast_clipboard_unreadable());
       return;
     }
     if (settings.importString(text)) {
-      toast.success('Console settings imported');
+      toast.success(m.terminal_toast_settings_imported());
     } else {
-      toast.error('Clipboard does not contain console settings');
+      toast.error(m.terminal_toast_settings_invalid());
     }
   }
 
   function copyOutput() {
-    void clipboard.copy(lines.map((l) => stripAnsi(l.text)).join('\n'), 'Console output copied');
+    void clipboard.copy(
+      lines.map((l) => stripAnsi(l.text)).join('\n'),
+      m.terminal_toast_output_copied()
+    );
   }
 </script>
 
@@ -373,7 +377,7 @@
         <div
           role="separator"
           aria-orientation="horizontal"
-          aria-label="Resize terminal panel"
+          aria-label={m.terminal_resize()}
           tabindex="0"
           class="group flex cursor-row-resize items-center justify-center py-0.5 select-none"
           onpointerdown={onResizeStart}
@@ -386,11 +390,11 @@
       <!-- Header -->
       <div class="flex items-center justify-between border-b px-4 py-1.5">
         <div class="flex min-w-0 items-center gap-4">
-          <span class="text-sm font-semibold">Console</span>
+          <span class="text-sm font-semibold">{m.terminal_console()}</span>
           {#if deviceLabel}
             <code
               class="bg-muted text-muted-foreground truncate rounded border px-1.5 py-0.5 font-mono text-[11px] leading-none"
-              title="Connected device"
+              title={m.terminal_connected_device()}
             >
               {deviceLabel}
             </code>
@@ -401,15 +405,15 @@
           <Button size="sm" variant="ghost" onclick={copyOutput} disabled={lines.length === 0}>
             {#if clipboard.copied}
               <Check class="mr-1 h-3.5 w-3.5" />
-              Copied
+              {m.common_copied()}
             {:else}
               <Copy class="mr-1 h-3.5 w-3.5" />
-              Copy
+              {m.common_copy()}
             {/if}
           </Button>
           <Button size="sm" variant="ghost" onclick={context.clean}>
             <Trash2 class="mr-1 h-3.5 w-3.5" />
-            Clear
+            {m.common_clear()}
           </Button>
           <ConsoleOptionsMenu
             {settings}
@@ -428,7 +432,7 @@
           {#if hasInput}
             <Button size="sm" variant="ghost" onclick={onReset} {disabled}>
               <RotateCcw class="mr-1 h-3.5 w-3.5" />
-              Reboot
+              {m.terminal_reboot()}
             </Button>
           {/if}
           {#if onDisconnect}
@@ -440,7 +444,7 @@
               {disabled}
             >
               <Unplug class="mr-1 h-3.5 w-3.5" />
-              Disconnect
+              {m.terminal_disconnect()}
             </Button>
           {/if}
 
@@ -450,8 +454,8 @@
             size="sm"
             variant="ghost"
             onclick={() => setMaximized(!maximized)}
-            title={maximized ? 'Exit fullscreen (Esc)' : 'Fill the window'}
-            aria-label={maximized ? 'Exit fullscreen' : 'Fill the window'}
+            title={maximized ? m.terminal_fullscreen_exit_esc() : m.terminal_fullscreen_fill()}
+            aria-label={maximized ? m.terminal_fullscreen_exit() : m.terminal_fullscreen_fill()}
           >
             {#if maximized}
               <Minimize2 class="h-3.5 w-3.5" />
@@ -516,8 +520,8 @@
                 bind:this={commandInputEl}
                 bind:value={commandInput}
                 onkeydown={handleKeydown}
-                aria-label="Serial command"
-                placeholder="Type a command..."
+                aria-label={m.terminal_command_label()}
+                placeholder={m.terminal_command_placeholder()}
                 {disabled}
               />
               <Button
@@ -525,8 +529,8 @@
                 variant="ghost"
                 onclick={sendCommand}
                 {disabled}
-                title="Send command"
-                aria-label="Send command"
+                title={m.terminal_command_send()}
+                aria-label={m.terminal_command_send()}
               >
                 <Send class="h-3.5 w-3.5" />
               </Button>
@@ -544,7 +548,7 @@
               : 'left: 50%; top: 50%; transform: translate(-50%, -50%)'}
             transition:fade={{ duration: COLORS_PANEL_FADE_MS }}
             role="dialog"
-            aria-label="Console colors"
+            aria-label={m.terminal_colors_label()}
           >
             <div class="flex items-center justify-between">
               <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -553,14 +557,14 @@
                 onpointerdown={onColorsDragStart}
               >
                 <GripVertical class="text-muted-foreground h-3.5 w-3.5" />
-                <p class="text-sm font-semibold">Colors</p>
+                <p class="text-sm font-semibold">{m.terminal_colors()}</p>
               </div>
               <Button
                 size="sm"
                 variant="ghost"
                 class="h-auto p-1"
                 onclick={() => (colorsOpen = false)}
-                aria-label="Close colors"
+                aria-label={m.terminal_colors_close()}
               >
                 <X class="h-3.5 w-3.5" />
               </Button>
@@ -574,13 +578,13 @@
                     class="ring-foreground/20 h-5 w-5 shrink-0 rounded-sm ring-1 ring-inset"
                     style="background: {palette[key]}"
                   ></span>
-                  <span class="truncate">{COLOR_LABELS[key]}</span>
+                  <span class="truncate">{COLOR_LABELS[key]()}</span>
                   <input
                     type="color"
                     class="sr-only"
                     value={palette[key]}
                     oninput={(e) => settings.setColor(key, e.currentTarget.value)}
-                    aria-label="{COLOR_LABELS[key]} color"
+                    aria-label={m.terminal_color_input({ name: COLOR_LABELS[key]() })}
                   />
                 </label>
               {/each}
@@ -592,7 +596,7 @@
               onclick={() => settings.resetColors()}
             >
               <RotateCcw class="h-3.5 w-3.5" />
-              Reset to defaults
+              {m.terminal_colors_reset()}
             </Button>
           </div>
         {/if}

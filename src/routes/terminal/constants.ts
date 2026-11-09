@@ -1,26 +1,27 @@
+import { m } from '#lib/paraglide/messages.js';
 import type { ColorKey, Palette, StoredSettings, TimestampMode } from './types';
 
 /** Maximum number of terminal lines to keep in memory. */
 export const MAX_LINES = 5000;
 
 export const TIMESTAMP_MODES: TimestampMode[] = ['uptime', 'local', 'ms', 'off'];
-export const TIMESTAMP_LABELS: Record<TimestampMode, string> = {
-  uptime: 'Uptime',
-  local: 'Local',
-  ms: 'Ms',
-  off: 'Off',
+export const TIMESTAMP_LABELS: Record<TimestampMode, () => string> = {
+  uptime: m.terminal_timestamp_uptime,
+  local: m.terminal_timestamp_local,
+  ms: m.terminal_timestamp_ms,
+  off: m.terminal_timestamp_off,
 };
 
 export const COLOR_KEYS: ColorKey[] = ['bg', 'fg', 'ts', 'E', 'W', 'I', 'D', 'V'];
-export const COLOR_LABELS: Record<ColorKey, string> = {
-  bg: 'Background',
-  fg: 'Text',
-  ts: 'Timestamp',
-  E: 'Error',
-  W: 'Warning',
-  I: 'Info',
-  D: 'Debug',
-  V: 'Verbose',
+export const COLOR_LABELS: Record<ColorKey, () => string> = {
+  bg: m.terminal_color_bg,
+  fg: m.terminal_color_fg,
+  ts: m.terminal_color_ts,
+  E: m.terminal_color_error,
+  W: m.terminal_color_warning,
+  I: m.terminal_color_info,
+  D: m.terminal_color_debug,
+  V: m.terminal_color_verbose,
 };
 
 /** Six-digit hex color with leading '#'. */

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import {
     ArrowLeft,
     Check,
@@ -171,9 +172,9 @@
   });
 
   const STEPS = [
-    { title: 'Select Channel' },
-    { title: 'Select Board' },
-    { title: 'Flash Firmware' },
+    { title: m.terminal_step_channel() },
+    { title: m.terminal_step_board() },
+    { title: m.terminal_mode_flash() },
   ];
 
   async function handleReset() {
@@ -181,12 +182,12 @@
     try {
       isFlashing = true;
       if (!connection) {
-        terminal.writeLine('Host-side error during reset: no device!');
+        terminal.writeLine(m.terminal_log_reset_no_device());
         return;
       }
       await connection.ensureApplication(true);
     } catch (e) {
-      terminal.writeLine(`Host-side error during reset: ${e}`);
+      terminal.writeLine(m.terminal_log_reset_error({ error: String(e) }));
     } finally {
       isFlashing = false;
     }
@@ -197,13 +198,13 @@
     try {
       isFlashing = true;
       if (!connection) {
-        terminal.writeLine("Couldn't send: no device!");
+        terminal.writeLine(m.terminal_log_send_no_device());
         return;
       }
       await connection.ensureApplication();
       await connection.sendApplicationCommand(command);
     } catch (e) {
-      terminal.writeLine(`Couldn't send: ${e}`);
+      terminal.writeLine(m.terminal_log_send_error({ error: String(e) }));
     } finally {
       isFlashing = false;
     }
@@ -230,33 +231,35 @@
         </div>
         <div class="flex flex-1 flex-col gap-1">
           <Dialog.Title class="text-left">
-            {mode === 'flash' ? 'Could not enter bootloader mode' : 'Device connection failed'}
+            {mode === 'flash'
+              ? m.terminal_connect_failed_bootloader()
+              : m.terminal_connect_failed()}
           </Dialog.Title>
           <Dialog.Description class="text-left">
-            We couldn't establish a serial connection with the device.
+            {m.terminal_connect_failed_desc()}
           </Dialog.Description>
         </div>
       </div>
     </Dialog.Header>
     <div class="flex flex-col gap-2 py-2">
-      <p class="text-muted-foreground text-sm">Quick things to try:</p>
+      <p class="text-muted-foreground text-sm">{m.terminal_quick_tries()}</p>
       <ul class="text-muted-foreground ml-1 flex flex-col gap-1.5 text-sm">
         <li class="flex items-start gap-2">
           <span class="bg-muted-foreground/40 mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full"></span>
-          Unplug and replug the device.
+          {m.terminal_try_replug()}
         </li>
         <li class="flex items-start gap-2">
           <span class="bg-muted-foreground/40 mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full"></span>
-          Try a different USB cable or port.
+          {m.terminal_try_cable()}
         </li>
         <li class="flex items-start gap-2">
           <span class="bg-muted-foreground/40 mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full"></span>
-          Make sure the serial driver is installed.
+          {m.terminal_try_driver()}
         </li>
       </ul>
     </div>
     <Dialog.Footer class="gap-2 sm:gap-2">
-      <Button variant="outline" onclick={() => (connectFailed = false)}>Close</Button>
+      <Button variant="outline" onclick={() => (connectFailed = false)}>{m.common_close()}</Button>
       <Button
         onclick={() => {
           connectFailed = false;
@@ -264,7 +267,7 @@
         }}
       >
         <MessageCircleQuestionMark class="h-4 w-4" />
-        Open troubleshooter
+        {m.terminal_open_troubleshooter()}
       </Button>
     </Dialog.Footer>
   </Dialog.Content>
@@ -276,11 +279,11 @@
       <Container>
         <Card.Header class="w-full">
           <Card.Title class="flex items-center justify-between gap-2 text-3xl">
-            <h1>Serial Terminal</h1>
+            <h1>{m.terminal_title()}</h1>
             {#if serial}
               <Button variant="outline" onclick={() => (showHelpDialog = true)}>
                 <MessageCircleQuestionMark />
-                I'm having trouble, help?
+                {m.terminal_help_button()}
               </Button>
             {/if}
           </Card.Title>
@@ -293,7 +296,7 @@
 
               {#if port && !connection && !connectFailed}
                 <div class="flex flex-col items-center gap-2">
-                  <span class="text-center text-lg">Connecting...</span>
+                  <span class="text-center text-lg">{m.live_tooltip_connecting()}</span>
                   <Progress />
                 </div>
               {/if}
@@ -313,18 +316,18 @@
                 class="h-auto gap-1 p-1"
               >
                 <ArrowLeft class="h-3.5 w-3.5" />
-                Back to mode picker
+                {m.terminal_back_to_modes()}
               </Button>
               <span>&middot;</span>
               {#if mode === 'configure'}
                 <Settings2 class="h-3.5 w-3.5" />
-                <span>Configure Device</span>
+                <span>{m.terminal_mode_configure()}</span>
               {:else if mode === 'raw'}
                 <Terminal class="h-3.5 w-3.5" />
-                <span>Serial Monitor</span>
+                <span>{m.terminal_mode_raw()}</span>
               {:else}
                 <Zap class="h-3.5 w-3.5" />
-                <span>Flash Firmware</span>
+                <span>{m.terminal_mode_flash()}</span>
               {/if}
             </div>
 
@@ -358,7 +361,7 @@
                               : 'border-muted-foreground/30 text-muted-foreground/50 border-2'}"
                           disabled={!isAccessible || isFlashing}
                           onclick={() => goToStep(i)}
-                          aria-label="Go to step {i + 1}: {step.title}"
+                          aria-label={m.terminal_go_to_step({ number: i + 1, title: step.title })}
                         >
                           {#if isCompleted}
                             <Check class="h-4 w-4" />
@@ -408,7 +411,7 @@
                                   disabled={isFlashing}
                                   class="w-fit"
                                 >
-                                  Continue
+                                  {m.common_continue()}
                                 </Button>
                               {/if}
                             </div>
@@ -436,10 +439,10 @@
                                     for="erase-before-flash"
                                     class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                   >
-                                    Erase before flashing
+                                    {m.terminal_erase()}
                                   </Label>
                                   <p class="text-muted-foreground text-sm">
-                                    Clears all data on the device including existing configs
+                                    {m.terminal_erase_desc()}
                                   </p>
                                 </div>
                               </div>
@@ -475,7 +478,7 @@
         {:else if browser}
           {@render unsupportedBrowser()}
         {:else}
-          <p>Loading...</p>
+          <p>{m.common_loading()}</p>
         {/if}
       </Container>
     </div>
@@ -497,13 +500,13 @@
 </div>
 
 {#snippet unsupportedBrowser()}
-  <h3>Your browser does not support this feature.</h3>
+  <h3>{m.terminal_unsupported()}</h3>
   {#if ['Chrome', 'Edge', 'Opera'].includes(getBrowserName())}
     <h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">
-      Please update your browser to the latest version.
+      {m.terminal_update_browser()}
     </h3>
   {:else}
-    <h3>Please use one of the following browsers:</h3>
+    <h3>{m.terminal_use_browsers()}</h3>
     <div class="flex flex-col gap-2">
       <a class="flex items-center gap-2" href="https://www.google.com/chrome/">
         <ChromeLogo class="h-16" />

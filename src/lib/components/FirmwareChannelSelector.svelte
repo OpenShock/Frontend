@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { CircleCheckBig, TriangleAlert } from '@lucide/svelte';
   import {
     FetchChannelVersion,
@@ -63,7 +64,7 @@
   <div class="flex flex-row items-center justify-start gap-2 pl-2">
     {#if channel === 'stable'}
       <CircleCheckBig class="text-success" />
-      <p class="text-success">This is the recommended channel.</p>
+      <p class="text-success">{m.terminal_channel_recommended()}</p>
       <!--
     {:else if channel === 'beta'}
       <TriangleAlert class="text-warning" />
@@ -72,7 +73,7 @@
     {:else}
       <TriangleAlert class="text-destructive" />
       <p class="text-destructive font-bold" role="alert">
-        DO NOT USE THIS UNLESS YOU KNOW WHAT YOU ARE DOING
+        {m.terminal_channel_danger()}
       </p>
     {/if}
   </div>

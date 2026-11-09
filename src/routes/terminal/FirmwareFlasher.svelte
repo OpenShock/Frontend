@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { Microchip, TriangleAlert } from '@lucide/svelte';
   import { DownloadAndVerifyBoardBinary } from '#lib/api/firmwareCDN.js';
   import { Button } from '@openshock/svelte-core/components/ui/button';
@@ -34,7 +35,7 @@
   async function FlashDeviceImpl() {
     if (!version || !board || !connection) {
       progressName = null;
-      error = 'No device selected.';
+      error = m.terminal_flash_no_device();
       return;
     }
 
@@ -45,28 +46,28 @@
       progressPercent = progress * 100;
     }
 
-    progressName = 'Resetting...';
+    progressName = m.terminal_flash_resetting();
     progressPercent = null;
     await connection.ensureBootloader();
 
-    progressName = 'Downloading firmware...';
+    progressName = m.terminal_flash_downloading();
     progressPercent = null;
     const firmware = await DownloadAndVerifyBoardBinary(version, board, 'firmware.bin');
     if (!firmware) {
       progressName = null;
-      error = 'Failed to download firmware.';
+      error = m.terminal_flash_download_failed();
       return;
     }
 
-    progressName = 'Flashing firmware...';
+    progressName = m.terminal_flash_flashing();
     progressPercent = null;
     await connection.flash(firmware, eraseBeforeFlash, progressCallback);
 
-    progressName = 'Rebooting device... (Reconnect to power manually if stuck)';
+    progressName = m.terminal_flash_rebooting();
     progressPercent = null;
     await connection.ensureApplication();
 
-    progressName = 'Rebooted device! Flashing complete.';
+    progressName = m.terminal_flash_done();
     progressPercent = 100;
     return true;
   }
@@ -99,7 +100,7 @@
   <!-- Flash button -->
   <Button onclick={FlashDevice} disabled={!connection || isFlashing}>
     <Microchip />
-    Flash
+    {m.terminal_flash_button()}
   </Button>
 
   <!-- Flash progress -->
@@ -107,11 +108,11 @@
     {#if error}
       <div class="flex flex-row items-center justify-start gap-2">
         <TriangleAlert class="text-destructive" />
-        <p class="text-destructive">Error: {error}</p>
+        <p class="text-destructive">{m.common_error({ message: error })}</p>
       </div>
     {:else}
       <span>
-        Flash Progress: {progressName ?? 'Idle'}
+        {m.terminal_flash_progress({ status: progressName ?? m.terminal_flash_idle() })}
         {#if progressPercent !== null}
           ({progressPercent.toFixed(2)}%)
         {/if}
