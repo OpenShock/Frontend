@@ -51,6 +51,7 @@
   "error_meta_description": "OpenShock ei ole tällä hetkellä käytettävissä",
   "error_meta_logo_alt": "OpenShockin logo",
   "error_fallback_message": "Jokin meni pieleen.",
+  "error_not_found_message": "Sivua ei löytynyt",
   "error_not_found_description": "Etsimääsi sivua ei ole olemassa.",
   "error_unexpected_description": "Tapahtui odottamaton virhe.",
   "error_go_back": "Takaisin",

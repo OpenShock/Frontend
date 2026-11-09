@@ -51,6 +51,7 @@
   "error_meta_description": "OpenShock er for øyeblikket utilgjengelig",
   "error_meta_logo_alt": "OpenShock-logo",
   "error_fallback_message": "Noe gikk galt.",
+  "error_not_found_message": "Fant ikke siden",
   "error_not_found_description": "Siden du leter etter finnes ikke.",
   "error_unexpected_description": "Det oppstod en uventet feil.",
   "error_go_back": "Gå tilbake",

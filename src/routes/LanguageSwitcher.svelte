@@ -3,7 +3,8 @@
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
   import { m } from '#lib/paraglide/messages.js';
-  import { getLocale, isLocale, locales, setLocale, type Locale } from '#lib/paraglide/runtime.js';
+  import { localeOverride } from '#lib/i18n/query-locale.js';
+  import { getLocale, locales, setLocale, type Locale } from '#lib/paraglide/runtime.js';
 
   const current = getLocale();
 
@@ -15,9 +16,10 @@
     return name.charAt(0).toLocaleUpperCase(locale) + name.slice(1);
   }
 
-  function onValueChange(value: string) {
-    // setLocale saves the choice and reloads the page.
-    if (isLocale(value) && value !== current) setLocale(value);
+  // setLocale saves the choice and reloads the page.
+  // Picking the language a `?lang=` link set is not a change, but it still saves it and drops the parameter.
+  function select(locale: Locale) {
+    if (locale !== current || localeOverride !== undefined) setLocale(locale);
   }
 </script>
 
@@ -38,9 +40,9 @@
   </DropdownMenu.Trigger>
   <DropdownMenu.Content align="end">
     <DropdownMenu.Label>{m.footer_language_label()}</DropdownMenu.Label>
-    <DropdownMenu.RadioGroup value={current} {onValueChange}>
+    <DropdownMenu.RadioGroup value={current}>
       {#each locales as locale (locale)}
-        <DropdownMenu.RadioItem value={locale} lang={locale}>
+        <DropdownMenu.RadioItem value={locale} lang={locale} onSelect={() => select(locale)}>
           {nativeName(locale)}
         </DropdownMenu.RadioItem>
       {/each}

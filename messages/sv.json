@@ -51,6 +51,7 @@
   "error_meta_description": "OpenShock är inte tillgängligt just nu",
   "error_meta_logo_alt": "OpenShocks logotyp",
   "error_fallback_message": "Något gick fel.",
+  "error_not_found_message": "Sidan hittades inte",
   "error_not_found_description": "Sidan du letar efter finns inte.",
   "error_unexpected_description": "Ett oväntat fel inträffade.",
   "error_go_back": "Gå tillbaka",

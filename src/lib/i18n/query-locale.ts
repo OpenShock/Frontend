@@ -24,23 +24,23 @@ defineCustomServerStrategy('custom-query', {
 
 // Read once per document, so client-side navigation away from the `?lang=` URL keeps the
 // whole page in one language until the next full load.
-const override =
+export const localeOverride =
   typeof window === 'undefined' ? undefined : localeFromUrl(new URL(window.location.href));
 
 defineCustomClientStrategy('custom-query', {
-  getLocale: () => override,
+  getLocale: () => localeOverride,
   // Persisting is the cookie strategy's job; this one only ever reads the URL.
   setLocale: () => {},
 });
 
-if (override) {
+if (localeOverride) {
   const originalSetLocale = setLocale;
 
   overwriteSetLocale((locale, options) => {
     // Paraglide calls `setLocale(resolved, { reload: false })` on the first `getLocale()` to
     // persist the detected locale. Skip it for the override so the cookie keeps the user's choice.
     if (options?.reload === false) {
-      if (locale === override) return;
+      if (locale === localeOverride) return;
       return originalSetLocale(locale, options);
     }
 

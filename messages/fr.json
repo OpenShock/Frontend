@@ -51,6 +51,7 @@
   "error_meta_description": "OpenShock est actuellement indisponible",
   "error_meta_logo_alt": "Logo d'OpenShock",
   "error_fallback_message": "Une erreur s'est produite.",
+  "error_not_found_message": "Page introuvable",
   "error_not_found_description": "La page que vous cherchez n'existe pas.",
   "error_unexpected_description": "Une erreur inattendue s'est produite.",
   "error_go_back": "Retour",

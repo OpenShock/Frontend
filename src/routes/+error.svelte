@@ -23,6 +23,14 @@
     }
   });
 
+  // SvelteKit's own messages are always English, so swap those for translated ones.
+  // Messages thrown by the app itself are shown as they are.
+  function errorHeading(message: string | undefined): string {
+    if (message === 'Not Found') return m.error_not_found_message();
+    if (message === undefined || message === 'Internal Error') return m.error_fallback_message();
+    return message;
+  }
+
   const meta = {
     title: m.error_meta_title(),
     description: m.error_meta_description(),
@@ -48,7 +56,7 @@
   </div>
 
   <p class="text-foreground mt-2 text-xl font-semibold">
-    {page.error?.message ?? m.error_fallback_message()}
+    {errorHeading(page.error?.message)}
   </p>
 
   <p class="text-muted-foreground mt-1 text-sm">

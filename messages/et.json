@@ -51,6 +51,7 @@
   "error_meta_description": "OpenShock pole praegu saadaval",
   "error_meta_logo_alt": "OpenShocki logo",
   "error_fallback_message": "Midagi läks valesti.",
+  "error_not_found_message": "Lehte ei leitud",
   "error_not_found_description": "Otsitavat lehte pole olemas.",
   "error_unexpected_description": "Tekkis ootamatu viga.",
   "error_go_back": "Tagasi",
