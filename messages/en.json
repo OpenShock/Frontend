@@ -1076,5 +1076,8 @@
   ],
   "error_unexpected_response": "Unexpected server response",
   "error_internal": "Internal error occurred",
-  "error_network": "Network error occurred"
+  "error_network": "Network error occurred",
+
+  "dev_banner": "This is the OpenShock {#b}DEVELOPMENT{/b} environment. {#u}No data is saved{/u}, and it is regularly overwritten by production data.",
+  "channel_bugs_warning": "This channel might contain bugs."
 }

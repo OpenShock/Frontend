@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { asset } from '$app/paths';
   import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
   import { DotGrid } from '@openshock/svelte-core/components';
@@ -15,7 +16,7 @@
 </svelte:head>
 
 <section
-  aria-label="Home"
+  aria-label={m.sidebar_home()}
   class="relative flex h-full flex-col items-center justify-center space-y-6 overflow-hidden bg-zinc-950 text-center text-white"
   onpointermove={(e) => grid?.handlePointerMove(e)}
 >

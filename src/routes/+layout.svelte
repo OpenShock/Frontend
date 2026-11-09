@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
+  import { ParaglideMessage } from '@inlang/paraglide-js-svelte';
   import { page } from '$app/state';
   import { PUBLIC_DEVELOPMENT_BANNER } from '$app/env/public';
   import {
@@ -55,8 +57,10 @@
       {#if PUBLIC_DEVELOPMENT_BANNER}
         <div class="top-0 left-0 z-1 flex-none bg-[orangered] text-center text-white">
           <p>
-            This is the OpenShock <b>DEVELOPMENT</b> environment. <u>No data is saved</u>, and
-            regularly overwritten by production data
+            <ParaglideMessage message={m.dev_banner}>
+              {#snippet b({ children })}<b>{@render children?.()}</b>{/snippet}
+              {#snippet u({ children })}<u>{@render children?.()}</u>{/snippet}
+            </ParaglideMessage>
           </p>
         </div>
       {/if}

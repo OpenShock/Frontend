@@ -1076,5 +1076,8 @@
   ],
   "error_unexpected_response": "Unerwartete Serverantwort",
   "error_internal": "Ein interner Fehler ist aufgetreten",
-  "error_network": "Ein Netzwerkfehler ist aufgetreten"
+  "error_network": "Ein Netzwerkfehler ist aufgetreten",
+
+  "dev_banner": "Dies ist die {#b}ENTWICKLUNGS{/b}-Umgebung von OpenShock. {#u}Es werden keine Daten gespeichert{/u}, und sie wird regelmäßig mit Produktionsdaten überschrieben.",
+  "channel_bugs_warning": "Dieser Kanal kann Fehler enthalten."
 }

@@ -1076,5 +1076,8 @@
   ],
   "error_unexpected_response": "Oväntat svar från servern",
   "error_internal": "Ett internt fel uppstod",
-  "error_network": "Ett nätverksfel uppstod"
+  "error_network": "Ett nätverksfel uppstod",
+
+  "dev_banner": "Det här är OpenShocks {#b}UTVECKLINGSMILJÖ{/b}. {#u}Ingen data sparas{/u}, och den skrivs regelbundet över med produktionsdata.",
+  "channel_bugs_warning": "Den här kanalen kan innehålla buggar."
 }

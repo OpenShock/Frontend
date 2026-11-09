@@ -1079,5 +1079,8 @@
   ],
   "error_unexpected_response": "The server said something weird",
   "error_internal": "Something went oopsie inside",
-  "error_network": "The internet tripped over"
+  "error_network": "The internet tripped over",
+
+  "dev_banner": "This is the OpenShock {#b}DEVELOPMENT{/b} playground! {#u}Nothing gets saved{/u}, and it gets replaced with production data every so often~",
+  "channel_bugs_warning": "This channel might have some bugs crawling around~"
 }

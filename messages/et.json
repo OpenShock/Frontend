@@ -1076,5 +1076,8 @@
   ],
   "error_unexpected_response": "Ootamatu serveri vastus",
   "error_internal": "Tekkis sisemine viga",
-  "error_network": "Tekkis võrguviga"
+  "error_network": "Tekkis võrguviga",
+
+  "dev_banner": "See on OpenShocki {#b}ARENDUSKESKKOND{/b}. {#u}Andmeid ei salvestata{/u} ja see kirjutatakse regulaarselt üle tootmisandmetega.",
+  "channel_bugs_warning": "See kanal võib sisaldada vigu."
 }

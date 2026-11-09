@@ -68,7 +68,7 @@
       <!--
     {:else if channel === 'beta'}
       <TriangleAlert class="text-warning" />
-      <p class="text-warning">This channel might contain bugs.</p>
+      <p class="text-warning">{m.channel_bugs_warning()}</p>
     -->
     {:else}
       <TriangleAlert class="text-destructive" />

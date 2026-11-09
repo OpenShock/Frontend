@@ -541,7 +541,7 @@
   "hub_update_status_timeout": "Aikakatkaisu",
   "hub_update_confirm_title": "Vahvista laiteohjelmiston päivitys",
   "hub_update_confirm_desc": "Päivitetäänkö {#strong}{name}{/strong} versioon {#strong}{version}{/strong}?",
-  "hub_update_unstable_warning": "Tämä versio ei välttämättä ole vakaalta kanavalta, ja siinä voi olla virheitä.",
+  "hub_update_unstable_warning": "Tämä versio ei välttämättä ole vakaalta kanavalta, ja siinä voi olla bugin paskiaisia.",
   "hub_update_title": "Päivitä {name}",
   "hub_update_subtitle": "Hallitse tämän hubin laiteohjelmistopäivityksiä.",
   "hub_update_status_title": "Hubin tila",
@@ -1076,5 +1076,8 @@
   ],
   "error_unexpected_response": "Odottamaton vastaus palvelimelta",
   "error_internal": "Tapahtui sisäinen virhe",
-  "error_network": "Tapahtui verkkovirhe"
+  "error_network": "Tapahtui verkkovirhe",
+
+  "dev_banner": "Tämä on OpenShockin {#b}KEHITYSYMPÄRISTÖ{/b}. {#u}Tietoja ei tallenneta{/u}, ja ympäristö korvataan säännöllisesti tuotantotiedoilla.",
+  "channel_bugs_warning": "Tällä kanavalla voi olla bugin paskiaisia."
 }

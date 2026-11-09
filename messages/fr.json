@@ -1076,5 +1076,8 @@
   ],
   "error_unexpected_response": "Réponse inattendue du serveur",
   "error_internal": "Une erreur interne s'est produite",
-  "error_network": "Une erreur réseau s'est produite"
+  "error_network": "Une erreur réseau s'est produite",
+
+  "dev_banner": "Ceci est l'environnement de {#b}DÉVELOPPEMENT{/b} d'OpenShock. {#u}Aucune donnée n'est conservée{/u}, et il est régulièrement écrasé par les données de production.",
+  "channel_bugs_warning": "Ce canal peut contenir des bugs."
 }
