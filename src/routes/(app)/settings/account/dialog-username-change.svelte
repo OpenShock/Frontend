@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { authenticatedAccountChangeUsername } from '#lib/api/index.js';
   import User from '@lucide/svelte/icons/user';
   import UsernameInput from '#lib/components/input/UsernameInput.svelte';
@@ -36,7 +37,7 @@
     try {
       await authenticatedAccountChangeUsername({ body: { username } });
 
-      toast.success('Username changed successfully');
+      toast.success(m.account_username_toast());
 
       userState.setSelfName(username);
 
@@ -52,23 +53,25 @@
 <Dialog.Root bind:open>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Change username</Dialog.Title>
-      <Dialog.Description>Enter a new username.</Dialog.Description>
+      <Dialog.Title>{m.account_username_title()}</Dialog.Title>
+      <Dialog.Description>{m.account_username_desc()}</Dialog.Description>
     </Dialog.Header>
 
     <form class="space-y-2" onsubmit={submitUsername}>
       <UsernameInput
-        label="New Username"
-        placeholder="New Username"
+        label={m.account_new_username()}
+        placeholder={m.account_new_username()}
         autocomplete="off"
         bind:value={username}
         bind:valid={usernameValid}
         Icon={User}
       />
       <Dialog.Footer>
-        <Button type="button" variant="outline" onclick={() => (open = false)}>Cancel</Button>
+        <Button type="button" variant="outline" onclick={() => (open = false)}
+          >{m.common_cancel()}</Button
+        >
         <Button type="submit" disabled={!usernameValid || username === account.name || loading}>
-          Change Username
+          {m.account_change_username()}
         </Button>
       </Dialog.Footer>
     </form>

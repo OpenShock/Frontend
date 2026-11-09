@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { authenticatedAccountChangePassword } from '#lib/api/index.js';
   import KeyRound from '@lucide/svelte/icons/key-round';
   import { PasswordInput } from '@openshock/svelte-core/components/input';
@@ -43,7 +44,7 @@
         body: { currentPassword, newPassword: password },
       });
 
-      toast.success('Password has been changed');
+      toast.success(m.account_password_toast());
 
       open = false;
     } catch (e) {
@@ -61,22 +62,22 @@
 <Dialog.Root bind:open>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Change password</Dialog.Title>
-      <Dialog.Description>Enter your current password and choose a new one.</Dialog.Description>
+      <Dialog.Title>{m.account_password_title()}</Dialog.Title>
+      <Dialog.Description>{m.account_password_desc()}</Dialog.Description>
     </Dialog.Header>
 
     <form class="space-y-2" onsubmit={submitPassword}>
       <PasswordInput
-        label="Current Password"
-        placeholder="Current Password"
+        label={m.account_current_password()}
+        placeholder={m.account_current_password()}
         autocomplete="current-password"
         bind:value={currentPassword}
         Icon={KeyRound}
       />
 
       <PasswordInput
-        label="New Password"
-        placeholder="New Password"
+        label={m.auth_reset_password_label()}
+        placeholder={m.auth_reset_password_label()}
         autocomplete="new-password"
         bind:value={password}
         bind:valid={passwordValid}
@@ -86,8 +87,8 @@
       />
 
       <PasswordInput
-        label="Confirm New Password"
-        placeholder="Confirm New Password"
+        label={m.auth_reset_confirm_label()}
+        placeholder={m.auth_reset_confirm_label()}
         autocomplete="new-password"
         bind:value={passwordConfirm}
         Icon={KeyRound}
@@ -95,8 +96,10 @@
       />
 
       <Dialog.Footer>
-        <Button type="button" variant="outline" onclick={() => (open = false)}>Cancel</Button>
-        <Button type="submit" disabled={!canSubmitPassword}>Change Password</Button>
+        <Button type="button" variant="outline" onclick={() => (open = false)}
+          >{m.common_cancel()}</Button
+        >
+        <Button type="submit" disabled={!canSubmitPassword}>{m.account_change_password()}</Button>
       </Dialog.Footer>
     </form>
   </Dialog.Content>

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { PermissionType, tokensEditTokenV2 } from '#lib/api/index.js';
   import type { ShockerControlSettings, TokenResponseV2 } from '#lib/api/index.js';
   import type { DialogContentProps } from '@openshock/svelte-core/components/dialog-manager';
@@ -36,7 +37,7 @@
         path: { tokenId: token.id },
         body: { name, permissions, shockerControl },
       });
-      toast.success('Token edited successfully');
+      toast.success(m.token_toast_edited());
       resolve({ name, permissions, shockerControl });
     } catch (error) {
       await handleApiError(error);
@@ -66,11 +67,11 @@
 
   function nameValidation(name: string): ValidationResult {
     if (name.length === 0) {
-      return { valid: false, message: 'Name is required' };
+      return { valid: false, message: m.token_name_required() };
     }
 
     if (name.length > 64) {
-      return { valid: false, message: 'Name is too long' };
+      return { valid: false, message: m.token_name_too_long() };
     }
 
     return { valid: true };
@@ -82,19 +83,19 @@
 <div class="flex max-h-[85dvh] flex-col gap-4">
   <div class="min-h-0 space-y-4 overflow-y-auto pr-1">
     <Dialog.Header>
-      <Dialog.Title>Edit API token</Dialog.Title>
+      <Dialog.Title>{m.token_edit_title()}</Dialog.Title>
       <Dialog.Description></Dialog.Description>
     </Dialog.Header>
     <form class="space-y-4" id="edit-api-token" onsubmit={saveChanges}>
       <TextInput
-        label="Token Name"
-        placeholder="Token name..."
+        label={m.token_name_label()}
+        placeholder={m.token_name_placeholder()}
         bind:value={name}
         validationResult={nameValidationResult}
       />
 
       <div class="mt-4">
-        <h2>Permissions</h2>
+        <h2>{m.token_permissions()}</h2>
         <div class="mt-3 flex flex-col space-y-4 rounded-md border p-4">
           {#each permissionCategories as permission (permission.name)}
             <span class="capitalize">{permission.name}</span>
@@ -114,7 +115,7 @@
       </div>
 
       <div class="mt-4">
-        <h2>Shocker Control</h2>
+        <h2>{m.token_shocker_control()}</h2>
         <div class="mt-3">
           <ShockerControlSettingsEditor bind:settings={shockerControl} />
         </div>
@@ -123,13 +124,13 @@
   </div>
 
   <Dialog.Footer>
-    <Button variant="outline" onclick={close} disabled={submitting}>Cancel</Button>
+    <Button variant="outline" onclick={close} disabled={submitting}>{m.common_cancel()}</Button>
     <Button
       type="submit"
       form="edit-api-token"
       disabled={submitting || !nameValidationResult.valid}
     >
-      Save Changes
+      {m.common_save_changes()}
     </Button>
   </Dialog.Footer>
 </div>

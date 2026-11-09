@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import Bug from '@lucide/svelte/icons/bug';
   import KeyRound from '@lucide/svelte/icons/key-round';
   import Mail from '@lucide/svelte/icons/mail';
@@ -21,17 +22,17 @@
   import DangerZone from './DangerZone.svelte';
 
   const telemetryOptions: { value: TelemetryLevel; label: string; description: string }[] = [
-    { value: 'off', label: 'Off', description: 'Send nothing.' },
+    { value: 'off', label: m.account_telemetry_off(), description: m.account_telemetry_off_desc() },
     {
       value: 'errors',
-      label: 'Errors',
-      description: 'Send browser error reports only.',
+      label: m.account_telemetry_errors(),
+      description: m.account_telemetry_errors_desc(),
     },
 
     {
       value: 'full',
-      label: 'Full',
-      description: 'Error reports plus traces of API calls (no page navigations).',
+      label: m.account_telemetry_full(),
+      description: m.account_telemetry_full_desc(),
     },
   ];
 
@@ -50,8 +51,8 @@
   );
 
   registerBreadcrumbs(() => [
-    { label: 'Settings', href: 'settings/account' },
-    { label: 'Account' },
+    { label: m.sidebar_group_settings(), href: 'settings/account' },
+    { label: m.settings_breadcrumb_account() },
   ]);
 
   let account = $derived(userState.self);
@@ -64,7 +65,7 @@
 
 {#if account}
   <Container>
-    <PageHeader title="Account Settings" subtitle="Your sign-in details and account actions." />
+    <PageHeader title={m.sidebar_settings_account()} subtitle={m.account_subtitle()} />
     <div
       class="bg-card border-border flex w-full flex-col items-start gap-y-6 rounded-lg border p-6"
     >
@@ -72,13 +73,13 @@
         <div class="grow">
           <div class="flex items-center gap-2 font-medium">
             <User />
-            Username
+            {m.auth_oauth_create_username_label()}
           </div>
           <div class="text-muted-foreground">{account.name}</div>
         </div>
 
         <Button type="button" variant="outline" onclick={() => (usernameDialogOpen = true)}>
-          Change Username
+          {m.account_change_username()}
         </Button>
       </div>
 
@@ -86,7 +87,7 @@
         <div class="grow">
           <div class="flex items-center gap-2 font-medium">
             <Mail />
-            Email
+            {m.auth_forgot_email_label()}
           </div>
           <div class="text-muted-foreground">{account.email}</div>
         </div>
@@ -94,8 +95,8 @@
           type="button"
           variant="outline"
           disabled={isOAuthOnly}
-          title={isOAuthOnly ? 'Not available for OAuth-only accounts' : undefined}
-          onclick={() => (emailDialogOpen = true)}>Change Email</Button
+          title={isOAuthOnly ? m.account_oauth_only() : undefined}
+          onclick={() => (emailDialogOpen = true)}>{m.account_change_email()}</Button
         >
       </div>
 
@@ -103,11 +104,11 @@
         <div class="grow">
           <div class="flex items-center gap-2 font-medium">
             <KeyRound />
-            Password
+            {m.auth_login_password_label()}
           </div>
           {#if isOAuthOnly}
             <div class="text-muted-foreground text-sm">
-              This account signs in via OAuth and has no password.
+              {m.account_oauth_no_password()}
             </div>
           {/if}
         </div>
@@ -115,8 +116,8 @@
           type="button"
           variant="outline"
           disabled={isOAuthOnly}
-          title={isOAuthOnly ? 'Not available for OAuth-only accounts' : undefined}
-          onclick={() => (passwordDialogOpen = true)}>Change Password</Button
+          title={isOAuthOnly ? m.account_oauth_only() : undefined}
+          onclick={() => (passwordDialogOpen = true)}>{m.account_change_password()}</Button
         >
       </div>
 
@@ -126,11 +127,11 @@
             <div class="grow">
               <div class="flex items-center gap-2 font-medium">
                 <Bug />
-                Diagnostics
+                {m.account_diagnostics()}
               </div>
               <div class="text-muted-foreground text-sm">
-                Help us fix crashes and slow API calls. Reports include the error message, stack
-                trace and your IP. Off by default. {telemetryDescription}
+                {m.account_diagnostics_desc()}
+                {telemetryDescription}
               </div>
             </div>
             <ToggleGroup
@@ -138,7 +139,7 @@
               variant="outline"
               value={telemetryConsent.value}
               onValueChange={onTelemetryLevelChange}
-              aria-label="Diagnostics level"
+              aria-label={m.account_diagnostics_level()}
             >
               {#each telemetryOptions as option (option.value)}
                 <ToggleGroupItem value={option.value} aria-label={option.label}>

@@ -22,8 +22,8 @@
   );
 
   function nameValidation(name: string): ValidationResult {
-    if (name.length === 0) return { valid: false, message: 'Name is required' };
-    if (name.length > 32) return { valid: false, message: 'Name is too long' };
+    if (name.length === 0) return { valid: false, message: m.token_name_required() };
+    if (name.length > 32) return { valid: false, message: m.token_name_too_long() };
     return { valid: true };
   }
 
@@ -33,6 +33,8 @@
 </script>
 
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
+  import { ParaglideMessage } from '@inlang/paraglide-js-svelte';
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import { ControlLimitMode, tokensCreateTokenV2 } from '#lib/api/index.js';
@@ -56,9 +58,9 @@
   } from '../shocker-control-settings.svelte';
 
   registerBreadcrumbs(() => [
-    { label: 'Settings', href: 'settings/account' },
-    { label: 'API Tokens', href: 'settings/api-tokens' },
-    { label: 'New' },
+    { label: m.sidebar_group_settings(), href: 'settings/account' },
+    { label: m.sidebar_settings_api_tokens(), href: 'settings/api-tokens' },
+    { label: m.token_new_breadcrumb() },
   ]);
 
   // Form state (prefilled from query params, then freely editable).
@@ -101,8 +103,7 @@
     // an attacker (remote http(s) origins, javascript:/data: schemes, …).
     if (redirectUri !== null && !isValidTokenRedirectUri(redirectUri)) {
       redirectUri = null;
-      parseError =
-        'The provided redirect_uri is not allowed. Only loopback addresses or custom application schemes are permitted.';
+      parseError = m.token_redirect_not_allowed();
       return;
     }
 
@@ -111,8 +112,7 @@
 
     // An external request must declare what it wants.
     if (external && (!qName || !qPermissions)) {
-      parseError =
-        'Required get parameters are missing. Make sure name, redirect_uri, and permissions are provided.';
+      parseError = m.token_params_missing();
       return;
     }
 
@@ -124,7 +124,7 @@
         (p) => !Object.values(PermissionType).includes(p as PermissionType)
       );
       if (invalid.length > 0) {
-        parseError = `Invalid permissions provided: ${invalid.join(', ')}`;
+        parseError = m.token_invalid_permissions({ list: invalid.join(', ') });
         return;
       }
       permissions = requested as PermissionType[];
@@ -172,7 +172,7 @@
         body: { name, validUntil: expireInstant, permissions, shockerControl },
       });
       tokenSecret = response.token;
-      toast.success('Token created successfully');
+      toast.success(m.token_toast_created());
       if (isExternal) redirectBack();
     } catch (error) {
       await handleApiError(error);
@@ -197,7 +197,7 @@
   <Card.Root class="w-lg max-w-2xl shrink-0">
     {#if parseError}
       <Card.Header>
-        <Card.Title class="text-2xl"><h1>API Token Request</h1></Card.Title>
+        <Card.Title class="text-2xl"><h1>{m.token_request_title()}</h1></Card.Title>
       </Card.Header>
       <Card.Content>
         <span class="text-destructive">{parseError}</span>
@@ -206,30 +206,30 @@
       <Card.Header>
         <Card.Title class="flex items-center gap-2 text-2xl">
           <CircleCheck class="text-success" />
-          <h1>Access granted</h1>
+          <h1>{m.token_access_granted()}</h1>
         </Card.Title>
         <Card.Description>
-          The token has been created and shared with the application. Redirecting you back to<br />
+          {m.token_shared_redirecting()}<br />
           <b>{redirectUri}</b>
         </Card.Description>
       </Card.Header>
       <Card.Content>
         <span class="text-muted-foreground text-sm">
-          If you are not redirected automatically, use the button below.
+          {m.token_not_redirected()}
         </span>
       </Card.Content>
       <Card.Footer class="flex justify-end space-x-2">
-        <Button variant="outline" onclick={redirectBack}>Retry</Button>
-        <Button href={resolve('settings/api-tokens')}>Finish</Button>
+        <Button variant="outline" onclick={redirectBack}>{m.common_retry()}</Button>
+        <Button href={resolve('settings/api-tokens')}>{m.token_finish()}</Button>
       </Card.Footer>
     {:else if tokenSecret}
       <Card.Header>
         <Card.Title class="flex items-center gap-2 text-2xl">
           <CircleCheck class="text-success" />
-          <h1>API Token Generated</h1>
+          <h1>{m.token_generated_title()}</h1>
         </Card.Title>
         <Card.Description>
-          Please copy your API Token now, you will not be able to view it again later!
+          {m.token_copy_now()}
         </Card.Description>
       </Card.Header>
       <Card.Content class="flex flex-col space-y-4">
@@ -241,33 +241,33 @@
       </Card.Content>
 
       <Card.Footer class="flex justify-end"
-        ><Button href={resolve('settings/api-tokens')}>Done</Button></Card.Footer
+        ><Button href={resolve('settings/api-tokens')}>{m.common_done()}</Button></Card.Footer
       >
     {:else}
       <Card.Header>
         <Card.Title class="text-2xl">
-          <h1>{isExternal ? 'API Token Request' : 'New API Token'}</h1>
+          <h1>{isExternal ? m.token_request_title() : m.token_new_title()}</h1>
         </Card.Title>
         <Card.Description>
           {#if isExternal}
-            An external application is requesting access to your account. Review and adjust the
-            permissions below before allowing access.
+            {m.token_external_desc()}
           {:else}
-            Configure and generate a new API token for your account.
+            {m.token_new_desc()}
           {/if}
         </Card.Description>
       </Card.Header>
       <Card.Content class="flex flex-col space-y-4">
         {#if isExternal}
           <span>
-            <b>{name}</b> is requesting an API Token. Your token will be shared with the application
-            at<br /><b>{redirectUri}</b>
+            <ParaglideMessage message={m.token_external_requesting} inputs={{ name }}>
+              {#snippet b({ children })}<b>{@render children?.()}</b>{/snippet}
+            </ParaglideMessage><br /><b>{redirectUri}</b>
           </span>
         {/if}
 
         <TextInput
-          label="Token Name"
-          placeholder="Token name..."
+          label={m.token_name_label()}
+          placeholder={m.token_name_placeholder()}
           bind:value={name}
           validationResult={nameValidationResult}
         />
@@ -275,7 +275,7 @@
         <ExpirationPicker bind:option={expire} bind:instant={expireInstant} />
 
         <div>
-          <h2>Permissions</h2>
+          <h2>{m.token_permissions()}</h2>
           <div class="mt-3 flex flex-col space-y-4 rounded-md border p-4">
             {#each permissionCategories as permission (permission.name)}
               <span>{capitalizeFirstLetter(permission.name)}</span>
@@ -295,7 +295,7 @@
         </div>
 
         <div>
-          <h2>Shocker Control</h2>
+          <h2>{m.token_shocker_control()}</h2>
           <div class="mt-3">
             <ShockerControlSettingsEditor bind:settings={shockerControl} />
           </div>
@@ -310,13 +310,13 @@
           {#if creating}
             <Spinner />
           {:else if isExternal}
-            Allow
+            {m.token_allow()}
           {:else}
-            Generate
+            {m.token_generate()}
           {/if}
         </Button>
         <Button href={isExternal ? resolve('') : resolve('settings/api-tokens')} variant="outline">
-          {isExternal ? 'Deny' : 'Cancel'}
+          {isExternal ? m.token_deny() : m.common_cancel()}
         </Button>
       </Card.Footer>
     {/if}
