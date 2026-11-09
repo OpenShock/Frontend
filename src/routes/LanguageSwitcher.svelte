@@ -9,6 +9,8 @@
 
   // Each language is named in itself, so users can find theirs whatever the page is in.
   function nativeName(locale: Locale): string {
+    // Not a real language, so Intl has no name for it.
+    if (locale === 'uwu') return 'UwU';
     const name = new Intl.DisplayNames([locale], { type: 'language' }).of(locale) ?? locale;
     return name.charAt(0).toLocaleUpperCase(locale) + name.slice(1);
   }
