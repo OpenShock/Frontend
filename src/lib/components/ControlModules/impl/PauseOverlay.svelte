@@ -58,9 +58,9 @@
     <Pause class="size-8 text-white/60" />
     <span class="text-sm font-semibold text-white">
       {#if pauseReason}
-        Paused at {pauseReason} level
+        {pauseReason}
       {:else}
-        Paused
+        {m.common_paused()}
       {/if}
     </span>
   {/if}

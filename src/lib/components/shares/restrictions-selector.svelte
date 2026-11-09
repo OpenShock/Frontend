@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { Volume2, Waves, Zap } from '@lucide/svelte';
   import { formatDurationSeconds } from '@openshock/svelte-core/utils';
   import { Label } from '@openshock/svelte-core/components/ui/label';
@@ -23,10 +24,10 @@
   let { permissions = $bindable(), limits = $bindable() }: Props = $props();
 
   const features = [
-    { key: 'shock', label: 'Shock', icon: Zap },
-    { key: 'vibrate', label: 'Vibrate', icon: Waves },
-    { key: 'sound', label: 'Sound', icon: Volume2 },
-    { key: 'live', label: 'Live Control', icon: LiveControlIcon },
+    { key: 'shock', label: m.control_type_shock(), icon: Zap },
+    { key: 'vibrate', label: m.control_type_vibrate(), icon: Waves },
+    { key: 'sound', label: m.control_type_sound(), icon: Volume2 },
+    { key: 'live', label: m.perm_live_control(), icon: LiveControlIcon },
   ] satisfies { key: keyof Props['permissions']; label: string; icon: Component }[];
 </script>
 
@@ -53,7 +54,7 @@
   <div class="flex flex-col gap-3">
     <div class="space-y-1.5">
       <div class="flex items-center justify-between">
-        <Label class="text-xs">Max Intensity</Label>
+        <Label class="text-xs">{m.control_max_intensity()}</Label>
         <span class="text-muted-foreground font-mono text-xs">{limits.intensity}%</span>
       </div>
       <Slider type="single" bind:value={limits.intensity} min={1} max={100} step={1} />
@@ -61,7 +62,7 @@
 
     <div class="space-y-1.5">
       <div class="flex items-center justify-between">
-        <Label class="text-xs">Max Duration</Label>
+        <Label class="text-xs">{m.control_max_duration()}</Label>
         <span class="text-muted-foreground font-mono text-xs"
           >{formatDurationSeconds(limits.duration / 1000)}</span
         >

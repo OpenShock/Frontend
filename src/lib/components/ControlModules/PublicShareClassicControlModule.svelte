@@ -74,7 +74,7 @@
     {#if isPaused}
       <div class="text-destructive flex items-center gap-1 text-sm">
         <Pause size={14} />
-        <span>Paused at {pauseReason} level</span>
+        <span>{pauseReason ?? m.common_paused()}</span>
       </div>
     {/if}
 
