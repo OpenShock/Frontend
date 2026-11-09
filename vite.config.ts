@@ -1,4 +1,5 @@
 /// <reference types="vitest/config" />
+import { paraglideVitePlugin } from '@inlang/paraglide-js';
 import adapterCloudflare from '@sveltejs/adapter-cloudflare';
 import adapterNode from '@sveltejs/adapter-node';
 import { type Config as KitConfig, sveltekit } from '@sveltejs/kit/vite';
@@ -288,6 +289,8 @@ export default defineConfig(({ command, mode, isPreview }) => {
       jsBannerPlugin('/*! For licenses information, see LICENSES.txt */'),
       tailwindcss(),
       sveltekit(buildSveltekitConfig(dotenv)),
+      // Options live in project.inlang/paraglide.config.ts, shared with the `paraglide-js` CLI.
+      paraglideVitePlugin({ project: './project.inlang' }),
       devtoolsJson(),
       license({
         thirdParty: {

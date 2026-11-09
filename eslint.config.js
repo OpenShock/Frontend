@@ -64,6 +64,7 @@ export default defineConfig(
       'yarn.lock',
       'src/lib/api/internal',
       'src/lib/components/ui',
+      'src/lib/paraglide',
       // Workspace packages (e.g. svelte-core submodule) own their own linting
       'packages/**',
     ],

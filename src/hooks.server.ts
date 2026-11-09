@@ -1,6 +1,25 @@
+import '#lib/i18n/query-locale.js';
+import { getTextDirection } from '#lib/paraglide/runtime.js';
+import { paraglideMiddleware } from '#lib/paraglide/server.js';
 import { PRIVATE_BACKEND_TLS_INSECURE } from '$app/env/private';
 import { PUBLIC_GITHUB_PROJECT_URL } from '$app/env/public';
-import type { Handle, ServerInit } from '@sveltejs/kit/hooks';
+import { type Handle, type ServerInit, sequence } from '@sveltejs/kit/hooks';
+
+/**
+ * Resolves the request's locale and scopes it to this request, so `getLocale()` and message
+ * functions return it during SSR.
+ * Also fills the `%lang%` and `%dir%` placeholders in app.html.
+ */
+const i18nHandle: Handle = ({ event, resolve }) =>
+  paraglideMiddleware(event.request, ({ request, locale }) =>
+    resolve(
+      { ...event, request },
+      {
+        transformPageChunk: ({ html }) =>
+          html.replace('%lang%', locale).replace('%dir%', getTextDirection(locale)),
+      }
+    )
+  );
 
 /**
  * Security + metadata headers for every dynamically rendered response.
@@ -9,7 +28,7 @@ import type { Handle, ServerInit } from '@sveltejs/kit/hooks';
  * deploy — SSR'd pages, and everything served by the Node/Docker deploy, get
  * their headers here. Keep the two lists in sync.
  */
-export const handle: Handle = async ({ event, resolve }) => {
+const securityHeadersHandle: Handle = async ({ event, resolve }) => {
   const response = await resolve(event);
 
   const headers: Record<string, string> = {
@@ -34,6 +53,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 
   return response;
 };
+
+export const handle = sequence(i18nHandle, securityHeadersHandle);
 
 /**
  * Runs once when the SvelteKit server boots (Node adapter), before any request

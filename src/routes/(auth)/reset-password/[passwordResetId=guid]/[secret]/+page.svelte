@@ -11,8 +11,9 @@
   import { validatePasswordMatch } from '@openshock/svelte-core/inputvalidation';
   import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
   import { toast } from 'svelte-sonner';
+  import { m } from '#lib/paraglide/messages.js';
 
-  registerBreadcrumbs(() => [{ label: 'Reset Password' }]);
+  registerBreadcrumbs(() => [{ label: m.auth_reset_breadcrumb() }]);
 
   let passwordResetId = $derived(page.params.passwordResetId!);
   let secret = $derived(page.params.secret!);
@@ -53,7 +54,7 @@
         body: { password },
       });
 
-      toast.success('Password has been reset');
+      toast.success(m.auth_reset_toast_success());
       goto(resolve('login'));
     } catch (e) {
       await handleApiError(e);
@@ -69,14 +70,14 @@
 
 <Card.Root>
   <Card.Header class="text-center">
-    <Card.Title class="text-xl"><h1>Reset Password</h1></Card.Title>
+    <Card.Title class="text-xl"><h1>{m.auth_reset_title()}</h1></Card.Title>
     <Card.Description>
       {#if checking}
-        Verifying reset link...
+        {m.auth_reset_checking()}
       {:else if valid}
-        Choose a new password for your account
+        {m.auth_reset_choose_password()}
       {:else}
-        This reset link is invalid or has expired
+        {m.auth_reset_invalid()}
       {/if}
     </Card.Description>
   </Card.Header>
@@ -84,8 +85,8 @@
     {#if valid}
       <form class="flex flex-col gap-4" onsubmit={submitReset}>
         <PasswordInput
-          label="New Password"
-          placeholder="New Password"
+          label={m.auth_reset_password_label()}
+          placeholder={m.auth_reset_password_placeholder()}
           autocomplete="new-password"
           bind:value={password}
           bind:valid={passwordValid}
@@ -95,19 +96,19 @@
         />
 
         <PasswordInput
-          label="Confirm New Password"
-          placeholder="Confirm New Password"
+          label={m.auth_reset_confirm_label()}
+          placeholder={m.auth_reset_confirm_placeholder()}
           autocomplete="new-password"
           bind:value={passwordConfirm}
           Icon={KeyRound}
           validate={passwordConfirmValid}
         />
 
-        <Button type="submit" disabled={!canSubmit}>Reset Password</Button>
+        <Button type="submit" disabled={!canSubmit}>{m.auth_reset_submit()}</Button>
       </form>
     {:else if !checking}
       <Button class="w-full" onclick={() => goto(resolve('forgot-password'))}
-        >Request a new reset link</Button
+        >{m.auth_reset_request_new()}</Button
       >
     {/if}
   </Card.Content>

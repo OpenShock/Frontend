@@ -44,6 +44,7 @@
   import { prefixBase } from '#lib/utils/url.js';
   import LogoMark from '#lib/components/svg/LogoMark.svelte';
   import LogoText from '#lib/components/svg/LogoText.svelte';
+  import { m } from '#lib/paraglide/messages.js';
 
   let currentUser = $derived(userState.self);
 
@@ -77,7 +78,7 @@
 
     let menus: Menu[] = [
       {
-        title: 'Home',
+        title: m.sidebar_home(),
         Icon: House,
         href: isAuthenticated ? 'home' : '',
       },
@@ -85,24 +86,24 @@
 
     if (isAuthenticated) {
       menus.push(
-        { title: 'Shockers', Icon: Zap, href: 'shockers/own' },
+        { title: m.sidebar_shockers(), Icon: Zap, href: 'shockers/own' },
         {
-          title: 'Shared Shockers',
+          title: m.sidebar_shared_shockers(),
           Icon: Share2,
           href: 'shockers/shared',
         },
         {
-          title: 'Hubs',
+          title: m.sidebar_hubs(),
           Icon: Router,
           href: 'hubs',
         },
         {
-          title: 'User Shares',
+          title: m.sidebar_user_shares(),
           Icon: Users,
           href: 'shares/user',
         },
         {
-          title: 'Public Shares',
+          title: m.sidebar_public_shares(),
           Icon: Link,
           href: 'shares/public',
         }
@@ -112,61 +113,61 @@
     // Only time we dont show the menu is if its on a mobile device without serial support
     if (!(!isSerialSupported && sidebarContext.isMobile)) {
       menus.push({
-        title: 'Serial Terminal',
+        title: m.sidebar_serial_terminal(),
         Icon: SquareTerminalIcon,
         href: 'terminal',
       });
     }
 
     return {
-      title: 'General',
+      title: m.sidebar_group_general(),
       menus,
     };
   });
   const adminGroup: Group = {
-    title: 'Admin',
+    title: m.sidebar_group_admin(),
     collapsible: { open: false },
     menus: [
       {
-        title: 'Monitoring',
+        title: m.sidebar_admin_monitoring(),
         Icon: SquareActivity,
         subItems: [
           {
-            title: 'Online Hubs',
+            title: m.sidebar_admin_online_hubs(),
             href: 'admin/online-hubs',
           },
           {
-            title: 'Online Gateways',
+            title: m.sidebar_admin_online_gateways(),
             href: 'admin/online-gateways',
           },
         ],
       },
       {
-        title: 'Management',
+        title: m.sidebar_admin_management(),
         Icon: Wrench,
         subItems: [
           {
-            title: 'Users',
+            title: m.sidebar_admin_users(),
             href: 'admin/users',
           },
           {
-            title: 'Blacklists',
+            title: m.sidebar_admin_blacklists(),
             href: 'admin/blacklists',
           },
           {
-            title: 'Webhooks',
+            title: m.sidebar_admin_webhooks(),
             href: 'admin/webhooks',
           },
           {
-            title: 'Mail',
+            title: m.sidebar_admin_mail(),
             href: 'admin/mail',
           },
           {
-            title: 'Automation Tokens',
+            title: m.sidebar_admin_automation_tokens(),
             href: 'admin/automation-tokens',
           },
           {
-            title: 'Configuration',
+            title: m.sidebar_admin_configuration(),
             href: 'admin/config',
           },
         ],
@@ -175,7 +176,7 @@
       ...(PUBLIC_HANGFIRE_URL
         ? [
             {
-              title: 'Hangfire',
+              title: m.sidebar_admin_hangfire(),
               Icon: Timer,
               externalHref: PUBLIC_HANGFIRE_URL,
               target: '_blank',
@@ -185,30 +186,30 @@
     ],
   };
   const settingsGroup: Group = {
-    title: 'Settings',
+    title: m.sidebar_group_settings(),
     menus: [
       {
-        title: 'API Tokens',
+        title: m.sidebar_settings_api_tokens(),
         Icon: KeyRound,
         href: 'settings/api-tokens',
       },
       {
-        title: 'Sessions',
+        title: m.sidebar_settings_sessions(),
         Icon: MonitorSmartphone,
         href: 'settings/sessions',
       },
       {
-        title: 'Audit Log',
+        title: m.sidebar_settings_audit_log(),
         Icon: ScrollText,
         href: 'settings/audit-log',
       },
       {
-        title: 'Connections',
+        title: m.sidebar_settings_connections(),
         Icon: IdCard,
         href: 'settings/connections',
       },
       {
-        title: 'Account Settings',
+        title: m.sidebar_settings_account(),
         Icon: Settings,
         href: 'settings/account',
       },
@@ -326,7 +327,7 @@
 <!-- group-data-[collapsible=icon]:opacity-0 -->
 <Root collapsible="icon">
   <Header>
-    <a href={currentUser ? resolve('home') : resolve('')} aria-label="OpenShock home">
+    <a href={currentUser ? resolve('home') : resolve('')} aria-label={m.sidebar_home_link_label()}>
       <span class="pointer-events-none flex">
         <LogoMark class="ml-[0.667px] h-7.5 shrink-0" />
 
