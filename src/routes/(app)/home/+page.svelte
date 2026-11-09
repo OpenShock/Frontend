@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { Link, Router, Share2, Zap } from '@lucide/svelte';
   import { resolve } from '$app/paths';
   import { Container, PageHeader } from '@openshock/svelte-core/components';
@@ -9,7 +10,7 @@
   import { onlineHubs, ownHubs, refreshOwnHubs } from '#lib/state/hubs-state.svelte.js';
   import { onMount } from 'svelte';
 
-  registerBreadcrumbs(() => [{ label: 'Home', href: 'home' }]);
+  registerBreadcrumbs(() => [{ label: m.home_breadcrumb(), href: 'home' }]);
 
   let shockerCount = $derived(ownHubs.values().reduce((sum, hub) => sum + hub.shockers.length, 0));
   let hubCount = $derived(ownHubs.size);
@@ -26,8 +27,8 @@
 <Container>
   <div class="flex w-full flex-col gap-6">
     <PageHeader
-      title="Welcome back{userState.self ? `, ${userState.self.name}` : ''}"
-      subtitle="Here's an overview of your OpenShock setup."
+      title={userState.self ? m.home_welcome_name({ name: userState.self.name }) : m.home_welcome()}
+      subtitle={m.home_subtitle()}
       class="mb-0"
     />
 
@@ -35,7 +36,7 @@
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
       <Card.Root>
         <Card.Header class="flex flex-row items-center justify-between pb-2">
-          <Card.Title class="text-sm font-medium">Shockers</Card.Title>
+          <Card.Title class="text-sm font-medium">{m.shockers_title()}</Card.Title>
           <Zap class="text-muted-foreground size-4" />
         </Card.Header>
         <Card.Content>
@@ -44,19 +45,19 @@
       </Card.Root>
       <Card.Root>
         <Card.Header class="flex flex-row items-center justify-between pb-2">
-          <Card.Title class="text-sm font-medium">Hubs</Card.Title>
+          <Card.Title class="text-sm font-medium">{m.hubs_title()}</Card.Title>
           <Router class="text-muted-foreground size-4" />
         </Card.Header>
         <Card.Content>
           <div class="text-2xl font-bold">{hubCount}</div>
           <p class="text-muted-foreground text-xs">
-            {onlineHubCount} online
+            {m.home_hubs_online({ count: onlineHubCount })}
           </p>
         </Card.Content>
       </Card.Root>
       <Card.Root>
         <Card.Header class="flex flex-row items-center justify-between pb-2">
-          <Card.Title class="text-sm font-medium">Hub Status</Card.Title>
+          <Card.Title class="text-sm font-medium">{m.home_hub_status()}</Card.Title>
           <div
             class={onlineHubCount > 0
               ? 'bg-success size-2 rounded-full'
@@ -66,13 +67,13 @@
         <Card.Content>
           <div class="text-2xl font-bold">
             {#if hubCount === 0}
-              No hubs
+              {m.home_no_hubs()}
             {:else if onlineHubCount === hubCount}
-              All online
+              {m.home_all_online()}
             {:else if onlineHubCount === 0}
-              All offline
+              {m.home_all_offline()}
             {:else}
-              {onlineHubCount}/{hubCount} online
+              {m.home_some_online({ online: onlineHubCount, total: hubCount })}
             {/if}
           </div>
         </Card.Content>
@@ -81,7 +82,7 @@
 
     <!-- Quick links -->
     <div>
-      <h2 class="mb-3 text-lg font-semibold">Quick Links</h2>
+      <h2 class="mb-3 text-lg font-semibold">{m.home_quick_links()}</h2>
       <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Button
           variant="outline"
@@ -90,16 +91,16 @@
         >
           <Zap class="size-5" />
           <div class="text-left">
-            <div class="font-medium">My Shockers</div>
-            <div class="text-muted-foreground text-xs">Control your shockers</div>
+            <div class="font-medium">{m.home_my_shockers()}</div>
+            <div class="text-muted-foreground text-xs">{m.home_my_shockers_desc()}</div>
           </div>
         </Button>
 
         <Button variant="outline" class="h-auto justify-start gap-3 p-4" href={resolve('hubs')}>
           <Router class="size-5" />
           <div class="text-left">
-            <div class="font-medium">Hubs</div>
-            <div class="text-muted-foreground text-xs">Manage your hubs</div>
+            <div class="font-medium">{m.hubs_title()}</div>
+            <div class="text-muted-foreground text-xs">{m.home_hubs_desc()}</div>
           </div>
         </Button>
         <Button
@@ -109,8 +110,8 @@
         >
           <Share2 class="size-5" />
           <div class="text-left">
-            <div class="font-medium">Shared Shockers</div>
-            <div class="text-muted-foreground text-xs">Shockers shared with you</div>
+            <div class="font-medium">{m.shared_shockers_title()}</div>
+            <div class="text-muted-foreground text-xs">{m.home_shared_desc()}</div>
           </div>
         </Button>
         <Button
@@ -120,8 +121,8 @@
         >
           <Link class="size-5" />
           <div class="text-left">
-            <div class="font-medium">Public Shares</div>
-            <div class="text-muted-foreground text-xs">Manage share links</div>
+            <div class="font-medium">{m.sidebar_public_shares()}</div>
+            <div class="text-muted-foreground text-xs">{m.home_public_desc()}</div>
           </div>
         </Button>
       </div>
@@ -131,30 +132,29 @@
     {#if hubCount === 0}
       <Card.Root class="border-dashed">
         <Card.Header>
-          <Card.Title>Get Started</Card.Title>
+          <Card.Title>{m.home_get_started()}</Card.Title>
           <Card.Description>
-            You don't have any hubs yet. Create a hub to connect your first device, then add
-            shockers to it.
+            {m.home_get_started_desc()}
           </Card.Description>
         </Card.Header>
 
         <Card.Footer
-          ><Button href={resolve('hubs')}><Router class="size-4" />Set Up a Hub</Button
+          ><Button href={resolve('hubs')}><Router class="size-4" />{m.home_set_up_hub()}</Button
           ></Card.Footer
         >
       </Card.Root>
     {:else if shockerCount === 0}
       <Card.Root class="border-dashed">
         <Card.Header>
-          <Card.Title>Add Your First Shocker</Card.Title>
+          <Card.Title>{m.home_first_shocker()}</Card.Title>
           <Card.Description>
-            You have {hubCount} hub{hubCount > 1 ? 's' : ''} set up. Add a shocker to start controlling
-            it.
+            {m.home_first_shocker_desc({ count: hubCount })}
           </Card.Description>
         </Card.Header>
 
         <Card.Footer
-          ><Button href={resolve('shockers/own')}><Zap class="size-4" />Go to Shockers</Button
+          ><Button href={resolve('shockers/own')}
+            ><Zap class="size-4" />{m.home_go_to_shockers()}</Button
           ></Card.Footer
         >
       </Card.Root>

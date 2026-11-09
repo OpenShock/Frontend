@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
+  import { ParaglideMessage } from '@inlang/paraglide-js-svelte';
   import {
     devicesEditDevice,
     devicesGetPairCode,
@@ -44,12 +46,12 @@
 
   let { hub }: Props = $props();
 
-  const copyId = () => copyToClipboard(hub.id, 'ID copied to clipboard');
+  const copyId = () => copyToClipboard(hub.id, m.common_id_copied());
 
   async function sendHubCommand(send: (connection: HubConnection) => Promise<void>) {
     const connection = getConnection();
     if (connection?.state !== HubConnectionState.Connected) {
-      toast.error('Not connected to the server', { description: 'Try again in a moment.' });
+      toast.error(m.hub_toast_not_connected(), { description: m.hub_toast_try_later() });
       return;
     }
     try {
@@ -72,19 +74,19 @@
 
   const rebootHub = () =>
     confirmHubCommand(
-      `Reboot ${hub.name}?`,
-      'The hub will disconnect and restart. Any shockers paired to it stop responding until it comes back online.',
-      'Reboot',
+      m.hub_reboot_title({ name: hub.name }),
+      m.hub_reboot_desc(),
+      m.hub_reboot(),
       (connection) => serializeRebootMessage(connection, hub.id)
     );
 
   const setCaptivePortal = (enabled: boolean) =>
     confirmHubCommand(
-      enabled ? `Enable Wi-Fi hotspot on ${hub.name}?` : `Disable Wi-Fi hotspot on ${hub.name}?`,
       enabled
-        ? 'The hub broadcasts its own setup network. It stays reachable on your Wi-Fi, but the hotspot is open to anyone in range until you turn it off.'
-        : 'The setup hotspot shuts down. If the hub is not already on your Wi-Fi you will need physical access to set it up again.',
-      enabled ? 'Enable' : 'Disable',
+        ? m.hub_hotspot_enable_title({ name: hub.name })
+        : m.hub_hotspot_disable_title({ name: hub.name }),
+      enabled ? m.hub_hotspot_enable_desc() : m.hub_hotspot_disable_desc(),
+      enabled ? m.common_enable() : m.common_disable(),
       (connection) => serializeCaptivePortalMessage(connection, hub.id, enabled)
     );
 
@@ -107,8 +109,8 @@
 
   async function openDeleteDialog() {
     const result = await dialog.confirm({
-      title: 'Are you sure?',
-      confirmButtonText: 'Delete',
+      title: m.common_are_you_sure(),
+      confirmButtonText: m.common_delete(),
       data: hub,
       descSnippet: deleteDescSnippet,
     });
@@ -167,15 +169,19 @@
 
 {#snippet editSnippet(props: DialogRenderProps<{ name: string }>)}
   <Dialog.Header>
-    <Dialog.Title>Edit hub</Dialog.Title>
+    <Dialog.Title>{m.hub_edit_title()}</Dialog.Title>
   </Dialog.Header>
-  <TextInput label="Name" placeholder={hub.name} bind:value={props.data.name} />
-  <Button onclick={() => editHub(props.data.name.trim(), props.close)}>Apply</Button>
+  <TextInput label={m.common_name()} placeholder={hub.name} bind:value={props.data.name} />
+  <Button onclick={() => editHub(props.data.name.trim(), props.close)}
+    >{m.terminal_cfg_apply()}</Button
+  >
 {/snippet}
 
 {#snippet deleteDescSnippet(h: Hub)}
-  You are about to delete hub "<strong>{h.name}</strong>"<br />
-  This will also delete the following shockers:
+  <ParaglideMessage message={m.hub_delete_desc} inputs={{ name: h.name }}>
+    {#snippet strong({ children })}<strong>{@render children?.()}</strong>{/snippet}
+  </ParaglideMessage><br />
+  {m.hub_delete_shockers()}
   <div class="flex justify-center gap-2 pt-2 text-sm sm:justify-start">
     {#each h.shockers as shocker (shocker.id)}
       <Badge>{shocker.name}</Badge>
@@ -191,26 +197,31 @@
   <Dialog.Header>
     <Dialog.Title>
       {props.data.loading
-        ? 'Generating...'
+        ? m.common_generating()
         : consumed
-          ? 'Hub paired'
+          ? m.hub_pair_title_paired()
           : props.data.code
-            ? 'Pair code generated'
-            : 'Generate pair code?'}
+            ? m.hub_pair_title_generated()
+            : m.hub_pair_title_generate()}
     </Dialog.Title>
     {#if !props.data.loading}
       <Dialog.Description>
         {#if consumed}
-          <strong>{hub.name}</strong> consumed this pair code and is now paired.<br />
-          The code has been used and is no longer valid.
+          <ParaglideMessage message={m.hub_pair_consumed} inputs={{ name: hub.name }}>
+            {#snippet strong({ children })}<strong>{@render children?.()}</strong>{/snippet}
+          </ParaglideMessage><br />
+          {m.hub_pair_used()}
         {:else if props.data.code}
-          Pair code generated for <strong>{hub.name}</strong><br />
-          The code below will not be accessible later, please copy it now and update clients with it
+          <ParaglideMessage message={m.hub_pair_generated_for} inputs={{ name: hub.name }}>
+            {#snippet strong({ children })}<strong>{@render children?.()}</strong>{/snippet}
+          </ParaglideMessage><br />
+          {m.hub_copy_now()}
         {:else}
-          You are about to generate a pair code for <strong>{hub.name}</strong><br />
-          It will be valid for 15 minutes after its creation.<br />
-          There is only one active pair code per hub, newly generated ones will override the older active
-          ones.
+          <ParaglideMessage message={m.hub_pair_generate_for} inputs={{ name: hub.name }}>
+            {#snippet strong({ children })}<strong>{@render children?.()}</strong>{/snippet}
+          </ParaglideMessage><br />
+          {m.hub_pair_valid_for()}<br />
+          {m.hub_pair_one_active()}
         {/if}
       </Dialog.Description>
     {/if}
@@ -219,17 +230,17 @@
     {#if consumed}
       <div class="text-success flex items-center gap-2">
         <CircleCheck class="size-5" />
-        <span class="text-sm font-medium">Pairing complete</span>
+        <span class="text-sm font-medium">{m.hub_pair_complete()}</span>
       </div>
-      <Button onclick={props.close}>Done</Button>
+      <Button onclick={props.close}>{m.common_done()}</Button>
     {:else if props.data.code}
       <div>
-        <strong class="text-muted-foreground text-sm font-medium">Pair code:</strong>
+        <strong class="text-muted-foreground text-sm font-medium">{m.hub_pair_code_label()}</strong>
         <CopyInput value={props.data.code} />
       </div>
-      <Button onclick={props.close}>Code has been copied, close</Button>
+      <Button onclick={props.close}>{m.hub_pair_copied_close()}</Button>
     {:else}
-      <Button onclick={() => generatePairCode(props.data)}>Get Pair Code</Button>
+      <Button onclick={() => generatePairCode(props.data)}>{m.hub_pair_get()}</Button>
     {/if}
   {/if}
 {/snippet}
@@ -240,20 +251,24 @@
   <Dialog.Header>
     <Dialog.Title>
       {props.data.loading
-        ? 'Generating...'
+        ? m.common_generating()
         : props.data.token
-          ? 'Token generated'
-          : 'Are you sure?'}
+          ? m.hub_token_generated()
+          : m.common_are_you_sure()}
     </Dialog.Title>
     {#if !props.data.loading}
       <Dialog.Description>
         {#if props.data.token}
-          New token generated for <strong>{hub.name}</strong><br />
-          The code below will not be accessible later, please copy it now and update clients with it
+          <ParaglideMessage message={m.hub_token_generated_for} inputs={{ name: hub.name }}>
+            {#snippet strong({ children })}<strong>{@render children?.()}</strong>{/snippet}
+          </ParaglideMessage><br />
+          {m.hub_copy_now()}
         {:else}
-          You are about to regenerate the token for <strong>{hub.name}</strong><br />
-          This action will invalidate the current token and disconnect clients using it<br />
-          Are you sure you want to do this?
+          <ParaglideMessage message={m.hub_token_regenerate_for} inputs={{ name: hub.name }}>
+            {#snippet strong({ children })}<strong>{@render children?.()}</strong>{/snippet}
+          </ParaglideMessage><br />
+          {m.hub_token_invalidate()}<br />
+          {m.hub_token_confirm()}
         {/if}
       </Dialog.Description>
     {/if}
@@ -261,51 +276,51 @@
   {#if !props.data.loading}
     {#if props.data.token}
       <div>
-        <strong class="text-muted-foreground text-sm font-medium">New token:</strong>
+        <strong class="text-muted-foreground text-sm font-medium">{m.hub_token_label()}</strong>
         <CopyInput value={props.data.token} />
       </div>
-      <Button onclick={props.close}>Token has been copied, close</Button>
+      <Button onclick={props.close}>{m.hub_token_copied_close()}</Button>
     {:else}
-      <Button onclick={() => regenerateToken(props.data)}>Regenerate Token</Button>
+      <Button onclick={() => regenerateToken(props.data)}>{m.hub_token_regenerate()}</Button>
     {/if}
   {/if}
 {/snippet}
 
 <TableActionMenu>
-  <DropdownMenu.Label>Hub</DropdownMenu.Label>
+  <DropdownMenu.Label>{m.shocker_hub()}</DropdownMenu.Label>
   <DropdownMenu.Group>
     <DropdownMenu.Item class="cursor-pointer" onclick={() => goto(resolve(`hubs/${hub.id}/update`))}
-      ><RefreshCw class="size-4" />Update</DropdownMenu.Item
+      ><RefreshCw class="size-4" />{m.hub_menu_update()}</DropdownMenu.Item
     >
 
     <DropdownMenu.Item class="cursor-pointer" onclick={rebootHub}>
       <RotateCcw class="size-4" />
-      Reboot
+      {m.hub_reboot()}
     </DropdownMenu.Item>
     <DropdownMenu.Item class="cursor-pointer" onclick={() => setCaptivePortal(true)}>
       <Wifi class="size-4" />
-      Enable Wi-Fi hotspot
+      {m.hub_menu_hotspot_enable()}
     </DropdownMenu.Item>
     <DropdownMenu.Item class="cursor-pointer" onclick={() => setCaptivePortal(false)}>
       <WifiOff class="size-4" />
-      Disable Wi-Fi hotspot
+      {m.hub_menu_hotspot_disable()}
     </DropdownMenu.Item>
     <DropdownMenu.Item class="cursor-pointer" onclick={openPairDialog}>
       <Link class="size-4" />
-      Pair
+      {m.hub_menu_pair()}
     </DropdownMenu.Item>
     <DropdownMenu.Item class="cursor-pointer" onclick={openRegenerateTokenDialog}>
       <KeyRound class="size-4" />
-      Regenerate Token
+      {m.hub_token_regenerate()}
     </DropdownMenu.Item>
     <DropdownMenu.Item class="cursor-pointer" onclick={openEditDialog}>
       <Pencil class="size-4" />
-      Edit
+      {m.common_edit()}
     </DropdownMenu.Item>
     <DropdownMenu.Separator />
     <DropdownMenu.Item class="cursor-pointer" onclick={copyId}>
       <Copy class="size-4" />
-      Copy ID
+      {m.common_copy_id()}
     </DropdownMenu.Item>
     <DropdownMenu.Separator />
     <DropdownMenu.Item
@@ -314,11 +329,11 @@
         sendHubCommand((connection) => serializeEmergencyStopMessage(connection, hub.id))}
     >
       <OctagonX class="size-4" />
-      Emergency Stop
+      {m.hub_menu_estop()}
     </DropdownMenu.Item>
     <DropdownMenu.Item class="text-destructive cursor-pointer" onclick={openDeleteDialog}>
       <Trash2 class="size-4" />
-      Delete
+      {m.common_delete()}
     </DropdownMenu.Item>
   </DropdownMenu.Group>
 </TableActionMenu>
