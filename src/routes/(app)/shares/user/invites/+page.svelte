@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { EmptyState } from '@openshock/svelte-core/components';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import * as Table from '@openshock/svelte-core/components/ui/table';
@@ -13,7 +14,7 @@
   import IncomingInviteItem from './incoming-invite-item.svelte';
   import OutgoingInviteItem from './outgoing-invite-item.svelte';
 
-  registerBreadcrumbs(() => [{ label: 'Invites' }]);
+  registerBreadcrumbs(() => [{ label: m.user_shares_tab_invites() }]);
 
   let invitesPromise = $state(Promise.all([refreshOutgoingInvites(), refreshIncomingInvites()]));
 
@@ -28,19 +29,15 @@
   </div>
 {:then}
   {#if bothEmpty}
-    <EmptyState
-      icon={Mail}
-      title="No invites yet"
-      description="You have no incoming or outgoing share invites."
-    />
+    <EmptyState icon={Mail} title={m.invites_empty_title()} description={m.invites_empty_desc()} />
   {:else}
-    <h2 class="text-3xl font-semibold">Outgoing</h2>
+    <h2 class="text-3xl font-semibold">{m.invites_outgoing()}</h2>
     {#if userSharesState.outgoingInvites.length === 0}
       <EmptyState
         compact
         icon={MailPlus}
-        title="No outgoing invites"
-        description="You have no outgoing share invites."
+        title={m.invites_outgoing_empty_title()}
+        description={m.invites_outgoing_empty_desc()}
         class="mb-6"
       />
     {:else}
@@ -55,13 +52,13 @@
       </div>
     {/if}
 
-    <h2 class="text-3xl font-semibold">Incoming</h2>
+    <h2 class="text-3xl font-semibold">{m.invites_incoming()}</h2>
     {#if userSharesState.incomingInvites.length === 0}
       <EmptyState
         compact
         icon={Mail}
-        title="No incoming invites"
-        description="You have no incoming share invites."
+        title={m.invites_incoming_empty_title()}
+        description={m.invites_incoming_empty_desc()}
         class="mb-6"
       />
     {:else}

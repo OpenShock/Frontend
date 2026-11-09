@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
+  import { ParaglideMessage } from '@inlang/paraglide-js-svelte';
   import { X, Zap } from '@lucide/svelte';
   import { userSharesBulkRemoveUserShareShockers } from '#lib/api/index.js';
   import type { V2UserSharesListItem } from '#lib/api/index.js';
@@ -28,7 +30,7 @@
         path: { userId: userState.self!.id },
         body: value.shares.map((shocker) => shocker.id),
       });
-      toast.success(`Removed share for ${value.name}`);
+      toast.success(m.incoming_share_toast_removed({ name: value.name }));
     } catch (error) {
       await handleApiError(error);
     } finally {
@@ -38,8 +40,8 @@
 
   async function removeShare() {
     const result = await dialog.confirm({
-      title: 'Remove Share',
-      confirmButtonText: 'Remove',
+      title: m.incoming_share_remove_title(),
+      confirmButtonText: m.common_remove(),
       data: share,
       descSnippet: confirmDesc,
     });
@@ -48,13 +50,17 @@
 </script>
 
 {#snippet confirmDesc(invite: V2UserSharesListItem)}
-  <p>Are you sure you want to remove the share for <strong>{invite.name}</strong>?</p>
+  <p>
+    <ParaglideMessage message={m.incoming_share_remove_desc} inputs={{ name: invite.name }}>
+      {#snippet strong({ children })}<strong>{@render children?.()}</strong>{/snippet}
+    </ParaglideMessage>
+  </p>
 {/snippet}
 
 <Table.Row onclick={onOpenEdit}>
   <Table.Cell class="flex items-center font-medium">
     <Avatar.Root class="h-15 w-15">
-      <Avatar.Image src={share.image} alt="User Avatar" />
+      <Avatar.Image src={share.image} alt={m.common_user_avatar()} />
       <Avatar.Fallback>
         {share.name.charAt(0)}
       </Avatar.Fallback>
