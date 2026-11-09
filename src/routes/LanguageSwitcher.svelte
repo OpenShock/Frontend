@@ -1,7 +1,8 @@
 <script lang="ts">
   import Languages from '@lucide/svelte/icons/languages';
   import { Button } from '@openshock/svelte-core/components/ui/button';
-  import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
+  import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
+  import Check from '@lucide/svelte/icons/check';
   import { m } from '#lib/paraglide/messages.js';
   import { localeOverride } from '#lib/i18n/query-locale.js';
   import { getLocale, locales, setLocale, type Locale } from '#lib/paraglide/runtime.js';
@@ -25,8 +26,8 @@
   }
 </script>
 
-<DropdownMenu.Root>
-  <DropdownMenu.Trigger>
+<Dialog.Root>
+  <Dialog.Trigger>
     {#snippet child({ props })}
       <Button
         {...props}
@@ -39,15 +40,28 @@
         {nativeName(current)}
       </Button>
     {/snippet}
-  </DropdownMenu.Trigger>
-  <DropdownMenu.Content align="end">
-    <DropdownMenu.Label>{m.footer_language_label()}</DropdownMenu.Label>
-    <DropdownMenu.RadioGroup value={current}>
-      {#each locales as locale (locale)}
-        <DropdownMenu.RadioItem value={locale} lang={locale} onSelect={() => select(locale)}>
-          {nativeName(locale)}
-        </DropdownMenu.RadioItem>
-      {/each}
-    </DropdownMenu.RadioGroup>
-  </DropdownMenu.Content>
-</DropdownMenu.Root>
+  </Dialog.Trigger>
+  <Dialog.Content
+    class="top-0 left-0 h-svh w-screen max-w-none translate-x-0 translate-y-0 content-start gap-6 overflow-y-auto rounded-none p-6 ring-0 sm:max-w-none sm:p-12"
+  >
+    <div class="mx-auto flex w-full max-w-4xl flex-col gap-6">
+      <Dialog.Title class="px-4 text-2xl">{m.footer_language_label()}</Dialog.Title>
+      <ul class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+        {#each locales as locale (locale)}
+          <li>
+            <Button
+              variant={locale === current ? 'secondary' : 'ghost'}
+              class="h-12 w-full justify-between px-4 text-base"
+              lang={locale}
+              aria-current={locale === current ? 'true' : undefined}
+              onclick={() => select(locale)}
+            >
+              {nativeName(locale)}
+              {#if locale === current}<Check class="size-5" />{/if}
+            </Button>
+          </li>
+        {/each}
+      </ul>
+    </div>
+  </Dialog.Content>
+</Dialog.Root>
