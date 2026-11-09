@@ -4,6 +4,7 @@
   import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
   import Check from '@lucide/svelte/icons/check';
   import { m } from '#lib/paraglide/messages.js';
+  import LocaleFlag from './LocaleFlag.svelte';
   import { localeOverride } from '#lib/i18n/query-locale.js';
   import { getLocale, locales, setLocale, type Locale } from '#lib/paraglide/runtime.js';
 
@@ -18,6 +19,13 @@
     const name = new Intl.DisplayNames([locale], { type: 'language' }).of(locale) ?? locale;
     return name.charAt(0).toLocaleUpperCase(locale) + name.slice(1);
   }
+
+  // Alphabetical by native name, with UwU last since it is not a real language.
+  // A fixed collation locale keeps the server and browser order identical.
+  const collator = new Intl.Collator('en');
+  const sortedLocales = [...locales].sort((a, b) =>
+    a === 'uwu' ? 1 : b === 'uwu' ? -1 : collator.compare(nativeName(a), nativeName(b))
+  );
 
   // setLocale saves the choice and reloads the page.
   // Picking the language a `?lang=` link set is not a change, but it still saves it and drops the parameter.
@@ -37,6 +45,7 @@
         aria-label={m.footer_language_label()}
       >
         <Languages class="size-4" />
+        <LocaleFlag locale={current} />
         {nativeName(current)}
       </Button>
     {/snippet}
@@ -47,7 +56,7 @@
     <div class="mx-auto flex w-full max-w-4xl flex-col gap-6">
       <Dialog.Title class="px-4 text-2xl">{m.footer_language_label()}</Dialog.Title>
       <ul class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
-        {#each locales as locale (locale)}
+        {#each sortedLocales as locale (locale)}
           <li>
             <Button
               variant={locale === current ? 'secondary' : 'ghost'}
@@ -56,7 +65,10 @@
               aria-current={locale === current ? 'true' : undefined}
               onclick={() => select(locale)}
             >
-              {nativeName(locale)}
+              <span class="flex items-center gap-3">
+                <LocaleFlag {locale} class="text-xl" />
+                {nativeName(locale)}
+              </span>
               {#if locale === current}<Check class="size-5" />{/if}
             </Button>
           </li>
