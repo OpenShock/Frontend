@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { ClockFading, Gauge, Pause } from '@lucide/svelte';
   import type { PublicShareShocker } from '#lib/api/index.js';
   import {
@@ -79,11 +80,11 @@
 
     <!-- Limits -->
     <div class="text-muted-foreground flex gap-3 text-xs">
-      <span class="flex items-center gap-1" title="Max Intensity">
+      <span class="flex items-center gap-1" title={m.control_max_intensity()}>
         <Gauge size={14} />
         {maxIntensity}%
       </span>
-      <span class="flex items-center gap-1" title="Max Duration">
+      <span class="flex items-center gap-1" title={m.control_max_duration()}>
         <ClockFading size={14} />
         {formatDurationSeconds(maxDurationSeconds)}
       </span>
@@ -93,13 +94,13 @@
   <!-- Sliders -->
   <div class="flex items-center gap-2">
     <CircleSlider
-      name="Intensity"
+      name={m.control_intensity()}
       bind:value={intensity}
       {...ControlIntensityProps}
       max={maxIntensity}
     />
     <CircleSlider
-      name="Duration"
+      name={m.control_duration()}
       bind:value={duration}
       {...ControlDurationProps}
       max={maxDurationSeconds}

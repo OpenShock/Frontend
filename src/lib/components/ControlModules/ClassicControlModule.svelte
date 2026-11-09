@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import {
     ControlDurationDefault,
     ControlDurationProps,
@@ -57,12 +58,17 @@
 <!-- Sliders -->
 <div class="grid w-full grid-cols-2 place-items-center gap-2">
   <CircleSlider
-    name="Intensity"
+    name={m.control_intensity()}
     bind:value={intensity}
     {...ControlIntensityProps}
     max={maxIntensity}
   />
-  <CircleSlider name="Duration" bind:value={duration} {...ControlDurationProps} max={maxDuration} />
+  <CircleSlider
+    name={m.control_duration()}
+    bind:value={duration}
+    {...ControlDurationProps}
+    max={maxDuration}
+  />
 </div>
 
 <!-- Buttons -->
