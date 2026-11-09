@@ -12,6 +12,8 @@
   function nativeName(locale: Locale): string {
     // Not a real language, so Intl has no name for it.
     if (locale === 'uwu') return 'UwU';
+    // Intl calls nb "norsk bokmål", which is longer than people expect in a language picker.
+    if (locale === 'nb') return 'Norsk';
     const name = new Intl.DisplayNames([locale], { type: 'language' }).of(locale) ?? locale;
     return name.charAt(0).toLocaleUpperCase(locale) + name.slice(1);
   }
