@@ -1013,7 +1013,7 @@
   "problem_control_stats_invalid_range_title": "De begindatum mag niet na de einddatum liggen",
   "problem_control_stats_invalid_time_zone_title": "Onbekende tijdzone",
   "problem_device_not_found_title": "Hub niet gevonden",
-  "problem_device_not_online_title": "Hub is offline",
+  "problem_device_not_online_title": "De hub is offline",
   "problem_device_too_many_hubs_title": "Je hebt het maximale aantal hubs bereikt",
   "problem_device_too_many_shockers_title": "Deze hub heeft het maximale aantal shockers bereikt",
   "problem_endpoint_retired_title": "Deze functie is niet meer beschikbaar",
