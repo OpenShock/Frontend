@@ -1,5 +1,4 @@
 import '#lib/i18n/preferred-locale.js';
-import '#lib/i18n/query-locale.js';
 import { getTextDirection } from '#lib/paraglide/runtime.js';
 import { paraglideMiddleware } from '#lib/paraglide/server.js';
 import { PRIVATE_BACKEND_TLS_INSECURE } from '$app/env/private';

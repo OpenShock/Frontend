@@ -5,7 +5,6 @@
   import Check from '@lucide/svelte/icons/check';
   import { m } from '#lib/paraglide/messages.js';
   import LocaleFlag from './LocaleFlag.svelte';
-  import { localeOverride } from '#lib/i18n/query-locale.js';
   import { getLocale, locales, setLocale, type Locale } from '#lib/paraglide/runtime.js';
 
   const current = getLocale();
@@ -28,9 +27,8 @@
   );
 
   // setLocale saves the choice and reloads the page.
-  // Picking the language a `?lang=` link set is not a change, but it still saves it and drops the parameter.
   function select(locale: Locale) {
-    if (locale !== current || localeOverride !== undefined) setLocale(locale);
+    if (locale !== current) setLocale(locale);
   }
 </script>
 

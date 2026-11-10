@@ -29,10 +29,9 @@ export default defineConfig({
   emitTsDeclarations: true,
   // Pinned so the CLI (used by `check`) and the Vite plugin emit the same layout.
   outputStructure: 'message-modules',
-  // `custom-query` is the one-off `?lang=` override, see src/lib/i18n/query-locale.ts.
   // `url` gives the landing page a stable URL per language, see `landingUrlPatterns`.
   // `custom-preferred` replaces `preferredLanguage` to map zh-CN and zh-TW to our Chinese locales, see src/lib/i18n/preferred-locale.ts.
-  strategy: ['custom-query', 'url', 'cookie', 'custom-preferred', 'baseLocale'],
+  strategy: ['url', 'cookie', 'custom-preferred', 'baseLocale'],
   urlPatterns: landingUrlPatterns(''),
   // So `/de/` resolves like `/de`.
   trailingSlash: 'never',
