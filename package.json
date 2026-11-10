@@ -26,6 +26,7 @@
 		"@hey-api/openapi-ts": "^0.99.0",
 		"@inlang/paraglide-js": "^3.2.0",
 		"@inlang/paraglide-js-svelte": "^1.0.5",
+		"@inlang/plugin-message-format": "^4.6.0",
 		"@internationalized/date": "^3.12.4",
 		"@lucide/svelte": "^1.61.0",
 		"@microsoft/signalr": "^10.0.11",
