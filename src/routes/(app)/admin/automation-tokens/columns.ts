@@ -10,6 +10,7 @@ import {
   RenderOrangeCell,
   TimeSinceRelativeOrNeverRenderer,
 } from '#lib/components/Table/ColumnUtils.js';
+import { intlLocale } from '#lib/i18n/intl.js';
 import { formatTimeSpan } from '#lib/utils/index.js';
 import DataTableActions from './data-table-actions.svelte';
 import type { Features } from './data-table-features';
@@ -66,7 +67,7 @@ function TokenTypesRenderer(types: AutomationTokenType[]) {
 // Counted, so zero is a real value; only an absent count is "N/A".
 function UseCountRenderer(useCount: bigint | undefined) {
   if (useCount === undefined) return CellNotApplicable;
-  return RenderBoldCell(useCount.toLocaleString());
+  return RenderBoldCell(useCount.toLocaleString(intlLocale()));
 }
 
 function AutoCleanupRenderer({ enabled, after }: AutoCleanupPolicy) {

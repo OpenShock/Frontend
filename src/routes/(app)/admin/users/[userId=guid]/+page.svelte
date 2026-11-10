@@ -18,6 +18,7 @@
   import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
   import { formatRelativeInstant } from '#lib/utils/datetime.js';
+  import { intlLocale } from '#lib/i18n/intl.js';
   import { createNowTicker } from '@openshock/svelte-core/utils';
   import SetEmailDialog from './dialog-set-email.svelte';
   import SetNameDialog from './dialog-set-name.svelte';
@@ -118,10 +119,10 @@
     if (!user) return [];
     const shockers = user.hubs.reduce((sum, hub) => sum + hub.shockers.length, 0);
     return [
-      { label: 'Hubs', value: user.hubs.length.toLocaleString() },
-      { label: 'Shockers', value: shockers.toLocaleString() },
-      { label: 'API tokens', value: user.apiTokens.length.toLocaleString() },
-      { label: 'Control logs', value: user.shockerControlLogsCount.toLocaleString() },
+      { label: 'Hubs', value: user.hubs.length.toLocaleString(intlLocale()) },
+      { label: 'Shockers', value: shockers.toLocaleString(intlLocale()) },
+      { label: 'API tokens', value: user.apiTokens.length.toLocaleString(intlLocale()) },
+      { label: 'Control logs', value: user.shockerControlLogsCount.toLocaleString(intlLocale()) },
     ];
   });
 
@@ -133,14 +134,14 @@
       { label: 'Password hash', value: user.passwordHashType },
       {
         label: 'Created',
-        value: `${user.createdAt.toLocaleString()} (${formatRelativeInstant(user.createdAt, clock.current)})`,
+        value: `${user.createdAt.toLocaleString(intlLocale())} (${formatRelativeInstant(user.createdAt, clock.current)})`,
       },
       {
         label: 'Activated',
         value:
           user.activatedAt === null
             ? 'Not activated'
-            : `${user.activatedAt.toLocaleString()} (${formatRelativeInstant(user.activatedAt, clock.current)})`,
+            : `${user.activatedAt.toLocaleString(intlLocale())} (${formatRelativeInstant(user.activatedAt, clock.current)})`,
       },
     ];
   });
@@ -240,7 +241,7 @@
                   deactivation.scheduledDeletionTime,
                   clock.current
                 )}
-                ({deactivation.scheduledDeletionTime.toLocaleString()}).
+                ({deactivation.scheduledDeletionTime.toLocaleString(intlLocale())}).
               {:else}
                 No deletion is scheduled.
               {/if}

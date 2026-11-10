@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { intlLocale } from '#lib/i18n/intl.js';
   import type { EmailOutboxMessageDto } from '#lib/api/index.js';
   import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
   import { Temporal } from 'temporal-polyfill';
@@ -10,7 +11,7 @@
 
   let { open = $bindable<boolean>(), message }: Props = $props();
 
-  const fmt = (i: Temporal.Instant | null) => (i ? i.toLocaleString() : '—');
+  const fmt = (i: Temporal.Instant | null) => (i ? i.toLocaleString(intlLocale()) : '—');
 
   let rows = $derived([
     { label: 'ID', value: message.id },

@@ -1,3 +1,4 @@
+import { intlLocale } from '#lib/i18n/intl.js';
 import { m } from '#lib/paraglide/messages.js';
 import { isControlLog, type ControlLog } from '#lib/signalr/models/ControlLog.js';
 import { isControlLogSender, type ControlLogSender } from '#lib/signalr/models/ControlLogSender.js';
@@ -61,7 +62,7 @@ export function handleSignalrLog(sender: unknown, logs: unknown) {
     // Iterate through each control log
     logs.forEach((log, index) => {
       console.group(
-        `Log #${index + 1} - ${Temporal.Instant.from(log.executedAt).toLocaleString()}`
+        `Log #${index + 1} - ${Temporal.Instant.from(log.executedAt).toLocaleString(intlLocale())}`
       );
       console.log('Shocker:', `${log.shocker.name} (${log.shocker.id})`);
       console.log('Type:', ControlType[log.type]);

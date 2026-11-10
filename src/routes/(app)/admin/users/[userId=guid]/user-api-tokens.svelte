@@ -12,6 +12,7 @@
 </script>
 
 <script lang="ts">
+  import { intlLocale } from '#lib/i18n/intl.js';
   import type { AdminUserViewApiToken } from '#lib/api/index.js';
   import KeyRound from '@lucide/svelte/icons/key-round';
   import Trash2 from '@lucide/svelte/icons/trash-2';
@@ -74,7 +75,7 @@
             </div>
             <div class="text-muted-foreground flex shrink-0 flex-col items-end gap-0.5 text-sm">
               <span title={token.createdAt.toString()}>
-                Created {token.createdAt.toLocaleString(undefined, { dateStyle: 'short' })}
+                Created {token.createdAt.toLocaleString(intlLocale(), { dateStyle: 'short' })}
                 {#if createdByIp}
                   from {createdByIp}
                 {/if}
