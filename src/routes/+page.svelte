@@ -27,19 +27,19 @@
   </h1>
 
   <p class="relative text-lg opacity-75 md:text-2xl">
-    The go-to platform for safe, reliable, real low-latency remote shocking.<br />
+    {m.landing_tagline()}<br />
     {#if data.ok}
+      {m.landing_hubs_online()}
       <span class="font-semibold">{data.deviceCount}</span>
-      {data.deviceCount === 1 ? 'hub' : 'hubs'} online right now.
     {/if}
   </p>
   <div class="relative flex space-x-4 pt-8 text-sm opacity-75">
     <a href="https://openshock.org" target="_blank" rel="noopener" class="hover:underline">
-      Learn More
+      {m.landing_learn_more()}
     </a>
     <span>·</span>
     <a href="https://wiki.openshock.org" target="_blank" rel="noopener" class="hover:underline">
-      Wiki
+      {m.landing_wiki()}
     </a>
   </div>
 </section>

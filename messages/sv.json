@@ -1,6 +1,11 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
 
+  "landing_tagline": "Plattformen för säker och pålitlig fjärrstyrning av shockers med riktigt låg fördröjning.",
+  "landing_hubs_online": "Hubbar online just nu: ",
+  "landing_learn_more": "Läs mer",
+  "landing_wiki": "Wiki",
+  "landing_meta_description": "Välkommen till OpenShock. {description}",
   "header_sidebar_toggle": "Visa/dölj sidopanelen",
   "header_avatar_alt": "{name}s avatar",
   "header_menu_profile": "Profil",

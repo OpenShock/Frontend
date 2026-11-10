@@ -1,6 +1,11 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
 
+  "landing_tagline": "安全、可靠、低延迟的电击器远程控制平台。",
+  "landing_hubs_online": "当前在线 Hub 数：",
+  "landing_learn_more": "了解更多",
+  "landing_wiki": "Wiki",
+  "landing_meta_description": "欢迎使用 OpenShock。{description}",
   "header_sidebar_toggle": "切换侧边栏",
   "header_avatar_alt": "{name} 的头像",
   "header_menu_profile": "个人资料",

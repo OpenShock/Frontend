@@ -1,6 +1,11 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
 
+  "landing_tagline": "Platvorm shockerite turvaliseks ja töökindlaks kaugjuhtimiseks väga väikese viivitusega.",
+  "landing_hubs_online": "Praegu võrgus: ",
+  "landing_learn_more": "Loe edasi",
+  "landing_wiki": "Viki",
+  "landing_meta_description": "Tere tulemast OpenShocki. {description}",
   "header_sidebar_toggle": "Näita või peida külgriba",
   "header_avatar_alt": "Kasutaja {name} avatar",
   "header_menu_profile": "Profiil",

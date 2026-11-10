@@ -1,3 +1,4 @@
+import { m } from '#lib/paraglide/messages.js';
 import { PUBLIC_SITE_DESCRIPTION, PUBLIC_SITE_NAME } from '$app/env/public';
 import type { ReadonlyURL } from '$app/state';
 import { getSiteAssetURL } from './utils/url';
@@ -8,7 +9,7 @@ function getPageTitleAndDescription(_url: ReadonlyURL): { title: string; descrip
   let description: string;
   switch (PUBLIC_SITE_NAME.toLowerCase()) {
     case 'openshock':
-      description = `Welcome to OpenShock, ${PUBLIC_SITE_DESCRIPTION}`;
+      description = m.landing_meta_description({ description: PUBLIC_SITE_DESCRIPTION });
       break;
     default:
       description = `Welcome to ${PUBLIC_SITE_NAME}, an independent instance of OpenShock - ${PUBLIC_SITE_DESCRIPTION}`;

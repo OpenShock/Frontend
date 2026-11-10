@@ -1,6 +1,11 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
 
+  "landing_tagline": "安全で信頼性の高い、低遅延のショッカー遠隔操作プラットフォームです。",
+  "landing_hubs_online": "現在オンラインのハブ数：",
+  "landing_learn_more": "詳しく見る",
+  "landing_wiki": "Wiki",
+  "landing_meta_description": "OpenShockへようこそ。{description}",
   "header_sidebar_toggle": "サイドバーの切り替え",
   "header_avatar_alt": "{name}のアバター",
   "header_menu_profile": "プロフィール",

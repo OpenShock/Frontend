@@ -1,6 +1,11 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
 
+  "landing_tagline": "Het platform voor veilige, betrouwbare afstandsbediening van shockers met echt weinig vertraging.",
+  "landing_hubs_online": "Hubs nu online: ",
+  "landing_learn_more": "Meer informatie",
+  "landing_wiki": "Wiki",
+  "landing_meta_description": "Welkom bij OpenShock. {description}",
   "header_sidebar_toggle": "Zijbalk tonen/verbergen",
   "header_avatar_alt": "Avatar van {name}",
   "header_menu_profile": "Profiel",

@@ -1,6 +1,11 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
 
+  "landing_tagline": "Платформа для безпечного й надійного дистанційного керування шокерами з мінімальною затримкою.",
+  "landing_hubs_online": "Хабів онлайн зараз: ",
+  "landing_learn_more": "Дізнатися більше",
+  "landing_wiki": "Вікі",
+  "landing_meta_description": "Вітаємо в OpenShock. {description}",
   "header_sidebar_toggle": "Перемкнути бічну панель",
   "header_avatar_alt": "Аватар {name}",
   "header_menu_profile": "Профіль",

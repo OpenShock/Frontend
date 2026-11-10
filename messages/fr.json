@@ -1,6 +1,11 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
 
+  "landing_tagline": "La plateforme de référence pour piloter des shockers à distance, en toute sécurité et avec une latence vraiment faible.",
+  "landing_hubs_online": "Hubs en ligne actuellement : ",
+  "landing_learn_more": "En savoir plus",
+  "landing_wiki": "Wiki",
+  "landing_meta_description": "Bienvenue sur OpenShock. {description}",
   "header_sidebar_toggle": "Afficher ou masquer la barre latérale",
   "header_avatar_alt": "Avatar de {name}",
   "header_menu_profile": "Profil",

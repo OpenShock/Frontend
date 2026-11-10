@@ -1,6 +1,11 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
 
+  "landing_tagline": "The go-to platform for safe, reliable, real low-latency remote shocking.",
+  "landing_hubs_online": "Hubs online right now: ",
+  "landing_learn_more": "Learn More",
+  "landing_wiki": "Wiki",
+  "landing_meta_description": "Welcome to OpenShock, {description}",
   "header_sidebar_toggle": "Toggle Sidebar",
   "header_avatar_alt": "{name}'s avatar",
   "header_menu_profile": "Profile",

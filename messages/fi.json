@@ -1,6 +1,11 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
 
+  "landing_tagline": "Alusta turvalliseen ja luotettavaan shockerien etäohjaukseen erittäin pienellä viiveellä.",
+  "landing_hubs_online": "Hubeja verkossa nyt: ",
+  "landing_learn_more": "Lue lisää",
+  "landing_wiki": "Wiki",
+  "landing_meta_description": "Tervetuloa OpenShockiin. {description}",
   "header_sidebar_toggle": "Näytä tai piilota sivupalkki",
   "header_avatar_alt": "Käyttäjän {name} avatar",
   "header_menu_profile": "Profiili",

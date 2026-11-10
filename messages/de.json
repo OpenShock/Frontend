@@ -1,6 +1,11 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
 
+  "landing_tagline": "Die Plattform für sicheres, zuverlässiges und wirklich latenzarmes Fernsteuern von Shockern.",
+  "landing_hubs_online": "Hubs jetzt online: ",
+  "landing_learn_more": "Mehr erfahren",
+  "landing_wiki": "Wiki",
+  "landing_meta_description": "Willkommen bei OpenShock, {description}",
   "header_sidebar_toggle": "Seitenleiste umschalten",
   "header_avatar_alt": "Avatar von {name}",
   "header_menu_profile": "Profil",

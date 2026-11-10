@@ -1,6 +1,11 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
 
+  "landing_tagline": "Plattformen for trygg og pålitelig fjernstyring av shockere med svært lav forsinkelse.",
+  "landing_hubs_online": "Huber på nett nå: ",
+  "landing_learn_more": "Les mer",
+  "landing_wiki": "Wiki",
+  "landing_meta_description": "Velkommen til OpenShock, {description}",
   "header_sidebar_toggle": "Vis/skjul sidepanel",
   "header_avatar_alt": "Avataren til {name}",
   "header_menu_profile": "Profil",
