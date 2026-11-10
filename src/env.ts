@@ -92,8 +92,10 @@ export const variables = defineEnvVars({
   PUBLIC_SITE_DESCRIPTION: {
     public: true,
     static: true,
-    description: 'One-sentence description of the deployment, used in metadata and llms.txt.',
-    schema: text('PUBLIC_SITE_DESCRIPTION'),
+    description:
+      'Optional full-sentence description of the deployment, used verbatim in metadata and ' +
+      'llms.txt for every locale. Unset uses the translated default.',
+    schema: optionalText,
   },
   PUBLIC_SITE_URL: {
     public: true,
