@@ -3,6 +3,8 @@
   import { ParaglideMessage } from '@inlang/paraglide-js-svelte';
   import { page } from '$app/state';
   import { PUBLIC_DEVELOPMENT_BANNER } from '$app/env/public';
+  import { getLocale, localizeUrl, locales, type Locale } from '#lib/paraglide/runtime.js';
+  import type { Path } from '$app/types';
   import {
     BasicTags,
     OpenGraphTags,
@@ -11,6 +13,7 @@
   import { SidebarProvider } from '@openshock/svelte-core/components/ui/sidebar';
   import { Toaster } from '@openshock/svelte-core/components/ui/sonner';
   import { buildMetaData } from '#lib/metadata.js';
+  import { getSiteURL } from '#lib/utils/url.js';
   import { onMount, untrack, type Snippet } from 'svelte';
   import { maybePromptTelemetryConsent } from '#lib/telemetry/consent-prompt.js';
   import Footer from './Footer.svelte';
@@ -30,6 +33,10 @@
   let { children, data }: Props = $props();
 
   let meta = $derived(buildMetaData(page.url));
+  // The landing page has a URL per language, e.g. `/de`, and the bare `/` redirects to one of them.
+  const isLandingPage = $derived(page.route.id === '/');
+  const defaultHomeURL = getSiteURL('' as Path);
+  const homeURL = (locale: Locale) => localizeUrl(defaultHomeURL, { locale }).href;
 
   const mobile = new IsMobile();
   // Seeded from the sidebar:state cookie (read in +layout.server.ts) so SSR
@@ -41,8 +48,22 @@
 </script>
 
 <BasicTags {...meta} />
-<OpenGraphTags type="website" {...meta} url={page.url.origin} />
+<OpenGraphTags
+  type="website"
+  {...meta}
+  url={isLandingPage ? homeURL(getLocale()) : page.url.origin}
+/>
 <TwitterSummaryTags type="summary" {...meta} site="@OpenShockORG" creator="@OpenShockORG" />
+
+<svelte:head>
+  {#if isLandingPage}
+    <link rel="canonical" href={homeURL(getLocale())} />
+    {#each locales.filter((locale) => locale !== 'uwu') as locale (locale)}
+      <link rel="alternate" hreflang={locale} href={homeURL(locale)} />
+    {/each}
+    <link rel="alternate" hreflang="x-default" href={defaultHomeURL.href} />
+  {/if}
+</svelte:head>
 
 <Toaster position="top-center" />
 

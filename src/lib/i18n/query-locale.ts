@@ -2,6 +2,7 @@ import {
   defineCustomClientStrategy,
   defineCustomServerStrategy,
   isLocale,
+  localizeUrl,
   overwriteSetLocale,
   setLocale,
   type Locale,
@@ -46,8 +47,9 @@ if (localeOverride) {
 
     // An explicit pick (the language switcher) is saved, then the override is dropped from the
     // URL; otherwise the reload would resolve to the override again.
+    // On a locale-prefixed URL like `/de` the path changes too, or the reload would keep `/de`.
     originalSetLocale(locale, { reload: false });
-    const url = new URL(window.location.href);
+    const url = localizeUrl(window.location.href, { locale });
     url.searchParams.delete(LOCALE_QUERY_PARAM);
     window.location.href = url.href;
   });

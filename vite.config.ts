@@ -11,6 +11,7 @@ import license from 'rollup-plugin-license';
 import { type Plugin, type PluginOption, type UserConfig, defineConfig, loadEnv } from 'vite';
 import devtoolsJson from 'vite-plugin-devtools-json';
 import mkcert from 'vite-plugin-mkcert';
+import { landingUrlPatterns } from './project.inlang/paraglide.config.ts';
 import { localDevChecksPlugin } from './vite-plugins/local-dev-checks.ts';
 
 type PublicEnv = ReturnType<typeof loadPublicEnv>;
@@ -290,7 +291,11 @@ export default defineConfig(({ command, mode, isPreview }) => {
       tailwindcss(),
       sveltekit(buildSveltekitConfig(dotenv)),
       // Options live in project.inlang/paraglide.config.ts, shared with the `paraglide-js` CLI.
-      paraglideVitePlugin({ project: './project.inlang' }),
+      // Only the URL patterns are set here, because they depend on the base path from the env.
+      paraglideVitePlugin({
+        project: './project.inlang',
+        urlPatterns: landingUrlPatterns(getSvelteBasePath(dotenv)),
+      }),
       devtoolsJson(),
       license({
         thirdParty: {

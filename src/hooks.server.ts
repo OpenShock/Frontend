@@ -11,8 +11,8 @@ import { type Handle, type ServerInit, sequence } from '@sveltejs/kit/hooks';
  * functions return it during SSR.
  * Also fills the `%lang%` and `%dir%` placeholders in app.html.
  */
-const i18nHandle: Handle = ({ event, resolve }) =>
-  paraglideMiddleware(event.request, ({ request, locale }) =>
+const i18nHandle: Handle = async ({ event, resolve }) => {
+  const response = await paraglideMiddleware(event.request, ({ request, locale }) =>
     resolve(
       { ...event, request },
       {
@@ -21,6 +21,13 @@ const i18nHandle: Handle = ({ event, resolve }) =>
       }
     )
   );
+
+  // The redirect from `/` to a localized URL can come from Accept-Language through our
+  // custom-preferred strategy, which the Vary header Paraglide sets does not cover.
+  if (response.headers.has('Location')) response.headers.append('Vary', 'Accept-Language');
+
+  return response;
+};
 
 /**
  * Security + metadata headers for every dynamically rendered response.
