@@ -13,13 +13,8 @@ import {
 } from '#lib/typeguards/errorGuards.js';
 import { dev } from '$app/env';
 import { toast } from 'svelte-sonner';
-import { problemMessageKey } from './problemMessageKey';
-import {
-  type ProblemCopy,
-  type ProblemType,
-  ProblemTypes,
-  isKnownProblemType,
-} from './problemTypes';
+import { ProblemMessages } from './problemMessages';
+import { type ProblemType, isKnownProblemType } from './problemTypes';
 import { isValidationError } from './ValidationProblemDetails';
 
 /**
@@ -46,18 +41,12 @@ export function describeProblem(problem: ProblemDetails): { title: string; descr
   if (!isKnownProblemType(problem.type)) {
     return { title: problem.title, description: problem.detail };
   }
-  const copy: ProblemCopy = ProblemTypes[problem.type];
-  const key = problemMessageKey(problem.type);
+  const messages: { title?: () => string; description?: () => string } =
+    ProblemMessages[problem.type];
   return {
-    title: (copy.title && translate(`${key}_title`)) ?? copy.title ?? problem.title,
-    description:
-      (copy.description && translate(`${key}_desc`)) ?? copy.description ?? problem.detail,
+    title: messages.title?.() ?? problem.title,
+    description: messages.description?.() ?? problem.detail,
   };
-}
-
-function translate(key: string): string | undefined {
-  const message = (m as unknown as Record<string, (() => string) | undefined>)[key];
-  return message?.();
 }
 
 let _onUnauthorized: (() => void) | null = null;
