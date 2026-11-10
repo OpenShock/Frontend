@@ -41,6 +41,7 @@ export const automationTokenTypes = Object.values(AutomationTokenType);
 const automationTokenTypeLabels: Record<AutomationTokenType, string> = {
   [AutomationTokenType.Turnstile]: 'Turnstile',
   [AutomationTokenType.RateLimit]: 'Rate limit',
+  [AutomationTokenType.ControlStatsRead]: 'Control stats read',
 };
 
 export function formatTokenType(type: AutomationTokenType): string {
