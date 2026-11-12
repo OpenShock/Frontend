@@ -55,16 +55,18 @@ for (const route of PROTECTED_ROUTES) {
 // ---------------------------------------------------------------------------
 
 test.describe('auth-page redirects for authenticated users', () => {
+  // The auth layout redirects once the client has booted and knows the user is signed in. A
+  // fixed wait races that against route compilation on a cold dev server, so wait for the
+  // URL itself to leave the auth page.
   test('authenticated GET /login redirects away from login', async ({ authedPage }) => {
     await authedPage.goto('/login');
-    await authedPage.waitForTimeout(1500);
-    // Should redirect to /home or dashboard, not stay on /login
+    await authedPage.waitForURL((url) => !/\/login(\?|$)/.test(url.href), { timeout: 10000 });
     expect(authedPage.url()).not.toMatch(/\/login(\?|$)/);
   });
 
   test('authenticated GET /signup redirects away from signup', async ({ authedPage }) => {
     await authedPage.goto('/signup');
-    await authedPage.waitForTimeout(1500);
+    await authedPage.waitForURL((url) => !/\/signup(\?|$)/.test(url.href), { timeout: 10000 });
     expect(authedPage.url()).not.toMatch(/\/signup(\?|$)/);
   });
 });

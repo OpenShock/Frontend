@@ -11,8 +11,11 @@ test.describe('account settings', () => {
   });
 
   test('displays current username', async ({ authedPage, user }) => {
-    // Username should appear somewhere on the settings page
-    await expect(authedPage.getByText(user.credentials.username, { exact: false })).toBeVisible();
+    // The username also appears in the sidebar avatar button and as the local part of the
+    // email, so look for the exact value inside the page content only.
+    await expect(
+      authedPage.getByRole('main').getByText(user.credentials.username, { exact: true })
+    ).toBeVisible();
   });
 
   test('displays current email', async ({ authedPage, user }) => {
@@ -33,7 +36,7 @@ test.describe('account settings', () => {
     await expect(dialog).toBeHidden();
     await authedPage.reload();
     await authedPage.waitForLoadState('networkidle');
-    await expect(authedPage.getByText(newName, { exact: false })).toBeVisible();
+    await expect(authedPage.getByRole('main').getByText(newName, { exact: true })).toBeVisible();
   });
 
   test('rejects username that is too short', async ({ authedPage }) => {
@@ -61,14 +64,15 @@ test.describe('sessions', () => {
   test('sessions page lists at least one active session', async ({ authedPage }) => {
     await authedPage.goto('/settings/sessions');
     await authedPage.waitForLoadState('networkidle');
-    // Should show the current session
-    // One auto-waiting assertion over the shapes the page may use, so a missing list fails.
+    // The list is a stack of divs, one per session, each saying when it was signed in. The
+    // current session is always there, so at least one of those lines must render.
     await expect(
       authedPage
-        .getByRole('row')
-        .or(authedPage.locator('[data-session]'))
-        .or(authedPage.getByText(/current|active|session/i))
+        .getByRole('main')
+        .getByText(/signed in/i)
         .first()
-    ).toBeVisible({ timeout: 5000 });
+    ).toBeVisible({
+      timeout: 5000,
+    });
   });
 });

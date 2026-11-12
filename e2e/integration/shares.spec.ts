@@ -26,11 +26,14 @@ test.describe('outgoing shares', () => {
   test('shows empty state or share list for new user', async ({ authedPage }) => {
     await authedPage.goto('/shares/user/outgoing');
     await authedPage.waitForLoadState('networkidle');
-    const emptyMsg = authedPage.getByText(/no shares|no outgoing|empty/i);
-    const shareList = authedPage.locator('[data-share], tr, [role="listitem"]');
-    const hasEmpty = (await emptyMsg.count()) > 0;
-    const hasList = (await shareList.count()) > 0;
-    expect(hasEmpty || hasList).toBe(true);
+    // The list loads after a spinner, so a bare count() can race it; one auto-waiting
+    // assertion over both shapes (empty state or at least one share row) covers that.
+    await expect(
+      authedPage
+        .getByText(/no shared shockers/i)
+        .or(authedPage.getByRole('main').getByRole('row'))
+        .first()
+    ).toBeVisible({ timeout: 5000 });
   });
 });
 
