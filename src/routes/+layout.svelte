@@ -11,6 +11,7 @@
   import { SidebarProvider } from '@openshock/svelte-core/components/ui/sidebar';
   import { Toaster } from '@openshock/svelte-core/components/ui/sonner';
   import { buildMetaData } from '#lib/metadata.js';
+  import { openGraphLocale } from '#lib/i18n/open-graph.js';
   import { onMount, untrack, type Snippet } from 'svelte';
   import { maybePromptTelemetryConsent } from '#lib/telemetry/consent-prompt.js';
   import Footer from './Footer.svelte';
@@ -41,7 +42,7 @@
 </script>
 
 <BasicTags {...meta} />
-<OpenGraphTags type="website" {...meta} url={page.url.origin} />
+<OpenGraphTags type="website" {...meta} url={page.url.origin} metaLocale={openGraphLocale()} />
 <TwitterSummaryTags type="summary" {...meta} site="@OpenShockORG" creator="@OpenShockORG" />
 
 <Toaster position="top-center" />

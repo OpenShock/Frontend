@@ -3,9 +3,9 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { problemMessageKey } from './problemMessageKey';
 import { ProblemMessages } from './problemMessages';
+import { type ProblemCopy, type ProblemType, ProblemTypes } from './problemTypes';
 
 type ProblemCopyMessages = { title?: () => string; description?: () => string };
-import { type ProblemCopy, type ProblemType, ProblemTypes } from './problemTypes';
 
 const messagesDir = path.resolve(__dirname, '../../../messages');
 const locales = fs.readdirSync(messagesDir).filter((f) => f.endsWith('.json'));

@@ -102,7 +102,7 @@
           {/if}
 
           <Button variant="default" size="sm" class="mt-4" onclick={() => goto(resolve('login'))}
-            >Ok</Button
+            >{m.common_continue()}</Button
           >
         </div>
       </Dialog.Description>

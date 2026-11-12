@@ -16,6 +16,8 @@ export type OtaInstallState = {
 export type OtaResultState = {
   success: boolean;
   message: string;
+  /** Set when the hub rolled back to its previous firmware instead of failing outright. */
+  rolledBack?: boolean;
 };
 
 export class HubOnlineState {

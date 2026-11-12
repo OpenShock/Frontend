@@ -17,13 +17,22 @@ function chineseLocale(tag: string): Locale | undefined {
   return toLocale(subtags.some((s) => TRADITIONAL_REGIONS.has(s)) ? 'zh-Hant' : 'zh-Hans');
 }
 
+// Norwegian browsers may send the macrolanguage `no` or Nynorsk `nn`; Bokmål is the closest we have.
+const NORWEGIAN_LANGUAGES = new Set(['no', 'nn']);
+
+function norwegianLocale(tag: string): Locale | undefined {
+  const language = tag.toLowerCase().split('-')[0];
+  return NORWEGIAN_LANGUAGES.has(language) ? toLocale('nb') : undefined;
+}
+
 /**
  * The first supported locale in a list of language tags, most preferred first.
- * Matches like Paraglide's `preferredLanguage`: the full tag, then its base language, plus the Chinese mapping above.
+ * Matches like Paraglide's `preferredLanguage`: the full tag, then its base language, plus the Chinese and Norwegian mappings above.
  */
 export function matchPreferredLocale(tags: readonly string[]): Locale | undefined {
   for (const tag of tags) {
-    const locale = toLocale(tag) ?? chineseLocale(tag) ?? toLocale(tag.split('-')[0]);
+    const locale =
+      toLocale(tag) ?? chineseLocale(tag) ?? norwegianLocale(tag) ?? toLocale(tag.split('-')[0]);
     if (locale) return locale;
   }
   return undefined;
@@ -35,8 +44,9 @@ export function parseAcceptLanguage(header: string): string[] {
     .split(',')
     .map((part, index) => {
       const [tag = '', ...params] = part.split(';').map((p) => p.trim());
-      const q = params.find((p) => p.startsWith('q='));
-      return { tag, q: q ? Number(q.slice(2)) : 1, index };
+      // RFC 9110 allows `Q` and whitespace around `=`; `Number` tolerates the surrounding spaces.
+      const q = params.find((p) => /^q\s*=/i.test(p));
+      return { tag, q: q ? Number(q.slice(q.indexOf('=') + 1)) : 1, index };
     })
     .filter(({ tag, q }) => tag !== '' && tag !== '*' && q > 0)
     .sort((a, b) => b.q - a.q || a.index - b.index)
@@ -50,6 +60,10 @@ defineCustomServerStrategy('custom-preferred', {
   },
 });
 
+// The server reads Accept-Language while the browser reads navigator.languages. Browsers normally
+// keep the two in step, but privacy settings can make them differ, in which case the first visit
+// hydrates in a different language than it was rendered in. The client writes its choice to the
+// cookie on that first resolution, so every later request agrees.
 defineCustomClientStrategy('custom-preferred', {
   getLocale: () =>
     typeof navigator === 'undefined' ? undefined : matchPreferredLocale(navigator.languages ?? []),

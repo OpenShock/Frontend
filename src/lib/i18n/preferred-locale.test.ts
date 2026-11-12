@@ -13,6 +13,10 @@ describe('matchPreferredLocale', () => {
     [['nl-BE'], 'nl'],
     [['uk-UA'], 'uk'],
     [['ja-JP'], 'ja'],
+    [['nb-NO'], 'nb'],
+    [['no'], 'nb'],
+    [['nn-NO'], 'nb'],
+    [['DE-de'], 'de'],
     [['xx', 'de-AT'], 'de'],
     [['xx'], undefined],
   ])('maps %j to %s', (tags, expected) => {
@@ -23,5 +27,17 @@ describe('matchPreferredLocale', () => {
 describe('parseAcceptLanguage', () => {
   it('orders by weight and drops q=0', () => {
     expect(parseAcceptLanguage('de;q=0.5, zh-TW, fr;q=0, en;q=0.8')).toEqual(['zh-TW', 'en', 'de']);
+  });
+
+  it('accepts uppercase Q and spaces around the equals sign', () => {
+    expect(parseAcceptLanguage('en;Q=0.5, de; q = 0.9, *;q=0.1')).toEqual(['de', 'en']);
+  });
+
+  it('drops tags with an unreadable weight', () => {
+    expect(parseAcceptLanguage('fr;q=abc, en')).toEqual(['en']);
+  });
+
+  it('resolves a parsed header to a supported locale', () => {
+    expect(matchPreferredLocale(parseAcceptLanguage('nn-NO, en;q=0.8'))).toBe('nb');
   });
 });

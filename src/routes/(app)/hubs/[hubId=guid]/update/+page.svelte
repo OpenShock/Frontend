@@ -280,7 +280,7 @@
                 >
               </div>
             </div>
-          {:else if hub.otaResult.message.includes('rolled back')}
+          {:else if hub.otaResult.rolledBack}
             <TriangleAlert class="text-warning mt-0.5 size-5 shrink-0" />
             <div class="flex flex-col gap-2">
               <p class="text-warning font-medium">{m.hub_update_rolled_back()}</p>

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { m } from '#lib/paraglide/messages.js';
+  import { intlLocale } from '#lib/i18n/intl.js';
   import { Microchip, TriangleAlert } from '@lucide/svelte';
   import { DownloadAndVerifyBoardBinary } from '#lib/api/firmwareCDN.js';
   import { Button } from '@openshock/svelte-core/components/ui/button';
@@ -28,6 +29,11 @@
   }: Props = $props();
 
   let riskAcknowledgeStatus = $state<'none' | 'shown' | 'accepted'>('none');
+
+  const percentFormat = new Intl.NumberFormat(intlLocale(), {
+    style: 'percent',
+    maximumFractionDigits: 2,
+  });
   let progressName = $state<string | null>(null);
   let progressPercent = $state<number | null>(null);
   let error = $state<string | null>(null);
@@ -114,7 +120,7 @@
       <span>
         {m.terminal_flash_progress({ status: progressName ?? m.terminal_flash_idle() })}
         {#if progressPercent !== null}
-          ({progressPercent.toFixed(2)}%)
+          ({percentFormat.format(progressPercent / 100)})
         {/if}
       </span>
       {#if progressName !== null}

@@ -22,7 +22,7 @@
 
   let { shareInvite = $bindable() }: Props = $props();
 
-  const copyCode = () => copyToClipboard(shareInvite.id, 'Code copied to clipboard');
+  const copyCode = () => copyToClipboard(shareInvite.id, m.common_copied());
 
   async function removeInviteCall(invite: ShareInviteBaseDetails) {
     try {
