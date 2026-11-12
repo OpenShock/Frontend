@@ -11,6 +11,7 @@ import { request as httpsRequest } from 'node:https';
 import { startStack } from './integration-stack.mjs';
 
 const API_URL = process.env.VITE_API_PROXY_TARGET ?? 'http://localhost:5001';
+const FRONTEND_URL = process.env.TEST_FRONTEND_URL ?? 'http://localhost:5173';
 const TIMEOUT_MS = Number(process.env.INTEGRATION_BACKEND_TIMEOUT_MS ?? 10 * 60 * 1000);
 const POLL_INTERVAL_MS = 1500;
 
@@ -71,7 +72,16 @@ const child = spawn('pnpm', ['exec', 'vite', 'dev', '--mode', 'integration'], {
   shell: process.platform === 'win32',
   // Lets src/env.ts and #lib/utils/url.ts accept the stack's plain-HTTP loopback API URL. Scoped
   // to this child so it cannot leak into a production build.
-  env: { ...process.env, PUBLIC_ALLOW_INSECURE_LOCAL_API: '1' },
+  env: {
+    ...process.env,
+    PUBLIC_ALLOW_INSECURE_LOCAL_API: '1',
+    // The app, the Vite listen address (vite.config.ts) and the activation links the Cron host
+    // builds (integration-stack.mjs) all follow TEST_FRONTEND_URL. Process env outranks
+    // .env.integration, so overriding the URL in one place moves everything together.
+    PUBLIC_SITE_URL: FRONTEND_URL,
+    PUBLIC_SITE_SHORT_URL: FRONTEND_URL,
+    PUBLIC_BACKEND_API_URL: FRONTEND_URL,
+  },
 });
 
 let shuttingDown = false;

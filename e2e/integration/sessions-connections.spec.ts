@@ -45,22 +45,21 @@ test.describe('connections / OAuth page', () => {
     await expect(authedPage.locator('main').first()).toBeVisible();
   });
 
-  test('shows available OAuth providers or an empty state', async ({ authedPage }) => {
+  test('shows the link action and either linked providers or an empty state', async ({
+    authedPage,
+  }) => {
     await authedPage.goto('/settings/connections');
     await authedPage.waitForLoadState('networkidle');
-    // Either provider UI is present, or an empty/none-configured state is shown.
-    // Both are acceptable — what's not acceptable is rendering nothing at all.
-    const providerVisible = await authedPage
-      .getByText(/discord|github|google|oauth|provider/i)
-      .first()
-      .isVisible({ timeout: 5000 })
-      .catch(() => false);
-    if (!providerVisible) {
-      await expect(
-        authedPage
-          .getByText(/no.*(provider|connection|configured)|none\s*(available|configured)/i)
-          .first()
-      ).toBeVisible({ timeout: 5000 });
-    }
+    const main = authedPage.getByRole('main');
+    // The heading always says "OAuth Connections", so it proves nothing about the loaded
+    // content. The link action and the list (or its empty state) only render once the
+    // connections request has resolved.
+    await expect(main.getByRole('button', { name: /link new provider/i })).toBeVisible();
+    await expect(
+      main
+        .getByText(/no connections yet/i)
+        .or(main.getByRole('button', { name: /unlink/i }))
+        .first()
+    ).toBeVisible();
   });
 });

@@ -53,10 +53,14 @@ test.describe('account settings', () => {
 });
 
 test.describe('profile page', () => {
-  test('profile page renders with user info', async ({ authedPage, user }) => {
+  test('profile page renders its heading and coming-soon state', async ({ authedPage }) => {
     await authedPage.goto('/profile');
     await authedPage.waitForLoadState('networkidle');
-    await expect(authedPage.getByText(user.credentials.username, { exact: false })).toBeVisible();
+    // The route is a placeholder today: a heading and an empty state, no user info of its own.
+    // Anything user-specific on the page would come from the surrounding shell, not the profile.
+    const main = authedPage.getByRole('main');
+    await expect(main.getByRole('heading', { name: /^profile$/i })).toBeVisible();
+    await expect(main.getByText(/profile is coming soon/i)).toBeVisible();
   });
 });
 

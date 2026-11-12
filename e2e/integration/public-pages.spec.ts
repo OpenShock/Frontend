@@ -84,12 +84,16 @@ test.describe('terminal page', () => {
   test('terminal page has the expected UI structure', async ({ page }) => {
     await page.goto('/terminal');
     await page.waitForLoadState('networkidle');
-    // Should have some terminal-related element
-    await expect(page.locator('canvas, [data-terminal], .terminal, textarea, select').first())
-      .toBeVisible({ timeout: 5000 })
-      .catch(() => {
-        // Terminal may need WebSerial or only renders content elements
-      });
+    await expect(page.getByRole('heading', { name: /serial terminal/i })).toBeVisible();
+    // With WebSerial the page offers the mode picker; headless Chromium has no WebSerial and
+    // gets the unsupported-browser notice instead. Either way something must render below the
+    // heading, so a blank body fails.
+    await expect(
+      page
+        .getByText(/configure device/i)
+        .or(page.getByText(/does not support this feature/i))
+        .first()
+    ).toBeVisible();
   });
 });
 

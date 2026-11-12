@@ -36,22 +36,24 @@ test.describe('SignalR connection lifecycle', () => {
     expect(errors).toHaveLength(0);
   });
 
-  test('authenticated page makes a negotiate or WebSocket request', async ({ authedPage }) => {
-    const wsRequests: string[] = [];
-    authedPage.on('request', (req) => {
-      const url = req.url();
-      if (/negotiate|ws:|wss:|signalr/i.test(url)) {
-        wsRequests.push(url);
-      }
+  test('authenticated page opens the user hub WebSocket and completes the handshake', async ({
+    authedPage,
+  }) => {
+    // The client is WebSockets-only with negotiation skipped, so the hub URL is the one and
+    // only socket. Matching request URLs is not enough: in dev mode the signalr JS chunk's URL
+    // matches too, and an upgrade the proxy drops never shows up as a failed request.
+    const socket = authedPage.waitForEvent('websocket', {
+      predicate: (ws) => /\/1\/hubs\/user/.test(ws.url()),
+      timeout: 15000,
     });
-
     await authedPage.goto('/home');
-    await authedPage.waitForLoadState('networkidle');
-    await authedPage.waitForTimeout(3000);
+    const ws = await socket;
 
-    // On an authenticated session the frontend must attempt to establish a
-    // SignalR connection — assert at least one negotiate/WebSocket request fired.
-    expect(wsRequests.length).toBeGreaterThan(0);
+    // SignalR's handshake is the first exchange on the socket: the client sends its protocol,
+    // the server answers. A received frame therefore proves the upgrade was forwarded and the
+    // hub accepted the session cookie.
+    await ws.waitForEvent('framereceived', { timeout: 10000 });
+    expect(ws.isClosed()).toBe(false);
   });
 });
 

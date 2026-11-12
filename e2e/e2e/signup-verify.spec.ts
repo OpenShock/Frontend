@@ -13,7 +13,7 @@
 import { deleteSelf } from './lib/api-client';
 import { FRONTEND_URL } from './lib/env';
 import { deleteMessage, extractAndRewriteLink, waitForEmailTo } from './lib/mailpit';
-import { expect, MAILPIT_URL, makeCredentials, test } from './lib/test-fixtures';
+import { expect, getAuthCookies, MAILPIT_URL, test } from './lib/test-fixtures';
 
 // ---------------------------------------------------------------------------
 // Browser-based signup — no email verification required
@@ -56,14 +56,11 @@ test.describe('browser signup flow', () => {
         { timeout: 15_000 }
       )
       .toBe(true);
-
-    // Cleanup: dismiss dialog and delete via API is handled in teardown
   });
 
-  test('duplicate email shows an error without crashing', async ({ page }) => {
-    // Sign up once (this is a fresh unique account so no conflict is expected,
-    // but we check that the error path doesn't crash the page)
-    const creds = makeCredentials('dup');
+  test('duplicate email shows an error without crashing', async ({ page, credentials }) => {
+    // Sign up once; the fixture deletes this account afterwards.
+    const creds = credentials;
     await page.goto('/signup');
     await page.waitForLoadState('networkidle');
 
@@ -83,11 +80,17 @@ test.describe('browser signup flow', () => {
     );
     await page.getByRole('button', { name: /create account/i }).click();
 
-    // Dismiss success if shown
-    const okBtn = page.getByRole('button', { name: /^ok$/i });
-    if (await okBtn.isVisible({ timeout: 5_000 }).catch(() => false)) {
-      await okBtn.click();
-    }
+    // The first signup has to succeed, or the second one is not a duplicate at all. Success
+    // shows the welcome dialog or lands on /login; whichever happens, wait on it.
+    await expect
+      .poll(
+        async () => {
+          if (/login/.test(page.url())) return true;
+          return page.getByText(/thank you for signing up/i).isVisible();
+        },
+        { timeout: 15_000 }
+      )
+      .toBe(true);
 
     // Try to sign up again with the same email
     await page.goto('/signup');
@@ -105,10 +108,14 @@ test.describe('browser signup flow', () => {
       () => !(document.querySelector('button[type="submit"]') as HTMLButtonElement)?.disabled,
       { timeout: 8_000 }
     );
+    const signupResponse = page.waitForResponse((res) => /\/account\/signup/.test(res.url()));
     await page.getByRole('button', { name: /create account/i }).click();
-    await page.waitForTimeout(3_000);
+    expect((await signupResponse).ok()).toBe(false);
 
-    // Should show an error toast or inline message — not crash or redirect to home
+    // The rejection has to reach the user: the problem's title is shown as a toast.
+    await expect(page.getByText(/already in use|already taken|already exists/i)).toBeVisible({
+      timeout: 10_000,
+    });
     expect(page.url()).not.toMatch(/\/(home|shockers|hubs)/);
   });
 });
@@ -194,19 +201,15 @@ test.describe('email verification via MailPit', () => {
 
     await deleteMessage(MAILPIT_URL, msg.ID);
 
-    // Step 4: Navigate to the activation link
+    // Step 4: Navigate to the activation link. The page activates on load and reports the result.
     await page.goto(activationLink!);
-    await page.waitForLoadState('networkidle');
-
-    // Step 5: Click "Activate Account" button
-    await expect(page.getByRole('button', { name: /activate account/i })).toBeVisible({
-      timeout: 5_000,
+    await expect(page.getByText(/your account has been activated/i)).toBeVisible({
+      timeout: 10_000,
     });
-    await page.getByRole('button', { name: /activate account/i }).click();
 
-    // Should redirect to /login after activation
+    // Step 5: Continue to login
+    await page.getByRole('link', { name: /continue to login/i }).click();
     await page.waitForURL(/login/, { timeout: 10_000 });
-    expect(page.url()).toMatch(/login/);
 
     // Step 6: Log in with the activated account
     await page.getByLabel(/username or email/i).fill(credentials.email);
@@ -222,11 +225,13 @@ test.describe('email verification via MailPit', () => {
 
   test('activate page with an invalid token shows an error state', async ({ page }) => {
     await page.goto('/activate?token=00000000-0000-0000-0000-000000000000');
-    await page.waitForLoadState('networkidle');
-    await page.getByRole('button', { name: /activate account/i }).click();
-    await page.waitForTimeout(2_000);
-    // Should show some error feedback — not crash or redirect to home
-    expect(page.url()).not.toMatch(/\/(home|shockers|hubs)/);
+    // The page activates on load; a bad token has to end in the visible failure message, and
+    // nothing else may happen (no redirect anywhere, no way to continue to login).
+    await expect(page.getByText(/activation link is invalid or has expired/i)).toBeVisible({
+      timeout: 10_000,
+    });
+    await expect(page.getByRole('link', { name: /continue to login/i })).toHaveCount(0);
+    expect(page.url()).toMatch(/\/activate/);
   });
 });
 
@@ -277,10 +282,12 @@ test.describe('complete new-user onboarding journey', () => {
     expect(link).toBeTruthy();
     await deleteMessage(MAILPIT_URL, msg.ID);
 
-    // 3. Activate
+    // 3. Activate (happens on load) and continue to login
     await page.goto(link!);
-    await page.waitForLoadState('networkidle');
-    await page.getByRole('button', { name: /activate account/i }).click();
+    await expect(page.getByText(/your account has been activated/i)).toBeVisible({
+      timeout: 10_000,
+    });
+    await page.getByRole('link', { name: /continue to login/i }).click();
     await page.waitForURL(/login/, { timeout: 10_000 });
 
     // 4. Login
@@ -297,16 +304,12 @@ test.describe('complete new-user onboarding journey', () => {
     await expect(page.getByRole('navigation').first()).toBeVisible({ timeout: 5_000 });
     expect(errors).toHaveLength(0);
 
-    // Teardown: delete the account
-    const cookies = await context.cookies();
-    const apiHost = new URL(FRONTEND_URL).hostname.replace('next.', '');
-    const authCookies = cookies
-      .filter((c) => c.domain.includes(apiHost) || c.domain.includes('openshock'))
-      .map((c) => `${c.name}=${c.value}; Path=${c.path}`);
+    // Teardown: delete the account with the session the browser holds for the API host. The
+    // credentials fixture would get there too, but this spares it the mail round trip.
     try {
-      await deleteSelf(authCookies);
+      await deleteSelf(await getAuthCookies(context));
     } catch {
-      // best-effort
+      // best-effort; the credentials fixture retries over the API
     }
   });
 });

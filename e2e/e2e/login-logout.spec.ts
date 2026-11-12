@@ -83,25 +83,22 @@ test.describe('login via browser UI', () => {
 
 test.describe('logout via browser UI', () => {
   test('user can log out and is redirected to the login page', async ({ authedPage }) => {
-    // Find and trigger the logout action
-    // The app may have a logout button in a user menu or sidebar
-    const logoutBtn = authedPage.getByRole('link', { name: /log.?out|sign.?out/i }).first();
-    const logoutBtnAlt = authedPage.getByRole('button', { name: /log.?out|sign.?out/i }).first();
+    // The logout control is a menu item in the header's avatar dropdown, so it has to be
+    // opened first. Requiring it keeps this a test of logging out through the UI; falling back
+    // to the /logout route would pass with the control missing altogether.
+    const userMenu = authedPage.getByRole('button', { name: /avatar/i }).first();
+    await expect(userMenu).toBeVisible({ timeout: 10_000 });
+    await userMenu.click();
 
-    const hasLink = (await logoutBtn.count()) > 0;
-    const hasBtnAlt = (await logoutBtnAlt.count()) > 0;
-
-    if (hasLink) {
-      await logoutBtn.click();
-    } else if (hasBtnAlt) {
-      await logoutBtnAlt.click();
-    } else {
-      // Navigate directly to the logout route
-      await authedPage.goto('/logout');
-    }
+    const logoutItem = authedPage.getByRole('menuitem', { name: /^logout$/i });
+    await expect(logoutItem).toBeVisible();
+    await logoutItem.click();
 
     await authedPage.waitForURL(/login/, { timeout: 10_000 });
-    expect(authedPage.url()).toMatch(/login/);
+
+    // The session has to be gone too, not just the page: a protected route must bounce.
+    await authedPage.goto('/home');
+    await authedPage.waitForURL(/login/, { timeout: 8_000 });
   });
 
   test('after logout, /home redirects to /login', async ({ authedPage }) => {

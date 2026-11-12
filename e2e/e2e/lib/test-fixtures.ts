@@ -1,6 +1,7 @@
 import { test as base, type BrowserContext, type Page } from '@playwright/test';
-import { deleteSelf, type AuthCookies } from './api-client';
+import { activate, login as apiLogin, deleteSelf, type AuthCookies } from './api-client';
 import { BACKEND_URL, FRONTEND_URL, MAILPIT_URL } from './env';
+import { deleteMessage, waitForEmailTo } from './mailpit';
 
 // ---------------------------------------------------------------------------
 // Unique ID helpers
@@ -90,12 +91,55 @@ async function applyTurnstileBypass(context: BrowserContext): Promise<void> {
 // Cookie helpers (for teardown)
 // ---------------------------------------------------------------------------
 
-async function getAuthCookies(context: BrowserContext): Promise<AuthCookies> {
+/** Cookies the browser holds for the API host, the ones account deletion needs. */
+export async function getAuthCookies(context: BrowserContext): Promise<AuthCookies> {
   const cookies = await context.cookies();
+  // The API sets its cookies for the backend's domain (or a parent of it), so match against
+  // that host rather than the frontend's: the two differ on every non-local target.
   const apiHost = new URL(BACKEND_URL).hostname;
   return cookies
-    .filter((c) => c.domain.includes(apiHost) || c.domain.includes('openshock'))
+    .filter((c) => apiHost.endsWith(c.domain.replace(/^\./, '')))
     .map((c) => `${c.name}=${c.value}; Path=${c.path}; Domain=${c.domain}`);
+}
+
+// ---------------------------------------------------------------------------
+// Account cleanup
+//
+// Accounts created through the signup form are not usable until activated, and only a
+// logged-in session can delete an account. So the teardown walks the rest of the way:
+// activate with the token from Mailpit (a no-op if the test already did), log in over the
+// API, delete. Without Mailpit a pending account cannot be reached, so the attempt is limited
+// to a plain login, which only works on instances that skip activation.
+// ---------------------------------------------------------------------------
+
+export async function cleanupAccount(creds: Credentials): Promise<void> {
+  if (MAILPIT_URL) {
+    try {
+      const msg = await waitForEmailTo(MAILPIT_URL, creds.email, { timeoutMs: 10_000 });
+      const token = (msg.Text || msg.HTML).match(/[?&]token=([^\s"'<&]+)/)?.[1];
+      if (token) {
+        // Already-used tokens are rejected; that just means the test activated it itself.
+        await activate(token).catch(() => {});
+      }
+      await deleteMessage(MAILPIT_URL, msg.ID);
+    } catch {
+      // No mail: the signup never happened (e.g. a duplicate-email test) or mail is disabled.
+    }
+  }
+
+  let cookies: AuthCookies;
+  try {
+    cookies = await apiLogin(creds.email, creds.password);
+  } catch {
+    // The account does not exist (never created, or already deleted by another teardown) or
+    // cannot be activated from here; nothing further can be done with it.
+    return;
+  }
+  try {
+    await deleteSelf(cookies);
+  } catch (err) {
+    console.warn(`[e2e] cleanup: deleting account ${creds.username} failed:`, err);
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -148,8 +192,12 @@ export const test = base.extend<{
     await use(page);
   },
 
+  // Every test that signs up through the form uses these credentials, so the fixture owns the
+  // cleanup: whatever account the test left behind is activated if need be, then deleted.
   credentials: async ({ browserName: _browserName }, use) => {
-    await use(makeCredentials());
+    const creds = makeCredentials();
+    await use(creds);
+    await cleanupAccount(creds);
   },
 
   mailpitEnabled: async ({ browserName: _browserName }, use) => {

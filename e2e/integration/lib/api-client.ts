@@ -56,7 +56,9 @@ export async function activateAccount(email: string): Promise<void> {
           const msgData = (await msg.json()) as { Text?: string; HTML?: string };
           // The mail itself is a single HTML part; Text is the plaintext Mailpit renders from it,
           // which is the cleaner thing to match. Fall back to the markup if that ever stops.
-          const match = (msgData.Text || msgData.HTML || '').match(/[?&]token=([A-Za-z0-9]+)/);
+          // The token alphabet is the API's business, so take everything up to the end of the
+          // query value rather than guessing at a character class.
+          const match = (msgData.Text || msgData.HTML || '').match(/[?&]token=([^\s"'<&]+)/);
           if (match) {
             token = match[1];
             break;

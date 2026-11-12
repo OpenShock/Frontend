@@ -31,11 +31,13 @@ test.describe('login page', () => {
     await page.getByLabel(/password/i).fill('WrongPass1!');
     // Wait for turnstile dev-bypass to fire and button to enable
     await expect(page.getByRole('button', { name: /login/i })).toBeEnabled({ timeout: 5000 });
+    // Wait for the login request itself to be answered, so a dead submit button cannot pass as
+    // "still on /login". The rejection surfaces as an inline password error.
+    const loginResponse = page.waitForResponse((res) => /\/account\/login/.test(res.url()));
     await page.getByRole('button', { name: /login/i }).click();
-    // Wrong credentials must not redirect to /home. Error UI varies (toast,
-    // inline aria-invalid, etc.) — the load-bearing invariant is "still on /login".
-    await page.waitForTimeout(2500);
-    expect(page.url()).toMatch(/\/login/);
+    expect((await loginResponse).ok()).toBe(false);
+    await expect(page.getByText(/invalid username or password/i)).toBeVisible();
+    await expect(page).toHaveURL(/\/login/);
   });
 
   test('successful login redirects to /home', async ({ page, user }) => {
@@ -115,6 +117,11 @@ test.describe('logout', () => {
     await logoutItem.click();
 
     await authedPage.waitForURL(/\/login|\/$/i, { timeout: 5000 });
+
+    // A redirect alone could leave a usable session behind. Prove it is gone: a protected
+    // route in the same browser context has to bounce back to the login page.
+    await authedPage.goto('/home');
+    await authedPage.waitForURL(/\/login/, { timeout: 8000 });
   });
 
   test('API logout invalidates the session cookie', async ({ user }) => {

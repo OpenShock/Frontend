@@ -271,10 +271,16 @@ function resolveServerConfig(
 function resolveIntegrationServer(): LocalServer {
   const vars = { ...env, ...loadEnv('integration', process.cwd(), ['PUBLIC_', 'VITE_']) };
   const target = vars.VITE_API_PROXY_TARGET ?? 'http://localhost:5001';
+  // Playwright probes TEST_FRONTEND_URL for readiness and the browser loads it, so the server has
+  // to listen where that URL points or the run waits out the webServer timeout.
+  const frontendUrl = new URL(process.env.TEST_FRONTEND_URL ?? 'http://localhost:5173');
   const proxy: Record<string, ProxyOptions> = {
     '^/(1|2)(/.*)?$': {
       target,
       changeOrigin: true,
+      // The SignalR client is WebSockets-only with negotiation skipped, and its hub lives under
+      // /1 as well. Without this the upgrade is never forwarded and realtime silently stays down.
+      ws: true,
       configure: (proxy) => {
         proxy.on('proxyRes', (proxyRes) => {
           const setCookie = proxyRes.headers['set-cookie'];
@@ -292,8 +298,8 @@ function resolveIntegrationServer(): LocalServer {
       forwardConsole: true,
       fs: { allow: ['./packages/svelte-core'] },
       proxy,
-      host: 'localhost',
-      port: 5173,
+      host: frontendUrl.hostname,
+      port: Number(frontendUrl.port || 80),
     },
     fqdn: null,
   };
