@@ -25,6 +25,12 @@
 
   let versions = $state<{ [key in FirmwareChannel]?: string | null }>({});
 
+  const channelLabels: Record<FirmwareChannel, () => string> = {
+    stable: m.firmware_channel_stable,
+    beta: m.firmware_channel_beta,
+    develop: m.firmware_channel_develop,
+  };
+
   // Reactive effect to update the version based on the selected channel.
   $effect(() => {
     // Ensure channel is valid; if missing or empty, default to 'stable'
@@ -55,8 +61,8 @@
 <div class="flex flex-row items-center justify-start gap-2">
   <ToggleGroup.Root type="single" bind:value={channel} {disabled}>
     {#each FirmwareChannels as key (key)}
-      <ToggleGroup.Item class="cursor-pointer capitalize" value={key} {disabled}>
-        {key}
+      <ToggleGroup.Item class="cursor-pointer" value={key} {disabled}>
+        {channelLabels[key]()}
       </ToggleGroup.Item>
     {/each}
   </ToggleGroup.Root>
@@ -64,14 +70,14 @@
   <div class="flex flex-row items-center justify-start gap-2 pl-2">
     {#if channel === 'stable'}
       <CircleCheckBig class="text-success" />
-      <p class="text-success">{m.terminal_channel_recommended()}</p>
+      <p class="text-success">{m.firmware_channel_recommended()}</p>
     {:else if channel === 'beta'}
       <TriangleAlert class="text-warning" />
-      <p class="text-warning">{m.channel_bugs_warning()}</p>
+      <p class="text-warning">{m.firmware_channel_bugs_warning()}</p>
     {:else}
       <TriangleAlert class="text-destructive" />
       <p class="text-destructive font-bold" role="alert">
-        {m.terminal_channel_danger()}
+        {m.firmware_channel_danger()}
       </p>
     {/if}
   </div>

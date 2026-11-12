@@ -71,8 +71,14 @@ export const ProblemMessages: {
   'ApiToken.CanOnlyDeleteSelf': { title: m.problem_api_token_can_only_delete_self_title },
   'ApiToken.NotFound': { title: m.problem_api_token_not_found_title },
   'ApiToken.Paused': { title: m.problem_api_token_paused_title },
-  'AssignLcg.BadSchemaVersion': {},
-  'AssignLcg.NoLcgAvailable': {},
+  'AssignLcg.BadSchemaVersion': {
+    title: m.problem_assign_lcg_bad_schema_version_title,
+    description: m.problem_assign_lcg_bad_schema_version_desc,
+  },
+  'AssignLcg.NoLcgAvailable': {
+    title: m.problem_assign_lcg_no_lcg_available_title,
+    description: m.problem_assign_lcg_no_lcg_available_desc,
+  },
   'Authentication.AccountDeactivated': {
     title: m.problem_authentication_account_deactivated_title,
   },
@@ -111,7 +117,9 @@ export const ProblemMessages: {
   'Configuration.NotFound': { title: m.problem_configuration_not_found_title },
   'ControlStats.InvalidRange': { title: m.problem_control_stats_invalid_range_title },
   'ControlStats.InvalidTimeZone': { title: m.problem_control_stats_invalid_time_zone_title },
-  'ControlStats.MissingCapability': {},
+  'ControlStats.MissingCapability': {
+    title: m.problem_control_stats_missing_capability_title,
+  },
   'Device.NotFound': { title: m.problem_device_not_found_title },
   'Device.NotOnline': { title: m.problem_device_not_online_title },
   'Device.TooManyHubs': { title: m.problem_device_too_many_hubs_title },

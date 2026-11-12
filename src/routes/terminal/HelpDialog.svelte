@@ -17,6 +17,11 @@
 
   let { open, onClose }: Props = $props();
 
+  // Identifiers the help text refers to. Passed as inputs so translations cannot alter them.
+  const DRIVER_INSTALLER = 'CP210xVCPInstaller_x64.exe';
+  const DEVICE_NAME = 'Silicon Labs CP210x USB to UART Bridge';
+  const SUPPORT_CHANNEL = '# 💭┃support-chat';
+
   function onOpenChange(open: boolean) {
     if (!open) {
       onClose();
@@ -88,7 +93,11 @@
     </li>
     <li>{m.terminal_help_driver_extract()}</li>
     <li>
-      <ParaglideMessage message={m.terminal_help_driver_run} {code} />
+      <ParaglideMessage
+        message={m.terminal_help_driver_run}
+        inputs={{ installer: DRIVER_INSTALLER }}
+        {code}
+      />
     </li>
     <li>{m.terminal_help_driver_reconnect()}</li>
   </ol>
@@ -103,8 +112,8 @@
     <li>
       <ParaglideMessage message={m.terminal_help_manual_ports} {code} />
       <ul class="my-2 ml-6 list-disc [&>li]:mt-1">
-        <li><Code>Silicon Labs CP210x USB to UART Bridge</Code></li>
-        <li><Code>Silicon Labs CP210x USB to UART Bridge (COM...)</Code></li>
+        <li><Code>{DEVICE_NAME}</Code></li>
+        <li><Code>{DEVICE_NAME} (COM...)</Code></li>
       </ul>
       {m.terminal_help_manual_missing()}
     </li>
@@ -115,7 +124,11 @@
       <ParaglideMessage message={m.terminal_help_manual_browse} {code} />
     </li>
     <li>
-      <ParaglideMessage message={m.terminal_help_manual_success} {code} />
+      <ParaglideMessage
+        message={m.terminal_help_manual_success}
+        inputs={{ deviceName: DEVICE_NAME }}
+        {code}
+      />
     </li>
   </ol>
 {/snippet}
@@ -123,7 +136,11 @@
 {#snippet discordBody()}
   <div class="flex flex-col gap-3 text-sm">
     <p>
-      <ParaglideMessage message={m.terminal_help_discord_intro} {code} />
+      <ParaglideMessage
+        message={m.terminal_help_discord_intro}
+        inputs={{ channel: SUPPORT_CHANNEL }}
+        {code}
+      />
     </p>
     <ul class="text-muted-foreground ml-6 list-disc [&>li]:mt-1">
       <li>{m.terminal_help_discord_os()}</li>

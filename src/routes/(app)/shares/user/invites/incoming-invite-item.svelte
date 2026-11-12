@@ -109,12 +109,12 @@
       <Tooltip.Trigger
         class={cn('mr-4 size-9', buttonVariants({ variant: 'destructive' }))}
         onclick={denyInvite}
-        aria-label={m.invite_deny_title()}
+        aria-label={m.invite_deny_label()}
       >
         <X />
       </Tooltip.Trigger>
       <Tooltip.Content>
-        <p>{m.invite_deny_title()}</p>
+        <p>{m.invite_deny_label()}</p>
       </Tooltip.Content>
     </Tooltip.Root>
   </Table.Cell>

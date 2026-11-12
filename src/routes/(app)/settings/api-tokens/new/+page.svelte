@@ -1,5 +1,6 @@
 <script lang="ts" module>
   import { PermissionType } from '#lib/api/index.js';
+  import { permissionActionLabel, permissionCategoryLabel } from '#lib/i18n/token-permissions.js';
   import type { ValidationResult } from '@openshock/svelte-core/types';
 
   type PermissionCategory = {
@@ -25,10 +26,6 @@
     if (name.length === 0) return { valid: false, message: m.token_name_required() };
     if (name.length > 32) return { valid: false, message: m.token_name_too_long() };
     return { valid: true };
-  }
-
-  function capitalizeFirstLetter(s: string) {
-    return s.charAt(0).toUpperCase() + s.slice(1);
   }
 </script>
 
@@ -209,8 +206,12 @@
           <h1>{m.token_access_granted()}</h1>
         </Card.Title>
         <Card.Description>
-          {m.token_shared_redirecting()}<br />
-          <b>{redirectUri}</b>
+          <ParaglideMessage
+            message={m.token_shared_redirecting}
+            inputs={{ uri: redirectUri ?? '' }}
+          >
+            {#snippet b({ children })}<b>{@render children?.()}</b>{/snippet}
+          </ParaglideMessage>
         </Card.Description>
       </Card.Header>
       <Card.Content>
@@ -259,9 +260,12 @@
       <Card.Content class="flex flex-col space-y-4">
         {#if isExternal}
           <span>
-            <ParaglideMessage message={m.token_external_requesting} inputs={{ name }}>
+            <ParaglideMessage
+              message={m.token_external_requesting}
+              inputs={{ name, uri: redirectUri ?? '' }}
+            >
               {#snippet b({ children })}<b>{@render children?.()}</b>{/snippet}
-            </ParaglideMessage><br /><b>{redirectUri}</b>
+            </ParaglideMessage>
           </span>
         {/if}
 
@@ -278,7 +282,7 @@
           <h2>{m.token_permissions()}</h2>
           <div class="mt-3 flex flex-col space-y-4 rounded-md border p-4">
             {#each permissionCategories as permission (permission.name)}
-              <span>{capitalizeFirstLetter(permission.name)}</span>
+              <span>{permissionCategoryLabel(permission.name)}</span>
               {#each permission.perms as perm (perm.key)}
                 <label class="mt-0! ml-4">
                   <input
@@ -287,7 +291,7 @@
                     value={perm.key}
                     bind:group={permissions}
                   />
-                  {capitalizeFirstLetter(perm.name)}
+                  {permissionActionLabel(perm.name)}
                 </label>
               {/each}
             {/each}

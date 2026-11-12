@@ -73,7 +73,7 @@
         <div class="grow">
           <div class="flex items-center gap-2 font-medium">
             <User />
-            {m.auth_oauth_create_username_label()}
+            {m.account_username_label()}
           </div>
           <div class="text-muted-foreground">{account.name}</div>
         </div>
@@ -87,7 +87,7 @@
         <div class="grow">
           <div class="flex items-center gap-2 font-medium">
             <Mail />
-            {m.auth_forgot_email_label()}
+            {m.account_email_label()}
           </div>
           <div class="text-muted-foreground">{account.email}</div>
         </div>
@@ -104,7 +104,7 @@
         <div class="grow">
           <div class="flex items-center gap-2 font-medium">
             <KeyRound />
-            {m.auth_login_password_label()}
+            {m.account_password_label()}
           </div>
           {#if isOAuthOnly}
             <div class="text-muted-foreground text-sm">

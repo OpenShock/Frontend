@@ -5,6 +5,7 @@ import {
   isProblemDetails,
 } from '#lib/errorhandling/ProblemDetails.js';
 import { m } from '#lib/paraglide/messages.js';
+import { baseLocale, getLocale } from '#lib/paraglide/runtime.js';
 import {
   isError,
   isFetchError,
@@ -36,16 +37,21 @@ export type ProblemHandlers = { [K in ProblemType]?: ProblemHandler<K> } & {
 /** Handler that swallows a problem silently, for cases the caller treats as expected. */
 export const ignoreProblem: ProblemHandler = () => true;
 
-/** User-facing copy for a problem: translated registry copy first, backend title and detail as fallback. */
+/**
+ * User-facing copy for a problem: translated registry copy first, backend title and detail as fallback.
+ * The backend writes its detail in English, so under a translated title it is only shown while the
+ * app is in English too; everywhere else a translated title alone beats a mixed-language toast.
+ */
 export function describeProblem(problem: ProblemDetails): { title: string; description?: string } {
   if (!isKnownProblemType(problem.type)) {
     return { title: problem.title, description: problem.detail };
   }
   const messages: { title?: () => string; description?: () => string } =
     ProblemMessages[problem.type];
+  const backendDetail = getLocale() === baseLocale ? problem.detail : undefined;
   return {
     title: messages.title?.() ?? problem.title,
-    description: messages.description?.() ?? problem.detail,
+    description: messages.description?.() ?? backendDetail,
   };
 }
 

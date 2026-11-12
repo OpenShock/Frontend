@@ -66,7 +66,7 @@
 
   function expiryInfo(expiresOn: Temporal.Instant | null | undefined) {
     if (!expiresOn) {
-      return { label: m.tokens_never_expires(), tone: 'neutral' as const };
+      return { label: m.public_share_never_expires(), tone: 'neutral' as const };
     }
     // Read from the ticker, not the clock directly: this is what makes the
     // badge flip to "Expired" on its own while the page is open.

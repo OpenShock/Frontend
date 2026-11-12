@@ -159,7 +159,7 @@ export const CellNotApplicable: CellContentProps = {
 };
 export const CellOrangeNever: CellContentProps = {
   get text() {
-    return m.expiration_never();
+    return m.common_never();
   },
   bold: true,
   color: 'orange',
@@ -243,7 +243,7 @@ export function LocaleDateRenderer(instant: Temporal.Instant): CellContentProps 
 }
 
 export function LocaleDateTimeRenderer(instant: Temporal.Instant | null): CellContentProps {
-  if (!instant) return RenderCell(m.expiration_never());
+  if (!instant) return RenderCell(m.common_never());
   return RenderCellWithTooltip(instant.toLocaleString(intlLocale()), instant.toString());
 }
 

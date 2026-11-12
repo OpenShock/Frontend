@@ -194,19 +194,13 @@
   let isReadingJson = $state(false);
   let isReadingRaw = $state(false);
   let failedReadOpen = $state(false);
-  let failedReadField = $state('');
   let failedReadKey = $state('');
 
-  async function readWithRetry(
-    command: string,
-    key: string,
-    friendlyName: string
-  ): Promise<boolean> {
+  async function readWithRetry(command: string, key: string): Promise<boolean> {
     for (let attempt = 1; attempt <= READ_ATTEMPTS; attempt++) {
       const outcome = await readOnce(command, key);
       if (outcome === 'success') return true;
     }
-    failedReadField = friendlyName;
     failedReadKey = key;
     failedReadOpen = true;
     return false;
@@ -216,7 +210,7 @@
     if (isReadingJson) return;
     isReadingJson = true;
     try {
-      await readWithRetry('jsonconfig', 'JsonConfig', m.terminal_cfg_json_config());
+      await readWithRetry('jsonconfig', 'JsonConfig');
     } finally {
       isReadingJson = false;
     }
@@ -226,7 +220,7 @@
     if (isReadingRaw) return;
     isReadingRaw = true;
     try {
-      await readWithRetry('rawconfig', 'RawConfig', m.terminal_cfg_raw_field());
+      await readWithRetry('rawconfig', 'RawConfig');
     } finally {
       isReadingRaw = false;
     }
@@ -390,7 +384,11 @@
           </Button>
         </div>
         <p class="text-muted-foreground text-xs">
-          <ParaglideMessage message={m.terminal_cfg_estop_note} {code} />
+          <ParaglideMessage
+            message={m.terminal_cfg_estop_note}
+            inputs={{ latching: 'estop.latching', active: 'estop.active' }}
+            {code}
+          />
         </p>
       </div>
     </Card.Content>
@@ -465,7 +463,17 @@
           </Button>
         </div>
         <p class="text-muted-foreground text-xs">
-          <ParaglideMessage message={m.terminal_cfg_ap_note} {code} />
+          <ParaglideMessage
+            message={m.terminal_cfg_ap_note}
+            inputs={{
+              ssid: 'ap_ssid',
+              password: 'ap_password',
+              disabled: 'ap_disabled',
+              staDisabled: 'sta_disabled',
+              offlineMode: 'offline_mode',
+            }}
+            {code}
+          />
         </p>
       </div>
     </Card.Content>
@@ -707,7 +715,9 @@
         </div>
         <div class="flex flex-1 flex-col gap-1">
           <Dialog.Title class="text-left"
-            >{m.terminal_cfg_read_failed_title({ field: failedReadField })}</Dialog.Title
+            >{failedReadKey === 'JsonConfig'
+              ? m.terminal_cfg_read_failed_json_title()
+              : m.terminal_cfg_read_failed_raw_title()}</Dialog.Title
           >
           <Dialog.Description class="text-left">
             {m.terminal_cfg_read_failed_desc({ attempts: READ_ATTEMPTS })}

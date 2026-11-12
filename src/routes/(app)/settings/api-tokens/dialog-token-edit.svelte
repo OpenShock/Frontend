@@ -1,6 +1,7 @@
 <script lang="ts">
   import { m } from '#lib/paraglide/messages.js';
   import { PermissionType, tokensEditTokenV2 } from '#lib/api/index.js';
+  import { permissionActionLabel, permissionCategoryLabel } from '#lib/i18n/token-permissions.js';
   import type { ShockerControlSettings, TokenResponseV2 } from '#lib/api/index.js';
   import type { DialogContentProps } from '@openshock/svelte-core/components/dialog-manager';
   import { TextInput } from '@openshock/svelte-core/components/input';
@@ -98,16 +99,11 @@
         <h2>{m.token_permissions()}</h2>
         <div class="mt-3 flex flex-col space-y-4 rounded-md border p-4">
           {#each permissionCategories as permission (permission.name)}
-            <span class="capitalize">{permission.name}</span>
+            <span>{permissionCategoryLabel(permission.name)}</span>
             {#each permission.perms as perm (perm.key)}
               <label class="mt-0! ml-4">
-                <input
-                  type="checkbox"
-                  class="checkbox capitalize"
-                  value={perm.key}
-                  bind:group={permissions}
-                />
-                {perm.name}
+                <input type="checkbox" class="checkbox" value={perm.key} bind:group={permissions} />
+                {permissionActionLabel(perm.name)}
               </label>
             {/each}
           {/each}

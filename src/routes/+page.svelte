@@ -16,7 +16,7 @@
 </svelte:head>
 
 <section
-  aria-label={m.sidebar_home()}
+  aria-label={m.landing_section_label()}
   class="relative flex h-full flex-col items-center justify-center space-y-6 overflow-hidden bg-zinc-950 text-center text-white"
   onpointermove={(e) => grid?.handlePointerMove(e)}
 >

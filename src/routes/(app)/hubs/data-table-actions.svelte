@@ -172,9 +172,7 @@
     <Dialog.Title>{m.hub_edit_title()}</Dialog.Title>
   </Dialog.Header>
   <TextInput label={m.common_name()} placeholder={hub.name} bind:value={props.data.name} />
-  <Button onclick={() => editHub(props.data.name.trim(), props.close)}
-    >{m.terminal_cfg_apply()}</Button
-  >
+  <Button onclick={() => editHub(props.data.name.trim(), props.close)}>{m.hub_edit_apply()}</Button>
 {/snippet}
 
 {#snippet deleteDescSnippet(h: Hub)}
@@ -287,7 +285,7 @@
 {/snippet}
 
 <TableActionMenu>
-  <DropdownMenu.Label>{m.shocker_hub()}</DropdownMenu.Label>
+  <DropdownMenu.Label>{m.hub_menu_label()}</DropdownMenu.Label>
   <DropdownMenu.Group>
     <DropdownMenu.Item class="cursor-pointer" onclick={() => goto(resolve(`hubs/${hub.id}/update`))}
       ><RefreshCw class="size-4" />{m.hub_menu_update()}</DropdownMenu.Item

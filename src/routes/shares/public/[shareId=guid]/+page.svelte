@@ -88,7 +88,7 @@
               ><CircleUser />{m.public_share_view_enter_guest()}</Button
             >
 
-            <Button variant="outline" href={loginUrl}><LogIn />{m.auth_login_submit()}</Button>
+            <Button variant="outline" href={loginUrl}><LogIn />{m.public_share_login()}</Button>
           {/if}
         </Card.Content>
       </Card.Root>

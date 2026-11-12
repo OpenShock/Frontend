@@ -69,8 +69,14 @@ export const ProblemTypes = {
   'ApiToken.Paused': { title: 'This API token is paused' },
 
   // Hub to gateway assignment (hub token only)
-  'AssignLcg.BadSchemaVersion': {},
-  'AssignLcg.NoLcgAvailable': {},
+  'AssignLcg.BadSchemaVersion': {
+    title: 'Unsupported hub protocol version',
+    description: 'Update the hub firmware to connect.',
+  },
+  'AssignLcg.NoLcgAvailable': {
+    title: 'No gateway available',
+    description: 'No live control gateway is available right now. Please try again later.',
+  },
 
   // Authentication layer, any authenticated endpoint
   'Authentication.AccountDeactivated': { title: 'This account has been deactivated' },
@@ -112,7 +118,9 @@ export const ProblemTypes = {
   // Control stats
   'ControlStats.InvalidRange': { title: 'The from date must not be after the to date' },
   'ControlStats.InvalidTimeZone': { title: 'Unknown time zone' },
-  'ControlStats.MissingCapability': {},
+  'ControlStats.MissingCapability': {
+    title: 'Control statistics are not available on this server',
+  },
 
   // Hubs
   'Device.NotFound': { title: 'Hub not found' },

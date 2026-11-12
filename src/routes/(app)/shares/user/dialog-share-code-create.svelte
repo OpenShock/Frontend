@@ -133,8 +133,8 @@
         bind:selected={shockerIds}
         options={availableShockers}
         label={m.shockers_title()}
-        placeholder={m.public_share_add_placeholder()}
-        noMatchText={m.public_share_add_no_match()}
+        placeholder={m.share_code_shocker_placeholder()}
+        noMatchText={m.share_code_no_match()}
       ></MultiSelectCombobox>
 
       <RestrictionsSelector

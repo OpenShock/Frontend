@@ -85,7 +85,7 @@
       ><Barcode />{m.user_shares_redeem()}</Button
     >
 
-    <Button onclick={() => (createDialogOpen = true)}><Plus />{m.public_shares_new()}</Button>
+    <Button onclick={() => (createDialogOpen = true)}><Plus />{m.user_shares_new()}</Button>
   </PageHeader>
 
   <div class="flex w-full flex-none">

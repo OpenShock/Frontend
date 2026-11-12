@@ -76,8 +76,8 @@
       />
 
       <PasswordInput
-        label={m.auth_reset_password_label()}
-        placeholder={m.auth_reset_password_label()}
+        label={m.account_new_password_label()}
+        placeholder={m.account_new_password_label()}
         autocomplete="new-password"
         bind:value={password}
         bind:valid={passwordValid}
@@ -87,8 +87,8 @@
       />
 
       <PasswordInput
-        label={m.auth_reset_confirm_label()}
-        placeholder={m.auth_reset_confirm_label()}
+        label={m.account_confirm_password_label()}
+        placeholder={m.account_confirm_password_label()}
         autocomplete="new-password"
         bind:value={passwordConfirm}
         Icon={KeyRound}

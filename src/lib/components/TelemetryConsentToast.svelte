@@ -41,7 +41,7 @@
       {m.telemetry_toast_errors()}
     </Button>
     <Button type="button" size="sm" onclick={() => choose('full')}
-      >{m.account_telemetry_full()}</Button
+      >{m.telemetry_toast_full()}</Button
     >
   </div>
 </div>

@@ -296,7 +296,7 @@
 
               {#if port && !connection && !connectFailed}
                 <div class="flex flex-col items-center gap-2">
-                  <span class="text-center text-lg">{m.live_tooltip_connecting()}</span>
+                  <span class="text-center text-lg">{m.terminal_connecting()}</span>
                   <Progress />
                 </div>
               {/if}

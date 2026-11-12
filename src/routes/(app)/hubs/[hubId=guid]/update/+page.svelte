@@ -222,7 +222,7 @@
       <Button variant="outline" onclick={() => (confirmOpen = false)}>{m.common_cancel()}</Button>
       <Button onclick={startUpdate}>
         <CloudDownload class="size-4" />
-        {m.hub_menu_update()}
+        {m.hub_update_confirm()}
       </Button>
     </Dialog.Footer>
   </Dialog.Content>
