@@ -15,6 +15,7 @@
   "header_signup": "注册",
   "header_github_title": "GitHub 上的 OpenShock",
   "header_discord_title": "社区 Discord",
+
   "footer_made_with": "由 <team>OpenShock 团队</team>用 <heart/> 打造",
   "footer_connection_status_label": "服务器连接状态",
   "footer_signalr_state": "SignalR 状态",
@@ -23,6 +24,7 @@
   "footer_backend_version": "后端版本",
   "footer_backend_commit_title": "提交 {{commit}}",
   "footer_language_label": "语言",
+
   "sidebar_home_link_label": "OpenShock 首页",
   "sidebar_group_general": "常规",
   "sidebar_home": "首页",
@@ -49,6 +51,7 @@
   "sidebar_settings_audit_log": "审计日志",
   "sidebar_settings_connections": "关联账号",
   "sidebar_settings_account": "账号设置",
+
   "error_meta_title": "服务不可用",
   "error_meta_description": "OpenShock 当前不可用",
   "error_meta_logo_alt": "OpenShock 标志",
@@ -57,8 +60,10 @@
   "error_not_found_description": "你访问的页面不存在。",
   "error_unexpected_description": "发生了意外错误。",
   "error_go_back": "返回",
+
   "auth_layout_logo_alt": "OpenShock 标志",
   "auth_layout_invalid_redirect_removed": "为了你的安全，已移除一个无效的重定向链接。",
+
   "auth_activate_breadcrumb": "激活账号",
   "auth_activate_title": "激活账号",
   "auth_activate_activating": "正在激活你的账号...",
@@ -67,6 +72,7 @@
   "auth_activate_missing_token": "缺少激活令牌",
   "auth_activate_continue": "继续登录",
   "auth_activate_toast_success": "账号已激活",
+
   "auth_forgot_breadcrumb": "忘记密码",
   "auth_forgot_title": "忘记密码",
   "auth_forgot_description": "输入你的邮箱以重置密码",
@@ -76,6 +82,7 @@
   "auth_forgot_signin_prompt": "想起密码了？<signin>登录</signin>",
   "auth_forgot_mail_disabled": "此实例未配置邮件服务，因此无法重置密码。请联系管理员帮你找回账号。",
   "auth_forgot_toast_sent": "重置密码请求已发送到指定邮箱",
+
   "auth_login_breadcrumb": "登录",
   "auth_login_title": "欢迎回来",
   "auth_login_loading_methods": "正在加载可用的登录方式",
@@ -91,6 +98,7 @@
   "auth_login_submit": "登录",
   "auth_login_signup_prompt": "还没有账号？<signup>注册</signup>",
   "auth_login_legal": "点击“登录”即表示你同意我们的<tos>服务条款</tos>和<privacy>隐私政策</privacy>。",
+
   "auth_oauth_create_breadcrumb": "使用 {{provider}} 注册",
   "auth_oauth_create_title": "使用 <provider>{{provider}}</provider> 注册",
   "auth_oauth_create_description": "完善你的账号信息",
@@ -100,9 +108,11 @@
   "auth_oauth_create_email_placeholder": "邮箱",
   "auth_oauth_create_submit": "注册",
   "auth_oauth_create_legal": "点击“注册”即表示你同意我们的<tos>服务条款</tos>和<privacy>隐私政策</privacy>。",
+
   "auth_oauth_error_breadcrumb": "认证错误",
   "auth_oauth_error_title": "认证错误",
   "auth_oauth_error_back": "返回登录",
+
   "auth_reset_breadcrumb": "重置密码",
   "auth_reset_title": "重置密码",
   "auth_reset_checking": "正在验证重置链接...",
@@ -115,6 +125,7 @@
   "auth_reset_submit": "重置密码",
   "auth_reset_request_new": "重新获取重置链接",
   "auth_reset_toast_success": "密码已重置",
+
   "auth_signup_breadcrumb": "注册",
   "auth_signup_toast_created_mail": "账号创建成功。请查收邮件以验证你的账号。",
   "auth_signup_toast_created_no_mail": "账号创建成功。你现在可以登录了。",
@@ -141,6 +152,7 @@
   "auth_signup_or": "或",
   "auth_signup_with_email": "使用邮箱注册",
   "auth_signup_legal": "点击“创建账号”即表示你同意我们的<tos>服务条款</tos>和<privacy>隐私政策</privacy>。",
+
   "auth_verify_breadcrumb": "验证邮箱",
   "auth_verify_title": "验证邮箱",
   "auth_verify_verifying": "正在验证你的邮箱地址...",
@@ -149,6 +161,7 @@
   "auth_verify_missing_token": "缺少验证令牌",
   "auth_verify_continue": "继续登录",
   "auth_verify_toast_success": "邮箱已验证",
+
   "common_cancel": "取消",
   "common_delete": "删除",
   "common_edit": "编辑",
@@ -253,6 +266,7 @@
   "shocker_edit_is_active": "电击器已启用",
   "shocker_edit_toast_updated": "电击器已更新",
   "shocker_edit_delete_desc": "永久删除此电击器。此操作无法撤销。",
+
   "common_close": "关闭",
   "common_continue": "继续",
   "common_loading": "正在加载...",
@@ -399,6 +413,7 @@
   "terminal_toast_clipboard_unreadable": "无法读取剪贴板",
   "terminal_toast_settings_imported": "控制台设置已导入",
   "terminal_toast_settings_invalid": "剪贴板中没有控制台设置",
+
   "common_try_again": "重试",
   "terminal_cfg_intro": "数值通过 UART 发送到设备，可在下方控制台查看设备的响应。不带参数的命令用于读取，点击各字段旁的 <eye/> 按钮即可读取当前值。",
   "terminal_cfg_rf_title": "RF 发射器",
@@ -455,6 +470,7 @@
   "terminal_cfg_cause_busy": "设备正忙于处理其他命令。",
   "terminal_cfg_cause_disconnected": "设备已断开或重启。",
   "terminal_cfg_cause_unsupported": "该固件版本不支持此命令。",
+
   "common_status": "状态",
   "common_version": "版本",
   "common_created": "创建时间",
@@ -580,6 +596,7 @@
   "profile_title": "个人资料",
   "profile_coming_soon": "个人资料即将推出",
   "profile_coming_soon_desc": "你的公开个人资料暂不可用。账号信息请在“设置”中查看。",
+
   "common_retry": "重试",
   "common_never_used": "从未使用",
   "common_expires": "{{time}}过期",
@@ -740,6 +757,7 @@
   "audit_meta_accounts_removed_other": "{{name}}（已移除 {{count}} 个账号）",
   "audit_meta_scheduled_deletion": "已计划删除",
   "audit_meta_kept": "保留以便重新激活",
+
   "common_view": "查看",
   "common_save": "保存",
   "common_saving": "正在保存...",
@@ -803,6 +821,7 @@
   "user_selector_aria": "要搜索的用户名",
   "user_selector_search": "搜索用户",
   "user_selector_found": "已找到用户",
+
   "common_remove": "移除",
   "user_shares_subtitle": "与其他用户的直接永久共享。",
   "user_shares_toast_invited": "已向 {{name}} 发送电击器邀请",
@@ -868,7 +887,9 @@
   "outgoing_share_per_desc": "为每个电击器单独调整限制",
   "outgoing_share_all": "全部",
   "outgoing_share_per": "按电击器",
+
   "outgoing_share_remove_desc": "确定要停止与 <strong>{{name}}</strong> 共享 <strong>{{shocker}}</strong> 吗？",
+
   "report_breadcrumb": "举报 API 令牌",
   "report_toast_clipboard_failed": "读取剪贴板失败：{{error}}",
   "report_title": "举报泄露的 API 令牌",
@@ -922,6 +943,7 @@
   "lcg_connect_failed": "连接实时控制网关失败",
   "terminal_toast_bootloader_failed": "进入 Bootloader 失败：{{error}}",
   "terminal_toast_app_mode_failed": "进入应用模式失败：{{error}}",
+
   "problem_account_account_not_activated_title": "账号未激活",
   "problem_account_account_not_activated_desc": "请在收件箱中查找激活邮件。",
   "problem_account_activation_not_found_title": "激活链接无效",
@@ -1039,11 +1061,13 @@
   "problem_webhook_not_found_title": "未找到 Webhook",
   "problem_webhook_unsupported_title": "仅支持 Discord Webhook",
   "problem_webhook_unsupported_desc": "请使用 discord.com 链接，而不是 canary 或 ptb。",
+
   "error_too_many_requests": "请求过多",
   "error_retry_after_other": "请在 {{count}} 秒后重试。",
   "error_unexpected_response": "服务器响应异常",
   "error_internal": "发生内部错误",
   "error_network": "发生网络错误",
+
   "dev_banner": "这是 OpenShock <b>开发</b>环境。<u>不会保存任何数据</u>，并且会定期被生产环境数据覆盖。",
   "firmware_channel_bugs_warning": "此通道可能存在 bug。"
 }

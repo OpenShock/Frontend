@@ -15,6 +15,7 @@
   "header_signup": "Registreeru",
   "header_github_title": "Projekt GitHubis",
   "header_discord_title": "Meie Discord",
+
   "footer_made_with": "Tehtud <heart/>-ga – <team>OpenShocki meeskond</team>",
   "footer_connection_status_label": "Serveriühenduse staatus",
   "footer_signalr_state": "SignalR-i staatus",
@@ -23,6 +24,7 @@
   "footer_backend_version": "Tagarakenduse versioon",
   "footer_backend_commit_title": "Commit {{commit}}",
   "footer_language_label": "Keel",
+
   "sidebar_home_link_label": "OpenShocki avaleht",
   "sidebar_group_general": "Üldine",
   "sidebar_home": "Avaleht",
@@ -49,6 +51,7 @@
   "sidebar_settings_audit_log": "Auditilogi",
   "sidebar_settings_connections": "Seotud kontod",
   "sidebar_settings_account": "Konto seaded",
+
   "error_meta_title": "Teenus pole saadaval",
   "error_meta_description": "OpenShock pole praegu saadaval",
   "error_meta_logo_alt": "OpenShocki logo",
@@ -57,8 +60,10 @@
   "error_not_found_description": "Otsitavat lehte pole olemas.",
   "error_unexpected_description": "Tekkis ootamatu viga.",
   "error_go_back": "Tagasi",
+
   "auth_layout_logo_alt": "OpenShocki logo",
   "auth_layout_invalid_redirect_removed": "Kehtetu ümbersuunamise URL eemaldati sinu turvalisuse huvides.",
+
   "auth_activate_breadcrumb": "Konto aktiveerimine",
   "auth_activate_title": "Konto aktiveerimine",
   "auth_activate_activating": "Sinu kontot aktiveeritakse...",
@@ -67,6 +72,7 @@
   "auth_activate_missing_token": "Aktiveerimisvõti puudub",
   "auth_activate_continue": "Jätka sisselogimisega",
   "auth_activate_toast_success": "Konto on aktiveeritud",
+
   "auth_forgot_breadcrumb": "Unustatud parool",
   "auth_forgot_title": "Unustatud parool",
   "auth_forgot_description": "Sisesta oma e-posti aadress, et parool lähtestada",
@@ -76,6 +82,7 @@
   "auth_forgot_signin_prompt": "Mäletad oma parooli? <signin>Logi sisse</signin>",
   "auth_forgot_mail_disabled": "Paroolide lähtestamine pole selles instantsis saadaval, sest e-posti teenusepakkujat pole seadistatud. Konto taastamiseks võta ühendust oma administraatoriga.",
   "auth_forgot_toast_sent": "Parooli lähtestamise taotlus saadeti antud e-posti aadressile",
+
   "auth_login_breadcrumb": "Sisselogimine",
   "auth_login_title": "Tere tulemast tagasi",
   "auth_login_loading_methods": "Saadaolevate sisselogimisviiside laadimine",
@@ -91,6 +98,7 @@
   "auth_login_submit": "Logi sisse",
   "auth_login_signup_prompt": "Pole veel kontot? <signup>Registreeru</signup>",
   "auth_login_legal": "Klõpsates „Logi sisse“, nõustud meie <tos>kasutustingimustega</tos> ja <privacy>privaatsuspoliisiga</privacy>.",
+
   "auth_oauth_create_breadcrumb": "Registreeru teenusega {{provider}}",
   "auth_oauth_create_title": "Registreeru teenusega <provider>{{provider}}</provider>",
   "auth_oauth_create_description": "Täida oma konto andmed",
@@ -100,9 +108,11 @@
   "auth_oauth_create_email_placeholder": "E-post",
   "auth_oauth_create_submit": "Registreeru",
   "auth_oauth_create_legal": "Klõpsates „Registreeru“, nõustud meie <tos>kasutustingimustega</tos> ja <privacy>privaatsuspoliisiga</privacy>.",
+
   "auth_oauth_error_breadcrumb": "Autentimise viga",
   "auth_oauth_error_title": "Autentimise viga",
   "auth_oauth_error_back": "Tagasi sisselogimise juurde",
+
   "auth_reset_breadcrumb": "Parooli lähtestamine",
   "auth_reset_title": "Parooli lähtestamine",
   "auth_reset_checking": "Lähtestamislingi kontrollimine...",
@@ -115,6 +125,7 @@
   "auth_reset_submit": "Lähtesta parool",
   "auth_reset_request_new": "Taotle uut linki",
   "auth_reset_toast_success": "Parool on lähtestatud",
+
   "auth_signup_breadcrumb": "Registreerumine",
   "auth_signup_toast_created_mail": "Konto loodi edukalt. Konto kinnitamiseks vaata oma e-posti.",
   "auth_signup_toast_created_no_mail": "Konto loodi edukalt. Võid nüüd sisse logida.",
@@ -141,6 +152,7 @@
   "auth_signup_or": "Või",
   "auth_signup_with_email": "Registreeru e-postiga",
   "auth_signup_legal": "Klõpsates „Loo konto“, nõustud meie <tos>kasutustingimustega</tos> ja <privacy>privaatsuspoliisiga</privacy>.",
+
   "auth_verify_breadcrumb": "E-posti kinnitamine",
   "auth_verify_title": "E-posti kinnitamine",
   "auth_verify_verifying": "Kinnitame sinu e-posti aadressi...",
@@ -149,6 +161,7 @@
   "auth_verify_missing_token": "Kinnitusvõti puudub",
   "auth_verify_continue": "Jätka sisselogimisega",
   "auth_verify_toast_success": "E-posti aadress on kinnitatud",
+
   "common_cancel": "Tühista",
   "common_delete": "Kustuta",
   "common_edit": "Muuda",
@@ -254,6 +267,7 @@
   "shocker_edit_is_active": "Shocker on aktiivne",
   "shocker_edit_toast_updated": "Shocker uuendati",
   "shocker_edit_delete_desc": "Kustuta see shocker jäädavalt. Seda toimingut ei saa tagasi võtta.",
+
   "common_close": "Sulge",
   "common_continue": "Jätka",
   "common_loading": "Laadimine...",
@@ -400,6 +414,7 @@
   "terminal_toast_clipboard_unreadable": "Lõikelauda ei õnnestunud lugeda",
   "terminal_toast_settings_imported": "Konsooli seaded imporditi",
   "terminal_toast_settings_invalid": "Lõikelaual pole konsooli seadeid",
+
   "common_try_again": "Proovi uuesti",
   "terminal_cfg_intro": "Väärtused saadetakse seadmele UART-i kaudu. Seadme vastust näed allolevas konsoolis. Ilma argumendita käsud loevad väärtust; praeguse väärtuse lugemiseks kasuta iga välja kõrval olevat nuppu <eye/>.",
   "terminal_cfg_rf_title": "RF-saatja",
@@ -456,6 +471,7 @@
   "terminal_cfg_cause_busy": "Seade töötleb parasjagu teist käsku.",
   "terminal_cfg_cause_disconnected": "Seadme ühendus katkes või see taaskäivitus.",
   "terminal_cfg_cause_unsupported": "Püsivara versioon ei toeta seda käsku.",
+
   "common_status": "Olek",
   "common_version": "Versioon",
   "common_created": "Loodud",
@@ -582,6 +598,7 @@
   "profile_title": "Profiil",
   "profile_coming_soon": "Profiil tuleb peagi",
   "profile_coming_soon_desc": "Sinu avalik profiil pole veel saadaval. Konto andmed leiad seadetest.",
+
   "common_retry": "Proovi uuesti",
   "common_never_used": "Pole kunagi kasutatud",
   "common_expires": "Aegub {{time}}",
@@ -743,6 +760,7 @@
   "audit_meta_accounts_removed_other": "{{name}} ({{count}} kontot eemaldatud)",
   "audit_meta_scheduled_deletion": "Kustutamine ajastatud",
   "audit_meta_kept": "Säilitatud taasaktiveerimiseks",
+
   "common_view": "Vaata",
   "common_save": "Salvesta",
   "common_saving": "Salvestamine...",
@@ -807,6 +825,7 @@
   "user_selector_aria": "Otsitav kasutajanimi",
   "user_selector_search": "Otsi kasutajat",
   "user_selector_found": "Kasutaja leitud",
+
   "common_remove": "Eemalda",
   "user_shares_subtitle": "Otsesed ja püsivad jagamised teiste kasutajatega.",
   "user_shares_toast_invited": "Kasutajale {{name}} saadeti shockeri kutse",
@@ -872,7 +891,9 @@
   "outgoing_share_per_desc": "Kohanda piiranguid shockeri kaupa",
   "outgoing_share_all": "Kõik",
   "outgoing_share_per": "Shockeri kaupa",
+
   "outgoing_share_remove_desc": "Kas oled kindel, et soovid lõpetada shockeri <strong>{{shocker}}</strong> jagamise kasutajaga <strong>{{name}}</strong>?",
+
   "report_breadcrumb": "Teata API-tõenditest",
   "report_toast_clipboard_failed": "Lõikelaua lugemine ebaõnnestus: {{error}}",
   "report_title": "Teata lekkinud API-tõenditest",
@@ -927,6 +948,7 @@
   "lcg_connect_failed": "Otsejuhtimise lüüsiga ühendumine ebaõnnestus",
   "terminal_toast_bootloader_failed": "Alglaadurisse sisenemine ebaõnnestus: {{error}}",
   "terminal_toast_app_mode_failed": "Rakendusrežiimi sisenemine ebaõnnestus: {{error}}",
+
   "problem_account_account_not_activated_title": "Konto pole aktiveeritud",
   "problem_account_account_not_activated_desc": "Otsi aktiveerimismeili oma postkastist.",
   "problem_account_activation_not_found_title": "Aktiveerimislink on vigane",
@@ -1044,12 +1066,14 @@
   "problem_webhook_not_found_title": "Veebihaaki ei leitud",
   "problem_webhook_unsupported_title": "Toetatud on ainult Discordi veebihaagid",
   "problem_webhook_unsupported_desc": "Kasuta discord.com-i URL-i, mitte canary või ptb oma.",
+
   "error_too_many_requests": "Liiga palju päringuid",
   "error_retry_after_one": "Proovi uuesti {{count}} sekundi pärast.",
   "error_retry_after_other": "Proovi uuesti {{count}} sekundi pärast.",
   "error_unexpected_response": "Ootamatu serveri vastus",
   "error_internal": "Tekkis sisemine viga",
   "error_network": "Tekkis võrguviga",
+
   "dev_banner": "See on OpenShocki <b>ARENDUSKESKKOND</b>. <u>Andmeid ei salvestata</u> ja see kirjutatakse regulaarselt üle tootmisandmetega.",
   "firmware_channel_bugs_warning": "See kanal võib sisaldada vigu."
 }

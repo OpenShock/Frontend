@@ -15,6 +15,7 @@
   "header_signup": "Registreren",
   "header_github_title": "OpenShock op GitHub",
   "header_discord_title": "Community-Discord",
+
   "footer_made_with": "Gemaakt met <heart/> door het <team>OpenShock-team</team>",
   "footer_connection_status_label": "Status serververbinding",
   "footer_signalr_state": "SignalR-status",
@@ -23,6 +24,7 @@
   "footer_backend_version": "Backendversie",
   "footer_backend_commit_title": "Commit {{commit}}",
   "footer_language_label": "Taal",
+
   "sidebar_home_link_label": "OpenShock-startpagina",
   "sidebar_group_general": "Algemeen",
   "sidebar_home": "Start",
@@ -49,6 +51,7 @@
   "sidebar_settings_audit_log": "Activiteitenlog",
   "sidebar_settings_connections": "Koppelingen",
   "sidebar_settings_account": "Accountinstellingen",
+
   "error_meta_title": "Dienst niet beschikbaar",
   "error_meta_description": "OpenShock is momenteel niet beschikbaar",
   "error_meta_logo_alt": "OpenShock-logo",
@@ -57,8 +60,10 @@
   "error_not_found_description": "De pagina die je zoekt bestaat niet.",
   "error_unexpected_description": "Er is een onverwachte fout opgetreden.",
   "error_go_back": "Terug",
+
   "auth_layout_logo_alt": "OpenShock-logo",
   "auth_layout_invalid_redirect_removed": "Een ongeldige doorverwijzings-URL is voor je veiligheid verwijderd.",
+
   "auth_activate_breadcrumb": "Account activeren",
   "auth_activate_title": "Account activeren",
   "auth_activate_activating": "Je account wordt geactiveerd...",
@@ -67,6 +72,7 @@
   "auth_activate_missing_token": "Activatietoken ontbreekt",
   "auth_activate_continue": "Door naar inloggen",
   "auth_activate_toast_success": "Account geactiveerd",
+
   "auth_forgot_breadcrumb": "Wachtwoord vergeten",
   "auth_forgot_title": "Wachtwoord vergeten",
   "auth_forgot_description": "Voer je e-mailadres in om je wachtwoord opnieuw in te stellen",
@@ -76,6 +82,7 @@
   "auth_forgot_signin_prompt": "Weet je je wachtwoord weer? <signin>Inloggen</signin>",
   "auth_forgot_mail_disabled": "Wachtwoorden resetten is niet mogelijk op deze instantie, omdat er geen e-mailprovider is ingesteld. Neem contact op met je beheerder om weer toegang tot je account te krijgen.",
   "auth_forgot_toast_sent": "Het verzoek om je wachtwoord te resetten is naar het opgegeven e-mailadres verzonden",
+
   "auth_login_breadcrumb": "Inloggen",
   "auth_login_title": "Welkom terug",
   "auth_login_loading_methods": "Beschikbare inlogmethoden laden",
@@ -91,6 +98,7 @@
   "auth_login_submit": "Inloggen",
   "auth_login_signup_prompt": "Nog geen account? <signup>Registreren</signup>",
   "auth_login_legal": "Door op Inloggen te klikken, ga je akkoord met onze <tos>Servicevoorwaarden</tos> en ons <privacy>Privacybeleid</privacy>.",
+
   "auth_oauth_create_breadcrumb": "Registreren met {{provider}}",
   "auth_oauth_create_title": "Registreren met <provider>{{provider}}</provider>",
   "auth_oauth_create_description": "Vul je accountgegevens aan",
@@ -100,9 +108,11 @@
   "auth_oauth_create_email_placeholder": "E-mail",
   "auth_oauth_create_submit": "Registreren",
   "auth_oauth_create_legal": "Door op Registreren te klikken, ga je akkoord met onze <tos>Servicevoorwaarden</tos> en ons <privacy>Privacybeleid</privacy>.",
+
   "auth_oauth_error_breadcrumb": "Authenticatiefout",
   "auth_oauth_error_title": "Authenticatiefout",
   "auth_oauth_error_back": "Terug naar inloggen",
+
   "auth_reset_breadcrumb": "Wachtwoord resetten",
   "auth_reset_title": "Wachtwoord resetten",
   "auth_reset_checking": "Resetlink controleren...",
@@ -115,6 +125,7 @@
   "auth_reset_submit": "Wachtwoord resetten",
   "auth_reset_request_new": "Nieuwe resetlink aanvragen",
   "auth_reset_toast_success": "Wachtwoord is gereset",
+
   "auth_signup_breadcrumb": "Registreren",
   "auth_signup_toast_created_mail": "Account aangemaakt. Controleer je e-mail om je account te verifiëren.",
   "auth_signup_toast_created_no_mail": "Account aangemaakt. Je kunt nu inloggen.",
@@ -141,6 +152,7 @@
   "auth_signup_or": "Of",
   "auth_signup_with_email": "Registreren met e-mail",
   "auth_signup_legal": "Door op Account aanmaken te klikken, ga je akkoord met onze <tos>Servicevoorwaarden</tos> en ons <privacy>Privacybeleid</privacy>.",
+
   "auth_verify_breadcrumb": "E-mail verifiëren",
   "auth_verify_title": "E-mail verifiëren",
   "auth_verify_verifying": "Je e-mailadres wordt geverifieerd...",
@@ -149,6 +161,7 @@
   "auth_verify_missing_token": "Verificatietoken ontbreekt",
   "auth_verify_continue": "Door naar inloggen",
   "auth_verify_toast_success": "E-mailadres geverifieerd",
+
   "common_cancel": "Annuleren",
   "common_delete": "Verwijderen",
   "common_edit": "Bewerken",
@@ -254,6 +267,7 @@
   "shocker_edit_is_active": "Shocker is actief",
   "shocker_edit_toast_updated": "Shocker bijgewerkt",
   "shocker_edit_delete_desc": "Verwijder deze shocker definitief. Dit kan niet ongedaan worden gemaakt.",
+
   "common_close": "Sluiten",
   "common_continue": "Doorgaan",
   "common_loading": "Laden...",
@@ -400,6 +414,7 @@
   "terminal_toast_clipboard_unreadable": "Kan het klembord niet lezen",
   "terminal_toast_settings_imported": "Console-instellingen geïmporteerd",
   "terminal_toast_settings_invalid": "Het klembord bevat geen console-instellingen",
+
   "common_try_again": "Opnieuw proberen",
   "terminal_cfg_intro": "Waarden worden via UART naar het apparaat gestuurd. Het antwoord van het apparaat zie je in de console hieronder. Opdrachten zonder argument lezen de waarde uit; gebruik de <eye/>-knop naast elk veld om de huidige waarde te lezen.",
   "terminal_cfg_rf_title": "RF-zender",
@@ -456,6 +471,7 @@
   "terminal_cfg_cause_busy": "Het apparaat is bezig met een andere opdracht.",
   "terminal_cfg_cause_disconnected": "Het apparaat is losgekoppeld of herstart.",
   "terminal_cfg_cause_unsupported": "Deze firmwareversie ondersteunt deze opdracht niet.",
+
   "common_status": "Status",
   "common_version": "Versie",
   "common_created": "Aangemaakt",
@@ -582,6 +598,7 @@
   "profile_title": "Profiel",
   "profile_coming_soon": "Profiel komt binnenkort",
   "profile_coming_soon_desc": "Je openbare profiel is nog niet beschikbaar. Accountgegevens vind je onder Instellingen.",
+
   "common_retry": "Opnieuw",
   "common_never_used": "Nooit gebruikt",
   "common_expires": "Verloopt {{time}}",
@@ -743,6 +760,7 @@
   "audit_meta_accounts_removed_other": "{{name}} ({{count}} accounts verwijderd)",
   "audit_meta_scheduled_deletion": "Gepland voor verwijdering",
   "audit_meta_kept": "Bewaard voor heractivering",
+
   "common_view": "Bekijken",
   "common_save": "Opslaan",
   "common_saving": "Opslaan...",
@@ -807,6 +825,7 @@
   "user_selector_aria": "Te zoeken gebruikersnaam",
   "user_selector_search": "Gebruiker zoeken",
   "user_selector_found": "Gebruiker gevonden",
+
   "common_remove": "Verwijderen",
   "user_shares_subtitle": "Directe, permanente delingen met andere gebruikers.",
   "user_shares_toast_invited": "Shocker-uitnodiging naar {{name}} verstuurd",
@@ -872,7 +891,9 @@
   "outgoing_share_per_desc": "Beperkingen per shocker instellen",
   "outgoing_share_all": "Alle",
   "outgoing_share_per": "Per shocker",
+
   "outgoing_share_remove_desc": "Weet je zeker dat je <strong>{{shocker}}</strong> niet meer wilt delen met <strong>{{name}}</strong>?",
+
   "report_breadcrumb": "API-tokens melden",
   "report_toast_clipboard_failed": "Klembord lezen mislukt: {{error}}",
   "report_title": "Gelekte API-tokens melden",
@@ -927,6 +948,7 @@
   "lcg_connect_failed": "Verbinden met live control gateway mislukt",
   "terminal_toast_bootloader_failed": "Bootloader starten mislukt: {{error}}",
   "terminal_toast_app_mode_failed": "Applicatiemodus starten mislukt: {{error}}",
+
   "problem_account_account_not_activated_title": "Account niet geactiveerd",
   "problem_account_account_not_activated_desc": "Kijk in je inbox voor de activatiemail.",
   "problem_account_activation_not_found_title": "Activatielink is ongeldig",
@@ -1044,12 +1066,14 @@
   "problem_webhook_not_found_title": "Webhook niet gevonden",
   "problem_webhook_unsupported_title": "Alleen Discord-webhooks worden ondersteund",
   "problem_webhook_unsupported_desc": "Gebruik een discord.com-URL, geen canary of ptb.",
+
   "error_too_many_requests": "Te veel verzoeken",
   "error_retry_after_one": "Probeer het over {{count}} seconde opnieuw.",
   "error_retry_after_other": "Probeer het over {{count}} seconden opnieuw.",
   "error_unexpected_response": "Onverwacht antwoord van server",
   "error_internal": "Er is een interne fout opgetreden",
   "error_network": "Er is een netwerkfout opgetreden",
+
   "dev_banner": "Dit is de <b>ONTWIKKEL</b>omgeving van OpenShock. <u>Er worden geen gegevens opgeslagen</u> en ze wordt regelmatig overschreven met productiegegevens.",
   "firmware_channel_bugs_warning": "Dit kanaal kan bugs bevatten."
 }

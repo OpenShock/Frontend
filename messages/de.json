@@ -15,6 +15,7 @@
   "header_signup": "Registrieren",
   "header_github_title": "OpenShock auf GitHub",
   "header_discord_title": "Community-Discord",
+
   "footer_made_with": "Mit <heart/> gemacht vom <team>OpenShock-Team</team>",
   "footer_connection_status_label": "Verbindungsstatus zum Server",
   "footer_signalr_state": "SignalR-Status",
@@ -23,6 +24,7 @@
   "footer_backend_version": "Backend-Version",
   "footer_backend_commit_title": "Commit {{commit}}",
   "footer_language_label": "Sprache",
+
   "sidebar_home_link_label": "OpenShock-Startseite",
   "sidebar_group_general": "Allgemein",
   "sidebar_home": "Startseite",
@@ -49,6 +51,7 @@
   "sidebar_settings_audit_log": "Aktivitätsprotokoll",
   "sidebar_settings_connections": "Verbindungen",
   "sidebar_settings_account": "Kontoeinstellungen",
+
   "error_meta_title": "Dienst nicht verfügbar",
   "error_meta_description": "OpenShock ist derzeit nicht verfügbar",
   "error_meta_logo_alt": "OpenShock-Logo",
@@ -57,8 +60,10 @@
   "error_not_found_description": "Die gesuchte Seite existiert nicht.",
   "error_unexpected_description": "Ein unerwarteter Fehler ist aufgetreten.",
   "error_go_back": "Zurück",
+
   "auth_layout_logo_alt": "OpenShock-Logo",
   "auth_layout_invalid_redirect_removed": "Eine ungültige Weiterleitungs-URL wurde zu deiner Sicherheit entfernt.",
+
   "auth_activate_breadcrumb": "Konto aktivieren",
   "auth_activate_title": "Konto aktivieren",
   "auth_activate_activating": "Dein Konto wird aktiviert...",
@@ -67,6 +72,7 @@
   "auth_activate_missing_token": "Aktivierungstoken fehlt",
   "auth_activate_continue": "Weiter zur Anmeldung",
   "auth_activate_toast_success": "Konto aktiviert",
+
   "auth_forgot_breadcrumb": "Passwort vergessen",
   "auth_forgot_title": "Passwort vergessen",
   "auth_forgot_description": "Gib deine E-Mail-Adresse ein, um dein Passwort zurückzusetzen",
@@ -76,6 +82,7 @@
   "auth_forgot_signin_prompt": "Passwort wieder eingefallen? <signin>Anmelden</signin>",
   "auth_forgot_mail_disabled": "Auf dieser Instanz ist das Zurücksetzen von Passwörtern nicht möglich, da kein E-Mail-Anbieter eingerichtet ist. Wende dich an deine Administration, um wieder Zugriff auf dein Konto zu erhalten.",
   "auth_forgot_toast_sent": "Die Anfrage zum Zurücksetzen des Passworts wurde an die angegebene E-Mail-Adresse gesendet",
+
   "auth_login_breadcrumb": "Anmelden",
   "auth_login_title": "Willkommen zurück",
   "auth_login_loading_methods": "Verfügbare Anmeldemethoden werden geladen",
@@ -91,6 +98,7 @@
   "auth_login_submit": "Anmelden",
   "auth_login_signup_prompt": "Noch kein Konto? <signup>Registrieren</signup>",
   "auth_login_legal": "Mit einem Klick auf „Anmelden“ stimmst du unseren <tos>Nutzungsbedingungen</tos> und unserer <privacy>Datenschutzerklärung</privacy> zu.",
+
   "auth_oauth_create_breadcrumb": "Mit {{provider}} registrieren",
   "auth_oauth_create_title": "Mit <provider>{{provider}}</provider> registrieren",
   "auth_oauth_create_description": "Vervollständige deine Kontodaten",
@@ -100,9 +108,11 @@
   "auth_oauth_create_email_placeholder": "E-Mail",
   "auth_oauth_create_submit": "Registrieren",
   "auth_oauth_create_legal": "Mit einem Klick auf „Registrieren“ stimmst du unseren <tos>Nutzungsbedingungen</tos> und unserer <privacy>Datenschutzerklärung</privacy> zu.",
+
   "auth_oauth_error_breadcrumb": "Authentifizierungsfehler",
   "auth_oauth_error_title": "Authentifizierungsfehler",
   "auth_oauth_error_back": "Zurück zur Anmeldung",
+
   "auth_reset_breadcrumb": "Passwort zurücksetzen",
   "auth_reset_title": "Passwort zurücksetzen",
   "auth_reset_checking": "Link zum Zurücksetzen wird geprüft...",
@@ -115,6 +125,7 @@
   "auth_reset_submit": "Passwort zurücksetzen",
   "auth_reset_request_new": "Neuen Link anfordern",
   "auth_reset_toast_success": "Passwort wurde zurückgesetzt",
+
   "auth_signup_breadcrumb": "Registrieren",
   "auth_signup_toast_created_mail": "Konto erfolgreich erstellt. Bitte sieh in deinen E-Mails nach, um dein Konto zu bestätigen.",
   "auth_signup_toast_created_no_mail": "Konto erfolgreich erstellt. Du kannst dich jetzt anmelden.",
@@ -141,6 +152,7 @@
   "auth_signup_or": "Oder",
   "auth_signup_with_email": "Mit E-Mail registrieren",
   "auth_signup_legal": "Mit einem Klick auf „Konto erstellen“ stimmst du unseren <tos>Nutzungsbedingungen</tos> und unserer <privacy>Datenschutzerklärung</privacy> zu.",
+
   "auth_verify_breadcrumb": "E-Mail bestätigen",
   "auth_verify_title": "E-Mail bestätigen",
   "auth_verify_verifying": "Deine E-Mail-Adresse wird bestätigt...",
@@ -149,6 +161,7 @@
   "auth_verify_missing_token": "Bestätigungstoken fehlt",
   "auth_verify_continue": "Weiter zur Anmeldung",
   "auth_verify_toast_success": "E-Mail-Adresse bestätigt",
+
   "common_cancel": "Abbrechen",
   "common_delete": "Löschen",
   "common_edit": "Bearbeiten",
@@ -254,6 +267,7 @@
   "shocker_edit_is_active": "Shocker ist aktiv",
   "shocker_edit_toast_updated": "Shocker aktualisiert",
   "shocker_edit_delete_desc": "Lösche diesen Shocker dauerhaft. Dies kann nicht rückgängig gemacht werden.",
+
   "common_close": "Schließen",
   "common_continue": "Weiter",
   "common_loading": "Wird geladen...",
@@ -400,6 +414,7 @@
   "terminal_toast_clipboard_unreadable": "Zwischenablage konnte nicht gelesen werden",
   "terminal_toast_settings_imported": "Konsoleneinstellungen importiert",
   "terminal_toast_settings_invalid": "Die Zwischenablage enthält keine Konsoleneinstellungen",
+
   "common_try_again": "Erneut versuchen",
   "terminal_cfg_intro": "Werte werden per UART an das Gerät gesendet. Die Antwort des Geräts siehst du in der Konsole unten. Befehle ohne Argument lesen den Wert aus; nutze die <eye/>-Schaltfläche neben jedem Feld, um den aktuellen Wert zu lesen.",
   "terminal_cfg_rf_title": "RF-Sender",
@@ -456,6 +471,7 @@
   "terminal_cfg_cause_busy": "Das Gerät verarbeitet gerade einen anderen Befehl.",
   "terminal_cfg_cause_disconnected": "Das Gerät wurde getrennt oder neu gestartet.",
   "terminal_cfg_cause_unsupported": "Die Firmware-Version unterstützt diesen Befehl nicht.",
+
   "common_status": "Status",
   "common_version": "Version",
   "common_created": "Erstellt",
@@ -582,6 +598,7 @@
   "profile_title": "Profil",
   "profile_coming_soon": "Das Profil kommt bald",
   "profile_coming_soon_desc": "Dein öffentliches Profil ist noch nicht verfügbar. Kontodetails findest du in den Einstellungen.",
+
   "common_retry": "Erneut versuchen",
   "common_never_used": "Nie verwendet",
   "common_expires": "Läuft {{time}} ab",
@@ -743,6 +760,7 @@
   "audit_meta_accounts_removed_other": "{{name}} ({{count}} Konten entfernt)",
   "audit_meta_scheduled_deletion": "Zur Löschung vorgemerkt",
   "audit_meta_kept": "Für Reaktivierung aufbewahrt",
+
   "common_view": "Ansehen",
   "common_save": "Speichern",
   "common_saving": "Wird gespeichert...",
@@ -807,6 +825,7 @@
   "user_selector_aria": "Zu suchender Benutzername",
   "user_selector_search": "Benutzer suchen",
   "user_selector_found": "Benutzer gefunden",
+
   "common_remove": "Entfernen",
   "user_shares_subtitle": "Direkte, dauerhafte Freigaben mit anderen Benutzern.",
   "user_shares_toast_invited": "Shocker-Einladung an {{name}} gesendet",
@@ -872,7 +891,9 @@
   "outgoing_share_per_desc": "Einschränkungen je Shocker anpassen",
   "outgoing_share_all": "Alle",
   "outgoing_share_per": "Je Shocker",
+
   "outgoing_share_remove_desc": "Möchtest du <strong>{{shocker}}</strong> wirklich nicht mehr mit <strong>{{name}}</strong> teilen?",
+
   "report_breadcrumb": "API-Token melden",
   "report_toast_clipboard_failed": "Zwischenablage konnte nicht gelesen werden: {{error}}",
   "report_title": "Geleakte API-Token melden",
@@ -927,6 +948,7 @@
   "lcg_connect_failed": "Verbindung zum Live-Control-Gateway fehlgeschlagen",
   "terminal_toast_bootloader_failed": "Bootloader konnte nicht gestartet werden: {{error}}",
   "terminal_toast_app_mode_failed": "Anwendungsmodus konnte nicht gestartet werden: {{error}}",
+
   "problem_account_account_not_activated_title": "Konto nicht aktiviert",
   "problem_account_account_not_activated_desc": "Sieh in deinem Posteingang nach der Aktivierungs-E-Mail.",
   "problem_account_activation_not_found_title": "Der Aktivierungslink ist ungültig",
@@ -1044,12 +1066,14 @@
   "problem_webhook_not_found_title": "Webhook nicht gefunden",
   "problem_webhook_unsupported_title": "Nur Discord-Webhooks werden unterstützt",
   "problem_webhook_unsupported_desc": "Verwende eine discord.com-URL, nicht canary oder ptb.",
+
   "error_too_many_requests": "Zu viele Anfragen",
   "error_retry_after_one": "Versuche es in {{count}} Sekunde erneut.",
   "error_retry_after_other": "Versuche es in {{count}} Sekunden erneut.",
   "error_unexpected_response": "Unerwartete Serverantwort",
   "error_internal": "Ein interner Fehler ist aufgetreten",
   "error_network": "Ein Netzwerkfehler ist aufgetreten",
+
   "dev_banner": "Dies ist die <b>ENTWICKLUNGS</b>-Umgebung von OpenShock. <u>Es werden keine Daten gespeichert</u>, und sie wird regelmäßig mit Produktionsdaten überschrieben.",
   "firmware_channel_bugs_warning": "Dieser Kanal kann Fehler enthalten."
 }

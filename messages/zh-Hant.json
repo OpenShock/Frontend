@@ -15,6 +15,7 @@
   "header_signup": "註冊",
   "header_github_title": "GitHub 上的 OpenShock",
   "header_discord_title": "社群 Discord",
+
   "footer_made_with": "由 <team>OpenShock 團隊</team>用 <heart/> 打造",
   "footer_connection_status_label": "伺服器連線狀態",
   "footer_signalr_state": "SignalR 狀態",
@@ -23,6 +24,7 @@
   "footer_backend_version": "後端版本",
   "footer_backend_commit_title": "Commit {{commit}}",
   "footer_language_label": "語言",
+
   "sidebar_home_link_label": "OpenShock 首頁",
   "sidebar_group_general": "一般",
   "sidebar_home": "首頁",
@@ -49,6 +51,7 @@
   "sidebar_settings_audit_log": "稽核記錄",
   "sidebar_settings_connections": "連結的帳號",
   "sidebar_settings_account": "帳號設定",
+
   "error_meta_title": "服務無法使用",
   "error_meta_description": "OpenShock 目前無法使用",
   "error_meta_logo_alt": "OpenShock 標誌",
@@ -57,8 +60,10 @@
   "error_not_found_description": "你要找的頁面不存在。",
   "error_unexpected_description": "發生未預期的錯誤。",
   "error_go_back": "返回",
+
   "auth_layout_logo_alt": "OpenShock 標誌",
   "auth_layout_invalid_redirect_removed": "為了你的安全，已移除無效的重新導向網址。",
+
   "auth_activate_breadcrumb": "啟用帳號",
   "auth_activate_title": "啟用帳號",
   "auth_activate_activating": "正在啟用你的帳號...",
@@ -67,6 +72,7 @@
   "auth_activate_missing_token": "缺少啟用權杖",
   "auth_activate_continue": "繼續登入",
   "auth_activate_toast_success": "帳號已啟用",
+
   "auth_forgot_breadcrumb": "忘記密碼",
   "auth_forgot_title": "忘記密碼",
   "auth_forgot_description": "輸入你的電子郵件以重設密碼",
@@ -76,6 +82,7 @@
   "auth_forgot_signin_prompt": "想起密碼了？<signin>登入</signin>",
   "auth_forgot_mail_disabled": "此站台未設定郵件服務，因此無法重設密碼。請聯絡管理員協助你找回帳號。",
   "auth_forgot_toast_sent": "已將重設密碼要求寄到指定的電子郵件",
+
   "auth_login_breadcrumb": "登入",
   "auth_login_title": "歡迎回來",
   "auth_login_loading_methods": "正在載入可用的登入方式",
@@ -91,6 +98,7 @@
   "auth_login_submit": "登入",
   "auth_login_signup_prompt": "還沒有帳號？<signup>註冊</signup>",
   "auth_login_legal": "點擊「登入」即表示你同意我們的<tos>服務條款</tos>及<privacy>隱私權政策</privacy>。",
+
   "auth_oauth_create_breadcrumb": "使用 {{provider}} 註冊",
   "auth_oauth_create_title": "使用 <provider>{{provider}}</provider> 註冊",
   "auth_oauth_create_description": "完成你的帳號資料",
@@ -100,9 +108,11 @@
   "auth_oauth_create_email_placeholder": "電子郵件",
   "auth_oauth_create_submit": "註冊",
   "auth_oauth_create_legal": "點擊「註冊」即表示你同意我們的<tos>服務條款</tos>及<privacy>隱私權政策</privacy>。",
+
   "auth_oauth_error_breadcrumb": "驗證錯誤",
   "auth_oauth_error_title": "驗證錯誤",
   "auth_oauth_error_back": "返回登入",
+
   "auth_reset_breadcrumb": "重設密碼",
   "auth_reset_title": "重設密碼",
   "auth_reset_checking": "正在驗證重設連結...",
@@ -115,6 +125,7 @@
   "auth_reset_submit": "重設密碼",
   "auth_reset_request_new": "要求新的重設連結",
   "auth_reset_toast_success": "密碼已重設",
+
   "auth_signup_breadcrumb": "註冊",
   "auth_signup_toast_created_mail": "帳號建立成功。請檢查你的電子郵件以驗證帳號。",
   "auth_signup_toast_created_no_mail": "帳號建立成功。你現在可以登入了。",
@@ -141,6 +152,7 @@
   "auth_signup_or": "或",
   "auth_signup_with_email": "使用電子郵件註冊",
   "auth_signup_legal": "點擊「建立帳號」即表示你同意我們的<tos>服務條款</tos>及<privacy>隱私權政策</privacy>。",
+
   "auth_verify_breadcrumb": "驗證電子郵件",
   "auth_verify_title": "驗證電子郵件",
   "auth_verify_verifying": "正在驗證你的電子郵件地址...",
@@ -149,6 +161,7 @@
   "auth_verify_missing_token": "缺少驗證權杖",
   "auth_verify_continue": "繼續登入",
   "auth_verify_toast_success": "電子郵件已驗證",
+
   "common_cancel": "取消",
   "common_delete": "刪除",
   "common_edit": "編輯",
@@ -253,6 +266,7 @@
   "shocker_edit_is_active": "電擊器運作中",
   "shocker_edit_toast_updated": "電擊器已更新",
   "shocker_edit_delete_desc": "永久刪除此電擊器。此動作無法復原。",
+
   "common_close": "關閉",
   "common_continue": "繼續",
   "common_loading": "載入中...",
@@ -399,6 +413,7 @@
   "terminal_toast_clipboard_unreadable": "無法讀取剪貼簿",
   "terminal_toast_settings_imported": "已匯入主控台設定",
   "terminal_toast_settings_invalid": "剪貼簿中沒有主控台設定",
+
   "common_try_again": "再試一次",
   "terminal_cfg_intro": "數值會透過 UART 傳送到裝置，可在下方主控台查看裝置的回應。不帶參數的指令會讀取數值；使用各欄位旁的 <eye/> 按鈕即可讀取目前的值。",
   "terminal_cfg_rf_title": "RF 發射器",
@@ -455,6 +470,7 @@
   "terminal_cfg_cause_busy": "裝置正在處理其他指令。",
   "terminal_cfg_cause_disconnected": "裝置已中斷連線或重新啟動。",
   "terminal_cfg_cause_unsupported": "此韌體版本不支援這個指令。",
+
   "common_status": "狀態",
   "common_version": "版本",
   "common_created": "建立時間",
@@ -580,6 +596,7 @@
   "profile_title": "個人檔案",
   "profile_coming_soon": "個人檔案即將推出",
   "profile_coming_soon_desc": "你的公開個人檔案尚未開放。帳號資料位於「設定」中。",
+
   "common_retry": "重試",
   "common_never_used": "從未使用",
   "common_expires": "{{time}}到期",
@@ -740,6 +757,7 @@
   "audit_meta_accounts_removed_other": "{{name}}（已移除 {{count}} 個帳號）",
   "audit_meta_scheduled_deletion": "已排定刪除",
   "audit_meta_kept": "保留以便重新啟用",
+
   "common_view": "檢視",
   "common_save": "儲存",
   "common_saving": "儲存中...",
@@ -803,6 +821,7 @@
   "user_selector_aria": "要搜尋的使用者名稱",
   "user_selector_search": "搜尋使用者",
   "user_selector_found": "已找到使用者",
+
   "common_remove": "移除",
   "user_shares_subtitle": "與其他使用者的直接永久分享。",
   "user_shares_toast_invited": "已傳送電擊器邀請給 {{name}}",
@@ -868,7 +887,9 @@
   "outgoing_share_per_desc": "個別調整每個電擊器的限制",
   "outgoing_share_all": "全部",
   "outgoing_share_per": "個別電擊器",
+
   "outgoing_share_remove_desc": "確定要停止將 <strong>{{shocker}}</strong> 分享給 <strong>{{name}}</strong> 嗎？",
+
   "report_breadcrumb": "回報 API 權杖",
   "report_toast_clipboard_failed": "無法讀取剪貼簿：{{error}}",
   "report_title": "回報外洩的 API 權杖",
@@ -922,6 +943,7 @@
   "lcg_connect_failed": "無法連線到即時控制閘道",
   "terminal_toast_bootloader_failed": "無法進入開機載入程式：{{error}}",
   "terminal_toast_app_mode_failed": "無法進入應用程式模式：{{error}}",
+
   "problem_account_account_not_activated_title": "帳號尚未啟用",
   "problem_account_account_not_activated_desc": "請檢查收件匣中的啟用信。",
   "problem_account_activation_not_found_title": "啟用連結無效",
@@ -1039,11 +1061,13 @@
   "problem_webhook_not_found_title": "找不到 Webhook",
   "problem_webhook_unsupported_title": "僅支援 Discord Webhook",
   "problem_webhook_unsupported_desc": "請使用 discord.com 網址，而非 canary 或 ptb。",
+
   "error_too_many_requests": "要求次數過多",
   "error_retry_after_other": "請在 {{count}} 秒後再試。",
   "error_unexpected_response": "未預期的伺服器回應",
   "error_internal": "發生內部錯誤",
   "error_network": "發生網路錯誤",
+
   "dev_banner": "這是 OpenShock 的<b>開發</b>環境。<u>不會儲存任何資料</u>，且會定期被正式環境的資料覆寫。",
   "firmware_channel_bugs_warning": "此通道可能含有錯誤。"
 }
