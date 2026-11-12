@@ -122,7 +122,7 @@ function toastProblem(problem: ProblemDetails) {
 function formatRetryAfter(ms: number | null): string | undefined {
   if (ms === null) return undefined;
   const seconds = Math.max(1, Math.ceil(ms / 1000));
-  return m.error_retry_after({ seconds });
+  return m.error_retry_after({ count: seconds });
 }
 
 async function handleResponseError(error: ResponseError, handlers: ProblemHandlers | undefined) {
