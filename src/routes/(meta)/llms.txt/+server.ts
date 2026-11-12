@@ -1,10 +1,10 @@
+import { getSiteDescription } from '#lib/metadata.js';
 import { paths } from '#lib/utils/public-routes.js';
 import { getBackendURL, getSiteURL } from '#lib/utils/url.js';
 import {
   PUBLIC_DISABLE_LLMS_TXT,
   PUBLIC_DISCORD_INVITE_URL,
   PUBLIC_GITHUB_PROJECT_URL,
-  PUBLIC_SITE_DESCRIPTION,
   PUBLIC_SITE_NAME,
 } from '$app/env/public';
 import { error } from '@sveltejs/kit';
@@ -23,11 +23,8 @@ export const GET: RequestHandler = ({ setHeaders }) => {
     'cache-control': 'public, max-age=3600',
   });
 
-  const isOpenShock = PUBLIC_SITE_NAME.toLowerCase() === 'openshock';
-
-  const summary = isOpenShock
-    ? `OpenShock — ${PUBLIC_SITE_DESCRIPTION}`
-    : `${PUBLIC_SITE_NAME} — an independent instance of OpenShock — ${PUBLIC_SITE_DESCRIPTION}`;
+  // llms.txt is not localized, so it always uses English.
+  const summary = getSiteDescription({ locale: 'en' });
 
   // Public, linkable routes grouped by role.
   const publicPaths = paths

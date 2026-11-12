@@ -1,4 +1,5 @@
 /// <reference types="vitest/config" />
+import { paraglideVitePlugin } from '@inlang/paraglide-js';
 import adapterCloudflare from '@sveltejs/adapter-cloudflare';
 import adapterNode from '@sveltejs/adapter-node';
 import { type Config as KitConfig, sveltekit } from '@sveltejs/kit/vite';
@@ -343,6 +344,14 @@ export default defineConfig(({ command, mode, isPreview }) => {
       jsBannerPlugin('/*! For licenses information, see LICENSES.txt */'),
       tailwindcss(),
       sveltekit(buildSveltekitConfig(dotenv)),
+      // Options live in project.inlang/paraglide.config.ts, shared with the `paraglide-js` CLI.
+      paraglideVitePlugin({ project: './project.inlang' }),
+      // svelte-core's own catalog, so its messages recompile in dev and build too. `outdir` is
+      // explicit because the plugin resolves the config file's relative outdir against this root.
+      paraglideVitePlugin({
+        project: './packages/svelte-core/project.inlang',
+        outdir: './packages/svelte-core/src/lib/paraglide',
+      }),
       devtoolsJson(),
       license({
         thirdParty: {

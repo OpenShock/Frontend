@@ -30,6 +30,7 @@ describe('handleSignalrOtaRollback', () => {
     expect(hub.otaInstall).toBeNull();
     expect(hub.otaResult).toEqual({
       success: false,
+      rolledBack: true,
       message: 'Device rolled back to previous version',
     });
   });

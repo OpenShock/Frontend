@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
+  import { ParaglideMessage } from '@inlang/paraglide-js-svelte';
   import { shockerShockerShareRemove } from '#lib/api/index.js';
   import type { UserShareInfo } from '#lib/api/index.js';
   import { Copy, Trash } from '@lucide/svelte';
@@ -28,7 +30,7 @@
         path: { shockerId: shocker.id, sharedWithUserId: userState.self!.id },
       });
       toast.success(
-        `Successfully removed incoming Shocker Share ${shocker.name} by ${userShare.name}`
+        m.incoming_share_toast_removed_shocker({ shocker: shocker.name, name: userShare.name })
       );
     } catch (error) {
       handleApiError(error);
@@ -40,10 +42,10 @@
 
   async function handleDeleteClick(shocker: UserShareInfo) {
     const result = await dialog.confirm({
-      title: 'Confirm removal of Incoming Shocker Share',
+      title: m.incoming_share_remove_shocker_title(),
       descSnippet: deleteConfirmDesc,
       data: shocker,
-      confirmButtonText: 'Remove Share',
+      confirmButtonText: m.share_remove(),
     });
     if (result.confirmed) await deleteShockerShare(result.data);
   }
@@ -51,8 +53,12 @@
 
 {#snippet deleteConfirmDesc(shocker: UserShareInfo)}
   <p>
-    Are you sure you want to remove the shocker share <strong>{shocker.name}</strong> by
-    <strong>{userShare.name}</strong>?
+    <ParaglideMessage
+      message={m.incoming_share_remove_shocker_desc}
+      inputs={{ shocker: shocker.name, name: userShare.name }}
+    >
+      {#snippet strong({ children })}<strong>{@render children?.()}</strong>{/snippet}
+    </ParaglideMessage>
   </p>
 {/snippet}
 
@@ -60,10 +66,10 @@
   <Drawer.Content>
     <div class="mx-auto flex max-h-dvh w-full flex-col">
       <Drawer.Header class="shrink-0">
-        <Drawer.Description>Manage Shares from</Drawer.Description>
+        <Drawer.Description>{m.incoming_share_manage_from()}</Drawer.Description>
         <Drawer.Title class="mt-1 flex items-center gap-2">
           <Avatar.Root class="size-10">
-            <Avatar.Image src={userShare.image} alt="User Avatar" />
+            <Avatar.Image src={userShare.image} alt={m.common_user_avatar()} />
             <Avatar.Fallback>
               {userShare.name.charAt(0)}
             </Avatar.Fallback>
@@ -84,16 +90,16 @@
                     <Button
                       variant="ghost"
                       size="icon"
-                      title="Copy ID"
-                      onclick={() => copyToClipboard(shocker.id, 'ID copied to clipboard')}
+                      title={m.common_copy_id()}
+                      onclick={() => copyToClipboard(shocker.id, m.common_id_copied())}
                     >
                       <Copy />
                     </Button>
                     <Button
                       variant="destructive"
                       size="icon"
-                      title="Remove share"
-                      aria-label="Remove share"
+                      title={m.share_remove()}
+                      aria-label={m.share_remove()}
                       onclick={() => handleDeleteClick(shocker)}
                     >
                       <Trash />

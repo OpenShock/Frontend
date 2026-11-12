@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { EmptyState } from '@openshock/svelte-core/components';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import * as Table from '@openshock/svelte-core/components/ui/table';
@@ -8,7 +9,7 @@
   import EditShare from './edit-share.svelte';
   import UserShareItem from './user-share-item.svelte';
 
-  registerBreadcrumbs(() => [{ label: 'Shares' }]);
+  registerBreadcrumbs(() => [{ label: m.user_shares_tab_shares() }]);
 
   let editShareDrawerOpen = $state(false);
   let editShareDrawerOpenCount = $state(0);
@@ -36,8 +37,8 @@
   {#if userSharesState.shares.outgoing.length === 0}
     <EmptyState
       icon={Share2}
-      title="No shared shockers"
-      description="You haven't shared any shockers with other users yet."
+      title={m.outgoing_shares_empty_title()}
+      description={m.outgoing_shares_empty_desc()}
     />
   {:else}
     <div class="mb-6 overflow-y-auto rounded-md border">

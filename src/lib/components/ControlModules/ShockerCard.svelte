@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import type { Snippet } from 'svelte';
   import { cn } from '@openshock/svelte-core/utils';
   import PauseOverlay from './impl/PauseOverlay.svelte';
@@ -43,7 +44,7 @@
         <div class="text-muted-foreground flex items-center gap-1.5 text-[11px]">
           <span
             class="size-1.5 shrink-0 rounded-full {hubOnline ? 'bg-success' : 'bg-destructive'}"
-            title={hubOnline ? 'Online' : 'Offline'}
+            title={hubOnline ? m.common_online() : m.common_offline()}
           ></span>
           <span class="truncate" title={hubName}>{hubName}</span>
         </div>

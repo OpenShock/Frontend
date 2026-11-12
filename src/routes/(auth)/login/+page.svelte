@@ -12,8 +12,8 @@
   import { TextInput, PasswordInput } from '@openshock/svelte-core/components/input';
   import type { ValidationResult } from '@openshock/svelte-core/types';
   import Turnstile from '#lib/components/Turnstile.svelte';
-  import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
-  import { isValidationError, mapToValRes } from '#lib/errorhandling/ValidationProblemDetails.js';
+  import { describeProblem, handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+  import { fieldErrors } from '#lib/errorhandling/ValidationProblemDetails.js';
   import OauthButtons from '#lib/components/auth/oauth-buttons.svelte';
   import { gotoQueryRedirectOrFallback, consumeSearchParam } from '#lib/utils/url.js';
   import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
@@ -21,18 +21,42 @@
   import { userState } from '#lib/state/user-state.svelte.js';
   import { Skeleton } from '@openshock/svelte-core/components/ui/skeleton';
   import { getOAuthErrorMessage } from '#lib/auth/oauth-errors.js';
+  import { MailCheck, KeyRound } from '@lucide/svelte';
+  import ResendActivationButton from '#lib/components/auth/resend-activation-button.svelte';
+  import { m } from '#lib/paraglide/messages.js';
+  import { ParaglideMessage } from '@inlang/paraglide-js-svelte';
 
-  registerBreadcrumbs(() => [{ label: 'Login' }]);
+  registerBreadcrumbs(() => [{ label: m.auth_login_breadcrumb() }]);
 
   let oauthError = $state<string>();
 
+  // Shown after an OAuth signup that still needs activation, and whenever a login attempt (password or
+  // OAuth) hits an unactivated account - the API (re)sends the activation email in that case, rate limited.
+  let activationPending = $state(false);
+  // Picks the wording; the resend button shows itself whenever this browser holds the resend cookie.
+  let activationFromSignup = $state(false);
+  // Set when a password login hits an account that was created through OAuth and has no password.
+  let oauthOnly = $state(false);
+
   consumeSearchParam('error', (code) => {
+    if (code === 'accountNotActivated') {
+      activationPending = true;
+      return;
+    }
     oauthError = code;
+  });
+
+  consumeSearchParam('message', (msg) => {
+    if (msg === 'signup-success') {
+      activationPending = true;
+      activationFromSignup = true;
+    }
   });
 
   let usernameOrEmail = $state('');
   let password = $state('');
   let turnstileResponse = $state<string | null>(null);
+  let turnstile = $state<Turnstile>();
 
   let usernameError = $state<ValidationResult | null>(null);
   let passwordError = $state<ValidationResult | null>(null);
@@ -43,6 +67,13 @@
     if (!usernameOrEmail || !password || !turnstileResponse) {
       return;
     }
+
+    // A new attempt may be for a different account; only re-show the notice if this one is unactivated too.
+    activationPending = false;
+    activationFromSignup = false;
+    oauthOnly = false;
+    usernameError = null;
+    passwordError = null;
 
     try {
       const account = await accountLoginV2({
@@ -60,13 +91,25 @@
 
       await gotoQueryRedirectOrFallback('home');
     } catch (error) {
-      await handleApiError(error, (problem) => {
-        if (!isValidationError(problem)) return false;
-        usernameError = mapToValRes(problem, 'UsernameOrEmail');
-        passwordError = mapToValRes(problem, 'Password');
-        // Only mark the problem as handled if we actually surfaced a field
-        // error; otherwise fall through so the generic toast is shown.
-        return usernameError !== null || passwordError !== null;
+      turnstile?.reset();
+      await handleApiError(error, {
+        'Account.AccountNotActivated': () => {
+          activationPending = true;
+        },
+        'Account.OAuthOnly': () => {
+          oauthOnly = true;
+        },
+        'Login.InvalidCredentials': (problem) => {
+          passwordError = { valid: false, message: describeProblem(problem).title };
+        },
+        'Validation.Error': (problem) => {
+          ({ UsernameOrEmail: usernameError, Password: passwordError } = fieldErrors(problem, [
+            'UsernameOrEmail',
+            'Password',
+          ]));
+          // Only count as handled if a field error was surfaced; otherwise the generic toast shows.
+          return usernameError !== null || passwordError !== null;
+        },
       });
     }
   }
@@ -84,18 +127,45 @@
 
 <Card.Root>
   <Card.Header class="text-center">
-    <Card.Title class="text-xl"><h1>Welcome back</h1></Card.Title>
+    <Card.Title class="text-xl"><h1>{m.auth_login_title()}</h1></Card.Title>
     <Card.Description>
       {#if backendMetadata.state === null}
-        Loading available login methods
+        {m.auth_login_loading_methods()}
       {:else if anyOAuthProviders}
-        Login with one of these methods
+        {m.auth_login_choose_method()}
       {:else}
-        Login with your OpenShock Account
+        {m.auth_login_with_account()}
       {/if}
     </Card.Description>
   </Card.Header>
   <Card.Content>
+    {#if activationPending}
+      <div
+        class="bg-muted text-foreground mb-4 flex items-start gap-3 rounded-md border p-3 text-sm"
+        role="status"
+      >
+        <MailCheck class="mt-0.5 size-4 shrink-0" />
+        <div class="flex flex-col items-start gap-1">
+          {#if activationFromSignup}
+            <p>{m.auth_login_activation_after_signup()}</p>
+          {:else}
+            <p>{m.auth_login_activation_pending()}</p>
+          {/if}
+          <ResendActivationButton class="h-auto px-0" />
+        </div>
+      </div>
+    {/if}
+    {#if oauthOnly}
+      <div
+        class="bg-muted text-foreground mb-4 flex items-start gap-3 rounded-md border p-3 text-sm"
+        role="alert"
+      >
+        <KeyRound class="mt-0.5 size-4 shrink-0" />
+        <p>
+          {anyOAuthProviders ? m.auth_login_oauth_only_with_buttons() : m.auth_login_oauth_only()}
+        </p>
+      </div>
+    {/if}
     {#if oauthError}
       <p class="text-destructive mb-4 text-center text-sm" role="alert">
         {getOAuthErrorMessage(oauthError)}
@@ -113,21 +183,21 @@
         {#if anyOAuthProviders}
           <OauthButtons {providers} />
           <FieldSeparator class="*:data-[slot=field-separator-content]:bg-card"
-            >Or continue with</FieldSeparator
+            >{m.auth_login_or_continue_with()}</FieldSeparator
           >
         {/if}
         <form onsubmit={handleSubmission}>
           <div>
             <div class="my-1 flex flex-col gap-1">
               <TextInput
-                label="Username or Email"
+                label={m.auth_login_username_label()}
                 autocomplete="username"
                 bind:value={usernameOrEmail}
                 validationResult={usernameError}
               />
 
               <PasswordInput
-                label="Password"
+                label={m.auth_login_password_label()}
                 autocomplete="current-password"
                 bind:value={password}
                 validate={passwordError}
@@ -135,15 +205,19 @@
               />
 
               <Turnstile
+                bind:this={turnstile}
                 action="signin"
                 onResponse={(response) => (turnstileResponse = response)}
               />
             </div>
             <Field class="mt-5">
-              <Button type="submit" disabled={!canSubmit}>Login</Button>
+              <Button type="submit" disabled={!canSubmit}>{m.auth_login_submit()}</Button>
               <FieldDescription class="text-center">
-                Don't have an account?
-                <a href={resolve('signup')}>Sign up</a>
+                <ParaglideMessage message={m.auth_login_signup_prompt}>
+                  {#snippet signup({ children })}
+                    <a href={resolve('signup')}>{@render children?.()}</a>
+                  {/snippet}
+                </ParaglideMessage>
               </FieldDescription>
             </Field>
           </div>
@@ -153,8 +227,14 @@
   </Card.Content>
 </Card.Root>
 <FieldDescription class="px-6 text-center">
-  By clicking Login, you agree to our
-  <a href="https://openshock.org/tos" target="_blank" rel="noopener">Terms of Service</a>
-  and
-  <a href="https://openshock.org/privacy" target="_blank" rel="noopener">Privacy Policy</a>.
+  <ParaglideMessage message={m.auth_login_legal}>
+    {#snippet tos({ children })}
+      <a href="https://openshock.org/tos" target="_blank" rel="noopener">{@render children?.()}</a>
+    {/snippet}
+    {#snippet privacy({ children })}
+      <a href="https://openshock.org/privacy" target="_blank" rel="noopener"
+        >{@render children?.()}</a
+      >
+    {/snippet}
+  </ParaglideMessage>
 </FieldDescription>

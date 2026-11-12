@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { shockerPauseShocker } from '#lib/api/index.js';
   import type { ShockerResponse } from '#lib/api/index.js';
   import { Pause, Play } from '@lucide/svelte';
@@ -23,7 +24,7 @@
         body: { pause: !shocker.isPaused },
       });
       shocker.isPaused = result.data ?? shocker.isPaused;
-      toast.success(shocker.isPaused ? 'Shocker paused' : 'Shocker resumed');
+      toast.success(shocker.isPaused ? m.shocker_toast_paused() : m.shocker_toast_resumed());
     } catch (error) {
       handleApiError(error);
     } finally {
@@ -38,10 +39,12 @@
   class="relative size-8 p-0"
   onclick={togglePause}
   disabled={pauseLoading}
-  title={shocker.isPaused ? 'Resume shocker' : 'Pause shocker'}
+  title={shocker.isPaused ? m.pause_resume_shocker() : m.pause_pause_shocker()}
   aria-busy={pauseLoading}
 >
-  <span class="sr-only">{shocker.isPaused ? 'Resume shocker' : 'Pause shocker'}</span>
+  <span class="sr-only"
+    >{shocker.isPaused ? m.pause_resume_shocker() : m.pause_pause_shocker()}</span
+  >
   {#if pauseLoading}
     <Spinner class="size-4" />
   {:else if shocker.isPaused}

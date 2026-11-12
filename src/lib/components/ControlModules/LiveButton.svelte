@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import * as Tooltip from '@openshock/svelte-core/components/ui/tooltip';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import {
@@ -58,15 +59,19 @@
       <div class="flex flex-col gap-0.5 text-xs">
         <span>
           {#if isActive}
-            Live via {connection?.gateway} ({connection?.country}), {connection?.latency}ms
+            {m.live_tooltip_active({
+              gateway: connection?.gateway ?? '',
+              country: connection?.country ?? '',
+              latency: connection?.latency ?? 0,
+            })}
           {:else if isConnecting}
-            Connecting...
+            {m.live_tooltip_connecting()}
           {:else}
-            Connect to Live Control
+            {m.live_tooltip_connect()}
           {/if}
         </span>
         <span class="text-muted-foreground">
-          Ctrl+click to {hubIsLive ? 'stop' : 'start'} the whole hub
+          {hubIsLive ? m.live_tooltip_hub_stop() : m.live_tooltip_hub_start()}
         </span>
       </div>
     </Tooltip.Content>

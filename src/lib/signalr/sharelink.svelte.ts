@@ -1,3 +1,4 @@
+import { m } from '#lib/paraglide/messages.js';
 import type { Control } from '#lib/signalr/models/Control.js';
 import { getBackendURL } from '#lib/utils/url.js';
 import { type HubConnection, HubConnectionState } from '@microsoft/signalr';
@@ -62,7 +63,7 @@ export class ShareLinkSignalr {
       this.signalr_state = HubConnectionState.Connected;
     } catch (error) {
       console.error(error);
-      toast.error('Failed to connect to server!');
+      toast.error(m.signalr_connect_failed());
       this.signalr_state = HubConnectionState.Disconnected;
     }
   }
@@ -84,7 +85,7 @@ export class ShareLinkSignalr {
       }
     } catch (error) {
       console.error(error);
-      toast.error('Encountered error while disconnecting from server!');
+      toast.error(m.signalr_disconnect_failed());
     } finally {
       this.#connection = null;
       this.signalr_state = HubConnectionState.Disconnected;

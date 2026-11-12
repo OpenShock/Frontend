@@ -1,4 +1,5 @@
 import { devicesGetLiveControlGatewayInfoV2 } from '#lib/api/index.js';
+import { m } from '#lib/paraglide/messages.js';
 import { ControlType } from '#lib/signalr/models/ControlType.js';
 import { getGatewayWsURL } from '#lib/utils/url.js';
 import { toast } from 'svelte-sonner';
@@ -144,7 +145,7 @@ export class LiveDeviceConnection {
     } catch (error) {
       if (attempt !== this.connectAttempt) return;
       console.error('Failed to connect to LCG:', error);
-      toast.error('Failed to connect to live control gateway');
+      toast.error(m.lcg_connect_failed());
       this.handleDisconnect();
     }
   }

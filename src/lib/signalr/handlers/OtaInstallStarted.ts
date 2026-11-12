@@ -1,3 +1,4 @@
+import { m } from '#lib/paraglide/messages.js';
 import { onlineHubs } from '#lib/state/hubs-state.svelte.js';
 import { isNumber, isString } from '@openshock/svelte-core/typeguards';
 import { toast } from 'svelte-sonner';
@@ -12,7 +13,7 @@ export function handleSignalrOtaInstallStarted(
 ): void {
   if (!isString(hubId) || !isNumber(updateId) || !isString(targetVersion)) {
     console.error('Invalid OTA install started payload', hubId, updateId, targetVersion);
-    toast.error('Received invalid OTA install start data!');
+    toast.error(m.signalr_invalid_ota());
     return;
   }
 

@@ -1,6 +1,10 @@
 import type { HandleClientError } from '@sveltejs/kit/hooks';
 import 'temporal-polyfill/global';
 
+import '#lib/i18n/preferred-locale.js';
+import { getLocale, setLocale } from '#lib/paraglide/runtime.js';
+import { initCoreI18n } from '@openshock/svelte-core/i18n';
+
 import { versionGetBackendInfo } from '#lib/api/index.js';
 import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
 import { authState, startAuthLifecycle } from '#lib/state/auth-state.svelte.js';
@@ -11,6 +15,10 @@ import { redirectLegacyHashRoute } from '#lib/utils/legacy-hash-redirect.js';
 import { removeLegacyStorage } from '#lib/utils/legacy-storage-cleanup.js';
 import { basePath } from '#lib/utils/url.js';
 import { initializeColorScheme } from '@openshock/svelte-core/state/color-scheme-state.svelte.js';
+
+// svelte-core renders strings of its own from its own catalog. Point its runtime at ours before
+// anything renders, so they follow the same locale as the app's messages.
+initCoreI18n({ getLocale, setLocale });
 
 /** Best-effort extraction of a message + stack from an unknown thrown value. */
 function describeError(value: unknown): { message: string; stack?: string } {

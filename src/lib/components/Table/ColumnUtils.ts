@@ -1,3 +1,5 @@
+import { intlLocale } from '#lib/i18n/intl.js';
+import { m } from '#lib/paraglide/messages.js';
 import { formatRelativeInstant } from '#lib/utils/datetime.js';
 import { getReadableUserAgentName } from '#lib/utils/index.js';
 import { formatDurationSeconds } from '@openshock/svelte-core/utils';
@@ -144,21 +146,52 @@ export function CreateColumnDefs<TFeatures extends DataTableFeatures, TData exte
   return { CreateColumnDef, CreateSortableColumnDef, CreateActionsColumnDef };
 }
 
-// Pre-defined cell values
+// Pre-defined cell values.
+// The text is read through getters so it follows the current request's language during SSR.
 export const CellNotApplicable: CellContentProps = {
-  text: 'N/A',
+  get text() {
+    return m.cell_na();
+  },
   bold: true,
-  title: 'Not applicable',
+  get title() {
+    return m.cell_not_applicable();
+  },
 };
-export const CellOrangeNever: CellContentProps = { text: 'Never', bold: true, color: 'orange' };
-export const CellRedUnknown: CellContentProps = { text: 'Unknown', bold: true, color: 'red' };
-export const CellRedInvalid: CellContentProps = { text: 'Invalid', bold: true, color: 'red' };
-export const CellRedUnavailable: CellContentProps = {
-  text: 'Unavailable',
+export const CellOrangeNever: CellContentProps = {
+  get text() {
+    return m.common_never();
+  },
+  bold: true,
+  color: 'orange',
+};
+export const CellRedUnknown: CellContentProps = {
+  get text() {
+    return m.common_unknown();
+  },
   bold: true,
   color: 'red',
 };
-export const CellRedNone: CellContentProps = { text: 'None', bold: true, color: 'red' };
+export const CellRedInvalid: CellContentProps = {
+  get text() {
+    return m.cell_invalid();
+  },
+  bold: true,
+  color: 'red',
+};
+export const CellRedUnavailable: CellContentProps = {
+  get text() {
+    return m.cell_unavailable();
+  },
+  bold: true,
+  color: 'red',
+};
+export const CellRedNone: CellContentProps = {
+  get text() {
+    return m.cell_none();
+  },
+  bold: true,
+  color: 'red',
+};
 export const CellGreenTrue: CellContentProps = { text: 'true', bold: true, color: 'green' };
 export const CellRedFalse: CellContentProps = { text: 'false', bold: true, color: 'red' };
 export const CellGreenOnline: CellContentProps = { text: 'online', bold: true, color: 'green' };
@@ -204,14 +237,14 @@ export const RenderCellWithTooltip = (content: string, tooltip: string): CellCon
 
 export function LocaleDateRenderer(instant: Temporal.Instant): CellContentProps {
   return RenderCellWithTooltip(
-    instant.toLocaleString(undefined, { dateStyle: 'short' }),
+    instant.toLocaleString(intlLocale(), { dateStyle: 'short' }),
     instant.toString()
   );
 }
 
 export function LocaleDateTimeRenderer(instant: Temporal.Instant | null): CellContentProps {
-  if (!instant) return RenderCell('Never');
-  return RenderCellWithTooltip(instant.toLocaleString(), instant.toString());
+  if (!instant) return RenderCell(m.common_never());
+  return RenderCellWithTooltip(instant.toLocaleString(intlLocale()), instant.toString());
 }
 
 // Pass `now` from a ticker to keep the label counting up; the default reads the

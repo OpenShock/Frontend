@@ -7,6 +7,7 @@ vi.mock('#lib/api/index.js', () => ({
 
 vi.mock('#lib/errorhandling/apiErrorHandling.js', () => ({
   handleApiError: vi.fn(),
+  ignoreProblem: () => true,
 }));
 
 function makeSelf(overrides: Partial<ApiUserSelf> = {}): ApiUserSelf {
@@ -162,7 +163,10 @@ describe('userState.refreshSelf', () => {
 
     expect(result).toBe(false);
     expect(userState.self).toBeNull();
-    expect(vi.mocked(handleApiError)).toHaveBeenCalledWith(err, expect.any(Function));
+    // The missing-cookie problem is the expected outcome of the probe and is swallowed.
+    expect(vi.mocked(handleApiError)).toHaveBeenCalledWith(err, {
+      'Authentication.CookieMissingOrInvalid': expect.any(Function),
+    });
   });
 
   it('a second refreshSelf overwrites self with new data', async () => {

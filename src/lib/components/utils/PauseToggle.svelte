@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { shockerPauseShocker, shockerShockerShareCodePause } from '#lib/api/index.js';
   import type { LegacyDataResponseOfboolean } from '#lib/api/index.js';
   import { Pause, Play } from '@lucide/svelte';
@@ -50,7 +51,7 @@
   disabled={requestInProgress}
   class="size-9"
   variant={paused ? 'destructive' : 'default'}
-  title={paused ? 'Resume shocker' : 'Pause shocker'}
+  title={paused ? m.pause_resume_shocker() : m.pause_pause_shocker()}
   aria-busy={requestInProgress}
 >
   {#if requestInProgress}

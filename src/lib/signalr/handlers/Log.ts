@@ -1,3 +1,5 @@
+import { intlLocale } from '#lib/i18n/intl.js';
+import { m } from '#lib/paraglide/messages.js';
 import { isControlLog, type ControlLog } from '#lib/signalr/models/ControlLog.js';
 import { isControlLogSender, type ControlLogSender } from '#lib/signalr/models/ControlLogSender.js';
 import { dev } from '$app/env';
@@ -40,7 +42,7 @@ function emitShockEvent(sender: ControlLogSender, log: ControlLog) {
 export function handleSignalrLog(sender: unknown, logs: unknown) {
   if (!isControlLogSender(sender) || !Array.isArray(logs) || !logs.every(isControlLog)) {
     console.error('Received invalid SignalR log payload', sender, logs);
-    toast.error('Received invalid log data from server!');
+    toast.error(m.signalr_invalid_log());
     return;
   }
 
@@ -60,7 +62,7 @@ export function handleSignalrLog(sender: unknown, logs: unknown) {
     // Iterate through each control log
     logs.forEach((log, index) => {
       console.group(
-        `Log #${index + 1} - ${Temporal.Instant.from(log.executedAt).toLocaleString()}`
+        `Log #${index + 1} - ${Temporal.Instant.from(log.executedAt).toLocaleString(intlLocale())}`
       );
       console.log('Shocker:', `${log.shocker.name} (${log.shocker.id})`);
       console.log('Type:', ControlType[log.type]);

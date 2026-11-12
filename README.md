@@ -37,6 +37,7 @@ This is the frontend for the OpenShock project that interfaces with the OpenShoc
 - `pnpm run build` - Build the project
 - `pnpm run preview` - Preview the built project
 - `pnpm run regen-api` - Generate the API client
+- `pnpm run check:problem-types` - Compare the problem type registry with the API source (needs a sibling `../API` checkout or `OPENSHOCK_API_DIR`)
 
 ## Setup
 
@@ -119,6 +120,26 @@ src/           # Application source code
 └── app.html   # HTML root template
 └── error.html # Fallback HTML error page (for critical errors)
 ```
+
+## API error handling
+
+The backend answers errors with problem details carrying a stable `type` string such as `Account.OAuthOnly`.
+Every known type lives in `src/lib/errorhandling/problemTypes.ts` together with the copy the UI shows for it.
+`handleApiError` toasts that copy by default, so most call sites pass nothing.
+When a page needs its own behaviour, pass a handler map keyed by problem type instead of comparing `problem.type` inline:
+
+```ts
+await handleApiError(error, {
+  'Account.OAuthOnly': () => (oauthOnly = true),
+  'Validation.Error': (problem) => {
+    passwordError = mapToValRes(problem, 'Password');
+    return passwordError !== null; // false falls through to the default toast
+  },
+});
+```
+
+When the backend gains or renames a type, add it to the registry.
+`pnpm run check:problem-types` reports drift, and the dev console warns when an unregistered type arrives.
 
 ## Configuration files
 

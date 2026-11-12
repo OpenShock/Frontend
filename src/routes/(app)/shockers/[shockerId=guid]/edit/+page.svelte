@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import {
     ShockerModelType,
     shockerEditShocker,
@@ -35,8 +36,8 @@
   let saving = $state(false);
 
   registerBreadcrumbs(() => [
-    { label: 'Shockers', href: 'shockers/own' },
-    { label: shocker?.name ?? 'Edit Shocker' },
+    { label: m.shockers_title(), href: 'shockers/own' },
+    { label: shocker?.name ?? m.shocker_edit_title() },
   ]);
 
   let hasChanges = $derived(
@@ -76,7 +77,7 @@
       shocker.name = name.trim();
       shocker.rfId = rfId;
       shocker.model = model;
-      toast.success('Shocker updated');
+      toast.success(m.shocker_edit_toast_updated());
       await refreshOwnHubs();
     } catch (error) {
       handleApiError(error);
@@ -88,14 +89,14 @@
   async function deleteShocker() {
     if (!shocker) return;
     const result = await dialog.confirm({
-      title: 'Delete Shocker',
-      desc: `Are you sure you want to delete "${shocker.name}"? This action cannot be undone.`,
-      confirmButtonText: 'Delete',
+      title: m.shocker_delete_title(),
+      desc: m.shocker_delete_desc({ name: shocker.name }),
+      confirmButtonText: m.common_delete(),
     });
     if (!result.confirmed) return;
     try {
       await shockerRemoveShocker({ path: { shockerId: shocker.id } });
-      toast.success(`Shocker "${shocker.name}" deleted`);
+      toast.success(m.shocker_toast_deleted({ name: shocker.name }));
       await refreshOwnHubs();
       goto(resolve('shockers/own'));
     } catch (error) {
@@ -105,42 +106,46 @@
 </script>
 
 <Container>
-  <PageHeader title="Edit Shocker" subtitle="Change this shocker's details or remove it.">
+  <PageHeader title={m.shocker_edit_title()} subtitle={m.shocker_edit_subtitle()}>
     <Button variant="outline" href={resolve('shockers/own')}>
       <ArrowLeft />
-      Back to Shockers
+      {m.shocker_edit_back()}
     </Button>
   </PageHeader>
 
   {#if loadError}
-    <PageError message="Failed to load shocker." />
+    <PageError message={m.shocker_edit_load_failed()} />
   {:else if !shocker}
-    <PageLoading label="Loading shocker..." />
+    <PageLoading label={m.shocker_edit_loading()} />
   {:else}
     <div class="mx-auto flex w-full max-w-lg flex-col gap-6 py-4">
       <Card.Root>
         <Card.Header>
-          <Card.Title>Shocker Details</Card.Title>
-          <Card.Description>Update the name, RF ID, and model for this shocker.</Card.Description>
+          <Card.Title>{m.shocker_edit_details_title()}</Card.Title>
+          <Card.Description>{m.shocker_edit_details_desc()}</Card.Description>
         </Card.Header>
         <Card.Content class="flex flex-col gap-4">
-          <TextInput label="Name" placeholder="Shocker name" bind:value={name} />
+          <TextInput
+            label={m.common_name()}
+            placeholder={m.shocker_name_placeholder()}
+            bind:value={name}
+          />
 
           <Field class="gap-2">
-            <FieldLabel>RF ID</FieldLabel>
+            <FieldLabel>{m.shocker_rf_id()}</FieldLabel>
             <Input type="number" bind:value={rfId} min={RfIdMin} max={RfIdMax} step={1} />
             {#if !rfIdValid}
               <span class="text-destructive text-sm">
-                RF ID must be a whole number between {RfIdMin} and {RfIdMax}.
+                {m.shocker_rf_id_invalid({ min: RfIdMin, max: RfIdMax })}
               </span>
             {/if}
           </Field>
 
           <Field class="gap-2">
-            <FieldLabel>Model</FieldLabel>
+            <FieldLabel>{m.shocker_model()}</FieldLabel>
             <Select.Root type="single" name="model" bind:value={model}>
               <Select.Trigger>
-                {model ?? 'Select model'}
+                {model ?? m.shocker_select_model()}
               </Select.Trigger>
               <Select.Content>
                 <Select.Group>
@@ -155,7 +160,7 @@
           </Field>
 
           <Field class="gap-2">
-            <FieldLabel>Pause State</FieldLabel>
+            <FieldLabel>{m.shocker_edit_pause_state()}</FieldLabel>
             <div class="flex items-center gap-2">
               <PauseToggle
                 shockerId={shocker.id}
@@ -164,7 +169,7 @@
                 onPausedChange={() => {}}
               />
               <span class="text-muted-foreground text-sm">
-                {shocker.isPaused ? 'Shocker is paused' : 'Shocker is active'}
+                {shocker.isPaused ? m.shocker_edit_is_paused() : m.shocker_edit_is_active()}
               </span>
             </div>
           </Field>
@@ -172,22 +177,22 @@
         <Card.Footer>
           <Button disabled={saving || !name.trim() || !rfIdValid || !hasChanges} onclick={save}>
             {#if saving}<Spinner class="size-4" />{/if}
-            Save Changes
+            {m.common_save_changes()}
           </Button>
         </Card.Footer>
       </Card.Root>
 
       <Card.Root class="border-destructive/30">
         <Card.Header>
-          <Card.Title class="text-destructive">Danger Zone</Card.Title>
+          <Card.Title class="text-destructive">{m.common_danger_zone()}</Card.Title>
           <Card.Description>
-            Permanently delete this shocker. This action cannot be undone.
+            {m.shocker_edit_delete_desc()}
           </Card.Description>
         </Card.Header>
         <Card.Footer>
           <Button variant="destructive" onclick={deleteShocker}>
             <Trash2 class="size-4" />
-            Delete Shocker
+            {m.shocker_delete_title()}
           </Button>
         </Card.Footer>
       </Card.Root>

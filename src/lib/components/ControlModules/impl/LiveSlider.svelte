@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { onDestroy, onMount } from 'svelte';
   import type { LiveShockerState } from '#lib/state/live-control-state.svelte.js';
 
@@ -172,7 +173,7 @@
     aria-valuenow={intensity}
     aria-valuemin={0}
     aria-valuemax={maxIntensity}
-    aria-label="Live intensity"
+    aria-label={m.control_live_intensity()}
     tabindex="0"
   >
     <!-- Intensity-history graph: newest on the right, slides smoothly left over time -->

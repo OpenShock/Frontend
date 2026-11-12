@@ -9,8 +9,9 @@
   import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
+  import { m } from '#lib/paraglide/messages.js';
 
-  registerBreadcrumbs(() => [{ label: 'Activate Account' }]);
+  registerBreadcrumbs(() => [{ label: m.auth_activate_breadcrumb() }]);
 
   let token = browser ? page.url.searchParams.get('token') : null;
 
@@ -23,7 +24,7 @@
     accountActivate({ query: { token } })
       .then(() => {
         status = 'success';
-        toast.success('Account activated');
+        toast.success(m.auth_activate_toast_success());
       })
       .catch(async (e: unknown) => {
         status = 'failed';
@@ -34,22 +35,23 @@
 
 <Card.Root>
   <Card.Header class="text-center">
-    <Card.Title class="text-xl"><h1>Activate Account</h1></Card.Title>
+    <Card.Title class="text-xl"><h1>{m.auth_activate_title()}</h1></Card.Title>
     <Card.Description>
       {#if status === 'activating'}
-        Activating your account...
+        {m.auth_activate_activating()}
       {:else if status === 'success'}
-        Your account has been activated
+        {m.auth_activate_success()}
       {:else if status === 'failed'}
-        This activation link is invalid or has expired
+        {m.auth_activate_failed()}
       {:else}
-        Missing activation token
+        {m.auth_activate_missing_token()}
       {/if}
     </Card.Description>
   </Card.Header>
   {#if status === 'success'}
     <Card.Content
-      ><Button class="w-full" href={resolve('login')}>Continue to login</Button></Card.Content
+      ><Button class="w-full" href={resolve('login')}>{m.auth_activate_continue()}</Button
+      ></Card.Content
     >
   {/if}
 </Card.Root>

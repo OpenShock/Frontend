@@ -1,7 +1,18 @@
-import { durationBetween, formatElapsed } from '@openshock/svelte-core/utils';
+import { intlLocale } from '#lib/i18n/intl.js';
+import { durationBetween } from '@openshock/svelte-core/utils';
+
+const UNITS = ['years', 'months', 'days', 'hours', 'minutes', 'seconds'] as const;
+
+// Picks the largest non-zero unit, like the svelte-core formatter, but words it in the app language.
+function formatSignedDuration(duration: Temporal.Duration): string {
+  const abs = duration.abs();
+  const unit = UNITS.find((u) => abs[u] >= 1) ?? 'seconds';
+  const format = new Intl.RelativeTimeFormat(intlLocale(), { numeric: 'always' });
+  return format.format(duration.sign < 0 ? -abs[unit] : abs[unit], unit);
+}
 
 /**
- * Relative label for an instant — "in 3 days", "2 hours ago".
+ * Relative label for an instant, such as "in 3 days" or "2 hours ago".
  *
  * Pass `now` from reactive state to keep the label ticking; the default reads
  * the clock once and so is only correct at call time.
@@ -10,7 +21,7 @@ export function formatRelativeInstant(
   instant: Temporal.Instant,
   now: Temporal.Instant = Temporal.Now.instant()
 ): string {
-  return formatElapsed(durationBetween(now, instant));
+  return formatSignedDuration(durationBetween(now, instant));
 }
 
 export function formatRelativeInstantOrNull(
@@ -18,7 +29,7 @@ export function formatRelativeInstantOrNull(
   now: Temporal.Instant = Temporal.Now.instant()
 ): string | null {
   if (instant === null) return null;
-  return formatElapsed(durationBetween(now, instant));
+  return formatSignedDuration(durationBetween(now, instant));
 }
 
 /** Zero-padded HH:MM:SS for a duration in milliseconds. Hours keep growing past 24. */
