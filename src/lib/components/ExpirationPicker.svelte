@@ -73,7 +73,7 @@
 
   {#if option === 'custom'}
     <div class="my-2 w-1/2">
-      <DateTimePicker bind:date={getCustomDate, setCustomDate} />
+      <DateTimePicker bind:date={getCustomDate, setCustomDate} locale={intlLocale()} />
     </div>
   {/if}
   {#if 'message' in validationResult}

@@ -42,7 +42,7 @@
 		"@types/semver": "^7.8.0",
 		"@types/w3c-web-serial": "^1.0.9",
 		"@typescript/native": "npm:typescript@~7.0.2",
-		"bits-ui": "2.20.2",
+		"bits-ui": "2.20.6",
 		"boxen": "^9.0.0",
 		"chalk": "^6.0.1",
 		"clsx": "^2.1.1",

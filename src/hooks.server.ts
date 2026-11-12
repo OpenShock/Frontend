@@ -1,9 +1,14 @@
 import '#lib/i18n/preferred-locale.js';
-import { getTextDirection } from '#lib/paraglide/runtime.js';
+import { getLocale, getTextDirection, setLocale } from '#lib/paraglide/runtime.js';
 import { paraglideMiddleware } from '#lib/paraglide/server.js';
 import { PRIVATE_BACKEND_TLS_INSECURE } from '$app/env/private';
 import { PUBLIC_GITHUB_PROJECT_URL } from '$app/env/public';
+import { initCoreI18n } from '@openshock/svelte-core/i18n';
 import { type Handle, type ServerInit, sequence } from '@sveltejs/kit/hooks';
+
+// svelte-core renders strings of its own (dialog buttons, pagination, validation messages) from
+// its own catalog. Point its runtime at ours so they follow the request's locale during SSR.
+initCoreI18n({ getLocale, setLocale });
 
 /**
  * Resolves the request's locale and scopes it to this request, so `getLocale()` and message
