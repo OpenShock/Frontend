@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import {
     publicGetPublicShare,
     shareLinksAddShocker,
@@ -33,8 +34,8 @@
   const shareUrl = $derived(getSiteShortURL(`s/${shareId}`));
 
   registerBreadcrumbs(() => [
-    { label: 'Public Shares', href: 'shares/public' },
-    { label: publicShareData?.name ?? 'Edit' },
+    { label: m.sidebar_public_shares(), href: 'shares/public' },
+    { label: publicShareData?.name ?? m.common_edit() },
   ]);
 
   onMount(() => {
@@ -66,7 +67,7 @@
       );
 
       await Promise.all(updatePromises);
-      toast.success('Changes saved successfully');
+      toast.success(m.common_toast_saved());
     } catch (error) {
       handleApiError(error);
     } finally {
@@ -85,7 +86,7 @@
       );
 
       await Promise.all(addPromises);
-      toast.success(`Added ${shockers.length} shocker(s) to share`);
+      toast.success(m.public_share_toast_added({ count: shockers.length }));
 
       publicShareRequest = getPublicShare();
     } catch (error) {
@@ -114,21 +115,21 @@
 
 <Container>
   <PageHeader
-    title="Public Share: {publicShareData?.name ?? 'Loading...'}"
-    subtitle="Editing — changes apply when you save."
+    title={m.public_share_edit_title({ name: publicShareData?.name ?? m.common_loading() })}
+    subtitle={m.public_share_edit_subtitle()}
   >
     <Button variant="outline" href={publicUrl}>
       <ExternalLink />
-      View
+      {m.common_view()}
     </Button>
     <Button
       variant="outline"
       onclick={() => (showAddShockerModal = true)}
-      disabled={isAddingShockers}><Plus />Add Shocker</Button
+      disabled={isAddingShockers}><Plus />{m.public_share_add_shocker()}</Button
     >
 
     <Button onclick={saveChanges} disabled={isSaving}
-      ><Save />{isSaving ? 'Saving...' : 'Save'}</Button
+      ><Save />{isSaving ? m.common_saving() : m.common_save()}</Button
     >
 
     {#if publicShareData}
@@ -138,7 +139,7 @@
             class="outline-muted-foreground/50 ml-2 flex flex-row items-center rounded-md px-3 py-1.5 outline-1"
           >
             <Avatar.Root class="h-8 w-8">
-              <Avatar.Image src={publicShareData.author.image} alt="User Avatar" />
+              <Avatar.Image src={publicShareData.author.image} alt={m.common_user_avatar()} />
               <Avatar.Fallback>
                 {publicShareData.author.name.charAt(0)}
               </Avatar.Fallback>
@@ -147,7 +148,7 @@
           </span>
         </Tooltip.Trigger>
         <Tooltip.Content>
-          <p>Shared by</p>
+          <p>{m.common_shared_by()}</p>
         </Tooltip.Content>
       </Tooltip.Root>
     {/if}
@@ -170,17 +171,17 @@
       {:else}
         <EmptyState
           icon={Zap}
-          title="No shockers in this share"
-          description="Add a shocker and anyone with the link will be able to control it."
+          title={m.public_share_empty_shockers_title()}
+          description={m.public_share_empty_shockers_desc()}
         >
           <Button onclick={() => (showAddShockerModal = true)} disabled={isAddingShockers}>
-            <Plus />Add Shocker
+            <Plus />{m.public_share_add_shocker()}
           </Button>
         </EmptyState>
       {/if}
     {:catch error}
       <div class="flex h-full w-full flex-col items-center justify-center">
-        <p>Error fetching public share details</p>
+        <p>{m.public_share_load_failed()}</p>
         <pre>{error.message}</pre>
       </div>
     {/await}

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
+  import { ParaglideMessage } from '@inlang/paraglide-js-svelte';
   import { tokenDeleteDeleteToken, tokensSetTokenPaused } from '#lib/api/index.js';
   import type { TokenResponseV2 } from '#lib/api/index.js';
   import { dialog, type DialogRenderProps } from '@openshock/svelte-core/components/dialog-manager';
@@ -22,7 +24,7 @@
 
   let { token, onEdit, onDeleted }: Props = $props();
 
-  const copyId = () => copyToClipboard(token.id, 'ID copied to clipboard');
+  const copyId = () => copyToClipboard(token.id, m.common_id_copied());
 
   async function togglePaused() {
     const paused = !token.shockerControl.paused;
@@ -35,7 +37,7 @@
         ...t,
         shockerControl: { ...t.shockerControl, paused: result.paused },
       }));
-      toast.success(result.paused ? 'Token paused' : 'Token resumed');
+      toast.success(result.paused ? m.token_toast_paused() : m.token_toast_resumed());
     } catch (error) {
       await handleApiError(error);
     }
@@ -51,8 +53,8 @@
 
   async function openDeleteDialog() {
     const result = await dialog.confirm({
-      title: 'Delete API token',
-      confirmButtonText: 'Delete',
+      title: m.token_delete_title(),
+      confirmButtonText: m.common_delete(),
       data: token,
       descSnippet: deleteDescSnippet,
     });
@@ -60,7 +62,7 @@
     try {
       await tokenDeleteDeleteToken({ path: { tokenId: token.id } });
       onDeleted(token.id);
-      toast.success('Token deleted successfully');
+      toast.success(m.token_toast_deleted());
     } catch (error) {
       await handleApiError(error);
     }
@@ -72,8 +74,10 @@
 {/snippet}
 
 {#snippet deleteDescSnippet(t: TokenResponseV2)}
-  Are you sure you want to delete <strong>{t.name}</strong>?<br />
-  This action cannot be undone. This will permanently delete the token.
+  <ParaglideMessage message={m.token_delete_desc} inputs={{ name: t.name }}>
+    {#snippet strong({ children })}<strong>{@render children?.()}</strong>{/snippet}
+  </ParaglideMessage><br />
+  {m.token_delete_permanent()}
 {/snippet}
 
 <div class="flex items-center justify-end gap-1">
@@ -89,7 +93,7 @@
       {/if}
     </Tooltip.Trigger>
     <Tooltip.Content>
-      <p>{token.shockerControl.paused ? 'Resume token' : 'Pause token'}</p>
+      <p>{token.shockerControl.paused ? m.token_resume() : m.token_pause()}</p>
     </Tooltip.Content>
   </Tooltip.Root>
 
@@ -97,17 +101,17 @@
     <DropdownMenu.Group>
       <DropdownMenu.Item class="cursor-pointer" onclick={openEditDialog}>
         <Pencil class="size-4" />
-        Edit
+        {m.common_edit()}
       </DropdownMenu.Item>
       <DropdownMenu.Separator />
       <DropdownMenu.Item class="cursor-pointer" onclick={copyId}>
         <Copy class="size-4" />
-        Copy ID
+        {m.common_copy_id()}
       </DropdownMenu.Item>
       <DropdownMenu.Separator />
       <DropdownMenu.Item class="text-destructive cursor-pointer" onclick={openDeleteDialog}>
         <Trash2 class="size-4" />
-        Delete
+        {m.common_delete()}
       </DropdownMenu.Item>
     </DropdownMenu.Group>
   </TableActionMenu>

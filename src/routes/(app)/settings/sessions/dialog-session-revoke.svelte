@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
+  import { ParaglideMessage } from '@inlang/paraglide-js-svelte';
   import { sessionsDeleteSession } from '#lib/api/index.js';
   import type { LoginSessionResponse } from '#lib/api/index.js';
   import { ConfirmDeleteDialog } from '@openshock/svelte-core/components';
@@ -17,7 +19,7 @@
   async function revokeSession() {
     try {
       await sessionsDeleteSession({ path: { sessionId: session.id } });
-      toast.success('Session revoked successfully');
+      toast.success(m.session_toast_revoked());
       onRevoked(session.id);
     } catch (error) {
       await handleApiError(error);
@@ -31,15 +33,19 @@
 
 <ConfirmDeleteDialog
   bind:open
-  title="Revoke session"
-  actionLabel="Revoke"
+  title={m.session_revoke_title()}
+  actionLabel={m.session_revoke()}
   onConfirm={revokeSession}
 >
   {#snippet description()}
-    Are you sure you want to revoke this session?
+    {m.session_revoke_desc()}
   {/snippet}
   <span>
-    Session logged in from <strong>{session.ip}</strong> using
-    <strong>{readableUserAgent}</strong>
+    <ParaglideMessage
+      message={m.session_revoke_from}
+      inputs={{ ip: session.ip, agent: readableUserAgent }}
+    >
+      {#snippet strong({ children })}<strong>{@render children?.()}</strong>{/snippet}
+    </ParaglideMessage>
   </span>
 </ConfirmDeleteDialog>

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { Settings2, Terminal, Zap } from '@lucide/svelte';
   import * as Card from '@openshock/svelte-core/components/ui/card';
 
@@ -16,9 +17,9 @@
     <Card.Root class="hover:bg-accent h-full cursor-pointer transition-colors">
       <Card.Header>
         <Settings2 class="mb-2 h-8 w-8" />
-        <Card.Title>Configure Device</Card.Title>
+        <Card.Title>{m.terminal_mode_configure()}</Card.Title>
         <Card.Description>
-          Configure WiFi, authentication, and more. Includes an interactive serial console.
+          {m.terminal_mode_configure_desc()}
         </Card.Description>
       </Card.Header>
     </Card.Root>
@@ -27,8 +28,8 @@
     <Card.Root class="hover:bg-accent h-full cursor-pointer transition-colors">
       <Card.Header>
         <Zap class="mb-2 h-8 w-8" />
-        <Card.Title>Flash Firmware</Card.Title>
-        <Card.Description>Install or update firmware on a connected device.</Card.Description>
+        <Card.Title>{m.terminal_mode_flash()}</Card.Title>
+        <Card.Description>{m.terminal_mode_flash_desc()}</Card.Description>
       </Card.Header>
     </Card.Root>
   </button>
@@ -36,8 +37,8 @@
     <Card.Root class="hover:bg-accent h-full cursor-pointer transition-colors">
       <Card.Header>
         <Terminal class="mb-2 h-8 w-8" />
-        <Card.Title>Serial Monitor</Card.Title>
-        <Card.Description>Just the console. Read device logs and send commands.</Card.Description>
+        <Card.Title>{m.terminal_mode_raw()}</Card.Title>
+        <Card.Description>{m.terminal_mode_raw_desc()}</Card.Description>
       </Card.Header>
     </Card.Root>
   </button>

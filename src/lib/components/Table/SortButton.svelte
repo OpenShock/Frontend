@@ -1,4 +1,5 @@
 <script lang="ts" generics="TFeatures extends DataTableFeatures, TData extends RowData">
+  import { m } from '#lib/paraglide/messages.js';
   import { ArrowDown, ArrowUp, ArrowUpDown } from '@lucide/svelte';
   import type { Column, Column_RowSorting, RowData } from '@tanstack/svelte-table';
   import type { DataTableFeatures } from './types';
@@ -18,11 +19,11 @@
 <button
   class="flex items-center text-xs sm:text-sm"
   onclick={() => column.toggleSorting(direction === 'asc')}
-  title="Sort by {name}, {direction === 'asc'
-    ? 'ascending'
+  title={direction === 'asc'
+    ? m.table_sort_asc({ name })
     : direction === 'desc'
-      ? 'descending'
-      : 'unsorted'}"
+      ? m.table_sort_desc({ name })
+      : m.table_sort_none({ name })}
 >
   {name}
   {#if direction === 'asc'}

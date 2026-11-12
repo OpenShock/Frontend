@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { Pause, Play } from '@lucide/svelte';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import { cn } from '@openshock/svelte-core/utils';
@@ -46,10 +47,10 @@
       {/if}
       <span class="text-sm font-semibold text-white">
         {#if resuming}
-          Resuming...
+          {m.common_resuming()}
         {:else}
-          <span class="group-hover:hidden">Paused</span>
-          <span class="hidden group-hover:inline">Resume</span>
+          <span class="group-hover:hidden">{m.common_paused()}</span>
+          <span class="hidden group-hover:inline">{m.common_resume()}</span>
         {/if}
       </span>
     </button>
@@ -57,9 +58,9 @@
     <Pause class="size-8 text-white/60" />
     <span class="text-sm font-semibold text-white">
       {#if pauseReason}
-        Paused at {pauseReason} level
+        {pauseReason}
       {:else}
-        Paused
+        {m.common_paused()}
       {/if}
     </span>
   {/if}

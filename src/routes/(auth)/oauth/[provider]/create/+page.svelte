@@ -12,8 +12,12 @@
   import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
   import { userState } from '#lib/state/user-state.svelte.js';
   import { onMount } from 'svelte';
+  import { m } from '#lib/paraglide/messages.js';
+  import { ParaglideMessage } from '@inlang/paraglide-js-svelte';
 
-  registerBreadcrumbs(() => [{ label: `Sign Up With ${page.params.provider ?? 'OAuth'}` }]);
+  registerBreadcrumbs(() => [
+    { label: m.auth_oauth_create_breadcrumb({ provider: page.params.provider ?? 'OAuth' }) },
+  ]);
 
   let username = $state<string>('');
   let usernameValid = $state<boolean>(false);
@@ -82,25 +86,47 @@
 <Card.Root>
   <Card.Header class="text-center">
     <Card.Title class="text-xl">
-      <h1>Sign Up With <span class="capitalize">{page.params.provider}</span></h1>
+      <h1>
+        <ParaglideMessage
+          message={m.auth_oauth_create_title}
+          inputs={{ provider: page.params.provider ?? '' }}
+        >
+          {#snippet provider({ children })}
+            <span class="capitalize">{@render children?.()}</span>
+          {/snippet}
+        </ParaglideMessage>
+      </h1>
     </Card.Title>
-    <Card.Description>Complete your account details</Card.Description>
+    <Card.Description>{m.auth_oauth_create_description()}</Card.Description>
   </Card.Header>
   <Card.Content>
     <form class="flex flex-col gap-2" onsubmit={handleSubmission}>
       <UsernameInput
-        label="Username"
-        placeholder="Username"
+        label={m.auth_oauth_create_username_label()}
+        placeholder={m.auth_oauth_create_username_placeholder()}
         bind:value={username}
         bind:valid={usernameValid}
       />
-      <EmailInput label="Email" placeholder="Email" bind:value={email} bind:valid={emailValid} />
+      <EmailInput
+        label={m.auth_oauth_create_email_label()}
+        placeholder={m.auth_oauth_create_email_placeholder()}
+        bind:value={email}
+        bind:valid={emailValid}
+      />
 
-      <Button type="submit" class="mt-3" disabled={!canSubmit}>Sign Up</Button>
+      <Button type="submit" class="mt-3" disabled={!canSubmit}
+        >{m.auth_oauth_create_submit()}</Button
+      >
     </form>
   </Card.Content>
 </Card.Root>
 <FieldDescription class="px-6 text-center">
-  By clicking Sign Up, you agree to our <a href="https://openshock.org/tos">Terms of Service</a>
-  and <a href="https://openshock.org/privacy">Privacy Policy</a>.
+  <ParaglideMessage message={m.auth_oauth_create_legal}>
+    {#snippet tos({ children })}
+      <a href="https://openshock.org/tos">{@render children?.()}</a>
+    {/snippet}
+    {#snippet privacy({ children })}
+      <a href="https://openshock.org/privacy">{@render children?.()}</a>
+    {/snippet}
+  </ParaglideMessage>
 </FieldDescription>

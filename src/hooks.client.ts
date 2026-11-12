@@ -1,6 +1,8 @@
 import type { HandleClientError } from '@sveltejs/kit/hooks';
 import 'temporal-polyfill/global';
 
+import '#lib/i18n/preferred-locale.js';
+
 import { versionGetBackendInfo } from '#lib/api/index.js';
 import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
 import { authState, startAuthLifecycle } from '#lib/state/auth-state.svelte.js';

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
+  import { ParaglideMessage } from '@inlang/paraglide-js-svelte';
   import { userSharesDenyIncomingInvite, userSharesRedeemInvite } from '#lib/api/index.js';
   import type { ShareInviteBaseDetails } from '#lib/api/index.js';
   import { Check, X, Zap } from '@lucide/svelte';
@@ -23,7 +25,7 @@
   async function acceptInvite() {
     try {
       await userSharesRedeemInvite({ path: { inviteId: shareInvite.id } });
-      toast.success(`Accepted share invite for ${shareInvite.owner.name}`);
+      toast.success(m.invite_toast_accepted({ name: shareInvite.owner.name }));
     } catch (error) {
       handleApiError(error);
     } finally {
@@ -34,7 +36,7 @@
   async function denyInviteCall(invite: ShareInviteBaseDetails) {
     try {
       await userSharesDenyIncomingInvite({ path: { inviteId: invite.id } });
-      toast.success(`Declined share invite for ${invite.owner.name}`);
+      toast.success(m.invite_toast_declined({ name: invite.owner.name }));
     } catch (error) {
       handleApiError(error);
     } finally {
@@ -44,8 +46,8 @@
 
   async function denyInvite() {
     const result = await dialog.confirm({
-      title: 'Deny Invite',
-      confirmButtonText: 'Deny',
+      title: m.invite_deny_title(),
+      confirmButtonText: m.invite_deny(),
       data: shareInvite,
       descSnippet: confirmDesc,
     });
@@ -54,13 +56,17 @@
 </script>
 
 {#snippet confirmDesc(invite: ShareInviteBaseDetails)}
-  <p>Are you sure you want to deny <strong>{invite.owner.name}'s</strong> invite?</p>
+  <p>
+    <ParaglideMessage message={m.invite_deny_desc} inputs={{ name: invite.owner.name }}>
+      {#snippet strong({ children })}<strong>{@render children?.()}</strong>{/snippet}
+    </ParaglideMessage>
+  </p>
 {/snippet}
 
 <Table.Row>
   <Table.Cell class="flex flex-auto items-center font-medium">
     <Avatar.Root class="h-15 w-15">
-      <Avatar.Image src={shareInvite.owner.image} alt="User Avatar" />
+      <Avatar.Image src={shareInvite.owner.image} alt={m.common_user_avatar()} />
       <Avatar.Fallback>
         {shareInvite.owner.name.charAt(0)}
       </Avatar.Fallback>
@@ -90,12 +96,12 @@
       <Tooltip.Trigger
         class={cn('mr-4 size-9', buttonVariants({ variant: 'default' }))}
         onclick={acceptInvite}
-        aria-label="Accept invite"
+        aria-label={m.invite_accept()}
       >
         <Check />
       </Tooltip.Trigger>
       <Tooltip.Content>
-        <p>Accept Invite</p>
+        <p>{m.invite_accept()}</p>
       </Tooltip.Content>
     </Tooltip.Root>
 
@@ -103,12 +109,12 @@
       <Tooltip.Trigger
         class={cn('mr-4 size-9', buttonVariants({ variant: 'destructive' }))}
         onclick={denyInvite}
-        aria-label="Deny invite"
+        aria-label={m.invite_deny_label()}
       >
         <X />
       </Tooltip.Trigger>
       <Tooltip.Content>
-        <p>Deny Invite</p>
+        <p>{m.invite_deny_label()}</p>
       </Tooltip.Content>
     </Tooltip.Root>
   </Table.Cell>

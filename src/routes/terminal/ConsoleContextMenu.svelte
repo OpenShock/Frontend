@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { ContextMenu } from 'bits-ui';
   import { Check, ChevronRight, Copy, Maximize2, Minimize2, Palette } from '@lucide/svelte';
   import type { Snippet } from 'svelte';
@@ -38,7 +39,7 @@
   }
 
   function copySelection() {
-    void copyToClipboard(selectedText, 'Selection copied');
+    void copyToClipboard(selectedText, m.terminal_toast_selection_copied());
   }
 
   // svelte-core ships dropdown-menu components but no context-menu ones, and the two bits-ui
@@ -69,12 +70,12 @@
       {#if selectedText}
         <ContextMenu.Item class={itemClass} onSelect={copySelection}>
           <Copy />
-          Copy selection
+          {m.terminal_copy_selection()}
         </ContextMenu.Item>
       {/if}
       <ContextMenu.Item class={itemClass} onSelect={onCopyOutput}>
         <Copy />
-        Copy all output
+        {m.terminal_copy_all()}
       </ContextMenu.Item>
 
       <ContextMenu.Separator class={separatorClass} />
@@ -87,7 +88,7 @@
       >
         {#snippet children({ checked })}
           {@render indicator(checked)}
-          Hide system messages
+          {m.terminal_hide_system()}
         {/snippet}
       </ContextMenu.CheckboxItem>
       <ContextMenu.CheckboxItem
@@ -98,7 +99,7 @@
       >
         {#snippet children({ checked })}
           {@render indicator(checked)}
-          Stick to bottom
+          {m.terminal_stick_bottom()}
         {/snippet}
       </ContextMenu.CheckboxItem>
       <ContextMenu.CheckboxItem
@@ -109,15 +110,15 @@
       >
         {#snippet children({ checked })}
           {@render indicator(checked)}
-          Raw output
+          {m.terminal_raw_output()}
         {/snippet}
       </ContextMenu.CheckboxItem>
 
       <ContextMenu.Sub>
         <ContextMenu.SubTrigger class={itemClass}>
-          Timestamps
+          {m.terminal_timestamps()}
           <span class="text-muted-foreground ml-auto text-xs">
-            {TIMESTAMP_LABELS[settings.timestampMode]}
+            {TIMESTAMP_LABELS[settings.timestampMode]()}
           </span>
           <ChevronRight />
         </ContextMenu.SubTrigger>
@@ -126,11 +127,11 @@
             value={settings.timestampMode}
             onValueChange={(v) => (settings.timestampMode = v as TimestampMode)}
           >
-            {#each TIMESTAMP_MODES as m (m)}
-              <ContextMenu.RadioItem class={checkItemClass} closeOnSelect={false} value={m}>
+            {#each TIMESTAMP_MODES as tsMode (tsMode)}
+              <ContextMenu.RadioItem class={checkItemClass} closeOnSelect={false} value={tsMode}>
                 {#snippet children({ checked })}
                   {@render indicator(checked)}
-                  {TIMESTAMP_LABELS[m]}
+                  {TIMESTAMP_LABELS[tsMode]()}
                 {/snippet}
               </ContextMenu.RadioItem>
             {/each}
@@ -143,15 +144,15 @@
       <ContextMenu.Item class={itemClass} onSelect={() => onMaximizedChange(!maximized)}>
         {#if maximized}
           <Minimize2 />
-          Exit fullscreen
+          {m.terminal_fullscreen_exit()}
         {:else}
           <Maximize2 />
-          Fill the window
+          {m.terminal_fullscreen_fill()}
         {/if}
       </ContextMenu.Item>
       <ContextMenu.Item class={itemClass} onSelect={onOpenColors}>
         <Palette />
-        Colors...
+        {m.terminal_colors_menu()}
       </ContextMenu.Item>
     </ContextMenu.Content>
   </ContextMenu.Portal>

@@ -19,8 +19,10 @@
   import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
   import { backendMetadata } from '#lib/state/backend-metadata-state.svelte.js';
   import { Skeleton } from '@openshock/svelte-core/components/ui/skeleton';
+  import { m } from '#lib/paraglide/messages.js';
+  import { ParaglideMessage } from '@inlang/paraglide-js-svelte';
 
-  registerBreadcrumbs(() => [{ label: 'Sign Up' }]);
+  registerBreadcrumbs(() => [{ label: m.auth_signup_breadcrumb() }]);
 
   let username = $state<string>('');
   let usernameValid = $state<boolean>(false);
@@ -55,9 +57,7 @@
     if (!open) {
       accountCreated = false;
       toast.success(
-        mailEnabled
-          ? 'Account created successfully. Please check your email to verify your account.'
-          : 'Account created successfully. You can log in now.'
+        mailEnabled ? m.auth_signup_toast_created_mail() : m.auth_signup_toast_created_no_mail()
       );
 
       goto(resolve('login'));
@@ -89,20 +89,20 @@
 <Dialog.Root bind:open={() => accountCreated, onOpenChange}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Welcome! Thank you for signing up! ❤️</Dialog.Title>
+      <Dialog.Title>{m.auth_signup_dialog_title()}</Dialog.Title>
       <Dialog.Description>
         <div class="flex flex-col gap-4">
           {#if mailEnabled}
-            <p>Your account has been created. 🎉 Please check your email to verify your account.</p>
-            <p>After verifying your email, you can log in to your account.</p>
+            <p>{m.auth_signup_dialog_created_mail()}</p>
+            <p>{m.auth_signup_dialog_verify_then_login()}</p>
             <ResendActivationButton class="self-start px-0" />
           {:else}
-            <p>Your account has been created and is ready to use. 🎉</p>
-            <p>You can log in to your account now.</p>
+            <p>{m.auth_signup_dialog_created_no_mail()}</p>
+            <p>{m.auth_signup_dialog_login_now()}</p>
           {/if}
 
           <Button variant="default" size="sm" class="mt-4" onclick={() => goto(resolve('login'))}
-            >Ok</Button
+            >{m.common_continue()}</Button
           >
         </div>
       </Dialog.Description>
@@ -112,14 +112,14 @@
 
 <Card.Root>
   <Card.Header class="text-center">
-    <Card.Title class="text-xl"><h1>Create your account</h1></Card.Title>
+    <Card.Title class="text-xl"><h1>{m.auth_signup_title()}</h1></Card.Title>
     <Card.Description>
       {#if backendMetadata.state === null}
-        Loading available sign-up methods
+        {m.auth_signup_loading_methods()}
       {:else if useEmail}
-        Signing up using email
+        {m.auth_signup_using_email()}
       {:else}
-        Choose your preferred sign-up method
+        {m.auth_signup_choose_method()}
       {/if}
     </Card.Description>
   </Card.Header>
@@ -137,25 +137,26 @@
                 variant="ghost"
                 size="sm"
                 class="text-muted-foreground hover:text-foreground -mx-2 -mt-2 mb-2 w-fit gap-1"
-                onclick={() => (useEmail = false)}><ChevronLeft class="size-4" />Back</Button
+                onclick={() => (useEmail = false)}
+                ><ChevronLeft class="size-4" />{m.auth_signup_back()}</Button
               >
             {/if}
 
             <UsernameInput
-              label="Username"
-              placeholder="John OpenShock"
+              label={m.auth_signup_username_label()}
+              placeholder={m.auth_signup_username_placeholder()}
               bind:value={username}
               bind:valid={usernameValid}
             />
             <EmailInput
-              label="Email"
-              placeholder="john@example.com"
+              label={m.auth_signup_email_label()}
+              placeholder={m.auth_signup_email_placeholder()}
               bind:value={email}
               bind:valid={emailValid}
             />
             <PasswordInput
-              label="Password"
-              placeholder="Password"
+              label={m.auth_signup_password_label()}
+              placeholder={m.auth_signup_password_placeholder()}
               autocomplete="new-password"
               bind:value={password}
               bind:valid={passwordValid}
@@ -163,8 +164,8 @@
               showStrengthMeter
             />
             <PasswordInput
-              label="Confirm Password"
-              placeholder="Confirm Password"
+              label={m.auth_signup_confirm_label()}
+              placeholder={m.auth_signup_confirm_placeholder()}
               autocomplete="new-password"
               bind:value={passwordConfirm}
               validate={validatePasswordMatch(passwordConfirm, password)}
@@ -177,29 +178,38 @@
             />
           </div>
           <Field.Field class="mt-5">
-            <Button type="submit" disabled={!canSubmit}>Create Account</Button>
+            <Button type="submit" disabled={!canSubmit}>{m.auth_signup_submit()}</Button>
             <Field.Description class="text-center">
-              Already have an account?
-              <a href={resolve('login')}>Sign in</a>
+              <ParaglideMessage message={m.auth_signup_signin_prompt}>
+                {#snippet signin({ children })}
+                  <a href={resolve('login')}>{@render children?.()}</a>
+                {/snippet}
+              </ParaglideMessage>
             </Field.Description>
           </Field.Field>
         </form>
       {:else}
         {#if anyOAuthProviders}
-          <OauthButtons verb="Signup" providers={oauthProviders} />
-          <FieldSeparator class="*:data-[slot=field-separator-content]:bg-card">Or</FieldSeparator>
+          <OauthButtons mode="signup" providers={oauthProviders} />
+          <FieldSeparator class="*:data-[slot=field-separator-content]:bg-card"
+            >{m.auth_signup_or()}</FieldSeparator
+          >
         {/if}
 
         <Button variant="outline" class="w-full" onclick={() => (useEmail = true)}
-          ><Mail />Signup with Email</Button
+          ><Mail />{m.auth_signup_with_email()}</Button
         >
       {/if}
     </Field.Group>
   </Card.Content>
 </Card.Root>
 <Field.Description class="px-6 text-center">
-  By clicking Create Account, you agree to our <a href="https://openshock.org/tos"
-    >Terms of Service</a
-  >
-  and <a href="https://openshock.org/privacy">Privacy Policy</a>.
+  <ParaglideMessage message={m.auth_signup_legal}>
+    {#snippet tos({ children })}
+      <a href="https://openshock.org/tos">{@render children?.()}</a>
+    {/snippet}
+    {#snippet privacy({ children })}
+      <a href="https://openshock.org/privacy">{@render children?.()}</a>
+    {/snippet}
+  </ParaglideMessage>
 </Field.Description>

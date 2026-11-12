@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { authenticatedAccountChangeEmail } from '#lib/api/index.js';
   import KeyRound from '@lucide/svelte/icons/key-round';
   import Mail from '@lucide/svelte/icons/mail';
@@ -38,9 +39,7 @@
     try {
       await authenticatedAccountChangeEmail({ body: { email, currentPassword } });
 
-      toast.success(
-        `Verification email sent to ${email}. Click the link in that email to apply the change.`
-      );
+      toast.success(m.account_email_toast_sent({ email }));
 
       open = false;
     } catch (e) {
@@ -54,30 +53,32 @@
 <Dialog.Root bind:open>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Change email</Dialog.Title>
+      <Dialog.Title>{m.account_email_title()}</Dialog.Title>
       <Dialog.Description>
-        Enter your new email address and confirm with your current password.
+        {m.account_email_desc()}
       </Dialog.Description>
     </Dialog.Header>
 
     <form class="space-y-2" onsubmit={submitEmail}>
       <EmailInput
-        label="New Email"
-        placeholder="New Email"
+        label={m.account_new_email()}
+        placeholder={m.account_new_email()}
         autocomplete="off"
         bind:value={email}
         bind:valid={emailValid}
         Icon={Mail}
       />
       <PasswordInput
-        label="Current Password"
-        placeholder="Current Password"
+        label={m.account_current_password()}
+        placeholder={m.account_current_password()}
         autocomplete="current-password"
         bind:value={currentPassword}
         Icon={KeyRound}
       />
       <Dialog.Footer>
-        <Button type="button" variant="outline" onclick={() => (open = false)}>Cancel</Button>
+        <Button type="button" variant="outline" onclick={() => (open = false)}
+          >{m.common_cancel()}</Button
+        >
         <Button
           type="submit"
           disabled={!emailValid ||
@@ -85,7 +86,7 @@
             currentPassword.length === 0 ||
             loading}
         >
-          Change Email
+          {m.account_change_email()}
         </Button>
       </Dialog.Footer>
     </form>

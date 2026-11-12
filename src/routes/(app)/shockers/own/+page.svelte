@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { PUBLIC_DISABLE_SHOCKER_MAP } from '$app/env/public';
   import { shockerPauseShocker, shockerRegisterShocker } from '#lib/api/index.js';
   import type { NewShocker } from '#lib/api/index.js';
@@ -43,7 +44,7 @@
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
 
-  registerBreadcrumbs(() => [{ label: 'Shockers' }]);
+  registerBreadcrumbs(() => [{ label: m.shockers_title() }]);
 
   let shockers = $derived(
     ownHubs
@@ -94,13 +95,13 @@
     refreshing = true;
     await refreshOwnHubs();
     refreshing = false;
-    toast.success('Shockers refreshed');
+    toast.success(m.shockers_toast_refreshed());
   }
 
   async function openAddShockerDialog() {
     const hubs = ownHubs.entries().toArray();
     if (hubs.length === 0) {
-      toast.error('You need to create a hub before adding shockers.');
+      toast.error(m.shockers_toast_need_hub());
       return;
     }
     const result = await dialog.createDialog<NewShocker | undefined>((resolve) => ({
@@ -116,7 +117,7 @@
     if (!result) return;
     try {
       await shockerRegisterShocker({ body: result });
-      toast.success('Shocker added');
+      toast.success(m.shockers_toast_added());
       await refreshOwnHubs();
     } catch (error) {
       handleApiError(error);
@@ -185,7 +186,7 @@
     {:else if moduleType === ModuleType.SimpleControlModule}
       <SimpleControlModule {shocker} {shockIntensity} {vibrationIntensity} {duration} />
     {:else}
-      <p>Unknown module type</p>
+      <p>{m.shockers_unknown_module()}</p>
     {/if}
   </ShockerCard>
 {/snippet}
@@ -194,20 +195,21 @@
   {#if loading}
     <div class="flex items-center gap-3 p-12">
       <Spinner class="size-6" />
-      <span class="text-muted-foreground">Loading shockers...</span>
+      <span class="text-muted-foreground">{m.shockers_loading()}</span>
     </div>
   {:else}
-    <PageHeader title="Shockers" subtitle="Every shocker paired to your hubs.">
+    <PageHeader title={m.shockers_title()} subtitle={m.shockers_subtitle()}>
       <div class="flex flex-wrap items-center gap-1">
         <Button variant="secondary" size="sm" onclick={openAddShockerDialog}>
-          <Plus class="size-4" /> Add Shocker
+          <Plus class="size-4" />
+          {m.shockers_add()}
         </Button>
         <Button
           variant="ghost"
           size="sm"
           onclick={refresh}
           disabled={refreshing}
-          aria-label="Refresh"
+          aria-label={m.common_refresh()}
         >
           <RotateCcw class={refreshing ? 'size-4 animate-spin' : 'size-4'} />
         </Button>
@@ -215,7 +217,7 @@
         <Popover.Root>
           <Popover.Trigger>
             {#snippet child({ props })}
-              <Button {...props} variant="ghost" size="sm" aria-label="View mode">
+              <Button {...props} variant="ghost" size="sm" aria-label={m.shockers_view_mode()}>
                 <Layers class="size-4" />
               </Button>
             {/snippet}
@@ -224,26 +226,30 @@
             <Button
               variant={moduleType === ModuleType.ClassicControlModule ? 'secondary' : 'ghost'}
               size="sm"
-              onclick={() => (moduleType = ModuleType.ClassicControlModule)}>Classic</Button
+              onclick={() => (moduleType = ModuleType.ClassicControlModule)}
+              >{m.shockers_mode_classic()}</Button
             >
 
             <Button
               variant={moduleType === ModuleType.RichControlModule ? 'secondary' : 'ghost'}
               size="sm"
-              onclick={() => (moduleType = ModuleType.RichControlModule)}>Rich</Button
+              onclick={() => (moduleType = ModuleType.RichControlModule)}
+              >{m.shockers_mode_rich()}</Button
             >
 
             <Button
               variant={moduleType === ModuleType.SimpleControlModule ? 'secondary' : 'ghost'}
               size="sm"
-              onclick={() => (moduleType = ModuleType.SimpleControlModule)}>Simple</Button
+              onclick={() => (moduleType = ModuleType.SimpleControlModule)}
+              >{m.shockers_mode_simple()}</Button
             >
 
             {#if !PUBLIC_DISABLE_SHOCKER_MAP}
               <Button
                 variant={moduleType === ModuleType.MapControlModule ? 'secondary' : 'ghost'}
                 size="sm"
-                onclick={() => (moduleType = ModuleType.MapControlModule)}>Map</Button
+                onclick={() => (moduleType = ModuleType.MapControlModule)}
+                >{m.shockers_mode_map()}</Button
               >
             {/if}
           </Popover.Content>
@@ -252,7 +258,7 @@
         <Popover.Root>
           <Popover.Trigger>
             {#snippet child({ props })}
-              <Button {...props} variant="ghost" size="sm" aria-label="Settings">
+              <Button {...props} variant="ghost" size="sm" aria-label={m.common_settings()}>
                 <Settings class="size-4" />
               </Button>
             {/snippet}
@@ -261,18 +267,22 @@
             <Button
               variant={groupByHub.value ? 'secondary' : 'ghost'}
               size="sm"
-              onclick={() => (groupByHub.value = !groupByHub.value)}>Group by Hub</Button
+              onclick={() => (groupByHub.value = !groupByHub.value)}
+              >{m.shockers_group_by_hub()}</Button
             >
 
             <Button variant="ghost" size="sm" disabled>
-              Global Limits
-              <span class="text-muted-foreground ml-2 text-xs">(Coming soon)</span>
+              {m.shockers_global_limits()}
+              <span class="text-muted-foreground ml-2 text-xs">{m.common_coming_soon()}</span>
             </Button>
           </Popover.Content>
         </Popover.Root>
 
-        <Button variant="ghost" size="sm" aria-label="Logs" href={resolve('shockers/logs')}
-          ><LogsIcon class="size-4" /></Button
+        <Button
+          variant="ghost"
+          size="sm"
+          aria-label={m.shockers_logs_label()}
+          href={resolve('shockers/logs')}><LogsIcon class="size-4" /></Button
         >
       </div>
     </PageHeader>
@@ -280,16 +290,17 @@
     {#if shockers.length === 0}
       <EmptyState
         icon={Zap}
-        title="No shockers yet"
-        description={ownHubs.size === 0
-          ? 'Create a hub first, then add shockers to it.'
-          : 'Add a shocker to one of your hubs to get started.'}
+        title={m.shockers_empty_title()}
+        description={ownHubs.size === 0 ? m.shockers_empty_no_hubs() : m.shockers_empty_has_hubs()}
       >
         {#if ownHubs.size === 0}
-          <Button size="lg" href={resolve('hubs')}><Plus class="size-4" />Create a Hub</Button>
+          <Button size="lg" href={resolve('hubs')}
+            ><Plus class="size-4" />{m.shockers_create_hub()}</Button
+          >
         {:else}
           <Button size="lg" onclick={openAddShockerDialog}>
-            <Plus class="size-4" /> Add Shocker
+            <Plus class="size-4" />
+            {m.shockers_add()}
           </Button>
         {/if}
       </EmptyState>
@@ -308,11 +319,11 @@
               <div class="flex items-center gap-2">
                 <span
                   class="size-2.5 rounded-full {online ? 'bg-success' : 'bg-destructive'}"
-                  title={online ? 'Online' : 'Offline'}
+                  title={online ? m.common_online() : m.common_offline()}
                 ></span>
                 <span class="text-lg font-semibold">{hub.name}</span>
                 <span class="text-muted-foreground text-xs">
-                  {shockerCount} shocker{shockerCount !== 1 ? 's' : ''}
+                  {m.shockers_count({ count: shockerCount })}
                 </span>
               </div>
               <div class="grid w-full grid-cols-[repeat(auto-fill,minmax(20rem,1fr))] gap-4">

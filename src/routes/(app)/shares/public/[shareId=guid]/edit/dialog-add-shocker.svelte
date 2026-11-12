@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { Plus } from '@lucide/svelte';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
@@ -46,9 +47,9 @@
 <Dialog.Root bind:open={() => open, onOpenChange}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Add shockers</Dialog.Title>
+      <Dialog.Title>{m.public_share_add_title()}</Dialog.Title>
       <Dialog.Description>
-        Add shockers to this public share. You can set their limits once they are added.
+        {m.public_share_add_desc()}
       </Dialog.Description>
     </Dialog.Header>
 
@@ -56,13 +57,13 @@
       <MultiSelectCombobox
         bind:selected={shockerIds}
         options={availableShockers}
-        label="Shockers"
-        placeholder="Select shockers to share..."
-        noMatchText="Not matching shockers"
+        label={m.shockers_title()}
+        placeholder={m.public_share_add_placeholder()}
+        noMatchText={m.public_share_add_no_match()}
       ></MultiSelectCombobox>
     </form>
     <Dialog.Footer>
-      <Button variant="outline" onclick={() => onOpenChange(false)}>Cancel</Button>
+      <Button variant="outline" onclick={() => onOpenChange(false)}>{m.common_cancel()}</Button>
       <Button
         type="submit"
         form="add-shockers"
@@ -70,7 +71,7 @@
         class="flex items-center"
       >
         <Plus />
-        Add Shockers
+        {m.public_share_add_submit()}
       </Button>
     </Dialog.Footer>
   </Dialog.Content>

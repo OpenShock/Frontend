@@ -3,6 +3,7 @@
   import Cpu from '@lucide/svelte/icons/cpu';
   import Zap from '@lucide/svelte/icons/zap';
   import { EmptyState } from '@openshock/svelte-core/components';
+  import { intlLocale } from '#lib/i18n/intl.js';
   import * as Card from '@openshock/svelte-core/components/ui/card';
 
   interface Props {
@@ -14,7 +15,7 @@
   let shockerCount = $derived(hubs.reduce((sum, hub) => sum + hub.shockers.length, 0));
 
   const shortDate = (instant: Temporal.Instant) =>
-    instant.toLocaleString(undefined, { dateStyle: 'short' });
+    instant.toLocaleString(intlLocale(), { dateStyle: 'short' });
 </script>
 
 <Card.Root>

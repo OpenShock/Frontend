@@ -1,4 +1,6 @@
 <script lang="ts" module>
+  import { m } from '#lib/paraglide/messages.js';
+  import { formatRelativeTime, intlLocale } from '#lib/i18n/intl.js';
   import { OtaUpdateStatus } from '#lib/api/index.js';
   import { OtaUpdateProgressTask } from '#lib/signalr/models/OtaUpdateProgressTask.js';
 
@@ -6,14 +8,22 @@
   const TASK_WEIGHTS = [4, 2, 22, 2, 49, 1, 20];
   const TASK_OFFSETS = [0, 4, 6, 28, 30, 79, 80];
 
-  const TASK_LABELS: Record<OtaUpdateProgressTask, string> = {
-    [OtaUpdateProgressTask.FetchingMetadata]: 'Fetching Metadata',
-    [OtaUpdateProgressTask.PreparingForUpdate]: 'Preparing for Update',
-    [OtaUpdateProgressTask.FlashingFilesystem]: 'Flashing Filesystem',
-    [OtaUpdateProgressTask.VerifyingFilesystem]: 'Verifying Filesystem',
-    [OtaUpdateProgressTask.FlashingApplication]: 'Flashing Application',
-    [OtaUpdateProgressTask.MarkingApplicationBootable]: 'Marking Application Bootable',
-    [OtaUpdateProgressTask.Rebooting]: 'Rebooting',
+  const TASK_LABELS: Record<OtaUpdateProgressTask, () => string> = {
+    [OtaUpdateProgressTask.FetchingMetadata]: m.hub_update_task_metadata,
+    [OtaUpdateProgressTask.PreparingForUpdate]: m.hub_update_task_preparing,
+    [OtaUpdateProgressTask.FlashingFilesystem]: m.hub_update_task_flash_fs,
+    [OtaUpdateProgressTask.VerifyingFilesystem]: m.hub_update_task_verify_fs,
+    [OtaUpdateProgressTask.FlashingApplication]: m.hub_update_task_flash_app,
+    [OtaUpdateProgressTask.MarkingApplicationBootable]: m.hub_update_task_bootable,
+    [OtaUpdateProgressTask.Rebooting]: m.hub_update_task_rebooting,
+  };
+
+  const STATUS_LABELS: Record<OtaUpdateStatus, () => string> = {
+    [OtaUpdateStatus.Started]: m.hub_update_status_started,
+    [OtaUpdateStatus.Running]: m.hub_update_status_running,
+    [OtaUpdateStatus.Finished]: m.hub_update_status_finished,
+    [OtaUpdateStatus.Error]: m.hub_update_status_error,
+    [OtaUpdateStatus.Timeout]: m.hub_update_status_timeout,
   };
 
   function calcTotalProgress(task: OtaUpdateProgressTask, progress: number): number {
@@ -37,18 +47,6 @@
     }
   }
 
-  function formatRelativeTime(instant: Temporal.Instant): string {
-    const tz = Temporal.Now.timeZoneId();
-    const elapsed = instant
-      .toZonedDateTimeISO(tz)
-      .until(Temporal.Now.zonedDateTimeISO(tz), { largestUnit: 'day' });
-
-    if (elapsed.days > 0) return `${elapsed.days}d ago`;
-    if (elapsed.hours > 0) return `${elapsed.hours}h ago`;
-    if (elapsed.minutes > 0) return `${elapsed.minutes}m ago`;
-    return 'just now';
-  }
-
   // Simulated reboot progress (last 20%) — hub goes offline so no more events
   const REBOOT_DURATION_MS = 10_000;
   const REBOOT_INTERVAL_MS = 100;
@@ -58,6 +56,7 @@
   import { devicesOtaGetOtaUpdateHistory, type OtaItem } from '#lib/api/index.js';
   import { CircleCheck, CircleX, CloudDownload, RotateCcw, TriangleAlert } from '@lucide/svelte';
   import { page } from '$app/state';
+  import { ParaglideMessage } from '@inlang/paraglide-js-svelte';
   import FirmwareChannelSelector from '#lib/components/FirmwareChannelSelector.svelte';
   import { Badge } from '@openshock/svelte-core/components/ui/badge';
   import { Button } from '@openshock/svelte-core/components/ui/button';
@@ -92,7 +91,7 @@
     return onlineHubs.get(hubId) ?? new HubOnlineState(hubId, false, null);
   });
 
-  let hubName = $derived(ownHubs.get(page.params.hubId ?? '')?.name ?? 'Unknown Hub');
+  let hubName = $derived(ownHubs.get(page.params.hubId ?? '')?.name ?? m.hub_update_unknown_hub());
 
   let isUpdating = $derived(hub?.otaInstall !== null && hub?.otaInstall !== undefined);
 
@@ -145,7 +144,7 @@
   });
 
   let currentTaskLabel = $derived(
-    hub?.otaInstall ? (TASK_LABELS[hub.otaInstall.task] ?? 'Unknown Task') : ''
+    hub?.otaInstall ? (TASK_LABELS[hub.otaInstall.task]?.() ?? m.hub_update_unknown_task()) : ''
   );
 
   function startUpdate() {
@@ -193,9 +192,9 @@
   $effect(() => fetchOtaLogs(page.params.hubId));
 
   registerBreadcrumbs(() => [
-    { label: 'Hubs', href: 'hubs' },
+    { label: m.hubs_title(), href: 'hubs' },
     { label: hubName, href: 'hubs' },
-    { label: 'Update' },
+    { label: m.hub_update_breadcrumb() },
   ]);
 
   onMount(refreshOwnHubs);
@@ -204,45 +203,56 @@
 <Dialog.Root bind:open={() => confirmOpen, (o) => (confirmOpen = o)}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Confirm firmware update</Dialog.Title>
+      <Dialog.Title>{m.hub_update_confirm_title()}</Dialog.Title>
       <Dialog.Description>
-        Update <strong>{hubName}</strong> to version <strong>{version}</strong>?
+        <ParaglideMessage
+          message={m.hub_update_confirm_desc}
+          inputs={{ name: hubName, version: version ?? '' }}
+        >
+          {#snippet strong({ children })}<strong>{@render children?.()}</strong>{/snippet}
+        </ParaglideMessage>
         {#if channel !== 'stable'}
           <p class="text-warning mt-2">
-            This version may not be from the stable channel and could contain bugs.
+            {m.hub_update_unstable_warning()}
           </p>
         {/if}
       </Dialog.Description>
     </Dialog.Header>
     <Dialog.Footer>
-      <Button variant="outline" onclick={() => (confirmOpen = false)}>Cancel</Button>
+      <Button variant="outline" onclick={() => (confirmOpen = false)}>{m.common_cancel()}</Button>
       <Button onclick={startUpdate}>
         <CloudDownload class="size-4" />
-        Update
+        {m.hub_update_confirm()}
       </Button>
     </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>
 
 <Container>
-  <PageHeader title="Update {hubName}" subtitle="Manage firmware updates for this hub." />
+  <PageHeader title={m.hub_update_title({ name: hubName })} subtitle={m.hub_update_subtitle()} />
   <div class="flex w-full min-w-0 flex-1 flex-col gap-6">
     {#if hub}
       <!-- Status -->
       <Card.Root>
         <Card.Header>
-          <Card.Title class="text-base">Hub Status</Card.Title>
+          <Card.Title class="text-base">{m.hub_update_status_title()}</Card.Title>
         </Card.Header>
         <Card.Content>
           <div class="flex flex-wrap items-center gap-3">
             {#if hub.isOnline}
-              <Badge variant="default" class="bg-success">Online</Badge>
+              <Badge variant="default" class="bg-success">{m.common_online()}</Badge>
             {:else}
-              <Badge variant="destructive">Offline</Badge>
+              <Badge variant="destructive">{m.common_offline()}</Badge>
             {/if}
             {#if hub.firmwareVersion}
               <span class="text-muted-foreground text-sm">
-                Firmware: <span class="font-mono">{hub.firmwareVersion}</span>
+                <ParaglideMessage
+                  message={m.hub_update_firmware}
+                  inputs={{ version: hub.firmwareVersion }}
+                >
+                  {#snippet mono({ children })}<span class="font-mono">{@render children?.()}</span
+                    >{/snippet}
+                </ParaglideMessage>
               </span>
             {/if}
           </div>
@@ -262,23 +272,29 @@
           {#if hub.otaResult.success}
             <CircleCheck class="text-success mt-0.5 size-5 shrink-0" />
             <div class="flex flex-col gap-2">
-              <p class="text-success font-medium">{hub.otaResult.message}</p>
+              <p class="text-success font-medium">{m.hub_update_success()}</p>
               <div class="flex gap-2">
-                <Button variant="outline" size="sm" href="/hubs">Back to Hubs</Button>
-                <Button variant="outline" size="sm" onclick={resetResult}>Flash Again</Button>
+                <Button variant="outline" size="sm" href="/hubs">{m.hub_update_back()}</Button>
+                <Button variant="outline" size="sm" onclick={resetResult}
+                  >{m.hub_update_flash_again()}</Button
+                >
               </div>
             </div>
-          {:else if hub.otaResult.message.includes('rolled back')}
+          {:else if hub.otaResult.rolledBack}
             <TriangleAlert class="text-warning mt-0.5 size-5 shrink-0" />
             <div class="flex flex-col gap-2">
-              <p class="text-warning font-medium">{hub.otaResult.message}</p>
-              <Button variant="outline" size="sm" onclick={resetResult}>Try Again</Button>
+              <p class="text-warning font-medium">{m.hub_update_rolled_back()}</p>
+              <Button variant="outline" size="sm" onclick={resetResult}
+                >{m.common_try_again()}</Button
+              >
             </div>
           {:else}
             <CircleX class="text-destructive mt-0.5 size-5 shrink-0" />
             <div class="flex flex-col gap-2">
               <p class="text-destructive font-medium">{hub.otaResult.message}</p>
-              <Button variant="outline" size="sm" onclick={resetResult}>Try Again</Button>
+              <Button variant="outline" size="sm" onclick={resetResult}
+                >{m.common_try_again()}</Button
+              >
             </div>
           {/if}
         </div>
@@ -288,8 +304,8 @@
       {#if !isUpdating && !hub.otaResult}
         <Card.Root>
           <Card.Header>
-            <Card.Title class="text-base">Firmware Update</Card.Title>
-            <Card.Description>Select a firmware channel and version to install.</Card.Description>
+            <Card.Title class="text-base">{m.hub_update_card_title()}</Card.Title>
+            <Card.Description>{m.hub_update_card_desc()}</Card.Description>
           </Card.Header>
           <Card.Content class="flex flex-col gap-4">
             <FirmwareChannelSelector bind:channel bind:version disabled={!hub.isOnline} />
@@ -303,11 +319,11 @@
                 !hub.isOnline}
             >
               <CloudDownload class="size-4" />
-              Update to {version ?? '...'}
+              {m.hub_update_to({ version: version ?? '...' })}
             </Button>
 
             {#if !hub.isOnline}
-              <p class="text-muted-foreground text-sm">Hub must be online to start an update.</p>
+              <p class="text-muted-foreground text-sm">{m.hub_update_must_be_online()}</p>
             {/if}
           </Card.Content>
         </Card.Root>
@@ -318,17 +334,18 @@
         <Card.Root>
           <Card.Header>
             <Card.Title class="text-base">
-              Updating to {hub.otaInstall?.version}...
+              {m.hub_update_updating_to({ version: hub.otaInstall?.version ?? '' })}
             </Card.Title>
           </Card.Header>
           <Card.Content class="flex flex-col gap-4">
             <div class="flex flex-col gap-3">
               <div class="grid grid-cols-[5rem_1fr] items-center gap-2">
-                <span class="text-muted-foreground text-sm font-medium">Total</span>
+                <span class="text-muted-foreground text-sm font-medium">{m.hub_update_total()}</span
+                >
                 <Progress value={totalProgress} />
               </div>
               <div class="grid grid-cols-[5rem_1fr] items-center gap-2">
-                <span class="text-muted-foreground text-sm font-medium">Task</span>
+                <span class="text-muted-foreground text-sm font-medium">{m.hub_update_task()}</span>
                 <Progress value={taskProgress} />
               </div>
             </div>
@@ -341,7 +358,7 @@
       <Card.Root>
         <Card.Header>
           <Card.Title class="flex items-center justify-between text-base">
-            Update History
+            {m.hub_update_history()}
             <Button
               variant="outline"
               size="sm"
@@ -349,24 +366,24 @@
               disabled={isLoading}
             >
               <RotateCcw class={cn('size-4', isLoading && 'animate-spin')} />
-              Refresh
+              {m.common_refresh()}
             </Button>
           </Card.Title>
         </Card.Header>
         <Card.Content>
           {#if otaLogs.length === 0}
             <p class="text-muted-foreground py-4 text-center text-sm">
-              No update history found for this hub.
+              {m.hub_update_no_history()}
             </p>
           {:else}
             <Table.Root class="w-full">
               <Table.Header>
                 <Table.Row>
-                  <Table.Head>ID</Table.Head>
-                  <Table.Head>Started</Table.Head>
-                  <Table.Head>Status</Table.Head>
-                  <Table.Head>Version</Table.Head>
-                  <Table.Head>Message</Table.Head>
+                  <Table.Head>{m.hub_update_col_id()}</Table.Head>
+                  <Table.Head>{m.hub_update_col_started()}</Table.Head>
+                  <Table.Head>{m.common_status()}</Table.Head>
+                  <Table.Head>{m.common_version()}</Table.Head>
+                  <Table.Head>{m.hub_update_col_message()}</Table.Head>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
@@ -375,12 +392,15 @@
                     <Table.Cell class="text-muted-foreground font-mono text-xs">
                       {NumberToHexPadded(otaLog.id, 8)}
                     </Table.Cell>
-                    <Table.Cell class="text-sm" title={otaLog.startedAt.toLocaleString()}>
+                    <Table.Cell
+                      class="text-sm"
+                      title={otaLog.startedAt.toLocaleString(intlLocale())}
+                    >
                       {formatRelativeTime(otaLog.startedAt)}
                     </Table.Cell>
                     <Table.Cell>
                       <Badge variant={getStatusBadgeVariant(otaLog.status)}>
-                        {otaLog.status}
+                        {STATUS_LABELS[otaLog.status]?.() ?? otaLog.status}
                       </Badge>
                     </Table.Cell>
                     <Table.Cell class="font-mono text-sm">{otaLog.version}</Table.Cell>
@@ -395,9 +415,9 @@
         </Card.Content>
       </Card.Root>
     {:else if isLoading}
-      <PageLoading label="Loading hub information..." />
+      <PageLoading label={m.hub_update_loading()} />
     {:else}
-      <p class="text-muted-foreground">Hub not found.</p>
+      <p class="text-muted-foreground">{m.hub_update_not_found()}</p>
     {/if}
   </div>
 </Container>

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { authenticatedAccountDeactivate } from '#lib/api/index.js';
@@ -12,7 +13,7 @@
   function deactivateAccount() {
     authenticatedAccountDeactivate()
       .then(() => {
-        toast.success('Account deactivated successfully');
+        toast.success(m.account_toast_deactivated());
         goto(resolve('/'));
       })
       .catch(handleApiError)
@@ -25,11 +26,11 @@
 <Dialog.Root bind:open={() => deactivateDialogOpen, (o) => (deactivateDialogOpen = o)}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Deactivate account</Dialog.Title>
-      <Dialog.Description>Are you sure you want to deactivate your account?</Dialog.Description>
+      <Dialog.Title>{m.account_deactivate_title()}</Dialog.Title>
+      <Dialog.Description>{m.account_deactivate_desc()}</Dialog.Description>
     </Dialog.Header>
     <Button variant="destructive" class="w-full" onclick={deactivateAccount}>
-      Deactivate Account
+      {m.account_deactivate()}
     </Button>
   </Dialog.Content>
 </Dialog.Root>
@@ -37,8 +38,8 @@
 <div
   class="border-destructive/60 bg-destructive/10 flex w-full flex-col items-start gap-y-4 rounded-lg border p-4"
 >
-  <h2 class="text-destructive text-base font-semibold">Danger Zone</h2>
+  <h2 class="text-destructive text-base font-semibold">{m.common_danger_zone()}</h2>
   <Button variant="destructive" class="w-full" onclick={() => (deactivateDialogOpen = true)}>
-    Deactivate Account
+    {m.account_deactivate()}
   </Button>
 </div>

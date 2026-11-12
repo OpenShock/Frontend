@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { shareLinksCreatePublicShare } from '#lib/api/index.js';
   import ExpirationPicker from '#lib/components/ExpirationPicker.svelte';
   import { TextInput } from '@openshock/svelte-core/components/input';
@@ -28,7 +29,7 @@
         body: { name, expiresOn: expireInstant ?? undefined },
       });
       onCreated();
-      toast.success('Created new public share');
+      toast.success(m.public_share_toast_created());
       open = false;
     } catch (error) {
       await handleApiError(error);
@@ -41,14 +42,14 @@
 <Dialog.Root bind:open={() => open, (o) => (open = o)}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Create public share</Dialog.Title>
+      <Dialog.Title>{m.public_share_create_title()}</Dialog.Title>
     </Dialog.Header>
-    <TextInput label="Name" bind:value={name} />
+    <TextInput label={m.common_name()} bind:value={name} />
     <ExpirationPicker bind:option={expireOption} bind:instant={expireInstant} />
 
     <Dialog.Footer>
-      <Button variant="outline" onclick={() => (open = false)}>Cancel</Button>
-      <Button onclick={createShareLink} disabled={submitting}>Create</Button>
+      <Button variant="outline" onclick={() => (open = false)}>{m.common_cancel()}</Button>
+      <Button onclick={createShareLink} disabled={submitting}>{m.common_create()}</Button>
     </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>

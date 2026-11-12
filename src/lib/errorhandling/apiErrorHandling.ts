@@ -4,6 +4,8 @@ import {
   type ProblemDetailsOf,
   isProblemDetails,
 } from '#lib/errorhandling/ProblemDetails.js';
+import { m } from '#lib/paraglide/messages.js';
+import { baseLocale, getLocale } from '#lib/paraglide/runtime.js';
 import {
   isError,
   isFetchError,
@@ -12,12 +14,8 @@ import {
 } from '#lib/typeguards/errorGuards.js';
 import { dev } from '$app/env';
 import { toast } from 'svelte-sonner';
-import {
-  type ProblemCopy,
-  type ProblemType,
-  ProblemTypes,
-  isKnownProblemType,
-} from './problemTypes';
+import { ProblemMessages } from './problemMessages';
+import { type ProblemType, isKnownProblemType } from './problemTypes';
 import { isValidationError } from './ValidationProblemDetails';
 
 /**
@@ -39,14 +37,21 @@ export type ProblemHandlers = { [K in ProblemType]?: ProblemHandler<K> } & {
 /** Handler that swallows a problem silently, for cases the caller treats as expected. */
 export const ignoreProblem: ProblemHandler = () => true;
 
-/** User-facing copy for a problem: registry copy first, backend title and detail as fallback. */
+/**
+ * User-facing copy for a problem: translated registry copy first, backend title and detail as fallback.
+ * The backend writes its detail in English, so under a translated title it is only shown while the
+ * app is in English too; everywhere else a translated title alone beats a mixed-language toast.
+ */
 export function describeProblem(problem: ProblemDetails): { title: string; description?: string } {
-  const copy: ProblemCopy | undefined = isKnownProblemType(problem.type)
-    ? ProblemTypes[problem.type]
-    : undefined;
+  if (!isKnownProblemType(problem.type)) {
+    return { title: problem.title, description: problem.detail };
+  }
+  const messages: { title?: () => string; description?: () => string } =
+    ProblemMessages[problem.type];
+  const backendDetail = getLocale() === baseLocale ? problem.detail : undefined;
   return {
-    title: copy?.title ?? problem.title,
-    description: copy?.description ?? problem.detail,
+    title: messages.title?.() ?? problem.title,
+    description: messages.description?.() ?? backendDetail,
   };
 }
 
@@ -117,7 +122,7 @@ function toastProblem(problem: ProblemDetails) {
 function formatRetryAfter(ms: number | null): string | undefined {
   if (ms === null) return undefined;
   const seconds = Math.max(1, Math.ceil(ms / 1000));
-  return `Try again in ${seconds} second${seconds === 1 ? '' : 's'}.`;
+  return m.error_retry_after({ seconds });
 }
 
 async function handleResponseError(error: ResponseError, handlers: ProblemHandlers | undefined) {
@@ -127,7 +132,7 @@ async function handleResponseError(error: ResponseError, handlers: ProblemHandle
   }
 
   if (error instanceof RateLimitError) {
-    toast.error('Too many requests', { description: formatRetryAfter(error.retryAfterMs) });
+    toast.error(m.error_too_many_requests(), { description: formatRetryAfter(error.retryAfterMs) });
     return;
   }
 
@@ -137,7 +142,7 @@ async function handleResponseError(error: ResponseError, handlers: ProblemHandle
   const problem = error.body;
   if (!isProblemDetails(problem)) {
     console.error('Content json is not a valid problemdetails object', problem);
-    toast.error('Unexpected server response', { description: `HTTP ${response.status}` });
+    toast.error(m.error_unexpected_response(), { description: `HTTP ${response.status}` });
     return;
   }
 
@@ -151,7 +156,7 @@ async function handleResponseError(error: ResponseError, handlers: ProblemHandle
 export async function handleApiError(error: unknown, handlers?: ProblemHandlers): Promise<void> {
   if (!isError(error)) {
     console.error('Got unknown error', error);
-    toast.error('Internal error occured');
+    toast.error(m.error_internal());
     return;
   }
 
@@ -168,13 +173,13 @@ export async function handleApiError(error: unknown, handlers?: ProblemHandlers)
       console.error('Got unknown fetch error', cause);
     }
 
-    toast.error('Network error occured');
+    toast.error(m.error_network());
     return;
   }
 
   console.error(`Got ${error.name}`, error);
 
-  toast.error('Internal error occured');
+  toast.error(m.error_internal());
 }
 
 export function createApiErrorHandler(handlers: ProblemHandlers) {

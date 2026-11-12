@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { ChartNoAxesGantt, ClockFading, Gauge, Volume2, Waves, Zap } from '@lucide/svelte';
   import type { ShockerPermLimitPairWithIdAndName } from '#lib/api/index.js';
   import { Badge } from '@openshock/svelte-core/components/ui/badge';
@@ -28,31 +29,31 @@
 <div class="flex flex-col gap-2">
   <div class="flex justify-center gap-2">
     {#if pausedReason}
-      <Badge variant="destructive" class="w-max">Paused at {pausedReason} Level</Badge>
+      <Badge variant="destructive" class="w-max">{pausedReason}</Badge>
     {/if}
   </div>
-  <div class="flex gap-2" role="group" aria-label="Permissions">
+  <div class="flex gap-2" role="group" aria-label={m.token_permissions()}>
     <span
       class={permClass(shockerShare.permissions.shock)}
-      title={shockerShare.permissions.shock ? 'Shock enabled' : 'Shock disabled'}
+      title={shockerShare.permissions.shock ? m.perm_shock_on() : m.perm_shock_off()}
     >
       <Zap />
     </span>
     <span
       class={permClass(shockerShare.permissions.vibrate)}
-      title={shockerShare.permissions.vibrate ? 'Vibrate enabled' : 'Vibrate disabled'}
+      title={shockerShare.permissions.vibrate ? m.perm_vibrate_on() : m.perm_vibrate_off()}
     >
       <Waves />
     </span>
     <span
       class={permClass(shockerShare.permissions.sound)}
-      title={shockerShare.permissions.sound ? 'Sound enabled' : 'Sound disabled'}
+      title={shockerShare.permissions.sound ? m.perm_sound_on() : m.perm_sound_off()}
     >
       <Volume2 />
     </span>
     <span
       class={permClass(shockerShare.permissions.live!)}
-      title={shockerShare.permissions.live ? 'Live enabled' : 'Live disabled'}
+      title={shockerShare.permissions.live ? m.perm_live_on() : m.perm_live_off()}
     >
       <ChartNoAxesGantt />
     </span>

@@ -1,3 +1,4 @@
+import { m } from '#lib/paraglide/messages.js';
 import { isOtaUpdateProgressTask } from '#lib/signalr/models/OtaUpdateProgressTask.js';
 import { onlineHubs } from '#lib/state/hubs-state.svelte.js';
 import { isNumber, isString } from '@openshock/svelte-core/typeguards';
@@ -19,7 +20,7 @@ export function handleSignalrOtaInstallProgress(
     !isNumber(progress)
   ) {
     console.error('Invalid OTA install progress payload', hubId, updateId, task, progress);
-    toast.error('Received invalid OTA install progress data!');
+    toast.error(m.signalr_invalid_ota());
     return;
   }
 

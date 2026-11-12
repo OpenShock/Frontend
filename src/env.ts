@@ -26,6 +26,23 @@ function optionalText(value: string | undefined): string {
 }
 
 /**
+ * Optional full sentence. Before i18n this variable held a fragment that was appended to
+ * "Welcome to <site>, ", so a value that still starts in lowercase is almost certainly that old
+ * fragment, which would now be published verbatim as the site description.
+ */
+function siteDescription(value: string | undefined): string {
+  const description = optionalText(value);
+  if (/^\p{Ll}/u.test(description)) {
+    console.warn(
+      `PUBLIC_SITE_DESCRIPTION starts in lowercase: "${description}". It is now used verbatim as ` +
+        'the site description instead of being appended to "Welcome to ...". Rewrite it as a full ' +
+        'sentence, or unset it to use the translated default.'
+    );
+  }
+  return description;
+}
+
+/**
  * Parses an absolute `http:` / `https:` URL and returns it as a trimmed string rather than a
  * `URL` instance. Strings stay inlinable for `static` variables and devalue-serializable for
  * dynamic public ones, and every consumer already builds its own `URL` from these.
@@ -92,8 +109,10 @@ export const variables = defineEnvVars({
   PUBLIC_SITE_DESCRIPTION: {
     public: true,
     static: true,
-    description: 'One-sentence description of the deployment, used in metadata and llms.txt.',
-    schema: text('PUBLIC_SITE_DESCRIPTION'),
+    description:
+      'Optional full-sentence description of the deployment, used verbatim in metadata and ' +
+      'llms.txt for every locale. Unset uses the translated default.',
+    schema: siteDescription,
   },
   PUBLIC_SITE_URL: {
     public: true,

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import {
     type OAuthConnectionResponse,
     authenticatedAccountListOAuthConnections,
@@ -22,8 +23,8 @@
   import { backendMetadata } from '#lib/state/backend-metadata-state.svelte.js';
 
   registerBreadcrumbs(() => [
-    { label: 'Settings', href: 'settings/account' },
-    { label: 'Connections' },
+    { label: m.sidebar_group_settings(), href: 'settings/account' },
+    { label: m.sidebar_settings_connections() },
   ]);
 
   // ---------- state
@@ -47,10 +48,11 @@
   // ---------- effects
   onMount(() => {
     if (queryStatus) {
-      const m = String(queryStatus).toLowerCase();
-      if (m === 'ok' || m === 'linked' || m === 'success') toast.success('Account linked.');
-      else if (m === 'cancelled') toast.message('Link flow cancelled.');
-      else toast.error('Linking failed.');
+      const status = String(queryStatus).toLowerCase();
+      if (status === 'ok' || status === 'linked' || status === 'success')
+        toast.success(m.connections_toast_linked());
+      else if (status === 'cancelled') toast.message(m.connections_toast_cancelled());
+      else toast.error(m.connections_toast_failed());
     }
   });
 
@@ -87,18 +89,15 @@
   // Called by dialog on success
   function handleDisconnected(providerKey: string) {
     connections = connections.filter((c) => c.providerKey !== providerKey);
-    toast.success('Connection removed');
+    toast.success(m.connections_toast_removed());
   }
 </script>
 
 <Container>
-  <PageHeader
-    title="OAuth Connections"
-    subtitle="Link or unlink third-party accounts to sign in faster and keep your profile in sync."
-  >
+  <PageHeader title={m.connections_title()} subtitle={m.connections_subtitle()}>
     <Button variant="outline" onclick={refresh} disabled={refreshing} aria-busy={refreshing}>
       <RotateCcw class="size-4" />
-      {refreshing ? 'Refreshing…' : 'Refresh'}
+      {refreshing ? m.connections_refreshing() : m.common_refresh()}
     </Button>
   </PageHeader>
 
@@ -112,7 +111,7 @@
             {#snippet child({ props })}
               <Button {...props} variant="secondary">
                 <Plus class="mr-2 size-4" />
-                Link new provider
+                {m.connections_link_new()}
               </Button>
             {/snippet}
           </Dropdown.Trigger>
@@ -139,8 +138,8 @@
       {#if connections.length === 0}
         <EmptyState
           icon={Link2}
-          title="No connections yet"
-          description="Choose “Link new provider” above to connect available providers."
+          title={m.connections_empty_title()}
+          description={m.connections_empty_desc()}
         />
       {:else}
         <div class="grid gap-3 md:grid-cols-2">
@@ -160,7 +159,7 @@
                     class="text-destructive hover:text-destructive"
                   >
                     <Unlink class="mr-2 size-4" />
-                    Unlink
+                    {m.connections_unlink()}
                   </Button>
                 </div>
               </div>
@@ -182,7 +181,7 @@
 
       {#snippet failed(_error: unknown, reset: () => void)}
         <PageError
-          message="Failed to load OAuth connections."
+          message={m.connections_load_failed()}
           onRetry={() => {
             initialLoad = loadConnections();
             reset();

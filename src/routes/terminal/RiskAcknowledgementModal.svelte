@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
+  import { ParaglideMessage } from '@inlang/paraglide-js-svelte';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
 
@@ -15,33 +17,36 @@
 <Dialog.Root {open}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>⚠️ UNSTABLE FIRMWARE</Dialog.Title>
+      <Dialog.Title>{m.terminal_risk_title()}</Dialog.Title>
       <Dialog.Description class="space-y-3">
         <p>
-          You are about to flash <strong class="text-destructive">experimental firmware</strong>
-          that is <strong class="text-destructive">known to be unstable</strong>.
+          <ParaglideMessage message={m.terminal_risk_intro}>
+            {#snippet strong({ children })}
+              <strong class="text-destructive">{@render children?.()}</strong>
+            {/snippet}
+          </ParaglideMessage>
         </p>
 
         <p>
-          This may permanently brick your device, require manual recovery, or render it unusable.
+          {m.terminal_risk_brick()}
         </p>
 
         <p class="text-destructive font-semibold">
-          We will NOT provide support for issues caused by this firmware.
+          {m.terminal_risk_no_support()}
         </p>
       </Dialog.Description>
     </Dialog.Header>
 
     <label class="flex items-center gap-2 text-sm">
       <input type="checkbox" bind:checked={acknowledgeChecked} />
-      I understand this is entirely my responsibility
+      {m.terminal_risk_acknowledge()}
     </label>
 
     <div class="flex justify-end gap-2">
-      <Button variant="secondary" onclick={() => onCancel?.()}>Abort</Button>
+      <Button variant="secondary" onclick={() => onCancel?.()}>{m.terminal_risk_abort()}</Button>
 
       <Button variant="destructive" disabled={!acknowledgeChecked} onclick={onAccept}>
-        I ACCEPT FULL RESPONSIBILITY
+        {m.terminal_risk_accept()}
       </Button>
     </div>
   </Dialog.Content>

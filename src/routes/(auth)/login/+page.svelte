@@ -23,8 +23,10 @@
   import { getOAuthErrorMessage } from '#lib/auth/oauth-errors.js';
   import { MailCheck, KeyRound } from '@lucide/svelte';
   import ResendActivationButton from '#lib/components/auth/resend-activation-button.svelte';
+  import { m } from '#lib/paraglide/messages.js';
+  import { ParaglideMessage } from '@inlang/paraglide-js-svelte';
 
-  registerBreadcrumbs(() => [{ label: 'Login' }]);
+  registerBreadcrumbs(() => [{ label: m.auth_login_breadcrumb() }]);
 
   let oauthError = $state<string>();
 
@@ -125,14 +127,14 @@
 
 <Card.Root>
   <Card.Header class="text-center">
-    <Card.Title class="text-xl"><h1>Welcome back</h1></Card.Title>
+    <Card.Title class="text-xl"><h1>{m.auth_login_title()}</h1></Card.Title>
     <Card.Description>
       {#if backendMetadata.state === null}
-        Loading available login methods
+        {m.auth_login_loading_methods()}
       {:else if anyOAuthProviders}
-        Login with one of these methods
+        {m.auth_login_choose_method()}
       {:else}
-        Login with your OpenShock Account
+        {m.auth_login_with_account()}
       {/if}
     </Card.Description>
   </Card.Header>
@@ -145,16 +147,9 @@
         <MailCheck class="mt-0.5 size-4 shrink-0" />
         <div class="flex flex-col items-start gap-1">
           {#if activationFromSignup}
-            <p>
-              Your account has been created. We've sent an activation link to your email address.
-              Check your inbox and spam folder.
-            </p>
+            <p>{m.auth_login_activation_after_signup()}</p>
           {:else}
-            <p>
-              Your account isn't activated yet. We've sent an activation link to your email address.
-              Check your inbox and spam folder. If nothing arrives, try logging in again later to
-              get a new link.
-            </p>
+            <p>{m.auth_login_activation_pending()}</p>
           {/if}
           <ResendActivationButton class="h-auto px-0" />
         </div>
@@ -167,8 +162,7 @@
       >
         <KeyRound class="mt-0.5 size-4 shrink-0" />
         <p>
-          This account has no password. Sign in with the provider you signed up with
-          {#if anyOAuthProviders}using the buttons above{/if}.
+          {anyOAuthProviders ? m.auth_login_oauth_only_with_buttons() : m.auth_login_oauth_only()}
         </p>
       </div>
     {/if}
@@ -189,21 +183,21 @@
         {#if anyOAuthProviders}
           <OauthButtons {providers} />
           <FieldSeparator class="*:data-[slot=field-separator-content]:bg-card"
-            >Or continue with</FieldSeparator
+            >{m.auth_login_or_continue_with()}</FieldSeparator
           >
         {/if}
         <form onsubmit={handleSubmission}>
           <div>
             <div class="my-1 flex flex-col gap-1">
               <TextInput
-                label="Username or Email"
+                label={m.auth_login_username_label()}
                 autocomplete="username"
                 bind:value={usernameOrEmail}
                 validationResult={usernameError}
               />
 
               <PasswordInput
-                label="Password"
+                label={m.auth_login_password_label()}
                 autocomplete="current-password"
                 bind:value={password}
                 validate={passwordError}
@@ -217,10 +211,13 @@
               />
             </div>
             <Field class="mt-5">
-              <Button type="submit" disabled={!canSubmit}>Login</Button>
+              <Button type="submit" disabled={!canSubmit}>{m.auth_login_submit()}</Button>
               <FieldDescription class="text-center">
-                Don't have an account?
-                <a href={resolve('signup')}>Sign up</a>
+                <ParaglideMessage message={m.auth_login_signup_prompt}>
+                  {#snippet signup({ children })}
+                    <a href={resolve('signup')}>{@render children?.()}</a>
+                  {/snippet}
+                </ParaglideMessage>
               </FieldDescription>
             </Field>
           </div>
@@ -230,8 +227,14 @@
   </Card.Content>
 </Card.Root>
 <FieldDescription class="px-6 text-center">
-  By clicking Login, you agree to our
-  <a href="https://openshock.org/tos" target="_blank" rel="noopener">Terms of Service</a>
-  and
-  <a href="https://openshock.org/privacy" target="_blank" rel="noopener">Privacy Policy</a>.
+  <ParaglideMessage message={m.auth_login_legal}>
+    {#snippet tos({ children })}
+      <a href="https://openshock.org/tos" target="_blank" rel="noopener">{@render children?.()}</a>
+    {/snippet}
+    {#snippet privacy({ children })}
+      <a href="https://openshock.org/privacy" target="_blank" rel="noopener"
+        >{@render children?.()}</a
+      >
+    {/snippet}
+  </ParaglideMessage>
 </FieldDescription>

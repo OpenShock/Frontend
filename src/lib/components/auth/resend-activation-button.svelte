@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { ResendActivationEmail, hasActivationResendCookie } from '#lib/api/next/account.js';
   import { onMount } from 'svelte';
   import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
@@ -18,15 +19,13 @@
     try {
       switch (await ResendActivationEmail()) {
         case 'sent':
-          toast.success('Activation email sent. Check your inbox and spam folder.');
+          toast.success(m.resend_toast_sent());
           break;
         case 'throttled':
-          toast.info('Too many activation emails have been requested. Please try again later.');
+          toast.info(m.resend_toast_throttled());
           break;
         case 'unavailable':
-          toast.info(
-            "No activation email can be resent from this browser. If your account isn't activated yet, logging in sends a new link."
-          );
+          toast.info(m.resend_toast_unavailable());
           break;
       }
     } catch (error) {
@@ -41,6 +40,6 @@
 
 {#if available}
   <Button variant="link" size="sm" class={className} disabled={pending} onclick={resend}>
-    Didn't get the email? Resend
+    {m.resend_button()}
   </Button>
 {/if}

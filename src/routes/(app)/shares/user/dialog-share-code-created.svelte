@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { Link } from '@lucide/svelte';
   import KeyRound from '@lucide/svelte/icons/key-round';
   import { CopyInput } from '@openshock/svelte-core/components';
@@ -22,8 +23,8 @@
 <Dialog.Root bind:open={() => code !== null, onOpenChanged}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Share code generated</Dialog.Title>
-      <Dialog.Description>Please copy share code or code link!</Dialog.Description>
+      <Dialog.Title>{m.share_code_created_title()}</Dialog.Title>
+      <Dialog.Description>{m.share_code_created_desc()}</Dialog.Description>
     </Dialog.Header>
     <div class="flex flex-col items-center space-y-4">
       <div class="flex w-full flex-col items-center justify-between gap-2 rounded-md p-2">

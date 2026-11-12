@@ -23,6 +23,7 @@
 </script>
 
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { RadToDeg, clamp, invLerp, lerp } from '@openshock/svelte-core/utils';
   import { onDestroy } from 'svelte';
   import { cubicOut } from 'svelte/easing';
@@ -190,7 +191,7 @@
     bind:value
     {max}
     {step}
-    aria-label="Value"
+    aria-label={m.control_value()}
     class="hide-spinners text-foreground absolute top-1/2 left-1/2 w-10 -translate-1/2 border-none bg-transparent text-center text-xl font-bold focus:outline-none"
   />
 

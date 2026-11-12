@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { Check, Search } from '@lucide/svelte';
   import { ResponseError, usersGetByName } from '#lib/api/index.js';
   import type { BasicUserInfo } from '#lib/api/index.js';
@@ -45,21 +46,23 @@
   <Avatar.Root class={(fetchedUser ? 'border-success border-3' : '') + ' h-15 w-15'}>
     <Avatar.Image
       src={fetchedUser?.image}
-      alt={fetchedUser ? `${fetchedUser.name}'s avatar` : 'User avatar'}
+      alt={fetchedUser
+        ? m.user_selector_avatar_of({ name: fetchedUser.name })
+        : m.common_user_avatar()}
     />
     <Avatar.Fallback>?</Avatar.Fallback>
   </Avatar.Root>
   <Input
     bind:value={userInput}
     onkeydown={onKeydown}
-    placeholder="Enter user name"
-    aria-label="Username to search"
+    placeholder={m.user_selector_placeholder()}
+    aria-label={m.user_selector_aria()}
   />
   <Button
     onclick={check}
     disabled={!inputModified}
     type="button"
-    title={inputModified ? 'Search user' : 'User found'}
+    title={inputModified ? m.user_selector_search() : m.user_selector_found()}
   >
     {#if inputModified}
       <Search />

@@ -11,8 +11,10 @@
   import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
   import { backendMetadata } from '#lib/state/backend-metadata-state.svelte.js';
   import { toast } from 'svelte-sonner';
+  import { m } from '#lib/paraglide/messages.js';
+  import { ParaglideMessage } from '@inlang/paraglide-js-svelte';
 
-  registerBreadcrumbs(() => [{ label: 'Forgot Password' }]);
+  registerBreadcrumbs(() => [{ label: m.auth_forgot_breadcrumb() }]);
 
   // Without a mail provider the reset link can never be delivered, so the flow is unavailable.
   let mailEnabled = $derived(backendMetadata.state?.isMailEnabled ?? true);
@@ -32,7 +34,7 @@
 
     accountPasswordResetInitiateV2({ body: { email, turnstileResponse } })
       .then(() => {
-        toast.success('Reset password request has been sent to the given email');
+        toast.success(m.auth_forgot_toast_sent());
         goto(resolve('login'));
       })
       .catch((error) => {
@@ -46,15 +48,15 @@
 
 <Card.Root>
   <Card.Header class="text-center">
-    <Card.Title class="text-xl"><h1>Forgot Password</h1></Card.Title>
-    <Card.Description>Enter your email to reset your password</Card.Description>
+    <Card.Title class="text-xl"><h1>{m.auth_forgot_title()}</h1></Card.Title>
+    <Card.Description>{m.auth_forgot_description()}</Card.Description>
   </Card.Header>
   <Card.Content>
     {#if mailEnabled}
       <form class="flex flex-col gap-4" onsubmit={handleSubmission}>
         <EmailInput
-          label="Email"
-          placeholder="Email"
+          label={m.auth_forgot_email_label()}
+          placeholder={m.auth_forgot_email_placeholder()}
           autocomplete="off"
           bind:value={email}
           bind:valid={emailValid}
@@ -67,23 +69,28 @@
         />
 
         <Field class="mt-1">
-          <Button type="submit" disabled={!canSubmit}>Reset Password</Button>
+          <Button type="submit" disabled={!canSubmit}>{m.auth_forgot_submit()}</Button>
           <FieldDescription class="text-center">
-            Remember your password?
-            <a href={resolve('login')}>Sign in</a>
+            <ParaglideMessage message={m.auth_forgot_signin_prompt}>
+              {#snippet signin({ children })}
+                <a href={resolve('login')}>{@render children?.()}</a>
+              {/snippet}
+            </ParaglideMessage>
           </FieldDescription>
         </Field>
       </form>
     {:else}
       <div class="flex flex-col gap-4">
         <p class="text-muted-foreground text-center text-sm">
-          Password resets are unavailable on this instance because it has no mail provider
-          configured. Please contact your administrator for help recovering your account.
+          {m.auth_forgot_mail_disabled()}
         </p>
         <Field class="mt-1">
           <FieldDescription class="text-center">
-            Remember your password?
-            <a href={resolve('login')}>Sign in</a>
+            <ParaglideMessage message={m.auth_forgot_signin_prompt}>
+              {#snippet signin({ children })}
+                <a href={resolve('login')}>{@render children?.()}</a>
+              {/snippet}
+            </ParaglideMessage>
           </FieldDescription>
         </Field>
       </div>
