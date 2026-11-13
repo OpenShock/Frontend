@@ -76,9 +76,13 @@ export const test = base.extend<{
 
     await use({ credentials, cookies });
 
-    // teardown: delete the account regardless of test outcome
+    // teardown: delete the account regardless of test outcome. A test that logs out (or
+    // otherwise ends the session) leaves these cookies dead, so fall back to a fresh login
+    // rather than leaving the account behind.
     try {
-      await deleteSelf(cookies);
+      await deleteSelf(cookies).catch(async () =>
+        deleteSelf(await apiLogin(credentials.email, credentials.password))
+      );
     } catch (err) {
       console.warn('user teardown failed:', err);
     }
