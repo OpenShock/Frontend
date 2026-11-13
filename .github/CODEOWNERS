@@ -1,0 +1,6 @@
+# Default owners: requested for review on every pull request.
+* @hhvrc @LucHeart
+
+# Security policy and repository automation.
+/SECURITY.md       @hhvrc @LucHeart
+/.github/          @hhvrc @LucHeart

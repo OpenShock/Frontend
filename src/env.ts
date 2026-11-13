@@ -98,6 +98,47 @@ function optionalUrl(label: string) {
   };
 }
 
+/** Optional absolute `https:` URL, normalized. RFC 9116 does not allow plain `http:` links. */
+function optionalHttpsUrl(label: string) {
+  return (value: string | undefined): string => {
+    const trimmed = value?.trim() ?? '';
+    if (!trimmed) return '';
+    const url = URL.parse(trimmed);
+    if (url?.protocol !== 'https:') throw new Error(`${label} must be an https: URL: ${trimmed}`);
+    return url.href;
+  };
+}
+
+/**
+ * Comma separated `mailto:` / `https:` URIs, returned normalized and joined by `,`. Normalizing
+ * through `URL` percent-encodes control characters, so a value cannot add lines to security.txt.
+ */
+function securityContacts(value: string | undefined): string {
+  return (value ?? '')
+    .split(',')
+    .map((entry) => entry.trim())
+    .filter(Boolean)
+    .map((entry) => {
+      const url = URL.parse(entry);
+      if (url?.protocol !== 'https:' && url?.protocol !== 'mailto:') {
+        throw new Error(`PUBLIC_SECURITY_CONTACT entries must be mailto: or https: URIs: ${entry}`);
+      }
+      return url.href;
+    })
+    .join(',');
+}
+
+/** Optional date, returned as an ISO 8601 UTC timestamp. Unset or blank becomes `''`. */
+function optionalDate(label: string) {
+  return (value: string | undefined): string => {
+    const trimmed = value?.trim() ?? '';
+    if (!trimmed) return '';
+    const date = new Date(trimmed);
+    if (Number.isNaN(date.getTime())) throw new Error(`${label} is not a valid date: ${trimmed}`);
+    return date.toISOString();
+  };
+}
+
 export const variables = defineEnvVars({
   // --- Site identity -------------------------------------------------------------------------
   PUBLIC_SITE_NAME: {
@@ -207,6 +248,37 @@ export const variables = defineEnvVars({
     public: true,
     description: 'Makes /llms.txt return 404.',
     schema: isTruthy,
+  },
+
+  // --- security.txt (RFC 9116) ---------------------------------------------------------------
+  // Tells security researchers where to report a vulnerability in *this deployment*. A self-hosted
+  // instance must set its own contact, or leave PUBLIC_SECURITY_CONTACT empty to disable the file.
+  PUBLIC_SECURITY_CONTACT: {
+    public: true,
+    description:
+      'Comma separated mailto: or https: URIs for reporting security vulnerabilities, in order ' +
+      'of preference. /.well-known/security.txt returns 404 when left empty.',
+    schema: securityContacts,
+  },
+  PUBLIC_SECURITY_EXPIRES: {
+    public: true,
+    description:
+      'Date after which security.txt is no longer valid, e.g. 2027-10-31T00:00:00Z. Required ' +
+      'when PUBLIC_SECURITY_CONTACT is set; keep it less than a year ahead. The file returns ' +
+      '404 once the date has passed.',
+    schema: optionalDate('PUBLIC_SECURITY_EXPIRES'),
+  },
+  PUBLIC_SECURITY_POLICY_URL: {
+    public: true,
+    description: 'Optional link to the security policy, published as the Policy field.',
+    schema: optionalHttpsUrl('PUBLIC_SECURITY_POLICY_URL'),
+  },
+  PUBLIC_SECURITY_ACKNOWLEDGMENTS_URL: {
+    public: true,
+    description:
+      'Optional link to the page crediting security researchers, published as the ' +
+      'Acknowledgments field.',
+    schema: optionalHttpsUrl('PUBLIC_SECURITY_ACKNOWLEDGMENTS_URL'),
   },
 
   // --- Telemetry (SigNoz / OpenTelemetry) ----------------------------------------------------

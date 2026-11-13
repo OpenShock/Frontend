@@ -174,6 +174,12 @@ With this import order, system environment variables will override any `.env` fi
 
 Any file ending with `.local` are meant for setting local development variables **and should not be committed to Git**.
 
+#### security.txt
+
+The frontend serves [`/.well-known/security.txt`](https://securitytxt.org/) (RFC 9116) from the `PUBLIC_SECURITY_*` variables, so that security researchers know where to report a vulnerability in the deployment they are looking at. The values in `.env` are those of the official OpenShock instance.
+
+If you host your own instance, set `PUBLIC_SECURITY_CONTACT` and `PUBLIC_SECURITY_EXPIRES` to your own details, or leave `PUBLIC_SECURITY_CONTACT` empty to disable the file. The file returns 404 once `PUBLIC_SECURITY_EXPIRES` has passed, so renew the date before it runs out.
+
 ### 🐳 Containerization
 
 - `Dockerfile` — Container definition for deployment or local dev.
@@ -183,6 +189,14 @@ Any file ending with `.local` are meant for setting local development variables 
 
 A guide to selfhost can be found [on the wiki.](https://wiki.openshock.org/guides/selfhosting)
 Alternatively you can deploy it to cloudflare workers using wrangler (or forking it).
+
+## Security
+
+Found a security vulnerability? **Please do not open a public issue.** Report it privately as described in [SECURITY.md](SECURITY.md).
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Support
 
