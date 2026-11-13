@@ -86,8 +86,9 @@ async function shutdown(code, signal) {
   if (shuttingDown) return;
   shuttingDown = true;
   await stack.stop().catch(() => {});
-  if (signal) process.kill(process.pid, signal);
-  else process.exit(code ?? 0);
+  // Exit explicitly. Re-raising the signal would do nothing: the handlers below are installed
+  // for it, so the process would stay alive until whoever is waiting on it resorts to SIGKILL.
+  process.exit(code ?? (signal ? 1 : 0));
 }
 
 child.on('exit', (code, signal) => shutdown(code, signal));

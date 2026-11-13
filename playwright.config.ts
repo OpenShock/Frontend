@@ -23,6 +23,11 @@ export default defineConfig({
     command: 'pnpm dev:integration',
     url: FRONTEND_URL,
     reuseExistingServer: !process.env.CI,
+    // Playwright's default is SIGKILL, which gives dev-integration.mjs no chance to stop the
+    // Testcontainers stack. The containers then keep their fixed host ports until Ryuk reaps
+    // them some seconds later, and a run started in that window fails on "port is already
+    // allocated". SIGTERM lets the script tear the stack down before it exits.
+    gracefulShutdown: { signal: 'SIGTERM', timeout: 30 * 1000 },
     // Cold CI runs pull docker images and wait for healthchecks before Vite
     // starts (see scripts/dev-integration.mjs). 10 minutes covers worst-case
     // cold pulls on the GitHub-hosted runner.

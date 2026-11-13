@@ -6,19 +6,23 @@
 // The frontend's Vite dev server proxies /1 and /2 to the API on a fixed host
 // port (VITE_API_PROXY_TARGET, default http://localhost:5001), and the tests
 // read mail from Mailpit on a fixed host port (default http://localhost:8025),
-// so those two containers bind fixed host ports. Postgres, Redis and the Cron
+// so those two containers bind fixed host ports. Postgres, Dragonfly and the Cron
 // host are only reached over the internal network, so they need no host ports.
 //
+// Postgres and Dragonfly are the images the API's own docker-compose.yml deploys, so the
+// suite runs against the same data stores production does.
+//
 // The Cron host is not optional: the API never sends mail itself, it only writes
-// an email_outbox row and publishes a Redis nudge. The Cron host is what drains
+// an email_outbox row and publishes a Redis pub/sub nudge. The Cron host is what drains
 // that table over SMTP, so without it no activation mail ever reaches Mailpit and
 // every test that needs an activated user fails.
 
 import { GenericContainer, Network, Wait } from 'testcontainers';
 
 const API_IMAGE = process.env.INTEGRATION_API_IMAGE ?? 'ghcr.io/openshock/api:develop';
-const POSTGRES_IMAGE = process.env.INTEGRATION_POSTGRES_IMAGE ?? 'postgres:16-alpine';
-const REDIS_IMAGE = process.env.INTEGRATION_REDIS_IMAGE ?? 'redis/redis-stack-server:latest';
+const POSTGRES_IMAGE = process.env.INTEGRATION_POSTGRES_IMAGE ?? 'postgres:18';
+const DRAGONFLY_IMAGE =
+  process.env.INTEGRATION_DRAGONFLY_IMAGE ?? 'ghcr.io/dragonflydb/dragonfly:latest';
 const MAILPIT_IMAGE = process.env.INTEGRATION_MAILPIT_IMAGE ?? 'axllent/mailpit:latest';
 const CRON_IMAGE = process.env.INTEGRATION_CRON_IMAGE ?? 'ghcr.io/openshock/cron:develop';
 
@@ -40,12 +44,12 @@ const FRONTEND_URL = process.env.TEST_FRONTEND_URL ?? 'http://localhost:5173';
 // Config both hosts need. They are two halves of one mail pipeline: the API writes the
 // email_outbox row and nudges Cron over Redis pub/sub, Cron claims the row and delivers it
 // over SMTP, building the links in the mail from the frontend base URL. They therefore have
-// to agree on the database, Redis, the frontend URL and the mail settings.
+// to agree on the database, Dragonfly, the frontend URL and the mail settings.
 const SHARED_ENVIRONMENT = {
   ASPNETCORE_ENVIRONMENT: 'Development',
   OPENSHOCK__DB__CONN:
     'Host=postgres;Port=5432;Database=openshock;Username=openshock;Password=openshock',
-  OPENSHOCK__REDIS__HOST: 'redis',
+  OPENSHOCK__REDIS__HOST: 'dragonfly',
   OPENSHOCK__FRONTEND__SHORTURL: FRONTEND_URL,
   OPENSHOCK__FRONTEND__BASEURL: FRONTEND_URL,
   OPENSHOCK__FRONTEND__COOKIEDOMAIN: 'localhost',
@@ -65,13 +69,35 @@ const SHARED_ENVIRONMENT = {
 const log = (msg) => process.stdout.write(`[integration-stack] ${msg}\n`);
 
 /**
- * Starts postgres, redis, mailpit, the API and the Cron host on a shared network
+ * Starts postgres, dragonfly, mailpit, the API and the Cron host on a shared network
  * and waits for each to become ready. Resolves to an object with the started containers
  * and a `stop()` helper that tears the whole stack down.
  */
 export async function startStack() {
   log('starting Testcontainers stack ...');
-  const network = await new Network().start();
+
+  // Everything started so far. If a later container fails to come up, these are stopped
+  // right away instead of being left for Ryuk: until Ryuk gets to them they keep the fixed
+  // host ports, and an immediate retry dies on "port is already allocated".
+  const started = [];
+  try {
+    return await startContainers(started);
+  } catch (err) {
+    log('startup failed, stopping what was already started ...');
+    for (const resource of started.reverse()) {
+      await resource.stop().catch(() => {});
+    }
+    throw err;
+  }
+}
+
+async function startContainers(started) {
+  const track = (resource) => {
+    started.push(resource);
+    return resource;
+  };
+
+  const network = track(await new Network().start());
 
   const postgres = await new GenericContainer(POSTGRES_IMAGE)
     .withNetwork(network)
@@ -82,22 +108,29 @@ export async function startStack() {
       POSTGRES_PASSWORD: 'openshock',
     })
     .withWaitStrategy(Wait.forLogMessage(/database system is ready to accept connections/, 2))
-    .start();
+    .start()
+    .then(track);
   log('postgres ready');
 
-  const redis = await new GenericContainer(REDIS_IMAGE)
+  // Redis-compatible store. `Ex` makes it emit expired-key events, which the API subscribes
+  // to. Nothing outside the network talks to it; the port is exposed only so the default
+  // wait strategy (listening ports) has something to probe.
+  const dragonfly = await new GenericContainer(DRAGONFLY_IMAGE)
     .withNetwork(network)
-    .withNetworkAliases('redis')
-    .withWaitStrategy(Wait.forLogMessage(/Ready to accept connections/))
-    .start();
-  log('redis ready');
+    .withNetworkAliases('dragonfly')
+    .withCommand(['--notify_keyspace_events=Ex'])
+    .withExposedPorts(6379)
+    .start()
+    .then(track);
+  log('dragonfly ready');
 
   const mailpit = await new GenericContainer(MAILPIT_IMAGE)
     .withNetwork(network)
     .withNetworkAliases('mailpit')
     .withExposedPorts({ container: 8025, host: MAILPIT_HOST_PORT })
     .withWaitStrategy(Wait.forHttp('/', 8025))
-    .start();
+    .start()
+    .then(track);
   log(`mailpit ready (web UI on host port ${MAILPIT_HOST_PORT})`);
 
   const api = await new GenericContainer(API_IMAGE)
@@ -118,7 +151,8 @@ export async function startStack() {
       Wait.forHttp('/', 80).forStatusCodeMatching(() => true)
     )
     .withStartupTimeout(Number(process.env.INTEGRATION_API_STARTUP_TIMEOUT_MS ?? 180_000))
-    .start();
+    .start()
+    .then(track);
   log(`api ready (http on host port ${API_HOST_PORT})`);
 
   // Started after the API because the API is the sole migrator: the Cron host does not migrate
@@ -143,7 +177,8 @@ export async function startStack() {
       Wait.forHttp('/', 80).forStatusCodeMatching(() => true)
     )
     .withStartupTimeout(Number(process.env.INTEGRATION_CRON_STARTUP_TIMEOUT_MS ?? 180_000))
-    .start();
+    .start()
+    .then(track);
   log('cron ready (email outbox delivery running)');
 
   const stop = async () => {
@@ -152,12 +187,12 @@ export async function startStack() {
     await Promise.all([api.stop().catch(() => {}), cron.stop().catch(() => {})]);
     await Promise.all([
       mailpit.stop().catch(() => {}),
-      redis.stop().catch(() => {}),
+      dragonfly.stop().catch(() => {}),
       postgres.stop().catch(() => {}),
     ]);
     await network.stop().catch(() => {});
     log('stack stopped');
   };
 
-  return { network, postgres, redis, mailpit, api, cron, stop };
+  return { network, postgres, dragonfly, mailpit, api, cron, stop };
 }
