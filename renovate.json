@@ -1,41 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended",
-    ":semanticCommitTypeAll(chore)",
-    "helpers:pinGitHubActionDigests",
-    "schedule:weekly"
-  ],
-  "minimumReleaseAge": "3 days",
+  "extends": ["local>OpenShock/org-config//renovate/default", "local>OpenShock/org-config//renovate/automerge"],
   "packageRules": [
-    {
-      "description": "One PR for all non-major npm updates",
-      "matchManagers": ["npm"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "groupName": "npm non-major"
-    },
-    {
-      "description": "One PR for all GitHub Actions updates",
-      "matchManagers": ["github-actions"],
-      "matchDepTypes": ["action"],
-      "groupName": "github-actions"
-    },
-    {
-      "description": "pnpm overrides are security floors for transitive packages, not versions to bump",
-      "matchManagers": ["npm"],
-      "matchDepTypes": ["pnpm-workspace.overrides", "pnpm.overrides", "overrides"],
-      "enabled": false
-    },
-    {
-      "description": "Our own packages skip the release-age delay, as in pnpm-workspace.yaml",
-      "matchPackageNames": ["@openshock/**"],
-      "minimumReleaseAge": null
-    },
-    {
-      "description": "The pnpm patch is keyed to an exact SignalR version, so bumps need the patch refreshed by hand",
-      "matchPackageNames": ["@microsoft/signalr"],
-      "groupName": null
-    },
     {
       "description": "Node, pnpm and the base image are bumped together by .github/workflows/update-toolchain.yml",
       "matchFileNames": [".nvmrc", "Dockerfile", "package.json"],
