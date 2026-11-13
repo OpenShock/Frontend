@@ -17,8 +17,9 @@
     "zh-Hant",
     "uwu"
   ],
-  "modules": ["./node_modules/@inlang/plugin-message-format/dist/index.js"],
-  "plugin.inlang.messageFormat": {
-    "pathPattern": "./messages/{locale}.json"
+  "modules": ["./node_modules/@inlang/plugin-i18next/dist/index.js"],
+  "plugin.inlang.i18next": {
+    "pathPattern": "./messages/{locale}.json",
+    "contextValues": []
   }
 }
