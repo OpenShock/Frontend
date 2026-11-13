@@ -4,7 +4,10 @@ Do you want to contribute to OpenShock? We'd love to have you! Here are some way
 
 ### Reporting Bugs
 
-- Please do not report security vulnerabilities here. Instead, please report them to ...
+- **Do not report security vulnerabilities in public issues or pull requests.** Report them privately as described in [SECURITY.md](SECURITY.md).
+- For other bugs, search the existing issues first, then open a new one with steps to reproduce.
+
+The general rules for contributing to OpenShock, including our Code of Conduct, are in the [organization-wide contributing guide](https://github.com/OpenShock/.github/blob/main/CONTRIBUTING.md).
 
 ### Branching Strategy
 

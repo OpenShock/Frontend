@@ -15,6 +15,7 @@
   "header_signup": "Rekisteröidy",
   "header_github_title": "OpenShock GitHubissa",
   "header_discord_title": "Yhteisön Discord",
+
   "footer_made_with": "Tehty rakkaudella <heart/> – <team>OpenShock-tiimi</team>",
   "footer_connection_status_label": "Palvelinyhteyden tila",
   "footer_signalr_state": "SignalR-tila",
@@ -23,6 +24,7 @@
   "footer_backend_version": "Backendin versio",
   "footer_backend_commit_title": "Commit {{commit}}",
   "footer_language_label": "Kieli",
+
   "sidebar_home_link_label": "OpenShockin etusivu",
   "sidebar_group_general": "Yleiset",
   "sidebar_home": "Etusivu",
@@ -49,6 +51,7 @@
   "sidebar_settings_audit_log": "Tapahtumaloki",
   "sidebar_settings_connections": "Yhdistetyt tilit",
   "sidebar_settings_account": "Tilin asetukset",
+
   "error_meta_title": "Palvelu ei ole käytettävissä",
   "error_meta_description": "OpenShock ei ole tällä hetkellä käytettävissä",
   "error_meta_logo_alt": "OpenShockin logo",
@@ -57,8 +60,10 @@
   "error_not_found_description": "Etsimääsi sivua ei ole olemassa.",
   "error_unexpected_description": "Tapahtui odottamaton virhe.",
   "error_go_back": "Takaisin",
+
   "auth_layout_logo_alt": "OpenShockin logo",
   "auth_layout_invalid_redirect_removed": "Virheellinen uudelleenohjausosoite poistettiin turvallisuutesi vuoksi.",
+
   "auth_activate_breadcrumb": "Aktivoi tili",
   "auth_activate_title": "Aktivoi tili",
   "auth_activate_activating": "Tiliäsi aktivoidaan...",
@@ -67,6 +72,7 @@
   "auth_activate_missing_token": "Aktivointitunnus puuttuu",
   "auth_activate_continue": "Jatka kirjautumiseen",
   "auth_activate_toast_success": "Tili aktivoitu",
+
   "auth_forgot_breadcrumb": "Unohtunut salasana",
   "auth_forgot_title": "Unohtunut salasana",
   "auth_forgot_description": "Anna sähköpostiosoitteesi salasanan palauttamista varten",
@@ -76,6 +82,7 @@
   "auth_forgot_signin_prompt": "Muistatko salasanasi? <signin>Kirjaudu sisään</signin>",
   "auth_forgot_mail_disabled": "Salasanan palautus ei ole käytettävissä tässä instanssissa, koska sähköpostipalvelua ei ole määritetty. Ota yhteyttä ylläpitäjään saadaksesi apua tilisi palauttamiseen.",
   "auth_forgot_toast_sent": "Salasanan palautuspyyntö on lähetetty annettuun sähköpostiosoitteeseen",
+
   "auth_login_breadcrumb": "Kirjaudu sisään",
   "auth_login_title": "Tervetuloa takaisin",
   "auth_login_loading_methods": "Ladataan käytettävissä olevia kirjautumistapoja",
@@ -91,6 +98,7 @@
   "auth_login_submit": "Kirjaudu sisään",
   "auth_login_signup_prompt": "Eikö sinulla ole tiliä? <signup>Rekisteröidy</signup>",
   "auth_login_legal": "Napsauttamalla ”Kirjaudu sisään” hyväksyt <tos>käyttöehtomme</tos> ja <privacy>tietosuojakäytäntömme</privacy>.",
+
   "auth_oauth_create_breadcrumb": "Rekisteröidy palvelulla {{provider}}",
   "auth_oauth_create_title": "Rekisteröidy palvelulla <provider>{{provider}}</provider>",
   "auth_oauth_create_description": "Täydennä tilisi tiedot",
@@ -100,9 +108,11 @@
   "auth_oauth_create_email_placeholder": "Sähköposti",
   "auth_oauth_create_submit": "Rekisteröidy",
   "auth_oauth_create_legal": "Napsauttamalla ”Rekisteröidy” hyväksyt <tos>käyttöehtomme</tos> ja <privacy>tietosuojakäytäntömme</privacy>.",
+
   "auth_oauth_error_breadcrumb": "Tunnistautumisvirhe",
   "auth_oauth_error_title": "Tunnistautumisvirhe",
   "auth_oauth_error_back": "Takaisin kirjautumiseen",
+
   "auth_reset_breadcrumb": "Palauta salasana",
   "auth_reset_title": "Palauta salasana",
   "auth_reset_checking": "Tarkistetaan palautuslinkkiä...",
@@ -115,6 +125,7 @@
   "auth_reset_submit": "Palauta salasana",
   "auth_reset_request_new": "Pyydä uusi palautuslinkki",
   "auth_reset_toast_success": "Salasana on palautettu",
+
   "auth_signup_breadcrumb": "Rekisteröidy",
   "auth_signup_toast_created_mail": "Tili luotiin onnistuneesti. Vahvista tilisi sähköpostiisi lähetetyllä linkillä.",
   "auth_signup_toast_created_no_mail": "Tili luotiin onnistuneesti. Voit nyt kirjautua sisään.",
@@ -141,6 +152,7 @@
   "auth_signup_or": "Tai",
   "auth_signup_with_email": "Rekisteröidy sähköpostilla",
   "auth_signup_legal": "Napsauttamalla ”Luo tili” hyväksyt <tos>käyttöehtomme</tos> ja <privacy>tietosuojakäytäntömme</privacy>.",
+
   "auth_verify_breadcrumb": "Vahvista sähköposti",
   "auth_verify_title": "Vahvista sähköposti",
   "auth_verify_verifying": "Vahvistetaan sähköpostiosoitettasi...",
@@ -149,6 +161,7 @@
   "auth_verify_missing_token": "Vahvistustunnus puuttuu",
   "auth_verify_continue": "Jatka kirjautumiseen",
   "auth_verify_toast_success": "Sähköpostiosoite vahvistettu",
+
   "common_cancel": "Peruuta",
   "common_delete": "Poista",
   "common_edit": "Muokkaa",
@@ -254,6 +267,7 @@
   "shocker_edit_is_active": "Shocker on aktiivinen",
   "shocker_edit_toast_updated": "Shocker päivitetty",
   "shocker_edit_delete_desc": "Poista tämä shocker pysyvästi. Toimintoa ei voi kumota.",
+
   "common_close": "Sulje",
   "common_continue": "Jatka",
   "common_loading": "Ladataan...",
@@ -400,6 +414,7 @@
   "terminal_toast_clipboard_unreadable": "Leikepöydän lukeminen epäonnistui",
   "terminal_toast_settings_imported": "Konsolin asetukset tuotu",
   "terminal_toast_settings_invalid": "Leikepöydällä ei ole konsolin asetuksia",
+
   "common_try_again": "Yritä uudelleen",
   "terminal_cfg_intro": "Arvot lähetetään laitteelle UARTin kautta. Laitteen vastaus näkyy alla olevassa konsolissa. Komennot ilman argumenttia lukevat arvon; lue nykyinen arvo kentän vieressä olevalla <eye/>-painikkeella.",
   "terminal_cfg_rf_title": "RF-lähetin",
@@ -456,6 +471,7 @@
   "terminal_cfg_cause_busy": "Laite käsittelee toista komentoa.",
   "terminal_cfg_cause_disconnected": "Laitteen yhteys katkesi tai se käynnistyi uudelleen.",
   "terminal_cfg_cause_unsupported": "Laiteohjelmiston versio ei tue tätä komentoa.",
+
   "common_status": "Tila",
   "common_version": "Versio",
   "common_created": "Luotu",
@@ -582,6 +598,7 @@
   "profile_title": "Profiili",
   "profile_coming_soon": "Profiili on tulossa pian",
   "profile_coming_soon_desc": "Julkinen profiilisi ei ole vielä käytettävissä. Tilin tiedot löytyvät asetuksista.",
+
   "common_retry": "Yritä uudelleen",
   "common_never_used": "Ei koskaan käytetty",
   "common_expires": "Vanhenee {{time}}",
@@ -743,6 +760,7 @@
   "audit_meta_accounts_removed_other": "{{name}} ({{count}} tiliä poistettu)",
   "audit_meta_scheduled_deletion": "Ajastettu poistettavaksi",
   "audit_meta_kept": "Säilytetty uudelleenaktivointia varten",
+
   "common_view": "Näytä",
   "common_save": "Tallenna",
   "common_saving": "Tallennetaan...",
@@ -807,6 +825,7 @@
   "user_selector_aria": "Haettava käyttäjänimi",
   "user_selector_search": "Hae käyttäjää",
   "user_selector_found": "Käyttäjä löytyi",
+
   "common_remove": "Poista",
   "user_shares_subtitle": "Suorat, pysyvät jaot muiden käyttäjien kanssa.",
   "user_shares_toast_invited": "Shocker-kutsu lähetettiin käyttäjälle {{name}}",
@@ -872,7 +891,9 @@
   "outgoing_share_per_desc": "Säädä rajoituksia shockerikohtaisesti",
   "outgoing_share_all": "Kaikki",
   "outgoing_share_per": "Shockerikohtaisesti",
+
   "outgoing_share_remove_desc": "Haluatko varmasti lopettaa shockerin <strong>{{shocker}}</strong> jakamisen käyttäjälle <strong>{{name}}</strong>?",
+
   "report_breadcrumb": "Ilmoita API-tunnisteista",
   "report_toast_clipboard_failed": "Leikepöydän lukeminen epäonnistui: {{error}}",
   "report_title": "Ilmoita vuotaneista API-tunnisteista",
@@ -927,6 +948,7 @@
   "lcg_connect_failed": "Yhteys live-ohjauksen yhdyskäytävään epäonnistui",
   "terminal_toast_bootloader_failed": "Käynnistyslataimeen siirtyminen epäonnistui: {{error}}",
   "terminal_toast_app_mode_failed": "Sovellustilaan siirtyminen epäonnistui: {{error}}",
+
   "problem_account_account_not_activated_title": "Tiliä ei ole aktivoitu",
   "problem_account_account_not_activated_desc": "Etsi aktivointiviesti saapuneista.",
   "problem_account_activation_not_found_title": "Aktivointilinkki on virheellinen",
@@ -1044,12 +1066,14 @@
   "problem_webhook_not_found_title": "Webhookia ei löytynyt",
   "problem_webhook_unsupported_title": "Vain Discord-webhookit ovat tuettuja",
   "problem_webhook_unsupported_desc": "Käytä discord.com-osoitetta, ei canary- tai ptb-osoitetta.",
+
   "error_too_many_requests": "Liian monta pyyntöä",
   "error_retry_after_one": "Yritä uudelleen {{count}} sekunnin päästä.",
   "error_retry_after_other": "Yritä uudelleen {{count}} sekunnin päästä.",
   "error_unexpected_response": "Odottamaton vastaus palvelimelta",
   "error_internal": "Tapahtui sisäinen virhe",
   "error_network": "Tapahtui verkkovirhe",
+
   "dev_banner": "Tämä on OpenShockin <b>KEHITYSYMPÄRISTÖ</b>. <u>Tietoja ei tallenneta</u>, ja ympäristö korvataan säännöllisesti tuotantotiedoilla.",
   "firmware_channel_bugs_warning": "Tällä kanavalla voi olla bugin paskiaisia."
 }

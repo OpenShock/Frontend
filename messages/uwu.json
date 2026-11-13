@@ -15,6 +15,7 @@
   "header_signup": "Join the pack! ♡",
   "header_github_title": "OpenShock on GitHub~",
   "header_discord_title": "Come hang out in our Discord den, cutie!",
+
   "footer_made_with": "Made with lots of <heart/> by the <team>OpenShock pack</team> *wags tail happily*",
   "footer_connection_status_label": "Is the server still there? *pokes gently*",
   "footer_signalr_state": "SignalR vibes ✨",
@@ -23,6 +24,7 @@
   "footer_backend_version": "Backend version",
   "footer_backend_commit_title": "Commit {{commit}} >w<",
   "footer_language_label": "Language~",
+
   "sidebar_home_link_label": "OpenShock home den",
   "sidebar_group_general": "General stuffs",
   "sidebar_home": "Home den",
@@ -49,6 +51,7 @@
   "sidebar_settings_audit_log": "What I've been up to (no peeking!)",
   "sidebar_settings_connections": "Linked accounts",
   "sidebar_settings_account": "My account stuffs ✨",
+
   "error_meta_title": "OpenShock is taking a beauty nap",
   "error_meta_description": "OpenShock is snoozing right now, pwease try again in a bit~",
   "error_meta_logo_alt": "OpenShock logo",
@@ -57,8 +60,10 @@
   "error_not_found_description": "I sniffed everywhere, but this page doesn't exist... *sad ear flop*",
   "error_unexpected_description": "Something unexpected happened! *hides behind fluffy tail*",
   "error_go_back": "Go back~",
+
   "auth_layout_logo_alt": "OpenShock logo",
   "auth_layout_invalid_redirect_removed": "Eep! I found a sketchy redirect link and chewed it up to keep you safe! *protective growl*",
+
   "auth_activate_breadcrumb": "Wake up account",
   "auth_activate_title": "Wake up your account~",
   "auth_activate_activating": "Waking up your account... *big sleepy stretch*",
@@ -67,6 +72,7 @@
   "auth_activate_missing_token": "The activation token wandered off somewhere... *pouts*",
   "auth_activate_continue": "Onward to login!",
   "auth_activate_toast_success": "Account activated! *happy tail wags*",
+
   "auth_forgot_breadcrumb": "Forgot pawsword",
   "auth_forgot_title": "Forgot your pawsword? Silly~",
   "auth_forgot_description": "Tell me your email and I'll fetch you a reset link!",
@@ -76,6 +82,7 @@
   "auth_forgot_signin_prompt": "Remembered it after all? <signin>Log in~</signin>",
   "auth_forgot_mail_disabled": "Sowwy, this den has no mailbox set up, so I can't send reset links... *fidgets* Pwease ask your pack leader (the admin) to help you get back in!",
   "auth_forgot_toast_sent": "Reset link fetched and sent to your email! *drops it at your feet*",
+
   "auth_login_breadcrumb": "Log in",
   "auth_login_title": "Welcome back, cutie! ♡",
   "auth_login_loading_methods": "Sniffing out ways to log in...",
@@ -91,6 +98,7 @@
   "auth_login_submit": "Log in~",
   "auth_login_signup_prompt": "Not in the pack yet? <signup>Join us, cutie!</signup>",
   "auth_login_legal": "By pressing Log in, you pinky-paw promise to follow our <tos>Terms of Service</tos> and our <privacy>Privacy Policy</privacy>. ♡",
+
   "auth_oauth_create_breadcrumb": "Join with {{provider}}",
   "auth_oauth_create_title": "Join the pack with <provider>{{provider}}</provider>! ✨",
   "auth_oauth_create_description": "Just a few more details and you're in~",
@@ -100,9 +108,11 @@
   "auth_oauth_create_email_placeholder": "Email",
   "auth_oauth_create_submit": "Join the pack! ♡",
   "auth_oauth_create_legal": "By pressing Join the pack, you pinky-paw promise to follow our <tos>Terms of Service</tos> and our <privacy>Privacy Policy</privacy>. ♡",
+
   "auth_oauth_error_breadcrumb": "Login oopsie",
   "auth_oauth_error_title": "Uh oh, login oopsie! *blushes*",
   "auth_oauth_error_back": "Back to login",
+
   "auth_reset_breadcrumb": "Reset pawsword",
   "auth_reset_title": "Reset pawsword",
   "auth_reset_checking": "Sniffing your reset link...",
@@ -115,6 +125,7 @@
   "auth_reset_submit": "Reset pawsword!",
   "auth_reset_request_new": "Fetch a new reset link",
   "auth_reset_toast_success": "Pawsword reset! Don't forget it this time, silly~ hehe",
+
   "auth_signup_breadcrumb": "Join the pack",
   "auth_signup_toast_created_mail": "Yay, account made! Check your email to verify it~",
   "auth_signup_toast_created_no_mail": "Yay, account made! You can log in right away~",
@@ -141,6 +152,7 @@
   "auth_signup_or": "Or",
   "auth_signup_with_email": "Join with email",
   "auth_signup_legal": "By pressing Join the pack, you pinky-paw promise to follow our <tos>Terms of Service</tos> and our <privacy>Privacy Policy</privacy>. ♡",
+
   "auth_verify_breadcrumb": "Verify email",
   "auth_verify_title": "Verify your email",
   "auth_verify_verifying": "Sniffing your email address...",
@@ -149,6 +161,7 @@
   "auth_verify_missing_token": "The verification token wandered off somewhere... *pouts*",
   "auth_verify_continue": "Onward to login!",
   "auth_verify_toast_success": "Email verified! *wags*",
+
   "common_cancel": "Nevermind~",
   "common_delete": "Delete *gulp*",
   "common_edit": "Edit~",
@@ -254,6 +267,7 @@
   "shocker_edit_is_active": "Wide awake and ready! ⚡",
   "shocker_edit_toast_updated": "All groomed and pretty! ✨",
   "shocker_edit_delete_desc": "Say goodbye to this shocker forever. There's no undo... *sniffles*",
+
   "common_close": "Close~",
   "common_continue": "Onward!",
   "common_loading": "Loading... *wiggles*",
@@ -400,6 +414,7 @@
   "terminal_toast_clipboard_unreadable": "Couldn't peek at your clipboard...",
   "terminal_toast_settings_imported": "Console settings imported! ✨",
   "terminal_toast_settings_invalid": "That's not console settings, silly~",
+
   "common_try_again": "Try again!",
   "terminal_cfg_intro": "Values get sent to your device over UART, and it answers in the console below. Commands without an argument just read the value; press the <eye/> button next to a field to peek at it~",
   "terminal_cfg_rf_title": "RF transmitter 📡",
@@ -456,6 +471,7 @@
   "terminal_cfg_cause_busy": "Your device is busy with another command.",
   "terminal_cfg_cause_disconnected": "Your device unplugged or took a nap.",
   "terminal_cfg_cause_unsupported": "This firmware doesn't know that command yet.",
+
   "common_status": "Status",
   "common_version": "Version",
   "common_created": "Born on",
@@ -582,6 +598,7 @@
   "profile_title": "My fursona ✨",
   "profile_coming_soon": "Your fursona page is coming soon~",
   "profile_coming_soon_desc": "Your public page isn't ready yet. Your account stuff lives in Settings~",
+
   "common_retry": "Again!",
   "common_never_used": "Never touched",
   "common_expires": "Goes poof {{time}}",
@@ -743,6 +760,7 @@
   "audit_meta_accounts_removed_other": "{{name}} ({{count}} accounts went poof)",
   "audit_meta_scheduled_deletion": "Going away soon",
   "audit_meta_kept": "Kept warm for later ♡",
+
   "common_view": "Peek",
   "common_save": "Save~",
   "common_saving": "Saving... *concentrates*",
@@ -807,6 +825,7 @@
   "user_selector_aria": "Name to sniff for",
   "user_selector_search": "Sniff them out",
   "user_selector_found": "Found them! ♡",
+
   "common_remove": "Shoo",
   "user_shares_subtitle": "Your zappy fwiends, shared with your pack~",
   "user_shares_toast_invited": "Sent {{name}} a lil invite! ♡",
@@ -872,7 +891,9 @@
   "outgoing_share_per_desc": "Different rules for each fwiend",
   "outgoing_share_all": "All",
   "outgoing_share_per": "Each one",
+
   "outgoing_share_remove_desc": "Really bring <strong>{{shocker}}</strong> home from <strong>{{name}}</strong>?",
+
   "report_breadcrumb": "Tattle on tokens",
   "report_toast_clipboard_failed": "Couldn't peek at your clipboard: {{error}}",
   "report_title": "Report leaked tokens",
@@ -927,6 +948,7 @@
   "lcg_connect_failed": "Couldn't reach the live boop gateway... *whimpers*",
   "terminal_toast_bootloader_failed": "Couldn't get to the bootloader: {{error}}",
   "terminal_toast_app_mode_failed": "Couldn't wake the app up: {{error}}",
+
   "problem_account_account_not_activated_title": "Account isn't awake yet",
   "problem_account_account_not_activated_desc": "Check your inbox for the activation letter~",
   "problem_account_activation_not_found_title": "That activation link is silly",
@@ -1044,12 +1066,14 @@
   "problem_webhook_not_found_title": "Couldn't sniff out that webhook",
   "problem_webhook_unsupported_title": "Only Discord webhooks, please",
   "problem_webhook_unsupported_desc": "Use a discord.com URL, not canary or ptb.",
+
   "error_too_many_requests": "Slow down, cutie!",
   "error_retry_after_one": "Try again in {{count}} second~",
   "error_retry_after_other": "Try again in {{count}} seconds~",
   "error_unexpected_response": "The server said something weird",
   "error_internal": "Something went oopsie inside",
   "error_network": "The internet tripped over",
+
   "dev_banner": "This is the OpenShock <b>DEVELOPMENT</b> playground! <u>Nothing gets saved</u>, and it gets replaced with production data every so often~",
   "firmware_channel_bugs_warning": "This channel might have some bugs crawling around~"
 }

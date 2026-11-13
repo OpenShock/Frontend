@@ -15,6 +15,7 @@
   "header_signup": "S'inscrire",
   "header_github_title": "OpenShock sur GitHub",
   "header_discord_title": "Discord de la communauté",
+
   "footer_made_with": "Fait avec <heart/> par l'<team>équipe OpenShock</team>",
   "footer_connection_status_label": "État de la connexion au serveur",
   "footer_signalr_state": "État de SignalR",
@@ -23,6 +24,7 @@
   "footer_backend_version": "Version du backend",
   "footer_backend_commit_title": "Commit {{commit}}",
   "footer_language_label": "Langue",
+
   "sidebar_home_link_label": "Accueil d'OpenShock",
   "sidebar_group_general": "Général",
   "sidebar_home": "Accueil",
@@ -49,6 +51,7 @@
   "sidebar_settings_audit_log": "Journal d'activité",
   "sidebar_settings_connections": "Comptes associés",
   "sidebar_settings_account": "Paramètres du compte",
+
   "error_meta_title": "Service indisponible",
   "error_meta_description": "OpenShock est actuellement indisponible",
   "error_meta_logo_alt": "Logo d'OpenShock",
@@ -57,8 +60,10 @@
   "error_not_found_description": "La page que vous cherchez n'existe pas.",
   "error_unexpected_description": "Une erreur inattendue s'est produite.",
   "error_go_back": "Retour",
+
   "auth_layout_logo_alt": "Logo d'OpenShock",
   "auth_layout_invalid_redirect_removed": "Une URL de redirection invalide a été supprimée pour votre sécurité.",
+
   "auth_activate_breadcrumb": "Activer le compte",
   "auth_activate_title": "Activer le compte",
   "auth_activate_activating": "Activation de votre compte...",
@@ -67,6 +72,7 @@
   "auth_activate_missing_token": "Jeton d'activation manquant",
   "auth_activate_continue": "Continuer vers la connexion",
   "auth_activate_toast_success": "Compte activé",
+
   "auth_forgot_breadcrumb": "Mot de passe oublié",
   "auth_forgot_title": "Mot de passe oublié",
   "auth_forgot_description": "Saisissez votre adresse e-mail pour réinitialiser votre mot de passe",
@@ -76,6 +82,7 @@
   "auth_forgot_signin_prompt": "Vous vous souvenez de votre mot de passe ? <signin>Se connecter</signin>",
   "auth_forgot_mail_disabled": "La réinitialisation des mots de passe n'est pas disponible sur cette instance, car aucun fournisseur d'e-mail n'est configuré. Contactez votre administrateur pour récupérer l'accès à votre compte.",
   "auth_forgot_toast_sent": "La demande de réinitialisation du mot de passe a été envoyée à l'adresse e-mail indiquée",
+
   "auth_login_breadcrumb": "Connexion",
   "auth_login_title": "Bon retour parmi nous",
   "auth_login_loading_methods": "Chargement des méthodes de connexion disponibles",
@@ -91,6 +98,7 @@
   "auth_login_submit": "Se connecter",
   "auth_login_signup_prompt": "Vous n'avez pas de compte ? <signup>S'inscrire</signup>",
   "auth_login_legal": "En cliquant sur « Se connecter », vous acceptez nos <tos>Conditions d'utilisation</tos> et notre <privacy>Politique de confidentialité</privacy>.",
+
   "auth_oauth_create_breadcrumb": "S'inscrire avec {{provider}}",
   "auth_oauth_create_title": "S'inscrire avec <provider>{{provider}}</provider>",
   "auth_oauth_create_description": "Complétez les informations de votre compte",
@@ -100,9 +108,11 @@
   "auth_oauth_create_email_placeholder": "E-mail",
   "auth_oauth_create_submit": "S'inscrire",
   "auth_oauth_create_legal": "En cliquant sur « S'inscrire », vous acceptez nos <tos>Conditions d'utilisation</tos> et notre <privacy>Politique de confidentialité</privacy>.",
+
   "auth_oauth_error_breadcrumb": "Erreur d'authentification",
   "auth_oauth_error_title": "Erreur d'authentification",
   "auth_oauth_error_back": "Retour à la connexion",
+
   "auth_reset_breadcrumb": "Réinitialiser le mot de passe",
   "auth_reset_title": "Réinitialiser le mot de passe",
   "auth_reset_checking": "Vérification du lien de réinitialisation...",
@@ -115,6 +125,7 @@
   "auth_reset_submit": "Réinitialiser le mot de passe",
   "auth_reset_request_new": "Demander un nouveau lien",
   "auth_reset_toast_success": "Le mot de passe a été réinitialisé",
+
   "auth_signup_breadcrumb": "Inscription",
   "auth_signup_toast_created_mail": "Compte créé avec succès. Consultez vos e-mails pour vérifier votre compte.",
   "auth_signup_toast_created_no_mail": "Compte créé avec succès. Vous pouvez vous connecter dès maintenant.",
@@ -141,6 +152,7 @@
   "auth_signup_or": "Ou",
   "auth_signup_with_email": "S'inscrire par e-mail",
   "auth_signup_legal": "En cliquant sur « Créer un compte », vous acceptez nos <tos>Conditions d'utilisation</tos> et notre <privacy>Politique de confidentialité</privacy>.",
+
   "auth_verify_breadcrumb": "Vérifier l'e-mail",
   "auth_verify_title": "Vérifier l'e-mail",
   "auth_verify_verifying": "Vérification de votre adresse e-mail...",
@@ -149,6 +161,7 @@
   "auth_verify_missing_token": "Jeton de vérification manquant",
   "auth_verify_continue": "Continuer vers la connexion",
   "auth_verify_toast_success": "Adresse e-mail vérifiée",
+
   "common_cancel": "Annuler",
   "common_delete": "Supprimer",
   "common_edit": "Modifier",
@@ -254,6 +267,7 @@
   "shocker_edit_is_active": "Le shocker est actif",
   "shocker_edit_toast_updated": "Shocker mis à jour",
   "shocker_edit_delete_desc": "Supprimez définitivement ce shocker. Cette action est irréversible.",
+
   "common_close": "Fermer",
   "common_continue": "Continuer",
   "common_loading": "Chargement...",
@@ -400,6 +414,7 @@
   "terminal_toast_clipboard_unreadable": "Impossible de lire le presse-papiers",
   "terminal_toast_settings_imported": "Paramètres de la console importés",
   "terminal_toast_settings_invalid": "Le presse-papiers ne contient pas de paramètres de console",
+
   "common_try_again": "Réessayer",
   "terminal_cfg_intro": "Les valeurs sont envoyées à l'appareil via UART. La réponse de l'appareil s'affiche dans la console ci-dessous. Les commandes sans argument lisent la valeur ; utilisez le bouton <eye/> à côté de chaque champ pour lire la valeur actuelle.",
   "terminal_cfg_rf_title": "Émetteur RF",
@@ -456,6 +471,7 @@
   "terminal_cfg_cause_busy": "L'appareil est occupé à traiter une autre commande.",
   "terminal_cfg_cause_disconnected": "L'appareil s'est déconnecté ou a redémarré.",
   "terminal_cfg_cause_unsupported": "La version du firmware ne prend pas en charge cette commande.",
+
   "common_status": "État",
   "common_version": "Version",
   "common_created": "Créé",
@@ -582,6 +598,7 @@
   "profile_title": "Profil",
   "profile_coming_soon": "Le profil arrive bientôt",
   "profile_coming_soon_desc": "Votre profil public n'est pas encore disponible. Les informations du compte se trouvent dans les paramètres.",
+
   "common_retry": "Réessayer",
   "common_never_used": "Jamais utilisé",
   "common_expires": "Expire {{time}}",
@@ -743,6 +760,7 @@
   "audit_meta_accounts_removed_other": "{{name}} ({{count}} comptes supprimés)",
   "audit_meta_scheduled_deletion": "Suppression programmée",
   "audit_meta_kept": "Conservé pour réactivation",
+
   "common_view": "Voir",
   "common_save": "Enregistrer",
   "common_saving": "Enregistrement...",
@@ -807,6 +825,7 @@
   "user_selector_aria": "Nom d'utilisateur à rechercher",
   "user_selector_search": "Rechercher l'utilisateur",
   "user_selector_found": "Utilisateur trouvé",
+
   "common_remove": "Retirer",
   "user_shares_subtitle": "Partages directs et permanents avec d'autres utilisateurs.",
   "user_shares_toast_invited": "Invitation de shocker envoyée à {{name}}",
@@ -872,7 +891,9 @@
   "outgoing_share_per_desc": "Ajustez les restrictions par shocker",
   "outgoing_share_all": "Tous",
   "outgoing_share_per": "Par shocker",
+
   "outgoing_share_remove_desc": "Voulez-vous vraiment ne plus partager <strong>{{shocker}}</strong> avec <strong>{{name}}</strong> ?",
+
   "report_breadcrumb": "Signaler des jetons d'API",
   "report_toast_clipboard_failed": "Impossible de lire le presse-papiers : {{error}}",
   "report_title": "Signaler des jetons d'API divulgués",
@@ -927,6 +948,7 @@
   "lcg_connect_failed": "Impossible de se connecter à la passerelle de contrôle en direct",
   "terminal_toast_bootloader_failed": "Impossible de passer en mode bootloader : {{error}}",
   "terminal_toast_app_mode_failed": "Impossible de passer en mode application : {{error}}",
+
   "problem_account_account_not_activated_title": "Compte non activé",
   "problem_account_account_not_activated_desc": "Recherchez l'e-mail d'activation dans votre boîte de réception.",
   "problem_account_activation_not_found_title": "Le lien d'activation est invalide",
@@ -1044,12 +1066,14 @@
   "problem_webhook_not_found_title": "Webhook introuvable",
   "problem_webhook_unsupported_title": "Seuls les webhooks Discord sont pris en charge",
   "problem_webhook_unsupported_desc": "Utilisez une URL discord.com, pas canary ni ptb.",
+
   "error_too_many_requests": "Trop de requêtes",
   "error_retry_after_one": "Réessayez dans {{count}} seconde.",
   "error_retry_after_other": "Réessayez dans {{count}} secondes.",
   "error_unexpected_response": "Réponse inattendue du serveur",
   "error_internal": "Une erreur interne s'est produite",
   "error_network": "Une erreur réseau s'est produite",
+
   "dev_banner": "Ceci est l'environnement de <b>DÉVELOPPEMENT</b> d'OpenShock. <u>Aucune donnée n'est conservée</u>, et il est régulièrement écrasé par les données de production.",
   "firmware_channel_bugs_warning": "Ce canal peut contenir des bugs."
 }

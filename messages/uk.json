@@ -15,6 +15,7 @@
   "header_signup": "Реєстрація",
   "header_github_title": "OpenShock на GitHub",
   "header_discord_title": "Спільнота в Discord",
+
   "footer_made_with": "Зроблено з <heart/> <team>командою OpenShock</team>",
   "footer_connection_status_label": "Стан з'єднання із сервером",
   "footer_signalr_state": "Стан SignalR",
@@ -23,6 +24,7 @@
   "footer_backend_version": "Версія бекенду",
   "footer_backend_commit_title": "Коміт {{commit}}",
   "footer_language_label": "Мова",
+
   "sidebar_home_link_label": "Головна OpenShock",
   "sidebar_group_general": "Загальне",
   "sidebar_home": "Головна",
@@ -49,6 +51,7 @@
   "sidebar_settings_audit_log": "Журнал аудиту",
   "sidebar_settings_connections": "Підключення",
   "sidebar_settings_account": "Обліковий запис",
+
   "error_meta_title": "Сервіс недоступний",
   "error_meta_description": "OpenShock зараз недоступний",
   "error_meta_logo_alt": "Логотип OpenShock",
@@ -57,8 +60,10 @@
   "error_not_found_description": "Сторінки, яку ти шукаєш, не існує.",
   "error_unexpected_description": "Сталася неочікувана помилка.",
   "error_go_back": "Назад",
+
   "auth_layout_logo_alt": "Логотип OpenShock",
   "auth_layout_invalid_redirect_removed": "Задля твоєї безпеки недійсну адресу переспрямування видалено.",
+
   "auth_activate_breadcrumb": "Активація облікового запису",
   "auth_activate_title": "Активація облікового запису",
   "auth_activate_activating": "Активуємо твій обліковий запис...",
@@ -67,6 +72,7 @@
   "auth_activate_missing_token": "Відсутній токен активації",
   "auth_activate_continue": "Перейти до входу",
   "auth_activate_toast_success": "Обліковий запис активовано",
+
   "auth_forgot_breadcrumb": "Забув пароль",
   "auth_forgot_title": "Забув пароль",
   "auth_forgot_description": "Введи свою пошту, щоб скинути пароль",
@@ -76,6 +82,7 @@
   "auth_forgot_signin_prompt": "Пам'ятаєш пароль? <signin>Увійти</signin>",
   "auth_forgot_mail_disabled": "Скидання пароля недоступне на цьому сервері, бо поштовий провайдер не налаштований. Звернися до адміністратора, щоб відновити обліковий запис.",
   "auth_forgot_toast_sent": "Запит на скидання пароля надіслано на вказану пошту",
+
   "auth_login_breadcrumb": "Вхід",
   "auth_login_title": "З поверненням",
   "auth_login_loading_methods": "Завантажуємо доступні способи входу",
@@ -91,6 +98,7 @@
   "auth_login_submit": "Увійти",
   "auth_login_signup_prompt": "Немає облікового запису? <signup>Зареєструватися</signup>",
   "auth_login_legal": "Натискаючи «Увійти», ти погоджуєшся з нашими <tos>Умовами використання</tos> та <privacy>Політикою конфіденційності</privacy>.",
+
   "auth_oauth_create_breadcrumb": "Реєстрація через {{provider}}",
   "auth_oauth_create_title": "Реєстрація через <provider>{{provider}}</provider>",
   "auth_oauth_create_description": "Заповни дані облікового запису",
@@ -100,9 +108,11 @@
   "auth_oauth_create_email_placeholder": "Пошта",
   "auth_oauth_create_submit": "Зареєструватися",
   "auth_oauth_create_legal": "Натискаючи «Зареєструватися», ти погоджуєшся з нашими <tos>Умовами використання</tos> та <privacy>Політикою конфіденційності</privacy>.",
+
   "auth_oauth_error_breadcrumb": "Помилка автентифікації",
   "auth_oauth_error_title": "Помилка автентифікації",
   "auth_oauth_error_back": "Назад до входу",
+
   "auth_reset_breadcrumb": "Скидання пароля",
   "auth_reset_title": "Скидання пароля",
   "auth_reset_checking": "Перевіряємо посилання...",
@@ -115,6 +125,7 @@
   "auth_reset_submit": "Скинути пароль",
   "auth_reset_request_new": "Запитати нове посилання",
   "auth_reset_toast_success": "Пароль скинуто",
+
   "auth_signup_breadcrumb": "Реєстрація",
   "auth_signup_toast_created_mail": "Обліковий запис створено. Перевір пошту, щоб підтвердити його.",
   "auth_signup_toast_created_no_mail": "Обліковий запис створено. Тепер можна увійти.",
@@ -141,6 +152,7 @@
   "auth_signup_or": "Або",
   "auth_signup_with_email": "Реєстрація через пошту",
   "auth_signup_legal": "Натискаючи «Створити обліковий запис», ти погоджуєшся з нашими <tos>Умовами використання</tos> та <privacy>Політикою конфіденційності</privacy>.",
+
   "auth_verify_breadcrumb": "Підтвердження пошти",
   "auth_verify_title": "Підтвердження пошти",
   "auth_verify_verifying": "Підтверджуємо твою адресу пошти...",
@@ -149,6 +161,7 @@
   "auth_verify_missing_token": "Відсутній токен підтвердження",
   "auth_verify_continue": "Перейти до входу",
   "auth_verify_toast_success": "Пошту підтверджено",
+
   "common_cancel": "Скасувати",
   "common_delete": "Видалити",
   "common_edit": "Редагувати",
@@ -256,6 +269,7 @@
   "shocker_edit_is_active": "Шокер активний",
   "shocker_edit_toast_updated": "Шокер оновлено",
   "shocker_edit_delete_desc": "Остаточно видалити цей шокер. Цю дію не можна скасувати.",
+
   "common_close": "Закрити",
   "common_continue": "Продовжити",
   "common_loading": "Завантаження...",
@@ -402,6 +416,7 @@
   "terminal_toast_clipboard_unreadable": "Не вдалося прочитати буфер обміну",
   "terminal_toast_settings_imported": "Налаштування консолі імпортовано",
   "terminal_toast_settings_invalid": "У буфері обміну немає налаштувань консолі",
+
   "common_try_again": "Спробувати ще",
   "terminal_cfg_intro": "Значення надсилаються на пристрій через UART. Відповідь пристрою дивись у консолі нижче. Команди без аргументу працюють як геттери: натисни кнопку <eye/> біля поля, щоб прочитати поточне значення.",
   "terminal_cfg_rf_title": "RF-передавач",
@@ -458,6 +473,7 @@
   "terminal_cfg_cause_busy": "Пристрій зайнятий іншою командою.",
   "terminal_cfg_cause_disconnected": "Пристрій від'єднався або перезавантажився.",
   "terminal_cfg_cause_unsupported": "Ця версія прошивки не підтримує цю команду.",
+
   "common_status": "Стан",
   "common_version": "Версія",
   "common_created": "Створено",
@@ -586,6 +602,7 @@
   "profile_title": "Профіль",
   "profile_coming_soon": "Профіль скоро буде",
   "profile_coming_soon_desc": "Твій публічний профіль поки недоступний. Дані облікового запису є в Налаштуваннях.",
+
   "common_retry": "Повторити",
   "common_never_used": "Не використовувався",
   "common_expires": "Діє до {{time}}",
@@ -749,6 +766,7 @@
   "audit_meta_accounts_removed_other": "{{name}} (видалено {{count}} облікового запису)",
   "audit_meta_scheduled_deletion": "Заплановано видалення",
   "audit_meta_kept": "Збережено для відновлення",
+
   "common_view": "Переглянути",
   "common_save": "Зберегти",
   "common_saving": "Зберігаємо...",
@@ -815,6 +833,7 @@
   "user_selector_aria": "Ім'я користувача для пошуку",
   "user_selector_search": "Знайти користувача",
   "user_selector_found": "Користувача знайдено",
+
   "common_remove": "Прибрати",
   "user_shares_subtitle": "Прямий постійний доступ для інших користувачів.",
   "user_shares_toast_invited": "Запрошення до шокера надіслано {{name}}",
@@ -880,7 +899,9 @@
   "outgoing_share_per_desc": "Окремі обмеження для кожного шокера",
   "outgoing_share_all": "Усі",
   "outgoing_share_per": "Окремо",
+
   "outgoing_share_remove_desc": "Точно припинити доступ <strong>{{name}}</strong> до <strong>{{shocker}}</strong>?",
+
   "report_breadcrumb": "Повідомити про токени",
   "report_toast_clipboard_failed": "Не вдалося прочитати буфер обміну: {{error}}",
   "report_title": "Повідомити про витік API-токенів",
@@ -937,6 +958,7 @@
   "lcg_connect_failed": "Не вдалося підключитися до шлюзу Live Control",
   "terminal_toast_bootloader_failed": "Не вдалося увійти в завантажувач: {{error}}",
   "terminal_toast_app_mode_failed": "Не вдалося увійти в режим застосунку: {{error}}",
+
   "problem_account_account_not_activated_title": "Обліковий запис не активовано",
   "problem_account_account_not_activated_desc": "Пошукай лист для активації у вхідних.",
   "problem_account_activation_not_found_title": "Посилання для активації недійсне",
@@ -1054,6 +1076,7 @@
   "problem_webhook_not_found_title": "Вебхук не знайдено",
   "problem_webhook_unsupported_title": "Підтримуються лише вебхуки Discord",
   "problem_webhook_unsupported_desc": "Використовуй URL discord.com, а не canary чи ptb.",
+
   "error_too_many_requests": "Забагато запитів",
   "error_retry_after_one": "Спробуй ще раз через {{count}} секунду.",
   "error_retry_after_few": "Спробуй ще раз через {{count}} секунди.",
@@ -1062,6 +1085,7 @@
   "error_unexpected_response": "Неочікувана відповідь сервера",
   "error_internal": "Сталася внутрішня помилка",
   "error_network": "Сталася помилка мережі",
+
   "dev_banner": "Це <b>ТЕСТОВЕ</b> середовище OpenShock. <u>Дані не зберігаються</u> і регулярно перезаписуються даними з продакшену.",
   "firmware_channel_bugs_warning": "Цей канал може містити помилки."
 }

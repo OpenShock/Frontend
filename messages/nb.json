@@ -15,6 +15,7 @@
   "header_signup": "Registrer konto",
   "header_github_title": "OpenShock på GitHub",
   "header_discord_title": "Discord-fellesskapet",
+
   "footer_made_with": "Laget med <heart/> av <team>OpenShock-teamet</team>",
   "footer_connection_status_label": "Tilkoblingsstatus til serveren",
   "footer_signalr_state": "SignalR-status",
@@ -23,6 +24,7 @@
   "footer_backend_version": "Backend-versjon",
   "footer_backend_commit_title": "Commit {{commit}}",
   "footer_language_label": "Språk",
+
   "sidebar_home_link_label": "OpenShock-startsiden",
   "sidebar_group_general": "Generelt",
   "sidebar_home": "Hjem",
@@ -49,6 +51,7 @@
   "sidebar_settings_audit_log": "Aktivitetslogg",
   "sidebar_settings_connections": "Tilknyttede kontoer",
   "sidebar_settings_account": "Kontoinnstillinger",
+
   "error_meta_title": "Tjenesten er utilgjengelig",
   "error_meta_description": "OpenShock er for øyeblikket utilgjengelig",
   "error_meta_logo_alt": "OpenShock-logo",
@@ -57,8 +60,10 @@
   "error_not_found_description": "Siden du leter etter finnes ikke.",
   "error_unexpected_description": "Det oppstod en uventet feil.",
   "error_go_back": "Gå tilbake",
+
   "auth_layout_logo_alt": "OpenShock-logo",
   "auth_layout_invalid_redirect_removed": "En ugyldig viderekoblings-URL ble fjernet for din sikkerhet.",
+
   "auth_activate_breadcrumb": "Aktiver konto",
   "auth_activate_title": "Aktiver konto",
   "auth_activate_activating": "Aktiverer kontoen din...",
@@ -67,6 +72,7 @@
   "auth_activate_missing_token": "Aktiveringstoken mangler",
   "auth_activate_continue": "Fortsett til innlogging",
   "auth_activate_toast_success": "Kontoen er aktivert",
+
   "auth_forgot_breadcrumb": "Glemt passord",
   "auth_forgot_title": "Glemt passord",
   "auth_forgot_description": "Skriv inn e-postadressen din for å tilbakestille passordet",
@@ -76,6 +82,7 @@
   "auth_forgot_signin_prompt": "Husker du passordet? <signin>Logg inn</signin>",
   "auth_forgot_mail_disabled": "Tilbakestilling av passord er ikke tilgjengelig på denne instansen fordi ingen e-postleverandør er satt opp. Kontakt administratoren din for hjelp til å få tilbake tilgangen til kontoen.",
   "auth_forgot_toast_sent": "En forespørsel om å tilbakestille passordet er sendt til den oppgitte e-postadressen",
+
   "auth_login_breadcrumb": "Logg inn",
   "auth_login_title": "Velkommen tilbake",
   "auth_login_loading_methods": "Laster inn tilgjengelige innloggingsmetoder",
@@ -91,6 +98,7 @@
   "auth_login_submit": "Logg inn",
   "auth_login_signup_prompt": "Har du ikke en konto? <signup>Registrer deg</signup>",
   "auth_login_legal": "Ved å klikke på «Logg inn» godtar du <tos>vilkårene for bruk</tos> og <privacy>personvernerklæringen</privacy> vår.",
+
   "auth_oauth_create_breadcrumb": "Registrer deg med {{provider}}",
   "auth_oauth_create_title": "Registrer deg med <provider>{{provider}}</provider>",
   "auth_oauth_create_description": "Fyll ut kontoopplysningene dine",
@@ -100,9 +108,11 @@
   "auth_oauth_create_email_placeholder": "E-post",
   "auth_oauth_create_submit": "Registrer deg",
   "auth_oauth_create_legal": "Ved å klikke på «Registrer deg» godtar du <tos>vilkårene for bruk</tos> og <privacy>personvernerklæringen</privacy> vår.",
+
   "auth_oauth_error_breadcrumb": "Autentiseringsfeil",
   "auth_oauth_error_title": "Autentiseringsfeil",
   "auth_oauth_error_back": "Tilbake til innlogging",
+
   "auth_reset_breadcrumb": "Tilbakestill passord",
   "auth_reset_title": "Tilbakestill passord",
   "auth_reset_checking": "Kontrollerer lenken...",
@@ -115,6 +125,7 @@
   "auth_reset_submit": "Tilbakestill passord",
   "auth_reset_request_new": "Be om en ny lenke",
   "auth_reset_toast_success": "Passordet er tilbakestilt",
+
   "auth_signup_breadcrumb": "Registrer deg",
   "auth_signup_toast_created_mail": "Kontoen er opprettet. Sjekk e-posten din for å bekrefte kontoen.",
   "auth_signup_toast_created_no_mail": "Kontoen er opprettet. Du kan logge inn nå.",
@@ -141,6 +152,7 @@
   "auth_signup_or": "Eller",
   "auth_signup_with_email": "Registrer deg med e-post",
   "auth_signup_legal": "Ved å klikke på «Opprett konto» godtar du <tos>vilkårene for bruk</tos> og <privacy>personvernerklæringen</privacy> vår.",
+
   "auth_verify_breadcrumb": "Bekreft e-post",
   "auth_verify_title": "Bekreft e-post",
   "auth_verify_verifying": "Bekrefter e-postadressen din...",
@@ -149,6 +161,7 @@
   "auth_verify_missing_token": "Bekreftelsestoken mangler",
   "auth_verify_continue": "Fortsett til innlogging",
   "auth_verify_toast_success": "E-postadressen er bekreftet",
+
   "common_cancel": "Avbryt",
   "common_delete": "Slett",
   "common_edit": "Rediger",
@@ -254,6 +267,7 @@
   "shocker_edit_is_active": "Shockeren er aktiv",
   "shocker_edit_toast_updated": "Shockeren er oppdatert",
   "shocker_edit_delete_desc": "Slett denne shockeren permanent. Dette kan ikke angres.",
+
   "common_close": "Lukk",
   "common_continue": "Fortsett",
   "common_loading": "Laster inn...",
@@ -400,6 +414,7 @@
   "terminal_toast_clipboard_unreadable": "Kunne ikke lese utklippstavlen",
   "terminal_toast_settings_imported": "Konsollinnstillingene er importert",
   "terminal_toast_settings_invalid": "Utklippstavlen inneholder ikke konsollinnstillinger",
+
   "common_try_again": "Prøv igjen",
   "terminal_cfg_intro": "Verdiene sendes til enheten via UART. Svaret vises i konsollen nedenfor. Kommandoer uten argument henter gjeldende verdi. Du kan også bruke <eye/>-knappen ved hvert felt.",
   "terminal_cfg_rf_title": "RF-sender",
@@ -456,6 +471,7 @@
   "terminal_cfg_cause_busy": "Enheten er opptatt med en annen kommando.",
   "terminal_cfg_cause_disconnected": "Enheten ble koblet fra eller startet på nytt.",
   "terminal_cfg_cause_unsupported": "Firmwareversjonen støtter ikke denne kommandoen.",
+
   "common_status": "Status",
   "common_version": "Versjon",
   "common_created": "Opprettet",
@@ -582,6 +598,7 @@
   "profile_title": "Profil",
   "profile_coming_soon": "Profilen kommer snart",
   "profile_coming_soon_desc": "Den offentlige profilen din er ikke tilgjengelig ennå. Kontodetaljene finner du under Innstillinger.",
+
   "common_retry": "Prøv igjen",
   "common_never_used": "Aldri brukt",
   "common_expires": "Utløper {{time}}",
@@ -743,6 +760,7 @@
   "audit_meta_accounts_removed_other": "{{name}} ({{count}} kontoer fjernet)",
   "audit_meta_scheduled_deletion": "Skal slettes senere",
   "audit_meta_kept": "Beholdt så kontoen kan aktiveres igjen",
+
   "common_view": "Vis",
   "common_save": "Lagre",
   "common_saving": "Lagrer...",
@@ -807,6 +825,7 @@
   "user_selector_aria": "Søk etter brukernavn",
   "user_selector_search": "Søk etter bruker",
   "user_selector_found": "Bruker funnet",
+
   "common_remove": "Fjern",
   "user_shares_subtitle": "Del shockerne dine med andre brukere så lenge du vil. Du kan slutte å dele når som helst.",
   "user_shares_toast_invited": "Invitasjon sendt til {{name}}",
@@ -872,7 +891,9 @@
   "outgoing_share_per_desc": "Egne grenser og tillatelser for hver shocker",
   "outgoing_share_all": "Alle",
   "outgoing_share_per": "Per shocker",
+
   "outgoing_share_remove_desc": "Er du sikker på at du vil slutte å dele <strong>{{shocker}}</strong> med <strong>{{name}}</strong>?",
+
   "report_breadcrumb": "Rapporter API-tokens",
   "report_toast_clipboard_failed": "Kunne ikke lese utklippstavlen: {{error}}",
   "report_title": "Rapporter lekkede API-tokens",
@@ -927,6 +948,7 @@
   "lcg_connect_failed": "Kunne ikke koble til gatewayen for live-kontroll",
   "terminal_toast_bootloader_failed": "Kunne ikke gå til bootloader-modus: {{error}}",
   "terminal_toast_app_mode_failed": "Kunne ikke starte enhetens firmware: {{error}}",
+
   "problem_account_account_not_activated_title": "Kontoen er ikke aktivert",
   "problem_account_account_not_activated_desc": "Sjekk innboksen din for e-posten med aktiveringslenken.",
   "problem_account_activation_not_found_title": "Aktiveringslenken er ugyldig",
@@ -1044,12 +1066,14 @@
   "problem_webhook_not_found_title": "Fant ikke webhooken",
   "problem_webhook_unsupported_title": "Bare Discord-webhooks støttes",
   "problem_webhook_unsupported_desc": "Bruk en discord.com-URL, ikke canary eller ptb.",
+
   "error_too_many_requests": "For mange forespørsler",
   "error_retry_after_one": "Prøv igjen om {{count}} sekund.",
   "error_retry_after_other": "Prøv igjen om {{count}} sekunder.",
   "error_unexpected_response": "Uventet svar fra serveren",
   "error_internal": "Det oppsto en intern feil",
   "error_network": "Det oppsto en nettverksfeil",
+
   "dev_banner": "Dette er <b>UTVIKLINGSMILJØET</b> til OpenShock. <u>Ingen data lagres</u>. Miljøet overskrives jevnlig med produksjonsdata.",
   "firmware_channel_bugs_warning": "Denne kanalen kan inneholde feil."
 }

@@ -15,6 +15,7 @@
   "header_signup": "新規登録",
   "header_github_title": "GitHub の OpenShock",
   "header_discord_title": "コミュニティ Discord",
+
   "footer_made_with": "<team>OpenShock チーム</team>が<heart/>を込めて制作",
   "footer_connection_status_label": "サーバー接続状態",
   "footer_signalr_state": "SignalR 状態",
@@ -23,6 +24,7 @@
   "footer_backend_version": "バックエンドのバージョン",
   "footer_backend_commit_title": "コミット {{commit}}",
   "footer_language_label": "言語",
+
   "sidebar_home_link_label": "OpenShock ホーム",
   "sidebar_group_general": "一般",
   "sidebar_home": "ホーム",
@@ -49,6 +51,7 @@
   "sidebar_settings_audit_log": "監査ログ",
   "sidebar_settings_connections": "連携",
   "sidebar_settings_account": "アカウント設定",
+
   "error_meta_title": "サービス利用不可",
   "error_meta_description": "OpenShock は現在ご利用いただけません",
   "error_meta_logo_alt": "OpenShock ロゴ",
@@ -57,8 +60,10 @@
   "error_not_found_description": "お探しのページは存在しません。",
   "error_unexpected_description": "予期しないエラーが発生しました。",
   "error_go_back": "戻る",
+
   "auth_layout_logo_alt": "OpenShock ロゴ",
   "auth_layout_invalid_redirect_removed": "安全のため、無効なリダイレクト URL を削除しました。",
+
   "auth_activate_breadcrumb": "アカウントの有効化",
   "auth_activate_title": "アカウントの有効化",
   "auth_activate_activating": "アカウントを有効化しています...",
@@ -67,6 +72,7 @@
   "auth_activate_missing_token": "有効化トークンがありません",
   "auth_activate_continue": "ログインへ進む",
   "auth_activate_toast_success": "アカウントを有効化しました",
+
   "auth_forgot_breadcrumb": "パスワードを忘れた場合",
   "auth_forgot_title": "パスワードを忘れた場合",
   "auth_forgot_description": "パスワードをリセットするにはメールアドレスを入力してください",
@@ -76,6 +82,7 @@
   "auth_forgot_signin_prompt": "パスワードを思い出しましたか？<signin>ログイン</signin>",
   "auth_forgot_mail_disabled": "このインスタンスにはメールプロバイダーが設定されていないため、パスワードのリセットはご利用いただけません。アカウントの復旧については管理者にお問い合わせください。",
   "auth_forgot_toast_sent": "入力されたメールアドレスにパスワードリセットのリクエストを送信しました",
+
   "auth_login_breadcrumb": "ログイン",
   "auth_login_title": "おかえりなさい",
   "auth_login_loading_methods": "利用可能なログイン方法を読み込んでいます",
@@ -91,6 +98,7 @@
   "auth_login_submit": "ログイン",
   "auth_login_signup_prompt": "アカウントをお持ちでないですか？<signup>新規登録</signup>",
   "auth_login_legal": "「ログイン」をクリックすると、<tos>利用規約</tos>と<privacy>プライバシーポリシー</privacy>に同意したものとみなされます。",
+
   "auth_oauth_create_breadcrumb": "{{provider}} で新規登録",
   "auth_oauth_create_title": "<provider>{{provider}}</provider> で新規登録",
   "auth_oauth_create_description": "アカウント情報を入力してください",
@@ -100,9 +108,11 @@
   "auth_oauth_create_email_placeholder": "メールアドレス",
   "auth_oauth_create_submit": "新規登録",
   "auth_oauth_create_legal": "「新規登録」をクリックすると、<tos>利用規約</tos>と<privacy>プライバシーポリシー</privacy>に同意したものとみなされます。",
+
   "auth_oauth_error_breadcrumb": "認証エラー",
   "auth_oauth_error_title": "認証エラー",
   "auth_oauth_error_back": "ログインに戻る",
+
   "auth_reset_breadcrumb": "パスワードのリセット",
   "auth_reset_title": "パスワードのリセット",
   "auth_reset_checking": "リセットリンクを確認しています...",
@@ -115,6 +125,7 @@
   "auth_reset_submit": "パスワードをリセット",
   "auth_reset_request_new": "新しいリセットリンクをリクエスト",
   "auth_reset_toast_success": "パスワードをリセットしました",
+
   "auth_signup_breadcrumb": "新規登録",
   "auth_signup_toast_created_mail": "アカウントを作成しました。メールを確認してアカウントを認証してください。",
   "auth_signup_toast_created_no_mail": "アカウントを作成しました。今すぐログインできます。",
@@ -141,6 +152,7 @@
   "auth_signup_or": "または",
   "auth_signup_with_email": "メールアドレスで登録",
   "auth_signup_legal": "「アカウントを作成」をクリックすると、<tos>利用規約</tos>と<privacy>プライバシーポリシー</privacy>に同意したものとみなされます。",
+
   "auth_verify_breadcrumb": "メールアドレスの認証",
   "auth_verify_title": "メールアドレスの認証",
   "auth_verify_verifying": "メールアドレスを認証しています...",
@@ -149,6 +161,7 @@
   "auth_verify_missing_token": "認証トークンがありません",
   "auth_verify_continue": "ログインへ進む",
   "auth_verify_toast_success": "メールアドレスを認証しました",
+
   "common_cancel": "キャンセル",
   "common_delete": "削除",
   "common_edit": "編集",
@@ -253,6 +266,7 @@
   "shocker_edit_is_active": "ショッカーは有効です",
   "shocker_edit_toast_updated": "ショッカーを更新しました",
   "shocker_edit_delete_desc": "このショッカーを完全に削除します。この操作は元に戻せません。",
+
   "common_close": "閉じる",
   "common_continue": "続行",
   "common_loading": "読み込んでいます...",
@@ -399,6 +413,7 @@
   "terminal_toast_clipboard_unreadable": "クリップボードを読み取れませんでした",
   "terminal_toast_settings_imported": "コンソール設定をインポートしました",
   "terminal_toast_settings_invalid": "クリップボードにコンソール設定が含まれていません",
+
   "common_try_again": "再試行",
   "terminal_cfg_intro": "値は UART 経由でデバイスに送信されます。デバイスの応答は下のコンソールで確認できます。引数なしのコマンドは値の取得として動作します。各フィールドの横にある <eye/> ボタンで現在の値を読み取れます。",
   "terminal_cfg_rf_title": "RF 送信機",
@@ -455,6 +470,7 @@
   "terminal_cfg_cause_busy": "デバイスが別のコマンドを処理中です。",
   "terminal_cfg_cause_disconnected": "デバイスが切断されたか、再起動しました。",
   "terminal_cfg_cause_unsupported": "このファームウェアバージョンはこのコマンドに対応していません。",
+
   "common_status": "状態",
   "common_version": "バージョン",
   "common_created": "作成日",
@@ -580,6 +596,7 @@
   "profile_title": "プロフィール",
   "profile_coming_soon": "プロフィールは近日公開予定です",
   "profile_coming_soon_desc": "公開プロフィールはまだご利用いただけません。アカウントの詳細は設定にあります。",
+
   "common_retry": "再試行",
   "common_never_used": "未使用",
   "common_expires": "有効期限: {{time}}",
@@ -740,6 +757,7 @@
   "audit_meta_accounts_removed_other": "{{name}}（{{count}} 件のアカウントを削除）",
   "audit_meta_scheduled_deletion": "削除予定",
   "audit_meta_kept": "再有効化のため保持",
+
   "common_view": "表示",
   "common_save": "保存",
   "common_saving": "保存しています...",
@@ -803,6 +821,7 @@
   "user_selector_aria": "検索するユーザー名",
   "user_selector_search": "ユーザーを検索",
   "user_selector_found": "ユーザーが見つかりました",
+
   "common_remove": "削除",
   "user_shares_subtitle": "他のユーザーとの直接の恒久的な共有です。",
   "user_shares_toast_invited": "{{name}} にショッカーの招待を送信しました",
@@ -868,7 +887,9 @@
   "outgoing_share_per_desc": "ショッカーごとに制限を調整",
   "outgoing_share_all": "すべて",
   "outgoing_share_per": "ショッカーごと",
+
   "outgoing_share_remove_desc": "<strong>{{name}}</strong> との <strong>{{shocker}}</strong> の共有を停止してもよろしいですか？",
+
   "report_breadcrumb": "API トークンの報告",
   "report_toast_clipboard_failed": "クリップボードを読み取れませんでした: {{error}}",
   "report_title": "流出した API トークンの報告",
@@ -922,6 +943,7 @@
   "lcg_connect_failed": "ライブコントロールゲートウェイに接続できませんでした",
   "terminal_toast_bootloader_failed": "ブートローダーに入れませんでした: {{error}}",
   "terminal_toast_app_mode_failed": "アプリケーションモードに入れませんでした: {{error}}",
+
   "problem_account_account_not_activated_title": "アカウントが有効化されていません",
   "problem_account_account_not_activated_desc": "受信トレイで有効化メールをご確認ください。",
   "problem_account_activation_not_found_title": "有効化リンクが無効です",
@@ -1039,11 +1061,13 @@
   "problem_webhook_not_found_title": "Webhook が見つかりません",
   "problem_webhook_unsupported_title": "Discord の Webhook のみサポートしています",
   "problem_webhook_unsupported_desc": "canary や ptb ではなく、discord.com の URL を使用してください。",
+
   "error_too_many_requests": "リクエストが多すぎます",
   "error_retry_after_other": "{{count}} 秒後にもう一度お試しください。",
   "error_unexpected_response": "予期しないサーバー応答です",
   "error_internal": "内部エラーが発生しました",
   "error_network": "ネットワークエラーが発生しました",
+
   "dev_banner": "これは OpenShock の<b>開発</b>環境です。<u>データは保存されず</u>、定期的に本番環境のデータで上書きされます。",
   "firmware_channel_bugs_warning": "このチャンネルには不具合が含まれる可能性があります。"
 }

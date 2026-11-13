@@ -15,6 +15,7 @@
   "header_signup": "Registrera dig",
   "header_github_title": "OpenShock på GitHub",
   "header_discord_title": "Communityns Discord",
+
   "footer_made_with": "Gjort med <heart/> av <team>OpenShock-teamet</team>",
   "footer_connection_status_label": "Anslutningsstatus till servern",
   "footer_signalr_state": "SignalR-status",
@@ -23,6 +24,7 @@
   "footer_backend_version": "Backend-version",
   "footer_backend_commit_title": "Commit {{commit}}",
   "footer_language_label": "Språk",
+
   "sidebar_home_link_label": "OpenShocks startsida",
   "sidebar_group_general": "Allmänt",
   "sidebar_home": "Hem",
@@ -49,6 +51,7 @@
   "sidebar_settings_audit_log": "Aktivitetslogg",
   "sidebar_settings_connections": "Kopplingar",
   "sidebar_settings_account": "Kontoinställningar",
+
   "error_meta_title": "Tjänsten är inte tillgänglig",
   "error_meta_description": "OpenShock är inte tillgängligt just nu",
   "error_meta_logo_alt": "OpenShocks logotyp",
@@ -57,8 +60,10 @@
   "error_not_found_description": "Sidan du letar efter finns inte.",
   "error_unexpected_description": "Ett oväntat fel inträffade.",
   "error_go_back": "Gå tillbaka",
+
   "auth_layout_logo_alt": "OpenShocks logotyp",
   "auth_layout_invalid_redirect_removed": "En ogiltig omdirigerings-URL togs bort för din säkerhet.",
+
   "auth_activate_breadcrumb": "Aktivera konto",
   "auth_activate_title": "Aktivera konto",
   "auth_activate_activating": "Aktiverar ditt konto...",
@@ -67,6 +72,7 @@
   "auth_activate_missing_token": "Aktiveringstoken saknas",
   "auth_activate_continue": "Fortsätt till inloggningen",
   "auth_activate_toast_success": "Kontot har aktiverats",
+
   "auth_forgot_breadcrumb": "Glömt lösenord",
   "auth_forgot_title": "Glömt lösenord",
   "auth_forgot_description": "Ange din e-postadress för att återställa ditt lösenord",
@@ -76,6 +82,7 @@
   "auth_forgot_signin_prompt": "Kommer du ihåg ditt lösenord? <signin>Logga in</signin>",
   "auth_forgot_mail_disabled": "Det går inte att återställa lösenord på den här instansen eftersom ingen e-postleverantör är konfigurerad. Kontakta din administratör för att få hjälp att återfå åtkomst till ditt konto.",
   "auth_forgot_toast_sent": "En begäran om att återställa lösenordet har skickats till den angivna e-postadressen",
+
   "auth_login_breadcrumb": "Logga in",
   "auth_login_title": "Välkommen tillbaka",
   "auth_login_loading_methods": "Läser in tillgängliga inloggningsmetoder",
@@ -91,6 +98,7 @@
   "auth_login_submit": "Logga in",
   "auth_login_signup_prompt": "Har du inget konto? <signup>Registrera dig</signup>",
   "auth_login_legal": "Genom att klicka på ”Logga in” godkänner du våra <tos>användarvillkor</tos> och vår <privacy>integritetspolicy</privacy>.",
+
   "auth_oauth_create_breadcrumb": "Registrera dig med {{provider}}",
   "auth_oauth_create_title": "Registrera dig med <provider>{{provider}}</provider>",
   "auth_oauth_create_description": "Fyll i dina kontouppgifter",
@@ -100,9 +108,11 @@
   "auth_oauth_create_email_placeholder": "E-post",
   "auth_oauth_create_submit": "Registrera dig",
   "auth_oauth_create_legal": "Genom att klicka på ”Registrera dig” godkänner du våra <tos>användarvillkor</tos> och vår <privacy>integritetspolicy</privacy>.",
+
   "auth_oauth_error_breadcrumb": "Autentiseringsfel",
   "auth_oauth_error_title": "Autentiseringsfel",
   "auth_oauth_error_back": "Tillbaka till inloggningen",
+
   "auth_reset_breadcrumb": "Återställ lösenord",
   "auth_reset_title": "Återställ lösenord",
   "auth_reset_checking": "Kontrollerar återställningslänken...",
@@ -115,6 +125,7 @@
   "auth_reset_submit": "Återställ lösenord",
   "auth_reset_request_new": "Begär en ny länk",
   "auth_reset_toast_success": "Lösenordet har återställts",
+
   "auth_signup_breadcrumb": "Registrera dig",
   "auth_signup_toast_created_mail": "Kontot har skapats. Kontrollera din e-post för att verifiera kontot.",
   "auth_signup_toast_created_no_mail": "Kontot har skapats. Du kan logga in nu.",
@@ -141,6 +152,7 @@
   "auth_signup_or": "Eller",
   "auth_signup_with_email": "Registrera dig med e-post",
   "auth_signup_legal": "Genom att klicka på ”Skapa konto” godkänner du våra <tos>användarvillkor</tos> och vår <privacy>integritetspolicy</privacy>.",
+
   "auth_verify_breadcrumb": "Verifiera e-post",
   "auth_verify_title": "Verifiera e-post",
   "auth_verify_verifying": "Verifierar din e-postadress...",
@@ -149,6 +161,7 @@
   "auth_verify_missing_token": "Verifieringstoken saknas",
   "auth_verify_continue": "Fortsätt till inloggningen",
   "auth_verify_toast_success": "E-postadressen har verifierats",
+
   "common_cancel": "Avbryt",
   "common_delete": "Ta bort",
   "common_edit": "Redigera",
@@ -254,6 +267,7 @@
   "shocker_edit_is_active": "Shockern är aktiv",
   "shocker_edit_toast_updated": "Shockern har uppdaterats",
   "shocker_edit_delete_desc": "Ta bort den här shockern permanent. Det går inte att ångra.",
+
   "common_close": "Stäng",
   "common_continue": "Fortsätt",
   "common_loading": "Läser in...",
@@ -400,6 +414,7 @@
   "terminal_toast_clipboard_unreadable": "Det gick inte att läsa urklipp",
   "terminal_toast_settings_imported": "Konsolinställningarna har importerats",
   "terminal_toast_settings_invalid": "Urklipp innehåller inga konsolinställningar",
+
   "common_try_again": "Försök igen",
   "terminal_cfg_intro": "Värden skickas till enheten via UART. Enhetens svar visas i konsolen nedan. Kommandon utan argument läser värdet; använd <eye/>-knappen vid varje fält för att läsa det aktuella värdet.",
   "terminal_cfg_rf_title": "RF-sändare",
@@ -456,6 +471,7 @@
   "terminal_cfg_cause_busy": "Enheten är upptagen med ett annat kommando.",
   "terminal_cfg_cause_disconnected": "Enheten kopplades från eller startades om.",
   "terminal_cfg_cause_unsupported": "Firmwareversionen stöder inte det här kommandot.",
+
   "common_status": "Status",
   "common_version": "Version",
   "common_created": "Skapad",
@@ -582,6 +598,7 @@
   "profile_title": "Profil",
   "profile_coming_soon": "Profilen kommer snart",
   "profile_coming_soon_desc": "Din offentliga profil är inte tillgänglig än. Kontouppgifterna finns under Inställningar.",
+
   "common_retry": "Försök igen",
   "common_never_used": "Aldrig använd",
   "common_expires": "Går ut {{time}}",
@@ -743,6 +760,7 @@
   "audit_meta_accounts_removed_other": "{{name}} ({{count}} konton borttagna)",
   "audit_meta_scheduled_deletion": "Schemalagd för borttagning",
   "audit_meta_kept": "Sparat för återaktivering",
+
   "common_view": "Visa",
   "common_save": "Spara",
   "common_saving": "Sparar...",
@@ -807,6 +825,7 @@
   "user_selector_aria": "Användarnamn att söka efter",
   "user_selector_search": "Sök användare",
   "user_selector_found": "Användare hittad",
+
   "common_remove": "Ta bort",
   "user_shares_subtitle": "Direkta, permanenta delningar med andra användare.",
   "user_shares_toast_invited": "Skickade en shocker-inbjudan till {{name}}",
@@ -872,7 +891,9 @@
   "outgoing_share_per_desc": "Justera begränsningar per shocker",
   "outgoing_share_all": "Alla",
   "outgoing_share_per": "Per shocker",
+
   "outgoing_share_remove_desc": "Är du säker på att du vill sluta dela <strong>{{shocker}}</strong> med <strong>{{name}}</strong>?",
+
   "report_breadcrumb": "Rapportera API-tokens",
   "report_toast_clipboard_failed": "Det gick inte att läsa urklipp: {{error}}",
   "report_title": "Rapportera läckta API-tokens",
@@ -927,6 +948,7 @@
   "lcg_connect_failed": "Det gick inte att ansluta till live-kontrollgatewayen",
   "terminal_toast_bootloader_failed": "Det gick inte att gå in i startladdaren: {{error}}",
   "terminal_toast_app_mode_failed": "Det gick inte att gå in i applikationsläge: {{error}}",
+
   "problem_account_account_not_activated_title": "Kontot är inte aktiverat",
   "problem_account_account_not_activated_desc": "Leta efter aktiveringsmejlet i din inkorg.",
   "problem_account_activation_not_found_title": "Aktiveringslänken är ogiltig",
@@ -1044,12 +1066,14 @@
   "problem_webhook_not_found_title": "Webhooken hittades inte",
   "problem_webhook_unsupported_title": "Endast Discord-webhooks stöds",
   "problem_webhook_unsupported_desc": "Använd en discord.com-URL, inte canary eller ptb.",
+
   "error_too_many_requests": "För många förfrågningar",
   "error_retry_after_one": "Försök igen om {{count}} sekund.",
   "error_retry_after_other": "Försök igen om {{count}} sekunder.",
   "error_unexpected_response": "Oväntat svar från servern",
   "error_internal": "Ett internt fel uppstod",
   "error_network": "Ett nätverksfel uppstod",
+
   "dev_banner": "Det här är OpenShocks <b>UTVECKLINGSMILJÖ</b>. <u>Ingen data sparas</u>, och den skrivs regelbundet över med produktionsdata.",
   "firmware_channel_bugs_warning": "Den här kanalen kan innehålla buggar."
 }

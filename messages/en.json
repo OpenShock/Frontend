@@ -15,6 +15,7 @@
   "header_signup": "Sign Up",
   "header_github_title": "OpenShock on GitHub",
   "header_discord_title": "Community Discord",
+
   "footer_made_with": "Made with <heart/> by the <team>OpenShock Team</team>",
   "footer_connection_status_label": "Server connection status",
   "footer_signalr_state": "SignalR State",
@@ -23,6 +24,7 @@
   "footer_backend_version": "Backend Version",
   "footer_backend_commit_title": "Commit {{commit}}",
   "footer_language_label": "Language",
+
   "sidebar_home_link_label": "OpenShock home",
   "sidebar_group_general": "General",
   "sidebar_home": "Home",
@@ -49,6 +51,7 @@
   "sidebar_settings_audit_log": "Audit Log",
   "sidebar_settings_connections": "Connections",
   "sidebar_settings_account": "Account Settings",
+
   "error_meta_title": "Service Unavailable",
   "error_meta_description": "OpenShock is currently unavailable",
   "error_meta_logo_alt": "OpenShock Logo",
@@ -57,8 +60,10 @@
   "error_not_found_description": "The page you're looking for doesn't exist.",
   "error_unexpected_description": "An unexpected error occurred.",
   "error_go_back": "Go back",
+
   "auth_layout_logo_alt": "OpenShock Logo",
   "auth_layout_invalid_redirect_removed": "An invalid redirect URL was removed for your safety.",
+
   "auth_activate_breadcrumb": "Activate Account",
   "auth_activate_title": "Activate Account",
   "auth_activate_activating": "Activating your account...",
@@ -67,6 +72,7 @@
   "auth_activate_missing_token": "Missing activation token",
   "auth_activate_continue": "Continue to login",
   "auth_activate_toast_success": "Account activated",
+
   "auth_forgot_breadcrumb": "Forgot Password",
   "auth_forgot_title": "Forgot Password",
   "auth_forgot_description": "Enter your email to reset your password",
@@ -76,6 +82,7 @@
   "auth_forgot_signin_prompt": "Remember your password? <signin>Sign in</signin>",
   "auth_forgot_mail_disabled": "Password resets are unavailable on this instance because it has no mail provider configured. Please contact your administrator for help recovering your account.",
   "auth_forgot_toast_sent": "Reset password request has been sent to the given email",
+
   "auth_login_breadcrumb": "Login",
   "auth_login_title": "Welcome back",
   "auth_login_loading_methods": "Loading available login methods",
@@ -91,6 +98,7 @@
   "auth_login_submit": "Login",
   "auth_login_signup_prompt": "Don't have an account? <signup>Sign up</signup>",
   "auth_login_legal": "By clicking Login, you agree to our <tos>Terms of Service</tos> and <privacy>Privacy Policy</privacy>.",
+
   "auth_oauth_create_breadcrumb": "Sign Up With {{provider}}",
   "auth_oauth_create_title": "Sign Up With <provider>{{provider}}</provider>",
   "auth_oauth_create_description": "Complete your account details",
@@ -100,9 +108,11 @@
   "auth_oauth_create_email_placeholder": "Email",
   "auth_oauth_create_submit": "Sign Up",
   "auth_oauth_create_legal": "By clicking Sign Up, you agree to our <tos>Terms of Service</tos> and <privacy>Privacy Policy</privacy>.",
+
   "auth_oauth_error_breadcrumb": "Authentication Error",
   "auth_oauth_error_title": "Authentication Error",
   "auth_oauth_error_back": "Back to login",
+
   "auth_reset_breadcrumb": "Reset Password",
   "auth_reset_title": "Reset Password",
   "auth_reset_checking": "Verifying reset link...",
@@ -115,6 +125,7 @@
   "auth_reset_submit": "Reset Password",
   "auth_reset_request_new": "Request a new reset link",
   "auth_reset_toast_success": "Password has been reset",
+
   "auth_signup_breadcrumb": "Sign Up",
   "auth_signup_toast_created_mail": "Account created successfully. Please check your email to verify your account.",
   "auth_signup_toast_created_no_mail": "Account created successfully. You can log in now.",
@@ -141,6 +152,7 @@
   "auth_signup_or": "Or",
   "auth_signup_with_email": "Signup with Email",
   "auth_signup_legal": "By clicking Create Account, you agree to our <tos>Terms of Service</tos> and <privacy>Privacy Policy</privacy>.",
+
   "auth_verify_breadcrumb": "Verify Email",
   "auth_verify_title": "Verify Email",
   "auth_verify_verifying": "Verifying your email address...",
@@ -149,6 +161,7 @@
   "auth_verify_missing_token": "Missing verification token",
   "auth_verify_continue": "Continue to login",
   "auth_verify_toast_success": "Email verified",
+
   "common_cancel": "Cancel",
   "common_delete": "Delete",
   "common_edit": "Edit",
@@ -254,6 +267,7 @@
   "shocker_edit_is_active": "Shocker is active",
   "shocker_edit_toast_updated": "Shocker updated",
   "shocker_edit_delete_desc": "Permanently delete this shocker. This action cannot be undone.",
+
   "common_close": "Close",
   "common_continue": "Continue",
   "common_loading": "Loading...",
@@ -400,6 +414,7 @@
   "terminal_toast_clipboard_unreadable": "Could not read the clipboard",
   "terminal_toast_settings_imported": "Console settings imported",
   "terminal_toast_settings_invalid": "Clipboard does not contain console settings",
+
   "common_try_again": "Try again",
   "terminal_cfg_intro": "Values are sent to the device via UART. Read the device's response in the console below. Commands without an argument act as getters; use the <eye/> button next to each field to read the current value.",
   "terminal_cfg_rf_title": "RF Transmitter",
@@ -456,6 +471,7 @@
   "terminal_cfg_cause_busy": "The device is busy handling another command.",
   "terminal_cfg_cause_disconnected": "The device disconnected or rebooted.",
   "terminal_cfg_cause_unsupported": "The firmware version doesn't support this command.",
+
   "common_status": "Status",
   "common_version": "Version",
   "common_created": "Created",
@@ -582,6 +598,7 @@
   "profile_title": "Profile",
   "profile_coming_soon": "Profile is coming soon",
   "profile_coming_soon_desc": "Your public profile is not available yet. Account details live under Settings.",
+
   "common_retry": "Retry",
   "common_never_used": "Never used",
   "common_expires": "Expires {{time}}",
@@ -743,6 +760,7 @@
   "audit_meta_accounts_removed_other": "{{name}} ({{count}} accounts removed)",
   "audit_meta_scheduled_deletion": "Scheduled for deletion",
   "audit_meta_kept": "Kept for reactivation",
+
   "common_view": "View",
   "common_save": "Save",
   "common_saving": "Saving...",
@@ -807,6 +825,7 @@
   "user_selector_aria": "Username to search",
   "user_selector_search": "Search user",
   "user_selector_found": "User found",
+
   "common_remove": "Remove",
   "user_shares_subtitle": "Direct permanent shares with other users.",
   "user_shares_toast_invited": "Sent a shocker invite to {{name}}",
@@ -872,7 +891,9 @@
   "outgoing_share_per_desc": "Tune restrictions per shocker",
   "outgoing_share_all": "All",
   "outgoing_share_per": "Per shocker",
+
   "outgoing_share_remove_desc": "Are you sure you want to stop sharing <strong>{{shocker}}</strong> with <strong>{{name}}</strong>?",
+
   "report_breadcrumb": "Report API Tokens",
   "report_toast_clipboard_failed": "Failed to read clipboard: {{error}}",
   "report_title": "Report Leaked API Tokens",
@@ -927,6 +948,7 @@
   "lcg_connect_failed": "Failed to connect to live control gateway",
   "terminal_toast_bootloader_failed": "Failed to enter bootloader: {{error}}",
   "terminal_toast_app_mode_failed": "Failed to enter application mode: {{error}}",
+
   "problem_account_account_not_activated_title": "Account not activated",
   "problem_account_account_not_activated_desc": "Check your inbox for the activation email.",
   "problem_account_activation_not_found_title": "Activation link is invalid",
@@ -1044,12 +1066,14 @@
   "problem_webhook_not_found_title": "Webhook not found",
   "problem_webhook_unsupported_title": "Only Discord webhooks are supported",
   "problem_webhook_unsupported_desc": "Use a discord.com URL, not canary or ptb.",
+
   "error_too_many_requests": "Too many requests",
   "error_retry_after_one": "Try again in {{count}} second.",
   "error_retry_after_other": "Try again in {{count}} seconds.",
   "error_unexpected_response": "Unexpected server response",
   "error_internal": "Internal error occurred",
   "error_network": "Network error occurred",
+
   "dev_banner": "This is the OpenShock <b>DEVELOPMENT</b> environment. <u>No data is saved</u>, and it is regularly overwritten by production data.",
   "firmware_channel_bugs_warning": "This channel might contain bugs."
 }
