@@ -1,6 +1,6 @@
 on:
   schedule:
-    - cron: '0 6 * * 1' # weekly, Monday 06:00 UTC — matches dependabot.yml's cadence
+    - cron: '0 6 * * 1' # weekly, Monday 06:00 UTC — same day as Renovate's weekly schedule
   workflow_dispatch: # Manually invoked by user.
 
 name: update-toolchain
