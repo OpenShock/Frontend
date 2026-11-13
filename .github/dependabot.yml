@@ -19,7 +19,9 @@ updates:
 
   # Check for Github Actions version updates (for CI/CD)
   - package-ecosystem: github-actions
-    directory: /
+    directories:
+      - /
+      - /.github/actions/* # composite actions are not covered by `/`
     schedule:
       interval: weekly
       day: monday
