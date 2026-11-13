@@ -36,9 +36,11 @@ jobs:
             exit 1
           fi
 
-          # Absolute latest Node release across all lines (not locked to the current
-          # major) — nodejs.org's index is already sorted newest-first.
-          new_node="$(curl -fsSL https://nodejs.org/dist/index.json | jq -r '.[0].version' | sed 's/^v//')"
+          # Latest stable Node release across all lines (not locked to the current major).
+          # nodejs.org's index is sorted newest-first but also lists prereleases such as
+          # v27.0.0-alpha.0, which have no Docker image, so only plain x.y.z versions count.
+          new_node="$(curl -fsSL https://nodejs.org/dist/index.json \
+            | jq -r '[.[].version | select(test("^v[0-9]+\\.[0-9]+\\.[0-9]+$"))][0]' | sed 's/^v//')"
 
           new_pnpm="$(curl -fsSL https://registry.npmjs.org/pnpm | jq -r '."dist-tags".latest')"
 
@@ -50,6 +52,7 @@ jobs:
               | grep -E "^${new_node}-alpine[0-9]+\.[0-9]+$" \
               | sed -E 's/^.*-alpine//' \
               | sort -V | tail -n1)"
+            new_tag="${new_node}-alpine${new_base}"
           else
             # Debian codenames aren't lexically ordered, so resolve via digest: the plain
             # "-slim" tag is kept aliased upstream to whichever codename is current stable.
@@ -57,10 +60,15 @@ jobs:
             new_base="$(jq -r --arg d "$slim_digest" --arg plain "${new_node}-slim" \
               '.results[] | select(.name | endswith("-slim")) | select(.name != $plain) | select(.digest == $d) | .name' <<<"$tags_json" \
               | sed -E 's/^.*-([a-z]+)-slim$/\1/' | head -n1)"
+            new_tag="${new_node}-${new_base}-slim"
           fi
 
-          if [ -z "$new_node" ] || [ -z "$new_pnpm" ] || [ -z "$new_base" ]; then
-            echo "::error::Failed to resolve one or more versions (node=$new_node pnpm=$new_pnpm base=$new_base)"
+          # The Dockerfile pins the base image by digest as well as by tag; this is the
+          # multi-arch index digest, the same one `docker buildx imagetools inspect` reports.
+          new_digest="$(jq -r --arg t "$new_tag" '.results[] | select(.name == $t) | .digest' <<<"$tags_json")"
+
+          if [ -z "$new_node" ] || [ -z "$new_pnpm" ] || [ -z "$new_base" ] || [[ "$new_digest" != sha256:* ]]; then
+            echo "::error::Failed to resolve one or more versions (node=$new_node pnpm=$new_pnpm base=$new_base digest=$new_digest)"
             exit 1
           fi
 
@@ -69,6 +77,7 @@ jobs:
             echo "pnpm=$new_pnpm"
             echo "base_family=$base_family"
             echo "base_version=$new_base"
+            echo "image=node:${new_tag}@${new_digest}"
           } >> "$GITHUB_OUTPUT"
 
       - name: Apply version updates
@@ -76,24 +85,19 @@ jobs:
         env:
           NEW_NODE: ${{ steps.resolve.outputs.node }}
           NEW_PNPM: ${{ steps.resolve.outputs.pnpm }}
-          BASE_FAMILY: ${{ steps.resolve.outputs.base_family }}
-          NEW_BASE: ${{ steps.resolve.outputs.base_version }}
+          NEW_IMAGE: ${{ steps.resolve.outputs.image }}
         run: |
           set -euo pipefail
 
-          sed -i "s/^ARG NODE_VERSION=.*/ARG NODE_VERSION=${NEW_NODE}/" Dockerfile
-          sed -i "s/^ARG PNPM_VERSION=.*/ARG PNPM_VERSION=${NEW_PNPM}/" Dockerfile
+          # The base image is a literal `FROM node:<tag>@<digest>` line, so Node version, base
+          # OS and digest all change together by replacing the image reference on it.
+          sed -i -E "s|^FROM node:[^[:space:]]+|FROM ${NEW_IMAGE}|" Dockerfile
+          if ! grep -qxF "FROM ${NEW_IMAGE}" Dockerfile; then
+            echo "::error::Dockerfile has no 'FROM node:...' line to update"
+            exit 1
+          fi
 
-          case "$BASE_FAMILY" in
-            alpine)
-              sed -i "s/^ARG ALPINE_VERSION=.*/ARG ALPINE_VERSION=${NEW_BASE}/" Dockerfile
-              ;;
-            debian)
-              # Convention: if/when the Dockerfile switches to a Debian-slim base, name its
-              # codename ARG `DEBIAN_VERSION` (e.g. `trixie`) so this step keeps working as-is.
-              sed -i "s/^ARG DEBIAN_VERSION=.*/ARG DEBIAN_VERSION=${NEW_BASE}/" Dockerfile
-              ;;
-          esac
+          sed -i "s/^ARG PNPM_VERSION=.*/ARG PNPM_VERSION=${NEW_PNPM}/" Dockerfile
 
           echo "$NEW_NODE" > .nvmrc
 
@@ -154,6 +158,15 @@ jobs:
         shell: bash
         run: docker build --pull -f Dockerfile -t toolchain-update-check:latest .
 
+      # open-pr-from-diff pushes with --force-with-lease when the branch already exists on the
+      # remote (an open PR, or a branch left behind by a merged one). The checkout above only
+      # fetched the default branch, and a lease with no remote-tracking ref to compare against
+      # is rejected as "stale info", so make the ref known first.
+      - name: Fetch existing update branch
+        if: steps.diff.outputs.changed == 'true'
+        shell: bash
+        run: git fetch origin '+refs/heads/chore/update-toolchain-versions:refs/remotes/origin/chore/update-toolchain-versions' || true
+
       - name: Open pull request
         if: steps.diff.outputs.changed == 'true'
         uses: OpenShock/actions/open-pr-from-diff@21ca2d511bca92cf24fb502fa302f82700822584 # v1.1.1
@@ -166,9 +179,10 @@ jobs:
 
             | Component | New version |
             |---|---|
-            | Node (`NODE_VERSION` / `.nvmrc` / `engines.node`) | `${{ steps.resolve.outputs.node }}` |
+            | Node (`.nvmrc` / `engines.node`) | `${{ steps.resolve.outputs.node }}` |
             | pnpm (`PNPM_VERSION` / `packageManager`) | `${{ steps.resolve.outputs.pnpm }}` |
             | Base OS (`${{ steps.resolve.outputs.base_family }}`) | `${{ steps.resolve.outputs.base_version }}` |
+            | Base image (Dockerfile `FROM`) | `${{ steps.resolve.outputs.image }}` |
 
             `pnpm run check`, `pnpm test:unit`, and a container build were run
             against these new versions before this PR was opened.
