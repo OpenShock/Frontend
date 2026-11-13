@@ -6,8 +6,7 @@
 // race the API container coming up and Playwright times out the webServer probe.
 
 import { spawn } from 'node:child_process';
-import { request as httpRequest } from 'node:http';
-import { request as httpsRequest } from 'node:https';
+import { request } from 'node:http';
 import { startStack } from './integration-stack.mjs';
 
 const API_URL = process.env.VITE_API_PROXY_TARGET ?? 'http://localhost:5001';
@@ -17,15 +16,13 @@ const POLL_INTERVAL_MS = 1500;
 
 function probe(url) {
   return new Promise((resolve) => {
-    const req = (url.startsWith('https:') ? httpsRequest : httpRequest)(
-      url,
-      { method: 'GET', rejectUnauthorized: false, timeout: 2000 },
-      (res) => {
-        res.resume();
-        // Any HTTP response (even 404) means the server is accepting connections.
-        resolve(true);
-      }
-    );
+    // The stack only ever publishes the API over plain HTTP (see integration-stack.mjs), so
+    // there is no TLS to negotiate here and no certificate to skip validating.
+    const req = request(url, { method: 'GET', timeout: 2000 }, (res) => {
+      res.resume();
+      // Any HTTP response (even 404) means the server is accepting connections.
+      resolve(true);
+    });
     req.on('error', () => resolve(false));
     req.on('timeout', () => {
       req.destroy();

@@ -8,6 +8,12 @@ vi.mock('svelte-sonner', () => ({
   toast: { error: vi.fn() },
 }));
 
+// The real barrel re-exports every compiled message. `vi.resetModules()` below makes the first
+// test pay for loading all of them, which blows the 5s timeout on a cold CI runner.
+vi.mock('#lib/paraglide/messages.js', () => ({
+  m: { lcg_connect_failed: () => 'lcg_connect_failed' },
+}));
+
 // ---------------------------------------------------------------------------
 // Mock WebSocket
 // ---------------------------------------------------------------------------
