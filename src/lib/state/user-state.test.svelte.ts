@@ -40,6 +40,11 @@ describe('userState', () => {
 
   it('reset() sets loading=false and clears self and all', async () => {
     const { userState } = await import('./user-state.svelte');
+    // Start from a signed-in state, otherwise self is already null and the assertions below
+    // would pass even if reset() cleared nothing. (`all` has no setter to seed it through.)
+    userState.setSelf(makeSelf());
+    expect(userState.self).not.toBeNull();
+
     userState.reset();
     expect(userState.loading).toBe(false);
     expect(userState.self).toBeNull();
@@ -144,6 +149,8 @@ describe('userState.refreshSelf', () => {
       data: null,
       message: 'Unauthorized',
     } as any);
+    // A previously signed-in user has to be dropped, not just left as it was.
+    userState.setSelf(makeSelf());
 
     const result = await userState.refreshSelf();
 
@@ -158,6 +165,7 @@ describe('userState.refreshSelf', () => {
     const { handleApiError } = await import('#lib/errorhandling/apiErrorHandling.js');
     const err = new Error('Network failure');
     vi.mocked(usersGetSelf).mockRejectedValue(err);
+    userState.setSelf(makeSelf());
 
     const result = await userState.refreshSelf();
 

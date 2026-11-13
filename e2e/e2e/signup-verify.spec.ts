@@ -155,7 +155,9 @@ test.describe('email verification via MailPit', () => {
     expect(msg.Subject).toBeTruthy();
     expect(msg.HTML || msg.Text).toMatch(/activate|verify|confirm/i);
 
-    await deleteMessage(MAILPIT_URL, msg.ID);
+    // The mail is deliberately left in MailPit: this account is still pending, and the
+    // `credentials` fixture's cleanup needs the token in it to activate and then delete the
+    // account. Deleting the mail here would strand a pending account on every run.
   });
 
   test('clicking the activation link activates the account and redirects to login', async ({

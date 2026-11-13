@@ -187,7 +187,10 @@ describe('LiveDeviceConnection.connect', () => {
     expect(MockWebSocket.instances[0].url).toBe('wss://gw.example.com/1/ws/live/dev-42');
   });
 
-  it('goes Disconnected and shows toast when the API reports no gateway', async () => {
+  // The gateway lookup has one failure shape: the call rejects. "No gateway assigned" is a
+  // problem response from the API and a network failure is a thrown fetch error, but both
+  // arrive here as a rejection, so there is a single path to cover.
+  it('goes Disconnected, shows a toast and opens no socket when the gateway lookup fails', async () => {
     const { LiveDeviceConnection, LiveConnectionState } =
       await import('./live-control-state.svelte');
     const { devicesGetLiveControlGatewayInfoV2 } = await import('#lib/api/index.js');
@@ -198,21 +201,9 @@ describe('LiveDeviceConnection.connect', () => {
     await conn.connect();
 
     expect(conn.state).toBe(LiveConnectionState.Disconnected);
-    expect(vi.mocked(toast.error)).toHaveBeenCalled();
-  });
-
-  it('goes Disconnected and shows toast when API throws', async () => {
-    const { LiveDeviceConnection, LiveConnectionState } =
-      await import('./live-control-state.svelte');
-    const { devicesGetLiveControlGatewayInfoV2 } = await import('#lib/api/index.js');
-    const { toast } = await import('svelte-sonner');
-    vi.mocked(devicesGetLiveControlGatewayInfoV2).mockRejectedValue(new Error('Network'));
-
-    const conn = new LiveDeviceConnection('dev-1');
-    await conn.connect();
-
-    expect(conn.state).toBe(LiveConnectionState.Disconnected);
-    expect(vi.mocked(toast.error)).toHaveBeenCalled();
+    expect(conn.gateway).toBeNull();
+    expect(MockWebSocket.instances).toHaveLength(0);
+    expect(vi.mocked(toast.error)).toHaveBeenCalledWith('lcg_connect_failed');
   });
 
   it('goes Disconnected when WebSocket fires close event', async () => {

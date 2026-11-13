@@ -8,7 +8,12 @@ test.describe('public shares landing page', () => {
   test('public share list page renders', async ({ authedPage }) => {
     await authedPage.goto('/shares/public');
     await authedPage.waitForLoadState('networkidle');
-    await expect(authedPage.locator('main').first()).toBeVisible();
+    // A visible <main> only proves the app shell rendered. The page's own header does not
+    // exist anywhere else, and the URL check catches a redirect away from the route.
+    await expect(authedPage).toHaveURL(/\/shares\/public$/);
+    const main = authedPage.getByRole('main');
+    await expect(main.getByRole('heading', { name: 'Public Shares' })).toBeVisible();
+    await expect(main.getByText(/a link anyone can use/i)).toBeVisible();
   });
 });
 
@@ -20,7 +25,15 @@ test.describe('outgoing shares', () => {
   test('outgoing shares page renders', async ({ authedPage }) => {
     await authedPage.goto('/shares/user/outgoing');
     await authedPage.waitForLoadState('networkidle');
-    await expect(authedPage.locator('main').first()).toBeVisible();
+    // The three tabs belong to the user-shares layout, with the one for this route selected.
+    await expect(authedPage).toHaveURL(/\/shares\/user\/outgoing$/);
+    const main = authedPage.getByRole('main');
+    await expect(main.getByRole('tab', { name: 'Shares', exact: true })).toHaveAttribute(
+      'data-state',
+      'active'
+    );
+    await expect(main.getByRole('tab', { name: 'Shared with Me' })).toBeVisible();
+    await expect(main.getByRole('tab', { name: 'Invites' })).toBeVisible();
   });
 
   test('shows empty state or share list for new user', async ({ authedPage }) => {
@@ -45,7 +58,14 @@ test.describe('incoming shares', () => {
   test('incoming shares page renders', async ({ authedPage }) => {
     await authedPage.goto('/shares/user/incoming');
     await authedPage.waitForLoadState('networkidle');
-    await expect(authedPage.locator('main').first()).toBeVisible();
+    await expect(authedPage).toHaveURL(/\/shares\/user\/incoming$/);
+    const main = authedPage.getByRole('main');
+    await expect(main.getByRole('tab', { name: 'Shared with Me' })).toHaveAttribute(
+      'data-state',
+      'active'
+    );
+    // The fixture's user is brand new, so nothing has been shared with it yet.
+    await expect(main.getByText(/nothing shared with you/i)).toBeVisible();
   });
 });
 
@@ -57,7 +77,14 @@ test.describe('share invites', () => {
   test('invites page renders', async ({ authedPage }) => {
     await authedPage.goto('/shares/user/invites');
     await authedPage.waitForLoadState('networkidle');
-    await expect(authedPage.locator('main').first()).toBeVisible();
+    await expect(authedPage).toHaveURL(/\/shares\/user\/invites$/);
+    const main = authedPage.getByRole('main');
+    await expect(main.getByRole('tab', { name: 'Invites' })).toHaveAttribute(
+      'data-state',
+      'active'
+    );
+    // A brand new user has neither sent nor received an invite.
+    await expect(main.getByText(/no invites yet/i)).toBeVisible();
   });
 });
 

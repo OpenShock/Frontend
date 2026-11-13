@@ -112,16 +112,25 @@ export async function getAuthCookies(context: BrowserContext): Promise<AuthCooki
 // to a plain login, which only works on instances that skip activation.
 // ---------------------------------------------------------------------------
 
+/**
+ * Activates the account behind `creds` using the token from its activation mail and returns
+ * that mail's MailPit ID. Throws if no mail arrives within `timeoutMs`. An already-used token
+ * is rejected by the API; that only means the account is active already, so it is ignored.
+ */
+async function activateFromMail(creds: Credentials, timeoutMs: number): Promise<string> {
+  const msg = await waitForEmailTo(MAILPIT_URL, creds.email, { timeoutMs });
+  const token = (msg.Text || msg.HTML).match(/[?&]token=([^\s"'<&]+)/)?.[1];
+  if (token) {
+    await activate(token).catch(() => {});
+  }
+  return msg.ID;
+}
+
 export async function cleanupAccount(creds: Credentials): Promise<void> {
   if (MAILPIT_URL) {
     try {
-      const msg = await waitForEmailTo(MAILPIT_URL, creds.email, { timeoutMs: 10_000 });
-      const token = (msg.Text || msg.HTML).match(/[?&]token=([^\s"'<&]+)/)?.[1];
-      if (token) {
-        // Already-used tokens are rejected; that just means the test activated it itself.
-        await activate(token).catch(() => {});
-      }
-      await deleteMessage(MAILPIT_URL, msg.ID);
+      const messageId = await activateFromMail(creds, 10_000);
+      await deleteMessage(MAILPIT_URL, messageId);
     } catch {
       // No mail: the signup never happened (e.g. a duplicate-email test) or mail is disabled.
     }
@@ -242,6 +251,18 @@ export const test = base.extend<{
     const okBtn = page.getByRole('button', { name: /^ok$/i });
     if (await okBtn.isVisible({ timeout: 5_000 }).catch(() => false)) {
       await okBtn.click();
+    }
+
+    // ---------------------------------------------------------------------------
+    // Activate the account
+    //
+    // A backend that requires email activation rejects the login below until this is done.
+    // The mail stays in MailPit so the `credentials` cleanup finds it at once instead of
+    // waiting out its timeout. Without MailPit there is no way to reach the token, and the
+    // fixture then only works against a backend that does not require activation.
+    // ---------------------------------------------------------------------------
+    if (MAILPIT_URL) {
+      await activateFromMail(credentials, 30_000);
     }
 
     // ---------------------------------------------------------------------------
