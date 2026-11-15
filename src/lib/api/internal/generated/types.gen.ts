@@ -27,8 +27,6 @@ export type AdminOnlineDeviceResponse = {
   owner: BasicUserInfo;
   /**
    * SemVer
-   *
-   * Lightweight semantic version model with optional prerelease and build metadata.
    */
   firmwareVersion: string;
   gateway: string;
@@ -62,6 +60,28 @@ export type AdminOnlineGatewayResponse = {
   load: number;
   environment: string;
   connectedHubs: number;
+};
+
+export type AdminUsersView = {
+  id: string;
+  name: string;
+  email: string;
+  passwordHashType: null | PasswordHashingAlgorithm;
+  roles: Array<RoleType>;
+  createdAt: Temporal.Instant;
+  activatedAt: null | Temporal.Instant;
+  createdByAutomationTokenId: null | string;
+  deactivatedAt: null | Temporal.Instant;
+  deactivatedByUserId: null | string;
+  apiTokenCount: number;
+  passwordResetCount: number;
+  shockerUserShareCount: number;
+  shockerPublicShareCount: number;
+  emailChangeRequestCount: number;
+  nameChangeRequestCount: number;
+  deviceCount: number;
+  shockerCount: number;
+  shockerControlLogCount: number;
 };
 
 export type AdminUserView = {
@@ -144,28 +164,6 @@ export type AdminUserViewUserDeactivation = {
 export type AdminUserViewUserRef = {
   id: string;
   name: string;
-};
-
-export type AdminUsersView = {
-  id: string;
-  name: string;
-  email: string;
-  passwordHashType: null | PasswordHashingAlgorithm;
-  roles: Array<RoleType>;
-  createdAt: Temporal.Instant;
-  activatedAt: null | Temporal.Instant;
-  createdByAutomationTokenId: null | string;
-  deactivatedAt: null | Temporal.Instant;
-  deactivatedByUserId: null | string;
-  apiTokenCount: number;
-  passwordResetCount: number;
-  shockerUserShareCount: number;
-  shockerPublicShareCount: number;
-  emailChangeRequestCount: number;
-  nameChangeRequestCount: number;
-  deviceCount: number;
-  shockerCount: number;
-  shockerControlLogCount: number;
 };
 
 export const AuditAction = {
@@ -280,7 +278,7 @@ export type AuditMetadataAutomationTokenCreatedMetadata = {
 };
 
 /**
- * The token was deleted together with the  accounts it created.
+ * The token was deleted together with the int AutomationTokenDeletedMetadata.DeletedAccountCount accounts it created.
  */
 export type AuditMetadataAutomationTokenDeletedMetadata = {
   t?: 'automationTokenDeleted';
@@ -308,7 +306,7 @@ export type AuditMetadataAutomationTokenUpdatedMetadata = {
 };
 
 /**
- * An automation token was used on this account.  is a `AutomationTokenFlow` name.
+ * An automation token was used on this account. string AutomationTokenUsedMetadata.Flow is a `AutomationTokenFlow` name.
  */
 export type AuditMetadataAutomationTokenUsedMetadata = {
   t?: 'automationTokenUsed';
@@ -317,15 +315,15 @@ export type AuditMetadataAutomationTokenUsedMetadata = {
   flow: string;
 };
 
-export type AuditMetadataEmailChangeRequestedMetadata = {
-  t?: 'emailChangeRequested';
-  newEmail: string;
-};
-
 export type AuditMetadataEmailChangedMetadata = {
   t?: 'emailChanged';
   old: string;
   new: string;
+};
+
+export type AuditMetadataEmailChangeRequestedMetadata = {
+  t?: 'emailChangeRequested';
+  newEmail: string;
 };
 
 export type AuditMetadataLoginMetadata = {
@@ -362,12 +360,16 @@ export type AutomationTokenDto = {
 };
 
 /**
- * A protection that an automation token is allowed to switch off.
+ * A protection that an automation token is allowed to switch off, or a service capability it grants.
  */
-export const AutomationTokenType = { Turnstile: 'Turnstile', RateLimit: 'RateLimit' } as const;
+export const AutomationTokenType = {
+  Turnstile: 'Turnstile',
+  RateLimit: 'RateLimit',
+  ControlStatsRead: 'ControlStatsRead',
+} as const;
 
 /**
- * A protection that an automation token is allowed to switch off.
+ * A protection that an automation token is allowed to switch off, or a service capability it grants.
  */
 export type AutomationTokenType = (typeof AutomationTokenType)[keyof typeof AutomationTokenType];
 
@@ -392,6 +394,12 @@ export type BasicUserInfo = {
   id: string;
   name: string;
   image: string;
+};
+
+export type BulkUserShareShockersUpdateRequest = {
+  shockers: Array<string>;
+  permissions: ShockerPermissions;
+  limits: ShockerLimits;
 };
 
 export type ChangeEmailRequest = {
@@ -427,7 +435,7 @@ export type ConfigurationAddItemRequest = {
   type: ConfigurationValueType;
   /**
    * The initial value for the configuration item, serialized as a string.
-   * Must conform to the format required by Type.
+   * Must conform to the format required by ConfigurationValueType ConfigurationAddItemRequest.Type.
    */
   value: string;
 };
@@ -464,7 +472,7 @@ export type ConfigurationItemDto = {
 
 /**
  * Request DTO for updating a configuration item.
- * Either Description or Value (or both) may be provided.
+ * Either string? ConfigurationUpdateItemRequest.Description or string? ConfigurationUpdateItemRequest.Value (or both) may be provided.
  * If both are null, no update action is performed.
  */
 export type ConfigurationUpdateItemRequest = {
@@ -506,11 +514,74 @@ export type Control = {
   exclusive?: boolean;
 };
 
+/**
+ * Determines how a per-token min/max limit is applied to an incoming control value.
+ */
+export const ControlLimitMode = { Clamp: 'Clamp', Lerp: 'Lerp' } as const;
+
+/**
+ * Determines how a per-token min/max limit is applied to an incoming control value.
+ */
+export type ControlLimitMode = (typeof ControlLimitMode)[keyof typeof ControlLimitMode];
+
 export type ControlLogSenderLight = {
   id: string;
   name: string;
   image: string;
   customName: null | string;
+};
+
+export type ControlRequest = {
+  shocks: Array<Control>;
+  customName?: null | string;
+};
+
+export type ControlStatChangesRequest = {
+  /**
+   * The cursor returned by the previous call, omit for an initial sync of every requested user.
+   */
+  since?: null | Temporal.Instant;
+  /**
+   * The users the caller is interested in, only these are ever reported.
+   */
+  userIds: Array<string>;
+};
+
+export type ControlStatChangesResponse = {
+  /**
+   * Pass as `since` on the next call.
+   */
+  cursor: Temporal.Instant;
+  users: Array<UserControlStatTotals>;
+};
+
+export type ControlStatsResponse = {
+  /**
+   * Activity on shockers you own.
+   */
+  received: ReceivedControlStats;
+  /**
+   * Activity you sent to shockers, your own included.
+   */
+  given: GivenControlStats;
+};
+
+/**
+ * Aggregated activity of one control type, split by whether it was live control.
+ */
+export type ControlStatTotals = {
+  type: ControlType;
+  live: boolean;
+  /**
+   * Number of controls, for live control the number of continuous bursts.
+   */
+  count: bigint;
+  durationMs: bigint;
+  /**
+   * Average intensity weighted by duration.
+   */
+  averageIntensity: number;
+  maxIntensity: number;
 };
 
 export const ControlType = {
@@ -526,17 +597,11 @@ export type CreateAutomationTokenDto = {
   name: string;
   types: Array<AutomationTokenType>;
   /**
-   * Whether the automated accounts this token creates are deleted once AutoCleanupAfter has
+   * Whether the automated accounts this token creates are deleted once TimeSpan? CreateAutomationTokenDto.AutoCleanupAfter has
    * passed since they were created. Off by default; accounts the token didn't create are never deleted.
    */
   autoCleanupUsers?: boolean;
   autoCleanupAfter?: null | string;
-};
-
-export type CreateTokenRequest = {
-  validUntil?: null | Temporal.Instant;
-  name: string;
-  permissions?: Array<PermissionType>;
 };
 
 export type CreatedAutomationTokenDto = {
@@ -548,6 +613,29 @@ export type CreatedAutomationTokenDto = {
   lastRotatedAt?: null | Temporal.Instant;
   autoCleanupUsers?: boolean;
   autoCleanupAfter?: null | string;
+};
+
+export type CreateShareRequest = {
+  shockers: Array<ShockerPermLimitPairWithId>;
+  user?: null | string;
+};
+
+export type CreateTokenRequestV2 = {
+  validUntil?: null | Temporal.Instant;
+  name: string;
+  permissions: Array<PermissionType>;
+  /**
+   * Per-token shocker control configuration. When omitted, the permissive default is used.
+   */
+  shockerControl: ShockerControlSettings;
+};
+
+export type DailyControlStats = {
+  /**
+   * Day in the requested time zone.
+   */
+  date: Temporal.PlainDate;
+  stats: Array<ControlStatTotals>;
 };
 
 export type DeviceResponse = {
@@ -576,9 +664,19 @@ export type DeviceWithTokenResponse = {
   createdOn: Temporal.Instant;
 };
 
-export type EditTokenRequest = {
+export type DurationLimitSettings = {
+  min: number;
+  max: number;
+  mode?: ControlLimitMode;
+};
+
+export type EditTokenRequestV2 = {
   name: string;
-  permissions?: Array<PermissionType>;
+  permissions: Array<PermissionType>;
+  /**
+   * Per-token shocker control configuration. When omitted, the permissive default is used.
+   */
+  shockerControl: ShockerControlSettings;
 };
 
 /**
@@ -655,7 +753,7 @@ export type EmailStatus = (typeof EmailStatus)[keyof typeof EmailStatus];
 
 /**
  * The kind of email an outbox message represents. The outbox stores
- * only the intent to send one of these, never a rendered body or a usable secret, the
+ * only the <em>intent</em> to send one of these, never a rendered body or a usable secret, the
  * consumer maps the type to the matching template and (for token-bearing types) mints a fresh
  * secret at send time.
  */
@@ -668,23 +766,52 @@ export const EmailType = {
 
 /**
  * The kind of email an outbox message represents. The outbox stores
- * only the intent to send one of these, never a rendered body or a usable secret, the
+ * only the <em>intent</em> to send one of these, never a rendered body or a usable secret, the
  * consumer maps the type to the matching template and (for token-bearing types) mints a fresh
  * secret at send time.
  */
 export type EmailType = (typeof EmailType)[keyof typeof EmailType];
 
+export type GivenControlStats = {
+  totals: Array<ControlStatTotals>;
+  owners: Array<UserControlStats>;
+};
+
+export type HubCreateRequest = {
+  name: string;
+};
+
 export type HubEditRequest = {
   name: string;
 };
 
-export type LcgNodeResponse = {
-  fqdn: string;
+export type IntensityLimitSettings = {
+  min: number;
+  max: number;
+  mode: ControlLimitMode;
+};
+
+export type LcgNodeResponseV2 = {
+  host: string;
+  port: number;
+  path: string;
   country: string;
 };
 
-export type LcgResponse = {
-  gateway: string;
+export type LcgResponseV2 = {
+  /**
+   * Public host of the gateway the hub is connected to.
+   */
+  host: string;
+  /**
+   * Public port to connect to (default 443).
+   */
+  port: number;
+  /**
+   * Base path prefix the gateway is served under, e.g. "/gateway" (empty for root). The client
+   * builds the full URL and appends the live-control route (`/1/ws/live/{hubId}`) itself.
+   */
+  pathPrefix: string;
   country: string;
 };
 
@@ -708,14 +835,14 @@ export type LegacyDataResponseOfArrayOfLogEntry = {
   data: Array<LogEntry>;
 };
 
-export type LegacyDataResponseOfArrayOfOwnPublicShareResponse = {
-  message: string;
-  data: Array<OwnPublicShareResponse>;
-};
-
 export type LegacyDataResponseOfArrayOfOwnerShockerResponse = {
   message: string;
   data: Array<OwnerShockerResponse>;
+};
+
+export type LegacyDataResponseOfArrayOfOwnPublicShareResponse = {
+  message: string;
+  data: Array<OwnPublicShareResponse>;
 };
 
 export type LegacyDataResponseOfArrayOfShareCodeInfo = {
@@ -738,6 +865,11 @@ export type LegacyDataResponseOfBackendInfoResponse = {
   data: BackendInfoResponse;
 };
 
+export type LegacyDataResponseOfboolean = {
+  message: string;
+  data: boolean;
+};
+
 export type LegacyDataResponseOfDeviceSelfResponse = {
   message: string;
   data: DeviceSelfResponse;
@@ -758,14 +890,9 @@ export type LegacyDataResponseOfIReadOnlyCollectionOfOtaItem = {
   data: Array<OtaItem>;
 };
 
-export type LegacyDataResponseOfLcgNodeResponse = {
+export type LegacyDataResponseOfLegacyUserSelfResponse = {
   message: string;
-  data: LcgNodeResponse;
-};
-
-export type LegacyDataResponseOfLcgResponse = {
-  message: string;
-  data: LcgResponse;
+  data: LegacyUserSelfResponse;
 };
 
 export type LegacyDataResponseOfPauseReason = {
@@ -800,16 +927,6 @@ export type LegacyDataResponseOfStatsResponse = {
   data: StatsResponse;
 };
 
-export type LegacyDataResponseOfUserSelfResponse = {
-  message: string;
-  data: UserSelfResponse;
-};
-
-export type LegacyDataResponseOfboolean = {
-  message: string;
-  data: boolean;
-};
-
 export type LegacyDataResponseOfstring = {
   message: string;
   data: string;
@@ -818,6 +935,19 @@ export type LegacyDataResponseOfstring = {
 export type LegacyEmptyResponse = {
   message: string;
   data?: unknown;
+};
+
+/**
+ * Response shape of the deprecated GET /1/users/self, kept for API token clients that still read `rank`.
+ */
+export type LegacyUserSelfResponse = {
+  id: string;
+  name: string;
+  email: string;
+  image: string;
+  roles: Array<RoleType>;
+  rank: string;
+  hasPassword: boolean;
 };
 
 export type LogEntry = {
@@ -858,6 +988,21 @@ export type LoginSessionResponse = {
   isVpn?: null | boolean;
   countryCode?: null | string;
   city?: null | string;
+};
+
+export type LoginV2 = {
+  password: string;
+  usernameOrEmail: string;
+  turnstileResponse: string;
+};
+
+export type LoginV2OkResponse = {
+  accountId: string;
+  accountName: string;
+  accountEmail: string;
+  isVerified: boolean;
+  profileImage: string;
+  accountRoles: Array<RoleType>;
 };
 
 export const MatchTypeEnum = { Exact: 'Exact', Contains: 'Contains' } as const;
@@ -907,8 +1052,6 @@ export type OtaItem = {
   status: OtaUpdateStatus;
   /**
    * SemVer
-   *
-   * Lightweight semantic version model with optional prerelease and build metadata.
    */
   version: string;
   message: null | string;
@@ -924,18 +1067,18 @@ export const OtaUpdateStatus = {
 
 export type OtaUpdateStatus = (typeof OtaUpdateStatus)[keyof typeof OtaUpdateStatus];
 
-export type OwnPublicShareResponse = {
-  id: string;
-  name: string;
-  createdOn: Temporal.Instant;
-  expiresOn?: null | Temporal.Instant;
-};
-
 export type OwnerShockerResponse = {
   id: string;
   name: string;
   image: string;
   devices: Array<SharedDevice>;
+};
+
+export type OwnPublicShareResponse = {
+  id: string;
+  name: string;
+  createdOn: Temporal.Instant;
+  expiresOn?: null | Temporal.Instant;
 };
 
 /**
@@ -959,7 +1102,7 @@ export type PagedResultOfAuditLogEntryResponse = {
    */
   totalCount: number;
   /**
-   * Total number of pages. Always at least 1, even when  is zero.
+   * Total number of pages. Always at least 1, even when `TotalCount` is zero.
    */
   totalPages?: number;
 };
@@ -985,7 +1128,7 @@ export type PagedResultOfLogEntryWithHub = {
    */
   totalCount: number;
   /**
-   * Total number of pages. Always at least 1, even when  is zero.
+   * Total number of pages. Always at least 1, even when `TotalCount` is zero.
    */
   totalPages?: number;
 };
@@ -1017,6 +1160,11 @@ export type PasswordResetProcessData = {
   password: string;
 };
 
+export type PasswordResetRequestV2 = {
+  email: string;
+  turnstileResponse: string;
+};
+
 export type PatchAutomationTokenDto = {
   name?: null | string;
   types?: null | Array<AutomationTokenType>;
@@ -1026,6 +1174,18 @@ export type PatchAutomationTokenDto = {
 
 export type PauseRequest = {
   pause: boolean;
+};
+
+export type PauseUserShareShockersRequest = {
+  shockers: Array<string>;
+  pause: boolean;
+};
+
+export type PauseUserShareShockersResponse = {
+  affectedRecords: number;
+  pauseStates: {
+    [key: string]: number;
+  };
 };
 
 export const PermissionType = {
@@ -1096,6 +1256,17 @@ export type PublicShareShocker = {
   paused: number;
 };
 
+export type ReceivedControlStats = {
+  totals: Array<ControlStatTotals>;
+  shockers: Array<ShockerControlStats>;
+  controllers: Array<UserControlStats>;
+  days: Array<DailyControlStats>;
+};
+
+export type RemoveUserSharesResponse = {
+  affectedRecords: number;
+};
+
 export type ReportTokensRequest = {
   turnstileResponse: string;
   secrets: Array<string>;
@@ -1129,6 +1300,13 @@ export type SendTestEmailDto = {
   recipientName?: null | string;
 };
 
+export type SetTokenPausedRequest = {
+  /**
+   * When true, the token is paused and may not send shocker control messages.
+   */
+  paused: boolean;
+};
+
 export type SetUserEmailRequestBody = {
   email: string;
 };
@@ -1146,14 +1324,6 @@ export type ShareCodeInfo = {
   createdOn: Temporal.Instant;
 };
 
-export type ShareInfo = {
-  sharedWith: BasicUserInfo;
-  createdOn: Temporal.Instant;
-  permissions: ShockerPermissions;
-  limits: ShockerLimits;
-  paused: boolean;
-};
-
 export type SharedDevice = {
   id: string;
   name: string;
@@ -1166,6 +1336,43 @@ export type SharedShocker = {
   isPaused: boolean;
   permissions: ShockerPermissions;
   limits: ShockerLimits;
+};
+
+export type ShareInfo = {
+  sharedWith: BasicUserInfo;
+  createdOn: Temporal.Instant;
+  permissions: ShockerPermissions;
+  limits: ShockerLimits;
+  paused: boolean;
+};
+
+export type ShareInviteBaseDetails = {
+  shockers: Array<ShockerPermLimitPairWithIdAndName>;
+  id: string;
+  createdAt: Temporal.Instant;
+  owner: BasicUserInfo;
+  sharedWith: null | BasicUserInfo;
+};
+
+/**
+ * Per-token shocker control configuration: a toggle plus min/max limits for intensity and duration.
+ */
+export type ShockerControlSettings = {
+  /**
+   * When true, this token is paused and may not send shocker control messages.
+   */
+  paused: boolean;
+  intensity: IntensityLimitSettings;
+  duration: DurationLimitSettings;
+};
+
+export type ShockerControlStats = {
+  /**
+   * Null for shockers that have since been deleted, these are combined into one entry.
+   */
+  shockerId: null | string;
+  shockerName: null | string;
+  stats: Array<ControlStatTotals>;
 };
 
 export type ShockerLimits = {
@@ -1182,16 +1389,29 @@ export const ShockerModelType = {
 
 export type ShockerModelType = (typeof ShockerModelType)[keyof typeof ShockerModelType];
 
-export type ShockerPermLimitPair = {
-  permissions: ShockerPermissions;
-  limits: ShockerLimits;
-};
-
 export type ShockerPermissions = {
   vibrate: boolean;
   sound: boolean;
   shock: boolean;
   live?: boolean;
+};
+
+export type ShockerPermLimitPair = {
+  permissions: ShockerPermissions;
+  limits: ShockerLimits;
+};
+
+export type ShockerPermLimitPairWithId = {
+  id?: string;
+  permissions: ShockerPermissions;
+  limits: ShockerLimits;
+};
+
+export type ShockerPermLimitPairWithIdAndName = {
+  name: string;
+  id?: string;
+  permissions: ShockerPermissions;
+  limits: ShockerLimits;
 };
 
 export type ShockerResponse = {
@@ -1213,6 +1433,13 @@ export type ShockerWithDevice = {
   model: ShockerModelType;
 };
 
+export type SignUpV2 = {
+  username: string;
+  password: string;
+  email: string;
+  turnstileResponse: string;
+};
+
 /**
  * Sort direction for list endpoints.
  */
@@ -1227,45 +1454,56 @@ export type StatsResponse = {
   devicesOnline: bigint;
 };
 
-export type TokenCreatedResponse = {
+export type TokenCreatedResponseV2 = {
   id: string;
   name: string;
   token: string;
   createdAt: Temporal.Instant;
   validUntil: null | Temporal.Instant;
-  lastUsed: Temporal.Instant;
+  lastUsed: null | Temporal.Instant;
   permissions: Array<PermissionType>;
+  shockerControl: ShockerControlSettings;
 };
 
-export type TokenResponse = {
+export type TokenPausedResponse = {
+  /**
+   * The now-set paused state of the token.
+   */
+  paused: boolean;
+};
+
+export type TokenResponseV2 = {
   id: string;
   name: string;
   createdOn: Temporal.Instant;
   validUntil: null | Temporal.Instant;
-  lastUsed: Temporal.Instant;
+  lastUsed: null | Temporal.Instant;
   permissions: Array<PermissionType>;
+  shockerControl: ShockerControlSettings;
 };
 
-export type UserNameBlacklistDto = {
-  id: string;
-  value: string;
-  matchType: MatchTypeEnum;
-  createdAt: Temporal.Instant;
+export type UserControlStats = {
+  /**
+   * Null for guests (public shares).
+   */
+  userId: null | string;
+  user: null | BasicUserInfo;
+  stats: Array<ControlStatTotals>;
 };
 
-export type UserPatchDto = {
-  name?: null | string;
-  email?: null | string;
-};
-
-export type UserSelfResponse = {
-  id: string;
-  name: string;
-  email: string;
-  image: string;
-  roles: Array<RoleType>;
-  rank: string;
-  hasPassword: boolean;
+/**
+ * Lifetime totals of one user, the same views as ControlStatsResponse without breakdowns.
+ */
+export type UserControlStatTotals = {
+  userId: string;
+  /**
+   * Activity on shockers the user owns.
+   */
+  received: Array<ControlStatTotals>;
+  /**
+   * Activity the user sent to shockers, their own included.
+   */
+  given: Array<ControlStatTotals>;
 };
 
 export const UsernameAvailability = {
@@ -1275,6 +1513,13 @@ export const UsernameAvailability = {
 } as const;
 
 export type UsernameAvailability = (typeof UsernameAvailability)[keyof typeof UsernameAvailability];
+
+export type UserNameBlacklistDto = {
+  id: string;
+  value: string;
+  matchType: MatchTypeEnum;
+  createdAt: Temporal.Instant;
+};
 
 export type UsernameCheckResponse = {
   availability: UsernameAvailability;
@@ -1296,6 +1541,53 @@ export const UsernameErrorType = {
 } as const;
 
 export type UsernameErrorType = (typeof UsernameErrorType)[keyof typeof UsernameErrorType];
+
+export type UserPatchDto = {
+  name?: null | string;
+  email?: null | string;
+};
+
+export type UserSelfResponse = {
+  id: string;
+  name: string;
+  email: string;
+  image: string;
+  roles: Array<RoleType>;
+  hasPassword: boolean;
+};
+
+export type UserShareInfo = {
+  id: string;
+  name: string;
+  createdOn: Temporal.Instant;
+  permissions: ShockerPermissions;
+  limits: ShockerLimits;
+  /**
+   * PauseReason
+   *
+   * An integer representing the reason(s) for the shocker being paused, expressed as a bitfield where reasons are OR'd together.
+   *
+   * Each bit corresponds to:
+   * - 1: Shocker
+   * - 2: UserShare
+   * - 4: PublicShare
+   *
+   * For example, a value of 6 (2 | 4) indicates both 'UserShare' and 'PublicShare' reasons.
+   */
+  paused: number;
+};
+
+export type V2UserShares = {
+  outgoing: Array<V2UserSharesListItem>;
+  incoming: Array<V2UserSharesListItem>;
+};
+
+export type V2UserSharesListItem = {
+  id: string;
+  name: string;
+  image: string;
+  shares: Array<UserShareInfo>;
+};
 
 export type WebhookDto = {
   id: string;
@@ -1332,10 +1624,50 @@ export type UsersGetSelfResponses = {
   /**
    * The user's information was successfully retrieved.
    */
-  200: LegacyDataResponseOfUserSelfResponse;
+  200: LegacyDataResponseOfLegacyUserSelfResponse;
 };
 
 export type UsersGetSelfResponse = UsersGetSelfResponses[keyof UsersGetSelfResponses];
+
+export type UsersGetSelfControlStatsData = {
+  body?: never;
+  path?: never;
+  query?: {
+    /**
+     * IANA time zone the daily breakdown and the date range are in, e.g. `Europe/Berlin`, defaults to UTC.
+     */
+    tz?: string;
+    /**
+     * First day to include (inclusive), defaults to all time.
+     */
+    from?: Temporal.PlainDate;
+    /**
+     * Last day to include (inclusive), defaults to today.
+     */
+    to?: Temporal.PlainDate;
+  };
+  url: '/1/users/self/control-stats';
+};
+
+export type UsersGetSelfControlStatsErrors = {
+  /**
+   * Unknown time zone or invalid range.
+   */
+  400: OpenShockProblem;
+};
+
+export type UsersGetSelfControlStatsError =
+  UsersGetSelfControlStatsErrors[keyof UsersGetSelfControlStatsErrors];
+
+export type UsersGetSelfControlStatsResponses = {
+  /**
+   * The statistics.
+   */
+  200: ControlStatsResponse;
+};
+
+export type UsersGetSelfControlStatsResponse =
+  UsersGetSelfControlStatsResponses[keyof UsersGetSelfControlStatsResponses];
 
 export type UsersGetByNameData = {
   body?: never;
@@ -1367,9 +1699,6 @@ export type UsersGetByNameResponse = UsersGetByNameResponses[keyof UsersGetByNam
 export type TokenDeleteDeleteTokenData = {
   body?: never;
   path: {
-    /**
-     * Revoke a token
-     */
     tokenId: string;
   };
   query?: never;
@@ -1397,81 +1726,22 @@ export type TokenDeleteDeleteTokenResponses = {
   200: unknown;
 };
 
-export type TokensGetTokenByIdData = {
-  body?: never;
-  path: {
-    /**
-     * Get a token by id
-     */
-    tokenId: string;
-  };
-  query?: never;
-  url: '/1/tokens/{tokenId}';
-};
-
-export type TokensGetTokenByIdErrors = {
-  /**
-   * The token does not exist or you do not have access to it.
-   */
-  404: OpenShockProblem;
-};
-
-export type TokensGetTokenByIdError = TokensGetTokenByIdErrors[keyof TokensGetTokenByIdErrors];
-
-export type TokensGetTokenByIdResponses = {
-  /**
-   * The token
-   */
-  200: TokenResponse;
-};
-
-export type TokensGetTokenByIdResponse =
-  TokensGetTokenByIdResponses[keyof TokensGetTokenByIdResponses];
-
-export type TokensEditTokenData = {
-  body: EditTokenRequest;
-  path: {
-    /**
-     * Edit a token
-     */
-    tokenId: string;
-  };
-  query?: never;
-  url: '/1/tokens/{tokenId}';
-};
-
-export type TokensEditTokenErrors = {
-  /**
-   * The token does not exist or you do not have access to it.
-   */
-  404: OpenShockProblem;
-};
-
-export type TokensEditTokenError = TokensEditTokenErrors[keyof TokensEditTokenErrors];
-
-export type TokensEditTokenResponses = {
-  /**
-   * The edited token
-   */
-  200: unknown;
-};
-
-export type TokensSelfGetSelfTokenData = {
+export type TokensSelfGetSelfTokenV2Data = {
   body?: never;
   path?: never;
   query?: never;
-  url: '/1/tokens/self';
+  url: '/2/tokens/self';
 };
 
-export type TokensSelfGetSelfTokenResponses = {
+export type TokensSelfGetSelfTokenV2Responses = {
   /**
    * OK
    */
-  200: TokenResponse;
+  200: TokenResponseV2;
 };
 
-export type TokensSelfGetSelfTokenResponse =
-  TokensSelfGetSelfTokenResponses[keyof TokensSelfGetSelfTokenResponses];
+export type TokensSelfGetSelfTokenV2Response =
+  TokensSelfGetSelfTokenV2Responses[keyof TokensSelfGetSelfTokenV2Responses];
 
 export type TokensReportTokensData = {
   body: ReportTokensRequest;
@@ -1487,45 +1757,126 @@ export type TokensReportTokensResponses = {
   200: unknown;
 };
 
-export type TokensListTokensData = {
+export type TokensListTokensV2Data = {
   body?: never;
   path?: never;
   query?: never;
-  url: '/1/tokens';
+  url: '/2/tokens';
 };
 
-export type TokensListTokensResponses = {
+export type TokensListTokensV2Responses = {
   /**
    * All tokens for the current user
    */
-  200: Array<TokenResponse>;
+  200: Array<TokenResponseV2>;
 };
 
-export type TokensListTokensResponse = TokensListTokensResponses[keyof TokensListTokensResponses];
+export type TokensListTokensV2Response =
+  TokensListTokensV2Responses[keyof TokensListTokensV2Responses];
 
-export type TokensCreateTokenData = {
-  body: CreateTokenRequest;
+export type TokensCreateTokenV2Data = {
+  body: CreateTokenRequestV2;
   path?: never;
   query?: never;
-  url: '/1/tokens';
+  url: '/2/tokens';
 };
 
-export type TokensCreateTokenResponses = {
+export type TokensCreateTokenV2Responses = {
   /**
    * The created token
    */
-  200: TokenCreatedResponse;
+  200: TokenCreatedResponseV2;
 };
 
-export type TokensCreateTokenResponse =
-  TokensCreateTokenResponses[keyof TokensCreateTokenResponses];
+export type TokensCreateTokenV2Response =
+  TokensCreateTokenV2Responses[keyof TokensCreateTokenV2Responses];
+
+export type TokensGetTokenByIdV2Data = {
+  body?: never;
+  path: {
+    tokenId: string;
+  };
+  query?: never;
+  url: '/2/tokens/{tokenId}';
+};
+
+export type TokensGetTokenByIdV2Errors = {
+  /**
+   * The token does not exist or you do not have access to it.
+   */
+  404: OpenShockProblem;
+};
+
+export type TokensGetTokenByIdV2Error =
+  TokensGetTokenByIdV2Errors[keyof TokensGetTokenByIdV2Errors];
+
+export type TokensGetTokenByIdV2Responses = {
+  /**
+   * The token
+   */
+  200: TokenResponseV2;
+};
+
+export type TokensGetTokenByIdV2Response =
+  TokensGetTokenByIdV2Responses[keyof TokensGetTokenByIdV2Responses];
+
+export type TokensEditTokenV2Data = {
+  body: EditTokenRequestV2;
+  path: {
+    tokenId: string;
+  };
+  query?: never;
+  url: '/2/tokens/{tokenId}';
+};
+
+export type TokensEditTokenV2Errors = {
+  /**
+   * The token does not exist or you do not have access to it.
+   */
+  404: OpenShockProblem;
+};
+
+export type TokensEditTokenV2Error = TokensEditTokenV2Errors[keyof TokensEditTokenV2Errors];
+
+export type TokensEditTokenV2Responses = {
+  /**
+   * The edited token
+   */
+  200: unknown;
+};
+
+export type TokensSetTokenPausedData = {
+  body: SetTokenPausedRequest;
+  path: {
+    tokenId: string;
+  };
+  query?: never;
+  url: '/2/tokens/{tokenId}/paused';
+};
+
+export type TokensSetTokenPausedErrors = {
+  /**
+   * The token does not exist or you do not have access to it.
+   */
+  404: OpenShockProblem;
+};
+
+export type TokensSetTokenPausedError =
+  TokensSetTokenPausedErrors[keyof TokensSetTokenPausedErrors];
+
+export type TokensSetTokenPausedResponses = {
+  /**
+   * The now-set paused state of the token.
+   */
+  200: TokenPausedResponse;
+};
+
+export type TokensSetTokenPausedResponse =
+  TokensSetTokenPausedResponses[keyof TokensSetTokenPausedResponses];
 
 export type ShockerRemoveShockerData = {
   body?: never;
   path: {
-    /**
-     * Remove a shocker
-     */
     shockerId: string;
   };
   query?: never;
@@ -1555,9 +1906,6 @@ export type ShockerRemoveShockerResponse =
 export type ShockerGetShockerByIdData = {
   body?: never;
   path: {
-    /**
-     * Get information about a shocker.
-     */
     shockerId: string;
   };
   query?: never;
@@ -1587,9 +1935,6 @@ export type ShockerGetShockerByIdResponse =
 export type ShockerEditShockerData = {
   body: NewShocker;
   path: {
-    /**
-     * Edit a shocker
-     */
     shockerId: string;
   };
   query?: never;
@@ -1618,19 +1963,10 @@ export type ShockerEditShockerResponse =
 export type ShockerGetShockerLogsData = {
   body?: never;
   path: {
-    /**
-     * Get the logs for a shocker
-     */
     shockerId: string;
   };
   query?: {
-    /**
-     * Get the logs for a shocker
-     */
     offset?: number;
-    /**
-     * Get the logs for a shocker
-     */
     limit?: number;
   };
   url: '/1/shockers/{shockerId}/logs';
@@ -1661,23 +1997,26 @@ export type ShockerGetAllShockerLogsData = {
   path?: never;
   query?: {
     /**
-     * Page, sort, and search parameters. Supported sort keys: createdOn (default), intensity, duration, type, hubName, shockerName.
+     * 1-based page index. Values below 1 are clamped to 1.
      */
     page?: number;
     /**
-     * Page, sort, and search parameters. Supported sort keys: createdOn (default), intensity, duration, type, hubName, shockerName.
+     * Number of items per page. Clamped to `[1, uint PaginationQuery.MaxPageSize]`.
      */
     pageSize?: number;
     /**
-     * Page, sort, and search parameters. Supported sort keys: createdOn (default), intensity, duration, type, hubName, shockerName.
+     * Optional free-text search term. Whitespace is trimmed; empty becomes null.
+     * Endpoints decide which fields the term is matched against.
      */
     search?: string;
     /**
-     * Page, sort, and search parameters. Supported sort keys: createdOn (default), intensity, duration, type, hubName, shockerName.
+     * Optional sort key. Endpoints register the allowed keys and translate them to
+     * the underlying column(s). Unknown values fall back to the endpoint default.
      */
     sort?: string;
     /**
-     * Page, sort, and search parameters. Supported sort keys: createdOn (default), intensity, duration, type, hubName, shockerName.
+     * Sort direction. Defaults to SortDirection.Desc when omitted, since list
+     * endpoints almost always want "newest/highest first" as the default.
      */
     sortDir?: SortDirection;
     /**
@@ -1735,9 +2074,6 @@ export type ShockerListShockersResponse =
 export type ShockerPauseShockerData = {
   body: PauseRequest;
   path: {
-    /**
-     * Pause or unpause a shocker
-     */
     shockerId: string;
   };
   query?: never;
@@ -1794,14 +2130,14 @@ export type ShockerRegisterShockerResponses = {
 export type ShockerRegisterShockerResponse =
   ShockerRegisterShockerResponses[keyof ShockerRegisterShockerResponses];
 
-export type ShockerSendControlDeprecatedData = {
-  body: Array<Control>;
+export type ShockerSendControlData = {
+  body: ControlRequest;
   path?: never;
   query?: never;
-  url: '/1/shockers/control';
+  url: '/2/shockers/control';
 };
 
-export type ShockerSendControlDeprecatedErrors = {
+export type ShockerSendControlErrors = {
   /**
    * Forbidden
    */
@@ -1816,18 +2152,17 @@ export type ShockerSendControlDeprecatedErrors = {
   412: OpenShockProblem;
 };
 
-export type ShockerSendControlDeprecatedError =
-  ShockerSendControlDeprecatedErrors[keyof ShockerSendControlDeprecatedErrors];
+export type ShockerSendControlError = ShockerSendControlErrors[keyof ShockerSendControlErrors];
 
-export type ShockerSendControlDeprecatedResponses = {
+export type ShockerSendControlResponses = {
   /**
    * The control messages were successfully sent.
    */
   200: LegacyEmptyResponse;
 };
 
-export type ShockerSendControlDeprecatedResponse =
-  ShockerSendControlDeprecatedResponses[keyof ShockerSendControlDeprecatedResponses];
+export type ShockerSendControlResponse =
+  ShockerSendControlResponses[keyof ShockerSendControlResponses];
 
 export type ShockerGetUserSharesData = {
   body?: never;
@@ -1864,9 +2199,6 @@ export type ShockerGetUserSharesResponse =
 export type ShockerShockerShareCodeCreateData = {
   body: ShockerPermLimitPair;
   path: {
-    /**
-     * Create a share code for a shocker
-     */
     shockerId: string;
   };
   query?: never;
@@ -1896,9 +2228,6 @@ export type ShockerShockerShareCodeCreateResponse =
 export type ShockerShockerShareCodeListData = {
   body?: never;
   path: {
-    /**
-     * List all share codes for a shocker
-     */
     shockerId: string;
   };
   query?: never;
@@ -1928,13 +2257,7 @@ export type ShockerShockerShareCodeListResponse =
 export type ShockerShockerShareRemoveData = {
   body?: never;
   path: {
-    /**
-     * Remove a share for a shocker
-     */
     shockerId: string;
-    /**
-     * Remove a share for a shocker
-     */
     sharedWithUserId: string;
   };
   query?: never;
@@ -1961,13 +2284,7 @@ export type ShockerShockerShareRemoveResponses = {
 export type ShockerShockerShareCodeUpdateData = {
   body: ShockerPermLimitPair;
   path: {
-    /**
-     * Update a share for a shocker
-     */
     shockerId: string;
-    /**
-     * Update a share for a shocker
-     */
     sharedWithUserId: string;
   };
   query?: never;
@@ -1994,13 +2311,7 @@ export type ShockerShockerShareCodeUpdateResponses = {
 export type ShockerShockerShareCodePauseData = {
   body: PauseRequest;
   path: {
-    /**
-     * Pause/Unpause a share code for a shocker
-     */
     shockerId: string;
-    /**
-     * Pause/Unpause a share code for a shocker
-     */
     sharedWithUserId: string;
   };
   query?: never;
@@ -2030,9 +2341,6 @@ export type ShockerShockerShareCodePauseResponse =
 export type SharesDeleteShareCodeData = {
   body?: never;
   path: {
-    /**
-     * Delete a share code
-     */
     shareCodeId: string;
   };
   query?: never;
@@ -2062,9 +2370,6 @@ export type SharesDeleteShareCodeResponse =
 export type SharesLinkShareCodeData = {
   body?: never;
   path: {
-    /**
-     * Link a share code to your account
-     */
     shareCodeId: string;
   };
   query?: never;
@@ -2098,16 +2403,237 @@ export type SharesLinkShareCodeResponses = {
 export type SharesLinkShareCodeResponse =
   SharesLinkShareCodeResponses[keyof SharesLinkShareCodeResponses];
 
+export type UserSharesCreateShareInviteData = {
+  body: CreateShareRequest;
+  path?: never;
+  query?: never;
+  url: '/2/shares/user/invites';
+};
+
+export type UserSharesCreateShareInviteErrors = {
+  /**
+   * Bad Request
+   */
+  400: OpenShockProblem;
+  /**
+   * Not Found
+   */
+  404: OpenShockProblem;
+};
+
+export type UserSharesCreateShareInviteError =
+  UserSharesCreateShareInviteErrors[keyof UserSharesCreateShareInviteErrors];
+
+export type UserSharesCreateShareInviteResponses = {
+  /**
+   * OK
+   */
+  200: string;
+};
+
+export type UserSharesCreateShareInviteResponse =
+  UserSharesCreateShareInviteResponses[keyof UserSharesCreateShareInviteResponses];
+
+export type UserSharesGetSharesByUsersData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/2/shares/user';
+};
+
+export type UserSharesGetSharesByUsersResponses = {
+  /**
+   * OK
+   */
+  200: V2UserShares;
+};
+
+export type UserSharesGetSharesByUsersResponse =
+  UserSharesGetSharesByUsersResponses[keyof UserSharesGetSharesByUsersResponses];
+
+export type UserSharesGetOutgoingInvitesListData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/2/shares/user/invites/outgoing';
+};
+
+export type UserSharesGetOutgoingInvitesListResponses = {
+  /**
+   * OK
+   */
+  200: Array<ShareInviteBaseDetails>;
+};
+
+export type UserSharesGetOutgoingInvitesListResponse =
+  UserSharesGetOutgoingInvitesListResponses[keyof UserSharesGetOutgoingInvitesListResponses];
+
+export type UserSharesGetIncomingInvitesListData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/2/shares/user/invites/incoming';
+};
+
+export type UserSharesGetIncomingInvitesListResponses = {
+  /**
+   * OK
+   */
+  200: Array<ShareInviteBaseDetails>;
+};
+
+export type UserSharesGetIncomingInvitesListResponse =
+  UserSharesGetIncomingInvitesListResponses[keyof UserSharesGetIncomingInvitesListResponses];
+
+export type UserSharesDeleteOutgoingInviteData = {
+  body?: never;
+  path: {
+    inviteId: string;
+  };
+  query?: never;
+  url: '/2/shares/user/invites/outgoing/{inviteId}';
+};
+
+export type UserSharesDeleteOutgoingInviteErrors = {
+  /**
+   * Not Found
+   */
+  404: OpenShockProblem;
+};
+
+export type UserSharesDeleteOutgoingInviteError =
+  UserSharesDeleteOutgoingInviteErrors[keyof UserSharesDeleteOutgoingInviteErrors];
+
+export type UserSharesDeleteOutgoingInviteResponses = {
+  /**
+   * OK
+   */
+  200: unknown;
+};
+
+export type UserSharesDenyIncomingInviteData = {
+  body?: never;
+  path: {
+    inviteId: string;
+  };
+  query?: never;
+  url: '/2/shares/user/invites/incoming/{inviteId}';
+};
+
+export type UserSharesDenyIncomingInviteErrors = {
+  /**
+   * Not Found
+   */
+  404: OpenShockProblem;
+};
+
+export type UserSharesDenyIncomingInviteError =
+  UserSharesDenyIncomingInviteErrors[keyof UserSharesDenyIncomingInviteErrors];
+
+export type UserSharesDenyIncomingInviteResponses = {
+  /**
+   * OK
+   */
+  200: unknown;
+};
+
+export type UserSharesRedeemInviteData = {
+  body?: never;
+  path: {
+    inviteId: string;
+  };
+  query?: never;
+  url: '/2/shares/user/invites/incoming/{inviteId}';
+};
+
+export type UserSharesRedeemInviteErrors = {
+  /**
+   * Not Found
+   */
+  404: OpenShockProblem;
+};
+
+export type UserSharesRedeemInviteError =
+  UserSharesRedeemInviteErrors[keyof UserSharesRedeemInviteErrors];
+
+export type UserSharesRedeemInviteResponses = {
+  /**
+   * OK
+   */
+  200: V2UserSharesListItem;
+};
+
+export type UserSharesRedeemInviteResponse =
+  UserSharesRedeemInviteResponses[keyof UserSharesRedeemInviteResponses];
+
+export type UserSharesBulkPauseUserShareShockersData = {
+  body: PauseUserShareShockersRequest;
+  path: {
+    userId: string;
+  };
+  query?: never;
+  url: '/2/shares/user/{userId}/shockers/pause';
+};
+
+export type UserSharesBulkPauseUserShareShockersResponses = {
+  /**
+   * OK
+   */
+  200: PauseUserShareShockersResponse;
+};
+
+export type UserSharesBulkPauseUserShareShockersResponse =
+  UserSharesBulkPauseUserShareShockersResponses[keyof UserSharesBulkPauseUserShareShockersResponses];
+
+export type UserSharesBulkRemoveUserShareShockersData = {
+  body: Array<string>;
+  path: {
+    userId: string;
+  };
+  query?: never;
+  url: '/2/shares/user/{userId}/shockers';
+};
+
+export type UserSharesBulkRemoveUserShareShockersResponses = {
+  /**
+   * OK
+   */
+  200: RemoveUserSharesResponse;
+};
+
+export type UserSharesBulkRemoveUserShareShockersResponse =
+  UserSharesBulkRemoveUserShareShockersResponses[keyof UserSharesBulkRemoveUserShareShockersResponses];
+
+export type UserSharesBulkUserShareShockersUpdateData = {
+  body: BulkUserShareShockersUpdateRequest;
+  path: {
+    userId: string;
+  };
+  query?: never;
+  url: '/2/shares/user/{userId}/shockers';
+};
+
+export type UserSharesBulkUserShareShockersUpdateErrors = {
+  /**
+   * The share code does not exist or you do not have access to it.
+   */
+  404: OpenShockProblem;
+};
+
+export type UserSharesBulkUserShareShockersUpdateError =
+  UserSharesBulkUserShareShockersUpdateErrors[keyof UserSharesBulkUserShareShockersUpdateErrors];
+
+export type UserSharesBulkUserShareShockersUpdateResponses = {
+  /**
+   * Successfully updated share code
+   */
+  200: unknown;
+};
+
 export type ShareLinksRemoveShockerData = {
   body?: never;
   path: {
-    /**
-     * Remove a shocker from a public share
-     */
     publicShareId: string;
-    /**
-     * Remove a shocker from a public share
-     */
     shockerId: string;
   };
   query?: never;
@@ -2141,13 +2667,7 @@ export type ShareLinksRemoveShockerResponse =
 export type ShareLinksEditShockerData = {
   body: PublicShareEditShocker;
   path: {
-    /**
-     * Edit a shocker in a public share
-     */
     publicShareId: string;
-    /**
-     * Edit a shocker in a public share
-     */
     shockerId: string;
   };
   query?: never;
@@ -2181,13 +2701,7 @@ export type ShareLinksEditShockerResponse =
 export type ShareLinksAddShockerData = {
   body?: never;
   path: {
-    /**
-     * Add a shocker to a public share
-     */
     publicShareId: string;
-    /**
-     * Add a shocker to a public share
-     */
     shockerId: string;
   };
   query?: never;
@@ -2254,9 +2768,6 @@ export type ShareLinksCreatePublicShareResponse =
 export type ShareLinksDeletePublicShareData = {
   body?: never;
   path: {
-    /**
-     * Deletes a public share
-     */
     publicShareId: string;
   };
   query?: never;
@@ -2286,13 +2797,7 @@ export type ShareLinksDeletePublicShareResponse =
 export type ShareLinksPauseShockerData = {
   body: PauseRequest;
   path: {
-    /**
-     * Pause a shocker in a public share
-     */
     publicShareId: string;
-    /**
-     * Pause a shocker in a public share
-     */
     shockerId: string;
   };
   query?: never;
@@ -2403,9 +2908,6 @@ export type PublicGetOnlineDevicesStatisticsResponse =
 export type PublicGetPublicShareData = {
   body?: never;
   path: {
-    /**
-     * Gets information about a public share.
-     */
     publicShareId: string;
   };
   query?: never;
@@ -2431,6 +2933,112 @@ export type PublicGetPublicShareResponses = {
 
 export type PublicGetPublicShareResponse =
   PublicGetPublicShareResponses[keyof PublicGetPublicShareResponses];
+
+export type IntegrationsGetControlStatChangesData = {
+  body: ControlStatChangesRequest;
+  path?: never;
+  query?: never;
+  url: '/1/integrations/control-stats/changes';
+};
+
+export type IntegrationsGetControlStatChangesErrors = {
+  /**
+   * No automation token granting ControlStatsRead was presented.
+   */
+  403: OpenShockProblem;
+};
+
+export type IntegrationsGetControlStatChangesError =
+  IntegrationsGetControlStatChangesErrors[keyof IntegrationsGetControlStatChangesErrors];
+
+export type IntegrationsGetControlStatChangesResponses = {
+  /**
+   * The changed users' totals and the cursor to pass next time.
+   */
+  200: ControlStatChangesResponse;
+};
+
+export type IntegrationsGetControlStatChangesResponse =
+  IntegrationsGetControlStatChangesResponses[keyof IntegrationsGetControlStatChangesResponses];
+
+export type DeviceGetLiveControlGatewayV2Data = {
+  body?: never;
+  path?: never;
+  query?: {
+    version?: number;
+  };
+  url: '/2/device/assignLCG';
+};
+
+export type DeviceGetLiveControlGatewayV2Errors = {
+  /**
+   * Bad Request
+   */
+  400: OpenShockProblem;
+  /**
+   * Unable to find suitable LCG node
+   */
+  503: OpenShockProblem;
+};
+
+export type DeviceGetLiveControlGatewayV2Error =
+  DeviceGetLiveControlGatewayV2Errors[keyof DeviceGetLiveControlGatewayV2Errors];
+
+export type DeviceGetLiveControlGatewayV2Responses = {
+  /**
+   * Successfully assigned LCG node
+   */
+  200: LcgNodeResponseV2;
+};
+
+export type DeviceGetLiveControlGatewayV2Response =
+  DeviceGetLiveControlGatewayV2Responses[keyof DeviceGetLiveControlGatewayV2Responses];
+
+export type DeviceGetSelfData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/1/device/self';
+};
+
+export type DeviceGetSelfResponses = {
+  /**
+   * The device information was successfully retrieved.
+   */
+  200: LegacyDataResponseOfDeviceSelfResponse;
+};
+
+export type DeviceGetSelfResponse = DeviceGetSelfResponses[keyof DeviceGetSelfResponses];
+
+export type DevicePairData = {
+  body?: never;
+  path: {
+    /**
+     * The pair code to pair with.
+     */
+    pairCode: string;
+  };
+  query?: never;
+  url: '/1/device/pair/{pairCode}';
+};
+
+export type DevicePairErrors = {
+  /**
+   * No such pair code exists
+   */
+  404: OpenShockProblem;
+};
+
+export type DevicePairError = DevicePairErrors[keyof DevicePairErrors];
+
+export type DevicePairResponses = {
+  /**
+   * Successfully assigned LCG node
+   */
+  200: LegacyDataResponseOfstring;
+};
+
+export type DevicePairResponse = DevicePairResponses[keyof DevicePairResponses];
 
 export type DevicesOtaGetOtaUpdateHistoryData = {
   body?: never;
@@ -2481,23 +3089,6 @@ export type DevicesListDevicesResponses = {
 export type DevicesListDevicesResponse =
   DevicesListDevicesResponses[keyof DevicesListDevicesResponses];
 
-export type DevicesCreateDeviceData = {
-  body?: never;
-  path?: never;
-  query?: never;
-  url: '/1/devices';
-};
-
-export type DevicesCreateDeviceResponses = {
-  /**
-   * Successfully created device
-   */
-  201: string;
-};
-
-export type DevicesCreateDeviceResponse =
-  DevicesCreateDeviceResponses[keyof DevicesCreateDeviceResponses];
-
 export type DevicesRemoveDeviceData = {
   body?: never;
   path: {
@@ -2529,9 +3120,6 @@ export type DevicesRemoveDeviceResponses = {
 export type DevicesGetDeviceByIdData = {
   body?: never;
   path: {
-    /**
-     * Get a device by its id
-     */
     deviceId: string;
   };
   query?: never;
@@ -2561,9 +3149,6 @@ export type DevicesGetDeviceByIdResponse =
 export type DevicesEditDeviceData = {
   body: HubEditRequest;
   path: {
-    /**
-     * Edit a device
-     */
     deviceId: string;
   };
   query?: never;
@@ -2622,12 +3207,26 @@ export type DevicesRegenerateDeviceTokenResponses = {
 export type DevicesRegenerateDeviceTokenResponse =
   DevicesRegenerateDeviceTokenResponses[keyof DevicesRegenerateDeviceTokenResponses];
 
+export type DevicesCreateDeviceV2Data = {
+  body: HubCreateRequest;
+  path?: never;
+  query?: never;
+  url: '/2/devices';
+};
+
+export type DevicesCreateDeviceV2Responses = {
+  /**
+   * Successfully created device
+   */
+  201: string;
+};
+
+export type DevicesCreateDeviceV2Response =
+  DevicesCreateDeviceV2Responses[keyof DevicesCreateDeviceV2Responses];
+
 export type DevicesGetPairCodeData = {
   body?: never;
   path: {
-    /**
-     * Get a pair code for a device
-     */
     deviceId: string;
   };
   query?: never;
@@ -2653,37 +3252,34 @@ export type DevicesGetPairCodeResponses = {
 export type DevicesGetPairCodeResponse =
   DevicesGetPairCodeResponses[keyof DevicesGetPairCodeResponses];
 
-export type DevicesGetLiveControlGatewayInfoData = {
+export type DevicesGetLiveControlGatewayInfoV2Data = {
   body?: never;
   path: {
-    /**
-     * Get LCG info for a device if it is online and connected to a LCG node
-     */
     deviceId: string;
   };
   query?: never;
-  url: '/1/devices/{deviceId}/lcg';
+  url: '/2/devices/{deviceId}/lcg';
 };
 
-export type DevicesGetLiveControlGatewayInfoErrors = {
+export type DevicesGetLiveControlGatewayInfoV2Errors = {
   /**
-   * Device does not exist or does not belong to you
+   * Device does not exist or is not online
    */
   404: OpenShockProblem;
 };
 
-export type DevicesGetLiveControlGatewayInfoError =
-  DevicesGetLiveControlGatewayInfoErrors[keyof DevicesGetLiveControlGatewayInfoErrors];
+export type DevicesGetLiveControlGatewayInfoV2Error =
+  DevicesGetLiveControlGatewayInfoV2Errors[keyof DevicesGetLiveControlGatewayInfoV2Errors];
 
-export type DevicesGetLiveControlGatewayInfoResponses = {
+export type DevicesGetLiveControlGatewayInfoV2Responses = {
   /**
-   * LCG node was found and device is online
+   * Successfully retrieved live control gateway info
    */
-  200: LegacyDataResponseOfLcgResponse;
+  200: LcgResponseV2;
 };
 
-export type DevicesGetLiveControlGatewayInfoResponse =
-  DevicesGetLiveControlGatewayInfoResponses[keyof DevicesGetLiveControlGatewayInfoResponses];
+export type DevicesGetLiveControlGatewayInfoV2Response =
+  DevicesGetLiveControlGatewayInfoV2Responses[keyof DevicesGetLiveControlGatewayInfoV2Responses];
 
 export type DevicesGetShockersData = {
   body?: never;
@@ -2715,79 +3311,6 @@ export type DevicesGetShockersResponses = {
 
 export type DevicesGetShockersResponse =
   DevicesGetShockersResponses[keyof DevicesGetShockersResponses];
-
-export type DeviceGetLiveControlGatewayData = {
-  body?: never;
-  path?: never;
-  query?: never;
-  url: '/1/device/assignLCG';
-};
-
-export type DeviceGetLiveControlGatewayErrors = {
-  /**
-   * Unable to find suitable LCG node
-   */
-  503: OpenShockProblem;
-};
-
-export type DeviceGetLiveControlGatewayError =
-  DeviceGetLiveControlGatewayErrors[keyof DeviceGetLiveControlGatewayErrors];
-
-export type DeviceGetLiveControlGatewayResponses = {
-  /**
-   * Successfully assigned LCG node
-   */
-  200: LegacyDataResponseOfLcgNodeResponse;
-};
-
-export type DeviceGetLiveControlGatewayResponse =
-  DeviceGetLiveControlGatewayResponses[keyof DeviceGetLiveControlGatewayResponses];
-
-export type DeviceGetSelfData = {
-  body?: never;
-  path?: never;
-  query?: never;
-  url: '/1/device/self';
-};
-
-export type DeviceGetSelfResponses = {
-  /**
-   * The device information was successfully retrieved.
-   */
-  200: LegacyDataResponseOfDeviceSelfResponse;
-};
-
-export type DeviceGetSelfResponse = DeviceGetSelfResponses[keyof DeviceGetSelfResponses];
-
-export type DevicePairData = {
-  body?: never;
-  path: {
-    /**
-     * The pair code to pair with.
-     */
-    pairCode: string;
-  };
-  query?: never;
-  url: '/1/device/pair/{pairCode}';
-};
-
-export type DevicePairErrors = {
-  /**
-   * No such pair code exists
-   */
-  404: OpenShockProblem;
-};
-
-export type DevicePairError = DevicePairErrors[keyof DevicePairErrors];
-
-export type DevicePairResponses = {
-  /**
-   * Successfully assigned LCG node
-   */
-  200: LegacyDataResponseOfstring;
-};
-
-export type DevicePairResponse = DevicePairResponses[keyof DevicePairResponses];
 
 export type AdminListAutomationTokensData = {
   body?: never;
@@ -2826,10 +3349,6 @@ export type AdminCreateAutomationTokenResponse =
 export type AdminDeleteAutomationTokenData = {
   body?: never;
   path: {
-    /**
-     * Deletes an automation token together with every account it created. Refused while any of those
-     * accounts holds a privileged role
-     */
     id: string;
   };
   query?: never;
@@ -2860,9 +3379,6 @@ export type AdminDeleteAutomationTokenResponses = {
 export type AdminPatchAutomationTokenData = {
   body: PatchAutomationTokenDto;
   path: {
-    /**
-     * Updates an automation token
-     */
     id: string;
   };
   query?: never;
@@ -2892,9 +3408,6 @@ export type AdminPatchAutomationTokenResponse =
 export type AdminRotateAutomationTokenData = {
   body?: never;
   path: {
-    /**
-     * Rotates the secret of an automation token. The new secret is only returned once, in this response
-     */
     id: string;
   };
   query?: never;
@@ -3016,9 +3529,6 @@ export type AdminConfigurationUpdateResponses = {
 export type AdminConfigurationDeleteData = {
   body?: never;
   path: {
-    /**
-     * Deletes a configuration
-     */
     name: string;
   };
   query?: never;
@@ -3053,19 +3563,10 @@ export type AdminConfigurationDeleteResponses = {
 export type AdminDeactivateUserData = {
   body?: never;
   path: {
-    /**
-     * Deactivates a user
-     */
     userId: string;
   };
   query?: {
-    /**
-     * Deactivates a user
-     */
     deleteLater?: boolean;
-    /**
-     * Deactivates a user
-     */
     reason?: string;
   };
   url: '/1/admin/users/{userId}/deactivate';
@@ -3088,9 +3589,6 @@ export type AdminDeactivateUserResponses = {
 export type AdminDeleteApiTokenData = {
   body?: never;
   path: {
-    /**
-     * Deletes an API token
-     */
     tokenId: string;
   };
   query?: never;
@@ -3114,15 +3612,9 @@ export type AdminDeleteApiTokenResponses = {
 export type AdminDeleteUserData = {
   body?: never;
   path: {
-    /**
-     * Deletes a user
-     */
     userId: string;
   };
   query?: {
-    /**
-     * Deletes a user
-     */
     reason?: string;
   };
   url: '/1/admin/users/{userId}';
@@ -3145,9 +3637,6 @@ export type AdminDeleteUserResponses = {
 export type AdminGetUserByIdData = {
   body?: never;
   path: {
-    /**
-     * Gets a user by id
-     */
     userId: string;
   };
   query?: never;
@@ -3179,9 +3668,6 @@ export type AdminGetUserByIdResponse = AdminGetUserByIdResponses[keyof AdminGetU
 export type AdminModifyUserData = {
   body: UserPatchDto;
   path: {
-    /**
-     * Edits a user
-     */
     userId: string;
   };
   query?: never;
@@ -3281,10 +3767,6 @@ export type AdminBulkDeleteEmailOutboxResponse =
 export type AdminCancelEmailOutboxData = {
   body?: never;
   path: {
-    /**
-     * Cancels a still-pending email outbox message by marking it skipped, so it is never sent. Only
-     * pending messages can be cancelled; a message already being sent or in a terminal state cannot.
-     */
     id: string;
   };
   query?: never;
@@ -3319,10 +3801,6 @@ export type AdminCancelEmailOutboxResponses = {
 export type AdminDeleteEmailOutboxData = {
   body?: never;
   path: {
-    /**
-     * Permanently deletes an email outbox message. If the delivery consumer is mid-send it simply finds
-     * the row gone and does nothing, so a delete never corrupts an in-flight send.
-     */
     id: string;
   };
   query?: never;
@@ -3354,29 +3832,9 @@ export type AdminGetEmailOutboxData = {
   body?: never;
   path?: never;
   query?: {
-    /**
-     * Lists email outbox messages, paginated. Supports the same OData-style
-     * `$filter`/`$orderby` as the users listing (e.g. `status eq 'failed'`,
-     * `recipient ilike '%@example.com'`). Defaults to newest first.
-     */
     $filter?: string;
-    /**
-     * Lists email outbox messages, paginated. Supports the same OData-style
-     * `$filter`/`$orderby` as the users listing (e.g. `status eq 'failed'`,
-     * `recipient ilike '%@example.com'`). Defaults to newest first.
-     */
     $orderby?: string;
-    /**
-     * Lists email outbox messages, paginated. Supports the same OData-style
-     * `$filter`/`$orderby` as the users listing (e.g. `status eq 'failed'`,
-     * `recipient ilike '%@example.com'`). Defaults to newest first.
-     */
     $offset?: number;
-    /**
-     * Lists email outbox messages, paginated. Supports the same OData-style
-     * `$filter`/`$orderby` as the users listing (e.g. `status eq 'failed'`,
-     * `recipient ilike '%@example.com'`). Defaults to newest first.
-     */
     $limit?: number;
   };
   url: '/1/admin/email/outbox';
@@ -3402,10 +3860,6 @@ export type AdminGetEmailOutboxResponse =
 export type AdminRequeueEmailOutboxData = {
   body?: never;
   path: {
-    /**
-     * Requeues a terminal (sent/failed/skipped) email outbox message: resets it to pending, due now,
-     * with a fresh attempt budget, and nudges the delivery consumer to send it immediately.
-     */
     id: string;
   };
   query?: never;
@@ -3555,23 +4009,26 @@ export type AdminGetAdminAuditLogData = {
   path?: never;
   query?: {
     /**
-     * Page, sort, and search parameters.
+     * 1-based page index. Values below 1 are clamped to 1.
      */
     page?: number;
     /**
-     * Page, sort, and search parameters.
+     * Number of items per page. Clamped to `[1, uint PaginationQuery.MaxPageSize]`.
      */
     pageSize?: number;
     /**
-     * Page, sort, and search parameters.
+     * Optional free-text search term. Whitespace is trimmed; empty becomes null.
+     * Endpoints decide which fields the term is matched against.
      */
     search?: string;
     /**
-     * Page, sort, and search parameters.
+     * Optional sort key. Endpoints register the allowed keys and translate them to
+     * the underlying column(s). Unknown values fall back to the endpoint default.
      */
     sort?: string;
     /**
-     * Page, sort, and search parameters.
+     * Sort direction. Defaults to SortDirection.Desc when omitted, since list
+     * endpoints almost always want "newest/highest first" as the default.
      */
     sortDir?: SortDirection;
     /**
@@ -3648,21 +4105,9 @@ export type AdminGetUsersData = {
   body?: never;
   path?: never;
   query?: {
-    /**
-     * Gets all users, paginated
-     */
     $filter?: string;
-    /**
-     * Gets all users, paginated
-     */
     $orderby?: string;
-    /**
-     * Gets all users, paginated
-     */
     $offset?: number;
-    /**
-     * Gets all users, paginated
-     */
     $limit?: number;
   };
   url: '/1/admin/users';
@@ -3687,15 +4132,9 @@ export type AdminGetUsersResponse = AdminGetUsersResponses[keyof AdminGetUsersRe
 export type AdminReactivateUserData = {
   body?: never;
   path: {
-    /**
-     * Reactivates a user
-     */
     userId: string;
   };
   query?: {
-    /**
-     * Reactivates a user
-     */
     reason?: string;
   };
   url: '/1/admin/users/{userId}/reactivate';
@@ -3924,9 +4363,6 @@ export type AdminAddWebhookResponses = {
 export type AdminRemoveWebhookData = {
   body?: never;
   path: {
-    /**
-     * Removes a webhook
-     */
     id: string;
   };
   query?: never;
@@ -3957,9 +4393,6 @@ export type AccountActivateData = {
   body?: never;
   path?: never;
   query?: {
-    /**
-     * Activate account
-     */
     token?: string;
   };
   url: '/1/account/activate';
@@ -3997,6 +4430,35 @@ export type AccountCheckUsernameResponses = {
 
 export type AccountCheckUsernameResponse =
   AccountCheckUsernameResponses[keyof AccountCheckUsernameResponses];
+
+export type AccountLoginV2Data = {
+  body: LoginV2;
+  path?: never;
+  query?: never;
+  url: '/2/account/login';
+};
+
+export type AccountLoginV2Errors = {
+  /**
+   * Invalid username or password
+   */
+  401: OpenShockProblem;
+  /**
+   * Forbidden
+   */
+  403: OpenShockProblem;
+};
+
+export type AccountLoginV2Error = AccountLoginV2Errors[keyof AccountLoginV2Errors];
+
+export type AccountLoginV2Responses = {
+  /**
+   * User successfully logged in
+   */
+  200: LoginV2OkResponse;
+};
+
+export type AccountLoginV2Response = AccountLoginV2Responses[keyof AccountLoginV2Responses];
 
 export type AccountLogoutData = {
   body?: never;
@@ -4051,7 +4513,13 @@ export type AccountPasswordResetCheckValidResponse =
 export type AccountPasswordResetCompleteData = {
   body: PasswordResetProcessData;
   path: {
+    /**
+     * The id of the password reset
+     */
     passwordResetId: string;
+    /**
+     * The secret of the password reset
+     */
     secret: string;
   };
   query?: never;
@@ -4078,13 +4546,93 @@ export type AccountPasswordResetCompleteResponses = {
 export type AccountPasswordResetCompleteResponse =
   AccountPasswordResetCompleteResponses[keyof AccountPasswordResetCompleteResponses];
 
+export type AccountPasswordResetInitiateV2Data = {
+  body: PasswordResetRequestV2;
+  path?: never;
+  query?: never;
+  url: '/2/account/password-reset';
+};
+
+export type AccountPasswordResetInitiateV2Errors = {
+  /**
+   * Forbidden
+   */
+  403: OpenShockProblem;
+};
+
+export type AccountPasswordResetInitiateV2Error =
+  AccountPasswordResetInitiateV2Errors[keyof AccountPasswordResetInitiateV2Errors];
+
+export type AccountPasswordResetInitiateV2Responses = {
+  /**
+   * Password reset email sent if the email is associated to an registered account
+   */
+  200: unknown;
+};
+
+export type AccountResendActivationData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/1/account/activate/resend';
+};
+
+export type AccountResendActivationErrors = {
+  /**
+   * No pending activation for this browser (missing/expired cookie, or already activated)
+   */
+  400: OpenShockProblem;
+  /**
+   * An activation email was sent too recently
+   */
+  429: OpenShockProblem;
+};
+
+export type AccountResendActivationError =
+  AccountResendActivationErrors[keyof AccountResendActivationErrors];
+
+export type AccountResendActivationResponses = {
+  /**
+   * Activation email enqueued
+   */
+  200: unknown;
+};
+
+export type AccountSignUpV2Data = {
+  body: SignUpV2;
+  path?: never;
+  query?: never;
+  url: '/2/account/signup';
+};
+
+export type AccountSignUpV2Errors = {
+  /**
+   * Username or email already exists
+   */
+  400: unknown;
+  /**
+   * Forbidden
+   */
+  403: OpenShockProblem;
+  /**
+   * Conflict
+   */
+  409: OpenShockProblem;
+};
+
+export type AccountSignUpV2Error = AccountSignUpV2Errors[keyof AccountSignUpV2Errors];
+
+export type AccountSignUpV2Responses = {
+  /**
+   * User successfully signed up
+   */
+  200: unknown;
+};
+
 export type AccountEmailVerifyData = {
   body?: never;
   path?: never;
   query?: {
-    /**
-     * Verify a pending email change using the token from the verification email.
-     */
     token?: string;
   };
   url: '/1/account/email-change/verify';
@@ -4114,9 +4662,6 @@ export type AccountEmailVerifyLegacyData = {
   body?: never;
   path?: never;
   query?: {
-    /**
-     * Verify a pending email change. Deprecated: use POST /email-change/verify instead.
-     */
     token?: string;
   };
   url: '/1/account/verify-email';
@@ -4270,28 +4815,48 @@ export type AuthenticatedAccountDeactivateResponses = {
 export type AuthenticatedAccountDeactivateResponse =
   AuthenticatedAccountDeactivateResponses[keyof AuthenticatedAccountDeactivateResponses];
 
+export type AuthenticatedAccountGetSelfData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/1/account';
+};
+
+export type AuthenticatedAccountGetSelfResponses = {
+  /**
+   * The account information was successfully retrieved.
+   */
+  200: UserSelfResponse;
+};
+
+export type AuthenticatedAccountGetSelfResponse =
+  AuthenticatedAccountGetSelfResponses[keyof AuthenticatedAccountGetSelfResponses];
+
 export type AuthenticatedAccountGetAuditLogData = {
   body?: never;
   path?: never;
   query?: {
     /**
-     * Page, sort, and search parameters.
+     * 1-based page index. Values below 1 are clamped to 1.
      */
     page?: number;
     /**
-     * Page, sort, and search parameters.
+     * Number of items per page. Clamped to `[1, uint PaginationQuery.MaxPageSize]`.
      */
     pageSize?: number;
     /**
-     * Page, sort, and search parameters.
+     * Optional free-text search term. Whitespace is trimmed; empty becomes null.
+     * Endpoints decide which fields the term is matched against.
      */
     search?: string;
     /**
-     * Page, sort, and search parameters.
+     * Optional sort key. Endpoints register the allowed keys and translate them to
+     * the underlying column(s). Unknown values fall back to the endpoint default.
      */
     sort?: string;
     /**
-     * Page, sort, and search parameters.
+     * Sort direction. Defaults to SortDirection.Desc when omitted, since list
+     * endpoints almost always want "newest/highest first" as the default.
      */
     sortDir?: SortDirection;
   };

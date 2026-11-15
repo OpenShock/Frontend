@@ -24,6 +24,7 @@ import {
   devicesGetShockersResponseTransformer,
   devicesListDevicesResponseTransformer,
   devicesOtaGetOtaUpdateHistoryResponseTransformer,
+  integrationsGetControlStatChangesResponseTransformer,
   publicGetOnlineDevicesStatisticsResponseTransformer,
   publicGetPublicShareResponseTransformer,
   sessionsGetSelfSessionResponseTransformer,
@@ -35,10 +36,15 @@ import {
   shockerGetUserSharesResponseTransformer,
   shockerListShockersResponseTransformer,
   shockerShockerShareCodeListResponseTransformer,
-  tokensCreateTokenResponseTransformer,
-  tokensGetTokenByIdResponseTransformer,
-  tokensListTokensResponseTransformer,
-  tokensSelfGetSelfTokenResponseTransformer,
+  tokensCreateTokenV2ResponseTransformer,
+  tokensGetTokenByIdV2ResponseTransformer,
+  tokensListTokensV2ResponseTransformer,
+  tokensSelfGetSelfTokenV2ResponseTransformer,
+  usersGetSelfControlStatsResponseTransformer,
+  userSharesGetIncomingInvitesListResponseTransformer,
+  userSharesGetOutgoingInvitesListResponseTransformer,
+  userSharesGetSharesByUsersResponseTransformer,
+  userSharesRedeemInviteResponseTransformer,
   versionGetBackendInfoResponseTransformer,
 } from './transformers.gen';
 import type {
@@ -53,6 +59,9 @@ import type {
   AccountEmailVerifyLegacyErrors,
   AccountEmailVerifyLegacyResponses,
   AccountEmailVerifyResponses,
+  AccountLoginV2Data,
+  AccountLoginV2Errors,
+  AccountLoginV2Responses,
   AccountLogoutData,
   AccountLogoutResponses,
   AccountPasswordResetCheckValidData,
@@ -61,6 +70,15 @@ import type {
   AccountPasswordResetCompleteData,
   AccountPasswordResetCompleteErrors,
   AccountPasswordResetCompleteResponses,
+  AccountPasswordResetInitiateV2Data,
+  AccountPasswordResetInitiateV2Errors,
+  AccountPasswordResetInitiateV2Responses,
+  AccountResendActivationData,
+  AccountResendActivationErrors,
+  AccountResendActivationResponses,
+  AccountSignUpV2Data,
+  AccountSignUpV2Errors,
+  AccountSignUpV2Responses,
   AdminAddEmailProviderBlacklistData,
   AdminAddEmailProviderBlacklistResponses,
   AdminAddUsernameBlacklistData,
@@ -188,30 +206,32 @@ import type {
   AuthenticatedAccountDeactivateResponses,
   AuthenticatedAccountGetAuditLogData,
   AuthenticatedAccountGetAuditLogResponses,
+  AuthenticatedAccountGetSelfData,
+  AuthenticatedAccountGetSelfResponses,
   AuthenticatedAccountListOAuthConnectionsData,
   AuthenticatedAccountListOAuthConnectionsResponses,
   AuthenticatedAccountRemoveOAuthConnectionData,
   AuthenticatedAccountRemoveOAuthConnectionErrors,
   AuthenticatedAccountRemoveOAuthConnectionResponses,
-  DeviceGetLiveControlGatewayData,
-  DeviceGetLiveControlGatewayErrors,
-  DeviceGetLiveControlGatewayResponses,
+  DeviceGetLiveControlGatewayV2Data,
+  DeviceGetLiveControlGatewayV2Errors,
+  DeviceGetLiveControlGatewayV2Responses,
   DeviceGetSelfData,
   DeviceGetSelfResponses,
   DevicePairData,
   DevicePairErrors,
   DevicePairResponses,
-  DevicesCreateDeviceData,
-  DevicesCreateDeviceResponses,
+  DevicesCreateDeviceV2Data,
+  DevicesCreateDeviceV2Responses,
   DevicesEditDeviceData,
   DevicesEditDeviceErrors,
   DevicesEditDeviceResponses,
   DevicesGetDeviceByIdData,
   DevicesGetDeviceByIdErrors,
   DevicesGetDeviceByIdResponses,
-  DevicesGetLiveControlGatewayInfoData,
-  DevicesGetLiveControlGatewayInfoErrors,
-  DevicesGetLiveControlGatewayInfoResponses,
+  DevicesGetLiveControlGatewayInfoV2Data,
+  DevicesGetLiveControlGatewayInfoV2Errors,
+  DevicesGetLiveControlGatewayInfoV2Responses,
   DevicesGetPairCodeData,
   DevicesGetPairCodeErrors,
   DevicesGetPairCodeResponses,
@@ -229,6 +249,9 @@ import type {
   DevicesRemoveDeviceData,
   DevicesRemoveDeviceErrors,
   DevicesRemoveDeviceResponses,
+  IntegrationsGetControlStatChangesData,
+  IntegrationsGetControlStatChangesErrors,
+  IntegrationsGetControlStatChangesResponses,
   PublicGetOnlineDevicesStatisticsData,
   PublicGetOnlineDevicesStatisticsResponses,
   PublicGetPublicShareData,
@@ -293,9 +316,9 @@ import type {
   ShockerRemoveShockerData,
   ShockerRemoveShockerErrors,
   ShockerRemoveShockerResponses,
-  ShockerSendControlDeprecatedData,
-  ShockerSendControlDeprecatedErrors,
-  ShockerSendControlDeprecatedResponses,
+  ShockerSendControlData,
+  ShockerSendControlErrors,
+  ShockerSendControlResponses,
   ShockerShockerShareCodeCreateData,
   ShockerShockerShareCodeCreateErrors,
   ShockerShockerShareCodeCreateResponses,
@@ -314,25 +337,56 @@ import type {
   TokenDeleteDeleteTokenData,
   TokenDeleteDeleteTokenErrors,
   TokenDeleteDeleteTokenResponses,
-  TokensCreateTokenData,
-  TokensCreateTokenResponses,
-  TokensEditTokenData,
-  TokensEditTokenErrors,
-  TokensEditTokenResponses,
-  TokensGetTokenByIdData,
-  TokensGetTokenByIdErrors,
-  TokensGetTokenByIdResponses,
-  TokensListTokensData,
-  TokensListTokensResponses,
+  TokensCreateTokenV2Data,
+  TokensCreateTokenV2Responses,
+  TokensEditTokenV2Data,
+  TokensEditTokenV2Errors,
+  TokensEditTokenV2Responses,
+  TokensGetTokenByIdV2Data,
+  TokensGetTokenByIdV2Errors,
+  TokensGetTokenByIdV2Responses,
+  TokensListTokensV2Data,
+  TokensListTokensV2Responses,
   TokensReportTokensData,
   TokensReportTokensResponses,
-  TokensSelfGetSelfTokenData,
-  TokensSelfGetSelfTokenResponses,
+  TokensSelfGetSelfTokenV2Data,
+  TokensSelfGetSelfTokenV2Responses,
+  TokensSetTokenPausedData,
+  TokensSetTokenPausedErrors,
+  TokensSetTokenPausedResponses,
   UsersGetByNameData,
   UsersGetByNameErrors,
   UsersGetByNameResponses,
+  UsersGetSelfControlStatsData,
+  UsersGetSelfControlStatsErrors,
+  UsersGetSelfControlStatsResponses,
   UsersGetSelfData,
   UsersGetSelfResponses,
+  UserSharesBulkPauseUserShareShockersData,
+  UserSharesBulkPauseUserShareShockersResponses,
+  UserSharesBulkRemoveUserShareShockersData,
+  UserSharesBulkRemoveUserShareShockersResponses,
+  UserSharesBulkUserShareShockersUpdateData,
+  UserSharesBulkUserShareShockersUpdateErrors,
+  UserSharesBulkUserShareShockersUpdateResponses,
+  UserSharesCreateShareInviteData,
+  UserSharesCreateShareInviteErrors,
+  UserSharesCreateShareInviteResponses,
+  UserSharesDeleteOutgoingInviteData,
+  UserSharesDeleteOutgoingInviteErrors,
+  UserSharesDeleteOutgoingInviteResponses,
+  UserSharesDenyIncomingInviteData,
+  UserSharesDenyIncomingInviteErrors,
+  UserSharesDenyIncomingInviteResponses,
+  UserSharesGetIncomingInvitesListData,
+  UserSharesGetIncomingInvitesListResponses,
+  UserSharesGetOutgoingInvitesListData,
+  UserSharesGetOutgoingInvitesListResponses,
+  UserSharesGetSharesByUsersData,
+  UserSharesGetSharesByUsersResponses,
+  UserSharesRedeemInviteData,
+  UserSharesRedeemInviteErrors,
+  UserSharesRedeemInviteResponses,
   VersionGetBackendInfoData,
   VersionGetBackendInfoResponses,
 } from './types.gen';
@@ -369,7 +423,9 @@ export const versionGetBackendInfo = <ThrowOnError extends boolean = true>(
   });
 
 /**
- * Get the current user's information.
+ * Get the current user's information. Deprecated: use GET /1/account instead.
+ *
+ * @deprecated
  */
 export const usersGetSelf = <ThrowOnError extends boolean = true>(
   options?: Options<UsersGetSelfData, ThrowOnError>
@@ -377,6 +433,29 @@ export const usersGetSelf = <ThrowOnError extends boolean = true>(
   (options?.client ?? client).get<UsersGetSelfResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
     url: '/1/users/self',
+    ...options,
+  });
+
+/**
+ * Get control statistics for the current user, both for their own shockers and for controls they sent.
+ */
+export const usersGetSelfControlStats = <ThrowOnError extends boolean = true>(
+  options?: Options<UsersGetSelfControlStatsData, ThrowOnError>
+): RequestResult<
+  UsersGetSelfControlStatsResponses,
+  UsersGetSelfControlStatsErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).get<
+    UsersGetSelfControlStatsResponses,
+    UsersGetSelfControlStatsErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: usersGetSelfControlStatsResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/users/self/control-stats',
     ...options,
   });
 
@@ -417,56 +496,19 @@ export const tokenDeleteDeleteToken = <ThrowOnError extends boolean = true>(
   });
 
 /**
- * Get a token by id
- */
-export const tokensGetTokenById = <ThrowOnError extends boolean = true>(
-  options: Options<TokensGetTokenByIdData, ThrowOnError>
-): RequestResult<TokensGetTokenByIdResponses, TokensGetTokenByIdErrors, ThrowOnError, 'data'> =>
-  (options.client ?? client).get<
-    TokensGetTokenByIdResponses,
-    TokensGetTokenByIdErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseTransformer: tokensGetTokenByIdResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/tokens/{tokenId}',
-    ...options,
-  });
-
-/**
- * Edit a token
- */
-export const tokensEditToken = <ThrowOnError extends boolean = true>(
-  options: Options<TokensEditTokenData, ThrowOnError>
-): RequestResult<TokensEditTokenResponses, TokensEditTokenErrors, ThrowOnError, 'data'> =>
-  (options.client ?? client).patch<
-    TokensEditTokenResponses,
-    TokensEditTokenErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/tokens/{tokenId}',
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-  });
-
-/**
  * Gets information about the current token used to access this endpoint
  */
-export const tokensSelfGetSelfToken = <ThrowOnError extends boolean = true>(
-  options?: Options<TokensSelfGetSelfTokenData, ThrowOnError>
-): RequestResult<TokensSelfGetSelfTokenResponses, unknown, ThrowOnError, 'data'> =>
-  (options?.client ?? client).get<TokensSelfGetSelfTokenResponses, unknown, ThrowOnError, 'data'>({
-    responseTransformer: tokensSelfGetSelfTokenResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/tokens/self',
-    ...options,
-  });
+export const tokensSelfGetSelfTokenV2 = <ThrowOnError extends boolean = true>(
+  options?: Options<TokensSelfGetSelfTokenV2Data, ThrowOnError>
+): RequestResult<TokensSelfGetSelfTokenV2Responses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<TokensSelfGetSelfTokenV2Responses, unknown, ThrowOnError, 'data'>(
+    {
+      responseTransformer: tokensSelfGetSelfTokenV2ResponseTransformer,
+      responseStyle: 'data',
+      url: '/2/tokens/self',
+      ...options,
+    }
+  );
 
 /**
  * Endpoint to delete potentially compromised api tokens
@@ -487,26 +529,86 @@ export const tokensReportTokens = <ThrowOnError extends boolean = true>(
 /**
  * List all tokens for the current user
  */
-export const tokensListTokens = <ThrowOnError extends boolean = true>(
-  options?: Options<TokensListTokensData, ThrowOnError>
-): RequestResult<TokensListTokensResponses, unknown, ThrowOnError, 'data'> =>
-  (options?.client ?? client).get<TokensListTokensResponses, unknown, ThrowOnError, 'data'>({
-    responseTransformer: tokensListTokensResponseTransformer,
+export const tokensListTokensV2 = <ThrowOnError extends boolean = true>(
+  options?: Options<TokensListTokensV2Data, ThrowOnError>
+): RequestResult<TokensListTokensV2Responses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<TokensListTokensV2Responses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: tokensListTokensV2ResponseTransformer,
     responseStyle: 'data',
-    url: '/1/tokens',
+    url: '/2/tokens',
     ...options,
   });
 
 /**
  * Create a new token
  */
-export const tokensCreateToken = <ThrowOnError extends boolean = true>(
-  options: Options<TokensCreateTokenData, ThrowOnError>
-): RequestResult<TokensCreateTokenResponses, unknown, ThrowOnError, 'data'> =>
-  (options.client ?? client).post<TokensCreateTokenResponses, unknown, ThrowOnError, 'data'>({
-    responseTransformer: tokensCreateTokenResponseTransformer,
+export const tokensCreateTokenV2 = <ThrowOnError extends boolean = true>(
+  options: Options<TokensCreateTokenV2Data, ThrowOnError>
+): RequestResult<TokensCreateTokenV2Responses, unknown, ThrowOnError, 'data'> =>
+  (options.client ?? client).post<TokensCreateTokenV2Responses, unknown, ThrowOnError, 'data'>({
+    responseTransformer: tokensCreateTokenV2ResponseTransformer,
     responseStyle: 'data',
-    url: '/1/tokens',
+    url: '/2/tokens',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+/**
+ * Get a token by id
+ */
+export const tokensGetTokenByIdV2 = <ThrowOnError extends boolean = true>(
+  options: Options<TokensGetTokenByIdV2Data, ThrowOnError>
+): RequestResult<TokensGetTokenByIdV2Responses, TokensGetTokenByIdV2Errors, ThrowOnError, 'data'> =>
+  (options.client ?? client).get<
+    TokensGetTokenByIdV2Responses,
+    TokensGetTokenByIdV2Errors,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: tokensGetTokenByIdV2ResponseTransformer,
+    responseStyle: 'data',
+    url: '/2/tokens/{tokenId}',
+    ...options,
+  });
+
+/**
+ * Edit a token
+ */
+export const tokensEditTokenV2 = <ThrowOnError extends boolean = true>(
+  options: Options<TokensEditTokenV2Data, ThrowOnError>
+): RequestResult<TokensEditTokenV2Responses, TokensEditTokenV2Errors, ThrowOnError, 'data'> =>
+  (options.client ?? client).patch<
+    TokensEditTokenV2Responses,
+    TokensEditTokenV2Errors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/2/tokens/{tokenId}',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+/**
+ * Set whether a token is paused. A paused token may not send shocker control messages.
+ */
+export const tokensSetTokenPaused = <ThrowOnError extends boolean = true>(
+  options: Options<TokensSetTokenPausedData, ThrowOnError>
+): RequestResult<TokensSetTokenPausedResponses, TokensSetTokenPausedErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).patch<
+    TokensSetTokenPausedResponses,
+    TokensSetTokenPausedErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/2/tokens/{tokenId}/paused',
     ...options,
     headers: {
       'Content-Type': 'application/json',
@@ -691,24 +793,19 @@ export const shockerRegisterShocker = <ThrowOnError extends boolean = true>(
   });
 
 /**
- * Send a control message to shockers (Deprecated in favor of the /2/shockers/control endpoint)
+ * Send a control message to shockers
  */
-export const shockerSendControlDeprecated = <ThrowOnError extends boolean = true>(
-  options: Options<ShockerSendControlDeprecatedData, ThrowOnError>
-): RequestResult<
-  ShockerSendControlDeprecatedResponses,
-  ShockerSendControlDeprecatedErrors,
-  ThrowOnError,
-  'data'
-> =>
+export const shockerSendControl = <ThrowOnError extends boolean = true>(
+  options: Options<ShockerSendControlData, ThrowOnError>
+): RequestResult<ShockerSendControlResponses, ShockerSendControlErrors, ThrowOnError, 'data'> =>
   (options.client ?? client).post<
-    ShockerSendControlDeprecatedResponses,
-    ShockerSendControlDeprecatedErrors,
+    ShockerSendControlResponses,
+    ShockerSendControlErrors,
     ThrowOnError,
     'data'
   >({
     responseStyle: 'data',
-    url: '/1/shockers/control',
+    url: '/2/shockers/control',
     ...options,
     headers: {
       'Content-Type': 'application/json',
@@ -894,6 +991,197 @@ export const sharesLinkShareCode = <ThrowOnError extends boolean = true>(
     responseStyle: 'data',
     url: '/1/shares/code/{shareCodeId}',
     ...options,
+  });
+
+export const userSharesCreateShareInvite = <ThrowOnError extends boolean = true>(
+  options: Options<UserSharesCreateShareInviteData, ThrowOnError>
+): RequestResult<
+  UserSharesCreateShareInviteResponses,
+  UserSharesCreateShareInviteErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).post<
+    UserSharesCreateShareInviteResponses,
+    UserSharesCreateShareInviteErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/2/shares/user/invites',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+export const userSharesGetSharesByUsers = <ThrowOnError extends boolean = true>(
+  options?: Options<UserSharesGetSharesByUsersData, ThrowOnError>
+): RequestResult<UserSharesGetSharesByUsersResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<
+    UserSharesGetSharesByUsersResponses,
+    unknown,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: userSharesGetSharesByUsersResponseTransformer,
+    responseStyle: 'data',
+    url: '/2/shares/user',
+    ...options,
+  });
+
+export const userSharesGetOutgoingInvitesList = <ThrowOnError extends boolean = true>(
+  options?: Options<UserSharesGetOutgoingInvitesListData, ThrowOnError>
+): RequestResult<UserSharesGetOutgoingInvitesListResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<
+    UserSharesGetOutgoingInvitesListResponses,
+    unknown,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: userSharesGetOutgoingInvitesListResponseTransformer,
+    responseStyle: 'data',
+    url: '/2/shares/user/invites/outgoing',
+    ...options,
+  });
+
+export const userSharesGetIncomingInvitesList = <ThrowOnError extends boolean = true>(
+  options?: Options<UserSharesGetIncomingInvitesListData, ThrowOnError>
+): RequestResult<UserSharesGetIncomingInvitesListResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<
+    UserSharesGetIncomingInvitesListResponses,
+    unknown,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: userSharesGetIncomingInvitesListResponseTransformer,
+    responseStyle: 'data',
+    url: '/2/shares/user/invites/incoming',
+    ...options,
+  });
+
+export const userSharesDeleteOutgoingInvite = <ThrowOnError extends boolean = true>(
+  options: Options<UserSharesDeleteOutgoingInviteData, ThrowOnError>
+): RequestResult<
+  UserSharesDeleteOutgoingInviteResponses,
+  UserSharesDeleteOutgoingInviteErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).delete<
+    UserSharesDeleteOutgoingInviteResponses,
+    UserSharesDeleteOutgoingInviteErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/2/shares/user/invites/outgoing/{inviteId}',
+    ...options,
+  });
+
+export const userSharesDenyIncomingInvite = <ThrowOnError extends boolean = true>(
+  options: Options<UserSharesDenyIncomingInviteData, ThrowOnError>
+): RequestResult<
+  UserSharesDenyIncomingInviteResponses,
+  UserSharesDenyIncomingInviteErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).delete<
+    UserSharesDenyIncomingInviteResponses,
+    UserSharesDenyIncomingInviteErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/2/shares/user/invites/incoming/{inviteId}',
+    ...options,
+  });
+
+/**
+ * Accept a share request and share the shockers with the current user.
+ */
+export const userSharesRedeemInvite = <ThrowOnError extends boolean = true>(
+  options: Options<UserSharesRedeemInviteData, ThrowOnError>
+): RequestResult<
+  UserSharesRedeemInviteResponses,
+  UserSharesRedeemInviteErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).post<
+    UserSharesRedeemInviteResponses,
+    UserSharesRedeemInviteErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: userSharesRedeemInviteResponseTransformer,
+    responseStyle: 'data',
+    url: '/2/shares/user/invites/incoming/{inviteId}',
+    ...options,
+  });
+
+export const userSharesBulkPauseUserShareShockers = <ThrowOnError extends boolean = true>(
+  options: Options<UserSharesBulkPauseUserShareShockersData, ThrowOnError>
+): RequestResult<UserSharesBulkPauseUserShareShockersResponses, unknown, ThrowOnError, 'data'> =>
+  (options.client ?? client).post<
+    UserSharesBulkPauseUserShareShockersResponses,
+    unknown,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/2/shares/user/{userId}/shockers/pause',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+export const userSharesBulkRemoveUserShareShockers = <ThrowOnError extends boolean = true>(
+  options: Options<UserSharesBulkRemoveUserShareShockersData, ThrowOnError>
+): RequestResult<UserSharesBulkRemoveUserShareShockersResponses, unknown, ThrowOnError, 'data'> =>
+  (options.client ?? client).delete<
+    UserSharesBulkRemoveUserShareShockersResponses,
+    unknown,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/2/shares/user/{userId}/shockers',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+/**
+ * Update user shares for a shocker
+ */
+export const userSharesBulkUserShareShockersUpdate = <ThrowOnError extends boolean = true>(
+  options: Options<UserSharesBulkUserShareShockersUpdateData, ThrowOnError>
+): RequestResult<
+  UserSharesBulkUserShareShockersUpdateResponses,
+  UserSharesBulkUserShareShockersUpdateErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).patch<
+    UserSharesBulkUserShareShockersUpdateResponses,
+    UserSharesBulkUserShareShockersUpdateErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/2/shares/user/{userId}/shockers',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
   });
 
 /**
@@ -1122,6 +1410,87 @@ export const publicGetPublicShare = <ThrowOnError extends boolean = true>(
   });
 
 /**
+ * Lets a service holding many users keep their lifetime control stats in sync with a single call per tick.
+ * Returns the lifetime totals of every requested user whose stats changed since the given cursor.
+ *
+ * Requires an automation token granting `ControlStatsRead`. "Changed since" is answered from when each
+ * stats row was last written rather than the time it covers, so live control stats written late (e.g. after a
+ * database outage) are still picked up. Rows deleted along with their owner lower the totals of everyone who
+ * controlled them without leaving a row behind, those are picked up from ControlStatRemoval. The
+ * lookback is widened by TimeSpan IntegrationsController.ChangeOverlap to cover writes still committing while the previous call
+ * read, so a user can be reported again although nothing changed.
+ */
+export const integrationsGetControlStatChanges = <ThrowOnError extends boolean = true>(
+  options: Options<IntegrationsGetControlStatChangesData, ThrowOnError>
+): RequestResult<
+  IntegrationsGetControlStatChangesResponses,
+  IntegrationsGetControlStatChangesErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).post<
+    IntegrationsGetControlStatChangesResponses,
+    IntegrationsGetControlStatChangesErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseTransformer: integrationsGetControlStatChangesResponseTransformer,
+    responseStyle: 'data',
+    url: '/1/integrations/control-stats/changes',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+/**
+ * Gets the best suited LCG node for the client
+ */
+export const deviceGetLiveControlGatewayV2 = <ThrowOnError extends boolean = true>(
+  options?: Options<DeviceGetLiveControlGatewayV2Data, ThrowOnError>
+): RequestResult<
+  DeviceGetLiveControlGatewayV2Responses,
+  DeviceGetLiveControlGatewayV2Errors,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).get<
+    DeviceGetLiveControlGatewayV2Responses,
+    DeviceGetLiveControlGatewayV2Errors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/2/device/assignLCG',
+    ...options,
+  });
+
+/**
+ * Gets information about the authenticated device.
+ */
+export const deviceGetSelf = <ThrowOnError extends boolean = true>(
+  options?: Options<DeviceGetSelfData, ThrowOnError>
+): RequestResult<DeviceGetSelfResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<DeviceGetSelfResponses, unknown, ThrowOnError, 'data'>({
+    responseStyle: 'data',
+    url: '/1/device/self',
+    ...options,
+  });
+
+/**
+ * Pair a device with a pair code.
+ */
+export const devicePair = <ThrowOnError extends boolean = true>(
+  options: Options<DevicePairData, ThrowOnError>
+): RequestResult<DevicePairResponses, DevicePairErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).get<DevicePairResponses, DevicePairErrors, ThrowOnError, 'data'>({
+    responseStyle: 'data',
+    url: '/1/device/pair/{pairCode}',
+    ...options,
+  });
+
+/**
  * Gets the OTA update history for a device
  */
 export const devicesOtaGetOtaUpdateHistory = <ThrowOnError extends boolean = true>(
@@ -1152,18 +1521,6 @@ export const devicesListDevices = <ThrowOnError extends boolean = true>(
 ): RequestResult<DevicesListDevicesResponses, unknown, ThrowOnError, 'data'> =>
   (options?.client ?? client).get<DevicesListDevicesResponses, unknown, ThrowOnError, 'data'>({
     responseTransformer: devicesListDevicesResponseTransformer,
-    responseStyle: 'data',
-    url: '/1/devices',
-    ...options,
-  });
-
-/**
- * Create a new device for the current user
- */
-export const devicesCreateDevice = <ThrowOnError extends boolean = true>(
-  options?: Options<DevicesCreateDeviceData, ThrowOnError>
-): RequestResult<DevicesCreateDeviceResponses, unknown, ThrowOnError, 'data'> =>
-  (options?.client ?? client).post<DevicesCreateDeviceResponses, unknown, ThrowOnError, 'data'>({
     responseStyle: 'data',
     url: '/1/devices',
     ...options,
@@ -1248,6 +1605,22 @@ export const devicesRegenerateDeviceToken = <ThrowOnError extends boolean = true
   });
 
 /**
+ * Create a new device for the current user
+ */
+export const devicesCreateDeviceV2 = <ThrowOnError extends boolean = true>(
+  options: Options<DevicesCreateDeviceV2Data, ThrowOnError>
+): RequestResult<DevicesCreateDeviceV2Responses, unknown, ThrowOnError, 'data'> =>
+  (options.client ?? client).post<DevicesCreateDeviceV2Responses, unknown, ThrowOnError, 'data'>({
+    responseStyle: 'data',
+    url: '/2/devices',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+/**
  * Get a pair code for a device
  */
 export const devicesGetPairCode = <ThrowOnError extends boolean = true>(
@@ -1265,24 +1638,25 @@ export const devicesGetPairCode = <ThrowOnError extends boolean = true>(
   });
 
 /**
- * Get LCG info for a device if it is online and connected to a LCG node
+ * Gets the live control gateway a hub is connected to, including its public port and the full
+ * live-control WebSocket path (honoring the gateway's configured path prefix).
  */
-export const devicesGetLiveControlGatewayInfo = <ThrowOnError extends boolean = true>(
-  options: Options<DevicesGetLiveControlGatewayInfoData, ThrowOnError>
+export const devicesGetLiveControlGatewayInfoV2 = <ThrowOnError extends boolean = true>(
+  options: Options<DevicesGetLiveControlGatewayInfoV2Data, ThrowOnError>
 ): RequestResult<
-  DevicesGetLiveControlGatewayInfoResponses,
-  DevicesGetLiveControlGatewayInfoErrors,
+  DevicesGetLiveControlGatewayInfoV2Responses,
+  DevicesGetLiveControlGatewayInfoV2Errors,
   ThrowOnError,
   'data'
 > =>
   (options.client ?? client).get<
-    DevicesGetLiveControlGatewayInfoResponses,
-    DevicesGetLiveControlGatewayInfoErrors,
+    DevicesGetLiveControlGatewayInfoV2Responses,
+    DevicesGetLiveControlGatewayInfoV2Errors,
     ThrowOnError,
     'data'
   >({
     responseStyle: 'data',
-    url: '/1/devices/{deviceId}/lcg',
+    url: '/2/devices/{deviceId}/lcg',
     ...options,
   });
 
@@ -1301,52 +1675,6 @@ export const devicesGetShockers = <ThrowOnError extends boolean = true>(
     responseTransformer: devicesGetShockersResponseTransformer,
     responseStyle: 'data',
     url: '/1/devices/{deviceId}/shockers',
-    ...options,
-  });
-
-/**
- * Gets the best suited LCG node for the client
- */
-export const deviceGetLiveControlGateway = <ThrowOnError extends boolean = true>(
-  options?: Options<DeviceGetLiveControlGatewayData, ThrowOnError>
-): RequestResult<
-  DeviceGetLiveControlGatewayResponses,
-  DeviceGetLiveControlGatewayErrors,
-  ThrowOnError,
-  'data'
-> =>
-  (options?.client ?? client).get<
-    DeviceGetLiveControlGatewayResponses,
-    DeviceGetLiveControlGatewayErrors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/1/device/assignLCG',
-    ...options,
-  });
-
-/**
- * Gets information about the authenticated device.
- */
-export const deviceGetSelf = <ThrowOnError extends boolean = true>(
-  options?: Options<DeviceGetSelfData, ThrowOnError>
-): RequestResult<DeviceGetSelfResponses, unknown, ThrowOnError, 'data'> =>
-  (options?.client ?? client).get<DeviceGetSelfResponses, unknown, ThrowOnError, 'data'>({
-    responseStyle: 'data',
-    url: '/1/device/self',
-    ...options,
-  });
-
-/**
- * Pair a device with a pair code.
- */
-export const devicePair = <ThrowOnError extends boolean = true>(
-  options: Options<DevicePairData, ThrowOnError>
-): RequestResult<DevicePairResponses, DevicePairErrors, ThrowOnError, 'data'> =>
-  (options.client ?? client).get<DevicePairResponses, DevicePairErrors, ThrowOnError, 'data'>({
-    responseStyle: 'data',
-    url: '/1/device/pair/{pairCode}',
     ...options,
   });
 
@@ -2014,6 +2342,9 @@ export const adminReactivateUser = <ThrowOnError extends boolean = true>(
     ...options,
   });
 
+/**
+ * Sets a users email to the supplied value
+ */
 export const adminSetUserEmail = <ThrowOnError extends boolean = true>(
   options: Options<AdminSetUserEmailData, ThrowOnError>
 ): RequestResult<AdminSetUserEmailResponses, AdminSetUserEmailErrors, ThrowOnError, 'data'> =>
@@ -2032,6 +2363,9 @@ export const adminSetUserEmail = <ThrowOnError extends boolean = true>(
     },
   });
 
+/**
+ * Sets a users name to the supplied value
+ */
 export const adminSetUserName = <ThrowOnError extends boolean = true>(
   options: Options<AdminSetUserNameData, ThrowOnError>
 ): RequestResult<AdminSetUserNameResponses, AdminSetUserNameErrors, ThrowOnError, 'data'> =>
@@ -2050,6 +2384,9 @@ export const adminSetUserName = <ThrowOnError extends boolean = true>(
     },
   });
 
+/**
+ * Sets a users password to the supplied value
+ */
 export const adminSetUserPassword = <ThrowOnError extends boolean = true>(
   options: Options<AdminSetUserPasswordData, ThrowOnError>
 ): RequestResult<AdminSetUserPasswordResponses, AdminSetUserPasswordErrors, ThrowOnError, 'data'> =>
@@ -2209,6 +2546,27 @@ export const accountCheckUsername = <ThrowOnError extends boolean = true>(
     },
   });
 
+/**
+ * Authenticate a user
+ */
+export const accountLoginV2 = <ThrowOnError extends boolean = true>(
+  options: Options<AccountLoginV2Data, ThrowOnError>
+): RequestResult<AccountLoginV2Responses, AccountLoginV2Errors, ThrowOnError, 'data'> =>
+  (options.client ?? client).post<
+    AccountLoginV2Responses,
+    AccountLoginV2Errors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/2/account/login',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
 export const accountLogout = <ThrowOnError extends boolean = true>(
   options?: Options<AccountLogoutData, ThrowOnError>
 ): RequestResult<AccountLogoutResponses, unknown, ThrowOnError, 'data'> =>
@@ -2240,6 +2598,9 @@ export const accountPasswordResetCheckValid = <ThrowOnError extends boolean = tr
     ...options,
   });
 
+/**
+ * Complete a password reset process
+ */
 export const accountPasswordResetComplete = <ThrowOnError extends boolean = true>(
   options: Options<AccountPasswordResetCompleteData, ThrowOnError>
 ): RequestResult<
@@ -2256,6 +2617,78 @@ export const accountPasswordResetComplete = <ThrowOnError extends boolean = true
   >({
     responseStyle: 'data',
     url: '/1/account/password-reset/{passwordResetId}/{secret}/complete',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+/**
+ * Initiate a password reset
+ */
+export const accountPasswordResetInitiateV2 = <ThrowOnError extends boolean = true>(
+  options: Options<AccountPasswordResetInitiateV2Data, ThrowOnError>
+): RequestResult<
+  AccountPasswordResetInitiateV2Responses,
+  AccountPasswordResetInitiateV2Errors,
+  ThrowOnError,
+  'data'
+> =>
+  (options.client ?? client).post<
+    AccountPasswordResetInitiateV2Responses,
+    AccountPasswordResetInitiateV2Errors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/2/account/password-reset',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+/**
+ * Resend the account activation email for the account this browser just signed up
+ *
+ * Identifies the account by the activation-resend cookie set on signup, not by an email address,
+ * so it can only target an account created from this browser and can't be used to probe registered emails.
+ */
+export const accountResendActivation = <ThrowOnError extends boolean = true>(
+  options?: Options<AccountResendActivationData, ThrowOnError>
+): RequestResult<
+  AccountResendActivationResponses,
+  AccountResendActivationErrors,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).post<
+    AccountResendActivationResponses,
+    AccountResendActivationErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/account/activate/resend',
+    ...options,
+  });
+
+/**
+ * Signs up a new user
+ */
+export const accountSignUpV2 = <ThrowOnError extends boolean = true>(
+  options: Options<AccountSignUpV2Data, ThrowOnError>
+): RequestResult<AccountSignUpV2Responses, AccountSignUpV2Errors, ThrowOnError, 'data'> =>
+  (options.client ?? client).post<
+    AccountSignUpV2Responses,
+    AccountSignUpV2Errors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/2/account/signup',
     ...options,
     headers: {
       'Content-Type': 'application/json',
@@ -2397,6 +2830,23 @@ export const authenticatedAccountDeactivate = <ThrowOnError extends boolean = tr
   (options?.client ?? client).delete<
     AuthenticatedAccountDeactivateResponses,
     AuthenticatedAccountDeactivateErrors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/1/account',
+    ...options,
+  });
+
+/**
+ * Get the current user's account information.
+ */
+export const authenticatedAccountGetSelf = <ThrowOnError extends boolean = true>(
+  options?: Options<AuthenticatedAccountGetSelfData, ThrowOnError>
+): RequestResult<AuthenticatedAccountGetSelfResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<
+    AuthenticatedAccountGetSelfResponses,
+    unknown,
     ThrowOnError,
     'data'
   >({

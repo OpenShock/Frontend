@@ -23,21 +23,13 @@ const sharedPlugins = [
   },
 ] as const;
 
-export default defineConfig([
-  {
-    input: 'https://api.openshock.dev/openapi/1.json',
-    output: {
-      path: 'src/lib/api/internal/v1',
-      postProcess: ['prettier'],
-    },
-    plugins: sharedPlugins,
+// The backend serves one document covering every API version. OPENAPI_INPUT overrides it,
+// e.g. with a local backend or a saved openapi.json.
+export default defineConfig({
+  input: process.env.OPENAPI_INPUT ?? 'https://api.openshock.dev/openapi.json',
+  output: {
+    path: 'src/lib/api/internal/generated',
+    postProcess: ['prettier'],
   },
-  {
-    input: 'https://api.openshock.dev/openapi/2.json',
-    output: {
-      path: 'src/lib/api/internal/v2',
-      postProcess: ['prettier'],
-    },
-    plugins: sharedPlugins,
-  },
-]);
+  plugins: sharedPlugins,
+});

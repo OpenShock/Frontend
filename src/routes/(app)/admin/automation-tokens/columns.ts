@@ -36,12 +36,13 @@ export function toAutomationToken(token: AutomationTokenDto): AutomationToken {
   };
 }
 
-/** Every protection a token can be granted the right to switch off. */
+/** Every capability a token can be granted: switching off a protection, or reading integration data. */
 export const automationTokenTypes = Object.values(AutomationTokenType);
 
 const automationTokenTypeLabels: Record<AutomationTokenType, string> = {
   [AutomationTokenType.Turnstile]: 'Turnstile',
   [AutomationTokenType.RateLimit]: 'Rate limit',
+  [AutomationTokenType.ControlStatsRead]: 'Control stats read',
 };
 
 export function formatTokenType(type: AutomationTokenType): string {

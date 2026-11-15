@@ -13,8 +13,6 @@ import type { RequestHandler } from './$types';
 // Internal-only top-level segments we don't want to disclose to crawlers.
 const HIDDEN_SEGMENTS: ReadonlySet<string> = new Set(['admin', 'hangfire']);
 
-const SWAGGER_VERSIONS = [1, 2] as const;
-
 export const GET: RequestHandler = ({ setHeaders }) => {
   if (PUBLIC_DISABLE_LLMS_TXT) error(404);
 
@@ -40,11 +38,8 @@ export const GET: RequestHandler = ({ setHeaders }) => {
   const generalList = renderLinks(generalPages);
   const authList = renderLinks(authPages);
 
-  // OpenAPI specs, one per backend API version.
-  const apiURL = getBackendURL();
-  const swaggerList = SWAGGER_VERSIONS.map(
-    (v) => `- [v${v} OpenAPI spec](${new URL(`/swagger/${v}/swagger.json`, apiURL).href})`
-  ).join('\n');
+  // One OpenAPI document covers every backend API version.
+  const openApiURL = new URL('/openapi.json', getBackendURL()).href;
 
   // Authenticated app routes — listed for crawlers with a "not indexable" notice.
   const appPaths = paths
@@ -92,7 +87,7 @@ ${authList}
 
 ## Backend API
 
-${swaggerList}
+- [OpenAPI spec](${openApiURL})
 
 ## Notes for crawlers
 

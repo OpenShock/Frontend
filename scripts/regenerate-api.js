@@ -1,10 +1,12 @@
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 
-const OUTPUT_DIRS = ['src/lib/api/internal/v1', 'src/lib/api/internal/v2'];
+const OUTPUT_DIR = 'src/lib/api/internal/generated';
+// Per-version clients from before the backend served a single document; removed if still present.
+const LEGACY_DIRS = ['src/lib/api/internal/v1', 'src/lib/api/internal/v2'];
 
 console.log('Cleaning previous output...');
-for (const dir of OUTPUT_DIRS) {
+for (const dir of [OUTPUT_DIR, ...LEGACY_DIRS]) {
   if (fs.existsSync(dir)) {
     fs.rmSync(dir, { recursive: true, force: true });
     console.log(`  Deleted ${dir}`);
@@ -21,22 +23,9 @@ try {
 }
 
 console.log('');
-console.log('Sharing v1 client with v2...');
-{
-  const v2Client = 'src/lib/api/internal/v2/client.gen.ts';
-  if (fs.existsSync(v2Client)) {
-    fs.writeFileSync(
-      v2Client,
-      `// Patched by scripts/regenerate-api.js: v2 reuses the v1 client instance.\nexport { client, type CreateClientConfig } from '../v1/client.gen';\n`
-    );
-    console.log(`  Patched ${v2Client}`);
-  }
-}
-
-console.log('');
 console.log('Formatting generated output...');
 try {
-  execSync(`pnpm exec prettier --write ${OUTPUT_DIRS.join(' ')}`, {
+  execSync(`pnpm exec prettier --write ${OUTPUT_DIR}`, {
     stdio: 'inherit',
     shell: true,
   });
