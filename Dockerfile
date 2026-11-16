@@ -1,8 +1,8 @@
 # The pnpm version and the base image line below (tag and digest) are rewritten by
 # .github/workflows/update-toolchain.yml - keep their shape if you edit them by hand.
-ARG PNPM_VERSION=12.15.0
+ARG PNPM_VERSION=12.21.0
 
-FROM node:26.9.0-trixie-slim@sha256:3a771f83944bb763050c23c0225c260638c4b7899e7a72485ef75e5e570499e5
+FROM node:26.13.1-trixie-slim@sha256:e6bedef217677b276c591795e169840edd9096dbf13f29df8ef8d1856b8820bc
 
 ARG PNPM_VERSION
 

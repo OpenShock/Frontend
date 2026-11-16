@@ -108,7 +108,7 @@
 	"browserslist": [
 		"defaults and fully supports es6-module"
 	],
-	"packageManager": "pnpm@12.15.0",
+	"packageManager": "pnpm@12.21.0",
 	"imports": {
 		"#lib": "./src/lib/index.js",
 		"#lib/*": "./src/lib/*"
