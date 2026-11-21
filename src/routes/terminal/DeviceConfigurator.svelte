@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
+  import { ParaglideMessage } from '@inlang/paraglide-js-svelte';
+  import type { Snippet } from 'svelte';
   import { AlertTriangle, Eye, RefreshCw, Send, TriangleAlert, WifiOff } from '@lucide/svelte';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Card from '@openshock/svelte-core/components/ui/card';
@@ -191,19 +194,13 @@
   let isReadingJson = $state(false);
   let isReadingRaw = $state(false);
   let failedReadOpen = $state(false);
-  let failedReadField = $state('');
   let failedReadKey = $state('');
 
-  async function readWithRetry(
-    command: string,
-    key: string,
-    friendlyName: string
-  ): Promise<boolean> {
+  async function readWithRetry(command: string, key: string): Promise<boolean> {
     for (let attempt = 1; attempt <= READ_ATTEMPTS; attempt++) {
       const outcome = await readOnce(command, key);
       if (outcome === 'success') return true;
     }
-    failedReadField = friendlyName;
     failedReadKey = key;
     failedReadOpen = true;
     return false;
@@ -213,7 +210,7 @@
     if (isReadingJson) return;
     isReadingJson = true;
     try {
-      await readWithRetry('jsonconfig', 'JsonConfig', 'JSON config');
+      await readWithRetry('jsonconfig', 'JsonConfig');
     } finally {
       isReadingJson = false;
     }
@@ -223,7 +220,7 @@
     if (isReadingRaw) return;
     isReadingRaw = true;
     try {
-      await readWithRetry('rawconfig', 'RawConfig', 'raw config');
+      await readWithRetry('rawconfig', 'RawConfig');
     } finally {
       isReadingRaw = false;
     }
@@ -262,26 +259,28 @@
 <div class="flex flex-col gap-4">
   <!-- Introductory note -->
   <p class="text-muted-foreground text-sm">
-    Values are sent to the device via UART. Read the device's response in the console below.
-    Commands without an argument act as getters; use the
-    <Eye class="inline h-3.5 w-3.5" /> button next to each field to read the current value.
+    <ParaglideMessage message={m.terminal_cfg_intro}>
+      {#snippet eye()}
+        <Eye class="inline h-3.5 w-3.5" />
+      {/snippet}
+    </ParaglideMessage>
   </p>
 
   <!-- RF -->
   <Card.Root>
     <Card.Header>
-      <Card.Title>RF Transmitter</Card.Title>
-      <Card.Description>Controls the shocker RF output.</Card.Description>
+      <Card.Title>{m.terminal_cfg_rf_title()}</Card.Title>
+      <Card.Description>{m.terminal_cfg_rf_desc()}</Card.Description>
     </Card.Header>
     <Card.Content class="flex flex-col gap-4">
       <div class="flex flex-col gap-2">
-        <Label for="cfg-rftxpin">TX GPIO pin</Label>
+        <Label for="cfg-rftxpin">{m.terminal_cfg_tx_pin()}</Label>
         <div class="flex gap-2">
           <Input
             id="cfg-rftxpin"
             type="number"
             min={0}
-            placeholder="e.g. 15"
+            placeholder={m.terminal_cfg_example({ value: '15' })}
             bind:value={rfTxPin}
             {disabled}
           />
@@ -289,7 +288,7 @@
             variant="outline"
             {disabled}
             onclick={() => send('rftxpin')}
-            title="Read current value"
+            title={m.terminal_cfg_read_value()}
           >
             <Eye />
           </Button>
@@ -298,16 +297,16 @@
             disabled={disabled || rfTxPin === ''}
           >
             <Send />
-            Set
+            {m.terminal_cfg_set()}
           </Button>
         </div>
       </div>
 
       <div class="flex items-center justify-between gap-4">
         <div class="flex flex-col gap-1">
-          <Label for="cfg-keepalive">Keepalive enabled</Label>
+          <Label for="cfg-keepalive">{m.terminal_cfg_keepalive()}</Label>
           <span class="text-muted-foreground text-sm">
-            Periodically pings paired shockers to keep them awake.
+            {m.terminal_cfg_keepalive_desc()}
           </span>
         </div>
         <div class="flex items-center gap-2">
@@ -317,13 +316,13 @@
             size="sm"
             {disabled}
             onclick={() => send('keepalive')}
-            title="Read current value"
+            title={m.terminal_cfg_read_value()}
           >
             <Eye />
           </Button>
           <Button size="sm" {disabled} onclick={() => send(`keepalive ${keepaliveEnabled}`)}>
             <Send />
-            Set
+            {m.terminal_cfg_set()}
           </Button>
         </div>
       </div>
@@ -333,12 +332,12 @@
   <!-- EStop -->
   <Card.Root>
     <Card.Header>
-      <Card.Title>Emergency Stop</Card.Title>
-      <Card.Description>Hardware button that halts all output.</Card.Description>
+      <Card.Title>{m.terminal_cfg_estop_title()}</Card.Title>
+      <Card.Description>{m.terminal_cfg_estop_desc()}</Card.Description>
     </Card.Header>
     <Card.Content class="flex flex-col gap-4">
       <div class="flex items-center justify-between gap-4">
-        <Label for="cfg-estop-enabled">EStop enabled</Label>
+        <Label for="cfg-estop-enabled">{m.terminal_cfg_estop_enabled()}</Label>
         <div class="flex items-center gap-2">
           <Switch id="cfg-estop-enabled" bind:checked={estopEnabled} {disabled} />
           <Button
@@ -346,25 +345,25 @@
             size="sm"
             {disabled}
             onclick={() => send('estop enabled')}
-            title="Read current value"
+            title={m.terminal_cfg_read_value()}
           >
             <Eye />
           </Button>
           <Button size="sm" {disabled} onclick={() => send(`estop enabled ${estopEnabled}`)}>
             <Send />
-            Set
+            {m.terminal_cfg_set()}
           </Button>
         </div>
       </div>
 
       <div class="flex flex-col gap-2">
-        <Label for="cfg-estop-pin">EStop GPIO pin</Label>
+        <Label for="cfg-estop-pin">{m.terminal_cfg_estop_pin()}</Label>
         <div class="flex gap-2">
           <Input
             id="cfg-estop-pin"
             type="number"
             min={0}
-            placeholder="e.g. 13"
+            placeholder={m.terminal_cfg_example({ value: '13' })}
             bind:value={estopPin}
             {disabled}
           />
@@ -372,7 +371,7 @@
             variant="outline"
             {disabled}
             onclick={() => send('estop pin')}
-            title="Read current value"
+            title={m.terminal_cfg_read_value()}
           >
             <Eye />
           </Button>
@@ -381,12 +380,15 @@
             disabled={disabled || estopPin === ''}
           >
             <Send />
-            Set
+            {m.terminal_cfg_set()}
           </Button>
         </div>
         <p class="text-muted-foreground text-xs">
-          Note: <code>estop.latching</code> and <code>estop.active</code> have no dedicated commands;
-          set them via the JSON config below.
+          <ParaglideMessage
+            message={m.terminal_cfg_estop_note}
+            inputs={{ latching: 'estop.latching', active: 'estop.active' }}
+            {code}
+          />
         </p>
       </div>
     </Card.Content>
@@ -395,16 +397,16 @@
   <!-- WiFi -->
   <Card.Root>
     <Card.Header>
-      <Card.Title>WiFi</Card.Title>
-      <Card.Description>Station credentials and device hostname.</Card.Description>
+      <Card.Title>{m.terminal_cfg_wifi_title()}</Card.Title>
+      <Card.Description>{m.terminal_cfg_wifi_desc()}</Card.Description>
     </Card.Header>
     <Card.Content class="flex flex-col gap-4">
       <div class="flex flex-col gap-2">
-        <Label for="cfg-hostname">Hostname</Label>
+        <Label for="cfg-hostname">{m.terminal_cfg_hostname()}</Label>
         <div class="flex gap-2">
           <Input
             id="cfg-hostname"
-            placeholder="e.g. OpenShock-Kitchen"
+            placeholder={m.terminal_cfg_example({ value: 'OpenShock-Kitchen' })}
             bind:value={hostname}
             {disabled}
           />
@@ -412,7 +414,7 @@
             variant="outline"
             {disabled}
             onclick={() => send('hostname')}
-            title="Read current value"
+            title={m.terminal_cfg_read_value()}
           >
             <Eye />
           </Button>
@@ -421,13 +423,13 @@
             disabled={disabled || !hostname}
           >
             <Send />
-            Set
+            {m.terminal_cfg_set()}
           </Button>
         </div>
       </div>
 
       <div class="flex flex-col gap-2">
-        <Label for="cfg-networks">Networks (JSON array)</Label>
+        <Label for="cfg-networks">{m.terminal_cfg_networks()}</Label>
         <Textarea
           id="cfg-networks"
           rows={4}
@@ -439,7 +441,7 @@
         {#if networksJson && !isValidJsonArray(networksJson)}
           <p class="text-destructive flex items-center gap-1 text-xs">
             <TriangleAlert class="h-3.5 w-3.5" />
-            Must be a valid JSON array
+            {m.terminal_cfg_invalid_json_array()}
           </p>
         {/if}
         <div class="flex gap-2">
@@ -447,23 +449,31 @@
             variant="outline"
             {disabled}
             onclick={() => send('networks')}
-            title="Read current value"
+            title={m.terminal_cfg_read_value()}
           >
             <Eye />
-            Read
+            {m.terminal_cfg_read()}
           </Button>
           <Button
             onclick={() => isValidJsonArray(networksJson) && send(`networks ${networksJson}`)}
             disabled={disabled || !isValidJsonArray(networksJson)}
           >
             <Send />
-            Set
+            {m.terminal_cfg_set()}
           </Button>
         </div>
         <p class="text-muted-foreground text-xs">
-          AP settings (<code>ap_ssid</code>, <code>ap_password</code>, <code>ap_disabled</code>,
-          <code>sta_disabled</code>, <code>offline_mode</code>) have no dedicated commands; use the
-          JSON config.
+          <ParaglideMessage
+            message={m.terminal_cfg_ap_note}
+            inputs={{
+              ssid: 'ap_ssid',
+              password: 'ap_password',
+              disabled: 'ap_disabled',
+              staDisabled: 'sta_disabled',
+              offlineMode: 'offline_mode',
+            }}
+            {code}
+          />
         </p>
       </div>
     </Card.Content>
@@ -472,12 +482,12 @@
   <!-- Backend -->
   <Card.Root>
     <Card.Header>
-      <Card.Title>Backend</Card.Title>
-      <Card.Description>OpenShock server and authentication.</Card.Description>
+      <Card.Title>{m.terminal_cfg_backend_title()}</Card.Title>
+      <Card.Description>{m.terminal_cfg_backend_desc()}</Card.Description>
     </Card.Header>
     <Card.Content class="flex flex-col gap-4">
       <div class="flex flex-col gap-2">
-        <Label for="cfg-domain">Domain</Label>
+        <Label for="cfg-domain">{m.terminal_cfg_domain()}</Label>
         <div class="flex gap-2">
           <Input
             id="cfg-domain"
@@ -489,7 +499,7 @@
             variant="outline"
             {disabled}
             onclick={() => send('domain')}
-            title="Read current value"
+            title={m.terminal_cfg_read_value()}
           >
             <Eye />
           </Button>
@@ -498,22 +508,22 @@
             disabled={disabled || !backendDomain}
           >
             <Send />
-            Set
+            {m.terminal_cfg_set()}
           </Button>
         </div>
         <p class="text-muted-foreground flex items-center gap-1 text-xs">
           <AlertTriangle class="h-3.5 w-3.5" />
-          Setting the domain will restart the device.
+          {m.terminal_cfg_domain_restart()}
         </p>
       </div>
 
       <div class="flex flex-col gap-2">
-        <Label for="cfg-authtoken">Auth token</Label>
+        <Label for="cfg-authtoken">{m.terminal_cfg_auth_token()}</Label>
         <div class="flex gap-2">
           <Input
             id="cfg-authtoken"
             type={showAuthToken ? 'text' : 'password'}
-            placeholder="Paste device token"
+            placeholder={m.terminal_cfg_auth_token_placeholder()}
             bind:value={authToken}
             autocomplete="off"
             {disabled}
@@ -522,7 +532,7 @@
             variant="outline"
             {disabled}
             onclick={() => (showAuthToken = !showAuthToken)}
-            title={showAuthToken ? 'Hide' : 'Show'}
+            title={showAuthToken ? m.terminal_cfg_hide() : m.terminal_cfg_show()}
           >
             <Eye />
           </Button>
@@ -531,7 +541,7 @@
             disabled={disabled || !authToken}
           >
             <Send />
-            Set
+            {m.terminal_cfg_set()}
           </Button>
         </div>
       </div>
@@ -541,14 +551,14 @@
   <!-- Serial -->
   <Card.Root>
     <Card.Header>
-      <Card.Title>Serial Input</Card.Title>
+      <Card.Title>{m.terminal_cfg_serial_title()}</Card.Title>
     </Card.Header>
     <Card.Content>
       <div class="flex items-center justify-between gap-4">
         <div class="flex flex-col gap-1">
-          <Label for="cfg-echo">Echo enabled</Label>
+          <Label for="cfg-echo">{m.terminal_cfg_echo()}</Label>
           <span class="text-muted-foreground text-sm">
-            Print typed characters back to the console.
+            {m.terminal_cfg_echo_desc()}
           </span>
         </div>
         <div class="flex items-center gap-2">
@@ -558,13 +568,13 @@
             size="sm"
             {disabled}
             onclick={() => send('echo')}
-            title="Read current value"
+            title={m.terminal_cfg_read_value()}
           >
             <Eye />
           </Button>
           <Button size="sm" {disabled} onclick={() => send(`echo ${echoEnabled}`)}>
             <Send />
-            Set
+            {m.terminal_cfg_set()}
           </Button>
         </div>
       </div>
@@ -574,15 +584,14 @@
   <!-- Advanced -->
   <Card.Root>
     <Card.Header>
-      <Card.Title>Advanced: full config</Card.Title>
+      <Card.Title>{m.terminal_cfg_advanced_title()}</Card.Title>
       <Card.Description>
-        For fields without dedicated commands (captive portal, OTA, LAN, etc.), replace the entire
-        config.
+        {m.terminal_cfg_advanced_desc()}
       </Card.Description>
     </Card.Header>
     <Card.Content class="flex flex-col gap-4">
       <div class="flex flex-col gap-2">
-        <Label for="cfg-jsonconfig">JSON config</Label>
+        <Label for="cfg-jsonconfig">{m.terminal_cfg_json_config()}</Label>
         <Textarea
           id="cfg-jsonconfig"
           rows={6}
@@ -594,7 +603,7 @@
         {#if jsonConfig && !isValidJson(jsonConfig)}
           <p class="text-destructive flex items-center gap-1 text-xs">
             <TriangleAlert class="h-3.5 w-3.5" />
-            Must be valid JSON
+            {m.terminal_cfg_invalid_json()}
           </p>
         {/if}
         <div class="flex gap-2">
@@ -602,27 +611,27 @@
             variant="outline"
             disabled={disabled || isReadingJson}
             onclick={readJsonConfig}
-            title="Read current config as JSON"
+            title={m.terminal_cfg_read_json()}
           >
             <Eye />
-            {isReadingJson ? 'Reading…' : 'Read'}
+            {isReadingJson ? m.terminal_cfg_reading() : m.terminal_cfg_read()}
           </Button>
           <Button
             onclick={() => isValidJson(jsonConfig) && send(`jsonconfig ${jsonConfig}`)}
             disabled={disabled || !isValidJson(jsonConfig)}
           >
             <Send />
-            Apply
+            {m.terminal_cfg_apply()}
           </Button>
         </div>
         <p class="text-muted-foreground flex items-center gap-1 text-xs">
           <AlertTriangle class="h-3.5 w-3.5" />
-          Applying a JSON config will restart the device.
+          {m.terminal_cfg_json_restart()}
         </p>
       </div>
 
       <div class="flex flex-col gap-2">
-        <Label for="cfg-rawconfig">Raw FlatBuffer config (base64)</Label>
+        <Label for="cfg-rawconfig">{m.terminal_cfg_raw_config()}</Label>
         <Textarea
           id="cfg-rawconfig"
           rows={4}
@@ -634,7 +643,7 @@
         {#if rawConfig && !isBase64(rawConfig)}
           <p class="text-destructive flex items-center gap-1 text-xs">
             <TriangleAlert class="h-3.5 w-3.5" />
-            Must be a valid base64 string
+            {m.terminal_cfg_invalid_base64()}
           </p>
         {/if}
         <div class="flex gap-2">
@@ -642,17 +651,17 @@
             variant="outline"
             disabled={disabled || isReadingRaw}
             onclick={readRawConfig}
-            title="Read current config as base64"
+            title={m.terminal_cfg_read_raw()}
           >
             <Eye />
-            {isReadingRaw ? 'Reading…' : 'Read'}
+            {isReadingRaw ? m.terminal_cfg_reading() : m.terminal_cfg_read()}
           </Button>
           <Button
             onclick={() => isBase64(rawConfig) && send(`rawconfig ${rawConfig.replace(/\s/g, '')}`)}
             disabled={disabled || !isBase64(rawConfig)}
           >
             <Send />
-            Apply
+            {m.terminal_cfg_apply()}
           </Button>
         </div>
       </div>
@@ -662,33 +671,36 @@
   <!-- Danger zone -->
   <Card.Root class="border-destructive/50">
     <Card.Header>
-      <Card.Title class="text-destructive">Danger zone</Card.Title>
+      <Card.Title class="text-destructive">{m.common_danger_zone()}</Card.Title>
     </Card.Header>
     <Card.Content>
       <div class="flex items-center justify-between gap-4">
         <div class="flex flex-col gap-1">
-          <span class="font-medium">Factory reset</span>
+          <span class="font-medium">{m.terminal_cfg_factory_reset()}</span>
           <span class="text-muted-foreground text-sm">
-            Wipes the entire device configuration.
+            {m.terminal_cfg_factory_reset_desc()}
           </span>
         </div>
         <Button variant="destructive" {disabled} onclick={() => (confirmFactoryResetOpen = true)}>
-          Factory reset
+          {m.terminal_cfg_factory_reset()}
         </Button>
       </div>
     </Card.Content>
   </Card.Root>
 </div>
 
+{#snippet code({ children }: { children?: Snippet })}
+  <code>{@render children?.()}</code>
+{/snippet}
+
 <ConfirmDeleteDialog
   bind:open={confirmFactoryResetOpen}
-  title="Factory reset device?"
-  actionLabel="Wipe config"
+  title={m.terminal_cfg_factory_reset_title()}
+  actionLabel={m.terminal_cfg_factory_reset_action()}
   onConfirm={() => send('factoryreset')}
 >
   {#snippet description()}
-    This will erase all configuration on the device; WiFi networks, backend credentials, pins, and
-    all other settings. The device will be reset to defaults.
+    {m.terminal_cfg_factory_reset_confirm()}
   {/snippet}
 </ConfirmDeleteDialog>
 
@@ -702,35 +714,39 @@
           <WifiOff class="h-5 w-5" />
         </div>
         <div class="flex flex-1 flex-col gap-1">
-          <Dialog.Title class="text-left">Couldn't read {failedReadField}</Dialog.Title>
+          <Dialog.Title class="text-left"
+            >{failedReadKey === 'JsonConfig'
+              ? m.terminal_cfg_read_failed_json_title()
+              : m.terminal_cfg_read_failed_raw_title()}</Dialog.Title
+          >
           <Dialog.Description class="text-left">
-            The device didn't respond after {READ_ATTEMPTS} attempts.
+            {m.terminal_cfg_read_failed_desc({ attempts: READ_ATTEMPTS })}
           </Dialog.Description>
         </div>
       </div>
     </Dialog.Header>
     <div class="flex flex-col gap-2 py-2">
-      <p class="text-muted-foreground text-sm">Common causes:</p>
+      <p class="text-muted-foreground text-sm">{m.terminal_cfg_common_causes()}</p>
       <ul class="text-muted-foreground ml-1 flex flex-col gap-1.5 text-sm">
         <li class="flex items-start gap-2">
           <span class="bg-muted-foreground/40 mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full"></span>
-          The device is busy handling another command.
+          {m.terminal_cfg_cause_busy()}
         </li>
         <li class="flex items-start gap-2">
           <span class="bg-muted-foreground/40 mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full"></span>
-          The device disconnected or rebooted.
+          {m.terminal_cfg_cause_disconnected()}
         </li>
         <li class="flex items-start gap-2">
           <span class="bg-muted-foreground/40 mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full"></span>
-          The firmware version doesn't support this command.
+          {m.terminal_cfg_cause_unsupported()}
         </li>
       </ul>
     </div>
     <Dialog.Footer class="gap-2 sm:gap-2">
-      <Button variant="outline" onclick={() => (failedReadOpen = false)}>Close</Button>
+      <Button variant="outline" onclick={() => (failedReadOpen = false)}>{m.common_close()}</Button>
       <Button onclick={retryFailedRead}>
         <RefreshCw class="h-4 w-4" />
-        Try again
+        {m.common_try_again()}
       </Button>
     </Dialog.Footer>
   </Dialog.Content>

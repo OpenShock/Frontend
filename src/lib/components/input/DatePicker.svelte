@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
+  import { intlLocale } from '#lib/i18n/intl.js';
   import { DateFormatter, type DateValue, getLocalTimeZone } from '@internationalized/date';
   import CalendarIcon from '@lucide/svelte/icons/calendar';
   import { buttonVariants } from '@openshock/svelte-core/components/ui/button';
@@ -12,7 +14,7 @@
 
   let { value = $bindable() }: Props = $props();
 
-  const df = new DateFormatter('en-US', {
+  const df = new DateFormatter(intlLocale(), {
     dateStyle: 'long',
   });
 
@@ -30,7 +32,7 @@
     )}
   >
     <CalendarIcon />
-    {value ? df.format(value.toDate(getLocalTimeZone())) : 'Pick a date'}
+    {value ? df.format(value.toDate(getLocalTimeZone())) : m.date_picker_placeholder()}
   </Popover.Trigger>
   <Popover.Content bind:ref={contentRef} class="w-auto p-0">
     <Calendar type="single" bind:value />

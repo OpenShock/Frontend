@@ -14,6 +14,7 @@ const mocks = {
     url: new URL('https://openshock.app/login'),
   },
   PUBLIC_BACKEND_API_URL: 'https://api.openshock.app/',
+  PUBLIC_ALLOW_INSECURE_LOCAL_API: false,
   PUBLIC_SITE_URL: 'https://openshock.app/',
   PUBLIC_SITE_SHORT_URL: 'https://shockl.ink/',
 };
@@ -40,6 +41,9 @@ vi.mock('$app/state', () => ({
 vi.mock('$app/env/public', () => ({
   get PUBLIC_BACKEND_API_URL() {
     return mocks.PUBLIC_BACKEND_API_URL;
+  },
+  get PUBLIC_ALLOW_INSECURE_LOCAL_API() {
+    return mocks.PUBLIC_ALLOW_INSECURE_LOCAL_API;
   },
   get PUBLIC_SITE_URL() {
     return mocks.PUBLIC_SITE_URL;
@@ -72,6 +76,7 @@ const {
 describe('getBackendURL', () => {
   beforeEach(() => {
     mocks.PUBLIC_BACKEND_API_URL = 'https://api.openshock.app/';
+    mocks.PUBLIC_ALLOW_INSECURE_LOCAL_API = false;
   });
 
   it('returns the base URL when no path is given', () => {
@@ -109,6 +114,20 @@ describe('getBackendURL', () => {
   });
 
   it('throws for non-HTTPS URLs', () => {
+    mocks.PUBLIC_BACKEND_API_URL = 'http://api.openshock.app/';
+    expect(() => getBackendURL()).toThrow('HTTPS');
+  });
+
+  it('allows plain HTTP on loopback when PUBLIC_ALLOW_INSECURE_LOCAL_API is set', () => {
+    mocks.PUBLIC_ALLOW_INSECURE_LOCAL_API = true;
+    for (const host of ['localhost:5173', '127.0.0.1:5173', '[::1]:5173']) {
+      mocks.PUBLIC_BACKEND_API_URL = `http://${host}/`;
+      expect(getBackendURL('2/account/login').pathname).toBe('/2/account/login');
+    }
+  });
+
+  it('still rejects plain HTTP off loopback when PUBLIC_ALLOW_INSECURE_LOCAL_API is set', () => {
+    mocks.PUBLIC_ALLOW_INSECURE_LOCAL_API = true;
     mocks.PUBLIC_BACKEND_API_URL = 'http://api.openshock.app/';
     expect(() => getBackendURL()).toThrow('HTTPS');
   });

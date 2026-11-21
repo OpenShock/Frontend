@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { shareLinksPauseShocker, shareLinksRemoveShocker } from '#lib/api/index.js';
   import type { PublicShareShocker } from '#lib/api/index.js';
   import { Pause, Play, Trash2 } from '@lucide/svelte';
@@ -35,7 +36,7 @@
       if (response.data !== undefined) {
         shocker.paused = response.data;
       }
-      toast.success(newPauseState ? 'Shocker paused' : 'Shocker resumed');
+      toast.success(newPauseState ? m.shocker_toast_paused() : m.shocker_toast_resumed());
     } catch (error) {
       handleApiError(error);
     } finally {
@@ -67,7 +68,7 @@
 
     try {
       await shareLinksRemoveShocker({ path: { publicShareId: shareId, shockerId: shocker.id } });
-      toast.success('Shocker removed from share');
+      toast.success(m.public_share_toast_removed());
       onRemoved?.(shocker.id);
     } catch (error) {
       handleApiError(error);
@@ -87,7 +88,7 @@
       {#if isPausedByPublicShare}
         <span class="text-muted-foreground flex items-center gap-1.5 text-[11px]">
           <span class="bg-warning size-1.5 shrink-0 rounded-full"></span>
-          Paused for this share
+          {m.public_share_paused_here()}
         </span>
       {/if}
     </div>
@@ -97,7 +98,9 @@
       class="h-7 w-7 shrink-0"
       onclick={togglePause}
       disabled={isTogglingPause}
-      title={isPausedByPublicShare ? 'Resume shocker' : 'Pause shocker'}
+      title={isPausedByPublicShare
+        ? m.public_share_resume_shocker()
+        : m.public_share_pause_shocker()}
     >
       {#if isPausedByPublicShare}
         <Play size={14} />
@@ -111,7 +114,7 @@
       class="text-destructive hover:text-destructive h-7 w-7 shrink-0"
       onclick={removeShocker}
       disabled={isRemoving}
-      title="Remove from share"
+      title={m.public_share_remove()}
     >
       <Trash2 size={14} />
     </Button>

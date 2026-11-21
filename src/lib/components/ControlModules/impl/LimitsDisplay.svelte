@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { ClockFading, Gauge } from '@lucide/svelte';
   import { formatDurationSeconds } from '@openshock/svelte-core/utils';
 
@@ -11,11 +12,11 @@
 </script>
 
 <div class="text-muted-foreground flex gap-3 text-xs">
-  <span class="flex items-center gap-1" title="Max Intensity">
+  <span class="flex items-center gap-1" title={m.control_max_intensity()}>
     <Gauge size={14} />
     {maxIntensity}%
   </span>
-  <span class="flex items-center gap-1" title="Max Duration">
+  <span class="flex items-center gap-1" title={m.control_max_duration()}>
     <ClockFading size={14} />
     {formatDurationSeconds(maxDuration)}
   </span>

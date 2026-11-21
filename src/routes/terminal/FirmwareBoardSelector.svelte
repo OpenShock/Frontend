@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { Check, ChevronsUpDown } from '@lucide/svelte';
   import { FetchVersionBoards } from '#lib/api/firmwareCDN.js';
   import { Button } from '@openshock/svelte-core/components/ui/button';
@@ -42,14 +43,14 @@
   <Popover>
     <PopoverTrigger>
       <Button variant="outline" role="combobox" class="w-[240px] justify-between" {disabled}>
-        {selectedBoard ?? 'Select a board...'}
+        {selectedBoard ?? m.terminal_board_select()}
         <ChevronsUpDown class="ml-2 size-4 shrink-0 opacity-50" />
       </Button>
     </PopoverTrigger>
     <PopoverContent class="w-[240px] p-0">
       <Command.Root>
-        <Command.Input placeholder="Search boards..." />
-        <Command.Empty>No board found.</Command.Empty>
+        <Command.Input placeholder={m.terminal_board_search()} />
+        <Command.Empty>{m.terminal_board_none()}</Command.Empty>
         <Command.Group>
           {#each boards as board (board)}
             <Command.Item value={board} onSelect={() => (selectedBoard = board)}>

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
+  import { ParaglideMessage } from '@inlang/paraglide-js-svelte';
   import { userSharesDeleteOutgoingInvite } from '#lib/api/index.js';
   import type { ShareInviteBaseDetails } from '#lib/api/index.js';
   import { Key, X, Zap } from '@lucide/svelte';
@@ -20,15 +22,17 @@
 
   let { shareInvite = $bindable() }: Props = $props();
 
-  const copyCode = () => copyToClipboard(shareInvite.id, 'Code copied to clipboard');
+  const copyCode = () => copyToClipboard(shareInvite.id, m.common_copied());
 
   async function removeInviteCall(invite: ShareInviteBaseDetails) {
     try {
       await userSharesDeleteOutgoingInvite({ path: { inviteId: shareInvite.id } });
       if (invite.sharedWith) {
-        toast.success(`Cancelled invite for ${invite.sharedWith.name} (${invite.id})`);
+        toast.success(
+          m.invite_toast_cancelled_for({ name: invite.sharedWith.name, id: invite.id })
+        );
       } else {
-        toast.success(`Cancelled invite ${invite.id}`);
+        toast.success(m.invite_toast_cancelled({ id: invite.id }));
       }
     } catch (error) {
       handleApiError(error);
@@ -39,8 +43,8 @@
 
   async function removeInvite() {
     const result = await dialog.confirm({
-      title: 'Cancel Invite',
-      confirmButtonText: 'Cancel',
+      title: m.invite_cancel_title(),
+      confirmButtonText: m.invite_cancel(),
       data: shareInvite,
       descSnippet: confirmDesc,
     });
@@ -50,9 +54,20 @@
 
 {#snippet confirmDesc(invite: ShareInviteBaseDetails)}
   {#if invite.sharedWith}
-    <p>Are you sure you want to cancel the invite for <strong>{invite.sharedWith.name}</strong>?</p>
+    <p>
+      <ParaglideMessage
+        message={m.invite_cancel_for_desc}
+        inputs={{ name: invite.sharedWith.name }}
+      >
+        {#snippet strong({ children })}<strong>{@render children?.()}</strong>{/snippet}
+      </ParaglideMessage>
+    </p>
   {:else}
-    <p>Are you sure you want to cancel the invite with code <strong>{invite.id}</strong>?</p>
+    <p>
+      <ParaglideMessage message={m.invite_cancel_code_desc} inputs={{ code: invite.id }}>
+        {#snippet strong({ children })}<strong>{@render children?.()}</strong>{/snippet}
+      </ParaglideMessage>
+    </p>
   {/if}
 {/snippet}
 
@@ -60,7 +75,7 @@
   <Table.Cell class="flex flex-auto items-center font-medium">
     {#if shareInvite.sharedWith}
       <Avatar.Root class="h-15 w-15">
-        <Avatar.Image src={shareInvite.sharedWith.image} alt="User Avatar" />
+        <Avatar.Image src={shareInvite.sharedWith.image} alt={m.common_user_avatar()} />
         <Avatar.Fallback>
           {shareInvite.sharedWith.name.charAt(0)}
         </Avatar.Fallback>
@@ -103,12 +118,12 @@
       <Tooltip.Trigger
         class={cn('mr-4 size-9', buttonVariants({ variant: 'destructive' }))}
         onclick={removeInvite}
-        aria-label="Cancel invite"
+        aria-label={m.invite_cancel_title()}
       >
         <X />
       </Tooltip.Trigger>
       <Tooltip.Content>
-        <p>Cancel Outstanding Invite</p>
+        <p>{m.invite_cancel_outstanding()}</p>
       </Tooltip.Content>
     </Tooltip.Root>
   </Table.Cell>

@@ -10,6 +10,7 @@
 </script>
 
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { untrack } from 'svelte';
   import { Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp } from '@lucide/svelte';
   import { Button } from '@openshock/svelte-core/components/ui/button';
@@ -51,7 +52,7 @@
     type="button"
     role="tab"
     aria-selected={isCurrent}
-    aria-label="Step {i + 1}: {title}"
+    aria-label={m.common_step_label({ number: i + 1, title })}
     onclick={() => goTo(i)}
     class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-semibold transition-colors
       {isCompleted
@@ -71,7 +72,7 @@
 <div class="flex h-full min-h-0 flex-col gap-4 {className ?? ''}">
   {#if orientation === 'horizontal'}
     <!-- Horizontal step indicator -->
-    <div class="flex flex-none items-start" role="tablist" aria-label="Steps">
+    <div class="flex flex-none items-start" role="tablist" aria-label={m.common_steps()}>
       {#each steps as step, i (i)}
         {@const isCurrent = i === active}
         {@const isCompleted = i < active}
@@ -112,7 +113,7 @@
     </div>
   {:else}
     <!-- Vertical stepper: list of steps with the active one expanded inline -->
-    <div class="min-h-0 flex-1 overflow-y-auto" role="tablist" aria-label="Steps">
+    <div class="min-h-0 flex-1 overflow-y-auto" role="tablist" aria-label={m.common_steps()}>
       {#each steps as step, i (i)}
         {@const isCurrent = i === active}
         {@const isCompleted = i < active}
@@ -158,10 +159,10 @@
         {:else}
           <ChevronLeft />
         {/if}
-        Previous
+        {m.common_previous()}
       </Button>
       <Button disabled={!canNext} onclick={() => goTo(active + 1)}>
-        Next
+        {m.common_next()}
         {#if orientation === 'vertical'}
           <ChevronDown />
         {:else}

@@ -3,8 +3,12 @@ packages:
 
 allowBuilds:
   '@tailwindcss/oxide': true
+  # testcontainers subdeps — build scripts not needed (ssh2/cpu-features have JS fallbacks)
+  cpu-features: false
   esbuild: true
+  protobufjs: false
   sharp: true
+  ssh2: false
   workerd: true
 blockExoticSubdeps: true
 minimumReleaseAge: 4320 # 3 days
@@ -17,6 +21,7 @@ overrides:
   cookie@<0.7.0: ^0.7.0
   js-yaml@>=4.0.0 <4.3.1: ^4.3.1
   source-map-js@>=1.0.0 <1.2.2: ^1.2.2
+  zod@<4.6.6: ^4.6.6
 
 patchedDependencies:
   '@microsoft/signalr@10.0.11': patches/signalr.patch

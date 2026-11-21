@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { Copy, Ellipsis, User } from '@lucide/svelte';
   import {
     Container,
@@ -28,7 +29,7 @@
   import { sharedHubsState, refreshSharedHubs } from '#lib/state/shared-hubs-state.svelte.js';
   import { onMount } from 'svelte';
 
-  registerBreadcrumbs(() => [{ label: 'Shared Shockers' }]);
+  registerBreadcrumbs(() => [{ label: m.shared_shockers_title() }]);
 
   onMount(refreshSharedHubs);
 
@@ -66,13 +67,13 @@
   {#if sharedHubsState.value == null}
     <PageLoading />
   {:else}
-    <PageHeader title="Shared Shockers" subtitle="Shockers other users have shared with you." />
+    <PageHeader title={m.shared_shockers_title()} subtitle={m.shared_shockers_subtitle()} />
 
     {#if !hasSharedShockers}
       <EmptyState
         icon={User}
-        title="No shockers have been shared with you yet."
-        description="When someone shares their shockers with you, they'll appear here."
+        title={m.shared_shockers_empty_title()}
+        description={m.shared_shockers_empty_desc()}
       />
     {:else}
       <div class="flex w-full flex-col gap-5">
@@ -91,7 +92,7 @@
               <div class="min-w-0">
                 <h2 class="truncate text-lg font-semibold">{owner.name}</h2>
                 <p class="text-muted-foreground text-xs">
-                  {totalShockers} shocker{totalShockers !== 1 ? 's' : ''}
+                  {m.shockers_count({ count: totalShockers })}
                 </p>
               </div>
             </div>
@@ -130,20 +131,20 @@
                               size="icon"
                               class="relative size-8 p-0"
                             >
-                              <span class="sr-only">Open menu</span>
+                              <span class="sr-only">{m.common_open_menu()}</span>
                               <Ellipsis class="size-4" />
                             </Button>
                           {/snippet}
                         </DropdownMenu.Trigger>
                         <DropdownMenu.Content>
-                          <DropdownMenu.Label>Shocker</DropdownMenu.Label>
+                          <DropdownMenu.Label>{m.shocker_label()}</DropdownMenu.Label>
                           <DropdownMenu.Group>
                             <DropdownMenu.Item
                               class="cursor-pointer"
-                              onclick={() => copyToClipboard(shocker.id, 'ID copied to clipboard')}
+                              onclick={() => copyToClipboard(shocker.id, m.common_id_copied())}
                             >
                               <Copy class="size-4" />
-                              Copy ID
+                              {m.common_copy_id()}
                             </DropdownMenu.Item>
                           </DropdownMenu.Group>
                         </DropdownMenu.Content>

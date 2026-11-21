@@ -1,5 +1,5 @@
 import { usersGetSelf } from '#lib/api/index.js';
-import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+import { handleApiError, ignoreProblem } from '#lib/errorhandling/apiErrorHandling.js';
 import type { ApiUser, ApiUserSelf } from '#lib/types/ApiUser.js';
 
 let loading = $state(true);
@@ -77,10 +77,8 @@ export const userState = {
     } catch (error) {
       userState.reset();
 
-      await handleApiError(
-        error,
-        (problem) => problem.type === 'Authentication.CookieMissingOrInvalid'
-      );
+      // Not being logged in is the expected outcome of this probe, not an error to show.
+      await handleApiError(error, { 'Authentication.CookieMissingOrInvalid': ignoreProblem });
 
       return false;
     }

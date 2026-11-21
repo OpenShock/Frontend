@@ -50,6 +50,12 @@ export default defineConfig(
     },
   },
   {
+    files: ['**/*.test.ts', '**/*.test.svelte.ts', '**/*.spec.ts'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
+  {
     ignores: [
       '.DS_Store',
       'node_modules',
@@ -64,6 +70,7 @@ export default defineConfig(
       'yarn.lock',
       'src/lib/api/internal',
       'src/lib/components/ui',
+      'src/lib/paraglide',
       // Workspace packages (e.g. svelte-core submodule) own their own linting
       'packages/**',
     ],

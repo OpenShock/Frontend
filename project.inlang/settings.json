@@ -1,0 +1,25 @@
+{
+  "$schema": "https://inlang.com/schema/project-settings",
+  "baseLocale": "en",
+  "locales": [
+    "en",
+    "de",
+    "nb",
+    "es",
+    "sv",
+    "fi",
+    "fr",
+    "et",
+    "nl",
+    "uk",
+    "ja",
+    "zh-Hans",
+    "zh-Hant",
+    "uwu"
+  ],
+  "modules": ["./node_modules/@inlang/plugin-i18next/dist/index.js"],
+  "plugin.inlang.i18next": {
+    "pathPattern": "./messages/{locale}.json",
+    "contextValues": []
+  }
+}

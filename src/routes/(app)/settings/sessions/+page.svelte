@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { sessionsListSessions } from '#lib/api/index.js';
   import type { LoginSessionResponse } from '#lib/api/index.js';
   import MonitorSmartphone from '@lucide/svelte/icons/monitor-smartphone';
@@ -22,8 +23,8 @@
   import SessionActions from './session-actions.svelte';
 
   registerBreadcrumbs(() => [
-    { label: 'Settings', href: 'settings/account' },
-    { label: 'Sessions' },
+    { label: m.sidebar_group_settings(), href: 'settings/account' },
+    { label: m.sidebar_settings_sessions() },
   ]);
 
   let data = $state<LoginSessionResponse[]>([]);
@@ -42,7 +43,7 @@
   }
 
   function deviceName(userAgent: string | null): string {
-    if (!userAgent) return 'Unknown device';
+    if (!userAgent) return m.sessions_unknown_device();
     return getReadableUserAgentName(userAgent) ?? userAgent;
   }
 
@@ -63,7 +64,7 @@
 
   async function onRefreshClicked() {
     if (await fetchSessions()) {
-      toast.success('Sessions refreshed successfully');
+      toast.success(m.sessions_toast_refreshed());
     }
   }
 
@@ -71,25 +72,22 @@
 </script>
 
 <Container>
-  <PageHeader
-    title="Sessions"
-    subtitle="Every active session on your account. Revoke any you do not recognize."
-  >
+  <PageHeader title={m.sidebar_settings_sessions()} subtitle={m.sessions_subtitle()}>
     <Button variant="outline" onclick={onRefreshClicked} disabled={loading}>
       <RotateCcw />
-      Refresh
+      {m.common_refresh()}
     </Button>
   </PageHeader>
   <Card.Content class="w-full">
     {#if loading && data.length === 0}
       <PageLoading />
     {:else if failed && data.length === 0}
-      <PageError message="Failed to load sessions." onRetry={fetchSessions} />
+      <PageError message={m.sessions_load_failed()} onRetry={fetchSessions} />
     {:else if data.length === 0}
       <EmptyState
         icon={MonitorSmartphone}
-        title="No active sessions"
-        description="Sessions appear here once you sign in from a browser or app."
+        title={m.sessions_empty_title()}
+        description={m.sessions_empty_desc()}
       />
     {:else}
       <div class="divide-y rounded-md border">
@@ -103,9 +101,19 @@
               <span class="text-muted-foreground shrink-0 text-sm">{session.ip}</span>
             </div>
             <div class="text-muted-foreground flex shrink-0 flex-wrap items-center gap-x-4 text-sm">
-              <span>{lastSeen ? `Last seen ${lastSeen}` : 'Never used'}</span>
-              <span>Signed in {formatRelativeInstant(session.created, clock.current)}</span>
-              <span>Expires {formatRelativeInstant(session.expires, clock.current)}</span>
+              <span
+                >{lastSeen ? m.sessions_last_seen({ time: lastSeen }) : m.common_never_used()}</span
+              >
+              <span
+                >{m.sessions_signed_in({
+                  time: formatRelativeInstant(session.created, clock.current),
+                })}</span
+              >
+              <span
+                >{m.common_expires({
+                  time: formatRelativeInstant(session.expires, clock.current),
+                })}</span
+              >
             </div>
             <SessionActions {session} {onRevoked} />
           </div>

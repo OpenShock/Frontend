@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
+  import { ParaglideMessage } from '@inlang/paraglide-js-svelte';
   import { page } from '$app/state';
   import { PUBLIC_DEVELOPMENT_BANNER } from '$app/env/public';
   import {
@@ -9,12 +11,12 @@
   import { SidebarProvider } from '@openshock/svelte-core/components/ui/sidebar';
   import { Toaster } from '@openshock/svelte-core/components/ui/sonner';
   import { buildMetaData } from '#lib/metadata.js';
+  import { openGraphLocale } from '#lib/i18n/open-graph.js';
   import { onMount, untrack, type Snippet } from 'svelte';
   import { maybePromptTelemetryConsent } from '#lib/telemetry/consent-prompt.js';
   import Footer from './Footer.svelte';
   import Header from './Header.svelte';
   import Sidebar from './Sidebar.svelte';
-  import WelcomeScreen from './WelcomeScreen.svelte';
   import '../app.css';
   import { IsMobile } from '@openshock/svelte-core/hooks';
   import { DialogManager } from '@openshock/svelte-core/components/dialog-manager';
@@ -36,27 +38,17 @@
   let sidebarOpen = $state(untrack(() => data.sidebarOpen));
   const isOpen = $derived(mobile.current ? false : sidebarOpen);
 
-  let welcomeOpen = $state(untrack(() => data.showWelcome));
-
   onMount(() => maybePromptTelemetryConsent());
 </script>
 
 <BasicTags {...meta} />
-<OpenGraphTags type="website" {...meta} url={page.url.origin} />
+<OpenGraphTags type="website" {...meta} url={page.url.origin} metaLocale={openGraphLocale()} />
 <TwitterSummaryTags type="summary" {...meta} site="@OpenShockORG" creator="@OpenShockORG" />
 
 <Toaster position="top-center" />
 
 <TooltipProvider delayDuration={250}>
   <DialogManager />
-
-  {#if welcomeOpen}
-    <WelcomeScreen
-      close={() => {
-        welcomeOpen = false;
-      }}
-    />
-  {/if}
 
   <SidebarProvider open={isOpen} onOpenChange={(v) => (sidebarOpen = v)}>
     <Sidebar />
@@ -66,8 +58,10 @@
       {#if PUBLIC_DEVELOPMENT_BANNER}
         <div class="top-0 left-0 z-1 flex-none bg-[orangered] text-center text-white">
           <p>
-            This is the OpenShock <b>DEVELOPMENT</b> environment. <u>No data is saved</u>, and
-            regularly overwritten by production data
+            <ParaglideMessage message={m.dev_banner}>
+              {#snippet b({ children })}<b>{@render children?.()}</b>{/snippet}
+              {#snippet u({ children })}<u>{@render children?.()}</u>{/snippet}
+            </ParaglideMessage>
           </p>
         </div>
       {/if}

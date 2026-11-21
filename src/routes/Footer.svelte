@@ -1,24 +1,47 @@
 <script lang="ts">
   import { HubConnectionState } from '@microsoft/signalr';
+  import { version as frontendCommit } from '$app/env';
   import { PUBLIC_GITHUB_PROJECT_URL } from '$app/env/public';
   import { getConnectionState } from '#lib/signalr/user.svelte.js';
   import { Wifi, WifiOff } from '@lucide/svelte';
   import * as DropdownMenu from '@openshock/svelte-core/components/ui/dropdown-menu';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import { backendMetadata } from '#lib/state/backend-metadata-state.svelte.js';
+  import { m } from '#lib/paraglide/messages.js';
+  import { ParaglideMessage } from '@inlang/paraglide-js-svelte';
+  import LanguageSwitcher from './LanguageSwitcher.svelte';
+
+  function shortCommit(commit: string): string {
+    return commit.slice(0, 7);
+  }
+
+  function commitUrl(repo: string, commit: string): string {
+    return `${PUBLIC_GITHUB_PROJECT_URL}/${repo}/commit/${commit}`;
+  }
+
+  const frontendCommitUrl = commitUrl('Frontend', frontendCommit);
+  const backendCommitUrl = $derived(
+    backendMetadata.state ? commitUrl('API', backendMetadata.state.commit) : undefined
+  );
 </script>
 
 <footer
   class="text-muted-foreground text-sm-foreground bottom-0 flex flex-none items-center justify-between px-2"
 >
   <div>
-    Made with
-    <span class="text-[#e25555]">♥</span>
-    by the
-    <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- external link -->
-    <a target="_blank" rel="noopener" href={PUBLIC_GITHUB_PROJECT_URL}>OpenShock Team</a>
+    <ParaglideMessage message={m.footer_made_with}>
+      {#snippet heart()}
+        <span class="text-[#e25555]">♥</span>
+      {/snippet}
+      {#snippet team({ children })}
+        <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- external link -->
+        <a target="_blank" rel="noopener" href={PUBLIC_GITHUB_PROJECT_URL}>{@render children?.()}</a
+        >
+      {/snippet}
+    </ParaglideMessage>
   </div>
   <div class="flex items-center gap-2">
+    <LanguageSwitcher />
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
         {#snippet child({ props })}
@@ -27,7 +50,7 @@
             variant="ghost"
             size="icon"
             class="h-4 w-4"
-            aria-label="Server connection status"
+            aria-label={m.footer_connection_status_label()}
           >
             {#if getConnectionState() === HubConnectionState.Connected}
               <Wifi class="text-success h-4 w-4" />
@@ -41,7 +64,7 @@
         <table class="w-full [&_td]:px-4 [&_td]:last:text-right">
           <tbody>
             <tr>
-              <td>SignalR State</td>
+              <td>{m.footer_signalr_state()}</td>
               <td>
                 <p class="flex items-center justify-end gap-2">
                   {#if getConnectionState() === HubConnectionState.Connected}
@@ -54,12 +77,24 @@
                 </p></td
               >
             </tr>
+            <tr>
+              <td>{m.footer_frontend_version()}</td>
+              <td title={m.footer_frontend_commit_title({ commit: frontendCommit })}>
+                <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- external link -->
+                <a target="_blank" rel="noopener" href={frontendCommitUrl}
+                  >{shortCommit(frontendCommit)}</a
+                >
+              </td>
+            </tr>
             {#if backendMetadata.state}
               <tr>
-                <td>Backend Version</td>
-                <td title="Commit {backendMetadata.state.commit}"
-                  >{backendMetadata.state.version}</td
-                >
+                <td>{m.footer_backend_version()}</td>
+                <td title={m.footer_backend_commit_title({ commit: backendMetadata.state.commit })}>
+                  <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- external link -->
+                  <a target="_blank" rel="noopener" href={backendCommitUrl}
+                    >{backendMetadata.state.version}</a
+                  >
+                </td>
               </tr>
             {/if}
           </tbody>

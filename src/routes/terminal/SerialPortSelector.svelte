@@ -3,10 +3,11 @@
 </script>
 
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
+  import { ParaglideMessage } from '@inlang/paraglide-js-svelte';
   import { Cpu, TriangleAlert, Unplug } from '@lucide/svelte';
   import { Button } from '@openshock/svelte-core/components/ui/button';
-  import type { SerialContext } from '#lib/utils/serial-context.svelte.js';
-  import { NumberToHexPadded } from '@openshock/svelte-core/utils';
+  import { getHardwareId, type SerialContext } from '#lib/utils/serial-context.svelte.js';
 
   interface Props {
     serial: SerialContext;
@@ -39,23 +40,6 @@
       });
   }
 
-  function GetHardwareID(serialPort: SerialPort | null) {
-    const info = serialPort?.getInfo();
-    if (!info || (!info.usbVendorId && !info.usbProductId)) {
-      return 'Unknown';
-    }
-
-    let parts: string[] = [];
-    if (info.usbVendorId) {
-      parts.push(`VID_${NumberToHexPadded(info.usbVendorId, 4)}`);
-    }
-    if (info.usbProductId) {
-      parts.push(`PID_${NumberToHexPadded(info.usbProductId, 4)}`);
-    }
-
-    return parts.join('&');
-  }
-
   // Remove port if disconnected
   $effect(() => {
     if (port && !serial.ports.includes(port)) {
@@ -69,10 +53,10 @@
     <Button class="flex-1" onclick={ToggleDeviceConnection} disabled={disabled || loading}>
       {#if port === null}
         <Cpu />
-        Select Device
+        {m.terminal_port_select()}
       {:else}
         <Unplug />
-        Disconnect Device
+        {m.terminal_port_disconnect()}
       {/if}
     </Button>
   </div>
@@ -80,13 +64,20 @@
     <div class="p-2">
       {#if port !== null}
         <p class="text-success">
-          Device connected: <span class="font-bold">{GetHardwareID(port)}</span>
+          <ParaglideMessage
+            message={m.terminal_port_connected}
+            inputs={{ id: getHardwareId(port) }}
+          >
+            {#snippet strong({ children })}
+              <span class="font-bold">{@render children?.()}</span>
+            {/snippet}
+          </ParaglideMessage>
         </p>
       {/if}
       {#if errorMessage !== null && errorMessage.name !== 'NotFoundError'}
         <div class="flex flex-row items-center justify-start gap-2">
           <TriangleAlert class="text-warning" />
-          <p class="text-warning">Error: {errorMessage.message}</p>
+          <p class="text-warning">{m.common_error({ message: errorMessage.message })}</p>
         </div>
       {/if}
     </div>

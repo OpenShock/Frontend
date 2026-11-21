@@ -1,7 +1,10 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
+  import { ParaglideMessage } from '@inlang/paraglide-js-svelte';
   import ArrowDownToLine from '@lucide/svelte/icons/arrow-down-to-line';
   import { PUBLIC_DISCORD_INVITE_URL } from '$app/env/public';
   import { Code, Keyboard } from '@openshock/svelte-core/components';
+  import type { Snippet } from 'svelte';
   import Stepper, { type StepperStep } from '#lib/components/Stepper.svelte';
   import { DiscordLogo } from '@openshock/svelte-core/components/svg';
   import { Button } from '@openshock/svelte-core/components/ui/button';
@@ -14,6 +17,11 @@
 
   let { open, onClose }: Props = $props();
 
+  // Identifiers the help text refers to. Passed as inputs so translations cannot alter them.
+  const DRIVER_INSTALLER = 'CP210xVCPInstaller_x64.exe';
+  const DEVICE_NAME = 'Silicon Labs CP210x USB to UART Bridge';
+  const SUPPORT_CHANNEL = '# 💭┃support-chat';
+
   function onOpenChange(open: boolean) {
     if (!open) {
       onClose();
@@ -21,11 +29,11 @@
   }
 
   const steps: StepperStep[] = [
-    { title: 'USB cable', content: cableBody },
-    { title: 'USB port', content: portBody },
-    { title: 'Install driver', content: driverBody },
-    { title: 'Manual driver update', content: manualBody },
-    { title: 'Ask on Discord', content: discordBody },
+    { title: m.terminal_help_step_cable(), content: cableBody },
+    { title: m.terminal_help_step_port(), content: portBody },
+    { title: m.terminal_help_step_driver(), content: driverBody },
+    { title: m.terminal_help_step_manual(), content: manualBody },
+    { title: m.terminal_help_step_discord(), content: discordBody },
   ];
 </script>
 
@@ -38,11 +46,11 @@
         <h2
           class="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0"
         >
-          Troubleshooter
+          {m.terminal_help_title()}
         </h2>
       </Dialog.Title>
       <Dialog.Description>
-        Work through these steps in order. Each one rules out a common cause.
+        {m.terminal_help_desc()}
       </Dialog.Description>
     </Dialog.Header>
 
@@ -50,25 +58,30 @@
   </Dialog.Content>
 </Dialog.Root>
 
+{#snippet code({ children }: { children?: Snippet })}
+  <Code>{@render children?.()}</Code>
+{/snippet}
+
+{#snippet key({ children }: { children?: Snippet })}
+  <Keyboard>{@render children?.()}</Keyboard>
+{/snippet}
+
 {#snippet cableBody()}
   <p class="text-sm">
-    Many USB-C and micro-USB cables are charge-only and don't carry data. Swap to a known-good data
-    cable (one you've used to transfer files or connect other devices) and reconnect the hub.
+    {m.terminal_help_cable_body()}
   </p>
 {/snippet}
 
 {#snippet portBody()}
   <p class="text-sm">
-    Plug the device directly into a USB port on your computer. Avoid USB hubs, docking stations, and
-    front-panel ports if possible; these are common sources of power and signal issues. If you're on
-    a desktop, try a port on the back of the machine.
+    {m.terminal_help_port_body()}
   </p>
 {/snippet}
 
 {#snippet driverBody()}
   <ol class="ml-4 flex list-decimal flex-col gap-3 text-sm">
     <li>
-      <p class="mb-2">Download the CP210x driver:</p>
+      <p class="mb-2">{m.terminal_help_driver_download()}</p>
       <Button
         href="https://download.openshock.org/drivers/CP210x_Universal_Windows_Driver.zip"
         target="_blank"
@@ -78,39 +91,44 @@
         CP210x Universal Windows Driver
       </Button>
     </li>
-    <li>Extract the contents of the zip file to a folder on your computer.</li>
+    <li>{m.terminal_help_driver_extract()}</li>
     <li>
-      Open the folder and run <Code>CP210xVCPInstaller_x64.exe</Code>. Follow the prompts to
-      install.
+      <ParaglideMessage
+        message={m.terminal_help_driver_run}
+        inputs={{ installer: DRIVER_INSTALLER }}
+        {code}
+      />
     </li>
-    <li>Reconnect the device.</li>
+    <li>{m.terminal_help_driver_reconnect()}</li>
   </ol>
 {/snippet}
 
 {#snippet manualBody()}
-  <p class="mb-2 text-sm">If the driver installer ran but the device still doesn't show up:</p>
+  <p class="mb-2 text-sm">{m.terminal_help_manual_intro()}</p>
   <ol class="ml-4 flex list-decimal flex-col gap-3 text-sm">
     <li>
-      Open Device Manager (press <Keyboard>Win</Keyboard> + <Keyboard>X</Keyboard> and select
-      <Code>Device Manager</Code>).
+      <ParaglideMessage message={m.terminal_help_manual_open} {code} {key} />
     </li>
     <li>
-      Under <Code>Ports (COM & LPT)</Code>, look for an entry like:
+      <ParaglideMessage message={m.terminal_help_manual_ports} {code} />
       <ul class="my-2 ml-6 list-disc [&>li]:mt-1">
-        <li><Code>Silicon Labs CP210x USB to UART Bridge</Code></li>
-        <li><Code>Silicon Labs CP210x USB to UART Bridge (COM...)</Code></li>
+        <li><Code>{DEVICE_NAME}</Code></li>
+        <li><Code>{DEVICE_NAME} (COM...)</Code></li>
       </ul>
-      If it's missing, the device isn't being detected by Windows at all; revisit the cable and port steps.
+      {m.terminal_help_manual_missing()}
     </li>
     <li>
-      Right-click the device and pick <Code>Update Driver</Code>.
+      <ParaglideMessage message={m.terminal_help_manual_update} {code} />
     </li>
     <li>
-      Choose <Code>Browse my computer for drivers</Code> and select the folder you extracted the driver
-      zip into. Make sure <Code>Include subfolders</Code> is checked.
+      <ParaglideMessage message={m.terminal_help_manual_browse} {code} />
     </li>
     <li>
-      On success, the entry should now read <Code>Silicon Labs CP210x USB to UART Bridge</Code>.
+      <ParaglideMessage
+        message={m.terminal_help_manual_success}
+        inputs={{ deviceName: DEVICE_NAME }}
+        {code}
+      />
     </li>
   </ol>
 {/snippet}
@@ -118,18 +136,21 @@
 {#snippet discordBody()}
   <div class="flex flex-col gap-3 text-sm">
     <p>
-      Still stuck after all of the above? Hop into our Discord server and ask in the
-      <Code># 💭┃support-chat</Code> channel. Please include:
+      <ParaglideMessage
+        message={m.terminal_help_discord_intro}
+        inputs={{ channel: SUPPORT_CHANNEL }}
+        {code}
+      />
     </p>
     <ul class="text-muted-foreground ml-6 list-disc [&>li]:mt-1">
-      <li>your operating system and browser</li>
-      <li>the device you're using (board model, where you got it)</li>
-      <li>what you've already tried from the previous steps</li>
-      <li>any error messages or relevant terminal output</li>
+      <li>{m.terminal_help_discord_os()}</li>
+      <li>{m.terminal_help_discord_device()}</li>
+      <li>{m.terminal_help_discord_tried()}</li>
+      <li>{m.terminal_help_discord_errors()}</li>
     </ul>
     <Button href={PUBLIC_DISCORD_INVITE_URL} target="_blank" rel="noopener" class="w-fit">
       <DiscordLogo class="fill-current" />
-      Join our Discord server
+      {m.terminal_help_discord_join()}
     </Button>
   </div>
 {/snippet}

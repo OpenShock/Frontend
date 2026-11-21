@@ -10,6 +10,8 @@
   } from '@openshock/svelte-core/components/metadata';
   import ArrowLeft from '@lucide/svelte/icons/arrow-left';
   import { isValidRedirectURL } from '#lib/utils/url.js';
+  import { openGraphLocale } from '#lib/i18n/open-graph.js';
+  import { m } from '#lib/paraglide/messages.js';
 
   let previousPath = $state<string>(resolve('/'));
 
@@ -21,10 +23,18 @@
     }
   });
 
+  // SvelteKit's own messages are always English, so swap those for translated ones.
+  // Messages thrown by the app itself are shown as they are.
+  function errorHeading(message: string | undefined): string {
+    if (message === 'Not Found') return m.error_not_found_message();
+    if (message === undefined || message === 'Internal Error') return m.error_fallback_message();
+    return message;
+  }
+
   const meta = {
-    title: 'Service Unavailable',
-    description: 'OpenShock is currently unavailable',
-    image: { src: asset('logo.svg'), alt: 'OpenShock Logo' },
+    title: m.error_meta_title(),
+    description: m.error_meta_description(),
+    image: { src: asset('logo.svg'), alt: m.error_meta_logo_alt() },
   };
 </script>
 
@@ -35,7 +45,7 @@
   url={page.url.origin}
   siteName={PUBLIC_SITE_NAME}
   determiner="auto"
-  metaLocale="en_US"
+  metaLocale={openGraphLocale()}
 />
 
 <TwitterSummaryTags type="summary" {...meta} site="@OpenShockORG" creator="@OpenShockORG" />
@@ -46,20 +56,19 @@
   </div>
 
   <p class="text-foreground mt-2 text-xl font-semibold">
-    {page.error?.message ?? 'Something went wrong.'}
+    {errorHeading(page.error?.message)}
   </p>
 
   <p class="text-muted-foreground mt-1 text-sm">
-    {page.status === 404
-      ? "The page you're looking for doesn't exist."
-      : 'An unexpected error occurred.'}
+    {page.status === 404 ? m.error_not_found_description() : m.error_unexpected_description()}
   </p>
   <!-- eslint-disable svelte/no-navigation-without-resolve -->
   <a
     href={previousPath}
     class="bg-primary text-primary-foreground hover:bg-primary/90 mt-6 inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors"
   >
-    <ArrowLeft class="size-4" /> Go back
+    <ArrowLeft class="size-4" />
+    {m.error_go_back()}
   </a>
   <!-- eslint-enable svelte/no-navigation-without-resolve -->
 </div>

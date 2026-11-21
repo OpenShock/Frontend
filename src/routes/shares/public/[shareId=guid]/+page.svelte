@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { publicGetPublicShare } from '#lib/api/index.js';
   import type { PublicShareResponse } from '#lib/api/index.js';
   import { CircleUser, LogIn, Undo2 } from '@lucide/svelte';
@@ -25,8 +26,8 @@
   let entered = $state(false);
 
   registerBreadcrumbs(() => [
-    { label: 'Public Shares', href: 'shares/public' },
-    { label: shareData?.name ?? 'Public Share' },
+    { label: m.sidebar_public_shares(), href: 'shares/public' },
+    { label: shareData?.name ?? m.public_share_label() },
   ]);
 
   // Fetch share details
@@ -56,7 +57,7 @@
 </script>
 
 {#await details}
-  <p>Loading share details...</p>
+  <p>{m.public_share_view_loading()}</p>
 {:then shareLinkRoot}
   {#if entered}
     <ControlView {shareLinkRoot} {guestName} />
@@ -64,30 +65,30 @@
     <div class="flex h-full w-full items-center justify-center">
       <Card.Root class="w-full max-w-sm">
         <Card.Header class="text-center">
-          <Card.Title class="text-xl"><h1>Public Share Link</h1></Card.Title>
-          <Card.Description>Enter as a guest or login with your OpenShock account</Card.Description>
+          <Card.Title class="text-xl"><h1>{m.public_share_view_title()}</h1></Card.Title>
+          <Card.Description>{m.public_share_view_desc()}</Card.Description>
         </Card.Header>
         <Card.Content class="flex flex-col gap-2">
           {#if enterAsGuestClicked}
-            <Input placeholder="Guest Name" bind:value={guestName} />
+            <Input placeholder={m.public_share_view_guest_name()} bind:value={guestName} />
             <span class="flex gap-2">
               <Button class="grow" variant="outline" onclick={() => (enterAsGuestClicked = false)}
-                ><Undo2 />Back</Button
+                ><Undo2 />{m.common_back()}</Button
               >
 
               <Button
                 class="grow"
                 variant="outline"
                 disabled={guestName ? false : true}
-                onclick={() => (entered = true)}><LogIn />Enter</Button
+                onclick={() => (entered = true)}><LogIn />{m.public_share_view_enter()}</Button
               >
             </span>
           {:else}
             <Button variant="outline" onclick={() => (enterAsGuestClicked = true)}
-              ><CircleUser />Enter as Guest</Button
+              ><CircleUser />{m.public_share_view_enter_guest()}</Button
             >
 
-            <Button variant="outline" href={loginUrl}><LogIn />Login</Button>
+            <Button variant="outline" href={loginUrl}><LogIn />{m.public_share_login()}</Button>
           {/if}
         </Card.Content>
       </Card.Root>

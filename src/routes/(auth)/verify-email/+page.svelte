@@ -9,8 +9,9 @@
   import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
+  import { m } from '#lib/paraglide/messages.js';
 
-  registerBreadcrumbs(() => [{ label: 'Verify Email' }]);
+  registerBreadcrumbs(() => [{ label: m.auth_verify_breadcrumb() }]);
 
   let token = browser ? page.url.searchParams.get('token') : null;
 
@@ -23,7 +24,7 @@
     accountEmailVerify({ query: { token } })
       .then(() => {
         status = 'success';
-        toast.success('Email verified');
+        toast.success(m.auth_verify_toast_success());
       })
       .catch(async (e: unknown) => {
         status = 'failed';
@@ -34,22 +35,23 @@
 
 <Card.Root>
   <Card.Header class="text-center">
-    <Card.Title class="text-xl"><h1>Verify Email</h1></Card.Title>
+    <Card.Title class="text-xl"><h1>{m.auth_verify_title()}</h1></Card.Title>
     <Card.Description>
       {#if status === 'verifying'}
-        Verifying your email address...
+        {m.auth_verify_verifying()}
       {:else if status === 'success'}
-        Your email has been verified
+        {m.auth_verify_success()}
       {:else if status === 'failed'}
-        This verification link is invalid or has expired
+        {m.auth_verify_failed()}
       {:else}
-        Missing verification token
+        {m.auth_verify_missing_token()}
       {/if}
     </Card.Description>
   </Card.Header>
   {#if status === 'success'}
     <Card.Content
-      ><Button class="w-full" href={resolve('login')}>Continue to login</Button></Card.Content
+      ><Button class="w-full" href={resolve('login')}>{m.auth_verify_continue()}</Button
+      ></Card.Content
     >
   {/if}
 </Card.Root>

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Volume2, Waves, Zap } from '@lucide/svelte';
   import { buttonVariants } from '@openshock/svelte-core/components/ui/button';
+  import { controlTypeLabel } from '#lib/i18n/control-type.js';
   import { ControlType } from '#lib/signalr/models/ControlType.js';
   import {
     type LiveShockerState,
@@ -18,9 +19,9 @@
   let { shockerId, liveState, connection }: Props = $props();
 
   const types = [
-    { type: ControlType.Sound, Icon: Volume2, label: 'Sound' },
-    { type: ControlType.Vibrate, Icon: Waves, label: 'Vibrate' },
-    { type: ControlType.Shock, Icon: Zap, label: 'Shock' },
+    { type: ControlType.Sound, Icon: Volume2 },
+    { type: ControlType.Vibrate, Icon: Waves },
+    { type: ControlType.Shock, Icon: Zap },
   ] as const;
 
   const buttonClasses = buttonVariants({ variant: 'secondary', size: 'default' });
@@ -28,7 +29,8 @@
 
 <!-- Type Selector -->
 <div class="flex w-full gap-2">
-  {#each types as { type, Icon, label } (type)}
+  {#each types as { type, Icon } (type)}
+    {@const label = controlTypeLabel(type)}
     <button
       class={cn(buttonClasses, 'flex-1', {
         'border-primary bg-primary/20': liveState.type === type,

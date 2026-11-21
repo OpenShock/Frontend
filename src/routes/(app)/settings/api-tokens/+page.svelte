@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
+  import { intlLocale } from '#lib/i18n/intl.js';
   import { tokensListTokensV2 } from '#lib/api/index.js';
   import type { TokenResponseV2 } from '#lib/api/index.js';
   import { resolve } from '$app/paths';
@@ -22,11 +24,17 @@
   import { createNowTicker } from '@openshock/svelte-core/utils';
 
   registerBreadcrumbs(() => [
-    { label: 'Settings', href: 'settings/account' },
-    { label: 'API Tokens' },
+    { label: m.sidebar_group_settings(), href: 'settings/account' },
+    { label: m.sidebar_settings_api_tokens() },
   ]);
 
-  let tokens = $derived(await tokensListTokensV2());
+  let tokens = $state<TokenResponseV2[]>([]);
+  // Awaited inside the boundary below so its pending and failed snippets cover the initial load.
+  let initialLoad = $state(loadTokens());
+
+  async function loadTokens() {
+    tokens = await tokensListTokensV2();
+  }
 
   const clock = createNowTicker();
 
@@ -41,7 +49,7 @@
   async function refresh() {
     try {
       tokens = await tokensListTokensV2();
-      toast.success('Tokens refreshed successfully');
+      toast.success(m.tokens_toast_refreshed());
     } catch (error) {
       await handleApiError(error);
     }
@@ -49,20 +57,18 @@
 </script>
 
 <Container>
-  <PageHeader
-    title="API Tokens"
-    subtitle="API Tokens are used to authenticate with the OpenShock API."
-  >
-    <Button href={resolve('settings/api-tokens/new')}><Plus />Generate Token</Button>
-    <Button variant="outline" onclick={refresh}><RotateCcw />Refresh</Button>
+  <PageHeader title={m.sidebar_settings_api_tokens()} subtitle={m.tokens_subtitle()}>
+    <Button href={resolve('settings/api-tokens/new')}><Plus />{m.tokens_generate()}</Button>
+    <Button variant="outline" onclick={refresh}><RotateCcw />{m.common_refresh()}</Button>
   </PageHeader>
   <Card.Content class="flex w-full flex-col space-y-4">
     <svelte:boundary onerror={(error: unknown) => handleApiError(error)}>
+      {await initialLoad}
       {#if tokens.length === 0}
         <EmptyState
           icon={KeyRound}
-          title="No API tokens"
-          description="Generate a token to authenticate with the OpenShock API."
+          title={m.tokens_empty_title()}
+          description={m.tokens_empty_desc()}
         />
       {:else}
         <div class="divide-y rounded-md border">
@@ -77,10 +83,16 @@
                 class="text-muted-foreground flex shrink-0 flex-wrap items-center gap-x-4 text-sm"
               >
                 <span>
-                  Created {token.createdOn.toLocaleString(undefined, { dateStyle: 'short' })}
+                  {m.tokens_created_on({
+                    date: token.createdOn.toLocaleString(intlLocale(), { dateStyle: 'short' }),
+                  })}
                 </span>
-                <span>{lastUsed ? `Last used ${lastUsed}` : 'Never used'}</span>
-                <span>{expires ? `Expires ${expires}` : 'Never expires'}</span>
+                <span
+                  >{lastUsed ? m.tokens_last_used({ time: lastUsed }) : m.common_never_used()}</span
+                >
+                <span
+                  >{expires ? m.common_expires({ time: expires }) : m.tokens_never_expires()}</span
+                >
               </div>
 
               <TokenActions {token} {onEdit} {onDeleted} />
@@ -94,7 +106,13 @@
       {/snippet}
 
       {#snippet failed(_error: unknown, reset: () => void)}
-        <PageError message="Failed to load API tokens." onRetry={reset} />
+        <PageError
+          message={m.tokens_load_failed()}
+          onRetry={() => {
+            initialLoad = loadTokens();
+            reset();
+          }}
+        />
       {/snippet}
     </svelte:boundary>
   </Card.Content>

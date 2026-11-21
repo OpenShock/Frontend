@@ -11,6 +11,18 @@ import { defineEnvVars } from '@sveltejs/kit/env';
 // the barrel.
 import { isTruthy } from '../packages/svelte-core/src/lib/utils/parse';
 
+/**
+ * Read from the process environment rather than from the variable below, because this module's own
+ * schemas run before `$app/env/public` exists. `scripts/dev-integration.mjs` is the only thing that
+ * sets it; deliberately not in `.env.integration`, since a value there would reach the app but not
+ * this read, leaving the two halves of the check disagreeing.
+ */
+const allowInsecureLocalApi = isTruthy(process.env.PUBLIC_ALLOW_INSECURE_LOCAL_API);
+
+function isLoopbackHost(hostname: string): boolean {
+  return hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '[::1]';
+}
+
 /** Required free text, trimmed. Throws when unset or blank. */
 function text(label: string) {
   return (value: string | undefined): string => {
@@ -23,6 +35,23 @@ function text(label: string) {
 /** Optional free text, trimmed. Unset or blank becomes `''`. */
 function optionalText(value: string | undefined): string {
   return value?.trim() ?? '';
+}
+
+/**
+ * Optional full sentence. Before i18n this variable held a fragment that was appended to
+ * "Welcome to <site>, ", so a value that still starts in lowercase is almost certainly that old
+ * fragment, which would now be published verbatim as the site description.
+ */
+function siteDescription(value: string | undefined): string {
+  const description = optionalText(value);
+  if (/^\p{Ll}/u.test(description)) {
+    console.warn(
+      `PUBLIC_SITE_DESCRIPTION starts in lowercase: "${description}". It is now used verbatim as ` +
+        'the site description instead of being appended to "Welcome to ...". Rewrite it as a full ' +
+        'sentence, or unset it to use the translated default.'
+    );
+  }
+  return description;
 }
 
 /**
@@ -45,7 +74,7 @@ function parseUrl(label: string, value: string, strict: boolean): string {
   }
 
   if (strict) {
-    if (url.protocol !== 'https:') {
+    if (url.protocol !== 'https:' && !(allowInsecureLocalApi && isLoopbackHost(url.hostname))) {
       throw new Error(`${label} must be an HTTPS URL`);
     }
     if (url.search || url.hash) {
@@ -81,6 +110,47 @@ function optionalUrl(label: string) {
   };
 }
 
+/** Optional absolute `https:` URL, normalized. RFC 9116 does not allow plain `http:` links. */
+function optionalHttpsUrl(label: string) {
+  return (value: string | undefined): string => {
+    const trimmed = value?.trim() ?? '';
+    if (!trimmed) return '';
+    const url = URL.parse(trimmed);
+    if (url?.protocol !== 'https:') throw new Error(`${label} must be an https: URL: ${trimmed}`);
+    return url.href;
+  };
+}
+
+/**
+ * Comma separated `mailto:` / `https:` URIs, returned normalized and joined by `,`. Normalizing
+ * through `URL` percent-encodes control characters, so a value cannot add lines to security.txt.
+ */
+function securityContacts(value: string | undefined): string {
+  return (value ?? '')
+    .split(',')
+    .map((entry) => entry.trim())
+    .filter(Boolean)
+    .map((entry) => {
+      const url = URL.parse(entry);
+      if (url?.protocol !== 'https:' && url?.protocol !== 'mailto:') {
+        throw new Error(`PUBLIC_SECURITY_CONTACT entries must be mailto: or https: URIs: ${entry}`);
+      }
+      return url.href;
+    })
+    .join(',');
+}
+
+/** Optional date, returned as an ISO 8601 UTC timestamp. Unset or blank becomes `''`. */
+function optionalDate(label: string) {
+  return (value: string | undefined): string => {
+    const trimmed = value?.trim() ?? '';
+    if (!trimmed) return '';
+    const date = new Date(trimmed);
+    if (Number.isNaN(date.getTime())) throw new Error(`${label} is not a valid date: ${trimmed}`);
+    return date.toISOString();
+  };
+}
+
 export const variables = defineEnvVars({
   // --- Site identity -------------------------------------------------------------------------
   PUBLIC_SITE_NAME: {
@@ -92,8 +162,10 @@ export const variables = defineEnvVars({
   PUBLIC_SITE_DESCRIPTION: {
     public: true,
     static: true,
-    description: 'One-sentence description of the deployment, used in metadata and llms.txt.',
-    schema: text('PUBLIC_SITE_DESCRIPTION'),
+    description:
+      'Optional full-sentence description of the deployment, used verbatim in metadata and ' +
+      'llms.txt for every locale. Unset uses the translated default.',
+    schema: siteDescription,
   },
   PUBLIC_SITE_URL: {
     public: true,
@@ -131,6 +203,15 @@ export const variables = defineEnvVars({
       'paths are appended to it.',
     schema: url('PUBLIC_BACKEND_API_URL', { strict: true }),
   },
+  PUBLIC_ALLOW_INSECURE_LOCAL_API: {
+    public: true,
+    static: true,
+    description:
+      'Allows PUBLIC_BACKEND_API_URL to be a plain-HTTP loopback URL, for the integration stack ' +
+      'which serves the API over HTTP so nothing has to trust a self-signed cert. Never set this ' +
+      'on a deployment.',
+    schema: isTruthy,
+  },
   PUBLIC_HANGFIRE_URL: {
     public: true,
     static: true,
@@ -153,12 +234,6 @@ export const variables = defineEnvVars({
     public: true,
     static: true,
     description: 'Shows the "development deployment" banner above the app shell.',
-    schema: isTruthy,
-  },
-  PUBLIC_DISABLE_ONBOARDING: {
-    public: true,
-    static: true,
-    description: 'Suppresses the first-run onboarding tour.',
     schema: isTruthy,
   },
   PUBLIC_DISABLE_SHOCKER_MAP: {
@@ -194,6 +269,37 @@ export const variables = defineEnvVars({
     public: true,
     description: 'Makes /llms.txt return 404.',
     schema: isTruthy,
+  },
+
+  // --- security.txt (RFC 9116) ---------------------------------------------------------------
+  // Tells security researchers where to report a vulnerability in *this deployment*. A self-hosted
+  // instance must set its own contact, or leave PUBLIC_SECURITY_CONTACT empty to disable the file.
+  PUBLIC_SECURITY_CONTACT: {
+    public: true,
+    description:
+      'Comma separated mailto: or https: URIs for reporting security vulnerabilities, in order ' +
+      'of preference. /.well-known/security.txt returns 404 when left empty.',
+    schema: securityContacts,
+  },
+  PUBLIC_SECURITY_EXPIRES: {
+    public: true,
+    description:
+      'Date after which security.txt is no longer valid, e.g. 2027-10-31T00:00:00Z. Required ' +
+      'when PUBLIC_SECURITY_CONTACT is set; keep it less than a year ahead. The file returns ' +
+      '404 once the date has passed.',
+    schema: optionalDate('PUBLIC_SECURITY_EXPIRES'),
+  },
+  PUBLIC_SECURITY_POLICY_URL: {
+    public: true,
+    description: 'Optional link to the security policy, published as the Policy field.',
+    schema: optionalHttpsUrl('PUBLIC_SECURITY_POLICY_URL'),
+  },
+  PUBLIC_SECURITY_ACKNOWLEDGMENTS_URL: {
+    public: true,
+    description:
+      'Optional link to the page crediting security researchers, published as the ' +
+      'Acknowledgments field.',
+    schema: optionalHttpsUrl('PUBLIC_SECURITY_ACKNOWLEDGMENTS_URL'),
   },
 
   // --- Telemetry (SigNoz / OpenTelemetry) ----------------------------------------------------

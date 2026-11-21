@@ -8,6 +8,10 @@ export const prerender = false;
 export async function load({ setHeaders }): ResponseType {
   setHeaders({
     'cache-control': 'public, max-age=300',
+    // The page is rendered in the request's language. The Paraglide middleware adds `Vary: Cookie`
+    // for the locale cookie, but it knows nothing about the custom Accept-Language strategy, so
+    // without this a shared cache could hand one visitor's language to the next.
+    vary: 'Accept-Language',
   });
 
   try {

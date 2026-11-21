@@ -5,9 +5,16 @@ import {
   PUBLIC_SIGNOZ_LOGS_URL,
   PUBLIC_SIGNOZ_TRACES_URL,
 } from '$app/env/public';
+import { context, propagation, trace } from '@opentelemetry/api';
+import { AsyncLocalStorageContextManager } from '@opentelemetry/context-async-hooks';
+import {
+  CompositePropagator,
+  W3CBaggagePropagator,
+  W3CTraceContextPropagator,
+} from '@opentelemetry/core';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { resourceFromAttributes } from '@opentelemetry/resources';
-import { BatchSpanProcessor, NodeTracerProvider } from '@opentelemetry/sdk-trace-node';
+import { BatchSpanProcessor, TracerProvider } from '@opentelemetry/sdk-trace';
 
 // Collector for SvelteKit's experimental server-side spans (handle/load/form actions,
 // enabled via kit.experimental.tracing in vite.config.ts). Runs before any application
@@ -40,7 +47,7 @@ if (PUBLIC_SIGNOZ_LOGS_ENABLED) {
     const collectorOrigin = originOf(PUBLIC_SIGNOZ_LOGS_URL, DEFAULT_COLLECTOR_ORIGIN);
     const tracesUrl = PUBLIC_SIGNOZ_TRACES_URL || `${collectorOrigin}/v1/traces`;
 
-    const provider = new NodeTracerProvider({
+    const provider = new TracerProvider({
       // Mirrors $lib/telemetry/common buildResource() so client and server signals
       // correlate as one service in SigNoz; `service.version` (the git SHA) drives
       // SigNoz deployment markers.
@@ -51,10 +58,19 @@ if (PUBLIC_SIGNOZ_LOGS_ENABLED) {
           PUBLIC_SIGNOZ_DEPLOYMENT_ENVIRONMENT ||
           (import.meta.env.DEV ? 'development' : 'production'),
       }),
-      spanProcessors: [new BatchSpanProcessor(new OTLPTraceExporter({ url: tracesUrl }))],
+      spanProcessors: [
+        new BatchSpanProcessor({ exporter: new OTLPTraceExporter({ url: tracesUrl }) }),
+      ],
     });
 
-    provider.register();
+    // sdk-trace has no register(); wire up the API globals the old NodeTracerProvider did.
+    context.setGlobalContextManager(new AsyncLocalStorageContextManager().enable());
+    propagation.setGlobalPropagator(
+      new CompositePropagator({
+        propagators: [new W3CTraceContextPropagator(), new W3CBaggagePropagator()],
+      })
+    );
+    trace.setGlobalTracerProvider(provider);
   } catch (error) {
     // Tracing is best-effort — a broken collector setup must never take the server down.
     console.error('Failed to initialize server-side tracing:', error);

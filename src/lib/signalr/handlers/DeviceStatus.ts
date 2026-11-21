@@ -1,3 +1,4 @@
+import { m } from '#lib/paraglide/messages.js';
 import { isDeviceOnlineState } from '#lib/signalr/models/DeviceOnlineState.js';
 import { HubOnlineState, onlineHubs } from '#lib/state/hubs-state.svelte.js';
 import { toast } from 'svelte-sonner';
@@ -5,7 +6,7 @@ import { toast } from 'svelte-sonner';
 export function handleSignalrDeviceStatus(array: unknown) {
   if (!Array.isArray(array) || !array.every(isDeviceOnlineState)) {
     console.error('Received invalid SignalR DeviceStatus event', array);
-    toast.error('Received invalid update from server!');
+    toast.error(m.signalr_invalid_update());
     return;
   }
 

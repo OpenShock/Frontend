@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import Link2 from '@lucide/svelte/icons/link-2';
   import { Button } from '@openshock/svelte-core/components/ui/button';
 
@@ -14,5 +15,5 @@
 
 <Button onclick={() => onLink(providerKey)} disabled={loading} aria-busy={loading}>
   <Link2 class="mr-2 size-4" />
-  {loading ? `Starting ${label}...` : `Link ${label}`}
+  {loading ? m.provider_starting({ name: label }) : m.provider_link({ name: label })}
 </Button>

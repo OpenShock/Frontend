@@ -8,6 +8,7 @@
 </script>
 
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import Plus from '@lucide/svelte/icons/plus';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
   import Link2 from '@lucide/svelte/icons/link-2';
@@ -35,7 +36,7 @@
   import { formatRelativeInstant } from '#lib/utils/datetime.js';
   import { createNowTicker } from '@openshock/svelte-core/utils';
 
-  registerBreadcrumbs(() => [{ label: 'Public Shares' }]);
+  registerBreadcrumbs(() => [{ label: m.sidebar_public_shares() }]);
 
   let data = $state<OwnPublicShareResponse[]>([]);
   let loading = $state(true);
@@ -65,17 +66,17 @@
 
   function expiryInfo(expiresOn: Temporal.Instant | null | undefined) {
     if (!expiresOn) {
-      return { label: 'Never expires', tone: 'neutral' as const };
+      return { label: m.public_share_never_expires(), tone: 'neutral' as const };
     }
     // Read from the ticker, not the clock directly: this is what makes the
     // badge flip to "Expired" on its own while the page is open.
     const now = clock.current;
     const isExpired = expiresOn.epochMilliseconds <= now.epochMilliseconds;
     if (isExpired) {
-      return { label: 'Expired', tone: 'danger' as const };
+      return { label: m.public_share_expired(), tone: 'danger' as const };
     }
     return {
-      label: 'Expires ' + formatRelativeInstant(expiresOn, now),
+      label: m.common_expires({ time: formatRelativeInstant(expiresOn, now) }),
       tone: 'warning' as const,
     };
   }
@@ -86,9 +87,11 @@
 <CreatePublicShareDialog bind:open={showAddShareModal} onCreated={refreshPublicShares} />
 
 <Container>
-  <PageHeader title="Public Shares" subtitle="A link anyone can use — no account required.">
-    <Button variant="outline" onclick={refreshPublicShares}><RotateCcw />Refresh</Button>
-    <Button onclick={() => (showAddShareModal = true)}><Plus />New Share</Button>
+  <PageHeader title={m.sidebar_public_shares()} subtitle={m.public_shares_subtitle()}>
+    <Button variant="outline" onclick={refreshPublicShares}
+      ><RotateCcw />{m.common_refresh()}</Button
+    >
+    <Button onclick={() => (showAddShareModal = true)}><Plus />{m.public_shares_new()}</Button>
   </PageHeader>
 
   {#if loading && data.length === 0}
@@ -96,9 +99,10 @@
   {:else if sortedShares.length === 0}
     <EmptyState
       icon={Link2}
-      title="No public shares yet"
-      description="Create a link that anyone can use to control your shockers."
-      ><Button size="lg" onclick={() => (showAddShareModal = true)}><Plus />New Share</Button
+      title={m.public_shares_empty_title()}
+      description={m.public_shares_empty_desc()}
+      ><Button size="lg" onclick={() => (showAddShareModal = true)}
+        ><Plus />{m.public_shares_new()}</Button
       ></EmptyState
     >
   {:else}
@@ -148,7 +152,7 @@
               class="flex items-center gap-1.5 rounded-full px-2 py-0.5 ring-1 ring-inset {expiryToneClasses[
                 exp.tone
               ]}"
-              title={share.expiresOn?.toString() ?? 'No expiry'}
+              title={share.expiresOn?.toString() ?? m.public_share_no_expiry()}
             >
               {#if exp.tone === 'neutral'}
                 <Infinity_ class="size-3.5" />

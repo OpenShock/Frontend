@@ -1,7 +1,7 @@
 <script lang="ts">
   import { accountCheckUsername } from '#lib/api/index.js';
   import { TextInput } from '@openshock/svelte-core/components/input';
-  import { isValidationError, mapToValRes } from '#lib/errorhandling/ValidationProblemDetails.js';
+  import { mapToValRes } from '#lib/errorhandling/ValidationProblemDetails.js';
   import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
   import {
     UsernameCheckingAvailabilityValRes,
@@ -46,19 +46,16 @@
       validationResult = mapUsernameCheckResponse(response);
       checkResponses.set(username, validationResult);
     } catch (error) {
-      await handleApiError(error, (err) => {
-        if (!isValidationError(err)) {
+      await handleApiError(error, {
+        'Validation.Error': (problem) => {
+          const apiValRes = mapToValRes(problem, 'Username');
+          if (apiValRes === null) return false;
+          validationResult = apiValRes;
+        },
+        fallback: () => {
           validationResult = UsernameInternalServerErrorValRes;
           return false;
-        }
-
-        const apiValRes = mapToValRes(err, 'Username');
-        if (apiValRes !== null) {
-          validationResult = apiValRes;
-          return true;
-        }
-
-        return false;
+        },
       });
     }
   }, 250);

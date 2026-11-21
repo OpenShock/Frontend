@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { authenticatedAccountRemoveOAuthConnection } from '#lib/api/index.js';
   import { Button } from '@openshock/svelte-core/components/ui/button';
   import * as Dialog from '@openshock/svelte-core/components/ui/dialog';
@@ -33,16 +34,22 @@
 <Dialog.Root bind:open={() => open, (o) => (open = o)}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Unlink {displayName ?? 'this account'}?</Dialog.Title>
+      <Dialog.Title
+        >{displayName
+          ? m.connections_unlink_title({ name: displayName })
+          : m.connections_unlink_title_generic()}</Dialog.Title
+      >
       <Dialog.Description>
-        You'll no longer be able to sign in with this provider unless you link it again.
+        {m.connections_unlink_desc()}
       </Dialog.Description>
     </Dialog.Header>
 
     <Dialog.Footer>
-      <Button variant="outline" onclick={() => (open = false)} disabled={busy}>Cancel</Button>
+      <Button variant="outline" onclick={() => (open = false)} disabled={busy}
+        >{m.common_cancel()}</Button
+      >
       <Button variant="destructive" onclick={doUnlink} disabled={busy} aria-busy={busy}>
-        Unlink
+        {m.connections_unlink()}
       </Button>
     </Dialog.Footer>
   </Dialog.Content>

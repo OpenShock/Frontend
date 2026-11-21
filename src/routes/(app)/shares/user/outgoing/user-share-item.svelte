@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { Zap } from '@lucide/svelte';
   import PermissionTooltip from '#lib/components/shares/permission-tooltip.svelte';
   import * as Avatar from '@openshock/svelte-core/components/ui/avatar';
@@ -21,7 +22,7 @@
 <Table.Row onclick={onOpenEdit}>
   <Table.Cell class="flex items-center font-medium">
     <Avatar.Root class="h-15 w-15">
-      <Avatar.Image src={userShare.image} alt="User Avatar" />
+      <Avatar.Image src={userShare.image} alt={m.common_user_avatar()} />
       <Avatar.Fallback>
         {userShare.name.charAt(0)}
       </Avatar.Fallback>

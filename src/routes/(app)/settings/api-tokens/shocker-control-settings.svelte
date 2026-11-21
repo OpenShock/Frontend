@@ -22,6 +22,7 @@
 </script>
 
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { Label } from '@openshock/svelte-core/components/ui/label';
   import { Slider } from '@openshock/svelte-core/components/ui/slider';
   import { Switch } from '@openshock/svelte-core/components/ui/switch';
@@ -36,11 +37,9 @@
 
   const modes = Object.values(ControlLimitMode);
 
-  const modeDescriptions: Record<ControlLimitMode, string> = {
-    [ControlLimitMode.Clamp]:
-      'Clamp: requests outside the allowed range are capped to the nearest limit (the min or the max).',
-    [ControlLimitMode.Lerp]:
-      'Lerp: the full input range is linearly rescaled so it fits within your allowed min–max range.',
+  const modeDescriptions: Record<ControlLimitMode, () => string> = {
+    [ControlLimitMode.Clamp]: m.token_mode_clamp_desc,
+    [ControlLimitMode.Lerp]: m.token_mode_lerp_desc,
   };
 </script>
 
@@ -52,7 +51,7 @@
           <ToggleGroup.Item {...props} class="cursor-pointer" value={mode}>{mode}</ToggleGroup.Item>
         {/snippet}
       </Tooltip.Trigger>
-      <Tooltip.Content class="max-w-xs">{modeDescriptions[mode]}</Tooltip.Content>
+      <Tooltip.Content class="max-w-xs">{modeDescriptions[mode]()}</Tooltip.Content>
     </Tooltip.Root>
   {/each}
 {/snippet}
@@ -60,9 +59,9 @@
 <div class="flex flex-col gap-5 rounded-md border p-4">
   <div class="flex items-center justify-between gap-2">
     <div class="flex flex-col">
-      <Label class="text-sm font-medium">Paused</Label>
+      <Label class="text-sm font-medium">{m.common_paused()}</Label>
       <span class="text-muted-foreground text-xs">
-        A paused token may not send shocker control messages.
+        {m.token_paused_desc()}
       </span>
     </div>
     <Switch bind:checked={settings.paused} />
@@ -70,7 +69,7 @@
 
   <div class="space-y-2">
     <div class="flex items-center justify-between">
-      <Label class="text-xs">Intensity range</Label>
+      <Label class="text-xs">{m.token_intensity_range()}</Label>
       <span class="text-muted-foreground font-mono text-xs">
         {settings.intensity.min}% – {settings.intensity.max}%
       </span>
@@ -99,7 +98,7 @@
 
   <div class="space-y-2">
     <div class="flex items-center justify-between">
-      <Label class="text-xs">Duration range</Label>
+      <Label class="text-xs">{m.token_duration_range()}</Label>
       <span class="text-muted-foreground font-mono text-xs">
         {(settings.duration.min / 1000).toFixed(1)}s – {(settings.duration.max / 1000).toFixed(1)}s
       </span>

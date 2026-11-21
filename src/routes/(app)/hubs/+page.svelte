@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { devicesCreateDeviceV2 } from '#lib/api/index.js';
   import { Plus, Router } from '@lucide/svelte';
   import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
@@ -13,6 +14,7 @@
     refreshOwnHubs,
   } from '#lib/state/hubs-state.svelte.js';
   import { onMount } from 'svelte';
+  import { intlLocale } from '#lib/i18n/intl.js';
   import type { Hub } from './columns';
   import DataTableActions from './data-table-actions.svelte';
   import { dialog, type DialogRenderProps } from '@openshock/svelte-core/components/dialog-manager';
@@ -70,7 +72,7 @@
     }
   }
 
-  registerBreadcrumbs(() => [{ label: 'Hubs', href: 'hubs' }]);
+  registerBreadcrumbs(() => [{ label: m.hubs_title(), href: 'hubs' }]);
   onMount(refreshOwnHubs);
 </script>
 
@@ -78,40 +80,40 @@
   props: DialogRenderProps<{ name: string }, { name: string } | undefined>
 )}
   <Dialog.Header>
-    <Dialog.Title>Create hub</Dialog.Title>
+    <Dialog.Title>{m.hubs_create_title()}</Dialog.Title>
   </Dialog.Header>
-  <TextInput label="Hub Name" placeholder="My Hub" bind:value={props.data.name} />
+  <TextInput
+    label={m.hubs_name_label()}
+    placeholder={m.hubs_name_placeholder()}
+    bind:value={props.data.name}
+  />
   <Button
     disabled={!props.data.name.trim()}
     onclick={() => props.resolve({ name: props.data.name.trim() })}
   >
-    Create
+    {m.common_create()}
   </Button>
 {/snippet}
 
 <Container class="w-full">
-  <PageHeader title="Hubs" subtitle="Every hub registered to your account.">
+  <PageHeader title={m.hubs_title()} subtitle={m.hubs_subtitle()}>
     <Button onclick={openCreateHubDialog}>
       <Plus />
-      Add Hub
+      {m.hubs_add()}
     </Button>
     <Button variant="outline" onclick={refreshOwnHubs}>
       <RotateCcw />
-      Refresh
+      {m.common_refresh()}
     </Button>
   </PageHeader>
 
   {#if !ownHubsStatus.loaded && ownHubsStatus.failed}
-    <PageError message="Failed to load hubs." onRetry={refreshOwnHubs} />
+    <PageError message={m.hubs_load_failed()} onRetry={refreshOwnHubs} />
   {:else if !ownHubsStatus.loaded}
     <PageLoading />
   {:else if data.length === 0}
-    <EmptyState
-      icon={Router}
-      title="No hubs yet"
-      description="A hub is the device that relays commands to your shockers. Add one to get started."
-    >
-      <Button size="lg" onclick={openCreateHubDialog}><Plus />Add Hub</Button>
+    <EmptyState icon={Router} title={m.hubs_empty_title()} description={m.hubs_empty_desc()}>
+      <Button size="lg" onclick={openCreateHubDialog}><Plus />{m.hubs_add()}</Button>
     </EmptyState>
   {:else if isMobile.current}
     <div class="grid w-full gap-6">
@@ -124,7 +126,7 @@
               {#if hub.is_online && hub.firmware_version}
                 <span>{hub.firmware_version}</span>
               {:else}
-                <span class="text-destructive">Offline</span>
+                <span class="text-destructive">{m.common_offline()}</span>
               {/if}
             </div>
           </div>
@@ -136,10 +138,10 @@
     <Table.Root>
       <Table.Header>
         <Table.Row>
-          <Table.Head>Name</Table.Head>
-          <Table.Head>Status</Table.Head>
-          <Table.Head>Version</Table.Head>
-          <Table.Head>Created</Table.Head>
+          <Table.Head>{m.common_name()}</Table.Head>
+          <Table.Head>{m.common_status()}</Table.Head>
+          <Table.Head>{m.common_version()}</Table.Head>
+          <Table.Head>{m.common_created()}</Table.Head>
           <Table.Head class="w-0"></Table.Head>
         </Table.Row>
       </Table.Header>
@@ -149,14 +151,14 @@
             <Table.Cell>{hub.name}</Table.Cell>
             <Table.Cell>
               {#if hub.is_online}
-                <span class="text-success">Online</span>
+                <span class="text-success">{m.common_online()}</span>
               {:else}
-                <span class="text-destructive">Offline</span>
+                <span class="text-destructive">{m.common_offline()}</span>
               {/if}
             </Table.Cell>
             <Table.Cell>{hub.firmware_version ?? '—'}</Table.Cell>
             <Table.Cell>
-              {hub.created_at.toLocaleString(undefined, { dateStyle: 'short' })}
+              {hub.created_at.toLocaleString(intlLocale(), { dateStyle: 'short' })}
             </Table.Cell>
             <Table.Cell>
               <DataTableActions {hub} />

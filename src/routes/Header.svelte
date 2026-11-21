@@ -16,6 +16,7 @@
   import { resolve } from '$app/paths';
   import { LogIn, UserPlus } from '@lucide/svelte';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
+  import { m } from '#lib/paraglide/messages.js';
 
   let sidebar = useSidebar();
 </script>
@@ -30,7 +31,12 @@
 
 <header class="flex h-12 shrink-0 items-center gap-2 border-b">
   <div class="flex w-full items-center gap-2 px-3">
-    <Button variant="ghost" class="size-8" title="Toggle Sidebar" onclick={() => sidebar.toggle()}>
+    <Button
+      variant="ghost"
+      class="size-8"
+      title={m.header_sidebar_toggle()}
+      onclick={() => sidebar.toggle()}
+    >
       <PanelLeft size={24} class="text-muted-foreground m-0" />
     </Button>
     <Separator orientation="vertical" class="mr-2 data-vertical:h-4 data-vertical:self-center" />
@@ -55,28 +61,28 @@
             <img
               class="inline-block h-8 rounded-full"
               src={userState.self.avatar}
-              alt="{userState.self.name}'s avatar"
+              alt={m.header_avatar_alt({ name: userState.self.name })}
             />
             <p class="hidden lg:inline-block">{userState.self.name}</p>
           </DropdownMenu.Trigger>
           <DropdownMenu.Content>
             <DropdownMenu.Group>
-              {@render dropdownItem('Profile', 'profile')}
-              {@render dropdownItem('Settings', 'settings/account')}
-              {@render dropdownItem('Logout', 'logout')}
+              {@render dropdownItem(m.header_menu_profile(), 'profile')}
+              {@render dropdownItem(m.header_menu_settings(), 'settings/account')}
+              {@render dropdownItem(m.header_menu_logout(), 'logout')}
             </DropdownMenu.Group>
           </DropdownMenu.Content>
         </DropdownMenu.Root>
       {:else}
-        <Button variant="outline" href={resolve('login')}>Login <LogIn /></Button>
-        <Button variant="outline" href={resolve('signup')}>Sign Up <UserPlus /></Button>
+        <Button variant="outline" href={resolve('login')}>{m.header_login()} <LogIn /></Button>
+        <Button variant="outline" href={resolve('signup')}>{m.header_signup()} <UserPlus /></Button>
         <div class="hidden sm:flex sm:flex-row">
           <!-- External links: resolve() only applies to app routes. -->
           <!-- eslint-disable svelte/no-navigation-without-resolve -->
-          <a href={PUBLIC_GITHUB_PROJECT_URL} class="p-2" title="Project GitHub">
+          <a href={PUBLIC_GITHUB_PROJECT_URL} class="p-2" title={m.header_github_title()}>
             <GithubIcon class="fill-foreground size-6" />
           </a>
-          <a href={PUBLIC_DISCORD_INVITE_URL} class="p-2" title="Community Discord">
+          <a href={PUBLIC_DISCORD_INVITE_URL} class="p-2" title={m.header_discord_title()}>
             <DiscordLogo class="fill-foreground size-6" />
           </a>
           <!-- eslint-enable svelte/no-navigation-without-resolve -->

@@ -30,7 +30,13 @@
     CreateActionsColumnDef(DataTableActions, (webhook) => ({ webhook })),
   ];
 
-  let data = $derived(await adminListWebhooks());
+  let data = $state<WebhookDto[]>([]);
+  // Awaited inside the boundary below so its pending and failed snippets cover the initial load.
+  let initialLoad = $state(loadWebhooks());
+
+  async function loadWebhooks() {
+    data = await adminListWebhooks();
+  }
 
   let addDialogOpen = $state<boolean>(false);
 
@@ -55,6 +61,7 @@
   </PageHeader>
   <div class="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-6">
     <svelte:boundary onerror={(error: unknown) => handleApiError(error)}>
+      {await initialLoad}
       <DataTable {data} {columns} {features} mobileColumns={['name']} />
 
       {#snippet pending()}
@@ -62,7 +69,13 @@
       {/snippet}
 
       {#snippet failed(_error: unknown, reset: () => void)}
-        <PageError message="Failed to load webhooks." onRetry={reset} />
+        <PageError
+          message="Failed to load webhooks."
+          onRetry={() => {
+            initialLoad = loadWebhooks();
+            reset();
+          }}
+        />
       {/snippet}
     </svelte:boundary>
   </div>

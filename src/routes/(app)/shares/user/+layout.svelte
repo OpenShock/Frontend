@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { Barcode, Plus } from '@lucide/svelte';
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
@@ -15,7 +16,7 @@
   import { resolve } from '$app/paths';
   import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
 
-  registerBreadcrumbs(() => [{ label: 'User Shares', href: 'shares/user/outgoing' }]);
+  registerBreadcrumbs(() => [{ label: m.sidebar_user_shares(), href: 'shares/user/outgoing' }]);
 
   let createDialogOpen = $state(false);
   let redeemDialogOpen = $state(false);
@@ -43,7 +44,7 @@
   }
 
   function onInvitedUser(user: BasicUserInfo) {
-    toast.success(`Sent a shocker invite to ${user.name}`);
+    toast.success(m.user_shares_toast_invited({ name: user.name }));
   }
 
   function navigateTo(path: 'incoming' | 'outgoing' | 'invites') {
@@ -79,35 +80,25 @@
 <DialogShareCodeRedeem bind:open={redeemDialogOpen} bind:userInput={redeemUserInput} />
 
 <Container class="flex flex-col">
-  <PageHeader title="User Shares" subtitle="Direct permanent shares with other users.">
-    <Button
-      variant="outline"
-      onclick={() => (redeemDialogOpen = true)}
-      data-tour="user-shares-redeem"><Barcode />Redeem Code</Button
+  <PageHeader title={m.sidebar_user_shares()} subtitle={m.user_shares_subtitle()}>
+    <Button variant="outline" onclick={() => (redeemDialogOpen = true)}
+      ><Barcode />{m.user_shares_redeem()}</Button
     >
 
-    <Button onclick={() => (createDialogOpen = true)} data-tour="user-shares-new"
-      ><Plus />New Share</Button
-    >
+    <Button onclick={() => (createDialogOpen = true)}><Plus />{m.user_shares_new()}</Button>
   </PageHeader>
 
   <div class="flex w-full flex-none">
-    <Tabs.Root value={tab} class="w-100" data-tour="user-shares-tabs">
+    <Tabs.Root value={tab} class="w-100">
       <Tabs.List>
-        <Tabs.Trigger
-          value="shares"
-          onclick={() => navigateTo('outgoing')}
-          data-tour="user-shares-tab-outgoing">Shares</Tabs.Trigger
+        <Tabs.Trigger value="shares" onclick={() => navigateTo('outgoing')}
+          >{m.user_shares_tab_shares()}</Tabs.Trigger
         >
-        <Tabs.Trigger
-          value="incoming"
-          onclick={() => navigateTo('incoming')}
-          data-tour="user-shares-tab-incoming">Shared with Me</Tabs.Trigger
+        <Tabs.Trigger value="incoming" onclick={() => navigateTo('incoming')}
+          >{m.user_shares_tab_incoming()}</Tabs.Trigger
         >
-        <Tabs.Trigger
-          value="invites"
-          onclick={() => navigateTo('invites')}
-          data-tour="user-shares-tab-invites">Invites</Tabs.Trigger
+        <Tabs.Trigger value="invites" onclick={() => navigateTo('invites')}
+          >{m.user_shares_tab_invites()}</Tabs.Trigger
         >
       </Tabs.List>
     </Tabs.Root>

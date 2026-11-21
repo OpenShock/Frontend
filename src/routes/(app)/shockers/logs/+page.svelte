@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { shockerGetAllShockerLogs } from '#lib/api/index.js';
   import type { SortingState } from '@tanstack/svelte-table';
   import type { LogEntryWithHub } from '#lib/api/index.js';
@@ -22,11 +23,12 @@
   import { ControlType } from '#lib/signalr/models/ControlType.js';
   import { ownHubs, refreshOwnHubs } from '#lib/state/hubs-state.svelte.js';
   import { createUrlFilters } from '#lib/utils/urlFilters.svelte.js';
+  import { controlTypeLabel } from '#lib/i18n/control-type.js';
   import { features, type Features } from './data-table-features';
 
   registerBreadcrumbs(() => [
-    { label: 'Shockers', href: 'shockers/own' },
-    { label: 'Shocker Logs' },
+    { label: m.shockers_title(), href: 'shockers/own' },
+    { label: m.shocker_logs_title() },
   ]);
 
   const DEFAULT_SORT_ID = 'createdOn';
@@ -202,26 +204,31 @@
   const { CreateSortableColumnDef } = CreateColumnDefs<Features, LogEntryWithHub>();
 
   const columns = [
-    CreateSortableColumnDef('hubName', 'Hub', (h) => RenderCell(h)),
-    CreateSortableColumnDef('shockerName', 'Shocker', (s) => RenderCell(s)),
-    CreateSortableColumnDef('createdOn', 'Time', LocaleDateTimeRenderer, (a, b) =>
-      Temporal.Instant.compare(a, b)
+    CreateSortableColumnDef('hubName', m.shocker_hub(), (h) => RenderCell(h)),
+    CreateSortableColumnDef('shockerName', m.shocker_label(), (s) => RenderCell(s)),
+    CreateSortableColumnDef(
+      'createdOn',
+      m.shocker_logs_col_time(),
+      LocaleDateTimeRenderer,
+      (a, b) => Temporal.Instant.compare(a, b)
     ),
-    CreateSortableColumnDef('type', 'Type', (t) => RenderCell(String(t))),
-    CreateSortableColumnDef('controlledBy', 'By', (c) => RenderCell(c.customName ?? c.name)),
-    CreateSortableColumnDef('intensity', 'Intensity', NumberRenderer),
-    CreateSortableColumnDef('duration', 'Duration', DurationRenderer),
+    CreateSortableColumnDef('type', m.shocker_logs_col_type(), (t) =>
+      RenderCell(controlTypeLabel(t))
+    ),
+    CreateSortableColumnDef('controlledBy', m.shocker_logs_col_by(), (c) =>
+      RenderCell(c.customName ?? c.name)
+    ),
+    CreateSortableColumnDef('intensity', m.control_intensity(), NumberRenderer),
+    CreateSortableColumnDef('duration', m.control_duration(), DurationRenderer),
   ];
 </script>
 
 <Container>
-  <PageHeader title="Shocker Logs" subtitle="Every control command sent to your shockers.">
+  <PageHeader title={m.shocker_logs_title()} subtitle={m.shocker_logs_subtitle()}>
     <Badge
       variant={liveUpdatesActive ? 'default' : 'secondary'}
       class="gap-1.5"
-      title={liveUpdatesActive
-        ? 'New logs appear in real time'
-        : 'Live updates pause when sorting or viewing a page other than the first'}
+      title={liveUpdatesActive ? m.shocker_logs_live_title() : m.shocker_logs_paused_title()}
     >
       <span class="relative flex size-2">
         {#if liveUpdatesActive}
@@ -235,7 +242,7 @@
             : 'bg-muted-foreground'}"
         ></span>
       </span>
-      {liveUpdatesActive ? 'Live' : 'Paused'}
+      {liveUpdatesActive ? m.shocker_logs_live() : m.common_paused()}
     </Badge>
   </PageHeader>
   <div class="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-6">
@@ -244,14 +251,16 @@
         <MultiSelectCombobox
           bind:selected={selectedShockerIds}
           options={shockerOptions}
-          label="Filter by shocker"
-          placeholder="Search shockers..."
-          selectText="All shockers"
-          noMatchText="No matching shockers"
+          label={m.shocker_logs_filter_label()}
+          placeholder={m.shocker_logs_filter_placeholder()}
+          selectText={m.shocker_logs_filter_all()}
+          noMatchText={m.shocker_logs_filter_none()}
         />
       </div>
       {#if selectedShockerIds.length > 0}
-        <Button variant="ghost" size="sm" onclick={() => (selectedShockerIds = [])}>Clear</Button>
+        <Button variant="ghost" size="sm" onclick={() => (selectedShockerIds = [])}
+          >{m.common_clear()}</Button
+        >
       {/if}
     </div>
     <div class="flex min-h-0 flex-1 flex-col gap-6" bind:clientHeight={tableViewportHeight}>

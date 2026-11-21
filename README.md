@@ -9,11 +9,13 @@
   <tr>
     <td>master</td>
     <td><a href="https://github.com/OpenShock/Frontend/actions/workflows/ci-build.yml"><img src="https://github.com/OpenShock/Frontend/actions/workflows/ci-build.yml/badge.svg?branch=master" alt="Build Status" /></a></td>
+    <td><a href="https://github.com/OpenShock/Frontend/actions/workflows/ci-integration.yml"><img src="https://github.com/OpenShock/Frontend/actions/workflows/ci-integration.yml/badge.svg?branch=master" alt="Integration Tests" /></a></td>
     <td><a href="https://github.com/OpenShock/Frontend/actions/workflows/codeql.yml"><img src="https://github.com/OpenShock/Frontend/actions/workflows/codeql.yml/badge.svg?branch=master" alt="CodeQL Status" /></a></td>
   </tr>
   <tr>
     <td>develop</td>
     <td><a href="https://github.com/OpenShock/Frontend/actions/workflows/ci-build.yml"><img src="https://github.com/OpenShock/Frontend/actions/workflows/ci-build.yml/badge.svg?branch=develop" alt="Build Status" /></a></td>
+    <td><a href="https://github.com/OpenShock/Frontend/actions/workflows/ci-integration.yml"><img src="https://github.com/OpenShock/Frontend/actions/workflows/ci-integration.yml/badge.svg?branch=develop" alt="Integration Tests" /></a></td>
     <td><a href="https://github.com/OpenShock/Frontend/actions/workflows/codeql.yml"><img src="https://github.com/OpenShock/Frontend/actions/workflows/codeql.yml/badge.svg?branch=develop" alt="CodeQL Status" /></a></td>
   </tr>
 </table>
@@ -35,6 +37,7 @@ This is the frontend for the OpenShock project that interfaces with the OpenShoc
 - `pnpm run build` - Build the project
 - `pnpm run preview` - Preview the built project
 - `pnpm run regen-api` - Generate the API client
+- `pnpm run check:problem-types` - Compare the problem type registry with the API source (needs a sibling `../API` checkout or `OPENSHOCK_API_DIR`)
 
 ## Setup
 
@@ -118,6 +121,26 @@ src/           # Application source code
 └── error.html # Fallback HTML error page (for critical errors)
 ```
 
+## API error handling
+
+The backend answers errors with problem details carrying a stable `type` string such as `Account.OAuthOnly`.
+Every known type lives in `src/lib/errorhandling/problemTypes.ts` together with the copy the UI shows for it.
+`handleApiError` toasts that copy by default, so most call sites pass nothing.
+When a page needs its own behaviour, pass a handler map keyed by problem type instead of comparing `problem.type` inline:
+
+```ts
+await handleApiError(error, {
+  'Account.OAuthOnly': () => (oauthOnly = true),
+  'Validation.Error': (problem) => {
+    passwordError = mapToValRes(problem, 'Password');
+    return passwordError !== null; // false falls through to the default toast
+  },
+});
+```
+
+When the backend gains or renames a type, add it to the registry.
+`pnpm run check:problem-types` reports drift, and the dev console warns when an unregistered type arrives.
+
 ## Configuration files
 
 ### 📦 Node & pnpm
@@ -153,6 +176,12 @@ With this import order, system environment variables will override any `.env` fi
 
 Any file ending with `.local` are meant for setting local development variables **and should not be committed to Git**.
 
+#### security.txt
+
+The frontend serves [`/.well-known/security.txt`](https://securitytxt.org/) (RFC 9116) from the `PUBLIC_SECURITY_*` variables, so that security researchers know where to report a vulnerability in the deployment they are looking at. The values in `.env` are those of the official OpenShock instance.
+
+If you host your own instance, set `PUBLIC_SECURITY_CONTACT` and `PUBLIC_SECURITY_EXPIRES` to your own details, or leave `PUBLIC_SECURITY_CONTACT` empty to disable the file. The file returns 404 once `PUBLIC_SECURITY_EXPIRES` has passed, so renew the date before it runs out.
+
 ### 🐳 Containerization
 
 - `Dockerfile` — Container definition for deployment or local dev.
@@ -162,6 +191,14 @@ Any file ending with `.local` are meant for setting local development variables 
 
 A guide to selfhost can be found [on the wiki.](https://wiki.openshock.org/guides/selfhosting)
 Alternatively you can deploy it to cloudflare workers using wrangler (or forking it).
+
+## Security
+
+Found a security vulnerability? **Please do not open a public issue.** Report it privately as described in [SECURITY.md](SECURITY.md).
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Support
 

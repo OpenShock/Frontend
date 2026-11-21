@@ -1,3 +1,4 @@
+import { m } from '#lib/paraglide/messages.js';
 import { DecodeString, EncodeString, md5 } from '@openshock/svelte-core/utils';
 import { ESPLoader, type IEspLoaderTerminal, type LoaderOptions, Transport } from 'esptool-js';
 import { toast } from 'svelte-sonner';
@@ -253,7 +254,7 @@ export default class EspSerialConnection {
       return true;
     } catch (e) {
       console.error(e);
-      toast.error(`Failed to enter bootloader: ${e}`);
+      toast.error(m.terminal_toast_bootloader_failed({ error: String(e) }));
       return false;
     }
   }
@@ -307,7 +308,7 @@ export default class EspSerialConnection {
         }
       } catch (e) {
         console.error(e);
-        this.terminal.writeLine(`firmware disconnected: ${e}`);
+        this.terminal.writeLine(m.terminal_log_firmware_disconnected({ error: String(e) }));
       } finally {
         try {
           serialPortReader.releaseLock();
@@ -336,7 +337,7 @@ export default class EspSerialConnection {
       return true;
     } catch (e) {
       console.error(e);
-      toast.error(`Failed to enter application mode: ${e}`);
+      toast.error(m.terminal_toast_app_mode_failed({ error: String(e) }));
       this.serialPort = null;
       return false;
     }
@@ -356,7 +357,7 @@ export default class EspSerialConnection {
       return true;
     } catch (e) {
       console.error(e);
-      this.terminal.writeLine(`Failed to erase flash: ${e}`);
+      this.terminal.writeLine(m.terminal_log_erase_failed({ error: String(e) }));
       return false;
     }
   }
@@ -369,7 +370,7 @@ export default class EspSerialConnection {
       return true;
     } catch (e) {
       console.error(e);
-      this.terminal.writeLine(`Failed to hard reset: ${e}`);
+      this.terminal.writeLine(m.terminal_log_hard_reset_failed({ error: String(e) }));
       return false;
     }
   }
@@ -392,11 +393,11 @@ export default class EspSerialConnection {
         reportProgress,
         calculateMD5Hash: md5,
       });
-      this.terminal.writeLine('Flash complete');
+      this.terminal.writeLine(m.terminal_log_flash_complete());
       return true;
     } catch (e) {
       console.error(e);
-      this.terminal.writeLine(`Failed to flash: ${e}`);
+      this.terminal.writeLine(m.terminal_log_flash_failed({ error: String(e) }));
       return false;
     }
   }
@@ -414,7 +415,7 @@ export default class EspSerialConnection {
       return true;
     } catch (e) {
       console.error(e);
-      this.terminal.writeLine(`Failed to write application command: ${e}`);
+      this.terminal.writeLine(m.terminal_log_command_failed({ error: String(e) }));
       return false;
     }
   }

@@ -34,3 +34,6 @@ yarn.lock
 
 .claude
 .playwright-mcp
+
+# Paraglide (src/lib/paraglide ignores itself)
+project.inlang/cache

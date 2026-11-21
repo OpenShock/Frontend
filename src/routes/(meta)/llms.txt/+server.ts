@@ -1,10 +1,10 @@
+import { getSiteDescription } from '#lib/metadata.js';
 import { paths } from '#lib/utils/public-routes.js';
 import { getBackendURL, getSiteURL } from '#lib/utils/url.js';
 import {
   PUBLIC_DISABLE_LLMS_TXT,
   PUBLIC_DISCORD_INVITE_URL,
   PUBLIC_GITHUB_PROJECT_URL,
-  PUBLIC_SITE_DESCRIPTION,
   PUBLIC_SITE_NAME,
 } from '$app/env/public';
 import { error } from '@sveltejs/kit';
@@ -12,8 +12,6 @@ import type { RequestHandler } from './$types';
 
 // Internal-only top-level segments we don't want to disclose to crawlers.
 const HIDDEN_SEGMENTS: ReadonlySet<string> = new Set(['admin', 'hangfire']);
-
-const SWAGGER_VERSIONS = [1, 2] as const;
 
 export const GET: RequestHandler = ({ setHeaders }) => {
   if (PUBLIC_DISABLE_LLMS_TXT) error(404);
@@ -23,11 +21,8 @@ export const GET: RequestHandler = ({ setHeaders }) => {
     'cache-control': 'public, max-age=3600',
   });
 
-  const isOpenShock = PUBLIC_SITE_NAME.toLowerCase() === 'openshock';
-
-  const summary = isOpenShock
-    ? `OpenShock — ${PUBLIC_SITE_DESCRIPTION}`
-    : `${PUBLIC_SITE_NAME} — an independent instance of OpenShock — ${PUBLIC_SITE_DESCRIPTION}`;
+  // llms.txt is not localized, so it always uses English.
+  const summary = getSiteDescription({ locale: 'en' });
 
   // Public, linkable routes grouped by role.
   const publicPaths = paths
@@ -43,11 +38,8 @@ export const GET: RequestHandler = ({ setHeaders }) => {
   const generalList = renderLinks(generalPages);
   const authList = renderLinks(authPages);
 
-  // OpenAPI specs, one per backend API version.
-  const apiURL = getBackendURL();
-  const swaggerList = SWAGGER_VERSIONS.map(
-    (v) => `- [v${v} OpenAPI spec](${new URL(`/swagger/${v}/swagger.json`, apiURL).href})`
-  ).join('\n');
+  // One OpenAPI document covers every backend API version.
+  const openApiURL = new URL('/openapi.json', getBackendURL()).href;
 
   // Authenticated app routes — listed for crawlers with a "not indexable" notice.
   const appPaths = paths
@@ -95,7 +87,7 @@ ${authList}
 
 ## Backend API
 
-${swaggerList}
+- [OpenAPI spec](${openApiURL})
 
 ## Notes for crawlers
 

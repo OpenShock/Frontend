@@ -13,6 +13,7 @@
 </script>
 
 <script lang="ts">
+  import { controlTypeLabel } from '#lib/i18n/control-type.js';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import type { TimeoutHandle } from '#lib/types/WAPI.js';
   import { cn } from '@openshock/svelte-core/utils';
@@ -49,7 +50,7 @@
 
 <div>
   {#each Buttons as { type, Icon } (type)}
-    {@const title = ControlType[type]}
+    {@const title = controlTypeLabel(type)}
     {@const isDisabled = disabled || disabledControls[type]}
     <button
       class={cn(buttonClasses, {

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
+  import { ParaglideMessage } from '@inlang/paraglide-js-svelte';
   import { shockerShockerShareCodeUpdate, shockerShockerShareRemove } from '#lib/api/index.js';
   import { Trash2 } from '@lucide/svelte';
   import { ComparePermissionsAndLimits } from '#lib/comparers/UserShareComparer.js';
@@ -150,7 +152,7 @@
       await shockerShockerShareRemove({
         path: { shockerId: shocker.id, sharedWithUserId: userShare.id },
       });
-      toast.success(`Successfully removed shocker share ${shocker.name}`);
+      toast.success(m.outgoing_share_toast_removed({ name: shocker.name }));
     } catch (error) {
       handleApiError(error);
       throw error;
@@ -161,10 +163,10 @@
 
   async function handleDeleteClick(shocker: EditableShare) {
     const result = await dialog.confirm({
-      title: 'Confirm Deletion',
+      title: m.outgoing_share_remove_title(),
       descSnippet: deleteConfirmDesc,
       data: shocker,
-      confirmButtonText: 'Remove',
+      confirmButtonText: m.common_remove(),
     });
     if (result.confirmed) await deleteShockerShare(result.data);
   }
@@ -185,8 +187,12 @@
 
 {#snippet deleteConfirmDesc(shocker: EditableShare)}
   <p>
-    Are you sure you want to remove the shocker share <strong>{shocker.name}</strong> for
-    <strong>{userShare.name}</strong>?
+    <ParaglideMessage
+      message={m.outgoing_share_remove_desc}
+      inputs={{ shocker: shocker.name, name: userShare.name }}
+    >
+      {#snippet strong({ children })}<strong>{@render children?.()}</strong>{/snippet}
+    </ParaglideMessage>
   </p>
 {/snippet}
 
@@ -195,11 +201,11 @@
     <div class="mx-auto flex h-full max-h-dvh w-full flex-col">
       <Drawer.Header class="shrink-0 border-b">
         <Drawer.Description class="text-muted-foreground text-xs">
-          Editing shares for
+          {m.outgoing_share_editing_for()}
         </Drawer.Description>
         <Drawer.Title class="flex items-center gap-3">
           <Avatar.Root class="size-10">
-            <Avatar.Image src={userShare.image} alt="User Avatar" />
+            <Avatar.Image src={userShare.image} alt={m.common_user_avatar()} />
             <Avatar.Fallback>
               {userShare.name.charAt(0)}
             </Avatar.Fallback>
@@ -215,16 +221,14 @@
       >
         <div class="flex shrink-0 items-center justify-between gap-3 px-4 pt-4 pb-3">
           <div class="flex min-w-0 flex-col">
-            <h3 class="text-sm font-semibold">Limits &amp; Permissions</h3>
+            <h3 class="text-sm font-semibold">{m.outgoing_share_limits()}</h3>
             <p class="text-muted-foreground text-xs">
-              {isUniformRestrictions
-                ? 'Same restrictions on every shocker'
-                : 'Tune restrictions per shocker'}
+              {isUniformRestrictions ? m.outgoing_share_same() : m.outgoing_share_per_desc()}
             </p>
           </div>
           <Tabs.List>
-            <Tabs.Trigger value="uniform">All</Tabs.Trigger>
-            <Tabs.Trigger value="individual">Per shocker</Tabs.Trigger>
+            <Tabs.Trigger value="uniform">{m.outgoing_share_all()}</Tabs.Trigger>
+            <Tabs.Trigger value="individual">{m.outgoing_share_per()}</Tabs.Trigger>
           </Tabs.List>
         </div>
 
@@ -283,7 +287,7 @@
                         size="icon"
                         class="text-destructive hover:text-destructive h-8 w-8"
                         onclick={() => handleDeleteClick(shares[i])}
-                        title="Remove share"
+                        title={m.share_remove()}
                       >
                         <Trash2 size={14} />
                       </Button>
@@ -303,10 +307,10 @@
 
       <Drawer.Footer class="border-t px-4 py-3">
         <div class="flex w-full items-center justify-between gap-2">
-          <Drawer.Close class="text-sm">Cancel</Drawer.Close>
+          <Drawer.Close class="text-sm">{m.common_cancel()}</Drawer.Close>
           <Button onclick={handleSave} disabled={saving}>
             {#if saving}<Spinner />{/if}
-            Save
+            {m.common_save()}
           </Button>
         </div>
       </Drawer.Footer>

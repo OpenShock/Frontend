@@ -1,6 +1,6 @@
 import { getBackendURL } from '#lib/utils/url.js';
 import { PUBLIC_BACKEND_API_URL } from '$app/env/public';
-import type { CreateClientConfig } from './v1/client.gen';
+import type { CreateClientConfig } from './generated/client.gen';
 
 function resolveBaseUrl(): string {
   if (!PUBLIC_BACKEND_API_URL) {

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { Timer, Volume2, Zap } from '@lucide/svelte';
   import { ControlDurationProps, ControlIntensityProps } from '#lib/constants/ControlConstants.js';
   import { formatDurationSeconds } from '@openshock/svelte-core/utils';
@@ -31,8 +32,16 @@
     <p>{formatDurationSeconds(duration)}</p>
   </div>
   <div class="flex flex-1 flex-row justify-between">
-    <CircleSlider name="Shock" bind:value={shockIntensity} {...ControlIntensityProps} />
-    <CircleSlider name="Vibration" bind:value={vibrationIntensity} {...ControlIntensityProps} />
-    <CircleSlider name="Duration" bind:value={duration} {...ControlDurationProps} />
+    <CircleSlider
+      name={m.control_type_shock()}
+      bind:value={shockIntensity}
+      {...ControlIntensityProps}
+    />
+    <CircleSlider
+      name={m.control_vibration()}
+      bind:value={vibrationIntensity}
+      {...ControlIntensityProps}
+    />
+    <CircleSlider name={m.control_duration()} bind:value={duration} {...ControlDurationProps} />
   </div>
 </div>

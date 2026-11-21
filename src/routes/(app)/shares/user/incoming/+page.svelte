@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { EmptyState } from '@openshock/svelte-core/components';
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import * as Table from '@openshock/svelte-core/components/ui/table';
@@ -8,7 +9,7 @@
   import IncomingShareItem from './incoming-share-item.svelte';
   import ManageShare from './manage-share.svelte';
 
-  registerBreadcrumbs(() => [{ label: 'Shared with Me' }]);
+  registerBreadcrumbs(() => [{ label: m.user_shares_tab_incoming() }]);
 
   let refreshPromise = $state(refreshUserShares());
 
@@ -37,8 +38,8 @@
   {#if userSharesState.shares.incoming.length === 0}
     <EmptyState
       icon={Inbox}
-      title="Nothing shared with you"
-      description="No one has shared a shocker with you yet."
+      title={m.incoming_shares_empty_title()}
+      description={m.incoming_shares_empty_desc()}
     />
   {:else}
     <div class="mb-6 overflow-y-auto rounded-md border">

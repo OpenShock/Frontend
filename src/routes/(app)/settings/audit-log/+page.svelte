@@ -18,18 +18,21 @@
   const DEFAULT_SORT_ID = 'createdAt';
 
   const columns = [
-    CreateSortableColumnDef('createdAt', 'Time', LocaleDateTimeRenderer),
-    CreateSortableColumnDef('action', 'Action', (action) => RenderBoldCell(describeAction(action))),
-    CreateColumnDef('metadata', 'Details', (metadata) =>
+    CreateSortableColumnDef('createdAt', m.audit_col_time(), LocaleDateTimeRenderer),
+    CreateSortableColumnDef('action', m.audit_col_action(), (action) =>
+      RenderBoldCell(describeAction(action))
+    ),
+    CreateColumnDef('metadata', m.audit_col_details(), (metadata) =>
       RenderCell(describeMetadata(metadata) ?? '')
     ),
-    CreateColumnDef('reason', 'Reason', (reason) => RenderCell(reason ?? '')),
-    CreateColumnDef('ipAddress', 'IP address', (ip) => RenderCell(ip ?? 'Unknown')),
-    CreateColumnDef('userAgent', 'Device', UserAgentRenderer),
+    CreateColumnDef('reason', m.audit_col_reason(), (reason) => RenderCell(reason ?? '')),
+    CreateColumnDef('ipAddress', m.audit_col_ip(), (ip) => RenderCell(ip ?? m.common_unknown())),
+    CreateColumnDef('userAgent', m.audit_col_device(), UserAgentRenderer),
   ];
 </script>
 
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { authenticatedAccountGetAuditLog } from '#lib/api/index.js';
   import DataTable from '#lib/components/Table/DataTableTemplate.svelte';
   import PaginationFooter from '#lib/components/Table/PaginationFooter.svelte';
@@ -42,8 +45,8 @@
   import { features } from './data-table-features';
 
   registerBreadcrumbs(() => [
-    { label: 'Settings', href: 'settings/account' },
-    { label: 'Audit Log' },
+    { label: m.sidebar_group_settings(), href: 'settings/account' },
+    { label: m.sidebar_settings_audit_log() },
   ]);
 
   const pageSize = 50;
@@ -106,11 +109,12 @@
 </script>
 
 <Container>
-  <PageHeader
-    title="Audit Log"
-    subtitle="Security-relevant activity on your account. Review anything you do not recognize."
-  >
-    <Input placeholder="Search..." bind:value={searchInput} class="w-full sm:w-48" />
+  <PageHeader title={m.sidebar_settings_audit_log()} subtitle={m.audit_subtitle()}>
+    <Input
+      placeholder={m.common_search_placeholder()}
+      bind:value={searchInput}
+      class="w-full sm:w-48"
+    />
   </PageHeader>
   <div class="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-6">
     <DataTable {data} {columns} {features} bind:sorting manualSorting />

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { userSharesRedeemInvite } from '#lib/api/index.js';
   import type { V2UserSharesListItem } from '#lib/api/index.js';
   import { Barcode, Zap } from '@lucide/svelte';
@@ -57,24 +58,24 @@
 <Dialog.Root bind:open={() => open, onOpenChange}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Redeem share code</Dialog.Title>
-      <Dialog.Description>Enter the share code to redeem</Dialog.Description>
+      <Dialog.Title>{m.share_code_redeem_title()}</Dialog.Title>
+      <Dialog.Description>{m.share_code_redeem_desc()}</Dialog.Description>
     </Dialog.Header>
 
     <form class="min-w-0 space-y-4" onsubmit={onFormSubmit}>
       <Input
         bind:value={userInput}
         disabled={redeeming || result !== null}
-        placeholder="Enter share code"
+        placeholder={m.share_code_redeem_placeholder()}
       />
 
       {#if result}
         <div class="flex flex-col gap-2">
-          <p class="text-success">Redeemed successfully!</p>
+          <p class="text-success">{m.share_code_redeemed()}</p>
 
           <span class="flex items-center gap-2">
             <Avatar.Root class="h-15 w-15">
-              <Avatar.Image src={result.image} alt="User Avatar" />
+              <Avatar.Image src={result.image} alt={m.common_user_avatar()} />
               <Avatar.Fallback>{result.name.charAt(0)}</Avatar.Fallback>
             </Avatar.Root>
             <p class="ml-4">{result.name}</p>
@@ -94,7 +95,7 @@
                     >
                   </Tooltip.Trigger>
                   <Tooltip.Content>
-                    <p>Shared shockers</p>
+                    <p>{m.share_code_shared_shockers()}</p>
                   </Tooltip.Content>
                 </Tooltip.Root>
               {/each}
@@ -108,7 +109,7 @@
           disabled={redeeming || !userInput.trim()}
         >
           <Barcode />
-          {redeeming ? 'Redeeming...' : 'Redeem'}
+          {redeeming ? m.share_code_redeeming() : m.share_code_redeem()}
         </Button>
       {/if}
     </form>

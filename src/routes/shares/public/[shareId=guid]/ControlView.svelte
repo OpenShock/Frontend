@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { HubConnectionState } from '@microsoft/signalr';
   import type { PublicShareResponse } from '#lib/api/index.js';
   import ClassicControlModule from '#lib/components/ControlModules/ClassicControlModule.svelte';
@@ -107,7 +108,7 @@
 
     <div class="flex items-center justify-end gap-4">
       {#if userState.self?.id === shareLinkRoot.author.id}
-        <Button variant="outline" href={editUrl}><Pencil /> Edit</Button>
+        <Button variant="outline" href={editUrl}><Pencil /> {m.common_edit()}</Button>
       {/if}
 
       <Tooltip.Root>
@@ -116,7 +117,7 @@
             class="outline-muted-foreground/50 mr-10 flex flex-row items-center rounded-md px-4 py-2 outline-1"
           >
             <Avatar.Root class="h-10 w-10">
-              <Avatar.Image src={shareLinkRoot.author.image} alt="User Avatar" />
+              <Avatar.Image src={shareLinkRoot.author.image} alt={m.common_user_avatar()} />
               <Avatar.Fallback>
                 {shareLinkRoot.author.name.charAt(0)}
               </Avatar.Fallback>
@@ -125,7 +126,7 @@
           </span>
         </Tooltip.Trigger>
         <Tooltip.Content>
-          <p>Shared by</p>
+          <p>{m.common_shared_by()}</p>
         </Tooltip.Content>
       </Tooltip.Root>
     </div>

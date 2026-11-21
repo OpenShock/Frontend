@@ -1,3 +1,4 @@
+import { m } from '#lib/paraglide/messages.js';
 import { getBackendURL } from '#lib/utils/url.js';
 import { type HubConnection, HubConnectionState } from '@microsoft/signalr';
 import { toast } from 'svelte-sonner';
@@ -67,7 +68,7 @@ export async function initializeSignalR() {
     connectionState = HubConnectionState.Connected;
   } catch (error) {
     console.error(error);
-    toast.error('Failed to connect to server!');
+    toast.error(m.signalr_connect_failed());
     connectionState = HubConnectionState.Disconnected;
   }
 }
@@ -79,7 +80,7 @@ export async function destroySignalR() {
     await connection.stop();
   } catch (error) {
     console.error(error);
-    toast.error('Encountered error while disconnecting from server!');
+    toast.error(m.signalr_disconnect_failed());
   } finally {
     connection = null;
     connectionState = HubConnectionState.Disconnected;

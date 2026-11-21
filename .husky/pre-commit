@@ -1,4 +1,5 @@
 pnpm exec svelte-kit sync
+pnpm exec paraglide-js compile --silent
 
 pnpm exec svelte-check --tsconfig ./tsconfig.json &
 pid1=$!

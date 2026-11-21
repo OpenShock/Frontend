@@ -1,3 +1,4 @@
+import { m } from '#lib/paraglide/messages.js';
 import { HubUpdateType, isHubUpdateType } from '#lib/signalr/models/HubUpdateType.js';
 import { notifyHubPaired, refreshOwnHubs } from '#lib/state/hubs-state.svelte.js';
 import { isString } from '@openshock/svelte-core/typeguards';
@@ -6,7 +7,7 @@ import { toast } from 'svelte-sonner';
 export function handleSignalrDeviceUpdate(deviceId: unknown, updateType: unknown) {
   if (!isString(deviceId) || !isHubUpdateType(updateType)) {
     console.error('Received invalid SignalR DeviceUpdate event', deviceId, updateType);
-    toast.error('Received invalid update from server!');
+    toast.error(m.signalr_invalid_update());
     return;
   }
 

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { shockerPauseShocker, shockerShockerShareCodePause } from '#lib/api/index.js';
   import type { LegacyDataResponseOfboolean } from '#lib/api/index.js';
   import { Asterisk, Pause, Play } from '@lucide/svelte';
@@ -76,7 +77,7 @@
   onclick={handleClick}
   class="size-9"
   variant={pausedBooleans === 'allTrue' ? 'destructive' : 'default'}
-  title={pausedBooleans === 'allTrue' ? 'Resume all shockers' : 'Pause all shockers'}
+  title={pausedBooleans === 'allTrue' ? m.pause_resume_all() : m.pause_pause_all()}
   aria-busy={requestInProgress}
 >
   {#if requestInProgress}

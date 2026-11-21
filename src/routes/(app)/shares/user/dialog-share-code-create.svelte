@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { userSharesCreateShareInvite } from '#lib/api/index.js';
   import type { BasicUserInfo } from '#lib/api/index.js';
   import { Barcode, User } from '@lucide/svelte';
@@ -121,8 +122,8 @@
 <Dialog.Root bind:open={() => open, onOpenChange}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>New share code</Dialog.Title>
-      <Dialog.Description>Create a Share Code or Invite</Dialog.Description>
+      <Dialog.Title>{m.share_code_create_title()}</Dialog.Title>
+      <Dialog.Description>{m.share_code_create_desc()}</Dialog.Description>
     </Dialog.Header>
 
     <form class="min-w-0 space-y-4" id="create-share-code" onsubmit={onFormSubmit}>
@@ -131,9 +132,9 @@
       <MultiSelectCombobox
         bind:selected={shockerIds}
         options={availableShockers}
-        label="Shockers"
-        placeholder="Select shockers to share..."
-        noMatchText="Not matching shockers"
+        label={m.shockers_title()}
+        placeholder={m.share_code_shocker_placeholder()}
+        noMatchText={m.share_code_no_match()}
       ></MultiSelectCombobox>
 
       <RestrictionsSelector
@@ -142,7 +143,7 @@
       />
     </form>
     <Dialog.Footer>
-      <Button variant="outline" onclick={() => onOpenChange(false)}>Cancel</Button>
+      <Button variant="outline" onclick={() => onOpenChange(false)}>{m.common_cancel()}</Button>
       <Button
         type="submit"
         form="create-share-code"
@@ -151,10 +152,10 @@
       >
         {#if fetchedUser}
           <User />
-          Send Share Invite
+          {m.share_code_send_invite()}
         {:else}
           <Barcode />
-          Create Share Code
+          {m.share_code_create()}
         {/if}
       </Button>
     </Dialog.Footer>

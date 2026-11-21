@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import { shockerRemoveShocker } from '#lib/api/index.js';
   import type { ShockerResponse } from '#lib/api/index.js';
   import { Copy, Ellipsis, Logs, Pencil, Share2, Trash2 } from '@lucide/svelte';
@@ -19,7 +20,7 @@
   let { shocker }: Props = $props();
 
   function copyId() {
-    copyToClipboard(shocker.id, 'ID copied to clipboard');
+    copyToClipboard(shocker.id, m.common_id_copied());
   }
 
   function viewLogs() {
@@ -36,14 +37,14 @@
 
   async function deleteShocker() {
     const result = await dialog.confirm({
-      title: 'Delete Shocker',
-      desc: `Are you sure you want to delete "${shocker.name}"? This action cannot be undone.`,
-      confirmButtonText: 'Delete',
+      title: m.shocker_delete_title(),
+      desc: m.shocker_delete_desc({ name: shocker.name }),
+      confirmButtonText: m.common_delete(),
     });
     if (!result.confirmed) return;
     try {
       await shockerRemoveShocker({ path: { shockerId: shocker.id } });
-      toast.success(`Shocker "${shocker.name}" deleted`);
+      toast.success(m.shocker_toast_deleted({ name: shocker.name }));
       await refreshOwnHubs();
     } catch (error) {
       handleApiError(error);
@@ -55,32 +56,32 @@
   <DropdownMenu.Trigger>
     {#snippet child({ props })}
       <Button {...props} variant="ghost" size="icon" class="relative size-8 p-0">
-        <span class="sr-only">Open menu</span>
+        <span class="sr-only">{m.common_open_menu()}</span>
         <Ellipsis class="size-4" />
       </Button>
     {/snippet}
   </DropdownMenu.Trigger>
   <DropdownMenu.Content>
-    <DropdownMenu.Label>Shocker</DropdownMenu.Label>
+    <DropdownMenu.Label>{m.shocker_label()}</DropdownMenu.Label>
     <DropdownMenu.Group>
       <DropdownMenu.Item class="cursor-pointer" onclick={editShocker}
-        ><Pencil class="size-4" />Edit</DropdownMenu.Item
+        ><Pencil class="size-4" />{m.common_edit()}</DropdownMenu.Item
       >
       <DropdownMenu.Item class="cursor-pointer" onclick={shareShocker}
-        ><Share2 class="size-4" />Share</DropdownMenu.Item
+        ><Share2 class="size-4" />{m.common_share()}</DropdownMenu.Item
       >
       <DropdownMenu.Item class="cursor-pointer" onclick={viewLogs}
-        ><Logs class="size-4" />View Logs</DropdownMenu.Item
+        ><Logs class="size-4" />{m.shocker_menu_view_logs()}</DropdownMenu.Item
       >
       <DropdownMenu.Separator />
       <DropdownMenu.Item class="cursor-pointer" onclick={copyId}>
         <Copy class="size-4" />
-        Copy ID
+        {m.common_copy_id()}
       </DropdownMenu.Item>
       <DropdownMenu.Separator />
       <DropdownMenu.Item class="text-destructive cursor-pointer" onclick={deleteShocker}>
         <Trash2 class="size-4" />
-        Delete
+        {m.common_delete()}
       </DropdownMenu.Item>
     </DropdownMenu.Group>
   </DropdownMenu.Content>

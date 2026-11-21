@@ -1,5 +1,24 @@
 import { isSerialSupported } from '#lib/utils/compatibility.js';
+import { NumberToHexPadded } from '@openshock/svelte-core/utils';
 import { onMount } from 'svelte';
+
+/** Formats a serial port's USB identifiers as "VID_xxxx&PID_xxxx", or "Unknown" when it has none. */
+export function getHardwareId(serialPort: Pick<SerialPort, 'getInfo'> | null): string {
+  const info = serialPort?.getInfo();
+  if (!info || (!info.usbVendorId && !info.usbProductId)) {
+    return 'Unknown';
+  }
+
+  const parts: string[] = [];
+  if (info.usbVendorId) {
+    parts.push(`VID_${NumberToHexPadded(info.usbVendorId, 4)}`);
+  }
+  if (info.usbProductId) {
+    parts.push(`PID_${NumberToHexPadded(info.usbProductId, 4)}`);
+  }
+
+  return parts.join('&');
+}
 
 export class SerialContext {
   #ports = $state<SerialPort[]>([]);

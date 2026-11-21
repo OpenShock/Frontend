@@ -1,0 +1,82 @@
+import { expect, test } from './lib/test-fixtures';
+
+test.describe('account settings', () => {
+  test.beforeEach(async ({ authedPage }) => {
+    await authedPage.goto('/settings/account');
+    await authedPage.waitForLoadState('networkidle');
+  });
+
+  test('settings page is accessible and renders', async ({ authedPage }) => {
+    await expect(authedPage.getByRole('heading', { name: /account|settings/i })).toBeVisible();
+  });
+
+  test('displays current username', async ({ authedPage, user }) => {
+    // The username also appears in the sidebar avatar button and as the local part of the
+    // email, so look for the exact value inside the page content only.
+    await expect(
+      authedPage.getByRole('main').getByText(user.credentials.username, { exact: true })
+    ).toBeVisible();
+  });
+
+  test('displays current email', async ({ authedPage, user }) => {
+    await expect(authedPage.getByText(user.credentials.email, { exact: false })).toBeVisible();
+  });
+
+  test('update username with a valid new name', async ({ authedPage }) => {
+    const newName = `upd_${Date.now().toString(36)}`;
+
+    // The page shows the username as text; changing it goes through a dialog.
+    await authedPage.getByRole('button', { name: /change username/i }).click();
+    const dialog = authedPage.getByRole('dialog');
+    await expect(dialog).toBeVisible();
+    await dialog.getByLabel(/new username/i).fill(newName);
+    await dialog.getByRole('button', { name: /^change username$/i }).click();
+
+    // The new name has to survive a reload — a toast alone would not prove it was saved.
+    await expect(dialog).toBeHidden();
+    await authedPage.reload();
+    await authedPage.waitForLoadState('networkidle');
+    await expect(authedPage.getByRole('main').getByText(newName, { exact: true })).toBeVisible();
+  });
+
+  test('rejects username that is too short', async ({ authedPage }) => {
+    await authedPage.getByRole('button', { name: /change username/i }).click();
+    const dialog = authedPage.getByRole('dialog');
+    await expect(dialog).toBeVisible();
+
+    const usernameInput = dialog.getByLabel(/new username/i);
+    await usernameInput.fill('ab');
+
+    await expect(usernameInput).toHaveAttribute('aria-invalid', 'true', { timeout: 3000 });
+    await expect(dialog.getByRole('button', { name: /^change username$/i })).toBeDisabled();
+  });
+});
+
+test.describe('profile page', () => {
+  test('profile page renders its heading and coming-soon state', async ({ authedPage }) => {
+    await authedPage.goto('/profile');
+    await authedPage.waitForLoadState('networkidle');
+    // The route is a placeholder today: a heading and an empty state, no user info of its own.
+    // Anything user-specific on the page would come from the surrounding shell, not the profile.
+    const main = authedPage.getByRole('main');
+    await expect(main.getByRole('heading', { name: /^profile$/i })).toBeVisible();
+    await expect(main.getByText(/profile is coming soon/i)).toBeVisible();
+  });
+});
+
+test.describe('sessions', () => {
+  test('sessions page lists at least one active session', async ({ authedPage }) => {
+    await authedPage.goto('/settings/sessions');
+    await authedPage.waitForLoadState('networkidle');
+    // The list is a stack of divs, one per session, each saying when it was signed in. The
+    // current session is always there, so at least one of those lines must render.
+    await expect(
+      authedPage
+        .getByRole('main')
+        .getByText(/signed in/i)
+        .first()
+    ).toBeVisible({
+      timeout: 5000,
+    });
+  });
+});

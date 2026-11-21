@@ -18,6 +18,7 @@
 </script>
 
 <script lang="ts">
+  import { m } from '#lib/paraglide/messages.js';
   import type { NewShocker } from '#lib/api/index.js';
   import { TextInput } from '@openshock/svelte-core/components/input';
   import { Button } from '@openshock/svelte-core/components/ui/button';
@@ -56,14 +57,18 @@
 </script>
 
 <Dialog.Header>
-  <Dialog.Title>Add shocker</Dialog.Title>
-  <Dialog.Description>Register a new shocker to one of your hubs.</Dialog.Description>
+  <Dialog.Title>{m.shockers_add()}</Dialog.Title>
+  <Dialog.Description>{m.shocker_add_desc()}</Dialog.Description>
 </Dialog.Header>
 <div class="flex flex-col gap-4 py-2">
-  <TextInput label="Name" placeholder="My Shocker" bind:value={data.name} />
+  <TextInput
+    label={m.common_name()}
+    placeholder={m.shocker_add_name_placeholder()}
+    bind:value={data.name}
+  />
 
   <Field class="gap-2">
-    <FieldLabel>RF ID</FieldLabel>
+    <FieldLabel>{m.shocker_rf_id()}</FieldLabel>
     <Input
       type="number"
       placeholder="12345"
@@ -75,10 +80,10 @@
   </Field>
 
   <Field class="gap-2">
-    <FieldLabel>Model</FieldLabel>
+    <FieldLabel>{m.shocker_model()}</FieldLabel>
     <Select.Root type="single" name="model" bind:value={data.model}>
       <Select.Trigger>
-        {data.model ?? 'Select model'}
+        {data.model ?? m.shocker_select_model()}
       </Select.Trigger>
       <Select.Content>
         <Select.Group>
@@ -91,10 +96,10 @@
   </Field>
 
   <Field class="gap-2">
-    <FieldLabel>Hub</FieldLabel>
+    <FieldLabel>{m.shocker_hub()}</FieldLabel>
     <Select.Root type="single" name="hub" bind:value={data.device}>
       <Select.Trigger>
-        {hubs.find(([id]) => id === data.device)?.[1].name ?? 'Select hub'}
+        {hubs.find(([id]) => id === data.device)?.[1].name ?? m.shocker_select_hub()}
       </Select.Trigger>
       <Select.Content>
         <Select.Group>
@@ -107,6 +112,6 @@
   </Field>
 </div>
 <Dialog.Footer>
-  <Button variant="outline" onclick={() => close()}>Cancel</Button>
-  <Button disabled={!canSubmit} onclick={submit}>Add Shocker</Button>
+  <Button variant="outline" onclick={() => close()}>{m.common_cancel()}</Button>
+  <Button disabled={!canSubmit} onclick={submit}>{m.shockers_add()}</Button>
 </Dialog.Footer>
