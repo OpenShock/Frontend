@@ -2,6 +2,7 @@ import type { ControlStatTotals } from '#lib/api/index.js';
 import { describe, expect, it } from 'vitest';
 import {
   dailySeries,
+  durationAxisUnit,
   formatStatDuration,
   summarizeByType,
   totalCount,
@@ -98,6 +99,17 @@ describe('dailySeries', () => {
       day
     );
     expect(series[0].Sound).toBe(750);
+  });
+});
+
+describe('durationAxisUnit', () => {
+  it.each([
+    [0, 's'],
+    [90_000, 's'],
+    [600_000, 'm'],
+    [7_200_000, 'h'],
+  ])('charts a %d ms maximum in %s', (ms, suffix) => {
+    expect(durationAxisUnit(ms).suffix).toBe(suffix);
   });
 });
 

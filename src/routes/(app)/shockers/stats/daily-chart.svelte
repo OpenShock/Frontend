@@ -6,7 +6,12 @@
   import { scaleBand } from 'd3-scale';
   import { BarChart } from 'layerchart';
   import { m } from '#lib/paraglide/messages.js';
-  import { StatControlTypes, dailySeries, formatStatDuration } from '#lib/utils/controlStats.js';
+  import {
+    StatControlTypes,
+    dailySeries,
+    durationAxisUnit,
+    formatStatDuration,
+  } from '#lib/utils/controlStats.js';
   import { controlTypeColors, controlTypeLabels } from './colors';
 
   interface Props {
@@ -19,8 +24,23 @@
 
   let metric = $state<'count' | 'durationMs'>('count');
 
-  let data = $derived(dailySeries(days, metric, from, to));
+  let points = $derived(dailySeries(days, metric, from, to));
   let hasActivity = $derived(days.some((day) => day.stats.length > 0));
+
+  // Durations are charted in whole seconds, minutes or hours so the axis ticks are round values.
+  let unit = $derived(
+    durationAxisUnit(Math.max(0, ...points.map((p) => p.Shock + p.Vibrate + p.Sound)))
+  );
+  let data = $derived(
+    metric === 'count'
+      ? points
+      : points.map((p) => ({
+          date: p.date,
+          Shock: p.Shock / unit.ms,
+          Vibrate: p.Vibrate / unit.ms,
+          Sound: p.Sound / unit.ms,
+        }))
+  );
 
   const chartConfig: Chart.ChartConfig = Object.fromEntries(
     StatControlTypes.map((type) => [
@@ -35,11 +55,24 @@
     color: `var(--color-${type})`,
   }));
 
-  const formatDay = (date: string) =>
-    Temporal.PlainDate.from(date).toLocaleString(undefined, { month: 'short', day: 'numeric' });
+  // The year only matters on the axis once the range spans more than one.
+  let spansYears = $derived(from.year !== to.year);
+
+  const formatAxisDay = (date: string) =>
+    Temporal.PlainDate.from(date).toLocaleString(undefined, {
+      month: 'short',
+      day: 'numeric',
+      year: spansYears ? '2-digit' : undefined,
+    });
+
+  const formatTooltipDay = (date: string) =>
+    Temporal.PlainDate.from(date).toLocaleString(undefined, { dateStyle: 'medium' });
+
+  const formatTick = (value: number) =>
+    metric === 'count' ? value.toLocaleString() : `${value.toLocaleString()}${unit.suffix}`;
 
   const formatValue = (value: number) =>
-    metric === 'count' ? value.toLocaleString() : formatStatDuration(value);
+    metric === 'count' ? value.toLocaleString() : formatStatDuration(value * unit.ms);
 </script>
 
 <Card.Root class="min-w-0 gap-2 py-4">
@@ -75,15 +108,17 @@
           seriesLayout="stack"
           rule={false}
           legend
+          padding={{ top: 4, right: 4, bottom: 52, left: 44 }}
           props={{
             bars: { stroke: 'none' },
             highlight: { area: { fill: 'none' } },
-            xAxis: { format: formatDay },
-            yAxis: { format: formatValue },
+            // One band per day, so labels are thinned by their rendered width.
+            xAxis: { format: formatAxisDay, tickOcclusion: { priority: 'start-end', padding: 8 } },
+            yAxis: { format: formatTick },
           }}
         >
           {#snippet tooltip()}
-            <Chart.Tooltip labelFormatter={formatDay}>
+            <Chart.Tooltip labelFormatter={formatTooltipDay}>
               {#snippet formatter({ value, item })}
                 <div
                   class="size-2.5 shrink-0 rounded-[2px] bg-(--color-bg)"

@@ -113,6 +113,21 @@ export function dailySeries(
   return points;
 }
 
+export interface DurationUnit {
+  ms: number;
+  suffix: 's' | 'm' | 'h';
+}
+
+/**
+ * Unit to chart durations in, picked so axis ticks land on round values of it
+ * instead of round milliseconds such as `6m 40s`.
+ */
+export function durationAxisUnit(maxMs: number): DurationUnit {
+  if (maxMs < 2 * 60_000) return { ms: 1000, suffix: 's' };
+  if (maxMs < 2 * 3_600_000) return { ms: 60_000, suffix: 'm' };
+  return { ms: 3_600_000, suffix: 'h' };
+}
+
 /** Formats a duration in milliseconds as the two most significant units, e.g. `2h 14m` or `4.2s`. */
 export function formatStatDuration(durationMs: number): string {
   const totalSeconds = durationMs / 1000;
