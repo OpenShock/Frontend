@@ -287,7 +287,7 @@
         <Button
           variant="ghost"
           size="sm"
-          aria-label="Stats"
+          aria-label={m.shockers_stats_label()}
           href={resolve('shockers/stats')}><ChartColumn class="size-4" /></Button
         >
       </div>

@@ -12,6 +12,7 @@
 <script lang="ts">
   import * as Card from '@openshock/svelte-core/components/ui/card';
   import * as Table from '@openshock/svelte-core/components/ui/table';
+  import { m } from '#lib/paraglide/messages.js';
   import {
     StatControlTypes,
     formatStatDuration,
@@ -61,10 +62,10 @@
           <Table.Row>
             <Table.Head>{nameHeader}</Table.Head>
             {#each StatControlTypes as type (type)}
-              <Table.Head class="text-right">{controlTypeLabels[type]}</Table.Head>
+              <Table.Head class="text-right">{controlTypeLabels[type]()}</Table.Head>
             {/each}
-            <Table.Head class="text-right">Duration</Table.Head>
-            <Table.Head class="text-right">Max intensity</Table.Head>
+            <Table.Head class="text-right">{m.shocker_stats_col_duration()}</Table.Head>
+            <Table.Head class="text-right">{m.shocker_stats_max_intensity()}</Table.Head>
           </Table.Row>
         </Table.Header>
         <Table.Body>

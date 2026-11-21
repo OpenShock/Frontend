@@ -11,6 +11,7 @@
   import { Spinner } from '@openshock/svelte-core/components/ui/spinner';
   import * as Tabs from '@openshock/svelte-core/components/ui/tabs';
   import { handleApiError } from '#lib/errorhandling/apiErrorHandling.js';
+  import { m } from '#lib/paraglide/messages.js';
   import { registerBreadcrumbs } from '#lib/state/breadcrumbs-state.svelte.js';
   import { createUrlFilters } from '#lib/utils/urlFilters.svelte.js';
   import BreakdownTable, { type BreakdownRow } from './breakdown-table.svelte';
@@ -18,22 +19,41 @@
   import TotalsCards from './totals-cards.svelte';
 
   registerBreadcrumbs(() => [
-    { label: 'Shockers', href: 'shockers/own' },
-    { label: 'Shocker Stats' },
+    { label: m.shockers_title(), href: 'shockers/own' },
+    { label: m.shocker_stats_title() },
   ]);
 
   const ranges = {
-    '7d': { label: 'Last 7 days', days: 7 },
-    '30d': { label: 'Last 30 days', days: 30 },
-    '90d': { label: 'Last 90 days', days: 90 },
-    '365d': { label: 'Last year', days: 365 },
-    all: { label: 'All time', days: null },
-    custom: { label: 'Custom range', days: null },
+    '7d': { label: m.shocker_stats_range_7d, days: 7 },
+    '30d': { label: m.shocker_stats_range_30d, days: 30 },
+    '90d': { label: m.shocker_stats_range_90d, days: 90 },
+    '365d': { label: m.shocker_stats_range_365d, days: 365 },
+    all: { label: m.shocker_stats_range_all, days: null },
+    custom: { label: m.shocker_stats_range_custom, days: null },
   } as const;
   type RangeKey = keyof typeof ranges;
 
-  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const today = Temporal.Now.plainDateISO(timeZone);
+  const browserTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+  // Falls back to UTC when the server's time zone database does not know the browser's zone.
+  let timeZone = $state(browserTimeZone);
+  let today = $state(Temporal.Now.plainDateISO(browserTimeZone));
+
+  function refreshToday() {
+    const current = Temporal.Now.plainDateISO(timeZone);
+    // Only on an actual change, every new value refetches the stats.
+    if (!current.equals(today)) today = current;
+  }
+
+  // Keeps `today` current when the page stays open past midnight, so presets include the new day.
+  // Reading `today` re-arms the timer each time it moves on.
+  $effect(() => {
+    refreshToday();
+    const now = Temporal.Now.zonedDateTimeISO(timeZone);
+    const nextMidnight = today.add({ days: 1 }).toZonedDateTime(timeZone);
+    // A second of slack so the timer never fires just before midnight.
+    const timer = setTimeout(refreshToday, now.until(nextMidnight).total('milliseconds') + 1000);
+    return () => clearTimeout(timer);
+  });
 
   const filters = createUrlFilters({
     range: { type: 'string', default: '30d' },
@@ -54,12 +74,18 @@
     filters.range && filters.range in ranges ? (filters.range as RangeKey) : '30d'
   );
 
-  let to = $derived(range === 'custom' ? (parseDate(filters.to) ?? today) : today);
-  let from = $derived.by(() => {
+  let selectedTo = $derived(range === 'custom' ? (parseDate(filters.to) ?? today) : today);
+  let selectedFrom = $derived.by(() => {
     if (range === 'custom') return parseDate(filters.from);
     const days = ranges[range].days;
     return days === null ? undefined : today.subtract({ days: days - 1 });
   });
+  // The API rejects a reversed range, which a hand-edited URL can still produce.
+  let reversed = $derived(
+    selectedFrom !== undefined && Temporal.PlainDate.compare(selectedFrom, selectedTo) > 0
+  );
+  let from = $derived(reversed ? selectedTo : selectedFrom);
+  let to = $derived(reversed && selectedFrom ? selectedFrom : selectedTo);
 
   function selectRange(value: string) {
     filters.range = value;
@@ -74,6 +100,7 @@
 
   let stats = $state<ControlStatsResponse | null>(null);
   let isFetching = $state(false);
+  let loadFailed = $state(false);
   let tab = $state<'received' | 'given'>('received');
 
   // Monotonic token so only the most recently issued request applies its result.
@@ -84,6 +111,7 @@
 
     const token = ++fetchToken;
     isFetching = true;
+    loadFailed = false;
     usersGetSelfControlStats({
       query,
       // The generated serializer drops Temporal values, so the dates are sent as ISO strings.
@@ -103,7 +131,15 @@
       .catch((err) => {
         if (token !== fetchToken) return;
         stats = null;
-        handleApiError(err);
+        loadFailed = true;
+        return handleApiError(err, {
+          'ControlStats.InvalidTimeZone': () => {
+            if (timeZone === 'UTC') return false;
+            // Retried by the effect, since the time zone is part of the query.
+            loadFailed = false;
+            timeZone = 'UTC';
+          },
+        });
       })
       .finally(() => {
         if (token === fetchToken) isFetching = false;
@@ -125,7 +161,7 @@
   function shockerRows(shockers: ShockerControlStats[]): BreakdownRow[] {
     return shockers.map((s) => ({
       key: s.shockerId ?? 'deleted',
-      name: s.shockerName ?? 'Deleted shockers',
+      name: s.shockerName ?? m.shocker_stats_deleted_shockers(),
       muted: s.shockerId === null,
       stats: s.stats,
     }));
@@ -134,11 +170,11 @@
   function userRows(users: UserControlStats[]): BreakdownRow[] {
     return users.map((u) => {
       if (u.userId === null) {
-        return { key: 'guests', name: 'Guests (public shares)', muted: true, stats: u.stats };
+        return { key: 'guests', name: m.shocker_stats_guests(), muted: true, stats: u.stats };
       }
       return {
         key: u.userId,
-        name: u.user?.name ?? 'Deleted user',
+        name: u.user?.name ?? m.shocker_stats_deleted_user(),
         muted: u.user === null,
         stats: u.stats,
       };
@@ -147,10 +183,7 @@
 </script>
 
 <Container>
-  <PageHeader
-    title="Shocker Stats"
-    subtitle="How your shockers have been used, and how you used others'."
-  >
+  <PageHeader title={m.shocker_stats_title()} subtitle={m.shocker_stats_subtitle()}>
     {#if isFetching}
       <Spinner />
     {/if}
@@ -159,10 +192,10 @@
   <div class="flex w-full min-w-0 flex-col gap-6">
     <div class="flex flex-wrap items-end gap-2">
       <Select.Root type="single" value={range} onValueChange={selectRange}>
-        <Select.Trigger class="w-44">{ranges[range].label}</Select.Trigger>
+        <Select.Trigger class="w-44">{ranges[range].label()}</Select.Trigger>
         <Select.Content>
           {#each Object.entries(ranges) as [key, option] (key)}
-            <Select.Item value={key} label={option.label}>{option.label}</Select.Item>
+            <Select.Item value={key} label={option.label()}>{option.label()}</Select.Item>
           {/each}
         </Select.Content>
       </Select.Root>
@@ -170,15 +203,17 @@
         <Input
           type="date"
           class="w-40"
-          aria-label="From"
+          aria-label={m.shocker_stats_from_label()}
           max={filters.to ?? today.toString()}
           bind:value={() => filters.from ?? '', (v) => (filters.from = v || undefined)}
         />
-        <span class="text-muted-foreground self-center text-sm">to</span>
+        <span class="text-muted-foreground self-center text-sm"
+          >{m.shocker_stats_range_separator()}</span
+        >
         <Input
           type="date"
           class="w-40"
-          aria-label="To"
+          aria-label={m.shocker_stats_to_label()}
           min={filters.from}
           max={today.toString()}
           bind:value={() => filters.to ?? '', (v) => (filters.to = v || undefined)}
@@ -186,11 +221,21 @@
       {/if}
     </div>
 
+    {#if timeZone !== browserTimeZone}
+      <p class="text-muted-foreground text-sm">
+        {m.shocker_stats_utc_fallback({ timeZone: browserTimeZone })}
+      </p>
+    {/if}
+
     {#if stats}
-      <Tabs.Root bind:value={tab}>
+      <Tabs.Root
+        bind:value={tab}
+        aria-busy={isFetching}
+        class={['transition-opacity', isFetching && 'opacity-60']}
+      >
         <Tabs.List>
-          <Tabs.Trigger value="received">Received</Tabs.Trigger>
-          <Tabs.Trigger value="given">Given</Tabs.Trigger>
+          <Tabs.Trigger value="received">{m.shocker_stats_tab_received()}</Tabs.Trigger>
+          <Tabs.Trigger value="given">{m.shocker_stats_tab_given()}</Tabs.Trigger>
         </Tabs.List>
 
         <Tabs.Content value="received" class="flex flex-col gap-6 pt-4">
@@ -198,16 +243,16 @@
           <DailyChart days={stats.received.days} from={chartFrom} {to} />
           <div class="grid grid-cols-1 gap-6 xl:grid-cols-2">
             <BreakdownTable
-              title="By shocker"
-              nameHeader="Shocker"
+              title={m.shocker_stats_by_shocker()}
+              nameHeader={m.shocker_stats_col_shocker()}
               rows={shockerRows(stats.received.shockers)}
-              emptyText="None of your shockers were controlled in this period."
+              emptyText={m.shocker_stats_empty_shockers()}
             />
             <BreakdownTable
-              title="By controller"
-              nameHeader="User"
+              title={m.shocker_stats_by_controller()}
+              nameHeader={m.shocker_stats_col_user()}
               rows={userRows(stats.received.controllers)}
-              emptyText="Nobody controlled your shockers in this period."
+              emptyText={m.shocker_stats_empty_controllers()}
             />
           </div>
         </Tabs.Content>
@@ -215,15 +260,17 @@
         <Tabs.Content value="given" class="flex flex-col gap-6 pt-4">
           <TotalsCards totals={stats.given.totals} />
           <BreakdownTable
-            title="By owner"
-            nameHeader="Owner"
+            title={m.shocker_stats_by_owner()}
+            nameHeader={m.shocker_stats_col_owner()}
             rows={userRows(stats.given.owners)}
-            emptyText="You did not control any shockers in this period."
+            emptyText={m.shocker_stats_empty_owners()}
           />
         </Tabs.Content>
       </Tabs.Root>
     {:else if isFetching}
       <div class="flex justify-center py-12"><Spinner /></div>
+    {:else if loadFailed}
+      <p class="text-muted-foreground py-12 text-center text-sm">{m.shocker_stats_load_failed()}</p>
     {/if}
   </div>
 </Container>

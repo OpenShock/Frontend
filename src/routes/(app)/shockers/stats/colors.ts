@@ -1,3 +1,4 @@
+import { m } from '#lib/paraglide/messages.js';
 import type { StatControlType } from '#lib/utils/controlStats.js';
 
 export const controlTypeColors: Record<StatControlType, { light: string; dark: string }> = {
@@ -6,8 +7,8 @@ export const controlTypeColors: Record<StatControlType, { light: string; dark: s
   Sound: { light: '#a9489f', dark: '#bf5ab8' },
 };
 
-export const controlTypeLabels: Record<StatControlType, string> = {
-  Shock: 'Shocks',
-  Vibrate: 'Vibrations',
-  Sound: 'Sounds',
+export const controlTypeLabels: Record<StatControlType, () => string> = {
+  Shock: m.shocker_stats_type_shock,
+  Vibrate: m.shocker_stats_type_vibrate,
+  Sound: m.shocker_stats_type_sound,
 };

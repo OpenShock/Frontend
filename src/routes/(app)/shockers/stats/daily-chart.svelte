@@ -5,6 +5,7 @@
   import * as Chart from '@openshock/svelte-core/components/ui/chart';
   import { scaleBand } from 'd3-scale';
   import { BarChart } from 'layerchart';
+  import { m } from '#lib/paraglide/messages.js';
   import { StatControlTypes, dailySeries, formatStatDuration } from '#lib/utils/controlStats.js';
   import { controlTypeColors, controlTypeLabels } from './colors';
 
@@ -19,17 +20,18 @@
   let metric = $state<'count' | 'durationMs'>('count');
 
   let data = $derived(dailySeries(days, metric, from, to));
+  let hasActivity = $derived(days.some((day) => day.stats.length > 0));
 
   const chartConfig: Chart.ChartConfig = Object.fromEntries(
     StatControlTypes.map((type) => [
       type,
-      { label: controlTypeLabels[type], theme: controlTypeColors[type] },
+      { label: controlTypeLabels[type](), theme: controlTypeColors[type] },
     ])
   );
 
   const series = StatControlTypes.map((type) => ({
     key: type,
-    label: controlTypeLabels[type],
+    label: controlTypeLabels[type](),
     color: `var(--color-${type})`,
   }));
 
@@ -42,56 +44,62 @@
 
 <Card.Root class="min-w-0 gap-2 py-4">
   <Card.Header class="flex items-center justify-between gap-2 px-4">
-    <Card.Title class="text-sm">Daily activity</Card.Title>
+    <Card.Title class="text-sm">{m.shocker_stats_daily_title()}</Card.Title>
     <div class="flex gap-1">
       <Button
         variant={metric === 'count' ? 'secondary' : 'ghost'}
         size="sm"
         class="h-7 text-xs"
-        onclick={() => (metric = 'count')}>Count</Button
+        onclick={() => (metric = 'count')}>{m.shocker_stats_metric_count()}</Button
       >
       <Button
         variant={metric === 'durationMs' ? 'secondary' : 'ghost'}
         size="sm"
         class="h-7 text-xs"
-        onclick={() => (metric = 'durationMs')}>Duration</Button
+        onclick={() => (metric = 'durationMs')}>{m.shocker_stats_metric_duration()}</Button
       >
     </div>
   </Card.Header>
   <Card.Content class="px-4">
-    <Chart.Container config={chartConfig} class="aspect-auto h-64 w-full">
-      <BarChart
-        {data}
-        x="date"
-        xScale={scaleBand().padding(0.2)}
-        {series}
-        seriesLayout="stack"
-        rule={false}
-        legend
-        props={{
-          bars: { stroke: 'none' },
-          highlight: { area: { fill: 'none' } },
-          xAxis: { format: formatDay },
-          yAxis: { format: formatValue },
-        }}
-      >
-        {#snippet tooltip()}
-          <Chart.Tooltip labelFormatter={formatDay}>
-            {#snippet formatter({ value, item })}
-              <div
-                class="size-2.5 shrink-0 rounded-[2px] bg-(--color-bg)"
-                style="--color-bg: {item.color}"
-              ></div>
-              <div class="flex flex-1 items-center justify-between gap-2 leading-none">
-                <span class="text-muted-foreground">{item.label}</span>
-                <span class="text-foreground font-mono font-medium tabular-nums">
-                  {formatValue(Number(value))}
-                </span>
-              </div>
-            {/snippet}
-          </Chart.Tooltip>
-        {/snippet}
-      </BarChart>
-    </Chart.Container>
+    {#if !hasActivity}
+      <p class="text-muted-foreground flex h-64 items-center justify-center text-sm">
+        {m.shocker_stats_daily_empty()}
+      </p>
+    {:else}
+      <Chart.Container config={chartConfig} class="aspect-auto h-64 w-full">
+        <BarChart
+          {data}
+          x="date"
+          xScale={scaleBand().padding(0.2)}
+          {series}
+          seriesLayout="stack"
+          rule={false}
+          legend
+          props={{
+            bars: { stroke: 'none' },
+            highlight: { area: { fill: 'none' } },
+            xAxis: { format: formatDay },
+            yAxis: { format: formatValue },
+          }}
+        >
+          {#snippet tooltip()}
+            <Chart.Tooltip labelFormatter={formatDay}>
+              {#snippet formatter({ value, item })}
+                <div
+                  class="size-2.5 shrink-0 rounded-[2px] bg-(--color-bg)"
+                  style="--color-bg: {item.color}"
+                ></div>
+                <div class="flex flex-1 items-center justify-between gap-2 leading-none">
+                  <span class="text-muted-foreground">{item.label}</span>
+                  <span class="text-foreground font-mono font-medium tabular-nums">
+                    {formatValue(Number(value))}
+                  </span>
+                </div>
+              {/snippet}
+            </Chart.Tooltip>
+          {/snippet}
+        </BarChart>
+      </Chart.Container>
+    {/if}
   </Card.Content>
 </Card.Root>

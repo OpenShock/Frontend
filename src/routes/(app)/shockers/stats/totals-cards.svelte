@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { ControlStatTotals } from '#lib/api/index.js';
   import * as Card from '@openshock/svelte-core/components/ui/card';
+  import { m } from '#lib/paraglide/messages.js';
   import { formatStatDuration, summarizeByType } from '#lib/utils/controlStats.js';
   import { controlTypeColors, controlTypeLabels } from './colors';
 
@@ -25,7 +26,7 @@
             summary.type
           ].dark}"
         ></span>
-        <Card.Title class="text-sm">{controlTypeLabels[summary.type]}</Card.Title>
+        <Card.Title class="text-sm">{controlTypeLabels[summary.type]()}</Card.Title>
       </Card.Header>
       <Card.Content class="flex flex-col gap-3 px-4">
         <div class="flex items-baseline gap-2">
@@ -38,17 +39,19 @@
         </div>
         <dl class="text-muted-foreground grid grid-cols-3 gap-2 text-xs">
           <div>
-            <dt>Avg intensity</dt>
+            <dt>{m.shocker_stats_avg_intensity()}</dt>
             <dd class="text-foreground font-medium tabular-nums">
-              {Math.round(summary.averageIntensity)}%
+              {summary.count > 0 ? `${Math.round(summary.averageIntensity)}%` : '–'}
             </dd>
           </div>
           <div>
-            <dt>Max intensity</dt>
-            <dd class="text-foreground font-medium tabular-nums">{summary.maxIntensity}%</dd>
+            <dt>{m.shocker_stats_max_intensity()}</dt>
+            <dd class="text-foreground font-medium tabular-nums">
+              {summary.count > 0 ? `${summary.maxIntensity}%` : '–'}
+            </dd>
           </div>
-          <div>
-            <dt>Live</dt>
+          <div title={m.shocker_stats_live_title()}>
+            <dt>{m.shocker_stats_live()}</dt>
             <dd class="text-foreground font-medium tabular-nums">
               {numberFormat.format(summary.liveCount)}
             </dd>
