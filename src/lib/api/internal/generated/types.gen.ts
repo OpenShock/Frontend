@@ -62,28 +62,6 @@ export type AdminOnlineGatewayResponse = {
   connectedHubs: number;
 };
 
-export type AdminUsersView = {
-  id: string;
-  name: string;
-  email: string;
-  passwordHashType: null | PasswordHashingAlgorithm;
-  roles: Array<RoleType>;
-  createdAt: Temporal.Instant;
-  activatedAt: null | Temporal.Instant;
-  createdByAutomationTokenId: null | string;
-  deactivatedAt: null | Temporal.Instant;
-  deactivatedByUserId: null | string;
-  apiTokenCount: number;
-  passwordResetCount: number;
-  shockerUserShareCount: number;
-  shockerPublicShareCount: number;
-  emailChangeRequestCount: number;
-  nameChangeRequestCount: number;
-  deviceCount: number;
-  shockerCount: number;
-  shockerControlLogCount: number;
-};
-
 export type AdminUserView = {
   id: string;
   name: string;
@@ -164,6 +142,28 @@ export type AdminUserViewUserDeactivation = {
 export type AdminUserViewUserRef = {
   id: string;
   name: string;
+};
+
+export type AdminUsersView = {
+  id: string;
+  name: string;
+  email: string;
+  passwordHashType: null | PasswordHashingAlgorithm;
+  roles: Array<RoleType>;
+  createdAt: Temporal.Instant;
+  activatedAt: null | Temporal.Instant;
+  createdByAutomationTokenId: null | string;
+  deactivatedAt: null | Temporal.Instant;
+  deactivatedByUserId: null | string;
+  apiTokenCount: number;
+  passwordResetCount: number;
+  shockerUserShareCount: number;
+  shockerPublicShareCount: number;
+  emailChangeRequestCount: number;
+  nameChangeRequestCount: number;
+  deviceCount: number;
+  shockerCount: number;
+  shockerControlLogCount: number;
 };
 
 export const AuditAction = {
@@ -315,15 +315,15 @@ export type AuditMetadataAutomationTokenUsedMetadata = {
   flow: string;
 };
 
+export type AuditMetadataEmailChangeRequestedMetadata = {
+  t?: 'emailChangeRequested';
+  newEmail: string;
+};
+
 export type AuditMetadataEmailChangedMetadata = {
   t?: 'emailChanged';
   old: string;
   new: string;
-};
-
-export type AuditMetadataEmailChangeRequestedMetadata = {
-  t?: 'emailChangeRequested';
-  newEmail: string;
 };
 
 export type AuditMetadataLoginMetadata = {
@@ -555,17 +555,6 @@ export type ControlStatChangesResponse = {
   users: Array<UserControlStatTotals>;
 };
 
-export type ControlStatsResponse = {
-  /**
-   * Activity on shockers you own.
-   */
-  received: ReceivedControlStats;
-  /**
-   * Activity you sent to shockers, your own included.
-   */
-  given: GivenControlStats;
-};
-
 /**
  * Aggregated activity of one control type, split by whether it was live control.
  */
@@ -582,6 +571,17 @@ export type ControlStatTotals = {
    */
   averageIntensity: number;
   maxIntensity: number;
+};
+
+export type ControlStatsResponse = {
+  /**
+   * Activity on shockers you own.
+   */
+  received: ReceivedControlStats;
+  /**
+   * Activity you sent to shockers, your own included.
+   */
+  given: GivenControlStats;
 };
 
 export const ControlType = {
@@ -604,17 +604,6 @@ export type CreateAutomationTokenDto = {
   autoCleanupAfter?: null | string;
 };
 
-export type CreatedAutomationTokenDto = {
-  id: string;
-  name: string;
-  secret: string;
-  types: Array<AutomationTokenType>;
-  createdAt: Temporal.Instant;
-  lastRotatedAt?: null | Temporal.Instant;
-  autoCleanupUsers?: boolean;
-  autoCleanupAfter?: null | string;
-};
-
 export type CreateShareRequest = {
   shockers: Array<ShockerPermLimitPairWithId>;
   user?: null | string;
@@ -628,6 +617,17 @@ export type CreateTokenRequestV2 = {
    * Per-token shocker control configuration. When omitted, the permissive default is used.
    */
   shockerControl: ShockerControlSettings;
+};
+
+export type CreatedAutomationTokenDto = {
+  id: string;
+  name: string;
+  secret: string;
+  types: Array<AutomationTokenType>;
+  createdAt: Temporal.Instant;
+  lastRotatedAt?: null | Temporal.Instant;
+  autoCleanupUsers?: boolean;
+  autoCleanupAfter?: null | string;
 };
 
 export type DailyControlStats = {
@@ -835,14 +835,14 @@ export type LegacyDataResponseOfArrayOfLogEntry = {
   data: Array<LogEntry>;
 };
 
-export type LegacyDataResponseOfArrayOfOwnerShockerResponse = {
-  message: string;
-  data: Array<OwnerShockerResponse>;
-};
-
 export type LegacyDataResponseOfArrayOfOwnPublicShareResponse = {
   message: string;
   data: Array<OwnPublicShareResponse>;
+};
+
+export type LegacyDataResponseOfArrayOfOwnerShockerResponse = {
+  message: string;
+  data: Array<OwnerShockerResponse>;
 };
 
 export type LegacyDataResponseOfArrayOfShareCodeInfo = {
@@ -863,11 +863,6 @@ export type LegacyDataResponseOfArrayOfShockerResponse = {
 export type LegacyDataResponseOfBackendInfoResponse = {
   message: string;
   data: BackendInfoResponse;
-};
-
-export type LegacyDataResponseOfboolean = {
-  message: string;
-  data: boolean;
 };
 
 export type LegacyDataResponseOfDeviceSelfResponse = {
@@ -925,6 +920,11 @@ export type LegacyDataResponseOfShockerWithDevice = {
 export type LegacyDataResponseOfStatsResponse = {
   message: string;
   data: StatsResponse;
+};
+
+export type LegacyDataResponseOfboolean = {
+  message: string;
+  data: boolean;
 };
 
 export type LegacyDataResponseOfstring = {
@@ -1067,18 +1067,18 @@ export const OtaUpdateStatus = {
 
 export type OtaUpdateStatus = (typeof OtaUpdateStatus)[keyof typeof OtaUpdateStatus];
 
-export type OwnerShockerResponse = {
-  id: string;
-  name: string;
-  image: string;
-  devices: Array<SharedDevice>;
-};
-
 export type OwnPublicShareResponse = {
   id: string;
   name: string;
   createdOn: Temporal.Instant;
   expiresOn?: null | Temporal.Instant;
+};
+
+export type OwnerShockerResponse = {
+  id: string;
+  name: string;
+  image: string;
+  devices: Array<SharedDevice>;
 };
 
 /**
@@ -1324,20 +1324,6 @@ export type ShareCodeInfo = {
   createdOn: Temporal.Instant;
 };
 
-export type SharedDevice = {
-  id: string;
-  name: string;
-  shockers: Array<SharedShocker>;
-};
-
-export type SharedShocker = {
-  id: string;
-  name: string;
-  isPaused: boolean;
-  permissions: ShockerPermissions;
-  limits: ShockerLimits;
-};
-
 export type ShareInfo = {
   sharedWith: BasicUserInfo;
   createdOn: Temporal.Instant;
@@ -1352,6 +1338,20 @@ export type ShareInviteBaseDetails = {
   createdAt: Temporal.Instant;
   owner: BasicUserInfo;
   sharedWith: null | BasicUserInfo;
+};
+
+export type SharedDevice = {
+  id: string;
+  name: string;
+  shockers: Array<SharedShocker>;
+};
+
+export type SharedShocker = {
+  id: string;
+  name: string;
+  isPaused: boolean;
+  permissions: ShockerPermissions;
+  limits: ShockerLimits;
 };
 
 /**
@@ -1389,13 +1389,6 @@ export const ShockerModelType = {
 
 export type ShockerModelType = (typeof ShockerModelType)[keyof typeof ShockerModelType];
 
-export type ShockerPermissions = {
-  vibrate: boolean;
-  sound: boolean;
-  shock: boolean;
-  live?: boolean;
-};
-
 export type ShockerPermLimitPair = {
   permissions: ShockerPermissions;
   limits: ShockerLimits;
@@ -1412,6 +1405,13 @@ export type ShockerPermLimitPairWithIdAndName = {
   id?: string;
   permissions: ShockerPermissions;
   limits: ShockerLimits;
+};
+
+export type ShockerPermissions = {
+  vibrate: boolean;
+  sound: boolean;
+  shock: boolean;
+  live?: boolean;
 };
 
 export type ShockerResponse = {
@@ -1482,15 +1482,6 @@ export type TokenResponseV2 = {
   shockerControl: ShockerControlSettings;
 };
 
-export type UserControlStats = {
-  /**
-   * Null for guests (public shares).
-   */
-  userId: null | string;
-  user: null | BasicUserInfo;
-  stats: Array<ControlStatTotals>;
-};
-
 /**
  * Lifetime totals of one user, the same views as ControlStatsResponse without breakdowns.
  */
@@ -1506,13 +1497,14 @@ export type UserControlStatTotals = {
   given: Array<ControlStatTotals>;
 };
 
-export const UsernameAvailability = {
-  Available: 'Available',
-  Taken: 'Taken',
-  Invalid: 'Invalid',
-} as const;
-
-export type UsernameAvailability = (typeof UsernameAvailability)[keyof typeof UsernameAvailability];
+export type UserControlStats = {
+  /**
+   * Null for guests (public shares).
+   */
+  userId: null | string;
+  user: null | BasicUserInfo;
+  stats: Array<ControlStatTotals>;
+};
 
 export type UserNameBlacklistDto = {
   id: string;
@@ -1520,27 +1512,6 @@ export type UserNameBlacklistDto = {
   matchType: MatchTypeEnum;
   createdAt: Temporal.Instant;
 };
-
-export type UsernameCheckResponse = {
-  availability: UsernameAvailability;
-  error?: null | UsernameError;
-};
-
-export type UsernameError = {
-  message: string;
-  type: UsernameErrorType;
-};
-
-export const UsernameErrorType = {
-  TooShort: 'TooShort',
-  TooLong: 'TooLong',
-  StartOrEndWithWhitespace: 'StartOrEndWithWhitespace',
-  ResembleEmail: 'ResembleEmail',
-  ObnoxiousCharacters: 'ObnoxiousCharacters',
-  Blacklisted: 'Blacklisted',
-} as const;
-
-export type UsernameErrorType = (typeof UsernameErrorType)[keyof typeof UsernameErrorType];
 
 export type UserPatchDto = {
   name?: null | string;
@@ -1576,6 +1547,35 @@ export type UserShareInfo = {
    */
   paused: number;
 };
+
+export const UsernameAvailability = {
+  Available: 'Available',
+  Taken: 'Taken',
+  Invalid: 'Invalid',
+} as const;
+
+export type UsernameAvailability = (typeof UsernameAvailability)[keyof typeof UsernameAvailability];
+
+export type UsernameCheckResponse = {
+  availability: UsernameAvailability;
+  error?: null | UsernameError;
+};
+
+export type UsernameError = {
+  message: string;
+  type: UsernameErrorType;
+};
+
+export const UsernameErrorType = {
+  TooShort: 'TooShort',
+  TooLong: 'TooLong',
+  StartOrEndWithWhitespace: 'StartOrEndWithWhitespace',
+  ResembleEmail: 'ResembleEmail',
+  ObnoxiousCharacters: 'ObnoxiousCharacters',
+  Blacklisted: 'Blacklisted',
+} as const;
+
+export type UsernameErrorType = (typeof UsernameErrorType)[keyof typeof UsernameErrorType];
 
 export type V2UserShares = {
   outgoing: Array<V2UserSharesListItem>;
@@ -2961,85 +2961,6 @@ export type IntegrationsGetControlStatChangesResponses = {
 export type IntegrationsGetControlStatChangesResponse =
   IntegrationsGetControlStatChangesResponses[keyof IntegrationsGetControlStatChangesResponses];
 
-export type DeviceGetLiveControlGatewayV2Data = {
-  body?: never;
-  path?: never;
-  query?: {
-    version?: number;
-  };
-  url: '/2/device/assignLCG';
-};
-
-export type DeviceGetLiveControlGatewayV2Errors = {
-  /**
-   * Bad Request
-   */
-  400: OpenShockProblem;
-  /**
-   * Unable to find suitable LCG node
-   */
-  503: OpenShockProblem;
-};
-
-export type DeviceGetLiveControlGatewayV2Error =
-  DeviceGetLiveControlGatewayV2Errors[keyof DeviceGetLiveControlGatewayV2Errors];
-
-export type DeviceGetLiveControlGatewayV2Responses = {
-  /**
-   * Successfully assigned LCG node
-   */
-  200: LcgNodeResponseV2;
-};
-
-export type DeviceGetLiveControlGatewayV2Response =
-  DeviceGetLiveControlGatewayV2Responses[keyof DeviceGetLiveControlGatewayV2Responses];
-
-export type DeviceGetSelfData = {
-  body?: never;
-  path?: never;
-  query?: never;
-  url: '/1/device/self';
-};
-
-export type DeviceGetSelfResponses = {
-  /**
-   * The device information was successfully retrieved.
-   */
-  200: LegacyDataResponseOfDeviceSelfResponse;
-};
-
-export type DeviceGetSelfResponse = DeviceGetSelfResponses[keyof DeviceGetSelfResponses];
-
-export type DevicePairData = {
-  body?: never;
-  path: {
-    /**
-     * The pair code to pair with.
-     */
-    pairCode: string;
-  };
-  query?: never;
-  url: '/1/device/pair/{pairCode}';
-};
-
-export type DevicePairErrors = {
-  /**
-   * No such pair code exists
-   */
-  404: OpenShockProblem;
-};
-
-export type DevicePairError = DevicePairErrors[keyof DevicePairErrors];
-
-export type DevicePairResponses = {
-  /**
-   * Successfully assigned LCG node
-   */
-  200: LegacyDataResponseOfstring;
-};
-
-export type DevicePairResponse = DevicePairResponses[keyof DevicePairResponses];
-
 export type DevicesOtaGetOtaUpdateHistoryData = {
   body?: never;
   path: {
@@ -3311,6 +3232,85 @@ export type DevicesGetShockersResponses = {
 
 export type DevicesGetShockersResponse =
   DevicesGetShockersResponses[keyof DevicesGetShockersResponses];
+
+export type DeviceGetLiveControlGatewayV2Data = {
+  body?: never;
+  path?: never;
+  query?: {
+    version?: number;
+  };
+  url: '/2/device/assignLCG';
+};
+
+export type DeviceGetLiveControlGatewayV2Errors = {
+  /**
+   * Bad Request
+   */
+  400: OpenShockProblem;
+  /**
+   * Unable to find suitable LCG node
+   */
+  503: OpenShockProblem;
+};
+
+export type DeviceGetLiveControlGatewayV2Error =
+  DeviceGetLiveControlGatewayV2Errors[keyof DeviceGetLiveControlGatewayV2Errors];
+
+export type DeviceGetLiveControlGatewayV2Responses = {
+  /**
+   * Successfully assigned LCG node
+   */
+  200: LcgNodeResponseV2;
+};
+
+export type DeviceGetLiveControlGatewayV2Response =
+  DeviceGetLiveControlGatewayV2Responses[keyof DeviceGetLiveControlGatewayV2Responses];
+
+export type DeviceGetSelfData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/1/device/self';
+};
+
+export type DeviceGetSelfResponses = {
+  /**
+   * The device information was successfully retrieved.
+   */
+  200: LegacyDataResponseOfDeviceSelfResponse;
+};
+
+export type DeviceGetSelfResponse = DeviceGetSelfResponses[keyof DeviceGetSelfResponses];
+
+export type DevicePairData = {
+  body?: never;
+  path: {
+    /**
+     * The pair code to pair with.
+     */
+    pairCode: string;
+  };
+  query?: never;
+  url: '/1/device/pair/{pairCode}';
+};
+
+export type DevicePairErrors = {
+  /**
+   * No such pair code exists
+   */
+  404: OpenShockProblem;
+};
+
+export type DevicePairError = DevicePairErrors[keyof DevicePairErrors];
+
+export type DevicePairResponses = {
+  /**
+   * Successfully assigned LCG node
+   */
+  200: LegacyDataResponseOfstring;
+};
+
+export type DevicePairResponse = DevicePairResponses[keyof DevicePairResponses];
 
 export type AdminListAutomationTokensData = {
   body?: never;
