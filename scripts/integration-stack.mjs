@@ -20,7 +20,10 @@
 import { GenericContainer, Network, Wait } from 'testcontainers';
 
 const API_IMAGE = process.env.INTEGRATION_API_IMAGE ?? 'ghcr.io/openshock/api:develop';
-const POSTGRES_IMAGE = process.env.INTEGRATION_POSTGRES_IMAGE ?? 'postgres:18';
+// The API keeps control logs in a TimescaleDB hypertable, so plain postgres:18 fails its migrations.
+const POSTGRES_IMAGE =
+  process.env.INTEGRATION_POSTGRES_IMAGE ??
+  'ghcr.io/openshock/postgres-timescaledb:2.32.1-18.7-trixie';
 const DRAGONFLY_IMAGE =
   process.env.INTEGRATION_DRAGONFLY_IMAGE ?? 'ghcr.io/dragonflydb/dragonfly:latest';
 const MAILPIT_IMAGE = process.env.INTEGRATION_MAILPIT_IMAGE ?? 'axllent/mailpit:latest';
