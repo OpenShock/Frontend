@@ -1,6 +1,7 @@
 import type { ControlStatTotals } from '#lib/api/index.js';
 import { describe, expect, it } from 'vitest';
 import {
+  MaxDailyPoints,
   dailySeries,
   durationAxisUnit,
   formatStatDuration,
@@ -88,6 +89,13 @@ describe('dailySeries', () => {
       { date: '2026-10-02', Shock: 3, Vibrate: 0, Sound: 0 },
       { date: '2026-10-03', Shock: 0, Vibrate: 0, Sound: 0 },
     ]);
+  });
+
+  it('caps the series at the most recent days', () => {
+    const to = Temporal.PlainDate.from('2026-10-03');
+    const series = dailySeries([], 'count', Temporal.PlainDate.from('0001-01-01'), to);
+    expect(series).toHaveLength(MaxDailyPoints);
+    expect(series.at(-1)?.date).toBe('2026-10-03');
   });
 
   it('can chart duration instead of count', () => {

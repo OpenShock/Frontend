@@ -71,7 +71,8 @@
   }
 
   let range = $derived<RangeKey>(
-    filters.range && filters.range in ranges ? (filters.range as RangeKey) : '30d'
+    // Own keys only, `in` would also accept inherited names such as `toString`.
+    filters.range && Object.hasOwn(ranges, filters.range) ? (filters.range as RangeKey) : '30d'
   );
 
   let selectedTo = $derived(range === 'custom' ? (parseDate(filters.to) ?? today) : today);
@@ -88,10 +89,13 @@
   let to = $derived(reversed && selectedFrom ? selectedFrom : selectedTo);
 
   function selectRange(value: string) {
+    // Read before switching, `from` and `to` follow the new range as soon as it is set.
+    const previousFrom = from;
+    const previousTo = to;
     filters.range = value;
     if (value === 'custom') {
-      filters.from ??= (from ?? today.subtract({ days: 29 })).toString();
-      filters.to ??= to.toString();
+      filters.from ??= (previousFrom ?? today.subtract({ days: 29 })).toString();
+      filters.to ??= previousTo.toString();
     } else {
       filters.from = undefined;
       filters.to = undefined;
@@ -147,15 +151,17 @@
   });
 
   // All time has no lower bound, so the chart starts at the first day with activity.
+  // Wide custom ranges do the same, so a start like 0001-01-01 doesn't chart centuries of empty days.
   let chartFrom = $derived.by(() => {
-    if (from) return from;
+    if (from && from.until(to).days < 366) return from;
     const first = stats?.received.days
       .map((day) => day.date)
       .reduce<Temporal.PlainDate | undefined>(
         (min, date) => (!min || Temporal.PlainDate.compare(date, min) < 0 ? date : min),
         undefined
       );
-    return first ?? to.subtract({ days: 29 });
+    if (!first) return to.subtract({ days: 29 });
+    return from && Temporal.PlainDate.compare(from, first) > 0 ? from : first;
   });
 
   function shockerRows(shockers: ShockerControlStats[]): BreakdownRow[] {

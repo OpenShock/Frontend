@@ -88,9 +88,13 @@ export function totalDurationMs(totals: ControlStatTotals[]): number {
 
 export type DailyPoint = { date: string } & Record<StatControlType, number>;
 
+/** Upper bound on chart points, ten years of days, so a far-off start can't stall the page. */
+export const MaxDailyPoints = 3660;
+
 /**
  * Turns the sparse daily breakdown into one point per day between `from` and `to`, both inclusive.
  * Days without activity are filled with zeroes so the chart keeps an even time axis.
+ * At most the last {@link MaxDailyPoints} days are returned.
  */
 export function dailySeries(
   days: DailyControlStats[],
@@ -100,8 +104,10 @@ export function dailySeries(
 ): DailyPoint[] {
   const byDate = new Map(days.map((day) => [day.date.toString(), day.stats]));
   const points: DailyPoint[] = [];
+  const earliest = to.subtract({ days: MaxDailyPoints - 1 });
+  const start = Temporal.PlainDate.compare(from, earliest) < 0 ? earliest : from;
 
-  for (let date = from; Temporal.PlainDate.compare(date, to) <= 0; date = date.add({ days: 1 })) {
+  for (let date = start; Temporal.PlainDate.compare(date, to) <= 0; date = date.add({ days: 1 })) {
     const point = { date: date.toString(), Shock: 0, Vibrate: 0, Sound: 0 };
     for (const row of byDate.get(date.toString()) ?? []) {
       if (!isStatControlType(row.type)) continue;
