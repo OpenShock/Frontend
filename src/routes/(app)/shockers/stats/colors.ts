@@ -8,7 +8,7 @@ export const controlTypeColors: Record<StatControlType, { light: string; dark: s
 };
 
 export const controlTypeLabels: Record<StatControlType, () => string> = {
-  Shock: m.shocker_stats_type_shock,
-  Vibrate: m.shocker_stats_type_vibrate,
-  Sound: m.shocker_stats_type_sound,
+  Shock: m.control_type_shock,
+  Vibrate: m.control_type_vibrate,
+  Sound: m.control_type_sound,
 };

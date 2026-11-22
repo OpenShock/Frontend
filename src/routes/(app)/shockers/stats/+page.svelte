@@ -256,7 +256,7 @@
             />
             <BreakdownTable
               title={m.shocker_stats_by_controller()}
-              nameHeader={m.shocker_stats_col_user()}
+              nameHeader={m.common_user()}
               rows={userRows(stats.received.controllers)}
               emptyText={m.shocker_stats_empty_controllers()}
             />
@@ -267,7 +267,7 @@
           <TotalsCards totals={stats.given.totals} />
           <BreakdownTable
             title={m.shocker_stats_by_owner()}
-            nameHeader={m.shocker_stats_col_owner()}
+            nameHeader={m.common_owner()}
             rows={userRows(stats.given.owners)}
             emptyText={m.shocker_stats_empty_owners()}
           />
