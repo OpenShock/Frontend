@@ -1414,11 +1414,8 @@ export const publicGetPublicShare = <ThrowOnError extends boolean = true>(
  * Returns the lifetime totals of every requested user whose stats changed since the given cursor.
  *
  * Requires an automation token granting `ControlStatsRead`. "Changed since" is answered from when each
- * stats row was last written rather than the time it covers, so live control stats written late (e.g. after a
- * database outage) are still picked up. Rows deleted along with their owner lower the totals of everyone who
- * controlled them without leaving a row behind, those are picked up from ControlStatRemoval. The
- * lookback is widened by TimeSpan IntegrationsController.ChangeOverlap to cover writes still committing while the previous call
- * read, so a user can be reported again although nothing changed.
+ * control log was written, so late writes are still picked up. The lookback is widened by
+ * TimeSpan IntegrationsController.ChangeOverlap, so a user can be reported again although nothing changed.
  */
 export const integrationsGetControlStatChanges = <ThrowOnError extends boolean = true>(
   options: Options<IntegrationsGetControlStatChangesData, ThrowOnError>
@@ -1442,52 +1439,6 @@ export const integrationsGetControlStatChanges = <ThrowOnError extends boolean =
       'Content-Type': 'application/json',
       ...options.headers,
     },
-  });
-
-/**
- * Gets the best suited LCG node for the client
- */
-export const deviceGetLiveControlGatewayV2 = <ThrowOnError extends boolean = true>(
-  options?: Options<DeviceGetLiveControlGatewayV2Data, ThrowOnError>
-): RequestResult<
-  DeviceGetLiveControlGatewayV2Responses,
-  DeviceGetLiveControlGatewayV2Errors,
-  ThrowOnError,
-  'data'
-> =>
-  (options?.client ?? client).get<
-    DeviceGetLiveControlGatewayV2Responses,
-    DeviceGetLiveControlGatewayV2Errors,
-    ThrowOnError,
-    'data'
-  >({
-    responseStyle: 'data',
-    url: '/2/device/assignLCG',
-    ...options,
-  });
-
-/**
- * Gets information about the authenticated device.
- */
-export const deviceGetSelf = <ThrowOnError extends boolean = true>(
-  options?: Options<DeviceGetSelfData, ThrowOnError>
-): RequestResult<DeviceGetSelfResponses, unknown, ThrowOnError, 'data'> =>
-  (options?.client ?? client).get<DeviceGetSelfResponses, unknown, ThrowOnError, 'data'>({
-    responseStyle: 'data',
-    url: '/1/device/self',
-    ...options,
-  });
-
-/**
- * Pair a device with a pair code.
- */
-export const devicePair = <ThrowOnError extends boolean = true>(
-  options: Options<DevicePairData, ThrowOnError>
-): RequestResult<DevicePairResponses, DevicePairErrors, ThrowOnError, 'data'> =>
-  (options.client ?? client).get<DevicePairResponses, DevicePairErrors, ThrowOnError, 'data'>({
-    responseStyle: 'data',
-    url: '/1/device/pair/{pairCode}',
-    ...options,
   });
 
 /**
@@ -1675,6 +1626,52 @@ export const devicesGetShockers = <ThrowOnError extends boolean = true>(
     responseTransformer: devicesGetShockersResponseTransformer,
     responseStyle: 'data',
     url: '/1/devices/{deviceId}/shockers',
+    ...options,
+  });
+
+/**
+ * Gets the best suited LCG node for the client
+ */
+export const deviceGetLiveControlGatewayV2 = <ThrowOnError extends boolean = true>(
+  options?: Options<DeviceGetLiveControlGatewayV2Data, ThrowOnError>
+): RequestResult<
+  DeviceGetLiveControlGatewayV2Responses,
+  DeviceGetLiveControlGatewayV2Errors,
+  ThrowOnError,
+  'data'
+> =>
+  (options?.client ?? client).get<
+    DeviceGetLiveControlGatewayV2Responses,
+    DeviceGetLiveControlGatewayV2Errors,
+    ThrowOnError,
+    'data'
+  >({
+    responseStyle: 'data',
+    url: '/2/device/assignLCG',
+    ...options,
+  });
+
+/**
+ * Gets information about the authenticated device.
+ */
+export const deviceGetSelf = <ThrowOnError extends boolean = true>(
+  options?: Options<DeviceGetSelfData, ThrowOnError>
+): RequestResult<DeviceGetSelfResponses, unknown, ThrowOnError, 'data'> =>
+  (options?.client ?? client).get<DeviceGetSelfResponses, unknown, ThrowOnError, 'data'>({
+    responseStyle: 'data',
+    url: '/1/device/self',
+    ...options,
+  });
+
+/**
+ * Pair a device with a pair code.
+ */
+export const devicePair = <ThrowOnError extends boolean = true>(
+  options: Options<DevicePairData, ThrowOnError>
+): RequestResult<DevicePairResponses, DevicePairErrors, ThrowOnError, 'data'> =>
+  (options.client ?? client).get<DevicePairResponses, DevicePairErrors, ThrowOnError, 'data'>({
+    responseStyle: 'data',
+    url: '/1/device/pair/{pairCode}',
     ...options,
   });
 
