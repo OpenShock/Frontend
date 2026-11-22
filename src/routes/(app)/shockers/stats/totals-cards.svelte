@@ -45,13 +45,13 @@
             </dd>
           </div>
           <div>
-            <dt>{m.shocker_stats_max_intensity()}</dt>
+            <dt>{m.control_max_intensity()}</dt>
             <dd class="text-foreground font-medium tabular-nums">
               {summary.count > 0 ? `${summary.maxIntensity}%` : '–'}
             </dd>
           </div>
           <div title={m.shocker_stats_live_title()}>
-            <dt>{m.shocker_stats_live()}</dt>
+            <dt>{m.common_live()}</dt>
             <dd class="text-foreground font-medium tabular-nums">
               {numberFormat.format(summary.liveCount)}
             </dd>

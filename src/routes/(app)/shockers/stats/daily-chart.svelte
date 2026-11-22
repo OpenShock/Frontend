@@ -89,7 +89,7 @@
         variant={metric === 'durationMs' ? 'secondary' : 'ghost'}
         size="sm"
         class="h-7 text-xs"
-        onclick={() => (metric = 'durationMs')}>{m.shocker_stats_metric_duration()}</Button
+        onclick={() => (metric = 'durationMs')}>{m.control_duration()}</Button
       >
     </div>
   </Card.Header>

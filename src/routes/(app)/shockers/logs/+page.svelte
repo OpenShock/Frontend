@@ -242,7 +242,7 @@
             : 'bg-muted-foreground'}"
         ></span>
       </span>
-      {liveUpdatesActive ? m.shocker_logs_live() : m.common_paused()}
+      {liveUpdatesActive ? m.common_live() : m.common_paused()}
     </Badge>
   </PageHeader>
   <div class="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-6">

@@ -64,8 +64,8 @@
             {#each StatControlTypes as type (type)}
               <Table.Head class="text-right">{controlTypeLabels[type]()}</Table.Head>
             {/each}
-            <Table.Head class="text-right">{m.shocker_stats_col_duration()}</Table.Head>
-            <Table.Head class="text-right">{m.shocker_stats_max_intensity()}</Table.Head>
+            <Table.Head class="text-right">{m.control_duration()}</Table.Head>
+            <Table.Head class="text-right">{m.control_max_intensity()}</Table.Head>
           </Table.Row>
         </Table.Header>
         <Table.Body>

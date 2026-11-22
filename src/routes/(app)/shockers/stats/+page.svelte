@@ -250,7 +250,7 @@
           <div class="grid grid-cols-1 gap-6 xl:grid-cols-2">
             <BreakdownTable
               title={m.shocker_stats_by_shocker()}
-              nameHeader={m.shocker_stats_col_shocker()}
+              nameHeader={m.shocker_label()}
               rows={shockerRows(stats.received.shockers)}
               emptyText={m.shocker_stats_empty_shockers()}
             />
