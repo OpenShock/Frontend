@@ -125,6 +125,7 @@ describe('formatStatDuration', () => {
   it.each([
     [4200, '4.2s'],
     [65_000, '1m 5s'],
+    [2.05 * 60_000, '2m 3s'],
     [8_040_000, '2h 14m'],
     [97_200_000, '1d 3h'],
   ])('formats %d ms as %s', (ms, expected) => {

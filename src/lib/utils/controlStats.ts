@@ -136,7 +136,8 @@ export function durationAxisUnit(maxMs: number): DurationUnit {
 
 /** Formats a duration in milliseconds as the two most significant units, e.g. `2h 14m` or `4.2s`. */
 export function formatStatDuration(durationMs: number): string {
-  const totalSeconds = durationMs / 1000;
+  // Durations are whole milliseconds, rounding drops float error such as 2.05 * 60_000 = 122999.99...
+  const totalSeconds = Math.round(durationMs) / 1000;
   if (totalSeconds < 60) return `${Math.round(totalSeconds * 10) / 10}s`;
 
   const seconds = Math.floor(totalSeconds) % 60;
