@@ -3,6 +3,12 @@
   "extends": ["local>OpenShock/org-config//renovate/default", "local>OpenShock/org-config//renovate/automerge"],
   "packageRules": [
     {
+      "description": "The pnpm patch is keyed to an exact SignalR version, so bumps need the patch refreshed by hand",
+      "matchPackageNames": ["@microsoft/signalr"],
+      "groupName": null,
+      "automerge": false
+    },
+    {
       "description": "Node, pnpm and the base image are bumped together by .github/workflows/update-toolchain.yml",
       "matchFileNames": [".nvmrc", "Dockerfile", "package.json"],
       "matchDepNames": ["node", "pnpm"],
