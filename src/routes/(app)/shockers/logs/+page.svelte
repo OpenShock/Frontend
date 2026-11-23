@@ -191,6 +191,7 @@
         },
         intensity: log.intensity,
         duration: log.duration,
+        liveControl: log.liveControl ?? false,
       };
       logs = [entry, ...logs.slice(0, pageSize - 1)];
       total += 1;
@@ -212,8 +213,14 @@
       LocaleDateTimeRenderer,
       (a, b) => Temporal.Instant.compare(a, b)
     ),
-    CreateSortableColumnDef('type', m.shocker_logs_col_type(), (t) =>
-      RenderCell(controlTypeLabel(t))
+    CreateSortableColumnDef('type', m.shocker_logs_col_type(), (t, row) =>
+      row.liveControl
+        ? {
+            text: m.shocker_logs_type_live({ type: controlTypeLabel(t) }),
+            title: m.shocker_logs_live_control_title(),
+            color: 'blue',
+          }
+        : RenderCell(controlTypeLabel(t))
     ),
     CreateSortableColumnDef('controlledBy', m.shocker_logs_col_by(), (c) =>
       RenderCell(c.customName ?? c.name)

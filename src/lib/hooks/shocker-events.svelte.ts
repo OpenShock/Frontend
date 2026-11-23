@@ -14,6 +14,8 @@ export function useShockerEvents(shockerId: () => string) {
   onMount(() => {
     const id = crypto.randomUUID();
     addShockEventListener(id, shockerId(), (_sender, log) => {
+      // Live bursts are only reported once they have ended
+      if (log.liveControl) return;
       clearTimeout(timeoutHandle);
       active = log.type;
       timeoutHandle = setTimeout(() => (active = null), log.duration);

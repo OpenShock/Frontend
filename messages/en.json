@@ -253,6 +253,8 @@
   "shocker_logs_paused_title": "Live updates pause when sorting or viewing a page other than the first",
   "shocker_logs_col_time": "Time",
   "shocker_logs_col_type": "Type",
+  "shocker_logs_type_live": "{{type}} (Live)",
+  "shocker_logs_live_control_title": "Live control, logged once the burst ends with its average intensity",
   "shocker_logs_col_by": "By",
   "shocker_logs_filter_label": "Filter by shocker",
   "shocker_logs_filter_placeholder": "Search shockers...",

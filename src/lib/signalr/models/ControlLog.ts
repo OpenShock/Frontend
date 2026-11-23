@@ -11,6 +11,7 @@ export interface ControlLog {
   intensity: number;
   duration: number;
   executedAt: string;
+  liveControl?: boolean;
 }
 
 function isControlLogShockerInfo(value: unknown): value is ControlLogShockerInfo {
@@ -24,6 +25,7 @@ export function isControlLog(value: unknown): value is ControlLog {
     HasNumber(value, 'intensity') &&
     HasNumber(value, 'duration') &&
     HasString(value, 'executedAt') &&
+    (value.liveControl === undefined || typeof value.liveControl === 'boolean') &&
     isControlLogShockerInfo(value.shocker) &&
     isControlType(value.type)
   );

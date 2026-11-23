@@ -107,7 +107,7 @@ export function CreateColumnDefs<TFeatures extends DataTableFeatures, TData exte
   function CreateSortableColumnDef<TKey extends Extract<keyof TData, string>>(
     accessorKey: TKey,
     headerName: string,
-    renderer: (content: TData[TKey]) => CellContentProps,
+    renderer: (content: TData[TKey], row: TData) => CellContentProps,
     sortFunct?: 'auto' | ((a: TData[TKey], b: TData[TKey]) => number) | ExtractSortFnKeys<TFeatures>
   ): ColumnDef<TFeatures, TData> {
     let sortFn: SortFnOption<TFeatures, TData>;
@@ -125,7 +125,8 @@ export function CreateColumnDefs<TFeatures extends DataTableFeatures, TData exte
     return asColumnDef({
       accessorKey,
       header: CreateSortHeader(headerName),
-      cell: ({ row }) => renderComponent(CellContent, renderer(row.original[accessorKey])),
+      cell: ({ row }) =>
+        renderComponent(CellContent, renderer(row.original[accessorKey], row.original)),
       meta: { label: headerName },
       // Registered sort-fn names come from the caller's `sortFns`, which the
       // generic `TableFeatures` shape used for checking doesn't know about.

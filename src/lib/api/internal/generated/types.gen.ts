@@ -957,6 +957,7 @@ export type LogEntry = {
   controlledBy: ControlLogSenderLight;
   intensity: number;
   duration: number;
+  liveControl: boolean;
 };
 
 export type LogEntryWithHub = {
@@ -970,6 +971,7 @@ export type LogEntryWithHub = {
   controlledBy: ControlLogSenderLight;
   intensity: number;
   duration: number;
+  liveControl: boolean;
 };
 
 export type LoginSessionResponse = {
